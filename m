@@ -2,83 +2,67 @@ Return-Path: <SRS0=b2+E=PU=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B099C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 17:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D445C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:24:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D8B846120F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 17:07:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D8B846120F
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2C0A760F45
+	for <buildroot@archiver.kernel.org>; Mon,  1 Nov 2021 18:24:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C0A760F45
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D36180CEB;
-	Mon,  1 Nov 2021 17:07:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDF74809E9;
+	Mon,  1 Nov 2021 18:24:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TtF8pgLss6qc; Mon,  1 Nov 2021 17:07:00 +0000 (UTC)
+	with ESMTP id dOGHxJeUjO_W; Mon,  1 Nov 2021 18:24:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2E8880CB3;
-	Mon,  1 Nov 2021 17:06:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 006A41BF358
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 17:06:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9B2880AE5;
+	Mon,  1 Nov 2021 18:24:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F3811BF2FD
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F095F80CB3
- for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 17:06:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B3A06059B
+ for <buildroot@lists.busybox.net>; Mon,  1 Nov 2021 18:24:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MhhIqsv0c3ao for <buildroot@lists.busybox.net>;
- Mon,  1 Nov 2021 17:06:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D3B980C3C
- for <buildroot@busybox.net>; Mon,  1 Nov 2021 17:06:57 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id m22so29179773wrb.0
- for <buildroot@busybox.net>; Mon, 01 Nov 2021 10:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
- :content-disposition:in-reply-to;
- bh=sV8S6P4M5MvjRmVcV7HVw64Cu4md4/wpqzoC1tDoiLg=;
- b=YS4zKFYv8IMpjU8NdayZ5ybMY8mkZur+JGHWPpr/ntCuiCoor2DRLvVLG0QTOxYfNM
- yrTbnFRXszrmumSsKJUf7G7dCHnosiJdWeAQ+v4ROp3bmc+38PSRPAl1dvE3jFVztcbs
- sXrs2KtdiGKRwBlvu8ZbfZ09X+cysSZEG+P121/fwm0dRiX4fhxzRB1SRGoitE8FaC3I
- c+13xG+eyEsM4poeGMp0uHkPhNqI49/wvolDg9y5fhlSIPoWhM2Por3KPR9lsZJIEuOt
- emAY9tOQprM4EI9a7duANrT4k6/K6CE6oW+Wk5q1lpcHT0M5TJK0Onhhl3zFH0825d4Z
- Ggtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
- :references:mime-version:content-disposition:in-reply-to;
- bh=sV8S6P4M5MvjRmVcV7HVw64Cu4md4/wpqzoC1tDoiLg=;
- b=KHd2bIdxn0KxOxu/jwPzmcLIfFDRQMYVdd29iZlQAZfONmYMWo6i8+CkyyS47tmWxP
- pQoQqAc/iw/PoaHRH8SRhmmF4PiNm/HdjDr3aUKGMC6/Ai2ua6V/C/li1jYfdEQP45sb
- un8LH4jAt7zFY/Sz1ir3xpeswqFRUjaas5E0Ka6mJ577dcQ62GU7Nbb1jLkYNcWcWAtm
- ktIeCeVr2yXO5MqL1NcwWJs9vC/0JqrdKZckXUK9cI6/E6MJ1Ud3PaB3yVvwGrbuBeI+
- M7OfXNTFTah3PuBieFGC5YG3FRo25wAUXvZ/FZ/UDC39bzhA2luog9LWtXVq4/YWVjop
- ItlA==
-X-Gm-Message-State: AOAM5313up2EUdBqbcD4JIXYXVBMI2o2Wo9qNP1AfHGP9ISdpfeI+mOO
- QA3jPpkhi+bDM7TE6JT8zWI=
-X-Google-Smtp-Source: ABdhPJwBgMKc/uSd9WcizbgI1KqVKQ1JMpMeAEo2Ctcp8yZhWpEdFjrIYNCTNStu+zWQHO6gBosDCw==
-X-Received: by 2002:a5d:4a46:: with SMTP id v6mr38445308wrs.262.1635786415351; 
- Mon, 01 Nov 2021 10:06:55 -0700 (PDT)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id j40sm85848wms.16.2021.11.01.10.06.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Nov 2021 10:06:55 -0700 (PDT)
-Date: Mon, 1 Nov 2021 18:06:47 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Michael Fischer <mf@go-sys.de>
-Message-ID: <YYAep/UzQ7qWg/1o@pevik>
-References: <20211101101217.23328-1-mf@go-sys.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211101101217.23328-1-mf@go-sys.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: bump version to 1.34.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=libero.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2bGrAQWW2LNk for <buildroot@lists.busybox.net>;
+ Mon,  1 Nov 2021 18:24:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from libero.it (smtp-32.italiaonline.it [213.209.10.32])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EACA3600B9
+ for <buildroot@buildroot.org>; Mon,  1 Nov 2021 18:24:38 +0000 (UTC)
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([213.45.67.127]) by smtp-32.iol.local with ESMTPA
+ id hbyxmkCeFdfuohbz1mCXBk; Mon, 01 Nov 2021 19:24:35 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+ t=1635791075; bh=Kg3Xixe+c3COlqLRUFuaXUMndx9PGljYRAE0cP0i2/c=;
+ h=From;
+ b=otBpfFKehb/V2zbTtuhqh3v6GDKrh9msFaMRRLKhyeV/uVqNpwKLu/+8DtBuPu67f
+ 3vXDobrwpJwLx60imIK9KNMnYzvnRSNUqXwxvKWn2RNVk5Vgvty7BjTl9hmAEx6mZf
+ 7/q4s2qE6+mlgCk+Jyql3kbNwzhIxTwhCc9LeROJMHnM2K37WA8ABLSo4CWbE+EpcZ
+ yPxOuV7WSnt3f0fBBSqowXQHH9cuWuoQGUgayZeQFtSqEP8r8l+v4+3UM9gpbSH26s
+ de0AyguRCpbOob+nVNWBURHEDNGSCtyGcbwUftAHqYjA+TREbxtWPDK+8s8jraP+jH
+ vekCKLy/2lqng==
+X-CNFS-Analysis: v=2.4 cv=IrzbzJzg c=1 sm=1 tr=0 ts=618030e3 cx=a_exe
+ a=Vk63IOK+/LoQucGDvce7tA==:117 a=Vk63IOK+/LoQucGDvce7tA==:17 a=uP1ucDPQAAAA:8
+ a=tB9EuSL0uEmBBSbdLuwA:9 a=9a9ggB8z3XFZH39hjkD6:22
+To: buildroot@buildroot.org
+Date: Mon,  1 Nov 2021 19:24:29 +0100
+Message-Id: <20211101182429.11450-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfLE4jHTvhV8vZRxHvJMOlHFFbxMh3WHZZqVl4OfAPD0FCrlo0RbF76L04eEp/D0eNO7ywJ+toP0SF7rA+6jMAlzk1PWx+1uavbxAfQrsFR0+tE/P8Qde
+ 4CDLnctB2Nu4kCeDIhE+nzDOlg3Td/QbmrNBRW9NDYTCUaBG3KelE3xFKdfIo+d/pfwCBQnA2cOgsYItuUJ/UNCz41jXCFY2JWJtjdUacEUQQhksowVMyd5e
+ 9DaGeBDAJxT+hepolqCfsWUfP8bX1JPyT0VQy7SeXMZA+uNvRCzjth2vGg0GYu3LrH1YUdcvFkrUBQrfl+jOB2hiTjtDT6JUJNgyET+lG/A=
+Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco: fix kernel bootup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,23 +74,297 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@busybox.net, Denys Vlasenko <vda.linux@googlemail.com>
+From: Dario Binacchi via buildroot <buildroot@buildroot.org>
+Reply-To: Dario Binacchi <dariobin@libero.it>
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ Dario Binacchi <dariobin@libero.it>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Michael,
+The kernel generated by the configuration for the STM32f429-discovery
+board is buggy:
 
-> patch 0003: already applied upstream
+ Unhandled exception: IPSR = 00000006 LR = fffffff1
+ CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
+ Hardware name: STM32 (Device Tree Support)
+ task: 9041a000 task.stack: 907c0000
+ PC is at ret_fast_syscall+0x2/0x4a
+ LR is at tty_ioctl+0x1ad/0x75c
+ pc : [<0800d942>]    lr : [<080c2e05>]    psr: 4000000b
+ sp : 907c1fa8  ip : 0000001c  fp : 905961a2
+ r10: 00000000  r9 : 907c0000  r8 : 0800dae0
+ r7 : 00000036  r6 : 905e7e60  r5 : 00000000  r4 : 905e7ebc
+ r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000000
+ xPSR: 4000000b
+ CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
+ Hardware name: STM32 (Device Tree Support)
+ [<0800fbf9>] (unwind_backtrace) from [<0800f05b>] (show_stack+0xb/0xc)
+ [<0800f05b>] (show_stack) from [<0800f553>] (__invalid_entry+0x4b/0x4c)
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Inspired by commit a3e3d9c198 ("configs/stm32f469_disco_xip_defconfig:
+alternative defconfig for XIP") I updated the stm32f429_disco_defconfig
+configuration to use a newer kernel. Current setup kernel + rootfs fits
+in 1.6MB on-chip flash memory.
 
-Thanks!
+Fixes:
+ - Move kernel to new flash bank due to growth of dtb size.
+ - Fix kernel start address in afboot-stm32 bootloader.
 
-Kind regards,
-Petr
+For better binary size optimization gcc LTO is turned on.
+
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+---
+ .../stm32f429-disco/flash.sh                  |   2 +-
+ .../stm32f429-disco/linux.config              | 120 ++++++++++++++++++
+ ...9i-disco-update-kernel-start-address.patch |  30 +++++
+ ...sco-don-t-force-init-in-chosen-boota.patch |  32 -----
+ configs/stm32f429_disco_defconfig             |   9 +-
+ 5 files changed, 156 insertions(+), 37 deletions(-)
+ create mode 100644 board/stmicroelectronics/stm32f429-disco/linux.config
+ create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+ delete mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+
+diff --git a/board/stmicroelectronics/stm32f429-disco/flash.sh b/board/stmicroelectronics/stm32f429-disco/flash.sh
+index b19e0a6019..3e2bf121d3 100755
+--- a/board/stmicroelectronics/stm32f429-disco/flash.sh
++++ b/board/stmicroelectronics/stm32f429-disco/flash.sh
+@@ -21,6 +21,6 @@ ${OUTPUT_DIR}/host/bin/openocd -f board/${BOARD_NAME}.cfg \
+   -c "flash info 0" \
+   -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429i-disco.bin 0x08000000" \
+   -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429-disco.dtb 0x08004000" \
+-  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08008000" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x0800C000" \
+   -c "reset run" \
+   -c "shutdown"
+diff --git a/board/stmicroelectronics/stm32f429-disco/linux.config b/board/stmicroelectronics/stm32f429-disco/linux.config
+new file mode 100644
+index 0000000000..7b5c60f180
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f429-disco/linux.config
+@@ -0,0 +1,120 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_KERNEL_XZ=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_LOG_BUF_SHIFT=12
++CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=10
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_INITRAMFS_SOURCE="${BR_BINARIES_DIR}/rootfs.cpio"
++# CONFIG_RD_GZIP is not set
++# CONFIG_RD_BZIP2 is not set
++# CONFIG_RD_LZMA is not set
++# CONFIG_RD_XZ is not set
++# CONFIG_RD_LZO is not set
++# CONFIG_RD_LZ4 is not set
++# CONFIG_RD_ZSTD is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++# CONFIG_MULTIUSER is not set
++# CONFIG_SYSFS_SYSCALL is not set
++# CONFIG_FHANDLE is not set
++CONFIG_POSIX_TIMERS=y
++CONFIG_BUG=y
++# CONFIG_BASE_FULL is not set
++# CONFIG_FUTEX is not set
++# CONFIG_EPOLL is not set
++# CONFIG_SIGNALFD is not set
++# CONFIG_TIMERFD is not set
++# CONFIG_EVENTFD is not set
++# CONFIG_AIO is not set
++# CONFIG_IO_URING is not set
++# CONFIG_ADVISE_SYSCALLS is not set
++# CONFIG_MEMBARRIER is not set
++# CONFIG_KALLSYMS is not set
++CONFIG_KCMP=y
++# CONFIG_RSEQ is not set
++CONFIG_EMBEDDED=y
++# CONFIG_VM_EVENT_COUNTERS is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLOB=y
++# CONFIG_SLAB_MERGE_DEFAULT is not set
++# CONFIG_MMU is not set
++CONFIG_ARCH_STM32=y
++# CONFIG_MACH_STM32F469 is not set
++# CONFIG_MACH_STM32F746 is not set
++# CONFIG_MACH_STM32F769 is not set
++# CONFIG_MACH_STM32H743 is not set
++CONFIG_CPU_V7M_NUM_IRQ=240
++# CONFIG_ARM_DMA_MEM_BUFFERABLE is not set
++CONFIG_SET_MEM_PARAM=y
++CONFIG_DRAM_BASE=0x90000000
++CONFIG_DRAM_SIZE=0x00800000
++CONFIG_HZ_1000=y
++# CONFIG_ATAGS is not set
++CONFIG_XIP_KERNEL=y
++CONFIG_XIP_PHYS_ADDR=0x0800C000
++CONFIG_XIP_DEFLATED_DATA=y
++# CONFIG_SUSPEND is not set
++# CONFIG_STACKPROTECTOR is not set
++# CONFIG_COMPAT_32BIT_TIME is not set
++# CONFIG_GCC_PLUGINS is not set
++# CONFIG_BLOCK is not set
++CONFIG_BINFMT_FLAT=y
++CONFIG_BINFMT_SHARED_FLAT=y
++# CONFIG_COREDUMP is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FW_LOADER is not set
++# CONFIG_ALLOW_DEV_COREDUMP is not set
++CONFIG_EEPROM_93CX6=y
++# CONFIG_INPUT is not set
++# CONFIG_VT is not set
++# CONFIG_UNIX98_PTYS is not set
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_LDISC_AUTOLOAD is not set
++CONFIG_SERIAL_STM32=y
++CONFIG_SERIAL_STM32_CONSOLE=y
++# CONFIG_DEVMEM is not set
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++CONFIG_MFD_STM32_TIMERS=y
++# CONFIG_USB_SUPPORT is not set
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_STM32=y
++CONFIG_DMADEVICES=y
++CONFIG_STM32_DMA=y
++CONFIG_STM32_DMAMUX=y
++CONFIG_STM32_MDMA=y
++CONFIG_SYNC_FILE=y
++# CONFIG_VIRTIO_MENU is not set
++# CONFIG_VHOST_MENU is not set
++CONFIG_IIO=y
++CONFIG_IIO_BUFFER=y
++CONFIG_IIO_TRIGGERED_BUFFER=y
++CONFIG_IIO_STM32_TIMER_TRIGGER=y
++# CONFIG_FILE_LOCKING is not set
++# CONFIG_DNOTIFY is not set
++# CONFIG_INOTIFY_USER is not set
++# CONFIG_PROC_SYSCTL is not set
++CONFIG_CONFIGFS_FS=y
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NLS=y
++CONFIG_PRINTK_TIME=y
++CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
++CONFIG_CONSOLE_LOGLEVEL_QUIET=15
++CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
++# CONFIG_SYMBOLIC_ERRNAME is not set
++CONFIG_DEBUG_INFO=y
++# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
++CONFIG_DEBUG_FS=y
++# CONFIG_DEBUG_MISC is not set
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_RCU_TRACE is not set
++# CONFIG_RUNTIME_TESTING_MENU is not set
+diff --git a/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+new file mode 100644
+index 0000000000..715ade694d
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+@@ -0,0 +1,30 @@
++From 9cdee858b36e2de7d6717e56fd3d08ad9ad25cde Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dariobin@libero.it>
++Date: Sun, 31 Oct 2021 08:52:52 +0100
++Subject: [PATCH] stm32f429i-disco: update kernel start address
++
++As of GNU/Linux v5.14 kernel device tree binary grows above 0x08008000
++and overwrites kernel binary.
++Therefore this commit moves kernel to the next flash bank.
++
++Signed-off-by: Dario Binacchi <dariobin@libero.it>
++---
++ stm32f429i-disco.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/stm32f429i-disco.c b/stm32f429i-disco.c
++index 8b27641..14a6f1e 100644
++--- a/stm32f429i-disco.c
+++++ b/stm32f429i-disco.c
++@@ -88,7 +88,7 @@ static void fmc_wait_busy(void)
++ 
++ void start_kernel(void)
++ {
++-	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
+++	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x0800C000 | 1);
++ 
++ 	kernel(0, ~0UL, 0x08004000);
++ }
++-- 
++2.17.1
++
+diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch b/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+deleted file mode 100644
+index d6d5c61aae..0000000000
+--- a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From ded9afa688184b3240a92c2b8f114c545a09bc3f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 12 Mar 2016 23:14:41 +0100
+-Subject: [PATCH] ARM: stm32f249-disco: don't force init= in /chosen/bootargs
+-
+-There is no reason to override the kernel's default init= value, as
+-this breaks userspace that assumes the kernel default of /init is
+-used. Since stm32 is often used with a minimal bootloader
+-(afboot-stm32) that doesn't provide any mechanism to override the DTB,
+-we need to adjust the kernel command line in the Device Tree source.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- arch/arm/boot/dts/stm32f429-disco.dts | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+-index f0b731d..2bae81c 100644
+---- a/arch/arm/boot/dts/stm32f429-disco.dts
+-+++ b/arch/arm/boot/dts/stm32f429-disco.dts
+-@@ -53,7 +53,7 @@
+- 	compatible = "st,stm32f429i-disco", "st,stm32f429";
+- 
+- 	chosen {
+--		bootargs = "root=/dev/ram rdinit=/linuxrc";
+-+		bootargs = "root=/dev/ram";
+- 		stdout-path = "serial0:115200n8";
+- 	};
+- 
+--- 
+-2.6.4
+-
+diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
+index 2c0641a6c5..58367fca0b 100644
+--- a/configs/stm32f429_disco_defconfig
++++ b/configs/stm32f429_disco_defconfig
+@@ -1,13 +1,14 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# BR2_UCLIBC_INSTALL_UTILS is not set
++BR2_GCC_ENABLE_LTO=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
+-BR2_LINUX_KERNEL_DEFCONFIG="stm32"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_XZ=y
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f429-disco"
+-- 
+2.17.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
