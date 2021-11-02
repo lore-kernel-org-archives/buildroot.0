@@ -2,42 +2,42 @@ Return-Path: <SRS0=drHZ=PV=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77AFDC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89641C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:25:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3623F60462
-	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:25:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3623F60462
+	by mail.kernel.org (Postfix) with ESMTPS id 5313A60462
+	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:25:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5313A60462
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B8B0608A1;
-	Tue,  2 Nov 2021 20:25:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32695608A0;
+	Tue,  2 Nov 2021 20:25:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ph0ZLhTwlTRw; Tue,  2 Nov 2021 20:25:16 +0000 (UTC)
+	with ESMTP id piFhQ13s11_k; Tue,  2 Nov 2021 20:25:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F01AF608A0;
-	Tue,  2 Nov 2021 20:25:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBA89608B3;
+	Tue,  2 Nov 2021 20:25:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8DC801BF40F
- for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:25:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E6FF61BF40F
+ for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D5AD608A2
- for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:25:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6BC7608A0
+ for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:25:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c5qR1TUbLzFy for <buildroot@lists.busybox.net>;
+ with ESMTP id 0noRrIyLYQqG for <buildroot@lists.busybox.net>;
  Tue,  2 Nov 2021 20:25:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A4BD608A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72EA5608A1
  for <buildroot@uclibc.org>; Tue,  2 Nov 2021 20:25:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1374E89182; Tue,  2 Nov 2021 20:21:34 +0000 (UTC)
+ id 3C6D389141; Tue,  2 Nov 2021 20:21:34 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
 Date: Tue, 02 Nov 2021 20:25:12 +0000
@@ -48,22 +48,22 @@ X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2021.05.1
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: critical
 X-Bugzilla-Who: thomas.petazzoni@bootlin.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone resolution
-Message-ID: <bug-14151-163@https.bugs.busybox.net/>
+ target_milestone
+Message-ID: <bug-14146-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14151] New: Cannot build for beaglebone black.
+Subject: [Buildroot] [Bug 14146] New: Cannot build for beaglebone black.
  Build fails with errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -81,26 +81,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14151
+https://bugs.busybox.net/show_bug.cgi?id=14146
 
-            Bug ID: 14151
+            Bug ID: 14146
            Summary: Cannot build for beaglebone black. Build fails with
                     errors
            Product: buildroot
            Version: 2021.05.1
           Hardware: All
                 OS: Linux
-            Status: RESOLVED
-          Severity: normal
+            Status: NEW
+          Severity: critical
           Priority: P5
          Component: Other
           Assignee: unassigned@buildroot.uclibc.org
           Reporter: afuakoff2003@gmail.com
-                CC: afuakoff2003@gmail.com, buildroot@uclibc.org
+                CC: buildroot@uclibc.org
   Target Milestone: ---
-                CC: afuakoff2003@gmail.com
-        Resolution: DUPLICATE
-            Status: RESOLVED
 
 Host PC OS: Ubuntu 21.04
 
@@ -355,9 +352,7 @@ Thanks
 Afua
 
 --- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-
-
-*** This bug has been marked as a duplicate of bug 14146 ***
+*** Bug 14151 has been marked as a duplicate of this bug. ***
 
 -- 
 You are receiving this mail because:
