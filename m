@@ -2,45 +2,45 @@ Return-Path: <SRS0=drHZ=PV=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF6AC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:14:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49313C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:15:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4A46A61101
-	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:14:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A46A61101
+	by mail.kernel.org (Postfix) with ESMTPS id ED1FB61101
+	for <buildroot@archiver.kernel.org>; Tue,  2 Nov 2021 20:15:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED1FB61101
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13D9B80E31;
-	Tue,  2 Nov 2021 20:14:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B95E6402F7;
+	Tue,  2 Nov 2021 20:15:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hVkc5FxK_-oF; Tue,  2 Nov 2021 20:15:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id F033E402F6;
+	Tue,  2 Nov 2021 20:15:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0817D1BF40F
+ for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:13:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC20D80B24
+ for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:13:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AUTcpTnIMrie; Tue,  2 Nov 2021 20:14:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FD1880D55;
-	Tue,  2 Nov 2021 20:14:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C47DF1BF40F
- for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:13:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD2204022F
- for <buildroot@lists.busybox.net>; Tue,  2 Nov 2021 20:13:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d3mHaZBfbA9A for <buildroot@lists.busybox.net>;
- Tue,  2 Nov 2021 20:13:24 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nQTQZjVkQ7_B for <buildroot@lists.busybox.net>;
+ Tue,  2 Nov 2021 20:13:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B6EA4025C
- for <buildroot@uclibc.org>; Tue,  2 Nov 2021 20:13:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66D6F80B13
+ for <buildroot@uclibc.org>; Tue,  2 Nov 2021 20:13:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id CDE8487E97; Tue,  2 Nov 2021 20:09:44 +0000 (UTC)
+ id 33EC187E97; Tue,  2 Nov 2021 20:09:48 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 02 Nov 2021 20:13:23 +0000
+Date: Tue, 02 Nov 2021 20:13:26 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -57,7 +57,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-13971-163-gBbcJq4Dck@https.bugs.busybox.net/>
+Message-ID: <bug-13971-163-MJYyNALNX9@https.bugs.busybox.net/>
 In-Reply-To: <bug-13971-163@https.bugs.busybox.net/>
 References: <bug-13971-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -83,8 +83,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=13971
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-*** Bug 13956 has been marked as a duplicate of this bug. ***
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+*** Bug 13961 has been marked as a duplicate of this bug. ***
 
 -- 
 You are receiving this mail because:
