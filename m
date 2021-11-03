@@ -2,84 +2,87 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0CC3C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:06:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55022C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5208C610A8
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:06:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5208C610A8
+	by mail.kernel.org (Postfix) with ESMTPS id 0CF8E60551
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0CF8E60551
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F53F40146;
-	Wed,  3 Nov 2021 20:06:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD323404E3;
+	Wed,  3 Nov 2021 20:12:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t6xoaKfXvz5I; Wed,  3 Nov 2021 20:06:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y7tDc63Rxvx1; Wed,  3 Nov 2021 20:12:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D022401C0;
-	Wed,  3 Nov 2021 20:06:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11BE5404E4;
+	Wed,  3 Nov 2021 20:12:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 589AA1BF3D6
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:06:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6D291BF3D6
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 487C480F77
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:06:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C31D28100B
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:12:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3sCpRH_wHDUQ for <buildroot@lists.busybox.net>;
- Wed,  3 Nov 2021 20:06:08 +0000 (UTC)
+ with ESMTP id 9M3dzVpvpibT for <buildroot@lists.busybox.net>;
+ Wed,  3 Nov 2021 20:12:07 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B9B580F56
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:06:07 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6125C80FBC
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1635969964;
- bh=B7IMgu0TYmkI7XTbQk4t63fuFPEhGBZiDEy9DqoNX3M=;
+ s=badeba3b8450; t=1635970323;
+ bh=dK7WZ4CpW+cHzR9y/Mb51KqP7xkdj2G3AXewQaq+740=;
  h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=OMtq/sCgxadfosnk9+pusKjdFSCGuANy8Uj7smL2agOnebAG4YoxBbmAsoFHCaZa6
- QPBIyS0yyrvd1yWF8H1fT9O1+eS/FwqKBpV+WiuFzd601ArIn8DyxCmIHI8Wtnd1Ck
- 92W3/4mflhSQxLmX7LMyK9GKcu8G8VdKgQxFbzcI=
+ b=fCMkiSsqniSZdoSnKu0eh7KFSDcWWLSW13TLyXDUUe6bCcBuLB6hNvtlPuoabMyAa
+ wxS4SEXtlG5EerCmjyiCDM/stgC6j7mle+g/oKUlVw0UkTzOVy0WmES85nAfLE3Vip
+ xld2WcL5JtMEV3brzXWEzRy8YUq8UQnHrY9jp1ns=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.171]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ81-1nES7t2qJR-00WBYB; Wed, 03
- Nov 2021 21:06:04 +0100
-Date: Wed, 3 Nov 2021 21:06:03 +0100
+Received: from localhost ([62.216.209.171]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6bjy-1mgTrJ2Iz0-0182mc; Wed, 03
+ Nov 2021 21:12:03 +0100
+Date: Wed, 3 Nov 2021 21:12:02 +0100
 From: Peter Seiderer <ps.report@gmx.net>
-To: Julien Grossholtz <julien.grossholtz@openest.io>
-Message-ID: <20211103210603.3a135f02@gmx.net>
-In-Reply-To: <20211030213600.3445223-1-julien.grossholtz@openest.io>
-References: <20211030213600.3445223-1-julien.grossholtz@openest.io>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20211103211202.539dba74@gmx.net>
+In-Reply-To: <CADvTj4rCzGkrFuPj67Xu9s7A3FNeyBpBEBQKiULQaLF4GYnEKg@mail.gmail.com>
+References: <20211029065957.3084528-1-james.hilliard1@gmail.com>
+ <20211103204805.1facb4a9@gmx.net>
+ <CADvTj4rCzGkrFuPj67Xu9s7A3FNeyBpBEBQKiULQaLF4GYnEKg@mail.gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:QkveaHVyR9smyZPepESLxWFUa+/b4T6wU4YHr8Nc66e5Bqceubu
- F5Zx1vR6+xJ0qyZq5WxDalZIhHgPB16k/CB/W5t74bspHmoBwkIY8turrpa/7xXGXJ3dXTY
- 5QULav7fQN3efCMoVN1Yj35xAmz1IoUrvqKPGVNsuv3E+ceqz9tsbPTYik+CXOoUa3UT7uq
- L4BV5wAp+At2S3ApfRu0A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wAlCtW+w4OQ=:JVZgX7OlTXgKfAdIwppyy4
- AfJ3WfbN2AwK7sLY1ZZ7hlnGtM91P0SWPnmdVlGA1nLtWEFBJX/XAqKt8YcnW5TpjIPncwo5X
- uyKxnpobjQKAYZG7WWgjpuETW6RdEQa0l/d1GMAO48dWIdzKm0/tdwcEHTBRa0Ggqm9dBTzaF
- z9GE04epxgBqW0Be9WNSkJYg+MrWz5hacK9mZ5sj7F4QminfajlKgy9ur0Zu13cbMgwMElc9m
- 9dZ5YPdfxLJJmxx1YGTbV3oPx4PjYBCsRovcIb0/tVzrjArHqu1HwOw7y1axmMmeRCAg7Y3v+
- Q3dJJRj0Q9a2Y8HZ6g5+txt14dAY4OEFUWZLedv2gtkU0fdX8RR4CpFI7O3acCLQC/6SB5zw7
- rfrAc1T8XcqNpO9IQwqBNtVJ/KMSRLhawwtvPdW/OFD8mWNMB+qZK2w5YfPPrjcG7Z5ay3Z9Z
- dnlS0rDuI1T3KCU+JMdXNBYMCdrM5DNibvo98amgyn9QqQs3rPJ3n2S9KCdJbTlgjqKQYP1Zh
- aLamv43Rgcb7cq8PmecDkjT/aquSskJvTZENxlHXmXWO3KbhbnbHDaEVutuYFBt0WaqT6aLej
- gyP7VKx1J2nOI6OdekRRwG1TNG8M5v6jX2nUAHD6M8Y5s9/dHsvERgUAetNVukcuL6eLUXG23
- bBPHw3v8mD1Ls9CiVxkaRSxDy7bZzMNBlUk9pLLjqWNec2H/ONJz8cW0vWTBSe75xcKwndv+2
- glbAnPaDbQxcdsgf/eJ6EmXjlq2Puf6BK/vRRdWNrFUc0/JeZ+nchUs+PXLK8YNItNUBhQ6UO
- suF5I7k2ONSVj7Y1iC79A2v3XuMB5lN3vr2En/8PwUdIajRmZ43GBSY/tD1Nf7FjuHfAkifuS
- oe6gYEWhBTtvIm1dtOXn3/KoV+E57fWT2L/r3YAu6FX/X1OGPkq+0E9Gkp13L4l3xn+eGeUtP
- 3SD8ZqaoYmTSGQzzi57z/ZUAddS3jzuOygvUUdJO5ZdCACDnb9O3bIMtQ/x/QikYn/WWFm2Sh
- bbbyK53l31o5WAgn7qxI1qCn9qHnNPMDxhTBrDNNetq3ksyklqzhuc2LQilbOd4dHu1qIeXGV
- LTsD8C9XkqaCq8=
-Subject: Re: [Buildroot] [v2 PATCH 0/2] Raspberry-Pi Zero 2 W support
+X-Provags-ID: V03:K1:Vq/fWwk2o2HITF64G/lNfYcXeXPuEWPHG/nzLCvpTyu+bwEVGwH
+ aBqp+GAb8TMlNjD5iCLrQKKOglTMd/kSYJuiI/T6Od1Cf6Q9Gdn/sgL2ME2os3ngLrRmwcT
+ nC+fV6lD0PT1q0KLmNTCfcYcoRrQ67e73V40jGWFGASgLMdvucSXkyOQAds02nMoyBQjjTa
+ 2EUuqxyryUUIKi2nJOn9A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PFcPxJNZ954=:pQBqgXAG/w2NDWkvzxtCVV
+ vI2mwl9m+Tui5FH9rtiZUPkrNasZxCHxy9W3HgrltKhjMRaBId9o1WSpfLDno+AYme6N0FA74
+ /+xDIEmu3rfAudrUDdvO+Vn/rdkDutBCNX0OUYaIVRF0RJ0Gd4bpJY+mSzH4go0kL56jCr2Ii
+ SPlW+s+pVq8TDjJ0TprG/C+WfNoVlSUdzJI2vwiSsfnWdNo2Qsgqu+YWl3xgOv5EDhEygetGW
+ dW/v90+S0n5jVEr+Re8TuSpvqZZ8ewhLxoBVhQCXL5+ljXTHyTlRj8QuWCcqGwX2zMdI0+dyi
+ L3pjVLftOrkMo+bvsQrIRySo/MU0yKmbtj5ToGJ4wjAG06LGhk63UoTN8LZvmmsgn+VG+rcar
+ IyCH3/UJMnr6rwhArK55Xuy7EoXtcfCvpt5O6+2uGWfFtqYSS+Zfgg66kogXZEyxxhjQxMccR
+ hTv1l6J6ZYbTBSZRdiqxvLWDLnXBN4l/qXBUVQOYVkeuDm21q0SElM+LHJ+b4Gi5UGbkS+ZsU
+ 1mCU6xUIx7ezlbvQFX9XqFhZbmGzE94+rQ42ZT1nWQj0jDatVpYBgntfXz7NILbnbZPzrM2CN
+ nP7sErO1/3+ynWIGDxX6XfL3MZXjzLA2b1en1RDpr1rNPb98/pYwzexDLG24ipqrBfEiAwEDn
+ GOsN6LlbL3TV+CNmOLXCVMzXebDSCyqZpp/wMn5phBaeBuuv3+aPAZoq6EL1UatkMlEeOSXrp
+ 5mW0SN/24BYxFFASWPFbgt8o7ITN2r61Z00xRpnEwkUPpawsNQ2CwE7RJEwoxYOzrqhTP5KMf
+ Slv+BGGIi/0f0CnrPpLX6Gd5CoFTvDIHEOCjek/1TPlqdekD8sICgrHfzxT6OlkHdW/QOE4Q8
+ VjnF1PuxwQntKnhZyxltvZPrOEtOn4NnbIqJqTvaUFPXg7jvrLC9h/PuH8cQXz/VCJr35mTxZ
+ b9YssKO+PAb6/YaLo+yeIIHuR12ADlpFabZT2P9B5oqmB9bbyAWEo9Es0Mzk7a2r5Lsd/Mk3Z
+ Kxg/MEG4TVGBDgC1LUi2BOocH1zcQl12yBS4pkCQotJxueKcBG9vNiUWgEZyLwQvwQoA/0OaH
+ HD6Tjl1HWVAMrU=
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: add
+ host-python3-six host dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,85 +94,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+Hello James,
 
-On Sat, 30 Oct 2021 23:35:58 +0200, Julien Grossholtz <julien.grossholtz@openest.io> wrote:
+On Wed, 3 Nov 2021 13:51:09 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Hello,
+> On Wed, Nov 3, 2021 at 1:48 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Hello James, Fabrice, *
+> >
+> > On Fri, 29 Oct 2021 00:59:57 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > > This dependency wasn't added during the removal of
+> > > python3-cryptography.
+> >
+> > The conversion/dropping of python3-cryptography was done with commits [1] and [2],
+> > and the commit log of [1] states the dropping of the host-python3-six dependency
+> > was intentionally:
+> >
+> >         [...]
+> >         While at it, drop host-python3-pip and host-python3-six as these
+> >         dependencies are not needed. Indeed, pip was never a dependency of
+> >         cryptography and six is not a dependency with python3 and will be
+> >         dropped in version 3.4 and
+> >         https://github.com/pyca/cryptography/commit/e66db8079d3fbd0110e87ece1fd48f4bfd9e48b9
+> >         [...]
+> >
+> > But the package python-cryptography is still at version 3.3.2 (and clearly depends on six)
+> >
+> > @Fabrice: version bump pending?
 >
-> Here is an update of my previous Raspberry-Pi Zero 2 W support.
-> As Peter Seiderer pointed out, the Raspberry-Pi Linux Kernel was
-> updated with a new bcm2710-rpi-zero-2.dtb [1] a few hours after I sent
-> the patch.
-
-Seems you are to fast, with commit [2] a 'bcm2710-rpi-zero-2-w.dtb' was
-added (as a permanent replacement/name-change for bcm2710-rpi-zero-2.dtb)
-...
-
+> I actually have a patch from a while back bumping the version...but it
+> also requires rust
+> support and that would probably cause a bit of breakage:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210318044253.3202355-2-james.hilliard1@gmail.com/
 >
-> Therefore, I bumped the Raspberry-Pi Linux kernel to 5.10.76 for all related
-> boards. I built and tested it for the Pis I have access to : Pi Zero W
-> and Pi 4 (32 and 64 bit versions). But, I cannot test the other.
+> So it's probably going to be a while before we can update cryptography
+> if I had to guess.
 
-Would like to keep rpi-firmware up-to-date with the rpi-kernel (see
-for example [3] and [4])...
+Clear vote for keeping the old version and re-adding the host-python3-six
+dependency ;-)
 
-Mind to re-spin your patchset?
+Mind to re-spin your patch with some explanation?
 
 Regards,
 Peter
 
-[2] https://github.com/raspberrypi/linux/commit/093bc6d7ffd3cfba05712a7208c8dbfdcffbbf47
-[3] https://patchwork.ozlabs.org/project/buildroot/patch/20211006213728.1069-1-ps.report@gmx.net/
-[4] https://patchwork.ozlabs.org/project/buildroot/patch/20211006213728.1069-2-ps.report@gmx.net/
-
 >
-> Regarding the Raspberry-Pi Zero 2 W, I updated the patch with the new
-> dts and kernel git sha1. I booted it, everything seems to work: HDMI,
-> Micro SD and Wi-Fi with some extra packages.
->
-> Let me know what you think,
->
-> Julien Grossholtz
->
->
-> [1] https://github.com/raspberrypi/linux/commit/84dc624be6ae704fdb3c413b7d86315cf49fbb0b
->
->
-> *** BLURB HERE ***
->
-> Julien Grossholtz (2):
->   configs/raspberrypi: bump kernel to 581049d (5.10.76)
->   board/raspberrypi: add Raspberry Pi Zero 2 W
->
->  board/raspberrypi/config_zero2w.txt           | 29 +++++++++++++++
->  .../genimage-raspberrypizero2w.cfg            | 31 ++++++++++++++++
->  board/raspberrypi/readme.txt                  |  5 +++
->  board/raspberrypizero2w                       |  1 +
->  configs/raspberrypi0_defconfig                |  2 +-
->  configs/raspberrypi0w_defconfig               |  2 +-
->  configs/raspberrypi2_defconfig                |  2 +-
->  configs/raspberrypi3_64_defconfig             |  2 +-
->  configs/raspberrypi3_defconfig                |  2 +-
->  configs/raspberrypi3_qt5we_defconfig          |  2 +-
->  configs/raspberrypi4_64_defconfig             |  2 +-
->  configs/raspberrypi4_defconfig                |  2 +-
->  configs/raspberrypi_defconfig                 |  2 +-
->  configs/raspberrypicm4io_64_defconfig         |  2 +-
->  configs/raspberrypicm4io_defconfig            |  2 +-
->  configs/raspberrypizero2w_defconfig           | 36 +++++++++++++++++++
->  16 files changed, 113 insertions(+), 11 deletions(-)
->  create mode 100644 board/raspberrypi/config_zero2w.txt
->  create mode 100644 board/raspberrypi/genimage-raspberrypizero2w.cfg
->  create mode 120000 board/raspberrypizero2w
->  create mode 100644 configs/raspberrypizero2w_defconfig
->
+> >
+> > @James: with a bit of explanation added to the commit log you can add my
+> >
+> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> >
+> > But although fine with an version bump of the package ;-)
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] https://git.buildroot.net/buildroot/commit/?id=95a63a34ac9204c4fe069154783bd97ed48c3ae2
+> > [2] https://git.buildroot.net/buildroot/commit/?id=43147827a7b759248288fad1d97130c027c23e9a
+> >
+> > >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.net/results/971/9711ccebb9c3e2fa8f17d969d8b431d4301677e3/build-end.log
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > >  package/python-cryptography/python-cryptography.mk | 5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+> > > index e21b9db042..081dfc06a0 100644
+> > > --- a/package/python-cryptography/python-cryptography.mk
+> > > +++ b/package/python-cryptography/python-cryptography.mk
+> > > @@ -14,7 +14,10 @@ PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
+> > >  PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
+> > >  PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
+> > >  HOST_PYTHON_CRYPTOGRAPHY_NEEDS_HOST_PYTHON = python3
+> > > -HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python3-cffi host-openssl
+> > > +HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
+> > > +     host-python3-cffi \
+> > > +     host-python3-six \
+> > > +     host-openssl
+> > >
+> > >  $(eval $(python-package))
+> > >  $(eval $(host-python-package))
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
