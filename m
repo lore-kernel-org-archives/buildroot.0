@@ -2,52 +2,53 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A9DC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:59:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76593C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:59:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B677961166
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:59:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B677961166
+	by mail.kernel.org (Postfix) with ESMTPS id 3F10E61166
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:59:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F10E61166
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FD544048E;
-	Wed,  3 Nov 2021 20:59:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vyg6eLq3K8eL; Wed,  3 Nov 2021 20:59:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDF9C404EF;
-	Wed,  3 Nov 2021 20:59:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CEF0E1BF3D6
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC9656062A
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1455D60B03;
+	Wed,  3 Nov 2021 20:59:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VXLPYM8iQdRt for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MPBv5E6ZnZY4; Wed,  3 Nov 2021 20:59:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E64760AF4;
+	Wed,  3 Nov 2021 20:59:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E39ED1BF3D6
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0894404F6
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gaf4d6Kbfwcb for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2211060AE4
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06AC7404F9
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:56:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 840628A3E5; Wed,  3 Nov 2021 20:52:57 +0000 (UTC)
+ id 635E08A3EB; Wed,  3 Nov 2021 20:52:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 21:24:25 +0100
+Date: Wed, 3 Nov 2021 21:19:13 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: a0e189ff7ff397c8c007c8555b0bc2cafe5af88b
-X-Git-Newrev: 5ecaec571fa8d040647dfd5ab5abed2d2f673afd
+X-Git-Oldrev: 7c579e1d59361757cd82fe9da8d95930861317cd
+X-Git-Newrev: 89e024acab85c828fa8011a92e882620ef3c7304
 X-Patchwork-Hint: ignore
-Message-Id: <20211103205257.840628A3E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/systemd: bump to
- version 249.5
+Message-Id: <20211103205257.635E08A3EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
+ support/scripts/generate-gitlab-ci-yml: allow multiple tests in one
+ pipeline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +66,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ecaec571fa8d040647dfd5ab5abed2d2f673afd
+commit: https://git.buildroot.net/buildroot/commit/?id=89e024acab85c828fa8011a92e882620ef3c7304
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Remove efi-ldsdir meson config option which is no longer used.
+The current Gitlab CI mechanism allows to trigger all tests in a CI
+pipeline by pushing a branch named <something>-runtime-tests, or to
+trigger a single test in a CI pipeline by pushing a branch name
+<something>-tests.<name of test>.
 
-Meson config variable systemd-analyze is renamed to analyze.
+However, there are cases where it is useful to run a suite of tests,
+for example to run all tests in tests.init.test_busybox.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This commit makes that possible by extending the current semantic of
+<something>-tests.<name of test> to not expect a complete test name,
+but instead to accept all tests that starts with the given pattern.
+
+This allows to do:
+
+  git push gitlab HEAD:foobar-tests.init.test_busybox.TestInitSystemBusyboxRo
+
+like it was the case before. But it now also allows to do:
+
+  git push gitlab HEAD:foobar-tests.init.test_busybox
+
+to run all Busybox tests.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 63b3a3c6d7bf43a4f1c7adb5541c07298b419b02)
+(cherry picked from commit 23186356a1c8f6cb8a104e783034e25633a0fe40)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/contribute.txt             | 18 ++++++++++++++++--
+ support/scripts/generate-gitlab-ci-yml |  6 +++++-
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index baab5304e6..a83ff7d989 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  f3df809bbe777fcb5ffe2b29aaf6f871de764ef22706940960f88b8a850e9278  systemd-249.4.tar.gz
-+sha256  773ee546ad6df0921ea6f9e12294eb102bf68c1ac9eb3dcaca1764f8306d6e13  systemd-249.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  f5645b4b846479859d6618fa7a5a1722681aa7fc43c1e45f8bf8e1fe5738d618  README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5a76f2f246..1a5ccc02fc 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index bf3d5a7075..36512c0ee3 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -677,9 +677,23 @@ string you choose to identify this specific job being created.
+  $ git push gitlab HEAD:<name>-runtime-tests
+ ---------------------
  
--SYSTEMD_VERSION = 249.4
-+SYSTEMD_VERSION = 249.5
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-@@ -507,7 +507,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Defi-cc=$(TARGET_CC) \
- 	-Defi-ld=$(TARGET_LD) \
- 	-Defi-libdir=$(STAGING_DIR)/usr/lib \
--	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
- 	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
+-* to trigger one test case job, a specific branch naming string is used that
+-includes the full test case name.
++* to trigger one or several test case jobs, a specific branch naming
++string is used that includes either the full test case name, or the
++beginning of a series of tests to run:
  
- SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
-@@ -730,7 +729,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dinitrd=false \
- 	-Dxdg-autostart=false \
- 	-Dkernel-install=false \
--	-Dsystemd-analyze=false \
-+	-Danalyze=false \
- 	-Dlibcryptsetup=false \
- 	-Daudit=false \
- 	-Dzstd=false
+ ---------------------
+  $ git push gitlab HEAD:<name>-<test case name>
+ ---------------------
++
++Example to run one test:
++
++---------------------
++ $ git push gitlab HEAD:foo-tests.init.test_busybox.TestInitSystemBusyboxRo
++---------------------
++
++Examples to run several tests part of the same group:
++
++---------------------
++ $ git push gitlab HEAD:foo-tests.init.test_busybox
++ $ git push gitlab HEAD:foo-tests.init
++---------------------
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 3f498e08fd..69c3fb275f 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -71,7 +71,11 @@ gen_tests() {
+             do_runtime=true
+             ;;
+           (*-tests.*)
+-            runtimes=( "${CI_COMMIT_REF_NAME##*-}" )
++            runtimes=( $(./support/testing/run-tests -l 2>&1 \
++                         | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/' \
++                         | LC_ALL=C sort \
++                         | grep "^${CI_COMMIT_REF_NAME##*-}")
++                     )
+             do_runtime=true
+             ;;
+         esac
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
