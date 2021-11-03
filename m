@@ -2,58 +2,83 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFCF2C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:40:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79708C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:47:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5EE6D610E7
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:40:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5EE6D610E7
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3D6F8610EA
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:47:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D6F8610EA
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 281578175C;
-	Wed,  3 Nov 2021 21:40:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06C31403A7;
+	Wed,  3 Nov 2021 21:47:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RKrZdmlLg6is; Wed,  3 Nov 2021 21:40:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C_-bOcpaSnVl; Wed,  3 Nov 2021 21:47:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 892DB814B5;
-	Wed,  3 Nov 2021 21:40:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B56840398;
+	Wed,  3 Nov 2021 21:47:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C3121BF38A
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:40:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1411F1BF38A
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12E9B403AC
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:40:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0295D40165
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:47:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id idX0qLgcyTVl for <buildroot@lists.busybox.net>;
- Wed,  3 Nov 2021 21:40:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 796C740398
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:40:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B5180240004;
- Wed,  3 Nov 2021 21:40:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1miNzS-0006vK-T7; Wed, 03 Nov 2021 22:40:14 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 7S3l4V40Lrvs for <buildroot@lists.busybox.net>;
+ Wed,  3 Nov 2021 21:47:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com
+ [IPv6:2607:f8b0:4864:20::72d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D31B40134
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:47:23 +0000 (UTC)
+Received: by mail-qk1-x72d.google.com with SMTP id bj27so2182832qkb.11
+ for <buildroot@buildroot.org>; Wed, 03 Nov 2021 14:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9ZxF7pSi+OiBckSytFcWhQjJ8TMaTwy0z7kqBLE0Pak=;
+ b=Xjrf1vnT+OzSoPBqLfvRTmwC2S7xq5uiL3QVyf9YnHupzu7bOsbvugxO6550+BPAGK
+ 9g5AsD3QBcTrBczyVA5YO4Cm/0wjaGq9IrIeC0zLnZ44NXdBQVLpIKzUQzR7+qscriKO
+ 9UodipbBeTZ6p0Ae5CVvl4fjGQPZEM22Ko49Gn3q4pVinojVfkJpBxa+I1HmLyUn1Y4v
+ lvMiluXT+qBOlx7yk8NHGWL7o9RkwGy+Us7nRhGz1AYK4vpO1/T/U6dNCtGtiFW7OL2d
+ zsxgLcryXvdvzi8g/uF9g/TFiW9LyTE/Af9OdvZsW3iqz2Z1xkJlNmT5Jp0NA55tQy7H
+ l8vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9ZxF7pSi+OiBckSytFcWhQjJ8TMaTwy0z7kqBLE0Pak=;
+ b=vryejsh8dhpLt/LyjDcirL1eAgsy+r+QaAMo7VuJZBSw4aoNmVd1CWyfWEbIhx6NLy
+ wTEr4xF5LVkSSLwoKeral43KiVT3tZeQUczDNHhj7zj0ybxYcDCd2sdunzbZpgIhzE7s
+ uw/Tx2hq2hMReoXUAmzSfsG0WDljlRJadHq4wFJM5TD2VrRKAnU3II8yzbAoK4Jd//MV
+ sEkFX5zxMf11ea3ffX/Y/mOy9YOQsdSmOaHCqy80v+8vWfDCkTPr3S4qZXU2p4+r8qMV
+ IBQW4X3+hIjs1IoZzUDM0NXu9SWzr5pc+sTq2rHU5D5kQEM9hYWcL0vHj0vGqF+BYFrC
+ JHGw==
+X-Gm-Message-State: AOAM532V7gPXnXl7ruBQBnjrLAPu3BOHodGe5lgA7pPApSCLN6a9YZ8d
+ sYp/weAHIabRPGjya2Be2HM5MPG9dfM=
+X-Google-Smtp-Source: ABdhPJyGmMkvnXInSTebk6FrNwaLQe4bM5oJzW+4XRLXZ3xnnaQi2lCAaI9aJXSB8X/YGy1Jwfs92g==
+X-Received: by 2002:a05:620a:3703:: with SMTP id
+ de3mr2496510qkb.125.1635976042720; 
+ Wed, 03 Nov 2021 14:47:22 -0700 (PDT)
+Received: from adam.rai.com ([47.149.13.137])
+ by smtp.gmail.com with ESMTPSA id o14sm2645896qtv.34.2021.11.03.14.47.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Nov 2021 14:47:22 -0700 (PDT)
+From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  3 Nov 2021 22:40:11 +0100
-Message-Id: <20211103214012.26524-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211103214012.26524-1-peter@korsgaard.com>
-References: <20211103214012.26524-1-peter@korsgaard.com>
+Date: Wed,  3 Nov 2021 14:47:18 -0700
+Message-Id: <20211103214718.1149331-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 10, 14}.x series
+Subject: [Buildroot] [PATCH v2 1/1] package/mender-grubenv: fix grub module
+ checks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,69 +90,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+Commit 3efb5e31fc05705ce3c46b1f0ec031978a5cfab6 broke mender-grubenv by
+splititng up BR2_TARGET_GRUB2_BUILTIN_MODULES and
+BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI. Indeed, when a user now builds a system
+with EFI, the MENDER_GRUBENV_MODULES_MISSING list always returns a full list
+of grub modules, resulting in the error condition on line 46 to trigger.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 32fe47d096..dca42d33aa 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  57b2cf6991910e3b67a1b3490022e8a0674b6965c74c12da1e99d138d1991ee8  linux-5.15.tar.xz
--sha256  4dff4e96d4052195002538027f8a810411ba6116a41bff5575952702d509d06a  linux-5.14.14.tar.xz
--sha256  0a2b2f5fefb90773190aaef4726ac363e03992aedc424b0a57eca092d084304b  linux-5.10.75.tar.xz
--sha256  cc0c0f902748d251cb22d0e69e3b8d260c447eb0072ef853da15da6cce775038  linux-5.4.155.tar.xz
-+sha256  c30dcbb1f884b94c80eab001339a6df5de46651f976460cdd213b6e2858ebc00  linux-5.14.16.tar.xz
-+sha256  d3b64edfc1dd7212e62ed733aeeb73d64ffd6d9658d322d44cddf1b41d5b8fc3  linux-5.10.77.tar.xz
-+sha256  9f3fbbbcb3c8a53e1cbed9ae6b06991ba618c1deeaef0a125ba9e82d8414864a  linux-5.4.157.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  33196aa3c0487d6d5be14c366fea1fb3d603d66efcf039746f77f3ef819be7bc  linux-4.4.289.tar.xz
--sha256  d44128674702529dd26214d6cd1c19542c37c5cc516f352bebbb78f0a9ed97c2  linux-4.9.287.tar.xz
--sha256  933bb2e9359165da8a7eb8ae8321e88e3e070c34b827d51937ff3ba443e15908  linux-4.14.252.tar.xz
--sha256  38f28c1cd6db0b54ee37a14fd17db651fe68704d08f95e141b14d32b872f4e98  linux-4.19.213.tar.xz
-+sha256  70a7f59ab5755d746dd35d5bc09fe122348f15986d21283fb7a81105c7de6b51  linux-4.4.291.tar.xz
-+sha256  a5c2d0fdd5b34aca1fb2d7bdce48a6a5a0fa85ad926e6d6d74df17fe30397fa6  linux-4.9.289.tar.xz
-+sha256  dfd95c1bc3af5b0e57e53608f8356037510b19cb55cac520e43c3d499ea60d46  linux-4.14.254.tar.xz
-+sha256  9e2064f9cb942999a76737d510f08a85bcd8164e9762ce0f7dbfeac58bc2f2b3  linux-4.19.215.tar.xz
- # Locally computed
- sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
- sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3a25667ea0..38cb274066 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -374,13 +374,13 @@ endchoice
+In addition, BR2_TARGET_GRUB2_BUILTIN_MODULES has been renamed to
+BR2_TARGET_GRUB2_BUILTIN_MODULES_PC, so this is changed in mender-grubenv.mk
+as well.
+
+Add an ifeq that checks if BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI is not empty,
+and checks the required modules properly if it is not.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+changes v1 -> v2:
+  - Change ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y) to
+    ifneq ($(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI),) to cover all grub2 efi
+    scenarios. (Thomas)
+  
+  - Change BR2_TARGET_GRUB2_BUILTIN_MODULES to
+    BR2_TARGET_GRUB2_BUILTIN_MODULES_PC (thomas)
+
+ package/mender-grubenv/mender-grubenv.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+index 07df25512c..ce63323f2a 100644
+--- a/package/mender-grubenv/mender-grubenv.mk
++++ b/package/mender-grubenv/mender-grubenv.mk
+@@ -31,9 +31,15 @@ MENDER_GRUBENV_DEFINES = \
+ # These grub modules must be built in for the grub scripts to work properly.
+ # Without them, the system will not boot.
+ MENDER_GRUBENV_MANDATORY_MODULES=loadenv hashsum echo halt gcry_sha256 test regexp
++ifneq ($(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI),)
+ MENDER_GRUBENV_MODULES_MISSING = \
+-	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES)),\
++	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
+ 		$(MENDER_GRUBENV_MANDATORY_MODULES))
++else
++MENDER_GRUBENV_MODULES_MISSING = \
++	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
++		$(MENDER_GRUBENV_MANDATORY_MODULES))
++endif
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.289"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.287"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.252"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.213"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.155"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.75"	if BR2_KERNEL_HEADERS_5_10
--	default "5.14.14"	if BR2_KERNEL_HEADERS_5_14
-+	default "4.4.291"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.289"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.254"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.215"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.157"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.77"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.14.16"	if BR2_KERNEL_HEADERS_5_14
- 	default "5.15"		if BR2_KERNEL_HEADERS_5_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+ ifneq ($(MENDER_GRUBENV_MODULES_MISSING),)
 -- 
-2.20.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
