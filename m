@@ -2,51 +2,89 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 140D4C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:13:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B928AC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:13:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CD19060E78
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:13:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CD19060E78
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7E83360EB9
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:13:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7E83360EB9
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D25F60AD2;
-	Wed,  3 Nov 2021 21:13:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B22A403AC;
+	Wed,  3 Nov 2021 21:13:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hs4zp9WDu4-f; Wed,  3 Nov 2021 21:13:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0aYrMcScGHdf; Wed,  3 Nov 2021 21:13:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9DDC606B3;
-	Wed,  3 Nov 2021 21:13:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C20140398;
+	Wed,  3 Nov 2021 21:13:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4D0EB1BF38A
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:13:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AA81A1BF38A
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C951E60730
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:13:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A50860730
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:13:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IVYZ5sr1TDS5 for <buildroot@lists.busybox.net>;
- Wed,  3 Nov 2021 21:13:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79DC6606B3
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:13:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D07C08A45B; Wed,  3 Nov 2021 21:09:31 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 22:12:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 661917efd8101a4bc5b7417f8926b48014a0b082
-X-Git-Newrev: 73a55011419030bc1efedc8ef81e3f1a5ec33d3b
-X-Patchwork-Hint: ignore
-Message-Id: <20211103210931.D07C08A45B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: add version 5.15
+ with ESMTP id R6PL0EZrVPvc for <buildroot@lists.busybox.net>;
+ Wed,  3 Nov 2021 21:13:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DECEC606B3
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:13:43 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id x27so7781020lfu.5
+ for <buildroot@buildroot.org>; Wed, 03 Nov 2021 14:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to;
+ bh=cWdb+prkgLxMeFB/Qp6Wfc6MnFHAPLMm8umcQddtJOI=;
+ b=OZQK5SXXlQkxrmb1z9Zg8fDwpJoEqsJBDsIZld331vYr8x4/Luo+FarRQz3AJdDvqo
+ +e4mmU0geiTgwDAyTF2zZQhS08IHKwAXYBFE1Ich8vdNjs7fUEZoRoXLEOyWGqMFpSpn
+ QbgOAG9i3Az4ma1CdznnMu5cPV5A0xSN1o9UED9Zr5P9JF0nmhNEh4eJWipYD4RBtaXg
+ 6Glq98QaCczfGcy8EBRIIhAzhlJzjRA4r8/7yja6TUVpCO85+zuOR+knF7IxHBKWN6PT
+ vYgs9HFmhoO0pVO5HozynnbHDYurMkc6WdNaX755VoPcjYM7zbCiVl46d4K74vHPO+P4
+ yBIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to;
+ bh=cWdb+prkgLxMeFB/Qp6Wfc6MnFHAPLMm8umcQddtJOI=;
+ b=VfG1Qdpd9x/FAkrztgqnxEPvLcvBi8Fk2B0YDvzhevdR+0PU2IyzJeo7ZWkgeVcG0E
+ Lkuri4/Bh4mdODlG7mu1+FsSgfB1YBDtIl8DHUGhRiDQ0QkkW5blKz50+ackbnLwvaui
+ doC/EbnI4mBcJvbj7Ols/EaDnXwS5d200ajuXZOlGId+TAFnA7gV1vgOj4ONoI26/lGX
+ olzcL59JlQGRia5fSNa2DiAnaPQVmS4KulU8H4YmESmxyvifapMHLsKX//AeuHa0tp62
+ T293NPqw4UiME7xQKtUP/E04TTYYIR14BEh/eF3M5xB8drwHgqyrOtQI57bOdt8cKcYN
+ y1Rw==
+X-Gm-Message-State: AOAM532oupK3+YzVXpFTZxpHBlZ1hy59XQ4HQbtK9fMoXBj2vItGlaH+
+ VpQiVxC/aAV6feVIDrwsqwQ=
+X-Google-Smtp-Source: ABdhPJwNEsdcTVNRPGRZEqgK8DQGW30mcWlwhZfG+t6cz2dkSoXkkiRavVBMZzyA7PRT3QFntnceiw==
+X-Received: by 2002:a05:6512:694:: with SMTP id
+ t20mr20392230lfe.341.1635974021893; 
+ Wed, 03 Nov 2021 14:13:41 -0700 (PDT)
+Received: from [10.0.196.136] ([176.10.248.197])
+ by smtp.googlemail.com with ESMTPSA id z26sm35326lji.110.2021.11.03.14.13.41
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 03 Nov 2021 14:13:41 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20211103123411.3116067-1-troglobit@gmail.com>
+ <20211103123411.3116067-2-troglobit@gmail.com>
+ <20211103184552.32325c55@windsurf>
+From: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <6325ade0-9dc1-fa42-5829-b044ab1f3804@gmail.com>
+Date: Wed, 3 Nov 2021 22:13:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211103184552.32325c55@windsurf>
+Subject: Re: [Buildroot] [PATCH 1/2] package/mrouted: bump version to v4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,145 +96,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============0224330157112173434=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73a55011419030bc1efedc8ef81e3f1a5ec33d3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============0224330157112173434==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="ZZUMXLcTNg8BdBHdwrd9tgybcLPrWklhF"
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in                                             |  4 ++--
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 5 files changed, 24 insertions(+), 5 deletions(-)
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--ZZUMXLcTNg8BdBHdwrd9tgybcLPrWklhF
+Content-Type: multipart/mixed; boundary="G5b4EtvwMWvldI77IBNG2wHoto4z1q3bD";
+ protected-headers="v1"
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Matt Weber <matthew.weber@collins.com>
+Message-ID: <6325ade0-9dc1-fa42-5829-b044ab1f3804@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/mrouted: bump version to v4.4
+References: <20211103123411.3116067-1-troglobit@gmail.com>
+ <20211103123411.3116067-2-troglobit@gmail.com>
+ <20211103184552.32325c55@windsurf>
+In-Reply-To: <20211103184552.32325c55@windsurf>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5ada29029b..d35dacc756 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,7 +28,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (5.14)"
-+	bool "Latest version (5.15)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (4.19.198-cip54)"
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.14.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 200d328426..e58f25ae3c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256  57b2cf6991910e3b67a1b3490022e8a0674b6965c74c12da1e99d138d1991ee8  linux-5.15.tar.xz
- sha256  4dff4e96d4052195002538027f8a810411ba6116a41bff5575952702d509d06a  linux-5.14.14.tar.xz
- sha256  e877ec724e917c967603225c7e5dc21b6e0f34998c7d086cab8c50324363ab7b  linux-5.13.19.tar.xz
- sha256  0a2b2f5fefb90773190aaef4726ac363e03992aedc424b0a57eca092d084304b  linux-5.10.75.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 95713a4a38..12d2caa20a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_14
-+	default BR2_KERNEL_HEADERS_5_15
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -65,6 +65,10 @@ config BR2_KERNEL_HEADERS_5_13
- config BR2_KERNEL_HEADERS_5_14
- 	bool "Linux 5.14.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
-+
-+config BR2_KERNEL_HEADERS_5_15
-+	bool "Linux 5.15.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -139,8 +143,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15
-+	bool "5.15.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14
--	bool "5.14.x or later"
-+	bool "5.14.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13
-@@ -378,6 +386,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.75"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.13.19"	if BR2_KERNEL_HEADERS_5_13
- 	default "5.14.14"	if BR2_KERNEL_HEADERS_5_14
-+	default "5.15"		if BR2_KERNEL_HEADERS_5_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 0782fc6922..140d07ca38 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -568,6 +568,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -581,6 +585,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
- 	default "5.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 	default "5.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_13
- 	default "5.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index ae78c0ef9e..1cea64d105 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -123,8 +123,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_15
-+	bool "5.15.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_14
--	bool "5.14.x or later"
-+	bool "5.14.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_13
+--G5b4EtvwMWvldI77IBNG2wHoto4z1q3bD
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 11/3/21 6:45 PM, Thomas Petazzoni wrote:
+> On Wed,  3 Nov 2021 13:34:09 +0100 Joachim Wiberg <troglobit@gmail.com>=
+ wrote:
+>> -config BR2_PACKAGE_MROUTED_RSRR
+>> -	bool "enable RSRR for RSVP"
+> When an option gets removed, we normally add an entry in
+> Config.in.legacy to let the user know.
+
+Ah, of course.  I'll send a v2 later.
+
+Q: that option is behind a condition (only if BR2_PACKAGE_MROUTED),
+   how is this normally handled?  I see no such constructs in the
+   Config.in.legacy file
+
+
+Best regards
+ /Joachim
+
+
+
+
+--G5b4EtvwMWvldI77IBNG2wHoto4z1q3bD--
+
+--ZZUMXLcTNg8BdBHdwrd9tgybcLPrWklhF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmGC+4QFAwAAAAAACgkQLCqwqW4MR1jd
+qgf/ZAROa0UtN1u1FYbeW8FNGBeou/Xjh7fNW32z9jBTXnzpJfeoyJql6j/fxOGn7Vm3EBkxmabl
+HHViTRd3qic8A1kEUIjvZBSP6ysz4Hi9kbCsdCMJU11QEIhyApum764G1FuAM9D05OfYatYZFbxQ
+iAUfyWAHey/V8udFFLBK1pj8GQKinXz3QqX4EyU67r6Yo/ShvEuBADW+9lpLJp6td1xuMZrdk7+C
+jvlMmRrUOKg40cRDkJKptKDEYqa7usgkyA6RbB95dxcutWgolIK2gdPUKbRLWN4xxI15hgx1Zojt
+z+CcEnSVagFLuXSlfc6ytgop3RveXoz+3xc76W0cVA==
+=jfX/
+-----END PGP SIGNATURE-----
+
+--ZZUMXLcTNg8BdBHdwrd9tgybcLPrWklhF--
+
+--===============0224330157112173434==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0224330157112173434==--
