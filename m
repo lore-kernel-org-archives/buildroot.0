@@ -2,52 +2,52 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1769EC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2244C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:09:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D38666112E
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:08:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D38666112E
+	by mail.kernel.org (Postfix) with ESMTPS id 986F060F5A
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:09:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 986F060F5A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B07E940501;
-	Wed,  3 Nov 2021 21:08:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73BAC403D4;
+	Wed,  3 Nov 2021 21:09:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QXXCIq9rLHE9; Wed,  3 Nov 2021 21:08:53 +0000 (UTC)
+	with ESMTP id ZjNbVthImcpp; Wed,  3 Nov 2021 21:09:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F27624032F;
-	Wed,  3 Nov 2021 21:08:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A67594050D;
+	Wed,  3 Nov 2021 21:09:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 29F141BF38A
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:08:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CC021BF38A
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C2864032F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C66FD4040D
  for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:08:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vu7huXphFlF0 for <buildroot@lists.busybox.net>;
+ with ESMTP id TVAsMs7sTJfU for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 21:08:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 902AA404F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85016404F0
  for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:08:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EB8838A435; Wed,  3 Nov 2021 21:04:45 +0000 (UTC)
+ id DFD3F8A436; Wed,  3 Nov 2021 21:04:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 22:07:15 +0100
+Date: Wed, 3 Nov 2021 22:06:42 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d7e925f13ff3453e7762c90b4b2f576571b0b005
-X-Git-Newrev: 77ebc36d3e568c9b4dfec4b091a3f31980dda5ba
+X-Git-Oldrev: a130d7c0025195904103c3f3ed8aff257e81ed00
+X-Git-Newrev: d7e925f13ff3453e7762c90b4b2f576571b0b005
 X-Patchwork-Hint: ignore
-Message-Id: <20211103210445.EB8838A435@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/bind: security
- bump to version 9.11.36
+Message-Id: <20211103210445.DFD3F8A436@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/wireguard-linux-compat: bump version to 1.0.20210606
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77ebc36d3e568c9b4dfec4b091a3f31980dda5ba
+commit: https://git.buildroot.net/buildroot/commit/?id=d7e925f13ff3453e7762c90b4b2f576571b0b005
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
-
-- CVE-2021-25219: Lame cache can be abused to severely degrade resolver
-  performance
-
-For details, see the advisory:
-https://kb.isc.org/docs/cve-2021-25219
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2021-June/006781.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e4bf1cf09dcf909629cce4649acb7f27a84ce05)
+(cherry picked from commit f3da5bdf7114bf133f27ec2a8d239a255c8ad3e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 6 +++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 12b80149c5..70299f1677 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index c164a9e48e..e18bd10cf7 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
 @@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.35/bind-9.11.35.tar.gz.asc
--# with key E9AB6E79233C0416E8993F450C03AFA90A5967C4
--sha256  1c882705827b6aafa45d917ae3b20eccccc8d5df3c4477df44b04382e6c47562  bind-9.11.35.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.36/bind-9.11.36.tar.gz.asc
-+# with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
-+sha256  c953fcb6703b395aaa53e65ff8b2869b69a5303dd60507cba2201305e1811681  bind-9.11.36.tar.gz
- sha256  cad49daa42654bc241762cd998630168a2542c8fd6fad3881e2eac1510bb6fcd  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0d95da209c..ba32d6150a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+-# https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
+-sha256  99d35296b8d847a0d4db97a4dda96b464311a6354e75fe0bef6e7c4578690f00  wireguard-linux-compat-1.0.20210219.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-June/006781.html
++sha256  3f5d990006e6eabfd692d925ec314fff2c5ee7dcdb869a6510d579acfdd84ec0  wireguard-linux-compat-1.0.20210606.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index eba5686683..1b7ec941db 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.35
-+BIND_VERSION = 9.11.36
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210219
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210606
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
