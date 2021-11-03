@@ -2,83 +2,85 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6592DC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 19:56:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A181C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 19:56:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 313C161108
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 19:56:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 313C161108
+	by mail.kernel.org (Postfix) with ESMTPS id 352496008E
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 19:56:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 352496008E
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E51160AF4;
-	Wed,  3 Nov 2021 19:56:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 039FF401EF;
+	Wed,  3 Nov 2021 19:56:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wzHpkTzhyo2r; Wed,  3 Nov 2021 19:56:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eA10-byPDyaJ; Wed,  3 Nov 2021 19:56:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62E726083B;
-	Wed,  3 Nov 2021 19:56:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2D5FB1BF3D1
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 19:55:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E66DF401C0;
+	Wed,  3 Nov 2021 19:56:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 207DB1BF3D1
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 19:55:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D0446063D
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 19:55:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C367401C0
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 19:55:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEjwbH_kX-67 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 83hN7pzgb9PG for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 19:55:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com
- [IPv6:2607:f8b0:4864:20::82c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DA5BD60AD8
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 19:55:28 +0000 (UTC)
-Received: by mail-qt1-x82c.google.com with SMTP id s1so2017736qta.13
- for <buildroot@buildroot.org>; Wed, 03 Nov 2021 12:55:28 -0700 (PDT)
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com
+ [IPv6:2607:f8b0:4864:20::82a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A4CD840146
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 19:55:29 +0000 (UTC)
+Received: by mail-qt1-x82a.google.com with SMTP id u7so2076315qtc.1
+ for <buildroot@buildroot.org>; Wed, 03 Nov 2021 12:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=AoujxsnyrPjM1dumLXgg9r1HOBkpJL42tBP/Sxr9vzs=;
- b=RyDCx1K9PpPyu676J9aK9pte1OXfA7wghqiQRmDIGLCirp9royR9y9oW4ecYMZysTy
- +EQ7KGg/RjLLHBsObXvg+UkHbDNV7jdsBML5FTHDGCP9uMftIlDyAK+dFttWRCBhRtDH
- apbzXsrXQChiU1yIvlxf7BWV10fw8dsvA47noef5CkyE7UJLUoaTqYNcJ2Ob2B1UtL+0
- SKPGvdIifJA8GxEESmv3ijy8Hf9yfNj81nVcyOrmTL1fh9y+yZYGiz0DWUo0leNczCJt
- D/t3NFoxX1w14PPhMviw0thXVXF8D2yW6J45mKsSOy+ZsiNs34gHKmfD/AHXG4yaRR8l
- zURA==
+ bh=JjNANnuOWMmqf5RgkupHu8FH/ejjtKEXs1rBfHvgYBE=;
+ b=my76hU0B0HdVENSfxIeEmIDkr8NG8z+3QwKTIDPcfYZAcV9DMLiTTiz++oPJdq7lNR
+ Ycs5dK3clgdkJOi3dG868LYVjMZX8pVY8q2hJudLZ2CH2r++IZQBQUnudxM4FqhoOGQk
+ XDyOj4rYNhZwOww/4eDotl7Pirb/j34ipiezY187dZQXAt3pAKKGyoDXQU2O+piIP/bt
+ /irnAp0naIxjl+Thk/disE+JLn8HGEm2YI09AUcftq1QTlH+dqmJsFWdPPYQfipYiLo6
+ skkCV2fDN+F7PE4CYMNukOm4VQDYQXKzwqy5GVBsPYID4Di+jIG117pYALORrpgs2NLx
+ ajKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=AoujxsnyrPjM1dumLXgg9r1HOBkpJL42tBP/Sxr9vzs=;
- b=4MjJ93/V81RijBJkg1N7ZtPA2vTc24I3cB7kIOMQIdXg8xzJvw9myZFgkTHUyM+cmQ
- daOfh8nBNfLK8eKXFowxxfRgp61gigejHay43L7MyJGP0pobVL3hrWXz1qLBWjjcXmcx
- bpotEUQcYolf0/vWl8oAgNQ78AEGWmbbO3Av5PmVBKawVCNIqwVQ+5jtCg2jdy/bVabl
- Clykm2q57Qs8VHXTLGLlvHlJyslS2/xuvT94Caexcq7yVFW/C/ZpN3/OEy2dZR2k+Ere
- VoN3ovcGsEhFDXTvoSeyz2X3SX3FLUXW9sYjlhr3/3ib45Xe2YhBaomJV6MUJU9Se7Nx
- LMvw==
-X-Gm-Message-State: AOAM533SvwTehH8EA9m8mrmVF6BAwokp+lHh7+9oRMWbrM0GrRh3gThe
- D4wiAWSrqlf1TQSZp9dsDzF0sbHTh+I=
-X-Google-Smtp-Source: ABdhPJxlxAUI4pWlZmJpgdF0b1pyAd9MAOXqhNHgrdnfy7UOrrlf898yrkrXSp06qux1M1ZvPqxwGA==
-X-Received: by 2002:ac8:5990:: with SMTP id e16mr23633123qte.109.1635969327354; 
- Wed, 03 Nov 2021 12:55:27 -0700 (PDT)
+ bh=JjNANnuOWMmqf5RgkupHu8FH/ejjtKEXs1rBfHvgYBE=;
+ b=5X/snzyPuN01EfNzwm5O39wB1wQgVDJSaBz9ErdSESCbHKQTHOWUCVdOXGCKk1fyAa
+ uCq73+tBXg/B/EI6ltcuB8ufTGP0SzDT5n7Pv5jrpq/DitMKoClAt09lWpJZgR2gvLQn
+ VS4Jpcd71E29jBZtxx7IXTI5cDuP9UXHEJFMnXniv6PdgXYvrXHU25TUvvRVXy8yrGyL
+ b/RPm1LYeMd+7kVLPGrOXldADr9VrIlH0SfYhxuhSk/nhfKmP/I2dQKq82GQEOt7lL+H
+ F0L25FcnKfLSj7BHPoG/Tyv2kek7mW5/4tK/2MzHyQT3+VE6I3ONDeT0jrWmhqdWzKBT
+ q7IQ==
+X-Gm-Message-State: AOAM5310QZ94VUayDWbgDBvV3KHu9soeChynDdoKLqK1s/uFAFgpI1hr
+ gXhnJ1ZDBAGw6K05Ybt+VDicGdIj5hs=
+X-Google-Smtp-Source: ABdhPJwIp2AchZcaCEgJneDcEyvlhnho3VgiEVrCz63ayYQ6TN8VZYhZJ678OOnJ7EXLtKwmfbtE8w==
+X-Received: by 2002:a05:622a:11d1:: with SMTP id
+ n17mr31887832qtk.357.1635969328330; 
+ Wed, 03 Nov 2021 12:55:28 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id e14sm2449335qty.59.2021.11.03.12.55.26
+ by smtp.gmail.com with ESMTPSA id e14sm2449335qty.59.2021.11.03.12.55.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Nov 2021 12:55:27 -0700 (PDT)
+ Wed, 03 Nov 2021 12:55:28 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  3 Nov 2021 12:55:19 -0700
-Message-Id: <20211103195520.147558-4-aduskett@gmail.com>
+Date: Wed,  3 Nov 2021 12:55:20 -0700
+Message-Id: <20211103195520.147558-5-aduskett@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211103195520.147558-1-aduskett@gmail.com>
 References: <20211103195520.147558-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/mender-grubenv: fix grub module checks
+Subject: [Buildroot] [PATCH] package/mender_grubenv: bump to version
+ 1a7db967495bbe8be53b7a69dcb42822f39d9a74
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,40 +100,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 3efb5e31fc05705ce3c46b1f0ec031978a5cfab6 broke mender-grubenv by
-splititng up BR2_TARGET_GRUB2_BUILTIN_MODULES and
-BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI. Indeed, when a user now builds a system
-with EFI, the MENDER_GRUBENV_MODULES_MISSING list always returns a full list
-of grub modules, resulting in the error condition on line 46 to trigger.
+Other changes:
+  - Drop depends on !BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV as mender-grubenv no
+    longer uses fw_printenv and fw_setenv and instead provides
+    grub-mender-grubenv-print and grub-mender-grubenv-set
 
-Add an ifeq that checks BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI if
-grub_efi is selected.
+  - Update the LICENSE hash as the year has changed.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/mender-grubenv/mender-grubenv.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/mender-grubenv/Config.in           | 7 -------
+ package/mender-grubenv/mender-grubenv.hash | 4 ++--
+ package/mender-grubenv/mender-grubenv.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 10 deletions(-)
 
+diff --git a/package/mender-grubenv/Config.in b/package/mender-grubenv/Config.in
+index 28b4bb7074..97f785ad3f 100644
+--- a/package/mender-grubenv/Config.in
++++ b/package/mender-grubenv/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_MENDER_GRUBENV
+ 	bool "mender-grubenv"
+ 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MENDER # runtime
+-	# grubenv provides it's own fw_printenv.
+-	depends on !BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+ 	depends on BR2_TARGET_GRUB2
+ 	help
+ 	  Contains the boot scripts and tools used by Mender to
+@@ -36,8 +34,3 @@ comment "mender-grubenv needs a grub2 bootloader"
+ 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MENDER
+ 	depends on !BR2_TARGET_GRUB2
+-
+-comment "mender-grubenv does not work with uboot-tools fw_printenv"
+-	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_MENDER
+-	depends on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+diff --git a/package/mender-grubenv/mender-grubenv.hash b/package/mender-grubenv/mender-grubenv.hash
+index b6b9db72a7..fcc4e02cbe 100644
+--- a/package/mender-grubenv/mender-grubenv.hash
++++ b/package/mender-grubenv/mender-grubenv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 5be4222a6934813da431ae472a633e766b73f4614020745b777c15c65bcfd032 mender-grubenv-f39c2c7ec7c9c24aae0108a9b04a0e6e61a3e96b.tar.gz
+-sha256 32714818ad6f98ee0185a52e23a475d89122e3efd2b2c26c733781c28e798c99 LICENSE
++sha256 00a574d2bed8d54ba6739700da789a420a02de900df56dd2cfbe0df460a98dca mender-grubenv-1a7db967495bbe8be53b7a69dcb42822f39d9a74.tar.gz
++sha256 b4acfcfa2a0ba1a8c82ec3965fbcee886cff8394ca4214e0ddac0a36beb1e05a LICENSE
 diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-index f06dbbe35c..1be722233c 100644
+index 1be722233c..08c6a5f240 100644
 --- a/package/mender-grubenv/mender-grubenv.mk
 +++ b/package/mender-grubenv/mender-grubenv.mk
-@@ -31,9 +31,15 @@ MENDER_GRUBENV_DEFINES = \
- # These grub modules must be built in for the grub scripts to work properly.
- # Without them, the system will not boot.
- MENDER_GRUBENV_MANDATORY_MODULES=loadenv hashsum echo halt gcry_sha256 test regexp
-+ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y)
-+MENDER_GRUBENV_MODULES_MISSING = \
-+	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
-+		$(MENDER_GRUBENV_MANDATORY_MODULES))
-+else
- MENDER_GRUBENV_MODULES_MISSING = \
- 	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES)),\
- 		$(MENDER_GRUBENV_MANDATORY_MODULES))
-+endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
- ifneq ($(MENDER_GRUBENV_MODULES_MISSING),)
+-MENDER_GRUBENV_VERSION = f39c2c7ec7c9c24aae0108a9b04a0e6e61a3e96b
++MENDER_GRUBENV_VERSION = 1a7db967495bbe8be53b7a69dcb42822f39d9a74
+ MENDER_GRUBENV_SITE = $(call github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
+ MENDER_GRUBENV_LICENSE = Apache-2.0
+ MENDER_GRUBENV_LICENSE_FILES = LICENSE
 -- 
 2.32.0
 
