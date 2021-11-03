@@ -2,58 +2,52 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B401C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:52:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA79C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:56:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8AE7261053
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:52:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8AE7261053
+	by mail.kernel.org (Postfix) with ESMTPS id AF39461058
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:56:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF39461058
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 274D981013;
-	Wed,  3 Nov 2021 20:52:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EFCA8101F;
+	Wed,  3 Nov 2021 20:56:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IOnvkctH4icu; Wed,  3 Nov 2021 20:52:18 +0000 (UTC)
+	with ESMTP id EWqA-fcVNXxK; Wed,  3 Nov 2021 20:56:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9429D8100C;
-	Wed,  3 Nov 2021 20:52:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E21918101B;
+	Wed,  3 Nov 2021 20:56:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 36D4F1BF3D6
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:52:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D3461BF3D6
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2662460AE4
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:52:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3752560AF5
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IEfvlJmJ8BjF for <buildroot@lists.busybox.net>;
- Wed,  3 Nov 2021 20:52:15 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E39896062A
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:52:14 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id EFB00240004;
- Wed,  3 Nov 2021 20:52:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1miNEw-0002rF-1c; Wed, 03 Nov 2021 21:52:10 +0100
+ with ESMTP id ppViSr7_M5hB for <buildroot@lists.busybox.net>;
+ Wed,  3 Nov 2021 20:56:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A17E6062A
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:56:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 05C4F8A3BA; Wed,  3 Nov 2021 20:52:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20211025073245.3148426-1-james.hilliard1@gmail.com>
-Date: Wed, 03 Nov 2021 21:52:10 +0100
-In-Reply-To: <20211025073245.3148426-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Mon, 25 Oct 2021 01:32:45 -0600")
-Message-ID: <87ilx9m079.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 249.5
+To: buildroot@buildroot.org
+Date: Wed, 3 Nov 2021 20:48:08 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: cf696504ca4143712a631fe3023364bbcd163801
+X-Git-Newrev: 628ab4907e79378fafa165869dc214a5fb4f285d
+X-Patchwork-Hint: ignore
+Message-Id: <20211103205252.05C4F8A3BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/gstreamer1/gst1-plugins-ugly: remove examples option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,26 +59,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=628ab4907e79378fafa165869dc214a5fb4f285d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Remove efi-ldsdir meson config option which is no longer used.
- > Meson config variable systemd-analyze is renamed to analyze.
+Fixes:
+output/build/gst1-plugins-ugly-1.18.5/meson.build:1:0: ERROR: Unknown options: "examples"
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+(WARNING for now, but will be an error in meson 0.60.0).
 
-Committed to 2021.08.x, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c98ca5f44ff6c7ab8bde5f22ba06b876557bcb33)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-For 2021.02.x I will instead bump to 247.10.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index b3dc765d07..a25110264e 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -14,7 +14,6 @@ GST1_PLUGINS_UGLY_LICENSE = LGPL-2.1+
+ GST1_PLUGINS_UGLY_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+-	-Dexamples=disabled \
+ 	-Dtests=disabled \
+ 	-Ddoc=disabled
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
