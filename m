@@ -2,52 +2,52 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F75C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C497C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:57:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 264356109F
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:56:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 264356109F
+	by mail.kernel.org (Postfix) with ESMTPS id A223961058
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:57:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A223961058
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5AAF60AF5;
-	Wed,  3 Nov 2021 20:56:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80BF560B02;
+	Wed,  3 Nov 2021 20:57:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UsdjBxOtBbIL; Wed,  3 Nov 2021 20:56:48 +0000 (UTC)
+	with ESMTP id 0pG4ojU0prti; Wed,  3 Nov 2021 20:56:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B8E760AE4;
-	Wed,  3 Nov 2021 20:56:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 460641BF9BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD1E560AF5;
+	Wed,  3 Nov 2021 20:56:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 71D431BF9C8
  for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 438EA8101B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61E6D404F6
  for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8J6VXVU4UbIX for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ccvVouiQOtRs for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 20:56:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9341781013
+ by smtp4.osuosl.org (Postfix) with ESMTP id B17CB403C3
  for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:56:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EF3B28A3B7; Wed,  3 Nov 2021 20:52:51 +0000 (UTC)
+ id 1ED1E8A3BA; Wed,  3 Nov 2021 20:52:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 20:47:25 +0100
+Date: Wed, 3 Nov 2021 20:53:47 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e0518531f693af12829b94fcb1a3377e812b778e
-X-Git-Newrev: cf696504ca4143712a631fe3023364bbcd163801
+X-Git-Oldrev: 8250c713f06b4597cece176b69bf63aca28ffb47
+X-Git-Newrev: 4ff3acf45d55b3a5fd1bbc937108a869cc4b2883
 X-Patchwork-Hint: ignore
-Message-Id: <20211103205251.EF3B28A3B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/gstreamer1/gst1-plugins-bad: fix meson options
+Message-Id: <20211103205252.1ED1E8A3BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pango: fix
+ fontconfig meson option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf696504ca4143712a631fe3023364bbcd163801
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff3acf45d55b3a5fd1bbc937108a869cc4b2883
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix teletextdec name and remove vdpau which is no longer available.
-
 Fixes:
-output/build/gst1-plugins-bad-1.18.5/meson.build:1:0: ERROR: Unknown options: "teletextdec, vdpau"
+output/build/pango-1.48.10/meson.build:1:0: ERROR: Unknown options: "use_fontconfig"
 
 (WARNING for now, but will be an error in meson 0.60.0).
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 87505ba9478fa039a72eaa984c07733cdd5ea280)
+(cherry picked from commit 15a7be2c121c73f99dd699b108d817593dc86f7e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/pango/pango.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index d8b2e2a5d3..d3f089bfed 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -59,12 +59,11 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	-Dofa=disabled \
- 	-Dopenexr=disabled \
- 	-Dopenni2=disabled \
--	-Dteletextdec=disabled \
-+	-Dteletext=disabled \
- 	-Dwildmidi=disabled \
- 	-Dsmoothstreaming=disabled \
- 	-Dsoundtouch=disabled \
- 	-Dgme=disabled \
--	-Dvdpau=disabled \
- 	-Dspandsp=disabled \
- 	-Dsvthevcenc=disabled \
- 	-Dtranscode=disabled \
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 104551a1fa..7d3d6626d9 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -13,8 +13,8 @@ PANGO_LICENSE = LGPL-2.0+
+ PANGO_LICENSE_FILES = COPYING
+ PANGO_CPE_ID_VENDOR = pango
+ 
+-PANGO_CONF_OPTS = -Duse_fontconfig=true
+-HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=disabled
++PANGO_CONF_OPTS = -Dfontconfig=enabled
++HOST_PANGO_CONF_OPTS = -Dfontconfig=enabled -Dintrospection=disabled
+ 
+ PANGO_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
