@@ -2,60 +2,51 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A25BC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 22:04:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2F8C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 22:04:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5559E610FD
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 22:04:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5559E610FD
+	by mail.kernel.org (Postfix) with ESMTPS id 987E761139
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 22:04:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 987E761139
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15E574017B;
-	Wed,  3 Nov 2021 22:04:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F51E81006;
+	Wed,  3 Nov 2021 22:04:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zkj9Ts7mHHJe; Wed,  3 Nov 2021 22:04:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QTBGCeCYRiC0; Wed,  3 Nov 2021 22:04:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 62FD7403AF;
-	Wed,  3 Nov 2021 22:04:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B7D0B1BF292
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 22:04:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D298E80F87;
+	Wed,  3 Nov 2021 22:04:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B5D7E1BF292
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 22:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACEDE403B3
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 22:04:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A521F40399
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 22:04:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id elARVJxFKrUc for <buildroot@lists.busybox.net>;
- Wed,  3 Nov 2021 22:04:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6E463403AC
- for <buildroot@buildroot.org>; Wed,  3 Nov 2021 22:04:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2B47340005;
- Wed,  3 Nov 2021 22:04:28 +0000 (UTC)
-Date: Wed, 3 Nov 2021 23:04:26 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id COnLG_N3Tmpp for <buildroot@lists.busybox.net>;
+ Wed,  3 Nov 2021 22:04:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D3CD40395
+ for <buildroot@buildroot.org>; Wed,  3 Nov 2021 22:04:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DB4368A4FB; Wed,  3 Nov 2021 22:01:05 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20211103230426.3b8726c0@windsurf>
-In-Reply-To: <b08f0641-06ec-c4ce-6960-2df5898cf6c2@gmail.com>
-References: <20211031224207.1385633-1-romain.naour@gmail.com>
- <BY5PR19MB36687517E13A0EE264B37A5FFB8A9@BY5PR19MB3668.namprd19.prod.outlook.com>
- <7a877d3b-95b9-55dc-8756-88fa9bb51876@gmail.com>
- <CAFSsvmqUvKZVr+uCFCpinRM5sK-3UdBrMXUXzJ1kF=i1xnXNxQ@mail.gmail.com>
- <b08f0641-06ec-c4ce-6960-2df5898cf6c2@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/refpolicy: enable refpolicy's xdg
- module when systemd is enabled
+To: buildroot@buildroot.org
+Date: Wed, 3 Nov 2021 23:04:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 377aa3b117e5845322e0619ae20f37f1331ec19e
+X-Git-Newrev: 2143a66cb6183b956e0e25908f67b5331991c1ed
+X-Patchwork-Hint: ignore
+Message-Id: <20211103220105.DB4368A4FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump to version 3.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,52 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>, Adam Duskett <aduskett@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2143a66cb6183b956e0e25908f67b5331991c1ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 3 Nov 2021 22:06:43 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+Bump to version 3.72. This also fixes sporadic parallel build failures.
 
-> > I just tested by adding xdg to SYSTEMD_SELINUX_MODULES which does
-> > indeed fix the issue.  
-> 
-> ok but it's not clear to me if we need to add xdg to SYSTEMD_SELINUX_MODULES or
-> REFPOLICY_MODULES.
+Fixes:
+http://autobuild.buildroot.net/results/a5f/a5f8a126a42ab784c3b5ab375a8cd7cbf205d745/
 
-Clearly to SYSTEMD_SELINUX_MODULES. The idea of REFPOLICY_MODULES is to list:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- (1) Mandatory refpolicy modules
-
- (2) refpolicy modules needed by other Buildroot packages, i.e.
-     $(PACKAGES_SELINUX_MODULES)
-
- (3) refpolicy modules explicitly enabled by the user through the
-     BR2_REFPOLICY_EXTRA_MODULES option
-
- (4) additional SELinux policy modules provided directly within a
-     package directory, in package/<foo>/selinux/
-
-In our case, it's the systemd refpolicy module that needs xdg, so
-systemd.mk should be patched:
-
--SYSTEMD_SELINUX_MODULES = systemd udev
-+SYSTEMD_SELINUX_MODULES = systemd udev xdg
-
-Could you send an updated patch ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index f35e8f2e4a..3dc6cb185a 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_71_RTM/src/SHA256SUMS
+-sha256  99acd315d9af35419cda4a6960f00a7d446bd231bd407174a7b07cb3dba0c253  nss-3.71.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_72_RTM/src/SHA256SUMS
++sha256  6ea60a9ff113e493ea2ab25f41ea75a9fbd10af7903f26f703dac8680732d02e  nss-3.72.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 83daf18e76..2d880d2336 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.71
++LIBNSS_VERSION = 3.72
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
