@@ -2,52 +2,52 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0486C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:58:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 500E7C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:58:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AE56B61183
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:58:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE56B61183
+	by mail.kernel.org (Postfix) with ESMTPS id 1DE8061175
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 20:58:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1DE8061175
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 776338103B;
-	Wed,  3 Nov 2021 20:58:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDCD060AFC;
+	Wed,  3 Nov 2021 20:58:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rkw4IOQ9lXff; Wed,  3 Nov 2021 20:58:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JO-PiXRuhjp1; Wed,  3 Nov 2021 20:58:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD5A981027;
-	Wed,  3 Nov 2021 20:58:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73B5E1BF3D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 547F060AF7;
+	Wed,  3 Nov 2021 20:58:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 99E321BF9BA
  for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7087B404FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9595F60AE7
  for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 20:56:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L61ol2GtDM0i for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dEAYNFpUcYqP for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 20:56:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6A3F404EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id E93AB6062A
  for <buildroot@buildroot.org>; Wed,  3 Nov 2021 20:56:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3431B8A3E5; Wed,  3 Nov 2021 20:52:57 +0000 (UTC)
+ id 56FDD8A3E5; Wed,  3 Nov 2021 20:52:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 20:48:46 +0100
+Date: Wed, 3 Nov 2021 21:16:54 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 7dedfc1e9baabd9d58588c95efd20737a7043ee9
-X-Git-Newrev: fe4da39cfb8596cbd06f581bb16ea579ff18c971
+X-Git-Oldrev: 4a846c39b65ae299f9592d5eac2003ab2f582655
+X-Git-Newrev: 7c579e1d59361757cd82fe9da8d95930861317cd
 X-Patchwork-Hint: ignore
-Message-Id: <20211103205257.3431B8A3E5@busybox.osuosl.org>
+Message-Id: <20211103205257.56FDD8A3E5@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.08.x]
- package/gstreamer1/gst1-vaapi: fix tests config option
+ docs/manual/contribute.txt: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe4da39cfb8596cbd06f581bb16ea579ff18c971
+commit: https://git.buildroot.net/buildroot/commit/?id=7c579e1d59361757cd82fe9da8d95930861317cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fixes:
-output/build/gst1-vaapi-1.18.5/meson.build:1:0: ERROR: Unknown options: "test"
+The directory that containts tests is "support/testing/tests/", not
+"supporting/testing/test".
 
-(WARNING for now, but will be an error in meson 0.60.0).
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d352ae712198799012acd2176214fbe62e2383a1)
+(cherry picked from commit 18bbeefb9990d81cef892b63e843563b4ae5b768)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 2 +-
+ docs/manual/contribute.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 497c6df0d3..9810b12cf7 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -24,7 +24,7 @@ GST1_VAAPI_CONF_OPTS += \
- 	-Dwith_wayland=no \
- 	-Dwith_egl=no \
- 	-Dexamples=disabled \
--	-Dtest=disabled \
-+	-Dtests=disabled \
- 	-Ddoc=disabled
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index e58e75d96d..bf3d5a7075 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -609,7 +609,7 @@ be the maintainer of that test case.
  
- ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
+ Within the Buildroot repository, the testing framework is organized at the
+ top level in +support/testing/+ by folders of +conf+, +infra+ and +tests+.
+-All the test cases live under the +test+ folder and are organized in various
++All the test cases live under the +tests+ folder and are organized in various
+ folders representing the category of test.
+ 
+ Lets walk through an example.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
