@@ -2,52 +2,52 @@ Return-Path: <SRS0=0gS+=PW=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 479F2C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96444C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:10:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E49D60F39
-	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:10:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E49D60F39
+	by mail.kernel.org (Postfix) with ESMTPS id 5F64E60F39
+	for <buildroot@archiver.kernel.org>; Wed,  3 Nov 2021 21:10:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5F64E60F39
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D136A4039F;
-	Wed,  3 Nov 2021 21:10:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B299F4038D;
+	Wed,  3 Nov 2021 21:10:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6XWoZUm4Mvqd; Wed,  3 Nov 2021 21:10:21 +0000 (UTC)
+	with ESMTP id SP2moOm8SFQu; Wed,  3 Nov 2021 21:10:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F2A634038D;
-	Wed,  3 Nov 2021 21:10:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D602E1BF9BA
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:10:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6268C403A8;
+	Wed,  3 Nov 2021 21:10:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 712FC1BF38A
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C66C180EFC
- for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:10:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FEEF4038D
+ for <buildroot@lists.busybox.net>; Wed,  3 Nov 2021 21:10:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zIgKVep4lf4g for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sYA8lnI1A0_U for <buildroot@lists.busybox.net>;
  Wed,  3 Nov 2021 21:10:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2358380EF6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31E6240389
  for <buildroot@buildroot.org>; Wed,  3 Nov 2021 21:10:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F6308A444; Wed,  3 Nov 2021 21:06:25 +0000 (UTC)
+ id 8D7338A443; Wed,  3 Nov 2021 21:06:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Nov 2021 22:07:20 +0100
+Date: Wed, 3 Nov 2021 22:07:45 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 0c05b5d825e6965987df3510cf71298210a92d8a
-X-Git-Newrev: 28763417d20fcf567fef76fe7fbbbd301641f1f2
+X-Git-Oldrev: 28763417d20fcf567fef76fe7fbbbd301641f1f2
+X-Git-Newrev: ba98b2df3a068dc05b3b26e192833c6652ffd8f2
 X-Patchwork-Hint: ignore
-Message-Id: <20211103210625.7F6308A444@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/bind: security
- bump to version 9.11.36
+Message-Id: <20211103210625.8D7338A443@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/openjdk{-bin}:
+ security bump LTS to version 11.0.13+8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +65,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28763417d20fcf567fef76fe7fbbbd301641f1f2
+commit: https://git.buildroot.net/buildroot/commit/?id=ba98b2df3a068dc05b3b26e192833c6652ffd8f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Fixes the following security issues:
 
-- CVE-2021-25219: Lame cache can be abused to severely degrade resolver
-  performance
+  - JDK-8163326, CVE-2021-35550: Update the default enabled cipher suites preference
+  - JDK-8254967, CVE-2021-35565: com.sun.net.HttpsServer spins on TLS session close
+  - JDK-8263314: Enhance XML Dsig modes
+  - JDK-8265167, CVE-2021-35556: Richer Text Editors
+  - JDK-8265574: Improve handling of sheets
+  - JDK-8265580, CVE-2021-35559: Enhanced style for RTF kit
+  - JDK-8265776: Improve Stream handling for SSL
+  - JDK-8266097, CVE-2021-35561: Better hashing support
+  - JDK-8266103: Better specified spec values
+  - JDK-8266109: More Resilient Classloading
+  - JDK-8266115: More Manifest Jar Loading
+  - JDK-8266137, CVE-2021-35564: Improve Keystore integrity
+  - JDK-8266689, CVE-2021-35567: More Constrained Delegation
+  - JDK-8267086: ArrayIndexOutOfBoundsException in java.security.KeyFactory.generatePublic
+  - JDK-8267712: Better LDAP reference processing
+  - JDK-8267729, CVE-2021-35578: Improve TLS client handshaking
+  - JDK-8267735, CVE-2021-35586: Better BMP support
+  - JDK-8268193: Improve requests of certificates
+  - JDK-8268199: Correct certificate requests
+  - JDK-8268205: Enhance DTLS client handshake
+  - JDK-8268506: More Manifest Digests
+  - JDK-8269618, CVE-2021-35603: Better session identification
+  - JDK-8269624: Enhance method selection support
+  - JDK-8270398: Enhance canonicalization
+  - JDK-8270404: Better canonicalization
 
-For details, see the advisory:
-https://kb.isc.org/docs/cve-2021-25219
+For more details, see the announcement:
+https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2021-October/009368.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e4bf1cf09dcf909629cce4649acb7f27a84ce05)
+(cherry picked from commit 7662fb76f080c60a43e7ec7c0e23762ed5214a75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 6 +++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 2 +-
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 12b80149c5..70299f1677 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.35/bind-9.11.35.tar.gz.asc
--# with key E9AB6E79233C0416E8993F450C03AFA90A5967C4
--sha256  1c882705827b6aafa45d917ae3b20eccccc8d5df3c4477df44b04382e6c47562  bind-9.11.35.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.36/bind-9.11.36.tar.gz.asc
-+# with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
-+sha256  c953fcb6703b395aaa53e65ff8b2869b69a5303dd60507cba2201305e1811681  bind-9.11.36.tar.gz
- sha256  cad49daa42654bc241762cd998630168a2542c8fd6fad3881e2eac1510bb6fcd  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0d95da209c..ba32d6150a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 696371eb51..de17aa71fc 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -2,7 +2,7 @@
+ sha256  323d6d7474a359a28eff7ddd0df8e65bd61554a8ed12ef42fd9365349e573c2c  OpenJDK16U-jdk_x64_linux_hotspot_16.0.2_7.tar.gz
  
--BIND_VERSION = 9.11.35
-+BIND_VERSION = 9.11.36
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+ # From https://github.com/adoptium/temurin11-binaries/releases
+-sha256  8770f600fc3b89bf331213c7aa21f8eedd9ca5d96036d1cd48cb2748a3dbefd2  OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz
++sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index a34ba355bd..01d3a3b88f 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -9,7 +9,7 @@ HOST_OPENJDK_BIN_VERSION_MAJOR = 16
+ HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_7
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
+ endif
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 2b4a2c7a62..8788d02be0 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+ sha256  b4a0e71e41a11175e8a7c1dba86ed5b0aa878413158c8d48813db1b64ac9536c  openjdk-16.0.2+7.tar.gz
+-sha256  9a37c9641b45f5c51fe19c1ccae141daeb5dcdbd59fa2f56e7dea7bf09484bec  openjdk-11.0.12+7.tar.gz
++sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index aac5c87e73..27809ba282 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -9,7 +9,7 @@ OPENJDK_VERSION_MAJOR = 16
+ OPENJDK_VERSION_MINOR = 0.2+7
+ else
+ OPENJDK_VERSION_MAJOR = 11
+-OPENJDK_VERSION_MINOR = 0.12+7
++OPENJDK_VERSION_MINOR = 0.13+8
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
