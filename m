@@ -2,68 +2,77 @@ Return-Path: <SRS0=01xH=PX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 159A8C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 14:55:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A5CC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:08:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2BFBB610FC
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 14:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2BFBB610FC
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3878A61213
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:08:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3878A61213
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=yandex.ru
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDA7D8188B;
-	Thu,  4 Nov 2021 14:55:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB0774013F;
+	Thu,  4 Nov 2021 15:08:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2caC9HmX_DF3; Thu,  4 Nov 2021 14:55:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qTvOBLSL0KtI; Thu,  4 Nov 2021 15:08:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 407F780F87;
-	Thu,  4 Nov 2021 14:55:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 412CC40141;
+	Thu,  4 Nov 2021 15:07:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E170A1BF5F6
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 14:55:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E53F1BF5A1
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D0935405BA
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 14:55:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EE174013F
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:07:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ALTXBVTs9vzT for <buildroot@lists.busybox.net>;
- Thu,  4 Nov 2021 14:55:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D7CC405B9
- for <buildroot@buildroot.org>; Thu,  4 Nov 2021 14:55:36 +0000 (UTC)
-Received: from [192.168.153.129] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ie9OmOdBHsfk3ie9OmFwhw; Thu, 04 Nov 2021 15:55:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636037734; bh=GmzAFGR91HEYZ7wkRbDIwZdtdNtj2teYeeoUwrgybuM=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=PKdX2nTqh1T3z4j6oyiR85ZvZ2CERjwZN48SeKjVmOSl7Zi/yFTr3jmYkN52BIhH5
- yibQaMM5HxB/zxlF7n6Z3VAsrkPfkrETb5QZSwSDaKNes/lPLT80z3qOOnJ4qcr0IJ
- yzIgLyci4ymuI+kKHsiS6JG+Ha6xycB3Xfqo8TtYU3/HVKnxoT+Yi8G+aZheOmGBaw
- BfCC5Feu6EHeMQjs0ugrLz9/vxLYCwRDvN1gVb2OLdKi7syBQM/PZ3ASqRx/rzZoQS
- ZrbOuISarvDzMZnb4s41V6rceBROtmIHGzrw0ewLkC2XLxrvFQ68U7TNrZLWTy8KMr
- 92EhLR+l0+38w==
-To: stsp <stsp2@yandex.ru>, buildroot@buildroot.org
+ with ESMTP id 1Pe-umszN05I for <buildroot@lists.busybox.net>;
+ Thu,  4 Nov 2021 15:07:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from forward501o.mail.yandex.net (forward501o.mail.yandex.net
+ [37.140.190.203])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E24FA40139
+ for <buildroot@buildroot.org>; Thu,  4 Nov 2021 15:07:55 +0000 (UTC)
+Received: from sas1-df7c155f48c6.qloud-c.yandex.net
+ (sas1-df7c155f48c6.qloud-c.yandex.net
+ [IPv6:2a02:6b8:c08:e119:0:640:df7c:155f])
+ by forward501o.mail.yandex.net (Yandex) with ESMTP id 4601945C48EB;
+ Thu,  4 Nov 2021 18:07:51 +0300 (MSK)
+Received: from sas8-b61c542d7279.qloud-c.yandex.net
+ (sas8-b61c542d7279.qloud-c.yandex.net [2a02:6b8:c1b:2912:0:640:b61c:542d])
+ by sas1-df7c155f48c6.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
+ cEnKGtF4Bu-7pCu7bK8; Thu, 04 Nov 2021 18:07:51 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+ t=1636038471; bh=4TA/yJni65xKtmCDh5A2h/U4t7hUTo0PWkf1VHWHct4=;
+ h=In-Reply-To:From:Subject:References:Date:Message-ID:To;
+ b=SbFabEjitio1nMpO30ngBFmrIdbQbeM0KbXbZg5L8+uW5ejjUlawGuUj9de0nuytB
+ RLlN+T75eJF2V+VB7999jXeiqiUVp7byhtcQUTvAI2I/EMpZHuRC+P3Uvq1zVZVjXR
+ NpYH8wK+qQthGijscoBZporXP0waZI/a/ryllu6U=
+Authentication-Results: sas1-df7c155f48c6.qloud-c.yandex.net;
+ dkim=pass header.i=@yandex.ru
+Received: by sas8-b61c542d7279.qloud-c.yandex.net (smtp/Yandex) with ESMTPS id
+ M878L2BRfw-7o8mqlJU; Thu, 04 Nov 2021 18:07:50 +0300
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client certificate not present)
+X-Yandex-Fwd: 2
+Message-ID: <8639a15a-14fc-26e3-10f6-abd14b2c688e@yandex.ru>
+Date: Thu, 4 Nov 2021 18:07:48 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 References: <3c3603ba-5719-fec9-9bb3-7b0f3967fc9f@yandex.ru>
  <b379b067-4456-324c-f768-2f6eac1b155c@yandex.ru>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <1180b9a6-7a4b-853b-a61e-0f853cdb5ef8@benettiengineering.com>
-Date: Thu, 4 Nov 2021 15:55:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <b379b067-4456-324c-f768-2f6eac1b155c@yandex.ru>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfFUQSR4e1W3uIDho68n67QbrgrRjiLwCB5HSwSszc3rq7nOo1QyImBHDvpG3i/tEuScMNn67ElfDxdiSj3TE9dPyN2bKYfiHs2WnpBoWr6MEzVyNlKZm
- Whl801HH7G7RCTNRd/vmo+6mM8k3WfpGQ0QtZuZUbU4/VsbP2GbmiDbTy9T8aVVDypbDHi6sH1+oQergtWFC7uE/Gk5/czTJ13vrStfzWEy8Tkip7NU8yDYH
+ <1180b9a6-7a4b-853b-a61e-0f853cdb5ef8@benettiengineering.com>
+From: stsp <stsp2@yandex.ru>
+In-Reply-To: <1180b9a6-7a4b-853b-a61e-0f853cdb5ef8@benettiengineering.com>
 Subject: Re: [Buildroot] generic code with i7 bootlin toolchain?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,79 +85,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
-
-On 11/4/21 11:02 AM, stsp wrote:
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->> Unfortunately some package(I would say many) has theirself a broken way to correctly pass external C/CXX/LDFLAGS.
->> Usually they internally override some flag that makes null what we pass or worse they completely ignore them by using hard coded flags.
->> To fix this specific problem we should go through every package and fix the package build system itself(a huge work).
-> I initially thought the same way.
-> But it seems to be after some more
-> investigation the other way:
-> $ file
-> /home/stas/src/fdpp-buildroot/buildroot/output/host/bin/x86_64-linux-gcc
-> /home/stas/src/fdpp-buildroot/buildroot/output/host/bin/x86_64-linux-gcc:
-> symbolic link to toolchain-wrapper
-> $ file
-> /home/stas/src/fdpp-buildroot/buildroot/output/host/bin/toolchain-wrapper
-> /home/stas/src/fdpp-buildroot/buildroot/output/host/bin/toolchain-wrapper:
-> ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked,
-> interpreter /lib64/ld-linux-x86-64.so.2,
-> BuildID[sha1]=965fad722d4737f4373924e5b37b0973c0cd5f46, for GNU/Linux
-> 3.2.0, stripped
-> 
-> So it looks like buildroot creates
-> the toolchain-wrapper binary as
-> a replacement of gcc, and that
-> binary would invoke gcc (and
-> perhaps ccache too) with the
-> needed flags.
-
-Yes
-
-> So such scheme should resist to
-> the "bad" packages you mention
-> because it doesn't rely on them
-> handling CFLAGS correctly.
-> There might be some other explanation
-> to the problem I see.
-
-No, it doesn't resist to the "bad" packages. Try to imagine an 
-auto-tools package where you can pass CFLAGS, but in Makefile.in you 
-find out that it does come check and it append something like "-O2" and 
-instead you want "-O0", but this way you will end up having CFLAGS="... 
--O0 -O2". This overrides the optimization flag, so this doesn't solve 
-the problem.
-
-> Thinking more about this - maybe
-> libgcc or some other lib from the
-> bootlin toolchain is over-optimized?
-> In that case I should ask at bootlin
-> perhaps instead...
-
-I don't see how it could help, also what you mean with over-optimized? 
-Do you mean that -Os on building Bootlin toolchain could lead to the 
-toolchain to fail in some way?
-
-> Please CC me the replies if possible.
-
-This is what I do, I "Answer to all" including the ML.
-
-Anyway here I think we're losing the focus of the previous e-mail that 
-you can't build for AMD. Can you provide the exact CPU model you're 
-buildling for?
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgowNC4xMS4yMDIxIDE3OjU1LCBHaXVsaW8gQmVuZXR0aSDQv9C40YjQtdGCOgo+PiBTbyBz
+dWNoIHNjaGVtZSBzaG91bGQgcmVzaXN0IHRvCj4+IHRoZSAiYmFkIiBwYWNrYWdlcyB5b3UgbWVu
+dGlvbgo+PiBiZWNhdXNlIGl0IGRvZXNuJ3QgcmVseSBvbiB0aGVtCj4+IGhhbmRsaW5nIENGTEFH
+UyBjb3JyZWN0bHkuCj4+IFRoZXJlIG1pZ2h0IGJlIHNvbWUgb3RoZXIgZXhwbGFuYXRpb24KPj4g
+dG8gdGhlIHByb2JsZW0gSSBzZWUuCj4KPiBObywgaXQgZG9lc24ndCByZXNpc3QgdG8gdGhlICJi
+YWQiIHBhY2thZ2VzLiBUcnkgdG8gaW1hZ2luZSBhbiAKPiBhdXRvLXRvb2xzIHBhY2thZ2Ugd2hl
+cmUgeW91IGNhbiBwYXNzIENGTEFHUywgYnV0IGluIE1ha2VmaWxlLmluIHlvdSAKPiBmaW5kIG91
+dCB0aGF0IGl0IGRvZXMgY29tZSBjaGVjayBhbmQgaXQgYXBwZW5kIHNvbWV0aGluZyBsaWtlICIt
+TzIiIAo+IGFuZCBpbnN0ZWFkIHlvdSB3YW50ICItTzAiLCBidXQgdGhpcyB3YXkgeW91IHdpbGwg
+ZW5kIHVwIGhhdmluZyAKPiBDRkxBR1M9Ii4uLiAtTzAgLU8yIi4gVGhpcyBvdmVycmlkZXMgdGhl
+IG9wdGltaXphdGlvbiBmbGFnLCBzbyB0aGlzIAo+IGRvZXNuJ3Qgc29sdmUgdGhlIHByb2JsZW0u
+CgpZb3UgbWVhbiBzb21lb25lIG92ZXJyaWRlcwpteSAtbWFyY2ggLW1jcHU/IEJ1dCBkb2Vzbid0
+CnRoYXQgc291bmQgdW5saWtlbHk/IFllcywgLU8gY2FuCmJlIG92ZXJyaWRkZW4sIHN1cmUsIGJ1
+dCAtbWFyY2guLi4KCgo+PiBUaGlua2luZyBtb3JlIGFib3V0IHRoaXMgLSBtYXliZQo+PiBsaWJn
+Y2Mgb3Igc29tZSBvdGhlciBsaWIgZnJvbSB0aGUKPj4gYm9vdGxpbiB0b29sY2hhaW4gaXMgb3Zl
+ci1vcHRpbWl6ZWQ/Cj4+IEluIHRoYXQgY2FzZSBJIHNob3VsZCBhc2sgYXQgYm9vdGxpbgo+PiBw
+ZXJoYXBzIGluc3RlYWQuLi4KPgo+IEkgZG9uJ3Qgc2VlIGhvdyBpdCBjb3VsZCBoZWxwLCBhbHNv
+IHdoYXQgeW91IG1lYW4gd2l0aCBvdmVyLW9wdGltaXplZD8gCj4gRG8geW91IG1lYW4gdGhhdCAt
+T3Mgb24gYnVpbGRpbmcgQm9vdGxpbiB0b29sY2hhaW4gY291bGQgbGVhZCB0byB0aGUgCj4gdG9v
+bGNoYWluIHRvIGZhaWwgaW4gc29tZSB3YXk/CgpJIG1lYW4gYnkgdGhlIHVzZSBvZiBTU0UzLzQg
+dGhhdApteSBDUFUgZG9lcyBub3QgaGF2ZS4KCgo+PiBQbGVhc2UgQ0MgbWUgdGhlIHJlcGxpZXMg
+aWYgcG9zc2libGUuCj4KPiBUaGlzIGlzIHdoYXQgSSBkbywgSSAiQW5zd2VyIHRvIGFsbCIgaW5j
+bHVkaW5nIHRoZSBNTC4KClNvcnJ5LCB5YW5kZXggcHV0IGl0IHRvIHNwYW0uIDooCgoKPiBBbnl3
+YXkgaGVyZSBJIHRoaW5rIHdlJ3JlIGxvc2luZyB0aGUgZm9jdXMgb2YgdGhlIHByZXZpb3VzIGUt
+bWFpbCB0aGF0IAo+IHlvdSBjYW4ndCBidWlsZCBmb3IgQU1ELiBDYW4geW91IHByb3ZpZGUgdGhl
+IGV4YWN0IENQVSBtb2RlbCB5b3UncmUgCj4gYnVpbGRsaW5nIGZvcj8gCm1vZGVsIG5hbWXCoMKg
+wqAgOiBBTUQgUGhlbm9tKHRtKSBJSSBYNCA5NTUgUHJvY2Vzc29yCmZsYWdzwqDCoMKgIMKgwqDC
+oCA6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2Ug
+bWNhIApjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwg
+bnggbW14ZXh0IGZ4c3Jfb3B0IApwZHBlMWdiIHJkdHNjcCBsbSAzZG5vd2V4dCAzZG5vdyBjb25z
+dGFudF90c2MgcmVwX2dvb2Qgbm9wbCBub25zdG9wX3RzYyAKY3B1aWQgZXh0ZF9hcGljaWQgcG5p
+IG1vbml0b3IgY3gxNiBwb3BjbnQgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIApjcjhf
+bGVnYWN5IGFibSBzc2U0YSBtaXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncgaWJzIHNraW5p
+dCB3ZHQgCm5vZGVpZF9tc3IgaHdfcHN0YXRlIHZtbWNhbGwgbnB0IGxicnYgc3ZtX2xvY2sgbnJp
+cF9zYXZlCgoKU28gaXQgc2VlbXMgdG8gaGF2ZSBTU0UsIFNTRTIsIFNTRTRhPwpEb2Vzbid0IHNl
+ZW0gdG8gaGF2ZSBTU0UzLCB3aGljaCBtaWdodApiZSB0aGUgcHJvYmxlbS4gSSBzdXNwZWN0IHRo
+ZSBsaWJzIGZyb20KYm9vdGxpbiB0b29sLWNoYWluIGFscmVhZHkgdXNlIFNTRTMsIHNvCnRoYXQg
+Y2FuJ3QgYmUgY3VyZWQgb3RoZXIgdGhhbiBieSB0aGUKdG9vbC1jaGFpbiByZWJ1aWxkLgoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
