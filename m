@@ -2,70 +2,78 @@ Return-Path: <SRS0=01xH=PX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE9FC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 20:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F57AC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 21:06:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7549E601FA
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 20:46:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7549E601FA
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id C581C6124D
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 21:06:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C581C6124D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=yandex.ru
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BDD881A15;
-	Thu,  4 Nov 2021 20:46:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A48181ABA;
+	Thu,  4 Nov 2021 21:06:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nk6UbNteWco4; Thu,  4 Nov 2021 20:46:48 +0000 (UTC)
+	with ESMTP id ykjc8h4hMOAw; Thu,  4 Nov 2021 21:06:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C29E819F5;
-	Thu,  4 Nov 2021 20:46:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BB8D01BF335
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 20:46:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBE3981AAB;
+	Thu,  4 Nov 2021 21:06:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0851E1BF8A8
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 21:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6DCE819F5
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 20:46:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4D07405FC
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 21:06:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sr5r4C5Mw3BM for <buildroot@lists.busybox.net>;
- Thu,  4 Nov 2021 20:46:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF0DA819D6
- for <buildroot@buildroot.org>; Thu,  4 Nov 2021 20:46:44 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:d011:289f:59c0:9f5b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B1FCD13F880;
- Thu,  4 Nov 2021 21:46:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636058802;
- bh=sVjKIShbyIxECU/Dmi1hud2SiLSmH2+WOOsHzB6074Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=g6NuzeJCoB2vvDx9Yjc1NBGGhipuZlZt3X8yVL9eviamR0e9OPnQyq4zycmM6hwsd
- bOIFmTbAzZR1U/NScohDHBxTbggRjmG+dLJwc6/0KQ9CoklnG59oVwf4pUMb+9IMYD
- zghJ73mTcV4jIhhVvu0N5+ov1B+g9NmMSU9ubnv7TtT9YlvB5Kv+hkLfoB1l8Xlnf9
- 6+OgtIk7Wb/xtj4MJ1SO6DOBmz9dpwDUTjfsbZPuK/0dCaaL5QYYgjb/n4ztHi/cG5
- EKP8y9qxT4VXx7A/kSbYo8W+emgcYVPEqICS7V+ytkKKGc9dlEpMiNzKQtZOO98Uq4
- M47HR6w8uzo8w==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 04 Nov 2021 21:46:36 +0100
-Date: Thu, 4 Nov 2021 21:46:36 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-Message-ID: <20211104204636.GB2400@scaer>
-References: <20211006204133.465875-1-arnout@mind.be>
- <20211006204133.465875-2-arnout@mind.be>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=yandex.ru
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lC-1PuxoaDKH for <buildroot@lists.busybox.net>;
+ Thu,  4 Nov 2021 21:06:31 +0000 (UTC)
+X-Greylist: delayed 00:06:59 by SQLgrey-1.8.0
+Received: from forward500p.mail.yandex.net (forward500p.mail.yandex.net
+ [IPv6:2a02:6b8:0:1472:2741:0:8b7:110])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07FA1405F0
+ for <buildroot@buildroot.org>; Thu,  4 Nov 2021 21:06:30 +0000 (UTC)
+Received: from myt6-1005c883711c.qloud-c.yandex.net
+ (myt6-1005c883711c.qloud-c.yandex.net
+ [IPv6:2a02:6b8:c12:2ca8:0:640:1005:c883])
+ by forward500p.mail.yandex.net (Yandex) with ESMTP id 6B07EF01AE8;
+ Thu,  4 Nov 2021 23:59:28 +0300 (MSK)
+Received: from myt6-9bdf92ffd111.qloud-c.yandex.net
+ (myt6-9bdf92ffd111.qloud-c.yandex.net [2a02:6b8:c12:468a:0:640:9bdf:92ff])
+ by myt6-1005c883711c.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
+ lLOHBsr2tn-xSDCkxHA; Thu, 04 Nov 2021 23:59:28 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+ t=1636059568; bh=wagrOCLaN+fW9q0due7qPx1WBW7yZvgC8/3F+ix90ww=;
+ h=In-Reply-To:From:Subject:Cc:References:Date:Message-ID:To;
+ b=nzELfjW9VJmyQMvIZAvQfVvlWpj4qvxmZ61Izw0zDvud7G3/a3+BcRU3FKfg76wos
+ 18mAPHcUWdQyvS+AVR2tGcQ2thbFZV+wmwIHh5pE8N+oHEz5nkDtpBFYWoGJlWbDQ4
+ WXfYCdnWXITpVndo1XZEwWwDx8uG3XCz72cqkweQ=
+Authentication-Results: myt6-1005c883711c.qloud-c.yandex.net;
+ dkim=pass header.i=@yandex.ru
+Received: by myt6-9bdf92ffd111.qloud-c.yandex.net (smtp/Yandex) with ESMTPS id
+ CsnxPOaXL3-xR1qOBFP; Thu, 04 Nov 2021 23:59:27 +0300
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client certificate not present)
+X-Yandex-Fwd: 2
+Message-ID: <0eeb0b07-b119-8d8c-b3a1-06064c2bf2ee@yandex.ru>
+Date: Thu, 4 Nov 2021 23:59:26 +0300
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211006204133.465875-2-arnout@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [RFC 2/2] Config.in: move toolchain menu before
- build options
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <3c3603ba-5719-fec9-9bb3-7b0f3967fc9f@yandex.ru>
+ <20211104203655.GA2400@scaer>
+From: stsp <stsp2@yandex.ru>
+In-Reply-To: <20211104203655.GA2400@scaer>
+Subject: Re: [Buildroot] generic code with i7 bootlin toolchain?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,74 +85,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raul Cabello <raul.cabello@suse.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
-
-On 2021-10-06 22:41 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Many of the build options depend on the toolchain configuration. In
-> addition, it's pretty logical that you select first target architecture,
-> then the toolchain, and only then things like debug and pic/pie.
-> Therefore, move the "Toolchain" menu before the "Build options" menu
-> instead of after.
-
-I think a much better solution would be to move the toolchain-related
-build options to the "Toolchain" menu, and keep in the "Build options"
-menu focused on the actual generic build "infra" (arg, I can't find a
-proper word...). Parallel jobs, download tools, patch directories et al.
-really are related to the build infrastructure, while static, -Os et al.
-are more about the toolchain "configuration".
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 8ed11c994d..efdf397c01 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -87,6 +87,8 @@ config BR2_NEEDS_HOST_GCC_PLUGIN_SUPPORT
->  
->  source "arch/Config.in"
->  
-> +source "toolchain/Config.in"
-> +
->  menu "Build options"
->  
->  menu "Commands"
-> @@ -908,8 +910,6 @@ comment "Fortify Source needs a glibc toolchain and optimization"
->  	depends on (!BR2_TOOLCHAIN_USES_GLIBC || BR2_OPTIMIZE_0)
->  endmenu
->  
-> -source "toolchain/Config.in"
-> -
->  source "system/Config.in"
->  
->  source "linux/Config.in"
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgowNC4xMS4yMDIxIDIzOjM2LCBZYW5uIEUuIE1PUklOINC/0LjRiNC10YI6Cj4+IFNvIGl0
+IGxvb2tzIGxpa2UgdGhlCj4+IEJSMl9UQVJHRVRfT1BUSU1JWkFUSU9OCj4+IGlzIHNvbWVob3cg
+YXBwbGllZCBub3QgdG8gYWxsCj4+IGJ1aWx0IHBhY2thZ2VzPyBXaHkgY2FuIHRoYXQgYmU/Cj4+
+IElzIHRoZXJlIGFueSBvdGhlciB3YXkgSSBjYW4KPj4gdXRpbGl6ZSBib290bGluIHRvb2wtY2hh
+aW4gZm9yIHNvbWUKPj4gImdlbmVyaWMiIChub24tU1NFMy80KSBDUFU/Cj4gWW91IHdpbGwgbm90
+IGJlIGFibGUgdG8gdXNlIHRoYXQgdG9vbGNoYWluIGZvciB0aGUgUGhlbm9tLiBZb3Ugd2lsbCBo
+YXZlCj4gdG8gYnVpbGQgeW91ciBvd24gdG9vbGNoYWluLgo+Cj4gTm90ZSB0aGF0IHlvdSBjYW4g
+YnVpbGQgdGhlIHRvb2xjaGFpbiBvbmNlLCBhbmQgbGF0ZXIgcmUtdXNlIHRoYXQgYXMgYQo+IHBy
+ZS1idWlsdCB0b29sY2hhaW4uIFNlZSB0aGUgbWFudWFsIG9uIGRpcmVjdGlvbnMgb24gaG93IHRv
+IGRvIHRoYXQ6Cj4gICAgICBodHRwczovL2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL21hbnVhbC9t
+YW51YWwuaHRtbCNfY3Jvc3NfY29tcGlsYXRpb25fdG9vbGNoYWluClRoYW5rcywgIm1ha2Ugc2Rr
+IiBpcyBhbgppbnRlcmVzdGluZyBzdWJqZWN0IHRvIHBsYXkgd2l0aC4KSG93ZXZlciwgYW55IGhv
+cGVzIGJvb3RsaW4KY2FuIHByb3ZpZGUgdGhlICJnZW5lcmljIgp0b29sLWNoYWluIGluIGFkZGl0
+aW9uIHRvIGk3PwpBbHNvIHRoZSBkb2MgeW91IG1lbnRpb25lZCwKcG9pbnRzIHRvIHNvbWUgY29k
+ZXNvdXJjZXJ5CnRvb2wtY2hhaW4uIFdoZXJlIGlzIGl0PwpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
