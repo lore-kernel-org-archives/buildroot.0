@@ -2,78 +2,80 @@ Return-Path: <SRS0=01xH=PX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A5CC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:08:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC652C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:31:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3878A61213
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:08:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3878A61213
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=yandex.ru
+	by mail.kernel.org (Postfix) with ESMTPS id C1881611C4
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 15:31:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C1881611C4
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB0774013F;
-	Thu,  4 Nov 2021 15:08:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 902DF60AD2;
+	Thu,  4 Nov 2021 15:31:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qTvOBLSL0KtI; Thu,  4 Nov 2021 15:08:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QiTD-D-egg30; Thu,  4 Nov 2021 15:31:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 412CC40141;
-	Thu,  4 Nov 2021 15:07:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E53F1BF5A1
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:07:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1316960AF5;
+	Thu,  4 Nov 2021 15:31:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 759281BF5A1
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EE174013F
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:07:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64A96403FB
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 15:31:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Pe-umszN05I for <buildroot@lists.busybox.net>;
- Thu,  4 Nov 2021 15:07:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from forward501o.mail.yandex.net (forward501o.mail.yandex.net
- [37.140.190.203])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E24FA40139
- for <buildroot@buildroot.org>; Thu,  4 Nov 2021 15:07:55 +0000 (UTC)
-Received: from sas1-df7c155f48c6.qloud-c.yandex.net
- (sas1-df7c155f48c6.qloud-c.yandex.net
- [IPv6:2a02:6b8:c08:e119:0:640:df7c:155f])
- by forward501o.mail.yandex.net (Yandex) with ESMTP id 4601945C48EB;
- Thu,  4 Nov 2021 18:07:51 +0300 (MSK)
-Received: from sas8-b61c542d7279.qloud-c.yandex.net
- (sas8-b61c542d7279.qloud-c.yandex.net [2a02:6b8:c1b:2912:0:640:b61c:542d])
- by sas1-df7c155f48c6.qloud-c.yandex.net (mxback/Yandex) with ESMTP id
- cEnKGtF4Bu-7pCu7bK8; Thu, 04 Nov 2021 18:07:51 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
- t=1636038471; bh=4TA/yJni65xKtmCDh5A2h/U4t7hUTo0PWkf1VHWHct4=;
- h=In-Reply-To:From:Subject:References:Date:Message-ID:To;
- b=SbFabEjitio1nMpO30ngBFmrIdbQbeM0KbXbZg5L8+uW5ejjUlawGuUj9de0nuytB
- RLlN+T75eJF2V+VB7999jXeiqiUVp7byhtcQUTvAI2I/EMpZHuRC+P3Uvq1zVZVjXR
- NpYH8wK+qQthGijscoBZporXP0waZI/a/ryllu6U=
-Authentication-Results: sas1-df7c155f48c6.qloud-c.yandex.net;
- dkim=pass header.i=@yandex.ru
-Received: by sas8-b61c542d7279.qloud-c.yandex.net (smtp/Yandex) with ESMTPS id
- M878L2BRfw-7o8mqlJU; Thu, 04 Nov 2021 18:07:50 +0300
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client certificate not present)
-X-Yandex-Fwd: 2
-Message-ID: <8639a15a-14fc-26e3-10f6-abd14b2c688e@yandex.ru>
-Date: Thu, 4 Nov 2021 18:07:48 +0300
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=microchip.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tGkm6EQUKo9V for <buildroot@lists.busybox.net>;
+ Thu,  4 Nov 2021 15:30:59 +0000 (UTC)
+X-Greylist: delayed 00:07:06 by SQLgrey-1.8.0
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.154.123])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D456403E2
+ for <buildroot@buildroot.org>; Thu,  4 Nov 2021 15:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1636039859; x=1667575859;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=jrHd7qIKd8jlM01Y+8vVvEolrWj6/G9Ui3noUJypfO0=;
+ b=wUyVZTTYHSyLAmcDQ5wdWER3hzj6vh1D7EG7DMh/QxhaaHrMWmyBFm/Z
+ xJBUZrJoPVwOUxDk1utwx7WeYX6/LShAZ/3+NNFOEWgz7DFvOfOzXwq9o
+ smPCtw/BiX6WvP0Wb6FsXh/cwZ1ybuv8Krcc02FItafTqyb/rlbbXMopa
+ m3trD3z4sYKWwajwhHdYraejSMzA0a/1yhma6uyWwiLgCqmFlSRz0dS3V
+ 915d2CkQ0C4JQgY0tDwyNSJjhpOzxpprVaUP8epiQtx+I4lhyzl2rY3Aj
+ RT7Yl1/N3Cl6d8d3bZA60eRpjzhXOMiTZYR28n+3z4rTRiXwxh531b2Ih A==;
+IronPort-SDR: fefuSY2G/wfFRDQch8MJdCn8w1aNomOXDwTqFAVhYdd6sUSYv5kiNDRZggT/BormyT5e0bgpx6
+ Yg7DZGBDWE7mtnQyXHfOV9Y+5bQNZgjgSgy9jkLkJ/qznu3CIT6h8AQLi0EpFKqZvXJu93cpFR
+ 3klN7AMzUUdMyi54L+0UG/noDDgOnEur3rrWVs7exEEpz8o6vJ2lzYxfIT2Z3HxhkmxCXXl1XF
+ Aw0aQIPPQbZoIPGLt09zimeqKR85VLGo5KePTcBOtf29C/XxYWfrXoBRLkTE3FDsOBiWP91j9e
+ I8XvNAzmv/819GVGlemcrcXd
+X-IronPort-AV: E=Sophos;i="5.87,209,1631602800"; d="scan'208";a="75378385"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 04 Nov 2021 08:23:52 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 4 Nov 2021 08:23:51 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 4 Nov 2021 08:23:49 -0700
+To: <buildroot@buildroot.org>
+Date: Thu, 4 Nov 2021 17:23:28 +0200
+Message-ID: <20211104152329.1560933-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-US
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <3c3603ba-5719-fec9-9bb3-7b0f3967fc9f@yandex.ru>
- <b379b067-4456-324c-f768-2f6eac1b155c@yandex.ru>
- <1180b9a6-7a4b-853b-a61e-0f853cdb5ef8@benettiengineering.com>
-From: stsp <stsp2@yandex.ru>
-In-Reply-To: <1180b9a6-7a4b-853b-a61e-0f853cdb5ef8@benettiengineering.com>
-Subject: Re: [Buildroot] generic code with i7 bootlin toolchain?
+Subject: [Buildroot] [PATCH 1/2] configs/microchip_sama7g5ek: add new
+ defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,49 +87,190 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Eugen Hristev via buildroot <buildroot@buildroot.org>
+Reply-To: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgowNC4xMS4yMDIxIDE3OjU1LCBHaXVsaW8gQmVuZXR0aSDQv9C40YjQtdGCOgo+PiBTbyBz
-dWNoIHNjaGVtZSBzaG91bGQgcmVzaXN0IHRvCj4+IHRoZSAiYmFkIiBwYWNrYWdlcyB5b3UgbWVu
-dGlvbgo+PiBiZWNhdXNlIGl0IGRvZXNuJ3QgcmVseSBvbiB0aGVtCj4+IGhhbmRsaW5nIENGTEFH
-UyBjb3JyZWN0bHkuCj4+IFRoZXJlIG1pZ2h0IGJlIHNvbWUgb3RoZXIgZXhwbGFuYXRpb24KPj4g
-dG8gdGhlIHByb2JsZW0gSSBzZWUuCj4KPiBObywgaXQgZG9lc24ndCByZXNpc3QgdG8gdGhlICJi
-YWQiIHBhY2thZ2VzLiBUcnkgdG8gaW1hZ2luZSBhbiAKPiBhdXRvLXRvb2xzIHBhY2thZ2Ugd2hl
-cmUgeW91IGNhbiBwYXNzIENGTEFHUywgYnV0IGluIE1ha2VmaWxlLmluIHlvdSAKPiBmaW5kIG91
-dCB0aGF0IGl0IGRvZXMgY29tZSBjaGVjayBhbmQgaXQgYXBwZW5kIHNvbWV0aGluZyBsaWtlICIt
-TzIiIAo+IGFuZCBpbnN0ZWFkIHlvdSB3YW50ICItTzAiLCBidXQgdGhpcyB3YXkgeW91IHdpbGwg
-ZW5kIHVwIGhhdmluZyAKPiBDRkxBR1M9Ii4uLiAtTzAgLU8yIi4gVGhpcyBvdmVycmlkZXMgdGhl
-IG9wdGltaXphdGlvbiBmbGFnLCBzbyB0aGlzIAo+IGRvZXNuJ3Qgc29sdmUgdGhlIHByb2JsZW0u
-CgpZb3UgbWVhbiBzb21lb25lIG92ZXJyaWRlcwpteSAtbWFyY2ggLW1jcHU/IEJ1dCBkb2Vzbid0
-CnRoYXQgc291bmQgdW5saWtlbHk/IFllcywgLU8gY2FuCmJlIG92ZXJyaWRkZW4sIHN1cmUsIGJ1
-dCAtbWFyY2guLi4KCgo+PiBUaGlua2luZyBtb3JlIGFib3V0IHRoaXMgLSBtYXliZQo+PiBsaWJn
-Y2Mgb3Igc29tZSBvdGhlciBsaWIgZnJvbSB0aGUKPj4gYm9vdGxpbiB0b29sY2hhaW4gaXMgb3Zl
-ci1vcHRpbWl6ZWQ/Cj4+IEluIHRoYXQgY2FzZSBJIHNob3VsZCBhc2sgYXQgYm9vdGxpbgo+PiBw
-ZXJoYXBzIGluc3RlYWQuLi4KPgo+IEkgZG9uJ3Qgc2VlIGhvdyBpdCBjb3VsZCBoZWxwLCBhbHNv
-IHdoYXQgeW91IG1lYW4gd2l0aCBvdmVyLW9wdGltaXplZD8gCj4gRG8geW91IG1lYW4gdGhhdCAt
-T3Mgb24gYnVpbGRpbmcgQm9vdGxpbiB0b29sY2hhaW4gY291bGQgbGVhZCB0byB0aGUgCj4gdG9v
-bGNoYWluIHRvIGZhaWwgaW4gc29tZSB3YXk/CgpJIG1lYW4gYnkgdGhlIHVzZSBvZiBTU0UzLzQg
-dGhhdApteSBDUFUgZG9lcyBub3QgaGF2ZS4KCgo+PiBQbGVhc2UgQ0MgbWUgdGhlIHJlcGxpZXMg
-aWYgcG9zc2libGUuCj4KPiBUaGlzIGlzIHdoYXQgSSBkbywgSSAiQW5zd2VyIHRvIGFsbCIgaW5j
-bHVkaW5nIHRoZSBNTC4KClNvcnJ5LCB5YW5kZXggcHV0IGl0IHRvIHNwYW0uIDooCgoKPiBBbnl3
-YXkgaGVyZSBJIHRoaW5rIHdlJ3JlIGxvc2luZyB0aGUgZm9jdXMgb2YgdGhlIHByZXZpb3VzIGUt
-bWFpbCB0aGF0IAo+IHlvdSBjYW4ndCBidWlsZCBmb3IgQU1ELiBDYW4geW91IHByb3ZpZGUgdGhl
-IGV4YWN0IENQVSBtb2RlbCB5b3UncmUgCj4gYnVpbGRsaW5nIGZvcj8gCm1vZGVsIG5hbWXCoMKg
-wqAgOiBBTUQgUGhlbm9tKHRtKSBJSSBYNCA5NTUgUHJvY2Vzc29yCmZsYWdzwqDCoMKgIMKgwqDC
-oCA6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2Ug
-bWNhIApjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwg
-bnggbW14ZXh0IGZ4c3Jfb3B0IApwZHBlMWdiIHJkdHNjcCBsbSAzZG5vd2V4dCAzZG5vdyBjb25z
-dGFudF90c2MgcmVwX2dvb2Qgbm9wbCBub25zdG9wX3RzYyAKY3B1aWQgZXh0ZF9hcGljaWQgcG5p
-IG1vbml0b3IgY3gxNiBwb3BjbnQgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIApjcjhf
-bGVnYWN5IGFibSBzc2U0YSBtaXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncgaWJzIHNraW5p
-dCB3ZHQgCm5vZGVpZF9tc3IgaHdfcHN0YXRlIHZtbWNhbGwgbnB0IGxicnYgc3ZtX2xvY2sgbnJp
-cF9zYXZlCgoKU28gaXQgc2VlbXMgdG8gaGF2ZSBTU0UsIFNTRTIsIFNTRTRhPwpEb2Vzbid0IHNl
-ZW0gdG8gaGF2ZSBTU0UzLCB3aGljaCBtaWdodApiZSB0aGUgcHJvYmxlbS4gSSBzdXNwZWN0IHRo
-ZSBsaWJzIGZyb20KYm9vdGxpbiB0b29sLWNoYWluIGFscmVhZHkgdXNlIFNTRTMsIHNvCnRoYXQg
-Y2FuJ3QgYmUgY3VyZWQgb3RoZXIgdGhhbiBieSB0aGUKdG9vbC1jaGFpbiByZWJ1aWxkLgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Add new defconfigs for sama7g5 evaluation kit.
+Update README with new defconfigs.
+Board uses linux 5.15 mainline.
+
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ board/atmel/readme.txt                        |  2 +
+ board/microchip/sama7g5ek/genimage.cfg        | 31 +++++++++
+ configs/microchip_sama7g5ek_mmc_defconfig     | 26 +++++++
+ configs/microchip_sama7g5ek_mmc_dev_defconfig | 69 +++++++++++++++++++
+ 4 files changed, 128 insertions(+)
+ create mode 100644 board/microchip/sama7g5ek/genimage.cfg
+ create mode 100644 configs/microchip_sama7g5ek_mmc_defconfig
+ create mode 100644 configs/microchip_sama7g5ek_mmc_dev_defconfig
+
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index a29d027214..a9c427e90b 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -25,6 +25,8 @@ This guide covers the following configurations:
+  - microchip_sam9x60ek_mmc_dev_defconfig
+  - microchip_sama5d2_icp_mmc_defconfig
+  - microchip_sama5d2_icp_mmc_dev_defconfig
++ - microchip_sama7g5ek_mmc_defconfig
++ - microchip_sama7g5ek_mmc_dev_defconfig
+ 
+ These configurations will use AT91Bootstrap, u-boot and a linux kernel from
+ the git trees maintained by Atmel.
+diff --git a/board/microchip/sama7g5ek/genimage.cfg b/board/microchip/sama7g5ek/genimage.cfg
+new file mode 100644
+index 0000000000..ade29e4b5d
+--- /dev/null
++++ b/board/microchip/sama7g5ek/genimage.cfg
+@@ -0,0 +1,31 @@
++# Image for SD card boot on Microchip SAMA7G5EK (sama7g5 evaluation kit)
++#
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"at91-sama7g5ek.dtb",
++			"boot.bin",
++			"u-boot.bin"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 1M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/configs/microchip_sama7g5ek_mmc_defconfig b/configs/microchip_sama7g5ek_mmc_defconfig
+new file mode 100644
+index 0000000000..406a49dd94
+--- /dev/null
++++ b/configs/microchip_sama7g5ek_mmc_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_NEON_VFPV4=y
++BR2_OPTIMIZE_FAST=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama7g5ek/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="sama7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama7g5ek"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2021.04)/u-boot-at91-linux4sam-2021.04.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama7g5ek_mmc1"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
+new file mode 100644
+index 0000000000..df72722221
+--- /dev/null
++++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
+@@ -0,0 +1,69 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_NEON_VFPV4=y
++BR2_OPTIMIZE_FAST=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_PTHREAD_DEBUG=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama7g5ek/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="sama7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama7g5ek"
++BR2_PACKAGE_LINUX_TOOLS_IIO=y
++BR2_PACKAGE_BZIP2=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_ZIP=y
++BR2_PACKAGE_GDB=y
++BR2_PACKAGE_LMBENCH=y
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_TREE=y
++BR2_PACKAGE_DOSFSTOOLS=y
++BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
++BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
++BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
++BR2_PACKAGE_MMC_UTILS=y
++BR2_PACKAGE_MTD=y
++BR2_PACKAGE_WILC1000_FIRMWARE=y
++BR2_PACKAGE_EVTEST=y
++BR2_PACKAGE_SETSERIAL=y
++BR2_PACKAGE_SPI_TOOLS=y
++BR2_PACKAGE_USBUTILS=y
++BR2_PACKAGE_LIBSYSFS=y
++BR2_PACKAGE_LIBDRM=y
++BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
++BR2_PACKAGE_DTC=y
++BR2_PACKAGE_DTC_PROGRAMS=y
++BR2_PACKAGE_ARGP_STANDALONE=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
++BR2_PACKAGE_BRIDGE_UTILS=y
++BR2_PACKAGE_CAN_UTILS=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_IPERF=y
++BR2_PACKAGE_IPROUTE2=y
++BR2_PACKAGE_IPTABLES=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_LRZSZ=y
++BR2_PACKAGE_MII_DIAG=y
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_HTOP=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2021.04)/u-boot-at91-linux4sam-2021.04.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama7g5ek_mmc1"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
