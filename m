@@ -2,85 +2,85 @@ Return-Path: <SRS0=01xH=PX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 652B9C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 00:36:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB1C5C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 00:36:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9878611CE
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 00:36:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9878611CE
+	by mail.kernel.org (Postfix) with ESMTPS id 5479A611CE
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 00:36:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5479A611CE
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E7AA40506;
-	Thu,  4 Nov 2021 00:36:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F94E607D9;
+	Thu,  4 Nov 2021 00:36:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uk17FquOgfzj; Thu,  4 Nov 2021 00:36:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DZK7o0YFQxYM; Thu,  4 Nov 2021 00:36:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3A0340513;
-	Thu,  4 Nov 2021 00:36:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 038721BF9CB
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 00:36:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66BF2607DA;
+	Thu,  4 Nov 2021 00:36:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 517881BF9CB
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 00:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3193404F4
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 00:36:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40ED281065
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 00:36:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7p6ULiIbb136 for <buildroot@lists.busybox.net>;
- Thu,  4 Nov 2021 00:36:15 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RzElHcKA79Ys for <buildroot@lists.busybox.net>;
+ Thu,  4 Nov 2021 00:36:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com
- [IPv6:2607:f8b0:4864:20::82b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 458B4404E7
- for <buildroot@buildroot.org>; Thu,  4 Nov 2021 00:36:15 +0000 (UTC)
-Received: by mail-qt1-x82b.google.com with SMTP id v4so2683569qtw.8
- for <buildroot@buildroot.org>; Wed, 03 Nov 2021 17:36:15 -0700 (PDT)
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com
+ [IPv6:2607:f8b0:4864:20::82c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 417F781006
+ for <buildroot@buildroot.org>; Thu,  4 Nov 2021 00:36:16 +0000 (UTC)
+Received: by mail-qt1-x82c.google.com with SMTP id h14so2697553qtb.3
+ for <buildroot@buildroot.org>; Wed, 03 Nov 2021 17:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=Au0EejHSkmanS5LqoOBP0BZlZYhaEUSblNpJlRz1EE4=;
- b=UpeKdxh8+uGcconrDqAjoex5LFFsXRJHdQ5c3nZHwjbcJe0UJUVQCyUEmL2aYvlJpe
- TYkWabhb4+/ML1A53b7uAVeOlJT1LrKjisJE7yyPPRMs557X6k9ABfM7QKNRTI0RljnF
- cZaxWEftO3V0LkQi2rlkNLLS0DrZ1J7q+zxAzdSxE15ODWiunykygh/09LZ2qbHdiqWP
- VBP5FYA9miO5xnHpFpA94hhoo2BSP/kLOHVMFPcBbksuYdy3psTwJ2y39/3fDLcvoB4Z
- xGS62mwMpBIIA2y6/KWtCB3zskBYA4FEfns/fGy42l2lIQS8gVLkyTvCOeX6Jh/4ipSY
- 9MwA==
+ bh=sUi0Ux49YEnSha12AlA0V4JrFWAq9ViP2ffbTTmcYIA=;
+ b=q2AoVP7PxdeNLMhrEjcQurVarFfjaW54U5fd2sWsll/IW3621H9M4ELbrhkazgu4FI
+ 06hszeDTtmyzuRDZ3keET5AGYi/WAqkMVwGYf5TiSYl4DDW1EhGP0lxGXscWw0ranXuJ
+ RqbBrf9gD7+zeqVE4DpHjoM3yTIuGI7DfSy0CLvWD4+zum+hfNvYCoO4p2YpxYwZaGVR
+ YpooN0dsCclBtid64GeegWa0W6bCAguNAkpDe6Z8qIKUyX21QszGFfVrNIbZFL/8sc8u
+ TaVo2vm/IIqiFyrdeEOlxjBdEfkWZvKmV9rf2/laTKeaQyrai239MCc1+HKSMN4gcf+O
+ tL3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=Au0EejHSkmanS5LqoOBP0BZlZYhaEUSblNpJlRz1EE4=;
- b=ViFsThNHwzoM8zeygULoKyO0ftNPpOyBQIHn0y8Vp6qgP6fF4gXj5NDronLdrcGMjp
- IuvbiOCokAMS0U7LrJgLbQoxN2SXkJw00T3iulRpYpBS5wM88qon8OR9F+JLWw5z723Z
- 4fIqkZiMneyxEcnbliEqKQwZKUcT4q2Cl1dTI4LNhWkit8zHlGZj6JYBJaatzMU9g2Rz
- PWL2KedbpZxAnJeSjc//w5ZPqordTjpEMh7KW8Xk+brAFyBJ+2W866aZs+cm58XhU5KZ
- nsNISqpSZan9mkQrs6TR2zT1qwko4blyxdbkI6FYtklwhlf2KtBSHgcZImCzio2D17tR
- Kwbw==
-X-Gm-Message-State: AOAM531XsL1QVK3/BHq7Xs7kRBSjJ5RQ9sBrbtF8MO0fwF0bobmTdc5G
- 3zqfuX86EeEveC/5jyRTe/dxhva2YgA=
-X-Google-Smtp-Source: ABdhPJwf1fxJycI5Zr4E6A62POGqBEIgi3VG1Yanw1AWkZue4VY38CjZ5y3NpUXYKSBW+72Olh2muw==
-X-Received: by 2002:a05:622a:1441:: with SMTP id
- v1mr50463066qtx.45.1635986174016; 
+ bh=sUi0Ux49YEnSha12AlA0V4JrFWAq9ViP2ffbTTmcYIA=;
+ b=k+uknCKmA+GENHcC8qbzqKu1QkZfYXlZvRheq4TppXxJ5zSGuBGZm3Dld/e1HJZ27S
+ n6N8ikawxUzseRLNT1StcfCragsEc0jDt80xQoghRX6kSxEaQ8nZI2CY0iVXD9wjgWqZ
+ fL3Pb3aCno/RzldZxEjQBcN7k+DodJ/RrqLLRv9CH1QOr+2l29x1H/bdBQE2HUGpyGL1
+ dREthetlvvSue5F3wKAv9leFfNRUJPYeoRj1XQo25/doI0KCnvlmDM/YUD9yx5KTT+XS
+ szT6awoOjUcevi2rIhTh1wRHmn/33s/E/xpQn7II1v6Iw73tL6HmbTxKnoShht2CHOd5
+ iSwA==
+X-Gm-Message-State: AOAM531Yd+UbYU9D3PKtUFicfuBealjArAMWzRN+/wobuD2fmrZWAPLH
+ LsdgaHHyBKIfYlXPPfs8Pm2P+ufvre0=
+X-Google-Smtp-Source: ABdhPJzaNDYLcBL9AIa6cfe30FP8mrDciZkiSOkpeXl1Mj55Fm0Vxsk6p4keF7sUgfGLBtttSj1gxA==
+X-Received: by 2002:ac8:6b98:: with SMTP id z24mr3315523qts.70.1635986174995; 
  Wed, 03 Nov 2021 17:36:14 -0700 (PDT)
 Received: from adam.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id o6sm2847034qta.2.2021.11.03.17.36.13
+ by smtp.gmail.com with ESMTPSA id o6sm2847034qta.2.2021.11.03.17.36.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Nov 2021 17:36:13 -0700 (PDT)
+ Wed, 03 Nov 2021 17:36:14 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  3 Nov 2021 17:36:05 -0700
-Message-Id: <20211104003607.2022984-3-aduskett@gmail.com>
+Date: Wed,  3 Nov 2021 17:36:06 -0700
+Message-Id: <20211104003607.2022984-4-aduskett@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211104003607.2022984-1-aduskett@gmail.com>
 References: <20211104003607.2022984-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH vRFC 2/4] package/webkitgtk: add
- gobject-introspection optional dependency
+Subject: [Buildroot] [PATCH vRFC 3/4] package/libpeas: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,41 +99,136 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable introspection when GObject Introspection is enabled.
-Midori 9.0 requires webkitgtk built with gobject-introspection
-support.
+midori 9.0 requires libpeas.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/webkitgtk/webkitgtk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/Config.in            |  1 +
+ package/libpeas/Config.in    | 45 ++++++++++++++++++++++++++++++++++++
+ package/libpeas/libpeas.hash |  4 ++++
+ package/libpeas/libpeas.mk   | 38 ++++++++++++++++++++++++++++++
+ 4 files changed, 88 insertions(+)
+ create mode 100644 package/libpeas/Config.in
+ create mode 100644 package/libpeas/libpeas.hash
+ create mode 100644 package/libpeas/libpeas.mk
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index a3db249ae6..4d5d0b89e2 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -21,7 +21,6 @@ WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_GAMEPAD=OFF \
- 	-DENABLE_GEOLOCATION=OFF \
- 	-DENABLE_GTKDOC=OFF \
--	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=ON \
- 	-DENABLE_SPELLCHECK=ON \
- 	-DPORT=GTK \
-@@ -59,6 +58,13 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=ON
-+WEBKITGTK_DEPENDENCIES += gobject-introspection
-+else
-+WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=OFF
+diff --git a/package/Config.in b/package/Config.in
+index c23755a421..0e2cc78d85 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1957,6 +1957,7 @@ menu "Other"
+ 	source "package/libnpth/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libosmium/Config.in"
++	source "package/libpeas/Config.in"
+ 	source "package/libpfm4/Config.in"
+ 	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+diff --git a/package/libpeas/Config.in b/package/libpeas/Config.in
+new file mode 100644
+index 0000000000..430e668ee7
+--- /dev/null
++++ b/package/libpeas/Config.in
+@@ -0,0 +1,45 @@
++config BR2_PACKAGE_LIBPEAS
++	bool "libpeas"
++	depends on BR2_USE_MMU # gobject-introspection
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
++	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
++	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
++	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
++	select BR2_PACKAGE_GOBJECT_INTROSPECTION
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  libpeas is a gobject-based plugins engine, and is targetted at
++	  giving every application the chance to assume its own
++	  extensibility. It also has a set of features including, but
++	  not limited to:
++	    - multiple extension points
++	    - On demand (lazy) programming language support for C,
++	      Python and Lua
++	    - Simplicity of the API
++
++	  https://wiki.gnome.org/Projects/Libpeas
++
++if BR2_PACKAGE_LIBPEAS
++
++config BR2_PACKAGE_LIBPEAS_WIDGETS
++	bool "widgets"
++	depends on BR2_PACKAGE_LIBGTK3
++	help
++	  Build GTK+ widgetry
++
++comment "widget support needs libgtk3"
++	depends on !BR2_PACKAGE_LIBGTK3
++
 +endif
 +
- # Only one target platform can be built, assume X11 > Wayland
- 
- # GTK3-X11 target gives OpenGL from newer libgtk3 versions
++comment "libpeas needs python3"
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_PYTHON3
++
++comment "libpeas needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_8
+diff --git a/package/libpeas/libpeas.hash b/package/libpeas/libpeas.hash
+new file mode 100644
+index 0000000000..2b030c01c5
+--- /dev/null
++++ b/package/libpeas/libpeas.hash
+@@ -0,0 +1,4 @@
++# From https://ftp.gnome.org/pub/GNOME/sources/libpeas/1.30/libpeas-1.30.0.sha256sum
++sha256  0bf5562e9bfc0382a9dcb81f64340787542568762a3a367d9d90f6185898b9a3  libpeas-1.30.0.tar.xz
++# Locally calculated
++sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+diff --git a/package/libpeas/libpeas.mk b/package/libpeas/libpeas.mk
+new file mode 100644
+index 0000000000..4f1ab1216a
+--- /dev/null
++++ b/package/libpeas/libpeas.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# libpeas
++#
++################################################################################
++
++LIBPEAS_VERSION_MAJOR = 1.30
++LIBPEAS_VERSION = $(LIBPEAS_VERSION_MAJOR).0
++LIBPEAS_SOURCE = libpeas-$(LIBPEAS_VERSION).tar.xz
++LIBPEAS_SITE = http://ftp.gnome.org/pub/gnome/sources/libpeas/$(LIBPEAS_VERSION_MAJOR)
++LIBPEAS_LICENSE = LGPL-2.1+
++LIBPEAS_LICENSE_FILES = COPYING
++LIBPEAS_CPE_ID_VENDOR = gnome
++LIBPEAS_INSTALL_STAGING = YES
++LIBPEAS_DEPENDENCIES = \
++	host-libglib2 \
++	host-pkgconf \
++	gobject-introspection \
++	libglib2 \
++	$(TARGET_NLS_DEPENDENCIES)
++
++LIBPEAS_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++
++LIBPEAS_CONF_OPTS = \
++	-Ddemos=false \
++	-Dglade_catalog=false \
++	-Dintrospection=true \
++	-Dlua51=false \
++	-Dvapi=false
++
++ifeq ($(BR2_PACKAGE_LIBPEAS_WIDGETS),y)
++LIBPEAS_DEPENDENCIES += libgtk3
++LIBPEAS_CONF_OPTS += -Dwidgetry=true
++else
++LIBPEAS_CONF_OPTS += -Dwidgetry=false
++endif
++
++$(eval $(meson-package))
 -- 
 2.32.0
 
