@@ -2,65 +2,79 @@ Return-Path: <SRS0=01xH=PX=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9623EC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 02:17:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A44CC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 03:53:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6F44260FED
-	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 02:17:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F44260FED
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id 91BB9611AE
+	for <buildroot@archiver.kernel.org>; Thu,  4 Nov 2021 03:53:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 91BB9611AE
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECBA360808;
-	Thu,  4 Nov 2021 02:17:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3214880CD3;
+	Thu,  4 Nov 2021 03:53:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ekRW89_OYPVT; Thu,  4 Nov 2021 02:17:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F1F5607F2;
-	Thu,  4 Nov 2021 02:17:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B532C1BF283
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 02:17:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97C1E81551
- for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 02:17:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xJRe0e17BuN0 for <buildroot@lists.busybox.net>;
- Thu,  4 Nov 2021 02:17:12 +0000 (UTC)
-X-Greylist: delayed 00:35:35 by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 81432814B5
- for <buildroot@buildroot.org>; Thu,  4 Nov 2021 02:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:From:Message-ID:Date;
- bh=DLRm8XFB5o0WMxS3BEltg7WAVWG4Sb6BEnqGJYcEe6w=; 
- b=CK6DjDx2lv1F9/1PCDDvrpTdLNHULDRB8JjaYgCgsnLpMpSA+TVXYFQh5AWq6z1j36X4OZQieYVIm28tQbw9f9ekBNlIGpdOOlQiW93AaR3GPrignb76tm0rHjIHbi99NQyJfAzNDSbKrh8/VQQMfVxus0vSAMcCb+Cfm9ofT5JLhU8Df+BXw8i0iFxqb6KPWi7USMbRUWY1h3QrDC0ggF9nvFRKghOOsrB59uPo9TdBDV7AhNRf6MQ+Cl59qXnGbjTNUYRTwU0Mwh6FRqJOJ57FxR7KzuVt9XvDo4DtTe0dLsA0fhozMCi4SIBx2hQ30Cwu0QlVbl1m7+D02ZXqmQ==;
-Received: from 91-152-140-142.elisa-laajakaista.fi ([91.152.140.142]
- helo=momiji) by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1miRl8-00009Y-Rc; Thu, 04 Nov 2021 02:41:42 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 58784385;
- Thu, 4 Nov 2021 01:41:15 +0000 (UTC)
-Date: Thu, 4 Nov 2021 03:41:15 +0200
-Message-ID: <20211104034115.GB825816@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Adam Duskett <aduskett@gmail.com>
-In-Reply-To: <20211104003607.2022984-3-aduskett@gmail.com>
-References: <20211104003607.2022984-1-aduskett@gmail.com>
- <20211104003607.2022984-3-aduskett@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u9YGv8umBngR; Thu,  4 Nov 2021 03:53:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9707D80C40;
+	Thu,  4 Nov 2021 03:53:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CE89B1BF9B2
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 03:53:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDBC9402DC
+ for <buildroot@lists.busybox.net>; Thu,  4 Nov 2021 03:53:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=jms.id.au
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TfMRMpc4aOC4 for <buildroot@lists.busybox.net>;
+ Thu,  4 Nov 2021 03:53:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com
+ [IPv6:2607:f8b0:4864:20::f30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5EF6B402BC
+ for <buildroot@buildroot.org>; Thu,  4 Nov 2021 03:53:36 +0000 (UTC)
+Received: by mail-qv1-xf30.google.com with SMTP id s9so4431813qvk.12
+ for <buildroot@buildroot.org>; Wed, 03 Nov 2021 20:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jms.id.au; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=TLrTqPIecA6E7yT2g/CTZMcUWD/OnA600So85qc/EMQ=;
+ b=m312LuzgtnB/qJq6Dt5s/fYXoKzCEDmtzUU7K1MwnkbCpWj4HaRXXDKCvON5lyj12g
+ NoR0mTb9dwt2OdxrZd8j25E9DmJsl5i6CGCRDaAaAjA2fsTeKbyXhoO3s3E+W5a+nfPp
+ Rue6aFRq1UwBfkas1UMeQWNVFhNbzTVYUSwa4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=TLrTqPIecA6E7yT2g/CTZMcUWD/OnA600So85qc/EMQ=;
+ b=0lPCBTF+WG17JOwuaTlfUBKjYfOqIvDseYxMAqLWcrBZZ3j4vu1N1bsYvrC/9XoY3H
+ VkP6q9Y3Y1z6xEl4NtsDKcYL25sKFMfzLnIAUIl0IGcvRiPM4U44cA+UGCoukjVXyzLI
+ F50zgeaksYSoF+Y9n0rUL8TSumUr6mI6HsgUbU5BuuLft4tCiNAW6GDqBwdGY83XPF6w
+ Udx+/8KnJuFGsIoXGYInEj9NGCImW0wXHCMjlHFk+AN/mXKGMfrhYOKyNPjtIrXOIZbG
+ xQP/B/7O/S/x/htG1bGQf5sOvrmcuQ/kodEjNSBpxk3xBYuxMyRgwjXOHrJQkyIUVrk2
+ 1t+A==
+X-Gm-Message-State: AOAM531tNH6f7xLzsxUj5VL//1YD0Tx9RP4bKVuzUzAVAKW6GzqR0ydj
+ GeB4gSLR4W1hjyQ6747MF3zcMH6W8IIM2qwYdnI=
+X-Google-Smtp-Source: ABdhPJxplwRdglu48nbKcbqfr2yPOYCCnZ3APtfwm0L4vWAW0IOAM5Ft99t1bj53DjIn3k+JSN47uHlK95LKKyEp9J8=
+X-Received: by 2002:a0c:c784:: with SMTP id k4mr47436019qvj.43.1635998015064; 
+ Wed, 03 Nov 2021 20:53:35 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH vRFC 2/4] package/webkitgtk: add
- gobject-introspection optional dependency
+References: <20211103045627.1281356-1-joel@jms.id.au>
+ <20211103184432.77423564@windsurf>
+ <bb8d99ec-8544-388d-41bd-16a032ae9e46@gmail.com>
+ <20211103220519.22d12e03@windsurf>
+In-Reply-To: <20211103220519.22d12e03@windsurf>
+From: Joel Stanley <joel@jms.id.au>
+Date: Thu, 4 Nov 2021 03:53:23 +0000
+Message-ID: <CACPK8XdJtEiSK490HNYnr+JMyKyQDRmQP-7C60pqkAaKCNVC2g@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 0/2] configs: Update ppc machines to v5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,71 +86,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4660682972754770608=="
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+ Gerome Burlats <gerome.burlats@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed, 3 Nov 2021 at 21:05, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Wed, 3 Nov 2021 21:56:52 +0100
+> Romain Naour <romain.naour@gmail.com> wrote:
+>
+> > This series can't work without adding kernel 5.15 support :)
+> > http://patchwork.ozlabs.org/project/buildroot/patch/20211101185420.2338601-1-michael@walle.cc/
+>
+> Dammit, you're right. I'll have a look at merging those patches.
 
---===============4660682972754770608==
-Content-Type: multipart/signed; boundary="JCTIf449Gy+I8Ans"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-
-
---JCTIf449Gy+I8Ans
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-T24gV2VkLCAwMyBOb3YgMjAyMSAxNzozNjowNSAtMDcwMCBBZGFtIER1c2tldHQgPGFkdXNrZXR0
-QGdtYWlsLmNvbT4gd3JvdGU6Cj4gRW5hYmxlIGludHJvc3BlY3Rpb24gd2hlbiBHT2JqZWN0IElu
-dHJvc3BlY3Rpb24gaXMgZW5hYmxlZC4KPiBNaWRvcmkgOS4wIHJlcXVpcmVzIHdlYmtpdGd0ayBi
-dWlsdCB3aXRoIGdvYmplY3QtaW50cm9zcGVjdGlvbgo+IHN1cHBvcnQuCj4gCj4gU2lnbmVkLW9m
-Zi1ieTogQWRhbSBEdXNrZXR0IDxhZHVza2V0dEBnbWFpbC5jb20+CgpSZXZpZXdlZC1ieTogQWRy
-aWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cgo+IC0tLQo+ICBwYWNrYWdl
-L3dlYmtpdGd0ay93ZWJraXRndGsubWsgfCA4ICsrKysrKystCj4gIDEgZmlsZSBjaGFuZ2VkLCA3
-IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93
-ZWJraXRndGsvd2Via2l0Z3RrLm1rIGIvcGFja2FnZS93ZWJraXRndGsvd2Via2l0Z3RrLm1rCj4g
-aW5kZXggYTNkYjI0OWFlNi4uNGQ1ZDBiODllMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3dlYmtp
-dGd0ay93ZWJraXRndGsubWsKPiArKysgYi9wYWNrYWdlL3dlYmtpdGd0ay93ZWJraXRndGsubWsK
-PiBAQCAtMjEsNyArMjEsNiBAQCBXRUJLSVRHVEtfQ09ORl9PUFRTID0gXAo+ICAJLURFTkFCTEVf
-R0FNRVBBRD1PRkYgXAo+ICAJLURFTkFCTEVfR0VPTE9DQVRJT049T0ZGIFwKPiAgCS1ERU5BQkxF
-X0dUS0RPQz1PRkYgXAo+IC0JLURFTkFCTEVfSU5UUk9TUEVDVElPTj1PRkYgXAo+ICAJLURFTkFC
-TEVfTUlOSUJST1dTRVI9T04gXAo+ICAJLURFTkFCTEVfU1BFTExDSEVDSz1PTiBcCj4gIAktRFBP
-UlQ9R1RLIFwKPiBAQCAtNTksNiArNTgsMTMgQEAgZWxzZQo+ICBXRUJLSVRHVEtfQ09ORl9PUFRT
-ICs9IC1ERU5BQkxFX1dFQkRSSVZFUj1PRkYKPiAgZW5kaWYKPiAgCj4gK2lmZXEgKCQoQlIyX1BB
-Q0tBR0VfR09CSkVDVF9JTlRST1NQRUNUSU9OKSx5KQo+ICtXRUJLSVRHVEtfQ09ORl9PUFRTICs9
-IC1ERU5BQkxFX0lOVFJPU1BFQ1RJT049T04KPiArV0VCS0lUR1RLX0RFUEVOREVOQ0lFUyArPSBn
-b2JqZWN0LWludHJvc3BlY3Rpb24KPiArZWxzZQo+ICtXRUJLSVRHVEtfQ09ORl9PUFRTICs9IC1E
-RU5BQkxFX0lOVFJPU1BFQ1RJT049T0ZGCj4gK2VuZGlmCj4gKwoKTmljZSB0byBzZWUgdGhpcyBo
-YXBwZW4gPSkKCj4gICMgT25seSBvbmUgdGFyZ2V0IHBsYXRmb3JtIGNhbiBiZSBidWlsdCwgYXNz
-dW1lIFgxMSA+IFdheWxhbmQKPiAgCj4gICMgR1RLMy1YMTEgdGFyZ2V0IGdpdmVzIE9wZW5HTCBm
-cm9tIG5ld2VyIGxpYmd0azMgdmVyc2lvbnMKPiAtLSAKPiAyLjMyLjAKPiAKPiBfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKQ2hlZXJzLArigJRBZHJpw6FuCg==
-
---JCTIf449Gy+I8Ans
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYYM6OwAKCRCRxVnb5MkS
-OyojAJ4mFOWuKpQNvxMsC8I3XvSiW20/iwCaAm3WFfeFDlYLwPPdpSPdRsnnHj4=
-=gJef
------END PGP SIGNATURE-----
-
---JCTIf449Gy+I8Ans--
-
---===============4660682972754770608==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thank you for your enthusiasm!
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4660682972754770608==--
