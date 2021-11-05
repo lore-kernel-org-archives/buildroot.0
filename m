@@ -2,56 +2,70 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 836C3C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:10:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB04AC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:24:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F2A04610FD
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:10:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2A04610FD
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id B44CF610FD
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:24:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B44CF610FD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7CA940181;
-	Fri,  5 Nov 2021 13:10:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tdTUihmSefzL; Fri,  5 Nov 2021 13:10:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3A75401BA;
-	Fri,  5 Nov 2021 13:10:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4D7DB1BF304
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:10:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BAEF60763
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:10:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB23E61566;
+	Fri,  5 Nov 2021 13:24:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id buUW7AH62f_q for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 13:10:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1EE25605E4
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 13:10:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id D6087FF808;
- Fri,  5 Nov 2021 13:10:43 +0000 (UTC)
-Date: Fri, 5 Nov 2021 14:10:42 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20211105141042.7ac80413@windsurf>
-In-Reply-To: <20211105123848.6356-2-peter@korsgaard.com>
-References: <20211105123848.6356-1-peter@korsgaard.com>
- <20211105123848.6356-2-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] configs/nezha_defconfig: new defconfig
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DyVNv5yE84RE; Fri,  5 Nov 2021 13:24:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 232DA6156C;
+	Fri,  5 Nov 2021 13:24:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B72A11BF304
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:24:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B284F4047E
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:24:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8FT1kM7jGQ3l for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 13:24:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25D41401D4
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 13:24:28 +0000 (UTC)
+Received: from smtpclient.apple ([151.36.1.27])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id izCimUyiAFf01izCjmZDCJ; Fri, 05 Nov 2021 14:24:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636118667; bh=bGEW8djvBSSHyMWVYYmysGodkQdlK6po6GD6elJSApg=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=anWVNZa3KaXMXTnWV0xARKOr+Vp+FfRGjE+zcP4nbeHFB8K8yrFKUqB5O0v6KutJh
+ 7sa2SwU9E2s+3eEPEHTmyCAGb5TSgvJ69RC/kg9WP69fKoCvomXnL+4WjAPHRYIKgb
+ ppghcVcP9RqoexhSZLE+qIxgOJRjd64W+L+iFaawXIbhuGE/Zxjd4zSiE/d75ILNnl
+ WgJ3eMZ8pWhUbFPWdPPZJnY0t/oqfFJcNAxTfl9lgDbnuzfZreVwlvdsd0RPq+e6Oe
+ Q/HoJQGYZpXDVN17UwrRb8VPN3Qvj3mpeVWbSNZehyqG3i0BLLQNDcbCYoQK8hmrCg
+ Zc9CvjVFH8C3g==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Fri, 5 Nov 2021 14:24:24 +0100
+Message-Id: <CC4DEBFE-15CC-4593-9F6D-7775ECF08A71@benettiengineering.com>
+References: <27c59ddf-4bcb-86e1-91cf-28b45848d446@lucaceresoli.net>
+In-Reply-To: <27c59ddf-4bcb-86e1-91cf-28b45848d446@lucaceresoli.net>
+To: Luca Ceresoli <luca@lucaceresoli.net>
+X-Mailer: iPhone Mail (18H107)
+X-CMAE-Envelope: MS4wfDsCXQBmIw6CuxZKf/LRJLknNCB9jaZp6LebGL5lM4xkF83ZDgcV3AovgnzUwAtW/id0krrcB1diH+Hy9ieCdlfGa2iNYe88lf3bYwUzQ0/isGAwgqYE
+ a6kNyrt/sdvhFpw3nOObqcoNy+ofQcoge8khl9UbKtD4UjBWIXinDCm5Mig743QiLKUw2omBIxRzzf8ag/aj113pWInP0PJEnbxiKxmMOtK9f8r/pkKOhA24
+ l/vdxEtboEpnit9eDMUXIndWMq60VS/exQDt/A9LUBeh20ZKJHsyHBpl4CBYSVjLuwAu95U/9u7+ij17EfYDBbr6ePTHG1+zTDB2jAQ2Wlq7Z+A8ogemOB0e
+ wFE+V1ApYalu5DMgpvR16s/g/+aNV8cFNHMIK2eBIzwHrcH65ceqvIyLwuKesEPqAkhosmuZSEwWw3kGIR0Bgh+L3X6wo2nm1ITSlgrz7Cekoxp2CeaV92RX
+ CX7t8yUfSEamRkU9
+Subject: Re: [Buildroot] [PATCH 1/2] package/sunxi-mali-utgard: rename from
+ sunxi-mali-mainline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +77,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: samuel@sholland.org, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Julien Olivain <ju.o@free.fr>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Howdy,
-
-Thanks for this! It's obviously great, just a couple of nits, see below.
-
-On Fri,  5 Nov 2021 13:38:47 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
-
-> diff --git a/board/nezha/post-build.sh b/board/nezha/post-build.sh
-> new file mode 100755
-> index 0000000000..9d38b13b84
-> --- /dev/null
-> +++ b/board/nezha/post-build.sh
-> @@ -0,0 +1,6 @@
-> +#!/bin/sh
-> +BOARD_DIR=$(dirname $0)
-> +
-> +# Bring the extlinux.conf file in
-> +install -D -m 0644 ${BOARD_DIR}/extlinux.conf \
-> +	${TARGET_DIR}/boot/extlinux/extlinux.conf
-
-Probably you don't even need a post-build script here, the
-extlinux.conf could just be added to the rootfs using a rootfs overlay.
-
-
-> new file mode 100644
-> index 0000000000..f04404b9a4
-> --- /dev/null
-> +++ b/configs/nezha_defconfig
-> @@ -0,0 +1,36 @@
-> +BR2_riscv=y
-> +BR2_GLOBAL_PATCH_DIR="board/nezha/patches"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/nezha/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/nezha/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/smaeul/linux.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="012f5a3d01be6d44e32c74bb3637ec281790b297"
-
-Here...
-
-
-> +BR2_TARGET_OPENSBI=y
-> +BR2_TARGET_OPENSBI_CUSTOM_GIT=y
-> +BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/smaeul/opensbi"
-> +BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="b9125c6f8909d1cc0417795737fc13cb6297ff11"
-
-Here...
-
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/smaeul/u-boot"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="62392d3b8a624a80646c1876533336f90140088d"
-
-.. and here
-
-We normally use the github macro to download a tarball instead of a
-full Git repository.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTHVjYSwKCj4gSWwgZ2lvcm5vIDUgbm92IDIwMjEsIGFsbGUgb3JlIDEyOjA1LCBMdWNhIENl
+cmVzb2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+IGhhIHNjcml0dG86Cj4gCj4g77u/SGkgR2l1
+bGlvLAo+IAo+PiBPbiAwNC8xMS8yMSAxODoyMywgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IEhp
+IEx1Y2EsCj4+IAo+Pj4gT24gMTEvNC8yMSAxMDoyNiBBTSwgTHVjYSBDZXJlc29saSB3cm90ZToK
+Pj4+IEhpIEdpdWxpbywKPj4+IAo+Pj4gdGhhbmtzIGZvciB0aGVzZSBhbmQgdGhlIG90aGVyIG9s
+aW1leCBwYXRjaGVzIHlvdSBhcmUgc2VuZGluZy4gVGhvbWFzCj4+PiBhcHBsaWVkIHRoZW0gZmFz
+dGVyIHRoYW4gSSBjb3VsZCByZXZpZXcgYW5kIHRlc3QgdGhlbS4uLiBsZXQgbWUgdHJ5IHRoaXMK
+Pj4+IHRpbWUgOikKPj4gCj4+IEkndmUganVzdCBzZW50IHRoZSB2MiBzZXJpZXMsIGRvIHdlIHdh
+aXQgdW50aWwgeW91IGdpdmUgYSBUZXN0ZWQtYnk6ID8KPiAKPiBKdXN0IHNlbnQgbXkgVGVzdGVk
+LWJ5IHRvbywgYnV0IEkgb25seSBidWlsZCB0ZXN0ZWQgc2luY2UgSSBoYXZlIG5vIGxpbWUKPiBi
+b2FyZC4KCkhhdmUgeW914oCZdmUgZ2l2ZW4gYSB0cnkgb24gbGltZTIgYXQgbGVhc3Q/CgpPdGhl
+cndpc2UgSSBjYW4uCgpHaXVsaW8KCj4gCj4gLS0gCj4gTHVjYQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
