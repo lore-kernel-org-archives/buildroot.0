@@ -2,59 +2,59 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FB8C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BA5C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:17:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E641A60EBC
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:17:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E641A60EBC
+	by mail.kernel.org (Postfix) with ESMTPS id 3BA24603E8
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:17:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3BA24603E8
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2369828E3;
-	Fri,  5 Nov 2021 16:17:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1053282640;
+	Fri,  5 Nov 2021 16:17:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2QIfmFENR7TF; Fri,  5 Nov 2021 16:17:18 +0000 (UTC)
+	with ESMTP id cf6xz_KnOT34; Fri,  5 Nov 2021 16:17:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CD6382861;
-	Fri,  5 Nov 2021 16:17:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21C061BF2A5
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC6158280E;
+	Fri,  5 Nov 2021 16:17:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B2D1A1BF2A5
  for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05F316FD0B
+ by smtp1.osuosl.org (Postfix) with ESMTP id B092182871
  for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:17:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cJNRmvd2STf8 for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 16:17:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rp1JbZd73pzl for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 16:17:08 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BE316F949
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 16:17:05 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 03A898281A
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 16:17:07 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 6323E1BF20A;
- Fri,  5 Nov 2021 16:17:01 +0000 (UTC)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 3214AC0002;
+ Fri,  5 Nov 2021 16:17:05 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mj1tl-0008CF-GK; Fri, 05 Nov 2021 17:17:01 +0100
+ id 1mj1tp-0008CK-9y; Fri, 05 Nov 2021 17:17:05 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bartosz Bilas <b.bilas@grinn-global.com>
 References: <20211026075020.12072-1-b.bilas@grinn-global.com>
- <20211026075020.12072-2-b.bilas@grinn-global.com>
-Date: Fri, 05 Nov 2021 17:17:01 +0100
-In-Reply-To: <20211026075020.12072-2-b.bilas@grinn-global.com> (Bartosz
- Bilas's message of "Tue, 26 Oct 2021 09:50:19 +0200")
-Message-ID: <87y262efwi.fsf@dell.be.48ers.dk>
+ <20211026075020.12072-3-b.bilas@grinn-global.com>
+Date: Fri, 05 Nov 2021 17:17:05 +0100
+In-Reply-To: <20211026075020.12072-3-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Tue, 26 Oct 2021 09:50:20 +0200")
+Message-ID: <87tugqefwe.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] configs/chiliboard: bump to linux 5.14.14
+Subject: Re: [Buildroot] [PATCH] configs/liteboard: bump to u-boot 2021.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
