@@ -2,51 +2,71 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B27CC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 21:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A27C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 21:05:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 91F2760FBF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 21:04:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 91F2760FBF
+	by mail.kernel.org (Postfix) with ESMTPS id 4E08B60FBF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 21:05:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4E08B60FBF
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3651460715;
-	Fri,  5 Nov 2021 21:04:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFFD760715;
+	Fri,  5 Nov 2021 21:05:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qO0EHZrAzfeo; Fri,  5 Nov 2021 21:04:46 +0000 (UTC)
+	with ESMTP id aRsT9plXUMBa; Fri,  5 Nov 2021 21:05:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E1146075E;
-	Fri,  5 Nov 2021 21:04:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAA5C6075E;
+	Fri,  5 Nov 2021 21:05:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A09401BF362
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 21:04:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 19B0D1BF5B5
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 21:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F4AE4078A
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 21:04:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14EC1407A0
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 21:05:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fn6PSvGN8EoO for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 21:04:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58AD840789
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 21:04:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 111EA8B35B; Fri,  5 Nov 2021 21:00:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 5 Nov 2021 21:59:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 639c0047a9321c6e061a7fe5b397e22089f09473
-X-Git-Newrev: 7485f5be0c460649e7406699cde82bb492aa23f1
-X-Patchwork-Hint: ignore
-Message-Id: <20211105210056.111EA8B35B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libteam: new package
+ with ESMTP id D-eR9RGSyVzT for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 21:05:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F7A04079E
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 21:05:30 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9d6e:5497:a761:f603])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E67205FF96;
+ Fri,  5 Nov 2021 22:05:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1636146327;
+ bh=Ih6Uo0nxJfh5tUoV3kyF4Tlzubck9dapA4AqjCQ01vI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=jjkfr/FmeDp3SB8gqYt5yFVQMTHPUs3nXUegQvSbhr2TFQpMCazVkw19LLmUu4dG8
+ no1WYfSF9PkPdIMU6vX3rbcZf8qZLtBs0iwBojflfNU7Pj2XlnWNTJezX8HhLQJkox
+ PptFYS0iJe6m0LchK7k2Omfnugc/CVM+ZzX5O1wlCl3euNabkjE2UBuKz2g5bBZLNT
+ T6+M64Jo1R+OkB0jMhBhFw3rhj+NSuoeslyj8mdxX82SBmGupnPz+++sS62VqaUmGb
+ JHx6LD41KFaPdyw8hgCDWVG/sajyShsCkBjXwB6b70dzWc7toB5dmbWvXpAh1N232f
+ DEecrszMe3IWw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 05 Nov 2021 22:05:19 +0100
+Date: Fri, 5 Nov 2021 22:05:19 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <20211105210519.GD2400@scaer>
+References: <20210719093815.2017764-1-troglobit@gmail.com>
+ <20210719093815.2017764-2-troglobit@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20210719093815.2017764-2-troglobit@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/libteam: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,298 +78,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8215289373104820862=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8215289373104820862==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7485f5be0c460649e7406699cde82bb492aa23f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package is the userspace daemon, client tool, and library for the
-team device implementation in the Linux kernel.  Team is an alternative
-to the traditional bonding driver and provides more "runners", or modes,
-of operation for aggregates.  None of these modes are enabled by default
-and need a custom kernel config.
-
-Backported the three most relevant patches to fix musl build, revert of
-a fix prior to 1.31 that can cause high CPU load, and a fix to prevent
-failing to stop the daemon due to too short timeout for kill command.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[yann.morin.1998@free.fr: slight reword in help text]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-revert-disregard-current-state.patch      | 51 ++++++++++++++++++++++
- .../0002-fix-build-on-openwrt-musl-libc.patch      | 41 +++++++++++++++++
- .../0003-increase-wait-time-for-daemon-kill.patch  | 37 ++++++++++++++++
- package/libteam/Config.in                          | 31 +++++++++++++
- package/libteam/libteam.hash                       |  3 ++
- package/libteam/libteam.mk                         | 24 ++++++++++
- 8 files changed, 189 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cae9e27a65..a2d34fdcc7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1344,6 +1344,7 @@ N:	Joachim Wiberg <troglobit@gmail.com>
- F:	configs/globalscale_espressobin_defconfig
- F:	board/globalscale/espressobin/
- F:	package/libite/
-+F:	package/libteam/
- F:	package/libuev/
- F:	package/mg/
- F:	package/mrouted/
-diff --git a/package/Config.in b/package/Config.in
-index 47b8f54115..e355ab1987 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1829,6 +1829,7 @@ menu "Networking"
- 	source "package/libsoup/Config.in"
- 	source "package/libsrtp/Config.in"
- 	source "package/libstrophe/Config.in"
-+	source "package/libteam/Config.in"
- 	source "package/libtelnet/Config.in"
- 	source "package/libtirpc/Config.in"
- 	source "package/libtorrent/Config.in"
-diff --git a/package/libteam/0001-revert-disregard-current-state.patch b/package/libteam/0001-revert-disregard-current-state.patch
-new file mode 100644
-index 0000000000..339afbf416
---- /dev/null
-+++ b/package/libteam/0001-revert-disregard-current-state.patch
-@@ -0,0 +1,51 @@
-+From 61efd6de2fbb8ee077863ee5a355ac3dfd9365b9 Mon Sep 17 00:00:00 2001
-+From: Xin Long <lucien.xin@gmail.com>
-+Date: Tue, 1 Sep 2020 13:59:27 +0800
-+Subject: [PATCH] Revert "teamd: Disregard current state when considering port
-+ enablement"
-+
-+This reverts commit deadb5b715227429a1879b187f5906b39151eca9.
-+
-+As Patrick noticed, with that commit, teamd_port_check_enable()
-+would set the team port to the new state unconditionally, which
-+triggers another change message from kernel to userspace, then
-+teamd_port_check_enable() is called again to set the team port
-+to the new state.
-+
-+This would go around and around to update the team port state,
-+and even cause teamd to consume 100% cpu.
-+
-+As the issue caused by that commit is serious, it has to be
-+reverted. As for the issued fixed by that commit, I would
-+propose a new fix later.
-+
-+Signed-off-by: Jiri Pirko <jiri@nvidia.com>
-+---
-+ teamd/teamd_per_port.c | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/teamd/teamd_per_port.c b/teamd/teamd_per_port.c
-+index 166da57..d429753 100644
-+--- a/teamd/teamd_per_port.c
-++++ b/teamd/teamd_per_port.c
-+@@ -442,14 +442,18 @@ int teamd_port_check_enable(struct teamd_context *ctx,
-+ 			    bool should_enable, bool should_disable)
-+ {
-+ 	bool new_enabled_state;
-++	bool curr_enabled_state;
-+ 	int err;
-+ 
-+ 	if (!teamd_port_present(ctx, tdport))
-+ 		return 0;
-++	err = teamd_port_enabled(ctx, tdport, &curr_enabled_state);
-++	if (err)
-++		return err;
-+ 
-+-	if (should_enable)
-++	if (!curr_enabled_state && should_enable)
-+ 		new_enabled_state = true;
-+-	else if (should_disable)
-++	else if (curr_enabled_state && should_disable)
-+ 		new_enabled_state = false;
-+ 	else
-+ 		return 0;
-diff --git a/package/libteam/0002-fix-build-on-openwrt-musl-libc.patch b/package/libteam/0002-fix-build-on-openwrt-musl-libc.patch
-new file mode 100644
-index 0000000000..f2b38a137d
---- /dev/null
-+++ b/package/libteam/0002-fix-build-on-openwrt-musl-libc.patch
-@@ -0,0 +1,41 @@
-+From 267f24839536234ca621d4fd0466d3b57cb6dccd Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Pavel=20=C5=A0imerda?= <code@simerda.eu>
-+Date: Tue, 12 Jan 2021 04:41:56 +0100
-+Subject: [PATCH] fix build on OpenWRT/musl-libc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Pavel Šimerda <code@simerda.eu>
-+Signed-off-by: Jiri Pirko <jiri@nvidia.com>
-+---
-+ teamd/teamd_runner_lacp.c | 2 --
-+ utils/teamnl.c            | 1 +
-+ 2 files changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/teamd/teamd_runner_lacp.c b/teamd/teamd_runner_lacp.c
-+index 9437f05..f524be2 100644
-+--- a/teamd/teamd_runner_lacp.c
-++++ b/teamd/teamd_runner_lacp.c
-+@@ -23,9 +23,7 @@
-+ #include <unistd.h>
-+ #include <limits.h>
-+ #include <sys/ioctl.h>
-+-#include <linux/if_ether.h>
-+ #include <sys/socket.h>
-+-#include <linux/netdevice.h>
-+ #include <netinet/in.h>
-+ #include <errno.h>
-+ #include <team.h>
-+diff --git a/utils/teamnl.c b/utils/teamnl.c
-+index c53345d..ec2b435 100644
-+--- a/utils/teamnl.c
-++++ b/utils/teamnl.c
-+@@ -24,6 +24,7 @@
-+ #include <getopt.h>
-+ #include <errno.h>
-+ #include <sys/signalfd.h>
-++#include <sys/select.h>
-+ #include <signal.h>
-+ #include <unistd.h>
-+ #include <team.h>
-diff --git a/package/libteam/0003-increase-wait-time-for-daemon-kill.patch b/package/libteam/0003-increase-wait-time-for-daemon-kill.patch
-new file mode 100644
-index 0000000000..7827a654ef
---- /dev/null
-+++ b/package/libteam/0003-increase-wait-time-for-daemon-kill.patch
-@@ -0,0 +1,37 @@
-+From 6875e6c8efb0fe86766b3d4f1d0db390af6998b7 Mon Sep 17 00:00:00 2001
-+From: Hangbin Liu <liuhangbin@gmail.com>
-+Date: Tue, 15 Dec 2020 19:33:17 +0800
-+Subject: [PATCH] teamd: increase the waitting time for daemon killing
-+
-+In the current code, we wait for at most 5s when kill the daemon pid.
-+But in some environment, it may need more time. Then the teamd -k will
-+failed and return error "Failed to kill daemon: Timer expired".
-+
-+Let's increase the value to have enough time. Here is the reuslt with
-+this patch:
-+
-+$ time libteam/teamd/teamd -k -t team0
-+
-+real    0m10.442s
-+user    0m0.017s
-+sys     0m0.016s
-+
-+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-+Signed-off-by: Jiri Pirko <jiri@nvidia.com>
-+---
-+ teamd/teamd.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/teamd/teamd.c b/teamd/teamd.c
-+index 9360cbf..b310140 100644
-+--- a/teamd/teamd.c
-++++ b/teamd/teamd.c
-+@@ -1858,7 +1858,7 @@ int main(int argc, char **argv)
-+ 		break;
-+ 	case DAEMON_CMD_KILL:
-+ 		if (daemon_pid_file_is_running() > 0) {
-+-			err = daemon_pid_file_kill_wait(SIGTERM, 5);
-++			err = daemon_pid_file_kill_wait(SIGTERM, 30);
-+ 			if (err)
-+ 				teamd_log_warn("Failed to kill daemon: %s",
-+ 					       strerror(errno));
-diff --git a/package/libteam/Config.in b/package/libteam/Config.in
-new file mode 100644
-index 0000000000..aa566a6c94
---- /dev/null
-+++ b/package/libteam/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_LIBTEAM
-+	bool "libteam"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # libnl-tools
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_LIBDAEMON
-+	select BR2_PACKAGE_LIBNL
-+	select BR2_PACKAGE_LIBNL_TOOLS
-+	help
-+	  The purpose of the Team driver is to provide a mechanism to
-+	  team multiple NICs (ports) into one logical one (teamdev) at
-+	  L2 layer. The process is called "channel bonding", "Ethernet
-+	  bonding", "channel teaming", "link aggregation", etc.
-+
-+	  Team tries to provide similar functionality as the bonding
-+	  driver, however architecturally it is quite different. Team is
-+	  modular, userspace driven, very lean and efficient, and it
-+	  does have some distinct advantages over bonding. The way Team
-+	  is configured differs dramatically from the way bonding is.
-+
-+	  If building the kernel with Buildroot, basic team support is
-+	  automatically enabled, but you will still need to enable the
-+	  modes you need, e.g. activebackup or loadbalance (e.g. with a
-+	  config fragment or a custom config).
-+
-+	  https://github.com/jpirko/libteam
-+
-+comment "libteam needs MMU and a toolchain w/ dynamic library and threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libteam/libteam.hash b/package/libteam/libteam.hash
-new file mode 100644
-index 0000000000..39d29425d3
---- /dev/null
-+++ b/package/libteam/libteam.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  c69f7cf5a98203d66db10e67b396fe325b77a5a9491d1e07e8a07cba3ba841bb  libteam-1.31.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libteam/libteam.mk b/package/libteam/libteam.mk
-new file mode 100644
-index 0000000000..99454a03e5
---- /dev/null
-+++ b/package/libteam/libteam.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libteam
-+#
-+################################################################################
-+
-+LIBTEAM_VERSION = 1.31
-+LIBTEAM_SITE = $(call github,jpirko,libteam,v$(LIBTEAM_VERSION))
-+LIBTEAM_CPE_ID_VENDOR = libteam
-+LIBTEAM_LICENSE = LGPL-2.1+
-+LIBTEAM_LICENSE_FILES = COPYING
-+LIBTEAM_DEPENDENCIES = host-pkgconf jansson libdaemon libnl
-+LIBTEAM_AUTORECONF = YES
-+LIBTEAM_INSTALL_STAGING = YES
-+
-+# Note: this enables basic team support, use a custom kernel config, or
-+#       fragment, to enable team modes, e.g. activebackup or loadbalance
-+define LIBTEAM_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETDEVICES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_TEAM)
-+endef
-+
-+$(eval $(autotools-package))
-
---===============8215289373104820862==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8215289373104820862==--
+Sm9hY2hpbSwgQWxsLAoKT24gMjAyMS0wNy0xOSAxMTozOCArMDIwMCwgSm9hY2hpbSBXaWJlcmcg
+c3Bha2UgdGh1c2x5Ogo+IFRoaXMgcGFja2FnZSBpcyB0aGUgdXNlcnNwYWNlIGRhZW1vbiwgY2xp
+ZW50IHRvb2wsIGFuZCBsaWJyYXJ5IGZvciB0aGUKPiB0ZWFtIGRldmljZSBpbXBsZW1lbnRhdGlv
+biBpbiB0aGUgTGludXgga2VybmVsLiAgVGVhbSBpcyBhbiBhbHRlcm5hdGl2ZQo+IHRvIHRoZSB0
+cmFkaXRpb25hbCBib25kaW5nIGRyaXZlciBhbmQgcHJvdmlkZXMgbW9yZSAicnVubmVycyIsIG9y
+IG1vZGVzLAo+IG9mIG9wZXJhdGlvbiBmb3IgYWdncmVnYXRlcy4gIE5vbmUgb2YgdGhlc2UgbW9k
+ZXMgYXJlIGVuYWJsZWQgYnkgZGVmYXVsdAo+IGFuZCBuZWVkIGEgY3VzdG9tIGtlcm5lbCBjb25m
+aWcuCj4gCj4gQmFja3BvcnRlZCB0aGUgdGhyZWUgbW9zdCByZWxldmFudCBwYXRjaGVzIHRvIGZp
+eCBtdXNsIGJ1aWxkLCByZXZlcnQgb2YKPiBhIGZpeCBwcmlvciB0byAxLjMxIHRoYXQgY2FuIGNh
+dXNlIGhpZ2ggQ1BVIGxvYWQsIGFuZCBhIGZpeCB0byBwcmV2ZW50Cj4gZmFpbGluZyB0byBzdG9w
+IHRoZSBkYWVtb24gZHVlIHRvIHRvbyBzaG9ydCB0aW1lb3V0IGZvciBraWxsIGNvbW1hbmQuCj4g
+Cj4gU2lnbmVkLW9mZi1ieTogSm9hY2hpbSBXaWJlcmcgPHRyb2dsb2JpdEBnbWFpbC5jb20+CgpB
+cHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLiBBcyBkaXNjdXNzZWQgb24gSVJDLCBJIHNsaWdodGx5
+IHR3ZWFrZWQgdGhlCmhlbHAgdGV4dC4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+
+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4g
+IHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAg
+Li4uLzAwMDEtcmV2ZXJ0LWRpc3JlZ2FyZC1jdXJyZW50LXN0YXRlLnBhdGNoIHwgNTEgKysrKysr
+KysrKysrKysrKysrKwo+ICAuLi4vMDAwMi1maXgtYnVpbGQtb24tb3BlbndydC1tdXNsLWxpYmMu
+cGF0Y2ggfCA0MSArKysrKysrKysrKysrKysKPiAgLi4uMy1pbmNyZWFzZS13YWl0LXRpbWUtZm9y
+LWRhZW1vbi1raWxsLnBhdGNoIHwgMzcgKysrKysrKysrKysrKysKPiAgcGFja2FnZS9saWJ0ZWFt
+L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgIHwgMzAgKysrKysrKysrKysKPiAgcGFja2Fn
+ZS9saWJ0ZWFtL2xpYnRlYW0uaGFzaCAgICAgICAgICAgICAgICAgIHwgIDMgKysKPiAgcGFja2Fn
+ZS9saWJ0ZWFtL2xpYnRlYW0ubWsgICAgICAgICAgICAgICAgICAgIHwgMjQgKysrKysrKysrCj4g
+IDggZmlsZXMgY2hhbmdlZCwgMTg4IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvbGlidGVhbS8wMDAxLXJldmVydC1kaXNyZWdhcmQtY3VycmVudC1zdGF0ZS5wYXRj
+aAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJ0ZWFtLzAwMDItZml4LWJ1aWxkLW9u
+LW9wZW53cnQtbXVzbC1saWJjLnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xp
+YnRlYW0vMDAwMy1pbmNyZWFzZS13YWl0LXRpbWUtZm9yLWRhZW1vbi1raWxsLnBhdGNoCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYnRlYW0vQ29uZmlnLmluCj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBwYWNrYWdlL2xpYnRlYW0vbGlidGVhbS5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL2xpYnRlYW0vbGlidGVhbS5tawo+IAo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJT
+IGIvREVWRUxPUEVSUwo+IGluZGV4IGM1MTlhNmNmYmIuLjg2MmU2Mzc2OGIgMTAwNjQ0Cj4gLS0t
+IGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BFUlMKPiBAQCAtMTMwOCw2ICsxMzA4LDcgQEAg
+RjoJcGFja2FnZS9ydHR5Lwo+ICBOOglKb2FjaGltIFdpYmVyZyA8dHJvZ2xvYml0QGdtYWlsLmNv
+bT4KPiAgRjoJY29uZmlncy9nbG9iYWxzY2FsZV9lc3ByZXNzb2Jpbl9kZWZjb25maWcKPiAgRjoJ
+Ym9hcmQvZ2xvYmFsc2NhbGUvZXNwcmVzc29iaW4vCj4gK0Y6CXBhY2thZ2UvbGlidGVhbS8KPiAg
+RjoJcGFja2FnZS9tZy8KPiAgRjoJcGFja2FnZS9uZXRjYWxjLwo+ICBGOglwYWNrYWdlL3NzZHAt
+cmVzcG9uZGVyLwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29u
+ZmlnLmluCj4gaW5kZXggZTg4M2NmMzc4MC4uZjU1ZDlmNGNjMiAxMDA2NDQKPiAtLS0gYS9wYWNr
+YWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAgLTE4MDksNiArMTgw
+OSw3IEBAIG1lbnUgIk5ldHdvcmtpbmciCj4gIAlzb3VyY2UgInBhY2thZ2UvbGlic291cC9Db25m
+aWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbGlic3J0cC9Db25maWcuaW4iCj4gIAlzb3VyY2Ug
+InBhY2thZ2UvbGlic3Ryb3BoZS9Db25maWcuaW4iCj4gKwlzb3VyY2UgInBhY2thZ2UvbGlidGVh
+bS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbGlidGVsbmV0L0NvbmZpZy5pbiIKPiAg
+CXNvdXJjZSAicGFja2FnZS9saWJ0aXJwYy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uv
+bGlidG9ycmVudC9Db25maWcuaW4iCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlidGVhbS8wMDAx
+LXJldmVydC1kaXNyZWdhcmQtY3VycmVudC1zdGF0ZS5wYXRjaCBiL3BhY2thZ2UvbGlidGVhbS8w
+MDAxLXJldmVydC1kaXNyZWdhcmQtY3VycmVudC1zdGF0ZS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMzM5YWZiZjQxNgo+IC0tLSAvZGV2L251bGwKPiAr
+KysgYi9wYWNrYWdlL2xpYnRlYW0vMDAwMS1yZXZlcnQtZGlzcmVnYXJkLWN1cnJlbnQtc3RhdGUu
+cGF0Y2gKPiBAQCAtMCwwICsxLDUxIEBACj4gK0Zyb20gNjFlZmQ2ZGUyZmJiOGVlMDc3ODYzZWU1
+YTM1NWFjM2RmZDkzNjViOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogWGluIExv
+bmcgPGx1Y2llbi54aW5AZ21haWwuY29tPgo+ICtEYXRlOiBUdWUsIDEgU2VwIDIwMjAgMTM6NTk6
+MjcgKzA4MDAKPiArU3ViamVjdDogW1BBVENIXSBSZXZlcnQgInRlYW1kOiBEaXNyZWdhcmQgY3Vy
+cmVudCBzdGF0ZSB3aGVuIGNvbnNpZGVyaW5nIHBvcnQKPiArIGVuYWJsZW1lbnQiCj4gKwo+ICtU
+aGlzIHJldmVydHMgY29tbWl0IGRlYWRiNWI3MTUyMjc0MjlhMTg3OWIxODdmNTkwNmIzOTE1MWVj
+YTkuCj4gKwo+ICtBcyBQYXRyaWNrIG5vdGljZWQsIHdpdGggdGhhdCBjb21taXQsIHRlYW1kX3Bv
+cnRfY2hlY2tfZW5hYmxlKCkKPiArd291bGQgc2V0IHRoZSB0ZWFtIHBvcnQgdG8gdGhlIG5ldyBz
+dGF0ZSB1bmNvbmRpdGlvbmFsbHksIHdoaWNoCj4gK3RyaWdnZXJzIGFub3RoZXIgY2hhbmdlIG1l
+c3NhZ2UgZnJvbSBrZXJuZWwgdG8gdXNlcnNwYWNlLCB0aGVuCj4gK3RlYW1kX3BvcnRfY2hlY2tf
+ZW5hYmxlKCkgaXMgY2FsbGVkIGFnYWluIHRvIHNldCB0aGUgdGVhbSBwb3J0Cj4gK3RvIHRoZSBu
+ZXcgc3RhdGUuCj4gKwo+ICtUaGlzIHdvdWxkIGdvIGFyb3VuZCBhbmQgYXJvdW5kIHRvIHVwZGF0
+ZSB0aGUgdGVhbSBwb3J0IHN0YXRlLAo+ICthbmQgZXZlbiBjYXVzZSB0ZWFtZCB0byBjb25zdW1l
+IDEwMCUgY3B1Lgo+ICsKPiArQXMgdGhlIGlzc3VlIGNhdXNlZCBieSB0aGF0IGNvbW1pdCBpcyBz
+ZXJpb3VzLCBpdCBoYXMgdG8gYmUKPiArcmV2ZXJ0ZWQuIEFzIGZvciB0aGUgaXNzdWVkIGZpeGVk
+IGJ5IHRoYXQgY29tbWl0LCBJIHdvdWxkCj4gK3Byb3Bvc2UgYSBuZXcgZml4IGxhdGVyLgo+ICsK
+PiArU2lnbmVkLW9mZi1ieTogSmlyaSBQaXJrbyA8amlyaUBudmlkaWEuY29tPgo+ICstLS0KPiAr
+IHRlYW1kL3RlYW1kX3Blcl9wb3J0LmMgfCA4ICsrKysrKy0tCj4gKyAxIGZpbGUgY2hhbmdlZCwg
+NiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ICsKPiArZGlmZiAtLWdpdCBhL3RlYW1k
+L3RlYW1kX3Blcl9wb3J0LmMgYi90ZWFtZC90ZWFtZF9wZXJfcG9ydC5jCj4gK2luZGV4IDE2NmRh
+NTcuLmQ0Mjk3NTMgMTAwNjQ0Cj4gKy0tLSBhL3RlYW1kL3RlYW1kX3Blcl9wb3J0LmMKPiArKysr
+IGIvdGVhbWQvdGVhbWRfcGVyX3BvcnQuYwo+ICtAQCAtNDQyLDE0ICs0NDIsMTggQEAgaW50IHRl
+YW1kX3BvcnRfY2hlY2tfZW5hYmxlKHN0cnVjdCB0ZWFtZF9jb250ZXh0ICpjdHgsCj4gKyAJCQkg
+ICAgYm9vbCBzaG91bGRfZW5hYmxlLCBib29sIHNob3VsZF9kaXNhYmxlKQo+ICsgewo+ICsgCWJv
+b2wgbmV3X2VuYWJsZWRfc3RhdGU7Cj4gKysJYm9vbCBjdXJyX2VuYWJsZWRfc3RhdGU7Cj4gKyAJ
+aW50IGVycjsKPiArIAo+ICsgCWlmICghdGVhbWRfcG9ydF9wcmVzZW50KGN0eCwgdGRwb3J0KSkK
+PiArIAkJcmV0dXJuIDA7Cj4gKysJZXJyID0gdGVhbWRfcG9ydF9lbmFibGVkKGN0eCwgdGRwb3J0
+LCAmY3Vycl9lbmFibGVkX3N0YXRlKTsKPiArKwlpZiAoZXJyKQo+ICsrCQlyZXR1cm4gZXJyOwo+
+ICsgCj4gKy0JaWYgKHNob3VsZF9lbmFibGUpCj4gKysJaWYgKCFjdXJyX2VuYWJsZWRfc3RhdGUg
+JiYgc2hvdWxkX2VuYWJsZSkKPiArIAkJbmV3X2VuYWJsZWRfc3RhdGUgPSB0cnVlOwo+ICstCWVs
+c2UgaWYgKHNob3VsZF9kaXNhYmxlKQo+ICsrCWVsc2UgaWYgKGN1cnJfZW5hYmxlZF9zdGF0ZSAm
+JiBzaG91bGRfZGlzYWJsZSkKPiArIAkJbmV3X2VuYWJsZWRfc3RhdGUgPSBmYWxzZTsKPiArIAll
+bHNlCj4gKyAJCXJldHVybiAwOwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnRlYW0vMDAwMi1m
+aXgtYnVpbGQtb24tb3BlbndydC1tdXNsLWxpYmMucGF0Y2ggYi9wYWNrYWdlL2xpYnRlYW0vMDAw
+Mi1maXgtYnVpbGQtb24tb3BlbndydC1tdXNsLWxpYmMucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEw
+MDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmYyYjM4YTEzN2QKPiAtLS0gL2Rldi9udWxsCj4gKysr
+IGIvcGFja2FnZS9saWJ0ZWFtLzAwMDItZml4LWJ1aWxkLW9uLW9wZW53cnQtbXVzbC1saWJjLnBh
+dGNoCj4gQEAgLTAsMCArMSw0MSBAQAo+ICtGcm9tIDI2N2YyNDgzOTUzNjIzNGNhNjIxZDRmZDA0
+NjZkM2I1N2NiNmRjY2QgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206ID0/VVRGLTg/
+cT9QYXZlbD0yMD1DNT1BMGltZXJkYT89IDxjb2RlQHNpbWVyZGEuZXU+Cj4gK0RhdGU6IFR1ZSwg
+MTIgSmFuIDIwMjEgMDQ6NDE6NTYgKzAxMDAKPiArU3ViamVjdDogW1BBVENIXSBmaXggYnVpbGQg
+b24gT3BlbldSVC9tdXNsLWxpYmMKPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1UeXBl
+OiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6
+IDhiaXQKPiArCj4gK1NpZ25lZC1vZmYtYnk6IFBhdmVsIMWgaW1lcmRhIDxjb2RlQHNpbWVyZGEu
+ZXU+Cj4gK1NpZ25lZC1vZmYtYnk6IEppcmkgUGlya28gPGppcmlAbnZpZGlhLmNvbT4KPiArLS0t
+Cj4gKyB0ZWFtZC90ZWFtZF9ydW5uZXJfbGFjcC5jIHwgMiAtLQo+ICsgdXRpbHMvdGVhbW5sLmMg
+ICAgICAgICAgICB8IDEgKwo+ICsgMiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBk
+ZWxldGlvbnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS90ZWFtZC90ZWFtZF9ydW5uZXJfbGFjcC5j
+IGIvdGVhbWQvdGVhbWRfcnVubmVyX2xhY3AuYwo+ICtpbmRleCA5NDM3ZjA1Li5mNTI0YmUyIDEw
+MDY0NAo+ICstLS0gYS90ZWFtZC90ZWFtZF9ydW5uZXJfbGFjcC5jCj4gKysrKyBiL3RlYW1kL3Rl
+YW1kX3J1bm5lcl9sYWNwLmMKPiArQEAgLTIzLDkgKzIzLDcgQEAKPiArICNpbmNsdWRlIDx1bmlz
+dGQuaD4KPiArICNpbmNsdWRlIDxsaW1pdHMuaD4KPiArICNpbmNsdWRlIDxzeXMvaW9jdGwuaD4K
+PiArLSNpbmNsdWRlIDxsaW51eC9pZl9ldGhlci5oPgo+ICsgI2luY2x1ZGUgPHN5cy9zb2NrZXQu
+aD4KPiArLSNpbmNsdWRlIDxsaW51eC9uZXRkZXZpY2UuaD4KPiArICNpbmNsdWRlIDxuZXRpbmV0
+L2luLmg+Cj4gKyAjaW5jbHVkZSA8ZXJybm8uaD4KPiArICNpbmNsdWRlIDx0ZWFtLmg+Cj4gK2Rp
+ZmYgLS1naXQgYS91dGlscy90ZWFtbmwuYyBiL3V0aWxzL3RlYW1ubC5jCj4gK2luZGV4IGM1MzM0
+NWQuLmVjMmI0MzUgMTAwNjQ0Cj4gKy0tLSBhL3V0aWxzL3RlYW1ubC5jCj4gKysrKyBiL3V0aWxz
+L3RlYW1ubC5jCj4gK0BAIC0yNCw2ICsyNCw3IEBACj4gKyAjaW5jbHVkZSA8Z2V0b3B0Lmg+Cj4g
+KyAjaW5jbHVkZSA8ZXJybm8uaD4KPiArICNpbmNsdWRlIDxzeXMvc2lnbmFsZmQuaD4KPiArKyNp
+bmNsdWRlIDxzeXMvc2VsZWN0Lmg+Cj4gKyAjaW5jbHVkZSA8c2lnbmFsLmg+Cj4gKyAjaW5jbHVk
+ZSA8dW5pc3RkLmg+Cj4gKyAjaW5jbHVkZSA8dGVhbS5oPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2xpYnRlYW0vMDAwMy1pbmNyZWFzZS13YWl0LXRpbWUtZm9yLWRhZW1vbi1raWxsLnBhdGNoIGIv
+cGFja2FnZS9saWJ0ZWFtLzAwMDMtaW5jcmVhc2Utd2FpdC10aW1lLWZvci1kYWVtb24ta2lsbC5w
+YXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNzgyN2E2NTRl
+Zgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2xpYnRlYW0vMDAwMy1pbmNyZWFzZS13
+YWl0LXRpbWUtZm9yLWRhZW1vbi1raWxsLnBhdGNoCj4gQEAgLTAsMCArMSwzNyBAQAo+ICtGcm9t
+IDY4NzVlNmM4ZWZiMGZlODY3NjZiM2Q0ZjFkMGRiMzkwYWY2OTk4YjcgTW9uIFNlcCAxNyAwMDow
+MDowMCAyMDAxCj4gK0Zyb206IEhhbmdiaW4gTGl1IDxsaXVoYW5nYmluQGdtYWlsLmNvbT4KPiAr
+RGF0ZTogVHVlLCAxNSBEZWMgMjAyMCAxOTozMzoxNyArMDgwMAo+ICtTdWJqZWN0OiBbUEFUQ0hd
+IHRlYW1kOiBpbmNyZWFzZSB0aGUgd2FpdHRpbmcgdGltZSBmb3IgZGFlbW9uIGtpbGxpbmcKPiAr
+Cj4gK0luIHRoZSBjdXJyZW50IGNvZGUsIHdlIHdhaXQgZm9yIGF0IG1vc3QgNXMgd2hlbiBraWxs
+IHRoZSBkYWVtb24gcGlkLgo+ICtCdXQgaW4gc29tZSBlbnZpcm9ubWVudCwgaXQgbWF5IG5lZWQg
+bW9yZSB0aW1lLiBUaGVuIHRoZSB0ZWFtZCAtayB3aWxsCj4gK2ZhaWxlZCBhbmQgcmV0dXJuIGVy
+cm9yICJGYWlsZWQgdG8ga2lsbCBkYWVtb246IFRpbWVyIGV4cGlyZWQiLgo+ICsKPiArTGV0J3Mg
+aW5jcmVhc2UgdGhlIHZhbHVlIHRvIGhhdmUgZW5vdWdoIHRpbWUuIEhlcmUgaXMgdGhlIHJldXNs
+dCB3aXRoCj4gK3RoaXMgcGF0Y2g6Cj4gKwo+ICskIHRpbWUgbGlidGVhbS90ZWFtZC90ZWFtZCAt
+ayAtdCB0ZWFtMAo+ICsKPiArcmVhbCAgICAwbTEwLjQ0MnMKPiArdXNlciAgICAwbTAuMDE3cwo+
+ICtzeXMgICAgIDBtMC4wMTZzCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBIYW5nYmluIExpdSA8bGl1
+aGFuZ2JpbkBnbWFpbC5jb20+Cj4gK1NpZ25lZC1vZmYtYnk6IEppcmkgUGlya28gPGppcmlAbnZp
+ZGlhLmNvbT4KPiArLS0tCj4gKyB0ZWFtZC90ZWFtZC5jIHwgMiArLQo+ICsgMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvdGVh
+bWQvdGVhbWQuYyBiL3RlYW1kL3RlYW1kLmMKPiAraW5kZXggOTM2MGNiZi4uYjMxMDE0MCAxMDA2
+NDQKPiArLS0tIGEvdGVhbWQvdGVhbWQuYwo+ICsrKysgYi90ZWFtZC90ZWFtZC5jCj4gK0BAIC0x
+ODU4LDcgKzE4NTgsNyBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCj4gKyAJCWJy
+ZWFrOwo+ICsgCWNhc2UgREFFTU9OX0NNRF9LSUxMOgo+ICsgCQlpZiAoZGFlbW9uX3BpZF9maWxl
+X2lzX3J1bm5pbmcoKSA+IDApIHsKPiArLQkJCWVyciA9IGRhZW1vbl9waWRfZmlsZV9raWxsX3dh
+aXQoU0lHVEVSTSwgNSk7Cj4gKysJCQllcnIgPSBkYWVtb25fcGlkX2ZpbGVfa2lsbF93YWl0KFNJ
+R1RFUk0sIDMwKTsKPiArIAkJCWlmIChlcnIpCj4gKyAJCQkJdGVhbWRfbG9nX3dhcm4oIkZhaWxl
+ZCB0byBraWxsIGRhZW1vbjogJXMiLAo+ICsgCQkJCQkgICAgICAgc3RyZXJyb3IoZXJybm8pKTsK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJ0ZWFtL0NvbmZpZy5pbiBiL3BhY2thZ2UvbGlidGVh
+bS9Db25maWcuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjJh
+M2FiYmEzMDEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9saWJ0ZWFtL0NvbmZpZy5p
+bgo+IEBAIC0wLDAgKzEsMzAgQEAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQlRFQU0KPiArCWJv
+b2wgImxpYnRlYW0iCj4gKwlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZm9yaygpCj4gKwlkZXBl
+bmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyBsaWJubC10b29scwo+ICsJZGVwZW5kcyBvbiBCUjJf
+VE9PTENIQUlOX0hBU19USFJFQURTICMgbGlibmwKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9KQU5T
+U09OCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCREFFTU9OCj4gKwlzZWxlY3QgQlIyX1BBQ0tB
+R0VfTElCTkwKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJOTF9UT09MUwo+ICsJaGVscAo+ICsJ
+ICBUaGUgcHVycG9zZSBvZiB0aGUgVGVhbSBkcml2ZXIgaXMgdG8gcHJvdmlkZSBhIG1lY2hhbmlz
+bSB0bwo+ICsJICB0ZWFtIG11bHRpcGxlIE5JQ3MgKHBvcnRzKSBpbnRvIG9uZSBsb2dpY2FsIG9u
+ZSAodGVhbWRldikgYXQKPiArCSAgTDIgbGF5ZXIuIFRoZSBwcm9jZXNzIGlzIGNhbGxlZCAiY2hh
+bm5lbCBib25kaW5nIiwgIkV0aGVybmV0Cj4gKwkgIGJvbmRpbmciLCAiY2hhbm5lbCB0ZWFtaW5n
+IiwgImxpbmsgYWdncmVnYXRpb24iLCBldGMuCj4gKwo+ICsJICBUZWFtIHRyaWVzIHRvIHByb3Zp
+ZGUgc2ltaWxhciBmdW5jdGlvbmFsaXR5IGFzIHRoZSBib25kaW5nCj4gKwkgIGRyaXZlciwgaG93
+ZXZlciBhcmNoaXRlY3R1cmFsbHkgaXQgaXMgcXVpdGUgZGlmZmVyZW50LiBUZWFtIGlzCj4gKwkg
+IG1vZHVsYXIsIHVzZXJzcGFjZSBkcml2ZW4sIHZlcnkgbGVhbiBhbmQgZWZmaWNpZW50LCBhbmQg
+aXQKPiArCSAgZG9lcyBoYXZlIHNvbWUgZGlzdGluY3QgYWR2YW50YWdlcyBvdmVyIGJvbmRpbmcu
+IFRoZSB3YXkgVGVhbQo+ICsJICBpcyBjb25maWd1cmVkIGRpZmZlcnMgZHJhbWF0aWNhbGx5IGZy
+b20gdGhlIHdheSBib25kaW5nIGlzLgo+ICsKPiArCSAgU2VsZWN0aW5nIHRoaXMgZW5hYmxlcyBi
+YXNpYyB0ZWFtIHN1cHBvcnQgaW4gTGludXguICBUbyBlbmFibGUKPiArCSAgYW55IHRlYW0gbW9k
+ZXMsIGUuZy4gYWN0aXZlYmFja3VwIG9yIGxvYWRiYWxhbmNlLCB1c2UgYSBjdXN0b20KPiArCSAg
+a2VybmVsIGNvbmZpZywgb3IgZnJhZ21lbnQuCj4gKwo+ICsJICBodHRwczovL2dpdGh1Yi5jb20v
+anBpcmtvL2xpYnRlYW0KPiArCj4gK2NvbW1lbnQgImxpYnRlYW0gbmVlZHMgTU1VIGFuZCBhIHRv
+b2xjaGFpbiB3LyBkeW5hbWljIGxpYnJhcnkgYW5kIHRocmVhZHMiCj4gKwlkZXBlbmRzIG9uIEJS
+Ml9VU0VfTU1VCj4gKwlkZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElCUyB8fCAhQlIyX1RPT0xDSEFJ
+Tl9IQVNfVEhSRUFEUwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnRlYW0vbGlidGVhbS5oYXNo
+IGIvcGFja2FnZS9saWJ0ZWFtL2xpYnRlYW0uaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+aW5kZXggMDAwMDAwMDAwMC4uMzlkMjk0MjVkMwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNr
+YWdlL2xpYnRlYW0vbGlidGVhbS5oYXNoCj4gQEAgLTAsMCArMSwzIEBACj4gKyMgTG9jYWxseSBj
+YWxjdWxhdGVkCj4gK3NoYTI1NiAgYzY5ZjdjZjVhOTgyMDNkNjZkYjEwZTY3YjM5NmZlMzI1Yjc3
+YTVhOTQ5MWQxZTA3ZThhMDdjYmEzYmE4NDFiYiAgbGlidGVhbS0xLjMxLnRhci5nego+ICtzaGEy
+NTYgIGRjNjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlk
+OGFiMDMyZmU1NTEgIENPUFlJTkcKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJ0ZWFtL2xpYnRl
+YW0ubWsgYi9wYWNrYWdlL2xpYnRlYW0vbGlidGVhbS5tawo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
+Cj4gaW5kZXggMDAwMDAwMDAwMC4uOTk0NTRhMDNlNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9w
+YWNrYWdlL2xpYnRlYW0vbGlidGVhbS5tawo+IEBAIC0wLDAgKzEsMjQgQEAKPiArIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMKPiArIwo+ICsjIGxpYnRlYW0KPiArIwo+ICsjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIwo+ICsKPiArTElCVEVBTV9WRVJTSU9OID0gMS4zMQo+ICtMSUJURUFNX1NJVEUgPSAk
+KGNhbGwgZ2l0aHViLGpwaXJrbyxsaWJ0ZWFtLHYkKExJQlRFQU1fVkVSU0lPTikpCj4gK0xJQlRF
+QU1fQ1BFX0lEX1ZFTkRPUiA9IGxpYnRlYW0KPiArTElCVEVBTV9MSUNFTlNFID0gTEdQTC0yLjEr
+Cj4gK0xJQlRFQU1fTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiArTElCVEVBTV9ERVBFTkRFTkNJ
+RVMgPSBob3N0LXBrZ2NvbmYgamFuc3NvbiBsaWJkYWVtb24gbGlibmwKPiArTElCVEVBTV9BVVRP
+UkVDT05GID0gWUVTCj4gK0xJQlRFQU1fSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gKwo+ICsjIE5v
+dGU6IHRoaXMgZW5hYmxlcyBiYXNpYyB0ZWFtIHN1cHBvcnQsIHVzZSBhIGN1c3RvbSBrZXJuZWwg
+Y29uZmlnLCBvcgo+ICsjICAgICAgIGZyYWdtZW50LCB0byBlbmFibGUgdGVhbSBtb2RlcywgZS5n
+LiBhY3RpdmViYWNrdXAgb3IgbG9hZGJhbGFuY2UKPiArZGVmaW5lIExJQlRFQU1fTElOVVhfQ09O
+RklHX0ZJWFVQUwo+ICsJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTkVUREVWSUNF
+UykKPiArCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX05FVF9DT1JFKQo+ICsJJChj
+YWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfTkVUX1RFQU0pCj4gK2VuZGVmCj4gKwo+ICsk
+KGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCj4gLS0gCj4gMi4yNS4xCj4gCj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0Cj4gYnVpbGRyb290QGJ1c3lib3gubmV0Cj4gaHR0cDovL2xpc3RzLmJ1c3lib3gubmV0
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
+fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
+IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
+aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
+IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
+VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
+IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
+LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
