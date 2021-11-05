@@ -2,52 +2,58 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C625C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 14:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF624C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:02:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BC98761244
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 14:49:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC98761244
+	by mail.kernel.org (Postfix) with ESMTPS id 2204360EBC
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:02:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2204360EBC
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85CDC4075F;
-	Fri,  5 Nov 2021 14:49:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E73040789;
+	Fri,  5 Nov 2021 15:02:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SZRM0NexaJMm; Fri,  5 Nov 2021 14:49:39 +0000 (UTC)
+	with ESMTP id QQ6islqMztdQ; Fri,  5 Nov 2021 15:02:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 000E040754;
-	Fri,  5 Nov 2021 14:49:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68FF21C1148
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 14:49:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09B5E40776;
+	Fri,  5 Nov 2021 15:02:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E58191BF304
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58E0782531
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 14:49:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D080840776
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:02:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OmTUlV52IIyr for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 14:49:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44AE382525
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 14:49:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 94C688A5BB; Fri,  5 Nov 2021 14:45:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3GlLTFgYdrd4 for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 15:02:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 939E240770
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 15:02:19 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id D03E1240002;
+ Fri,  5 Nov 2021 15:02:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mj0jO-0005rN-Tf; Fri, 05 Nov 2021 16:02:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 5 Nov 2021 15:48:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 700ecefcc580729069dbbe19b64774550cfd24a3
-X-Git-Newrev: a610bf996798949f047c1f84f5617be26c3682c6
-X-Patchwork-Hint: ignore
-Message-Id: <20211105144538.94C688A5BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openjdk{-bin}: bump version to
- 17.0.1+12
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211105124445.2275022-1-fontaine.fabrice@gmail.com>
+Date: Fri, 05 Nov 2021 16:02:14 +0100
+In-Reply-To: <20211105124445.2275022-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Nov 2021 13:44:45 +0100")
+Message-ID: <874k8qir2h.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/snort: security bump to version
+ 2.9.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,170 +65,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a610bf996798949f047c1f84f5617be26c3682c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-OpenJDK 17 is a new LTS release, which leaves the Buildroot Config option of
-"LTS" and "LATEST" as a misnomer because both 11 and 17 are LTS releases.
+ > Fix CVE-2021-40114: Multiple Cisco products are affected by a
+ > vulnerability in the way the Snort detection engine processes ICMP
+ > traffic that could allow an unauthenticated, remote attacker to cause a
+ > denial of service (DoS) condition on an affected device. The
+ > vulnerability is due to improper memory resource management while the
+ > Snort detection engine is processing ICMP packets. An attacker could
+ > exploit this vulnerability by sending a series of ICMP packets through
+ > an affected device. A successful exploit could allow the attacker to
+ > exhaust resources on the affected device, causing the device to reload.
 
-There are two options in this case:
+ > https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-snort-dos-s2R7W9UU
+ > https://www.snort.org/downloads/snort/changelog_2.9.18.1.txt
 
-1) Remove "LATEST" and update OpenJDK 11 to 17, and only support 17.
-2) Change "LTS" to "11" and "LATEST" to "17" and only support the latest 2 LTS
-OpenJDK releases.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-After some discussion with Thomas Petazzoni and Peter Korsgaard, and testing,
-option 2 is the best course of action for a few reasons:
+Committed, thanks.
 
-  - OpenJDK 11 and 17 have very long support cycles:
-  - OpenJDK 11 has two years of Active and five years of security support left.
-  - OpenJDK 17 has five years of Active and ten years of security support left.
-  - Both OpenJDK versions build with the same parameters.
-  - The maintenance cost of both versions is meager.
-  - Both versions pass tests.package.test_openjdk without issue.
-
-Changes:
-  - Change BR2_OPENJDK_VERSION_LATEST -> BR2_OPENJDK_VERSION_17
-  - Change BR2_OPENJDK_VERSION_LTS -> BR2_OPENJDK_VERSION_11
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[Peter: add Config.in.legacy, use BR2_PACKAGE_OPENJDK_ prefix]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                     | 16 ++++++++++++++++
- package/openjdk-bin/openjdk-bin.hash |  4 ++--
- package/openjdk-bin/openjdk-bin.mk   |  6 +++---
- package/openjdk/Config.in            | 14 +++++++-------
- package/openjdk/openjdk.hash         |  2 +-
- package/openjdk/openjdk.mk           |  6 +++---
- 6 files changed, 32 insertions(+), 16 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 24d0dc1d51..40011a1890 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,22 @@ endif
- 
- comment "Legacy options removed in 2021.11"
- 
-+config BR2_OPENJDK_VERSION_LTS
-+	bool "OpenJDK LTS version was renamed to OpenJDK 11"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_OPENJDK_VERSION_11
-+	help
-+	  The LTS version option was renamed to OpenJDK 11 to make it
-+	  clear what LTS version is.
-+
-+config BR2_OPENJDK_VERSION_LATEST
-+	bool "OpenJDK latest version (16.x) was removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_OPENJDK_VERSION_17
-+	help
-+	  OpenJDK 16.x is no longer mainted, so the option has been
-+	  removed. Use OpenJDK 17.x instead.
-+
- config BR2_PACKAGE_MROUTED_RSRR
- 	bool "RSRR for RSVP removed in mrouted v4.4"
- 	select BR2_LEGACY
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index de17aa71fc..bbc939d4e8 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/AdoptOpenJDK/openjdk16-binaries/releases
--sha256  323d6d7474a359a28eff7ddd0df8e65bd61554a8ed12ef42fd9365349e573c2c  OpenJDK16U-jdk_x64_linux_hotspot_16.0.2_7.tar.gz
-+# https://github.com/adoptium/temurin17-binaries/releases
-+sha256  6ea18c276dcbb8522feeebcfc3a4b5cb7c7e7368ba8590d3326c6c3efc5448b6  OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz
- 
- # From https://github.com/adoptium/temurin11-binaries/releases
- sha256  3b1c0c34be4c894e64135a454f2d5aaa4bd10aea04ec2fa0c0efe6bb26528e30  OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 01d3a3b88f..266c93d363 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ifeq ($(BR2_OPENJDK_VERSION_LATEST),y)
--HOST_OPENJDK_BIN_VERSION_MAJOR = 16
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.2_7
-+ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 17
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.13_8
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index a0d04e5725..2aad1dcea3 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_OPENJDK
- 	depends on !BR2_STATIC_LIBS # glibc
- 	depends on BR2_INSTALL_LIBSTDCPP # cups
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib, cups, libusb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb, C++14 for OpenJDK16
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb, C++14 for OpenJDK17
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_USE_MMU # cups
- 	depends on BR2_PACKAGE_XORG7
-@@ -51,18 +51,18 @@ if BR2_PACKAGE_OPENJDK
- 
- choice
- 	prompt "openjdk version"
--	default BR2_OPENJDK_VERSION_LATEST
-+	default BR2_PACKAGE_OPENJDK_VERSION_17
- 	help
- 	  Select the version of OpenJDK you wish to use.
- 
--config BR2_OPENJDK_VERSION_LTS
--	bool "LTS (OpenJDK 11)"
-+config BR2_PACKAGE_OPENJDK_VERSION_11
-+	bool "OpenJDK 11"
- 
--config BR2_OPENJDK_VERSION_LATEST
--	bool "latest (OpenJDK 16)"
-+config BR2_PACKAGE_OPENJDK_VERSION_17
-+	bool "OpenJDK 17"
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++14
- 
--comment "OpenJDK 16 needs a host gcc >= 4.9"
-+comment "OpenJDK 17 needs a host gcc >= 4.9"
- 	depends on !BR2_HOST_GCC_AT_LEAST_4_9 # C++14
- 
- endchoice
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 8788d02be0..2f46b044ad 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  b4a0e71e41a11175e8a7c1dba86ed5b0aa878413158c8d48813db1b64ac9536c  openjdk-16.0.2+7.tar.gz
-+sha256  8c076203a6f85ab916b3e54de1992bcbcc5ffe580c52b1ac8d52ca7afb9f02d1  openjdk-17.0.1+12.tar.gz
- sha256  119c6233fe7ff5670c590e2f9d6686ac4d80c97b17065506998b75c547b54f2c  openjdk-11.0.13+8.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 27809ba282..5fccdaa7ac 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ifeq ($(BR2_OPENJDK_VERSION_LATEST),y)
--OPENJDK_VERSION_MAJOR = 16
--OPENJDK_VERSION_MINOR = 0.2+7
-+ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
-+OPENJDK_VERSION_MAJOR = 17
-+OPENJDK_VERSION_MINOR = 0.1+12
- else
- OPENJDK_VERSION_MAJOR = 11
- OPENJDK_VERSION_MINOR = 0.13+8
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
