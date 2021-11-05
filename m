@@ -2,72 +2,51 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AD16C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:46:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA1AEC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:58:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 987ED6124A
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:46:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 987ED6124A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lucaceresoli.net
+	by mail.kernel.org (Postfix) with ESMTPS id C6A6B61101
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 15:58:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6A6B61101
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 418684071C;
-	Fri,  5 Nov 2021 15:46:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6446A6154A;
+	Fri,  5 Nov 2021 15:58:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tUeUb-fhNqAY; Fri,  5 Nov 2021 15:46:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9KHDKnB0AM2S; Fri,  5 Nov 2021 15:58:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFE0140707;
-	Fri,  5 Nov 2021 15:46:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58CA41BF5DA
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:46:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD35F60625;
+	Fri,  5 Nov 2021 15:58:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C11F1BF5DA
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54DF740707
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:46:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AFF5401D9
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 15:58:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oN596LT66M_F for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 15:46:12 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 226A8406F1
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 15:46:11 +0000 (UTC)
-Received: from [77.244.183.192] (port=63408 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1mj1Pt-00FAlp-NV; Fri, 05 Nov 2021 16:46:09 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <27c59ddf-4bcb-86e1-91cf-28b45848d446@lucaceresoli.net>
- <CC4DEBFE-15CC-4593-9F6D-7775ECF08A71@benettiengineering.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
-Date: Fri, 5 Nov 2021 16:46:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CC4DEBFE-15CC-4593-9F6D-7775ECF08A71@benettiengineering.com>
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH 1/2] package/sunxi-mali-utgard: rename from
- sunxi-mali-mainline
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ecEgkpX-O858 for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 15:58:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F2CB40012
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 15:58:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 402DF8A651; Fri,  5 Nov 2021 15:54:14 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 5 Nov 2021 16:51:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8402b5263fd7f1a77128374485053e1bd2a3f667
+X-Git-Newrev: 79e3cd1c78ac5f5f886ad587dcbf1d1512fd55ec
+X-Patchwork-Hint: ignore
+Message-Id: <20211105155414.402DF8A651@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/audit: bump to version 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,31 +58,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Julien Olivain <ju.o@free.fr>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgR2l1bGlvLAoKT24gMDUvMTEvMjEgMTQ6MjQsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhp
-IEx1Y2EsCj4gCj4+IElsIGdpb3JubyA1IG5vdiAyMDIxLCBhbGxlIG9yZSAxMjowNSwgTHVjYSBD
-ZXJlc29saSA8bHVjYUBsdWNhY2VyZXNvbGkubmV0PiBoYSBzY3JpdHRvOgo+Pgo+PiDvu79IaSBH
-aXVsaW8sCj4+Cj4+PiBPbiAwNC8xMS8yMSAxODoyMywgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+
-PiBIaSBMdWNhLAo+Pj4KPj4+PiBPbiAxMS80LzIxIDEwOjI2IEFNLCBMdWNhIENlcmVzb2xpIHdy
-b3RlOgo+Pj4+IEhpIEdpdWxpbywKPj4+Pgo+Pj4+IHRoYW5rcyBmb3IgdGhlc2UgYW5kIHRoZSBv
-dGhlciBvbGltZXggcGF0Y2hlcyB5b3UgYXJlIHNlbmRpbmcuIFRob21hcwo+Pj4+IGFwcGxpZWQg
-dGhlbSBmYXN0ZXIgdGhhbiBJIGNvdWxkIHJldmlldyBhbmQgdGVzdCB0aGVtLi4uIGxldCBtZSB0
-cnkgdGhpcwo+Pj4+IHRpbWUgOikKPj4+Cj4+PiBJJ3ZlIGp1c3Qgc2VudCB0aGUgdjIgc2VyaWVz
-LCBkbyB3ZSB3YWl0IHVudGlsIHlvdSBnaXZlIGEgVGVzdGVkLWJ5OiA/Cj4+Cj4+IEp1c3Qgc2Vu
-dCBteSBUZXN0ZWQtYnkgdG9vLCBidXQgSSBvbmx5IGJ1aWxkIHRlc3RlZCBzaW5jZSBJIGhhdmUg
-bm8gbGltZQo+PiBib2FyZC4KPiAKPiBIYXZlIHlvdeKAmXZlIGdpdmVuIGEgdHJ5IG9uIGxpbWUy
-IGF0IGxlYXN0PwoKTm8sIGFwb2xvZ2llcywgSSBkb24ndCBoYXZlIGFueSAibGltZSoiIGJvYXJk
-Li4uIG5vIGxpbWUsIG5vIGxpbWUyLgoKSSBoYXZlIG9ubHkgYW4gQTIwIG1pY3JvIGJ1dCBpdCBo
-YXMgbm8gTUFMSSBkZWZjb25maWcgaW4gQnVpbGRyb290IGFuZApzbyBpdCBkb2Vzbid0IGFwcGVh
-ciBpbiB0aGlzIHNlcmllcy4KCi0tIApMdWNhCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=79e3cd1c78ac5f5f886ad587dcbf1d1512fd55ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This bump will fix the following build failure with kernel >= 5.15
+thanks to
+https://github.com/linux-audit/audit-userspace/commit/6b09724c69d91668418ddb3af00da6db6755208c
+
+interpret.c:48:10: fatal error: linux/ipx.h: No such file or directory
+   48 | #include <linux/ipx.h>
+      |          ^~~~~~~~~~~~~
+
+Indeed, ipx.h has been dropped since
+https://github.com/torvalds/linux/commit/6c9b40844751ea30c72f7a2f92f4d704bc6b2927
+
+https://github.com/linux-audit/audit-userspace/blob/v3.0.6/ChangeLog
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1c8a959d8847d8942fbdf148c1b781df0d8bb4dc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 4ef9a42b0d..9e16a339d6 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256  994c4250d8fd43f3087a3c2ce73461832e30f1e9b278bf5bb03c3e07091155a5  audit-3.0.1.tar.gz
++sha256  c3e44d77513a42401d417dd0ceb203cf23886cb89402dea7b9494faa3f4fcc5e  audit-3.0.6.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index df6650593d..6c75bca53e 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUDIT_VERSION = 3.0.1
++AUDIT_VERSION = 3.0.6
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
