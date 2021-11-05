@@ -2,83 +2,70 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AC36C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 22:17:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D083FC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 22:18:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D3C9660551
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 22:17:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D3C9660551
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id E88656112D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 22:18:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E88656112D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A6B44023F;
-	Fri,  5 Nov 2021 22:17:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5B704039C;
+	Fri,  5 Nov 2021 22:18:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u9ybiaqvIGv6; Fri,  5 Nov 2021 22:17:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V2FP6o7y2M8C; Fri,  5 Nov 2021 22:18:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C0884021D;
-	Fri,  5 Nov 2021 22:17:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D21E1BF386
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 22:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 087C8402D2;
+	Fri,  5 Nov 2021 22:18:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 728541BF386
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 22:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 480954021D
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 22:17:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B7FF6F93A
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 22:18:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kYcWPU2pElKx for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 22:17:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC01340130
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 22:17:05 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id d3so15917157wrh.8
- for <buildroot@buildroot.org>; Fri, 05 Nov 2021 15:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=N6vUctaJhjUkWK6GMKUIrfQX6Rv5QcAcDTXLR/gj1qE=;
- b=lSF0uKmLgdMuCmwTyF18GtOOAEkPm/ikcggJoRgUfpAROiV0RXC2YA2ABUu5yq+Wgh
- cTYZy34247gQSDxaL2EMnDZqlGvd3M+CpsJdeEiFZ5LU/zbkpSJS5cq6tmFSlTX21V50
- uwL/8J9kpXIgI/shEEsY41PlzemO+W+94jYq9Qp2MRqGTcXDNWFM2UzVy1lGmFb6eTOG
- EnZdnZoeiTjiM2hYNQMmM+T4Fgo3fWwthpgjE+GK5ZfIg6E0pmHUJ2cAvGyYE5rL5f9S
- zYqM+5Ls3AImVpnIkHwb/KUD7Uk5w9bX3J8qghV1pwuyvInLUQ01vjcw/3eUkd7Qi1rO
- qHhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=N6vUctaJhjUkWK6GMKUIrfQX6Rv5QcAcDTXLR/gj1qE=;
- b=1rlV5kQZkwVRYHBnY7T4AU8KwKcGg+1uTKhf0y5C0rmdHwrWg34zz4tU4skMMpaVEI
- jiMzaCoVggH/6yZMFvqwO0oQQBHp2Ft2IHDH4ghRGufyQwRjJ/a3PlXtws2nR3c16vtD
- bZoe09FyTBa956iDlLcJ/vy7CzswSoCl4SPKh0TAHmwehOSNYdghzBPiBJtZtweBCzAh
- WH++3DnC4wG/0xvcfv0LbBHMPLkwA6K1k2av2Es/XdhQ1W4jzeAm60nkOgl/dXZTUGC6
- guy4IyWTmJotoSqGQH4c0/fJUTCLzLcW3tmAIvplbeM3kjUNAeglpC7wK2D40wWVoGtO
- dNug==
-X-Gm-Message-State: AOAM531Gwz1juYP8skHJ8BzRAp2jlzUf8gH6bBREz5WRniZbL7i2kHLe
- x+R09jjg+xWshryAG1EmZsxJCtVF210=
-X-Google-Smtp-Source: ABdhPJxtDtMkzaZ8eiZMyF+0LhGGnxQQAWTIafqdBYLG6A9Pq6WBAU0CM7AAqbZbNnBVjwBage40PQ==
-X-Received: by 2002:adf:cc8d:: with SMTP id p13mr71688446wrj.274.1636150624109; 
- Fri, 05 Nov 2021 15:17:04 -0700 (PDT)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id 10sm11135281wrb.75.2021.11.05.15.17.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Nov 2021 15:17:03 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dFp3ORtfqRvh for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 22:18:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D64146F933
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 22:18:04 +0000 (UTC)
+Received: from ubuntu.localdomain ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id j7X7mGJ7s5cjnj7X8m4SPA; Fri, 05 Nov 2021 23:18:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636150683; bh=hAL+YjlHKkF8TIinqI0LkYrOYALnVKoaZkR4pqTGHCE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=MfucSFK0lx6lRVgQZxooEz+bq28ZAnhumxGr5aMsiVEe2fH/lfvdlIcA+6dASCxiL
+ 6WLElOXajxJ5AzthXH7TjoQP6Jeqyf1q5CDXYZF7mGY0JHoAyf8LtPk0aqw7e9PksZ
+ ywvp0CHo4VkbMzdz9Xtzd0m9380gZBz004N2TbMOG8C1SvE7iq98s1/mb1S3LJVe0J
+ 3EnXDFQkH67MoAaX75TxLx2+rV8BMltU1FvPWsLIgSwbBxHXyqq2jYhkSXbT1eprfb
+ Tn0UqvTrX46hn4mY7UZQG1qH/33NvA/Sk8hD3duKQg/5joVIxhYOjd9jcC/BQGx8m3
+ ulCW0XBtpXh8w==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri,  5 Nov 2021 23:16:58 +0100
-Message-Id: <20211105221658.1163788-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
+Date: Fri,  5 Nov 2021 23:17:55 +0100
+Message-Id: <20211105221800.1451167-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
+References: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/refpolicy: move patches to subdirectory
+X-CMAE-Envelope: MS4xfPhBM14PQSPVxppgvUBdukMA1xyGm/HGno3E0+W+V+UwhhBYrQGaVwN50r1ncrqUds76tu2r2L70uPW0F2AHwG0vxpliAVA5PIhZ2dSqjsYKaxr2K3cW
+ GSQZCqVmXFhCv2IQGSbgq2ECtZck6tVcxFkkg9ojvom8Clno/2FiOpDZT7LMMMglD8UVFXtT4RuXQgWfMuR1I6mdhiDRCu59nFa/UI6mxwMj/hksiYJsHuVg
+ t5yIRS2iDxzQb/p+nhrPGyxZpSCzeiOZl0VWpuibfTJNC/xVgyfM86kmYnOmQdPWAajYcVHqwB6+ApxGh6OlkEI3C4RvEl7TGl5yvnNuyLnLbHYHUC4w2MF0
+ ZGNIi8jhCKTjLprM4xyERHc3ocs9ULnG0dNNRkTuj9KnGNv8Ucno/VpxLUv2mZ9N05PXgfXa0VcgxoL+Vah2ebjymQ4P+jKr1h0Hyn55RigGiHztFPM5I+Vr
+ Dpc2FznWviZtxOMhS8aXCkDSxSumbuZjWHJ1wIJZl2tweDBZfiWkkD64K2M=
+Subject: [Buildroot] [PATCH v2 0/5] Rename sunxi-mali-mainline* to
+ sunxi-mali-utgard* and fix Mali loading
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,36 +77,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Luca Ceresoli <luca@lucaceresoli.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-refpolicy patches are for 2.20210908 upstream version but when using a custom
-version from git they may fail to apply.
+With this patchset I respin the first 2 patches. While testing on hardware
+the patches they work, but I've left back an error while bumping linux
+version to 5.14. The error is that Linux's sunxi_defconfig(used by both
+a20_olinuxino_lime/2) enables Lima driver, but in this 2 boards we want
+to use Mali driver, so when Mali driver tries to load(being it a module),
+it finds that Lima already has taken gpu resources and fail. So here I add
+3 patches, 1 to add a Linux fragment to disable Lima in Linux and other 2
+to use that fragment in a20_olinuxino_lime/2.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1734417630
+Giulio Benetti (3):
+  board/olimex/a20_olinuxino: add linux-disable-lima.fragment
+  configs/olimex_a20_olinuxino_lime2_defconfig: use
+    linux-disable-lima.fragment
+  configs/olimex_a20_olinuxino_lime_defconfig: use
+    linux-disable-lima.fragment
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...001-policy-modules-services-samba.te-make-crack-optional.patch | 0
- ...002-policy-modules-services-wireguard.te-make-iptables-o.patch | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename package/refpolicy/{ => 2.20210908}/0001-policy-modules-services-samba.te-make-crack-optional.patch (100%)
- rename package/refpolicy/{ => 2.20210908}/0002-policy-modules-services-wireguard.te-make-iptables-o.patch (100%)
+Miquel Raynal (2):
+  package/sunxi-mali-utgard: rename from sunxi-mali-mainline
+  package/sunxi-mali-utgard-driver: rename from
+    sunxi-mali-mainline-driver
 
-diff --git a/package/refpolicy/0001-policy-modules-services-samba.te-make-crack-optional.patch b/package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
-similarity index 100%
-rename from package/refpolicy/0001-policy-modules-services-samba.te-make-crack-optional.patch
-rename to package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
-diff --git a/package/refpolicy/0002-policy-modules-services-wireguard.te-make-iptables-o.patch b/package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
-similarity index 100%
-rename from package/refpolicy/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
-rename to package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
+ Config.in.legacy                              | 42 ++++++++++++++++
+ DEVELOPERS                                    |  4 +-
+ .../a20_olinuxino/linux-disable-lima.fragment |  2 +
+ configs/olimex_a20_olinuxino_lime2_defconfig  |  7 +--
+ configs/olimex_a20_olinuxino_lime_defconfig   |  7 +--
+ docs/manual/adding-packages-virtual.txt       |  2 +-
+ package/Config.in                             |  4 +-
+ package/glslsandbox-player/Config.in          |  4 +-
+ .../glslsandbox-player/glslsandbox-player.mk  |  2 +-
+ package/qt5/qt5base/qt5base.mk                |  2 +-
+ .../sunxi-mali-mainline-driver.mk             | 41 ----------------
+ package/sunxi-mali-mainline/Config.in         | 42 ----------------
+ .../sunxi-mali-mainline.mk                    | 49 -------------------
+ .../Config.in                                 | 20 ++++----
+ .../sunxi-mali-utgard-driver.hash}            |  2 +-
+ .../sunxi-mali-utgard-driver.mk               | 41 ++++++++++++++++
+ package/sunxi-mali-utgard/Config.in           | 43 ++++++++++++++++
+ .../egl.pc                                    |  0
+ .../glesv2.pc                                 |  0
+ .../sunxi-mali-utgard.hash}                   |  2 +-
+ .../sunxi-mali-utgard/sunxi-mali-utgard.mk    | 49 +++++++++++++++++++
+ 21 files changed, 206 insertions(+), 159 deletions(-)
+ create mode 100644 board/olimex/a20_olinuxino/linux-disable-lima.fragment
+ delete mode 100644 package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+ delete mode 100644 package/sunxi-mali-mainline/Config.in
+ delete mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+ rename package/{sunxi-mali-mainline-driver => sunxi-mali-utgard-driver}/Config.in (60%)
+ rename package/{sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash => sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash} (66%)
+ create mode 100644 package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+ create mode 100644 package/sunxi-mali-utgard/Config.in
+ rename package/{sunxi-mali-mainline => sunxi-mali-utgard}/egl.pc (100%)
+ rename package/{sunxi-mali-mainline => sunxi-mali-utgard}/glesv2.pc (100%)
+ rename package/{sunxi-mali-mainline/sunxi-mali-mainline.hash => sunxi-mali-utgard/sunxi-mali-utgard.hash} (70%)
+ create mode 100644 package/sunxi-mali-utgard/sunxi-mali-utgard.mk
+
 -- 
-2.31.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
