@@ -2,75 +2,55 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C036C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 11:05:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC18DC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 12:39:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D60C66124F
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 11:05:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D60C66124F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=lucaceresoli.net
+	by mail.kernel.org (Postfix) with ESMTPS id 055C361212
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 12:39:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 055C361212
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A881406CC;
-	Fri,  5 Nov 2021 11:05:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9519A401D1;
+	Fri,  5 Nov 2021 12:39:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZKoE4QvtLQRI; Fri,  5 Nov 2021 11:05:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vWrVLVmJ7POm; Fri,  5 Nov 2021 12:39:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E02B040648;
-	Fri,  5 Nov 2021 11:05:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D1914019A;
+	Fri,  5 Nov 2021 12:39:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1BD741BF860
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 11:04:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 52C0D1BF5AC
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 12:39:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1875D6075E
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 11:04:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 404A260763
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 12:39:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Rs3mPWWQBW6 for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 11:04:51 +0000 (UTC)
+ with ESMTP id JnV8FDZUqTAp for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 12:39:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A1566063F
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 11:04:51 +0000 (UTC)
-Received: from [77.244.183.192] (port=62422 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1mix1d-00CkXm-MR; Fri, 05 Nov 2021 12:04:49 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20211104063807.139604-1-giulio.benetti@benettiengineering.com>
- <20211104063807.139604-2-giulio.benetti@benettiengineering.com>
- <fcc23c74-070b-12cc-3d77-48bc2fcf5eb4@lucaceresoli.net>
- <72be5698-98dc-d5b2-50a6-342326d9dacf@benettiengineering.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <27c59ddf-4bcb-86e1-91cf-28b45848d446@lucaceresoli.net>
-Date: Fri, 5 Nov 2021 12:04:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CD2B060585
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 12:39:11 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id BFCACC0005;
+ Fri,  5 Nov 2021 12:39:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1miyUs-0001fh-FC; Fri, 05 Nov 2021 13:39:06 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri,  5 Nov 2021 13:38:46 +0100
+Message-Id: <20211105123848.6356-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <72be5698-98dc-d5b2-50a6-342326d9dacf@benettiengineering.com>
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH 1/2] package/sunxi-mali-utgard: rename from
- sunxi-mali-mainline
+Subject: [Buildroot] [PATCH 1/2] boot/sun20i-d1-spl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,35 +62,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Peter Seiderer <ps.report@gmx.net>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, samuel@sholland.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+U-Boot does not yet have SPL code to initialize the DDR controller on the
+Allwinner D1 - So instead package the sun20i-d1-spl bootloader, which is
+based on boot0 from the Allwinner BSP with some modifications to build it
+separately from the BSP and boot mainline U-Boot as explained on the
+linux-sunxi wiki:
 
-On 04/11/21 18:23, Giulio Benetti wrote:
-> Hi Luca,
-> 
-> On 11/4/21 10:26 AM, Luca Ceresoli wrote:
->> Hi Giulio,
->>
->> thanks for these and the other olimex patches you are sending. Thomas
->> applied them faster than I could review and test them... let me try this
->> time :)
-> 
-> I've just sent the v2 series, do we wait until you give a Tested-by: ?
+https://linux-sunxi.org/Allwinner_Nezha
 
-Just sent my Tested-by too, but I only build tested since I have no lime
-board.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                            |  1 +
+ boot/Config.in                        |  1 +
+ boot/sun20i-d1-spl/Config.in          |  8 ++++++++
+ boot/sun20i-d1-spl/sun20i-d1-spl.hash |  2 ++
+ boot/sun20i-d1-spl/sun20i-d1-spl.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 boot/sun20i-d1-spl/Config.in
+ create mode 100644 boot/sun20i-d1-spl/sun20i-d1-spl.hash
+ create mode 100644 boot/sun20i-d1-spl/sun20i-d1-spl.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d0e92b564..c378270bb7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2108,6 +2108,7 @@ F:	board/orangepi/
+ F:	board/pandaboard/
+ F:	board/roseapplepi/
+ F:	boot/shim/
++F:	boot/sun20i-d1-spl/
+ F:	configs/avenger96_defconfig
+ F:	configs/beagleboneai_defconfig
+ F:	configs/lafrite_defconfig
+diff --git a/boot/Config.in b/boot/Config.in
+index ff98a49796..40472ae07d 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -20,6 +20,7 @@ source "boot/optee-os/Config.in"
+ source "boot/opensbi/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/shim/Config.in"
++source "boot/sun20i-d1-spl/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
+diff --git a/boot/sun20i-d1-spl/Config.in b/boot/sun20i-d1-spl/Config.in
+new file mode 100644
+index 0000000000..9d94d87b1c
+--- /dev/null
++++ b/boot/sun20i-d1-spl/Config.in
+@@ -0,0 +1,8 @@
++config BR2_TARGET_SUN20I_D1_SPL
++	bool "sun20-d1-spl"
++	depends on BR2_RISCV_64
++	help
++	  Allwinner D1 boot0 code with modifications to use as U-Boot
++	  SPL.
++
++	  https://github.com/smaeul/sun20i_d1_spl
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.hash b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+new file mode 100644
+index 0000000000..6ca60e5278
+--- /dev/null
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  69063601239a7254fb72e486b138d88a6f2b5c645b24cdfe9792123f975d4a8f  sun20i-d1-spl-771192d0b3737798d7feca87263c8fa74a449787.tar.gz
+diff --git a/boot/sun20i-d1-spl/sun20i-d1-spl.mk b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+new file mode 100644
+index 0000000000..2462ce2322
+--- /dev/null
++++ b/boot/sun20i-d1-spl/sun20i-d1-spl.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# sun20i-d1-spl
++#
++################################################################################
++
++# Commit on the 'mainline' branch
++SUN20I_D1_SPL_VERSION = 771192d0b3737798d7feca87263c8fa74a449787
++SUN20I_D1_SPL_SITE = $(call github,smaeul,sun20i_d1_spl,$(SUN20I_D1_SPL_VERSION))
++SUN20I_D1_SPL_INSTALL_TARGET = NO
++SUN20I_D1_SPL_INSTALL_IMAGES = YES
++SUN20I_D1_SPL_LICENSE = GPL-2.0+
++
++define SUN20I_D1_SPL_BUILD_CMDS
++	$(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)" p=sun20iw1p1 mmc
++endef
++
++define SUN20I_D1_SPL_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/nboot/boot0_sdcard_sun20iw1p1.bin \
++		$(BINARIES_DIR)/boot0_sdcard_sun20iw1p1.bin
++endef
++
++$(eval $(generic-package))
 -- 
-Luca
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
