@@ -2,84 +2,81 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 148C4C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 12:46:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4DD2C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:08:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D267060F21
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 12:46:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D267060F21
+	by mail.kernel.org (Postfix) with ESMTPS id 4647660FE3
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:08:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4647660FE3
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0ABC823E0;
-	Fri,  5 Nov 2021 12:46:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFCDF6152D;
+	Fri,  5 Nov 2021 13:08:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UzCz8cwwH83q; Fri,  5 Nov 2021 12:46:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cXHdVaYR5Ljx; Fri,  5 Nov 2021 13:08:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7663823C6;
-	Fri,  5 Nov 2021 12:46:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B140607BE;
+	Fri,  5 Nov 2021 13:08:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CEAB1BF372
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 12:46:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 59A651BF304
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C25E605BC
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 12:46:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 484E4605E4
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:08:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qFjqUVA8NfuB for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 12:46:41 +0000 (UTC)
+ with ESMTP id CmXKozb-irpH for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 13:08:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0A45B6152F
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 12:46:40 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id n29so1828082wra.11
- for <buildroot@buildroot.org>; Fri, 05 Nov 2021 05:46:40 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 30908605D5
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 13:08:02 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id d5so13673433wrc.1
+ for <buildroot@buildroot.org>; Fri, 05 Nov 2021 06:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ix2aqwAG7LvssSbFGU/JbT5awKsiaOevGc/jXDdOp4Y=;
- b=PAc3UCwTYu9wUvW83jmNpjMMuF5ZMl7nmZQaKgtHNEa/zAqeE9RpsA/dNMlwDXpmoQ
- wmDze+DpvDt79vW6C3o2uyPEy+ZF8AyLWRaDftgOSCi4+GoaTLYxgRDzSUpOng6wpA1S
- Uhu8rr2lF15dfSfblZmVj3YG4T1DvOQOVSVfAkiA4h5vtfz/4PnX2UQe6iFJSFrkqTEJ
- 99/9aw6zpp9lUxbn5LwdEYsV0DfKozC6L0jKPcMUrG+P5WKbNR1uNV3PSQIEhUx2tssl
- yBj6r8sVynDsP5+snTm7YoDnojtKXG99ow+Syp+csZ+u6IiKI7gz6PmLav8f7p+JLxVU
- ANXA==
+ bh=csd1Hr3mk4iZZlAzhoXzzttRLe/XLlkx9z6/UjA1wq4=;
+ b=fmAsl0dl2i/aN0ypYG7uaaYqb9LQu+U2WsEJipUYVqazJKJU+ZOHhH0P3buI2Y/IwK
+ pVop+ryQ8ZsyDPUbUBGMKvhbYBQdHcho0vSZXbeRlyzWj5t0dBbweaufx7r+Ul5tPo6C
+ lZVBsVvYlXGy5x05nf5JZr9f+wBSyq1sC7Al+lae8GUS/vBkGF/yeIxyz5Ln67cdB7AH
+ 73dK96tzQvuD+x64YejwV46aCgAEwYmr5kEAADuhGX6FGJqXmu+jWSHgrPZPutDNBlwa
+ dMwRX3iS91RwG7VOuIySPn0ZHFlgXPWl8CzGOEZDujRKCKF7Gbz8BINR7mo+CSR+9hC0
+ Vwpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ix2aqwAG7LvssSbFGU/JbT5awKsiaOevGc/jXDdOp4Y=;
- b=JGihVk9YrA//6R94m6wNfo7wIHBRXw6II+JPWkWxd814iTOYvF/hFGHNKC1HCH1pmj
- cVHOA6o0tcW0yuLNc2/Go9GDd+a8vTqA54mGCltmIT3oNVV9FOdxNq3NAQWZPC7VZ5gn
- 01V8mJNL8S39P5OcdSmHuI5lC4jYMHC2C68rz4JMbhQdtH17TRRgUCh6mnCtdSoFIH3U
- Aahrbq2baJ/597FFmYKUnpmMim50Y7HRibB05F3E15s3xgty8Ku+VYmM7XOkfTS0uctt
- 04aKNL339S6Rqj3oqkAKdbujJ3jvuc1TuuAdQV50Nh6V/kRbMlq/x0lshkFREfUV0KJ5
- JaaA==
-X-Gm-Message-State: AOAM533C4bieB5JDqJ+fYzyvrpzLMYQD6SOHrU1e3eL4aibxDZ922+Gj
- UoY8/BqUq6T5gLp94F1cinCg97RsBF0=
-X-Google-Smtp-Source: ABdhPJyW9zD69ctGHFoGFQwUd9mV4R0cqG3MDqZbIkkcuaK+wA/tv//98tnyGsfSeu9Bm2eKwG8bpw==
-X-Received: by 2002:adf:d20e:: with SMTP id j14mr64375679wrh.220.1636116399029; 
- Fri, 05 Nov 2021 05:46:39 -0700 (PDT)
+ bh=csd1Hr3mk4iZZlAzhoXzzttRLe/XLlkx9z6/UjA1wq4=;
+ b=JzS/OqH6CK16V4PPO4UwIvsbykJEEqD5u+YJypeehejU5i/OhTnp6Og4MSWcqHqkHM
+ W4KXMJxUE34n6FwMn15wlvQvjXa54S95+23vcODhM6wv4t7C4Rq/5iiFfbObZvP1CjAE
+ SU32ZcEpoy+4g+/diO7ZkrsoGyZG/jV35j0Ee5J3cuVxBoAdfTcUaZcecoXwkPWV4f2M
+ I5VBQO1v7D5MQ1LNtQ5D8Jjq2eUwe2NbJZQngGykpVnUj+uEBfHtUDJhl/dJd3zwdDQG
+ cSvVEDVJNkt3ivWsjdC8ySlDAMIPVSkhQz5tlJKYJrNjLtHcQet+ypWBZyGL3zHeSEBL
+ tN/g==
+X-Gm-Message-State: AOAM533HRcvnpzkpPaySjrnsqVSvo9zMPDCmokVAPwlL7qplGaS8CeL2
+ 2U1OlA3lDuu2W0LPWwt5uZ7QVDbLPYA=
+X-Google-Smtp-Source: ABdhPJzbeIVV0buEiF4W4PflXnfurr6Iu7YdU9YfClBO0cHCjq98l5lcrp7/H5bEcd4vsNNtvhc6iw==
+X-Received: by 2002:a5d:4b0f:: with SMTP id v15mr30835257wrq.264.1636117680249; 
+ Fri, 05 Nov 2021 06:08:00 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id t8sm7712822wrv.30.2021.11.05.05.46.38
+ by smtp.gmail.com with ESMTPSA id a134sm8243937wmd.9.2021.11.05.06.07.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Nov 2021 05:46:38 -0700 (PDT)
+ Fri, 05 Nov 2021 06:07:26 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  5 Nov 2021 13:44:45 +0100
-Message-Id: <20211105124445.2275022-1-fontaine.fabrice@gmail.com>
+Date: Fri,  5 Nov 2021 14:05:15 +0100
+Message-Id: <20211105130515.2275926-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/snort: security bump to version
- 2.9.18.1
+Subject: [Buildroot] [PATCH 1/1] package/mpd: drop tidal option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,114 +88,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-40114: Multiple Cisco products are affected by a
-vulnerability in the way the Snort detection engine processes ICMP
-traffic that could allow an unauthenticated, remote attacker to cause a
-denial of service (DoS) condition on an affected device. The
-vulnerability is due to improper memory resource management while the
-Snort detection engine is processing ICMP packets. An attacker could
-exploit this vulnerability by sending a series of ICMP packets through
-an affected device. A successful exploit could allow the attacker to
-exhaust resources on the affected device, causing the device to reload.
+tidal option has been removed from mpd since version 0.22.10 and
+https://github.com/MusicPlayerDaemon/MPD/commit/97c43954e8df3f772899cda951ad5a7dd4a24f25
+resulting in the following build failure since bump of meson to version
+0.60.1 in commit 78d3f2ea03dfba07a73fe0405c2aa4778f063ce3:
 
-https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-snort-dos-s2R7W9UU
-https://www.snort.org/downloads/snort/changelog_2.9.18.1.txt
+../output-1/build/mpd-0.22.11/meson.build:1:0: ERROR: Unknown options: "tidal"
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b8c5879a02078f4962088dff5ae2ede1f0e6b805
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...en-building-on-a-Fedora-host-machine.patch | 28 ++++++++++++++++++-
- package/snort/snort.hash                      |  4 +--
- package/snort/snort.mk                        |  2 +-
- 3 files changed, 30 insertions(+), 4 deletions(-)
+ Config.in.legacy      | 6 ++++++
+ package/mpd/Config.in | 7 -------
+ package/mpd/mpd.mk    | 7 -------
+ 3 files changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/package/snort/0007-Fix-error-when-building-on-a-Fedora-host-machine.patch b/package/snort/0007-Fix-error-when-building-on-a-Fedora-host-machine.patch
-index afe9672a3c..66d4fa2839 100644
---- a/package/snort/0007-Fix-error-when-building-on-a-Fedora-host-machine.patch
-+++ b/package/snort/0007-Fix-error-when-building-on-a-Fedora-host-machine.patch
-@@ -7,6 +7,8 @@ Remove the code that adds unsafe header/library path when
- cross-compiling on a Fedora host machine.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 24d0dc1d51..3551dd9982 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+[Fabrice: Update for 2.9.18.1 (also fix build on Centos host machine)]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  configure.in | 24 ------------------------
-  1 file changed, 24 deletions(-)
-@@ -15,7 +17,7 @@ diff --git a/configure.in b/configure.in
- index e6586f399898..fb35d4d7e3e3 100644
- --- a/configure.in
- +++ b/configure.in
--@@ -957,30 +957,6 @@ if test "x$enable_dlclose" = "xno"; then
-+@@ -957,54 +957,6 @@ if test "x$enable_dlclose" = "xno"; then
-      AC_DEFINE([DISABLE_DLCLOSE_FOR_VALGRIND_TESTING],[1],[Don't close opened shared objects for valgrind leak testing of dynamic libraries])
-  fi
-  
-@@ -42,6 +44,30 @@ index e6586f399898..fb35d4d7e3e3 100644
- -        extra_incl="-I/usr/include/tirpc"
- -    fi
- -fi
-+-
-+-##################################################
-+-# Centos 8+ does not have inbuilt SunRPC support  #
-+-# in glibc and is separately availble in tirpc   #
-+-# package. Make sure we've got the library and   #
-+-# link it                                        #
-+-##################################################
-+-if test -f /etc/centos-release ; then
-+-    LINUX_FLAVOUR=$(awk '{ print $1 }' /etc/centos-release)
-+-    DISTRO_VERSION=`cut -d ' ' -f 4 /etc/centos-release | cut -d '.' -f 1`
-+-    if [[ "$LINUX_FLAVOUR" == "CentOS" ]] && [[ $DISTRO_VERSION -ge 8 ]]; then
-+-        TIRPC=""
-+-        AC_CHECK_LIB(tirpc,bindresvport,, TIRPC="no")
-+-        echo "$TIRPC"
-+-        if test "x$TIRPC" = "xno"; then
-+-            echo
-+-            echo " ERROR! tirpc not found, get it by running "
-+-            echo " yum install libtirpc-devel or dnf install libtirpc-devel"
-+-            exit
-+-        fi
-+-        LIBS="${LIBS} -ltirpc"
-+-        extra_incl="-I/usr/include/tirpc"
-+-    fi
-+-fi
- -
-  Z_LIB=""
-  AC_CHECK_HEADERS(zlib.h,, Z_LIB="no")
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index 115a8398dd..6df7ae5229 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  006d6b0d71c6c7bd23eac74670f5b4e6  snort-2.9.17.1.tar.gz
-+md5  2b4e30300ef6feca1f60c267e727c6c0  snort-2.9.18.1.tar.gz
+ comment "Legacy options removed in 2021.11"
  
- # Locally computed:
--sha256  303d3d5dc5affecfeaad3a331d3163f901d48d960fdd6598cb55c6d1591eed82  snort-2.9.17.1.tar.gz
-+sha256  da8af0f1b2e4f247d970c6a3c0e83fb6dcd5c84faa21aea49f306f269e8e28aa  snort-2.9.18.1.tar.gz
++config BR2_PACKAGE_MPD_TIDAL
++	bool "mpd tidal option removed"
++	select BR2_LEGACY
++	help
++	  tidal has been removed from mpd since version 0.22.10.
++
+ config BR2_PACKAGE_MROUTED_RSRR
+ 	bool "RSRR for RSVP removed in mrouted v4.4"
+ 	select BR2_LEGACY
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index b075df0d03..e5de77f1bd 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -58,13 +58,6 @@ config BR2_PACKAGE_MPD_SOUNDCLOUD
+ 	help
+ 	  Enable soundcloud.com playlist support.
  
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index e073a59a70..54017d3460 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-config BR2_PACKAGE_MPD_TIDAL
+-	bool "tidal"
+-	select BR2_PACKAGE_MPD_CURL
+-	select BR2_PACKAGE_YAJL
+-	help
+-	  Play songs from the commercial streaming service TIDAL.
+-
+ comment "Converter plugins"
  
--SNORT_VERSION = 2.9.17.1
-+SNORT_VERSION = 2.9.18.1
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
+ config BR2_PACKAGE_MPD_LIBSAMPLERATE
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7a18783386..14390fd0f4 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -284,13 +284,6 @@ ifneq ($(BR2_PACKAGE_MPD_TCP),y)
+ MPD_CONF_OPTS += -Dtcp=true
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MPD_TIDAL),y)
+-MPD_DEPENDENCIES += yajl
+-MPD_CONF_OPTS += -Dtidal=enabled
+-else
+-MPD_CONF_OPTS += -Dtidal=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
+ MPD_DEPENDENCIES += tremor
+ MPD_CONF_OPTS += -Dtremor=enabled
 -- 
 2.33.0
 
