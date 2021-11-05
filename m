@@ -2,72 +2,82 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE9CBC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 18:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33216C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 19:34:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C9A8561244
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 18:59:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C9A8561244
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id A2ABE61101
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 19:34:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A2ABE61101
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 616EE60710;
-	Fri,  5 Nov 2021 18:59:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41BF560775;
+	Fri,  5 Nov 2021 19:34:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dSl6JOYKRZcx; Fri,  5 Nov 2021 18:59:40 +0000 (UTC)
+	with ESMTP id 2hsMeuDTLLaJ; Fri,  5 Nov 2021 19:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B655A6067A;
-	Fri,  5 Nov 2021 18:59:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C16D1BF2F8
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 18:59:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A550160715;
+	Fri,  5 Nov 2021 19:34:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 207021BF580
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 19:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BEDF81C2F
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 18:59:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CC1A60715
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 19:34:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PUiliDtpspwr for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 18:59:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0347181C20
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 18:59:36 +0000 (UTC)
-Received: from [192.168.153.129] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id j4R3mIk2gueW5j4R3mb4fy; Fri, 05 Nov 2021 19:59:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636138774; bh=ojmm3/9FZ9MR7Sqm9AqsUmzP9+vWS62/8V11krm2LaE=;
- h=Subject:From:To:Date:MIME-Version:Content-Type;
- b=BPjil3hQyidiyiVE1+cB/urvKzFjCRccUn6jK1R5G0/d5JcD2jgxHeng3aDnWDHBo
- Xc0f1OsVq3KcM7nOXyHbdbyZvCLryqOWjTzNJphWydrpoUk8rN0tpNNyI+X9zQEeBh
- kPhDf77lO/BzN0+aD5kL/XzJogB4w85uK8h+UWRrTWGxFjrhELdm2/QhC8BKTtoePX
- qd0OfvFMCt2wk8yRIBcY/Z8nmnYOGn97RTFfxPhd2W1pbrIP+MQxTn0Ki3SzxRIKHW
- ZQa7IZi5Vxx5I/E2iJCdxrCZSgaE30LWmAeWoOnLfspJJ4YPDKF9Kfc6lyXMEMR5tZ
- fz1jcmquney9A==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Luca Ceresoli <luca@lucaceresoli.net>
-References: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
- <64499E53-A306-4C85-956F-2CDF8A9F3E61@benettiengineering.com>
-Message-ID: <24766a67-1024-3069-a93b-7a40acab2656@benettiengineering.com>
-Date: Fri, 5 Nov 2021 19:59:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9gJXhyjevj0d for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 19:34:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2284960710
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 19:34:37 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id d24so15369991wra.0
+ for <buildroot@buildroot.org>; Fri, 05 Nov 2021 12:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Eq97Xr6nqpOVwR0WG/9GRl45VpWCeqjvWfUYxfVzJac=;
+ b=RwBYmP25emjP7k04MbAkNIBRaWZ9PXarPdT/z3p4b+1P0yTfnBFYCTonqBJxwNXSQf
+ frVgtZHIb8fAHI2pSvZeml5kPb/eqIndjY4Emd6FMlNjxNHyci0zxL+uR2Zr7SVccw3Z
+ XZEkHkELN6EgIYsAfZ77aOAwqIfYxLlg7u9xTiS5QXRpgGLu7m5M/m1IHMtc8GpJPye4
+ mRd5x2IZbkJEFEPPRIs39o+wf5I9EU1WBHtNbtcFZyxzFgzUSMj/E+1ZzMWUJiX2Ymi6
+ D9GgNnzPyAh9mm/LSmalkEaR/uRbMfieF04x6jLqjePYsOjeNjWwlyCTVU811LrM7x9I
+ nohg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Eq97Xr6nqpOVwR0WG/9GRl45VpWCeqjvWfUYxfVzJac=;
+ b=5x9vwrSjl4PVyRBb1m40H1JndApQqrrN+JUjoTjZTYYxs0MGH3qwDzD5a9Ql6xRZbq
+ RjW3Cc1OZJjefO3Lu4IYRC2MfkVNIc6fNdnB5h0inh1D4ggmjY51rw+Buw7hbC+x4fYT
+ SADXWt6NNqIAa4m+RVZNjPR0ub2Ahvn/30G1yK6wH67GKBpU08VRem0huXlC/mrhEQ7B
+ 1vbHYDokwaFlIpxscPedu6efNTDYwBBr8+jwZ7pU5z6tnV44WlezB232/runOn029c32
+ MU8AYxWpDotiwK6eeRNwidGbkSG0ieJREzae7toiFVhXNXt7loUNHRxu8vllC7IKU6WA
+ tB9g==
+X-Gm-Message-State: AOAM533/vA/e6le8ji3SN8RaotLYNSnTin7iR9yb2vzB5AOXIDL7JBQj
+ VVC6nD47znwNY1Fi+59ZRYU0uZkDfQg=
+X-Google-Smtp-Source: ABdhPJyufgYYwSHMDG9apTN/a8KvgTblRpvadewmMlyp7icJBOuSG70RiCLjxwLm/VrqQY5C7b30+Q==
+X-Received: by 2002:a05:6000:18a3:: with SMTP id
+ b3mr27637939wri.343.1636140874973; 
+ Fri, 05 Nov 2021 12:34:34 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id x13sm8813042wrr.47.2021.11.05.12.34.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 05 Nov 2021 12:34:34 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  5 Nov 2021 20:32:43 +0100
+Message-Id: <20211105193243.2530585-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <64499E53-A306-4C85-956F-2CDF8A9F3E61@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfGy5dOZtNNg3nPEPe6oMOTLtF5g29MVbOgQ0JQp7jyfE5hBYf8mNiWE5Md3M5gaVXnFwbgHhVzwmIaqQZc3BGSWhJjYnN2rnPZ4r7G8MIE94O4u/bU8D
- 2q8HvXEil6UvpSQRfp9mS7O18mXk7cnUgiRvDyMnHbhN/8vj2v+8UIsccQfm9wn4af68fV1Mn2Qtnbx86q9aFS58KM12rMYdPFYPtbYGKCq3uWoSpnVbih8o
- ZSp4zmV1rxj5reLLfCR/IY6NVYIJyTIbhMVO38RM7PgJR0DsD+zJdKp3mP8nClq1+4J7wwHlMUWJ32fIyZG+HIfRxOrzCK/M78H2iy3goYoqplNiCRGt1Dws
- HdkaXQJKxCw8NcH/OMguidWq94rvL4o2swofHAuP216CA7iZfzZ+ahQbiTCB1d/PqVtw4g/QEoZ1L+13InsbhxPx/vN/RBHW9GDMyhDDpQb210ieLy0=
-Subject: Re: [Buildroot] [PATCH 1/2] package/sunxi-mali-utgard: rename from
- sunxi-mali-mainline
+Subject: [Buildroot] [PATCH 1/1] package/janet: link with -latomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,41 +89,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Julien Olivain <ju.o@free.fr>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTHVjYSwKCk9uIDExLzUvMjEgNjowOCBQTSwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4gCj4+
-IElsIGdpb3JubyA1IG5vdiAyMDIxLCBhbGxlIG9yZSAxNjo0NiwgTHVjYSBDZXJlc29saSA8bHVj
-YUBsdWNhY2VyZXNvbGkubmV0PiBoYSBzY3JpdHRvOgo+Pgo+PiDvu79IaSBHaXVsaW8sCj4+Cj4+
-PiBPbiAwNS8xMS8yMSAxNDoyNCwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+PiBIaSBMdWNhLAo+
-Pj4KPj4+Pj4gSWwgZ2lvcm5vIDUgbm92IDIwMjEsIGFsbGUgb3JlIDEyOjA1LCBMdWNhIENlcmVz
-b2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+IGhhIHNjcml0dG86Cj4+Pj4KPj4+PiDvu79IaSBH
-aXVsaW8sCj4+Pj4KPj4+Pj4gT24gMDQvMTEvMjEgMTg6MjMsIEdpdWxpbyBCZW5ldHRpIHdyb3Rl
-Ogo+Pj4+PiBIaSBMdWNhLAo+Pj4+Pgo+Pj4+Pj4gT24gMTEvNC8yMSAxMDoyNiBBTSwgTHVjYSBD
-ZXJlc29saSB3cm90ZToKPj4+Pj4+IEhpIEdpdWxpbywKPj4+Pj4+Cj4+Pj4+PiB0aGFua3MgZm9y
-IHRoZXNlIGFuZCB0aGUgb3RoZXIgb2xpbWV4IHBhdGNoZXMgeW91IGFyZSBzZW5kaW5nLiBUaG9t
-YXMKPj4+Pj4+IGFwcGxpZWQgdGhlbSBmYXN0ZXIgdGhhbiBJIGNvdWxkIHJldmlldyBhbmQgdGVz
-dCB0aGVtLi4uIGxldCBtZSB0cnkgdGhpcwo+Pj4+Pj4gdGltZSA6KQo+Pj4+Pgo+Pj4+PiBJJ3Zl
-IGp1c3Qgc2VudCB0aGUgdjIgc2VyaWVzLCBkbyB3ZSB3YWl0IHVudGlsIHlvdSBnaXZlIGEgVGVz
-dGVkLWJ5OiA/Cj4+Pj4KPj4+PiBKdXN0IHNlbnQgbXkgVGVzdGVkLWJ5IHRvbywgYnV0IEkgb25s
-eSBidWlsZCB0ZXN0ZWQgc2luY2UgSSBoYXZlIG5vIGxpbWUKPj4+PiBib2FyZC4KPj4+Cj4+PiBI
-YXZlIHlvdeKAmXZlIGdpdmVuIGEgdHJ5IG9uIGxpbWUyIGF0IGxlYXN0Pwo+Pgo+PiBObywgYXBv
-bG9naWVzLCBJIGRvbid0IGhhdmUgYW55ICJsaW1lKiIgYm9hcmQuLi4gbm8gbGltZSwgbm8gbGlt
-ZTIuCj4+Cj4+IEkgaGF2ZSBvbmx5IGFuIEEyMCBtaWNybyBidXQgaXQgaGFzIG5vIE1BTEkgZGVm
-Y29uZmlnIGluIEJ1aWxkcm9vdCBhbmQKPj4gc28gaXQgZG9lc24ndCBhcHBlYXIgaW4gdGhpcyBz
-ZXJpZXMuCj4gCj4gT2ssIG5vIHByb2JsZW0sIEkgZ2l2ZSBhIHRyeSB0aGVuIDotKQoKSSd2ZSBq
-dXN0IHRlc3RlZCwgb24gbXkgcmVjZW50IHByZXZpb3VzIGxpbnV4L3UtYm9vdCBidW1wIEkgZGlk
-bid0IHNlZSAKdGhhdCBMaW1hIGlzIGVuYWJsZWQgYnkgZGVmYXVsdCBpbiBMaW51eCBzdW54aV9k
-ZWZjb25maWcgc28gb24gbmV4dCAKaXRlcmFpb24gSSdtIGdvaW5nIHRvIHNlbmQgYW5vdGhlciBw
-YXRjaCB0aGF0IGFkZHMgYSBsaW51eC5mcmFnbWVudCB0byAKZGlzYWJsZSBMaW1hIGluIGZhdm91
-ciBvZiBNYWxpLiBUaGVuIHRoZSBjaG9pY2Ugb2YgdXNpbmcgTGltYStNZXNhM2QgaXMgCmEgdXNl
-ciBkZWNpc2lvbi4KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdp
-bmVlcmluZyBzYXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Link with -latomic if needed to avoid the following build failure since
+bump to version 1.18.1 in commit
+1ffdab3eac6ea111e37fcc5077f8a64b611c55be and
+https://github.com/janet-lang/janet/commit/eb0b37f7296611a411b9a86d9d65fe620b0454d8:
+
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: janet.p/meson-generated_.._janet.c.o: in function `janet_abstract_incref':
+janet.c:(.text+0x2790): undefined reference to `__atomic_fetch_add_4'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8d204d8f065e6e4bc1376edd1f639864b3c69c0b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/janet/janet.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 20917ec8fa..71e9e08e62 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -15,6 +15,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ JANET_CONF_OPTS += -Ddynamic_modules=false
+ endif
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++JANET_LDFLAGS += -latomic
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ JANET_CONF_OPTS += -Dsingle_threaded=true
+ endif
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
