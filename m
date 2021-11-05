@@ -2,81 +2,56 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4DD2C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:08:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 836C3C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:10:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4647660FE3
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:08:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4647660FE3
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id F2A04610FD
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 13:10:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2A04610FD
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFCDF6152D;
-	Fri,  5 Nov 2021 13:08:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7CA940181;
+	Fri,  5 Nov 2021 13:10:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cXHdVaYR5Ljx; Fri,  5 Nov 2021 13:08:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tdTUihmSefzL; Fri,  5 Nov 2021 13:10:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B140607BE;
-	Fri,  5 Nov 2021 13:08:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3A75401BA;
+	Fri,  5 Nov 2021 13:10:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 59A651BF304
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:08:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D7DB1BF304
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 484E4605E4
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:08:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BAEF60763
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 13:10:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CmXKozb-irpH for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 13:08:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 30908605D5
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 13:08:02 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id d5so13673433wrc.1
- for <buildroot@buildroot.org>; Fri, 05 Nov 2021 06:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=csd1Hr3mk4iZZlAzhoXzzttRLe/XLlkx9z6/UjA1wq4=;
- b=fmAsl0dl2i/aN0ypYG7uaaYqb9LQu+U2WsEJipUYVqazJKJU+ZOHhH0P3buI2Y/IwK
- pVop+ryQ8ZsyDPUbUBGMKvhbYBQdHcho0vSZXbeRlyzWj5t0dBbweaufx7r+Ul5tPo6C
- lZVBsVvYlXGy5x05nf5JZr9f+wBSyq1sC7Al+lae8GUS/vBkGF/yeIxyz5Ln67cdB7AH
- 73dK96tzQvuD+x64YejwV46aCgAEwYmr5kEAADuhGX6FGJqXmu+jWSHgrPZPutDNBlwa
- dMwRX3iS91RwG7VOuIySPn0ZHFlgXPWl8CzGOEZDujRKCKF7Gbz8BINR7mo+CSR+9hC0
- Vwpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=csd1Hr3mk4iZZlAzhoXzzttRLe/XLlkx9z6/UjA1wq4=;
- b=JzS/OqH6CK16V4PPO4UwIvsbykJEEqD5u+YJypeehejU5i/OhTnp6Og4MSWcqHqkHM
- W4KXMJxUE34n6FwMn15wlvQvjXa54S95+23vcODhM6wv4t7C4Rq/5iiFfbObZvP1CjAE
- SU32ZcEpoy+4g+/diO7ZkrsoGyZG/jV35j0Ee5J3cuVxBoAdfTcUaZcecoXwkPWV4f2M
- I5VBQO1v7D5MQ1LNtQ5D8Jjq2eUwe2NbJZQngGykpVnUj+uEBfHtUDJhl/dJd3zwdDQG
- cSvVEDVJNkt3ivWsjdC8ySlDAMIPVSkhQz5tlJKYJrNjLtHcQet+ypWBZyGL3zHeSEBL
- tN/g==
-X-Gm-Message-State: AOAM533HRcvnpzkpPaySjrnsqVSvo9zMPDCmokVAPwlL7qplGaS8CeL2
- 2U1OlA3lDuu2W0LPWwt5uZ7QVDbLPYA=
-X-Google-Smtp-Source: ABdhPJzbeIVV0buEiF4W4PflXnfurr6Iu7YdU9YfClBO0cHCjq98l5lcrp7/H5bEcd4vsNNtvhc6iw==
-X-Received: by 2002:a5d:4b0f:: with SMTP id v15mr30835257wrq.264.1636117680249; 
- Fri, 05 Nov 2021 06:08:00 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id a134sm8243937wmd.9.2021.11.05.06.07.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Nov 2021 06:07:26 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  5 Nov 2021 14:05:15 +0100
-Message-Id: <20211105130515.2275926-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ with ESMTP id buUW7AH62f_q for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 13:10:48 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1EE25605E4
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 13:10:47 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id D6087FF808;
+ Fri,  5 Nov 2021 13:10:43 +0000 (UTC)
+Date: Fri, 5 Nov 2021 14:10:42 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20211105141042.7ac80413@windsurf>
+In-Reply-To: <20211105123848.6356-2-peter@korsgaard.com>
+References: <20211105123848.6356-1-peter@korsgaard.com>
+ <20211105123848.6356-2-peter@korsgaard.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mpd: drop tidal option
+Subject: Re: [Buildroot] [PATCH 2/2] configs/nezha_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,86 +63,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: samuel@sholland.org, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-tidal option has been removed from mpd since version 0.22.10 and
-https://github.com/MusicPlayerDaemon/MPD/commit/97c43954e8df3f772899cda951ad5a7dd4a24f25
-resulting in the following build failure since bump of meson to version
-0.60.1 in commit 78d3f2ea03dfba07a73fe0405c2aa4778f063ce3:
+Howdy,
 
-../output-1/build/mpd-0.22.11/meson.build:1:0: ERROR: Unknown options: "tidal"
+Thanks for this! It's obviously great, just a couple of nits, see below.
 
-Fixes:
- - http://autobuild.buildroot.org/results/b8c5879a02078f4962088dff5ae2ede1f0e6b805
+On Fri,  5 Nov 2021 13:38:47 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy      | 6 ++++++
- package/mpd/Config.in | 7 -------
- package/mpd/mpd.mk    | 7 -------
- 3 files changed, 6 insertions(+), 14 deletions(-)
+> diff --git a/board/nezha/post-build.sh b/board/nezha/post-build.sh
+> new file mode 100755
+> index 0000000000..9d38b13b84
+> --- /dev/null
+> +++ b/board/nezha/post-build.sh
+> @@ -0,0 +1,6 @@
+> +#!/bin/sh
+> +BOARD_DIR=$(dirname $0)
+> +
+> +# Bring the extlinux.conf file in
+> +install -D -m 0644 ${BOARD_DIR}/extlinux.conf \
+> +	${TARGET_DIR}/boot/extlinux/extlinux.conf
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 24d0dc1d51..3551dd9982 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2021.11"
- 
-+config BR2_PACKAGE_MPD_TIDAL
-+	bool "mpd tidal option removed"
-+	select BR2_LEGACY
-+	help
-+	  tidal has been removed from mpd since version 0.22.10.
-+
- config BR2_PACKAGE_MROUTED_RSRR
- 	bool "RSRR for RSVP removed in mrouted v4.4"
- 	select BR2_LEGACY
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b075df0d03..e5de77f1bd 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -58,13 +58,6 @@ config BR2_PACKAGE_MPD_SOUNDCLOUD
- 	help
- 	  Enable soundcloud.com playlist support.
- 
--config BR2_PACKAGE_MPD_TIDAL
--	bool "tidal"
--	select BR2_PACKAGE_MPD_CURL
--	select BR2_PACKAGE_YAJL
--	help
--	  Play songs from the commercial streaming service TIDAL.
--
- comment "Converter plugins"
- 
- config BR2_PACKAGE_MPD_LIBSAMPLERATE
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7a18783386..14390fd0f4 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -284,13 +284,6 @@ ifneq ($(BR2_PACKAGE_MPD_TCP),y)
- MPD_CONF_OPTS += -Dtcp=true
- endif
- 
--ifeq ($(BR2_PACKAGE_MPD_TIDAL),y)
--MPD_DEPENDENCIES += yajl
--MPD_CONF_OPTS += -Dtidal=enabled
--else
--MPD_CONF_OPTS += -Dtidal=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
- MPD_DEPENDENCIES += tremor
- MPD_CONF_OPTS += -Dtremor=enabled
+Probably you don't even need a post-build script here, the
+extlinux.conf could just be added to the rootfs using a rootfs overlay.
+
+
+> new file mode 100644
+> index 0000000000..f04404b9a4
+> --- /dev/null
+> +++ b/configs/nezha_defconfig
+> @@ -0,0 +1,36 @@
+> +BR2_riscv=y
+> +BR2_GLOBAL_PATCH_DIR="board/nezha/patches"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/nezha/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/nezha/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/smaeul/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="012f5a3d01be6d44e32c74bb3637ec281790b297"
+
+Here...
+
+
+> +BR2_TARGET_OPENSBI=y
+> +BR2_TARGET_OPENSBI_CUSTOM_GIT=y
+> +BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/smaeul/opensbi"
+> +BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="b9125c6f8909d1cc0417795737fc13cb6297ff11"
+
+Here...
+
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/smaeul/u-boot"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="62392d3b8a624a80646c1876533336f90140088d"
+
+.. and here
+
+We normally use the github macro to download a tarball instead of a
+full Git repository.
+
+Thomas
 -- 
-2.33.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
