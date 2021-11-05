@@ -2,58 +2,51 @@ Return-Path: <SRS0=Jxa3=PY=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFAFEC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:14:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB4CFC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:15:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B6239611C0
-	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:14:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B6239611C0
+	by mail.kernel.org (Postfix) with ESMTPS id 48D8261252
+	for <buildroot@archiver.kernel.org>; Fri,  5 Nov 2021 16:15:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48D8261252
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7292C40260;
-	Fri,  5 Nov 2021 16:14:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggVcMPAULmjy; Fri,  5 Nov 2021 16:14:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1F5C4023B;
-	Fri,  5 Nov 2021 16:14:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 62EE41BF2A5
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:14:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51D606154A
- for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:14:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17FF961579;
+	Fri,  5 Nov 2021 16:15:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6paKWZjvY9pK for <buildroot@lists.busybox.net>;
- Fri,  5 Nov 2021 16:14:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2C8A061681
- for <buildroot@buildroot.org>; Fri,  5 Nov 2021 16:14:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 22343240010;
- Fri,  5 Nov 2021 16:14:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mj1rO-000813-GC; Fri, 05 Nov 2021 17:14:34 +0100
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JHfIFgIT_o5J; Fri,  5 Nov 2021 16:15:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 879C761681;
+	Fri,  5 Nov 2021 16:15:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF1D41BF2A5
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:15:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC284406D3
+ for <buildroot@lists.busybox.net>; Fri,  5 Nov 2021 16:15:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mr43ib7N07un for <buildroot@lists.busybox.net>;
+ Fri,  5 Nov 2021 16:15:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F1094023B
+ for <buildroot@buildroot.org>; Fri,  5 Nov 2021 16:15:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 4D1FA8A6B3; Fri,  5 Nov 2021 16:11:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211026164534.4014337-1-fontaine.fabrice@gmail.com>
-Date: Fri, 05 Nov 2021 17:14:34 +0100
-In-Reply-To: <20211026164534.4014337-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 26 Oct 2021 18:45:34 +0200")
-Message-ID: <87bl2yful1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: fix build on musl
+To: buildroot@buildroot.org
+Date: Fri, 5 Nov 2021 17:10:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d9796f2db9866060b916487784b046bb6b76f9b6
+X-Git-Newrev: 258878c1e4a0ef313765a1ad238a5525ba3a78a3
+X-Patchwork-Hint: ignore
+Message-Id: <20211105161120.4D1FA8A6B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/moarvm: bump to 2021.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +58,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=258878c1e4a0ef313765a1ad238a5525ba3a78a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure on musl raised since bump to version
- > 1.4.60 in commit d62b7f54f00291a50274409fb5510527fd725ffe:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > In file included from buffer.h:404,
- >                  from array.h:5,
- >                  from array.c:3:
- > ck.h:24:14: error: expected ';' before 'typedef'
- >    24 | __BEGIN_DECLS
- >       |              ^
- >       |              ;
- > ......
- >    29 | typedef size_t rsize_t;
- >       | ~~~~~~~
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/0d56a44449e89773499051b35f21ec83bfab4ca6
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-I was going to apply this, but it seems like it is in 1.4.61 already, so I
-have marked it as superseeded in patchwork.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 44c54e35b4..01e3ee4aee 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2300a921d504c9d33f111cbe08097d0011bfb06000c018b8d4353d97966772a7  MoarVM-2021.06.tar.gz
++sha256  7f3487a70e8b77be0e4e2f12b14c49f6a01d0378e0940c86958c9016c495ad75  MoarVM-2021.10.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 17b2a234e7..99e26c73c9 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOARVM_VERSION = 2021.06
++MOARVM_VERSION = 2021.10
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
