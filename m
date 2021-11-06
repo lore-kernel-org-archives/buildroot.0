@@ -2,68 +2,88 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24909C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC779C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 22:02:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3488A61139
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3488A61139
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gadz.org
+	by mail.kernel.org (Postfix) with ESMTPS id 4B89960E78
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 22:02:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4B89960E78
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8829400ED;
-	Sat,  6 Nov 2021 21:20:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E944940318;
+	Sat,  6 Nov 2021 22:02:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9oSL0y4x5_jd; Sat,  6 Nov 2021 21:20:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zXd6xdoGcTXm; Sat,  6 Nov 2021 22:02:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96362400F6;
-	Sat,  6 Nov 2021 21:19:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0D3351BF319
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 21:19:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19F354031B;
+	Sat,  6 Nov 2021 22:02:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7691A1BF95E
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 22:02:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ED7A6400F6
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 21:19:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7296B4031B
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 22:02:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dB-7s0Cf5112 for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 21:19:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aoiA6DU0RU6t for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 22:02:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com
- [209.85.167.52])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6542C400ED
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 21:19:56 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id d21so26422854lfg.7
- for <buildroot@buildroot.org>; Sat, 06 Nov 2021 14:19:55 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 38B3E40318
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 22:02:21 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id t30so19633673wra.10
+ for <buildroot@buildroot.org>; Sat, 06 Nov 2021 15:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=e1I1irtB++7ajMAaKbm7ymEotMiqHn47HufmXmoKdIU=;
+ b=VAiXumkK2vxGfmq081ja8qJr1vcAUbYsNeuOk076rzpt2CnN5YlT85LB21lF/UQ4yt
+ /oZmUbFKkkNsL+U4AEO7xk0Vru64qjb4sonxpeqZXCP5ZhV11fEgxsisw7zH7+MvUoJA
+ Spxk9hh5CYNBc+wVOuyl5g/g3nSPSUJKjoxAyRkKeJpFFHyDTsfbsmEIqRL5rGTgY0AR
+ V/AWHjIEUOjKyexVIf2WyDMVCcX19aS8Cw2NIJ9E2hUvlmqkLxvxEtd4AbH8rggKCsOn
+ NJh8ttzAVsJnrbguVLyAaLp3fmE3voUcop6daZhMh2eu+WWxQ6zL+/hciYx6Ww9dRPy9
+ lvOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=qgaG8HSKqMIi3NzA7Yt29IkMbgcPgLCwuJkOgN40zhs=;
- b=jCz3zd9f8nQzPXImIdvPpX8joWbVth1c6FgPUe3VLoHQJ9B5f8Ipvn6wogJ8VFVNLz
- tBEUJYWtBpI1FMu1JhGK6ABTlOP3/mhyYM/iZFisLFD2ezgDUsSV8cG4K9OWH7aHVzji
- fe2qHEi4SBB2uqyusl6KpXNJ3ySkZpJOiOvEYLX8QJTUxEJxegQU+pEWsp0t0HwNbi7a
- iB7ePis21UfqhSinB7elxh2cPdUZof7V6idu5cFf2M2JIJnTEO2jFnF7k5iA0uOF4i2k
- 3CdnZlbVaSvgt7SVUFNG+4cOTtQmZulP0tMpSnpYdnr2tC1dbNPmOsVWM/3eKsuTZ4m9
- bBWg==
-X-Gm-Message-State: AOAM530h1ZqO20eFboI/xyk5pte8EXIfGHgCuv3jpry4JS3GCXhGj2sh
- xfc8fyfYc+B0Venx0DGPKZqHpambJMay+8ZLFirsmg==
-X-Google-Smtp-Source: ABdhPJyl5H5y3czPv+q5pQYJt+jvagnyOoXL5Gum1hrH6dFICPApUxXGZcBnxxUF5lKCrmkAaakvYMKCQlM4VZzUJN0=
-X-Received: by 2002:a05:6512:3b9a:: with SMTP id
- g26mr2483916lfv.144.1636233594040; 
- Sat, 06 Nov 2021 14:19:54 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=e1I1irtB++7ajMAaKbm7ymEotMiqHn47HufmXmoKdIU=;
+ b=QC00CMv4bwRDJ/46UJr+U23/hTXKrTo7iz5B4/+NrHISNdM5M/Zv1ErXavfYSvuTxh
+ U3WpCYn5C4AnO/V0lTPNjWLd41Trp+7+lzKQGjr4t6GAbdAsxKP2Xfmf8Fjh8o/ZOV9z
+ uobvLAiR1WnCHuSQZ7ed8rfDIpuRzbKLt3kKFj+a1NfSrwuzDd5gxe+7hlKAVwwhbDdv
+ eh+/4w1XGGUwQ5WkRMO+Qj8nAuSpHxLk+GGTbWvHxxJsPLt7E97f99nlFHvghro6mwwA
+ 1BZSUtR8wjrUlLf34GVZTrw0fDxQm9Ewv1JzkTF++boNl/BxqHuWr9rCc/f9sTdnQ8Sq
+ vaFA==
+X-Gm-Message-State: AOAM533NxvvEqOCdU8LTgBtMld7hMwLJxznnn1qTVDmq/4s03k+jEMa0
+ /0DiaGc+1HvGovtRaXKUQxfJhoDH4Bw=
+X-Google-Smtp-Source: ABdhPJy6H1ppyS4MaQaGHXvUmLYQQTSgMf9/sQroRlGmsYVik38JBfJH+HonX2d4GpWeArwtc7GXzQ==
+X-Received: by 2002:a5d:604b:: with SMTP id j11mr63323874wrt.22.1636236139446; 
+ Sat, 06 Nov 2021 15:02:19 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id m17sm4334406wrz.22.2021.11.06.15.02.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 06 Nov 2021 15:02:19 -0700 (PDT)
+Message-ID: <89f9350d-63a6-4953-a212-3e2f17aa5a5f@gmail.com>
+Date: Sat, 6 Nov 2021 23:02:13 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To: =?UTF-8?Q?Fran=c3=a7ois_Perrad?= <francois.perrad@gadz.org>
 References: <20211106190057.2487641-1-romain.naour@gmail.com>
-In-Reply-To: <20211106190057.2487641-1-romain.naour@gmail.com>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 6 Nov 2021 22:19:42 +0100
-Message-ID: <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
+ <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
 Subject: Re: [Buildroot] [PATCH] Revert "package/luajit: back to mainline
  and bump to 05f1984e"
 X-BeenThere: buildroot@buildroot.org
@@ -77,195 +97,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <joerg.krause@embedded.rocks>,
+Cc: =?UTF-8?Q?J=c3=b6rg_Krause?= <joerg.krause@embedded.rocks>,
  buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============6296616105893641553=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6296616105893641553==
-Content-Type: multipart/alternative; boundary="00000000000024853405d0255263"
-
---00000000000024853405d0255263
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Le sam. 6 nov. 2021 =C3=A0 20:01, Romain Naour <romain.naour@gmail.com> a =
-=C3=A9crit :
-
-> This reverts commit 9450b53c8e06f1b5a75840b82c0f4663a5d75c45 since it
-> introcude a regretion to luvi package [1].
->
-> luvi doesn't work since the luv static linking doesn't seems to
-> work anymore.
-> (see
-> https://github.com/luvit/luvi/commit/a9dc8dae2eb69d4a754a0cf5c08622d70f6b=
-7067
-> )
->
->  # luvi -v
->
-> [string "return require('init')(...)"]:1: module 'init' not found:
->
->         no field package.preload['init']
->         no file './init.lua'
->         no file '/usr/share/luajit-2.1.0-beta3/init.lua'
->         no file '/usr/local/share/lua/5.1/init.lua'
->         no file '/usr/local/share/lua/5.1/init/init.lua'
->         no file '/usr/share/lua/5.1/init.lua'
->         no file '/usr/share/lua/5.1/init/init.lua'
->         no file './init.so'
->         no file '/usr/local/lib/lua/5.1/init.so'
->         no file '/usr/lib/lua/5.1/init.so'
->         no file '/usr/local/lib/lua/5.1/loadall.so'
->
-> stack traceback:
->         [C]: in function 'require'
->         [string "return require('init')(...)"]:1: in main chunk
->
-> luvi now try to load init.lua script:
-> https://github.com/luvit/luvi/blob/v2.12.0/src/main.c#L176
->
-> Luvi seems to rely on some moonjit extentions [2] not available yet in
-> luajit.
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2021-October/627134.html
-> [2] https://github.com/moonjit/moonjit/blob/master/doc/extensions.md
->
->
-the module `init.lua` is supplied by luvi (see
-https://github.com/luvit/luvi/blob/master/src/lua/init.lua)
-and installed somewhere or not (I cannot find it).
-
-moonjit 2.1.2 try to load a Lua module from these locations :
-    './init.lua'
-    '/usr/share/luajit-2.1.2/init.lua' (usually reserved to luajit itself)
-    '/usr/local/share/lua/5.1/init.lua'
-    '/usr/local/share/lua/5.1/init/init.lua'
-    '/usr/share/lua/5.1/init.lua'
-    '/usr/share/lua/5.1/init/init.lua'
-
-luajit try to load a Lua module from these locations :
-    './init.lua'
-    '/usr/share/luajit-2.1.0-beta3/init.lua' (usually reserved to luajit
-itself)
-    '/usr/local/share/lua/5.1/init.lua'
-    '/usr/local/share/lua/5.1/init/init.lua'
-    '/usr/share/lua/5.1/init.lua'
-    '/usr/share/lua/5.1/init/init.lua'
-
-this issue is not about moonjit vs luajit,
-it is about `init.lua` is not installed by luvi package.
-
-Fran=C3=A7ois
-
-
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Cc: J=C3=B6rg Krause <joerg.krause@embedded.rocks>
->
->
-
---00000000000024853405d0255263
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 6 nov. 2021 =C3=A0=C2=A0=
-20:01, Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com">romain.na=
-our@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">This reverts commit 9450b53c8e06f1b5a75840b82c0f4=
-663a5d75c45 since it<br>
-introcude a regretion to luvi package [1].<br>
-<br>
-luvi doesn&#39;t work since the luv static linking doesn&#39;t seems to<br>
-work anymore.<br>
-(see <a href=3D"https://github.com/luvit/luvi/commit/a9dc8dae2eb69d4a754a0c=
-f5c08622d70f6b7067" rel=3D"noreferrer" target=3D"_blank">https://github.com=
-/luvit/luvi/commit/a9dc8dae2eb69d4a754a0cf5c08622d70f6b7067</a>)<br>
-<br>
-=C2=A0# luvi -v<br>
-<br>
-[string &quot;return require(&#39;init&#39;)(...)&quot;]:1: module &#39;ini=
-t&#39; not found:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no field package.preload[&#39;init&#39;]<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;./init.lua&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/luajit-2.1.0-beta3/init=
-.lua&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/share/lua/5.1/init.lua&=
-#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/share/lua/5.1/init/init=
-.lua&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/lua/5.1/init.lua&#39;<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/lua/5.1/init/init.lua&#=
-39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;./init.so&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/lib/lua/5.1/init.so&#39=
-;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/lib/lua/5.1/init.so&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/lib/lua/5.1/loadall.so&=
-#39;<br>
-<br>
-stack traceback:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 [C]: in function &#39;require&#39;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 [string &quot;return require(&#39;init&#39;)(..=
-.)&quot;]:1: in main chunk<br>
-<br>
-luvi now try to load init.lua script:<br>
-<a href=3D"https://github.com/luvit/luvi/blob/v2.12.0/src/main.c#L176" rel=
-=3D"noreferrer" target=3D"_blank">https://github.com/luvit/luvi/blob/v2.12.=
-0/src/main.c#L176</a><br>
-<br>
-Luvi seems to rely on some moonjit extentions [2] not available yet in<br>
-luajit.<br>
-<br>
-[1] <a href=3D"http://lists.busybox.net/pipermail/buildroot/2021-October/62=
-7134.html" rel=3D"noreferrer" target=3D"_blank">http://lists.busybox.net/pi=
-permail/buildroot/2021-October/627134.html</a><br>
-[2] <a href=3D"https://github.com/moonjit/moonjit/blob/master/doc/extension=
-s.md" rel=3D"noreferrer" target=3D"_blank">https://github.com/moonjit/moonj=
-it/blob/master/doc/extensions.md</a><br>
-<br></blockquote><div><br></div><div>the module `init.lua` is supplied by l=
-uvi (see <a href=3D"https://github.com/luvit/luvi/blob/master/src/lua/init.=
-lua">https://github.com/luvit/luvi/blob/master/src/lua/init.lua</a>)<br>and=
- installed somewhere or not (I cannot find it).<br><br>moonjit 2.1.2 try to=
- load a Lua module from these locations :<br>=C2=A0 =C2=A0 &#39;./init.lua&=
-#39;<br>=C2=A0 =C2=A0 &#39;/usr/share/luajit-2.1.2/init.lua&#39; (usually r=
-eserved to luajit itself)<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/in=
-it.lua&#39;<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init/init.lua&#3=
-9;<br>=C2=A0 =C2=A0 &#39;/usr/share/lua/5.1/init.lua&#39;<br>=C2=A0 =C2=A0 =
-&#39;/usr/share/lua/5.1/init/init.lua&#39;<br><br>luajit try to load a Lua =
-module from these locations :<br>=C2=A0 =C2=A0 &#39;./init.lua&#39;<br>=C2=
-=A0 =C2=A0 &#39;/usr/share/luajit-2.1.0-beta3/init.lua&#39; (usually reserv=
-ed to luajit itself)<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init.lu=
-a&#39;<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init/init.lua&#39;<br=
->=C2=A0 =C2=A0 &#39;/usr/share/lua/5.1/init.lua&#39;<br>=C2=A0 =C2=A0 &#39;=
-/usr/share/lua/5.1/init/init.lua&#39;<br><br>this issue is not about moonji=
-t vs luajit,<br>it is about `init.lua` is not installed by luvi package.<br=
-><br>Fran=C3=A7ois<br>=C2=A0</div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">
-Signed-off-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com" t=
-arget=3D"_blank">romain.naour@gmail.com</a>&gt;<br>
-Cc: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=
-=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
-Cc: J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt;<br><br>
-</blockquote></div></div>
-
---00000000000024853405d0255263--
-
---===============6296616105893641553==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6296616105893641553==--
+TGUgMDYvMTEvMjAyMSDDoCAyMjoxOSwgRnJhbsOnb2lzIFBlcnJhZCBhIMOpY3JpdMKgOgo+IAo+
+IAo+IExlwqBzYW0uIDYgbm92LiAyMDIxIMOgwqAyMDowMSwgUm9tYWluIE5hb3VyIDxyb21haW4u
+bmFvdXJAZ21haWwuY29tCj4gPG1haWx0bzpyb21haW4ubmFvdXJAZ21haWwuY29tPj4gYSDDqWNy
+aXTCoDoKPiAKPiAgICAgVGhpcyByZXZlcnRzIGNvbW1pdCA5NDUwYjUzYzhlMDZmMWI1YTc1ODQw
+YjgyYzBmNDY2M2E1ZDc1YzQ1IHNpbmNlIGl0Cj4gICAgIGludHJvY3VkZSBhIHJlZ3JldGlvbiB0
+byBsdXZpIHBhY2thZ2UgWzFdLgo+IAo+ICAgICBsdXZpIGRvZXNuJ3Qgd29yayBzaW5jZSB0aGUg
+bHV2IHN0YXRpYyBsaW5raW5nIGRvZXNuJ3Qgc2VlbXMgdG8KPiAgICAgd29yayBhbnltb3JlLgo+
+ICAgICAoc2VlCj4gICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sdXZpdC9sdXZpL2NvbW1pdC9hOWRj
+OGRhZTJlYjY5ZDRhNzU0YTBjZjVjMDg2MjJkNzBmNmI3MDY3IDxodHRwczovL2dpdGh1Yi5jb20v
+bHV2aXQvbHV2aS9jb21taXQvYTlkYzhkYWUyZWI2OWQ0YTc1NGEwY2Y1YzA4NjIyZDcwZjZiNzA2
+Nz4pCj4gCj4gICAgIMKgIyBsdXZpIC12Cj4gCj4gICAgIFtzdHJpbmcgInJldHVybiByZXF1aXJl
+KCdpbml0JykoLi4uKSJdOjE6IG1vZHVsZSAnaW5pdCcgbm90IGZvdW5kOgo+IAo+ICAgICDCoCDC
+oCDCoCDCoCBubyBmaWVsZCBwYWNrYWdlLnByZWxvYWRbJ2luaXQnXQo+ICAgICDCoCDCoCDCoCDC
+oCBubyBmaWxlICcuL2luaXQubHVhJwo+ICAgICDCoCDCoCDCoCDCoCBubyBmaWxlICcvdXNyL3No
+YXJlL2x1YWppdC0yLjEuMC1iZXRhMy9pbml0Lmx1YScKPiAgICAgwqAgwqAgwqAgwqAgbm8gZmls
+ZSAnL3Vzci9sb2NhbC9zaGFyZS9sdWEvNS4xL2luaXQubHVhJwo+ICAgICDCoCDCoCDCoCDCoCBu
+byBmaWxlICcvdXNyL2xvY2FsL3NoYXJlL2x1YS81LjEvaW5pdC9pbml0Lmx1YScKPiAgICAgwqAg
+wqAgwqAgwqAgbm8gZmlsZSAnL3Vzci9zaGFyZS9sdWEvNS4xL2luaXQubHVhJwo+ICAgICDCoCDC
+oCDCoCDCoCBubyBmaWxlICcvdXNyL3NoYXJlL2x1YS81LjEvaW5pdC9pbml0Lmx1YScKPiAgICAg
+wqAgwqAgwqAgwqAgbm8gZmlsZSAnLi9pbml0LnNvJwo+ICAgICDCoCDCoCDCoCDCoCBubyBmaWxl
+ICcvdXNyL2xvY2FsL2xpYi9sdWEvNS4xL2luaXQuc28nCj4gICAgIMKgIMKgIMKgIMKgIG5vIGZp
+bGUgJy91c3IvbGliL2x1YS81LjEvaW5pdC5zbycKPiAgICAgwqAgwqAgwqAgwqAgbm8gZmlsZSAn
+L3Vzci9sb2NhbC9saWIvbHVhLzUuMS9sb2FkYWxsLnNvJwo+IAo+ICAgICBzdGFjayB0cmFjZWJh
+Y2s6Cj4gICAgIMKgIMKgIMKgIMKgIFtDXTogaW4gZnVuY3Rpb24gJ3JlcXVpcmUnCj4gICAgIMKg
+IMKgIMKgIMKgIFtzdHJpbmcgInJldHVybiByZXF1aXJlKCdpbml0JykoLi4uKSJdOjE6IGluIG1h
+aW4gY2h1bmsKPiAKPiAgICAgbHV2aSBub3cgdHJ5IHRvIGxvYWQgaW5pdC5sdWEgc2NyaXB0Ogo+
+ICAgICBodHRwczovL2dpdGh1Yi5jb20vbHV2aXQvbHV2aS9ibG9iL3YyLjEyLjAvc3JjL21haW4u
+YyNMMTc2Cj4gICAgIDxodHRwczovL2dpdGh1Yi5jb20vbHV2aXQvbHV2aS9ibG9iL3YyLjEyLjAv
+c3JjL21haW4uYyNMMTc2Pgo+IAo+ICAgICBMdXZpIHNlZW1zIHRvIHJlbHkgb24gc29tZSBtb29u
+aml0IGV4dGVudGlvbnMgWzJdIG5vdCBhdmFpbGFibGUgeWV0IGluCj4gICAgIGx1YWppdC4KPiAK
+PiAgICAgWzFdIGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIw
+MjEtT2N0b2Jlci82MjcxMzQuaHRtbAo+ICAgICA8aHR0cDovL2xpc3RzLmJ1c3lib3gubmV0L3Bp
+cGVybWFpbC9idWlsZHJvb3QvMjAyMS1PY3RvYmVyLzYyNzEzNC5odG1sPgo+ICAgICBbMl0gaHR0
+cHM6Ly9naXRodWIuY29tL21vb25qaXQvbW9vbmppdC9ibG9iL21hc3Rlci9kb2MvZXh0ZW5zaW9u
+cy5tZAo+ICAgICA8aHR0cHM6Ly9naXRodWIuY29tL21vb25qaXQvbW9vbmppdC9ibG9iL21hc3Rl
+ci9kb2MvZXh0ZW5zaW9ucy5tZD4KPiAKPiAKPiB0aGUgbW9kdWxlIGBpbml0Lmx1YWAgaXMgc3Vw
+cGxpZWQgYnkgbHV2aSAoc2VlCj4gaHR0cHM6Ly9naXRodWIuY29tL2x1dml0L2x1dmkvYmxvYi9t
+YXN0ZXIvc3JjL2x1YS9pbml0Lmx1YQo+IDxodHRwczovL2dpdGh1Yi5jb20vbHV2aXQvbHV2aS9i
+bG9iL21hc3Rlci9zcmMvbHVhL2luaXQubHVhPikKPiBhbmQgaW5zdGFsbGVkIHNvbWV3aGVyZSBv
+ciBub3QgKEkgY2Fubm90IGZpbmQgaXQpLgo+IAo+IG1vb25qaXQgMi4xLjIgdHJ5IHRvIGxvYWQg
+YSBMdWEgbW9kdWxlIGZyb20gdGhlc2UgbG9jYXRpb25zIDoKPiDCoCDCoCAnLi9pbml0Lmx1YScK
+PiDCoCDCoCAnL3Vzci9zaGFyZS9sdWFqaXQtMi4xLjIvaW5pdC5sdWEnICh1c3VhbGx5IHJlc2Vy
+dmVkIHRvIGx1YWppdCBpdHNlbGYpCj4gwqAgwqAgJy91c3IvbG9jYWwvc2hhcmUvbHVhLzUuMS9p
+bml0Lmx1YScKPiDCoCDCoCAnL3Vzci9sb2NhbC9zaGFyZS9sdWEvNS4xL2luaXQvaW5pdC5sdWEn
+Cj4gwqAgwqAgJy91c3Ivc2hhcmUvbHVhLzUuMS9pbml0Lmx1YScKPiDCoCDCoCAnL3Vzci9zaGFy
+ZS9sdWEvNS4xL2luaXQvaW5pdC5sdWEnCj4gCj4gbHVhaml0IHRyeSB0byBsb2FkIGEgTHVhIG1v
+ZHVsZSBmcm9tIHRoZXNlIGxvY2F0aW9ucyA6Cj4gwqAgwqAgJy4vaW5pdC5sdWEnCj4gwqAgwqAg
+Jy91c3Ivc2hhcmUvbHVhaml0LTIuMS4wLWJldGEzL2luaXQubHVhJyAodXN1YWxseSByZXNlcnZl
+ZCB0byBsdWFqaXQgaXRzZWxmKQo+IMKgIMKgICcvdXNyL2xvY2FsL3NoYXJlL2x1YS81LjEvaW5p
+dC5sdWEnCj4gwqAgwqAgJy91c3IvbG9jYWwvc2hhcmUvbHVhLzUuMS9pbml0L2luaXQubHVhJwo+
+IMKgIMKgICcvdXNyL3NoYXJlL2x1YS81LjEvaW5pdC5sdWEnCj4gwqAgwqAgJy91c3Ivc2hhcmUv
+bHVhLzUuMS9pbml0L2luaXQubHVhJwo+IAo+IHRoaXMgaXNzdWUgaXMgbm90IGFib3V0IG1vb25q
+aXQgdnMgbHVhaml0LAoKVGhlIGx1YWppdCB2cyBtb29uaml0IHRyYWNlcyBhcmUgY2xlYXJseSBu
+b3QgdGhlIHNhbWUgKHVzaW5nIHN0cmFjZSkKCm1vb25qaXQgZG9lc24ndCBldmVuIHRyeSB0byBv
+cGVuIGluaXQubHVhIChpbml0Lmx1YSBpcyBub3QgaW5zdGFsbGVkIGluIHRhcmdldCk6CgpvcGVu
+KCIvdXNyL2Jpbi9sdXZpIiwgT19SRE9OTFl8T19MQVJHRUZJTEV8T19DTE9FWEVDKSA9IDEzCnN0
+YXR4KDEzLCAiIiwgQVRfU1RBVFhfU1lOQ19BU19TVEFUfEFUX0VNUFRZX1BBVEgsIFNUQVRYX0FM
+TCwKe3N0eF9tYXNrPVNUQVRYX0JBU0lDX1NUQVRTfFNUQVRYX01OVF9JRCwgc3R4X2F0dHJpYnV0
+ZXM9MCwKc3R4X21vZGU9U19JRlJFR3wwNzU1LCBzdHhfc2l6ZT00MDE0NzIsIC4uLn0pID0gMApw
+cmVhZDY0KDEzLAoiXDIxM1wyNDBcNVwwaCdcNFwwXDM3M1wyNzdcNVwwWDVcNFwwXDM0MlwzMDVc
+NVwwdC1cNFwwR1wyNjBcNVwwXDM0J1w0XDAiLi4uLAo0MDk2LCAzOTczNzYpID0gNDA5NgpwcmVh
+ZDY0KDEzLAoiXDBcMVwwXDBcMFwyXDBcMFwwXDNcMFwwXDBcNFwwXDBcMFwzNTFcMjMyXDVcMEtc
+MjUzXDVcMFwzNjFcMjMyXDVcMFwzNjdcMjMyXDUiLi4uLAo0MDk2LCAzOTMyODMpID0gNDA5Ngpw
+cmVhZDY0KDEzLAoiXDFcMFwzMzROXDFcMFwzMzROXDFcMFwzMzROXDFcMFwzMzROXDFcMFwzMzRO
+XDFcMFwzMzROXDFcMFwzMzROXDFcMFwzMzROIi4uLiwKNDA5NiwgMzg5MTkwKSA9IDQwOTYKcHJl
+YWQ2NCgxMywgImVkXDBsei5pbmZsYXRlLm1ldGFcMEJFU1RfU1BFRURcMEJFIi4uLiwgNDA5Niwg
+Mzg1MDk3KSA9IDQwOTYKcHJlYWQ2NCgxMywgIkx1dmkvYnVpbGQvbHV2aS0yLjEyLjAvZGVwcy9s
+dWEtIi4uLiwgNDA5NiwgMzgxMDA0KSA9IDQwOTYKcHJlYWQ2NCgxMywgImVwdCBmYWlsXDAjMSBC
+SU8gbXVzdCBiZSBtZW1vcnkgdCIuLi4sIDQwOTYsIDM3NjkxMSkgPSA0MDk2CnByZWFkNjQoMTMs
+ICJzY2FwZV9jYV9kbl9idWdcMG5ldHNjYXBlX2NoYWxsZW4iLi4uLCA0MDk2LCAzNzI4MTgpID0g
+NDA5NgpwcmVhZDY0KDEzLCAiIHRvIGNlcnRcMFBLQ1MxMl9jYXJlYXRlIGZhaWxlZCxwIi4uLiwg
+NDA5NiwgMzY4NzI1KSA9IDQwOTYKcHJlYWQ2NCgxMywKIlwyMDArXDEwXDBcMC1cdFwwXDA4XHRc
+N1x0OVx0XDBcdFwyMlxuXDBcMEJcdFwyXDNcMjJcM1xuXDBcMjJcMTBcdCIuLi4sIDQwOTYsCjM2
+NDYzMikgPSA0MDk2CnByZWFkNjQoMTMsICInXDdcMlwwXDIyXDEwXDJcMFwyMlx0XDNcMEJcNVw1
+XDImXDRcNVw0TFw0XDJcMEtcMFwxXDBcNlxcXDYvIi4uLiwKNDA5NiwgMzYwNTM5KSA9IDQwOTYK
+cHJlYWQ2NCgxMywgInZlIGlzIHRvbyBsYXJnZVwwdmFsaWRhdGlvbiBmYWlsZSIuLi4sIDQwOTYs
+IDM1NjQ0NikgPSA0MDk2CnByZWFkNjQoMTMsCiJcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFc
+MjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFcMjFc
+MjFcMjFcMjFcMjEiLi4uLAo0MDk2LCAzNTIzNTMpID0gNDA5NgpwcmVhZDY0KDEzLAoiVFBcMjM3
+XDM0NVwzcFwzMDBcMzQzXDIwMFwxXDI0MFwzNDFcMzBgXDBcMzQySFwyMDBcMjM3XDM0NVwyNVZc
+MjQwXDM0MVwxXDIyMFwyNDBcMzQxXDBcMFwyMjdcMzQ1Ii4uLiwKNDA5NiwgMzQ4MjYwKSA9IDQw
+OTYKcHJlYWQ2NCgxMywKIlwxI1wwXDA6XDFcMFBcMzQxXDMyXDBcMFwyMzJcMlwwXDIxXDM0MVwz
+M1wwXDBcblwyMT9vXDM0MVwyMC9vXDM0MVwyIEMiLi4uLAo0MDk2LCAzNDQxNjcpID0gNDA5Ngpw
+cmVhZDY0KDEzLAoiXDIxNVwzNDJcNFwzNjBcMjM1XDM0NFwzNjNHLVwzNTFcMzRcMjIxXDIzN1wz
+NDVcMGBcMjQwXDM0MVwwQFwyNDBcMzQzXDJwXDI0MFwzNDFcZlwwXDIyMFwzNDVcNAoiLi4uLCA0
+MDk2LCAzNDAwNzQpID0gNDA5NgpwcmVhZDY0KDEzLAoiIVwzMTVcMzQxXDNcMFwyMjZcMzUwXDI3
+Nlx2XDM3N1wzNTNcZlwwcFwzNDNcMFwwUFwyM1wwcFwyNDBcMzQxJVwwXDBcMjcyXDBcMFBcMzQz
+XDAiLi4uLAo0MDk2LCAzMzU5ODEpID0gNDA5NgpwcmVhZDY0KDEzLCAiQFwyNlwzNzdcMzUzXDBc
+MFBcMzQzXG5cMFwwXDMyXDRcMFwyMzVcMzQ1XDMyNlxmXDBcMzUzXDAKXDI0MFwzNDFcMDAxMFwy
+NDBcMzQxXDRcMFwyNDBcMzQxIi4uLiwgNDA5NiwgMzMxODg4KSA9IDQwOTYKd3JpdGUoMSwgImx1
+dmkgdjIuMTIuMFxuIiwgMTNsdXZpIHYyLjEyLjAKCgpsdWFqaXQ6CgpwaXBlMihbNiwgN10sIE9f
+Tk9OQkxPQ0t8T19DTE9FWEVDKSAgICAgPSAwCmV2ZW50ZmQyKDAsIEVGRF9DTE9FWEVDfEVGRF9O
+T05CTE9DSykgICA9IDgKb3BlbigiLi9pbml0Lmx1YSIsIE9fUkRPTkxZfE9fTEFSR0VGSUxFKSA9
+IC0xIEVOT0VOVCAoTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeSkKb3BlbigiL3Vzci9zaGFyZS9s
+dWFqaXQtMi4xLjAtYmV0YTMvaW5pdC5sdWEiLCBPX1JET05MWXxPX0xBUkdFRklMRSkgPSAtMSBF
+Tk9FTlQKKE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkpCm9wZW4oIi91c3IvbG9jYWwvc2hhcmUv
+bHVhLzUuMS9pbml0Lmx1YSIsIE9fUkRPTkxZfE9fTEFSR0VGSUxFKSA9IC0xIEVOT0VOVCAoTm8K
+c3VjaCBmaWxlIG9yIGRpcmVjdG9yeSkKb3BlbigiL3Vzci9sb2NhbC9zaGFyZS9sdWEvNS4xL2lu
+aXQvaW5pdC5sdWEiLCBPX1JET05MWXxPX0xBUkdFRklMRSkgPSAtMSBFTk9FTlQKKE5vIHN1Y2gg
+ZmlsZSBvciBkaXJlY3RvcnkpCm9wZW4oIi91c3Ivc2hhcmUvbHVhLzUuMS9pbml0Lmx1YSIsIE9f
+UkRPTkxZfE9fTEFSR0VGSUxFKSA9IC0xIEVOT0VOVCAoTm8gc3VjaApmaWxlIG9yIGRpcmVjdG9y
+eSkKb3BlbigiL3Vzci9zaGFyZS9sdWEvNS4xL2luaXQvaW5pdC5sdWEiLCBPX1JET05MWXxPX0xB
+UkdFRklMRSkgPSAtMSBFTk9FTlQgKE5vCnN1Y2ggZmlsZSBvciBkaXJlY3RvcnkpCm9wZW4oIi4v
+aW5pdC5zbyIsIE9fUkRPTkxZfE9fTEFSR0VGSUxFKSA9IC0xIEVOT0VOVCAoTm8gc3VjaCBmaWxl
+IG9yIGRpcmVjdG9yeSkKb3BlbigiL3Vzci9sb2NhbC9saWIvbHVhLzUuMS9pbml0LnNvIiwgT19S
+RE9OTFl8T19MQVJHRUZJTEUpID0gLTEgRU5PRU5UIChObwpzdWNoIGZpbGUgb3IgZGlyZWN0b3J5
+KQpvcGVuKCIvdXNyL2xpYi9sdWEvNS4xL2luaXQuc28iLCBPX1JET05MWXxPX0xBUkdFRklMRSkg
+PSAtMSBFTk9FTlQgKE5vIHN1Y2ggZmlsZQpvciBkaXJlY3RvcnkpCm9wZW4oIi91c3IvbG9jYWwv
+bGliL2x1YS81LjEvbG9hZGFsbC5zbyIsIE9fUkRPTkxZfE9fTEFSR0VGSUxFKSA9IC0xIEVOT0VO
+VCAoTm8Kc3VjaCBmaWxlIG9yIGRpcmVjdG9yeSkKd3JpdGUoMiwgIltzdHJpbmcgXCJyZXR1cm4g
+cmVxdWlyZSgnaW5pdCcpKCIuLi4sIDU5NltzdHJpbmcgInJldHVybgpyZXF1aXJlKCdpbml0Jyko
+Li4uKSJdOjE6IG1vZHVsZSAnaW5pdCcgbm90IGZvdW5kOgoKU29tZXRoaW5nIGlzIHN0cmFuZ2Ug
+aGVyZS4uLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IGl0IGlzIGFib3V0IGBpbml0Lmx1YWAg
+aXMgbm90IGluc3RhbGxlZCBieSBsdXZpIHBhY2thZ2UuCj4gCj4gRnJhbsOnb2lzCj4gwqAKPiAK
+PiAgICAgU2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29t
+Cj4gICAgIDxtYWlsdG86cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4+Cj4gICAgIENjOiBGcmFuY29p
+cyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZyA8bWFpbHRvOmZyYW5jb2lzLnBlcnJh
+ZEBnYWR6Lm9yZz4+Cj4gICAgIENjOiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRl
+ZC5yb2Nrcz4KPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
