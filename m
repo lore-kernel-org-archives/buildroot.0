@@ -2,86 +2,70 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B5F1C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 19:01:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24909C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 99B9961076
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 19:01:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 99B9961076
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3488A61139
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3488A61139
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gadz.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EFF781DB2;
-	Sat,  6 Nov 2021 19:01:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8829400ED;
+	Sat,  6 Nov 2021 21:20:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JsAvXRPGKfTj; Sat,  6 Nov 2021 19:01:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9oSL0y4x5_jd; Sat,  6 Nov 2021 21:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AB7882479;
-	Sat,  6 Nov 2021 19:01:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36C261BF350
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 19:01:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96362400F6;
+	Sat,  6 Nov 2021 21:19:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D3351BF319
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 21:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33BDD82479
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 19:01:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED7A6400F6
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 21:19:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xWRhGKCHdNas for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 19:01:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dB-7s0Cf5112 for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 21:19:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E44081DB2
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 19:01:07 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- b2-20020a1c8002000000b0032fb900951eso11997951wmd.4
- for <buildroot@buildroot.org>; Sat, 06 Nov 2021 12:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=V/7E+Y5bZSCL+nETl+RazzKUVKsUIp9vKW7ilbw0u4M=;
- b=m0HcBAHNfL57qJIVS8qU29788ytQUGqHhMGQ95jGr7VntOmFO81/DJywbj9KT4SdkB
- XpVJMMAllY2+tdYHVABJuor8iaqc7HfbUN8i4eQwdMzUNdM3etSq9cse3Wb12d+0Wp+w
- pPANzifOrKDX5wtgJ/LkSvmYtfp1D256dMRnVgqQAerPXqzaO6oezxp8UTcCOb+3y5Os
- ByCjDoRs/n+LQlvwGFwvYKzNCympE6S7jACQUeJEU4Y0JuEy17Dkr4rkiquBk1u2/IIi
- LwurwCsTrKSxGoIlRqA4BWuR/yv9gsADhze41CwtrktKfN3P/Ar/YDHgxD6BhruuPfbv
- KGqA==
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com
+ [209.85.167.52])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6542C400ED
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 21:19:56 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id d21so26422854lfg.7
+ for <buildroot@buildroot.org>; Sat, 06 Nov 2021 14:19:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=V/7E+Y5bZSCL+nETl+RazzKUVKsUIp9vKW7ilbw0u4M=;
- b=X6cXCgZz5HVr5pFgmvZnXngBjN0wdBUVwLAGwgHIcNqbxs+8H51hHZU1HT7QAUnqhF
- 3/MAaokUlBRiipKnYyc9vALSNaVa5yNv6DtBclLHHHrZPkx3HTrc1ejsll1GMpe1bPk7
- 5fvm4RW8bXXakW03irOIxz7gg5LLH6nHWV/8/hp04uAL/0ibRocgd0fFfvg8lg4xS03o
- pUqpK4YlyLg1eyvhJsIyRvBBujJJzRuSgbOA5BgvSPwrjywzpRQNLeNUMbESnDwx9sBP
- xciuYH5J8bnQiZ+odPFc2odkUpYwYSa4wMA2Hyze8NxOT+AhpNGagbnXLsVO9O0BAy34
- a1BQ==
-X-Gm-Message-State: AOAM533WubgmS4of0VwR0SEp6QMbeNUiL97N5gpMFydYfNgZKdDHDVef
- sCIL9qbmhRtWmzTMv2pXyl5bJB4uaK8=
-X-Google-Smtp-Source: ABdhPJy3NWYJPAcLKoHPlONSAgecd0xAL/LGqsopwCn0kRSGoRnVVUCB/Evp4r5PtbpfNSkL8a3Drg==
-X-Received: by 2002:a05:600c:a08:: with SMTP id
- z8mr41081608wmp.165.1636225264929; 
- Sat, 06 Nov 2021 12:01:04 -0700 (PDT)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id j38sm14742002wms.29.2021.11.06.12.01.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Nov 2021 12:01:04 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 20:00:57 +0100
-Message-Id: <20211106190057.2487641-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=qgaG8HSKqMIi3NzA7Yt29IkMbgcPgLCwuJkOgN40zhs=;
+ b=jCz3zd9f8nQzPXImIdvPpX8joWbVth1c6FgPUe3VLoHQJ9B5f8Ipvn6wogJ8VFVNLz
+ tBEUJYWtBpI1FMu1JhGK6ABTlOP3/mhyYM/iZFisLFD2ezgDUsSV8cG4K9OWH7aHVzji
+ fe2qHEi4SBB2uqyusl6KpXNJ3ySkZpJOiOvEYLX8QJTUxEJxegQU+pEWsp0t0HwNbi7a
+ iB7ePis21UfqhSinB7elxh2cPdUZof7V6idu5cFf2M2JIJnTEO2jFnF7k5iA0uOF4i2k
+ 3CdnZlbVaSvgt7SVUFNG+4cOTtQmZulP0tMpSnpYdnr2tC1dbNPmOsVWM/3eKsuTZ4m9
+ bBWg==
+X-Gm-Message-State: AOAM530h1ZqO20eFboI/xyk5pte8EXIfGHgCuv3jpry4JS3GCXhGj2sh
+ xfc8fyfYc+B0Venx0DGPKZqHpambJMay+8ZLFirsmg==
+X-Google-Smtp-Source: ABdhPJyl5H5y3czPv+q5pQYJt+jvagnyOoXL5Gum1hrH6dFICPApUxXGZcBnxxUF5lKCrmkAaakvYMKCQlM4VZzUJN0=
+X-Received: by 2002:a05:6512:3b9a:: with SMTP id
+ g26mr2483916lfv.144.1636233594040; 
+ Sat, 06 Nov 2021 14:19:54 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] Revert "package/luajit: back to mainline and
- bump to 05f1984e"
+References: <20211106190057.2487641-1-romain.naour@gmail.com>
+In-Reply-To: <20211106190057.2487641-1-romain.naour@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 6 Nov 2021 22:19:42 +0100
+Message-ID: <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
+To: Romain Naour <romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] Revert "package/luajit: back to mainline
+ and bump to 05f1984e"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,68 +77,195 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <joerg.krause@embedded.rocks>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============6296616105893641553=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyByZXZlcnRzIGNvbW1pdCA5NDUwYjUzYzhlMDZmMWI1YTc1ODQwYjgyYzBmNDY2M2E1ZDc1
-YzQ1IHNpbmNlIGl0CmludHJvY3VkZSBhIHJlZ3JldGlvbiB0byBsdXZpIHBhY2thZ2UgWzFdLgoK
-bHV2aSBkb2Vzbid0IHdvcmsgc2luY2UgdGhlIGx1diBzdGF0aWMgbGlua2luZyBkb2Vzbid0IHNl
-ZW1zIHRvCndvcmsgYW55bW9yZS4KKHNlZSBodHRwczovL2dpdGh1Yi5jb20vbHV2aXQvbHV2aS9j
-b21taXQvYTlkYzhkYWUyZWI2OWQ0YTc1NGEwY2Y1YzA4NjIyZDcwZjZiNzA2NykKCiAjIGx1dmkg
-LXYKCltzdHJpbmcgInJldHVybiByZXF1aXJlKCdpbml0JykoLi4uKSJdOjE6IG1vZHVsZSAnaW5p
-dCcgbm90IGZvdW5kOgoKCW5vIGZpZWxkIHBhY2thZ2UucHJlbG9hZFsnaW5pdCddCglubyBmaWxl
-ICcuL2luaXQubHVhJwoJbm8gZmlsZSAnL3Vzci9zaGFyZS9sdWFqaXQtMi4xLjAtYmV0YTMvaW5p
-dC5sdWEnCglubyBmaWxlICcvdXNyL2xvY2FsL3NoYXJlL2x1YS81LjEvaW5pdC5sdWEnCglubyBm
-aWxlICcvdXNyL2xvY2FsL3NoYXJlL2x1YS81LjEvaW5pdC9pbml0Lmx1YScKCW5vIGZpbGUgJy91
-c3Ivc2hhcmUvbHVhLzUuMS9pbml0Lmx1YScKCW5vIGZpbGUgJy91c3Ivc2hhcmUvbHVhLzUuMS9p
-bml0L2luaXQubHVhJwoJbm8gZmlsZSAnLi9pbml0LnNvJwoJbm8gZmlsZSAnL3Vzci9sb2NhbC9s
-aWIvbHVhLzUuMS9pbml0LnNvJwoJbm8gZmlsZSAnL3Vzci9saWIvbHVhLzUuMS9pbml0LnNvJwoJ
-bm8gZmlsZSAnL3Vzci9sb2NhbC9saWIvbHVhLzUuMS9sb2FkYWxsLnNvJwoKc3RhY2sgdHJhY2Vi
-YWNrOgoJW0NdOiBpbiBmdW5jdGlvbiAncmVxdWlyZScKCVtzdHJpbmcgInJldHVybiByZXF1aXJl
-KCdpbml0JykoLi4uKSJdOjE6IGluIG1haW4gY2h1bmsKCmx1dmkgbm93IHRyeSB0byBsb2FkIGlu
-aXQubHVhIHNjcmlwdDoKaHR0cHM6Ly9naXRodWIuY29tL2x1dml0L2x1dmkvYmxvYi92Mi4xMi4w
-L3NyYy9tYWluLmMjTDE3NgoKTHV2aSBzZWVtcyB0byByZWx5IG9uIHNvbWUgbW9vbmppdCBleHRl
-bnRpb25zIFsyXSBub3QgYXZhaWxhYmxlIHlldCBpbgpsdWFqaXQuCgpbMV0gaHR0cDovL2xpc3Rz
-LmJ1c3lib3gubmV0L3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMS1PY3RvYmVyLzYyNzEzNC5odG1s
-ClsyXSBodHRwczovL2dpdGh1Yi5jb20vbW9vbmppdC9tb29uaml0L2Jsb2IvbWFzdGVyL2RvYy9l
-eHRlbnNpb25zLm1kCgpTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBn
-bWFpbC5jb20+CkNjOiBGcmFuY29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4K
-Q2M6IErDtnJnIEtyYXVzZSA8am9lcmcua3JhdXNlQGVtYmVkZGVkLnJvY2tzPgotLS0KIHBhY2th
-Z2UvbHVhaml0L0NvbmZpZy5pbiAgIHwgMiArLQogcGFja2FnZS9sdWFqaXQvbHVhaml0Lmhhc2gg
-fCA0ICsrLS0KIHBhY2thZ2UvbHVhaml0L2x1YWppdC5tayAgIHwgNCArKy0tCiAzIGZpbGVzIGNo
-YW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNr
-YWdlL2x1YWppdC9Db25maWcuaW4gYi9wYWNrYWdlL2x1YWppdC9Db25maWcuaW4KaW5kZXggZTRl
-MTI0OTI0MC4uZWIzZWIwMTk5OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9sdWFqaXQvQ29uZmlnLmlu
-CisrKyBiL3BhY2thZ2UvbHVhaml0L0NvbmZpZy5pbgpAQCAtMjcsNyArMjcsNyBAQCBjb25maWcg
-QlIyX1BBQ0tBR0VfTFVBSklUCiAJICBBQkktY29tcGF0aWJsZSB0byB0aGUgc3RhbmRhcmQgTHVh
-IGludGVycHJldGVyIGFuZCBjYW4gYmUKIAkgIGRlcGxveWVkIGFzIGEgZHJvcC1pbiByZXBsYWNl
-bWVudC4KIAotCSAgaHR0cHM6Ly9sdWFqaXQub3JnL2x1YWppdC5odG1sCisJICBodHRwczovL2dp
-dGh1Yi5jb20vbW9vbmppdC9tb29uaml0CiAKIGlmIEJSMl9QQUNLQUdFX0xVQUpJVAogCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2x1YWppdC9sdWFqaXQuaGFzaCBiL3BhY2thZ2UvbHVhaml0L2x1YWpp
-dC5oYXNoCmluZGV4IDE0OTdlZTlkZjQuLjUzMmVjMGIyOTQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-bHVhaml0L2x1YWppdC5oYXNoCisrKyBiL3BhY2thZ2UvbHVhaml0L2x1YWppdC5oYXNoCkBAIC0x
-LDUgKzEsNSBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgYjFiMTlmOTI0NTFhNjYx
-YmExMTY3ZWUwYjI1OTI5OTYxNmNiM2ExY2RhZjVhYjA1ZDdjY2ZmYWZmZWI0YTBmYiAgbHVhaml0
-LTA1ZjE5ODRlMWE4NjJlNGIzZDNjM2IzNzBjNzczNDkyZTJlZGY4NGEudGFyLmd6CitzaGEyNTYg
-YzNkZThlMjlhYTYxN2ZjNTk0YzA0M2Y1NzYzNmFiOWFkNzFhZjJiNGEzYTUxMzkzMmIwNWY1Y2Rh
-YTQzMjBiMiAgbHVhaml0LTIuMS4yLnRhci5negogCiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hh
-MjU2ICA0M2ZjMjUxMTc5ZDkwMGY5OTQ4ZTUxZGQzY2M5MzczM2QxMjE5ZjJkYjA2MGZhYWEwYzgx
-MDBhZDA1NGY1NGQ4ICBDT1BZUklHSFQKK3NoYTI1NiBhYTY0YTc3MDZkZWQ3NzMwMTFiOTMzZjQy
-MzBkN2IzNWJhNjYyNTk4MTk3ZjgyYWMyYzdiY2E2MmFiZGFhNGQ3ICBDT1BZUklHSFQKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvbHVhaml0L2x1YWppdC5tayBiL3BhY2thZ2UvbHVhaml0L2x1YWppdC5t
-awppbmRleCBmYmJkOGViYzcwLi5kZWZhMjFkZDNmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2x1YWpp
-dC9sdWFqaXQubWsKKysrIGIvcGFja2FnZS9sdWFqaXQvbHVhaml0Lm1rCkBAIC00LDggKzQsOCBA
-QAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotTFVBSklUX1ZFUlNJT04gPSAwNWYxOTg0
-ZTFhODYyZTRiM2QzYzNiMzcwYzc3MzQ5MmUyZWRmODRhCi1MVUFKSVRfU0lURSA9ICQoY2FsbCBn
-aXRodWIsTHVhSklULEx1YUpJVCwkKExVQUpJVF9WRVJTSU9OKSkKK0xVQUpJVF9WRVJTSU9OID0g
-Mi4xLjIKK0xVQUpJVF9TSVRFID0gJChjYWxsIGdpdGh1Yixtb29uaml0LG1vb25qaXQsJChMVUFK
-SVRfVkVSU0lPTikpCiBMVUFKSVRfTElDRU5TRSA9IE1JVAogTFVBSklUX0xJQ0VOU0VfRklMRVMg
-PSBDT1BZUklHSFQKIAotLSAKMi4zMS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+--===============6296616105893641553==
+Content-Type: multipart/alternative; boundary="00000000000024853405d0255263"
+
+--00000000000024853405d0255263
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le sam. 6 nov. 2021 =C3=A0 20:01, Romain Naour <romain.naour@gmail.com> a =
+=C3=A9crit :
+
+> This reverts commit 9450b53c8e06f1b5a75840b82c0f4663a5d75c45 since it
+> introcude a regretion to luvi package [1].
+>
+> luvi doesn't work since the luv static linking doesn't seems to
+> work anymore.
+> (see
+> https://github.com/luvit/luvi/commit/a9dc8dae2eb69d4a754a0cf5c08622d70f6b=
+7067
+> )
+>
+>  # luvi -v
+>
+> [string "return require('init')(...)"]:1: module 'init' not found:
+>
+>         no field package.preload['init']
+>         no file './init.lua'
+>         no file '/usr/share/luajit-2.1.0-beta3/init.lua'
+>         no file '/usr/local/share/lua/5.1/init.lua'
+>         no file '/usr/local/share/lua/5.1/init/init.lua'
+>         no file '/usr/share/lua/5.1/init.lua'
+>         no file '/usr/share/lua/5.1/init/init.lua'
+>         no file './init.so'
+>         no file '/usr/local/lib/lua/5.1/init.so'
+>         no file '/usr/lib/lua/5.1/init.so'
+>         no file '/usr/local/lib/lua/5.1/loadall.so'
+>
+> stack traceback:
+>         [C]: in function 'require'
+>         [string "return require('init')(...)"]:1: in main chunk
+>
+> luvi now try to load init.lua script:
+> https://github.com/luvit/luvi/blob/v2.12.0/src/main.c#L176
+>
+> Luvi seems to rely on some moonjit extentions [2] not available yet in
+> luajit.
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2021-October/627134.html
+> [2] https://github.com/moonjit/moonjit/blob/master/doc/extensions.md
+>
+>
+the module `init.lua` is supplied by luvi (see
+https://github.com/luvit/luvi/blob/master/src/lua/init.lua)
+and installed somewhere or not (I cannot find it).
+
+moonjit 2.1.2 try to load a Lua module from these locations :
+    './init.lua'
+    '/usr/share/luajit-2.1.2/init.lua' (usually reserved to luajit itself)
+    '/usr/local/share/lua/5.1/init.lua'
+    '/usr/local/share/lua/5.1/init/init.lua'
+    '/usr/share/lua/5.1/init.lua'
+    '/usr/share/lua/5.1/init/init.lua'
+
+luajit try to load a Lua module from these locations :
+    './init.lua'
+    '/usr/share/luajit-2.1.0-beta3/init.lua' (usually reserved to luajit
+itself)
+    '/usr/local/share/lua/5.1/init.lua'
+    '/usr/local/share/lua/5.1/init/init.lua'
+    '/usr/share/lua/5.1/init.lua'
+    '/usr/share/lua/5.1/init/init.lua'
+
+this issue is not about moonjit vs luajit,
+it is about `init.lua` is not installed by luvi package.
+
+Fran=C3=A7ois
+
+
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Francois Perrad <francois.perrad@gadz.org>
+> Cc: J=C3=B6rg Krause <joerg.krause@embedded.rocks>
+>
+>
+
+--00000000000024853405d0255263
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 6 nov. 2021 =C3=A0=C2=A0=
+20:01, Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com">romain.na=
+our@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gma=
+il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
+04,204);padding-left:1ex">This reverts commit 9450b53c8e06f1b5a75840b82c0f4=
+663a5d75c45 since it<br>
+introcude a regretion to luvi package [1].<br>
+<br>
+luvi doesn&#39;t work since the luv static linking doesn&#39;t seems to<br>
+work anymore.<br>
+(see <a href=3D"https://github.com/luvit/luvi/commit/a9dc8dae2eb69d4a754a0c=
+f5c08622d70f6b7067" rel=3D"noreferrer" target=3D"_blank">https://github.com=
+/luvit/luvi/commit/a9dc8dae2eb69d4a754a0cf5c08622d70f6b7067</a>)<br>
+<br>
+=C2=A0# luvi -v<br>
+<br>
+[string &quot;return require(&#39;init&#39;)(...)&quot;]:1: module &#39;ini=
+t&#39; not found:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no field package.preload[&#39;init&#39;]<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;./init.lua&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/luajit-2.1.0-beta3/init=
+.lua&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/share/lua/5.1/init.lua&=
+#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/share/lua/5.1/init/init=
+.lua&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/lua/5.1/init.lua&#39;<b=
+r>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/share/lua/5.1/init/init.lua&#=
+39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;./init.so&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/lib/lua/5.1/init.so&#39=
+;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/lib/lua/5.1/init.so&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 no file &#39;/usr/local/lib/lua/5.1/loadall.so&=
+#39;<br>
+<br>
+stack traceback:<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 [C]: in function &#39;require&#39;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 [string &quot;return require(&#39;init&#39;)(..=
+.)&quot;]:1: in main chunk<br>
+<br>
+luvi now try to load init.lua script:<br>
+<a href=3D"https://github.com/luvit/luvi/blob/v2.12.0/src/main.c#L176" rel=
+=3D"noreferrer" target=3D"_blank">https://github.com/luvit/luvi/blob/v2.12.=
+0/src/main.c#L176</a><br>
+<br>
+Luvi seems to rely on some moonjit extentions [2] not available yet in<br>
+luajit.<br>
+<br>
+[1] <a href=3D"http://lists.busybox.net/pipermail/buildroot/2021-October/62=
+7134.html" rel=3D"noreferrer" target=3D"_blank">http://lists.busybox.net/pi=
+permail/buildroot/2021-October/627134.html</a><br>
+[2] <a href=3D"https://github.com/moonjit/moonjit/blob/master/doc/extension=
+s.md" rel=3D"noreferrer" target=3D"_blank">https://github.com/moonjit/moonj=
+it/blob/master/doc/extensions.md</a><br>
+<br></blockquote><div><br></div><div>the module `init.lua` is supplied by l=
+uvi (see <a href=3D"https://github.com/luvit/luvi/blob/master/src/lua/init.=
+lua">https://github.com/luvit/luvi/blob/master/src/lua/init.lua</a>)<br>and=
+ installed somewhere or not (I cannot find it).<br><br>moonjit 2.1.2 try to=
+ load a Lua module from these locations :<br>=C2=A0 =C2=A0 &#39;./init.lua&=
+#39;<br>=C2=A0 =C2=A0 &#39;/usr/share/luajit-2.1.2/init.lua&#39; (usually r=
+eserved to luajit itself)<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/in=
+it.lua&#39;<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init/init.lua&#3=
+9;<br>=C2=A0 =C2=A0 &#39;/usr/share/lua/5.1/init.lua&#39;<br>=C2=A0 =C2=A0 =
+&#39;/usr/share/lua/5.1/init/init.lua&#39;<br><br>luajit try to load a Lua =
+module from these locations :<br>=C2=A0 =C2=A0 &#39;./init.lua&#39;<br>=C2=
+=A0 =C2=A0 &#39;/usr/share/luajit-2.1.0-beta3/init.lua&#39; (usually reserv=
+ed to luajit itself)<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init.lu=
+a&#39;<br>=C2=A0 =C2=A0 &#39;/usr/local/share/lua/5.1/init/init.lua&#39;<br=
+>=C2=A0 =C2=A0 &#39;/usr/share/lua/5.1/init.lua&#39;<br>=C2=A0 =C2=A0 &#39;=
+/usr/share/lua/5.1/init/init.lua&#39;<br><br>this issue is not about moonji=
+t vs luajit,<br>it is about `init.lua` is not installed by luvi package.<br=
+><br>Fran=C3=A7ois<br>=C2=A0</div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">
+Signed-off-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.com" t=
+arget=3D"_blank">romain.naour@gmail.com</a>&gt;<br>
+Cc: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=
+=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+Cc: J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt;<br><br>
+</blockquote></div></div>
+
+--00000000000024853405d0255263--
+
+--===============6296616105893641553==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6296616105893641553==--
