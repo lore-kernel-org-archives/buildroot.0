@@ -2,81 +2,86 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0423AC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:28:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FA7C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:30:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3F9E261058
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:28:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F9E261058
+	by mail.kernel.org (Postfix) with ESMTPS id D2C4B611C0
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:30:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D2C4B611C0
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3A6040010;
-	Sat,  6 Nov 2021 11:28:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C1146F94F;
+	Sat,  6 Nov 2021 11:30:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OCLaGMMuTzAy; Sat,  6 Nov 2021 11:28:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z-hZomnLaO5z; Sat,  6 Nov 2021 11:30:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0B90401A3;
-	Sat,  6 Nov 2021 11:28:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DF6601BF83E
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:28:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0C2C607C1;
+	Sat,  6 Nov 2021 11:30:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D384E1BF83E
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:30:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAE1C401A3
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:28:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF671405CA
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:30:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D8jlaB8-brBW for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 11:28:10 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2CJUakNjTbVc for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 11:30:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 24CED40010
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 11:28:09 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 98FAA4057D
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 11:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636198086;
- bh=4nl19F8dhuxf9RZjgAIUNZc5ec/0gZjTchge4Y6UmFA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=FhaDHemgFtTHV1DTerak5opWJoiqFXko0ktRQFyaVqobwck9gz1xRd8O1EoMpE24X
- sy2aGAHjUtJ9ttmTfInltoGxGRslQp03VZ+PM+4b5kY3o7SFENinFn0Je5lRHCQzPA
- 9ta/3QUzhxEwQfgbe+pexemhorzewxWc0VOm8j1E=
+ s=badeba3b8450; t=1636198214;
+ bh=jZHUzs0XQOvOiKlLZbhqEBEyKAIxhu7l8QVXBWeieEc=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=LM5wmQE04vKEHpJhE5ciI8bp9EMd7yDmkHmjd5fSOHCGsbnuBo8BAOJjHDGlV2jZz
+ e4NLPB2HCQIydmCSDIMF1ne5xj9vD2c8Lt21cxWJXnp42SIQKm4+nKCqYkbAlN2cFc
+ YU90HJqeI0RtRinaZiZPhUuo7v2cVYnLq9mjbcSU=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.26]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MPXd2-1n4iKy1FL8-00MaZ9; Sat, 06
- Nov 2021 12:28:06 +0100
+Received: from localhost ([62.216.209.26]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZCbB-1nEJ1j2j7R-00V8Bf; Sat, 06
+ Nov 2021 12:30:14 +0100
+Date: Sat, 6 Nov 2021 12:30:13 +0100
 From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 12:28:05 +0100
-Message-Id: <20211106112805.7076-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20211106123013.5773071a@gmx.net>
+In-Reply-To: <20211106115027.79c8bc06@windsurf>
+References: <20211106091508.29167-1-ps.report@gmx.net>
+ <20211106115027.79c8bc06@windsurf>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:O4p4yZ9j7mygWL0mRw/FnUonqiXJXVwXmx0dfAm0T2gnGu9SJ7P
- gXJvuaMzoKAEiZF7kU7xtlKl6nW93hqmxCSiUqcUQW9t2qajoePlPu7Ibj+YwCm4hN3WA5x
- QyqV/UYlinqA728gqKyD20qb8onj2tC4Du/7gDVGofSb9fMl+hSOkuPJAFofky8D1Dup6Ad
- QW2vq6xslCeoIEK7eoGnA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X0Bi//0KcEU=:tOGqNPjqBXGL1hSgghXAEi
- OtBzIbA8GkhB0lBA0Ya1HjH/V5q0iuXroO/uFeaxLZ7QGHBvSWMB0i0O4bY7pUIZTWWS5ELng
- 5cN0g4P5spXasqEwePTdB7+53e1oiiHnWZb4Hgd7laFB3Bbxwh0R1pUjKjq6ML8B554/anmHn
- O4sxb5afIuzBJyzTkxJXrL4OWay0Lr9gF6YJT+x6SlwVphNlDW0iEIp99s4e4D2BxUfHYYqnO
- Yfx9u2EFPdNXH6jszVf+OogVSo/EVCYJQPSfuDZkrEUW1alQlD5Hy2zhb+OYMbA1L7Kypm0yN
- X02PteQmnHqreFRwrUT2QkJ4gqGW/3qk3K3icLJ0JfOxCdPaRZ/LRw+ZJXu/KQXIFRyLz94h5
- jAczrB1M6fnLlgO1Zk9DOqlDLMj28fpsXPYOGgxgxv5D2qktXQ/HITMId0ZNEMVnMPlnyexIO
- PzeLCTiuHIlBCUK1MQEVR9U8k74j0RAhmh5T/ucQBWg6zh9gqNmmZHGeQhugAu6lHdvA2thUO
- yQv5jo/KKdKfJYbSQzmvwiyWsqdu2IFvYskDYvbtnWiIIwrCofcuvv7wZbr609+KEm9b9B6Xc
- oRZfEpiuSLWXrMk3JoEpATOyH2Sr3k0pRuDI0xRnTEKx/WhJoi818o9mcjhf3sqddeWgcNucb
- zXNu1IDgBteZ9Y78bzHkeXc2Eb1mMONN/grzvVd7uII7KpB0bU6Dr6tgxH0gW07zT3Bj1cErJ
- d6pkJo8QQ/o17OxwttNL8WIcMQKhMxTHHgogOpHK0cP6XuTu4EUNPdL9eOPwkwJLKShs/QSYy
- r6W6lOOEQJkcm6wLZsW+rXMoeVrFlz76MjzCsApIpHDCWxflURuisVAFI5buc1r3O2aMCiENe
- hF9dSRiVX4uLEzMlxmCbzmNZXoklF0fKIa+POmpH+UoSsM/nsDMSpzviMh3gP1z1AcWb3pwd9
- rXaWsdpszci/P89oJ+4x05EBRMxNPkkRq3NJK1t+I/GkyQVUONPW2t6zpEw0YdDHkUt9rHgtK
- 7mRMK/FoaifTDYe/is15wqvfvbLWuC0/fa1dNoQ6tZzXK3oJoZlvCUIlC3CpTepQ1lPpY85bk
- tLg73K3f/jWFQY=
-Subject: [Buildroot] [PATCH v1] package/olsr: add upstream patch to fix
- compile with gpsd-3.23.1
+X-Provags-ID: V03:K1:7XmQvyyloJQzrnn4UXzPbPHPKwLJgvcOu/MR/kjl27oZewOUy20
+ 8NlGwzQQvrSLhlP8CCdjosq/kxvCR8fSwqrq7CeynoXI4HZNeALpgtZ/AuA8pomaLdnKvvR
+ dB4FiDFboEY/RJzEseCJpb+DKPTq1mwpUZusUy7aANTjT4QY3HC9ooQSuR+JuDLD78dXu+Q
+ ic8F7EbsHioCBgfkxH5gQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cP8ikqAFoiw=:HM8Diz0Ow+MwNsEvTQfJHD
+ FB+ABFcvfKEQu3DjUGlNio5mN/8+l94Bdg3MqHRY3rlR5jFXbk62jYcQRoxhcNGp9a6RxYo1Z
+ iwemO/uQSzVlWJjadQhqJVBV6GVPhRfAFfwNvcUZqgKAQOWTUU/FgyN5onseH/rQ1XMssv6VW
+ gGCgAtHpZGVV41h/Zv4m6CVYbtBvK0ZAYhGZDmH6YCGHcS+5KMyiBU+YF51uKnC+m+4iLoN4P
+ 7qAOdLLOoFGptVMLHGlTyL+jcWnFJpGPUj3Jqxc1WpDfBEmb5VQQUC9oVSNJD3GkmMwKLjQT9
+ ANXEeWVqfXF4baxFSKZi+IF/9FsHJKjDNmfKrxqW9GkCR3IiZkgbeI8yvxOhvjTxm2Dihhvfv
+ 709HWhBM5mhVwvymrCtN7VBKu5CvHpQ9Tdv2KG1EpyKvbaWvpmNV49EaWVKEYpU5QIiRtxfHP
+ aBF1zhBgA3jQwn+LkmQovm+c2xNqCKiY5Mba3SE8/KV7xKsesJC5G/COCARrmAhhJhy1t3I/a
+ kUPN3ELmF+AEf8zACeoOS7W3GHitDroSab3ZyZQ5LrpYZaudEuEhKiyG1wouTRl/eBA5Hwwcp
+ GYUkOcEEijvx0YjqOkhFLPD0vd3+jduUb9kK/oTfzLVRdA59Zic3QgLVf9rPcePAN6j0JkAsK
+ 0AdL8hnZCqZu3rWvaGh8JzdBXspMrtUXxoq8b52lBnG2wD6JDwLtHJBd4YeyIgtu8VS7Fn09b
+ qyasKuRVAyohbDHl/hxsrkoQWdZ/CPNGN/SIQckOvhUKrahfKqCTITMhzcpV/zfFBbD8l00Ly
+ e10KLCqRHDztTCcuohikz1oz8QoHnEdBnOqEY+ioq/pRgOSQlh3Im0SoVFESzzWuvkjcc2R8N
+ eVUJZIq05kPkX+kMUg2EUU4r2N8whae0ffaUxkvivPq4Mdzp9xmcJvzlsuNU0Go8H+Nxe93+I
+ L9rIzO1q3XckcSPyoZZAfO0ZsDWulkxhZCfYbyN4vZSKhrTsy4BwitMeyl4VghRPLBnhXmm5Z
+ px48eiwd/WmhVKni0jH8Zyzd1uIBUn3REiinKHnWvrqUrzC6AjOafFBu83gtHqngSH4zC4aw6
+ N3w7VApXUASFYg=
+Subject: Re: [Buildroot] [PATCH v1] package/gdb: fix gdb-10.2 compile for
+ uclibc < v1.0.35 (getrandom related)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,92 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- add upstream patch ([1]) to fix compile with gpsd-3.23.1
-
-Fixes:
-
-  - http://autobuild.buildroot.org/results/53b06e72fb2d8b4c8b6ba41baf775ff33654cd18
-  - http://autobuild.buildroot.net/results/54cae924711e26f04045f8208db0d772292a3933
-
-  src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
-  src/gpsdclient.c:374:30: error: 'STATUS_NO_FIX' undeclared (first use in this function); did you mean 'STATUS_PPS_FIX'?
-    374 |   if (gpsdata->fix.status == STATUS_NO_FIX) {
-        |                              ^~~~~~~~~~~~~
-        |                              STATUS_PPS_FIX
-
-[1] https://github.com/OLSR/olsrd/commit/69ae23be9f96b9e7dd68a0252f3ad05986bb222d
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Notes:
-
-  - @Fabrice: did not find a corresponding buildroot patch from you,
-     did you sent one and I missed it?
----
- .../0005-pud-fix-build-with-gpsd-3.23.1.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/olsr/0005-pud-fix-build-with-gpsd-3.23.1.patch
-
-diff --git a/package/olsr/0005-pud-fix-build-with-gpsd-3.23.1.patch b/package/olsr/0005-pud-fix-build-with-gpsd-3.23.1.patch
-new file mode 100644
-index 0000000000..a8d53482b9
---- /dev/null
-+++ b/package/olsr/0005-pud-fix-build-with-gpsd-3.23.1.patch
-@@ -0,0 +1,44 @@
-+From 69ae23be9f96b9e7dd68a0252f3ad05986bb222d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 24 Oct 2021 23:22:11 +0200
-+Subject: [PATCH] pud: fix build with gpsd >= 3.23.1
-+
-+Fix the following build failure raised with gpsd >= 3.23.1 and
-+https://gitlab.com/gpsd/gpsd/-/commit/d4a4d8d3606fd50f10bcd20096a8a0cdb8b2d427:
-+
-+src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
-+src/gpsdclient.c:374:30: error: 'STATUS_NO_FIX' undeclared (first use in this function); did you mean 'STATUS_PPS_FIX'?
-+  374 |   if (gpsdata->fix.status == STATUS_NO_FIX) {
-+      |                              ^~~~~~~~~~~~~
-+      |                              STATUS_PPS_FIX
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/53b06e72fb2d8b4c8b6ba41baf775ff33654cd18
-+
-+[Fixed-Commit-Message by: Nick Hainke <vincent@systemli.org>]
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream: https://github.com/OLSR/olsrd/commit/69ae23be9f96b9e7dd68a0252f3ad05986bb222d]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ lib/pud/src/gpsdclient.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
-+index a2a9cee0..9c98f4df 100644
-+--- a/lib/pud/src/gpsdclient.c
-++++ b/lib/pud/src/gpsdclient.c
-+@@ -370,7 +370,9 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+           );
-+ 
-+   gpsdata->set &= ~STATUS_SET; /* always valid */
-+-  #if GPSD_API_MAJOR_VERSION >= 10
-++  #if GPSD_API_MAJOR_VERSION >= 12
-++  if (gpsdata->fix.status == STATUS_UNK) {
-++  #elif GPSD_API_MAJOR_VERSION >= 10
-+   if (gpsdata->fix.status == STATUS_NO_FIX) {
-+   #else
-+   if (gpsdata->status == STATUS_NO_FIX) {
-+-- 
-+2.33.1
-+
--- 
-2.33.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKT24gU2F0LCA2IE5vdiAyMDIxIDExOjUwOjI3ICswMTAwLCBUaG9tYXMg
+UGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKCj4gT24gU2F0
+LCAgNiBOb3YgMjAyMSAxMDoxNTowOCArMDEwMAo+IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRA
+Z214Lm5ldD4gd3JvdGU6Cj4gCj4gPiAtIGZpeCBnZXRyYW5kb20gY29tcGlsZSBmb3IgdWNsaWJj
+IDwgdjEuMC4zNSwgYWRkIG1pc3Npbmcgc3RkZGVmLmgKPiA+ICAgaW5jbHVkZSAoZml4ZWQgaW4g
+dWNsaWJjIHNpbmNlIHYxLjAuMzUsIHNlZSBbMV0pCj4gPiAKPiA+IEZpeGVzOgo+ID4gCj4gPiAg
+IC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvNmQ0YTYyYzcwM2M4NWRk
+OTkzZGRiMmQ5MGViZTFmNmNhZDI0ZTBiMAo+ID4gCj4gPiAgIC4uLi9ob3N0L3g4Nl82NC1idWls
+ZHJvb3QtbGludXgtdWNsaWJjL3N5c3Jvb3QvdXNyL2luY2x1ZGUvc3lzL3JhbmRvbS5oOjI3OjM1
+OiBlcnJvcjogdW5rbm93biB0eXBlIG5hbWUg4oCYc2l6ZV904oCZCj4gPiAgICAgIDI3IHwgZXh0
+ZXJuIGludCBnZXRyYW5kb20odm9pZCAqX19idWYsIHNpemVfdCBjb3VudCwgdW5zaWduZWQgaW50
+IGZsYWdzKQo+ID4gICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBe
+fn5+fn4KPiA+IAo+ID4gWzFdIGh0dHBzOi8vY2dpdC51Y2xpYmMtbmcub3JnL2NnaS9jZ2l0L3Vj
+bGliYy1uZy5naXQvY29tbWl0Lz9pZD0wMDk3MmMwMmMyYjZlMGE5NWQ1ZGVmNGE3MWJkZmIxODhl
+MDkxNzgydAo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0
+QGdteC5uZXQ+Cj4gPiAtLS0KPiA+ICAuLi5nZXRyYW5kb20tY29tcGlsZS1mb3ItdWNsaWJjLXYx
+LjAuMzUucGF0Y2ggfCAzOSArKysrKysrKysrKysrKysrKysrCj4gPiAgMSBmaWxlIGNoYW5nZWQs
+IDM5IGluc2VydGlvbnMoKykKPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nZGIvMTAu
+Mi8wMDA2LUZpeC1nZXRyYW5kb20tY29tcGlsZS1mb3ItdWNsaWJjLXYxLjAuMzUucGF0Y2ggIAo+
+IAo+IEFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuIERpZCB5b3UgdmVyaWZ5IHRoYXQgdGhpcyB3
+YXMgb25seSBhcHBsaWNhYmxlCj4gdG8gZ2RiIDEwLngsIGFuZCBub25lIG9mIHRoZSBvbGRlciBv
+ciBuZXdlciB2ZXJzaW9ucyA/CgpKdXN0IG5vdy4uLiwgZ2RiLTkuMiBzZWVtcyBub3QgYWZmZWN0
+ZWQsIGdkYi0xMS4xIHNob3dzIHRoZSBzYW1lIGZhaWx1cmUsIHBhdGNoIGZvbGxvd3MuLi4KClJl
+Z2FyZHMsClBldGVyCgo+IAo+IFRoYW5rcyEKPiAKPiBUaG9tYXMKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
