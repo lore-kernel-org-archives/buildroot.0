@@ -2,55 +2,52 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E396BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:49:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A708CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:50:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A953D6124D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:49:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A953D6124D
+	by mail.kernel.org (Postfix) with ESMTPS id 3958C6124A
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:50:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3958C6124A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 857116F94F;
-	Sat,  6 Nov 2021 10:49:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBEEA400CC;
+	Sat,  6 Nov 2021 10:50:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id prFzX7ZQa2DW; Sat,  6 Nov 2021 10:50:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id F190A40189;
+	Sat,  6 Nov 2021 10:50:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFAE1BF476
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:50:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5CA6E6F94D
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:50:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O5dMDz28oe2v; Sat,  6 Nov 2021 10:49:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E83826F94D;
-	Sat,  6 Nov 2021 10:49:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3AC051BF476
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:48:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A28540092
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:48:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id np5cAYE-OseH for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 10:48:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 34A3840038
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:48:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 4C0F66000A;
- Sat,  6 Nov 2021 10:48:55 +0000 (UTC)
-Date: Sat, 6 Nov 2021 11:48:55 +0100
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N3vd4PJMCKUM for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 10:50:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0DCD6068B
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:50:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0E31388F89; Sat,  6 Nov 2021 10:46:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bartosz Bilas <b.bilas@grinn-global.com>
-Message-ID: <20211106114855.31d1c486@windsurf>
-In-Reply-To: <20211106100244.293028-1-b.bilas@grinn-global.com>
-References: <20211106100244.293028-1-b.bilas@grinn-global.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] configs/stm32mp157*: uboot needs openssl
+To: buildroot@buildroot.org
+Date: Sat, 6 Nov 2021 11:50:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 35870e2078f16139d67c56480c8efa949ab7ab5e
+X-Git-Newrev: 2f7598034c00f6b51a7e2679401d45cada14be3f
+X-Patchwork-Hint: ignore
+Message-Id: <20211106104624.0E31388F89@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: fix gdb-10.2 compile for
+ uclibc < v1.0.35 (getrandom related)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,35 +59,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3103137155012974872=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Nov 2021 11:02:44 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+--===============3103137155012974872==
+Content-Type: text/plain
 
-> Fixes:
->  https://gitlab.com/buildroot.org/buildroot/-/jobs/1746850755
->  https://gitlab.com/buildroot.org/buildroot/-/jobs/1746850753
->  https://gitlab.com/buildroot.org/buildroot/-/jobs/1746850754
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  configs/stm32mp157a_dk1_defconfig     | 1 +
->  configs/stm32mp157c_dk2_defconfig     | 1 +
->  configs/stm32mp157c_odyssey_defconfig | 1 +
->  3 files changed, 3 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=2f7598034c00f6b51a7e2679401d45cada14be3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+- fix getrandom compile for uclibc < v1.0.35, add missing stddef.h
+  include (fixed in uclibc since v1.0.35, see [1])
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+
+  - http://autobuild.buildroot.net/results/6d4a62c703c85dd993ddb2d90ebe1f6cad24e0b0
+
+  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name ‘size_t’
+     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
+        |                                   ^~~~~~
+
+[1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=00972c02c2b6e0a95d5def4a71bdfb188e091782t
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-Fix-getrandom-compile-for-uclibc-v1.0.35.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/package/gdb/10.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/10.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
+new file mode 100644
+index 0000000000..4b212e2d03
+--- /dev/null
++++ b/package/gdb/10.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
+@@ -0,0 +1,39 @@
++From bb894a9cfb1c3cf0e0a174c496ad848f589ee7da Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 6 Nov 2021 10:06:25 +0100
++Subject: [PATCH] Fix getrandom compile for uclibc < v1.0.35
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++- fix getrandom compile for uclibc < v1.0.35, add missing stddef.h
++  include (fixed in uclibc since v1.0.35, see [1])
++
++Fixes:
++
++  .../host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name ‘size_t’
++     27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++        |                                   ^~~~~~
++
++[1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=00972c02c2b6e0a95d5def4a71bdfb188e091782t
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ gnulib/import/getrandom.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gnulib/import/getrandom.c b/gnulib/import/getrandom.c
++index 030a78b..7b24350 100644
++--- a/gnulib/import/getrandom.c
+++++ b/gnulib/import/getrandom.c
++@@ -19,6 +19,7 @@
++ 
++ #include <config.h>
++ 
+++#include <stddef.h>
++ #include <sys/random.h>
++ 
++ #include <errno.h>
++-- 
++2.33.1
++
+
+--===============3103137155012974872==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3103137155012974872==--
