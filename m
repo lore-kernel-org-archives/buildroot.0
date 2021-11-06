@@ -2,51 +2,55 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6F07C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:46:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F7DAC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:47:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F23F36124A
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:46:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F23F36124A
+	by mail.kernel.org (Postfix) with ESMTPS id 0091460E8B
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:47:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0091460E8B
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B61806F94F;
-	Sat,  6 Nov 2021 10:46:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8C5E401A3;
+	Sat,  6 Nov 2021 10:47:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fb-Q2su5dWAS; Sat,  6 Nov 2021 10:46:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4cW4ZO2tImMD; Sat,  6 Nov 2021 10:47:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 128ED6F94D;
-	Sat,  6 Nov 2021 10:46:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4E884022A;
+	Sat,  6 Nov 2021 10:47:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1724D1BF476
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:46:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 92CC81BF476
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2B66405CF
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:46:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82725405CF
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:47:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KlahtwS732Jo for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 10:46:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEECB405CD
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:46:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 540EA88334; Sat,  6 Nov 2021 10:42:53 +0000 (UTC)
+ with ESMTP id NPpBGXAnfbdA for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 10:47:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B0BF405CD
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:47:02 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id E92BD60009;
+ Sat,  6 Nov 2021 10:46:58 +0000 (UTC)
+Date: Sat, 6 Nov 2021 11:46:57 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 6 Nov 2021 11:46:23 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57a950754227d768f84a85266850e47172310ea9
-X-Git-Newrev: deb67dbca6a38094ae74a2070746dc68b4d2fbb8
-X-Patchwork-Hint: ignore
-Message-Id: <20211106104253.540EA88334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/refpolicy: move patches to
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20211106114657.3eea0cae@windsurf>
+In-Reply-To: <20211105221658.1163788-1-romain.naour@gmail.com>
+References: <20211105221658.1163788-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/refpolicy: move patches to
  subdirectory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,36 +63,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=deb67dbca6a38094ae74a2070746dc68b4d2fbb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  5 Nov 2021 23:16:58 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-refpolicy patches are for 2.20210908 upstream version but when using a custom
-version from git they may fail to apply.
+> refpolicy patches are for 2.20210908 upstream version but when using a custom
+> version from git they may fail to apply.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/1734417630
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  ...001-policy-modules-services-samba.te-make-crack-optional.patch | 0
+>  ...002-policy-modules-services-wireguard.te-make-iptables-o.patch | 0
+>  2 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/refpolicy/{ => 2.20210908}/0001-policy-modules-services-samba.te-make-crack-optional.patch (100%)
+>  rename package/refpolicy/{ => 2.20210908}/0002-policy-modules-services-wireguard.te-make-iptables-o.patch (100%)
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1734417630
+Applied to master, thanks.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-policy-modules-services-samba.te-make-crack-optional.patch       | 0
- .../0002-policy-modules-services-wireguard.te-make-iptables-o.patch       | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
-
-diff --git a/package/refpolicy/0001-policy-modules-services-samba.te-make-crack-optional.patch b/package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
-similarity index 100%
-rename from package/refpolicy/0001-policy-modules-services-samba.te-make-crack-optional.patch
-rename to package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
-diff --git a/package/refpolicy/0002-policy-modules-services-wireguard.te-make-iptables-o.patch b/package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
-similarity index 100%
-rename from package/refpolicy/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
-rename to package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
