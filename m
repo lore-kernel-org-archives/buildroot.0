@@ -2,56 +2,83 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3951C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 17:30:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F4B3C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 286026103A
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 17:30:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 286026103A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id CBCC861101
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:09:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CBCC861101
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 704C9401FE;
-	Sat,  6 Nov 2021 17:30:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69B7460632;
+	Sat,  6 Nov 2021 18:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lB3ATvEj-0hO; Sat,  6 Nov 2021 17:30:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y39NIkaU-4ks; Sat,  6 Nov 2021 18:09:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBE044023D;
-	Sat,  6 Nov 2021 17:30:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 627701BF391
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 17:30:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B587F60641;
+	Sat,  6 Nov 2021 18:09:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D3BAC1BF350
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F379403BE
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 17:30:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB962401FE
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:09:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OCLAhgllQUBI for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 17:30:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6922F403B3
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 17:30:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id B64B2100003;
- Sat,  6 Nov 2021 17:30:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mjPWG-0002Pu-TC; Sat, 06 Nov 2021 18:30:20 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v0MmassOvCq0 for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 18:09:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D82844010B
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 18:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1636222183;
+ bh=bQqA1mUprtZbVQbE8RsrezGa3pCl9dnfKaZN8HdKI10=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=PqmJIbDiVowJU+lLuOpG38IqT1R1702+fe8wes5FbjTaJFfu3g+2tKX3IDgRHFH6P
+ 6gQ+tlQ8g1SCKIUiTCOSJod4NepmPMo6mWyLE03HpBJFaaDn4yljbiCfPsFl+h/CrE
+ 8ybC661LhijXWPygh4cg7J3A+IINPx5+jiop24vU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.26]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Md6Mj-1m9oSy0w2V-00aGES; Sat, 06
+ Nov 2021 19:09:43 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 18:29:55 +0100
-Message-Id: <20211106172956.9193-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211106172956.9193-1-peter@korsgaard.com>
-References: <20211106172956.9193-1-peter@korsgaard.com>
+Date: Sat,  6 Nov 2021 19:09:42 +0100
+Message-Id: <20211106180942.27850-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/2] configs/nezha_defconfig: new defconfig
+X-Provags-ID: V03:K1:AWHt62xDf5JMHRrqr4WexWToPGD3yvyTnVvresAqxIvttASCmua
+ cC79mRWPEDP1QdenXWy1UeXP3psWeISXSh3jvCaVLvHLKWXZMhewhWZZoJ2OpRWjLxmGrIE
+ jcev7TWug6TMuPN25Qq8Or4B2k2QkZeeDMxs0Bt8qDz2WnjlpTOrACvzGq68LqmOgJr3AMc
+ FUIE/hSl6bRu+X2YoKH8g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f4rMwieZI4w=:Za0yhReAecTVbxCxxYsKya
+ 8Nar4ZRyDjdiG964WjoGV5D2W0679sSo0b2TUd+HO6dou7ZYqFbAEfwY4hH1SCGW8pgf6bd47
+ 019XicKGBi1OAlWlt9NLXwMmVhpxk7lYfck8a3JN+P50qZCEFJuwBnAc0fmy5YY+VLevTo0UY
+ LcT0gVt++nuVzsq1LqQFKL41RT0AOX1gW7rRkxdCT5XsUYTzwuWGTLgSA1SF6GuMOn8c67C8z
+ g4PyGj6yeWnXWScuQMaulUFlJ5ApwXemypRf64qt7jJXus5OmHIL2EgxtVitW52IxaCOmKN8t
+ qSu8NsCn++HhU0zZRgF2/4CGU6qh4sXTJtGMf7btkE0K7onCUY8K2F6AEnR+msCsU+EUBaZhN
+ r9DZPp8RhguGjOhR8R4PEMQ/E1XYzvFg8QfiUXFHGTHHnbnwy6QI5bS9f9gb7/XOHqnM5TSLT
+ KgmN/D1bJHe4MCLLHmn+3ZgNKMUK+gO8prk0jUgQqyOoQaE+QXfsuZol2nAMBsnkSZXzwuPcJ
+ AilFD1h5Eaw8lOwKEOoTDB2N93Pgn7UFx4xxhiDYlM+se36/jMLXOSgC9UmB5Ib/aE/RcK6Zi
+ FAlULI23yZE57VcsiGohCQ4/o3eDDk7O2L9EYjGkI8WlbBspQs58BFt8wsX3H/8LQkgko6+Sh
+ tvFA5AhcttQecQbdfxt3Mp+++qvlKL1CjXm6ML+CHriPpI6hZOyAQmS4H9hIxlrhLegVR5Kpe
+ 7ZD89hC/Q60RfGYaLZAaPIE2+EaogOpESMGZl6w61gm2CG0+yQz0jTWk+88NajYC8z/KnPW3F
+ w70Q5PNWjWabQ7aIo59geLIQcTo8O/5A8wzCnDDLlNL0N8OtKGe8SfYZ9+R9nXrNRarAkPvhQ
+ k/6mybE4OakePj8Ikax0vTQVGKVPofYopX+sQACtwLA1vK+gIDyrsnIj6tinwDiCZ8AGFllf0
+ 8QLtJ8CuYF921eHENGCgP9Hu6vsvOj4EyL6KGqdz4fMP0Fn2uD6UDDAqhkx6U6njpotg592UA
+ Cm55RrWTyJPICnhctsVKpAjL8WhjQptBE0ZQZob1mWs1Zp2ssWpwa/vK8rQZ41K7RdXzvok1Z
+ AHL6X4UoKr2dkU=
+Subject: [Buildroot] [PATCH v2] package/olsr: add upstream patch to fix
+ compile with gpsd-3.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,298 +90,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: samuel@sholland.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a defconfig for the Allwinner Nezha, a raspberrypi-style board built
-around the RISC-V 64bit D1 SoC.
+- add upstream patch ([1]) to fix compile with gpsd-3.23.1
 
-There is currently no upstream support, so use the git repos from Samuel
-Holland as explained on the linux-sunxi wiki:
+Fixes:
 
-https://linux-sunxi.org/Allwinner_Nezha
+  - http://autobuild.buildroot.org/results/53b06e72fb2d8b4c8b6ba41baf775ff33654cd18
+  - http://autobuild.buildroot.net/results/54cae924711e26f04045f8208db0d772292a3933
 
-The U-Boot DTB is also used by opensbi, but the two branches are
-unfortunately not in sync at the moment, so add a patch to fix the
-compatible for the PLIC so opensbi makes it available to S-Mode (Linux).
+  src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
+  src/gpsdclient.c:374:30: error: 'STATUS_NO_FIX' undeclared (first use in this function); did you mean 'STATUS_PPS_FIX'?
+    374 |   if (gpsdata->fix.status == STATUS_NO_FIX) {
+        |                              ^~~~~~~~~~~~~
+        |                              STATUS_PPS_FIX
 
-The use of the sun20i-d1-spl SPL bootloader / TOC1 file format also makes it
-a bit more complicated to build the boot image.  As this is expected to only
-be a temporary issue, add a U-Boot patch to build the TOC1 image as part of
-the build rather than adding explicit support in our U-Boot package to do
-it.
+[1] https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- Changes since v1:
- - Use github macro/tarballs for linux/opensbi/u-boot
- - Use rootfs overlay for extlinux.conf
- - Use kilobytes (K) for offsets in genimage.cfg
+Changes v1 -> v2:
 
- DEVELOPERS                                    |  2 +
- board/nezha/genimage.cfg                      | 37 +++++++++++++
- .../nezha/overlay/boot/extlinux/extlinux.conf |  4 ++
- ...un20i-d1.dtsi-adjust-plic-compatible.patch | 36 +++++++++++++
- ...pport-building-u-boot.toc1-for-nezda.patch | 54 +++++++++++++++++++
- board/nezha/readme.txt                        | 24 +++++++++
- configs/nezha_defconfig                       | 33 ++++++++++++
- 7 files changed, 190 insertions(+)
- create mode 100644 board/nezha/genimage.cfg
- create mode 100644 board/nezha/overlay/boot/extlinux/extlinux.conf
- create mode 100644 board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
- create mode 100644 board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
- create mode 100644 board/nezha/readme.txt
- create mode 100644 configs/nezha_defconfig
+  - previous upstream patch was (after some discussion) reverted and
+    replaced with the now provided one
+---
+ ...client.c-drop-handling-of-gpsdata-fi.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 19d527b396..70262eac8c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2105,6 +2105,7 @@ N:	Peter Korsgaard <peter@korsgaard.com>
- F:	board/arrow/avenger96/
- F:	board/beagleboneai/
- F:	board/minnowboard/
-+F:	board/nezha/
- F:	board/librecomputer/lafrite/
- F:	board/nexbox/a95x/
- F:	board/openblocks/a6/
-@@ -2119,6 +2120,7 @@ F:	configs/lafrite_defconfig
- F:	configs/minnowboard_max-graphical_defconfig
- F:	configs/minnowboard_max_defconfig
- F:	configs/nexbox_a95x_defconfig
-+F:	configs/nezha_defconfig
- F:	configs/openblocks_a6_defconfig
- F:	configs/orangepi_pc_defconfig
- F:	configs/orangepi_r1_defconfig
-diff --git a/board/nezha/genimage.cfg b/board/nezha/genimage.cfg
+diff --git a/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
 new file mode 100644
-index 0000000000..9860b83eca
+index 0000000000..7ea3fbadd7
 --- /dev/null
-+++ b/board/nezha/genimage.cfg
-@@ -0,0 +1,37 @@
-+# Minimal SD card image for the Allwinner Nezha
++++ b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
+@@ -0,0 +1,49 @@
++From 665051a845464c0f95edb81432104dac39426f79 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Nov 2021 15:50:58 +0100
++Subject: [PATCH] lib/pud/src/gpsdclient.c: drop handling of
++ gpsdata->fix.status
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++Here is an extract of https://gpsd.gitlab.io/gpsd/gpsd_json.html:
 +
-+	partition boot0-1 {
-+		in-partition-table = "no"
-+		image = "boot0_sdcard_sun20iw1p1.bin"
-+		offset = 8K
-+	}
++The optional "status" field (aka fix type), is a modifier (adjective) to
++mode. It is not a replacement for, or superset of, the "mode" field. It
++is almost, but not quite, the same as the NMEA 4.x xxGGA GPS Quality
++Indicator Values. Many GNSS receivers do not supply it. Those that do
++interpret the specification in various incompatible ways.
 +
-+	partition boot0-2 {
-+		in-partition-table = "no"
-+		image = "boot0_sdcard_sun20iw1p1.bin"
-+		offset = 128K
-+	}
++So status field is optional and STATUS_NO_FIX has been explicitly
++renamed into STATUS_UNK to avoid confusion with MODE_NO_FIX (which is
++already handled by gpsdclient.c) so drop the if block to fix the build
++failure with gpsd >= 3.23.1.
 +
-+	partition u-boot-1 {
-+		in-partition-table = "no"
-+		image = "u-boot.toc1"
-+		offset = 12288K
-+	}
-+
-+	partition u-boot-2 {
-+		in-partition-table = "no"
-+		image = "u-boot.toc1"
-+		offset = 16400K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		bootable = "true"
-+		offset = 18M
-+	}
-+}
-diff --git a/board/nezha/overlay/boot/extlinux/extlinux.conf b/board/nezha/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..02232f4d16
---- /dev/null
-+++ b/board/nezha/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /boot/Image
-+  devicetree /boot/sun20i-d1-nezha.dtb
-+  append console=ttyS0,115200 root=/dev/mmcblk0p1 ro rootwait
-diff --git a/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch b/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
-new file mode 100644
-index 0000000000..3524f44a61
---- /dev/null
-+++ b/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
-@@ -0,0 +1,36 @@
-+From 99cf8f37ceb1def9e7bbaccc395cf2275723e03d Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 4 Nov 2021 22:15:13 +0100
-+Subject: [PATCH] arch/riscv/dts/sun20i-d1.dtsi: adjust plic compatible to
-+ match opensbi
-+
-+The T-HEAD PLIC is by default not accessible from S-mode, and access must be
-+enabled by opensbi to make it accessible to Linux.
-+
-+The DTB is used both by U-Boot and opensbi (but the PLIC node is ignored by
-+U-Boot), so change the compatible to match what opensbi expects to fix a
-+crash during Linux boot:
-+
-+https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream: https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ arch/riscv/dts/sun20i-d1.dtsi | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ lib/pud/src/gpsdclient.c | 9 ---------
++ 1 file changed, 9 deletions(-)
 +
-+diff --git a/arch/riscv/dts/sun20i-d1.dtsi b/arch/riscv/dts/sun20i-d1.dtsi
-+index 280e0336d4..56d02c33b0 100644
-+--- a/arch/riscv/dts/sun20i-d1.dtsi
-++++ b/arch/riscv/dts/sun20i-d1.dtsi
-+@@ -1136,7 +1136,7 @@
++diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
++index a2a9cee0..d448867d 100644
++--- a/lib/pud/src/gpsdclient.c
+++++ b/lib/pud/src/gpsdclient.c
++@@ -370,15 +370,6 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++           );
 + 
-+ 		plic: interrupt-controller@10000000 {
-+ 			compatible = "allwinner,sun20i-d1-plic",
-+-				     "sifive,plic-1.0.0";
-++				     "thead,c900-plic";
-+ 			reg = <0x10000000 0x4000000>;
-+ 			#address-cells = <0>;
-+ 			interrupts-extended = <&cpu0_intc 11>,
-+-- 
-+2.20.1
-+
-diff --git a/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch b/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
-new file mode 100644
-index 0000000000..6e89a921df
---- /dev/null
-+++ b/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
-@@ -0,0 +1,54 @@
-+From 4a923e0e4ef6d2b41cb89d658e269adada847573 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 4 Nov 2021 22:32:04 +0100
-+Subject: [PATCH] Makefile: HACK: Support building u-boot.toc1 for nezda board
-+
-+For easier integration into Buildroot.  The boot0 / toc1 logic is WIP until
-+U-Boot gains SPL support for the D1, so add a hack to make it easier to
-+integrate in Buildroot as-is.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Makefile  | 9 +++++++++
-+ nezha.cfg | 9 +++++++++
-+ 2 files changed, 18 insertions(+)
-+ create mode 100644 nezha.cfg
-+
-+diff --git a/Makefile b/Makefile
-+index f911f70344..259d93bf80 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1084,6 +1084,15 @@ endif
-+ .binman_stamp: FORCE
-+ 	@touch $@
++   gpsdata->set &= ~STATUS_SET; /* always valid */
++-  #if GPSD_API_MAJOR_VERSION >= 10
++-  if (gpsdata->fix.status == STATUS_NO_FIX) {
++-  #else
++-  if (gpsdata->status == STATUS_NO_FIX) {
++-  #endif
++-    nmeaInfoClear(info);
++-    nmeaTimeSet(&info->utc, &info->present, NULL);
++-    return;
++-  }
 + 
-++fw_dynamic.bin: $(OPENSBI)
-++	$(call if_changed,copy)
-++
-++MKIMAGEFLAGS_u-boot.toc1 = -T sunxi_toc1
-++u-boot.toc1: nezha.cfg fw_dynamic.bin inputs
-++	$(call if_changed,mkimage)
-++
-++all: u-boot.toc1
-++
-+ ifeq ($(CONFIG_DEPRECATED),y)
-+ 	$(warning "You have deprecated configuration options enabled in your .config! Please check your configuration.")
-+ endif
-+diff --git a/nezha.cfg b/nezha.cfg
-+new file mode 100644
-+index 0000000000..2d23b9b388
-+--- /dev/null
-++++ b/nezha.cfg
-+@@ -0,0 +1,9 @@
-++[opensbi]
-++file = fw_dynamic.bin
-++addr = 0x40000000
-++[dtb]
-++file = arch/riscv/dts/sun20i-d1-nezha.dtb
-++addr = 0x44000000
-++[u-boot]
-++file = u-boot-nodtb.bin
-++addr = 0x4a000000
++   if (!gpsdata->set) {
++     return;
 +-- 
-+2.20.1
++2.33.1
 +
-diff --git a/board/nezha/readme.txt b/board/nezha/readme.txt
-new file mode 100644
-index 0000000000..fd4c6707de
---- /dev/null
-+++ b/board/nezha/readme.txt
-@@ -0,0 +1,24 @@
-+Allwinner Nezha
-+===============
-+
-+Nezha is is a low-cost RISC-V 64-bit based platform, powered by an
-+Allwinner D1 SoC.
-+
-+How to build
-+============
-+
-+$ make nezha_defconfig
-+$ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Connect a TTL UART to the debug connector, insert the microSD card and
-+plug in a USB-C cable to the PWR connector to boot the system.
-diff --git a/configs/nezha_defconfig b/configs/nezha_defconfig
-new file mode 100644
-index 0000000000..d4724de2f3
---- /dev/null
-+++ b/configs/nezha_defconfig
-@@ -0,0 +1,33 @@
-+BR2_riscv=y
-+BR2_GLOBAL_PATCH_DIR="board/nezha/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+BR2_ROOTFS_OVERLAY="board/nezha/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/nezha/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,012f5a3d01be6d44e32c74bb3637ec281790b297)/linux-012f5a3d01be6d44e32c74bb3637ec281790b297.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-nezha"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
-+BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,b9125c6f8909d1cc0417795737fc13cb6297ff11)/opensbi-b9125c6f8909d1cc0417795737fc13cb6297ff11.tar.gz"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
-+BR2_TARGET_SUN20I_D1_SPL=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,62392d3b8a624a80646c1876533336f90140088d)/uboot-62392d3b8a624a80646c1876533336f90140088d.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nezha"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.toc1"
-+BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-2.20.1
+2.33.1
 
 _______________________________________________
 buildroot mailing list
