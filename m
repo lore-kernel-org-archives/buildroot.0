@@ -2,83 +2,67 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F4B3C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1788C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:13:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CBCC861101
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:09:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CBCC861101
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id F2E2A6112D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 18:13:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F2E2A6112D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69B7460632;
-	Sat,  6 Nov 2021 18:09:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1C60605D9;
+	Sat,  6 Nov 2021 18:13:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y39NIkaU-4ks; Sat,  6 Nov 2021 18:09:50 +0000 (UTC)
+	with ESMTP id EtFXNtzXlFtj; Sat,  6 Nov 2021 18:13:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B587F60641;
-	Sat,  6 Nov 2021 18:09:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D3BAC1BF350
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:09:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7C3760632;
+	Sat,  6 Nov 2021 18:13:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A28B1BF350
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB962401FE
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:09:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5972F401F2
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 18:13:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v0MmassOvCq0 for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 18:09:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D82844010B
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 18:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636222183;
- bh=bQqA1mUprtZbVQbE8RsrezGa3pCl9dnfKaZN8HdKI10=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=PqmJIbDiVowJU+lLuOpG38IqT1R1702+fe8wes5FbjTaJFfu3g+2tKX3IDgRHFH6P
- 6gQ+tlQ8g1SCKIUiTCOSJod4NepmPMo6mWyLE03HpBJFaaDn4yljbiCfPsFl+h/CrE
- 8ybC661LhijXWPygh4cg7J3A+IINPx5+jiop24vU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.26]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Md6Mj-1m9oSy0w2V-00aGES; Sat, 06
- Nov 2021 19:09:43 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ArJfJ8HCQwmE for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 18:13:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEC97401CF
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 18:13:26 +0000 (UTC)
+Received: from ubuntu.localdomain ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id jQBvmczejueW5jQBvmpynZ; Sat, 06 Nov 2021 19:13:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636222404; bh=rrpZWZ2dkn3rnHdgxhmuVaEFzS9rCxkVHP0AHnz8Txo=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Jz58RWIa1mKsfusARLqtesKni10vyA0pdDWNLqhQ7e+gI5yJ9QYFopwqlAFQgVbHI
+ X5VrB10UPe7HwoUpFZkurRESJZWNa+wZdhyN3aGDlfBVE7djGo8vhcqpWoJWElldpv
+ e73r4hUlB79Rw5cF1mcEvBsIhqu+B4K1xrsvxmIruDAF+/g1F6UODfqL/vxC/K0nJ0
+ iZ8xeO5RY/hxG2OZWRLMISXpW61whOeuTtXNZkBGCUPr0n1+sLjl/lFu3ga1AKrZtU
+ E2oStIg8MBcVCUmTSiJ7+pMg5eFV8RwUo4xEpgWlqr4vaCYKBKc540z5jwtsd9QGq9
+ yTX7wmevITApQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 19:09:42 +0100
-Message-Id: <20211106180942.27850-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+Date: Sat,  6 Nov 2021 19:13:22 +0100
+Message-Id: <20211106181322.302485-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:AWHt62xDf5JMHRrqr4WexWToPGD3yvyTnVvresAqxIvttASCmua
- cC79mRWPEDP1QdenXWy1UeXP3psWeISXSh3jvCaVLvHLKWXZMhewhWZZoJ2OpRWjLxmGrIE
- jcev7TWug6TMuPN25Qq8Or4B2k2QkZeeDMxs0Bt8qDz2WnjlpTOrACvzGq68LqmOgJr3AMc
- FUIE/hSl6bRu+X2YoKH8g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:f4rMwieZI4w=:Za0yhReAecTVbxCxxYsKya
- 8Nar4ZRyDjdiG964WjoGV5D2W0679sSo0b2TUd+HO6dou7ZYqFbAEfwY4hH1SCGW8pgf6bd47
- 019XicKGBi1OAlWlt9NLXwMmVhpxk7lYfck8a3JN+P50qZCEFJuwBnAc0fmy5YY+VLevTo0UY
- LcT0gVt++nuVzsq1LqQFKL41RT0AOX1gW7rRkxdCT5XsUYTzwuWGTLgSA1SF6GuMOn8c67C8z
- g4PyGj6yeWnXWScuQMaulUFlJ5ApwXemypRf64qt7jJXus5OmHIL2EgxtVitW52IxaCOmKN8t
- qSu8NsCn++HhU0zZRgF2/4CGU6qh4sXTJtGMf7btkE0K7onCUY8K2F6AEnR+msCsU+EUBaZhN
- r9DZPp8RhguGjOhR8R4PEMQ/E1XYzvFg8QfiUXFHGTHHnbnwy6QI5bS9f9gb7/XOHqnM5TSLT
- KgmN/D1bJHe4MCLLHmn+3ZgNKMUK+gO8prk0jUgQqyOoQaE+QXfsuZol2nAMBsnkSZXzwuPcJ
- AilFD1h5Eaw8lOwKEOoTDB2N93Pgn7UFx4xxhiDYlM+se36/jMLXOSgC9UmB5Ib/aE/RcK6Zi
- FAlULI23yZE57VcsiGohCQ4/o3eDDk7O2L9EYjGkI8WlbBspQs58BFt8wsX3H/8LQkgko6+Sh
- tvFA5AhcttQecQbdfxt3Mp+++qvlKL1CjXm6ML+CHriPpI6hZOyAQmS4H9hIxlrhLegVR5Kpe
- 7ZD89hC/Q60RfGYaLZAaPIE2+EaogOpESMGZl6w61gm2CG0+yQz0jTWk+88NajYC8z/KnPW3F
- w70Q5PNWjWabQ7aIo59geLIQcTo8O/5A8wzCnDDLlNL0N8OtKGe8SfYZ9+R9nXrNRarAkPvhQ
- k/6mybE4OakePj8Ikax0vTQVGKVPofYopX+sQACtwLA1vK+gIDyrsnIj6tinwDiCZ8AGFllf0
- 8QLtJ8CuYF921eHENGCgP9Hu6vsvOj4EyL6KGqdz4fMP0Fn2uD6UDDAqhkx6U6njpotg592UA
- Cm55RrWTyJPICnhctsVKpAjL8WhjQptBE0ZQZob1mWs1Zp2ssWpwa/vK8rQZ41K7RdXzvok1Z
- AHL6X4UoKr2dkU=
-Subject: [Buildroot] [PATCH v2] package/olsr: add upstream patch to fix
- compile with gpsd-3.23.1
+X-CMAE-Envelope: MS4wfEhfhO28+pgbYCMOl4bry1aFF6XeoStrg5x6AB42KvAym9iRUwGkYgeSehEIFvuIOkSn5lM8JNsvN9BiuylpQ9waXMv+9WNA11raMxluhQiUVdiuIDeW
+ TotZ6+tERuzt3on9EIQKRJAQ1NWCFpJffLG1Zu+1xdHLYVq0nB1FKwFWtzhjDAjTVOC14Tp9WXGjTTBJdk3JK9J3ng3+j7u0NulNCTTwrwoedaGfWeIg4ROJ
+ ltoK7fIGIn5G3rjnb1TFVwEAoaJKvD8lEMRJksZ5wkyPrm1Xddb3WLbCN9NDUSH6T4gOzRff4uYY6gviYXHMduF8fPw4iqBhdoCEUiQ04eRs9HB9j/fhMYYC
+ Y04hfWK+flMjgNUvpwL3KmIiYDNQ0/4jwqxEavc6bfd5fMR6dVz3tG3T/xZnkATTG5JCdYZAPZvahlKVU379D82jXrz1vMjzxHVbtmAwn3QYamz6nHKGmf8s
+ Juy+S/Z2xlY7ks18
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,95 +74,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Peter Seiderer <ps.report@gmx.net>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- add upstream patch ([1]) to fix compile with gpsd-3.23.1
+Bump to version 3.1.0 by:
+- adding upstream patch[1] to prevent build failure on 32-bit arm
+- requiring BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 instead of _4_8 in this
+package taking care of reverse dependencies, since now harfbuzz requires
+gcc 4.9 to be built successfully.
 
-Fixes:
+[1]: https://github.com/harfbuzz/harfbuzz/commit/07dc34bdaf977a3be97ab5a68455ed7a67f80a06
 
-  - http://autobuild.buildroot.org/results/53b06e72fb2d8b4c8b6ba41baf775ff33654cd18
-  - http://autobuild.buildroot.net/results/54cae924711e26f04045f8208db0d772292a3933
-
-  src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
-  src/gpsdclient.c:374:30: error: 'STATUS_NO_FIX' undeclared (first use in this function); did you mean 'STATUS_PPS_FIX'?
-    374 |   if (gpsdata->fix.status == STATUS_NO_FIX) {
-        |                              ^~~~~~~~~~~~~
-        |                              STATUS_PPS_FIX
-
-[1] https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-Changes v1 -> v2:
+ ...-around-GCC-cast-align-error-warning.patch | 35 +++++++++++++++++++
+ package/harfbuzz/Config.in                    |  6 ++--
+ package/harfbuzz/harfbuzz.hash                |  2 +-
+ package/harfbuzz/harfbuzz.mk                  |  2 +-
+ package/libass/Config.in                      |  6 ++--
+ package/mupdf/Config.in                       |  6 ++--
+ package/pango/Config.in                       |  2 +-
+ package/qt5/qt5base/Config.in                 |  2 +-
+ package/supertuxkart/Config.in                |  2 +-
+ 9 files changed, 49 insertions(+), 14 deletions(-)
+ create mode 100644 package/harfbuzz/0002-mutex-Try-work-around-GCC-cast-align-error-warning.patch
 
-  - previous upstream patch was (after some discussion) reverted and
-    replaced with the now provided one
----
- ...client.c-drop-handling-of-gpsdata-fi.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
-
-diff --git a/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
+diff --git a/package/harfbuzz/0002-mutex-Try-work-around-GCC-cast-align-error-warning.patch b/package/harfbuzz/0002-mutex-Try-work-around-GCC-cast-align-error-warning.patch
 new file mode 100644
-index 0000000000..7ea3fbadd7
+index 0000000000..965205c9d1
 --- /dev/null
-+++ b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
-@@ -0,0 +1,49 @@
-+From 665051a845464c0f95edb81432104dac39426f79 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Nov 2021 15:50:58 +0100
-+Subject: [PATCH] lib/pud/src/gpsdclient.c: drop handling of
-+ gpsdata->fix.status
++++ b/package/harfbuzz/0002-mutex-Try-work-around-GCC-cast-align-error-warning.patch
+@@ -0,0 +1,35 @@
++From 07dc34bdaf977a3be97ab5a68455ed7a67f80a06 Mon Sep 17 00:00:00 2001
++From: Behdad Esfahbod <behdad@behdad.org>
++Date: Fri, 5 Nov 2021 14:45:20 -0700
++Subject: [PATCH] [mutex] Try work around GCC cast-align error/warning
 +
-+Here is an extract of https://gpsd.gitlab.io/gpsd/gpsd_json.html:
++Shouldn't be needed because of the alignas(). Oh well...
 +
-+The optional "status" field (aka fix type), is a modifier (adjective) to
-+mode. It is not a replacement for, or superset of, the "mode" field. It
-+is almost, but not quite, the same as the NMEA 4.x xxGGA GPS Quality
-+Indicator Values. Many GNSS receivers do not supply it. Those that do
-+interpret the specification in various incompatible ways.
++Might fix https://github.com/harfbuzz/harfbuzz/issues/3283
 +
-+So status field is optional and STATUS_NO_FIX has been explicitly
-+renamed into STATUS_UNK to avoid confusion with MODE_NO_FIX (which is
-+already handled by gpsdclient.c) so drop the if block to fix the build
-+failure with gpsd >= 3.23.1.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream: https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 +---
-+ lib/pud/src/gpsdclient.c | 9 ---------
-+ 1 file changed, 9 deletions(-)
++ src/hb-mutex.hh | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
-+index a2a9cee0..d448867d 100644
-+--- a/lib/pud/src/gpsdclient.c
-++++ b/lib/pud/src/gpsdclient.c
-+@@ -370,15 +370,6 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+           );
++diff --git a/src/hb-mutex.hh b/src/hb-mutex.hh
++index 4e135027f..6914b2245 100644
++--- a/src/hb-mutex.hh
+++++ b/src/hb-mutex.hh
++@@ -97,10 +97,13 @@ struct hb_mutex_t
++   /* Create space for, but do not initialize m. */
++   alignas(hb_mutex_impl_t) char m[sizeof (hb_mutex_impl_t)];
 + 
-+   gpsdata->set &= ~STATUS_SET; /* always valid */
-+-  #if GPSD_API_MAJOR_VERSION >= 10
-+-  if (gpsdata->fix.status == STATUS_NO_FIX) {
-+-  #else
-+-  if (gpsdata->status == STATUS_NO_FIX) {
-+-  #endif
-+-    nmeaInfoClear(info);
-+-    nmeaTimeSet(&info->utc, &info->present, NULL);
-+-    return;
-+-  }
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wcast-align"
++   void init   () { hb_mutex_impl_init   ((hb_mutex_impl_t *) m); }
++   void lock   () { hb_mutex_impl_lock   ((hb_mutex_impl_t *) m); }
++   void unlock () { hb_mutex_impl_unlock ((hb_mutex_impl_t *) m); }
++   void fini   () { hb_mutex_impl_finish ((hb_mutex_impl_t *) m); }
+++#pragma GCC diagnostic pop
++ };
 + 
-+   if (!gpsdata->set) {
-+     return;
++ struct hb_lock_t
 +-- 
-+2.33.1
++2.25.1
 +
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+index 8bc88f4284..2e4219ee22 100644
+--- a/package/harfbuzz/Config.in
++++ b/package/harfbuzz/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	bool "harfbuzz"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  HarfBuzz is an OpenType text shaping engine
+ 
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	  Harfbuzz can make optional use of cairo, freetype,
+ 	  glib2 and icu packages if they are selected.
+ 
+-comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
++comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 97fc5a2c5f..cf81f6634a 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  036b0ee118451539783ec7864148bb4106be42a2eb964df4e83e6703ec46f3d9  harfbuzz-3.0.0.tar.xz
++sha256  2359390944a74a933d2b1bd214754a5b3f817916a09c6d4ca3d263473cf19b8e  harfbuzz-3.1.0.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 4534d166ef..f3ec3887d6 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 3.0.0
++HARFBUZZ_VERSION = 3.1.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+diff --git a/package/libass/Config.in b/package/libass/Config.in
+index 803f6b4438..d7725d5e1b 100644
+--- a/package/libass/Config.in
++++ b/package/libass/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBASS
+ 	bool "libass"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_LIBFRIBIDI
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBASS
+ 
+ 	  https://github.com/libass/libass
+ 
+-comment "libass needs a toolchain w/ C++, gcc >= 4.8"
++comment "libass needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+index ff176f4b99..cf97711160 100644
+--- a/package/mupdf/Config.in
++++ b/package/mupdf/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_MUPDF
+ 	bool "mupdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GUMBO_PARSER
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_MUPDF
+ 
+ 	  https://www.mupdf.com/index.html
+ 
+-comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "mupdf needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index cf5170c8f3..ff529ab0dc 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_PANGO
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBFRIBIDI
+ 	select BR2_PACKAGE_EXPAT
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e93b2dec38..a328190a98 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -237,7 +237,7 @@ config BR2_PACKAGE_QT5BASE_HARFBUZZ
+ 	bool "harfbuzz support"
+ 	select BR2_PACKAGE_HARFBUZZ if \
+ 		BR2_TOOLCHAIN_HAS_SYNC_4 && \
+-		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  This option enables HarfBuzz support (either system harfbuzz
+ 	  if the toolchain supports __sync for 4 bytes, or the qt
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index 8af006d632..a18b9c1a0a 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # openal
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz, openal
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
+ 	depends on BR2_PACKAGE_HAS_LIBGL
 -- 
-2.33.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
