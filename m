@@ -2,60 +2,60 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB09BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 08:49:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B4AC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 08:55:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9E9EE60EDF
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 08:49:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E9EE60EDF
+	by mail.kernel.org (Postfix) with ESMTPS id 2E36F61059
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 08:55:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2E36F61059
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C72360AE2;
-	Sat,  6 Nov 2021 08:49:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED44D8290B;
+	Sat,  6 Nov 2021 08:55:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id On46fsfz9pGo; Sat,  6 Nov 2021 08:55:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58CBB828DA;
+	Sat,  6 Nov 2021 08:55:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 310AE1BF3EB
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 08:55:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D7786075E
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 08:55:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id URMLIJ0QQV78; Sat,  6 Nov 2021 08:49:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C90756075E;
-	Sat,  6 Nov 2021 08:49:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 38F611BF3EB
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 08:49:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27AF94020D
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 08:49:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TmhWjvHWw5Zc for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 08:49:03 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eAOs61c72NWC for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 08:55:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 040614015F
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 08:49:02 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout03.t-online.de (Postfix) with SMTP id 895BC12F1
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 09:49:00 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.204.142]) by fwd72.t-online.de
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F3AB260594
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 08:55:28 +0000 (UTC)
+Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
+ by mailout01.t-online.de (Postfix) with SMTP id 2175963C9
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 09:52:31 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.204.142]) by fwd75.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mjHNj-1foVm50; Sat, 6 Nov 2021 09:48:59 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40872)
+ esmtp id 1mjHPc-0Lat850; Sat, 6 Nov 2021 09:50:56 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40874)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mjHNj-0002qj-5a
- for buildroot@buildroot.org; Sat, 06 Nov 2021 09:48:59 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mjHPc-0003B5-94
+ for buildroot@buildroot.org; Sat, 06 Nov 2021 09:50:56 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 09:48:59 +0100
-Message-Id: <20211106084859.8657-1-bernd.kuhls@t-online.de>
+Date: Sat,  6 Nov 2021 09:50:56 +0100
+Message-Id: <20211106085056.8814-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1636188539-00001454-882D5AE9/0/0 CLEAN NORMAL
-X-TOI-MSGID: 1af93fd4-0284-4250-99df-fd17fb649370
-Subject: [Buildroot] [PATCH 1/1] package/tor: version to 0.4.6.8
+X-TOI-EXPURGATEID: 150726::1636188656-00001454-7D66BD87/0/0 CLEAN NORMAL
+X-TOI-MSGID: ed22ef9d-d5db-4cad-b916-726de0ecd11c
+Subject: [Buildroot] [PATCH v2 1/1] package/tor: bump version to 0.4.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,6 +77,8 @@ https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.6/ReleaseNotes
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: fixed typo in subject
+
  package/tor/tor.hash | 2 +-
  package/tor/tor.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
