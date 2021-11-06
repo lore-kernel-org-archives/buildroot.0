@@ -2,53 +2,51 @@ Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E898C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:11:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F2ABC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:20:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9139A611C0
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:11:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9139A611C0
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=grinn-global.com
+	by mail.kernel.org (Postfix) with ESMTPS id 8CDBE611C4
+	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 10:20:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8CDBE611C4
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D8EB405F8;
-	Sat,  6 Nov 2021 10:11:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3cm9MuWM6WK; Sat,  6 Nov 2021 10:11:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD0E9405F2;
-	Sat,  6 Nov 2021 10:11:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 380D91BF2AE
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:11:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E30960731
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:11:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59D4F60BE0;
+	Sat,  6 Nov 2021 10:20:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OWycGhV-ekKZ for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 10:11:54 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 883236071C
- for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:11:54 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (12)
-Received: from bartekk-pc.lan (host-81-161-202-9.oxylion.net.pl [81.161.202.9])
- by server220076.nazwa.pl (Postfix) with ESMTP id 32E2D1C50DB;
- Sat,  6 Nov 2021 11:11:51 +0100 (CET)
-From: Bartosz Bilas <b.bilas@grinn-global.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tRbgeYPRbK41; Sat,  6 Nov 2021 10:20:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1A1C60AE2;
+	Sat,  6 Nov 2021 10:20:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 00E9A1BF2AE
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:20:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2D51400CF
+ for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 10:20:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NxRLbVgxlfvr for <buildroot@lists.busybox.net>;
+ Sat,  6 Nov 2021 10:20:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC807400CC
+ for <buildroot@buildroot.org>; Sat,  6 Nov 2021 10:20:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 401528806E; Sat,  6 Nov 2021 10:16:44 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  6 Nov 2021 11:11:48 +0100
-Message-Id: <20211106101148.295572-1-b.bilas@grinn-global.com>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/stm32mp157c_odyssey: specify uboot
- custom version
+Date: Sat, 6 Nov 2021 11:19:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bd2318df7b92cfe3a87273cc38f8ad1767419b9b
+X-Git-Newrev: 57a950754227d768f84a85266850e47172310ea9
+X-Patchwork-Hint: ignore
+Message-Id: <20211106101644.401528806E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: expand for 2021.11-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,37 +58,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-According to buildroot requirements set custom uboot
-version instead of relying on the newest one.
+commit: https://git.buildroot.net/buildroot/commit/?id=57a950754227d768f84a85266850e47172310ea9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/stm32mp157c_odyssey_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ CHANGES | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/configs/stm32mp157c_odyssey_defconfig b/configs/stm32mp157c_odyssey_defconfig
-index 8639c6ee6c..22a8ff0a1f 100644
---- a/configs/stm32mp157c_odyssey_defconfig
-+++ b/configs/stm32mp157c_odyssey_defconfig
-@@ -22,6 +22,9 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--- 
-2.33.1
-
+diff --git a/CHANGES b/CHANGES
+index 93d191682d..676f195e01 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,7 +1,7 @@
+ 2021.11-rc1, to be released
+ 
+ 	Numerous package updates. Notable updates including numerous
+-	Python modules, as well as Kodi add-ons.
++	Python modules, Kodi add-ons, nodejs, OpenJDK.
+ 
+ 	Toolchain:
+ 	- glibc update to 2.34
+@@ -33,16 +33,21 @@
+ 	Removed defconfigs: qemu_csky
+ 
+ 	New packages: dtbocfg, firmware-utils, gstd, libdbi,
+-	libdbi-drivers, lua-augeas, mstpd, php-pecl-dbus,
++	libdbi-drivers, libteam, lua-augeas, mstpd, php-pecl-dbus,
+ 	python-aioprocessing, python-bidict,
+ 	python-charset-normalizer, python-flask-expects-json,
+-	python-git, python-pyndiff, python-rsa, python-xmljson,
++	python-git, python-pyndiff, python-rsa,
++	python-unitest-xml-reporting, python-xmljson,
+ 	python3-cryptography, python3-pip, qt5opcua, rwmem,
+ 	sloci-image, softhsm2, uqmi, vuejs-router, watchdogd,
+ 	wireplumber
+ 
+ 	Removed packages: canfestival, python-meld3
+ 
++	Work toward the removal of python 2 has progressed: many
++	python modules and packages have been updated to a version
++	supporting python 3.
++
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+ 	#14271: compilation error with rsync command for  permission
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
