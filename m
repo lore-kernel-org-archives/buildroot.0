@@ -2,70 +2,73 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB0C4C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 13:10:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C318C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 13:15:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 07A9D6103D
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 13:10:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 07A9D6103D
+	by mail.kernel.org (Postfix) with ESMTPS id B1A936112D
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 13:15:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B1A936112D
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gadz.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9156A60656;
-	Sun,  7 Nov 2021 13:10:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6bGP5tJB1QCj; Sun,  7 Nov 2021 13:10:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FD7C60665;
-	Sun,  7 Nov 2021 13:10:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0E8E31BF2CB
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 13:10:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F246680EF1
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 13:10:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A90780F0E;
+	Sun,  7 Nov 2021 13:15:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EZ3bYlU4JCdZ for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 13:10:23 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id apZlx2ZCfvaV; Sun,  7 Nov 2021 13:15:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85BD180F10;
+	Sun,  7 Nov 2021 13:15:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 863BF1BF2CB
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 13:15:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8229C40188
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 13:15:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 53sz6cTR_9ua for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 13:15:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com
  [209.85.208.176])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A22D180EE2
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 13:10:23 +0000 (UTC)
-Received: by mail-lj1-f176.google.com with SMTP id d11so2811725ljg.8
- for <buildroot@buildroot.org>; Sun, 07 Nov 2021 05:10:23 -0800 (PST)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4EF92400C7
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 13:15:08 +0000 (UTC)
+Received: by mail-lj1-f176.google.com with SMTP id v15so16915028ljc.0
+ for <buildroot@buildroot.org>; Sun, 07 Nov 2021 05:15:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=LwGLoDYCEo8oz1r4S8O0vM0m1Gg1/xgN27cJt/27ahI=;
- b=aicU/kZGJtWnhk/CDgHxblOiR1GUG0EiwaoWoSRTrAln97fD8OJibcjwloEkvMfqD/
- tgvU1Jb6lWW0VZXaunZ6e7shnumFEB7qgjElcyl2xfRgSEFANq86cmGBRELhcYqtMDdY
- 2nOwalYNUKHKV/RgS48lGfIik4A9RdAFfAW2hkl1P/ioA5GHcsCjIb8XlkIQHPK10pvV
- c0uEziJdORFpOatv0VFWB3ZLUtejqGV35zyir97cuRV6WSUKSDRhHQtjz6rt1WQprj6c
- qN0TmU+0WPE+SDmQqMrjdXMNhysCV6H/1K5oB4q+H4zl4B1c/u5HeLOzLl/6HlYI1HI5
- nXKA==
-X-Gm-Message-State: AOAM530eHFNVzW64RnZgRVwLALHpTovRCyWL68lyvvbh58T/+PJCuwcn
- qCD4RELPRuQXm+qi6WGE3dzGpT3IctXR18WNU/hm2aHaAtUkeg==
-X-Google-Smtp-Source: ABdhPJxrHT7a0ydM1Hm0E+VmFez/bFkG5qu9nbxLI5J5gNPPiHAkk0L2qNjqKVoauhStURmOjGOCorLFOkmu7/3H9YQ=
-X-Received: by 2002:a2e:9699:: with SMTP id q25mr1380561lji.6.1636290621492;
- Sun, 07 Nov 2021 05:10:21 -0800 (PST)
+ bh=voSuHKKeEYF+UeiO5L9SerAjBkVcUTs/mI2TbS8rXoc=;
+ b=zU7tX06bOSNfx8dlT6qZW8N5vMcnysgl0XTHJ/6nZOOwUWtp8grSiMrDTybvqiEU+i
+ v+UumJ4UlHrn3AGdumL1Xtv9hWv+ikK0h19nYTxKoKPgRcnJYzDAkzZKufmdVQVyeyMd
+ 3p9nUKS2DciEQAEjCd8LgluxN7zZzvVslbcaQW+myTmlvtDPoMm2xc1AH4IvbqjaPhiy
+ r9G/KWh2QmmXnvenACdAU0nud8rlSmG1cM37Qzwo+xJCGT69SLpD2JIoiGrvMl7u4Pu5
+ TzKK6tzLU5GVAmwOvRq2ADljhnQWSealEYxqRnjIwFMiLsmdX+L5QTuebHEzuk8jdFQ0
+ BScw==
+X-Gm-Message-State: AOAM533rMt0bc0UN3LI184uxg/PduetFkYR1AJtzMndCGquo0ssNED0s
+ O4jvE55jxESL7GhcogUvNBGbKwQLPhHcUzW1ClG5dIecEAvKpQ==
+X-Google-Smtp-Source: ABdhPJwQtF6SJDaH9FMGX1BP16ZqQxekOJhL1OCP/zA5++y0Fq6H2sgD+BKHT/g7t75l0dckZbI5gL0PrGbCD5UqDHM=
+X-Received: by 2002:a2e:bc19:: with SMTP id b25mr48946765ljf.434.1636290906250; 
+ Sun, 07 Nov 2021 05:15:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20211031210258.654193-1-romain.naour@gmail.com>
- <b37969629a8e4c8f1d44b818eb0470aa5975e0f4.camel@embedded.rocks>
-In-Reply-To: <b37969629a8e4c8f1d44b818eb0470aa5975e0f4.camel@embedded.rocks>
+References: <20211106190057.2487641-1-romain.naour@gmail.com>
+ <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
+ <89f9350d-63a6-4953-a212-3e2f17aa5a5f@gmail.com>
+ <CAB0FRsuJ-37rquRvLsq+n5sg8gJo0PJU2-aRDqGn-kRkUju=Ug@mail.gmail.com>
+ <4eb0d55eb4e537aaa4ce604127038b43212d8de2.camel@embedded.rocks>
+In-Reply-To: <4eb0d55eb4e537aaa4ce604127038b43212d8de2.camel@embedded.rocks>
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 7 Nov 2021 14:10:09 +0100
-Message-ID: <CAB0FRsuz3tV5HT1jL7JUdccane8EEM2BUJWxWSHgo1L3oQ2=Og@mail.gmail.com>
+Date: Sun, 7 Nov 2021 14:14:54 +0100
+Message-ID: <CAB0FRstT9fZVUESTavowBf10p=0HZoNjgyh3tKxVUbgKwgn=GQ@mail.gmail.com>
 To: buildroot <buildroot@buildroot.org>
-Subject: Re: [Buildroot] [WIP 1/2] package/luvi: don't use LUAJIT_VERSION
- for the luajit installation path
+Subject: Re: [Buildroot] [PATCH] Revert "package/luajit: back to mainline
+ and bump to 05f1984e"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,276 +82,167 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Romain Naour <romain.naour@gmail.com>,
  =?UTF-8?B?SsO2cmcgS3JhdXNl?= <joerg.krause@embedded.rocks>
-Content-Type: multipart/mixed; boundary="===============1248907435855191153=="
+Content-Type: multipart/mixed; boundary="===============1623474675828986316=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1248907435855191153==
-Content-Type: multipart/alternative; boundary="0000000000003e5c9705d0329992"
+--===============1623474675828986316==
+Content-Type: multipart/alternative; boundary="000000000000376f0505d032aad9"
 
---0000000000003e5c9705d0329992
+--000000000000376f0505d032aad9
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le dim. 7 nov. 2021 =C3=A0 11:47, J=C3=B6rg Krause <joerg.krause@embedded.r=
+Le dim. 7 nov. 2021 =C3=A0 12:12, J=C3=B6rg Krause <joerg.krause@embedded.r=
 ocks> a
 =C3=A9crit :
 
-> Hi Romain,
+> Hi Fran=C3=A7ois, Hi Romain,
 >
-> I can confirm that this fixes the following build error:
+> the issue has nothing to do with static linking (the issue Romain cited
+> was raised by in 2015 has been fixed long time ago) nor is it an issue
+> about moonjit vs luajit as correctly stated by Fran=C3=A7ois. Also, it is
+> not about setting `LUAJIT_ENABLE_LUA52COMPAT`.
+>
+> After applying the patch [1] from Romain I am building and running luvi
+> on my machine successfully:
 >
 > ```
-> PATH=3D"$BR/output/host/bin:$BR/output/host/sbin:/usr/local/bin:/usr/bin:=
-/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor=
-_perl:/usr/bin/core_perl"
-> /usr/bin/make -j9  -C $BR/output/build/luvi-2.12.0/
-> make[1]: Entering directory '$BR/output/build/luvi-2.12.0'
-> make[2]: Entering directory '$BR/output/build/luvi-2.12.0'
-> make[3]: Entering directory '$BR/output/build/luvi-2.12.0'
-> [ 50%] Building Luajitted
-> $BR/output/build/luvi-2.12.0/src/lua/luvibundle.lua:
-> $BR/output/build/luvi-2.12.0/jitted_tmp/src/lua/luvibundle.lua_luvi_gener=
-ated.o
-> [ 50%] Building Luajitted
-> $BR/output/build/luvi-2.12.0/src/lua/luvipath.lua:
-> $BR/output/build/luvi-2.12.0/jitted_tmp/src/lua/luvipath.lua_luvi_generat=
-ed.o
-> [ 50%] Building Luajitted $BR/output/build/luvi-2.12.0/src/lua/init.lua:
+> LD_LIBRARY_PATH=3D"./output/target/usr/lib/:./output/target/lib"
+> ./output/target/usr/bin/luvi
+> ./output/target/usr/bin/luvi v2.12.0
+> libuv: 1.42.0
+> ```
+>
+> The file `init.lua` is Luajitted into an object file:
+> ```
+> Building $BR/output/host/share/luajit-2.1.0-beta3/?.lua Luajitted
+> $BR/output/build/luvi-2.12.0/src/lua/init.lua:
 > $BR/output/build/luvi-2.12.0/jitted_tmp/src/lua/init.lua_luvi_generated.o
-> luajit: unknown luaJIT command or jit.* modules not installed
-> luajit: unknown luaJIT command or jit.* modules not installed
-> make[3]: *** [CMakeFiles/luvi.dir/build.make:78:
-> jitted_tmp/src/lua/luvipath.lua_luvi_generated.o] Error 1
 > ```
 >
-> The issue is, that LUA_PATH is set to
-> `$BR/output/host/share/luajit-05f1984e1a862e4b3d3c3b370c773492e2edf84a/?.=
-lua`,
-> which is wrong, as the installation path of luajit is
-> `$BR/output/host/share/luajit-2.1.0-beta3/`.
->
-> So, the fix proposed by Romain is correct.
->
-> Tested-by: J=C3=B6rg Krause <joerg.krause@embedded.rocks>
+> My first guess is, that the byte code generated by luajit is generated
+> for a different machine than luvi is actually running on. Is
+> `file
+> output/build/luvi-2.12.0/jitted_tmp/src/lua/init.lua_luvi_generated.o`
+> printing the correct file type information?
 >
 >
-I agree.
+correct, src/init.lua is bytecoded in
+jitted_tmp/lua/src/init.lua_luvi_generated.o
+by the following command :
+LUA_PATH=3D.../host/share/luajit-2.1.0-beta3/?.lua \
+luajit -b -a arm .../src/lua/init.lua
+.../jitted_tmp/src/lua/init.lua_luvi_generated.o
 
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+$ nm .../jitted_tmp/src/lua/init.lua_luvi_generated.o
+00000000 R luaJIT_BC_init
+
+$ file .../jitted_tmp/src/lua/init.lua_luvi_generated.o
+jitted_tmp/src/lua/init.lua_luvi_generated.o: ELF 32-bit LSB relocatable,
+ARM, version 1 (SYSV), not stripped
+
+$ nm .../luvi | grep luaJIT_BC_
+000173e3 R luaJIT_BC_init
+00018248 R luaJIT_BC_luvibundle
+00017d28 R luaJIT_BC_luvipath
+
+$ file .../luvi
+luvi: ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV),
+dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux
+3.2.0, with debug_info, not stripped
+
+The LuaJIT bytecode is platform independent (not the case for PUC Lua).
+The bytecode could exported as C array in a .c or .h file :
+    const unsigned char luaJIT_BC_init[] =3D {
+    ...
+when exported as .o or .obj, the option -a allows to set the target
+architecture.
 
 Fran=C3=A7ois
 
 
+> [1]
+> http://patchwork.ozlabs.org/project/buildroot/patch/20211031210258.654193=
+-1-romain.naour@gmail.com/
+>
 > Best regards
 > J=C3=B6rg Krause
 >
-> On Sun, 2021-10-31 at 22:02 +0100, Romain Naour wrote:
-> > Luajit package has been recently updated to the latest commit in the
-> > master branch [1]. Since then LUAJIT_VERSION doesn't contain the luajit
-> > version anymore but a commit hash:
-> >
-> > LUAJIT_VERSION =3D 05f1984e1a862e4b3d3c3b370c773492e2edf84a
-> >
-> > Use pkg-config --variable=3Dversion luajit in luvi package to set
-> > LUA_PATH correctly.
-> >
-> > Fixes:
-> > luajit: unknown luaJIT command or jit.* modules not installed
-> >
-> > https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552605
-> >
-> > [1] 9450b53c8e06f1b5a75840b82c0f4663a5d75c45
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > Cc: J=C3=B6rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > The TestLuvi doesn't work yet due to missing rng support on Qemu armv7
-> target
-> > used to run the test. luvi -v is stuck due to getrandom().
-> > ---
-> >  package/luvi/luvi.mk | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-> > index 386daafc31..ef5777cac8 100644
-> > --- a/package/luvi/luvi.mk
-> > +++ b/package/luvi/luvi.mk
-> > @@ -9,7 +9,7 @@ LUVI_SOURCE =3D luvi-src-v$(LUVI_VERSION).tar.gz
-> >  LUVI_SITE =3D
-> https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
-> >  LUVI_LICENSE =3D Apache-2.0
-> >  LUVI_LICENSE_FILES =3D LICENSE.txt
-> > -LUVI_DEPENDENCIES =3D libuv luajit luv host-luajit
-> > +LUVI_DEPENDENCIES =3D libuv luajit luv host-luajit host-pkgconf
-> >
-> >  # Dispatch all architectures of LuaJIT
-> >  ifeq ($(BR2_i386),y)
-> > @@ -30,12 +30,16 @@ else
-> >  LUVI_TARGET_ARCH =3D $(BR2_ARCH)
-> >  endif
-> >
-> > +# LUAJIT_VERSION and the luajit installation path may not use the
-> > +# same value. Use the value from luajit.pc file.
-> > +LUVI_LUAJIT_VERSION =3D $(shell $(PKG_CONFIG_HOST_BINARY)
-> --variable=3Dversion luajit)
-> > +
-> >  # Bundled lua bindings have to be linked statically into the luvi
-> executable
-> >  LUVI_CONF_OPTS =3D \
-> >       -DBUILD_SHARED_LIBS=3DOFF \
-> >       -DWithSharedLibluv=3DON \
-> >       -DTARGET_ARCH=3D$(LUVI_TARGET_ARCH) \
-> > -     -DLUA_PATH=3D$(HOST_DIR)/share/luajit-$(LUAJIT_VERSION)/?.lua
-> > +     -DLUA_PATH=3D$(HOST_DIR)/share/luajit-$(LUVI_LUAJIT_VERSION)/?.lu=
-a
-> >
-> >  # Add "rex" module (PCRE via bundled lrexlib)
-> >  ifeq ($(BR2_PACKAGE_PCRE),y)
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 >
 
---0000000000003e5c9705d0329992
+--000000000000376f0505d032aad9
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
 <div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0dim. 7 nov. 2021 =C3=A0=C2=A0=
-11:47, J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt; a =C3=A9crit=C2=
+12:12, J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt; a =C3=A9crit=C2=
 =A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
- 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Romain,<=
-br>
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Fran=C3=
+=A7ois, Hi Romain,<br>
 <br>
-I can confirm that this fixes the following build error:<br>
+the issue has nothing to do with static linking (the issue Romain cited<br>
+was raised by in 2015 has been fixed long time ago) nor is it an issue<br>
+about moonjit vs luajit as correctly stated by Fran=C3=A7ois. Also, it is<b=
+r>
+not about setting `LUAJIT_ENABLE_LUA52COMPAT`.<br>
+<br>
+After applying the patch [1] from Romain I am building and running luvi<br>
+on my machine successfully:<br>
 <br>
 ```<br>
-PATH=3D&quot;$BR/output/host/bin:$BR/output/host/sbin:/usr/local/bin:/usr/b=
-in:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/ven=
-dor_perl:/usr/bin/core_perl&quot;=C2=A0 /usr/bin/make -j9=C2=A0 -C $BR/outp=
-ut/build/luvi-2.12.0/<br>
-make[1]: Entering directory &#39;$BR/output/build/luvi-2.12.0&#39;<br>
-make[2]: Entering directory &#39;$BR/output/build/luvi-2.12.0&#39;<br>
-make[3]: Entering directory &#39;$BR/output/build/luvi-2.12.0&#39;<br>
-[ 50%] Building Luajitted $BR/output/build/luvi-2.12.0/src/lua/luvibundle.l=
-ua: $BR/output/build/luvi-2.12.0/jitted_tmp/src/lua/luvibundle.lua_luvi_gen=
-erated.o<br>
-[ 50%] Building Luajitted $BR/output/build/luvi-2.12.0/src/lua/luvipath.lua=
-: $BR/output/build/luvi-2.12.0/jitted_tmp/src/lua/luvipath.lua_luvi_generat=
-ed.o<br>
-[ 50%] Building Luajitted $BR/output/build/luvi-2.12.0/src/lua/init.lua: $B=
-R/output/build/luvi-2.12.0/jitted_tmp/src/lua/init.lua_luvi_generated.o<br>
-luajit: unknown luaJIT command or jit.* modules not installed<br>
-luajit: unknown luaJIT command or jit.* modules not installed<br>
-make[3]: *** [CMakeFiles/luvi.dir/build.make:78: jitted_tmp/src/lua/luvipat=
-h.lua_luvi_generated.o] Error 1<br>
+LD_LIBRARY_PATH=3D&quot;./output/target/usr/lib/:./output/target/lib&quot; =
+./output/target/usr/bin/luvi<br>
+./output/target/usr/bin/luvi v2.12.0<br>
+libuv: 1.42.0<br>
 ```<br>
 <br>
-The issue is, that LUA_PATH is set to `$BR/output/host/share/luajit-05f1984=
-e1a862e4b3d3c3b370c773492e2edf84a/?.lua`, which is wrong, as the installati=
-on path of luajit is `$BR/output/host/share/luajit-2.1.0-beta3/`.<br>
+The file `init.lua` is Luajitted into an object file: <br>
+```<br>
+Building $BR/output/host/share/luajit-2.1.0-beta3/?.lua Luajitted $BR/outpu=
+t/build/luvi-2.12.0/src/lua/init.lua: $BR/output/build/luvi-2.12.0/jitted_t=
+mp/src/lua/init.lua_luvi_generated.o<br>
+```<br>
 <br>
-So, the fix proposed by Romain is correct.<br>
+My first guess is, that the byte code generated by luajit is generated<br>
+for a different machine than luvi is actually running on. Is<br>
+`file output/build/luvi-2.12.0/jitted_tmp/src/lua/init.lua_luvi_generated.o=
+`<br>
+printing the correct file type information?<br>
+<br></blockquote><div><br></div><div>correct, src/init.lua is bytecoded in =
+jitted_tmp/lua/src/init.lua_luvi_generated.o<br>by the following command :<=
+br>LUA_PATH=3D.../host/share/luajit-2.1.0-beta3/?.lua \<br>luajit -b -a arm=
+ .../src/lua/init.lua .../jitted_tmp/src/lua/init.lua_luvi_generated.o<br><=
+br>$ nm .../jitted_tmp/src/lua/init.lua_luvi_generated.o <br>00000000 R lua=
+JIT_BC_init<br><br>$ file .../jitted_tmp/src/lua/init.lua_luvi_generated.o =
+<br>jitted_tmp/src/lua/init.lua_luvi_generated.o: ELF 32-bit LSB relocatabl=
+e, ARM, version 1 (SYSV), not stripped<br><br>$ nm .../luvi | grep luaJIT_B=
+C_<br>000173e3 R luaJIT_BC_init<br>00018248 R luaJIT_BC_luvibundle<br>00017=
+d28 R luaJIT_BC_luvipath<br><br>$ file .../luvi<br>luvi: ELF 32-bit LSB pie=
+ executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /=
+lib/ld-linux-armhf.so.3, for GNU/Linux 3.2.0, with debug_info, not stripped=
+<br><br>The LuaJIT bytecode is platform independent (not the case for PUC L=
+ua).<br>The bytecode could exported as C array in a .c or .h file :<br>=C2=
+=A0 =C2=A0 const unsigned char luaJIT_BC_init[] =3D {<br>=C2=A0 =C2=A0 ...<=
+br>when exported as .o or .obj, the option -a allows to set the target arch=
+itecture.<br><br>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+[1] <a href=3D"http://patchwork.ozlabs.org/project/buildroot/patch/20211031=
+210258.654193-1-romain.naour@gmail.com/" rel=3D"noreferrer" target=3D"_blan=
+k">http://patchwork.ozlabs.org/project/buildroot/patch/20211031210258.65419=
+3-1-romain.naour@gmail.com/</a><br>
 <br>
-Tested-by: J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt;<br>
-<br></blockquote><div><br></div><div>I agree.<br></div><div><br></div><div>=
-Acked-by: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org">f=
-rancois.perrad@gadz.org</a>&gt;</div><div><br></div><div>Fran=C3=A7ois<br><=
-/div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
- 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
 Best regards<br>
 J=C3=B6rg Krause<br>
-<br>
-On Sun, 2021-10-31 at 22:02 +0100, Romain Naour wrote:<br>
-&gt; Luajit package has been recently updated to the latest commit in the<b=
-r>
-&gt; master branch [1]. Since then LUAJIT_VERSION doesn&#39;t contain the l=
-uajit<br>
-&gt; version anymore but a commit hash:<br>
-&gt; <br>
-&gt; LUAJIT_VERSION =3D 05f1984e1a862e4b3d3c3b370c773492e2edf84a<br>
-&gt; <br>
-&gt; Use pkg-config --variable=3Dversion luajit in luvi package to set<br>
-&gt; LUA_PATH correctly.<br>
-&gt; <br>
-&gt; Fixes:<br>
-&gt; luajit: unknown luaJIT command or jit.* modules not installed<br>
-&gt; <br>
-&gt; <a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/171055260=
-5" rel=3D"noreferrer" target=3D"_blank">https://gitlab.com/buildroot.org/bu=
-ildroot/-/jobs/1710552605</a><br>
-&gt; <br>
-&gt; [1] 9450b53c8e06f1b5a75840b82c0f4663a5d75c45<br>
-&gt; <br>
-&gt; Signed-off-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@gmail.c=
-om" target=3D"_blank">romain.naour@gmail.com</a>&gt;<br>
-&gt; Cc: J=C3=B6rg Krause &lt;joerg.krause@embedded.rocks&gt;<br>
-&gt; ---<br>
-&gt; The TestLuvi doesn&#39;t work yet due to missing rng support on Qemu a=
-rmv7 target<br>
-&gt; used to run the test. luvi -v is stuck due to getrandom().<br>
-&gt; ---<br>
-&gt;=C2=A0 package/luvi/<a href=3D"http://luvi.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">luvi.mk</a> | 8 ++++++--<br>
-&gt;=C2=A0 1 file changed, 6 insertions(+), 2 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/luvi/<a href=3D"http://luvi.mk" rel=3D"noreferrer=
-" target=3D"_blank">luvi.mk</a> b/package/luvi/<a href=3D"http://luvi.mk" r=
-el=3D"noreferrer" target=3D"_blank">luvi.mk</a><br>
-&gt; index 386daafc31..ef5777cac8 100644<br>
-&gt; --- a/package/luvi/<a href=3D"http://luvi.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">luvi.mk</a><br>
-&gt; +++ b/package/luvi/<a href=3D"http://luvi.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">luvi.mk</a><br>
-&gt; @@ -9,7 +9,7 @@ LUVI_SOURCE =3D luvi-src-v$(LUVI_VERSION).tar.gz<br>
-&gt;=C2=A0 LUVI_SITE =3D <a href=3D"https://github.com/luvit/luvi/releases/=
-download/v$(LUVI_VERSION)" rel=3D"noreferrer" target=3D"_blank">https://git=
-hub.com/luvit/luvi/releases/download/v$(LUVI_VERSION)</a><br>
-&gt;=C2=A0 LUVI_LICENSE =3D Apache-2.0<br>
-&gt;=C2=A0 LUVI_LICENSE_FILES =3D LICENSE.txt<br>
-&gt; -LUVI_DEPENDENCIES =3D libuv luajit luv host-luajit<br>
-&gt; +LUVI_DEPENDENCIES =3D libuv luajit luv host-luajit host-pkgconf<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 # Dispatch all architectures of LuaJIT<br>
-&gt;=C2=A0 ifeq ($(BR2_i386),y)<br>
-&gt; @@ -30,12 +30,16 @@ else<br>
-&gt;=C2=A0 LUVI_TARGET_ARCH =3D $(BR2_ARCH)<br>
-&gt;=C2=A0 endif<br>
-&gt;=C2=A0 <br>
-&gt; +# LUAJIT_VERSION and the luajit installation path may not use the<br>
-&gt; +# same value. Use the value from luajit.pc file.<br>
-&gt; +LUVI_LUAJIT_VERSION =3D $(shell $(PKG_CONFIG_HOST_BINARY) --variable=
-=3Dversion luajit)<br>
-&gt; +<br>
-&gt;=C2=A0 # Bundled lua bindings have to be linked statically into the luv=
-i executable<br>
-&gt;=C2=A0 LUVI_CONF_OPTS =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DBUILD_SHARED_LIBS=3DOFF \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DWithSharedLibluv=3DON \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DTARGET_ARCH=3D$(LUVI_TARGET_ARCH) \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0-DLUA_PATH=3D$(HOST_DIR)/share/luajit-$(LUAJIT_VE=
-RSION)/?.lua<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DLUA_PATH=3D$(HOST_DIR)/share/luajit-$(LUVI_LUAJ=
-IT_VERSION)/?.lua<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 # Add &quot;rex&quot; module (PCRE via bundled lrexlib)<br>
-&gt;=C2=A0 ifeq ($(BR2_PACKAGE_PCRE),y)<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
+<br><br>
 </blockquote></div></div>
 
---0000000000003e5c9705d0329992--
+--000000000000376f0505d032aad9--
 
---===============1248907435855191153==
+--===============1623474675828986316==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -359,4 +253,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1248907435855191153==--
+--===============1623474675828986316==--
