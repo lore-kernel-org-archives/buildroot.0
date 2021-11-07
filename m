@@ -2,52 +2,61 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE634C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76EF2C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:59:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F29BA61374
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F29BA61374
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 070A2613A6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:59:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 070A2613A6
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C38DB60620;
-	Sun,  7 Nov 2021 08:45:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CEE360628;
+	Sun,  7 Nov 2021 08:59:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aPjoswJeWZvP; Sun,  7 Nov 2021 08:45:47 +0000 (UTC)
+	with ESMTP id OHVA8ChLRIew; Sun,  7 Nov 2021 08:59:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F53660627;
-	Sun,  7 Nov 2021 08:45:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92FB01BF3A8
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D76B60620;
+	Sun,  7 Nov 2021 08:59:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 426D41BF286
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82413402E5
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3263680CC3
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:59:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nIKltvbVrGQp for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 08:45:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7F4D402DF
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 08:45:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E61858B390; Sun,  7 Nov 2021 08:41:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A2nJ-4-AJtrw for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 08:59:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24DB480C03
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 08:59:44 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout07.t-online.de (Postfix) with SMTP id 12FB7D96D
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 09:58:41 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.204.142]) by fwd72.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mje0b-2UDxej0; Sun, 7 Nov 2021 09:58:37 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49368)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mje0b-0005j5-7K
+ for buildroot@buildroot.org; Sun, 07 Nov 2021 09:58:37 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 7 Nov 2021 09:42:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80623ea83743039f8f629563c040b5e893c27fc3
-X-Git-Newrev: d9123dd79956124ab1b39427764882b61fe44261
-X-Patchwork-Hint: ignore
-Message-Id: <20211107084151.E61858B390@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tpm2-tss: fix build on host
- without setfacl
+Date: Sun,  7 Nov 2021 09:58:37 +0100
+Message-Id: <20211107085837.2436545-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1636275517-00001454-4AE3D85C/0/0 CLEAN NORMAL
+X-TOI-MSGID: 2de47540-065b-4493-9f83-47647415fda7
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.14.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,87 +68,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9123dd79956124ab1b39427764882b61fe44261
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2020-17049:
+https://www.samba.org/samba/history/samba-4.14.9.html
 
-Fixes:
-http://autobuild.buildroot.org/results/eab44622f8d8ff4fbf464b5a98856382f019c2cb/
-
-Since the bump to 3.1.0 in commit 470e2e9bc521 (package/tpm2-tss: bump
-version to 3.1.0), the install is borked because it is looking for
-programs at configure time, so it finds those on the host if they exist,
-or do not find any at all, which can very well differ from what will be
-present on the target.
-
-But this is not totally unreasonable: there is no way, at cross-configure
-time, for a package to find the tools that will be present at runtime.
-
-All that can be done in such a case is to force the path to such tools.
-
-However, in this case, tpm2-tss only uses setfacl if systemd-tmpfiles is
-not available. If the call to setfacl fails, the install does not fail
-(split on two lines for readability):
-
-    @-$(call make_fapi_dirs) && $(call set_fapi_permissions) \
-    || echo "WARNING Failed to create the FAPI directories with the correct permissions"
-
-set_fapi_permissions is a macro that eventually expands to:
-
-    (chown -R tss:tss "$1") && \
-    (chmod -R 2775 "$1") && \
-    (setfacl -m default:group:tss:rwx "$1")
-
-So the call to setfacl will not even be ever attempted, because the
-chown will fail first. Furthermore, it would look for the 'tss' username
-and groupname from the host, which could differ from those on the
-target.
-
-So we can just fake the fact that setfacl is available.
-
-As for the permissions, they are to be set on a directory that is in
-${runstatedir}, i.e. /run, which is a tmpfs, so there is no way we can
-prepare them at build time. We'd need a startup script or systemd unit,
-or proper systemd-tmpfiles support, either of which can be done in a
-followup patch by an interested party...
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yair Ben-Avraham <yairba@protonmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tpm2-tss/tpm2-tss.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 8e701933c4..73764141a1 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -12,10 +12,16 @@ TPM2_TSS_CPE_ID_VENDOR = tpm2_software_stack_project
- TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
- TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
--TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc --disable-defaultflags
-+
- # 0001-configure-Only-use-CXX-when-fuzzing.patch
- TPM2_TSS_AUTORECONF = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f33b61e262..a571ba79f4 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.14.8.tar.asc
+-sha256  c936b782c2aced8cd7299c13bec67c495fd4affdb217a6ed6150f4fd6d770fde  samba-4.14.8.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.14.9.tar.asc
++sha256  7fb11818ef7f9bb817a3b21019358b1469aec98799057cc9e55933563361c409  samba-4.14.9.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 3faeb88e09..83eb2dacda 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+TPM2_TSS_CONF_OPTS = \
-+	ac_cv_prog_result_setfacl=yes \
-+	--with-crypto=ossl \
-+	--disable-doxygen-doc \
-+	--disable-defaultflags
-+
- # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
- TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
- 
+-SAMBA4_VERSION = 4.14.8
++SAMBA4_VERSION = 4.14.9
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
