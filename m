@@ -2,56 +2,86 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 371AFC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 18:25:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29049C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3E78A613B3
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 18:25:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3E78A613B3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6EB866120D
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EB866120D
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C87A940215;
-	Sun,  7 Nov 2021 18:25:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05C17606F9;
+	Sun,  7 Nov 2021 19:29:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J0c5rkP0wRPH; Sun,  7 Nov 2021 18:25:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tvhmrl8PbaXR; Sun,  7 Nov 2021 19:29:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4460F4020F;
-	Sun,  7 Nov 2021 18:25:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 673236069C;
+	Sun,  7 Nov 2021 19:29:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B61B51BF3EC
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 18:25:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 612531BF328
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 19:29:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3C8240122
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 18:25:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C58B400D8
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 19:29:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fkVXSI_DbVWB for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 18:25:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07B05400D0
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 18:25:42 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 4640020005;
- Sun,  7 Nov 2021 18:25:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mjmrJ-00035z-PH; Sun, 07 Nov 2021 19:25:37 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id 3CURVGAiu7VO for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 19:29:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 23A084024E
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 19:29:38 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r8so23089938wra.7
+ for <buildroot@buildroot.org>; Sun, 07 Nov 2021 11:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FWE4lGSGaywCW1pmRaF1TOH2ipP7+su/Rn1FFMb2ZVU=;
+ b=OVUVip954vkx0GBysVjyEl8jyB3IlL2n9k8d2H7hXyY/7EHtkJjimRsgmJOBGwRhf+
+ iTT9Eo4xCizyaxxbjIHmJg4P+8+FnOGdQTKuihWGlA7Uaz9hYx4v1PVeX+bP7jOertSy
+ W4o/tZtb0tsMjBpqa/PbU2K/6RylTUOqg10BzeZU12Qs1SBvcjGFg9PrD96+8hL8knxU
+ EBJVg4mDNgljyOgCbUvCa+rFIyoKPjjH7kF4p5o5UqU/wK2lwKdoZgKajl1VHOGDsP+n
+ lZoSLQELT20zTffNneinHLvxaSAT9EsJONjspEIbyqzFjXX1AqIxxc3sFNwBa6RT9vAK
+ KkYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FWE4lGSGaywCW1pmRaF1TOH2ipP7+su/Rn1FFMb2ZVU=;
+ b=gaxtiIpWXbe7R3szXeN4matyVJdfjgHorF6ZVTvvVMxzdTFXoMeHnnJPIxPRa2smp7
+ jcAo10lWLt0pUKnDpUy6C4ZWJqg5rw1tXeYUOy/Ra/wcKgGA9xOWKkvavcwGz9lM7OIF
+ patoQcwjISLpIO7asaIBoxFaGHck09zBoYdIDIAz9PLtKpBm+YX/BqSofp+3PbygxKxc
+ mqXFdnlxE71+5fvZ8Tj3ffPnreDsxvgagdB7+bEFHzX2Z39wLNsrx0Y65ReYOnt7HyhP
+ QO8IqMCMZhWZfIDYs4ew+R+CmDKOSYQpgaZKymevaIYO9AOXuJtgp2Xr1/Y1/gnnB2zL
+ x11w==
+X-Gm-Message-State: AOAM532DtqzZZV4EU8rBvOzC2kFwl0h5+5oL+tDZpgQplyutWeH4PdQz
+ WQ4GGIAj4t8gNoPS8/K8V/qzGH9l7GM=
+X-Google-Smtp-Source: ABdhPJzfRxSBQO7dJV8nqRNLFmypojJl9seurfYpszxqnLSo/5h6986Tm1Cg7xyaAV7Kdc0Qs+vXZw==
+X-Received: by 2002:adf:efc6:: with SMTP id i6mr69443364wrp.428.1636313376228; 
+ Sun, 07 Nov 2021 11:29:36 -0800 (PST)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id r15sm15017405wru.9.2021.11.07.11.29.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Nov 2021 11:29:35 -0800 (PST)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Nov 2021 19:25:35 +0100
-Message-Id: <20211107182536.11830-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+Date: Sun,  7 Nov 2021 20:29:29 +0100
+Message-Id: <20211107192930.370979-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/containerd: security bump to version
- 1.5.7
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_aarch64_sbsa_defconfig: use
+ ARM cortex a57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+When booting with cortex-a53, qemu refuse to start with the following message [1]:
 
-- CVE-2021-41103: Insufficiently restricted permissions on plugin
-  directories
-  https://github.com/advisories/GHSA-c2h3-6mxw-7mvq
+  qemu-system-aarch64: sbsa-ref: CPU type other than the built-in cortex-a57 not supported
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Use ARM cortex a57 as requested by Qemu.
+
+[1] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=64580903c2b3aee08d74d64e6248a313b246cb69
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Dick Olsson <hi@senzilla.io>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
+ board/qemu/aarch64-sbsa/readme.txt  | 2 +-
+ configs/qemu_aarch64_sbsa_defconfig | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 3840d3ea57..594c56a819 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  3a580cd5f125fd473c10a1ea38178b0f662777144a8cc83d97dba2d2350f2b17  containerd-1.5.5.tar.gz
-+sha256  09be0cedea77568029aa0c7be9a323b89fa6886b402b5d223780a05b8c7cd45a  containerd-1.5.7.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index ea45c61028..fdbd2bf3e6 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/readme.txt
+index 7935108ef1..b62947f55f 100644
+--- a/board/qemu/aarch64-sbsa/readme.txt
++++ b/board/qemu/aarch64-sbsa/readme.txt
+@@ -17,7 +17,7 @@ Run the emulation with:
  
--CONTAINERD_VERSION = 1.5.5
-+CONTAINERD_VERSION = 1.5.7
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+   qemu-system-aarch64 \
+     -M sbsa-ref \
+-    -cpu cortex-a53 \
++    -cpu cortex-a57 \
+     -smp 4 \
+     -m 1024 \
+     -nographic \
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+index 0e1c799b4d..d1e0adadd1 100644
+--- a/configs/qemu_aarch64_sbsa_defconfig
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -1,6 +1,6 @@
+ # Architecture
+ BR2_aarch64=y
+-BR2_cortex_a53=y
++BR2_cortex_a57=y
+ 
+ # Toolchain
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
 -- 
-2.20.1
+2.31.1
 
 _______________________________________________
 buildroot mailing list
