@@ -2,78 +2,76 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D36CFC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 02:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEAC4C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 02:04:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9C0C5610A8
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 02:04:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9C0C5610A8
+	by mail.kernel.org (Postfix) with ESMTPS id 9A68A61440
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 02:04:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A68A61440
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2468C40236;
-	Sun,  7 Nov 2021 02:04:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66AAD4022E;
+	Sun,  7 Nov 2021 02:04:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TyTLcj44bvdK; Sun,  7 Nov 2021 02:04:01 +0000 (UTC)
+	with ESMTP id XPNIIa3AIYsJ; Sun,  7 Nov 2021 02:04:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C19F40232;
-	Sun,  7 Nov 2021 02:04:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21C8A1BF578
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 02:03:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A21974023A;
+	Sun,  7 Nov 2021 02:04:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 443EA1BF578
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 02:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CD7880F94
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 02:03:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D4FF4023A
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 02:04:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JbH9-GXcRiP2 for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 02:03:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ziq4LY9q2fgZ for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 02:04:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0876.aruba.it (smtpcmd0876.aruba.it [62.149.156.76])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BD8480DC9
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 02:03:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4045140232
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 02:04:07 +0000 (UTC)
 Received: from ubuntu.localdomain ([146.241.216.221])
  by Aruba Outgoing Smtp  with ESMTPSA
- id jXULmuQl0Ff01jXULmqKyH; Sun, 07 Nov 2021 03:00:55 +0100
+ id jXWTmuRoYFf01jXWTmqLQq; Sun, 07 Nov 2021 03:03:06 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636250455; bh=js9+Pk2CjF/neUlgp+PKsPPB6XF6IR+HVPchgqLhhJQ=;
+ t=1636250586; bh=+Vjkn9b5pMNmmNLM513frzN54Tib4SeLLFbitNRyBJw=;
  h=From:To:Subject:Date:MIME-Version;
- b=bbvhymHDUFt2ZrlQWmSDa+mnzUZLmkepVR7jgQBDREUKQtDsFrp+NjzojYwQzl+qP
- 59RU8juUVo2mTPNGcT0LyxifviLHKAcncf6c4IoAzMsFZMIDWyN1v3ls9+q7BdoRM0
- hxYUy/KniysBnVUWJUqHnsmqAnKMbs0r/pE/PPP7L8Okaubtx3S17cA1K27BYPBE6H
- dWm9OO8PPZ2QE+N/wnQ3mgkgnAenvFTl/MictseFOjU3E3VgBoeRLw0xjVP8bpojLp
- nVcBtngvCfxZ601fuxn2DPAsE+EgCM9l9kE2opazlNSFQD0A/ojpeLa58tMl+Cnfor
- pDUJjJpcNzKLg==
+ b=TTYj656446PL5smi6+Q/g70bcychEsqtl5IhBvtAani31SC3RnAPnA/MpVKDghn8X
+ 2faO8mmfAFfZZIA7cvQagnVhAZ+DjLxpPhQymXT6QSxiJtvVxabBe6XShtLFO2ZXHz
+ eEJ25TMB6TAH19WtZfI7vXwpCW2nYSDC7B/aCFPkste7fii9mkfV+2Vs99x1mbcuAg
+ GI3ZNSeKQgASzqhjF2f4Ny8kB0HXH8xI0/IfmHvuG5sTtQKBSdD3wy9hh2lylL+0fW
+ 8/J/lPoDwtyxr7PCcmxUzKAXi4Uj1pbi1gFvpLh7FOIwqsoOjANAwUORHqovF9+B3d
+ DwGGK4eheHY5Q==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Nov 2021 03:00:52 +0100
-Message-Id: <20211107020052.3056168-1-giulio.benetti@benettiengineering.com>
+Date: Sun,  7 Nov 2021 03:03:04 +0100
+Message-Id: <20211107020304.3056759-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfDATurusixpb2QLsZFmFhOjd9aVQBSj9BlNpIOR2Wiy1JkDASm5znyayBo1acvx6I8hTdjyAI3wJPLHKoSZLK4WvsImLrqhamBgy3dY1ovnsY7eHlz8i
- 68KH4OyNebyubXHgkSlw8PTvIVkQP58jTKlDCHkIJVnTozNrFyr5OzyZ/eR95i80JuG4PMKrsBbjqevh4zbeiFYiCjTRpFNYk2TQ9LEqz3Cvs6bX69q3p6oE
- rexDz3szAycqOq4eNrpvHxf54AsBtehbJxMte6gH5V3qgJ4b9AAsvdnKufBTAPx3ii6QOkuRToEHMi/ndBdnxkoHJxrsLdM8lTV3/vvauD9AaCBFn22sz4TL
- rUThsoDZ8YS8x1JAlztvBmf3lTMYeav0BvkFauCF686mWxbpbWjlleYwfUKvrilKCEeZrc9C8Vd7Me+crkDxrMUN/itINVfrMuWmxspnbrXHtnFHtOCsB7ox
- 5uXHVAiQxuL8yj6HZpVdSoFFcFbv4MHg37BQfNvVQuZUYuu1ICZTq9VqjMebSxh8cVktHliLIA7WCxp3LXQ/11Cip7GnHgVkpjTecKx+mT8uYgvbc2tCYqSu
- PdSEkVyyASRxoKR4ysVkV0HIivmqmu2L0q2UhDlOF4ZzwJ4lj1HSxa9c9ttRmq4KrvMBikJL9r5KmlwcWdXqCGcram69FtcNPjojHCeA0ULjkcsJLwru1Nl+
- w/6rWiHD86XF1Av2PAo39q9Cxb2e2CfOalRs+BryU7Ws2li47bUzMV8fgDWYCOOqZEyspYtyVtQ9j9PxigxlwGSqhjONuMx9zwCXJZdEwNDoUmV92Ea17QVH
- AC8B/nMGqXfgLhy2PEwWOjHlRxnqblDUUKJEwq+IvAGj7QBz7x/Fmn7B3pNwVeGGZjD2o+17+NWcqm3+5cRDmbrtNKoptiyW2q4uWLjvU3sxjLFzyOhZurqw
- dYOc+Uhcm81CsM5oDDxaF97uT/xAQPqT0P14Z8WFvr+O3SRL3fasvEt+m8EDdQKc5DiWS9HS2CGQUk0NoREzAvsqeCE5k51hVElsMv7OH45qa3VcoPf9Dq6j
- 8UrmgwtPaQkysYB2GCt+8cJ6DPEf3R98GdtPw9CoOzxc31neNkW3qO3OuE+vYx/xYoY0q6qNb3057v7USbWm6SFJFwycOuOgX/Rr4sKsiyfRApR/AV6zJj6F
- LK8ou2xt2jIfiRhWlh29a8w86rPS3HaWQtI/QDwYscLpXuAbWTbTgxiNB9OtkXHutMhluwyzyUBpEPaWfnGoqYdLAxU0YkjK8p8P26bdP/urQ6q+E3rx7E2w
- ZfUuMZxatinpmRVPOw/ygV755w2bFXrpyuh1x4CTaWW2BdjxCE5zZiYqCZXylJEgHBhXf64LoNmAeCF7wBW0NKt15MkvbvwQntTkN0+sN1agTRwVKIzt7C8h
- iV68+3Om3h5UcyOflF9VLdAScusm3RIuKNiRW8HAFBsqISfdm6VCEkIBBPoHGkNO4neGSvrN7fhZVKvP8EuaG1fymz5Ehig7U450cVzxsLYn9ufKrJxrHYZq
- 0WbmBErxhiYT9P/ZclSCb8K79duiLS/TBWrDc5IlvfFtaWGbWczdH0pu5G/DEZxyLPAFSS/33mQPNYFOk0gWSibUgMlcmu1rUfcEnF5QupzKZfjz//wKA6N0
- OjlSAK6Fa7dzqK1LAUeD3nagzn/kVWeQmd7/bYeJmSv2l6k1ANwKN5BOCK0cnQfhFzVjzMvTDceBzaWHTJVgCAFR8wejFvyAx10dFEvJDA9ZJsgPti/r5w==
-Subject: [Buildroot] [PATCH 004/102]
- board/acmesystems/arietta-g25/genimage.cfg: beautify file
+X-CMAE-Envelope: MS4wfKHmSgwxws9LKpwUtuubIjNqvjMc9q6mUoesgOCe4y4stHS6zZ6vbeWJ4jGPdE9xTCf0IuIcwcjnZZotC2VqTVfrXf/5D+S/ooTczdB88KgoG4qUA8tI
+ rKCNqRNQDz5YfF4NSJntHnn8ECLbNtO7OZMoN5NUnSu/LGYwsgN9vh40pfpjbKOiYfJ6mKQWJ5JTlQnau/BvZt4OAMyJxL1xd+tUftImXRDK77bUqxWUnm6K
+ 1HHfU8sqQ/J/mQI9C4LyPM+lv77YguslccG9n9mGdB9DhjAbCTxkb8KOHR1tysL5q8uxBqNiDr7EonkHCg807yD9vxY2shyyDiJguzhOiz3birmvB5ObpFvq
+ fbd6ahJBExTFF5WFvAG2sdKy0ZxH7UwWgmAccgror3bVhKtOi4S8Oakvqn0NS4tgmyARECdQUlGuRCIdov7SiLYJ4EHPn8GEOtWPRIODxJ8vkDRmsTs0yq4G
+ 2i6Aa3ATzHeVpX+c6knz4pyOziuL+Qy9PEFaHAbLMNuaqh4Mcr3hMX4oQFD9baezGgS/3fnh2PJ0FdxrnOgNTv2kY0VtJi9UdjLWA0JOSeUTD8d2T3QKMBL4
+ rCe87R3irVMB3e0P1Kk0IwTRlo4dFCVtVgucbl1gMPJVk+YTGCv4pHpyUTS18os6VClrw92T8+E9LeMtf4BgoY2nDmBZkVb5WW+dDc1DnaLq+ZnJyY/26EGM
+ yojJ6Xde2BnwZ9Tpij+UQsTkrAcTuL9xcIeFV30TlAO2LJfDXuIbXC8TjRuGtALJS9+6wnJAqGWLLtkUD2C2lKWhyXhq56GV8rpjQKcahcCJoV2MlQJll/Sh
+ 7R4ZAKhKA1JF6VMG/A7VUqvp85gW4EbpD/Zbb33j/c+InqPshD8Fmf5QIbOMEeXhpp+M/uVITDBlLkUgRnky8kRu7qZwm64EZnFaegai5Eb0FPFNNg6VZArV
+ 70V6OegsEOr1kH/x8F1SODXHJ4lPDkhOvATTgE3Vg9WnJFOdNMh9ui4DPFrq/xZvfh4RELF/7TDwNV9mvD8bJNY0tiq3n23a/Dy3mYhEYgO1RjyXmHq8CBdE
+ 9s8OVxXG/LtUwDBX69BEG4GNzC9TLq5xDthgQ7QvCDZ7ZGNptn4OkrCVM7i8/4VIIcL9W/9UecqHmLHCRjcSzusNzFvbT5mZnqx5UlN5IWz2IKul3zk6Zp1A
+ fyKG6d2vIikXvKKDmwNO4eZAvdHmLy7jUcS9dZ/nAVdzeEhnXbBGCd/0OHYlj7YfXigU0ki821eWhVphV5YfVt57n9x89CFqC5WhJ9r2vGQhLa+/Q5No2uHm
+ FXQFdOXcZzHQx2D+7AULvEMubmmS7PWymRMJaa2wX8HdHJlWXGZYbs7IEU4fcMkWo1r+WolSLfRPk0mvMzkaIJxvz3aNKUexGr2CGYjYfiHoEkHTRjjVsTdQ
+ SW35jizQELXRJ3n0JoKjQ9U/hsOmFux9Jycvq/hMxvWwTk4A9G3yNowSYJVM6wwRhTkbQU4nNMvxLZNZVu7E2gfKaUoJkYMbratWfRjonWuHPSXXKOIGDst6
+ D5Yxlk++G4Q04pUVs3/QTtAGczvZ91u8gsIuHMK8hJ+kZ8+0j83xwwQAyGo8UUgNL0GSaDIX1EhsRfQGqmj73tpu0SirGfJKnFsEAQ+AUSHw6td64UnP8tMd
+ EMeT4YynoAmuRkBA2riBHad7pG3WLvtS2eDL16MEvbHNaAQ1YfEqW5MXfkReziFu8/yOot5DMKBSx3SYWqhfB22PueUUFHj8em/9A/q73YfhXYhyJ19oWw==
+Subject: [Buildroot] [PATCH 014/102]
+ board/bananapi/bananapi-m2-ultra/genimage.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -129,33 +127,32 @@ files in Buildroot.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/acmesystems/arietta-g25/genimage.cfg | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ board/bananapi/bananapi-m2-ultra/genimage.cfg | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
-index 9ab8a6aff5..3b67a474cd 100644
---- a/board/acmesystems/arietta-g25/genimage.cfg
-+++ b/board/acmesystems/arietta-g25/genimage.cfg
-@@ -5,15 +5,16 @@ image boot.vfat {
- 		file zImage {
- 			image = "zImage"
+diff --git a/board/bananapi/bananapi-m2-ultra/genimage.cfg b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+index 675253af23..88324f1f24 100644
+--- a/board/bananapi/bananapi-m2-ultra/genimage.cfg
++++ b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+@@ -6,6 +6,7 @@ image boot.vfat {
+ 			"boot.scr"
  		}
--		
-+
- 		file acme-arietta.dtb {
- 			image = "at91-ariettag25.dtb"
- 		}
--		
-+
- 		file boot.bin {
- 			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.10.3.bin"
--		} 
-+		}
  	}
 +
- 	size = 16M
+ 	size = 64M
  }
  
+@@ -16,8 +17,8 @@ image sdcard.img {
+ 	partition u-boot {
+ 		in-partition-table = "no"
+ 		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8192
+-		size = 1040384 # 1MB - 8192
++		offset = 8K
++		size = 1016K # 1MB - 8KB
+ 	}
+ 
+ 	partition boot {
 -- 
 2.25.1
 
