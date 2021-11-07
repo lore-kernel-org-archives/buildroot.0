@@ -2,52 +2,52 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2456C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 20:20:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC19C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 20:20:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 881046137A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 20:20:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 881046137A
+	by mail.kernel.org (Postfix) with ESMTPS id 1318360F0F
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 20:20:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1318360F0F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59F8E80DBC;
-	Sun,  7 Nov 2021 20:20:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCFDE40252;
+	Sun,  7 Nov 2021 20:20:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LbzT9byWL8hJ; Sun,  7 Nov 2021 20:20:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yFxAubXC__Qw; Sun,  7 Nov 2021 20:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A41FA80DFF;
-	Sun,  7 Nov 2021 20:20:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A9CE1BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43BF040257;
+	Sun,  7 Nov 2021 20:20:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 422301BF97C
  for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 20:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18EE36070D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EBBA40250
  for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 20:20:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lkl69CC-AVj3 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RNTBWlqg5IC4 for <buildroot@lists.busybox.net>;
  Sun,  7 Nov 2021 20:20:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65D406068C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B8284024D
  for <buildroot@buildroot.org>; Sun,  7 Nov 2021 20:20:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 91CFC8B496; Sun,  7 Nov 2021 20:16:28 +0000 (UTC)
+ id A8C398B496; Sun,  7 Nov 2021 20:16:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Nov 2021 21:15:02 +0100
+Date: Sun, 7 Nov 2021 21:16:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 222b52d675733266a0f0e64dc27c090cb06c9b54
-X-Git-Newrev: 825bf865293e4e5251dae7d65e94e03f906d79b4
+X-Git-Oldrev: 052cbfb0c70e22121312a086815c7f71b693c414
+X-Git-Newrev: 839ae7519215e488f586ef6afac2b61e98734468
 X-Patchwork-Hint: ignore
-Message-Id: <20211107201628.91CFC8B496@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: security bump version to
- 4.14.9
+Message-Id: <20211107201628.A8C398B496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/suricata: add
+ SURICATA_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=825bf865293e4e5251dae7d65e94e03f906d79b4
+commit: https://git.buildroot.net/buildroot/commit/?id=839ae7519215e488f586ef6afac2b61e98734468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2020-17049:
-https://www.samba.org/samba/history/samba-4.14.9.html
+cpe:2.3:a:oisf:suricata is a valid CPE identifier for this package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoisf%3Asuricata
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/suricata/suricata.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index f33b61e262..a571ba79f4 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.8.tar.asc
--sha256  c936b782c2aced8cd7299c13bec67c495fd4affdb217a6ed6150f4fd6d770fde  samba-4.14.8.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.9.tar.asc
-+sha256  7fb11818ef7f9bb817a3b21019358b1469aec98799057cc9e55933563361c409  samba-4.14.9.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 3faeb88e09..83eb2dacda 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.14.8
-+SAMBA4_VERSION = 4.14.9
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index ebeaa68d34..e7067acdc1 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -8,6 +8,7 @@ SURICATA_VERSION = 6.0.3
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
++SURICATA_CPE_ID_VENDOR = oisf
+ # 0001-python-ensure-proper-shabang-on-python-scripts.patch
+ # 0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+ SURICATA_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
