@@ -2,86 +2,89 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29049C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD55EC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6EB866120D
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6EB866120D
+	by mail.kernel.org (Postfix) with ESMTPS id 21CDE61215
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 19:29:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 21CDE61215
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05C17606F9;
-	Sun,  7 Nov 2021 19:29:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C968460744;
+	Sun,  7 Nov 2021 19:29:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tvhmrl8PbaXR; Sun,  7 Nov 2021 19:29:42 +0000 (UTC)
+	with ESMTP id 7Dv_CuC2OzJZ; Sun,  7 Nov 2021 19:29:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 673236069C;
-	Sun,  7 Nov 2021 19:29:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 612531BF328
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 19:29:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E638F6072D;
+	Sun,  7 Nov 2021 19:29:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E3FD1BF328
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 19:29:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C58B400D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2B2D80BF3
  for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 19:29:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3CURVGAiu7VO for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 19:29:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bLgNvkxY338I for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 19:29:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 23A084024E
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0332380BBC
  for <buildroot@buildroot.org>; Sun,  7 Nov 2021 19:29:38 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id r8so23089938wra.7
- for <buildroot@buildroot.org>; Sun, 07 Nov 2021 11:29:37 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ d72-20020a1c1d4b000000b00331140f3dc8so10213711wmd.1
+ for <buildroot@buildroot.org>; Sun, 07 Nov 2021 11:29:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FWE4lGSGaywCW1pmRaF1TOH2ipP7+su/Rn1FFMb2ZVU=;
- b=OVUVip954vkx0GBysVjyEl8jyB3IlL2n9k8d2H7hXyY/7EHtkJjimRsgmJOBGwRhf+
- iTT9Eo4xCizyaxxbjIHmJg4P+8+FnOGdQTKuihWGlA7Uaz9hYx4v1PVeX+bP7jOertSy
- W4o/tZtb0tsMjBpqa/PbU2K/6RylTUOqg10BzeZU12Qs1SBvcjGFg9PrD96+8hL8knxU
- EBJVg4mDNgljyOgCbUvCa+rFIyoKPjjH7kF4p5o5UqU/wK2lwKdoZgKajl1VHOGDsP+n
- lZoSLQELT20zTffNneinHLvxaSAT9EsJONjspEIbyqzFjXX1AqIxxc3sFNwBa6RT9vAK
- KkYA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Qf/smqxSWKrklYX7X5GA8QFmh2tE2bBZf1w71cwnPEk=;
+ b=gIQOHv/cydUuw9jsR6ZTfwvkwGyacZybSBQrsZQoHnGvUW4/j4o6dSuDf4pe3cVlVi
+ 1KOfk9gOPsiLrjTQ4SgnPVqbJquggND9A3VDsri0NZqsiV1GP7hW3JHvovw/NSNSxb9f
+ upd4BKeNe2/5KAN500PvAzCq4WOZy2oRZj34VMNJkmLlYaWPI/6oRvvu6ssWqIJQMFyD
+ 7Uln6FrjXQxoWCZt4xlVPeuyGASTXJhLZc4CVTrW0608K9ggpnQP/SvoJdmVGiUnVor2
+ SKCpo7F2+lxT/0JkhCbaWubr7St95HMQb8MsbbCkkjCc01EE1XSR9gm1ywd7AsSeZwLm
+ H2xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=FWE4lGSGaywCW1pmRaF1TOH2ipP7+su/Rn1FFMb2ZVU=;
- b=gaxtiIpWXbe7R3szXeN4matyVJdfjgHorF6ZVTvvVMxzdTFXoMeHnnJPIxPRa2smp7
- jcAo10lWLt0pUKnDpUy6C4ZWJqg5rw1tXeYUOy/Ra/wcKgGA9xOWKkvavcwGz9lM7OIF
- patoQcwjISLpIO7asaIBoxFaGHck09zBoYdIDIAz9PLtKpBm+YX/BqSofp+3PbygxKxc
- mqXFdnlxE71+5fvZ8Tj3ffPnreDsxvgagdB7+bEFHzX2Z39wLNsrx0Y65ReYOnt7HyhP
- QO8IqMCMZhWZfIDYs4ew+R+CmDKOSYQpgaZKymevaIYO9AOXuJtgp2Xr1/Y1/gnnB2zL
- x11w==
-X-Gm-Message-State: AOAM532DtqzZZV4EU8rBvOzC2kFwl0h5+5oL+tDZpgQplyutWeH4PdQz
- WQ4GGIAj4t8gNoPS8/K8V/qzGH9l7GM=
-X-Google-Smtp-Source: ABdhPJzfRxSBQO7dJV8nqRNLFmypojJl9seurfYpszxqnLSo/5h6986Tm1Cg7xyaAV7Kdc0Qs+vXZw==
-X-Received: by 2002:adf:efc6:: with SMTP id i6mr69443364wrp.428.1636313376228; 
- Sun, 07 Nov 2021 11:29:36 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=Qf/smqxSWKrklYX7X5GA8QFmh2tE2bBZf1w71cwnPEk=;
+ b=IlkprP5p9JIX9XmXFzCd8YBos6LnoqMGpRxDyXQ859QOcs76MBUqHf8m+lqRwHnlwj
+ D09pWpoINr2ZtnNQjacO2ngvabDx03v+WafuscS32dNhEsDuR253W0FO1zQ9jHvnigHC
+ U/nZtZE6vowloasHI83Nko/g25QexNuBjoGLByIwTA0kAjvk0CZdjI9Ux/qMroDr/Wz6
+ UouIQ1FtdNMONmzDIals/f/j+9HOdqcEelynNEegHFa4WjtyiCKAti6bZhmW90pEdd/G
+ I2ikwCeGtztgFOIivzClT12QGSMHWq8XysKOUO7M+xR4WCUDZIW3xU2hz1v8rnVVCDmR
+ H+gA==
+X-Gm-Message-State: AOAM530RrlEKOcrU/cRvUp8Np9mdAUdOk0zNKQQtZ842TJ5KldcseQWH
+ ch7seFGTyrFeU6Zf0a8hiy2Ky5yYkIQ=
+X-Google-Smtp-Source: ABdhPJzrzi2BqJPqrJhIznWmYuvXH+gJuIKsfN87YpOxMQDaklGtZSQic0BsMx26XhLMoHzCJTU/hg==
+X-Received: by 2002:a7b:c764:: with SMTP id x4mr48473733wmk.78.1636313377176; 
+ Sun, 07 Nov 2021 11:29:37 -0800 (PST)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id r15sm15017405wru.9.2021.11.07.11.29.35
+ by smtp.gmail.com with ESMTPSA id r15sm15017405wru.9.2021.11.07.11.29.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Nov 2021 11:29:35 -0800 (PST)
+ Sun, 07 Nov 2021 11:29:36 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Nov 2021 20:29:29 +0100
-Message-Id: <20211107192930.370979-1-romain.naour@gmail.com>
+Date: Sun,  7 Nov 2021 20:29:30 +0100
+Message-Id: <20211107192930.370979-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211107192930.370979-1-romain.naour@gmail.com>
+References: <20211107192930.370979-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_aarch64_sbsa_defconfig: use
- ARM cortex a57
+Subject: [Buildroot] [PATCH 2/2] configs/qemu_aarch64_sbsa_defconfig: add
+ gitlab runtime testing tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,46 +102,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When booting with cortex-a53, qemu refuse to start with the following message [1]:
-
-  qemu-system-aarch64: sbsa-ref: CPU type other than the built-in cortex-a57 not supported
-
-Use ARM cortex a57 as requested by Qemu.
-
-[1] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=64580903c2b3aee08d74d64e6248a313b246cb69
+Enable the runtime testing by adding the tag in the readme.txt
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Dick Olsson <hi@senzilla.io>
 ---
+The gitlab job needs more that 3h to build and execute the test:
+https://gitlab.com/kubu93/buildroot/-/jobs/1755899154
+Tested locally using the Buildroot docker image.
+
+I'm not sure about the comment about SeaBIOS package, the test works
+fine with the current host-qemu (6.1.0).
+---
  board/qemu/aarch64-sbsa/readme.txt  | 2 +-
- configs/qemu_aarch64_sbsa_defconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/qemu_aarch64_sbsa_defconfig | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/readme.txt
-index 7935108ef1..b62947f55f 100644
+index b62947f55f..cf5f66d4d6 100644
 --- a/board/qemu/aarch64-sbsa/readme.txt
 +++ b/board/qemu/aarch64-sbsa/readme.txt
-@@ -17,7 +17,7 @@ Run the emulation with:
- 
-   qemu-system-aarch64 \
-     -M sbsa-ref \
--    -cpu cortex-a53 \
-+    -cpu cortex-a57 \
-     -smp 4 \
-     -m 1024 \
+@@ -23,7 +23,7 @@ Run the emulation with:
      -nographic \
+     -pflash output/images/SBSA_FLASH0.fd \
+     -pflash output/images/SBSA_FLASH1.fd \
+-    -hda output/images/disk.img
++    -hda output/images/disk.img # qemu_aarch64_sbsa_defconfig
+ 
+ Note that if you want to run sbsa-ref emulation with QEMU provided by
+ your distro (i.e., not host-qemu by Buildroot) then you may need to
 diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
-index 0e1c799b4d..d1e0adadd1 100644
+index d1e0adadd1..e7d3bd03ca 100644
 --- a/configs/qemu_aarch64_sbsa_defconfig
 +++ b/configs/qemu_aarch64_sbsa_defconfig
-@@ -1,6 +1,6 @@
- # Architecture
- BR2_aarch64=y
--BR2_cortex_a53=y
-+BR2_cortex_a57=y
+@@ -16,8 +16,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
  
- # Toolchain
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-sbsa/genimage.cfg"
+ 
+ # Linux headers same as kernel
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
 -- 
 2.31.1
 
