@@ -2,65 +2,65 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 822FBC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 21:31:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0002C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 21:33:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BB8D16135F
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 21:31:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BB8D16135F
+	by mail.kernel.org (Postfix) with ESMTPS id BBD826137F
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 21:33:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BBD826137F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5362280DB1;
-	Sun,  7 Nov 2021 21:31:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A79540250;
+	Sun,  7 Nov 2021 21:33:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yAQiwW8kLs32; Sun,  7 Nov 2021 21:31:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B19D780DB3;
-	Sun,  7 Nov 2021 21:31:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5FD561BF335
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 21:31:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4EB2A40242
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 21:31:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=senzilla.io
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UVTSwvBUZGvI for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 21:31:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05BE640241
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 21:31:22 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OhPj6a5T1j08; Sun,  7 Nov 2021 21:33:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9965F4024A;
+	Sun,  7 Nov 2021 21:33:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CADE81BF335
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 21:33:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B964D80CCF
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 21:33:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=senzilla.io
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EMmch_LzrKGu for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 21:33:32 +0000 (UTC)
+X-Greylist: delayed 00:07:59 by SQLgrey-1.8.0
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9BC6380CA9
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 21:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=senzilla.io; s=key1;
- t=1636320680;
+ t=1636320329;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=DN7VCZgT6wsGRBqbBsFSgtqdbHYQ16ICVyQ4Fe/xPQs=;
- b=ElQD8LSYgg8yFOxDllyB4/Wny/+vbeZN1M3cC6HzLoQJzxY5CAJ+yMz8Xd+GFZ3KbAgfKv
- Fu5aq+PjGLd6kdRwAJvjEGxJTHrQuVeG7NjPlTsJVML/CndeAZl0IS6puBbhOFJ0vlsqzu
- aMEbehxrn+b481PCqgclQo0+UruH3xM=
+ bh=COsF8s8ABUW/OoZrYTZOM+rJnDXmtmpz/JoiICiBmZo=;
+ b=P6Ip+d/0QwqnUZoWcPpJX/Thgrfb4Or2RljrSrRFen5BjXqrLA+PKGB+Tpf4BUsEJkK7g1
+ Qbw7suw6V7x0H8hU8mKcmnqKUbvhAZ8tn9tTgKyxMVH2s4Ay0k0Ow6OKImk70ig1C+pTmx
+ Q9GRLrvYHGsIFVX7RNgQSav1LoEHtCY=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
  include these headers.
 MIME-Version: 1.0
-Date: Sun, 7 Nov 2021 22:31:18 +0100
-Message-Id: <D547813E-CD39-4BD6-A55E-0EF27D954E37@senzilla.io>
-References: <20211107192930.370979-2-romain.naour@gmail.com>
-In-Reply-To: <20211107192930.370979-2-romain.naour@gmail.com>
+Date: Sun, 7 Nov 2021 22:25:27 +0100
+Message-Id: <53DE106D-44F1-40F5-B364-DA9708EFC032@senzilla.io>
+References: <20211107192930.370979-1-romain.naour@gmail.com>
+In-Reply-To: <20211107192930.370979-1-romain.naour@gmail.com>
 To: Romain Naour <romain.naour@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: hi@senzilla.io
-Subject: Re: [Buildroot] [PATCH 2/2] configs/qemu_aarch64_sbsa_defconfig:
- add gitlab runtime testing tag
+Subject: Re: [Buildroot] [PATCH 1/2] configs/qemu_aarch64_sbsa_defconfig:
+ use ARM cortex a57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,56 +75,146 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: "D. Olsson via buildroot" <buildroot@buildroot.org>
 Reply-To: "D. Olsson" <hi@senzilla.io>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5585827871407623430=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluLAoKPiBPbiA3IE5vdiAyMDIxLCBhdCAyMDoyOSwgUm9tYWluIE5hb3VyIDxyb21h
-aW4ubmFvdXJAZ21haWwuY29tPiB3cm90ZToKPiAKPiDvu79FbmFibGUgdGhlIHJ1bnRpbWUgdGVz
-dGluZyBieSBhZGRpbmcgdGhlIHRhZyBpbiB0aGUgcmVhZG1lLnR4dAo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPiBDYzogRGljayBPbHNz
-b24gPGhpQHNlbnppbGxhLmlvPgo+IC0tLQo+IFRoZSBnaXRsYWIgam9iIG5lZWRzIG1vcmUgdGhh
-dCAzaCB0byBidWlsZCBhbmQgZXhlY3V0ZSB0aGUgdGVzdDoKPiBodHRwczovL2dpdGxhYi5jb20v
-a3VidTkzL2J1aWxkcm9vdC8tL2pvYnMvMTc1NTg5OTE1NAo+IFRlc3RlZCBsb2NhbGx5IHVzaW5n
-IHRoZSBCdWlsZHJvb3QgZG9ja2VyIGltYWdlLgo+IAo+IEknbSBub3Qgc3VyZSBhYm91dCB0aGUg
-Y29tbWVudCBhYm91dCBTZWFCSU9TIHBhY2thZ2UsIHRoZSB0ZXN0IHdvcmtzCj4gZmluZSB3aXRo
-IHRoZSBjdXJyZW50IGhvc3QtcWVtdSAoNi4xLjApLgoKUmlnaHQsIGhvc3QtcWVtdSB3b3JrcyBn
-cmVhdCEgTXkgQ0kgc2V0dXAgaGFzIHRvIHJlbHkgb24gcWVtdSBwYWNrZWQgYnkgRGViaWFuLCBo
-b3dldmVyLiBBbmQgaWYgSSByZWNhbGwgY29ycmVjdGx5IEkgcmFuIGludG8gc29tZSBkaXNwbGF5
-IG9yIFZHQSByZWxhdGVkIGlzc3VlcyB3aXRoIHFlbXUgZnJvbSBEZWJpYW4gZm9yIHRoZSBzYnNh
-IG1hY2hpbmUuIEl0IHdhcyByZXNvbHZlZCBieSBpbnN0YWxsaW5nIHNlYWJpb3MgYmVjYXVzZSBp
-dCBhZGRzIHNvbWUgZHJpdmVycyB0byBxZW11LgoKSXQncyBwcm9iYWJseSBhIGdvb2QgaWRlYSB0
-byBsZWF2ZSB0aGUgY29tbWVudCB0aGVyZSBmb3Igb3RoZXJzIHdobyBtaWdodCBydW4gaW50byB0
-aGUgc2FtZSBpc3N1ZS4KCj4gLS0tCj4gYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvcmVhZG1lLnR4
-dCAgfCAyICstCj4gY29uZmlncy9xZW11X2FhcmNoNjRfc2JzYV9kZWZjb25maWcgfCA0ICsrLS0K
-PiAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAKPiBk
-aWZmIC0tZ2l0IGEvYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvcmVhZG1lLnR4dCBiL2JvYXJkL3Fl
-bXUvYWFyY2g2NC1zYnNhL3JlYWRtZS50eHQKPiBpbmRleCBiNjI5NDdmNTVmLi5jZjVmNjZkNGQ2
-IDEwMDY0NAo+IC0tLSBhL2JvYXJkL3FlbXUvYWFyY2g2NC1zYnNhL3JlYWRtZS50eHQKPiArKysg
-Yi9ib2FyZC9xZW11L2FhcmNoNjQtc2JzYS9yZWFkbWUudHh0Cj4gQEAgLTIzLDcgKzIzLDcgQEAg
-UnVuIHRoZSBlbXVsYXRpb24gd2l0aDoKPiAgICAgLW5vZ3JhcGhpYyBcCj4gICAgIC1wZmxhc2gg
-b3V0cHV0L2ltYWdlcy9TQlNBX0ZMQVNIMC5mZCBcCj4gICAgIC1wZmxhc2ggb3V0cHV0L2ltYWdl
-cy9TQlNBX0ZMQVNIMS5mZCBcCj4gLSAgICAtaGRhIG91dHB1dC9pbWFnZXMvZGlzay5pbWcKPiAr
-ICAgIC1oZGEgb3V0cHV0L2ltYWdlcy9kaXNrLmltZyAjIHFlbXVfYWFyY2g2NF9zYnNhX2RlZmNv
-bmZpZwo+IAo+IE5vdGUgdGhhdCBpZiB5b3Ugd2FudCB0byBydW4gc2JzYS1yZWYgZW11bGF0aW9u
-IHdpdGggUUVNVSBwcm92aWRlZCBieQo+IHlvdXIgZGlzdHJvIChpLmUuLCBub3QgaG9zdC1xZW11
-IGJ5IEJ1aWxkcm9vdCkgdGhlbiB5b3UgbWF5IG5lZWQgdG8KPiBkaWZmIC0tZ2l0IGEvY29uZmln
-cy9xZW11X2FhcmNoNjRfc2JzYV9kZWZjb25maWcgYi9jb25maWdzL3FlbXVfYWFyY2g2NF9zYnNh
-X2RlZmNvbmZpZwo+IGluZGV4IGQxZTBhZGFkZDEuLmU3ZDNiZDAzY2EgMTAwNjQ0Cj4gLS0tIGEv
-Y29uZmlncy9xZW11X2FhcmNoNjRfc2JzYV9kZWZjb25maWcKPiArKysgYi9jb25maWdzL3FlbXVf
-YWFyY2g2NF9zYnNhX2RlZmNvbmZpZwo+IEBAIC0xNiw4ICsxNiw4IEBAIEJSMl9UQVJHRVRfUk9P
-VEZTX0VYVDJfND15Cj4gQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIxMjhNIgo+IAo+ICMg
-SW1hZ2UKPiAtQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9hYXJjaDY0
-LXNic2EvYXNzZW1ibGUtZmxhc2gtaW1hZ2VzIHN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIK
-PiAtQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC9xZW11L2FhcmNoNjQtc2Jz
-YS9nZW5pbWFnZS5jZmciCj4gK0JSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9ImJvYXJkL3Fl
-bXUvcG9zdC1pbWFnZS5zaCBib2FyZC9xZW11L2FhcmNoNjQtc2JzYS9hc3NlbWJsZS1mbGFzaC1p
-bWFnZXMgc3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIgo+ICtCUjJfUk9PVEZTX1BPU1RfU0NS
-SVBUX0FSR1M9IiQoQlIyX0RFRkNPTkZJRykgLWMgYm9hcmQvcWVtdS9hYXJjaDY0LXNic2EvZ2Vu
-aW1hZ2UuY2ZnIgo+IAo+ICMgTGludXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbAo+IEJSMl9QQUNL
-QUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNT15Cj4gLS0gCj4gMi4zMS4xCgpMb29r
-cyBnb29kIQoKUmV2aWV3ZWQtYnk6IERpY2sgT2xzc29uIDxoaUBzZW56aWxsYS5pbz4KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+--===============5585827871407623430==
+Content-Type: multipart/alternative; boundary=Apple-Mail-5717B023-E047-4A88-81F8-A2DA35C0C66C
+Content-Transfer-Encoding: 7bit
+
+
+--Apple-Mail-5717B023-E047-4A88-81F8-A2DA35C0C66C
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Romain,
+
+Resending my review because I didn't reply to all :)
+
+> On 7 Nov 2021, at 20:29, Romain Naour <romain.naour@gmail.com> wrote:
+>=20
+> =EF=BB=BFWhen booting with cortex-a53, qemu refuse to start with the follo=
+wing message [1]:
+>=20
+>  qemu-system-aarch64: sbsa-ref: CPU type other than the built-in cortex-a5=
+7 not supported
+
+Thanks for catching this! Looks like removal of a53 support is a fairly rece=
+nt change in QEMU: https://github.com/qemu/qemu/commit/4f335a6381f83beb5d6ac=
+0d3993514379454a99d#diff-8efb73c3e0dd9d7a13b0597a056b4cd8fa9d9250c7de8b1d3b5=
+38d07d98a8c50
+
+> Use ARM cortex a57 as requested by Qemu.
+>=20
+> [1] https://git.qemu.org/?p=3Dqemu.git;a=3Dcommitdiff;h=3D64580903c2b3aee0=
+8d74d64e6248a313b246cb69
+>=20
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Dick Olsson <hi@senzilla.io>
+> ---
+> board/qemu/aarch64-sbsa/readme.txt  | 2 +-
+> configs/qemu_aarch64_sbsa_defconfig | 2 +-
+> 2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/=
+readme.txt
+> index 7935108ef1..b62947f55f 100644
+> --- a/board/qemu/aarch64-sbsa/readme.txt
+> +++ b/board/qemu/aarch64-sbsa/readme.txt
+> @@ -17,7 +17,7 @@ Run the emulation with:
+>=20
+>   qemu-system-aarch64 \
+>     -M sbsa-ref \
+> -    -cpu cortex-a53 \
+> +    -cpu cortex-a57 \
+>     -smp 4 \
+>     -m 1024 \
+>     -nographic \
+> diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sb=
+sa_defconfig
+> index 0e1c799b4d..d1e0adadd1 100644
+> --- a/configs/qemu_aarch64_sbsa_defconfig
+> +++ b/configs/qemu_aarch64_sbsa_defconfig
+> @@ -1,6 +1,6 @@
+> # Architecture
+> BR2_aarch64=3Dy
+> -BR2_cortex_a53=3Dy
+> +BR2_cortex_a57=3Dy
+>=20
+> # Toolchain
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=3Dy
+> --=20
+> 2.31.1
+
+Looks good!
+
+Reviewed-by: Dick Olsson <hi@senzilla.io>
+
+
+--Apple-Mail-5717B023-E047-4A88-81F8-A2DA35C0C66C
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Romain,<div><br></div><div>Resending my r=
+eview because I didn't reply to all :)<br><div dir=3D"ltr"><br><blockquote t=
+ype=3D"cite">On 7 Nov 2021, at 20:29, Romain Naour &lt;romain.naour@gmail.co=
+m&gt; wrote:<br><br></blockquote></div><blockquote type=3D"cite"><div dir=3D=
+"ltr">=EF=BB=BF<span>When booting with cortex-a53, qemu refuse to start with=
+ the following message [1]:</span><br><span></span><br><span> &nbsp;qemu-sys=
+tem-aarch64: sbsa-ref: CPU type other than the built-in cortex-a57 not suppo=
+rted</span><br></div></blockquote><div><br></div><div><span style=3D"-webkit=
+-text-size-adjust: auto; caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); bac=
+kground-color: rgb(255, 255, 255);">Thanks for catching this! Looks like rem=
+oval of a53 support is a fairly recent change in QEMU:&nbsp;</span><a href=3D=
+"https://github.com/qemu/qemu/commit/4f335a6381f83beb5d6ac0d3993514379454a99=
+d#diff-8efb73c3e0dd9d7a13b0597a056b4cd8fa9d9250c7de8b1d3b538d07d98a8c50" sty=
+le=3D"-webkit-text-size-adjust: auto;">https://github.com/qemu/qemu/commit/4=
+f335a6381f83beb5d6ac0d3993514379454a99d#diff-8efb73c3e0dd9d7a13b0597a056b4cd=
+8fa9d9250c7de8b1d3b538d07d98a8c50</a></div><br><blockquote type=3D"cite"><di=
+v dir=3D"ltr"><span></span><span>Use ARM cortex a57 as requested by Qemu.</s=
+pan><br><span></span><br><span>[1] https://git.qemu.org/?p=3Dqemu.git;a=3Dco=
+mmitdiff;h=3D64580903c2b3aee08d74d64e6248a313b246cb69</span><br><span></span=
+><br><span>Signed-off-by: Romain Naour &lt;romain.naour@gmail.com&gt;</span>=
+<br><span>Cc: Dick Olsson &lt;hi@senzilla.io&gt;</span><br><span>---</span><=
+br><span> board/qemu/aarch64-sbsa/readme.txt &nbsp;| 2 +-</span><br><span> c=
+onfigs/qemu_aarch64_sbsa_defconfig | 2 +-</span><br><span> 2 files changed, 2=
+ insertions(+), 2 deletions(-)</span><br><span></span><br><span>diff --git a=
+/board/qemu/aarch64-sbsa/readme.txt b/board/qemu/aarch64-sbsa/readme.txt</sp=
+an><br><span>index 7935108ef1..b62947f55f 100644</span><br><span>--- a/board=
+/qemu/aarch64-sbsa/readme.txt</span><br><span>+++ b/board/qemu/aarch64-sbsa/=
+readme.txt</span><br><span>@@ -17,7 +17,7 @@ Run the emulation with:</span><=
+br><span></span><br><span> &nbsp;&nbsp;qemu-system-aarch64 \</span><br><span=
+> &nbsp;&nbsp;&nbsp;&nbsp;-M sbsa-ref \</span><br><span>- &nbsp;&nbsp;&nbsp;=
+-cpu cortex-a53 \</span><br><span>+ &nbsp;&nbsp;&nbsp;-cpu cortex-a57 \</spa=
+n><br><span> &nbsp;&nbsp;&nbsp;&nbsp;-smp 4 \</span><br><span> &nbsp;&nbsp;&=
+nbsp;&nbsp;-m 1024 \</span><br><span> &nbsp;&nbsp;&nbsp;&nbsp;-nographic \</=
+span><br><span>diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qe=
+mu_aarch64_sbsa_defconfig</span><br><span>index 0e1c799b4d..d1e0adadd1 10064=
+4</span><br><span>--- a/configs/qemu_aarch64_sbsa_defconfig</span><br><span>=
++++ b/configs/qemu_aarch64_sbsa_defconfig</span><br><span>@@ -1,6 +1,6 @@</s=
+pan><br><span> # Architecture</span><br><span> BR2_aarch64=3Dy</span><br><sp=
+an>-BR2_cortex_a53=3Dy</span><br><span>+BR2_cortex_a57=3Dy</span><br><span><=
+/span><br><span> # Toolchain</span><br><span> BR2_TOOLCHAIN_BUILDROOT_WCHAR=3D=
+y</span><br><span>-- </span><br><span>2.31.1</span><br></div></blockquote><b=
+r></div><div>Looks good!</div><div><br></div><div>Reviewed-by: Dick Olsson &=
+lt;hi@senzilla.io&gt;</div><div><br></div></body></html>=
+
+--Apple-Mail-5717B023-E047-4A88-81F8-A2DA35C0C66C--
+
+--===============5585827871407623430==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5585827871407623430==--
