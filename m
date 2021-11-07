@@ -2,59 +2,61 @@ Return-Path: <SRS0=xRR2=P2=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A82E1C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8361C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CE81761374
-	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CE81761374
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 415226137F
+	for <buildroot@archiver.kernel.org>; Sun,  7 Nov 2021 08:45:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 415226137F
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6887C819D2;
-	Sun,  7 Nov 2021 08:45:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 188B781A50;
+	Sun,  7 Nov 2021 08:45:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BSCga-UaSB0N; Sun,  7 Nov 2021 08:45:14 +0000 (UTC)
+	with ESMTP id GbxG2zZGxnSW; Sun,  7 Nov 2021 08:45:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5F8C81919;
-	Sun,  7 Nov 2021 08:45:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C00911BF3A8
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7024C81A47;
+	Sun,  7 Nov 2021 08:45:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 748BD1BF3A8
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCC2F402E5
- for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FC0B4023E
+ for <buildroot@lists.busybox.net>; Sun,  7 Nov 2021 08:45:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9woilgpFEvcO for <buildroot@lists.busybox.net>;
- Sun,  7 Nov 2021 08:45:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 75655402DF
- for <buildroot@buildroot.org>; Sun,  7 Nov 2021 08:45:10 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id A258820002;
- Sun,  7 Nov 2021 08:45:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mjdnV-0005wD-Hg; Sun, 07 Nov 2021 09:45:05 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20211106154525.910204-1-yann.morin.1998@free.fr>
-Date: Sun, 07 Nov 2021 09:45:05 +0100
-In-Reply-To: <20211106154525.910204-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 6 Nov 2021 16:45:25 +0100")
-Message-ID: <87sfw8bbhq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gXjBuAR444TB for <buildroot@lists.busybox.net>;
+ Sun,  7 Nov 2021 08:45:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE990400D2
+ for <buildroot@buildroot.org>; Sun,  7 Nov 2021 08:45:32 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout04.t-online.de (Postfix) with SMTP id 89BCBEE6;
+ Sun,  7 Nov 2021 09:45:29 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.204.142]) by fwd85.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mjdnr-1MCoYT0; Sun, 7 Nov 2021 09:45:27 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49364)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mjdnq-0003Qk-Qo;
+ Sun, 07 Nov 2021 09:45:27 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sun,  7 Nov 2021 09:45:26 +0100
+Message-Id: <20211107084526.2073471-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/tpm2-tss: fix build on host with
- setfacl
+X-TOI-EXPURGATEID: 150726::1636274727-00001449-7F2C64E2/0/0 CLEAN NORMAL
+X-TOI-MSGID: 62078aeb-d939-4e15-945c-cbeaee8fd4aa
+Subject: [Buildroot] [PATCH 1/1] package/boinc: needs at least gcc 4.8 for
+ c++11 features
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,66 +68,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yair Ben-Avraham <yairba@protonmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Fixes:
+http://autobuild.buildroot.net/results/ed3/ed3656f443364f01895600f332816d20e340f315/
 
-s/with/without/ in the subject.
+hostinfo_unix.cpp:1695:37: error: range-based 'for' loops are not allowed in C++98 mode
+         for (const string &ignore : ignore_list) {
 
+Adding -std=c++11 to CXXFLAGS is done in _MAKE_OPTS due to the Makefiles
+not passing CXXFLAGS from _CONV_ENV down to client/Makefile.
 
- > Since the bump to 3.1.0 in commit 470e2e9bc521 (package/tpm2-tss: bump
- > version to 3.1.0), the install is borked because it is looking for
- > programs at configure time, so it finds those on the host if they exist,
- > or do not find any at all, which can very well differ from what will be
- > present on the target.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/boinc/Config.in | 4 +++-
+ package/boinc/boinc.mk  | 2 ++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
- > But this is not totally unreasonable: there is no way, at cross-configure
- > time, for a package to find the tools that will be present at runtime.
-
- > All that can be done in such a case is to force the path to such tools.
-
- > However, in this case, tpm2-tss only uses setfacl if systemd-tmpfiles is
- > not available. If the call to setfacl fails, the install does not fail
- > (split on two lines for readability):
-
- >     @-$(call make_fapi_dirs) && $(call set_fapi_permissions) \
- >     || echo "WARNING Failed to create the FAPI directories with the correct permissions"
-
- > set_fapi_permissions is a macro that eventually expands to:
-
- >     (chown -R tss:tss "$1") && \
- >     (chmod -R 2775 "$1") && \
- >     (setfacl -m default:group:tss:rwx "$1")
-
- > So the call to setfacl will not even be ever attempted, because the
- > chown will fail first. Furthermore, it would look for the 'tss' username
- > and groupname from the host, which could differ from those on the
- > target.
-
- > So we can just fake the fact that setfacl is available.
-
- > As for the permissions, they are to be set on a directory that is in
- > ${runstatedir}, i.e. /run, which is a tmpfs, so there is no way we can
- > prepare them at build time. We'd need a startup script or systemd unit,
- > or proper systemd-tmpfiles support, either of which can be done in a
- > followup patch by an interested party...
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Yair Ben-Avraham <yairba@protonmail.com>
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
-
-Committed after adding an autobuilder reference, thanks.
-
+diff --git a/package/boinc/Config.in b/package/boinc/Config.in
+index 5239019a57..72d5440131 100644
+--- a/package/boinc/Config.in
++++ b/package/boinc/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BOINC
+ 	bool "boinc"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBCURL
+@@ -16,7 +17,8 @@ config BR2_PACKAGE_BOINC
+ 
+ 	  https://boinc.berkeley.edu
+ 
+-comment "boinc needs a toolchain w/ dynamic library, C++, threads"
++comment "boinc needs a toolchain w/ dynamic library, C++, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 567ffc923c..7f78c427ea 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -45,6 +45,8 @@ else
+ BOINC_CONF_OPTS += --disable-fcgi
+ endif
+ 
++BOINC_MAKE_OPTS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++
+ # Remove boinc-client because it is incompatible with buildroot
+ define BOINC_REMOVE_UNNEEDED_FILE
+ 	$(RM) $(TARGET_DIR)/etc/init.d/boinc-client
 -- 
-Bye, Peter Korsgaard
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
