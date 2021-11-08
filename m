@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E06B3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:29:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 991A4C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:30:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A48B061994
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:29:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A48B061994
+	by mail.kernel.org (Postfix) with ESMTPS id 57921604D7
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:30:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 57921604D7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78A436086B;
-	Mon,  8 Nov 2021 22:29:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29AF2403C3;
+	Mon,  8 Nov 2021 22:30:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n_hU_iPOlNvE; Mon,  8 Nov 2021 22:29:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D8ExLTOODn-8; Mon,  8 Nov 2021 22:30:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4B0060867;
-	Mon,  8 Nov 2021 22:29:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49A551BF865
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 700D9403B9;
+	Mon,  8 Nov 2021 22:30:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 02EB41BF97E
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40BA760862
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EFA280D07
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j8Bysni3WaO0 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NuGItB_hOkis for <buildroot@lists.busybox.net>;
  Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7D8B6085E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2492D80EAA
  for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 60D5B8B719; Mon,  8 Nov 2021 22:08:00 +0000 (UTC)
+ id E091C8A47B; Mon,  8 Nov 2021 22:07:59 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:26 +0100
+Date: Mon, 8 Nov 2021 22:20:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 24b74c3bbdb0a3ef4b7718ee83bb3f49cc1cbc86
-X-Git-Newrev: e4621f7dc4b6dd5661eb054e982c1bca7759ab06
+X-Git-Oldrev: 615c2a5da573ecd0fd99a9914cfa10932df23a74
+X-Git-Newrev: b22f649a1dd512d083bf8d3d84acbe32757d0e72
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220800.60D5B8B719@busybox.osuosl.org>
+Message-Id: <20211108220759.E091C8A47B@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/engicam/geam6ul/genimage.cfg: beautify file
+ board/atmel/sama5d4_xplained_mmc/genimage.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4621f7dc4b6dd5661eb054e982c1bca7759ab06
+commit: https://git.buildroot.net/buildroot/commit/?id=b22f649a1dd512d083bf8d3d84acbe32757d0e72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,30 +74,21 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/engicam/geam6ul/genimage.cfg | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ board/atmel/sama5d4_xplained_mmc/genimage.cfg | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/engicam/geam6ul/genimage.cfg b/board/engicam/geam6ul/genimage.cfg
-index fcca6e1739..3d290b2ea6 100644
---- a/board/engicam/geam6ul/genimage.cfg
-+++ b/board/engicam/geam6ul/genimage.cfg
-@@ -5,6 +5,7 @@ image boot.vfat {
- 			"imx6ul-geam-kit.dtb"
+diff --git a/board/atmel/sama5d4_xplained_mmc/genimage.cfg b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+index 004f2fddb3..bd929ffab4 100644
+--- a/board/atmel/sama5d4_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+@@ -9,6 +9,7 @@ image boot.vfat {
+ 			"u-boot.bin"
  		}
  	}
 +
- 	size = 64M
+ 	size = 16M
  }
  
-@@ -15,7 +16,7 @@ image sdcard.img {
- 	partition SPL {
- 		in-partition-table = "no"
- 		image = "SPL"
--		offset = 1024
-+		offset = 1K
- 	}
- 
- 	partition u-boot-dtb {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
