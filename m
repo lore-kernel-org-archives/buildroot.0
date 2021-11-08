@@ -2,52 +2,66 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1141C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28402C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:45:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4C6AD61075
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:40:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4C6AD61075
+	by mail.kernel.org (Postfix) with ESMTPS id 79C1861075
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:45:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79C1861075
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F04E880E05;
-	Mon,  8 Nov 2021 07:40:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47CD180E05;
+	Mon,  8 Nov 2021 07:45:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YoG4iDKhHK3o; Mon,  8 Nov 2021 07:40:28 +0000 (UTC)
+	with ESMTP id 3qJhLlTCj3ia; Mon,  8 Nov 2021 07:45:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 576ED80DFF;
-	Mon,  8 Nov 2021 07:40:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6905D1BF3A6
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:40:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD2C480DFF;
+	Mon,  8 Nov 2021 07:45:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 12F7C1BF995
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5714840235
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:40:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0110360786
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:45:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QKuKqVPyyoMz for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 07:40:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91A47401BF
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 07:40:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A24B68B553; Mon,  8 Nov 2021 07:36:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jg0DMtnJsplW for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 07:45:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D52356077E
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 07:45:31 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id ED5EC1C0004;
+ Mon,  8 Nov 2021 07:45:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mjzLL-0000Hj-91; Mon, 08 Nov 2021 08:45:27 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 08:37:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b5b9f75e998f30cdaebcc12deaed82be12ee81b
-X-Git-Newrev: 0787695a50b77e71669bef4e1e67e8f8c8e505ef
-X-Patchwork-Hint: ignore
-Message-Id: <20211108073629.A24B68B553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mono: fix build with autoconf >=
- 2.70
+To: Romain Naour <romain.naour@gmail.com>
+References: <20211106190057.2487641-1-romain.naour@gmail.com>
+ <CAB0FRsschq6bcfjimC1FCce+TrRx2_sJYBpwP+ZtgJNNWuFbfQ@mail.gmail.com>
+ <89f9350d-63a6-4953-a212-3e2f17aa5a5f@gmail.com>
+ <CAB0FRsuJ-37rquRvLsq+n5sg8gJo0PJU2-aRDqGn-kRkUju=Ug@mail.gmail.com>
+ <4eb0d55eb4e537aaa4ce604127038b43212d8de2.camel@embedded.rocks>
+ <5f72ced4-6f2a-9f24-6bac-c7fde6700e1e@gmail.com>
+ <39214aefcc2ab923909f01873e41af39b8205c0b.camel@embedded.rocks>
+ <cf0d9f73-0982-5782-7aa2-b2b0ee27639c@gmail.com>
+Date: Mon, 08 Nov 2021 08:45:27 +0100
+In-Reply-To: <cf0d9f73-0982-5782-7aa2-b2b0ee27639c@gmail.com> (Romain Naour's
+ message of "Sun, 7 Nov 2021 23:27:09 +0100")
+Message-ID: <87bl2v850o.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] Revert "package/luajit: back to mainline
+ and bump to 05f1984e"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,76 +73,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?utf-8?Q?J=C3=B6rg?= Krause <joerg.krause@embedded.rocks>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0787695a50b77e71669bef4e1e67e8f8c8e505ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For an unknown reason, the following build failure is raised on one of
-the autobuilder with host gcc 6.3.0 since bump of autoconf to version
-2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
-
-icall.c: In function 'mono_create_icall_signatures':
-icall.c:9513:20: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]
-   gsize_a *types = (gsize*)(sig + 1);
-                    ^
-
-Add an upstream patch to fix it.
-
-Fixes:
- - http://autobuild.buildroot.org/results/1d1d82b505abd16d014d754b6a4a48fb1271e3b6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-Ongoing-work-on-the-cmake-build.patch     | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/package/mono/0002-Ongoing-work-on-the-cmake-build.patch b/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
-new file mode 100644
-index 0000000000..afe618f193
---- /dev/null
-+++ b/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
-@@ -0,0 +1,34 @@
-+From 17650f7e0f571287bb14bb9b4fbde7b91d842bb4 Mon Sep 17 00:00:00 2001
-+From: monojenkins <jo.shields+jenkins@xamarin.com>
-+Date: Thu, 24 Sep 2020 12:17:34 -0400
-+Subject: [PATCH] Ongoing work on the cmake build. (#20428)
-+
-+* Fix some warnings.
-+* Avoid creating netcore/config.make.
-+* Fix CPU_COUNT test.
-+* Add missing source file.
-+
-+Co-authored-by: vargaz <vargaz@users.noreply.github.com>
-+
-+[Retrieved (and updated to keep only update of icall.c) from:
-+https://github.com/mono/mono/commit/17650f7e0f571287bb14bb9b4fbde7b91d842bb4]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ mono/metadata/CMakeLists.txt | 1 +
-+ mono/metadata/icall.c        | 2 +-
-+ mono/mini/CMakeLists.txt     | 5 +++++
-+ 3 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/mono/metadata/icall.c b/mono/metadata/icall.c
-+index fa991bc72e57..f2c003ac1ff1 100644
-+--- a/mono/metadata/icall.c
-++++ b/mono/metadata/icall.c
-+@@ -9605,7 +9605,7 @@ mono_create_icall_signatures (void)
-+ 	int n;
-+ 	while ((n = sig->param_count)) {
-+ 		--sig->param_count; // remove ret
-+-		gsize_a *types = (gsize*)(sig + 1);
-++		gsize_a *types = (gsize_a*)(sig + 1);
-+ 		for (int i = 0; i < n; ++i) {
-+ 			gsize index = *types++;
-+ 			g_assert (index < G_N_ELEMENTS (lookup));
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlJvbWFpbiIgPT0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPiB3
+cml0ZXM6CgogPiBIaSBKw7ZyZzsKID4gTGUgMDcvMTEvMjAyMSDDoCAyMTowOCwgSsO2cmcgS3Jh
+dXNlIGEgw6ljcml0wqA6CiA+PiBIZWxsbywKID4+IAogPj4ganVzdCBub3RpY2VkIEkgbWlzc2Vk
+IHRoZSBzZWNvbmQgcGF0Y2ggWzJdIG9mIHRoZSBzZXJpZXMuIEkgd2lsbCByZS1ydW4KID4+IHRo
+ZSB0ZXN0IHdpdGggdGhlIHBhdGNoIGFwcGxpZWQuCgogPiBnaXQgYmlzZWN0IHNheXMgdGhhdCBs
+dXZpIGRvZXNuJ3Qgd29yayB3aXRoIGx1YWppdCBzaW5jZSB0aGlzIGNvbW1pdCBbMV0uCgogPiBB
+ZGRpbmcgLURMVUFKSVRfRElTQUJMRV9HQzY0IHRvIGx1YWppdC5tayBhbGxvdyB0byB1c2UgbHV2
+aSAtdiBvbiB0aGUgdGFyZ2V0IGJ1dAogPiBJIGdldCBhIHN0cmFuZ2UgYmVoYXZpb3IuIFRoZSBs
+aXN0IHJldHVybmVkIGJ5IGx1dmkgLXYgaXMgbm90IGFsd2F5cyBpbiB0aGUgc2FtZQogPiBvcmRl
+cjoKCkZ1bmt5LiBUaGUgY29tbWl0IHNheXMgdGhhdCB0aGlzIG9ubHkgYXBwbGllcyB0byA2NGJp
+dCB0YXJnZXQsIGJ1dCB0aGUKdGVzdCB1c2VzIGFybXY3LCBzbyBwZXJoYXBzIGl0IGlzIGluZGVl
+ZCBzb21ldGhpbmcgcmVsYXRlZCB0bwpob3N0L3RhcmdldCBjb25mdXNpb24/CgogPiBJJ20gbm90
+IHN1cmUgaWYgdXNpbmcgbHVhaml0IGlzIHJlYWxseSBzYWZlIGZvciB0aGUgdXBjb21pbmcgQnVp
+bGRyb290IHJlbGVhc2UuCgpIbW0sIG5vIHBlcmhhcHMgbm90LiBTdGlsbCwgaWYgbW9vbmppdCBp
+cyB1bm1haW50YWluZWQgd2Ugd2lsbCBuZWVkIHRvCm1vdmUgYXdheSBmcm9tIGl0IChFLkcuIGJl
+Zm9yZSAyMDIyLjAyKSBzbyBpdCB3b3VsZCBiZSBnb29kIHRvIGdldCB0bwp0aGUgYm90dG9tIG9m
+IHRoaXMgaXNzdWUuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
