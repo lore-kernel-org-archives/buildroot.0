@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E60C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:33:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D950C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:33:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1ADA1619A6
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:33:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1ADA1619A6
+	by mail.kernel.org (Postfix) with ESMTPS id 2BC0D61994
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:33:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2BC0D61994
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E85A3403A8;
-	Mon,  8 Nov 2021 22:33:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E832B402FE;
+	Mon,  8 Nov 2021 22:33:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4UNZzyNLkbSL; Mon,  8 Nov 2021 22:33:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LsCCZuUn9E5z; Mon,  8 Nov 2021 22:33:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62C43403BA;
-	Mon,  8 Nov 2021 22:33:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 828B11BF995
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12C3D4031F;
+	Mon,  8 Nov 2021 22:33:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 12F801BF865
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3500640361
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4832960870
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7byYvRKjZpgQ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LML5iYSS6fxU for <buildroot@lists.busybox.net>;
  Mon,  8 Nov 2021 22:11:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7784B40314
+ by smtp3.osuosl.org (Postfix) with ESMTP id A297960871
  for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 328B48B718; Mon,  8 Nov 2021 22:08:01 +0000 (UTC)
+ id 5B93B8B719; Mon,  8 Nov 2021 22:08:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 8 Nov 2021 22:59:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c799afd6d6f45c634be62cd75b68da97bbfa7906
-X-Git-Newrev: 4ee0c22bae0239774def6ec6845f72c45b7c2617
+X-Git-Oldrev: 4b6a53a0dbeb55922a6eddba2b361d712d958a6f
+X-Git-Newrev: 617587f929e3a0b15f8b1fa86c4837e04fd4628a
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220801.328B48B718@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- board/hardkernel/odroidxu4/genimage.cfg: beautify file
+Message-Id: <20211108220801.5B93B8B719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/licheepi/genimage.cfg:
+ beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ee0c22bae0239774def6ec6845f72c45b7c2617
+commit: https://git.buildroot.net/buildroot/commit/?id=617587f929e3a0b15f8b1fa86c4837e04fd4628a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,64 +74,32 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/hardkernel/odroidxu4/genimage.cfg | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ board/licheepi/genimage.cfg | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/hardkernel/odroidxu4/genimage.cfg b/board/hardkernel/odroidxu4/genimage.cfg
-index e6b85cf2fa..0a90d6be50 100644
---- a/board/hardkernel/odroidxu4/genimage.cfg
-+++ b/board/hardkernel/odroidxu4/genimage.cfg
-@@ -6,6 +6,7 @@ image boot.vfat {
- 			"exynos5422-odroidxu4.dtb"
+diff --git a/board/licheepi/genimage.cfg b/board/licheepi/genimage.cfg
+index 0d8540f2a0..8dcb2e708e 100644
+--- a/board/licheepi/genimage.cfg
++++ b/board/licheepi/genimage.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+ 			"boot.scr"
  		}
  	}
 +
- 	size = 32M
+ 	size = 8M
  }
  
-@@ -17,34 +18,34 @@ image sdcard.img {
- 		in-partition-table = "no"
- 		image = "bl1.bin.hardkernel"
- 		offset = 512
--		size = 15360
-+		size = 15K
- 	}
- 
- 	partition bl2 {
- 		in-partition-table = "no"
- 		image = "bl2.bin.hardkernel.720k_uboot"
--		offset = 15872
--		size = 16384
-+		offset = 15872 # 15KB + 512B
-+		size = 16K
- 	}
- 
+@@ -17,8 +18,8 @@ image sdcard.img {
  	partition u-boot {
  		in-partition-table = "no"
- 		image = "u-boot-dtb.bin"
--		offset = 32256
--		size = 720k
-+		offset = 32256 # 31KB + 512B
-+		size = 720K
+ 		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8192
+-		size = 516096 # 512KB - 8192
++		offset = 8K
++		size = 504K # 512KB - 8KB
  	}
  
- 	partition tzsw {
- 		in-partition-table = "no"
- 		image = "tzsw.bin.hardkernel"
--		offset = 769536
--		size = 256k
-+		offset = 769536 # 751KB + 512B
-+		size = 256K
- 	}
- 
- 	partition vfat {
- 		partition-type = 0xC
- 		image = "boot.vfat"
--		offset = 2097152
-+		offset = 2M
- 	}
- 
- 	partition rootfs {
+ 	partition boot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
