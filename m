@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32771C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:44:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C88A7C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:44:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EBF5461105
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:44:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EBF5461105
+	by mail.kernel.org (Postfix) with ESMTPS id 94F93619A6
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:44:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 94F93619A6
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C199B6077B;
-	Mon,  8 Nov 2021 22:44:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72796608B0;
+	Mon,  8 Nov 2021 22:44:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fw9jWEaMrQPJ; Mon,  8 Nov 2021 22:44:00 +0000 (UTC)
+	with ESMTP id KyqAlqpnLsTZ; Mon,  8 Nov 2021 22:44:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3926C60667;
-	Mon,  8 Nov 2021 22:43:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 710741BF865
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBE5260746;
+	Mon,  8 Nov 2021 22:44:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C54E1BF97E
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6C2A80EBD
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CFFC40335
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PEB4zq4Y4enr for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2vTGVCQni2Lz for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BB9B80E98
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56D604032F
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 43BA08A47B; Mon,  8 Nov 2021 22:08:00 +0000 (UTC)
+ id 0D5038A47B; Mon,  8 Nov 2021 22:08:03 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:25 +0100
+Date: Mon, 8 Nov 2021 22:59:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 827cb07b2dafa25b3d4830fef9085583dd215f90
-X-Git-Newrev: 1812ef56671c2b9f177635ebd2ade996ffd85cd2
+X-Git-Oldrev: 606170b66af83e3047d2588abdc48d981d40d6ba
+X-Git-Newrev: fe6fc735bd9cf35197450f2cb5cccd56dd12afd6
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220800.43BA08A47B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/ci20/genimage.cfg:
- beautify file
+Message-Id: <20211108220803.0D5038A47B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ board/raspberrypi/genimage-raspberrypi3.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1812ef56671c2b9f177635ebd2ade996ffd85cd2
+commit: https://git.buildroot.net/buildroot/commit/?id=fe6fc735bd9cf35197450f2cb5cccd56dd12afd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,62 +74,72 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/ci20/genimage.cfg | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3.cfg | 53 +++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 26 deletions(-)
 
-diff --git a/board/ci20/genimage.cfg b/board/ci20/genimage.cfg
-index 5f8a16c610..2d4a18a99b 100644
---- a/board/ci20/genimage.cfg
-+++ b/board/ci20/genimage.cfg
-@@ -1,28 +1,28 @@
- image sdcard.img {
--    hdimage {
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+index 0a547241f4..a617823379 100644
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -1,33 +1,34 @@
+ image boot.vfat {
+-  vfat {
+-    files = {
+-      "bcm2710-rpi-3-b.dtb",
+-      "bcm2710-rpi-3-b-plus.dtb",
+-      "bcm2710-rpi-cm3.dtb",
+-      "rpi-firmware/bootcode.bin",
+-      "rpi-firmware/cmdline.txt",
+-      "rpi-firmware/config.txt",
+-      "rpi-firmware/fixup.dat",
+-      "rpi-firmware/start.elf",
+-      "rpi-firmware/overlays",
+-      "zImage"
 -    }
+-  }
+-  size = 32M
++	vfat {
++		files = {
++			"bcm2710-rpi-3-b.dtb",
++			"bcm2710-rpi-3-b-plus.dtb",
++			"bcm2710-rpi-cm3.dtb",
++			"rpi-firmware/bootcode.bin",
++			"rpi-firmware/cmdline.txt",
++			"rpi-firmware/config.txt",
++			"rpi-firmware/fixup.dat",
++			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
++			"zImage"
++		}
++	}
++
++	size = 32M
+ }
+ 
+ image sdcard.img {
+-  hdimage {
+-  }
 +	hdimage {
 +	}
  
--    partition uboot-spl {
--        in-partition-table = "no"
--        image = "u-boot-spl.bin"
--        offset = 512
--    }
-+	partition uboot-spl {
-+		in-partition-table = "no"
-+		image = "u-boot-spl.bin"
-+		offset = 512
+-  partition boot {
+-    partition-type = 0xC
+-    bootable = "true"
+-    image = "boot.vfat"
+-  }
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
 +	}
  
--    partition uboot {
--        in-partition-table = "no"
--        image = "u-boot.img"
--        offset = 14k
--    }
-+	partition uboot {
-+		in-partition-table = "no"
-+		image = "u-boot.img"
-+		offset = 14K
-+	}
- 
--    partition uboot-env {
--        in-partition-table = "no"
--        image = "uboot-env.bin"
--        offset = 526k
--    }
-+	partition uboot-env {
-+		in-partition-table = "no"
-+		image = "uboot-env.bin"
-+		offset = 526K
-+	}
- 
--    partition rootfs {
--        partition-type = 0x83
--        image = "rootfs.ext4"
--        offset = 2M
--    }
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-  }
 +	partition rootfs {
 +		partition-type = 0x83
 +		image = "rootfs.ext4"
-+		offset = 2M
 +	}
  }
 _______________________________________________
