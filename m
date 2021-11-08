@@ -2,83 +2,67 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D67F1C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F7DCC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:05:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 64B18614C8
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:52:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 64B18614C8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 4CBD0619BB
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:05:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4CBD0619BB
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2368340327;
-	Mon,  8 Nov 2021 22:52:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8123402ED;
+	Mon,  8 Nov 2021 23:05:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i2z_9_dJShFu; Mon,  8 Nov 2021 22:52:35 +0000 (UTC)
+	with ESMTP id Ju_9jyWlsUEm; Mon,  8 Nov 2021 23:05:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E1FB402ED;
-	Mon,  8 Nov 2021 22:52:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F675402D5;
+	Mon,  8 Nov 2021 23:05:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E7AF1BF865
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:52:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF6081BF2C4
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 23:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A3A240404
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:52:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE2D44021B
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 23:05:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KfeNPbGf-oVH for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:52:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0012C40400
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636411949;
- bh=5zRYULYZbk6jqi5y8sbAVqdgaepdo2MOiFSOBz8Jjzg=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=MPTGv2sb1xcHEAPY3rnI5KRtedKU2H0UOWxqmHfAh+wuWreNULiMDR4QWzGdI8xd3
- Ik4SrkyNTDEsKfvSSeihXlaEXgsNhsbL8eP0Y89pUbLV6tiqzrZPghpga6KwbDb+LH
- LuBXhm3R/b211zAqbBLG36slwh9OcftLXFOrBkCI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.202]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MfpOT-1mCoh20xdx-00gIi2 for <buildroot@buildroot.org>; Mon, 08 Nov 2021
- 23:52:29 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+ with ESMTP id 0_Yu39ZtWoS2 for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 23:05:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E16140216
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 23:05:24 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.216.221])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id kDhZmJJDJNGRPkDhZmjC97; Tue, 09 Nov 2021 00:05:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636412723; bh=32T0hPmm3pT7VewZ4+Kt/RGVczqMjzpJq4hwCUeVIWo=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Zjg0ilEIgPSw1+jO+Wr4x6DRt4NUZZ6VpUw7EzcJFS5idtlKZI2Np65m/bVltz90S
+ FrF9jfk6d3706TFFSgXfLjUYEHAlu0hCpjE3oEsppsS6DkortcgsNY9kAqu/7rceAp
+ 8TSQCXyU3Y+Q9rZnkxyRhoHX45dlPVQrqE9u7He4xPW+wXC4sN2SgObIPEaOWcoPnn
+ xqvPADImJQOjiJrufTxjIy6ex11Jig6gZv6QmchLyLpuuGvnaeEPI/YVyy1y8Wkc8J
+ HmNFRcrPaGgUDyAdik2pS4KvHMUluTVEMSFN++dU6m0kLp/zjXtaolTc8mZVYIaWg+
+ YJpkBvIqrCniA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon,  8 Nov 2021 23:52:28 +0100
-Message-Id: <20211108225228.2982-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+Date: Tue,  9 Nov 2021 00:05:13 +0100
+Message-Id: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Lm/8Nqykw4k9hWjrzO+e/oqVjDXyCLttcREkqpgG9ijfNzxb1R/
- Y8xwAA6GZghLdZ0ZuPrPpDDd2TlcRAMug7LhCA+nyvxq4sIUNDYuWIRZsda9zEh1QypNkJP
- mYHQnPqt3Ph/U4boQSR0uN+L73DDyEdcYZGGjOykr24gPbplGNRmeZnBiV7hpckBIADB+7Y
- wlladLYatg+doqXwCGB2A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gnY3x26bLcY=:9XguqDFrmxAdckHMV4Cy+C
- Dxt5ucfyXZfKvshgYHWl2h6PamijzK6xJWcF697Iqj+4DJ7w3VnUmuKry+NpJGyRIwDvKbJh7
- p7FOpKFNL1TD/6tnqoXH7BGSOyO45VgStR+DDpwAsAMfJU/xtU3vhOEdG9pWb3WADJkaJJvz5
- hcZ84H/z6MGv+3xU9HClomk1L+yUpeOYbl1PV0Bf8d9dRDpd5gX8roJyCZTeADTaPOAii753u
- 0vbJHaYNMDAItM944M0nH1T3XLMZbZkW+DvGH0RdGi2/W0OIrpEyhtaODkl1mTbMK5yieZuTJ
- MYRGrHj9cWw12xLSrLGReesNEBQekXgc/2IhOCzOOLo/8rVysrCwM0zwU8W5ZUPjw6nXhPViM
- UPm9e93Dvhcf+BLXl2oF4OA01bL4Pz3JKpCpa8ZoSlVM9PBTeh6DWVZiuhDeUILbq10TPd/8R
- rykh5iORaTqVZEvuF9aYluB2+yw2HJNiKmNi1duJ3N0kPZqhCGzSaL2oJEkq6O6+DX4B5xcXu
- 62iE85AvbPhZZWDKj1LQhQLOacsdRtnpbzzSpFHxFKVgLfmtIrZdUcQRA9urZ7nlmmtuffjNn
- cYIFCgBV6DU5eQJuD9X4w/kDTN2baUNbECYHfWZeWskxa4EN0ucWmGqUMBiFIe51VIrynGtC8
- kKFFcGV/YwzCCT7sXTRCfTGOFDGyU60adp4WJf86SScWQZbzz1g0EU1HkC5LvHkb9HJ6fk6z4
- 1MdMH+m1KOoer83hKH3lgc4YXvet1QdkcwK3TKXWqmuxLXO/lBL4IKkWsDUuDImM/gKvE1qyn
- 83l7m0TEFf4CmCZxWRL93bZJib65+tPuPgRDaMvZ/ru4R/XfGNymJ9j22VTTbhvtSF1Cfjv/c
- xYQ9jUBDtjab7xkG85OLTMPhLqQIgpVunNR+bUUlKXwtRh0oknTgvlp4tCxIHuG2Jm5VLRkUD
- 5uH24zdkBbupOS0nIaTrzsHRvyQHB3W/f9W5v7LDgHryVrWsjL6lAFZiiZ0vcf5sFPOxZrTWd
- NrG3DRZoulr9yNfuvcm2qVy0t/ofT53+QO8mFsUO8tTXJS9YwKoFkKSso8rz8qTIulZlsT0k5
- x5WBa4I3EoSIh8=
-Subject: [Buildroot] [PATCH v1] package/hwdata: bump version to 0.353
+X-CMAE-Envelope: MS4wfBtIs2EWJQtNRWjj4Rwhw3C+KYiYK7Qe2E8SSIibpJARKlNhubeh3lOlwUa0pefCBRQb+/Vq86GEEeJnOBeiNoxvqUUlwVwXmCdGLhyFHUx7hxf5sY4F
+ Z69ZSHxuJBELXiC9h8HIIWzKFt0yaBRk6cPCMxs1ixlyXqGc2yvRZCJ885gyW5zFC2a0urWLhRKKUaDzOAeGZRa92LzJiwcTY5pztxZKXfbaZAxilXTrcoVC
+ sP01+kFfNJ2K5gCEe9FjUSKltO97VCSd3T3EytUMxZVXlg1TNOGakaIkNDmJJtPCZTkCloH9nYV1xsOmQ9rojvPdBfqvpyWDRHrNXZAtajNp61NmdFez23Ar
+ 1CptqvFDSEmBPlM+fTJoBsOfuj5Tft1KKxqHq31BRt3TddApy9OPa7A6g5xUSN6Y2M0qjI/BI9BzO6N5tQZSDYYNxffHun8RR0kXHiI7T/RtVRPt7j60xcKO
+ W5ObmR6AiwmnuATbhmgx/rWTLWXgwtQRKwpecv2qDUyLGPw5CK3mNesIrWw+Ib/Z6FEkBPdTF4xSBf9t2ScHCOdFuLP0bKCrB6TpAw==
+Subject: [Buildroot] [PATCH 0/7] Post genimage.cfg beautify
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,42 +74,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Michael Walle <michael@walle.cc>, Jagan Teki <jagan@amarulasolutions.com>,
+ =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>,
+ Luca Ceresoli <luca@lucaceresoli.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This patchset has a critical patch(a20_olinuxino) that prevents from
+creating the image. While the rest is still code style related.
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index be8576d8d2..8479e94339 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  fafcc97421ba766e08a2714ccc3eebb0daabc99e67d53c2d682721dd01ccf7a7  hwdata-0.345.tar.gz
-+sha256  14d120ae58f71da18d7731f44e65a818e4209d621b41fba6f0cd03278a002c1d  hwdata-0.353.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 0485603f16..8341757a11 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HWDATA_VERSION = 0.345
-+HWDATA_VERSION = 0.353
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+As promised I'm going to write the linter for genimage.cfg files.
+
+Best regards
+Giulio Benetti
+Benetti Engineering sas
+
+Giulio Benetti (7):
+  board/olimex/a20_olinuxino/genimage.cfg: fix build failure due to
+    wrong offset value suffix
+  board/altera/socrates_cyclone5/genimage.cfg: fix offset suffix
+  board/friendlyarm/nanopi-neo2/genimage.cfg: fix comment
+  board/orangepi/orangepi-pc2/genimage.cfg: fix comment
+  board/minnowboard/genimage.cfg: fix option assignment spaces
+  board/kontron/pitx-imx8m/genimage.cfg: fix option suffix
+  board/kontron/smarc-sal28/genimage.cfg: fix option suffix
+
+ board/altera/socrates_cyclone5/genimage.cfg | 2 +-
+ board/friendlyarm/nanopi-neo2/genimage.cfg  | 2 +-
+ board/kontron/pitx-imx8m/genimage.cfg       | 2 +-
+ board/kontron/smarc-sal28/genimage.cfg      | 2 +-
+ board/minnowboard/genimage.cfg              | 2 +-
+ board/olimex/a20_olinuxino/genimage.cfg     | 2 +-
+ board/orangepi/orangepi-pc2/genimage.cfg    | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
 -- 
-2.33.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
