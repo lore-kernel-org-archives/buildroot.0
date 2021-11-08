@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C131FC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D03AC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:27:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8A5C761279
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:27:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8A5C761279
+	by mail.kernel.org (Postfix) with ESMTPS id 4168861279
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:27:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4168861279
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65A2880EEE;
-	Mon,  8 Nov 2021 22:27:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A7F280F01;
+	Mon,  8 Nov 2021 22:27:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g1z6nSVCcNsQ; Mon,  8 Nov 2021 22:27:20 +0000 (UTC)
+	with ESMTP id IPnSYTdjGM-Z; Mon,  8 Nov 2021 22:27:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D199680EEB;
-	Mon,  8 Nov 2021 22:27:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C92C1BF995
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74FC780EF9;
+	Mon,  8 Nov 2021 22:27:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CE6B51BF97E
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6CC0F80EAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE680402F4
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UsVcOkAX1Jrw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3MjLZFBCDIAl for <buildroot@lists.busybox.net>;
  Mon,  8 Nov 2021 22:11:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D16D380E98
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8E76401E9
  for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8898D8B719; Mon,  8 Nov 2021 22:07:59 +0000 (UTC)
+ id A0C178B718; Mon,  8 Nov 2021 22:07:59 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:20:36 +0100
+Date: Mon, 8 Nov 2021 22:20:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 103ceb8d673111feb6ff1a8374b00bb627663ebe
-X-Git-Newrev: aed5f2b999ec10aa4a14becd5801cc3dd9648ee6
+X-Git-Oldrev: 15d8d81db37246fc681dafe6f2659cb902dc87ce
+X-Git-Newrev: 60a825bfea3664b4222153a1af983b8507a2b758
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220759.8898D8B719@busybox.osuosl.org>
+Message-Id: <20211108220759.A0C178B718@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/acmesystems/aria-g25/genimage.cfg: beautify file
+ board/amarula/a64-relic/genimage.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aed5f2b999ec10aa4a14becd5801cc3dd9648ee6
+commit: https://git.buildroot.net/buildroot/commit/?id=60a825bfea3664b4222153a1af983b8507a2b758
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,21 +74,20 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/acmesystems/aria-g25/genimage.cfg | 1 +
+ board/amarula/a64-relic/genimage.cfg | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/board/acmesystems/aria-g25/genimage.cfg b/board/acmesystems/aria-g25/genimage.cfg
-index fd7b9557c6..29dc697153 100644
---- a/board/acmesystems/aria-g25/genimage.cfg
-+++ b/board/acmesystems/aria-g25/genimage.cfg
-@@ -14,6 +14,7 @@ image boot.vfat {
- 			image = "at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.10.3.bin"
+diff --git a/board/amarula/a64-relic/genimage.cfg b/board/amarula/a64-relic/genimage.cfg
+index 002b6bb4d1..58b607f5fb 100644
+--- a/board/amarula/a64-relic/genimage.cfg
++++ b/board/amarula/a64-relic/genimage.cfg
+@@ -6,5 +6,6 @@ image boot.vfat {
+ 			"extlinux"
  		}
  	}
 +
- 	size = 16M
+ 	size = 64M
  }
- 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
