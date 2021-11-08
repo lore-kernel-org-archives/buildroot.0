@@ -2,65 +2,67 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F07C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:19:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F066C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:32:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 355F86103A
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:19:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 355F86103A
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=igalia.com
+	by mail.kernel.org (Postfix) with ESMTPS id 9CDDC611C0
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:32:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9CDDC611C0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=green-communications.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0517680D58;
-	Mon,  8 Nov 2021 10:19:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F19114025D;
+	Mon,  8 Nov 2021 10:32:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p9wgqy0rYSxj; Mon,  8 Nov 2021 10:32:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D9094025E;
+	Mon,  8 Nov 2021 10:32:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 204F51BF36C
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:32:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0FE7080E17
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:32:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OWRLy64lUR_V; Mon,  8 Nov 2021 10:19:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EB0080D40;
-	Mon,  8 Nov 2021 10:19:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46DE91BF36C
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:19:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42FC340182
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:19:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P5v5T3l4mpEu for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 10:19:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 25EB440163
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 10:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
- s=20170329; 
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:To:From:Message-ID:Date;
- bh=z5NpPE2GNzhUcjghzazn+no8TlnrdQBEBTZgGDCdxSo=; 
- b=CqisLhHyPVZuRX79H41clkDleBuXaXxek2uW3A4dzgysdDy+vMT6nVIYR55HcS5vKx52UslBl04KKETV+oIolsGpmsm7BRRwny7/QA2FV8Xcx5IKDPaUmteDEHZrot/PlmLwmVnICaLev5ujEaTAU9dujfZgccsTPtfHTi8SXTx0MGCMc6aklNRiilPU+5eAnTHnGCdmT34J/VfJaDwmphnmjMVAoPyQBUR2vQ6kWycDxCuHFiPfFVc2afXYK0W6fcu6ZJtGH7HE2Fh3gHeZ/9SyshEQCFsPcEm54GbBltJHQ1a+/Sm4rRUm1PnJmZHPeqbPim0jNXghc+eJQo1aKA==;
-Received: from 91-153-34-221.elisa-laajakaista.fi ([91.153.34.221] helo=momiji)
- by fanzine.igalia.com with esmtpsa 
- (Cipher TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256) (Exim)
- id 1mk1ku-0007Hk-51
- for <buildroot@buildroot.org>; Mon, 08 Nov 2021 11:20:00 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id a3c34488
- for <buildroot@buildroot.org>; Mon, 8 Nov 2021 10:19:23 +0000 (UTC)
-Date: Mon, 8 Nov 2021 12:19:23 +0200
-Message-ID: <20211108121923.GB462971@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D9x-YLLL65Ix for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 10:32:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 28D6580DC3
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 10:32:45 +0000 (UTC)
+Received: from hardbit.localdomain ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.168]) with ESMTPSA (Nemesis)
+ id 1MJV9M-1mzLsZ16kK-00JnYd; Mon, 08 Nov 2021 11:32:43 +0100
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 To: buildroot@buildroot.org
-In-Reply-To: <20211107065455.CED66402C5@smtp4.osuosl.org>
-References: <20211107065455.CED66402C5@smtp4.osuosl.org>
+Date: Mon,  8 Nov 2021 11:32:27 +0100
+Message-Id: <20211108103227.23310-1-thomas.claveirole@green-communications.fr>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-11-06
+X-Provags-ID: V03:K1:ucJ/ZBVotNLQP9GD5m0k4I3Ym+lPcy9gLwhM2ZsthPtIS1jNzEv
+ YIH3FLFpBer1uL8FOor5pMA2THv7Is6kq788JQ2zIeYyi0C9Ri2UHAdQ4UnI1SNGETPBPU6
+ op8kvZZkwM0UgRghrqkYPAuWcL5d7/tOCN+i/w2Ob5pXjlokoWMD3wng/psbKhhy+ltYzte
+ 2il5XPDgdI9cJyK5LiD8g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:viVnd+Dd6lI=:9ZZfyNJMJ/4ERnP2r5/41c
+ J7fFsU+fhruMEklEj+8pnhuKSs27rubTkVvMiVbYhopZ+pO8G5Zsd7yqwWx+eGFuUGF9RtxMe
+ dC2m18w0+GmfwPm7UEpTaRakzyu0i8vQALxCbLTP6ADvh3HrEVU/ZViBZDSlULswrouBXkU4H
+ PUYvmz4Hbj3ynLNwm4I9RtuNLn1PigOq8vsuBZrxpPmvsJIMwujEbwnV/ETizPkX4vzQ/WzbK
+ JwY89l7MjhFH8c3rikrRmRqIiSA6PnkOY6H3cLYno7AaMtN9w0bugs5nz0y9IbTcUVPKNvtzQ
+ fej4wqJstVzVfIhNyzrQpx6swXBUOxCJprQl6lM/ZedZUfUFDyxfo+7zByvfpHf4NWboIGSwk
+ O5M8m/U4af6W7RccyIPMbJMaH+6bMzaLFqpuR+7hRTIsOMZXg96naZxjJBGKJ6oVMEfdNr5lh
+ wcNOMbfV8qglALHOttRQT68aqbWo4HEvVb8xAbq9X69bzK2u0wGr5OPnqer2Z9YrcWs3uMG0Z
+ ixsZUmcyFEpur4sxmRvAT3kLHAZfZ9FfClCAbr6HLt3kobhpc58XQ4pdRz+6VhaMu2ozCmrI9
+ P98Bwy5r8Ezw6fuz+yp7uQn7uCQIflbphpXurDkhXMgMI5qE1erbqFi0+sJeRnaP13+jeKe0s
+ 8KaRAgMKVK6Os3mS9hPZ8KdfzAuGTJD6Tuq+0vGoQiMN5bAMVmX/b2oFHC458Nx3XjbYF3dgn
+ NydbuBlY9TKDgrsNxzlohZrtt4EbJ5FMggXGaQ==
+Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 6.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,52 +74,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4645197515873045436=="
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============4645197515873045436==
-Content-Type: multipart/signed; boundary="XPsCR0jrZfJkaIGl"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-
-
---XPsCR0jrZfJkaIGl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
-
-T24gU3VuLCAwNyBOb3YgMjAyMSAwNjo1NDo1MSArMDAwMCBUaG9tYXMgUGV0YXp6b25pIDx0aG9t
-YXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKCj4gICBhYXJjaDY0ICAgIHwgICAgICAg
-IHdlYmtpdGd0ay0yLjMyLjQgICAgICAgIHwgTk9LIHwgaHR0cDovL2F1dG9idWlsZC5idWlsZHJv
-b3QubmV0L3Jlc3VsdHMvMmZiYmY2NWEzZGQ4YjY5MTZmYWRiNDU5YWYxYjMwOGY4OGI1ODU1NCB8
-ICAgICAKClRoaXMgaXMgYSBidWlsZCBmYWlsdXJlIHdoaWNoIGhhZCBiZWVuIHJlcG9ydGVkIGlu
-IHRoZSBwYXN0IGluIFdlYktpdCdzCkJ1Z3ppbGxhLCBidXQgd2Ugd2VyZSBub3QgYWJsZSB0byBm
-aW5kIGEgd2F5IHRvIHJlbGlhYmx5IHJlcHJvZHVjZToKCiAgaHR0cHM6Ly9idWdzLndlYmtpdC5v
-cmcvc2hvd19idWcuY2dpP2lkPTIwODkwNyNjMTEKCkknbGwgdHJ5IHRvIGNvbWUgdXAgd2l0aCBh
-IGZpeCB0aGlzIHdlZWsgbm93IHRoYXQgd2UgaGF2ZSB0aGlzIGF1dG9idWlsZGVyCmNvbmZpZ3Vy
-YXRpb24gdG8gcmVwcm9kdWNlIGl0IHJlbGlhYmx5IDopCgoKQ2hlZXJzLArigJRBZHJpw6FuCg==
-
---XPsCR0jrZfJkaIGl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYYj5qwAKCRCRxVnb5MkS
-OwQTAJ0QBnTH8vMHKpn+LGIxH3hMLpDWTQCfawW4KSxCLYQX6PmTDEz5a0a3byY=
-=uXr/
------END PGP SIGNATURE-----
-
---XPsCR0jrZfJkaIGl--
-
---===============4645197515873045436==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index 306996090c..e29365fc91 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	07d06f17f44399d86ddeac8d8000d39ff9db503257f77c59e5743d5934463623	v6.8.1-dist.zip
++sha256	35a0b37a5c1e7c48553215c6e8c24a12bac8e9048f008fc61c4b329cf6611b5c	v6.9.0-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 7a4922edc4..b20ea9977c 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.8.1
++OPENLAYERS_VERSION = 6.9.0
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4645197515873045436==--
