@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3DE1C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC547C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:38:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 682B86124D
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:38:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 682B86124D
+	by mail.kernel.org (Postfix) with ESMTPS id 97F496124D
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:38:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 97F496124D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39D8640320;
-	Mon,  8 Nov 2021 22:38:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67F974032C;
+	Mon,  8 Nov 2021 22:38:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B6WTYa_r2D2c; Mon,  8 Nov 2021 22:38:13 +0000 (UTC)
+	with ESMTP id DGsRzFwGzmHD; Mon,  8 Nov 2021 22:38:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01F4B4031F;
-	Mon,  8 Nov 2021 22:38:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9470E1BF97E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 99C1340338;
+	Mon,  8 Nov 2021 22:38:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A9621BF865
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B911E402F4
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8152780EB9
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LG5knQSI2kSz for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QKDazHpDwd1c for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:11:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08D2740333
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D062880EAA
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B687D8B719; Mon,  8 Nov 2021 22:08:02 +0000 (UTC)
+ id 988C98A47B; Mon,  8 Nov 2021 22:08:01 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:32 +0100
+Date: Mon, 8 Nov 2021 22:59:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 95d1d6bf8780da12aa2e284ff0eb1d6c9d18d32f
-X-Git-Newrev: 542ad8226c951c4b517a3079e804fbd3ad282efc
+X-Git-Oldrev: 1ca31c6d7c54cfd2a548ebf7c38a058ea2c4852e
+X-Git-Newrev: 0458912a45e58dcfba33a44cc26c0ce6b74dc436
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220802.B687D8B719@busybox.osuosl.org>
+Message-Id: <20211108220801.988C98A47B@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/radxa/rockpi-n10/genimage.cfg: beautify file
+ board/olimex/a13_olinuxino/genimage.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=542ad8226c951c4b517a3079e804fbd3ad282efc
+commit: https://git.buildroot.net/buildroot/commit/?id=0458912a45e58dcfba33a44cc26c0ce6b74dc436
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,26 +74,59 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/radxa/rockpi-n10/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/olimex/a13_olinuxino/genimage.cfg | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
-index 8fbf562f28..b3ade327d6 100644
---- a/board/radxa/rockpi-n10/genimage.cfg
-+++ b/board/radxa/rockpi-n10/genimage.cfg
-@@ -6,11 +6,11 @@ image boot.vfat {
- 			"extlinux"
- 		}
- 	}
+diff --git a/board/olimex/a13_olinuxino/genimage.cfg b/board/olimex/a13_olinuxino/genimage.cfg
+index 6f6b0b0bab..4eb14eb520 100644
+--- a/board/olimex/a13_olinuxino/genimage.cfg
++++ b/board/olimex/a13_olinuxino/genimage.cfg
+@@ -1,12 +1,13 @@
+ image boot.vfat {
+-        vfat {
+-                files = {
+-                        "zImage",
+-                        "sun5i-a13-olinuxino.dtb",
+-                        "boot.scr"
+-                }
+-        }
+-        size = 64M
++	vfat {
++		files = {
++			"zImage",
++			"sun5i-a13-olinuxino.dtb",
++			"boot.scr"
++		}
++	}
 +
- 	size = 112M
++	size = 64M
  }
  
  image sdcard.img {
--
- 	hdimage {
- 		gpt = true
+@@ -16,16 +17,15 @@ image sdcard.img {
+ 	partition u-boot {
+ 		in-partition-table = "no"
+ 		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8192
+-		size = 1040384 # 1MB - 8192
++		offset = 8K
++		size = 1016K # 1MB - 8KB
  	}
+ 
+-        partition boot {
+-                partition-type = 0xC
+-                bootable = "true"
+-                image = "boot.vfat"
+-        }
+-
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
+ 
+ 	partition rootfs {
+ 		partition-type = 0x83
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
