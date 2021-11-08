@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF585C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49FD7C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:12:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 79E7F61350
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:11:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79E7F61350
+	by mail.kernel.org (Postfix) with ESMTPS id 1AC946134F
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:12:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1AC946134F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48FD9402FC;
-	Mon,  8 Nov 2021 16:11:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB891402FD;
+	Mon,  8 Nov 2021 16:11:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wvJ45PaGfUcz; Mon,  8 Nov 2021 16:11:47 +0000 (UTC)
+	with ESMTP id 9OwnUNUhuNtP; Mon,  8 Nov 2021 16:11:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFF06402F0;
-	Mon,  8 Nov 2021 16:11:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5354940307;
+	Mon,  8 Nov 2021 16:11:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A931E1BF868
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:07:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B8EE21BF868
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 682BB402F5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 809B9402F7
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:07:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yv9ImS0fo5W2 for <buildroot@lists.busybox.net>;
+ with ESMTP id XGTVNnKlOhso for <buildroot@lists.busybox.net>;
  Mon,  8 Nov 2021 16:07:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A93DF402FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91CD4402F8
  for <buildroot@buildroot.org>; Mon,  8 Nov 2021 16:07:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ED0E28B6D5; Mon,  8 Nov 2021 16:03:23 +0000 (UTC)
+ id D79238B6F3; Mon,  8 Nov 2021 16:03:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 17:06:29 +0100
+Date: Mon, 8 Nov 2021 17:01:31 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 8a46e128eb842f890f119b7b19359192d0f88aaf
-X-Git-Newrev: 8c549af8a81c05c191e2d5dd266178412556f897
+X-Git-Oldrev: 7487f0fc77e028e15357d90db6838c2a4ad175b4
+X-Git-Newrev: 029b7a2356b75c69ca0c0627c8e8ce252908decb
 X-Patchwork-Hint: ignore
-Message-Id: <20211108160323.ED0E28B6D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/weston: remove
- launcher-libseat meson option
+Message-Id: <20211108160323.D79238B6F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/netdata: disable
+ unit tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c549af8a81c05c191e2d5dd266178412556f897
+commit: https://git.buildroot.net/buildroot/commit/?id=029b7a2356b75c69ca0c0627c8e8ce252908decb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-This option only exists in main and is not in a release.
+Disable unit tests which are enabled by default if cmocka is found since
+the addition of the package in commit
+1d2bb469078b5818aa2390b9868cd632200f17a2
 
-Fixes:
-output/build/weston-9.0.0/meson.build:1:0: ERROR: Unknown options: "launcher-libseat"
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0f1bce7b73204a7abb85aa629e8704e08cbd0ce9)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ab721dc46028fdb2214a37592d5e8d1820ccf40d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/weston.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ package/netdata/netdata.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 69ee11d23c..6dd5439291 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -26,13 +26,6 @@ else
- WESTON_CONF_OPTS += -Dsimple-clients=
- endif
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index d66a9602e2..34365cbf56 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -10,7 +10,9 @@ NETDATA_LICENSE = GPL-3.0+
+ NETDATA_LICENSE_FILES = LICENSE
+ # netdata's source code is released without a generated configure script
+ NETDATA_AUTORECONF = YES
+-NETDATA_CONF_OPTS = --disable-dbengine
++NETDATA_CONF_OPTS = \
++	--disable-dbengine \
++	--disable-unit-tests
+ NETDATA_DEPENDENCIES = libuv util-linux zlib
  
--ifeq ($(BR2_PACKAGE_SEATD),y)
--WESTON_CONF_OPTS += -Dlauncher-libseat=true
--WESTON_DEPENDENCIES += seatd
--else
--WESTON_CONF_OPTS += -Dlauncher-libseat=false
--endif
--
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
- WESTON_CONF_OPTS += -Dlauncher-logind=true
- WESTON_DEPENDENCIES += dbus systemd
+ ifeq ($(BR2_GCC_ENABLE_LTO),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
