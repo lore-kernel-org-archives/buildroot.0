@@ -2,51 +2,51 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 182EAC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:11:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5119C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:11:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B634461353
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:11:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B634461353
+	by mail.kernel.org (Postfix) with ESMTPS id 9E26E61361
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:11:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9E26E61361
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8796B80E8C;
-	Mon,  8 Nov 2021 22:11:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NSO_6oBuqGC0; Mon,  8 Nov 2021 22:11:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 001BF80E5A;
-	Mon,  8 Nov 2021 22:11:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 685351BF865
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A4F5402E6
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BE50402E1;
+	Mon,  8 Nov 2021 22:11:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dcuoDxMjwJhf for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:06:03 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gVxClpt2wD15; Mon,  8 Nov 2021 22:11:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86B90402E0;
+	Mon,  8 Nov 2021 22:11:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A5EA1BF97E
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5BC740357
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:05 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u2hXkMt2gEMT for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:06:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D089401CD
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:06:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CE394034F
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:06:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0792C8B70F; Mon,  8 Nov 2021 22:02:10 +0000 (UTC)
+ id EDD918B70F; Mon,  8 Nov 2021 22:02:11 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:27 +0100
+Date: Mon, 8 Nov 2021 22:59:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39d6637c3e6b3e74a155dde4e4987dece7f0f290
-X-Git-Newrev: fbbf6b8712e07e4d605f4605447b3f7a002479d3
+X-Git-Oldrev: 2c676c803768ca624349f16a6ba9a855e0c0e7cf
+X-Git-Newrev: 95d1d6bf8780da12aa2e284ff0eb1d6c9d18d32f
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220210.0792C8B70F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/friendlyarm/nanopi-m1/genimage.cfg:
+Message-Id: <20211108220211.EDD918B70F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/radxa/rockpi-4/genimage.cfg:
  beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbbf6b8712e07e4d605f4605447b3f7a002479d3
+commit: https://git.buildroot.net/buildroot/commit/?id=95d1d6bf8780da12aa2e284ff0eb1d6c9d18d32f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,32 +74,26 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/friendlyarm/nanopi-m1/genimage.cfg | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ board/radxa/rockpi-4/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/friendlyarm/nanopi-m1/genimage.cfg b/board/friendlyarm/nanopi-m1/genimage.cfg
-index 23c9c7dca2..3b2b82ce96 100644
---- a/board/friendlyarm/nanopi-m1/genimage.cfg
-+++ b/board/friendlyarm/nanopi-m1/genimage.cfg
-@@ -8,6 +8,7 @@ image boot.vfat {
- 			"boot.scr"
+diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
+index 88986df34d..197968320e 100644
+--- a/board/radxa/rockpi-4/genimage.cfg
++++ b/board/radxa/rockpi-4/genimage.cfg
+@@ -6,11 +6,11 @@ image boot.vfat {
+ 			"extlinux"
  		}
  	}
 +
- 	size = 10M
+ 	size = 112M
  }
  
-@@ -18,8 +19,8 @@ image sdcard.img {
- 	partition u-boot {
- 		in-partition-table = "no"
- 		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8192
--		size = 1040384 # 1MB - 8192
-+		offset = 8K
-+		size = 1016K # 1MB - 8KB
+ image sdcard.img {
+-
+ 	hdimage {
+ 		gpt = true
  	}
- 
- 	partition boot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
