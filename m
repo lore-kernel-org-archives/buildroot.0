@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB96C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:25:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B89AC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:25:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D9C8861502
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:25:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D9C8861502
+	by mail.kernel.org (Postfix) with ESMTPS id DA6096162E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:25:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DA6096162E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3BE84036E;
-	Mon,  8 Nov 2021 22:25:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5C7640389;
+	Mon,  8 Nov 2021 22:25:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3F7smtLhbis; Mon,  8 Nov 2021 22:25:09 +0000 (UTC)
+	with ESMTP id 1Ezo37LivvJG; Mon,  8 Nov 2021 22:25:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 210B740390;
-	Mon,  8 Nov 2021 22:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DC56403A6;
+	Mon,  8 Nov 2021 22:25:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 118011BF865
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02B5A1BF865
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 620A680E8A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A71C80EB6
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:06:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5egTDnqXLWSZ for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:06:06 +0000 (UTC)
+ with ESMTP id N4uClfIe-bFv for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:06:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10C3B80EDF
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:06:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 358F680EBB
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:06:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C122F8B70F; Mon,  8 Nov 2021 22:02:12 +0000 (UTC)
+ id E51F38B708; Mon,  8 Nov 2021 22:02:11 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:35 +0100
+Date: Mon, 8 Nov 2021 22:59:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb8c35fcd53945c8aacb8a6d02d2ad72ec71805e
-X-Git-Newrev: 2cfed9b4f710169068582b674ecccbc253b183e4
+X-Git-Oldrev: 96dcd875c737fdd799c3f57d7f5753c28b98d524
+X-Git-Newrev: 2c676c803768ca624349f16a6ba9a855e0c0e7cf
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220212.C122F8B70F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/toradex/apalis-imx6/genimage.cfg:
- beautify file
+Message-Id: <20211108220211.E51F38B708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/pine64/sopine/genimage.cfg: beautify
+ file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cfed9b4f710169068582b674ecccbc253b183e4
+commit: https://git.buildroot.net/buildroot/commit/?id=2c676c803768ca624349f16a6ba9a855e0c0e7cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,33 +74,38 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/toradex/apalis-imx6/genimage.cfg | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ board/pine64/sopine/genimage.cfg | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/board/toradex/apalis-imx6/genimage.cfg b/board/toradex/apalis-imx6/genimage.cfg
-index fe359bd93e..a277decaa8 100644
---- a/board/toradex/apalis-imx6/genimage.cfg
-+++ b/board/toradex/apalis-imx6/genimage.cfg
-@@ -4,12 +4,12 @@
- # from its internal flash memory (eMMC).
- 
- image sdcard.img {
--  hdimage {
--  }
-+	hdimage {
-+	}
- 
--  partition rootfs {
--    partition-type = 0x83
--    image = "rootfs.ext2"
--    size = 512M
--  }
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+		size = 512M
-+	}
+diff --git a/board/pine64/sopine/genimage.cfg b/board/pine64/sopine/genimage.cfg
+index 02ebe7ab9b..9300f3d601 100644
+--- a/board/pine64/sopine/genimage.cfg
++++ b/board/pine64/sopine/genimage.cfg
+@@ -6,6 +6,7 @@ image boot.vfat {
+ 			"boot.scr"
+ 		}
+ 	}
++
+ 	size = 64M
  }
+ 
+@@ -16,14 +17,14 @@ image sdcard.img {
+ 	partition spl {
+ 		in-partition-table = "no"
+ 		image = "sunxi-spl.bin"
+-		offset = 8192
++		offset = 8K
+ 	}
+ 
+ 	partition u-boot {
+ 		in-partition-table = "no"
+ 		image = "u-boot.itb"
+ 		offset = 40K
+-		size = 1M # 1MB - 40K
++		size = 1M # 1MB - 40KB
+ 	}
+ 
+ 	partition boot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
