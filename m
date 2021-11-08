@@ -2,52 +2,59 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ACF9C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5ADBC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:40:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9EBA7610A3
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:04:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9EBA7610A3
+	by mail.kernel.org (Postfix) with ESMTPS id A636060F6E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 07:40:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A636060F6E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D8CB6077E;
-	Mon,  8 Nov 2021 07:04:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B4BA60786;
+	Mon,  8 Nov 2021 07:40:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2WzWVZcCuCZt; Mon,  8 Nov 2021 07:04:33 +0000 (UTC)
+	with ESMTP id Q3nf5grDGnHN; Mon,  8 Nov 2021 07:40:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE4E16070E;
-	Mon,  8 Nov 2021 07:04:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C72606077D;
+	Mon,  8 Nov 2021 07:40:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B7F181BF3A6
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:04:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E3F11BF3A6
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B362B80CF3
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:04:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A96280D3E
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 07:40:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ofupcoOg5TfY for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 07:04:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6DA080CEC
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 07:04:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 147F58B547; Mon,  8 Nov 2021 07:00:35 +0000 (UTC)
+ with ESMTP id GyCuFTluPsDz for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 07:40:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A2FF80D3C
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 07:40:12 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E609120005;
+ Mon,  8 Nov 2021 07:40:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mjzGC-00007L-TZ; Mon, 08 Nov 2021 08:40:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 08:04:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29226854e14fcba655b3e6380b6f5ef27615b420
-X-Git-Newrev: 4b5b9f75e998f30cdaebcc12deaed82be12ee81b
-X-Patchwork-Hint: ignore
-Message-Id: <20211108070035.147F58B547@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: security bump to
- version 1.5.7
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211107214505.3620429-1-fontaine.fabrice@gmail.com>
+Date: Mon, 08 Nov 2021 08:40:08 +0100
+In-Reply-To: <20211107214505.3620429-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Nov 2021 22:45:05 +0100")
+Message-ID: <87fss7859j.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/mono: fix build with autoconf
+ >= 2.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +66,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b5b9f75e998f30cdaebcc12deaed82be12ee81b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes the following security issues:
+ > For an unknown reason, the following build failure is raised on one of
+ > the autobuilder with host gcc 6.3.0 since bump of autoconf to version
+ > 2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
 
-- CVE-2021-41103: Insufficiently restricted permissions on plugin
-  directories
-  https://github.com/advisories/GHSA-c2h3-6mxw-7mvq
+ > icall.c: In function 'mono_create_icall_signatures':
+ > icall.c:9513:20: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]
+ >    gsize_a *types = (gsize*)(sig + 1);
+ >                     ^
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Add an upstream patch to fix it.
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 3840d3ea57..594c56a819 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  3a580cd5f125fd473c10a1ea38178b0f662777144a8cc83d97dba2d2350f2b17  containerd-1.5.5.tar.gz
-+sha256  09be0cedea77568029aa0c7be9a323b89fa6886b402b5d223780a05b8c7cd45a  containerd-1.5.7.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index ea45c61028..fdbd2bf3e6 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONTAINERD_VERSION = 1.5.5
-+CONTAINERD_VERSION = 1.5.7
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+Odd that it only triggers now, but the patch looks obviously
+correct. Interesting enough, gsize_a is defined as:
+
+typedef gsize G_MAY_ALIAS gsize_a;
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
