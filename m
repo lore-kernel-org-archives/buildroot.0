@@ -2,65 +2,85 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1267C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 18:53:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC56C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C56461361
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 18:53:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C56461361
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
+	by mail.kernel.org (Postfix) with ESMTPS id A17FD6120A
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A17FD6120A
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0A07400B5;
-	Mon,  8 Nov 2021 18:53:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D0AD6083F;
+	Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V_uEB75-PUpw; Mon,  8 Nov 2021 18:53:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id szX27CtsvJT7; Mon,  8 Nov 2021 19:27:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9703C400C5;
-	Mon,  8 Nov 2021 18:53:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E0F96083C;
+	Mon,  8 Nov 2021 19:27:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 257371BF3F3
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 18:53:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CA03C1BF311
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2190180E24
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 18:53:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C612680DC6
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OsziTMZ4yi25 for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 18:53:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.tkos.co.il (guitar.tcltek.co.il [192.115.133.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3028980E1E
- for <buildroot@busybox.net>; Mon,  8 Nov 2021 18:53:07 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.4])
- (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
- (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id AD1AA4408FE;
- Mon,  8 Nov 2021 20:52:52 +0200 (IST)
-Authentication-Results: mx.tkos.co.il; dmarc=fail header.from=tkos.co.il
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1636397572;
- bh=47QlCALGTgz13urCoOg7t1cbUnuZNT5W5LBsW3tZ2Xc=;
- h=From:To:Cc:Subject:Date:From;
- b=bgY0q/8/XcAvNQ+krvclCB4rTUJ3ZoflNU0TbG4CY3+03Iauf26zsUIWH9H5m29kr
- tXCNAfHeZnkjyahsZjFWtLE8vfj0wiThNYm658n3RhHt2b5ruTnIRFgV9EM8DS0KA5
- LUIh6jpuHcpuyq5kXJxn3eNEtz47dpkFZM6I8wofBX99uCrFEYVkVwhtG3eO/cKK0i
- giay12va+RbB+rAaki/czs5Z8YuLI4nqLEQ1MsNG4uoUw7vXK51xblTCAR0JJrfiVj
- zFu2L746nmyLpwPCL/PO7OmyLigshb0ZoGn/eua6Eghz/2ztp2fs8T5hGLPIR11ERm
- VQYQUHCTnJANA==
-To: buildroot@busybox.net
-Date: Mon,  8 Nov 2021 20:51:36 +0200
-Message-Id: <5b186b86fcb09362595194f266ca1fe33a8f0f59.1636397496.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.33.0
+ with ESMTP id 9HeykhlSIh3i for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2854B80D7C
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id u1so28774565wru.13
+ for <buildroot@buildroot.org>; Mon, 08 Nov 2021 11:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uy7ehZfgfO/FsWDcAKx7nah+nnTX2mCMiCqwxMk9vyc=;
+ b=o+Url7Hm8zWggxBS2MY8UV1/4YXjz7ESTM6ra77NN4MusDiFP7qhsSZQ7/5f/L+ZgK
+ IaVJLxpv/2J7VtWMqk+/eueVSqAVTFXyYzxaPdhI5yZ38ITHAcM6nhJ2ckrN2irB8Fvo
+ Lu5cMxa4/voKDzkh/cbLBp9uemqab6AGINi7j2nODrkyk7KOPgfXzapMCLOG8HpGUaqD
+ bWRzvwHfGuL27AMbE9UxmJOpqdKLbjkafJH8cwPHdJHo0A3NBLiVyil7ryNBE3gWPYnw
+ maJaYQZLhGso12Hva7smMnfwKUOY5Gg0hcgaqBE9sPKPh9NxhW94aalfbb+pNzyTkvCr
+ 4QdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=uy7ehZfgfO/FsWDcAKx7nah+nnTX2mCMiCqwxMk9vyc=;
+ b=huFDnzzLsOhMJLibMykzupUVN/2C6QeALIsm2VMOQNk/RkY5zD6iQSj7XbD6VL0Eby
+ ixLp+X90VDdCYj6ZkXuMk0catDYboITRZd7HHLVrLm+Lz7r/7vBRpovrPKPaQHC8tEjn
+ 9W4Lj5rJqGbC5n73b2AyVpPQeziOqRAvpK0OiFuZFVEHi12CZXIpjYlyVRw+phFHOmOI
+ l+VDFbPnC5e47uOHjs8LNadDo8SWOxCc5PFQXdt6eU+ZXdHtegN/S/MH4e+jIsH+4bL2
+ oepM+ssEKc9PunYY3qsIUauaA2ISXvXuXL6BzGpahDqnJA9ete3LYEjsY0fujeoqJAIX
+ 1lVQ==
+X-Gm-Message-State: AOAM5323eDK9id387t6ooTHjasjyLAuWFJs1evFKBIh/dTMHGuKkmxsB
+ Xtb0pJ+ZHAfSKzi1Exc3WELZ5w8apY9ojw==
+X-Google-Smtp-Source: ABdhPJwgFR+4YM1zDTq226F7WITihlLbHf+L5RaM+LeQ3lTetFrJ67jzc9Wp1if5b9Pd+kfyz8p0qw==
+X-Received: by 2002:a5d:51cb:: with SMTP id n11mr1878125wrv.278.1636399632115; 
+ Mon, 08 Nov 2021 11:27:12 -0800 (PST)
+Received: from menoah.home ([2a01:cb19:190:c500:f823:1d08:390b:d00e])
+ by smtp.gmail.com with ESMTPSA id r1sm256016wmr.36.2021.11.08.11.27.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Nov 2021 11:27:11 -0800 (PST)
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  8 Nov 2021 20:27:05 +0100
+Message-Id: <20211108192706.456116-1-texier.pj2@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/socat: bump to version 1.7.4.2
+Subject: [Buildroot] [PATCH]
+ support/testing/tests/package/test_python_unittest_xml_reporting.py: fix
+ flake8 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,65 +92,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fixes release.
+Fixes:
 
-Update README hash for version update.
+support/testing/tests/package/test_python_unittest_xml_reporting.py:3:1: F401 'time' imported but unused
+1     F401 'time' imported but unused
+make: *** [Makefile:1220: check-flake8] Error 123
 
-Update comment; we do not patch configure.in.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 ---
- package/socat/socat.hash | 6 +++---
- package/socat/socat.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../testing/tests/package/test_python_unittest_xml_reporting.py  | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 5a4c5204555a..0d9d0ba76c9d 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,8 +1,8 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5  36cad050ecf4981ab044c3fbd75c643f  socat-1.7.4.1.tar.bz2
-+md5  003686f80d820072649660b85f80c58f  socat-1.7.4.2.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256  3faca25614e89123dff5045680549ecef519d02e331aaf3c4f5a8f6837c675e9  socat-1.7.4.1.tar.bz2
-+sha256  6690a9f9990457b505097a272bbf2cbf4cc35576176f76646e3524b0e91c1763  socat-1.7.4.2.tar.bz2
- # Locally calculated
--sha256  b1ebebbce145027f4268211f36d121b083aeeabdc1736eb144b8afd8e86ce8da  README
-+sha256  062e425b43da6b3df6d8657639b5e2c781781572b5d8867444fd6d2487ac7644  README
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 61c985256541..cf2a31b0969c 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_python_unittest_xml_reporting.py b/support/testing/tests/package/test_python_unittest_xml_reporting.py
+index f08c88e3da..446c231a00 100644
+--- a/support/testing/tests/package/test_python_unittest_xml_reporting.py
++++ b/support/testing/tests/package/test_python_unittest_xml_reporting.py
+@@ -1,6 +1,5 @@
+ from tests.package.test_python import TestPythonPackageBase
+ import os
+-import time
  
--SOCAT_VERSION = 1.7.4.1
-+SOCAT_VERSION = 1.7.4.2
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
-@@ -24,7 +24,7 @@ SOCAT_CONF_ENV += \
- endif
  
- # We need to run autoconf to regenerate the configure script, since we patch
--# configure.in and Makefile.in. However, the package only uses autoconf and not
-+# Makefile.in. However, the package only uses autoconf and not
- # automake, so we can't use the normal autoreconf logic.
- 
- SOCAT_DEPENDENCIES = host-autoconf
+ class TestPythonPy3UnitTestXmlReporting(TestPythonPackageBase):
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
