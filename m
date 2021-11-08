@@ -1,71 +1,60 @@
-Return-Path: <SRS0=GWv0=PZ=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D98BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:04:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81DACC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:41:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E0EBA611C4
-	for <buildroot@archiver.kernel.org>; Sat,  6 Nov 2021 11:04:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E0EBA611C4
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id B520B61406
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:41:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B520B61406
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7BA9405CA;
-	Sat,  6 Nov 2021 11:04:40 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jdKPS94gGpQ4; Sat,  6 Nov 2021 11:04:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECF71405AF;
-	Sat,  6 Nov 2021 11:04:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 66DF81BF357
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:04:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1472823E0
- for <buildroot@lists.busybox.net>; Sat,  6 Nov 2021 11:04:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66EDA80E52;
+	Mon,  8 Nov 2021 13:41:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iSFuy12t0KS9 for <buildroot@lists.busybox.net>;
- Sat,  6 Nov 2021 11:04:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1715082400
- for <buildroot@uclibc.org>; Sat,  6 Nov 2021 11:04:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 722448B3F6; Sat,  6 Nov 2021 11:00:38 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Sat, 06 Nov 2021 11:04:25 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2020.08.2
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-13321-163-MFKgcPiBTT@https.bugs.busybox.net/>
-In-Reply-To: <bug-13321-163@https.bugs.busybox.net/>
-References: <bug-13321-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id weZb8r9Y4NBD; Mon,  8 Nov 2021 13:41:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF1B480E4A;
+	Mon,  8 Nov 2021 13:41:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF0811BF331
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:41:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABE5040231
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:41:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uImXfcvwkSDV for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 13:41:37 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 21B1F401CC
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 13:41:36 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 6834E240006;
+ Mon,  8 Nov 2021 13:41:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mk4tw-0000Vh-C3; Mon, 08 Nov 2021 14:41:32 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Christian Stewart <christian@paral.in>
+References: <20211105023146.22275-1-christian@paral.in>
+ <87h7cqiut9.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Nov 2021 14:41:32 +0100
+In-Reply-To: <87h7cqiut9.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 05 Nov 2021 14:41:22 +0100")
+Message-ID: <87czna7oj7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?=5BBug_13321=5D_utils/scanpypi=3A_fails_wi?=
- =?utf-8?q?th_packages_that_define_a_package=E2=80=99s_metadata_in_setup?=
- =?utf-8?q?=2Ecfg?=
+Subject: Re: [Buildroot] [PATCH 1/1] package/go: security bump to 1.17.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +66,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=13321
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-julian@meter.com changed:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+ >> go1.17.3 (released 2021-11-04) includes security fixes to the archive/zip and
+ >> debug/macho packages, as well as bug fixes to the compiler, linker, runtime, the
+ >> go command, the misc/wasm directory, and to the net/http and syscall packages.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |julian@meter.com
+ >> https://golang.org/doc/devel/release#go1.17.minor
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+ >> Signed-off-by: Christian Stewart <christian@paral.in>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |kr886q@att.com
+ > Committed, thanks.
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-*** Bug 14321 has been marked as a duplicate of this bug. ***
+For 2021.02.x and 2021.08.x I have instead bumped to 1.16.10, which
+contains the same fixes.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
