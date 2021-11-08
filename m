@@ -2,70 +2,70 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 555A6C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:06:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA614C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:06:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 06D87619BB
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:06:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 06D87619BB
+	by mail.kernel.org (Postfix) with ESMTPS id 717AC619E5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 23:06:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 717AC619E5
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D3760862;
-	Mon,  8 Nov 2021 23:06:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C1E94022D;
+	Mon,  8 Nov 2021 23:06:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bRdTsvxOS6yf; Mon,  8 Nov 2021 23:06:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nmab5r3VHLfO; Mon,  8 Nov 2021 23:06:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C2A560667;
-	Mon,  8 Nov 2021 23:06:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 967321BF97E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B31A64021B;
+	Mon,  8 Nov 2021 23:06:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D18721BF2C4
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 23:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8284C401E9
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 23:05:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1A2780D94
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 23:05:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2hyJm3gzBkkV for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 23:05:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IC4YpzmZ_JNo for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 23:05:28 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C1B0402D5
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 23:05:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 070AB80D4E
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 23:05:27 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.216.221])
  by Aruba Outgoing Smtp  with ESMTPSA
- id kDhZmJJDJNGRPkDhcmjCC8; Tue, 09 Nov 2021 00:05:25 +0100
+ id kDhZmJJDJNGRPkDhemjCDw; Tue, 09 Nov 2021 00:05:27 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636412725; bh=h3/3S1f9y9sSb9d0uj0k5p4QyK34ijT2ZIhhvizAlqM=;
+ t=1636412727; bh=ZzijNeAmj3maMW/Bsphx7kuvOc9FhA2oxgWMQhBUwYo=;
  h=From:To:Subject:Date:MIME-Version;
- b=ip8/rIXOYr5sExnRms71gWGc3x++rKeK9OFk507FCnBJamCEsBx75KqLI7opiLTJ3
- tIiZJ3hrE2Q0CCzd6XdwK7f0zxfLIolIeM2f7f1B6y54n4L5ii/pFhSjSeAA7N1YXb
- DdYoIEO8M3qvWKRHsbomT+kuRczkSLE/2QTBn/EoaLxUfRtet/FP1ESNZ7f634WEdY
- 83vVEj02xe5jTRc4FLFBmBUn2tWXkgsY6lb/qqvIh/Pp1RTEnUDkXctFohgI4feVQm
- bU6m5zFNVi8RNv+rEn0DDXqaEDm17zfbM7+m3lWmijxlaTilNUs+J7lxzVAV8yGnXr
- TEVMxvTkpaNDw==
+ b=OxA5o9h82JAsPRlORi5oxprpwLOBogY2JP4jt38yLTZAlT+2WL2AMm0Vz7I+5uMgY
+ u4UGxi75aDeDCjkk2MEGP7DvlDexXKplIWqBdjzfzfgigUcnQGYItm7CFaCjQjPtwd
+ TIYXU2usv0ASGhQIoi75S9EaaCajdu21ssRSEiNbgQIQd96aGsE77UnYhqH+m5Af0U
+ z3U8yJ1eLLO/5Q7dOnHaEly8tbCvBv4TbPEBsCkrHydHq3crCq2/QbKZ7bLz9vFQlm
+ z7K2s/UygTjGxZO+0mnx2riTqFie5NI0egJgSXtLdmsnvuAiBE7PARDGssyqEgbO2d
+ VLyCetqd4nLkw==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Nov 2021 00:05:16 +0100
-Message-Id: <20211108230520.4007148-4-giulio.benetti@benettiengineering.com>
+Date: Tue,  9 Nov 2021 00:05:19 +0100
+Message-Id: <20211108230520.4007148-7-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
 References: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfORXEBI2FHjt8JzBXkCtt3HpzCAw4OC9OedMowSWQC+Q+2iX7VYlBk1xs5rLKzI05GZ00XiNoovyjeVGCIlflDv2n7sf834F4gdpWYr4YIUsVMWU9YYt
- lyTmnds7LKQ4bs/A6tcK/T9ykUeMWcM0m1+l1ohGMmllq60o4ZgF+Ek61QOIwpNpxwPHY3rj3MKH4cSRtP58ekOpRE4OYEFIr1s2JQ1z+mIHXJhOAKKTUMvp
- ylohtGdkMXpz8ZBcXsaijWxbQI0GwF5mQinabYI6WYfp1CpAmA7ePnGqQE5patbLSA+g5Ve+s/LJ6o5QTYgVvRxFFLblRW8gOtvc8KNcaZMZ7d6vNp/ED9av
- /B4CDTz7CpmFyf7vtm0Yn+7WEe/G+10UuHMOvBlMc3Cpo2w+KUUooMuqoQTpDCoEgK1PWjOZmXi6V3/+8wgMSGoaPAgemKh+e85MsR5JMNgTdCBw4tRxONlc
- VgN7vaPCCgxkTtFjqxLViw0V7LI5XC53MilJ0Mti5D0bRu3bdJAv6OEGTsUsjr0g9nVkCj4AA99NK6ubiP9HfXtH9JqzGHMUe2Z3EA==
-Subject: [Buildroot] [PATCH 3/7] board/friendlyarm/nanopi-neo2/genimage.cfg:
- fix comment
+X-CMAE-Envelope: MS4wfKVSCbIdivXx0KJ9BmbpFENCNXjxmbrigNaJtsrjoPLF4zRztkKD1xIB60FdS7YYmHmEzvkyoQ9Z2gKHCM9l2O6z0OyKqM8z4XaeUs2b7X/eBojOIQ6A
+ gVreDcuo+AAxsC3I3IaBheSt399iW9kY+x/Oa3wfT3M0VRUcX9BxdtJqvBKnGmp0jF8N2zwiHWZp/aGcAa+s3fHpGEKLXgUs+VE+50hPpJVtHOugzc9Drvrb
+ Ox5x2APqocvgv2DGF5Nutcin+9w9b7+ErUeFXF0bHmRalTqIHDWj6jybw76DmnTuxh9vr7dEDCwPul7S/kHxMDdrX3rT9L44CXK5cybbBjsk+d2xV2p+kJDE
+ CdXr+v6+9fXStVBPuOZfbJ7Yyl+SfQvRTTJArVOlaWj6j1HVMLhMkUeTCGNYKWxpWq1+9Tbxql0zuO28TkmaftZkKLuMqr3XqQRnn5+2kBEPPNsIJDB379//
+ V6hhceU4lhtBbcXZeAJqeq3Utc3lKtq3t+jRnSqXef9ZnJi0fpjYQsnY9YIt0LRb6XNj5vQZ5J1bMG585jRxz1azkuU48iiD01OlWQ==
+Subject: [Buildroot] [PATCH 6/7] board/kontron/pitx-imx8m/genimage.cfg: fix
+ option suffix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,26 +88,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For consistency comment '# 1MB - 40K' must be '# 1MB - 40KB'.
+Option 'offset = 4k' must be 'option = 4K'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/friendlyarm/nanopi-neo2/genimage.cfg | 2 +-
+ board/kontron/pitx-imx8m/genimage.cfg | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
-index 45d081e197..3163a06592 100644
---- a/board/friendlyarm/nanopi-neo2/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
-@@ -24,7 +24,7 @@ image sdcard.img {
+diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
+index c335b0c026..c78ef0f910 100644
+--- a/board/kontron/pitx-imx8m/genimage.cfg
++++ b/board/kontron/pitx-imx8m/genimage.cfg
+@@ -5,7 +5,7 @@ image sdcard.img {
+ 	partition imx-boot {
  		in-partition-table = "no"
- 		image = "u-boot.itb"
- 		offset = 40K
--		size = 1M # 1MB - 40K
-+		size = 1M # 1MB - 40KB
+ 		image = "imx8-boot-sd.bin"
+-		offset = 33k
++		offset = 33K
  	}
  
- 	partition boot {
+ 	partition rootfs {
 -- 
 2.25.1
 
