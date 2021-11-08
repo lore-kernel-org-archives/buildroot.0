@@ -2,84 +2,86 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DC56C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14092C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A17FD6120A
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A17FD6120A
+	by mail.kernel.org (Postfix) with ESMTPS id D1FAB6120A
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 19:27:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D1FAB6120A
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D0AD6083F;
-	Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91EF480DE3;
+	Mon,  8 Nov 2021 19:27:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id szX27CtsvJT7; Mon,  8 Nov 2021 19:27:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E0F96083C;
-	Mon,  8 Nov 2021 19:27:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CA03C1BF311
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C612680DC6
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9HeykhlSIh3i for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OhOqCGngEGHj; Mon,  8 Nov 2021 19:27:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F201C80DA0;
+	Mon,  8 Nov 2021 19:27:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EAAC1BF311
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CEAD40003
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 19:27:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id noXwg2MRWE0X for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 19:27:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2854B80D7C
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 19:27:14 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id u1so28774565wru.13
- for <buildroot@buildroot.org>; Mon, 08 Nov 2021 11:27:14 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5FCCA400C5
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 19:27:16 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id t30so28789091wra.10
+ for <buildroot@buildroot.org>; Mon, 08 Nov 2021 11:27:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uy7ehZfgfO/FsWDcAKx7nah+nnTX2mCMiCqwxMk9vyc=;
- b=o+Url7Hm8zWggxBS2MY8UV1/4YXjz7ESTM6ra77NN4MusDiFP7qhsSZQ7/5f/L+ZgK
- IaVJLxpv/2J7VtWMqk+/eueVSqAVTFXyYzxaPdhI5yZ38ITHAcM6nhJ2ckrN2irB8Fvo
- Lu5cMxa4/voKDzkh/cbLBp9uemqab6AGINi7j2nODrkyk7KOPgfXzapMCLOG8HpGUaqD
- bWRzvwHfGuL27AMbE9UxmJOpqdKLbjkafJH8cwPHdJHo0A3NBLiVyil7ryNBE3gWPYnw
- maJaYQZLhGso12Hva7smMnfwKUOY5Gg0hcgaqBE9sPKPh9NxhW94aalfbb+pNzyTkvCr
- 4QdA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=+BRghd5ITMRWE4WGpcHSeV0ovAbZs7Q5J0NyB83zNT0=;
+ b=ddUUTmh5Z9PBWivqtJ2rdKDElLWeGqcu8zTLK3vo9L2JMFNhr7L09M007VbDmq68rk
+ ZZbAjFNMg1VTCPiEEephm/KvY8aKQrNJJs6fzwWZZZDQgo81WfYJVfWZMcbN2bJMMN1v
+ AQ0CiKpIIF98zFQ1KXaXqgna3FybhpXAeohIOncXCiaXyG1KzuQOvBUDj9sfLc67PMY7
+ bl3oQ3btEc3bZPCRh7epY+ha+OWYBZSvTs1Gb+NkzuvUqMc33wBhFeJYy71/i7C5zguX
+ KT2ONEsQcWdUwNqZ8CwAbpkF2jMU2jNn4qN9PVKqCqL2Rehdm+MehFNCy00Uvel6H0Uo
+ 42Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=uy7ehZfgfO/FsWDcAKx7nah+nnTX2mCMiCqwxMk9vyc=;
- b=huFDnzzLsOhMJLibMykzupUVN/2C6QeALIsm2VMOQNk/RkY5zD6iQSj7XbD6VL0Eby
- ixLp+X90VDdCYj6ZkXuMk0catDYboITRZd7HHLVrLm+Lz7r/7vBRpovrPKPaQHC8tEjn
- 9W4Lj5rJqGbC5n73b2AyVpPQeziOqRAvpK0OiFuZFVEHi12CZXIpjYlyVRw+phFHOmOI
- l+VDFbPnC5e47uOHjs8LNadDo8SWOxCc5PFQXdt6eU+ZXdHtegN/S/MH4e+jIsH+4bL2
- oepM+ssEKc9PunYY3qsIUauaA2ISXvXuXL6BzGpahDqnJA9ete3LYEjsY0fujeoqJAIX
- 1lVQ==
-X-Gm-Message-State: AOAM5323eDK9id387t6ooTHjasjyLAuWFJs1evFKBIh/dTMHGuKkmxsB
- Xtb0pJ+ZHAfSKzi1Exc3WELZ5w8apY9ojw==
-X-Google-Smtp-Source: ABdhPJwgFR+4YM1zDTq226F7WITihlLbHf+L5RaM+LeQ3lTetFrJ67jzc9Wp1if5b9Pd+kfyz8p0qw==
-X-Received: by 2002:a5d:51cb:: with SMTP id n11mr1878125wrv.278.1636399632115; 
- Mon, 08 Nov 2021 11:27:12 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=+BRghd5ITMRWE4WGpcHSeV0ovAbZs7Q5J0NyB83zNT0=;
+ b=CaheFHxK7DGCkziJeQ6JYf3OGwqpJiN+W8U3QO7frMiIPN5tmVh7+4B1U3Qd6eSpZm
+ TzrSowL1mAU5bdsMZT9pNQtFMcfR0uQBsF5rqLFb3yZmKmjIrW/wAEiXs9ngg9UvVh+w
+ ajt+yDFT/QlJE8hBEFAinyJy7LZAZKzS3Aud08Jj9uGX08yMwNebYUMllHfH9uRYFZnH
+ QNG4Jsr3KFlTeyS6vZy+2DknW8Q6nytzf3tVYJwiu7rwwvKfb3PCOwPZeW93Te/UQ+06
+ A2UM0TDmmFJy7mhWDwVLNZUOHraxy/l1ZK+HmNcg7ozW6Jbrb3N+2ihJlfyHFDY/4n/u
+ 8iIg==
+X-Gm-Message-State: AOAM530Mm5k4ELEa9JqoWTfc2/FN+zAgWBlvXOmzPN7cDm/ygofuARNm
+ eFQK3jqy8dcaBO2G96u7ZmMVps5RiUtL3g==
+X-Google-Smtp-Source: ABdhPJwJsNdDZ8Ef5nCQr05VmGqw027cbzBIZPLJ1cAi27BtPx0tXjVZ4VAMs7/XYzBQBliLlKWEFw==
+X-Received: by 2002:a5d:5986:: with SMTP id n6mr1859664wri.297.1636399633196; 
+ Mon, 08 Nov 2021 11:27:13 -0800 (PST)
 Received: from menoah.home ([2a01:cb19:190:c500:f823:1d08:390b:d00e])
- by smtp.gmail.com with ESMTPSA id r1sm256016wmr.36.2021.11.08.11.27.11
+ by smtp.gmail.com with ESMTPSA id r1sm256016wmr.36.2021.11.08.11.27.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Nov 2021 11:27:11 -0800 (PST)
+ Mon, 08 Nov 2021 11:27:12 -0800 (PST)
 From: Pierre-Jean Texier <texier.pj2@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  8 Nov 2021 20:27:05 +0100
-Message-Id: <20211108192706.456116-1-texier.pj2@gmail.com>
+Date: Mon,  8 Nov 2021 20:27:06 +0100
+Message-Id: <20211108192706.456116-2-texier.pj2@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211108192706.456116-1-texier.pj2@gmail.com>
+References: <20211108192706.456116-1-texier.pj2@gmail.com>
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH]
- support/testing/tests/package/test_python_unittest_xml_reporting.py: fix
+ support/testing/tests/package/sample_python_unittest_xml_reporting.py: fix
  flake8 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,26 +104,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fixes:
 
-support/testing/tests/package/test_python_unittest_xml_reporting.py:3:1: F401 'time' imported but unused
-1     F401 'time' imported but unused
-make: *** [Makefile:1220: check-flake8] Error 123
+support/testing/tests/package/sample_python_unittest_xml_reporting.py:4:1: E302 expected 2 blank lines, found 1
+support/testing/tests/package/sample_python_unittest_xml_reporting.py:8:1: E305 expected 2 blank lines after class or function definition, found 1
+1     E302 expected 2 blank lines, found 1
+1     E305 expected 2 blank lines after class or function definition, found 1
 
 Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 ---
- .../testing/tests/package/test_python_unittest_xml_reporting.py  | 1 -
- 1 file changed, 1 deletion(-)
+ .../tests/package/sample_python_unittest_xml_reporting.py       | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/tests/package/test_python_unittest_xml_reporting.py b/support/testing/tests/package/test_python_unittest_xml_reporting.py
-index f08c88e3da..446c231a00 100644
---- a/support/testing/tests/package/test_python_unittest_xml_reporting.py
-+++ b/support/testing/tests/package/test_python_unittest_xml_reporting.py
-@@ -1,6 +1,5 @@
- from tests.package.test_python import TestPythonPackageBase
- import os
--import time
+diff --git a/support/testing/tests/package/sample_python_unittest_xml_reporting.py b/support/testing/tests/package/sample_python_unittest_xml_reporting.py
+index 8fa92aaccc..cfef4df22a 100644
+--- a/support/testing/tests/package/sample_python_unittest_xml_reporting.py
++++ b/support/testing/tests/package/sample_python_unittest_xml_reporting.py
+@@ -1,9 +1,11 @@
+ import unittest
+ import xmlrunner
  
++
+ class Test1(unittest.TestCase):
+     def test_something(self):
+         self.assertTrue(True)
  
- class TestPythonPy3UnitTestXmlReporting(TestPythonPackageBase):
++
+ if __name__ == '__main__':
+     unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test-reports'))
 -- 
 2.25.1
 
