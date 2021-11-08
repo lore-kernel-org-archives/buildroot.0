@@ -2,51 +2,84 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFDD1C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 08:47:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D0FC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 09:00:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7138B6125F
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 08:47:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7138B6125F
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 3F2F461029
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 09:00:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3F2F461029
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41EA240290;
-	Mon,  8 Nov 2021 08:47:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0613940231;
+	Mon,  8 Nov 2021 09:00:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dkmOV8DeATC8; Mon,  8 Nov 2021 08:47:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ppLdpTSMLqic; Mon,  8 Nov 2021 09:00:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89A0F40285;
-	Mon,  8 Nov 2021 08:47:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9AF341BF995
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 08:47:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 685A14022F;
+	Mon,  8 Nov 2021 09:00:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F5321BF393
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 09:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88D9E606D5
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 08:47:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2F3C80D42
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 09:00:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3l_BfU-FN-G3 for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 08:47:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7367A606CB
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 08:47:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7004D8B5C2; Mon,  8 Nov 2021 08:43:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zIszOwg_hEmV for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 09:00:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1AF880D1B
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 09:00:03 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id d24so25553593wra.0
+ for <buildroot@buildroot.org>; Mon, 08 Nov 2021 01:00:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ajYiWrKqvu8In2vb8G1P7kBAAQrDdCu0/CXzLjLdEvA=;
+ b=m2pyc1SMFs6vnfwKWnbNw+PQhcau8SdogwtAHDDtC0njJgXpAN4KfyU7Odlf9DoSNv
+ vPIvsqa7wM7XVWn6rOd//eh5Chw5t9v7MLHwShOwo6gaIsKwHJAv5Mfm5oqxfHcBziG+
+ Y0orjI77kyglwXpiZzC2USAs4SlcaaDbUMpSryY1/+OoBuD3oBlnGaOn/8SZ8TW98CNi
+ P75jrr5mMYwFDdX4uqll/wlNEe3ZNZS8WrJ+ZcvZVusXyRoMqoXPvUVi4y118U0g9LFM
+ mTMoYfENKmAoLVJFQ2YPJZRsEtDKSMUDIjYmWhUlIINVUGU1FKDZWtK8gARYMu2h6MBa
+ nvBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ajYiWrKqvu8In2vb8G1P7kBAAQrDdCu0/CXzLjLdEvA=;
+ b=QqeOueLJkU7YJNJ4uBtqO1LG2PxPJExMUTzx/RPGfXtJGneZnvcf/LSS9ai9aofcqo
+ BG47LFXOHOl1eruWTTVng2NEX0ZWXBfs+t01yyMwlKPA4kL4LJ8/04ix8R94xDgHd+Rn
+ 2EfcaTNVXCPrP8ZbGvchnWjvJt8AiazIr6An1U/VV4l4EW9OZaN6jJYj7ohIKiSs03GS
+ UKAZqPha+iwEGYT8ZzdBv2sF83MdhYuudPJ3WM67hlb8bQmsx/0HSN8D0KzOPetK49NW
+ Le2HSbMjT59GWOBYqd7VnkY4LFKtPDsZ8hkWnKIynq3KDNHj3/T4yMmibwMuVHG+0SrN
+ QBYQ==
+X-Gm-Message-State: AOAM532Dr9T5/fEuulrlOZtmL4V01IkXxC4Azt0kQ0DlI3Ckd0U8HHRC
+ 3LSeb+YxfangLR/Afq1XDJihqgR36Fs+TQ==
+X-Google-Smtp-Source: ABdhPJw4yeO8AhIYRC9VlUkTaKgNtjGN0gcIZcGTlia+sn1ILlV7RRJBknTA+iWNMmmDHvhAG6/I/Q==
+X-Received: by 2002:adf:ed41:: with SMTP id u1mr100537673wro.346.1636362001592; 
+ Mon, 08 Nov 2021 01:00:01 -0800 (PST)
+Received: from mclaren.neureality.corp (82.166.25.98.fix.netvision.net.il.
+ [82.166.25.98])
+ by smtp.gmail.com with ESMTPSA id t4sm6543864wmi.48.2021.11.08.01.00.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Nov 2021 01:00:01 -0800 (PST)
+From: Ramon Fried <rfried.dev@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 09:45:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 87b06f3a803a26b4d6822646ef3c2be0210ba163
-X-Git-Newrev: acbe6a0a898a8f5163b6af868f398d698ed0a7ef
-X-Patchwork-Hint: ignore
-Message-Id: <20211108084334.7004D8B5C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/nezha_defconfig: new defconfig
+Date: Mon,  8 Nov 2021 10:59:48 +0200
+Message-Id: <20211108085948.3601629-1-rfried.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/bitwise: bump version to 0.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,288 +91,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Ramon Fried <rfried.dev@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acbe6a0a898a8f5163b6af868f398d698ed0a7ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a defconfig for the Allwinner Nezha, a raspberrypi-style board built
-around the RISC-V 64bit D1 SoC.
-
-There is currently no upstream support, so use the git repos from Samuel
-Holland as explained on the linux-sunxi wiki:
-
-https://linux-sunxi.org/Allwinner_Nezha
-
-The U-Boot DTB is also used by opensbi, but the two branches are
-unfortunately not in sync at the moment, so add a patch to fix the
-compatible for the PLIC so opensbi makes it available to S-Mode (Linux).
-
-The use of the sun20i-d1-spl SPL bootloader / TOC1 file format also makes it
-a bit more complicated to build the boot image.  As this is expected to only
-be a temporary issue, add a U-Boot patch to build the TOC1 image as part of
-the build rather than adding explicit support in our U-Boot package to do
-it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
 ---
- DEVELOPERS                                         |  2 +
- board/nezha/genimage.cfg                           | 37 +++++++++++++++
- board/nezha/overlay/boot/extlinux/extlinux.conf    |  4 ++
- ...dts-sun20i-d1.dtsi-adjust-plic-compatible.patch | 36 +++++++++++++++
- ...CK-Support-building-u-boot.toc1-for-nezda.patch | 54 ++++++++++++++++++++++
- board/nezha/readme.txt                             | 24 ++++++++++
- configs/nezha_defconfig                            | 33 +++++++++++++
- 7 files changed, 190 insertions(+)
+ package/bitwise/bitwise.hash | 2 +-
+ package/bitwise/bitwise.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 19d527b396..70262eac8c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2105,6 +2105,7 @@ N:	Peter Korsgaard <peter@korsgaard.com>
- F:	board/arrow/avenger96/
- F:	board/beagleboneai/
- F:	board/minnowboard/
-+F:	board/nezha/
- F:	board/librecomputer/lafrite/
- F:	board/nexbox/a95x/
- F:	board/openblocks/a6/
-@@ -2119,6 +2120,7 @@ F:	configs/lafrite_defconfig
- F:	configs/minnowboard_max-graphical_defconfig
- F:	configs/minnowboard_max_defconfig
- F:	configs/nexbox_a95x_defconfig
-+F:	configs/nezha_defconfig
- F:	configs/openblocks_a6_defconfig
- F:	configs/orangepi_pc_defconfig
- F:	configs/orangepi_r1_defconfig
-diff --git a/board/nezha/genimage.cfg b/board/nezha/genimage.cfg
-new file mode 100644
-index 0000000000..9860b83eca
---- /dev/null
-+++ b/board/nezha/genimage.cfg
-@@ -0,0 +1,37 @@
-+# Minimal SD card image for the Allwinner Nezha
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot0-1 {
-+		in-partition-table = "no"
-+		image = "boot0_sdcard_sun20iw1p1.bin"
-+		offset = 8K
-+	}
-+
-+	partition boot0-2 {
-+		in-partition-table = "no"
-+		image = "boot0_sdcard_sun20iw1p1.bin"
-+		offset = 128K
-+	}
-+
-+	partition u-boot-1 {
-+		in-partition-table = "no"
-+		image = "u-boot.toc1"
-+		offset = 12288K
-+	}
-+
-+	partition u-boot-2 {
-+		in-partition-table = "no"
-+		image = "u-boot.toc1"
-+		offset = 16400K
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		bootable = "true"
-+		offset = 18M
-+	}
-+}
-diff --git a/board/nezha/overlay/boot/extlinux/extlinux.conf b/board/nezha/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..02232f4d16
---- /dev/null
-+++ b/board/nezha/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label linux
-+  kernel /boot/Image
-+  devicetree /boot/sun20i-d1-nezha.dtb
-+  append console=ttyS0,115200 root=/dev/mmcblk0p1 ro rootwait
-diff --git a/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch b/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
-new file mode 100644
-index 0000000000..3524f44a61
---- /dev/null
-+++ b/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
-@@ -0,0 +1,36 @@
-+From 99cf8f37ceb1def9e7bbaccc395cf2275723e03d Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 4 Nov 2021 22:15:13 +0100
-+Subject: [PATCH] arch/riscv/dts/sun20i-d1.dtsi: adjust plic compatible to
-+ match opensbi
-+
-+The T-HEAD PLIC is by default not accessible from S-mode, and access must be
-+enabled by opensbi to make it accessible to Linux.
-+
-+The DTB is used both by U-Boot and opensbi (but the PLIC node is ignored by
-+U-Boot), so change the compatible to match what opensbi expects to fix a
-+crash during Linux boot:
-+
-+https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ arch/riscv/dts/sun20i-d1.dtsi | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/arch/riscv/dts/sun20i-d1.dtsi b/arch/riscv/dts/sun20i-d1.dtsi
-+index 280e0336d4..56d02c33b0 100644
-+--- a/arch/riscv/dts/sun20i-d1.dtsi
-++++ b/arch/riscv/dts/sun20i-d1.dtsi
-+@@ -1136,7 +1136,7 @@
-+ 
-+ 		plic: interrupt-controller@10000000 {
-+ 			compatible = "allwinner,sun20i-d1-plic",
-+-				     "sifive,plic-1.0.0";
-++				     "thead,c900-plic";
-+ 			reg = <0x10000000 0x4000000>;
-+ 			#address-cells = <0>;
-+ 			interrupts-extended = <&cpu0_intc 11>,
-+-- 
-+2.20.1
-+
-diff --git a/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch b/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
-new file mode 100644
-index 0000000000..6e89a921df
---- /dev/null
-+++ b/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
-@@ -0,0 +1,54 @@
-+From 4a923e0e4ef6d2b41cb89d658e269adada847573 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 4 Nov 2021 22:32:04 +0100
-+Subject: [PATCH] Makefile: HACK: Support building u-boot.toc1 for nezda board
-+
-+For easier integration into Buildroot.  The boot0 / toc1 logic is WIP until
-+U-Boot gains SPL support for the D1, so add a hack to make it easier to
-+integrate in Buildroot as-is.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Makefile  | 9 +++++++++
-+ nezha.cfg | 9 +++++++++
-+ 2 files changed, 18 insertions(+)
-+ create mode 100644 nezha.cfg
-+
-+diff --git a/Makefile b/Makefile
-+index f911f70344..259d93bf80 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1084,6 +1084,15 @@ endif
-+ .binman_stamp: FORCE
-+ 	@touch $@
-+ 
-++fw_dynamic.bin: $(OPENSBI)
-++	$(call if_changed,copy)
-++
-++MKIMAGEFLAGS_u-boot.toc1 = -T sunxi_toc1
-++u-boot.toc1: nezha.cfg fw_dynamic.bin inputs
-++	$(call if_changed,mkimage)
-++
-++all: u-boot.toc1
-++
-+ ifeq ($(CONFIG_DEPRECATED),y)
-+ 	$(warning "You have deprecated configuration options enabled in your .config! Please check your configuration.")
-+ endif
-+diff --git a/nezha.cfg b/nezha.cfg
-+new file mode 100644
-+index 0000000000..2d23b9b388
-+--- /dev/null
-++++ b/nezha.cfg
-+@@ -0,0 +1,9 @@
-++[opensbi]
-++file = fw_dynamic.bin
-++addr = 0x40000000
-++[dtb]
-++file = arch/riscv/dts/sun20i-d1-nezha.dtb
-++addr = 0x44000000
-++[u-boot]
-++file = u-boot-nodtb.bin
-++addr = 0x4a000000
-+-- 
-+2.20.1
-+
-diff --git a/board/nezha/readme.txt b/board/nezha/readme.txt
-new file mode 100644
-index 0000000000..fd4c6707de
---- /dev/null
-+++ b/board/nezha/readme.txt
-@@ -0,0 +1,24 @@
-+Allwinner Nezha
-+===============
-+
-+Nezha is is a low-cost RISC-V 64-bit based platform, powered by an
-+Allwinner D1 SoC.
-+
-+How to build
-+============
-+
-+$ make nezha_defconfig
-+$ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Connect a TTL UART to the debug connector, insert the microSD card and
-+plug in a USB-C cable to the PWR connector to boot the system.
-diff --git a/configs/nezha_defconfig b/configs/nezha_defconfig
-new file mode 100644
-index 0000000000..d4724de2f3
---- /dev/null
-+++ b/configs/nezha_defconfig
-@@ -0,0 +1,33 @@
-+BR2_riscv=y
-+BR2_GLOBAL_PATCH_DIR="board/nezha/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
-+BR2_ROOTFS_OVERLAY="board/nezha/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/nezha/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,012f5a3d01be6d44e32c74bb3637ec281790b297)/linux-012f5a3d01be6d44e32c74bb3637ec281790b297.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-nezha"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
-+BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,b9125c6f8909d1cc0417795737fc13cb6297ff11)/opensbi-b9125c6f8909d1cc0417795737fc13cb6297ff11.tar.gz"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
-+BR2_TARGET_SUN20I_D1_SPL=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,62392d3b8a624a80646c1876533336f90140088d)/uboot-62392d3b8a624a80646c1876533336f90140088d.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nezha"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.toc1"
-+BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/bitwise/bitwise.hash b/package/bitwise/bitwise.hash
+index 5493c642a6..c8daa0aa64 100644
+--- a/package/bitwise/bitwise.hash
++++ b/package/bitwise/bitwise.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d3d43cef47bf8f49e85f7ed381c3eaf1df921ca51805e0962f1a97a517e1d1d2  bitwise-v0.42.tar.gz
++sha256  f524f794188a10defc4df673d8cf0b3739f93e58e93aff0cdb8a99fbdcca2ffb  bitwise-v0.43.tar.gz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/bitwise/bitwise.mk b/package/bitwise/bitwise.mk
+index 237f7753cd..33d8f6776b 100644
+--- a/package/bitwise/bitwise.mk
++++ b/package/bitwise/bitwise.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BITWISE_VERSION = 0.42
++BITWISE_VERSION = 0.43
+ BITWISE_SITE = https://github.com/mellowcandle/bitwise/releases/download/v$(BITWISE_VERSION)
+ BITWISE_SOURCE = bitwise-v$(BITWISE_VERSION).tar.gz
+ BITWISE_DEPENDENCIES = ncurses readline
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
