@@ -2,57 +2,58 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DED6EC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:16:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32649C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:19:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 48D9E6124D
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:16:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48D9E6124D
+	by mail.kernel.org (Postfix) with ESMTPS id CADF061288
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 13:19:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CADF061288
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 116F74023C;
-	Mon,  8 Nov 2021 13:16:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D10E80E0E;
+	Mon,  8 Nov 2021 13:19:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JzbpVoBAfV_L; Mon,  8 Nov 2021 13:16:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zl56RXM6mlwa; Mon,  8 Nov 2021 13:19:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56DD14025E;
-	Mon,  8 Nov 2021 13:16:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7A48E1BF331
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:16:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D4D780D05;
+	Mon,  8 Nov 2021 13:19:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CB1D51BF331
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6967F606A7
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:16:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAAB9402A8
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 13:19:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lu52_w_proZF for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 13:15:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PMpJCgdnb-we for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 13:19:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8622860674
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 13:15:57 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B890402B1
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 13:19:17 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 215E824000B;
- Mon,  8 Nov 2021 13:15:53 +0000 (UTC)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 636ED1C0018;
+ Mon,  8 Nov 2021 13:19:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mk4V7-0008LX-El; Mon, 08 Nov 2021 14:15:53 +0100
+ id 1mk4YK-0008UF-AQ; Mon, 08 Nov 2021 14:19:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211103215447.756808-1-thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Nov 2021 14:15:53 +0100
-In-Reply-To: <20211103215447.756808-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 3 Nov 2021 22:54:46 +0100")
-Message-ID: <87lf1y7ppy.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211027191311.414458-1-fontaine.fabrice@gmail.com>
+Date: Mon, 08 Nov 2021 14:19:12 +0100
+In-Reply-To: <20211027191311.414458-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Oct 2021 21:13:11 +0200")
+Message-ID: <87h7cm7pkf.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: drop Mirza Krak
+Subject: Re: [Buildroot] [PATCH 1/1] package/vim: fix build with uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,23 +71,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > His e-mail is no longer responding:
- > ** Address not found **
+ > Fix the following build failure with uclibc raised since bump to version
+ > 8.2.3565 in commit 5650439b922d020cfad1131e5fb536bce73eb845 and
+ > https://github.com/vim/vim/commit/0a7984af5601323fae7b3398f05a48087db7b767:
 
- > Your message wasn't delivered to mirza.krak@northern.tech because the address couldn't be found, or is unable to receive mail.
+ > In file included from vim.h:27,
+ >                  from fileio.c:14:
+ > fileio.c: In function 'time_differs':
+ > auto/config.h:149:22: error: 'stat_T' {aka 'struct stat'} has no member named 'st_mtim'; did you mean 'st_mtime'?
+ >   149 | #define ST_MTIM_NSEC st_mtim.tv_nsec
+ >       |                      ^~~~~~~
 
- > Learn more here: https://support.google.com/mail/?p=NoSuchUser
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/2132f9aa1b0bc618c91f7bf44fbd1b71b9d6ba05
 
- > The response from the remote server was:
- > 550 5.1.1 The email account that you tried to reach does not
- > exist. Please try double-checking the recipient's email address for
- > typos or unnecessary spaces. Learn more at
- > https://support.google.com/mail/?p=NoSuchUser bi21si292758edb.0 -
- > gsmtp
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2021.02.x and 2021.08.x, thanks.
 
