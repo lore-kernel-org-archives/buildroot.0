@@ -2,59 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B38DC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:07:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E66C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:07:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9573D61186
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:07:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9573D61186
+	by mail.kernel.org (Postfix) with ESMTPS id 9BB8D60ED7
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 16:07:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9BB8D60ED7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 478C2402C1;
-	Mon,  8 Nov 2021 16:07:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A4A180EA1;
+	Mon,  8 Nov 2021 16:07:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NERNeCphyjxl; Mon,  8 Nov 2021 16:07:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9-0x0qjHJCYf; Mon,  8 Nov 2021 16:07:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87154402CC;
-	Mon,  8 Nov 2021 16:07:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42F7F1BF868
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:06:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD88C80EA3;
+	Mon,  8 Nov 2021 16:07:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 78C6A1BF868
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31B9A402CD
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:06:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67F396081D
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 16:07:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id drUiqIolsZhE for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 16:06:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 90859402C1
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 16:06:57 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 57BCA20007;
- Mon,  8 Nov 2021 16:06:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mk7AZ-0007B8-NU; Mon, 08 Nov 2021 17:06:51 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y593S0No_PAo for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 16:07:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9B216061B
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 16:07:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 0AFA78B6B9; Mon,  8 Nov 2021 16:03:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20211025084310.4055707-1-james.hilliard1@gmail.com>
-Date: Mon, 08 Nov 2021 17:06:51 +0100
-In-Reply-To: <20211025084310.4055707-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Mon, 25 Oct 2021 02:43:10 -0600")
-Message-ID: <87sfw64oo4.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/weston: remove launcher-libseat
- meson option
+To: buildroot@buildroot.org
+Date: Mon, 8 Nov 2021 16:05:37 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: c6a0652f0a1327516db55f520535bc0db266bdbb
+X-Git-Newrev: cbe28a841d3ab787c8535b4322b2a818796441fd
+X-Patchwork-Hint: ignore
+Message-Id: <20211108160318.0AFA78B6B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/dahdi-linux:
+ needs CRC CCITT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,25 +59,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cbe28a841d3ab787c8535b4322b2a818796441fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > This option only exists in main and is not in a release.
- > Fixes:
- > output/build/weston-9.0.0/meson.build:1:0: ERROR: Unknown options: "launcher-libseat"
+dahdi-linux needs a linux with CRC CCITT since the addition of the
+package in commit d959966b41bd88a36664c733a8a8d2b6809e4fc2 as stated in
+the README:
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- CONFIG_CRC_CCITT must be enabled ('y' or 'm'). On 2.6 kernels this can
+  be selected These can be selected from the "Library Routines" submenu
+  during kernel configuration via "make menuconfig".
 
-Committed to 2021.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b22ec4bd95b7d9dd82990937e6488ca7136e6136)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dahdi-linux/dahdi-linux.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dahdi-linux/dahdi-linux.mk b/package/dahdi-linux/dahdi-linux.mk
+index 4d2c7e7177..cb1d692e94 100644
+--- a/package/dahdi-linux/dahdi-linux.mk
++++ b/package/dahdi-linux/dahdi-linux.mk
+@@ -60,6 +60,10 @@ define DAHDI_LINUX_EXTRACT_FW
+ endef
+ DAHDI_LINUX_POST_EXTRACT_HOOKS += DAHDI_LINUX_EXTRACT_FW
+ 
++define DAHDI_LINUX_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC_CCITT)
++endef
++
+ # Need to pass the same options as for building the modules, because
+ # it wants to scan Linux' .config file to check whether some options
+ # are set or not (like CONFIG_FW_LOADER).
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
