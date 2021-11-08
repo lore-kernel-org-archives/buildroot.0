@@ -2,52 +2,52 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50C22C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:45:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 701E1C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:46:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 13FC7619BB
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:45:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13FC7619BB
+	by mail.kernel.org (Postfix) with ESMTPS id 1D5AC6134F
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1D5AC6134F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D68D84033B;
-	Mon,  8 Nov 2021 22:45:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5EDC80DE9;
+	Mon,  8 Nov 2021 22:46:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KOiabCbTUFbG; Mon,  8 Nov 2021 22:45:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U6noTIqHjFAR; Mon,  8 Nov 2021 22:46:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E42B40330;
-	Mon,  8 Nov 2021 22:45:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59CD380B92;
+	Mon,  8 Nov 2021 22:46:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B4E31BF865
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CD721BF865
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:12:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7360880E98
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9543380ED3
  for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WBoVGZ-I3oPP for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+ with ESMTP id M2cyDOGIjrZF for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:11:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC9B380EDF
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B479E80EB8
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:11:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 9320E8A47B; Mon,  8 Nov 2021 22:08:03 +0000 (UTC)
+ id 7C47C8B719; Mon,  8 Nov 2021 22:08:02 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 22:59:35 +0100
+Date: Mon, 8 Nov 2021 22:59:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bb8c35fcd53945c8aacb8a6d02d2ad72ec71805e
-X-Git-Newrev: 2cfed9b4f710169068582b674ecccbc253b183e4
+X-Git-Oldrev: 228672b4cdf261016fb4e1812ca6d14b4370d492
+X-Git-Newrev: 5f9d2a2e668669056ac6f925b61233447e3a4a7d
 X-Patchwork-Hint: ignore
-Message-Id: <20211108220803.9320E8A47B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- board/toradex/apalis-imx6/genimage.cfg: beautify file
+Message-Id: <20211108220802.7C47C8B719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/pc/genimage-efi.cfg:
+ beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cfed9b4f710169068582b674ecccbc253b183e4
+commit: https://git.buildroot.net/buildroot/commit/?id=5f9d2a2e668669056ac6f925b61233447e3a4a7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Beatify this genimage .cfg file to have consistency with all genimage .cfg
@@ -74,31 +74,68 @@ files in Buildroot.
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/toradex/apalis-imx6/genimage.cfg | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ board/pc/genimage-efi.cfg | 49 ++++++++++++++++++++++++-----------------------
+ 1 file changed, 25 insertions(+), 24 deletions(-)
 
-diff --git a/board/toradex/apalis-imx6/genimage.cfg b/board/toradex/apalis-imx6/genimage.cfg
-index fe359bd93e..a277decaa8 100644
---- a/board/toradex/apalis-imx6/genimage.cfg
-+++ b/board/toradex/apalis-imx6/genimage.cfg
-@@ -4,12 +4,12 @@
- # from its internal flash memory (eMMC).
+diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
+index 34befb7d69..9cf701b798 100644
+--- a/board/pc/genimage-efi.cfg
++++ b/board/pc/genimage-efi.cfg
+@@ -1,31 +1,32 @@
+ image efi-part.vfat {
+-  vfat {
+-    file EFI {
+-      image = "efi-part/EFI"
+-    }
+-    file bzImage {
+-      image = "bzImage"
+-    }
+-  }
+-  # 16MB - 32KB
+-  size = 16744448
++	vfat {
++		file EFI {
++			image = "efi-part/EFI"
++		}
++
++		file bzImage {
++			image = "bzImage"
++		}
++	}
++
++	size = 16352K # 16MB - 32KB
+ }
  
- image sdcard.img {
+ image disk.img {
 -  hdimage {
+-    gpt = true
 -  }
 +	hdimage {
++		gpt = true
 +	}
  
--  partition rootfs {
--    partition-type = 0x83
--    image = "rootfs.ext2"
--    size = 512M
+-  partition boot {
+-    image = "efi-part.vfat"
+-    partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+-    offset = 32768
+-    bootable = true
 -  }
-+	partition rootfs {
-+		partition-type = 0x83
++	partition boot {
++		image = "efi-part.vfat"
++		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++		offset = 32K
++		bootable = true
++	}
+ 
+-  partition root {
+-    partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
+-    partition-uuid = UUID_TMP
+-    image = "rootfs.ext2"
+-  }
++	partition root {
++		partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
++		partition-uuid = UUID_TMP
 +		image = "rootfs.ext2"
-+		size = 512M
 +	}
  }
 _______________________________________________
