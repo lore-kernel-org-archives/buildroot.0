@@ -2,51 +2,55 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90E7FC433FE
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:38:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8302AC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 11:08:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BCBF461105
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 10:38:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BCBF461105
+	by mail.kernel.org (Postfix) with ESMTPS id CA0D560ED7
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 11:08:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA0D560ED7
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9559740249;
-	Mon,  8 Nov 2021 10:38:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E59A6061B;
+	Mon,  8 Nov 2021 11:08:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ShwDSQvikCx2; Mon,  8 Nov 2021 10:38:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kkK_8V_lq5_e; Mon,  8 Nov 2021 11:08:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9E3940113;
-	Mon,  8 Nov 2021 10:38:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 30C861BF36C
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:38:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9585560793;
+	Mon,  8 Nov 2021 11:08:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 900EB1BF33B
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 11:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C76740113
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 10:38:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E3184028B
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 11:08:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ESRpeEwJnyic for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 10:38:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2354B400FC
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 10:38:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E171B8B61A; Mon,  8 Nov 2021 10:34:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6Eq4ycNCf8Y8 for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 11:08:13 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7485340017
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 11:08:13 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 656C0C0008
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 11:08:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>) id 1mk2VV-0005Vb-G3
+ for buildroot@buildroot.org; Mon, 08 Nov 2021 12:08:09 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 8 Nov 2021 11:37:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0bd07a0cc63c0933fcda5c78fbda6df99c4aaa29
-X-Git-Newrev: 0df2928afe536a67619ac19aeca52c3bec5b53f9
-X-Patchwork-Hint: ignore
-Message-Id: <20211108103424.E171B8B61A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2021.11-rc1
+Date: Mon, 08 Nov 2021 12:08:09 +0100
+Message-ID: <87tugm7vmu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: [Buildroot] Buildroot 2021.11-rc1 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,159 +62,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0df2928afe536a67619ac19aeca52c3bec5b53f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    |  8 ++++----
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 38 insertions(+), 17 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 676f195e01..e611898795 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2021.11-rc1, to be released
-+2021.11-rc1, released November 8th, 2021
- 
- 	Numerous package updates. Notable updates including numerous
- 	Python modules, Kodi add-ons, nodejs, OpenJDK.
-@@ -28,7 +28,7 @@
- 	- support for hybrid ISO9660 images added, which work on
-           legacy and EFI BIOS machines
- 
--	New defconfigs: stm32mp157c_odyssey
-+	New defconfigs: Allwinner nezha, stm32mp157c_odyssey
- 
- 	Removed defconfigs: qemu_csky
- 
-@@ -39,8 +39,8 @@
- 	python-git, python-pyndiff, python-rsa,
- 	python-unitest-xml-reporting, python-xmljson,
- 	python3-cryptography, python3-pip, qt5opcua, rwmem,
--	sloci-image, softhsm2, uqmi, vuejs-router, watchdogd,
--	wireplumber
-+	sloci-image, softhsm2, sun20i-d1-spl, uqmi, vuejs-router,
-+	watchdogd, wireplumber
- 
- 	Removed packages: canfestival, python-meld3
- 
-diff --git a/Makefile b/Makefile
-index c960b53a6d..4062883cc2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2021.11-git
-+export BR2_VERSION := 2021.11-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1630749000
-+BR2_VERSION_EPOCH = 1636367800
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index c966ac8f4f..0f59e7a007 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2021.08.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2021.08-rc3</b></h3>
-+
-+      <h3 style="text-align: center;">Latest release candidate: <b>2021.11-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.08-rc3.tar.gz">buildroot-2021.08-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2021.08-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.11-rc1.tar.gz">buildroot-2021.11-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.11-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2021.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2021.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2021.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2021.08-rc3.tar.bz2">buildroot-2021.08-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2021.08-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2021.11-rc1.tar.bz2">buildroot-2021.11-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2021.11-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index eeff335a6a..947a39fdb6 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2021.11-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>8 November 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.11-rc1">CHANGES</a>
-+	  file for more details.</p>
-+
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2021.11-rc1.tar.bz2">2021.11-rc1
-+	  release</a>, and report any problems found to the
-+         <a href="support.html">mailing list</a> or
-+         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyMS4xMS1yYzEgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHA6Ly9idWlsZHJvb3QubmV0L2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyMS4xMS1yYzEu
+dGFyLmd6CgpvcgoKaHR0cDovL2J1aWxkcm9vdC5uZXQvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIx
+LjExLXJjMS50YXIuYnoyCgpPciBnZXQgaXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290
+Lm5ldC9idWlsZHJvb3QKClBsZWFzZSBnaXZlIGl0IGEgc3BpbiBhbmQgcmVwb3J0IGFueSBwcm9i
+bGVtcyB0byB0aGUgbWFpbGluZyBsaXN0IG9yCmJ1ZyB0cmFja2VyLgoKQSBmYWlybHkgYnVzeSBj
+eWNsZSB3aXRoIG1vcmUgdGhhbiAxMjAwIGNoYW5nZXMgZnJvbSA5NiB1bmlxdWUKY29udHJpYnV0
+b3JzIQoKT2Ygbm90ZXdvcnRoeSBuZXcgZmVhdHVyZXMvY2hhbmdlcyB3ZSBoYXZlOgoKLSBOdW1l
+cm91cyBwYWNrYWdlIHVwZGF0ZXMuIE5vdGFibGUgdXBkYXRlcyBpbmNsdWRpbmcgbnVtZXJvdXMg
+UHl0aG9uCiAgbW9kdWxlcywgS29kaSBhZGQtb25zLCBub2RlanMsIE9wZW5KREsuCgotIFRvb2xj
+aGFpbjoKICAtIGdsaWJjIHVwZGF0ZSB0byAyLjM0CiAgLSBzdXBwb3J0IGZvciBnZGIgMTEueCBh
+ZGRlZCwgZ2RiIDEwLnggbm93IHRoZSBkZWZhdWx0CiAgLSBleHRlcm5hbCB0b29sY2hhaW5zIHBy
+b3ZpZGVkIGJ5IEFSTSB1cGRhdGVkCiAgLSByZW1vdmUgc3VwcG9ydCBmb3IgaW50ZXJuYWwgdG9v
+bGNoYWluIG9uIHRoZSBDU0tZCiAgICBhcmNoaXRlY3R1cmUsIGFzIGl0IHdhcyBicm9rZW4gYW5k
+IHVubWFpbnRhaW5lZAoKLSBGaWxlc3lzdGVtczoKICAtIG5ldyBPQ0kgZmlsZXN5c3RlbSB0eXBl
+LCB0byBidWlsZCBjb250YWluZXIgaW1hZ2VzCiAgICBjb21wYXRpYmxlIHdpdGggdGhlIE9wZW4g
+Q29udGFpbmVyIEluaXRpYXRpdmUgc3RhbmRhcmQKICAtIHN1cHBvcnQgZm9yIGh5YnJpZCBJU085
+NjYwIGltYWdlcyBhZGRlZCwgd2hpY2ggd29yayBvbgogICAgbGVnYWN5IGFuZCBFRkkgQklPUyBt
+YWNoaW5lcwoKLSBOZXcgZGVmY29uZmlnczogQWxsd2lubmVyIG5lemhhLCBzdG0zMm1wMTU3Y19v
+ZHlzc2V5CgotIE5ldyBwYWNrYWdlczogZHRib2NmZywgZmlybXdhcmUtdXRpbHMsIGdzdGQsIGxp
+YmRiaSwgbGliZGJpLWRyaXZlcnMsCiAgbGlidGVhbSwgbHVhLWF1Z2VhcywgbXN0cGQsIHBocC1w
+ZWNsLWRidXMsIHB5dGhvbi1haW9wcm9jZXNzaW5nLAogIHB5dGhvbi1iaWRpY3QsIHB5dGhvbi1j
+aGFyc2V0LW5vcm1hbGl6ZXIsIHB5dGhvbi1mbGFzay1leHBlY3RzLWpzb24sCiAgcHl0aG9uLWdp
+dCwgcHl0aG9uLXB5bmRpZmYsIHB5dGhvbi1yc2EsIHB5dGhvbi11bml0ZXN0LXhtbC1yZXBvcnRp
+bmcsCiAgcHl0aG9uLXhtbGpzb24sIHB5dGhvbjMtY3J5cHRvZ3JhcGh5LCBweXRob24zLXBpcCwg
+cXQ1b3BjdWEsIHJ3bWVtLAogIHNsb2NpLWltYWdlLCBzb2Z0aHNtMiwgc3VuMjBpLWQxLXNwbCwg
+dXFtaSwgdnVlanMtcm91dGVyLCB3YXRjaGRvZ2QsCiAgd2lyZXBsdW1iZXIKCkFuZCB0aGUgdXN1
+YWwgcGFja2FnZSB2ZXJzaW9uIHVwZGF0ZXMgYW5kIGJ1ZyBmaXhlcy4gU2VlIHRoZSBDSEFOR0VT
+CmZpbGUgZm9yIGRldGFpbHM6CgpodHRwOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3Bs
+YWluL0NIQU5HRVM/aWQ9MjAyMS4xMS1yYzEKCgpNYW55IHRoYW5rcyB0byB0aGUgcGVvcGxlIGNv
+bnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXMgLW4gMjAyMS4wOC4u
+CgogICAyODEJRmFicmljZSBGb250YWluZQogICAxMTcJQmVybmQgS3VobHMKICAgIDg1CUFzYWYg
+S2FobG9uCiAgICA4MglKYW1lcyBIaWxsaWFyZAogICAgNjMJUGV0ZXIgU2VpZGVyZXIKICAgIDUz
+CUdpdWxpbyBCZW5ldHRpCiAgICA0NwlQZXRlciBLb3JzZ2FhcmQKICAgIDQ1CUZyYW5jb2lzIFBl
+cnJhZAogICAgNDIJQWRhbSBEdXNrZXR0CiAgICAzOAlSb21haW4gTmFvdXIKICAgIDMwCVRob21h
+cyBQZXRhenpvbmkKICAgIDE5CVlhbm4gRS4gTU9SSU4KICAgIDE3CUtvcnkgTWFpbmNlbnQKICAg
+IDE2CVBldHIgVm9yZWwKICAgIDE0CUpvYWNoaW0gV2liZXJnCiAgICAxMglIZXJ2ZSBDb2RpbmEK
+ICAgIDEyCU1pY2hhZWwgTm9zdGhvZmYKICAgIDExCUNocmlzdGlhbiBTdGV3YXJ0CiAgICAxMAlB
+ZHJpYW4gUGVyZXogZGUgQ2FzdHJvCiAgICAxMAlSYXBoYcOrbCBNw6lsb3R0ZQogICAgIDgJQmFy
+dG9zeiBCaWxhcwogICAgIDgJQ2hyaXMgRGltaWNoCiAgICAgNwlBcm5vdXQgVmFuZGVjYXBwZWxs
+ZSAoRXNzZW5zaXVtL01pbmQpCiAgICAgNwlFdGllbm5lIENhcnJpZXJlCiAgICAgNwlKb3PDqSBQ
+ZWtrYXJpbmVuCiAgICAgNglBbmdlbG8gQ29tcGFnbnVjY2kKICAgICA2CUdpbGxlcyBUYWxpcwog
+ICAgIDYJSmFtZXMgS25pZ2h0CiAgICAgNglUaG9tYXMgQ2xhdmVpcm9sZQogICAgIDUJQWxleGFu
+ZGVyIERhaGwKICAgICA1CUNocmlzIFBhY2toYW0KICAgICA1CUhlaWtvIFRoaWVyeQogICAgIDUJ
+SnVsaWVuIE9saXZhaW4KICAgICA1CUrDtnJnIEtyYXVzZQogICAgIDUJTWFyY2luIE5pZXN0cm9q
+CiAgICAgNQlTw6liYXN0aWVuIFN6eW1hbnNraQogICAgIDUJTWF4aW0gS29jaGV0a292CiAgICAg
+NAlCYXJ1Y2ggU2lhY2gKICAgICA0CUdyemVnb3J6IEJsYWNoCiAgICAgNAlNYXJ0aW4gRWxzaHVi
+ZXIKICAgICA0CU1pY2hhZWwgRmlzY2hlcgogICAgIDQJTWljaGFlbCBXYWxsZQogICAgIDQJTWF0
+dGhldyBXZWJlcgogICAgIDMJRGFtaWVuIExlIE1vYWwKICAgICAzCUZhYmlvIEVzdGV2YW0KICAg
+ICAzCUlsbGlhIEJpdGtvdgogICAgIDMJTGFuZyBEYW5pZWwKICAgICAzCU5pY29sYXMgQ2F2YWxs
+YXJpCiAgICAgMwlQaWVycmUtSmVhbiBUZXhpZXIKICAgICAzCVNhbSBWb3NzCiAgICAgMwlUb21p
+IFZhbGtlaW5lbgogICAgIDMJWWFpciBCZW4tQXZyYWhhbQogICAgIDIJQWxleGFuZGVyIEVnb3Jl
+bmtvdgogICAgIDIJQW5kcmVhcyBOYXVtYW5uCiAgICAgMglBc2ggQ2hhcmxlcwogICAgIDIJRWRn
+YXIgQm9uZXQKICAgICAyCUpvZWwgU3RhbmxleQogICAgIDIJTGVvbmlkIFl1cmlldgogICAgIDIJ
+TWFyY3VzIEZvbGtlc3NvbgogICAgIDIJTm9yYmVydCBMYW5nZQogICAgIDIJUGF1bCBDZXJjdWVp
+bAogICAgIDIJU2VyZ2lvIFByYWRvCiAgICAgMglUaG9tYXMgRGUgU2NoYW1waGVsZWlyZQogICAg
+IDIJVGl0b3VhbiBDaHJpc3RvcGhlCiAgICAgMQlBZHJpYW4gQW1hZ2xpbwogICAgIDEJQWxleGV5
+IEJyb2RraW4KICAgICAxCUFuZHJlYXMgWmllZ2xlcgogICAgIDEJQW50b2luZSBUZW5hcnQKICAg
+ICAxCUFydGVtIFBhbmZpbG92CiAgICAgMQlDaHJpc3RvcGggSGVsbHdpZwogICAgIDEJRGFyaW8g
+QmluYWNjaGkKICAgICAxCURhdmlkIENvcmJlaWwKICAgICAxCURhdmlkIEdPVUFSSU4KICAgICAx
+CURhdmlkIExlY2huZXIKICAgICAxCUZsb3JpYW4gTGEgUm9jaGUKICAgICAxCUhhbnNwZXRlciBQ
+b3J0bmVyCiAgICAgMQlJc21hZWwgTHVjZW5vCiAgICAgMQlKYW4gSGF2cmFuCiAgICAgMQlKb25h
+aCBQZXRyaQogICAgIDEJSnVsaWVuIEdyb3NzaG9sdHoKICAgICAxCUthbWVsIEJvdWhhcmEKICAg
+ICAxCUtyenlzenRvZiBLYW5hcwogICAgIDEJUGhpbGlwcGUgUmV5bmVzCiAgICAgMQlRdWVudGlu
+IFNjaHVsegogICAgIDEJUmFmYcWCIE1pxYJlY2tpCiAgICAgMQlSaWNoYXJkIFBhbGV0aG9ycGUK
+ICAgICAxCVNpbW9uIERvcHBsZXIKICAgICAxCVN0ZWZhbiBBZ25lcgogICAgIDEJVnlhY2hlc2xh
+diBCb2NoYXJvdgogICAgIDEJV2FsZGVtYXIgQnJvZGtvcmIKICAgICAxCVlhdWhlbmkgU2FsZGF0
+c2Vua2EKICAgICAxCVllZ29yIFllZnJlbW92CiAgICAgMQlaZW5vIEVuZGVtYW5uCgpBbmQgYSBz
+cGVjaWFsIHRoYW5rcyB0byBvdXIgcGF0Y2ggcmV2aWV3ZXJzOgoKZ2l0IGxvZyAyMDIxLjA4Li4g
+fCBncmVwIC1FaSAnKHJldmlld2VkfGFja2VkKS1ieTonIHwgXAogICAgc2VkICdzLy4qYnk6IC8v
+JyB8IHNvcnQgfCB1bmlxIC1jIHwgc29ydCAtbiAtcgoKICAgICAxMiBQZXRlciBTZWlkZXJlciA8
+cHMucmVwb3J0QGdteC5uZXQ+CiAgICAgIDYgTWFyY2luIE5pZXN0cm9qIDxtLm5pZXN0cm9qQGdy
+aW5uLWdsb2JhbC5jb20+CiAgICAgIDUgR2FyeSBCaXNzb24gPGdhcnkuYmlzc29uQGJvdW5kYXJ5
+ZGV2aWNlcy5jb20+CiAgICAgIDQgTHVjYSBDZXJlc29saSA8bHVjYUBsdWNhY2VyZXNvbGkubmV0
+PgogICAgICA0IEZhYmlvIEVzdGV2YW0gPGZlc3RldmFtQGdtYWlsLmNvbT4KICAgICAgNCBBZHJp
+YW4gUGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4KICAgICAgMyBUaG9tYXMgUGV0
+YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgogICAgICAzIFBldHIgVm9yZWwg
+PHBldHIudm9yZWxAZ21haWwuY29tPgogICAgICAzIEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVu
+ZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgogICAgICAzIENocmlzdGlhbiBTdGV3YXJ0IDxj
+aHJpc3RpYW5AcGFyYWwuaW4+CiAgICAgIDMgQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3RhaXIuZnJh
+bmNpc0B3ZGMuY29tPgogICAgICAzIEhlcnZlIENvZGluYSA8aGVydmUuY29kaW5hQGJvb3RsaW4u
+Y29tPgogICAgICAyIE1pY2hhZWwgTm9zdGhvZmYgPGJ1aWxkcm9vdEBoZWluZS50ZWNoPgogICAg
+ICAyIERpY2sgT2xzc29uIDxoaUBzZW56aWxsYS5pbz4KICAgICAgMiBLaWVyYW4gQmluZ2hhbSA8
+a2llcmFuLmJpbmdoYW1AaWRlYXNvbmJvYXJkLmNvbT4KICAgICAgMSBZYW5uIEUuIE1PUklOIDx5
+YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KICAgICAgMSBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91
+ckBnbWFpbC5jb20+CiAgICAgIDEgUGF1bCBDZXJjdWVpbCA8cGF1bEBjcmFwb3VpbGxvdS5uZXQ+
+CiAgICAgIDEgTmljb2xhcyBDYXZhbGxhcmkgPG5pY29sYXMuY2F2YWxsYXJpQGdyZWVuLWNvbW11
+bmljYXRpb25zLmZyPgogICAgICAxIE1heGltIEtvY2hldGtvdiA8Zmlkb19tYXhAaW5ib3gucnU+
+CiAgICAgIDEgSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+CiAgICAg
+IDEgQ2hyaXN0b3BoZSBQcmlvdXplYXUgPGNocmlzdG9waGUucHJpb3V6ZWF1QGZvc3Muc3QuY29t
+PgogICAgICAxIENocmlzIFBhY2toYW0gPGp1ZGdlLnBhY2toYW1AZ21haWwuY29tPgogICAgICAx
+IEFybm91dCBWYW5kZWNhcHBlbGxlIChFc3NlbnNpdW0vTWluZCkgPGFybm91dEBtaW5kLmJlPgog
+ICAgICAxIEFsZXhhbmRlciBEYWhsIDxwb3N0QGxlc3BvY2t5LmRlPgoKV2Ugd2lsbCBub3cgY3Jl
+YXRlIGEgbmV4dCBicmFuY2ggYW5kIHN0YXJ0IG1lcmdpbmcgbmV3IGZlYXR1cmVzIGZvcgoyMDIy
+LjAyICh0aGUgbmV4dCBMVFMpIGFscmVhZHkgaW4gcGFyYWxsZWwgd2l0aCB0aGUgMjAyMS4xMQpz
+dGFiaWxpemF0aW9uLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
