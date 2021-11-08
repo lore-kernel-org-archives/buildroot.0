@@ -2,93 +2,96 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E11BAC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D10C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:26:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A4D6460232
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:26:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A4D6460232
+	by mail.kernel.org (Postfix) with ESMTPS id AF5DC60232
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:26:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AF5DC60232
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8188D80EDF;
-	Mon,  8 Nov 2021 22:26:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EDA380E9C;
+	Mon,  8 Nov 2021 22:26:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VuTadIJJquqy; Mon,  8 Nov 2021 22:26:45 +0000 (UTC)
+	with ESMTP id iZlIE33g3oWq; Mon,  8 Nov 2021 22:26:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D689C80E9C;
-	Mon,  8 Nov 2021 22:26:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C7BFD1BF97E
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:07:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC8DB80E8F;
+	Mon,  8 Nov 2021 22:26:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8ED311BF865
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B801A80EA1
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:07:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D34A60630
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QRrU8Kyp2FNg for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:07:51 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yOpNm-L0x_D6 for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:08:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6CD5780E03
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:07:51 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id g14so67792945edz.2
- for <buildroot@buildroot.org>; Mon, 08 Nov 2021 14:07:51 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A4AC460603
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:08:58 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id x15so37281003edv.1
+ for <buildroot@buildroot.org>; Mon, 08 Nov 2021 14:08:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=JWTp01LzbRvvS/Crmp3YGAoGGRDQ26S7wCattcZ2kBM=;
- b=AI0ys/OmAn144fO2+y5yBHi7aY001KHLhZnx7o5U7/6Pb14OdYx9uEFpoogmQXgYYB
- aqpAltSj41XmG86BQ3G9NjaoSlyli4SboBpp9F0qumXTuK4ufff0wDa0pR58XXp+d4j6
- gppxoJzf8msRujTKkQ7IAB6GYVxUEt50RyXHXW4e//5QO0Ke27qtaYQPPjJJ93oUkok0
- 1RrXUZfLKFy3yvaDexo13VOfOcT1nunloEtjWX4beEH+82s44q8QKWcOdGetV1HMFBSM
- co+J/INUn6Hl7TcdHWLL7hK+S5jRJlPrTaPhjFCpYRlNQEhWLd8rMU4rDcbZoa2WL6xd
- xZoA==
+ bh=IPNUSSFRGzJhgDAYAQwY1PbWfPmtWs0Jimkkuc8YEcg=;
+ b=XqD18eN/3+ZNVkyv0KFa7YgTLPkL4u8w/poOjlqstTFQLU+IcaTgtnSYDlsezKg8JT
+ 1gpMCovQYJpHFOgF4iENfqNBROmBcdvvwnBPNCiadjzuULK+zOtnB6FXfohwJ2JkPCiE
+ FkT38Y9vk//334zPIVXJEdQClQgrhYqA2D9BWdvXVBhmDNsLZiYbPnw1HYYCCiB8wBx+
+ 2OgLfOJxnUBFe0AXYLfzG2X/5IsBfnc0JGz+RHVV2Ozwg5P1oownal64b+LVbY9LOYt+
+ zn4KpaJPZWx5ghrJ94E2gYVsr2Z2J0oWX8fQoc6UGMpoXiEoOCU3NaaNHGzgL5DUU6ki
+ siSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=JWTp01LzbRvvS/Crmp3YGAoGGRDQ26S7wCattcZ2kBM=;
- b=b95VNw6j4bWkwS9lH9JK9BtG3ITNcLMY9VtIGDsBnQjs1243rhNbJ6QlGSrpxf8k5T
- EJlMZsPhVhhKF9CA/zcd7FiwS4e2cImyQnFMCB1/xwrx0OHytB0T5m0Pog25/H+P14Fw
- 0wWFzWMSyiFay26ArmYsjYJlrYk4CpkHpd9sTpVDktsnSDYhcIcvTvll0oX71DCPJKnu
- pj3+cMprGpWb9G+gF8iS4kNCQDsiYBoMaVDQdoWRj4m299vZjC1K/fYsbnuQc2w6DG7R
- crLKiC7n0657rgAhlLkz5F3iNaiOjrnG4GBCZ8yl3Tu7lo1mBkGrbNreRsfWKLu9Gy7E
- 5oQw==
-X-Gm-Message-State: AOAM531z6B7nZvzEB60at/AmMW1YOwoX7mVSddZQtWzgN9rM0Cd+gor/
- v1Ze/7+XqTFak3QrLZWIwcXC41/0Hps3Kw==
-X-Google-Smtp-Source: ABdhPJy+HP2i/f4sm57CDxWcMF0OJInLPgObP0qyg5AXzROgrOzSgSyh6Ww33W239UbwueI7iqjeSA==
-X-Received: by 2002:aa7:c783:: with SMTP id n3mr3250565eds.121.1636409269709; 
- Mon, 08 Nov 2021 14:07:49 -0800 (PST)
+ bh=IPNUSSFRGzJhgDAYAQwY1PbWfPmtWs0Jimkkuc8YEcg=;
+ b=SmCJKw+kADKJfqNrid+htMU3VTkYn4zXqQ/k8URjikfswb5n5nro48wr18ig19QXzy
+ b8w1bmfOo7k5yxNyZxc7t47gU9dm/0R3fIUKsIxrPlJkSPA1BpV2d5l1+Qj9mKr+RUyE
+ Vn9jimJ5TCacs6QNE8LffwB+Jbazn6geFvgh6arKbKZ+B18ElvP7qFCim1cPHm5nanpb
+ 6oVNlmDVBGPg0Y2L9gMTA6fb9oWyMujaiH/ed3pWgdpmwi72mY4NHE94JS1cOWELdTVD
+ FUF5mygdVWWKg3A2+4N7UbBP1+uo6LaQKnNbuNed1S+XtfM5gZaVqyazn91rTGryd8da
+ gC6w==
+X-Gm-Message-State: AOAM533s4nduX0Ly/SXYtnzEdV5X6mBPlSCai+U/xKZ4/z9RtxEUH1XH
+ wnVdhrC6Qe7xdeTjaMdSyrEPZg==
+X-Google-Smtp-Source: ABdhPJw5+e/Vd+5v16/EYHNLVJQCXNqh94eoXDv/OzToPlEfYDHwxJeJopHyrSi56ISEhlvYGtAcyA==
+X-Received: by 2002:a17:906:c9d0:: with SMTP id
+ hk16mr3109471ejb.109.1636409336970; 
+ Mon, 08 Nov 2021 14:08:56 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id d3sm9967960edr.0.2021.11.08.14.07.48
+ by smtp.gmail.com with ESMTPSA id e13sm8495532eje.95.2021.11.08.14.08.56
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 08 Nov 2021 14:07:49 -0800 (PST)
-Message-ID: <ead8e3e9-1ee3-ff4c-5a82-7af5d78a4d12@mind.be>
-Date: Mon, 8 Nov 2021 23:07:48 +0100
+ Mon, 08 Nov 2021 14:08:56 -0800 (PST)
+Message-ID: <276de7b8-12a8-055a-7c62-f33befd82f5f@mind.be>
+Date: Mon, 8 Nov 2021 23:08:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20211108195130.2798450-1-giulio.benetti@benettiengineering.com>
- <20211108195130.2798450-2-giulio.benetti@benettiengineering.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20211107015835.3055951-1-giulio.benetti@benettiengineering.com>
+ <20211108150731.GD680793@scaer> <20211108162404.58ebbd3c@windsurf>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211108195130.2798450-2-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: add genimage.cfg file
- coding style standard
+In-Reply-To: <20211108162404.58ebbd3c@windsurf>
+Subject: Re: [Buildroot] [PATCH 000/102] Standardize/beautify genimage .cfg
+ files for all boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,109 +103,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 08/11/2021 20:51, Giulio Benetti wrote:
-> This patch adds the explanation for the genimage.cfg files coding standard.
-> A real standard is not defined upstream by the genimage utility
-> developers[1], but I try to give one here in Buildroot for consistency.
-> 
-> [1]: https://github.com/pengutronix/genimage
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   docs/manual/writing-rules.txt | 62 +++++++++++++++++++++++++++++++++++
->   1 file changed, 62 insertions(+)
-> 
-> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-> index 3b809d5c48..28cb0fe4f1 100644
-> --- a/docs/manual/writing-rules.txt
-> +++ b/docs/manual/writing-rules.txt
-> @@ -136,6 +136,68 @@ LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
->   endif
->   ---------------------
->   
-> +[[writing-genimage-cfg]]
-> +
-> +=== The +genimage.cfg+ file
-> +
-> ++genimage.cfg+ files contain the output image layout that genimage utility
-> +uses to create final .img file.
-> +
-> +An example follows:
-> +
-> +---------------------
-> +image efi-part.vfat {
-> +	vfat {
-> +		file EFI {
-> +			image = "efi-part/EFI"
-> +		}
-> +
-> +		file Image {
-> +			image = "Image"
-> +		}
-> +	}
-> +
-> +	size = 32M
-> +}
-> +
-> +image sdimage.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		image = "efi-part.vfat"
-> +		offset = 8K
-> +	}
-> +
-> +	partition root {
-> +		image = "rootfs.ext2"
-> +		size = 512M
-> +	}
-> +}
-> +---------------------
-> +
-> +* Every +section+(i.e. hdimage, vfat etc.), +partition+ must be indented
-> +  with one tab.
-> +
-> +* Every +file+ or other +subnode+ must be indented with two tabs.
-> +
-> +* Every node(+section+, +partition+, +file+, +subnode+) must have an open
-> +  curly bracket on the same line of the node's name, while the closing one
-> +  must be on a newline and after it a newline must be added except for the
-> +  last one node. Same goes for its option, for example option +size = +.
-> +
-> +* Every +option+(i.e. +image+, +offset+, +size+) must have the +=+
-> +  assignment one space from it and one space from the value specified.
-> +
-> +* Filename must at least begin with genimage prefix and have the .cfg
-> +  extension to be easy to recognize.
-> +
-> +The +genimage.cfg+ files are the input for the genimage tool used in
-> +Buildroot to generate the final image file(i.e. sdcard.img). For further
-> +details about the _genimage_ language, refer to
-> +https://github.com/pengutronix/genimage/blob/master/README.rst[].
-> +
-> +
->   === The documentation
->   
->   The documentation uses the
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwOC8xMS8yMDIxIDE2OjI0LCBUaG9tYXMgUGV0YXp6b25pIHdyb3RlOgo+IEhlbGxvLAo+
+IAo+IE9uIE1vbiwgOCBOb3YgMjAyMSAxNjowNzozMSArMDEwMAo+ICJZYW5uIEUuIE1PUklOIiA8
+eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+IAo+PiBJIGtub3cgdGhpcyBhcyBiZWVu
+IGRpc2N1c3NlZCBvbiBhbm90aGVyIHRocmVhZCB3aXRoIFBldGVyLCBhYm91dCB1c2luZwo+PiBL
+L00gaW5zdGVhZCBvZiBiYXJlIG51bWJlcnMsIGFuZCBpdCB3YXMgbXkgdW5kZXJzdGFuZGluZyB0
+aGF0IGlmIGEKPj4gY2hhbmdlIHdlcmUgdG8gYmUgbWFkZSwgaXQgd291bGQgYmUgcmVzdHJpY3Rl
+ZCB0byBqdXN0IHRoYXQuCj4+Cj4+IEhvd2V2ZXIsIEkgcXVlc3Rpb24gdGhlIHJlbGV2YW5jZSBv
+ZiB0aGlzICpodWdlKiBwYXRjaHNldCBqdXN0IGZvciBhCj4+IG1ha2VvdmVyLgo+Pgo+PiBZZXMs
+IHVzdWFsbHksIEkgbGlrZSBjb25zaXN0ZW5jeSwgYnV0IGhlcmUgd2UgaGF2ZSBhIHR3by1lZGdl
+IGlzc3VlOgo+Pgo+PiAgICAtIHRoZSBzZXJpZXMgaXMgaHVnZSwgYW5kIGNhdXNlcyBhIGxvdCBv
+ZiBjaHVybiBtYWtpbmcgcGVuZGluZyBwYXRjaGVzCj4+ICAgICAgbW9yZSBkaWZmaWN1bHQgdG8g
+YXBwbHksCj4gCj4gSSB3b3VsZCBhZ3JlZSBpbiBnZW5lcmFsLCBidXQgaGVyZSBJIGRvdWJ0IGl0
+IGlzIHJlYWxseSBnb2luZyB0byBjYXVzZQo+IG11Y2ggY29uZmxpY3Qgd2l0aCBvdGhlciBwZW5k
+aW5nIHBhdGNoZXMuCj4gCj4+ICAgIC0gdGhlIGdlbmltYWdlIGZvcm1hdCBpcyBub3Qgd2VsbCBk
+ZWZpbmVkLCBhbmQgdGhlcmUgaXMgbm8gbGludGVyLCBzbwo+PiAgICAgIHRoZSBleGlzdGluZyBm
+aWxlcyAqd2lsbCogZGl2ZXJnZSBhZ2FpbiwgYW5kIHdlIHdvbid0IG5vdGljZSB0aGF0Cj4+ICAg
+ICAgbmV3IGZpbGVzIHdvbid0IGJlIGNvbXBsaWFudC4KPiAKPiBSaWdodCwgYnV0IHRoYXQncyBu
+b3QgcmVhbGx5IGEgcmVhc29uIHRvIG5vdCB0YWtlIHRoaXMgcGF0Y2ggc2VyaWVzLgo+IAo+IE9u
+IG15IHNpZGUsIEkgd291bGQgc2ltcGx5IGFwcGx5IHRoZSB3aG9sZSB0aGluZy4gSXQgbWFrZXMg
+dGhpbmdzCj4gb3ZlcmFsbCBiZXR0ZXIgKHBlcmhhcHMgbm90IHBlcmZlY3QsIGJ1dCBiZXR0ZXIg
+YW5kIG1vcmUgY29uc2lzdGVudCkuCgogIFNpbmNlIEkgYWdyZWUgd2l0aCBUaG9tYXMsIGFuZCBz
+aW5jZSBHaXVsaW8gcHJvbWlzZWQgaGUnZCBtYWtlIGEgY2hlY2stcGFja2FnZSAKY2hlY2sgZm9y
+IGl0LCBJIGFwcGxpZWQgdGhlIHNlcmllcy4KCiAgVG8gYXZvaWQgcHJvYmxlbXMgd2l0aCBtZXJn
+ZXMgZG93biB0aGUgbGluZSwgSSBhcHBsaWVkIHRvIGJvdGggbWFzdGVyIGFuZCBuZXh0LgoKICBS
+ZWdhcmRzLAogIEFybm91dAoKPiAKPj4gSSB1c3VhbGx5IGzMtm/Mtsy2Ycy2dMy2aMy2IGTMtmXM
+tnPMtnDMtmnMtnPMtmXMtiBozLZhzLZ0zLZlzLYgZG8gbm90IGxpa2UgVEFCcy4uLiBUaGUgd2lk
+dGggb2YgYSBUQUIKPj4gdmFyaWVzIGRlcGVuZGluZyBvbiBvbmUncyBlbnZpcm9ubWVudCBhbmQg
+Y29kaW5nIHByYWN0aWNlczsgdGhlIHVzdWFsCj4+IDgtc3BhY2Ugd2lkdGggbWFrZXMgZm9yIHZl
+cnkgbG9uZywgdWdseSBsaW5lczsgVEFCIGJyZWFrIGNhcmVmdWxsCj4+IGluZGVudGF0aW9uLgo+
+IAo+IEEgbWF0dGVyIG9mIHRhc3RlIGluZGVlZCwgYnV0IGluICJtYWtlIiAoeW91IGtub3cgdGhp
+cyBsYW5ndWFnZSB3ZQo+IGhlYXZpbHkgYWJ1c2UgaW4gQnVpbGRyb290KSwgVEFCcyBhcmUga2lu
+ZyEgU28gaXQgd291bGQgYmUga2luZCBvZgo+IGlyb25pY2FsIG5vdCB0byBhbGxvdyBUQUJzIGlu
+IGEgbWFrZS1iYXNlZCBwcm9qZWN0IDotKQo+IAo+PiBBbmQgdGhlbiB0aGlzIGdhdmUgYSAxMDct
+cGF0Y2ggc2VyaWVzLiBBbmQgdGhlIGNvbW1pdHMgYWxsIGhhdmUgdGhlIHNhbWUKPj4gdHlwbzog
+J2JlYXRpZnknIGluc3RlYWQgb2YgJ2JlYXV0aWZ5Jy4gQWx0aG91Z2ggSSBjYW4gZm9yZ2l2ZSBh
+IHR5cG8KPj4gKHdobyB3b3VsZCBJIGJlIG5vdCB0bz8pLCBhbmQgdGhpcyBvbmUgd2FzIGZ1bm55
+IG9uZSwgZml4aW5nIGFsbCB0aG9zZQo+PiBtYW51YWxseSB3aGVuIGFwcGx5aW5nIHdpbGwgYmUg
+YSB0ZWRpb3VzIHRhc2ssIHRob3VnaCwgc28geW91IHdvdWxkIGhhdmUKPj4gdG8gZG8gdGhhdCBv
+biB5b3VyIHNpZGUgYW5kIHJlc3Bpbi4KPiAKPiBJIGRvbid0IGtub3cgaWYgdGhhdCB0eXBvIGlz
+IHdvcnRoIGEgaHVnZSByZXNwaW4uCj4gCj4+IEJ1dCBiZWZvcmUgeW91IGRvIHNvLCBwbGVhc2Ug
+d2FpdCBhIGJpdCBmb3Igb3RoZXJzIHRvIHNwZWFrIHVwLCBpZiB0aGlzCj4+IHNlcmllcyBpcyBy
+ZWFsbHkgbWVhbmluZ2Z1bC4KPiAKPiBJIGhhdmVuJ3QgcmV2aWV3ZWQgaXQgaW4gaXRzIGVudGly
+ZXR5LCBidXQgb3ZlcmFsbCwgSSB0aGluayB3ZSBzaG91bGQKPiBqdXN0IGFwcGx5LCBhbmQgbW92
+ZSBvbi4gSS5lLCBiZSBwcmFnbWF0aWMuCj4gCj4gVGhvbWFzCj4gCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
