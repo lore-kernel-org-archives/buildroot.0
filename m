@@ -2,70 +2,94 @@ Return-Path: <SRS0=Mf7g=P3=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B7E7C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4D9DC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:03:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 79B4A61054
-	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:02:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79B4A61054
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6CBE061054
+	for <buildroot@archiver.kernel.org>; Mon,  8 Nov 2021 22:03:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CBE061054
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37EA86085C;
-	Mon,  8 Nov 2021 22:02:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E2406085D;
+	Mon,  8 Nov 2021 22:03:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q4v-14kfOjqg; Mon,  8 Nov 2021 22:02:09 +0000 (UTC)
+	with ESMTP id ykFTPAw5dsJO; Mon,  8 Nov 2021 22:03:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A748060860;
-	Mon,  8 Nov 2021 22:02:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E9C221BF2FC
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:02:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 933A060858;
+	Mon,  8 Nov 2021 22:02:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B00811BF2FC
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D396F80ED0
- for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:02:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C5C1401CB
+ for <buildroot@lists.busybox.net>; Mon,  8 Nov 2021 22:02:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BphVhY1fGyOt for <buildroot@lists.busybox.net>;
- Mon,  8 Nov 2021 22:02:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83B4180E7B
- for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:02:04 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id kCiImLEQGueW5kCiImNLFA; Mon, 08 Nov 2021 23:02:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636408922; bh=z1BDyXI0olmynenk23vMn0rsYCALYL9xhPSef9cEGt4=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=a20GfTdqleo53mvmj4ExFCoI9kbWfwXc9poQ8IGEQUONDnQ2Wqd1CzWu98N6gDWfG
- Xo8P8Lvp52EA161SehUCGuaUuG1vUyD4RYwRdOx0ewQH313TFuMSSYio1syH34Y/e0
- lb+BtQOPZHLjVs2Qxxhqpz1j/HiBIWCQ49/sD5+nBP26o5/my0vrsFUvD+QlP1jrZq
- JneAmtfj0SPTE6zqI4ypiQWmHFjuKDmBykmIMvhgD9GkU2agCO3Kp7sTXHxwxz+/NH
- 2ZPgSOG+SuPKnmmc9zGW47Qd+FJWFdcf03EzxqAoBowQblWXzEgz4GrBcQbeGhFCnx
- p3sAdvVDkUT8g==
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20211107020519.3057454-1-giulio.benetti@benettiengineering.com>
- <8ffa84de-ed47-3310-d4b2-fb1b22b49738@mind.be>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <79df7e04-9a19-c144-742c-71c00cfd0060@benettiengineering.com>
-Date: Mon, 8 Nov 2021 23:02:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mim_IZfSL17N for <buildroot@lists.busybox.net>;
+ Mon,  8 Nov 2021 22:02:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E642401C0
+ for <buildroot@buildroot.org>; Mon,  8 Nov 2021 22:02:56 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id ee33so68761496edb.8
+ for <buildroot@buildroot.org>; Mon, 08 Nov 2021 14:02:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=bpGEd++k6Nix503r0ajlOHAyUU5d6TgyNx3aU5j1ALw=;
+ b=TWXfAQluVI8z2DvCcJFvXf1zfQHyLWHD/hE5GwVS81R6hP/v4UpOEsFfy8TvAlQ9df
+ BBDO/cL+zOJFEvk8S81IzVjAQ48v6z57x4TbUqXUzKVVAZguMxNd1g7x2+7c0owwVAo7
+ 0bFNdymsKzWxfQZ3MmvoncOJJnGlsr7SYndLEONbhqHVLEMSf7uV4/TjffgWN65gj/vW
+ 4HiAFTWDsyHjdZDVEEVQZ5NaISt05blSZXpoEOkQ9CBUpe31jayudqm2AvkETvQZgooa
+ +Ieed6N0L6aTKNFLJkjFCVeeAjxh9uxjuJ699vWOwTWYYwVWTunAFVLHjRU8zXPwZ8iY
+ Sp6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=bpGEd++k6Nix503r0ajlOHAyUU5d6TgyNx3aU5j1ALw=;
+ b=eFSf4hekJBShkjJjCktsYmWKMDMF4u89MpGz2WUK4mXCMM9nmLXXlsenDJ7+ewxGcY
+ FPye800EM3mWKrxMslpLwYR1ORnvd+MSYbimvXeGoy5ua/V4NOpRqSxkARTd/t6f8ezb
+ K3/VrAJ8OHIr4S/sDYKvMkOWVd6Smi6pUNzXzeWFl52dDbZt9KYbzWNFQfdoaxgkQyZX
+ Ak6XNifKxFndH4+qm6YLyKvZZ/381h/UWW8Fauj03xqanvRFcb8Rdjxc0/QiH9Hf2OdH
+ LO4XTg7EzS1aw+GKuuPOk4uae6fHMjfiLyWmA/zYC1wqSX5bp8+7cugX0pAa6ai+I/vT
+ BtKQ==
+X-Gm-Message-State: AOAM5324lPNJvSdmJiGiwzXPucsYwtInCM+1QyXHfz5t48KbslHvmoIF
+ c7R2O8bsmhNRFlUnuFT9/HV0e+mvo5oX8w==
+X-Google-Smtp-Source: ABdhPJyuc3vC3l4svm2oqylqcfXf53vcbTp446N0Va39KWxl49xoSgUEO3xwv1hYEghfw7E8SmX4hw==
+X-Received: by 2002:a17:906:6089:: with SMTP id
+ t9mr3148219ejj.323.1636408974609; 
+ Mon, 08 Nov 2021 14:02:54 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id y15sm7314283eda.35.2021.11.08.14.02.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 08 Nov 2021 14:02:54 -0800 (PST)
+Message-ID: <de0870fd-2afe-b5f8-d245-fe8c8e6599ca@mind.be>
+Date: Mon, 8 Nov 2021 23:02:53 +0100
 MIME-Version: 1.0
-In-Reply-To: <8ffa84de-ed47-3310-d4b2-fb1b22b49738@mind.be>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfDumRV+JN3fGm/ijUf+9XQyxl9dtmmJM/WmPSIVZLCa0GReV/CC2OJLDorW2wb0r5GbfQagmYeo8OD3FrvzLnAHdilzikmfa3O1au7Nr/I88OyQYC0I4
- A7O3YxM4p+R0eT5bD5UfjrgS4FI/uicXU7Nsvw2aLV1xIIL0oBuig7VH+KU60QNtvd4FvF4VC1Qo/kM98pINPkj1CnO5wqSabV9CO1t9ldNEEek6VsNWodXa
-Subject: Re: [Buildroot] [PATCH 023/102]
- board/cubietech/cubieboard2/genimage.cfg: beautify file
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20211107020336.3056910-1-giulio.benetti@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211107020336.3056910-1-giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH 016/102]
+ board/bananapi/bananapi-m64/genimage.cfg: beautify file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,59 +106,56 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/8/21 11:00 PM, Arnout Vandecappelle wrote:
-> 
-> 
-> On 07/11/2021 03:05, Giulio Benetti wrote:
->> Beatify this genimage .cfg file to have consistency with all genimage .cfg
->> files in Buildroot.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>    board/cubietech/cubieboard2/genimage.cfg | 5 +++--
->>    1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/board/cubietech/cubieboard2/genimage.cfg b/board/cubietech/cubieboard2/genimage.cfg
->> index b082ab0da1..5ef10ef135 100644
->> --- a/board/cubietech/cubieboard2/genimage.cfg
->> +++ b/board/cubietech/cubieboard2/genimage.cfg
->> @@ -9,6 +9,7 @@ image boot.vfat {
->>    			"boot.scr"
->>    		}
->>    	}
->> +
->>    	size = 10M
->>    }
->>    
->> @@ -19,8 +20,8 @@ image sdcard.img {
->>    	partition u-boot {
->>    		in-partition-table = "no"
->>    		image = "u-boot-sunxi-with-spl.bin"
->> -		offset = 8192
->> -		size = 1040384 # 1MB - 8192
->> +		offset = 8K
->> +		size = 1016 # 1MB - 8KB
-> 
->    1016K, not 1016 bytes...
 
-Thank you Arnout. I check again for the 4th time all files too.
 
->    Regards,
->    Arnout
+On 07/11/2021 03:03, Giulio Benetti wrote:
+> Beatify this genimage .cfg file to have consistency with all genimage .cfg
+> files in Buildroot.
 > 
->>    	}
->>    
->>    	partition boot {
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   board/bananapi/bananapi-m64/genimage.cfg | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
+> diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
+> index 9730d8faac..52127167ce 100644
+> --- a/board/bananapi/bananapi-m64/genimage.cfg
+> +++ b/board/bananapi/bananapi-m64/genimage.cfg
+> @@ -6,6 +6,7 @@ image boot.vfat {
+>   			"boot.scr"
+>   		}
+>   	}
+> +
+>   	size = 64M
+>   }
+>   
+> @@ -16,14 +17,14 @@ image sdcard.img {
+>   	partition spl {
+>   		in-partition-table = "no"
+>   		image = "sunxi-spl.bin"
+> -		offset = 8192
+> +		offset = 8K
+>   	}
+>   
+>   	partition u-boot {
+>   		in-partition-table = "no"
+>   		image = "u-boot.itb"
+>   		offset = 40K
+> -		size = 1M # 1MB - 40K
+> +		size = 984K # 1MB - 40KB
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+  Since there's no way you actually tested this on a board, and there's a slight 
+risk that one of these defconfigs actually needs the full 1MB rather than 984K, 
+I've reverted all of those to 1M.
+
+
+  Regards,
+  Arnout
+
+>   	}
+>   
+>   	partition boot {
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
