@@ -2,52 +2,52 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E787C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 08:20:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18BB5C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 08:20:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 087236113D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 08:20:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 087236113D
+	by mail.kernel.org (Postfix) with ESMTPS id 9692D611AF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 08:20:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9692D611AF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7B7B40394;
-	Tue,  9 Nov 2021 08:20:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C37180DF7;
+	Tue,  9 Nov 2021 08:20:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D2agaIr5kEpN; Tue,  9 Nov 2021 08:20:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8NEVlVSqHEfc; Tue,  9 Nov 2021 08:20:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE164039C;
-	Tue,  9 Nov 2021 08:20:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E47C61BF3B9
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0E7680DE9;
+	Tue,  9 Nov 2021 08:20:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F00021BF9A4
  for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 08:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0F4660621
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF97580DE6
  for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 08:20:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qS6l0q1-FYpm for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3kooU7Y1J-aS for <buildroot@lists.busybox.net>;
  Tue,  9 Nov 2021 08:20:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35FF7605F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B79C80DAC
  for <buildroot@buildroot.org>; Tue,  9 Nov 2021 08:20:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E4D4A8B75D; Tue,  9 Nov 2021 08:16:29 +0000 (UTC)
+ id D783D8B75C; Tue,  9 Nov 2021 08:16:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Nov 2021 09:07:44 +0100
+Date: Tue, 9 Nov 2021 08:58:59 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 08b0f2473a535b28d5713afa3af78a07f4ca95c6
-X-Git-Newrev: 41ece1ac6c01c2d35f5e962e2abaea6314e7a996
+X-Git-Oldrev: 8c549af8a81c05c191e2d5dd266178412556f897
+X-Git-Newrev: 08b0f2473a535b28d5713afa3af78a07f4ca95c6
 X-Patchwork-Hint: ignore
-Message-Id: <20211109081629.E4D4A8B75D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/systemd: enable
- selinux xdg module for refpolicy
+Message-Id: <20211109081629.D783D8B75C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] support/testing:
+ test_jffs2.py: update logical eraseblock size for qemu >= 2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41ece1ac6c01c2d35f5e962e2abaea6314e7a996
+commit: https://git.buildroot.net/buildroot/commit/?id=08b0f2473a535b28d5713afa3af78a07f4ca95c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Without the selinux xgd module enabled by systemd package, refpolicy
-fail to build due to policy/modules/system/systemd.te [1]
+The test_jffs2 test fail for the same reason as test_ubi test with qemu >= 2.9
+due to a qemu 2.8 bug. See commit d8447c38f53f98e1df4a209e9f70e54f8b60f36e.
 
-policy/modules/system/systemd.te:288:ERROR 'attribute xdg_config_type is not declared' at token ';' on line 508447:
+Divide the erase block size by two.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552468
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552470
-
-[1] https://github.com/SELinuxProject/refpolicy/blob/RELEASE_2_20210908/policy/modules/system/systemd.te#L288
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1687590514
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Antoine Tenart <atenart@kernel.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d51189ffe50fab00d36778a53d28c9d5cb34ae42)
+(cherry picked from commit d2f92512f699cb34f6373c43e8da7f5907e2abd0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk | 2 +-
+ support/testing/tests/fs/test_jffs2.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1a5ccc02fc..d5b0f7203b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -20,7 +20,7 @@ SYSTEMD_DEPENDENCIES = \
- 	util-linux-libs \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
--SYSTEMD_SELINUX_MODULES = systemd udev
-+SYSTEMD_SELINUX_MODULES = systemd udev xdg
- 
- SYSTEMD_PROVIDES = udev
- 
+diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
+index f595e408d5..1806bd7e3c 100644
+--- a/support/testing/tests/fs/test_jffs2.py
++++ b/support/testing/tests/fs/test_jffs2.py
+@@ -16,7 +16,7 @@ class TestJffs2(infra.basetest.BRTest):
+         """
+         BR2_TARGET_ROOTFS_JFFS2=y
+         BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
+-        BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x80000
++        BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x40000
+         BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+         BR2_TARGET_ROOTFS_JFFS2_PAD=y
+         BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
