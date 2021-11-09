@@ -2,94 +2,83 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2BEBC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:01:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 687A2C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3052F6103D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:00:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3052F6103D
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id 05F4661186
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:03:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 05F4661186
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C14F5606AE;
-	Tue,  9 Nov 2021 22:00:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1EAB40015;
+	Tue,  9 Nov 2021 22:03:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOR0-Ia_epcZ; Tue,  9 Nov 2021 22:00:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7F1F6075D;
-	Tue,  9 Nov 2021 22:00:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 917981BF5DF
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:00:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CCD7401B1
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:00:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3dcDig1tLCSt for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 22:00:55 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3-YMBDWtwClz; Tue,  9 Nov 2021 22:03:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2E0B401B1;
+	Tue,  9 Nov 2021 22:03:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F7A41BF5DF
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:03:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DE83817ED
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:03:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9i6r-ZRlCSYO for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 22:03:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2524440015
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 22:00:54 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id c8so2099806ede.13
- for <buildroot@buildroot.org>; Tue, 09 Nov 2021 14:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8FAF817AF
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 22:03:08 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id r8so424471wra.7
+ for <buildroot@buildroot.org>; Tue, 09 Nov 2021 14:03:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yWBdbB46sv1DjT4+IrZAeEUyvw+XiolO2c2hx7ym8jU=;
- b=QU+O0/n4uLiG349FY40u2BntxM0EUDtk4LjC3p2kSwB/xjdw2PmX6B01obwqVJUPBo
- LmFfGqVORPkt64FNh8Vu86lLt825cMvUqDdq/n4HFYQotZx78+J3oIzuoP94WyGT1+j1
- i+apJsEW3GeOouyFQpkrJUW+3jh3WQYLOKZooE2dCnql3kq6CfJprgCiVaU1ONvazlwY
- 2oQxm+PBGP9NPey4x95V5ntbMR70CN8aJj2dYc0UrLzYHB0nfNfoMZjEoKWglc3vt8fc
- STrdvx7fKo7D0ByI5horQBwE80yu2JQUwZ+ggN0mGw8plBOi/Nrn5CstcSeL5yOIkpk4
- YoYg==
+ bh=YcASDVz37wacpM3O7oss8jUC7IASo5smcVdypQ6Vtwg=;
+ b=fMn3sIWixrbCH7FTuEhVMhy+kCDnk2u8d16unASb0/dSKkz2YJkaZMFLW/h7SCn6cJ
+ QrpaQwdlUBLcT8kqa1U+wcEbZnEQV9osicDpfU/h64z0UAlO8xtrehSOo8M12DxjFrO7
+ 6G6dWK1TfDr/fvtOO3xQDQs9vlfUodcuGJ59sQ2+rpjoIgurAxddeIn2lVPDXw4Lo37u
+ PN8nZUBrEHr8asPE2rLlVkWyHHw56s9izsMtG2srlWwx+aGc2KtOAJ+ayPGAENiMLGJs
+ 2s6+ZbPV1RklLqO6F2XwOVi/Qfee0wCL5rV0jixJ6LHnPvgIcNwkbvnEhe7a5D7QRobN
+ XL/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yWBdbB46sv1DjT4+IrZAeEUyvw+XiolO2c2hx7ym8jU=;
- b=q5hitwgBmjwrOFWHI8oaGW1VvZBq1T288fM+/DXFC2yFj6iIcb0mTAB0JRHeKO3gzd
- QBJ/wScY9qObCZcIFhkCcZ2wY0Q1DocHBEN/4vmW6VQDUIURieQ3GESyn+5YGHBc5Lel
- +WmCh1C1+ZqD69Ay5zX6kg+/AHbpX8irDvJayCQM5Sl3kALU8I6yKIX/DACXoivumfej
- xraveirmHYMaTCCBA5nZTu/NupERwozskx2oNHErCcWsYzRuaFLOYep/29X7VsnZ8FdO
- 2tg+/KBhIucz4pPBXn40ZvZEdcXxWZAlZmuvrz8XUEj/YcvPMbVIdm/P6G2ZBOMaVk+M
- fgNA==
-X-Gm-Message-State: AOAM533LiNITQMbJCETKU3OB+jzqhEZC3XpLnwmMh0wEEWqe0tEyzDtj
- +kknPzi9NEvs5/OdUD+Sy/yvxw==
-X-Google-Smtp-Source: ABdhPJwJTBp5N6teoWjHhRivTYB6YPiAym476LUOEh4C03KwAAEJzcKlsf3FhKpBeh4+3VFBX5gQrg==
-X-Received: by 2002:a05:6402:27d3:: with SMTP id
- c19mr14830474ede.2.1636495253163; 
- Tue, 09 Nov 2021 14:00:53 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id j11sm10027492ejt.114.2021.11.09.14.00.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 09 Nov 2021 14:00:52 -0800 (PST)
-Message-ID: <60a8f99e-b1dd-02e7-9ee6-0ac569e58642@mind.be>
-Date: Tue, 9 Nov 2021 23:00:50 +0100
+ bh=YcASDVz37wacpM3O7oss8jUC7IASo5smcVdypQ6Vtwg=;
+ b=RcKYAM/PRjWnJ9SGCo+1JNcMsVXpwXGVkAB6wlKXhS7VRgw5KTD0S7ggeqsbSvwBLC
+ CorIZI8NMduiOdN1BgRUH9+deYfZ0kreXCtW3i9gzFkWj6K8LC8P9JZo+ZX9UNNAKD0r
+ VHd1sGGTo2k9ZYIkCwYJ5s2RY+54sLRL77tl2KA/Kyn2IdeYPsGQ9uC4UlcLyhq1HDsE
+ X2AvYbSvsg6dtAjGQ6xozPAKnnojZIzSQdXt6SUxFrzGlseVvKaa++mgAblXGW9/XkGA
+ LloheLNPoy21wN589HXSR2hwxjQa+tnUFuE+wUBCL66WLslJ5tCFGCEIjalejtU4vQSs
+ XXuA==
+X-Gm-Message-State: AOAM531nl0Ruk6KBRzZpeMcaWBjPw0peY38NggLb0+64nafR46oTf25W
+ d/MFdJrZt4ZxvgXtPkOHz+E5YjSGKRk=
+X-Google-Smtp-Source: ABdhPJz0DKOOQsIkOQ6RAgEsLNhaXPt7gvva7Dzfdoid8guYh9zezn5m8wlz5ND43PxpDFhHrO8ZxA==
+X-Received: by 2002:a5d:68ce:: with SMTP id p14mr13477722wrw.116.1636495386718; 
+ Tue, 09 Nov 2021 14:03:06 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id n32sm4298031wms.1.2021.11.09.14.03.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Nov 2021 14:03:06 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  9 Nov 2021 23:01:06 +0100
+Message-Id: <20211109220106.1645006-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: Dario Binacchi <dariobin@libero.it>, buildroot@buildroot.org
-References: <20211101182429.11450-1-dariobin@libero.it>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211101182429.11450-1-dariobin@libero.it>
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f429_disco: fix kernel
- bootup
+Subject: [Buildroot] [PATCH 1/1] package/botan: fix build on mips
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,201 +90,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following build failure on one mips toolchain with gcc 5.3
+raised since bump to version 2.18.2 in commit
+47fa16dffa6c6a72b2f76984f6d492f4f352a52b:
 
+src/lib/hash/sha3/sha3.cpp: In function 'std::tuple<long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int> Botan::{anonymous}::xor_CNs(const uint64_t*)':
+src/lib/hash/sha3/sha3.cpp:41:42: error: converting to 'std::tuple<long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int>' from initializer list would use explicit constructor 'constexpr std::tuple< <template-parameter-1-1> >::tuple(_UElements&& ...) [with _UElements = {long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int}; <template-parameter-2-2> = void; _Elements = {long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int, long long unsigned int}]'
+       A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24]};
+                                          ^
 
-On 01/11/2021 19:24, Dario Binacchi wrote:
-> The kernel generated by the configuration for the STM32f429-discovery
-> board is buggy:
-> 
->   Unhandled exception: IPSR = 00000006 LR = fffffff1
->   CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
->   Hardware name: STM32 (Device Tree Support)
->   task: 9041a000 task.stack: 907c0000
->   PC is at ret_fast_syscall+0x2/0x4a
->   LR is at tty_ioctl+0x1ad/0x75c
->   pc : [<0800d942>]    lr : [<080c2e05>]    psr: 4000000b
->   sp : 907c1fa8  ip : 0000001c  fp : 905961a2
->   r10: 00000000  r9 : 907c0000  r8 : 0800dae0
->   r7 : 00000036  r6 : 905e7e60  r5 : 00000000  r4 : 905e7ebc
->   r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000000
->   xPSR: 4000000b
->   CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
->   Hardware name: STM32 (Device Tree Support)
->   [<0800fbf9>] (unwind_backtrace) from [<0800f05b>] (show_stack+0xb/0xc)
->   [<0800f05b>] (show_stack) from [<0800f553>] (__invalid_entry+0x4b/0x4c)
-> 
-> Inspired by commit a3e3d9c198 ("configs/stm32f469_disco_xip_defconfig:
-> alternative defconfig for XIP") I updated the stm32f429_disco_defconfig
-> configuration to use a newer kernel. Current setup kernel + rootfs fits
-> in 1.6MB on-chip flash memory.
-> 
-> Fixes:
+Fixes:
+ - http://autobuild.buildroot.org/results/4e86c3008aa70284a3002f426066fcc21d018e95
 
-  (nitpick) you normally put the fixes tag before the thing that gets fixed, not 
-before the changes you made to fix them. So in this case, it would become before 
-the Unhandled exception above.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...d-a-miscompilation-issue-in-clang-12.patch | 144 ++++++++++++++++++
+ 1 file changed, 144 insertions(+)
+ create mode 100644 package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch
 
->   - Move kernel to new flash bank due to growth of dtb size.
->   - Fix kernel start address in afboot-stm32 bootloader.
-> 
-> For better binary size optimization gcc LTO is turned on.
-> 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> ---
->   .../stm32f429-disco/flash.sh                  |   2 +-
->   .../stm32f429-disco/linux.config              | 120 ++++++++++++++++++
->   ...9i-disco-update-kernel-start-address.patch |  30 +++++
->   ...sco-don-t-force-init-in-chosen-boota.patch |  32 -----
->   configs/stm32f429_disco_defconfig             |   9 +-
->   5 files changed, 156 insertions(+), 37 deletions(-)
->   create mode 100644 board/stmicroelectronics/stm32f429-disco/linux.config
->   create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
->   delete mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
-> 
-> diff --git a/board/stmicroelectronics/stm32f429-disco/flash.sh b/board/stmicroelectronics/stm32f429-disco/flash.sh
-> index b19e0a6019..3e2bf121d3 100755
-> --- a/board/stmicroelectronics/stm32f429-disco/flash.sh
-> +++ b/board/stmicroelectronics/stm32f429-disco/flash.sh
-> @@ -21,6 +21,6 @@ ${OUTPUT_DIR}/host/bin/openocd -f board/${BOARD_NAME}.cfg \
->     -c "flash info 0" \
->     -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429i-disco.bin 0x08000000" \
->     -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429-disco.dtb 0x08004000" \
-> -  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08008000" \
-> +  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x0800C000" \
+diff --git a/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch b/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch
+new file mode 100644
+index 0000000000..b43aeafe13
+--- /dev/null
++++ b/package/botan/0001-Revert-workaround-a-miscompilation-issue-in-clang-12.patch
+@@ -0,0 +1,144 @@
++From 372bdf0348fb86d671e73baab19daa34bd0cf73d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 9 Nov 2021 19:01:20 +0100
++Subject: [PATCH] Revert "workaround a miscompilation issue in clang 12
++ (XCode 13)"
++
++This reverts commit 219329f8e777af54d785ae7259f8be32a714b751.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/randombit/botan/issues/2845]
++---
++ src/lib/hash/sha3/sha3.cpp                | 46 ++++++-----------------
++ src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp | 46 ++++++-----------------
++ 2 files changed, 22 insertions(+), 70 deletions(-)
++
++diff --git a/src/lib/hash/sha3/sha3.cpp b/src/lib/hash/sha3/sha3.cpp
++index 289e451ff..690c2b264 100644
++--- a/src/lib/hash/sha3/sha3.cpp
+++++ b/src/lib/hash/sha3/sha3.cpp
++@@ -11,47 +11,23 @@
++ #include <botan/exceptn.h>
++ #include <botan/cpuid.h>
++ 
++-#include <tuple>
++-
++ namespace Botan {
++ 
++ namespace {
++ 
++-// This is a workaround for a suspected bug in clang 12 (and XCode 13)
++-// that caused a miscompile of the SHA3 implementation for optimization
++-// level -O2 and higher.
++-//
++-// For details, see: https://github.com/randombit/botan/issues/2802
++-#if    defined(__clang__) && \
++-    (( defined(__apple_build_version__) && __clang_major__ == 13) || \
++-     (!defined(__apple_build_version__) && __clang_major__ == 12))
++-#define BOTAN_WORKAROUND_MAYBE_INLINE __attribute__((noinline))
++-#else
++-#define BOTAN_WORKAROUND_MAYBE_INLINE inline
++-#endif
++-
++-BOTAN_WORKAROUND_MAYBE_INLINE std::tuple<uint64_t, uint64_t, uint64_t, uint64_t, uint64_t>
++-   xor_CNs(const uint64_t A[25])
++-   {
++-   return {
++-      A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20],
++-      A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21],
++-      A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22],
++-      A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23],
++-      A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24]};
++-   }
++-
++-#undef BOTAN_WORKAROUND_MAYBE_INLINE
++-
++ inline void SHA3_round(uint64_t T[25], const uint64_t A[25], uint64_t RC)
++    {
++-   const auto Cs = xor_CNs(A);
++-
++-   const uint64_t D0 = rotl<1>(std::get<0>(Cs)) ^ std::get<3>(Cs);
++-   const uint64_t D1 = rotl<1>(std::get<1>(Cs)) ^ std::get<4>(Cs);
++-   const uint64_t D2 = rotl<1>(std::get<2>(Cs)) ^ std::get<0>(Cs);
++-   const uint64_t D3 = rotl<1>(std::get<3>(Cs)) ^ std::get<1>(Cs);
++-   const uint64_t D4 = rotl<1>(std::get<4>(Cs)) ^ std::get<2>(Cs);
+++   const uint64_t C0 = A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20];
+++   const uint64_t C1 = A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21];
+++   const uint64_t C2 = A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22];
+++   const uint64_t C3 = A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23];
+++   const uint64_t C4 = A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24];
+++
+++   const uint64_t D0 = rotl<1>(C0) ^ C3;
+++   const uint64_t D1 = rotl<1>(C1) ^ C4;
+++   const uint64_t D2 = rotl<1>(C2) ^ C0;
+++   const uint64_t D3 = rotl<1>(C3) ^ C1;
+++   const uint64_t D4 = rotl<1>(C4) ^ C2;
++ 
++    const uint64_t B00 =          A[ 0] ^ D1;
++    const uint64_t B01 = rotl<44>(A[ 6] ^ D2);
++diff --git a/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp b/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
++index c7f1914a3..a9650ad9d 100644
++--- a/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
+++++ b/src/lib/hash/sha3/sha3_bmi2/sha3_bmi2.cpp
++@@ -8,47 +8,23 @@
++ #include <botan/sha3.h>
++ #include <botan/rotate.h>
++ 
++-#include <tuple>
++-
++ namespace Botan {
++ 
++ namespace {
++ 
++-// This is a workaround for a suspected bug in clang 12 (and XCode 13)
++-// that caused a miscompile of the SHA3 implementation for optimization
++-// level -O2 and higher.
++-//
++-// For details, see: https://github.com/randombit/botan/issues/2802
++-#if    defined(__clang__) && \
++-    (( defined(__apple_build_version__) && __clang_major__ == 13) || \
++-     (!defined(__apple_build_version__) && __clang_major__ == 12))
++-#define BOTAN_WORKAROUND_MAYBE_INLINE __attribute__((noinline))
++-#else
++-#define BOTAN_WORKAROUND_MAYBE_INLINE inline
++-#endif
++-
++-BOTAN_WORKAROUND_MAYBE_INLINE std::tuple<uint64_t, uint64_t, uint64_t, uint64_t, uint64_t>
++-   xor_CNs(const uint64_t A[25])
++-   {
++-   return {
++-      A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20],
++-      A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21],
++-      A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22],
++-      A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23],
++-      A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24]};
++-   }
++-
++-#undef BOTAN_WORKAROUND_MAYBE_INLINE
++-
++ inline void SHA3_BMI2_round(uint64_t T[25], const uint64_t A[25], uint64_t RC)
++    {
++-   const auto Cs = xor_CNs(A);
++-
++-   const uint64_t D0 = rotl<1>(std::get<0>(Cs)) ^ std::get<3>(Cs);
++-   const uint64_t D1 = rotl<1>(std::get<1>(Cs)) ^ std::get<4>(Cs);
++-   const uint64_t D2 = rotl<1>(std::get<2>(Cs)) ^ std::get<0>(Cs);
++-   const uint64_t D3 = rotl<1>(std::get<3>(Cs)) ^ std::get<1>(Cs);
++-   const uint64_t D4 = rotl<1>(std::get<4>(Cs)) ^ std::get<2>(Cs);
+++   const uint64_t C0 = A[0] ^ A[5] ^ A[10] ^ A[15] ^ A[20];
+++   const uint64_t C1 = A[1] ^ A[6] ^ A[11] ^ A[16] ^ A[21];
+++   const uint64_t C2 = A[2] ^ A[7] ^ A[12] ^ A[17] ^ A[22];
+++   const uint64_t C3 = A[3] ^ A[8] ^ A[13] ^ A[18] ^ A[23];
+++   const uint64_t C4 = A[4] ^ A[9] ^ A[14] ^ A[19] ^ A[24];
+++
+++   const uint64_t D0 = rotl<1>(C0) ^ C3;
+++   const uint64_t D1 = rotl<1>(C1) ^ C4;
+++   const uint64_t D2 = rotl<1>(C2) ^ C0;
+++   const uint64_t D3 = rotl<1>(C3) ^ C1;
+++   const uint64_t D4 = rotl<1>(C4) ^ C2;
++ 
++    const uint64_t B00 =          A[ 0] ^ D1;
++    const uint64_t B01 = rotl<44>(A[ 6] ^ D2);
++-- 
++2.33.0
++
+-- 
+2.33.0
 
-  I'm a bit confused, but I think I get it now... We have 3 disco configs:
-
-- stm32f429_disco_defconfig is XIP
-- stm32f469_disco_defconfig is in spiflash
-- stm32f469_disco_xip_defconfig is XIP
-
-  So, perhaps, to make things clearer, we should rename this defconfig to 
-stm32f429_disco_xip_defconfig?
-
-[snip]
-> diff --git a/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
-> new file mode 100644
-> index 0000000000..715ade694d
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
-> @@ -0,0 +1,30 @@
-> +From 9cdee858b36e2de7d6717e56fd3d08ad9ad25cde Mon Sep 17 00:00:00 2001
-> +From: Dario Binacchi <dariobin@libero.it>
-> +Date: Sun, 31 Oct 2021 08:52:52 +0100
-> +Subject: [PATCH] stm32f429i-disco: update kernel start address
-> +
-> +As of GNU/Linux v5.14 kernel device tree binary grows above 0x08008000
-> +and overwrites kernel binary.
-> +Therefore this commit moves kernel to the next flash bank.
-> +
-> +Signed-off-by: Dario Binacchi <dariobin@libero.it>
-
-  Since the DTS comes from the upstream kernel AFAICS, it would seem that this 
-patch should be sent upstream as well. Have you done that? If so, please add an 
-Upstream: <URL>.
-
-> +---
-> + stm32f429i-disco.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/stm32f429i-disco.c b/stm32f429i-disco.c
-> +index 8b27641..14a6f1e 100644
-> +--- a/stm32f429i-disco.c
-> ++++ b/stm32f429i-disco.c
-> +@@ -88,7 +88,7 @@ static void fmc_wait_busy(void)
-> +
-> + void start_kernel(void)
-> + {
-> +-	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
-> ++	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x0800C000 | 1);
-> +
-> + 	kernel(0, ~0UL, 0x08004000);
-> + }
-> +--
-> +2.17.1
-> +
-> diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch b/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
-> deleted file mode 100644
-> index d6d5c61aae..0000000000
-> --- a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From ded9afa688184b3240a92c2b8f114c545a09bc3f Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Sat, 12 Mar 2016 23:14:41 +0100
-> -Subject: [PATCH] ARM: stm32f249-disco: don't force init= in /chosen/bootargs
-> -
-> -There is no reason to override the kernel's default init= value, as
-> -this breaks userspace that assumes the kernel default of /init is
-> -used. Since stm32 is often used with a minimal bootloader
-> -(afboot-stm32) that doesn't provide any mechanism to override the DTB,
-> -we need to adjust the kernel command line in the Device Tree source.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ----
-> - arch/arm/boot/dts/stm32f429-disco.dts | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
-> -index f0b731d..2bae81c 100644
-> ---- a/arch/arm/boot/dts/stm32f429-disco.dts
-> -+++ b/arch/arm/boot/dts/stm32f429-disco.dts
-> -@@ -53,7 +53,7 @@
-> - 	compatible = "st,stm32f429i-disco", "st,stm32f429";
-> -
-> - 	chosen {
-> --		bootargs = "root=/dev/ram rdinit=/linuxrc";
-> -+		bootargs = "root=/dev/ram";
-> - 		stdout-path = "serial0:115200n8";
-> - 	};
-> -
-> ---
-> -2.6.4
-> -
-> diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
-> index 2c0641a6c5..58367fca0b 100644
-> --- a/configs/stm32f429_disco_defconfig
-> +++ b/configs/stm32f429_disco_defconfig
-> @@ -1,13 +1,14 @@
->   BR2_arm=y
->   BR2_cortex_m4=y
->   BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-> +# BR2_UCLIBC_INSTALL_UTILS is not set
-> +BR2_GCC_ENABLE_LTO=y
->   BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
->   BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
-
-  You *must* keep this (and the linux-headers version) explicitly, relying on 
-the default is not OK. Indeed, if the default kernel is update in Buildroot 
-(which happens every couple of weeks), then it's possible it will grow again and 
-doesn't fit any more.
-
-
-> -BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
->   BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_XZ=y
-
-  Err, now I'm really confused, this is a XIP kernel right, so it shouldn't be 
-compressed?
-
-  Regards,
-  Arnout
-
->   BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f429-disco"
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
