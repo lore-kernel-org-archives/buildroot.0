@@ -2,82 +2,83 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D18C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:23:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04CDAC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:24:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6F4A861027
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:23:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6F4A861027
+	by mail.kernel.org (Postfix) with ESMTPS id 8B01B61027
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:24:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8B01B61027
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D2B340398;
-	Tue,  9 Nov 2021 17:23:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A20740391;
+	Tue,  9 Nov 2021 17:24:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p2QvejaGiXh8; Tue,  9 Nov 2021 17:23:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vys1y06bfWTf; Tue,  9 Nov 2021 17:24:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BA5440186;
-	Tue,  9 Nov 2021 17:23:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE501BF9AA
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:23:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD47840290;
+	Tue,  9 Nov 2021 17:24:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A0931BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:24:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BD7940186
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:23:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2992040290
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:24:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qoG0hdW6bpDa for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 17:23:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vGzAE8cbpLxq for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 17:24:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2E57B400D4
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 17:23:16 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id d24so34299412wra.0
- for <buildroot@buildroot.org>; Tue, 09 Nov 2021 09:23:16 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 886DE401D2
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 17:24:03 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id t30so34270855wra.10
+ for <buildroot@buildroot.org>; Tue, 09 Nov 2021 09:24:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BOnID2EbdOnOzgVvrX5QekDBuwLJT9pI5zd1uAy2Zv0=;
- b=mgMDYhz+X3fZ2JzCi6IVTwD9a5d8c1Mgwlc9JteFzYsPCNoY4U8Jw4Jp9WdocUDSEy
- 9SERoO2zN31yMnG8iYat/Q3PCLjCZMO6Ffs5nXM1mpNj8V/BYaLyNn6kQ3k1d8V3EBcQ
- fCMFhePmFyQCV/I/C1UOmcgOUZQsthual3jIlE/fBDLqXs3a18TIW4/Y3kLlwuHYCipE
- G4lmvALVNnfmA9CmXaFJtXgjWWw0keY4jrL+MTisBTz6DEMKgmrbBJQ/EwRUjScZKyLc
- OX1PjELCM9hc7ICWjgytmxeNSDTW3Ty5fQ2DYFqzzmVSc0nG3x3ynDlYIntDrMHu9uz1
- D82A==
+ bh=NgGmv6vSF30uV3ZSZi+ZlHajXRLU9HKqWKCbkcGxatc=;
+ b=HEYB2UPN0Ld4s3ctZWRO4jeokanX6RiUR+4VLEzD059XMcwrcIe7K7jm119S8na8bg
+ tWwTHfU4LAwC0gWRtVR+hrUZ9/VHAO3kiqdGpkZ7QJgyxonyjTZ/DajhMACHJvjxA9JL
+ MWo11+6c0ABzj8cUcRmeqlI0RzhfEFDzmjOqHIGrDsn/ErLjE6eme6g/ik5FwoQK6kG0
+ 7ZEYWhFwAgHOaKulR6RmZdF1OWRzSSYU6RBbMTTmRmK3Z6/Q8X8gM5EN9WNEQGLZfUBK
+ 5qHnhFfkUdu4JrWPrZ1l3VO8xwHS88SnnLazDDxa5sFCgjFyq+IPy1Bj6AmlgOP4IjhH
+ a7Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BOnID2EbdOnOzgVvrX5QekDBuwLJT9pI5zd1uAy2Zv0=;
- b=wo+JDHO5jiauwjVBSunSTPZzu59S38uoxnLTY2BPOrixzcGjiBlCFrYQcydwxbOxb9
- bRR5ikG51hTsZuC58WMi8HKBbJ6RD04ZfwOMCoBRGggFiswlsUHOD3/gJ3iQ9VjoUTeP
- thLQOIHgmRFO1qdSlDzMz+OyHa+1l2ito+dT8nSpkTm6Qgqd9pkQgo8uQZ7SxiDrg/Zz
- zYbsDFO1jqZVE6YVxgrEkMhqtTlWlYGN5CISk68sxVInv+Xl3zVwjAlmRKW6qDXsw5wK
- bwZpB6UXHNV4qAnVjSu1YEyi/cmwdNaiaV1G24TwaDy6r6+raAmMzhHsdZToh11sgSO1
- Ws1A==
-X-Gm-Message-State: AOAM533/JGwcyJ7p2sJR9WDufD25H8e627Sy9feO1nlsKg9wARwUjx7C
- LEko79lbeKe5eNnE3ZKvaaTmgIKTqjw=
-X-Google-Smtp-Source: ABdhPJy+TJfr7y8gXiWpkC8TW2fhazCjDVnfJqDoD7weiPmJKs/BoQg1ZtnmaVJCZTdd+eTcfueH6A==
-X-Received: by 2002:a5d:588b:: with SMTP id n11mr11822988wrf.344.1636478594210; 
- Tue, 09 Nov 2021 09:23:14 -0800 (PST)
+ bh=NgGmv6vSF30uV3ZSZi+ZlHajXRLU9HKqWKCbkcGxatc=;
+ b=7D8VQJXBaK7kAKDnkt5iQS92qkuVjuKdLKYsycpAb7+Knd5XCTr3rvHojlUlCjsvAv
+ HDpd9YD1KCO4VCWunl9F7txRUlkT4uNkY0f30pzb+lNBmuXs+er//x3jTt1qmeQGPosj
+ DtKBmJfroC4BcPe+zLTaMEPAu8K8DsD94Xs5o2XCtoJR0REq7iBvHqVlUKr7SEQXMjfB
+ ZMpXSoOL3iEBaeh0WAoCefgX+nsUN57dkJGF2/7i3uJXs3lUrtmOazgfqXSoH9HvtmNs
+ iFe3YsACz2cqo7Jev1ohkRlWQA8Mp5Re8eG3pwAoGkuDT7sDE57DohahhIuvON/YZoes
+ wgLQ==
+X-Gm-Message-State: AOAM530tTTP2D8SOBDBzZACvXV/IGVQwh+HiSVUIfSz1y87lhbM/nhEn
+ 2da83WxiQ6qUq1C1HPdfgHAA8ygOGaE=
+X-Google-Smtp-Source: ABdhPJzMEVqdGnM5cI9GokzbUSDY+9ATnowzN3RoK5DynAMPH0+Z8wwY17RwCg5qW0JU6pNe7xPL7g==
+X-Received: by 2002:a05:6000:1848:: with SMTP id
+ c8mr11295036wri.265.1636478641572; 
+ Tue, 09 Nov 2021 09:24:01 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id a1sm24094313wri.89.2021.11.09.09.23.13
+ by smtp.gmail.com with ESMTPSA id z6sm4583367wmp.1.2021.11.09.09.24.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Nov 2021 09:23:13 -0800 (PST)
+ Tue, 09 Nov 2021 09:24:01 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Nov 2021 18:21:20 +0100
-Message-Id: <20211109172120.457166-1-fontaine.fabrice@gmail.com>
+Date: Tue,  9 Nov 2021 18:22:07 +0100
+Message-Id: <20211109172207.457200-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpuwrap: don't
- override dependencies
+Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: don't override
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,44 +90,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Don't override IMX_VPUWRAP_DEPENDENCIES in a conditional
+Don't override ALSA_LIB_DEPENDENCIES in a conditional
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ package/alsa-lib/alsa-lib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
-index fdad3a5f2b..b9a1717d28 100644
---- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
-+++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
-@@ -8,15 +8,9 @@ IMX_VPUWRAP_VERSION = 4.3.5
- IMX_VPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPUWRAP_SOURCE = imx-vpuwrap-$(IMX_VPUWRAP_VERSION).bin
- IMX_VPUWRAP_INSTALL_STAGING = YES
--
--ifeq ($(BR2_PACKAGE_IMX_VPU),y)
--IMX_VPUWRAP_DEPENDENCIES = imx-vpu
--endif
--
--ifeq ($(BR2_PACKAGE_IMX_VPU_HANTRO),y)
--IMX_VPUWRAP_DEPENDENCIES = imx-vpu-hantro
--endif
--
-+IMX_VPUWRAP_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_IMX_VPU),imx-vpu) \
-+	$(if $(BR2_PACKAGE_IMX_VPU_HANTRO),imx-vpu-hantro)
- IMX_VPUWRAP_LICENSE = NXP Semiconductor Software License Agreement
- IMX_VPUWRAP_LICENSE_FILES = EULA COPYING
- IMX_VPUWRAP_REDISTRIBUTE = NO
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 99c53f9408..3bdde217ce 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -64,13 +64,13 @@ ALSA_LIB_CONF_OPTS += \
+ 	--with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
+ 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+ ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+-ALSA_LIB_DEPENDENCIES = python
++ALSA_LIB_DEPENDENCIES += python
+ else
+ ALSA_LIB_CONF_OPTS += \
+ 	--with-pythonlibs=-lpython$(PYTHON3_VERSION_MAJOR) \
+ 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+ ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+-ALSA_LIB_DEPENDENCIES = python3
++ALSA_LIB_DEPENDENCIES += python3
+ endif
+ else
+ ALSA_LIB_CONF_OPTS += --disable-python
 -- 
 2.33.0
 
