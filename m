@@ -2,74 +2,96 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C33DC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 09:17:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D60C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 09:23:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9A69C61029
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 09:17:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9A69C61029
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id E16C86112D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 09:23:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E16C86112D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CDA96062A;
-	Tue,  9 Nov 2021 09:17:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A263403AD;
+	Tue,  9 Nov 2021 09:23:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wocbjxmGLWPD; Tue,  9 Nov 2021 09:17:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA7B560732;
-	Tue,  9 Nov 2021 09:17:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9E4EB1BF2B0
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 09:17:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BF37402F1
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 09:17:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vMygP3tVvvZ4 for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 09:17:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
- by smtp4.osuosl.org (Postfix) with ESMTP id D78EB402F0
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 09:17:09 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id kNFUmyQOIyoivkNFVmNXAj; Tue, 09 Nov 2021 10:17:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636449427; bh=mASdttL/tQ3Bg7UFYzrlKXLNeg9AMXfDTI7LlPSIrrw=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=fVPGWp0d0Ab+SeQ2JxJ2B6NVnTd2EHzzDM0J7vp0xRAReo91/qN3qgQSi1BZnutpZ
- tEa14zBLuzKBPnecc8WjfR1W/alWWrUnQzRTGkLZOPHFU/i9pDOHaKp4dSI0yHk7CM
- BerZA9Vh+REyQGQa4+itTSQx5th3/Bsw+qy7e/ClQg7/4wSLij0/SivYEtsckiW0yF
- 58F3K+rSZouayzBGascyQeFOM6RJRZvFX40iQ7CyNXfeQWe8ISp1sfzWhTMuEEwa8u
- 7TbDjQCXalzUS9s9/MOs0EhItEG8FkJtdARPVkfF0jx4UF+i59cQFjiEfZGS6LzI76
- zZS/gNRg0NUUg==
-To: Luca Ceresoli <luca@lucaceresoli.net>, buildroot@buildroot.org
-References: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
- <20211108230520.4007148-2-giulio.benetti@benettiengineering.com>
- <312c89ac-4ae6-97e6-2c77-cb1a5e5e441d@lucaceresoli.net>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <b880f6ca-6a19-f7d7-dc31-4368e55160fa@benettiengineering.com>
-Date: Tue, 9 Nov 2021 10:16:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EmIFHEJR_3sG; Tue,  9 Nov 2021 09:23:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D865C40399;
+	Tue,  9 Nov 2021 09:23:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE2991BF2B0
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 09:23:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5CF34033E
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 09:23:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wgLgF1EKcDZi for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 09:23:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C67114032F
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 09:23:30 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id f8so74156379edy.4
+ for <buildroot@buildroot.org>; Tue, 09 Nov 2021 01:23:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=8YMjE/UWBeIN3eiP/TEtyu9wCPmTmN0o4zPqZszfLmQ=;
+ b=T5PP7OYyMGe/kVQLaY+3tvP2IZDV/VnjjLj9/RktCPafmyL8YGtaR5BiGgClCvZa87
+ //ISWKGwvczUzUYhXllKQXJ1qOqWRzbgbfSUFfI3l5/lthFd4aBVeweB8LiCoEbEmJet
+ IquCIHFR1uCtQesaRMBLSNBs3XVzQLblvoIDUbmqDqakS/2BZieCJPuTAbs0rX2fsb6q
+ iclxozuEBXcLnK0hrELuSiDYoVBsIvbz55fO8tPFscVtoWcjagpF/n/LYFL+nh3IjczO
+ l/Su44mg2HJnWwCUQ0+xfKtKkfFSswxwICDExgZTtUwAQTfDJ8pIega5ocZM84xxcwAk
+ f18w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=8YMjE/UWBeIN3eiP/TEtyu9wCPmTmN0o4zPqZszfLmQ=;
+ b=ciCsNKa+AvQlvQJ/X1aJP0HS+A2XK3o4vK1KgGx2gQ+KAQdEMNO7mnvAutAG+1Oc9W
+ DKRkmlBRU3IzYKSKxVur9n6IlBKEU93OKSjRq5lCFQwuk+nJJxF2E3ArRXNbgyxJ0XFn
+ AozRliMEfz5sziJZujBq/CbA8c93U6O/kIltskjEE8YJ+4vd1h4DZW33ZdYeeT0E4KLF
+ HrKB9NwwmCtB4GudrfxN+WQS5lGyGMUQA29YgM6rVmX1W7ktD3C6Q84q9L56G/T/haS7
+ aJ0+DXXv8xNdYOTTCcXzj4lBlMCUmW2w8SRMF3zMsp5vNttOcspiLPG4jovKH8SCwNSK
+ ne5Q==
+X-Gm-Message-State: AOAM530Nhd22xvbtn0gN868tbVGZb53jjlLmlwO8Llo+taFHo/pgliFJ
+ 0zYPY0sCK5Ke4Lw8FRZsgqCvaw==
+X-Google-Smtp-Source: ABdhPJzbXqkRYIbr//qH3eCsZQJPihTr4gINsnC3QWcKWia5DgfWk28Dg1RPw2wuygC/b3T0LKbb6Q==
+X-Received: by 2002:a17:907:1b0a:: with SMTP id
+ mp10mr7670835ejc.29.1636449808606; 
+ Tue, 09 Nov 2021 01:23:28 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id s12sm10640584edc.48.2021.11.09.01.23.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 09 Nov 2021 01:23:27 -0800 (PST)
+Message-ID: <37a68082-d058-73d4-6b15-9a3129a672d7@mind.be>
+Date: Tue, 9 Nov 2021 10:23:27 +0100
 MIME-Version: 1.0
-In-Reply-To: <312c89ac-4ae6-97e6-2c77-cb1a5e5e441d@lucaceresoli.net>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfPdGhkg3U/bUiF6+f4Eldf3YrORKwv2SPiuLk77yp3rNdmzQZ5PK0NncVYFticP1gLhUT3MX6fnne7pIife35mzt76snpeKdFiuaIwxEaNCOUPs1SXXF
- rYWnKozxptdychG3li78CTpLOK39rs8YRLcuBENTOIDX8qvZpuIKqUplztj27P+6cOg9HGO790rYODzwUatIE2fyR/vbYWesMkjV/blAu1TQDk3VmW6ca28V
- wtBEJn61r2M4iZuFGVSP05puEKkCHTVgVcbUTlRjps53fqRUrB5UilPVlWTjR95khwsacYfNQZzK5ocx5JsDy9FHO8PADcvGFw9rXrui0COlkAFQBtNY95Nx
- EV3Pq2uP8HjDDnBgKZrgkIBvg0qUu1HgD/dEQwmBVcG+zb8bZZI7ryHPZ+9nnXy9mIEj9jtW
-Subject: Re: [Buildroot] [PATCH 1/7]
- board/olimex/a20_olinuxino/genimage.cfg: fix build failure due to wrong
- offset value suffix
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Michael Walle <michael@walle.cc>
+References: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
+ <20211108230520.4007148-8-giulio.benetti@benettiengineering.com>
+ <eea83befc9a6f40dad4efa7a4ae019de@walle.cc> <20211109085032.GF680793@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211109085032.GF680793@scaer>
+Subject: Re: [Buildroot] [PATCH 7/7] board/kontron/smarc-sal28/genimage.cfg:
+ fix option suffix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,51 +103,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Michael Walle <michael@walle.cc>, Jagan Teki <jagan@amarulasolutions.com>,
+Cc: Jagan Teki <jagan@amarulasolutions.com>,
  =?UTF-8?B?TWljaGHFgiDFgXlzemN6ZWs=?= <michal.lyszczek@bofc.pl>,
- Heiko Thiery <heiko.thiery@gmail.com>
+ buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
 
-On 11/9/21 10:01 AM, Luca Ceresoli wrote:
-> Hi Giulio.
+
+On 09/11/2021 09:50, Yann E. MORIN wrote:
+> Michael, All,
 > 
-> On 09/11/21 00:05, Giulio Benetti wrote:
->> With commit[1] I've introduced a bug:
->               ^^^
-> Which commit? :)
-
-I've forgotten, thank you for pointing, I've just reworded for v2 series.
-
-This is the commit:
-https://gitlab.com/buildroot.org/buildroot/-/commit/43bfa1cf1046b0e44e87a02bc5a358bf1de5bfdd
-
->> offset = 8KB(not valid for genimage)
->> and this prevents genimage to work, so let's substitute 8KB with 8K.
+> On 2021-11-09 09:04 +0100, Michael Walle spake thusly:
+>> Am 2021-11-09 00:05, schrieb Giulio Benetti:
+>>> Option 'offset = 4k' must be 'option = 4K'.
+>> Why is this is a 'must'? Apparently it works, no? So if anything
+>> it is for unifying; but even then it's moving in the wrong
+>> direction. There is no "K" prefix in si units. Stictly speaking
+>> there is no "KB"; there is a "kB" or a "KiB".
 > 
-> I wanted to test this patch, but the build succeeds on current master.
-> How do you detect the wrong behaviour?
+> This SI reference was also my comment on the preceding series, but
+> unfortunately, that ship has sailed now that the series has been
+> applied...
 
-I've supposed genimage parser was stronger but I've just found as you've 
-found that it builds even if it shouldn't. Genimage only checks the 
-first letter of suffix, so if you try to modify that offset to:
-offset = 8KDEADBEEF
-it will build with offset at 8K.
+  What has been applied is uppercase K everywhere. Lowercase k looks like a SI 
+unit, i.e. 1000, so I think uppercase is a little better. To be fully correct, 
+we should use KiB instead (which apparently works since genimage apparently 
+ignores everything after the first letter). But as you say, that ship has sailed...
 
-So I reword by adding commit URL and changing from "fix build 
-failure..." to "offset value must be...".
+  Anyway, this stuff is never going to be fully accurate, so anything is OK in 
+my book, as long as it's consistent.
 
-
-Thank you for checking!
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
