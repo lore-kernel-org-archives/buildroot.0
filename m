@@ -2,86 +2,93 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E887C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:03:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F55C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:16:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7C1CF61186
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:03:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7C1CF61186
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7DD4361248
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 22:16:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7DD4361248
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B5AE403C2;
-	Tue,  9 Nov 2021 22:03:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B95C8101A;
+	Tue,  9 Nov 2021 22:16:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qk4lM2ZoiRBx; Tue,  9 Nov 2021 22:03:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1QiZLuHc4bZM; Tue,  9 Nov 2021 22:16:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F104403C3;
-	Tue,  9 Nov 2021 22:03:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F989814B7;
+	Tue,  9 Nov 2021 22:16:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F26201BF5DF
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:03:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BD691BF3C2
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF18460894
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:03:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF5E260766
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 22:16:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Umj80kvvh9H1 for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 22:03:40 +0000 (UTC)
+ with ESMTP id 28wBlJPT6TnC for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 22:16:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 09ED56088F
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 22:03:39 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id d27so439768wrb.6
- for <buildroot@buildroot.org>; Tue, 09 Nov 2021 14:03:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 82E586075D
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 22:16:47 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id ee33so2350155edb.8
+ for <buildroot@buildroot.org>; Tue, 09 Nov 2021 14:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QPaKBQJwrOE69qRX1slR8rZVR5VDLY5MLixOtzFB+6s=;
- b=XuK82B4hEb+P74H6eI2raY0+cAY+9J6+BJCx7r+Pic/oiwu0VVmXo/rRl/ibv0BZ6G
- uOGuKdXBUYd2i4fZ0KXWnXdDn1pp37HTrfeaZcoPniJcObhZ1tVoP7/04JA1B9KFIEi+
- aQuPd4ZGdCTSTsFR1y8SVk/PTUT7rjS9ABYcmVdnKElEwWJCqkfLnNpU47WvXv5g8hNG
- nz8InmFu8i/0zqADZ/qiOAtbHAdLESzsbEdmK7bPuTe0GM+9lpgu2lPWd7gJes54/Sgw
- 3AXfP58mDJeOYHFL63c2cCEUqFPYt4uP6ue3P7H3j3psLi0s9G9GIAfj2/Xgf0ldxF94
- 7kEg==
+ bh=MwlWFBCg4+o8V/qcnH89WoLu+afHCoOqRCX+ZMUmS8k=;
+ b=grSOZhrPXxrdKHZlj85FLE4Sx7pZ/bq18G7irFBlDLadBlPqcMSJK6NJu6yAfaukpT
+ 3zI787tqcbi9UqUMrYRseJiwRvax+y989amqDo8kfooQ+jkZZHvjjPCPhrN1dAHEsAEk
+ KJxenJZzI+6wWACkRYT0HyQvIGaq/m4HbDMGEja+Ac2a7fqeU0OZW/A8rR1kW9/Rk8sD
+ nagvV92wALvJL/TUOlhkdUjxkPXasLanIZBRwb/TwnycJ0D66a9FGAMsLj/EJK1M9wKC
+ nWkRuJ9WYxTLNU2mRHOD87c3JmwU87vA9uzuRKRqjA+0sz3mhIfToACWoqfgp/WSSdiV
+ 3+Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=QPaKBQJwrOE69qRX1slR8rZVR5VDLY5MLixOtzFB+6s=;
- b=QUgooHi18OaU/Wa9tcXi9usXzF5pvaVsOGyPjLnNX4Ly8mmyUh0KLHA7grN8ea3jdR
- jrdHVlVIBmzJZ+8VGWhTjNBf43KTu4hzFA1R+5VvbSaKnZxEghGC6qsX5hYgbx0d4EnA
- qFPbGmNG4yEuE8BLblLGHdSyvDLtNhSS+1v1XM/jcxoLl+590cQuQUGd2qifRd5SE5dA
- ueXL1WHiildjRBz1rtTQsJ0VZso1M2BVurcQCTPiLvqhhHulJN6W3ENycZPyZa8zCwMD
- 58+ULEz3qq7UPD7x8WUZhcqGTkxFk5G7fUshwQQ4FEXlwad4yGBYhMiiXuYW6tFeYv9S
- cbVQ==
-X-Gm-Message-State: AOAM533akFoha4X473RInGqrPAktraOi+4d6l05kZ/qe6WTkefv28hjp
- /+/Jl/T1iUnQG4e3tuhoKPYrqyQOztM=
-X-Google-Smtp-Source: ABdhPJxv07XHh8UBkQeu16hCWdq8WpMH1F6iKGhFp95kZ4ZNb9f0NjGZe00u3Nd4xjJD6Fjsk6++zg==
-X-Received: by 2002:adf:ea51:: with SMTP id j17mr13980617wrn.421.1636495418126; 
- Tue, 09 Nov 2021 14:03:38 -0800 (PST)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id i15sm4246301wmq.18.2021.11.09.14.03.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Nov 2021 14:03:37 -0800 (PST)
-From: Romain Naour <romain.naour@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  9 Nov 2021 23:03:28 +0100
-Message-Id: <20211109220328.388872-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
+ bh=MwlWFBCg4+o8V/qcnH89WoLu+afHCoOqRCX+ZMUmS8k=;
+ b=Uyk0txrxam+d8xF9iSZznEP9AiZNh1jMqw5JUnWQ5kNG4kyaKm/b/LJpsQJjiwm6Pz
+ vJ8b+63G4yA3aArK7f/65rspPoVzjV+XT/CbcSvE2n3BKdrUZiutD4MUCb+yMCDXyZyZ
+ 6hd195cGq9r0WwygnKqDh/ARfRdkMPBwt0qjewIacEEPas7+Z9FZPX7PTTzNdSqYComQ
+ K92FYzJtOdfSLPge2+fw6GnGwvrNR6nYkOAsNhqr9MnkrEuypX/T8zssaWGY0sR/fbj5
+ 1FtVu4inm3MQJSqGag8dQMOU7XEF08BYsJGpFdwwn2cVhcwDW/iD0pSX4JGO0TqPXH9Y
+ w2oA==
+X-Gm-Message-State: AOAM530ac9/X7NPU0QRhZJOPME89t1VLc8VhR8/G4XE5DG2goAXRUcL3
+ KhuRgO1CYtV7jRbp4FQbMBpYblfyFGb33w==
+X-Google-Smtp-Source: ABdhPJzF5vcj0BRZIkqYsklxNMTWPqfnHIa1s7fy0dTrfFvbM8hkmTrs0pJtXVfaMZaUnZTVSFttNw==
+X-Received: by 2002:aa7:ca0a:: with SMTP id y10mr15313022eds.148.1636496205742; 
+ Tue, 09 Nov 2021 14:16:45 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id ds17sm5652163ejc.45.2021.11.09.14.16.44
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 09 Nov 2021 14:16:45 -0800 (PST)
+Message-ID: <1f024089-4dff-0a78-ae7b-1b27895c511e@mind.be>
+Date: Tue, 9 Nov 2021 23:16:43 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 RFC] support/scripts: don't build board
- defconfigs with Gitlab's pipelines trigged on tag
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211105201257.2589008-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211105201257.2589008-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/bird: fix build with autoconf
+ >= 2.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,76 +100,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?Q?Adrien_Gallou=c3=abt?= <adrien@gallouet.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently when a tag is added to the Buildroot git tree, the gitlab-ci
-create a pipeline with several hundred of jobs (~750) to build all
-defconfigs and execute the Buildroot testsuite.
 
-However, there is only a limited number of gitlab-ci runner (9 runners)
-and some jobs reach the timeout limit (24h) while waiting for a runner
-[1]. Indeed, the Buildroot project doesn't use the Gitlab's shared
-runners.
 
-In addition to the pipeline created when a new tag is added to the
-git repository, two pipelines are created each weeks to execute the
-Buildroot testsuite (on monday [2]) and build all defconfigs (on
-Thursday [3]).
+On 05/11/2021 21:12, Fabrice Fontaine wrote:
+> Fix the following build failure raised since bump of autoconf to version
+> 2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
+> 
+> checking for glob.h... no
+> configure: error: glob.h not found.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/d7aab7df196e0f6d6389b87ff29da7c2971e6b6d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   ...gure.ac-fix-build-with-autoconf-2.70.patch | 43 +++++++++++++++++++
+>   1 file changed, 43 insertions(+)
+>   create mode 100644 package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+> 
+> diff --git a/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch b/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+> new file mode 100644
+> index 0000000000..b412a55ead
+> --- /dev/null
+> +++ b/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+> @@ -0,0 +1,43 @@
+> +From aa5bc6d2e59c5257d777a45ee4a0e0a784c44244 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 5 Nov 2021 20:58:41 +0100
+> +Subject: [PATCH] configure.ac: fix build with autoconf >= 2.70
+> +
+> +On some embedded toolchains, glob.h detection fails because -g is
+> +wrongly added (even when CFLAGS is overwritten):
+> +
+> +configure:5881: checking for glob.h
+> +configure:5904: /home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -pthread -fno-strict-aliasing -fno-strict-overflow -flto -Wall -Wextra -Wstrict-prototypes -Wno-parentheses -Wno-pointer-sign -Wno-missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pthread -flto=4 -g conftest.c  >&5
+> +/home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /tmp/ccldlED9.ltrans0.ltrans.o:(.debug_info+0x2a): undefined reference to `conftest.c.fb729d13'
+> +/home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /tmp/ccldlED9.ltrans0.ltrans.o:(.debug_info+0x2f): undefined reference to `conftest.c.fb729d13'
+> +
+> +This build failure is raised since autoconf 2.70 and
+> +https://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=76754e04fce5f6a7701bec57b057020585df2ae3
+> +because ac_test_CFLAGS is now set to ${CFLAGS+y} instead of
+> +${CFLAGS+set}
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/d7aab7df196e0f6d6389b87ff29da7c2971e6b6d
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: sent to bird-users@network.cz]
 
-At some point there are too many jobs waiting in gitlab due board
-defconfigs builds. Indded a board defconfig requires a lot of time
-(~30min) compared to other jobs in order to build a toolchain and a
-kernel linux along with a basic rootfs. There is currently 262
-defconfigs.
+  Why not create an MR? You can log in to their gitlab with a github account 
+(funny that you can't log in with a gitlab.com account...)
 
-This is even worse when several pipelines are trigged at the same
-time (new git tag and scheduled pipeline trigger).
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 64181d29..b4b3fcfb 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -114,7 +114,7 @@ AC_SEARCH_LIBS([clock_gettime], [rt posix4],
+> + AC_CANONICAL_HOST
+> +
+> + # Store this value because ac_test_CFLAGS is overwritten by AC_PROG_CC
+> +-if test "$ac_test_CFLAGS" != set ; then
+> ++if ! test $ac_test_CFLAGS ; then
 
-In order to reduce the number of long jobs, don't build board
-defconfigs with pipelines trigged on tag, keeping only the runtime
-tests and the Qemu's defconfigs.
+  Wouldn't it be more future-safe to put quotes around $ac_test_CFLAGS?
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966541
-[2] https://gitlab.com/buildroot.org/buildroot/-/pipelines/404035190
-[3] https://gitlab.com/buildroot.org/buildroot/-/pipelines/401685550
+  Regards,
+  Arnout
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
-v2: improve commit log
-
-I would like to keep Qemu runtime testing when a tag is added because
-it test the toolchain provided by default by Buildroot on several
-architectures.
----
- support/scripts/generate-gitlab-ci-yml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 7d09279bbd..232785f2e3 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -36,6 +36,9 @@ gen_tests() {
-              )
- 
-     if [ -n "${CI_COMMIT_TAG}" ]; then
-+        # When a tag is added to the Buildroot git tree, we want
-+        # to run the runtime tests and only test Qemu defconfigs.
-+        defconfigs=( $(cd configs; LC_ALL=C ls -1 qemu_*_defconfig) )
-         do_basics=true
-         do_defconfigs=base
-         do_runtime=true
--- 
-2.31.1
-
+> +   bird_cflags_default=yes
+> + fi
+> +
+> +--
+> +2.33.0
+> +
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
