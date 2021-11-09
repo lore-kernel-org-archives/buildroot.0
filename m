@@ -2,80 +2,68 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 878D9C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 07:37:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E770EC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 07:49:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id EAAE961175
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 07:37:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EAAE961175
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 273D761175
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 07:49:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 273D761175
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A298180E9D;
-	Tue,  9 Nov 2021 07:37:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1A4D40298;
+	Tue,  9 Nov 2021 07:49:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DUDhssDYQZSZ; Tue,  9 Nov 2021 07:37:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 071A480E98;
-	Tue,  9 Nov 2021 07:37:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 218081BF86C
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 07:37:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BF8040271
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 07:37:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KNTjJfN7cUK0 for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 07:37:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AEECB4024F
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 07:37:47 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id u11so42398475lfs.1
- for <buildroot@buildroot.org>; Mon, 08 Nov 2021 23:37:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=oGe+7Tlx5mv+PFeJEu1mwtgCJI4I7dlIP1pNsSsSUXE=;
- b=iW7rwGMjFvyztpXuUYveQJ2hnVOKamITt1Hr+s/nV53pIyFxWtwpaaxML8hYziFVAz
- gwX7p/dMoXtK1tAEz6j6LEBn+FJSgRUoVvO60JA6AOBXyiiWGA3xgY9JNIoNEvpQNAI/
- KDeDvguzw+QLnb49gcYnHrj5sZ75E7DqRZz5oya1KuXrGDFqToxUVsDZn9i6Qb4ZkIyG
- oZqG6/75Jf6uUNddvhK0gelT8NUJQa17vrLoSvtrv0faCBtA6zSlcS3dTEDqpmNi3Jzq
- UxE/to2c5ZeQ1BwRAk/X6ClN9tVKJejjfsnAvijkE/T6r5RVvbDEwCdAAAP34zoJFzZF
- l5Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=oGe+7Tlx5mv+PFeJEu1mwtgCJI4I7dlIP1pNsSsSUXE=;
- b=zMFX5J7jGaJQ/+DhFYJM60dg5F1msen01aBoImfHXuEtq9EXHpM0+vko0FKXe9zqnH
- GJixnS+dK0Qzojb5QdSZzD8osZBOpuXps8sAKSaiqqTF6sQ6dOxjWBZTb5A/CuS/IFFB
- RwxfFFXQCPxC1hI9akUmdeLyxN0WCtdOYG9XnWrsrU3Z24h9OgHKjdqk5a2FaB1p9Qsh
- w4xuF16JJJS888L1QmdeADaJMSPMzFgpvJ4Jy1YzDqS+xFGmjjwD8kbs/3XuWHbK4BKX
- xd0sQlXbUmS1jy1Wgr+LTy1oAF3Q8EILJcEoUyc+YOHTnUeNGdBzGsAC6yqqXN84eZq3
- s+KA==
-X-Gm-Message-State: AOAM5333pgCn300SmI1G2ZkrHYmygkHZ9sYoQqP2yN+rKK5fI+6UbGrT
- L3Bd/gpfx++iX6DP+9yUm4UljmogSvh6ibD5KiA=
-X-Google-Smtp-Source: ABdhPJwbkfagppzqo/FIKLIBgi5IY+LSRGVuPFjT84fow9R7x0mR9b0z6aw6JbAAjkwEtlsAwujz5AlG9hD4kt9WUP8=
-X-Received: by 2002:a05:6512:e91:: with SMTP id
- bi17mr5168043lfb.14.1636443465676; 
- Mon, 08 Nov 2021 23:37:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20211108230520.4007148-1-giulio.benetti@benettiengineering.com>
- <20211108230520.4007148-7-giulio.benetti@benettiengineering.com>
-In-Reply-To: <20211108230520.4007148-7-giulio.benetti@benettiengineering.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 9 Nov 2021 08:37:34 +0100
-Message-ID: <CAEyMn7byVtNQjGB3uEnsitCCTsnn3LBxFoxErRAFOkUXqEasVQ@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B4KTSTmy2_9I; Tue,  9 Nov 2021 07:49:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A8CB40291;
+	Tue,  9 Nov 2021 07:49:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 07EA41BF34A
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 07:49:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E527960603
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 07:49:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NiM85pr9TJ5E for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 07:49:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62058605FC
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 07:49:28 +0000 (UTC)
+Received: from smtpclient.apple ([151.68.167.252])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id kLshmkCH3DBs2kLshm2X0G; Tue, 09 Nov 2021 08:49:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636444165; bh=x29czv+O6gqAWuCIuWlJecHzfRRqXOkofsmsjYsO7fI=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=Ue29/UYuosnja47naNILs2lPdAZ48SODMsZCDWNPvrciPDbETa7NpvHUOHv0ACp0+
+ vZtpMcIEYaGiwbopdrqOke2K0HWz7rcWSihMAj8yvpCE38sv2x7nuO6Xbawg1HiXjI
+ hfFTObW1029y4t+th5Gg9BmYdcx1dsDsGV9MjNOumjgC6U7qUrAwiiGuCjOkXNuRSG
+ sh7bhACxSiaSI7TI/pLbdAVU3WuBEb0JkqmoXN/lXFeFsFDTm/rOJw2QIDwh3sE3Oq
+ NZ42Tlz6uTNV3GD3jVPEptT7rQ7BjGKjr171ckGMxWJF9PdJIyjNAn8pgn6BEPJ2dq
+ crKoV57VfHEbw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 9 Nov 2021 08:49:22 +0100
+Message-Id: <CED41E68-52A7-465C-874E-1991C9320A5D@benettiengineering.com>
+References: <CAEyMn7byVtNQjGB3uEnsitCCTsnn3LBxFoxErRAFOkUXqEasVQ@mail.gmail.com>
+In-Reply-To: <CAEyMn7byVtNQjGB3uEnsitCCTsnn3LBxFoxErRAFOkUXqEasVQ@mail.gmail.com>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+X-Mailer: iPhone Mail (18H107)
+X-CMAE-Envelope: MS4wfOP5QpK9cJEg9DlPnAcx0dwia9HV0UgqBFcabCPrlwHZ4txAvt/F2zjiRjWb1IyWhcVTi2iCw9wUyUDUJOH+N9Kv5T/S2lVqVgT7oMDjGh5boWR/kKAg
+ 8HZ6dVWiSbc0U76RWA6aJBOFcY6pCCMeWXhgA+asVqb+3alNsZ8YqvfU/XQkklQtiRMZll/YMfA4Ly+Pjv/uBpwUl1HvVB/KFJkMwLpvGmhVvqC2k0Qk4Gzz
+ MZX8UQYDfiUjKnMjazLQXauUW67IgaxWujI2R/vmuXwEFz1kkPo8GuyvkTa7tyDtHX8Zs7fECjuPHAuEi5tLxMrDZhr8Z03B+iMFEFOEWdDzlAGkw0C4PRsw
+ r4UBVWeeZ90ocg5WapqFk5xOXu44ngY2oIA3NbAmVasaG9sTKz5Zw3pgKwZgnjMzC+mkwGuEtgvqz6YZSLT2M67mwXj3cxWqey22opb0gEffycw+8AQR/NJh
+ +A6qSLt/yFPy0YvEQ1ZNAbeltN44f48a4HEkKw==
 Subject: Re: [Buildroot] [PATCH 6/7] board/kontron/pitx-imx8m/genimage.cfg:
  fix option suffix
 X-BeenThere: buildroot@buildroot.org
@@ -90,52 +78,39 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Michael Walle <michael@walle.cc>, Jagan Teki <jagan@amarulasolutions.com>,
- =?UTF-8?B?TWljaGHFgiDFgXlzemN6ZWs=?= <michal.lyszczek@bofc.pl>,
+ =?utf-8?Q?Micha=C5=82_=C5=81yszczek?= <michal.lyszczek@bofc.pl>,
  buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Guilio,
-
-
-Am Di., 9. Nov. 2021 um 00:05 Uhr schrieb Giulio Benetti
-<giulio.benetti@benettiengineering.com>:
->
-> Option 'offset = 4k' must be 'option = 4K'.
-
-Is it really a must that the kilobyte value has an uppercase 'k'? From
-the code I see that both k and K are allowed for that. But I have
-nothing against unifying it.
-
-Small nitpick here: s/'option = 4K'/option 'offset = 4K'/
-
->
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  board/kontron/pitx-imx8m/genimage.cfg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
-> index c335b0c026..c78ef0f910 100644
-> --- a/board/kontron/pitx-imx8m/genimage.cfg
-> +++ b/board/kontron/pitx-imx8m/genimage.cfg
-> @@ -5,7 +5,7 @@ image sdcard.img {
->         partition imx-boot {
->                 in-partition-table = "no"
->                 image = "imx8-boot-sd.bin"
-> -               offset = 33k
-> +               offset = 33K
->         }
->
->         partition rootfs {
-> --
-> 2.25.1
-
-Acked-by: Heiko Thiery <heiko.thiery@gmail.com>
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSGVpa28sCgo+IElsIGdpb3JubyA5IG5vdiAyMDIxLCBhbGxlIG9yZSAwODozOCwgSGVpa28g
+VGhpZXJ5IDxoZWlrby50aGllcnlAZ21haWwuY29tPiBoYSBzY3JpdHRvOgo+IAo+IO+7v0hpIEd1
+aWxpbywKPiAKPiAKPj4gQW0gRGkuLCA5LiBOb3YuIDIwMjEgdW0gMDA6MDUgVWhyIHNjaHJpZWIg
+R2l1bGlvIEJlbmV0dGkKPj4gPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+
+Ogo+PiAKPj4gT3B0aW9uICdvZmZzZXQgPSA0aycgbXVzdCBiZSAnb3B0aW9uID0gNEsnLgo+IAo+
+IElzIGl0IHJlYWxseSBhIG11c3QgdGhhdCB0aGUga2lsb2J5dGUgdmFsdWUgaGFzIGFuIHVwcGVy
+Y2FzZSAnayc/IEZyb20KPiB0aGUgY29kZSBJIHNlZSB0aGF0IGJvdGggayBhbmQgSyBhcmUgYWxs
+b3dlZCBmb3IgdGhhdC4gQnV0IEkgaGF2ZQo+IG5vdGhpbmcgYWdhaW5zdCB1bmlmeWluZyBpdC4K
+ClllcywgaXTigJlzIGZvciB1bmlmeWluZywgSSBoYXZlIHRvIGFkZCBpdCB0byB0aGUgbWFudWFs
+LgoKPiAKPiBTbWFsbCBuaXRwaWNrIGhlcmU6IHMvJ29wdGlvbiA9IDRLJy9vcHRpb24gJ29mZnNl
+dCA9IDRLJy8KCk9oLCB5ZXMsIHRoYW5rIHlvdS4gSSByZXdvcmQgYW5kIHNlbmQgYSB2MiB0b25p
+Z2h0LgoKVGhhbmsgeW91CkdpdWxpbyBCZW5ldHRpCkJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCgo+
+IAo+PiAKPj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJl
+bmV0dGllbmdpbmVlcmluZy5jb20+Cj4+IC0tLQo+PiBib2FyZC9rb250cm9uL3BpdHgtaW14OG0v
+Z2VuaW1hZ2UuY2ZnIHwgMiArLQo+PiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9ib2FyZC9rb250cm9uL3BpdHgtaW14OG0v
+Z2VuaW1hZ2UuY2ZnIGIvYm9hcmQva29udHJvbi9waXR4LWlteDhtL2dlbmltYWdlLmNmZwo+PiBp
+bmRleCBjMzM1YjBjMDI2Li5jNzhlZjBmOTEwIDEwMDY0NAo+PiAtLS0gYS9ib2FyZC9rb250cm9u
+L3BpdHgtaW14OG0vZ2VuaW1hZ2UuY2ZnCj4+ICsrKyBiL2JvYXJkL2tvbnRyb24vcGl0eC1pbXg4
+bS9nZW5pbWFnZS5jZmcKPj4gQEAgLTUsNyArNSw3IEBAIGltYWdlIHNkY2FyZC5pbWcgewo+PiAg
+ICAgICAgcGFydGl0aW9uIGlteC1ib290IHsKPj4gICAgICAgICAgICAgICAgaW4tcGFydGl0aW9u
+LXRhYmxlID0gIm5vIgo+PiAgICAgICAgICAgICAgICBpbWFnZSA9ICJpbXg4LWJvb3Qtc2QuYmlu
+Igo+PiAtICAgICAgICAgICAgICAgb2Zmc2V0ID0gMzNrCj4+ICsgICAgICAgICAgICAgICBvZmZz
+ZXQgPSAzM0sKPj4gICAgICAgIH0KPj4gCj4+ICAgICAgICBwYXJ0aXRpb24gcm9vdGZzIHsKPj4g
+LS0KPj4gMi4yNS4xCj4gCj4gQWNrZWQtYnk6IEhlaWtvIFRoaWVyeSA8aGVpa28udGhpZXJ5QGdt
+YWlsLmNvbT4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
