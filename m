@@ -2,86 +2,83 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C874C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:26:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAF9EC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:56:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0845A611C8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:26:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0845A611C8
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 5F0B6610A0
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 17:56:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5F0B6610A0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCA7780F3C;
-	Tue,  9 Nov 2021 17:26:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06F7A80F48;
+	Tue,  9 Nov 2021 17:56:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 82bhJ3VpXCGq; Tue,  9 Nov 2021 17:26:05 +0000 (UTC)
+	with ESMTP id f_f37yEaZT6B; Tue,  9 Nov 2021 17:56:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C53D180F44;
-	Tue,  9 Nov 2021 17:26:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C88B71BF9AA
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:26:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6101C8100A;
+	Tue,  9 Nov 2021 17:56:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C274B1BF9AA
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6BA740399
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:26:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1F4B6088F
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 17:56:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eC28A1QMUx_V for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 17:26:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 47C4740392
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 17:26:02 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id w15so21389603ill.2
- for <buildroot@buildroot.org>; Tue, 09 Nov 2021 09:26:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NNqglwbYsB7hhj2d8shrjf3niNLlUFmMKpCjOSz1qrM=;
- b=YTKKqNBNtrwONDVLGUDdFME+bDmAH5MUClu1DIqdazDQjURUgySFg4VtNrMbgFF6lr
- pL3JNViieYUAUdiZDVCEdfolk98veioWGAqQjTQ+k2DSDKynoAbsytVUxEvdhqI5QM6d
- fWv2dB1qsEBoHKkeHx7anpo2V8ogSqEf+F356VDpWSE0/nHdoA5v5C4rnw/EXjkwxuQ+
- M+k4/qT8nXIRVsYhMOaYLQmWX+BGn2H4X8YZZ8xVk3A9pd4raK9WfF/NuG81NJn7iwTl
- 9+CdpdMgPelLDsP+rVLp5CS5mDE+msyqIu5Ad+bB38nuauF+BkKDvr+BaU5IXCl4BCye
- TyNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NNqglwbYsB7hhj2d8shrjf3niNLlUFmMKpCjOSz1qrM=;
- b=sCpFhJlSDVPgBTpm9N+becbovdSlhIsBqHeNMtCbK5q3iHNGFFQFEhIdA9zRuC2D+7
- MtXB+UyRrd3TggS8mnr+1EsZa3WAGSjfK8dNSxjxnj8yZNfSNRPDQyJDtMDv9KMfJElx
- XV/zWIMa3n6wFU4gBNSd2R0YJrZ4lHf5QJg2Y1L/jm2gtAmpKC2i3PeVjwc7dPCBs4YD
- ImY3F2d3eITIqZmCh3m2tbkcUeJ6uKwI/BGXJTHRnqelFGk8rWm4MkQCLI/7T3aDkxgP
- ERjTcLBygXpQXj+FKtip92jo5L7IKBc2qAJo8DlTpbExV1dphzUu3lxxMIAIhrRwmWjo
- k8qw==
-X-Gm-Message-State: AOAM531IpQaA3urlzVSG2/oinXkr9zUnFSAj6sI0LFVyo3o8rIjkQqMl
- 5JzOn1HfK2zZU8Uz7h9fJQNq4Xv39sqX2g==
-X-Google-Smtp-Source: ABdhPJxnsUZJtbj3pWwzTvyYaKWJN42pbC+B52gIV30Ui16ys8OTa2c2BXku61dim+iRhMdJzoOHgw==
-X-Received: by 2002:a05:6e02:1b8a:: with SMTP id
- h10mr6346133ili.237.1636478761126; 
- Tue, 09 Nov 2021 09:26:01 -0800 (PST)
-Received: from james-x399.localdomain (97-118-146-63.hlrn.qwest.net.
- [97.118.146.63])
- by smtp.gmail.com with ESMTPSA id e17sm12339800iow.18.2021.11.09.09.26.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Nov 2021 09:26:00 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kdmwlVOT5pdz for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 17:56:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E77660874
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 17:56:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1636480591;
+ bh=kbbEHGN7JxIsF3X9F2Obc5n9J1J8aYfYn+tvVwwP72E=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=MF2gGO2V7B/e2JKXuc4iyJLUbrxFJntL9/NqxDZM+n5J1F/IDp1jp+g42cgXoqzhI
+ 8lSwASXWe0k2WyYMEu0NdzJenlz7qFg7HDT3h79WeGCjsU3+xdwLaB2IEizyaBS6O8
+ SYD5N+ZNy1awXI4AX0PXOeDPC07mgk2HiFQ1NGxw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.16]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbAcs-1m8ykJ3AMa-00bedf
+ for <buildroot@buildroot.org>; Tue, 09 Nov 2021 18:56:31 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue,  9 Nov 2021 10:25:15 -0700
-Message-Id: <20211109172515.3342499-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Tue,  9 Nov 2021 18:56:30 +0100
+Message-Id: <20211109175631.26267-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp: fix async_timeout
- 4.0.0 compatibility
+X-Provags-ID: V03:K1:Jb+JsTS/mvmNAbx/KiJ2YXqsPXVI2IqwSj1ofv2GEf+Nosg088o
+ Dpcmw7XadizbR4b/i9krLaC5r88mZyIZpnIreryztwIh8XdihkwBprfyqu0i8oTs9bADblg
+ xiLey3uXE3Z/0RFugBTOo9Uiaf9A78A0CReASXHRDydc0qr18ak7KxHJMSKOpDVOnRSeJel
+ S8iz7ehT7xAz6h7D6UjEg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4Tt62WkLyss=:JJ9X+aLsAQq3WOcmOOiIsB
+ DX3BspRCna0XObA5VKS6qoJU+IA9ls9wpuZTFvk6TzjHTtIvq23mcuFktcI6I5L8e/Ms84f1v
+ MIw80ZozpQoFK5JSJsa4cWBj2qU0ZQZan/RCZUs5crno3AfJHn4pB9zvUUp8zVjbML+g/QMII
+ 4pbKw+y5pRlh6SlGJ59r2WtECV2RS0AHSCeLUrYw2/MwdQjCv3vyv15invVelYP4O2nAUbcK7
+ c1rwMMd4N3iQ68dk6lvZrbILraWeVh53084Co538Pw6HC5lmTULG/PJGT5XZNSe+2vjxoKtNF
+ kn1WLaIgBl1O0EgIHsx2reDJzoKBC38ZBwDDHFvnsBAc9cKCa2BA8tevGVFGJB+50coJ53k7U
+ 0yW5m+3k+7Q+l3ns30loly0bSMWkt9yDAgENy4NsbbLzi4j2spmkY9ASjwYees2J6KXvfEU6i
+ wsZaKR7ZeB6BxkgHMWolDoMnG60p7moF0ZqrbbxRzFWr+S+nrJSATQGn+5n8bhcJktb7610uj
+ 04jQTlHa6sZBIdecqGxCBCNtwB92JhcARyl5HlxYQmZGIJURF1K/IoUNNXP3Ak9fu+XS029Yj
+ E9OkuBa0akzaybsnRz6VpX7xJLa17ye7F2aJr232grWc36L48Ta+2NB/lQ96Ss0q9nRIDrfrR
+ dyl0Xz6TqUwIztwlkyWUM/SXrNbu3kr72b/0o8sBS9tZM27O6BM2LdG0KRg5KXEyIterLisDo
+ HJkd85Jg9y0CBxL6DE368A8pLFzE5S7ooqmGjb3vA1oZbqHT7OM4/xIGJ/sNohcPqzDH6IAvB
+ NWNi+icqnrHw4G4RDY4hWUQHrR1T1MS7PBXGjJh5XLXtsZl00QfojZOsQNwSKnT4y4PyqAF7s
+ AC1j77eDBENO7r7NVPS5GEOtjOR6dulXI7UI3NdMy2Rx84vq/Rj/LABsZ3a7c7DGdT1ZokoNH
+ xjLwM0EwOl8xxAei7/BEXb8Q+sIvdk3Cy4GCH/iiPwVtCQhO1lHEQptUlNXZ/MIEddYo6yNWS
+ Z3FjMVbxGu/1sw88uN+Hzq3/Wi9WW5nQrUVLEDfH8KyhouXuaYUntpy7sw1SoKA53f0Sx56Do
+ aLMT91Fn7vNE9Q=
+Subject: [Buildroot] [PATCH v2 1/2] package/gdb: fix gdb-11.1 compile for
+ uclibc < v1.0.35 (getrandom related)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,350 +90,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We need to backport an upstream patch adding async_timeout 4.0.0
-compatibility since we are still on aiohttp version 3.7.4.post0.
-
-Fixes:
->>> import aiohttp
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.9/site-packages/aiohttp/__init__.py", line 6, in <module>
-  File "/usr/lib/python3.9/site-packages/aiohttp/client.py", line 35, in <module>
-  File "/usr/lib/python3.9/site-packages/aiohttp/http.py", line 7, in <module>
-  File "/usr/lib/python3.9/site-packages/aiohttp/http_parser.py", line 15, in <module>
-  File "/usr/lib/python3.9/site-packages/aiohttp/helpers.py", line 667, in <module>
-TypeError: function() argument 'code' must be code, not str
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...timeout-version-for-aiohttp-3.8-5299.patch | 306 ++++++++++++++++++
- 1 file changed, 306 insertions(+)
- create mode 100644 package/python-aiohttp/0001-Bump-async-timeout-version-for-aiohttp-3.8-5299.patch
-
-diff --git a/package/python-aiohttp/0001-Bump-async-timeout-version-for-aiohttp-3.8-5299.patch b/package/python-aiohttp/0001-Bump-async-timeout-version-for-aiohttp-3.8-5299.patch
-new file mode 100644
-index 0000000000..95042b713e
---- /dev/null
-+++ b/package/python-aiohttp/0001-Bump-async-timeout-version-for-aiohttp-3.8-5299.patch
-@@ -0,0 +1,306 @@
-+From 572db464d3b5123e433759411a0c8796ea9fb5c9 Mon Sep 17 00:00:00 2001
-+From: Andrew Svetlov <andrew.svetlov@gmail.com>
-+Date: Sun, 29 Nov 2020 15:12:15 +0200
-+Subject: [PATCH] Bump async-timeout version for aiohttp 3.8 (#5299)
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+1e6ec85e709db083d240c5ca249660d0fa56c61c]
-+---
-+ aiohttp/client.py                  |  4 +--
-+ aiohttp/client_ws.py               |  6 ++--
-+ aiohttp/connector.py               | 15 ++++++---
-+ aiohttp/helpers.py                 | 25 ++++++---------
-+ aiohttp/web_protocol.py            |  6 ++--
-+ aiohttp/web_ws.py                  |  6 ++--
-+ setup.py                           |  2 +-
-+ tests/test_client_ws_functional.py |  2 +-
-+ tests/test_helpers.py              | 49 +++++++-----------------------
-+ 10 files changed, 44 insertions(+), 73 deletions(-)
-+
-+diff --git a/aiohttp/client.py b/aiohttp/client.py
-+index a9da8e15..2c87eb52 100644
-+--- a/aiohttp/client.py
-++++ b/aiohttp/client.py
-+@@ -74,8 +74,8 @@ from .helpers import (
-+     DEBUG,
-+     PY_36,
-+     BasicAuth,
-+-    CeilTimeout,
-+     TimeoutHandle,
-++    ceil_timeout,
-+     get_running_loop,
-+     proxies_from_env,
-+     sentinel,
-+@@ -515,7 +515,7 @@ class ClientSession:
-+ 
-+                     # connection timeout
-+                     try:
-+-                        with CeilTimeout(real_timeout.connect, loop=self._loop):
-++                        async with ceil_timeout(real_timeout.connect):
-+                             assert self._connector is not None
-+                             conn = await self._connector.connect(
-+                                 req, traces=traces, timeout=real_timeout
-+diff --git a/aiohttp/client_ws.py b/aiohttp/client_ws.py
-+index 28fa371c..a4c7371f 100644
-+--- a/aiohttp/client_ws.py
-++++ b/aiohttp/client_ws.py
-+@@ -191,7 +191,7 @@ class ClientWebSocketResponse:
-+ 
-+             while True:
-+                 try:
-+-                    with async_timeout.timeout(self._timeout, loop=self._loop):
-++                    async with async_timeout.timeout(self._timeout):
-+                         msg = await self._reader.read()
-+                 except asyncio.CancelledError:
-+                     self._close_code = 1006
-+@@ -224,9 +224,7 @@ class ClientWebSocketResponse:
-+             try:
-+                 self._waiting = self._loop.create_future()
-+                 try:
-+-                    with async_timeout.timeout(
-+-                        timeout or self._receive_timeout, loop=self._loop
-+-                    ):
-++                    async with async_timeout.timeout(timeout or self._receive_timeout):
-+                         msg = await self._reader.read()
-+                     self._reset_heartbeat()
-+                 finally:
-+diff --git a/aiohttp/connector.py b/aiohttp/connector.py
-+index 748b22a4..77a4f379 100644
-+--- a/aiohttp/connector.py
-++++ b/aiohttp/connector.py
-+@@ -44,7 +44,14 @@ from .client_exceptions import (
-+ )
-+ from .client_proto import ResponseHandler
-+ from .client_reqrep import ClientRequest, Fingerprint, _merge_ssl_params
-+-from .helpers import PY_36, CeilTimeout, get_running_loop, is_ip_address, noop, sentinel
-++from .helpers import (
-++    PY_36,
-++    ceil_timeout,
-++    get_running_loop,
-++    is_ip_address,
-++    noop,
-++    sentinel,
-++)
-+ from .http import RESPONSES
-+ from .locks import EventResultOrError
-+ from .resolver import DefaultResolver
-+@@ -965,7 +972,7 @@ class TCPConnector(BaseConnector):
-+         **kwargs: Any,
-+     ) -> Tuple[asyncio.Transport, ResponseHandler]:
-+         try:
-+-            with CeilTimeout(timeout.sock_connect):
-++            async with ceil_timeout(timeout.sock_connect):
-+                 return await self._loop.create_connection(*args, **kwargs)  # type: ignore  # noqa
-+         except cert_errors as exc:
-+             raise ClientConnectorCertificateError(req.connection_key, exc) from exc
-+@@ -1189,7 +1196,7 @@ class UnixConnector(BaseConnector):
-+         self, req: "ClientRequest", traces: List["Trace"], timeout: "ClientTimeout"
-+     ) -> ResponseHandler:
-+         try:
-+-            with CeilTimeout(timeout.sock_connect):
-++            async with ceil_timeout(timeout.sock_connect):
-+                 _, proto = await self._loop.create_unix_connection(
-+                     self._factory, self._path
-+                 )
-+@@ -1245,7 +1252,7 @@ class NamedPipeConnector(BaseConnector):
-+         self, req: "ClientRequest", traces: List["Trace"], timeout: "ClientTimeout"
-+     ) -> ResponseHandler:
-+         try:
-+-            with CeilTimeout(timeout.sock_connect):
-++            async with ceil_timeout(timeout.sock_connect):
-+                 _, proto = await self._loop.create_pipe_connection(  # type: ignore
-+                     self._factory, self._path
-+                 )
-+diff --git a/aiohttp/helpers.py b/aiohttp/helpers.py
-+index bbf5f129..a6b14025 100644
-+--- a/aiohttp/helpers.py
-++++ b/aiohttp/helpers.py
-+@@ -664,21 +664,16 @@ class TimerContext(BaseTimerContext):
-+             self._cancelled = True
-+ 
-+ 
-+-class CeilTimeout(async_timeout.timeout):
-+-    def __enter__(self) -> async_timeout.timeout:
-+-        if self._timeout is not None:
-+-            self._task = current_task(loop=self._loop)
-+-            if self._task is None:
-+-                raise RuntimeError(
-+-                    "Timeout context manager should be used inside a task"
-+-                )
-+-            now = self._loop.time()
-+-            delay = self._timeout
-+-            when = now + delay
-+-            if delay > 5:
-+-                when = ceil(when)
-+-            self._cancel_handler = self._loop.call_at(when, self._cancel_task)
-+-        return self
-++def ceil_timeout(delay: Optional[float]) -> async_timeout.Timeout:
-++    if delay is None:
-++        return async_timeout.timeout(None)
-++    else:
-++        loop = get_running_loop()
-++        now = loop.time()
-++        when = now + delay
-++        if delay > 5:
-++            when = ceil(when)
-++        return async_timeout.timeout_at(when)
-+ 
-+ 
-+ class HeadersMixin:
-+diff --git a/aiohttp/web_protocol.py b/aiohttp/web_protocol.py
-+index 8e02bc4a..16f4d4ef 100644
-+--- a/aiohttp/web_protocol.py
-++++ b/aiohttp/web_protocol.py
-+@@ -13,7 +13,7 @@ import yarl
-+ 
-+ from .abc import AbstractAccessLogger, AbstractStreamWriter
-+ from .base_protocol import BaseProtocol
-+-from .helpers import CeilTimeout, current_task
-++from .helpers import ceil_timeout, current_task
-+ from .http import (
-+     HttpProcessingError,
-+     HttpRequestParser,
-+@@ -228,7 +228,7 @@ class RequestHandler(BaseProtocol):
-+ 
-+         # wait for handlers
-+         with suppress(asyncio.CancelledError, asyncio.TimeoutError):
-+-            with CeilTimeout(timeout, loop=self._loop):
-++            async with ceil_timeout(timeout):
-+                 if self._error_handler is not None and not self._error_handler.done():
-+                     await self._error_handler
-+ 
-+@@ -517,7 +517,7 @@ class RequestHandler(BaseProtocol):
-+ 
-+                         with suppress(asyncio.TimeoutError, asyncio.CancelledError):
-+                             while not payload.is_eof() and now < end_t:
-+-                                with CeilTimeout(end_t - now, loop=loop):
-++                                async with ceil_timeout(end_t - now):
-+                                     # read and ignore
-+                                     await payload.readany()
-+                                 now = loop.time()
-+diff --git a/aiohttp/web_ws.py b/aiohttp/web_ws.py
-+index da7ce6df..5f3cce56 100644
-+--- a/aiohttp/web_ws.py
-++++ b/aiohttp/web_ws.py
-+@@ -359,7 +359,7 @@ class WebSocketResponse(StreamResponse):
-+             reader = self._reader
-+             assert reader is not None
-+             try:
-+-                with async_timeout.timeout(self._timeout, loop=self._loop):
-++                async with async_timeout.timeout(self._timeout):
-+                     msg = await reader.read()
-+             except asyncio.CancelledError:
-+                 self._close_code = 1006
-+@@ -400,9 +400,7 @@ class WebSocketResponse(StreamResponse):
-+             try:
-+                 self._waiting = loop.create_future()
-+                 try:
-+-                    with async_timeout.timeout(
-+-                        timeout or self._receive_timeout, loop=self._loop
-+-                    ):
-++                    async with async_timeout.timeout(timeout or self._receive_timeout):
-+                         msg = await self._reader.read()
-+                     self._reset_heartbeat()
-+                 finally:
-+diff --git a/setup.py b/setup.py
-+index 54462ba7..c262de1e 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -68,7 +68,7 @@ install_requires = [
-+     "attrs>=17.3.0",
-+     "chardet>=2.0,<5.0",
-+     "multidict>=4.5,<7.0",
-+-    "async_timeout>=3.0,<4.0",
-++    "async_timeout>=4.0.0a3,<5.0",
-+     "yarl>=1.0,<2.0",
-+     'idna-ssl>=1.0; python_version<"3.7"',
-+     "typing_extensions>=3.6.5",
-+diff --git a/tests/test_client_ws_functional.py b/tests/test_client_ws_functional.py
-+index e423765a..76ef0525 100644
-+--- a/tests/test_client_ws_functional.py
-++++ b/tests/test_client_ws_functional.py
-+@@ -461,7 +461,7 @@ async def test_recv_timeout(aiohttp_client) -> None:
-+     await resp.send_str("ask")
-+ 
-+     with pytest.raises(asyncio.TimeoutError):
-+-        with async_timeout.timeout(0.01):
-++        async with async_timeout.timeout(0.01):
-+             await resp.receive()
-+ 
-+     await resp.close()
-+diff --git a/tests/test_helpers.py b/tests/test_helpers.py
-+index 3367c24b..d36c7e4c 100644
-+--- a/tests/test_helpers.py
-++++ b/tests/test_helpers.py
-+@@ -3,7 +3,6 @@ import base64
-+ import gc
-+ import os
-+ import platform
-+-import sys
-+ import tempfile
-+ from math import isclose, modf
-+ from unittest import mock
-+@@ -391,48 +390,22 @@ async def test_weakref_handle_weak(loop) -> None:
-+     await asyncio.sleep(0.1)
-+ 
-+ 
-+-def test_ceil_call_later() -> None:
-+-    cb = mock.Mock()
-+-    loop = mock.Mock()
-+-    loop.time.return_value = 10.1
-+-    helpers.call_later(cb, 10.1, loop)
-+-    loop.call_at.assert_called_with(21.0, cb)
-+-
-+-
-+-def test_ceil_call_later_no_timeout() -> None:
-+-    cb = mock.Mock()
-+-    loop = mock.Mock()
-+-    helpers.call_later(cb, 0, loop)
-+-    assert not loop.call_at.called
-+-
-+-
-+-async def test_ceil_timeout(loop) -> None:
-+-    with helpers.CeilTimeout(None, loop=loop) as timeout:
-+-        assert timeout._timeout is None
-+-        assert timeout._cancel_handler is None
-++async def test_ceil_timeout() -> None:
-++    async with helpers.ceil_timeout(None) as timeout:
-++        assert timeout.deadline is None
-+ 
-+ 
-+-def test_ceil_timeout_no_task(loop) -> None:
-+-    with pytest.raises(RuntimeError):
-+-        with helpers.CeilTimeout(10, loop=loop):
-+-            pass
-+-
-+-
-+-@pytest.mark.skipif(
-+-    sys.version_info < (3, 7), reason="TimerHandle.when() doesn't exist"
-+-)
-+-async def test_ceil_timeout_round(loop) -> None:
-+-    with helpers.CeilTimeout(7.5, loop=loop) as cm:
-+-        frac, integer = modf(cm._cancel_handler.when())
-++async def test_ceil_timeout_round() -> None:
-++    async with helpers.ceil_timeout(7.5) as cm:
-++        assert cm.deadline is not None
-++        frac, integer = modf(cm.deadline)
-+         assert frac == 0
-+ 
-+ 
-+-@pytest.mark.skipif(
-+-    sys.version_info < (3, 7), reason="TimerHandle.when() doesn't exist"
-+-)
-+-async def test_ceil_timeout_small(loop) -> None:
-+-    with helpers.CeilTimeout(1.1, loop=loop) as cm:
-+-        frac, integer = modf(cm._cancel_handler.when())
-++async def test_ceil_timeout_small() -> None:
-++    async with helpers.ceil_timeout(1.1) as cm:
-++        assert cm.deadline is not None
-++        frac, integer = modf(cm.deadline)
-+         # a chance for exact integer with zero fraction is negligible
-+         assert frac != 0
-+ 
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+LSBmaXggZ2V0cmFuZG9tIGNvbXBpbGUgZm9yIHVjbGliYyA8IHYxLjAuMzUsIGFkZCBtaXNzaW5n
+IHN0ZGRlZi5oCiAgaW5jbHVkZSAoZml4ZWQgaW4gdWNsaWJjIHNpbmNlIHYxLjAuMzUsIHNlZSBb
+MV0pCgpGaXhlczoKCiAgLi4uL2hvc3QveDg2XzY0LWJ1aWxkcm9vdC1saW51eC11Y2xpYmMvc3lz
+cm9vdC91c3IvaW5jbHVkZS9zeXMvcmFuZG9tLmg6Mjc6MzU6IGVycm9yOiB1bmtub3duIHR5cGUg
+bmFtZSDigJhzaXplX3TigJkKICAgICAyNyB8IGV4dGVybiBpbnQgZ2V0cmFuZG9tKHZvaWQgKl9f
+YnVmLCBzaXplX3QgY291bnQsIHVuc2lnbmVkIGludCBmbGFncykKICAgICAgICB8ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+fn4KClNpZ25lZC1vZmYtYnk6IFBldGVyIFNl
+aWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tCiAuLi5nZXRyYW5kb20tY29tcGlsZS1mb3It
+dWNsaWJjLXYxLjAuMzUucGF0Y2ggfCAzOSArKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hh
+bmdlZCwgMzkgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ2RiLzEx
+LjEvMDAwNy1GaXgtZ2V0cmFuZG9tLWNvbXBpbGUtZm9yLXVjbGliYy12MS4wLjM1LnBhdGNoCgpk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9nZGIvMTEuMS8wMDA3LUZpeC1nZXRyYW5kb20tY29tcGlsZS1m
+b3ItdWNsaWJjLXYxLjAuMzUucGF0Y2ggYi9wYWNrYWdlL2dkYi8xMS4xLzAwMDctRml4LWdldHJh
+bmRvbS1jb21waWxlLWZvci11Y2xpYmMtdjEuMC4zNS5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0
+NAppbmRleCAwMDAwMDAwMDAwLi5iMDJkNjNmYzBjCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2Fn
+ZS9nZGIvMTEuMS8wMDA3LUZpeC1nZXRyYW5kb20tY29tcGlsZS1mb3ItdWNsaWJjLXYxLjAuMzUu
+cGF0Y2gKQEAgLTAsMCArMSwzOSBAQAorRnJvbSA4NzkwMDhlZjlhNDhhYTEzNjM2NzFmNWMxNzM2
+YjQ5ZjMwYzVhMzc5IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogUGV0ZXIgU2VpZGVy
+ZXIgPHBzLnJlcG9ydEBnbXgubmV0PgorRGF0ZTogU2F0LCA2IE5vdiAyMDIxIDEwOjA2OjI1ICsw
+MTAwCitTdWJqZWN0OiBbUEFUQ0hdIEZpeCBnZXRyYW5kb20gY29tcGlsZSBmb3IgdWNsaWJjIDwg
+djEuMC4zNQorTUlNRS1WZXJzaW9uOiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hh
+cnNldD1VVEYtOAorQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAorCistIGZpeCBnZXRy
+YW5kb20gY29tcGlsZSBmb3IgdWNsaWJjIDwgdjEuMC4zNSwgYWRkIG1pc3Npbmcgc3RkZGVmLmgK
+KyAgaW5jbHVkZSAoZml4ZWQgaW4gdWNsaWJjIHNpbmNlIHYxLjAuMzUsIHNlZSBbMV0pCisKK0Zp
+eGVzOgorCisgIC4uLi9ob3N0L3g4Nl82NC1idWlsZHJvb3QtbGludXgtdWNsaWJjL3N5c3Jvb3Qv
+dXNyL2luY2x1ZGUvc3lzL3JhbmRvbS5oOjI3OjM1OiBlcnJvcjogdW5rbm93biB0eXBlIG5hbWUg
+4oCYc2l6ZV904oCZCisgICAgIDI3IHwgZXh0ZXJuIGludCBnZXRyYW5kb20odm9pZCAqX19idWYs
+IHNpemVfdCBjb3VudCwgdW5zaWduZWQgaW50IGZsYWdzKQorICAgICAgICB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBefn5+fn4KKworWzFdIGh0dHBzOi8vY2dpdC51Y2xpYmMt
+bmcub3JnL2NnaS9jZ2l0L3VjbGliYy1uZy5naXQvY29tbWl0Lz9pZD0wMDk3MmMwMmMyYjZlMGE5
+NWQ1ZGVmNGE3MWJkZmIxODhlMDkxNzgydAorCitTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJl
+ciA8cHMucmVwb3J0QGdteC5uZXQ+CistLS0KKyBnbnVsaWIvaW1wb3J0L2dldHJhbmRvbS5jIHwg
+MSArCisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCisKK2RpZmYgLS1naXQgYS9nbnVs
+aWIvaW1wb3J0L2dldHJhbmRvbS5jIGIvZ251bGliL2ltcG9ydC9nZXRyYW5kb20uYworaW5kZXgg
+NDEyMTJmYi4uMGFkM2Y5NiAxMDA2NDQKKy0tLSBhL2dudWxpYi9pbXBvcnQvZ2V0cmFuZG9tLmMK
+KysrKyBiL2dudWxpYi9pbXBvcnQvZ2V0cmFuZG9tLmMKK0BAIC0xOSw2ICsxOSw3IEBACisgCisg
+I2luY2x1ZGUgPGNvbmZpZy5oPgorIAorKyNpbmNsdWRlIDxzdGRkZWYuaD4KKyAjaW5jbHVkZSA8
+c3lzL3JhbmRvbS5oPgorIAorICNpbmNsdWRlIDxlcnJuby5oPgorLS0gCisyLjMzLjEKKwotLSAK
+Mi4zMy4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
