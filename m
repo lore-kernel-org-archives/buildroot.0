@@ -2,71 +2,71 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EBF6C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:26:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C7BC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:40:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F2C06115B
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:26:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F2C06115B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id AB8A261107
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:40:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AB8A261107
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6360403BF;
-	Tue,  9 Nov 2021 10:26:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 703F060771;
+	Tue,  9 Nov 2021 10:40:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSo2RdJzoJsL; Tue,  9 Nov 2021 10:26:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uvP0VXjvMqHr; Tue,  9 Nov 2021 10:40:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52FF6403B7;
-	Tue,  9 Nov 2021 10:26:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D34241BF2C0
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:26:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C14D3606CA;
+	Tue,  9 Nov 2021 10:40:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A8711BF2C0
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFEBF80D5B
- for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:26:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3947D40128
+ for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:40:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k2BxSvY89aF0 for <buildroot@lists.busybox.net>;
- Tue,  9 Nov 2021 10:26:23 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LHDGj1yF26tC for <buildroot@lists.busybox.net>;
+ Tue,  9 Nov 2021 10:40:39 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0BF8880D24
- for <buildroot@buildroot.org>; Tue,  9 Nov 2021 10:26:22 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.216.221])
- by Aruba Outgoing Smtp  with ESMTPSA
- id kODFmziIdyoivkODkmOaDR; Tue, 09 Nov 2021 11:19:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636453159; bh=tURRMX6ZepmeToIcFBC4Js+7qBy7nXrxYuMvFbnZ/bc=;
- h=From:To:Subject:Date:MIME-Version;
- b=KL8h9+BrsDhVehKcWejQOOSuAE4tCBw4cv0Q7ere77073QuoBSmERcSI+WcgR+cfD
- QQlhuCGpRfDF7oXF4xDvoDSDY5TEnkCfB5nRB1LQ22y/udUhvk35y9D4WNAYYIwO88
- pCVizEgvFj8OnKJLe+JVC1Yv92WbBtR2y6oSToWPN/2d2YmQGCRrVMCuQY29BxX1sX
- Wyp+4rfQuA4NYRbeNVUhsUj8OxfbX5GVTbxOXs4xFJGxrh7ibDXn2FOJjWXJ3lzVYH
- AXgdB8VWsfDk6376ECRSDgLVLjHOo622GYVaTWlwCfcKg21J6wn7g29QMOp4pFCSpu
- zQMd6SpT6zJfA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue,  9 Nov 2021 11:18:44 +0100
-Message-Id: <20211109101844.1132067-10-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211109101844.1132067-1-giulio.benetti@benettiengineering.com>
-References: <20211109101844.1132067-1-giulio.benetti@benettiengineering.com>
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A6A27400BA
+ for <buildroot@buildroot.org>; Tue,  9 Nov 2021 10:40:39 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:710f:610b:602a:e07])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2B6732003DD;
+ Tue,  9 Nov 2021 11:40:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1636454436;
+ bh=vyA5749q1Dy8kOqHpEtELzhY68QbLpBiI3loG51XLgY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=lfiYEkgf9dHYhga+OWewL5Ybaq6isJwjZ+B7/AlnC8vJNnYdf/nQ4ZY4i+H0IFfkg
+ jiL491TMADb1DEEbzjR6udPRL2H+vEfBO3voNlfecyfhdTwtOsa7B3OrQPjvriQQny
+ IYbe8a5nDiGefqGVLvS850GX14Tm77OBqVi6n63OOPrfQLklFc/INI1GKeKd44pndS
+ cGESaj6etyv7YCiZ9//Elsh5TEqEKnxVSLPloH3s3WZqdkNfNot5fYgMd7KOdj3YPS
+ QpoKEsyEHPv4IFrcOzNUgAt7d6aYDO91HJYHYKeskp+rQjKAFFygutFtSydTfqN7fW
+ Pouku9SWMwVcg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 09 Nov 2021 11:40:31 +0100
+Date: Tue, 9 Nov 2021 11:40:31 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211109104031.GG680793@scaer>
+References: <20211109071001.3866765-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfD8WLrqstqMtFQoDFzgU2axQ3UBik0NQL1sVMlav+kU/FjBdw/cUioi79OKu0/037Wq26Gh8vAKwthk7qV6ajTGR4CGBFGuo683pr0p6kUO/uObP12qX
- WfUanWNM6Cg6vRjcvridm906Pug4Nlg+ePnpCyNE/4h/O1iP4kFgzHCA74UoNXcq4JN6cO7p4u+suidejBWr1q8A+Ne77uX2URE2+/eHiP4QYcjDdipVrVMh
- lTbKRZYD7b5lWbGi8tYw+2cSZDlkJ3IoSOUQPJmLRPYDjTxbCBn8MyG6jN6NtbexCAjKmUKFMmw+4ansD8lYHQJaV8tc4npNVtezY59XJVHzQvC2JRjSG5LO
- OoVHvv4fTUkFn0/Udrj9vIO8woZj2LoRJWh5KWZnLmJihU/SR4mXIqn9CWyp1Fru6RK7etkiT2KJsL+iuhMCmqkAHRG2WMgxb6SjgEoJ+2kvlTwiWJ2ZYK2F
- ZQNPM46XcF4NvFDEALwW2w7VZC5R4vwy+qfehoRHsHmXKs8QuX33PQGiQqP93yunTg0AfIDwh6MtuPZZ0ayJEcVhwyCvAmu1waljB6Qg3ilzwbhZjXt3pN3n
- YXI=
-Subject: [Buildroot] [PATCH v2 9/9] board/nezha/genimage.cfg: fix offset
- value notation
+Content-Disposition: inline
+In-Reply-To: <20211109071001.3866765-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-tss: fix build on host
+ without useradd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +78,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Michael Walle <michael@walle.cc>, Jagan Teki <jagan@amarulasolutions.com>,
- =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>,
- Luca Ceresoli <luca@lucaceresoli.net>, Heiko Thiery <heiko.thiery@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Option "offset = 12288K" must be "offset = 12M" according to the new
-guidelines specified in Buildroot Manual with previous patch.
+Fabrice, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- board/nezha/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2021-11-09 08:10 +0100, Fabrice Fontaine spake thusly:
+> Override check for useradd as already done for setfacl since commit
+> d9123dd79956124ab1b39427764882b61fe44261 to avoid the following build
+> failure:
+> 
+> checking for useradd... no
+> configure: error: Missing required program 'useradd': ensure it is installed and on PATH.
 
-diff --git a/board/nezha/genimage.cfg b/board/nezha/genimage.cfg
-index 9860b83eca..783391fb99 100644
---- a/board/nezha/genimage.cfg
-+++ b/board/nezha/genimage.cfg
-@@ -19,7 +19,7 @@ image sdcard.img {
- 	partition u-boot-1 {
- 		in-partition-table = "no"
- 		image = "u-boot.toc1"
--		offset = 12288K
-+		offset = 12M
- 	}
- 
- 	partition u-boot-2 {
+It is also looking for systemd_sysusers and systemd_tmpfiles, but those
+two are not mandatory. However, it might find those from the host.
+
+But that is not an issue in the end, because they are only used to
+instanciate the users and create the tmpfiles. At build time on the
+host, we do not need them, and on the target, if systemd is being used,
+then they will be instanciated/created at boot.
+
+If they are not found, then the fallback paths are taken, and those
+fallback paths are those using the setfacl and groupadd and useradd
+tools, which we already know are going to fail but that we do not care.
+
+So, we can safely force those two to =no to avoid the install trying to
+use the system-wide tools, or even the ones we build as part of
+host-systemd ourselves.
+
+Applied to master with those two added to the list, plus a comment to
+explain why, also in t e commit log. Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results//97bfa8f7dcb12e36bd63c9d06fb39418070d840b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/tpm2-tss/tpm2-tss.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+> index f2b5f32171..f35e994a5c 100644
+> --- a/package/tpm2-tss/tpm2-tss.mk
+> +++ b/package/tpm2-tss/tpm2-tss.mk
+> @@ -19,6 +19,7 @@ TPM2_TSS_AUTORECONF = YES
+>  TPM2_TSS_CONF_OPTS = \
+>  	ac_cv_prog_result_groupadd=yes \
+>  	ac_cv_prog_result_setfacl=yes \
+> +	ac_cv_prog_result_useradd=yes \
+>  	--with-crypto=ossl \
+>  	--disable-doxygen-doc \
+>  	--disable-defaultflags
+> -- 
+> 2.33.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.25.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
