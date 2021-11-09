@@ -2,52 +2,52 @@ Return-Path: <SRS0=D8Yb=P4=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99510C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:01:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA68DC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:02:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6395D61175
-	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:01:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6395D61175
+	by mail.kernel.org (Postfix) with ESMTPS id 761EA61175
+	for <buildroot@archiver.kernel.org>; Tue,  9 Nov 2021 10:02:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 761EA61175
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41C6C60764;
-	Tue,  9 Nov 2021 10:01:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 422B84012D;
+	Tue,  9 Nov 2021 10:02:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cQprIBwpZZoF; Tue,  9 Nov 2021 10:01:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O9xL00lNpebl; Tue,  9 Nov 2021 10:02:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A410E60732;
-	Tue,  9 Nov 2021 10:01:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F0B31BF34A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 465664014D;
+	Tue,  9 Nov 2021 10:02:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 48C5F1BF9A4
  for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A1A26059D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 370D240133
  for <buildroot@lists.busybox.net>; Tue,  9 Nov 2021 10:00:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zCXUZ4Xzne5o for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q1yEnJoSMNgT for <buildroot@lists.busybox.net>;
  Tue,  9 Nov 2021 10:00:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A65360764
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5A3B40215
  for <buildroot@buildroot.org>; Tue,  9 Nov 2021 10:00:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 016FC8B79A; Tue,  9 Nov 2021 09:56:23 +0000 (UTC)
+ id 3E28F8B79A; Tue,  9 Nov 2021 09:56:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Nov 2021 10:54:28 +0100
+Date: Tue, 9 Nov 2021 10:57:38 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 6435a58c8f16f0ddd4f9cdeeaba8489467df93c9
-X-Git-Newrev: 5096e10640512cd6ac26c80d2c148cc9eb8c3ce2
+X-Git-Oldrev: dc4a479ef9aefd90e8c2d7d49077e2646d4dad6e
+X-Git-Newrev: 7750c4d6d658b15fd4ef2b43bbc81c61e61d720f
 X-Patchwork-Hint: ignore
-Message-Id: <20211109095623.016FC8B79A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/dvb-apps: don't
- override dependencies
+Message-Id: <20211109095623.3E28F8B79A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/olsr: add
+ upstream patch to fix compile with gpsd-3.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5096e10640512cd6ac26c80d2c148cc9eb8c3ce2
+commit: https://git.buildroot.net/buildroot/commit/?id=7750c4d6d658b15fd4ef2b43bbc81c61e61d720f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Don't override DVB_APPS_DEPENDENCIES in a conditional
+- add upstream patch ([1]) to fix compile with gpsd-3.23.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  - http://autobuild.buildroot.org/results/53b06e72fb2d8b4c8b6ba41baf775ff33654cd18
+  - http://autobuild.buildroot.net/results/54cae924711e26f04045f8208db0d772292a3933
+
+  src/gpsdclient.c: In function 'nmeaInfoFromGpsd':
+  src/gpsdclient.c:374:30: error: 'STATUS_NO_FIX' undeclared (first use in this function); did you mean 'STATUS_PPS_FIX'?
+    374 |   if (gpsdata->fix.status == STATUS_NO_FIX) {
+        |                              ^~~~~~~~~~~~~
+        |                              STATUS_PPS_FIX
+
+[1] https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e2b6861fe0c9501f2ab6c6f454e301b06d2b5b8f)
+(cherry picked from commit cc54ac17f8060134f93d1b8965d297b3f91e575a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dvb-apps/dvb-apps.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...-gpsdclient.c-drop-handling-of-gpsdata-fi.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index ffab0db682..161c1f8495 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -11,7 +11,7 @@ DVB_APPS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+
- DVB_APPS_LICENSE_FILES = COPYING COPYING.LGPL
- 
- ifeq ($(BR2_ENABLE_LOCALE),)
--DVB_APPS_DEPENDENCIES = libiconv
-+DVB_APPS_DEPENDENCIES += libiconv
- DVB_APPS_LDLIBS += -liconv
- endif
- 
+diff --git a/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
+new file mode 100644
+index 0000000000..7ea3fbadd7
+--- /dev/null
++++ b/package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch
+@@ -0,0 +1,49 @@
++From 665051a845464c0f95edb81432104dac39426f79 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Nov 2021 15:50:58 +0100
++Subject: [PATCH] lib/pud/src/gpsdclient.c: drop handling of
++ gpsdata->fix.status
++
++Here is an extract of https://gpsd.gitlab.io/gpsd/gpsd_json.html:
++
++The optional "status" field (aka fix type), is a modifier (adjective) to
++mode. It is not a replacement for, or superset of, the "mode" field. It
++is almost, but not quite, the same as the NMEA 4.x xxGGA GPS Quality
++Indicator Values. Many GNSS receivers do not supply it. Those that do
++interpret the specification in various incompatible ways.
++
++So status field is optional and STATUS_NO_FIX has been explicitly
++renamed into STATUS_UNK to avoid confusion with MODE_NO_FIX (which is
++already handled by gpsdclient.c) so drop the if block to fix the build
++failure with gpsd >= 3.23.1.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream: https://github.com/OLSR/olsrd/commit/665051a845464c0f95edb81432104dac39426f79]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ lib/pud/src/gpsdclient.c | 9 ---------
++ 1 file changed, 9 deletions(-)
++
++diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
++index a2a9cee0..d448867d 100644
++--- a/lib/pud/src/gpsdclient.c
+++++ b/lib/pud/src/gpsdclient.c
++@@ -370,15 +370,6 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++           );
++ 
++   gpsdata->set &= ~STATUS_SET; /* always valid */
++-  #if GPSD_API_MAJOR_VERSION >= 10
++-  if (gpsdata->fix.status == STATUS_NO_FIX) {
++-  #else
++-  if (gpsdata->status == STATUS_NO_FIX) {
++-  #endif
++-    nmeaInfoClear(info);
++-    nmeaTimeSet(&info->utc, &info->present, NULL);
++-    return;
++-  }
++ 
++   if (!gpsdata->set) {
++     return;
++-- 
++2.33.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
