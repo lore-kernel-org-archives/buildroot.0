@@ -2,84 +2,71 @@ Return-Path: <SRS0=ghJV=P5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B1B0C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 17:54:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 588B9C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 18:46:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 83DEB6113D
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 17:54:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 83DEB6113D
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id CC814613D3
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 18:46:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CC814613D3
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43CD660B1C;
-	Wed, 10 Nov 2021 17:54:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 725CA400CE;
+	Wed, 10 Nov 2021 18:46:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A7ILHWyc8HDJ; Wed, 10 Nov 2021 17:54:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1EisfnfN7Vw6; Wed, 10 Nov 2021 18:46:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B333E60AF7;
-	Wed, 10 Nov 2021 17:54:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7103840416;
+	Wed, 10 Nov 2021 18:46:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93B6E1BF9B2
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 17:54:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E31361BF5A4
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 18:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 818E74008C
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 17:54:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D201C404A3
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 18:46:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q6qFj3Z66jFB for <buildroot@lists.busybox.net>;
- Wed, 10 Nov 2021 17:54:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF3C940023
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 17:54:16 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id w29so5412991wra.12
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 09:54:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0+rF2l2wYotmsLvJrHXHVbu21pPzMUZqvBAASao814U=;
- b=O2c+Ydg+wpCalTnq5vv4YzF/D/6XfUueaDJZl7TgEeazDZ9AaKDcEf/f5Rhpe3AhzH
- V9ypmiiNPu16Zpaj+Wi/6ISFN+OtMruSaCWCIt1AZHbe/IfL4sFlPabZMl2ioctyGyz6
- UAIn0HV80EHJHqscZbp0qvx6I1Rr0qHgMmVzUpjzvKybTB/iHSQ4RPBQppmP2G7fClgg
- Tw9negGHgITa+rd4O4Nx58sTnU6bqMMP1vlkrgFd4Q2nbgeBmuv07hTGrLkd3tOshTVh
- ocQD+NG3mbouDJT/h//WshVCtMoeVLsbMWTvJpbTDidDHlbe6D8vPzA8ewvmEXKNmt+x
- /eOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=0+rF2l2wYotmsLvJrHXHVbu21pPzMUZqvBAASao814U=;
- b=rrVK/1NNT7UalNrTz4xL3uNSKMFDZdZJdtBCZ5vqmSs6uRYKWEhUb7IdcPrw4d9ImZ
- qvAo9YJKoHuCsxRn9cMzIguPIM4aLuDGPxUINNMpkMLo1vmdbTbC43hCiA7R0b6kiyyb
- 9o5BA5nYx8LJXjZO0VKeZ5IJrXff/mdT1X77w2CP+ap0t9K0sZ9N2iFZPUgig0XY0p6A
- 6MneXrbuvetvmhezZKGMQvPHdSBqWfFLLXmLPZbY1tOoJCVSVISqRkQNtsA1kEzZPXAC
- sQVYIeECofL3pnfxp/TO54Cgcmw0/op8yp+118IHnsKQ2exRh3Fooc7OQ03YOtSj7Zzq
- vUVg==
-X-Gm-Message-State: AOAM532LSQ5MJGqxkbOa4+tt5FIxg0kOYbmvyQcRz48JJeq5s1TchsvV
- IDB6alB6KFdHVmgZlUz59Abvdig2dP8=
-X-Google-Smtp-Source: ABdhPJwwkYdyEpWnU7u79+JSen86MSgUj2wHzr74/xBGIKPjUfRmApsfcnAWIAoEXpT8sp7SYVOPzQ==
-X-Received: by 2002:adf:f681:: with SMTP id v1mr930633wrp.367.1636566854750;
- Wed, 10 Nov 2021 09:54:14 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id j38sm6882894wms.29.2021.11.10.09.54.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Nov 2021 09:54:13 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Nov 2021 18:52:18 +0100
-Message-Id: <20211110175218.1927678-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ with ESMTP id LemeY588V5bB for <buildroot@lists.busybox.net>;
+ Wed, 10 Nov 2021 18:46:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 794AF404A7
+ for <buildroot@buildroot.org>; Wed, 10 Nov 2021 18:46:51 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:90c4:eaed:10a6:22de])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 92ED65FEF7;
+ Wed, 10 Nov 2021 19:46:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1636570008;
+ bh=ONMGsSXRhKJeBnfMynfV3rRLT+Nd5pJJXJ58v1HQV6I=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=RZprtjizhopBvPpHTNP/f851uaGXhu7uy65wd2z8HOPEhKdVzhaMxm/8ajdFaUgRz
+ rir0ToNBXJx8OHhl1D0cxawPQF61UBqtb8cUes8bjvgXkpW9qz8TxnPfjTo43YNsfg
+ CD+QgXXWbZq/hnRRasWQMtWz5bfLa+b3b9vp6tEdqk+ubpAbClNSeOpC6Akl9sEeOs
+ vYyxZY+bx5sg+pnEI3VlZQyVG4DGY5rmrcOkRrscOpRE46uyNBo4jHyKs/fm0Z92Ao
+ UjCK3GHB24u7B6gHyXURkDhAxpu1G3JZKSUpQNauvzDCm2VvlU2SpofX/nTRpQbYH8
+ aNdQwc/NL2e9w==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 10 Nov 2021 19:46:42 +0100
+Date: Wed, 10 Nov 2021 19:46:42 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20211110184642.GM2084998@scaer>
+References: <20211110161505.74745-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib/lib_mk.py: check
- DEPENDENCIES
+Content-Disposition: inline
+In-Reply-To: <20211110161505.74745-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: disable meson wrap
+ downloads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,47 +78,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Check that {FOO}_DEPENDENCIES are never overriden in a conditional
+James, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- utils/checkpackagelib/lib_mk.py | 6 ++++++
- 1 file changed, 6 insertions(+)
+On 2021-11-10 09:15 -0700, James Hilliard spake thusly:
+> We don't want to allow meson to download wrap dependencies as this
+> bypasses buildroot's dependency resolution.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 0278354434..d09922f724 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -88,6 +88,8 @@ class OverriddenVariable(_CheckFunction):
-         r"_SITE\s*=\s*",
-         r"_SOURCE\s*=\s*",
-         r"_VERSION\s*=\s*"])))
-+    FORBIDDEN_OVERRIDDEN = re.compile(r"^[A-Z0-9_]+({})".format("|".join([
-+        r"_DEPENDENCIES\s*=\s*"])))
- 
-     def before(self):
-         self.conditional = 0
-@@ -123,6 +125,10 @@ class OverriddenVariable(_CheckFunction):
-                         .format(self.filename, lineno, variable),
-                         text]
-         else:
-+            if self.FORBIDDEN_OVERRIDDEN.search(text):
-+                return ["{}:{}: conditional override of variable {}"
-+                        .format(self.filename, lineno, variable),
-+                        text]
-             if variable not in self.unconditionally_set:
-                 self.conditionally_set.append(variable)
-                 return
+Applied to master, thanks, after adding a pointer to the FAQ about the
+wrap-mode option.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/meson/cross-compilation.conf.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index 37b49eea3b..7a7ece97ae 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -17,6 +17,7 @@ c_args = [@TARGET_CFLAGS@]
+>  c_link_args = [@TARGET_LDFLAGS@]
+>  cpp_args = [@TARGET_CXXFLAGS@]
+>  cpp_link_args = [@TARGET_LDFLAGS@]
+> +wrap_mode = 'nodownload'
+>  
+>  [properties]
+>  needs_exe_wrapper = true
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.33.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
