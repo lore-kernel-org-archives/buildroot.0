@@ -2,80 +2,51 @@ Return-Path: <SRS0=ghJV=P5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90F96C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 19:37:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA00C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 20:44:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0E48560F46
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 19:37:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0E48560F46
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id 40F48611F2
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 20:44:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 40F48611F2
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A24994048C;
-	Wed, 10 Nov 2021 19:37:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA6F540012;
+	Wed, 10 Nov 2021 20:44:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xmF2VSZ2R6pu; Wed, 10 Nov 2021 19:37:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pycg0BtVpYRT; Wed, 10 Nov 2021 20:44:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0A2A4049A;
-	Wed, 10 Nov 2021 19:37:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 138421BF4E6
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 19:37:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D50AB401F0;
+	Wed, 10 Nov 2021 20:44:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A12251BF2F1
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 20:44:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FC0B4049A
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 19:37:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85D6C60B00
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 20:44:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8zR913WigBuC for <buildroot@lists.busybox.net>;
- Wed, 10 Nov 2021 19:37:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 708A74048C
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 19:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636573049;
- bh=2I72aW8Q22HB1FXQRwbkwQOlyqx3xGuAjHvQT205DgA=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=A2t/XQ828FCCRx0VF63ooBdX8pGDT/pUqHpG7ZOtORAgX5ATKLZoWQn406gcmh465
- 9ixBjfxxTi1tGw63xDFYOK78OXUKeR0RNlo42wsIUIfuRr/yEbWWfEUZVJQl02a2Yg
- 7cu94h45HqCS9VI+ioYuwIGJHty+BrBmKJ5h/a9M=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.16]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M7b6l-1mmEib3G85-0085AP
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 20:37:28 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ge5YwBdX8GxK for <buildroot@lists.busybox.net>;
+ Wed, 10 Nov 2021 20:44:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B22960AFA
+ for <buildroot@buildroot.org>; Wed, 10 Nov 2021 20:44:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BE6B88B910; Wed, 10 Nov 2021 20:40:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 10 Nov 2021 20:37:28 +0100
-Message-Id: <20211110193728.28746-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:N88XWULwZIkqfmwKTKC0iOTPDJKwrtznQUtsQj2FC5XmICETNwC
- BwLsmo2Fnvw+umARlYggeHhJAYg0fyu09PLMvvjP9TzZWp5KqNLoOBaKuAEC5Ya98S6Mxq6
- ilFp+5uJTYr3nVEfgqW1GFwk7qSIPqpJwdGewq9MQM9JLkj2qqC1ei8157yuSIDy0iPevR1
- tjTnOxsDHKetRutleJHXw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Jr1dhQB4zW4=:F8UFIhDyXY2MFyhkr0Ihg2
- CCfUjVzdPfEOo58wWLJd5+fMUK5Wx/dYEboVB3rj0TWAPu38VGEYcV64qhctFXX87YcY4tV6U
- ZpyPhZCXqFTfnJYoEZyeihsCIJcB+/M88xyPXlbSNTM0mAsQfTp15YaNh2mRQgNMvUX5a8YbH
- 7Vg/WOA5b/g6L3yBUQmvVLE69lneEF9C5RYSK+R1DjticsSxGwp7mdVI15Yb93ls+hwKHa3L2
- zTSnh/rnEij14WTNU0R4x9H0dvS+Go7P+fPlL9ZgLfeF3FB/Z5RxpwSLITVoLohVJZQu/tQus
- uIIZmlT3SH35k6lrYFoPlk5t4gp87COh0Hc5rxOyNneDlFwEEjm1VxOKYhWdGPB6SiaSdS7F7
- PhFHjmkzPDApH+9eaznZ1ZLDrI1rEEoy8ehO6wERfRre4QtrN6DylNRzV4l87VhLmKF55ljrZ
- myPjyMjLZLR/XmoyvvgH9uv2hz/qHr1WDV+zwZ7oYnEB02nEC0j/fa+pO9dpeNF+dEc0IeDWy
- 9Hze5dUMo69v+tsr8BMhoeN5KXciZD99hgaZrTXv+ErhvwkAuy2JqfX1i/lcuu42Q0+LDVmm/
- 4zR8Sn6TjnBC9LAlGrOPMhl1X/UMulYV51yTOK4+qqmm2sqCxrIanTclDj4HYgt86KZPTgmUc
- NOhzHyJbnIidZm+xuPs1A1ekbNCnWBiXNanEiokQBrdWXldGWbbsXf4zUmkcbecFTsd3QfoF4
- 0aKsUQ4Q54KgksWsmqB9LODfrSIVRErKfYQVfaaBXyN7duK/D/4rVgo8LPnIqEA+P7z3vRzRN
- AHd6dJFMEMVQbjRplms/INbMERFjDseiZ0cL24koDF5ucR96WEIEHtaI2nUXsy/gndsTKctIN
- LkGtn6lSxmLuKLIqxlFELm8kb7aQv18hjDkcOcZiHPtwjBC9L7+jENfhkNlmqNj2CKhYDqKYB
- DyjEn3Z1+y+eIs5r4bXbM9tV/ENjvaJkIKNRvRjbnhZsJORg/TM4HcXizjiznyKfLTGaySrS/
- xWwIUGAwp0VQB3Jpu/1qPH0vmtwXsjW0AMwFGfv57mpg7ZYJPiV6tkxHEJv9qkfBjOVtogXhd
- +8BODqAVENHhAg=
-Subject: [Buildroot] [PATCH/next v1] package/ntp: run ntpd as ntp user
+Date: Wed, 10 Nov 2021 21:40:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 12ba3563655e3ebab252e52daa6c710864fa869f
+X-Git-Newrev: a3c1ba68f4bbad17df57a408097b7e862df43b6b
+X-Patchwork-Hint: ignore
+Message-Id: <20211110204035.BE6B88B910@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: zlib is mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,94 +58,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- in case libcap is enabled use the now enabled '-u' option to run nptd as
-  user/group ntp
+commit: https://git.buildroot.net/buildroot/commit/?id=a3c1ba68f4bbad17df57a408097b7e862df43b6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+As found out by Yann [1], binutils will use its bundled copy of zlib,
+whether it is already provided by the system or not, and unless
+explicitly told to use the system zlib with --with-system-zlib, which
+is available since version 2.21 and
+https://github.com/bminor/binutils-gdb/commit/700d40ca16eb3ba1ecc1e602cb3eec175bdf70f0
+
+This will fix the following build failure with oprofile when compiling
+in a static configuration where zlib is not enabled:
+
+    checking for bfd_openr in -lbfd... no
+    checking for compress in -lz... no
+    configure: error: libz library not found; required by libbfd
+
+As found out by Arnout [1], this fails infrequently because static is
+already pretty rare, but in addition zlib is almost always selected by
+some other package.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0e1d16dfbb455a08db80ac5d35613908c3b4163f
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20211030214734.2154583-1-fontaine.fabrice@gmail.com/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - reword the explanations about the system zlib
+  - extend the oprofile example with static and !zlib
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ntp/{S49ntp => S49ntp.in}             |  2 +-
- package/ntp/ntp.mk                            | 15 +++++++++++++--
- package/ntp/{ntpd.service => ntpd.service.in} |  2 +-
- 3 files changed, 15 insertions(+), 4 deletions(-)
- rename package/ntp/{S49ntp => S49ntp.in} (96%)
- rename package/ntp/{ntpd.service => ntpd.service.in} (85%)
+ package/binutils/Config.in   | 1 +
+ package/binutils/binutils.mk | 7 ++-----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp.in
-similarity index 96%
-rename from package/ntp/S49ntp
-rename to package/ntp/S49ntp.in
-index 66c5f70a5f..11c03b888f 100644
---- a/package/ntp/S49ntp
-+++ b/package/ntp/S49ntp.in
-@@ -6,7 +6,7 @@
- DAEMON="ntpd"
- PIDFILE="/var/run/$DAEMON.pid"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index e17a8ec65a..5e1a769998 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Install binutils on the target
  
--NTPD_ARGS="-g"
-+NTPD_ARGS="@NTPD_EXTRA_ARGS@ -g"
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index bfad25422d..13f61be035 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -25,7 +25,7 @@ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+ BINUTILS_INSTALL_STAGING = YES
+-BINUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++BINUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ BINUTILS_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
+ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+@@ -51,6 +51,7 @@ BINUTILS_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--enable-install-libiberty \
+ 	--enable-build-warnings=no \
++	--with-system-zlib \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
- # shellcheck source=/dev/null
- [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index ff23cdc2b6..3ffd2b6fc5 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -44,6 +44,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NTP_CONF_OPTS += --enable-linuxcaps
- NTP_DEPENDENCIES += libcap
-+define NTP_USERS
-+        ntp -1 ntp -1 * - - - ntpd user
-+endef
-+NTP_DAEMON_EXTRA_ARGS = -u ntp:ntp
- else
- NTP_CONF_OPTS += --disable-linuxcaps
- endif
-@@ -109,11 +113,18 @@ endif
- 
- ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
- define NTP_INSTALL_INIT_SYSV_NTPD
--	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-+	mkdir -p $(TARGET_DIR)/etc/init.d
-+	sed -e 's%@NTPD_EXTRA_ARGS@%$(NTP_DAEMON_EXTRA_ARGS)%g' \
-+		package/ntp/S49ntp.in \
-+		> $(TARGET_DIR)/etc/init.d/S49ntp
-+	chmod 0755 $(TARGET_DIR)/etc/init.d/S49ntp
- endef
- 
- define NTP_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
-+	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
-+	sed -e 's%@NTPD_EXTRA_ARGS@%$(NTP_DAEMON_EXTRA_ARGS)%g' \
-+		package/ntp/ntpd.service.in \
-+		> $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
- endef
+@@ -74,10 +75,6 @@ ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_OPTIMIZE_S),yy)
+ BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
  endif
  
-diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service.in
-similarity index 85%
-rename from package/ntp/ntpd.service
-rename to package/ntp/ntpd.service.in
-index 9a0f4c6dbf..b7db4a2878 100644
---- a/package/ntp/ntpd.service
-+++ b/package/ntp/ntpd.service.in
-@@ -9,7 +9,7 @@ PIDFile=/run/ntpd.pid
- # correct time to work, but we likely won't acquire that without NTP. Let's
- # break this chicken-and-egg cycle here.
- Environment=SYSTEMD_NSS_RESOLVE_VALIDATE=0
--ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
-+ExecStart=/usr/sbin/ntpd @NTPD_EXTRA_ARGS@ -g -p /run/ntpd.pid
- 
- [Install]
- WantedBy=multi-user.target
--- 
-2.33.1
-
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-BINUTILS_DEPENDENCIES += zlib
+-endif
+-
+ # "host" binutils should actually be "cross"
+ # We just keep the convention of "host utility" for now
+ HOST_BINUTILS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
