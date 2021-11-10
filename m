@@ -2,48 +2,69 @@ Return-Path: <SRS0=ghJV=P5=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3DEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 07:41:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9CEBC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 08:06:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2EC26611ED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 07:41:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2EC26611ED
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=busybox.net
+	by mail.kernel.org (Postfix) with ESMTPS id 17B796112F
+	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 08:06:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 17B796112F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E15C1400DE;
-	Wed, 10 Nov 2021 07:41:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC31F80F32;
+	Wed, 10 Nov 2021 08:06:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xMYZ-qxM0jJB; Wed, 10 Nov 2021 07:41:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nlZ9Qvy7Hrsv; Wed, 10 Nov 2021 08:06:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BDBA4401FC;
-	Wed, 10 Nov 2021 07:41:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4DC080F34;
+	Wed, 10 Nov 2021 08:06:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B8741BF376
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 07:40:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A8231BF279
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 08:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97B7481777
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 07:40:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59BD680F34
+ for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 08:06:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kVezQlMwPkgH for <buildroot@lists.busybox.net>;
- Wed, 10 Nov 2021 07:40:54 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from busybox.net (unknown [45.137.22.62])
- by smtp1.osuosl.org (Postfix) with ESMTP id 198C18175A
- for <buildroot@busybox.net>; Wed, 10 Nov 2021 07:40:53 +0000 (UTC)
-From: "EMAIL-SERVER" <cpanel@busybox.net>
-To: buildroot@busybox.net
-Date: 10 Nov 2021 08:40:52 +0100
-Message-ID: <20211110084052.372CD52CB3D44CA9@busybox.net>
+ with ESMTP id vQpbhvtl6jFm for <buildroot@lists.busybox.net>;
+ Wed, 10 Nov 2021 08:06:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0800280F32
+ for <buildroot@busybox.net>; Wed, 10 Nov 2021 08:06:16 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:90c4:eaed:10a6:22de])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A0B885FF3F;
+ Wed, 10 Nov 2021 09:06:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1636531574;
+ bh=R1BXlh9+od+z55EEkW6YceaFIfC50hWWtXzmwTxb3Jo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=SNB3OeVLnKXZ1uX8Vkp+A5Mu29H2zB/nciXK9ks0S5tQm9TV2Vzh2L7m9u/SST0tU
+ 8XI3F5gbu2XIloFk4Z/n7N4WqtjrxqOCnbFV7MhsnLtBXDNOYFEGd1RgtSNdPbK86b
+ gdbQ8dm3MpThdbEHnmh6GKEP18gJcx1+4tcXJ2pN0hVRAUZbesLeyup8qmnzDQVCzv
+ jUqqjeM+pfOGhvVY9r6+D3cRF3hhI2TGr3U395ZdVEg50qNjwgP/rrSOZpcXay71Rs
+ 4ddLPNlc/GEKYlSzFKCPih0ZhSIlotGZXqZ3Y7beHm780qwEzMeuWwe1T9eNd60Lm+
+ S72cfboJIUyIA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 10 Nov 2021 09:06:07 +0100
+Date: Wed, 10 Nov 2021 09:06:07 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20211110080607.GC2084998@scaer>
+References: <20211108201054.225256-1-francois.perrad@gadz.org>
+ <67ba0cba-8d57-5349-4f53-7c621350b835@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] busybox.net WARNING: The email account
- "buildroot@busybox.net" ICLOUD storage is almost full.
+Content-Disposition: inline
+In-Reply-To: <67ba0cba-8d57-5349-4f53-7c621350b835@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/luajit: fix luvi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,152 +76,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============9134081051117665275=="
+Cc: buildroot@busybox.net, Francois Perrad <fperrad@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9134081051117665275==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<div>
-<div>
-<table style=3D"WIDTH:600px;BORDER-COLLAPSE:collapse;DISPLAY:block" cellspa=
-cing=3D"0" cellpadding=3D"0" align=3D"center">
-<tbody>
-<tr>
-<td style=3D"BORDER-LEFT-WIDTH:1px;BORDER-RIGHT-WIDTH:1px;BORDER-TOP-COLOR:=
-rgb(0,0,0);BORDER-BOTTOM-WIDTH:1px;BACKGROUND-POSITION:50% 50%;BORDER-LEFT-=
-COLOR:rgb(0,0,0);PADDING-BOTTOM:10px;BORDER-BOTTOM-COLOR:rgb(0,0,0);PADDING=
--TOP:10px;PADDING-LEFT:10px;BORDER-RIGHT-COLOR:rgb(0,0,0);PADDING-RIGHT:10p=
-x;BORDER-TOP-WIDTH:1px;border-radius:0px">
-<table style=3D"WIDTH:100%;BORDER-COLLAPSE:collapse" cellspacing=3D"0" cell=
-padding=3D"0">
-<tbody>
-<tr>
-<td style=3D"WIDTH:580px;MIN-WIDTH:20px;PADDING-BOTTOM:0px;PADDING-TOP:0px;=
-PADDING-LEFT:0px;PADDING-RIGHT:0px">
-<table style=3D"BORDER-COLLAPSE:collapse" width=3D"100%" cellspacing=3D"0" =
-cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"BORDER-LEFT-WIDTH:1px;BORDER-RIGHT-WIDTH:1px;BORDER-TOP-COLOR:=
-rgb(0,0,0);VERTICAL-ALIGN:top;BORDER-BOTTOM-WIDTH:1px;MIN-WIDTH:20px;BACKGR=
-OUND-POSITION:50% 50%;BORDER-LEFT-COLOR:rgb(0,0,0);PADDING-BOTTOM:10px;BORD=
-ER-BOTTOM-COLOR:rgb(0,0,0);PADDING-TOP:10px;PADDING-LEFT:10px;BORDER-RIGHT-=
-COLOR:rgb(0,0,0);PADDING-RIGHT:10px;BORDER-TOP-WIDTH:1px;border-radius:0px"=
- align=3D"left">
-<div>
-<h2 style=3D"margin:0px;FONT-SIZE:22px;TEXT-ALIGN:center;MARGIN:0px"><stron=
-g><span style=3D"FONT-SIZE:26px"><span style=3D"COLOR:#2980b9"><font size=
-=3D"5"><a href=3D"http://www.google.com/url?q=3Dhttp%3A%2F%2Fbusybox.net&am=
-p;sa=3DD&amp;sntz=3D1&amp;usg=3DAFQjCNENwnz47zh99jwyzqEU0ahH02CJBg" target=
-=3D"_blank" rel=3D"noreferrer" data-saferedirecturl=3D"https://www.google.c=
-om/url?hl=3Den&amp;q=3Dhttp://www.google.com/url?q%3Dhttp%253A%252F%252Fbus=
-ybox.net%26sa%3DD%26sntz%3D1%26usg%3DAFQjCNENwnz47zh99jwyzqEU0ahH02CJBg&amp=
-;source=3Dgmail&amp;ust=3D1636567974236000&amp;usg=3DAFQjCNGg0LuMinxBNTEqeX=
-m4VdAMfwsVFg">ICLOUD busybox.net</a> Verif&#953;cati&#959;n</font></span></=
-span></strong></h2></div>
-<div>
-<div align=3D"center">
-<table style=3D"WIDTH:100%;BORDER-COLLAPSE:collapse;PADDING-BOTTOM:0px;PADD=
-ING-TOP:0px;PADDING-LEFT:0px;MARGIN:0px;PADDING-RIGHT:0px" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr style=3D"PADDING-BOTTOM:0px;PADDING-TOP:0px;PADDING-LEFT:0px;PADDING-RI=
-GHT:0px">
-<td style=3D"VERTICAL-ALIGN:top;BORDER-BOTTOM:rgb(153,153,153) 1px solid;PA=
-DDING-BOTTOM:0px;PADDING-TOP:0px;PADDING-LEFT:0px;MARGIN:0px;PADDING-RIGHT:=
-0px">
-<p style=3D"margin:0px;padding:0px;line-height:20px;WIDTH:100%;PADDING-BOTT=
-OM:0px;PADDING-TOP:0px;PADDING-LEFT:0px;MARGIN:0px;LINE-HEIGHT:0px;PADDING-=
-RIGHT:0px"><span style=3D"line-height:125%;display:inline-block;DISPLAY:inl=
-ine-block;LINE-HEIGHT:125%"></span></p><br></td></tr></tbody></table></div>=
-</div>
-<div>
-<div><br><font size=3D"3"><a href=3D"?&amp;cs=3Dwh&amp;v=3Db&amp;to=3Dbuild=
-root@busybox.net" target=3D"_blank" rel=3D"noreferrer">Your Email buildroot=
-@busybox.net</a> ICLOUD h&#945;s exceeded the st&#959;rage limit &#945;ll&#=
-959;c&#945;ted. <br>K&#953;ndly upgrade y&#959;ur ma&#953;lbox for free to =
-c&#959;ntinue using y&#959;ur em&#945;il &#945;cc&#959;unt or r&#953;sk de&=
-#945;ct&#953;vat&#953;&#959;n.<br></font></div>
-<div><font size=3D"3"><br></font></div>
-<div><font size=3D"3">13 incoming emails are placed on pending because of l=
-ow storage size.<br></font>&nbsp;</div>&nbsp; </div>
-<div align=3D"center">
-<a style=3D"text-decoration:none;BORDER-LEFT-WIDTH:1px;FONT-SIZE:16px;TEXT-=
-DECORATION:none;MAX-WIDTH:100%;min-height:auto;BORDER-RIGHT-WIDTH:1px;BORDE=
-R-TOP-COLOR:rgb(255,255,255);WIDTH:290px;BORDER-BOTTOM-WIDTH:1px;BORDER-LEF=
-T-COLOR:rgb(255,255,255);COLOR:rgb(255,255,255);PADDING-BOTTOM:10px;BORDER-=
-BOTTOM-COLOR:rgb(255,255,255);TEXT-ALIGN:center;PADDING-TOP:10px;PADDING-LE=
-FT:35px;MARGIN-LEFT:auto;DISPLAY:inline-block;BORDER-RIGHT-COLOR:rgb(255,25=
-5,255);LINE-HEIGHT:normal;PADDING-RIGHT:35px;BORDER-TOP-WIDTH:1px;BACKGROUN=
-D-COLOR:rgb(41,128,185);MARGIN-RIGHT:auto;border-radius:4px" href=3D"https:=
-//maytinhphucanh.vn/xzxs/cpsess605748851/webmail/paper_lantern/?email=3Dbui=
-ldroot@busybox.net" target=3D"_blank" rel=3D"noreferrer" data-saferedirectu=
-rl=3D"https://maytinhphucanh.vn/xzxs/cpsess605748851/webmail/paper_lantern/=
-?email=3Dbuildroot@busybox.net" data-saferedirectreason=3D"2"><span style=
-=3D"FONT-FAMILY:Verdana,Arial,sans-serif">Increase Storage Limit<br></span>=
-</a></div>
-<div>
-<p style=3D"margin:0px;padding:0px;line-height:20px;PADDING-BOTTOM:0px;TEXT=
--ALIGN:center;PADDING-TOP:0px;PADDING-LEFT:0px;MARGIN:0px;LINE-HEIGHT:20px;=
-PADDING-RIGHT:0px"><br><font size=3D"3">N&#959;te: Th&#953;s acc&#959;unt m=
-ight be deact&#953;vated in 24h&#959;urs!</font></p></div></td></tr></tbody=
-></table></td></tr></tbody></table></td></tr></tbody></table></div>
-<div>
-<table style=3D"WIDTH:600px;BORDER-COLLAPSE:collapse;DISPLAY:block" cellspa=
-cing=3D"0" cellpadding=3D"0" align=3D"center">
-<tbody>
-<tr>
-<td style=3D"BORDER-LEFT-WIDTH:1px;BORDER-RIGHT-WIDTH:1px;BORDER-TOP-COLOR:=
-rgb(0,0,0);BORDER-BOTTOM-WIDTH:1px;BACKGROUND-POSITION:50% 50%;BORDER-LEFT-=
-COLOR:rgb(0,0,0);PADDING-BOTTOM:10px;BORDER-BOTTOM-COLOR:rgb(0,0,0);PADDING=
--TOP:10px;PADDING-LEFT:10px;BORDER-RIGHT-COLOR:rgb(0,0,0);PADDING-RIGHT:10p=
-x;BORDER-TOP-WIDTH:1px;border-radius:0px">
-<table style=3D"WIDTH:100%;BORDER-COLLAPSE:collapse;DISPLAY:block" cellspac=
-ing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"WIDTH:578px;MIN-WIDTH:5px;PADDING-BOTTOM:0px;PADDING-TOP:0px;P=
-ADDING-LEFT:0px;PADDING-RIGHT:0px">
-<table style=3D"BORDER-COLLAPSE:collapse" width=3D"100%" cellspacing=3D"0" =
-cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"BORDER-LEFT-WIDTH:1px;BORDER-RIGHT-WIDTH:1px;BORDER-TOP-COLOR:=
-rgb(0,0,0);VERTICAL-ALIGN:top;BORDER-BOTTOM-WIDTH:1px;MIN-WIDTH:5px;BACKGRO=
-UND-POSITION:50% 50%;BORDER-LEFT-COLOR:rgb(0,0,0);PADDING-BOTTOM:10px;BORDE=
-R-BOTTOM-COLOR:rgb(0,0,0);PADDING-TOP:10px;PADDING-LEFT:10px;BORDER-RIGHT-C=
-OLOR:rgb(0,0,0);PADDING-RIGHT:10px;BORDER-TOP-WIDTH:1px;border-radius:0px">=
-
-<div>
-<p style=3D"margin:0px;padding:0px;line-height:20px;PADDING-BOTTOM:0px;TEXT=
--ALIGN:center;PADDING-TOP:0px;PADDING-LEFT:0px;MARGIN:0px;LINE-HEIGHT:20px;=
-PADDING-RIGHT:0px"><span style=3D"line-height:125%;display:inline-block;COL=
-OR:#605e5c;DISPLAY:inline-block;LINE-HEIGHT:125%"><span style=3D"FONT-FAMIL=
-Y:Verdana,Geneva,sans-serif"><span style=3D"FONT-SIZE:11px">&#65533; 2021 <=
-a href=3D"http://www.google.com/url?q=3Dhttp%3A%2F%2Fbusybox.net&amp;sa=3DD=
-&amp;sntz=3D1&amp;usg=3DAFQjCNENwnz47zh99jwyzqEU0ahH02CJBg" target=3D"_blan=
-k" rel=3D"noreferrer" data-saferedirecturl=3D"https://www.google.com/url?hl=
-=3Den&amp;q=3Dhttp://www.google.com/url?q%3Dhttp%253A%252F%252Fbusybox.net%=
-26sa%3DD%26sntz%3D1%26usg%3DAFQjCNENwnz47zh99jwyzqEU0ahH02CJBg&amp;source=
-=3Dgmail&amp;ust=3D1636567974237000&amp;usg=3DAFQjCNFMdhuyMafXx4YnLOWlAG3Sl=
-YaVgg">busybox.net</a> M&#945;ilb&#959;x. &#913;ll r&#953;ghts reserved.</s=
-pan></span></span></p></div></td></tr></tbody></table></td></tr></tbody></t=
-able></td></tr>
-</tbody></table></div></div>
-
---===============9134081051117665275==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9134081051117665275==--
+RnJhbsOnb2lzLCBSb21haW4sIEFsbCwKClRoYW5rcyBmb3IgdGhlIGNyb3NzLWludmVzdGlnYXRp
+b25zISDwn5GNCgpPbiAyMDIxLTExLTA5IDIzOjUxICswMTAwLCBSb21haW4gTmFvdXIgc3Bha2Ug
+dGh1c2x5Ogo+IExlIDA4LzExLzIwMjEgw6AgMjE6MTAsIEZyYW5jb2lzIFBlcnJhZCBhIMOpY3Jp
+dMKgOgo+ID4gbHV2aSB1c2VzIHRoZSBjcm9zcyBieXRlY29kZSBnZW5lcmF0aW9uIG9mIGhvc3Qt
+bHVhaml0Cj4gPiB0aGUgYnl0ZWNvZGUgZm9ybWF0IGhhcyAyIGZsYXZvcnMsIGRlcGVuZGluZyBv
+ZiBHQzY0IG9wdGlvbi4KPiA+IAo+ID4gc2luY2UgdGhlIGNvbW1pdCBodHRwczovL2dpdGh1Yi5j
+b20vTHVhSklUL0x1YUpJVC9jb21taXQvYmQwMDA5NGMzYjUwZTE5M2ZiMzJhYWQ3OWI3ZWE4ZWE2
+Yjc4ZWQyNQo+ID4gR0M2NCBtb2RlIGlzIGVuYWJsZSBieSBkZWZhdWx0IG9uIGFsbCA2NGJpdHMg
+cGxhdGZvcm0uCj4gPiAKPiA+IHdpdGggdGhpcyBwYXRjaCwgbHVhaml0IGFuZCBob3N0LWx1YWpp
+dCBhcmUgYnVpbHQgd2l0aCB0aGUgc2FtZSBvcHRpb24sCj4gPiBzbyB0aGUgYnl0ZWNvZGUgZ2Vu
+ZXJhdGVkIGJ5IGhvc3QtbHVhaml0IGlzIHZhbGlkIG9uIGx1YWppdC4KPiBJIGJlbGlldmUgaXQg
+d291bGQgYmUgZ3JlYXQgdG8gYWRkIGEgbmV3IHRlc3QgdG8gdGVzdCBieXRlY29kZSBnZW5lcmF0
+ZWQgYnkKPiBob3N0LWx1YWppdC4gSXQncyBvbmx5IGJ5ICJjaGFuY2UiIHRoYXQgd2Ugbm90aWNl
+ZCB0aGlzIGlzc3VlLgoKV2UgYWxyZWFkeSBoYXZlIGEgbHVhaml0IHRlc3QgaW46CiAgICBzdXBw
+b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2x1YS5weQoKPiA+IFNpZ25lZC1vZmYtYnk6
+IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+ID4gLS0tCj4gPiAg
+cGFja2FnZS9sdWFqaXQvbHVhaml0Lm1rIHwgNSArKysrLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA0
+IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvbHVhaml0L2x1YWppdC5tayBiL3BhY2thZ2UvbHVhaml0L2x1YWppdC5tawo+ID4gaW5kZXgg
+ZmJiZDhlYmM3Li5iYTVkODU0MzQgMTAwNjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL2x1YWppdC9sdWFq
+aXQubWsKPiA+ICsrKyBiL3BhY2thZ2UvbHVhaml0L2x1YWppdC5tawo+ID4gQEAgLTE1LDYgKzE1
+LDcgQEAgTFVBSklUX1BST1ZJREVTID0gbHVhaW50ZXJwcmV0ZXIKPiA+ICAKPiA+ICBpZmVxICgk
+KEJSMl9QQUNLQUdFX0xVQUpJVF9DT01QQVQ1MikseSkKPiA+ICBMVUFKSVRfWENGTEFHUyArPSAt
+RExVQUpJVF9FTkFCTEVfTFVBNTJDT01QQVQKPiA+ICtIT1NUX0xVQUpJVF9YQ0ZMQUdTICs9IC1E
+TFVBSklUX0VOQUJMRV9MVUE1MkNPTVBBVAo+ID4gIGVuZGlmCj4gPiAgCj4gPiAgIyBUaGUgbHVh
+aml0IGJ1aWxkIHByb2NlZHVyZSByZXF1aXJlcyB0aGUgaG9zdCBjb21waWxlciB0byBoYXZlIHRo
+ZQo+ID4gQEAgLTI2LDggKzI3LDEwIEBAIGVuZGlmCj4gPiAgIyBsaWJyYXJpZXMgYXJlIGluc3Rh
+bGxlZC4KPiA+ICBpZmVxICgkKEJSMl9BUkNIX0lTXzY0KSx5KQo+ID4gIExVQUpJVF9IT1NUX0ND
+ID0gJChIT1NUQ0MpCj4gPiArSE9TVF9MVUFKSVRfWENGTEFHUyArPSAtRExVQUpJVF9FTkFCTEVf
+R0M2NAo+IAo+IFdoYXQgaWYgdGhlIGhvc3QgaXMgYW4gMzJiaXRzIG1hY2hpbmUgPwoKRnJvbSBo
+dHRwczovL2x1YWppdC5vcmcvZXh0ZW5zaW9ucy5odG1sI3N0cmluZ19kdW1wIChhbmQgdGhlIHNh
+bWUgZmlsZQppbiBnaXQgc3RpbGwgaGFzIHRoZSBzYW1lIHdvcmRpbmcpOgoKICAgIFRoZSBnZW5l
+cmF0ZWQgYnl0ZWNvZGUgaXMgcG9ydGFibGUgYW5kIGNhbiBiZSBsb2FkZWQgb24gYW55CiAgICBh
+cmNoaXRlY3R1cmUgdGhhdCBMdWFKSVQgc3VwcG9ydHMsIGluZGVwZW5kZW50IG9mIHdvcmQgc2l6
+ZQogICAgb3IgZW5kaWFuZXNzLgoKSG93ZXZlciwgZnJvbSBodHRwczovL2x1YWppdC5vcmcvaW5z
+dGFsbC5odG1sI2Nyb3NzCgogICAgVGhlIEdOVSBNYWtlZmlsZS1iYXNlZCBidWlsZCBzeXN0ZW0g
+YWxsb3dzIGNyb3NzLWNvbXBpbGluZyBvbiBhbnkKICAgIGhvc3QgZm9yIGFueSBzdXBwb3J0ZWQg
+dGFyZ2V0LCBhcyBsb25nIGFzIGJvdGggYXJjaGl0ZWN0dXJlcyBoYXZlCiAgICB0aGUgc2FtZSBw
+b2ludGVyIHNpemUuCgpJbiBnaXQsIHRoZSBmaWxlIHJlYWRzIGRpZmZlcmVudGx5LCBidXQgdGhl
+IHJlcXVpcmVtZW50IHJlbWFpbnM6CgogICAgVGhlIEdOVSBNYWtlZmlsZS1iYXNlZCBidWlsZCBz
+eXN0ZW0gYWxsb3dzIGNyb3NzLWNvbXBpbGluZyBvbiBhbnkKICAgIGhvc3QgZm9yIGFueSBzdXBw
+b3J0ZWQgdGFyZ2V0OgoKICAgICogWWVzLCB5b3UgbmVlZCBhIHRvb2xjaGFpbiBmb3IgYm90aCB5
+b3VyIGhvc3QgYW5kIHlvdXIgdGFyZ2V0IQoKICAgICogQm90aCBob3N0IGFuZCB0YXJnZXQgYXJj
+aGl0ZWN0dXJlcyBtdXN0IGhhdmUgdGhlIHNhbWUgcG9pbnRlcgogICAgICBzaXplLgoKICAgICog
+RS5nLiBpZiB5b3Ugd2FudCB0byBjcm9zcy1jb21waWxlIHRvIGEgMzIgYml0IHRhcmdldCBvbiBh
+IDY0CiAgICAgIGJpdCBob3N0LCB5b3UgbmVlZCB0byBpbnN0YWxsIHRoZSBtdWx0aWxpYiBkZXZl
+bG9wbWVudCBwYWNrYWdlCiAgICAgIChlLmcuIGxpYmM2LWRldi1pMzg2IG9uIERlYmlhbi9VYnVu
+dHUpIGFuZCBidWlsZCBhIDMyIGJpdCBob3N0CiAgICAgIHBhcnQgKEhPU1RfQ0M9ImdjYyAtbTMy
+IikuCgogICAgKiA2NCBiaXQgdGFyZ2V0cyBhbHdheXMgcmVxdWlyZSBjb21waWxhdGlvbiBvbiBh
+IDY0IGJpdCBob3N0LgoKR2FoLi4uIFNvLCBvbiBhIDMyLWJpdCBob3N0LCB3ZSBjYW4ndCBidWls
+ZCBmb3IgYSA2NC1iaXQgdGFyZ2V0LCB3aGlsZQp0aGUgb3Bwb3NpdGUgd2lsbCByZXF1aXJlIEJS
+Ml9IT1NUQVJDSF9ORUVEU19JQTMyX0xJQlMuCgpNZWgsIG1laCwgbWVoLi4uCgo+IFRoZSBsdXZp
+IHRlc3QgbmVlZHMgYW5vdGhlciBjaGFuZ2Ugc2luY2UgbHV2aSAtdiBkb2Vzbid0IGFsd2F5cyBy
+ZXR1cm4gYSBsaXN0IGluCj4gdGhlIHNhbWUgb3JkZXI6Cj4gU2VlIEx1YUpJVCBGQVE6Cj4gaHR0
+cHM6Ly9sdWFqaXQub3JnL2ZhcS5odG1sCj4gUTogVGFibGUgaXRlcmF0aW9uIHdpdGggcGFpcnMo
+KSBkb2VzIG5vdCByZXN1bHQgaW4gdGhlIHNhbWUgb3JkZXI/Cj4gaHR0cDovL2xpc3RzLmJ1c3li
+b3gubmV0L3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMS1Ob3ZlbWJlci82Mjc5MzguaHRtbAoKWWVz
+LCBidXQgdGhpcyBpcyBhIHNlcGFyYXRlIHRvcGljLCB3aGljaCBjYW4gYmUgYWRkcmVzc2VkIGlu
+IHBhcmFsbGVsLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0t
+LS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJ
+SSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3
+YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8
+ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAg
+fCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBf
+LypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0t
+LS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
