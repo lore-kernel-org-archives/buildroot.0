@@ -2,52 +2,59 @@ Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5736EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 10:33:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D37C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 10:35:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0025761268
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 10:33:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0025761268
+	by mail.kernel.org (Postfix) with ESMTPS id 3C9FA61284
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 10:35:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3C9FA61284
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB67740201;
-	Thu, 11 Nov 2021 10:33:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sTktbN4AX5CS; Thu, 11 Nov 2021 10:33:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE1714021C;
-	Thu, 11 Nov 2021 10:33:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E55FF1BF9D1
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 10:33:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4DAE60782
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 10:33:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F35C160842;
+	Thu, 11 Nov 2021 10:35:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7N2bh0yWaoa5 for <buildroot@lists.busybox.net>;
- Thu, 11 Nov 2021 10:33:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B34A605CD
- for <buildroot@buildroot.org>; Thu, 11 Nov 2021 10:33:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E55098B84F; Thu, 11 Nov 2021 10:29:30 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ht9SqmqWH72b; Thu, 11 Nov 2021 10:35:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6331F6071E;
+	Thu, 11 Nov 2021 10:34:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 29A061BF955
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 10:34:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26D8A80F0E
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 10:34:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ci2XJXGIQRK for <buildroot@lists.busybox.net>;
+ Thu, 11 Nov 2021 10:34:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0F3E780E87
+ for <buildroot@buildroot.org>; Thu, 11 Nov 2021 10:34:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 089AA1C0003;
+ Thu, 11 Nov 2021 10:34:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ml7Pw-0001Kc-1J; Thu, 11 Nov 2021 11:34:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 11 Nov 2021 11:31:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7ac3f0a4ac7e51980397e79a6fc6da404951159
-X-Git-Newrev: f69f27f06c6299f78993427518439a9aaa9982dc
-X-Patchwork-Hint: ignore
-Message-Id: <20211111102930.E55098B84F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: security bump version to
- 4.14.10
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211111091638.2307787-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Nov 2021 11:34:52 +0100
+In-Reply-To: <20211111091638.2307787-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 11 Nov 2021 10:16:38 +0100")
+Message-ID: <87bl2ryo8j.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 8.2.3582
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,81 +66,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f69f27f06c6299f78993427518439a9aaa9982dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.14.10.html
+ > - Fix CVE-2021-3928: vim is vulnerable to Stack-based Buffer Overflow
+ > - Drop patch (already in version)
 
-This is a security release in order to address the following defects:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-o CVE-2016-2124:  SMB1 client connections can be downgraded to plaintext
-                  authentication.
-                  https://www.samba.org/samba/security/CVE-2016-2124.html
+Committed, thanks.
 
-o CVE-2020-25717: A user on the domain can become root on domain members.
-                  https://www.samba.org/samba/security/CVE-2020-25717.html
-                  (PLEASE READ! There are important behaviour changes described)
-
-o CVE-2020-25718: Samba AD DC did not correctly sandbox Kerberos tickets issued
-                  by an RODC.
-                  https://www.samba.org/samba/security/CVE-2020-25718.html
-
-o CVE-2020-25719: Samba AD DC did not always rely on the SID and PAC in Kerberos
-                  tickets.
-                  https://www.samba.org/samba/security/CVE-2020-25719.html
-
-o CVE-2020-25721: Kerberos acceptors need easy access to stable AD identifiers
-                  (eg objectSid).
-                  https://www.samba.org/samba/security/CVE-2020-25721.html
-
-o CVE-2020-25722: Samba AD DC did not do suffienct access and conformance
-                  checking of data stored.
-                  https://www.samba.org/samba/security/CVE-2020-25722.html
-
-o CVE-2021-3738:  Use after free in Samba AD DC RPC server.
-                  https://www.samba.org/samba/security/CVE-2021-3738.html
-
-o CVE-2021-23192: Subsequent DCE/RPC fragment injection vulnerability.
-                  https://www.samba.org/samba/security/CVE-2021-23192.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index a571ba79f4..033d932732 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.9.tar.asc
--sha256  7fb11818ef7f9bb817a3b21019358b1469aec98799057cc9e55933563361c409  samba-4.14.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.10.tar.asc
-+sha256  107ee862f58062682cec362ec68a24251292805f89aa4c97e7ab80237f91c7af  samba-4.14.10.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 83eb2dacda..eb1f3b830e 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.14.9
-+SAMBA4_VERSION = 4.14.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
