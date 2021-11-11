@@ -1,86 +1,101 @@
-Return-Path: <SRS0=ghJV=P5=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E2A5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 22:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2223C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 03:16:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B030961267
-	for <buildroot@archiver.kernel.org>; Wed, 10 Nov 2021 22:34:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B030961267
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2A65F61168
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 03:16:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A65F61168
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=live.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 776FD400BE;
-	Wed, 10 Nov 2021 22:34:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC049400BE;
+	Thu, 11 Nov 2021 03:16:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hhKdwN1JH1M7; Wed, 10 Nov 2021 22:34:49 +0000 (UTC)
+	with ESMTP id mi6g7c4szzAm; Thu, 11 Nov 2021 03:16:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72D9D4011F;
-	Wed, 10 Nov 2021 22:34:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42B8A1BF322
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 22:34:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FEE740130;
+	Thu, 11 Nov 2021 03:16:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B6A1B1BF995
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 03:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31B9180FFA
- for <buildroot@lists.busybox.net>; Wed, 10 Nov 2021 22:34:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B22F74021C
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 03:16:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VH-3owBpdE7a for <buildroot@lists.busybox.net>;
- Wed, 10 Nov 2021 22:34:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XaWID3Py0Nr3 for <buildroot@lists.busybox.net>;
+ Thu, 11 Nov 2021 03:16:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0DD0E80F75
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 22:34:45 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- f7-20020a1c1f07000000b0032ee11917ceso3102465wmf.0
- for <buildroot@buildroot.org>; Wed, 10 Nov 2021 14:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NiLXN/9nSeS+S69xk/OK4XVJkMDwk1HtAV5+oLJseAg=;
- b=LPC7ohY2Cn1UxL70icmVcWzvJkYQ40dO7p7JRi4I3R/SNl+JXu0dozPHaZMeWQNrPx
- C3aBY2B/AttslFP+21lmCoazuN3Z/Lp4E98Y11bbnVvOU27c/VzvTEq2jpTeb7uJms8y
- PxBxRKWhVR14ILO4CDQJf79ILMeSpv6EF9Zg2MAfwv7V6C+98tPawOVlWEvXlYPg2eXk
- k51KF4pRR+3dKkcZluFcWUeE0wKkG0du/uGdicvMNLhkPKp4x6xaRhu1BQ31KMb71W8v
- hcCSG8xj4b28W1mSNYfB6ZGnvhS69jSzBJTrTTDagjob+jdpDR238XV4BJdvp0LGrn1M
- wNjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NiLXN/9nSeS+S69xk/OK4XVJkMDwk1HtAV5+oLJseAg=;
- b=F9JuKBPXeylhWCWZQS3LnOw9tD7tHeYvrZaBHE0/nw8HPU+ZcVBXnYPukASPctN06W
- UPcxOBzXpRCGhDxYyDhPcMt3kQ7YsVI3+M0LCiKC3A/BjFWioptUhPx+cjvIX29+shj+
- H2FTiWAg7DALGNt091fWyTTZrznyPR6h3QMP+ihVhbeKdd/rpM+q4ZuCu8LAEB278hlZ
- vwvbzRUrXaOYCfq64Jimklht8ygqhySTUIcbvtJN4bJ/+maPMYC5gw5MtdVfxD0HIbdq
- apRsVT85qeLuXMvBYwFGUgUP2cfL4l4zxb9pL7J+0uTw4qKz3jGREEHEDgIKspnkAlfh
- r7ZQ==
-X-Gm-Message-State: AOAM533tvHQvGJYYlBSRylXqjZNAeKS07OzzqVL5Hn5fsusR4j1AF8hL
- QXGYRPW0LeHMgCVZN+euy3sT6tdvOsI=
-X-Google-Smtp-Source: ABdhPJzEAx6xREDM5zHl0hlVYO6LWsJ7+tECej88HZ2Ds3bBORN4sB8FB7JiInHPjM1Qwj0/SHwr5w==
-X-Received: by 2002:a1c:43c1:: with SMTP id
- q184mr20427776wma.153.1636583683987; 
- Wed, 10 Nov 2021 14:34:43 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id t9sm1160792wrx.72.2021.11.10.14.34.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Nov 2021 14:34:43 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Nov 2021 23:32:44 +0100
-Message-Id: <20211110223244.2116243-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+ (mail-oln040092073064.outbound.protection.outlook.com [40.92.73.64])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9F627400BE
+ for <buildroot@buildroot.org>; Thu, 11 Nov 2021 03:16:08 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jOXQKH8h13IdmD7vc1JRFZ6abwh+hGnDnaVxuXEs/jIhu5L5BDGSLvXgQAC/yRGJ55TYg2N2T/Eiq2552uARUfcol3OdMrf9ZnW8DBqBkvhEPFbVAf7ZWOy45+Esium3iBr984aA/QOYQjMUuYGZ3b9cdf7YHiuh8URljSn+NlXu1k/dmjYgjd4YKQoVKQR+ny+uGFnpzlW+A8sscivdfIIPmE72eRa6YujAUKC5BtLWG93kwkaLnzlUr7tGW5Akc58KLxhRKaa63eVz4epg98MLOFNxhWjevFXd1V4u3s9YeoFFX9vVdZWn7FFq5XomXUu6/IRBkT3/No7iyTQkPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MdWVU5Qc0oLsFL1ILIKIWLYFP1DuKlJQxc6YwmVwsEg=;
+ b=IyqofwJdM0ZOEVIiycU5XzyCwGk5Q5iGXXYZg4rx06FOgcHvtID+WSLsFAqBMcAaZZdK8PftouGXr7Eug9w0WMfUSYw3KzBtN/9is2RCaJDhKa76511ovRMDh0r6MXy4DUs9p5I5JcZwEGqt0ASH8iXTrbzadnx8zmgScjxt8wdhHKtrqYHhWI2x0FVr2QW8Djn0OBpKPh3ZK0gruLwKI8vSO6KFUqGDCS5N/L4lS8oaGEjPvBlJiYSfjUeTg66WCAvbu8PRNizK6ihyJ1c1/l0PWzyRsPsBxqUGd7Njk/Dcrt2G4Ob3UrBcByWAyqo0aa63p4F4cZ7C06iBfC54vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MdWVU5Qc0oLsFL1ILIKIWLYFP1DuKlJQxc6YwmVwsEg=;
+ b=N5H0sskVPbm3+nT3ugtC0WCTkrhFkocIb3aA42V7QpC7eqrtvEg13RtaP/GyqV9uXDhXEIHovQflI5lOthdVwfqhJ+HqP+zVws1Z/n6o4HEpjb7BOMyUj0IO7WZ9nZq+xdD+n630RpICGZRPJ50962ogdc/7ffGTbLy+KSKZ8aMG8eVYqau9keMyjqY9KEXa45qCLvQ4r8iojtB38nmaPD+EUMAk2jLIka3TRSZmbrkWdEAcl3pJ2/oCeNtUHJPOrsGLvqpjNxtaHJFxZkSBB9F9Z9B/SwwZmI7WuFx5qhnSrdqaYVu/u3mLvYIGAYRdbKUglnVHHEJwrUA+epAMJg==
+Received: from AM6PR03MB5622.eurprd03.prod.outlook.com (2603:10a6:20b:f7::18)
+ by AM6PR03MB5942.eurprd03.prod.outlook.com (2603:10a6:20b:e4::31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.13; Thu, 11 Nov
+ 2021 03:16:02 +0000
+Received: from AM6PR03MB5622.eurprd03.prod.outlook.com
+ ([fe80::c519:4480:da7:cb54]) by AM6PR03MB5622.eurprd03.prod.outlook.com
+ ([fe80::c519:4480:da7:cb54%5]) with mapi id 15.20.4669.016; Thu, 11 Nov 2021
+ 03:16:02 +0000
+From: Tan Xiaofan <xfan1024@live.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thread-Topic: [Buildroot] [PATCH] fs: allow strip binaries when create rootfs
+Thread-Index: AQHX1k1qSuL8FIpGvEOLGdiSlpjTa6v9Hb2AgAB8geo=
+Date: Thu, 11 Nov 2021 03:16:02 +0000
+Message-ID: <AM6PR03MB56222D5EBD242C87ABF79C28B5949@AM6PR03MB5622.eurprd03.prod.outlook.com>
+References: <AM6PR03MB56227C126CCA7748EAB48382B5939@AM6PR03MB5622.eurprd03.prod.outlook.com>
+ <20211110190005.GN2084998@scaer>
+In-Reply-To: <20211110190005.GN2084998@scaer>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: 23da3cca-be52-f61e-e262-8a3cba1c4baf
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn: [Wtz27XnzoRhVkbOeOZ/YkO4S6bde2QzId/+kJLbNVjU=]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2e885768-9ab0-48c8-6bdd-08d9a4c19758
+x-ms-traffictypediagnostic: AM6PR03MB5942:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vnj0+OPz9751ii5qxmksrt1EYUJSzi4vdZUiHN3hO9XCrY23p5OuvHUYRj2DyCOcp+3N8N10wMpPD93bJPjuquhAlBv03tjP4/2zEt+dS4TLJWlRfVxM00Ia/xSD+YzYQiJ4vZ6F6V5qZOU6b0dJ6dXKarER6Sow6iV5IGpbWJOzLJEBUCYc2C26VSa6PC7QubFeDSpWYoAC+o/o7BUVS2s8SztQOitUoxERclrjqfitjLFhPGppVMaozMdWy4h19n9orfwa0KxcRojbV3u/0AkLidB/CWroWV+9w555hs8pYKWAkoZve3iuc1dwxijMaRbjT5BkjA2TaI5pa6J2tqE4KgGHcvk1FcJwlraLtjI4GcT9gZihAJMfkCdrRQRjDVs/DwligjvjMWfD2Yza8IjPsfBgXCyPzEENt0WUKx5c7j71+rG8dhhcqridn6F7tlqvr2OWINlq+lGZxce4g7iXJNR4siFCCFY2T8GLm65whd03W3Jtbc5oM8e6a0YXSxTaMlz2g9PTAaImtzHne0+K+B9/WqKjxqllA4ezoSU=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: rvH3EXql5fy9XmOmYqjawihEtCeUgT52ycrZEzQ3J801UK+Wx1AFS910jWGoVd6aNY1eKkj9As5JyO+Y3NC786+1MfhxhfJB5CKx4AIXlku6lVHhYXFkoPFJm0ekN0aub3umi/2bMGRxEynhHRP0lJpjbgSTc5U8R/4Cc7eASyfu50n0VDduP95HoqX9s8ED9aJIGE13wST+4ntXkBgUPLgX5ikxNxc90fU3/MAnB2Agtds7uPV6/wk82OR9RWk/xJOM4ideJiGri4W6pgsu5YeUTE2D9uqHlKbBfMEO6u1P1rXbclvuqCgMHaHM+NaB+rio6Xv/6wsTjoX9xG0UAkBKzJcMSoY7VkvrbTa46VhZNJfIKBo0Q3LGt2Qc0z9zypJD8Z7fQe50lgZPpQIpAs2ER34EA6utZ7fbTaKbYlCnnOYnTy5yhwVI9+X73uMITtN+NJ/DAO2kAQfOsvmvZhvcAzdns63M0ve6Y6WbPmgEudtpEuiEbqADWjiiVw5oTcLGGUhdwD3c6nRmiVM+3K45rH29cO1s7QMdFncyG3Swbxv0m2KlgN3L/R/oRvytyVUNgzLQkNAjECGat7LLALsAeqfptD/H+VwnJIHi+wMxt3+89xr0Er4xkCsO/DfoyQ/SEUyuBNOH6QfVKQX+Mq22suzfFwKQciSXrHYPe92farTU4lZ/Tv6knlShLr8bNDypeRtXdRyXB/o5m2sStQ==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gdb: fix musl build on riscv
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-e50d8.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5622.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e885768-9ab0-48c8-6bdd-08d9a4c19758
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2021 03:16:02.3863 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB5942
+Subject: [Buildroot] =?gb2312?b?u9i4tDogIFtQQVRDSF0gZnM6IGFsbG93IHN0cmlw?=
+ =?gb2312?b?IGJpbmFyaWVzIHdoZW4gY3JlYXRlIHJvb3Rmcw==?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,169 +107,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since gdb 10.1 and
-https://github.com/bminor/binutils-gdb/commit/bf84f7066626c78884436e1c39fb60f04c665f21:
+>> From: xiaofan <xfan1024@live.com>
+>> Date: Wed, 10 Nov 2021 23:13:25 +0800
+>> Subject: [PATCH] fs: allow strip binaries when create rootfs
+>>
+>> Add BR2_STRIP_ROOTFS option, it is useful when using gdbserver on
+>> target board. Host need unstriped binares for debug info and target
+>> need only striped binares for rootfs size.
+>>
+>> Signed-off-by: xiaofan <xfan1024@live.com>
+>
+> This is a simple approach to the problem, indeed. However, I think the
+> choice is not needed: just keep the boolean option, and move the whole
+> stripping out of target-finalize and into the fs creation step.
+>
 
-../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
-../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
-  140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
-      |                   ^~~~~~~~~~
-      |                   ELF_NGREG
+Do you mean to change the behavior of BR2_STRIP_strip without adding other
+options? In this case, we need to permanently set TARGET_STRIP to /bin/true
+to prevent the binaries from being stripped on building time.
 
-musl fixed the issue with
-https://github.com/ifduyue/musl/commit/e5d2823631bbfebacf48e1a34ed28f28d7cb2570
+From 2b55431c3d5ccee2aa43f5996cfff65afe3f6537 Mon Sep 17 00:00:00 2001
+From: xiaofan <xfan1024@live.com>
+Date: Thu, 11 Nov 2021 11:01:13 +0800
+Subject: [PATCH] fs: move stripping into fs creation step
 
-Fixes:
- - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
+It is useful when using gdbserver on target board. Host need unstriped
+binares for debug info and target need only striped binares for rootfs
+size.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: xiaofan <xfan1024@live.com>
 ---
- .../10.2/0007-fix-musl-build-on-riscv.patch   | 60 +++++++++++++++++++
- .../11.1/0007-fix-musl-build-on-riscv.patch   | 60 +++++++++++++++++++
- 2 files changed, 120 insertions(+)
- create mode 100644 package/gdb/10.2/0007-fix-musl-build-on-riscv.patch
- create mode 100644 package/gdb/11.1/0007-fix-musl-build-on-riscv.patch
+ Config.in           | 4 +---
+ Makefile            | 2 --
+ fs/common.mk        | 4 ++++
+ package/Makefile.in | 7 +------
+ 4 files changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch b/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch
-new file mode 100644
-index 0000000000..983f3b30d0
---- /dev/null
-+++ b/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch
-@@ -0,0 +1,60 @@
-+From c3fdbc0a24c83246f951ba79c7167547da979ae5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 10 Nov 2021 23:14:54 +0100
-+Subject: [PATCH] fix musl build on riscv
-+
-+Fix the following build failure raised with musl:
-+
-+../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
-+../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
-+  140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
-+      |                   ^~~~~~~~~~
-+      |                   ELF_NGREG
-+
-+musl fixed the issue with
-+https://github.com/ifduyue/musl/commit/e5d2823631bbfebacf48e1a34ed28f28d7cb2570
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gdb/nat/riscv-linux-tdesc.c  | 5 +++++
-+ gdbserver/linux-riscv-low.cc | 5 +++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/gdb/nat/riscv-linux-tdesc.c b/gdb/nat/riscv-linux-tdesc.c
-+index 837b1707e0f..667c013006a 100644
-+--- a/gdb/nat/riscv-linux-tdesc.c
-++++ b/gdb/nat/riscv-linux-tdesc.c
-+@@ -31,6 +31,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* See nat/riscv-linux-tdesc.h.  */
-+ 
-+ struct riscv_gdbarch_features
-+diff --git a/gdbserver/linux-riscv-low.cc b/gdbserver/linux-riscv-low.cc
-+index 8bf97ea4aa3..1142dbc7b16 100644
-+--- a/gdbserver/linux-riscv-low.cc
-++++ b/gdbserver/linux-riscv-low.cc
-+@@ -30,6 +30,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* Linux target op definitions for the RISC-V architecture.  */
-+ 
-+ class riscv_target : public linux_process_target
-+-- 
-+2.33.0
-+
-diff --git a/package/gdb/11.1/0007-fix-musl-build-on-riscv.patch b/package/gdb/11.1/0007-fix-musl-build-on-riscv.patch
-new file mode 100644
-index 0000000000..983f3b30d0
---- /dev/null
-+++ b/package/gdb/11.1/0007-fix-musl-build-on-riscv.patch
-@@ -0,0 +1,60 @@
-+From c3fdbc0a24c83246f951ba79c7167547da979ae5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 10 Nov 2021 23:14:54 +0100
-+Subject: [PATCH] fix musl build on riscv
-+
-+Fix the following build failure raised with musl:
-+
-+../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
-+../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
-+  140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
-+      |                   ^~~~~~~~~~
-+      |                   ELF_NGREG
-+
-+musl fixed the issue with
-+https://github.com/ifduyue/musl/commit/e5d2823631bbfebacf48e1a34ed28f28d7cb2570
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gdb/nat/riscv-linux-tdesc.c  | 5 +++++
-+ gdbserver/linux-riscv-low.cc | 5 +++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/gdb/nat/riscv-linux-tdesc.c b/gdb/nat/riscv-linux-tdesc.c
-+index 837b1707e0f..667c013006a 100644
-+--- a/gdb/nat/riscv-linux-tdesc.c
-++++ b/gdb/nat/riscv-linux-tdesc.c
-+@@ -31,6 +31,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* See nat/riscv-linux-tdesc.h.  */
-+ 
-+ struct riscv_gdbarch_features
-+diff --git a/gdbserver/linux-riscv-low.cc b/gdbserver/linux-riscv-low.cc
-+index 8bf97ea4aa3..1142dbc7b16 100644
-+--- a/gdbserver/linux-riscv-low.cc
-++++ b/gdbserver/linux-riscv-low.cc
-+@@ -30,6 +30,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* Linux target op definitions for the RISC-V architecture.  */
-+ 
-+ class riscv_target : public linux_process_target
-+-- 
-+2.33.0
-+
+diff --git a/Config.in b/Config.in
+index 3db2c8d..593859c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -432,9 +432,7 @@ config BR2_STRIP_strip
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the normal 'strip' command. This allows to save
+-	  space, mainly by removing debugging symbols. Debugging symbols
+-	  on the target are needed for native debugging, but not when
+-	  remote debugging is used.
++	  space, mainly by removing debugging symbols.
+ 
+ config BR2_STRIP_EXCLUDE_FILES
+ 	string "executables that should not be stripped"
+diff --git a/Makefile b/Makefile
+index 4062883..64cc8a0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -763,8 +763,6 @@ endif
+ ifneq ($(BR2_ENABLE_DEBUG):$(BR2_STRIP_strip),y:)
+ 	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
+ endif
+-	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+-	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
+ 
+ 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+ 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+diff --git a/fs/common.mk b/fs/common.mk
+index afab7b5..9675d02 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -171,6 +171,10 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 		--exclude=/$$(notdir $$(TARGET_DIR_WARNING_FILE)) \
+ 		$$(BASE_TARGET_DIR)/ \
+ 		$$(TARGET_DIR)
++ifeq ($$(BR2_STRIP_strip),y)
++	$$(STRIP_FIND_CMD) | xargs -0 $$(STRIPCMD) 2>/dev/null || true
++	$$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $$(STRIPCMD) $$(STRIP_STRIP_DEBUG) 2>/dev/null || true
++endif
+ 
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dae7a85..a03312d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -224,14 +224,9 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
+ TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ 
+-ifeq ($(BR2_STRIP_strip),y)
+ STRIP_STRIP_DEBUG := --strip-debug
+-TARGET_STRIP = $(TARGET_CROSS)strip
+-STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+-else
+ TARGET_STRIP = /bin/true
+-STRIPCMD = $(TARGET_STRIP)
+-endif
++STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+ INSTALL := $(shell which install || type -p install)
+ UNZIP := $(shell which unzip || type -p unzip) -q
+ 
 -- 
-2.33.0
+2.17.1
 
 _______________________________________________
 buildroot mailing list
