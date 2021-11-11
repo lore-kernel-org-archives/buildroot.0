@@ -2,57 +2,55 @@ Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E33D1C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 23:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D151FC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 23:05:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D8B8161452
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 23:05:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D8B8161452
+	by mail.kernel.org (Postfix) with ESMTPS id 79D416115A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 23:05:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 79D416115A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 752EE60B61;
-	Thu, 11 Nov 2021 23:05:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19DD160B95;
+	Thu, 11 Nov 2021 23:05:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dDLFtklZG3hU; Thu, 11 Nov 2021 23:05:06 +0000 (UTC)
+	with ESMTP id Jhg-cwqVDAGK; Thu, 11 Nov 2021 23:05:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8509607C1;
-	Thu, 11 Nov 2021 23:05:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C30551BF954
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D09660B71;
+	Thu, 11 Nov 2021 23:05:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D9B161BF9D1
  for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 23:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFC4F80F1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C92E0405B5
  for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 23:05:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FFunbokHU12Y for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6p7gfpaL9AJl for <buildroot@lists.busybox.net>;
  Thu, 11 Nov 2021 23:05:02 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9943480CA0
- for <buildroot@buildroot.org>; Thu, 11 Nov 2021 23:05:02 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 511EC404BE
+ for <buildroot@buildroot.org>; Thu, 11 Nov 2021 23:05:00 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id CCCC9100006;
- Thu, 11 Nov 2021 23:04:58 +0000 (UTC)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7D6CC200002;
+ Thu, 11 Nov 2021 23:04:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1mlJ7p-00030F-Jd; Fri, 12 Nov 2021 00:04:57 +0100
+ id 1mlJ7o-000307-Dr; Fri, 12 Nov 2021 00:04:56 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 00:04:53 +0100
-Message-Id: <20211111230455.11470-2-peter@korsgaard.com>
+Date: Fri, 12 Nov 2021 00:04:52 +0100
+Message-Id: <20211111230455.11470-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211111230455.11470-1-peter@korsgaard.com>
-References: <20211111230455.11470-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] configs/beagleboneai_defconfig: backport
- gcc >= 10 u-boot patch
+Subject: [Buildroot] [PATCH 1/2] configs/sheevaplug_defconfig: backport gcc
+ >= 10 u-boot patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,13 +62,12 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966041
+Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966307
 
 The old U-Boot version used does not build with hostcc >= 10.  Backport a
 patch fixing that issue.
@@ -78,14 +75,15 @@ patch fixing that issue.
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...e-redundant-YYLOC-global-declaration.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch
+ configs/sheevaplug_defconfig                  |  1 +
+ 2 files changed, 29 insertions(+)
+ create mode 100644 board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch
 
-diff --git a/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch b/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch
+diff --git a/board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch b/board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch
 new file mode 100644
 index 0000000000..c9d5d71ca1
 --- /dev/null
-+++ b/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch
++++ b/board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch
 @@ -0,0 +1,28 @@
 +From 018921ee79d3f30893614b3b2b63b588d8544f73 Mon Sep 17 00:00:00 2001
 +From: Peter Robinson <pbrobinson@gmail.com>
@@ -115,6 +113,18 @@ index 0000000000..c9d5d71ca1
 +-- 
 +2.20.1
 +
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 4c3bb21b4a..7f186df22c 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -3,6 +3,7 @@ BR2_arm=y
+ BR2_arm926t=y
+ 
+ # system
++BR2_GLOBAL_PATCH_DIR="board/sheevaplug/patches"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
 -- 
 2.20.1
 
