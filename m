@@ -2,70 +2,70 @@ Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4035C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:38:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B78BC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:56:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1C3AE61264
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:38:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1C3AE61264
+	by mail.kernel.org (Postfix) with ESMTPS id 7F5B861269
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:56:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7F5B861269
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5858403F3;
-	Thu, 11 Nov 2021 20:38:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1642E60B83;
+	Thu, 11 Nov 2021 20:56:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RD388YMYhFIJ; Thu, 11 Nov 2021 20:38:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8X9SD-z1zvuq; Thu, 11 Nov 2021 20:56:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB31940471;
-	Thu, 11 Nov 2021 20:38:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 052A21BF44A
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:38:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65DCA60B74;
+	Thu, 11 Nov 2021 20:56:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A3FC1BF44A
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 021B340565
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:38:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A5E481D02
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:56:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Pi1lgnWgfHE for <buildroot@lists.busybox.net>;
- Thu, 11 Nov 2021 20:38:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90C9A40413
- for <buildroot@buildroot.org>; Thu, 11 Nov 2021 20:38:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZHRLaMuUmQ8Z for <buildroot@lists.busybox.net>;
+ Thu, 11 Nov 2021 20:56:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1E86281CA0
+ for <buildroot@busybox.net>; Thu, 11 Nov 2021 20:56:12 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:2dfd:466c:d080:8051])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id E715F19F58D;
- Thu, 11 Nov 2021 21:38:13 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 21D9119F4F3;
+ Thu, 11 Nov 2021 21:56:05 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636663100;
- bh=oAL1BR4QEosCyeUs/gQ0EVycTrCsGd3vncF1IRDGFEQ=;
+ s=smtp-20201208; t=1636664169;
+ bh=bOxtdjIAjg2A4aaQMmwu82wZxM0HOiwc1ZgLQJIIj/k=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MSzgQKOLf5ASg+N5DPKndMKXqegxBOXBLBCm0x+PnZ52R4wQRgUHKUJqbZWWoZMMY
- G5DsYtQ0ssw9eoi/BauLIzoppmHgALK7uBLI2JHnt/v/pvNDrhwsHCE17PklCdCn+d
- C8OyVbKT6QOZouqKf6Ona/tuQMsrjuG1OUeJ17G+fF+3YQyNBEQn2IODp7Bo3oCzAs
- CovUP4ORTrJ7xlDn5YrMQNO6qFTA6/hvCcqJl81N4UiLWUGBG/pUbu9UCPktKoaqY3
- 6NDmoSrCZaRve1CfhS3l+5KXfevYQR2m88IRtal9A1QrGAGWz+c0y7If60ILFcT4dC
- ZOuzaMTyeU1ug==
+ b=rROEfNMDyYQKMrgyugbDwOemuONJ+7iwGkKvaPQLuHUmGdG7YV7QdJ/W7T+DnR4wV
+ CO4lYCBADW7Hz3VIKzLzU7G7NkIcc4KgpvwVlOdvUS45hXNtT3RKOBOwal4c56N4pK
+ 9b9Dt0pWyKsUvOjqegx+Rm8rB2OS22tuLaeEqOYU5+uldeB2z6hp8MC90Nys1iptgv
+ 07JGzVWLnYnnjGKSyHrTcZR53nscF2W/Hql0Ld7mSw2CFgsm9znYKOQ4dxajZVw2te
+ WAutQcVotp+StHriqCdwbKPWFpKCQkaZruQyWSHYQX8A0tUNhTLnTCB9CKvbcSzOUc
+ 76vVLhi9wgaAQ==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 11 Nov 2021 21:38:13 +0100
-Date: Thu, 11 Nov 2021 21:38:13 +0100
+ Thu, 11 Nov 2021 21:56:04 +0100
+Date: Thu, 11 Nov 2021 21:56:04 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20211111203813.GB2609@scaer>
-References: <20211109202921.2031664-1-bernd.kuhls@t-online.de>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20211111205604.GC2609@scaer>
+References: <20211110103107.421623-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211109202921.2031664-1-bernd.kuhls@t-online.de>
+In-Reply-To: <20211110103107.421623-1-francois.perrad@gadz.org>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/2] package/glmark2: drm-glesv2 needs libdrm
+Subject: Re: [Buildroot] [PATCH v2] package/luajit: fix luvi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,84 +77,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>, buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
-
-On 2021-11-09 21:29 +0100, Bernd Kuhls spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/58a/58a498fac83cbb55b252ab54cd8db04570bb5ec9/
+On 2021-11-10 11:31 +0100, Francois Perrad spake thusly:
+> luvi uses the cross bytecode generation of host-luajit
+> the bytecode format has 2 flavors, depending of GC64 option.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> since the commit https://github.com/LuaJIT/LuaJIT/commit/bd00094c3b50e193fb32aad79b7ea8ea6b78ed25
+> GC64 mode is enable by default on all 64bits platform.
+> 
+> with this patch, luajit and host-luajit are built with the same option,
+> so the bytecode generated by host-luajit is valid on luajit.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
-> re-sent deferred patch
-> http://patchwork.ozlabs.org/project/buildroot/patch/20200104193919.91589-1-bernd.kuhls@t-online.de/
+>  package/luajit/luajit.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
->  package/glmark2/Config.in  | 3 +++
->  package/glmark2/glmark2.mk | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-> index 40d0adcc8a..96b34f971a 100644
-> --- a/package/glmark2/Config.in
-> +++ b/package/glmark2/Config.in
-> @@ -7,7 +7,10 @@ config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2
->  	depends on BR2_PACKAGE_HAS_LIBEGL
->  	depends on BR2_PACKAGE_HAS_LIBGLES
->  	depends on BR2_PACKAGE_HAS_UDEV
-> +	# libpthread-stubs -> libdrm
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
-> +	select BR2_PACKAGE_LIBDRM
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index fbbd8ebc7..e93361ba3 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -26,8 +26,10 @@ endif
+>  # libraries are installed.
+>  ifeq ($(BR2_ARCH_IS_64),y)
+>  LUAJIT_HOST_CC = $(HOSTCC)
+> +LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_GC64
 
-Oh no no no no!
+As I explained in a previous review, this is not sufficient, because we
+currently still are allowed to create a configuration where the build
+machine is a 32-bit system. but the target is 64-bit. This is not
+supported by the luajit buildsystem, and is explictly documented.
 
-This means that, even if glmark2 is not enabled, then libdrm will
-forcibly be enabled in a configuration with libelg, libegls, and udev.
+This is partially covered but only for x86_64 where the condition in
+BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS conditions it to HOSTARCH=x86_64.
+But for Aarch64, this is not accounted for.
 
-This is not correct *at all*. And IIRC, we already fixed a similar case
-not so long ago... Ah, there it is:
+However, the BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS symbol is very unpleasant
+to read. We usually write it in a way that is much easier to read and to
+maintain; e.g. with the proper 64-bit condition added:
 
-    b80c488d04 package/kodi: fix selection of dependencies
+    config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+        bool
+        default y if BR2_arm || BR2_armeb || BR2_aarch64
+        default y if BR2_i386 || BR2_x86_64
+        default y if BR2_powerpc
+        default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT \
+                && !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+        # -m32 flag is used for 32bit builds and host-luajit has
+        # limited architecture support
+        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+        # Building for 64-bit target requires a 64-bit host
+        depends on !BR2_ARCH_IS_64 || BR_HOST_ARCH="x86_64"
 
-And now, I also notice that there is already such a bug in glmark2,
-where wayland protocols will also forcibly be enabled in a configuration
-with egl, gles, and wayland, even when glmark2 is not enabled.
-
-Globally, I think glmark2 needs a bit of refactoring: it is very unusual
-that the feature-set is before the main symbol. Usually, we have, in order:
-  - ARCH_SUPPORTS et al.
-  - main symbol
-  - if-block with all options.
-  - comment(s) about toolchain features et al.
-
-Could you look into that, and respin a full series that fixes all these
-issues in glmark2, and adds the missing dependencies, please?
+Can you please fix that?
 
 Regards,
 Yann E. MORIN.
 
->  config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GL
->  	bool
-> diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-> index 5c2dd06362..5ad3ea2cb4 100644
-> --- a/package/glmark2/glmark2.mk
-> +++ b/package/glmark2/glmark2.mk
-> @@ -11,7 +11,7 @@ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
->  GLMARK2_DEPENDENCIES = host-pkgconf jpeg libegl libpng
->  
->  ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2),y)
-> -GLMARK2_DEPENDENCIES += libgles udev
-> +GLMARK2_DEPENDENCIES += libdrm libgles udev
->  GLMARK2_FLAVORS += drm-glesv2
+>  else
+>  LUAJIT_HOST_CC = $(HOSTCC) -m32
+> +LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
 >  endif
 >  
+>  # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
 > -- 
-> 2.30.2
+> 2.32.0
 > 
 > _______________________________________________
 > buildroot mailing list
