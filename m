@@ -2,85 +2,85 @@ Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C19D6C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:04:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7301DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:05:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 13FEE61264
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:04:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 13FEE61264
+	by mail.kernel.org (Postfix) with ESMTPS id D7B45610A8
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 20:05:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D7B45610A8
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93DE7401FE;
-	Thu, 11 Nov 2021 20:04:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 823524059D;
+	Thu, 11 Nov 2021 20:05:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ngCB9craeZiP; Thu, 11 Nov 2021 20:04:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2mCu9YCHDXUl; Thu, 11 Nov 2021 20:05:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A073B40226;
-	Thu, 11 Nov 2021 20:04:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 555D01BF44A
+	by smtp4.osuosl.org (Postfix) with ESMTP id E372A4059A;
+	Thu, 11 Nov 2021 20:05:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FD271BF9D1
  for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 420E481CAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A1E8403EB
  for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 20:04:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZeU_M9aYHgUK for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0uXP5zl4omAD for <buildroot@lists.busybox.net>;
  Thu, 11 Nov 2021 20:04:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1879681BF5
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2022640226
  for <buildroot@buildroot.org>; Thu, 11 Nov 2021 20:04:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636661080;
- bh=pQkzhAdWzLrUnkq8u0EhFJLs3WlF9YnO/p3yqFgfbQE=;
+ s=badeba3b8450; t=1636661081;
+ bh=csysZjh9k/S6M9leELyS8UBbn/zUkW9b4Mxpa+PapYU=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=lV2dNrNDWg63/xidC0cNPWPFkoGm1TSO6CWjaMxg3Po79dInJFd8+4fveSgMlLsp5
- pRYvSJ2K9FQadF//zNM28LTm5D1m8abMPkbKNDYkRzr18ctgLrn09bALTMW+iSoTnE
- jeuCF3oVJepTSPF7HaqVTHtJ4a2h4Ss37fe7LEDQ=
+ b=l2NyWwHLPhFD8eJQSIlVf3+AFyUuLzoJdZ1uKazDBvwBy1VQT8NOAI3NrS6bQFjMi
+ ltSAnDHbm29g4s6FjVPRzW+aGQQQJLDfBBUZKWbW9OtDHnu/Xi3QxtaS8Wd8A0Yrty
+ nfwU36ux1UEzKQtoZs3PeUmaBB/C+ED62WCXdBoU=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.16]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MatRT-1mAHb9242F-00cQcm; Thu, 11
- Nov 2021 21:04:40 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMXQF-1n1xYE0N7v-00JXI8; Thu, 11
+ Nov 2021 21:04:41 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Thu, 11 Nov 2021 21:04:34 +0100
-Message-Id: <20211111200439.15379-2-ps.report@gmx.net>
+Date: Thu, 11 Nov 2021 21:04:36 +0100
+Message-Id: <20211111200439.15379-4-ps.report@gmx.net>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211111200439.15379-1-ps.report@gmx.net>
 References: <20211111200439.15379-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:uEi+xUvDaJaPhIkqvSpI32rjUCIP1nBmXyznaG1Ihpi460+9N80
- w1qSOykfxcilzYIHjdRG35FmN+7fqiND0KJTnKr/EkRKFHMWM+LWhPuAn5vm6Su3RUIaMpy
- LpTzVJaPVcq1JB9UcU0tvdm6zuKy1yeo0m9W7FIqVebO+DtSwAPs7ZzrKXC2x+1VcdeBKdX
- YfIy4mW3AEslipVIO04NQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kxNvmaCl+To=:0zZd1W1VQhdiPYO4uMZfrf
- 7Rd3h0MXrwOBYwk032nF3SJYKHvDvhIIjHHN1YH4Vlms0vgSsAM3RVNxEY6PBswEOMeQws//l
- ckdhAAWhuliq/ZHzDFngCKp9AoYJk6xS857GY1AqokvbzFJsPwocr2yuHAPDMNdA99Zb7PSrL
- X5zkkFPZokqtr5noo/XeEo+1tTzJlYsBrm1hhglALmFir83PlFVJT/T+InO1ijhNJl+JQDyd4
- MEAyp05VUaNzuPdf4wK6bTH0hoTgF9E5rbQTgBI0Mc+Lp066bTt8iqh/LRc5zvgqZBiqlcvR3
- 8ak6OyPgMlNRieIUsEfrNMSyYaBEZN0Y4rm5mWP8u7cv+oc8Cv6YUUAqv3coVA7qxbqC9zNsu
- KbzvbPaK8+DuX4v8udRY+XyJcU2117ij7zCvn2QGBCV2ZcLdCe2kaA+qWqM9F+dF9AduoIs3B
- fsxjM1gOoANfYls7FVQb1UYSnO/K10C/0TWKqTncZCgfStw8t/VSQ8RxsyEXvJptmSnylpJ/6
- BNs/3n1KpJmLhp5geTMtkLs0retOW178d7MhHPEamQcyNRDfBxcbgCb6P761tQBKTV54l3S6p
- vCHgCR+K/EglFEbWbGf58Xzdoq8nbHqxz3KroU1465e9qlleBGPCWxWhCs7g7CPbEUC7CcldR
- 49JFvtTbrCYMwgU/zRds1UB8B7Nj2gilFqPgDZ0FmOHXjbxtJ/ThjDl13nVT94INSxoqrpNKb
- OYA6f31z3mOcvNCgbaYJIkP3lvaimQoaGaHU9WK+NO7b/RLGcLEhrm7chXN1QcCee8m2dqJdP
- yp7SX5JS2H+fSq37OwlBcFYqzsDgjnS6cgYNif7/aa9wocwlsoWTaBAxDkLcbE4xcbLVtPNV4
- sIpXoqr0lgRskNwpLvlWvO/1uBiK7BcRetlVkHBpsQK8Jlo2wED5ydMVWyyTQ59qFDpT9PmJz
- E/+RidBKsSF4EqHhrwlz0OifNbg8xyiuM+T1085iVdyXSnUJo6Rd4Mnp1YgIWZ2FNqJbMM4aR
- WIstBrcVQ3Q9l+KVra/zaHNWMhJqo4HAQ2aBS67uV7Txv0qq24E9TnC1A3AaMOuFfoboXHogP
- RAiK+EA2+7FswU=
-Subject: [Buildroot] [PATCH/next v1 2/7] package/rpi-firmware: bump version
- to fa9a006
+X-Provags-ID: V03:K1:/ZkNF2IFJDeKUFzZ8X4k79g/1ApgUs+6fyljAyi1iCmYMEEOrou
+ hWcAzgBHyJcH6/nNHgqU1J9LXtuOrsExPZD/Kc6TvhhjwXpvXNFRCfUnXJKLazwkYbr6Bik
+ ZN2D2PAMu4bFh7BYLPWSiZ359CRPjUGBGKjhgve4cwg2BAQ+P+GTigJ51cblR5PrIpg+gcS
+ zyxiyDdKBNYevPNr1HYoA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UHUUQvGd050=:ox7TX+9ubv07V/PrV0ZT/N
+ fxs7bDUIYj5wwTLwWhvGoOPONM9X7GI3J22PwOK3mbeFH0IJXlLHLFouSXSdYvmnz0FbRzxR2
+ aQggARrE7UotNCMwtm8vh/DguXCHnhYXejr6OX23TiGJbjpdE0H+yi2+niC+k/rCfYjiE0e2G
+ C7GkkZvP6jXvl4F0F5MTK57k6mylBJJKYgx8y4MjOK1qeAgGLFZurrw09ZqgNwvkrxupsxUUY
+ xAxjqecgOGtPg31Vx6nwv6Mqz3QBtDzV95h/gj+PK6NoErtEen0rIfUqKZ6ZxRZsG+j9rALn/
+ intrfI08Pog+gHK5j4HemJFaf5xODXgPgG4dssw36LokvYmQzY6YyiqxXdP5RPJbSYYz+2tze
+ RqKOBoHzZQaOjEDL0Lwy2zpT9ZHrtr+zEdxtJL1kz1FOdQw+oMAOdNeH5N6Q0b49UpJz8oLVw
+ 4GJ34FA7wTM9K/A7Snogr51qob/eExc0k8JG7tA01s+qEUI8caBXpKuL+7A0YuhQ1ieDMlDKo
+ qn6ov2Ip8VKefI80fUJHuiuJv76L2HfIbhdftZkaRqHgdnE9wVb2DiA1GIh7zqIUjuHT1zOJV
+ 48Gc9gJ6m2vL+UF2npN70RELFGSXVPpRroE+RGnkx/IBeGfX3sMKQ8H417zvB5wWIr+CutasT
+ 969qXyr5Z/TrUxZhxUx2jE745Ocv8S7eal+slo5Wm0mG4bjjKMtwOv3AVQ/r60FTOVTOanjZP
+ 4ObJ0jaRSyXSKrdx88XDYSyY+jrxh1U4hO4LmwpUsp2RGBcV+hGVq3FLY+XyVNOnRI6+29OSQ
+ L4XIWFYhgBgZnjQIe4iuH2YBB5dXsbhy2++9bQ/9dGN7tfQAQzGT+7/P+MJ5HvJHgdJaDanhw
+ J3H5E+1dVuQlWpSvG7zpl0pncfLgxyn/FL1H2nktQ6BeFlkkMQ/6j4AhkIB4rOEDGkmoOi2Qq
+ M1y9m2AjjVNGHiQXGhzTMCqJIzdumHGLxXhuRfAMH+cG2dXpuJrzbBKLPXSe2FSV46+2z6r8O
+ d0I091hG3tk8Do0eg/nMxDuZpYR020W8scb3lSh6/2hJGVMpgncytcKXj83ZSW/ry8YelL9WD
+ PjAjC/X1Yy3JH8=
+Subject: [Buildroot] [PATCH/next v1 4/7] package/rpi-bt-firmware: bump
+ version to 3888ba2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,36 +100,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog (since ):
+Changelog (since 883b726):
+
+  - 3e020f7 Add 43436S firmware
+            Future Zero 2 W boards will have an alternative version of 43436
+            that should have different firmware, named brcmfmac43436s-sdio.
+
+  - 3888ba2 Merge pull request #18 from HiassofT/43436S
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 0ff7a73a37..7cbfd1b249 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+index 3f37d964d0..7e60aa4632 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  80af5efb51677edb7af6746a553dc2d8ad3f532ff44e4b7263f1e12d4bf72ffd  rpi-firmware-2ef3800b1b71c0e30c2a61ecad6e007ae96ea342.tar.gz
-+sha256  a079a31fc80a23421589edcacef94faa713b12d3e77b92710ae2594c8d549477  rpi-firmware-fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25.tar.gz
- sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 3a4741a0ff..5e8b0379ba 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+-sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-bt-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
++sha256  9bd61431d42322eb0610bd7eed218da255c4472efc203be4332a0872bb562ade  rpi-bt-firmware-3888ba29898bb3f056d5f1eb283cb8de4c533bef.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index 13358b4fda..8d658ce435 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 2ef3800b1b71c0e30c2a61ecad6e007ae96ea342
-+RPI_FIRMWARE_VERSION = fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_BT_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
++RPI_BT_FIRMWARE_VERSION = 3888ba29898bb3f056d5f1eb283cb8de4c533bef
+ RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
 -- 
 2.33.1
 
