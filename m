@@ -2,70 +2,81 @@ Return-Path: <SRS0=/juA=P6=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 989A0C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 14:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E054AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 14:39:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DF75C61183
-	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 14:28:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DF75C61183
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 0741F6115A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Nov 2021 14:39:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0741F6115A
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=cato-gmbh.de
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91492404ED;
-	Thu, 11 Nov 2021 14:28:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 965134021A;
+	Thu, 11 Nov 2021 14:39:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OKRKkpl_NEit; Thu, 11 Nov 2021 14:28:28 +0000 (UTC)
+	with ESMTP id mvZkiC2mBRo2; Thu, 11 Nov 2021 14:39:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03BCF40439;
-	Thu, 11 Nov 2021 14:28:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 641F61BF288
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 14:28:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F39F640213;
+	Thu, 11 Nov 2021 14:39:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 252141BF288
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 14:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 536AD600CB
- for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 14:28:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 147BC40240
+ for <buildroot@lists.busybox.net>; Thu, 11 Nov 2021 14:39:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ltaDHulv2FVc for <buildroot@lists.busybox.net>;
- Thu, 11 Nov 2021 14:28:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 244E1606D9
- for <buildroot@buildroot.org>; Thu, 11 Nov 2021 14:28:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2dfd:466c:d080:8051])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8F4AE19F595;
- Thu, 11 Nov 2021 15:28:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636640901;
- bh=yfQ0XQ+0nk3kK0ApxXruUWyTSsd0P/IT6Zwklky2tpI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RK6Iy4v6GF3rTCsoZi54FHSwQSk6knbZ25XIXbmwcFSDXSa0bQgZOm5KcpoWJQaMx
- VWYlU26lBJpYdJ7j8rKT5aSKIBTi8Zzj6V+nBIbM+wsB44NCheL+Lh0t+JRmzY9N7B
- tpCA1PnxWCjrxMJtX8yKLY5WIktxNEhzh6plIGcj6JG2QnHwXgZtBg0AkeLghdhxG6
- db53qyGK0MGWe3VxAWDmVgzh00gedfXypADerKJ/ZKlFZCOvQiK1f0J7FlE1qgroeg
- 7euGmZo9sae4Z/hkR6ykXiKCEhSgyD36la0/Xi9KkfYSZ4pC0bmkyXegrWgwQeO1BE
- JyJPcUtWXakFw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 11 Nov 2021 15:28:12 +0100
-Date: Thu, 11 Nov 2021 15:28:12 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: David Laight <David.Laight@ACULAB.COM>
-Message-ID: <20211111142812.GA2609@scaer>
-References: <5cd31e7e638246aeb7321933b088a743@AcuMS.aculab.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id olRqTm3p8VKh for <buildroot@lists.busybox.net>;
+ Thu, 11 Nov 2021 14:39:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 902D940172
+ for <buildroot@buildroot.org>; Thu, 11 Nov 2021 14:39:35 +0000 (UTC)
+Received: from winhexfeeu2.win.mail ([10.72.16.11]) by mrieue.server.lan
+ (mrieue102 [172.19.220.27]) with ESMTPS (Nemesis) id 0LsjzR-1ma4Ka2ioj-012Hlc
+ for <buildroot@buildroot.org>; Thu, 11 Nov 2021 15:39:33 +0100
+Received: from WINHEXBEEU126.win.mail (10.72.16.52) by WINHEXBEEU132.win.mail
+ (10.72.16.55) with Microsoft SMTP Server (TLS) id 15.0.1497.26;
+ Thu, 11 Nov 2021 15:39:00 +0100
+Received: from WINHEXBEEU126.win.mail ([fe80::1b9:abf1:114a:db9f]) by
+ WINHEXBEEU126.win.mail ([fe80::1b9:abf1:114a:db9f%13]) with mapi id
+ 15.00.1497.026; Thu, 11 Nov 2021 15:39:00 +0100
+From: Anton Kornilevsky <kornilevsky@cato-gmbh.de>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Adding support to a variant of an already supported MCU
+Thread-Index: AdfXCdrmZcprO2aNScimvjUr0//JaA==
+Date: Thu, 11 Nov 2021 14:39:00 +0000
+Message-ID: <c73dab514fed4b4caa7ed80739fcc029@WINHEXBEEU126.win.mail>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-bromium-msgid: 51f3561a-db13-44f4-92db-ef680f81b581
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [37.24.110.28]
+x-1and1-spam-score: 1/100
+x-1and1-spam-level: None
+x-1and1-expurgate-category: clean
+x-purgate-id: 150684::1636641540-00000007-738A3C90/0/0
+x-provags-id: V02::Ckv9jhirV7FMXHGUqtaaeOq7TbkfQxI/rFHIqyCmWnsS2
+ zUKZIX1faDfWLWtTQnt40ciuM6TydbcvZn3MxJrJnTpl+KyBJ5
+ +u7L9ive3M8cF36L6MRhKtS2frH8jVk7b+2GQMF7xN5/TRk2g5
+ pzAiEim/RU1hd5K2dNudeWl+IywnRaNBB+iGVW+4po3txbS
+x-routing-0be3562e-11e2-4fc7-b5a6-c7ea0e0bf210: 1.0.0.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <5cd31e7e638246aeb7321933b088a743@AcuMS.aculab.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] Add 'IRIX mode' to top.
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5eFgb3i0Y1Q=:F1M89YO89UOM8/cYXDirdb
+ ouPMxuT7UIufZOskni84NuMepBzlArQ436JLbiI+7fy/0g+wmvxFwxPBEOBef1UV1l20K7gWE
+ mLvV6Ur7uHNf7fy+6aV2pZ9F1hDkW3O+UIlwlG7sOAQppoxPf/lW8MULXaiYQPeXhGTDITBWN
+ aPZHj14A07L9oC9Q6s8JfWSQD5kSvbz35dEDTfcsFFftT33owcQu8ff8Y8ABYk/zwVE6ema6h
+ jZGLIOOImJ/5PN2t/gea6Ih+S+PDVgl2i2vi/wwJlsV3LFKF3lIG48kirrb84b9g0Emq9c+jm
+ XOpnb1oyjuYCNqxAutf30Tn1eKFmGdys6OJz13zWYjnENHhWNIczJWSXU43dhjfJBBl/e8ElD
+ aeV1b/qx7NwN6mKzI0BhmT5jPFifl57oFPjv+bZQ=
+Subject: [Buildroot] Adding support to a variant of an already supported MCU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +88,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "'vda.linux@googlemail.com'" <vda.linux@googlemail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4542181262710764025=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-David, All,
+--===============4542181262710764025==
+Content-Language: de-DE
+Content-Type: multipart/alternative;
+	boundary="_000_c73dab514fed4b4caa7ed80739fcc029WINHEXBEEU126winmail_"
 
-On 2021-11-11 12:28 +0000, David Laight spake thusly:
-> Add 'IRIX mode' to top.
+--_000_c73dab514fed4b4caa7ed80739fcc029WINHEXBEEU126winmail_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your contribution.
+Hello,
 
-So, this does not look like it is a patch that was aimed at Buildroot,
-but maybe at busybox? You should respin there with the proper list
-address:
+I have been tasked with rebuilding a linux kernal for a board that is using=
+ the AT91SAM9261 MCU.
 
-    busybox@busybox.net
+The buildroot support for this MCU has been dropped sometimes back in 2015,=
+ and I was unable to rebuild the kernal using the last supported version of=
+ buildroot, due to an error related to the integrity of the zipfile contain=
+ing the sam-ba utility. I seems like the older sam-ba utility versions are =
+no longer to be found on microchips servers.
 
-If you did intent to send it to Buildroot, then first, it is incorrectly
-formatted, and second, in Buildroot we usually do not take a feature
-patch, unless under very strict conditions (e.g. it is badly needed and
-is an upstream backport).
+How would one go about adding support to a variant of an MCU that is alread=
+y supported by Buildroot? Is this even possible?
 
-Regards,
-Yann E. MORIN.
+Any help will be greatly appriciated.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards
+Anton Kornilevsky
+
+
+--_000_c73dab514fed4b4caa7ed80739fcc029WINHEXBEEU126winmail_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.E-MailFormatvorlage17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-GB" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hello,<br>
+<br>
+I have been tasked with rebuilding a linux kernal for a board that is using=
+ the AT91SAM9261 MCU.
+<br>
+<br>
+The buildroot support for this MCU has been dropped sometimes back in 2015,=
+ and I was unable to rebuild the kernal using the last supported version of=
+ buildroot, due to an error related to the integrity of the zipfile contain=
+ing the sam-ba utility. I seems
+ like the older sam-ba utility versions are no longer to be found on microc=
+hips servers.
+<br>
+<br>
+How would one go about adding support to a variant of an MCU that is alread=
+y supported by Buildroot? Is this even possible? &nbsp;<br>
+<br>
+Any help will be greatly appriciated. <br>
+<br>
+Best regards<br>
+Anton Kornilevsky<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_c73dab514fed4b4caa7ed80739fcc029WINHEXBEEU126winmail_--
+
+--===============4542181262710764025==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4542181262710764025==--
