@@ -2,52 +2,52 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E0F8C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61EB4C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1859360F39
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1859360F39
+	by mail.kernel.org (Postfix) with ESMTPS id 238B160F39
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 238B160F39
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB31480C7C;
-	Fri, 12 Nov 2021 22:13:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F05C580C7C;
+	Fri, 12 Nov 2021 22:13:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 23dp-w7LIb-p; Fri, 12 Nov 2021 22:13:41 +0000 (UTC)
+	with ESMTP id WEO6eaBLpzJx; Fri, 12 Nov 2021 22:13:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4016680C0B;
-	Fri, 12 Nov 2021 22:13:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFC701C1148
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00D9180E87;
+	Fri, 12 Nov 2021 22:13:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9743C1BF3A3
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C40446072D
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B9DE82779
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5J0dkhZxHm7F for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id szZahIoxCH_t for <buildroot@lists.busybox.net>;
  Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 149416072E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32C44827B1
  for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 85E658C5F3; Fri, 12 Nov 2021 22:08:33 +0000 (UTC)
+ id 9B14D8C5F2; Fri, 12 Nov 2021 22:08:33 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 23:09:54 +0100
+Date: Fri, 12 Nov 2021 23:09:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d5ef29e9953ccff61db1e2818e2e7ef408cbd5ac
-X-Git-Newrev: b88c545efd79ea6e287884213ed6cdab1f670e7a
+X-Git-Oldrev: 6983c511f9e0ddbefc9d46bdef09f0d4d1a6bb52
+X-Git-Newrev: 19575e9e9e0a9cdf900f95a56e00654fd77d1ca0
 X-Patchwork-Hint: ignore
-Message-Id: <20211112220833.85E658C5F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rpi-wifi-firmware:
- bump version to 3888ba2
+Message-Id: <20211112220833.9B14D8C5F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/raspberrypi: add
+ Raspberry Pi Zero 2 W
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,200 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b88c545efd79ea6e287884213ed6cdab1f670e7a
+commit: https://git.buildroot.net/buildroot/commit/?id=19575e9e9e0a9cdf900f95a56e00654fd77d1ca0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog (since 883b726):
+The Raspberry-Pi Zero 2 W is an affordable single board computer. It is
+a more powerful drop-in replacement for the Raspberry Pi Zero W.
 
-  - 3e020f7 Add 43436S firmware
-            Future Zero 2 W boards will have an alternative version of 43436
-            that should have different firmware, named brcmfmac43436s-sdio.
+The board incorporates an Raspberry-Pi RP3A0 system-in-package (SiP) with
+a Broadcom BCM2710A1 and 512MB LPDDR2 SDRAM. The CPU is a quad-core 1Ghz
+64-bit Arm Cortex-A53. As for other Raspberry-Pis it also provides
+2.4GHz 802.11 b/g/n Wifi, Bluetooth 4.2 and BLE.
 
-  - 3888ba2 Merge pull request #18 from HiassofT/43436S
+The BCM2710 cpu is similar to the Raspberry-Pi 3, it uses the same
+kernel configuration as the Raspberry-Pi 2 and 3.
 
+Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+[Based on https://patchwork.ozlabs.org/project/buildroot/patch/20211030213600.3445223-3-julien.grossholtz@openest.io/
+  - reformat genimage-raspberrypizero2w.cfg according to the beautify patch-set
+  - update kernel version to 9878a11 (5.10.78)
+  - use new bcm2710-rpi-zero-2-w dtb
+  - update commit log about kernel config (RPi2/3)
+  - add DEVELOPERS entries for Julien
+]
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
- package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                       |  2 ++
+ board/raspberrypi/config_zero2w.txt              | 29 +++++++++++++++++++
+ board/raspberrypi/genimage-raspberrypizero2w.cfg | 32 +++++++++++++++++++++
+ board/raspberrypi/readme.txt                     |  5 ++++
+ board/raspberrypizero2w                          |  1 +
+ configs/raspberrypizero2w_defconfig              | 36 ++++++++++++++++++++++++
+ 6 files changed, 105 insertions(+)
 
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-index 3bd62306eb..09cd197dd8 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-wifi-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
-+sha256  9bd61431d42322eb0610bd7eed218da255c4472efc203be4332a0872bb562ade  rpi-wifi-firmware-3888ba29898bb3f056d5f1eb283cb8de4c533bef.tar.gz
- sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-index 582e0aa8f5..a467f2c7b4 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 70262eac8c..6f812eb564 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1512,7 +1512,9 @@ N:	Julien Corjon <corjon.j@ecagroup.com>
+ F:	package/qt5/
  
--RPI_WIFI_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
-+RPI_WIFI_FIRMWARE_VERSION = 3888ba29898bb3f056d5f1eb283cb8de4c533bef
- RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
- RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
- RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+ N:	Julien Grossholtz <julien.grossholtz@openest.io>
++F:	board/raspberrypi/
+ F:	board/technologic/ts7680/
++F:	configs/raspberrypizero2w_defconfig
+ F:	configs/ts7680_defconfig
+ F:	package/paho-mqtt-c
+ 
+diff --git a/board/raspberrypi/config_zero2w.txt b/board/raspberrypi/config_zero2w.txt
+new file mode 100644
+index 0000000000..9e6b7f5ccf
+--- /dev/null
++++ b/board/raspberrypi/config_zero2w.txt
+@@ -0,0 +1,29 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start.elf
++fixup_file=fixup.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B ,zero W and zero 2) ttyAMA0 serial console
++dtoverlay=miniuart-bt
++
++# enable autoprobing of Bluetooth driver without need of hciattach/btattach
++dtoverlay=krnbt=on
+diff --git a/board/raspberrypi/genimage-raspberrypizero2w.cfg b/board/raspberrypi/genimage-raspberrypizero2w.cfg
+new file mode 100644
+index 0000000000..b510fea563
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypizero2w.cfg
+@@ -0,0 +1,32 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"bcm2710-rpi-zero-2-w.dtb",
++			"rpi-firmware/bootcode.bin",
++			"rpi-firmware/cmdline.txt",
++			"rpi-firmware/config.txt",
++			"rpi-firmware/fixup.dat",
++			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
++			"zImage"
++		}
++	}
++
++	size = 32M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index d20096b5e6..c81fd801ae 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -28,6 +28,10 @@ For model Zero (model A+ in smaller form factor):
+ 
+   $ make raspberrypi0_defconfig
+ 
++For model Zero 2 W (model B3 in smaller form factor):
++
++  $ make raspberrypizero2w_defconfig
++
+ For model 2 B:
+ 
+   $ make raspberrypi2_defconfig
+@@ -79,6 +83,7 @@ After building, you should obtain this tree:
+     +-- bcm2708-rpi-cm.dtb          [1]
+     +-- bcm2708-rpi-zero.dtb        [1]
+     +-- bcm2708-rpi-zero-w.dtb      [1]
++    +-- bcm2710-rpi-zero-2-w.dtb    [1]
+     +-- bcm2709-rpi-2-b.dtb         [1]
+     +-- bcm2710-rpi-3-b.dtb         [1]
+     +-- bcm2710-rpi-3-b-plus.dtb    [1]
+diff --git a/board/raspberrypizero2w b/board/raspberrypizero2w
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypizero2w
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
+new file mode 100644
+index 0000000000..ddd6b97b06
+--- /dev/null
++++ b/configs/raspberrypizero2w_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++# Linux headers same as kernel, 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9878a118cbdb7779fd15caa45915d22bff381ba3)/linux-9878a118cbdb7779fd15caa45915d22bff381ba3.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-zero-2-w"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypizero2w/config_zero2w.txt"
++
++# MicroSD images generation tools
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w/post-image.sh"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
