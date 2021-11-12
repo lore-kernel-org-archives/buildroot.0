@@ -2,52 +2,51 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3159C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F352BC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id AA8CE60F45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AA8CE60F45
+	by mail.kernel.org (Postfix) with ESMTPS id 839AD60F6B
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 839AD60F6B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75ED140628;
-	Fri, 12 Nov 2021 22:40:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BD7E40636;
+	Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kVm23B5uPIeR; Fri, 12 Nov 2021 22:40:22 +0000 (UTC)
+	with ESMTP id tWAbelkmyjUF; Fri, 12 Nov 2021 22:40:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBDB140625;
-	Fri, 12 Nov 2021 22:40:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B54EF1C1148
+	by smtp4.osuosl.org (Postfix) with ESMTP id 711FF40606;
+	Fri, 12 Nov 2021 22:40:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BBA891C115D
  for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B256640627
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5CE6404CB
  for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ySo4C0o9ngu for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7kO9FskGl_2T for <buildroot@lists.busybox.net>;
  Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8EEA40606
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB9D3401F7
  for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 4A2188C967; Fri, 12 Nov 2021 22:36:05 +0000 (UTC)
+ id 6C6278C966; Fri, 12 Nov 2021 22:36:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 23:23:44 +0100
+Date: Fri, 12 Nov 2021 23:26:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4427b298396b8bf1190b3b1ea4ceacb37b05aaa2
-X-Git-Newrev: 1477b60d4ef8b653493132c2a2edf48f26426e55
+X-Git-Oldrev: bd4f70b185503d9d04c1393be67236a7f6735cf7
+X-Git-Newrev: d4e6e1b53b07b05d51ebfb70979608c144ac155a
 X-Patchwork-Hint: ignore
-Message-Id: <20211112223605.4A2188C967@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_luvi: switch to
- armv5 to boot with rng support enabled
+Message-Id: <20211112223605.6C6278C966@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: disable 64 bit GC objects
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,54 +59,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8814241184446848677=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8814241184446848677==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1477b60d4ef8b653493132c2a2edf48f26426e55
+commit: https://git.buildroot.net/buildroot/commit/?id=d4e6e1b53b07b05d51ebfb70979608c144ac155a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the commit replacing moonjit by luajit [1] luvi doesn't work without
-rng support enabled.
+Luvi uses the cross bytecode generation of host-luajit
+the bytecode format has 2 flavors, depending of GC64 option.
 
-Switch to armv5 to use virtio-rng-pci on the qemu command line [2].
+Since the commit https://github.com/LuaJIT/LuaJIT/commit/bd00094c3b50e193fb32aad79b7ea8ea6b78ed25
+GC64 mode is enable by default on all 64bits platform.
 
-[1] 9450b53c8e06f1b5a75840b82c0f4663a5d75c45
-[2] https://git.buildroot.net/buildroot/tree/support/testing/infra/emulator.py?h=2021.08.1
+With this patch, luajit and host-luajit are built with the same option,
+so the bytecode generated by host-luajit is valid on luajit.
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Romain:
+  - update commit title
+  - add a comment about missing LUAJIT_ENABLE_GC64]
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Jörg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_luvi.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luajit/luajit.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/tests/package/test_luvi.py b/support/testing/tests/package/test_luvi.py
-index a85a6f4d27..eb15ad31b5 100644
---- a/support/testing/tests/package/test_luvi.py
-+++ b/support/testing/tests/package/test_luvi.py
-@@ -17,7 +17,7 @@ class TestLuvi(infra.basetest.BRTest):
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index fbbd8ebc70..89b164c96d 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -26,8 +26,10 @@ endif
+ # libraries are installed.
+ ifeq ($(BR2_ARCH_IS_64),y)
+ LUAJIT_HOST_CC = $(HOSTCC)
++# There is no LUAJIT_ENABLE_GC64 option.
+ else
+ LUAJIT_HOST_CC = $(HOSTCC) -m32
++LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
+ endif
  
-     def login(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv7",
-+        self.emulator.boot(arch="armv5",
-                            kernel="builtin",
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
-
---===============8814241184446848677==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8814241184446848677==--
