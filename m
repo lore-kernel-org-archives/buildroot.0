@@ -4,88 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4B6EC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 13:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7651EC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5949D40130;
-	Mon,  6 Dec 2021 13:20:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E41E94048D;
+	Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MWqj4xWP999d; Mon,  6 Dec 2021 13:20:57 +0000 (UTC)
+	with ESMTP id 2xCg19E2XaMk; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C4C440190;
-	Mon,  6 Dec 2021 13:20:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE5481BF2E5
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 13:20:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E17040124;
+	Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CB6331BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE01082572
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 13:20:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE29860D64
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 59paLd9LhNL5 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 13:20:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 846AD82410
- for <buildroot@busybox.net>; Mon,  6 Dec 2021 13:20:52 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id e3so42942517edu.4
- for <buildroot@busybox.net>; Mon, 06 Dec 2021 05:20:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=X5pwvogyXkGALodYWAJNsXoJSBw4unFlhJHtvAK3fr0=;
- b=JQ1SNlHp2xHKtBOfyyzWfoy2lXo01/KBKNIT8wIlaf0FuSWCLUZ4nJRrMeBZz6kZIj
- 7+k1T9lULjbNdjXc0i6YxKq/7VqsXb6xMNdNjZPpDWmtNcqGbWSMmFyD6cnZY3RylJpe
- bIKJqz8yTexzsgq+lTdWQUBG6TGQy209WoAKyQlQypuhjkwUI1xvmSSLumIlNEE433Gn
- rq/jghm3WadPtOxdliXyrZRkHNd8t8Iz1MkrhImEVV0sFCsOV4NER6XefUZtKnxe8Aij
- +0N8PRPyJph4voA7zzYNh6ZH6x0wouAXMGu44Q2oI5R9AUTr9MqST2bRLjFcJQNkQnSy
- kkDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=X5pwvogyXkGALodYWAJNsXoJSBw4unFlhJHtvAK3fr0=;
- b=vG1mMQWPVo9bjC+BaXZ+T08C7dSqlHHw3KxQFUh3/11Q21WymUt1I8yWq1cF+mpT7j
- qvbKP6TcdGEtJ8934YHrx0oDcJUqv4RG5ZCJEQfttcYzw5J109vC3G90nplG1AScurJp
- B1DO1KDnYUzy3mtPMsxkBdoXxa68AU4mYEROoNC7T3qcb/UYT+S4HMSOks8ut60ONhgK
- rd3hpYFxDG6XtGTfnAqz5KyZFjq+d3wXIUT6dnwA7qIBaAzQjQHohToSWLs9N2UsQhNa
- FBFf2vkIqfOuysh8OE8EEkzGq/yx5+2v5qo1RLrdqb/3qSSZuR2vKhqEZvYgrx3FRsIx
- tDFA==
-X-Gm-Message-State: AOAM531pbHbudTaEYeEwaR/x5cNgiRVkvjGBaZTMoOCE+IZ63KDboOit
- r1JjfFcU67y2Ss0Pb1oZRyzpAA==
-X-Google-Smtp-Source: ABdhPJzwYIRdjFyL1Cbjo4BIIgI8iYVMR87ROETDHob1DLLQ0ebzWFOKE5lnoFf1N4YxPmR1HobtDQ==
-X-Received: by 2002:a17:906:f6c2:: with SMTP id
- jo2mr44731098ejb.496.1638796850559; 
- Mon, 06 Dec 2021 05:20:50 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id og38sm6688957ejc.5.2021.12.06.05.20.49
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 06 Dec 2021 05:20:50 -0800 (PST)
-Message-ID: <760f07ee-35ec-090e-237a-9f1501f0ff93@mind.be>
-Date: Mon, 6 Dec 2021 14:20:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: Guillaume Bres <guillaume.bressaix@gmail.com>
-References: <20211205204720.2831-1-guillaume.bressaix@gmail.com>
- <1e21be4a-2465-e5c9-f775-0430cd3b0cf1@mind.be>
- <CAJe0E3fN-kd=q0wus32=XSdZW5i=PPvSJ1Kaxw=KA_THrAWFRA@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CAJe0E3fN-kd=q0wus32=XSdZW5i=PPvSJ1Kaxw=KA_THrAWFRA@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-pybind: fix upgrade to
- version 2.6.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e8P12N_nDx3g for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 242A560D60
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B42E781503; Mon,  6 Dec 2021 18:07:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 12 Nov 2021 23:09:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d5ef29e9953ccff61db1e2818e2e7ef408cbd5ac
+X-Git-Newrev: b88c545efd79ea6e287884213ed6cdab1f670e7a
+X-Patchwork-Hint: ignore
+Message-Id: <20211206180736.B42E781503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-wifi-firmware: bump version to
+ 3888ba2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,138 +53,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNi8xMi8yMDIxIDEzOjM5LCBHdWlsbGF1bWUgQnJlcyB3cm90ZToKPiBBcm5vdXQsCj4g
-dGhhbmtzIGZvciB0aGUgcXVpY2sgcmV2aWV3Cj4gCj4gID5OaXRwaWNrOiB0byBtYWtlIGl0IGFw
-cGVhciB3aXRoIHRoZSBmaXhlcyB0YWcgaW4gcGF0Y2h3b3JrIG9yIGluIHRoZSBzdW1tYXJ5Cj4g
-ID50aGF0IFBldGVyIG1ha2VzLCB5b3UgaGF2ZSB0byBmb3JtYXQgaXQgbGlrZSB0aGlzOgo+IHRo
-YW5rcywgbmV2ZXIgZG9uZSB0aGF0IGJlZm9yZSwgSSB3aWxsIGNvcnJlY3QgdGhhdCBpbiBhIFYy
-Cj4gCj4gID5JIGRvbid0IHNlZSBDTUFLRV9FTlYgYW55d2hlcmUgaW4gQnVpbGRyb290LCBvciBp
-biB0aGlzIHBhdGNoLgo+IEkganVzdCBtZWFudCB0aGXCoGdlbmVyYWwgY21ha2UgZW52LiBJIHdp
-bGwgY29ycmVjdC9pbXByb3ZlIG15IGV4cGxhbmF0aW9ucyBpbiBhIFYyLAo+IGVzcGVjaWFsbHkg
-dGhvc2UsIGJlY2F1c2UgdGhleSBhcmUgdG8gcmVtYWluIHZpc2libGUgdG8gY2xhcmlmeSB0aGlu
-Z3MgaW4gY2FzZSAKPiBvZiBmdXR1cmUgcHJvYmxlbXMuCj4gCj4gID7CoCBUaGlzIGlzIHN0aWxs
-IGxvb2tpbmcgZmFpcmx5IHdlaXJkIHRvIG1lLi4uCj4gID5BbHNvLCBJIGRvbid0IHRoaW5rIHRo
-ZXJlJ3MgYW55IHdheSB0byB0ZWxsIENNYWtlIGFib3V0ICJhbGwgQlIgdmFyaWFibGVzIgo+ICA+
-b3RoZXIgdGhhbiBwYXNzaW5nIGEgdG9vbGNoYWluZmlsZSAod2l0aCAtRENNQUtFX1RPT0xDSEFJ
-Tl9GSUxFPS4uLikuIEFyZSB5b3UKPiAgPnN1cmUgdGhhdCBpdCdzIHJlYWxseSBidWlsZGluZyBj
-b3JyZWN0bHkgZm9yIHRoZSB0YXJnZXQ/Cj4gdGhlIHBhY2thZ2UgaXPCoGJyb2tlbiwgaXQgcHV0
-wqBvbiBob2xkIGZvciBhYm91dCAzIHllYXJzIG5vdywgc29tZSAKPiBpbnRlcmVzdGluZ8KgY29u
-dHJpYnV0aW9ucyBJIHdvdWxkIGxpa2UgdG8gc3VibWl0LiBJdCB3b3VsZCBiZSBuaWNlIHRvIGZp
-eCBpdC4KPiAKPiBZZXN0ZXJkYXkgeW91IGV4cGxhaW5lZCB0aGUgcGtnIG5hbWUgYW5kIGJ1aWxk
-IGluZnJhc3RydWN0dXJlIGFyZSB0b3RhbCAKPiBkaWZmZXJlbnQgdGhpbmdzIGFuZCB3ZSBhZ3Jl
-ZWQgdG8gY29udmVydCB0byBhIGNtYWtlIHBhY2thZ2UuCj4gSW4gdGhlIG1lYW50aW1lLCBJIHdh
-cyBleHBsb3JpbmcgYm90aCBvcHRpb25zLCB3aXRoIG15IGdvYWwgYmVpbmcgYWJsZSB0byAKPiBw
-cm92aWRlIHRhcmdldMKgKyBzdGFnaW5nwqArIGhvc3QgKGJhc2ljYWxseSBhbGwgMykgY29tYmlu
-YXRpb25zLgo+IAo+IEkgZGVjaWRlZCB0byBrZWVwIGl0IGFzIGEgcHl0aG9uLXBrZyBhbmQgc3Vi
-bWl0IHRoaXMgY29udGVudCwgaW4gc3BpdGUgb2Ygb3VyIAo+IGNvbnZlcnNhdGlvbiwgYXMgSSBy
-YW4gaW50byB0aGlzIGZpeCB1bmV4cGVjdGVkbHkuCj4gSSBhY3R1YWxseSB3b3JrcyAodGVzdGVk
-IG9uIDIgcGxhdGZvcm1zKSwgdGhlIGludHJpbnNpYyBidWlsZCBmYWlsdXJlIGlzIGZpeGVkLgo+
-IAo+IFdpdGggdGhlIGNtYWtlLXBhY2thZ2Ugb3B0aW9uLCB0aGF0wqBJIGFsc28gaW5xdWlyZWQg
-aW50ZW5zaXZlbHksIEkgbmV2ZXIgZ2V0IGEgCj4gc3RhZ2luZ8KgKyB0YXJnZXQgaW5zdGFsbCwg
-YnVpbGQgZmFpbHMuCj4gV2l0aCB0aGlzIG9wdGlvbiwgYWxsIGNvbWJpbmF0aW9ucyBwYXNzLgoK
-ICBPSywgZXhjZWxsZW50LCB0aGVuIHRoZSBjdXJyZW50IHBhdGNoIGlzIGdvb2QgZW5vdWdoLiBZ
-b3UncmUgb2YgY291cnNlIHdlbGNvbWUgCnRvIHN1Ym1pdCBhIHYyIHdpdGggZml4ZWQgY29tbWl0
-IG1lc3NhZ2UgYW5kIGNvbW1lbnRzLgoKCj4gID5zdXJlIHRoYXQgaXQncyByZWFsbHkgYnVpbGRp
-bmcgY29ycmVjdGx5IGZvciB0aGUgdGFyZ2V0Pwo+IE15IG5leHQgc3VibWlzc2lvbiBpcyBzY2lw
-eSBhbmQgaXQgcmVsaWVzIG9uIHRoZSBob3N0LSB2ZXJzaW9uIG9mIHRoaXMgcGtnIChub3cgCj4g
-c3VwcG9zZWRseSAyLjguMSBpZiB5b3UgbWVyZ2UgcGF0Y2ggIzIpLgo+IEFuZCBJIGp1c3QgcmVk
-aWQgYSB0ZXN0IG9mIHRoZSBwcm9kdWNlZCBzY2lweSBiaW5hcmllcyBvbiBteSB6ZWRib2FyZCwg
-dGhleSB3b3JrIAo+IGZpbmUuCj4gVGhlIHByb2JsZW0gdG8gYW5zd2VyIGZ1bGx5IHlvdXIgcXVl
-c3Rpb24gaXMgdGhhdDoKPiAqIG5vIHBrZyBjdXJyZW50bHkgZGVwZW5kIG9uIHB5YmluZAo+ICog
-bXkgbmV4dCBzdWJtaXNzaW9uIGRlcGVuZHMgb24gaG9zdC1weWJpbmQgKHRvIGJlIHN1Ym1pdHRl
-ZCBhZnRlciBhbGwgdGhlIAo+IGZpeGluZyksIG5vdCBvbiB0YXJnZXQtcHliaW5kLgo+IFRoaXMg
-aXMgd2h5IEkgd2FudGVkIHRvIG1vdmUgdGhpcyBwa2cgdG8gYSBob3N0LW9ubHkgcGFja2FnZSwg
-YnV0IFlhbm4gY29ycmVjdGVkIAo+IG90aGVyd2lzZQoKICBZb3UgeW91cnNlbGYgc3VibWl0dGVk
-IHRoZSBweWJpbmQgcGFja2FnZSBhYm91dCBhIHllYXIgYWdvLiBXaGF0IHdhcyBpdCBmb3IgCnRo
-ZW4/IFdhcyBpdCBhbHJlYWR5IGZvciBzY2lweT8gV2FzIGl0IGp1c3QgYnkgYWNjaWRlbnQgdGhh
-dCB5b3Ugc3VibWl0dGVkIGEgCnRhcmdldCB2ZXJzaW9uIGluc3RlYWQgb2YgYSBob3N0IHZlcnNp
-b24/CgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IAo+IEkgd2lsbCB3YWl0IGZvciB5b3UgYW5zd2Vy
-IGJlZm9yZSBzdWJtaXR0aW5nIGEgVjIgZGVwZW5kaW5nIG9uIHdoYXQgd2UgZGVjaWRlCj4gCj4g
-R3VpbGxhdW1lIFcuIEJyZXMKPiBTb2Z0d2FyZSBlbmdpbmVlcgo+IDxndWlsbGF1bWUuYnJlc3Nh
-aXhAZ21haWwuY29tIDxtYWlsdG86Z3VpbGxhdW1lLmJyZXNzYWl4QGdtYWlsLmNvbT4+Cj4gCj4g
-Cj4gTGXCoGx1bi4gNiBkw6ljLiAyMDIxIMOgwqAwODo0NSwgQXJub3V0IFZhbmRlY2FwcGVsbGUg
-PGFybm91dEBtaW5kLmJlIAo+IDxtYWlsdG86YXJub3V0QG1pbmQuYmU+PiBhIMOpY3JpdMKgOgo+
-IAo+ICAgICAgwqAgSGkgR3VpbGxhdW1lLAo+IAo+ICAgICAgwqAgVGhpcyBpcyBzdGlsbCBsb29r
-aW5nIGZhaXJseSB3ZWlyZCB0byBtZS4uLgo+IAo+ICAgICBPbiAwNS8xMi8yMDIxIDIxOjQ3LCBn
-dWlsbGF1bWUuYnJlc3NhaXhAZ21haWwuY29tCj4gICAgIDxtYWlsdG86Z3VpbGxhdW1lLmJyZXNz
-YWl4QGdtYWlsLmNvbT4gd3JvdGU6Cj4gICAgICA+IEZyb206ICJHdWlsbGF1bWUgVy4gQnJlcyIg
-PGd1aWxsYXVtZS5icmVzc2FpeEBnbWFpbC5jb20KPiAgICAgPG1haWx0bzpndWlsbGF1bWUuYnJl
-c3NhaXhAZ21haWwuY29tPj4KPiAgICAgID4KPiAgICAgID4gVGhlIHB5dGhvbiAnc2V0dXAucHkn
-IHNjcmlwdCBuZWVkcyBoZWFkZXIgZmlsZXMKPiAgICAgID4gaW4gJChARCkvcHliaW5kMTEgdG8g
-d29yayBzaW5jZSB2Mi42LjEsIGFuZCB0aGVzZSBmaWxlcwo+ICAgICAgPiBhcmUgY3JlYXRlZCBi
-eSBhbiBpbnRlcm5hbCBtaW5pbWFsaXN0IGNtYWtlIGJ1aWxkLgo+ICAgICAgPgo+ICAgICAgPiBm
-aXhlcwo+ICAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9iODlmMWRl
-NjRiMzA4ZGZmYTczNjc1ZjFmMzFjY2IwYjdiZTVhMTBkCj4gICAgIDxodHRwOi8vYXV0b2J1aWxk
-LmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9iODlmMWRlNjRiMzA4ZGZmYTczNjc1ZjFmMzFjY2IwYjdi
-ZTVhMTBkPgo+IAo+ICAgICAgwqAgTml0cGljazogdG8gbWFrZSBpdCBhcHBlYXIgd2l0aCB0aGUg
-Zml4ZXMgdGFnIGluIHBhdGNod29yayBvciBpbiB0aGUgc3VtbWFyeQo+ICAgICB0aGF0IFBldGVy
-IG1ha2VzLCB5b3UgaGF2ZSB0byBmb3JtYXQgaXQgbGlrZSB0aGlzOgo+IAo+ICAgICBGaXhlczoK
-PiAgICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvYjg5ZjFkZTY0YjMw
-OGRmZmE3MzY3NWYxZjMxY2NiMGI3YmU1YTEwZAo+ICAgICA8aHR0cDovL2F1dG9idWlsZC5idWls
-ZHJvb3QubmV0L3Jlc3VsdHMvYjg5ZjFkZTY0YjMwOGRmZmE3MzY3NWYxZjMxY2NiMGI3YmU1YTEw
-ZD4KPiAgICAgIMKgIMKgIMKgaHR0cDovLy4uLgo+IAo+ICAgICAgPiBmaXhlcwo+ICAgICBodHRw
-Oi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9kMDI4N2I3ZjY0ZjIwNmIwZjA3NDkw
-OGM1NzgwYTM2MzJlMGNiNzk5Cj4gICAgIDxodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQv
-cmVzdWx0cy9kMDI4N2I3ZjY0ZjIwNmIwZjA3NDkwOGM1NzgwYTM2MzJlMGNiNzk5Pgo+ICAgICAg
-PiBmaXhlcwo+ICAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8yN2Vm
-YjU0NWE1YTcxOWE1NTgxYzhmNzQ2ZDNhMzU1NWZmNDIxNmNlCj4gICAgIDxodHRwOi8vYXV0b2J1
-aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8yN2VmYjU0NWE1YTcxOWE1NTgxYzhmNzQ2ZDNhMzU1
-NWZmNDIxNmNlPgo+ICAgICAgPiBmaXhlcwo+ICAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9v
-dC5uZXQvcmVzdWx0cy9kMmYwYTBhZDhmNmM3MTc4NTE3ZGYxMDllN2Q4ODVkYWM5MTM0YzNhCj4g
-ICAgIDxodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9kMmYwYTBhZDhmNmM3
-MTc4NTE3ZGYxMDllN2Q4ODVkYWM5MTM0YzNhPgo+ICAgICAgPiBmaXhlcwo+ICAgICBodHRwOi8v
-YXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9iNTdlOWEzMjc5MjYwZGFlNGE1OTBmOTQy
-MTIzOGZjYWJiMmY3Y2FiCj4gICAgIDxodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVz
-dWx0cy9iNTdlOWEzMjc5MjYwZGFlNGE1OTBmOTQyMTIzOGZjYWJiMmY3Y2FiPgo+ICAgICAgPiBm
-aXhlcwo+ICAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy81MTVlNmYy
-ZmM2YjU3ODAyNjBkOThkNmJiNTJiNTQxY2U0YmYxYWZlCj4gICAgIDxodHRwOi8vYXV0b2J1aWxk
-LmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy81MTVlNmYyZmM2YjU3ODAyNjBkOThkNmJiNTJiNTQxY2U0
-YmYxYWZlPgo+ICAgICAgPiBmaXhlcwo+ICAgICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5u
-ZXQvcmVzdWx0cy9kODljNGVjYzgxMjIyZDRmODBjOTUxZGEyMjMyZDJlMzkzZmExYzY5Cj4gICAg
-IDxodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9kODljNGVjYzgxMjIyZDRm
-ODBjOTUxZGEyMjMyZDJlMzkzZmExYzY5Pgo+ICAgICAgPgo+ICAgICAgPiBTaWduZWQtb2ZmLWJ5
-OiBHdWlsbGF1bWUgVy4gQnJlcyA8Z3VpbGxhdW1lLmJyZXNzYWl4QGdtYWlsLmNvbQo+ICAgICA8
-bWFpbHRvOmd1aWxsYXVtZS5icmVzc2FpeEBnbWFpbC5jb20+Pgo+ICAgICAgPgo+ICAgICAgPiAt
-LS0KPiAgICAgID4gVGhpcyByZW1haW5zIGEgcHl0aG9uLXBhY2thZ2UuCj4gICAgICA+Cj4gICAg
-ICA+ICdweXRob24gc2V0dXAucHknIGFjdHVhbGx5IGhhcmRjb2RlcyBhIHN5c3RlbSBjYWxsIHRv
-IGNtYWtlLAo+ICAgICAgPiB3aGljaCBzZWVtcyBkaXJ0eSBhdCBmaXJzdC4KPiAgICAgID4gRm9y
-dHVuYXRlbHksIGlmIHdlIGhhdmUgQ01BS0UgRU5WLCBhbGwgQlIgdmFyaWFibGVzIGFyZSByZXRy
-aWV2ZWQuCj4gCj4gICAgICDCoCBJIGRvbid0IHNlZSBDTUFLRV9FTlYgYW55d2hlcmUgaW4gQnVp
-bGRyb290LCBvciBpbiB0aGlzIHBhdGNoLgo+IAo+ICAgICAgwqAgQWxzbywgSSBkb24ndCB0aGlu
-ayB0aGVyZSdzIGFueSB3YXkgdG8gdGVsbCBDTWFrZSBhYm91dCAiYWxsIEJSIHZhcmlhYmxlcyIK
-PiAgICAgb3RoZXIgdGhhbiBwYXNzaW5nIGEgdG9vbGNoYWluZmlsZSAod2l0aCAtRENNQUtFX1RP
-T0xDSEFJTl9GSUxFPS4uLikuIEFyZSB5b3UKPiAgICAgc3VyZSB0aGF0IGl0J3MgcmVhbGx5IGJ1
-aWxkaW5nIGNvcnJlY3RseSBmb3IgdGhlIHRhcmdldD8KPiAKPiAKPiAgICAgIMKgIFJlZ2FyZHMs
-Cj4gICAgICDCoCBBcm5vdXQKPiAKPiAKPiAgICAgID4gSSB0aGluayB0aGV5IG1hZGUgdGhpcyBj
-bWFrZSBjYWxsIHRvIG1ha2Ugc2V0dXAucHkgc2VsZiBzdWZmaWNpZW50Lgo+ICAgICAgPgo+ICAg
-ICAgPiAtLS0KPiAgICAgID7CoCDCoHBhY2thZ2UvcHl0aG9uLXB5YmluZC9weXRob24tcHliaW5k
-Lm1rIDxodHRwOi8vcHl0aG9uLXB5YmluZC5taz4gfCA2ICsrKysrKwo+ICAgICAgPsKgIMKgMSBm
-aWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+ICAgICAgPgo+ICAgICAgPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9weXRob24tcHliaW5kL3B5dGhvbi1weWJpbmQubWsKPiAgICAgPGh0dHA6Ly9w
-eXRob24tcHliaW5kLm1rPiBiL3BhY2thZ2UvcHl0aG9uLXB5YmluZC9weXRob24tcHliaW5kLm1r
-Cj4gICAgIDxodHRwOi8vcHl0aG9uLXB5YmluZC5taz4KPiAgICAgID4gaW5kZXggYTZhMWJkYjk3
-Ni4uMDgwNTg2YTg3NyAxMDA2NDQKPiAgICAgID4gLS0tIGEvcGFja2FnZS9weXRob24tcHliaW5k
-L3B5dGhvbi1weWJpbmQubWsgPGh0dHA6Ly9weXRob24tcHliaW5kLm1rPgo+ICAgICAgPiArKysg
-Yi9wYWNrYWdlL3B5dGhvbi1weWJpbmQvcHl0aG9uLXB5YmluZC5tayA8aHR0cDovL3B5dGhvbi1w
-eWJpbmQubWs+Cj4gICAgICA+IEBAIC05LDUgKzksMTEgQEAgUFlUSE9OX1BZQklORF9TSVRFID0g
-JChjYWxsCj4gICAgIGdpdGh1YixweWJpbmQscHliaW5kMTEsdiQoUFlUSE9OX1BZQklORF9WRVJT
-SU9OKSkKPiAgICAgID7CoCDCoFBZVEhPTl9QWUJJTkRfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQo+
-ICAgICAgPsKgIMKgUFlUSE9OX1BZQklORF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ICAgICAg
-PsKgIMKgUFlUSE9OX1BZQklORF9TRVRVUF9UWVBFID0gc2V0dXB0b29scwo+ICAgICAgPiArUFlU
-SE9OX1BZQklORF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAgICAgID4gKwo+ICAgICAgPiArIyBl
-dmVyeSBzaW5nbGUgJ3B5dGhvbiBzZXR1cC5weScgY2FsbCBhY3R1YWxseSBjYWxscyBjbWFrZQo+
-ICAgICAgPiArIyB0byBwb3B1bGF0ZSAkKEBEKS9weWJpbmQxMSB3aXRoIC5oIGFuZCBidWlsZCBy
-ZXF1aXJlbWVudHMuCj4gICAgICA+ICsjIElmIHdlIGhhdmUgYSBIT1NUX0NNQUtFX0VOViwgdGhl
-biBpbnN0YWxsYXRpb24gcGF0aHMgYXJlIHByb3Blcmx5IGRlZmluZWQKPiAgICAgID4gK1BZVEhP
-Tl9QWUJJTkRfREVQRU5ERU5DSUVTID0gaG9zdC1jbWFrZQo+ICAgICAgPgo+ICAgICAgPsKgIMKg
-JChldmFsICQocHl0aG9uLXBhY2thZ2UpKQo+ICAgICAgPgo+IApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=b88c545efd79ea6e287884213ed6cdab1f670e7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog (since 883b726):
+
+  - 3e020f7 Add 43436S firmware
+            Future Zero 2 W boards will have an alternative version of 43436
+            that should have different firmware, named brcmfmac43436s-sdio.
+
+  - 3888ba2 Merge pull request #18 from HiassofT/43436S
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index 3bd62306eb..09cd197dd8 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-wifi-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
++sha256  9bd61431d42322eb0610bd7eed218da255c4472efc203be4332a0872bb562ade  rpi-wifi-firmware-3888ba29898bb3f056d5f1eb283cb8de4c533bef.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index 582e0aa8f5..a467f2c7b4 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_WIFI_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
++RPI_WIFI_FIRMWARE_VERSION = 3888ba29898bb3f056d5f1eb283cb8de4c533bef
+ RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
