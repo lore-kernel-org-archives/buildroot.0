@@ -2,56 +2,52 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 165D0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 222E7C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 937DD60F45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:36:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 937DD60F45
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id DF69C60F45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DF69C60F45
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57DC04019B;
-	Fri, 12 Nov 2021 22:36:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83FAE401F7;
+	Fri, 12 Nov 2021 22:40:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Uibt7pf8PSJ; Fri, 12 Nov 2021 22:36:12 +0000 (UTC)
+	with ESMTP id bcNcaYiXyvLs; Fri, 12 Nov 2021 22:40:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F4D14018D;
-	Fri, 12 Nov 2021 22:36:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A9A61BF3A3
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:36:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D23940253;
+	Fri, 12 Nov 2021 22:40:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C87E1BF3A3
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDCF84018D
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:36:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A18681B84
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 93R6XAWw2NmI for <buildroot@lists.busybox.net>;
- Fri, 12 Nov 2021 22:36:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A410240183
- for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:36:07 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 36FCE1C0003;
- Fri, 12 Nov 2021 22:36:04 +0000 (UTC)
-Date: Fri, 12 Nov 2021 23:36:03 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20211112233603.274a7af2@windsurf>
-In-Reply-To: <20211110190005.GN2084998@scaer>
-References: <AM6PR03MB56227C126CCA7748EAB48382B5939@AM6PR03MB5622.eurprd03.prod.outlook.com>
- <20211110190005.GN2084998@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] fs: allow strip binaries when create rootfs
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OOtaXxrRLE9p for <buildroot@lists.busybox.net>;
+ Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF57181B83
+ for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 3DADF8C966; Fri, 12 Nov 2021 22:36:05 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 12 Nov 2021 23:23:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0f7761b6f99c7c5d27f6f385cad48a05bdae1bba
+X-Git-Newrev: 4427b298396b8bf1190b3b1ea4ceacb37b05aaa2
+X-Patchwork-Hint: ignore
+Message-Id: <20211112223605.3DADF8C966@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luvi: don't use LUAJIT_VERSION for
+ the luajit installation path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +59,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tan Xiaofan <xfan1024@live.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8072411976612879408=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 10 Nov 2021 20:00:05 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+--===============8072411976612879408==
+Content-Type: text/plain
 
-> This is a simple approach to the problem, indeed. However, I think the
-> choice is not needed: just keep the boolean option, and move the whole
-> stripping out of target-finalize and into the fs creation step.
-> 
-> Thoughts?
+commit: https://git.buildroot.net/buildroot/commit/?id=4427b298396b8bf1190b3b1ea4ceacb37b05aaa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm not sure about this change. I understand that's it's an easy way to
-have all binaries unstripped on the build machine, while having them
-stripped on the target.
+Luajit package has been recently updated to the latest commit in the
+master branch [1]. Since then LUAJIT_VERSION doesn't contain the luajit
+version anymore but a commit hash:
 
-However, it makes $(TARGET_DIR) move further away from what will
-actually end up on the target. I tend (and I guess a number of users as
-well) to look at $(O)/target to see what my root filesystem looks like,
-what it contains, etc. So all the post-processing steps that we add in
-the root filesystem generation logic kind of "hides" this
-post-processing from the eyes of the person looking at $(O)/target.
+LUAJIT_VERSION = 05f1984e1a862e4b3d3c3b370c773492e2edf84a
 
-Furthermore, I believe this change is going to break "make size-stats",
-because make size-stats looks at the size of files installed in
-$(O)/target.
+Use pkg-config --variable=version luajit in luvi package to set
+LUA_PATH correctly.
 
-I think the long term idea instead was to install all packages to
-STAGING_DIR, so that we have an unstripped installation of all packages.
+Fixes:
+luajit: unknown luaJIT command or jit.* modules not installed
 
-Best regards,
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1710552605
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+[1] 9450b53c8e06f1b5a75840b82c0f4663a5d75c45
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jörg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/luvi/luvi.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index 386daafc31..5daa3c1793 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -9,7 +9,7 @@ LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+ LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
+ LUVI_LICENSE = Apache-2.0
+ LUVI_LICENSE_FILES = LICENSE.txt
+-LUVI_DEPENDENCIES = libuv luajit luv host-luajit
++LUVI_DEPENDENCIES = libuv luajit luv host-luajit host-pkgconf
+ 
+ # Dispatch all architectures of LuaJIT
+ ifeq ($(BR2_i386),y)
+@@ -30,12 +30,16 @@ else
+ LUVI_TARGET_ARCH = $(BR2_ARCH)
+ endif
+ 
++# LUAJIT_VERSION and the luajit installation path may not use the
++# same value. Use the value from luajit.pc file.
++LUVI_LUAJIT_VERSION = `$(PKG_CONFIG_HOST_BINARY) --variable=version luajit`
++
+ # Bundled lua bindings have to be linked statically into the luvi executable
+ LUVI_CONF_OPTS = \
+ 	-DBUILD_SHARED_LIBS=OFF \
+ 	-DWithSharedLibluv=ON \
+ 	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
+-	-DLUA_PATH=$(HOST_DIR)/share/luajit-$(LUAJIT_VERSION)/?.lua
++	-DLUA_PATH=$(HOST_DIR)/share/luajit-$(LUVI_LUAJIT_VERSION)/?.lua
+ 
+ # Add "rex" module (PCRE via bundled lrexlib)
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+
+--===============8072411976612879408==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8072411976612879408==--
