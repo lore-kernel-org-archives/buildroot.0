@@ -2,68 +2,69 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C294EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:36:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A021DC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6CA8360F5B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:36:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CA8360F5B
+	by mail.kernel.org (Postfix) with ESMTPS id 5869B600CD
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5869B600CD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 444E76061C;
-	Fri, 12 Nov 2021 13:36:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24AF7400CC;
+	Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ljiROMHCSC5c; Fri, 12 Nov 2021 13:36:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D-fGldN9iGzc; Fri, 12 Nov 2021 13:37:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AD7B60658;
-	Fri, 12 Nov 2021 13:36:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CD6C61BF405
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:36:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2974E40148;
+	Fri, 12 Nov 2021 13:37:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C19B31BF405
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8D7360755
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:36:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B145B82433
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fTz7fmVXnTyC for <buildroot@lists.busybox.net>;
- Fri, 12 Nov 2021 13:36:47 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RBLLh24qtyOv for <buildroot@lists.busybox.net>;
+ Fri, 12 Nov 2021 13:37:06 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 677E860682
- for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:36:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A91588242D
+ for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:37:06 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [90.1.143.61])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 39FF219F58D;
- Fri, 12 Nov 2021 14:36:37 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1453519F553;
+ Fri, 12 Nov 2021 14:36:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636724203;
- bh=eIw6fJXhgt1OpshpBEnbqERgOfae7/5TSKjyFoZ+oXo=;
+ s=smtp-20201208; t=1636724225;
+ bh=0DI2Le9T+oXF8eeMY+/zl4Fp/rZ97uO+1XMMJdewRf4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ePSfrQkvrBf+ObHay1geZLoU+Jl6gRB/4/jeLPdLo90PMixLYX7V+YEeCK0gaSqXr
- EaJDS4RLmRgjsvkVY4Y+aRenMphO0YklkZd9Wef2o8qW+r4li5Mw0TY4ZDkl5L1Sry
- wZcoLazlufQoHaIumTLzAGIfv6Ql7JF7rFaqz1dy9eKWWJZg2ZwnoG6D9ePYMjjSsf
- Rp53lyRfSRdm/1Sw05J/oM9u+yrnuaPsREDoY2u0G/aRGDBPQWLaKvid90uYoWMulr
- RrrK4FgmJ1U84ZGtLzvpTweY+/stD1SYazJsmZ31yGQiHP4QpHMZ45UU/c6svAc8wB
- snrg/xXFVDe/A==
+ b=IdjMnww+7seqh5b66JG5JqXehqFwc0o9Bait2N3OJrkSJHjEX1Ak0nxt+f4dJzuE4
+ b9WwDmBQyXfTSfAXPCCsTrZuHvMyd1KB6W7bkDrvVCGSgARd/CkT9x4JCcxGRkV46c
+ ei8KGjHZ+kxbp6EkmNgU0Zdikzzs2mfulze7dLFS2j9jkbMey85zXoIxstZCAksi2X
+ 72KWkPFZ3XqDA5IzeijlPRPZBC09nS5NF0FgZNUHy67BKqCZyKMnyy/qYGuJzsetma
+ /gRYYuqSdxFXWXJ5jjPr8QbVuORzLnVYGgu4oTysK5ge7sTD40zXPHdGrJl2xtUl/2
+ R/MBoGHGSrN/Q==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 12 Nov 2021 14:36:36 +0100
-Date: Fri, 12 Nov 2021 14:36:36 +0100
+ Fri, 12 Nov 2021 14:36:58 +0100
+Date: Fri, 12 Nov 2021 14:36:58 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211112133636.GM2609@scaer>
-References: <20211112104724.3308539-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211112133658.GN2609@scaer>
+References: <20211109171351.456708-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211112104724.3308539-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211109171351.456708-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire-media-session: needs
- alsa-lib-ucm
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,16 +84,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2021-11-12 11:47 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since the addition of the
-> package in commit 51f30f47cd04efe494c8da37077bea860d3fbe14:
+On 2021-11-09 18:13 +0100, Fabrice Fontaine spake thusly:
+> Fix the following build failure raised since bump to version 0.3.39 in
+> commit d9796f2db9866060b916487784b046bb6b76f9b6 and
+> https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/ddfbd684e78e2b8b9ad40bedb4612ea0197d231a:
 > 
-> ../src/alsa-endpoint.c:34:10: fatal error: alsa/use-case.h: No such file or directory
->    34 | #include <alsa/use-case.h>
->       |          ^~~~~~~~~~~~~~~~~
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/9.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.339.0.p/pipewire.c.o: in function `i18n_ntext':
+> pipewire.c:(.text+0x3ec): undefined reference to `libintl_dngettext'
+> 
+> Indeed, since that time, pipewire uses the new meson intl dependency API
+> which has been added in version 0.59.0 with
+> https://github.com/mesonbuild/meson/commit/2c6ccfe4c40741ae1f15f073f7d7bc8c398a1648
+> 
+> This new intl dependency API is broken (which is not so surprising based
+> on my experience of meson). Don't even try to fix it as meson is not
+> very prone to merge our pull requests:
+> https://github.com/mesonbuild/meson/issues/6108
+> https://github.com/mesonbuild/meson/pull/6629
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/bbf54d1bdb0f8f2d4f675ffdcbcbbf56562c3d7b
+>  - http://autobuild.buildroot.org/results/435d59d40209cc1028cee8e2a71a69cd3769ab56
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -102,21 +113,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/pipewire-media-session/Config.in | 1 +
+>  package/pipewire/pipewire.mk | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/pipewire-media-session/Config.in b/package/pipewire-media-session/Config.in
-> index d025cd4d75..affbc00c1a 100644
-> --- a/package/pipewire-media-session/Config.in
-> +++ b/package/pipewire-media-session/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PIPEWIRE_MEDIA_SESSION
->  	depends on BR2_USE_MMU # dbus
->  	depends on BR2_PACKAGE_PIPEWIRE
->  	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_ALSA_LIB_UCM
->  	select BR2_PACKAGE_DBUS
->  	help
->  	  Build pipewire media-session support
+> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+> index f376f3c276..4cd2e7fcf5 100644
+> --- a/package/pipewire/pipewire.mk
+> +++ b/package/pipewire/pipewire.mk
+> @@ -11,6 +11,7 @@ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+>  PIPEWIRE_LICENSE_FILES = COPYING LICENSE
+>  PIPEWIRE_INSTALL_STAGING = YES
+>  PIPEWIRE_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+> +PIPEWIRE_LDFLAGS = $(TARGET_NLS_LIBS)
+>  
+>  PIPEWIRE_CONF_OPTS += \
+>  	-Ddocs=disabled \
 > -- 
 > 2.33.0
 > 
