@@ -2,52 +2,52 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4447CC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F3B6C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D218861054
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D218861054
+	by mail.kernel.org (Postfix) with ESMTPS id 2462460F39
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:13:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2462460F39
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80B66827CE;
-	Fri, 12 Nov 2021 22:13:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F4F440253;
+	Fri, 12 Nov 2021 22:13:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aEEKQ6YwzaIs; Fri, 12 Nov 2021 22:13:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F2F640183;
+	Fri, 12 Nov 2021 22:13:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BA3C1BF3A3
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABF06827AF
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wq7GgW92PJuT; Fri, 12 Nov 2021 22:13:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA20F827BA;
-	Fri, 12 Nov 2021 22:13:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC42D1C115D
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8A9240602
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KmZ8OKPjBnYg for <buildroot@lists.busybox.net>;
- Fri, 12 Nov 2021 22:12:35 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ODILzn1vp5Gg for <buildroot@lists.busybox.net>;
+ Fri, 12 Nov 2021 22:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E56F7405E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08E1282779
  for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 612E08854A; Fri, 12 Nov 2021 22:08:33 +0000 (UTC)
+ id 789158854A; Fri, 12 Nov 2021 22:08:33 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 22:55:28 +0100
+Date: Fri, 12 Nov 2021 23:09:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 146c232692e72154e5987f83e9bd0678e3b86e20
-X-Git-Newrev: 1f051ef2e8f7ffd9291fe7b6db2a384d6eb788c7
+X-Git-Oldrev: 76875989326d9122db272c1a0f49b92961c3f2af
+X-Git-Newrev: d5ef29e9953ccff61db1e2818e2e7ef408cbd5ac
 X-Patchwork-Hint: ignore
-Message-Id: <20211112220833.612E08854A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rpi-firmware: bump
- version to fa9a006
+Message-Id: <20211112220833.789158854A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-bt-firmware: bump
+ version to 3888ba2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f051ef2e8f7ffd9291fe7b6db2a384d6eb788c7
+commit: https://git.buildroot.net/buildroot/commit/?id=d5ef29e9953ccff61db1e2818e2e7ef408cbd5ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
+Changelog (since 883b726):
 
-    kernel: Bump to 5.10.78
-    kernel: VC4 PixelValve and HDMI Drivers Locking Improvements for 5.10
-    kernel: Bump to 5.10.77
-    kernel: dtoverlays: Update all image sensor overlays for Media Controller option
-    kernel: drm/vc4: Add support for non-standard modes in VEC
-    kernel: Bump to 5.10.76
-    kernel: Bump to 5.10.75
-    firmware: video_decode: i/p port enable/disable without o/p active could stall
-    firmware: clock-2711: Limit PLLB VCO frequency to the high range
-    kernel: Bump to 5.10.74
-    kernel: ARM: dts: bcm2835_audio missing firmware reference
-    kernel: vcio rewrite
-    kernel: Bump to 5.10.73
-    kernel: Bump to 5.10.71
-    kernel: Bump to 5.10.69
-    kernel: Bump to 5.10.67
-    kernel: Bump to 5.10.66
-    kernel: Bump to 5.10.65
-    kernel: Bump to 5.10.64
-    kernel: Enable driver for RTL8111H used in cm4 carrier boards
+  - 3e020f7 Add 43436S firmware
+            Future Zero 2 W boards will have an alternative version of 43436
+            that should have different firmware, named brcmfmac43436s-sdio.
+
+  - 3888ba2 Merge pull request #18 from HiassofT/43436S
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998@free.fr: actually fill-in the changelog]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 0ff7a73a37..7cbfd1b249 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+index 3f37d964d0..7e60aa4632 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  80af5efb51677edb7af6746a553dc2d8ad3f532ff44e4b7263f1e12d4bf72ffd  rpi-firmware-2ef3800b1b71c0e30c2a61ecad6e007ae96ea342.tar.gz
-+sha256  a079a31fc80a23421589edcacef94faa713b12d3e77b92710ae2594c8d549477  rpi-firmware-fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25.tar.gz
- sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 3a4741a0ff..5e8b0379ba 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+-sha256  0e7fcfe75a8990815a184dc55f8fdf5d0644d351a15a7aef865ff90ff4ca8eb4  rpi-bt-firmware-883b72628de1d7efa45b421da0cbf175ac2374f8.tar.gz
++sha256  9bd61431d42322eb0610bd7eed218da255c4472efc203be4332a0872bb562ade  rpi-bt-firmware-3888ba29898bb3f056d5f1eb283cb8de4c533bef.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index 13358b4fda..8d658ce435 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 2ef3800b1b71c0e30c2a61ecad6e007ae96ea342
-+RPI_FIRMWARE_VERSION = fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_BT_FIRMWARE_VERSION = 883b72628de1d7efa45b421da0cbf175ac2374f8
++RPI_BT_FIRMWARE_VERSION = 3888ba29898bb3f056d5f1eb283cb8de4c533bef
+ RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
