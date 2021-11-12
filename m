@@ -2,69 +2,68 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A021DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD25DC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5869B600CD
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5869B600CD
+	by mail.kernel.org (Postfix) with ESMTPS id 6B7B860F36
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:37:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B7B860F36
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24AF7400CC;
-	Fri, 12 Nov 2021 13:37:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 361E94052C;
+	Fri, 12 Nov 2021 13:37:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D-fGldN9iGzc; Fri, 12 Nov 2021 13:37:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bm3HrA0G7q7H; Fri, 12 Nov 2021 13:37:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2974E40148;
-	Fri, 12 Nov 2021 13:37:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C19B31BF405
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E2834052D;
+	Fri, 12 Nov 2021 13:37:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF9081BF405
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B145B82433
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC6CF4052D
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:37:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RBLLh24qtyOv for <buildroot@lists.busybox.net>;
- Fri, 12 Nov 2021 13:37:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A91588242D
- for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:37:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hhAWxRewXVVO for <buildroot@lists.busybox.net>;
+ Fri, 12 Nov 2021 13:37:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ED7154052C
+ for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:37:28 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown [90.1.143.61])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 1453519F553;
- Fri, 12 Nov 2021 14:36:59 +0100 (CET)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5AAAA19F553;
+ Fri, 12 Nov 2021 14:37:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636724225;
- bh=0DI2Le9T+oXF8eeMY+/zl4Fp/rZ97uO+1XMMJdewRf4=;
+ s=smtp-20201208; t=1636724247;
+ bh=8dHkpQdxKa+Yng+nGWfd46iUU6/yLJjqUypHkBWHEeQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IdjMnww+7seqh5b66JG5JqXehqFwc0o9Bait2N3OJrkSJHjEX1Ak0nxt+f4dJzuE4
- b9WwDmBQyXfTSfAXPCCsTrZuHvMyd1KB6W7bkDrvVCGSgARd/CkT9x4JCcxGRkV46c
- ei8KGjHZ+kxbp6EkmNgU0Zdikzzs2mfulze7dLFS2j9jkbMey85zXoIxstZCAksi2X
- 72KWkPFZ3XqDA5IzeijlPRPZBC09nS5NF0FgZNUHy67BKqCZyKMnyy/qYGuJzsetma
- /gRYYuqSdxFXWXJ5jjPr8QbVuORzLnVYGgu4oTysK5ge7sTD40zXPHdGrJl2xtUl/2
- R/MBoGHGSrN/Q==
+ b=UF3S+aSYArURgbvqObopHTj79pIUcQ4DEXf7Y/LtSykQHyKZJiy7Td7f7vCHGSJsL
+ lgL9O/nCJbxG+laK2C3fOVwhAJ+faS2av9o/DnjEvnsIuhYfIHyzBrtVqJKFz5nt/t
+ ImIDPL9KYEHmw3lqFWquQGFBqTtavgsj+EPgiXPJuDy/pNasj3ZvWZJ3HD2C4ZIzxz
+ vWQSXtmCbKpwwigvA0vJiUWSwnJqjz4m+fkvmIUK0MAD97xYBAo84eNo+/ykQGWGkq
+ r9b02NnM4GNrAOPSZSfdjBNtVO97sfDTq/jO7kEDsqyi324PUsKZjWqpcWDD9Re26J
+ /TgnA38G2n8+Q==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 12 Nov 2021 14:36:58 +0100
-Date: Fri, 12 Nov 2021 14:36:58 +0100
+ Fri, 12 Nov 2021 14:37:21 +0100
+Date: Fri, 12 Nov 2021 14:37:21 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211112133658.GN2609@scaer>
-References: <20211109171351.456708-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211112133721.GO2609@scaer>
+References: <20211106134108.3015865-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211109171351.456708-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211106134108.3015865-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: fix NLS build
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: fix build on
+ arm926ej-s
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,26 +83,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2021-11-09 18:13 +0100, Fabrice Fontaine spake thusly:
+On 2021-11-06 14:41 +0100, Fabrice Fontaine spake thusly:
 > Fix the following build failure raised since bump to version 0.3.39 in
-> commit d9796f2db9866060b916487784b046bb6b76f9b6 and
-> https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/ddfbd684e78e2b8b9ad40bedb4612ea0197d231a:
+> commit d9796f2db9866060b916487784b046bb6b76f9b6:
 > 
-> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/9.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: src/pipewire/libpipewire-0.3.so.0.339.0.p/pipewire.c.o: in function `i18n_ntext':
-> pipewire.c:(.text+0x3ec): undefined reference to `libintl_dngettext'
-> 
-> Indeed, since that time, pipewire uses the new meson intl dependency API
-> which has been added in version 0.59.0 with
-> https://github.com/mesonbuild/meson/commit/2c6ccfe4c40741ae1f15f073f7d7bc8c398a1648
-> 
-> This new intl dependency API is broken (which is not so surprising based
-> on my experience of meson). Don't even try to fix it as meson is not
-> very prone to merge our pull requests:
-> https://github.com/mesonbuild/meson/issues/6108
-> https://github.com/mesonbuild/meson/pull/6629
+> /tmp/ccsZ6haQ.s:467: Error: selected processor does not support `vmrs r3,fpscr' in ARM mode
+> /tmp/ccsZ6haQ.s:469: Error: selected processor does not support `vmsr fpscr,r3' in ARM mode
+> /tmp/ccsZ6haQ.s:490: Error: selected processor does not support `vmrs r3,fpscr' in ARM mode
+> /tmp/ccsZ6haQ.s:492: Error: selected processor does not support `vmsr fpscr,r3' in ARM mode
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/435d59d40209cc1028cee8e2a71a69cd3769ab56
+>  - http://autobuild.buildroot.org/results/d449095c67b9477fc95ebbab5eb628e5eb4ea5c6
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -113,21 +103,46 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/pipewire/pipewire.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...u-disable-VFP-asm-when-not-available.patch | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/pipewire/0002-cpu-disable-VFP-asm-when-not-available.patch
 > 
-> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-> index f376f3c276..4cd2e7fcf5 100644
-> --- a/package/pipewire/pipewire.mk
-> +++ b/package/pipewire/pipewire.mk
-> @@ -11,6 +11,7 @@ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
->  PIPEWIRE_LICENSE_FILES = COPYING LICENSE
->  PIPEWIRE_INSTALL_STAGING = YES
->  PIPEWIRE_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-> +PIPEWIRE_LDFLAGS = $(TARGET_NLS_LIBS)
->  
->  PIPEWIRE_CONF_OPTS += \
->  	-Ddocs=disabled \
+> diff --git a/package/pipewire/0002-cpu-disable-VFP-asm-when-not-available.patch b/package/pipewire/0002-cpu-disable-VFP-asm-when-not-available.patch
+> new file mode 100644
+> index 0000000000..297016edc2
+> --- /dev/null
+> +++ b/package/pipewire/0002-cpu-disable-VFP-asm-when-not-available.patch
+> @@ -0,0 +1,30 @@
+> +From 2cddd4a775c145570f4a8a30d28b57f551d43206 Mon Sep 17 00:00:00 2001
+> +From: Wim Taymans <wtaymans@redhat.com>
+> +Date: Mon, 25 Oct 2021 16:32:16 +0200
+> +Subject: [PATCH] cpu: disable VFP asm when not available
+> +
+> +Fixes #1746
+> +
+> +[Retrieved from:
+> +https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/2cddd4a775c145570f4a8a30d28b57f551d43206]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + spa/plugins/support/cpu-arm.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/spa/plugins/support/cpu-arm.c b/spa/plugins/support/cpu-arm.c
+> +index c07711f70..fe6222f7c 100644
+> +--- a/spa/plugins/support/cpu-arm.c
+> ++++ b/spa/plugins/support/cpu-arm.c
+> +@@ -143,7 +143,7 @@ static int arm_zero_denormals(void *object, bool enable)
+> + 			"msr	fpcr, %0		\n"
+> + 			"isb				\n"
+> + 			: "=r"(cw)::"memory");
+> +-#else
+> ++#elif (defined(__VFP_FP__) && !defined(__SOFTFP__))
+> + 	uint32_t cw;
+> + 	if (enable)
+> + 		__asm__ __volatile__(
+> +-- 
+> +GitLab
+> +
 > -- 
 > 2.33.0
 > 
