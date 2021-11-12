@@ -2,51 +2,52 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F352BC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8056EC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 839AD60F6B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 839AD60F6B
+	by mail.kernel.org (Postfix) with ESMTPS id 287A860F45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 22:40:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 287A860F45
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BD7E40636;
-	Fri, 12 Nov 2021 22:40:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 039D140253;
+	Fri, 12 Nov 2021 22:40:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tWAbelkmyjUF; Fri, 12 Nov 2021 22:40:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N_faaKQ6l9Zn; Fri, 12 Nov 2021 22:40:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 711FF40606;
-	Fri, 12 Nov 2021 22:40:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28BBA404CE;
+	Fri, 12 Nov 2021 22:40:45 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BBA891C115D
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D5361BF3A3
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5CE6404CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAF71404CE
  for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 22:40:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7kO9FskGl_2T for <buildroot@lists.busybox.net>;
+ with ESMTP id 6wTipXGrNJDe for <buildroot@lists.busybox.net>;
  Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB9D3401F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id E6BC340183
  for <buildroot@buildroot.org>; Fri, 12 Nov 2021 22:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 6C6278C966; Fri, 12 Nov 2021 22:36:05 +0000 (UTC)
+ id 5525C8C966; Fri, 12 Nov 2021 22:36:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 23:26:15 +0100
+Date: Fri, 12 Nov 2021 23:23:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd4f70b185503d9d04c1393be67236a7f6735cf7
-X-Git-Newrev: d4e6e1b53b07b05d51ebfb70979608c144ac155a
+X-Git-Oldrev: 1477b60d4ef8b653493132c2a2edf48f26426e55
+X-Git-Newrev: 18557c6757f2e38362762f8ea1ddae91be5837f9
 X-Patchwork-Hint: ignore
-Message-Id: <20211112223605.6C6278C966@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luajit: disable 64 bit GC objects
+Message-Id: <20211112223605.5525C8C966@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: rework
+ BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4e6e1b53b07b05d51ebfb70979608c144ac155a
+commit: https://git.buildroot.net/buildroot/commit/?id=18557c6757f2e38362762f8ea1ddae91be5837f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Luvi uses the cross bytecode generation of host-luajit
-the bytecode format has 2 flavors, depending of GC64 option.
+This commit reworks how BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is
+defined to follow the recommended syntax.
 
-Since the commit https://github.com/LuaJIT/LuaJIT/commit/bd00094c3b50e193fb32aad79b7ea8ea6b78ed25
-GC64 mode is enable by default on all 64bits platform.
-
-With this patch, luajit and host-luajit are built with the same option,
-so the bytecode generated by host-luajit is valid on luajit.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Romain:
-  - update commit title
-  - add a comment about missing LUAJIT_ENABLE_GC64]
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998@free.fr: alphabetical order]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/luajit/luajit.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/luajit/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index fbbd8ebc70..89b164c96d 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -26,8 +26,10 @@ endif
- # libraries are installed.
- ifeq ($(BR2_ARCH_IS_64),y)
- LUAJIT_HOST_CC = $(HOSTCC)
-+# There is no LUAJIT_ENABLE_GC64 option.
- else
- LUAJIT_HOST_CC = $(HOSTCC) -m32
-+LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
- endif
- 
- # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index e4e1249240..5417c3f0bd 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_i386 || \
+-		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+-		BR2_powerpc || BR2_arm || BR2_armeb || BR2_aarch64 || \
+-		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
+-		!BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6)
++	default y if BR2_arm || BR2_armeb || BR2_aarch64
++	default y if BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64')
++	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT \
++		&& !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
++	default y if BR2_powerpc
+ 	# -m32 flag is used for 32bit builds and host-luajit has
+ 	# limited architecture support
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
