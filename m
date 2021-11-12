@@ -2,53 +2,53 @@ Return-Path: <SRS0=pZJ6=P7=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65A50C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:13:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F032C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:13:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0F8606102A
-	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:13:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0F8606102A
+	by mail.kernel.org (Postfix) with ESMTPS id 2B8166102A
+	for <buildroot@archiver.kernel.org>; Fri, 12 Nov 2021 13:13:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2B8166102A
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 115A9801CF;
-	Fri, 12 Nov 2021 13:13:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00EE16063F;
+	Fri, 12 Nov 2021 13:13:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SwNGVUDpbMfV; Fri, 12 Nov 2021 13:13:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cknlHrCetW2b; Fri, 12 Nov 2021 13:13:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2901481D67;
-	Fri, 12 Nov 2021 13:13:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 86E7C1BF405
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:13:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1331A605F5;
+	Fri, 12 Nov 2021 13:13:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57E491BF405
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75E1640148
- for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:13:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53E9A6060D
+ for <buildroot@lists.busybox.net>; Fri, 12 Nov 2021 13:13:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AjZVFz1p0M6Y for <buildroot@lists.busybox.net>;
- Fri, 12 Nov 2021 13:13:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4cgLwLK-jaN3 for <buildroot@lists.busybox.net>;
+ Fri, 12 Nov 2021 13:13:14 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19B3B400CC
- for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:13:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D5C9605F5
+ for <buildroot@buildroot.org>; Fri, 12 Nov 2021 13:13:13 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPA id 105B8200002;
- Fri, 12 Nov 2021 13:13:09 +0000 (UTC)
+ by relay12.mail.gandi.net (Postfix) with ESMTPA id CFFE9200002;
+ Fri, 12 Nov 2021 13:13:11 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Nov 2021 14:12:54 +0100
-Message-Id: <20211112131258.2671293-2-herve.codina@bootlin.com>
+Date: Fri, 12 Nov 2021 14:12:56 +0100
+Message-Id: <20211112131258.2671293-4-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211112131258.2671293-1-herve.codina@bootlin.com>
 References: <20211112131258.2671293-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/5] package/alchemy: new host package
+Subject: [Buildroot] [PATCH v2 3/5] package/libfutils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,118 +62,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxjaGVteSBpcyBhIGJ1aWxkIHN5c3RlbSBkZXZlbG9wZWQgYnkgUGFycm90LgoKSXQgaXMgYSBu
-ZXcgYnVpbGQgc3lzdGVtIGJhc2VkIG9uIHRoZSBvbmUgdXNlZCBpbiBBbmRyb2lkLgpBIGNlbnRy
-YWwgbWFrZWZpbGUgaW5zdGFuY2Ugc2NhbnMgYSB3b3Jrc3BhY2UgdG8gZmluZCB1c2VyCm1ha2Vm
-aWxlcywgaW5jbHVkZXMgdGhlbSBhbmQgcmVnaXN0ZXIgbW9kdWxlcyB0byBiZSBidWlsdC4KCmh0
-dHBzOi8vZ2l0aHViLmNvbS9QYXJyb3QtRGV2ZWxvcGVycy9hbGNoZW15CgpTaWduZWQtb2ZmLWJ5
-OiBIZXJ2ZSBDb2RpbmEgPGhlcnZlLmNvZGluYUBib290bGluLmNvbT4KLS0tCkNoYW5nZXMgdjEg
-LT4gdjIKICAtIEZpeGVkIG1pc3NpbmcgbGljZW5zZSBpbmZvcm1hdGlvbiByZWxhdGVkIHRvIGtj
-b25maWcKICAtIEluc3RhbGxlZCBBbGNoZW15IGluICQoSE9TVF9ESVIpL29wdC9hbGNoZW15CiAg
-LSBSZW5hbWVkIEFMQ0hFTVlfVEFSR0VUX0NPTkZJR1VSRV9FTlYgdG8gQUxDSEVNWV9UQVJHRVRf
-RU5WCiAgLSBSZW1vdmVkIEFMQ0hFTVlfVEFSR0VUX0NPTkZJR1VSRV9TREtTIG1hY3JvCgogREVW
-RUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwogLi4ubGNo
-YWlucy1yZW1vdmUtaGFzaC1zdHlsZS1tYW5hZ2VtZW50LnBhdGNoIHwgMzYgKysrKysrKysrKwog
-cGFja2FnZS9hbGNoZW15L2FsY2hlbXkuaGFzaCAgICAgICAgICAgICAgICAgIHwgIDQgKysKIHBh
-Y2thZ2UvYWxjaGVteS9hbGNoZW15Lm1rICAgICAgICAgICAgICAgICAgICB8IDcyICsrKysrKysr
-KysrKysrKysrKysKIDQgZmlsZXMgY2hhbmdlZCwgMTEzIGluc2VydGlvbnMoKykKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBwYWNrYWdlL2FsY2hlbXkvMDAwMS10b29sY2hhaW5zLXJlbW92ZS1oYXNoLXN0
-eWxlLW1hbmFnZW1lbnQucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2FsY2hlbXkv
-YWxjaGVteS5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hbGNoZW15L2FsY2hlbXku
-bWsKCmRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCA3MDI2MmVhYzhj
-Li5lYmI2MGNkZWY5IDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAg
-LTExNDksNiArMTE0OSw3IEBAIE46CUhlbnJpcXVlIENhbWFyZ28gPGhlbnJpcXVlQGhlbnJpcXVl
-Y2FtYXJnby5jb20+CiBGOglwYWNrYWdlL2pzb24tZ2xpYi8KIAogTjoJSGVydsOpIENvZGluYSA8
-aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgorRjoJcGFja2FnZS9hbGNoZW15LwogRjoJcGFja2Fn
-ZS9kdGJvY2ZnLwogRjoJcGFja2FnZS9saWJkYmkvCiBGOglwYWNrYWdlL2xpYmRiaS1kcml2ZXJz
-LwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbGNoZW15LzAwMDEtdG9vbGNoYWlucy1yZW1vdmUtaGFz
-aC1zdHlsZS1tYW5hZ2VtZW50LnBhdGNoIGIvcGFja2FnZS9hbGNoZW15LzAwMDEtdG9vbGNoYWlu
-cy1yZW1vdmUtaGFzaC1zdHlsZS1tYW5hZ2VtZW50LnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0
-CmluZGV4IDAwMDAwMDAwMDAuLjUyMjc2NmI5NzcKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdl
-L2FsY2hlbXkvMDAwMS10b29sY2hhaW5zLXJlbW92ZS1oYXNoLXN0eWxlLW1hbmFnZW1lbnQucGF0
-Y2gKQEAgLTAsMCArMSwzNiBAQAorRnJvbSA0Y2I5NjgxYWI5OWRiM2Q4ZTMzMGFjNzg5ZTE3ZWM2
-OTU4M2FlY2Q0IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogSGVydmUgQ29kaW5hIDxo
-ZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+CitEYXRlOiBUaHUsIDI4IE9jdCAyMDIxIDE4OjM5OjE4
-ICswMjAwCitTdWJqZWN0OiBbUEFUQ0hdIHRvb2xjaGFpbnM6IHJlbW92ZSAtLWhhc2gtc3R5bGUg
-bWFuYWdlbWVudAorCitVc2luZyBhbiBleHRlcm5hbCB0b29sY2hhaW4sIHdpdGggYW4gZXh0ZXJu
-YWwgY29uZmlndXJhdGlvbiBnaXZlbgordXNpbmcgVEFSR0VUX0dMT0JBTF9YWFhYIHZhcmlhYmxl
-cywgaGF2aW5nICctLWhhc2gtc3R5bGU9Ym90aCcKK2luIEFsY2hlbXkgdG9vbGNoYWlucyBjYW4g
-bGVhZCB0byBjb21waWxhdGlvbiBmYWlsdXJlLgorCitUaGlzIHBhdGNoIHNpbXBseSByZW1vdmVz
-IGFsbCAtLWhhc2gtc3R5bGUgc2V0dGluZ3MuCisKK1NpZ25lZC1vZmYtYnk6IEhlcnZlIENvZGlu
-YSA8aGVydmUuY29kaW5hQGJvb3RsaW4uY29tPgorLS0tCisgdG9vbGNoYWlucy9saW51eC9lZ2xp
-YmMvZmxhZ3MubWsgfCA5ICstLS0tLS0tLQorIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KSwgOCBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL3Rvb2xjaGFpbnMvbGludXgvZWdsaWJj
-L2ZsYWdzLm1rIGIvdG9vbGNoYWlucy9saW51eC9lZ2xpYmMvZmxhZ3MubWsKK2luZGV4IDk1YzBh
-NDYuLjQ0NzQ3MjkgMTAwNjQ0CistLS0gYS90b29sY2hhaW5zL2xpbnV4L2VnbGliYy9mbGFncy5t
-aworKysrIGIvdG9vbGNoYWlucy9saW51eC9lZ2xpYmMvZmxhZ3MubWsKK0BAIC0xMSwxMSArMTEs
-NCBAQCBUQVJHRVRfR0xPQkFMX0xETElCUyArPSAtcHRocmVhZCAtbHJ0CisgVEFSR0VUX0dMT0JB
-TF9DRkxBR1MgKz0gLWZ1bndpbmQtdGFibGVzCisgCisgIyBFbmFibGUgbGluayBvcHRpbWl6YXRp
-b24gZm9yIGJpbnV0aWxzJ3MgbGQuCistIyBnbnUgaGFzaCBub3Qgc3VwcG9ydGVkIGJ5IG1pcHMg
-QUJJCistaWZlcSAoIiQoVEFSR0VUX0FSQ0gpIiwibWlwcyIpCistICBUQVJHRVRfR0xPQkFMX0xE
-RkxBR1MgKz0gLVdsLC1PMQorLWVsc2UgaWZlcSAoIiQoVEFSR0VUX0FSQ0gpIiwibWlwczY0IikK
-Ky0gIFRBUkdFVF9HTE9CQUxfTERGTEFHUyArPSAtV2wsLU8xCistZWxzZQorLSAgVEFSR0VUX0dM
-T0JBTF9MREZMQUdTICs9IC1XbCwtTzEsLS1oYXNoLXN0eWxlPWJvdGgKKy1lbmRpZgorK1RBUkdF
-VF9HTE9CQUxfTERGTEFHUyArPSAtV2wsLU8xCistLSAKKzIuMzEuMQorCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL2FsY2hlbXkvYWxjaGVteS5oYXNoIGIvcGFja2FnZS9hbGNoZW15L2FsY2hlbXkuaGFz
-aApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4zMzg5NTI2M2NjCi0tLSAv
-ZGV2L251bGwKKysrIGIvcGFja2FnZS9hbGNoZW15L2FsY2hlbXkuaGFzaApAQCAtMCwwICsxLDQg
-QEAKKyMgTG9jYWxseSBjb21wdXRlZDoKK3NoYTI1NiAgMzQ2YzA2YjkzMTc2OTFhOTM3MWQ4Nzhi
-ODUwZTYxZjhiY2VjNGYyMDEzMmFjOTUzNDBiOWQyNTcxYmUyNWVlOCAgYWxjaGVteS1kOTViM2Mz
-OGNkMzc4MTRhMWI5OGQwYmJmODEzZGU3YWRhYWVjZmJjLnRhci5negorc2hhMjU2ICA1NDJmNDRl
-ZWNkOWY4ODA2ZWMxYWUyODUyMDFlNDQyYWI1NDdjODJkOWY4YzcwZTQ0Yzk3N2Q2MzMyYTJiZWEw
-ICBDT1BZSU5HCitzaGEyNTYgIDQ5ODcyODE1ZWUzZGUxNjNmMDdhODM3MzdjOTk2ZTc3YTViZmZh
-MTg2ZDA2YjFlM2JiOTY5YmZiNjhjMjUxZGYgIFJFQURNRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9h
-bGNoZW15L2FsY2hlbXkubWsgYi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5tawpuZXcgZmlsZSBt
-b2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi42M2Q1YTk0MWM1Ci0tLSAvZGV2L251bGwKKysr
-IGIvcGFja2FnZS9hbGNoZW15L2FsY2hlbXkubWsKQEAgLTAsMCArMSw3MiBAQAorIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMKKyMKKyMgYWxjaGVteQorIworIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
-KworQUxDSEVNWV9WRVJTSU9OID0gZDk1YjNjMzhjZDM3ODE0YTFiOThkMGJiZjgxM2RlN2FkYWFl
-Y2ZiYworQUxDSEVNWV9TSVRFID0gJChjYWxsIGdpdGh1YixQYXJyb3QtRGV2ZWxvcGVycyxhbGNo
-ZW15LCQoQUxDSEVNWV9WRVJTSU9OKSkKK0FMQ0hFTVlfTElDRU5TRSA9IEJTRC0zLUNsYXVzZSAo
-QWxjaGVteSksIEdQTC0yLjAgKGtjb25maWcpCitBTENIRU1ZX0xJQ0VOU0VfRklMRVMgPSBDT1BZ
-SU5HIFJFQURNRQorSE9TVF9BTENIRU1ZX0RFUEVOREVOQ0lFUyA9IGhvc3QtcHl0aG9uMworCitB
-TENIRU1ZX1NES19CQVNFRElSID0gJChTVEFHSU5HX0RJUikvdXNyL2xpYi9hbGNoZW15L3Nkawor
-CitkZWZpbmUgSE9TVF9BTENIRU1ZX0lOU1RBTExfQ01EUworCXJtIC1yZiAkKEhPU1RfRElSKS9v
-cHQvYWxjaGVteQorCW1rZGlyIC1wICQoSE9TVF9ESVIpL29wdC9hbGNoZW15CisJY3AgLXJmICQo
-QEQpLyogJChIT1NUX0RJUikvb3B0L2FsY2hlbXkvCitlbmRlZgorCiskKGV2YWwgJChob3N0LWdl
-bmVyaWMtcGFja2FnZSkpCisKKyMgVmFyaWFibGVzIHVzZWQgYnkgb3RoZXIgcGFja2FnZXMKKwor
-QUxDSEVNWV9IT01FID0gJChIT1NUX0RJUikvb3B0L2FsY2hlbXkKK0FMQ0hFTVlfTUFLRSA9ICQo
-QUxDSEVNWV9IT01FKS9zY3JpcHRzL2FsY2hlbWFrZQorCisjIFRBUkdFVF9BUkNIIGlzIHNldCB0
-byAneHh4JyB0byBhdm9pZCBBbGNoZW15IG1hbmFnaW5nIHRoZSBhcmNoaXRlY3R1cmUuCisjIFdo
-ZW4gQWxjaGVteSBtYW5hZ2VzIHRoZSBhcmNoaXRlY3R1cmUsIGl0IGNhbiBhZGQgc29tZSBmbGFn
-cyB0byBDRkdMQUdTIGFuZAorIyBjYW4gbGVhZCB0byBpbmNvcnJlY3QgcmVzdWx0IHdpdGggdGhl
-IHRvb2xjaGFpbiBwcm92aWRlZCBpbiBUQVJHRVRfQ1JPU1MuCisjICd4eHgnIGlzIGFuIHVua25v
-d24gYXJjaGl0ZWN0dXJlIGZvciBBbGNoZW15LiBVc2luZyB0aGlzIHZhbHVlIGlzIGEgc2ltcGxl
-CisjIHdheSB0byBkaXNhYmxlIHRoZSBBbGNoZW15IGFyY2hpdGVjdHVyZSBtYW5hZ2VtZW50Lgor
-QUxDSEVNWV9UQVJHRVRfRU5WID0gXAorCSQoVEFSR0VUX01BS0VfRU5WKSBcCisJQUxDSEVNWV9I
-T01FPSQoQUxDSEVNWV9IT01FKSBcCisJQUxDSEVNWV9XT1JLU1BBQ0VfRElSPSIkKEBEKSIgXAor
-CUFMQ0hFTVlfVEFSR0VUX09VVD1hbGNoZW15LW91dCBcCisJVEFSR0VUX09TPWxpbnV4IFwKKwlU
-QVJHRVRfT1NfRkxBVk9VUj1idWlsZHJvb3QgXAorCVRBUkdFVF9DUk9TUz0iJChUQVJHRVRfQ1JP
-U1MpIiBcCisJVEFSR0VUX0FSQ0g9eHh4IFwKKwlUQVJHRVRfR0xPQkFMX0NYWEZMQUdTPSIkKFRB
-UkdFVF9DWFhGTEFHUykiIFwKKwlUQVJHRVRfR0xPQkFMX0xERkxBR1M9IiQoVEFSR0VUX0xERkxB
-R1MpIiBcCisJVEFSR0VUX0dMT0JBTF9GRkxBR1M9IiQoVEFSR0VUX0ZDRkxBR1MpIiBcCisJVEFS
-R0VUX0dMT0JBTF9GQ0ZMQUdTPSIkKFRBUkdFVF9GQ0ZMQUdTKSIKKworaWZlcSAoJChCUjJfU1RB
-VElDX0xJQlMpLHkpCitBTENIRU1ZX1RBUkdFVF9FTlYgKz0gXAorCVRBUkdFVF9GT1JDRV9TVEFU
-SUM9MSBcCisJVEFSR0VUX0dMT0JBTF9DRkxBR1M9IiQoVEFSR0VUX0NGTEFHUykiCitlbHNlCitB
-TENIRU1ZX1RBUkdFVF9FTlYgKz0gXAorCVRBUkdFVF9HTE9CQUxfQ0ZMQUdTPSIkKFRBUkdFVF9D
-RkxBR1MpIC1mUElDIgorZW5kaWYKKworIyBJbnN0YWxsIGFuIEFsY2hlbXkgU0RLIGZpbGUuCisj
-IFRoaXMgbWFjcm8gY2FuIGJlIHVzZWQgYnkgQWxjaGVteSBwYWNrYWdlcworIyAkMTogQnVpbGRy
-b290IHBhY2thZ2UgbmFtZQorIyAkMjogQWxjaGVteSBtb2R1bGUgbmFtZQorIyAkMzogQWxjaGVt
-eSBtb2R1bGUgZmlsZSBuYW1lCitkZWZpbmUgQUxDSEVNWV9JTlNUQUxMX0xJQl9TREtfRklMRQor
-CW1rZGlyIC1wICQoQUxDSEVNWV9TREtfQkFTRURJUikvJChzdHJpcCAkKDEpKQorCSggXAorCQll
-Y2hvICdMT0NBTF9QQVRIIDo9ICQkKGNhbGwgbXktZGlyKSc7IFwKKwkJZWNobyAnaW5jbHVkZSAk
-JChDTEVBUl9WQVJTKSc7IFwKKwkJZWNobyAnTE9DQUxfTU9EVUxFIDo9ICQoc3RyaXAgJCgyKSkn
-OyBcCisJCWVjaG8gJ0xPQ0FMX1NESyA6PSAkKFNUQUdJTkdfRElSKSc7IFwKKwkJZWNobyAnTE9D
-QUxfREVTVERJUiA6PSB1c3IvbGliJzsgXAorCQllY2hvICdMT0NBTF9NT0RVTEVfRklMRU5BTUUg
-Oj0gJChzdHJpcCAkKDMpKSc7IFwKKwkJZWNobyAnaW5jbHVkZSAkJChCVUlMRF9MSUJSQVJZKSc7
-IFwKKwkpID4gJChBTENIRU1ZX1NES19CQVNFRElSKS8kKHN0cmlwICQoMSkpL2F0b20ubWsKK2Vu
-ZGVmCi0tIAoyLjMxLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The libfutils library is a library that contains some common
+useful functions (list, hash, time).
+
+https://github.com/Parrot-Developers/libfutils
+
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+---
+Changes v1 -> v2
+  - Renamed ALCHEMY_TARGET_CONFIGURE_ENV to ALCHEMY_TARGET_ENV
+  - Removed ALCHEMY_TARGET_CONFIGURE_SDKS and set ALCHEMY_TARGET_SDK_DIRS
+  - Removed $(strip ...)
+  - Fixed indentation
+  - Added missing "depends on" in Config.in comment
+
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libfutils/Config.in      | 15 ++++++++++
+ package/libfutils/libfutils.hash |  3 ++
+ package/libfutils/libfutils.mk   | 50 ++++++++++++++++++++++++++++++++
+ 5 files changed, 70 insertions(+)
+ create mode 100644 package/libfutils/Config.in
+ create mode 100644 package/libfutils/libfutils.hash
+ create mode 100644 package/libfutils/libfutils.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 004eb17cd4..792aae625f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1153,6 +1153,7 @@ F:	package/alchemy/
+ F:	package/dtbocfg/
+ F:	package/libdbi/
+ F:	package/libdbi-drivers/
++F:	package/libfutils/
+ F:	package/lua-augeas/
+ F:	package/ulog/
+ F:	support/testing/tests/package/test_dtbocfg.py
+diff --git a/package/Config.in b/package/Config.in
+index cb4acd3cf0..89d928c0e7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1950,6 +1950,7 @@ menu "Other"
+ 	source "package/libevdev/Config.in"
+ 	source "package/libevent/Config.in"
+ 	source "package/libffi/Config.in"
++	source "package/libfutils/Config.in"
+ 	source "package/libgee/Config.in"
+ 	source "package/libgeos/Config.in"
+ 	source "package/libglib2/Config.in"
+diff --git a/package/libfutils/Config.in b/package/libfutils/Config.in
+new file mode 100644
+index 0000000000..7f795fc7e0
+--- /dev/null
++++ b/package/libfutils/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBFUTILS
++	bool "libfutils"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_INSTALL_LIBSTDCPP # ulog
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ulog
++	select BR2_PACKAGE_ULOG
++	help
++	  This library contains some common useful functions (list,
++	  hash, time)
++
++	  https://github.com/Parrot-Developers/libfutils
++
++comment "libfutils needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+diff --git a/package/libfutils/libfutils.hash b/package/libfutils/libfutils.hash
+new file mode 100644
+index 0000000000..1fdcd84b13
+--- /dev/null
++++ b/package/libfutils/libfutils.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  b38d40c46b83e448d8c1716ddfb04b7ecd384f5cd2cb773db5c26c0589accdb3  libfutils-c326ce0cc2a7354381265a7664bb215be587fac6.tar.gz
++sha256  eca11a1c62fae8d64a1247d93271375baecff8396141d7ff8d89671ee7e3ed0d  COPYING
+diff --git a/package/libfutils/libfutils.mk b/package/libfutils/libfutils.mk
+new file mode 100644
+index 0000000000..ac4ad69d71
+--- /dev/null
++++ b/package/libfutils/libfutils.mk
+@@ -0,0 +1,50 @@
++################################################################################
++#
++# libfutils
++#
++################################################################################
++
++LIBFUTILS_VERSION = c326ce0cc2a7354381265a7664bb215be587fac6
++LIBFUTILS_SITE = $(call github,Parrot-Developers,libfutils,$(LIBFUTILS_VERSION))
++LIBFUTILS_LICENSE = BSD-3-Clause
++LIBFUTILS_LICENSE_FILES = COPYING
++LIBFUTILS_DEPENDENCIES = ulog host-alchemy
++LIBFUTILS_INSTALL_STAGING = YES
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBFUTILS_CONF_ENV += TARGET_GLOBAL_LDLIBS='-latomic'
++endif
++
++define LIBFUTILS_BUILD_CMDS
++	$(ALCHEMY_TARGET_ENV) \
++		ALCHEMY_TARGET_SDK_DIRS="$(ALCHEMY_SDK_BASEDIR)/ulog" \
++		$(LIBFUTILS_CONF_ENV) \
++		$(ALCHEMY_MAKE) libfutils
++endef
++
++define LIBFUTILS_INSTALL_STATIC_LIBS
++	$(INSTALL) -m 644 $(@D)/alchemy-out/staging/usr/lib/libfutils.a $(1)/usr/lib/
++endef
++
++define LIBFUTILS_INSTALL_HEADERS
++	cp -Raf $(@D)/include/* $(1)/usr/include/
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define LIBFUTILS_INSTALL_SHARED_LIBS
++	$(INSTALL) -m 755 $(@D)/alchemy-out/staging/usr/lib/libfutils.so* $(1)/usr/lib/
++endef
++endif
++
++define LIBFUTILS_INSTALL_TARGET_CMDS
++	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(TARGET_DIR))
++endef
++
++define LIBFUTILS_INSTALL_STAGING_CMDS
++	$(call LIBFUTILS_INSTALL_STATIC_LIBS, $(STAGING_DIR))
++	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(STAGING_DIR))
++	$(call LIBFUTILS_INSTALL_HEADERS, $(STAGING_DIR))
++	$(call ALCHEMY_INSTALL_LIB_SDK_FILE, libfutils, libfutils, libfutils.so)
++endef
++
++$(eval $(generic-package))
+-- 
+2.31.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
