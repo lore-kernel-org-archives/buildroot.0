@@ -2,86 +2,87 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78BD1C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1036EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:21:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3535661106
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:18:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3535661106
+	by mail.kernel.org (Postfix) with ESMTPS id C747F60F6B
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:21:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C747F60F6B
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06EC880E39;
-	Sat, 13 Nov 2021 17:18:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 710EF814A1;
+	Sat, 13 Nov 2021 17:21:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KZ2BeCmq4Fxs; Sat, 13 Nov 2021 17:18:57 +0000 (UTC)
+	with ESMTP id QwHOh-KGjf0N; Sat, 13 Nov 2021 17:21:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4096880C2B;
-	Sat, 13 Nov 2021 17:18:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 363791BF370
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:18:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCBB480EDD;
+	Sat, 13 Nov 2021 17:21:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 892B91BF370
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25D4840241
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:18:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77CD660651
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:21:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vQn20AMbMa9C for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 17:18:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JeLj1Jlt9q3Y for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 17:21:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 314B240238
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:18:54 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- y84-20020a1c7d57000000b00330cb84834fso12360248wmc.2
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 09:18:53 -0800 (PST)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8D14B60623
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:21:44 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id p16so30906678lfa.2
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 09:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=jmYAT8K1aqlLqwrWCHl6co83FMIDwvavp/oUvaS8VUQ=;
- b=IsELphkJ3RlQAK3DCA1YkCtwBRpL/L4IcRca12RFF9wfnfNNUJ2JGujuY+1cdV5R+x
- oFj4s6K6sdePQ2lr3BBXULEi8vuvGRNQaUku/LFTgPX3A45ezK+MhcdfKkbxyb7N+yhb
- 8kAVOS5WEkQ7fBrFf0tAB9lWb5uXlTTP5MXMseRG1E6jUI+tahle0eVh74dxgrDqXlAR
- GkgyejsvwArLBmtPu8VioWxZwI4ulc4fJeOH4Y0/ym4K2KJGXGIO6/oAX8VgHs+njF1K
- BkBO6AO5weDmT1E8iYNZwEpn9+3tw90LKqTTkFNUfE/4o405Ud7FBLsHPFPCiiLJLAWo
- KJLw==
+ h=to:from:subject:message-id:date:user-agent:mime-version
+ :content-language;
+ bh=3jyXd85PtyMNGCFoskmsrJESPv/1m+b3eNeuO9hY8r8=;
+ b=RifHG7UM+HpHzQJDINyHsmeaYP20Mrw2mtxhh6OS9ilJtIANAjMPvFbVhmrg5tAW9L
+ iXolyzTn1pujw/n8RrwHFgMVEhjksJk6EcBupZl5wazxxPE2nDGmaxCZFCMA+Wk8tzmr
+ KrZ46nfEr+TxYgotXO8Hyz1LkkjTKTv0Wbx3M4ry6+FquE8vgAE93497kqAVYMZQ54Xt
+ RtQ5503ALqTzmwqgJIyRJbQIKwnTXAI8JhtD6j4l5eSkTD6rLL6w9RWiS1iAOXM9VYVr
+ StWPzf6e3aNBmD5tMpVhVTKfL9P0zz985SxrnzblLCVCF6ojgzQ4XqydSSc2Gi7sWI4r
+ vs5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=jmYAT8K1aqlLqwrWCHl6co83FMIDwvavp/oUvaS8VUQ=;
- b=iYNNCcnGukR+wPv2VEPMWaW+uE0OazUahpysXxLyaVYSKfKMLvwxFwfJi8i4xEQ5Qc
- le+xfxxqVL6SmbrvK6Qq83VmMHPqx2j1Addbh8iw7BHzt4D8Dx0xlbE/L/Z+kIafSctG
- krCHZXAjhLmtNiGSEfr9nVJyAB1mxRqGfP6+FHylRZshOGs14aageKoCnjdR+1GNbTzo
- jEitfcu6LNI38wxUv5AC7AGvxIuBJOB2jeahpuOjwKj+G35j6ajsnt6Q9n8Tp5TmL43C
- C0GAsQvcBlGQUAscnn7sONbpOCX5njnd+As8p9qbNj3P+rpvaR7a8vjuRFiZpzXIzYUv
- b5qA==
-X-Gm-Message-State: AOAM5333lydCGAz19YwD8Nv7wNGIoV1gfzc1fiq2NGrnJwngO/vwuyTq
- bd+id6n0/v4qXJzqx8D+wft5NVN36FI=
-X-Google-Smtp-Source: ABdhPJzXH9Tdwh7sxf0Kf0Vt4W9r68qiWkWMsarhDTnFRzhG50qGXuXJHs1xUYD5BgcyfjVAKDKqIg==
-X-Received: by 2002:a05:600c:35cb:: with SMTP id
- r11mr45412267wmq.190.1636823932265; 
- Sat, 13 Nov 2021 09:18:52 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id g13sm8681181wmk.37.2021.11.13.09.18.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Nov 2021 09:18:51 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+ :mime-version:content-language;
+ bh=3jyXd85PtyMNGCFoskmsrJESPv/1m+b3eNeuO9hY8r8=;
+ b=7SpwdoJ76umuxfGdS6D+rGDWJhw7Hr5nq9gWbYOx6qF0G2ND0XySM0UjgKnwm/gy2T
+ uh4LKbTRp23lNm/5mxqnz7zKKZIu0HwFJZRZ5+73S9konvDMe++bLcKT5MgqOCC3komo
+ /I4AAigVYdXL0Fu8OpOmy437HkjTT7qrY5UswuPPmM3Jli3kMYt+4qwklLKI/4O/zkFj
+ LCCNElaWpTBOacw/mmKkSYhkFA64/eDZbx7pyh9d+sIDNrAsl4iIZha9Pc2y/Y+naDez
+ mG+TDSaio5M2hCgQB3TzD/SpgMwRMfeA2o8punidbP/DzP1YJdpnGcaUCKbVlEA2QMT7
+ p/aQ==
+X-Gm-Message-State: AOAM530abIu4C70kipDstjYUltTYMJ/GJllQbHa0lfu93HlZTmqsm3b8
+ eF+EGDXgIb1UMCkvqRR1ZoXGjpPC60o=
+X-Google-Smtp-Source: ABdhPJyLhCSGj+FWaLc8JG9rs83gKai3X5+1Jejrv8Nnp1/531cLZpqs3Fr77Ogn6m0/QAljdti7yQ==
+X-Received: by 2002:a19:9157:: with SMTP id y23mr22901667lfj.277.1636824102390; 
+ Sat, 13 Nov 2021 09:21:42 -0800 (PST)
+Received: from [192.168.10.7] ([178.155.5.87])
+ by smtp.gmail.com with ESMTPSA id g6sm914273lfu.86.2021.11.13.09.21.41
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 13 Nov 2021 09:21:42 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 18:16:50 +0100
-Message-Id: <20211113171650.579634-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Message-ID: <0ee5faa0-e4dc-a8a1-11ad-a1908a3d43aa@gmail.com>
+Date: Sat, 13 Nov 2021 20:21:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/dehydrated: bump to version
- 0.7.0
+Content-Type: multipart/mixed; boundary="------------88514A6BC493EDFE7AB67DDE"
+Content-Language: ru-RU
+Subject: [Buildroot] Enable uart1 and uart2 on Orange pi zero
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,63 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/dehydrated-io/dehydrated/releases/tag/v0.7.0
+This is a multi-part message in MIME format.
+--------------88514A6BC493EDFE7AB67DDE
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dehydrated/Config.in       | 2 +-
- package/dehydrated/dehydrated.hash | 4 ++--
- package/dehydrated/dehydrated.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Enable uart1 and uart2 on Orange pi zero.
 
-diff --git a/package/dehydrated/Config.in b/package/dehydrated/Config.in
-index 979938d70c..13b3632f9d 100644
---- a/package/dehydrated/Config.in
-+++ b/package/dehydrated/Config.in
-@@ -30,4 +30,4 @@ config BR2_PACKAGE_DEHYDRATED
- 	  You probably need to install a custom /etc/dehydrated/config
- 	  with the rootfs overlay.
- 
--	  https://github.com/lukas2511/dehydrated
-+	  https://github.com/dehydrated-io/dehydrated
-diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
-index 388dd24749..0452645256 100644
---- a/package/dehydrated/dehydrated.hash
-+++ b/package/dehydrated/dehydrated.hash
-@@ -1,6 +1,6 @@
- # Locally computed after verifying
--# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
-+# https://github.com/dehydrated-io/dehydrated/releases/download/v0.7.0/dehydrated-0.7.0.tar.gz.asc
- # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
--sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
-+sha256  1c5f12c2e57e64b1762803f82f0f7e767a72e65a6ce68e4d1ec197e61b9dc4f9  dehydrated-0.7.0.tar.gz
- # License, locally computed
- sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
-diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
-index 17c67b8478..28fb5a4912 100644
---- a/package/dehydrated/dehydrated.mk
-+++ b/package/dehydrated/dehydrated.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DEHYDRATED_VERSION = 0.6.5
--DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
-+DEHYDRATED_VERSION = 0.7.0
-+DEHYDRATED_SITE = https://github.com/dehydrated-io/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
- 
- DEHYDRATED_LICENSE = MIT
- DEHYDRATED_LICENSE_FILES = LICENSE
--- 
-2.33.0
+
+--------------88514A6BC493EDFE7AB67DDE
+Content-Type: application/gzip;
+ name="board.tar.gz"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="board.tar.gz"
+
+H4sIAI/zj2EAA+2WUW/TMBDH99p8itMeeAnX2I4dbx2g8gHggS8wOU3aRmRJZTsSBfHdua7p
+NiEGpKVBCP+V5CL7zmfnd3GSt8YWycVZxRjTSgFZrhXrLd/ZBwGXXKZacyU1MJ4ywS9AnXda
+e3XOG0tTcaVdldvn/X7V36/jwf4jyu/5t9Y0q3JTnacQBvEnR8ZlJmTgP4a+43+4wc+lbf9U
+NQzin0niryVTgf8Y+in/jfGLdelOrYNB/LUA2vxZmgb+Y+i3+NdV0306vgqG8M9YRvwF1yzw
+H0MD+NOyJL798A4L73DviL0ner+d3nv/KAcFZlI+y58zfeDPpFL0/qdMStr/2RgP4D/nX1TL
+JWAHaAHfg0mMXazpcpfkbesTIp24rrmqcC1wU3cH7j32KfVDPjwmQsRjck0EfRqQ0yGA6xlT
+MyWmj3tITIXDojiOj5nT49gpcDGT6SyVU319vfsZ5bIfez4H5FfyJfnEvZ3PI3jRGes5fIlg
+sqmahbc1NuaudPAaLotyabraX9486WTU8WofdEtt7s1NhBOqQ9/tQypn8rosKCZ+0tx+NNvd
+MF/p7HOKY3KKE3K6/Lb1K8r6t+s2KCgoKOg0fQP9YQEpABQAAA==
+--------------88514A6BC493EDFE7AB67DDE
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--------------88514A6BC493EDFE7AB67DDE--
