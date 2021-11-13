@@ -2,87 +2,80 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43180C43217
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 18:11:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 117D3C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 18:12:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D455761208
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 18:11:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D455761208
+	by mail.kernel.org (Postfix) with ESMTPS id 6CF3E60F36
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 18:12:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6CF3E60F36
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CCE040173;
-	Sat, 13 Nov 2021 18:11:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F52080F6F;
+	Sat, 13 Nov 2021 18:12:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w5vAce-np_6s; Sat, 13 Nov 2021 18:11:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id po8u881iYTA5; Sat, 13 Nov 2021 18:12:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D155400BF;
-	Sat, 13 Nov 2021 18:11:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F4EB1BF863
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 18:11:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 989DB80F4A;
+	Sat, 13 Nov 2021 18:11:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D9021BF863
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 18:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BA7A6062B
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 18:11:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A1D680F4A
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 18:11:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oZDYChBEtlY0 for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 18:11:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3hWjbXvzEX1Q for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 18:11:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5659D60622
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 18:11:00 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id e7so10854372ljq.12
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 10:11:00 -0800 (PST)
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com
+ [IPv6:2607:f8b0:4864:20::a29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 623E980F41
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 18:11:55 +0000 (UTC)
+Received: by mail-vk1-xa29.google.com with SMTP id k83so6052650vke.7
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 10:11:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=to:from:subject:message-id:date:user-agent:mime-version
- :content-transfer-encoding:content-language;
- bh=le0Nr3aTjSNTnYsOQYWRiFDIcohDhSdcuezC+1y41gs=;
- b=RTxViJGYuhwPWcJy085Tn1hjObE4hT1Um5PojrNok8w04NBZvBhc3PP3Bz+pDB00Ml
- +Pgp4smnbdtMrwMzlzL0Y2EPpV7/riPPWdCUG7D+3zA9lQMTntM5ejumJzI3YKbX2GRw
- kZnOq0tgY5FfSm/bypLLsIwAbT+Eo9/UcIbeulJmmKPAd6jiJti0nAz6Xocb2Tk6TT5i
- zKwkokl7Cvrkx9vKsrRxNa0euZOZUNmn/PCBTeZjD70dNmtEVoWIO/PWwl7sUkQ7xqK/
- rEjJMxkxAshDtdq2SqhsWnke7f7FjFi0s1ToG6BmWKftG+LqTwEIVmzF6ak+86YPx+v0
- ZzjA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=CvckwdA62Ive5LA66uh/McveXgU5jZbN++ujmpDJD90=;
+ b=XT1IEZr+JdQ9k+LFDM/iANo6uaTnt5Ejkxh/kZgbL5q6cXxUYCCE+j2TqLBziD/Wk+
+ hfKzyGUF7MjEGpcQQmmW/v2IJlwBgvlWNPsGRHXk456NSTGj8vRlPBC5+zYkxUSIDReE
+ w1pE1FhZvtKJFSKVibcmfJVaAj5Ni+AM7AAxXxtKIXHE9ofQ6yTiKdicSZNN5M7Mfz8F
+ YhQgX7i3+tnVLkjWhcPVFdOCdUsOaVVBJ+3jCpCDF6CiqK7CgetQY4w791bmorPEsdT3
+ KwUWwWjiqF/A94vwSWu7JZHH6QyLQKXkky9p/e+K2f3v6M08Yecc1GiHmYjohc3c18Pj
+ 0GeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:to:from:subject:message-id:date:user-agent
- :mime-version:content-transfer-encoding:content-language;
- bh=le0Nr3aTjSNTnYsOQYWRiFDIcohDhSdcuezC+1y41gs=;
- b=XQWU4q/YG9kpQso7nAX98b4PsCE4mb6ANt7isePIkgABO8C6+bEwiARq2EUzT+7s7x
- uE84dUJTx87bSbn+CRlZEMON6+QPAZnSvwMd+tv/snpX7FQ7LH8EWzQ2YdHdJyw9p98u
- sH7jULBU31pQH/z2J6U9BExYBfFE9G/M8HBqBiYDCguWFa154nSzHkMNWP7mcmonfsef
- injrshSDzwxIAadn1bAxcg3gr9xknN32dtSOv5ltG5KRwoZUF9SOoJ2WMrEJ0qMJm10+
- C4FpjKis+Xug8IypJDoGnB6ZJ1fceST6+EWRT0SOX0gP4IGjuhRop9Z7dYr8LEixTd1O
- 9mVQ==
-X-Gm-Message-State: AOAM5322Wcvw0zTrP1vfYXVPetNV8yfuWCPL5X1JLiQaT9l2/zGmKmW3
- 1zUt0PVt7kcNwVsrCGA2YSSoXPdJKqM=
-X-Google-Smtp-Source: ABdhPJwYLmdI24t0p+hD6yJD2lP0hW4uIV5wO9N1lm7JZc40mBls0vWB36RgFnBCKhXqS6ZgVQfaww==
-X-Received: by 2002:a2e:5d7:: with SMTP id 206mr24840868ljf.133.1636827058034; 
- Sat, 13 Nov 2021 10:10:58 -0800 (PST)
-Received: from [192.168.10.7] ([178.155.5.87])
- by smtp.gmail.com with ESMTPSA id h7sm906880lji.112.2021.11.13.10.10.57
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 13 Nov 2021 10:10:57 -0800 (PST)
-To: buildroot@buildroot.org
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Message-ID: <d32c5762-899a-d9f9-c634-c696c1b4a4b5@gmail.com>
-Date: Sat, 13 Nov 2021 21:10:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=CvckwdA62Ive5LA66uh/McveXgU5jZbN++ujmpDJD90=;
+ b=65TagnMulTu7vYL1UKKFDWoWgPZ70q5Z5pMx5Y4NNXwQk80Rp57PgVXhB+Jwqmc+UK
+ I9xf4zagWidUvgWvXI6/NeIfBmVlsY77UPFkQcH3DhQNtVSfa+FxgoUET/7aAl4lalfW
+ g+YyjmgCig5aKJSTdHnF035SXFSmOub2rFX01p6iA8XqJbEvSkrZ3Xunpz+x0kT2fD33
+ dZTkDiX3pOi1totStkXIPe4PD7zzysMvF915MPkRVKV2kCUzd55VZDkBKdFlaoFwnFVm
+ Az9kuKRv3nZoI25nTgY/uTAXOboHKlRFyVYArUquRm2iscN8zhdd+Y2ekh6WM1qPpdZH
+ 6aGQ==
+X-Gm-Message-State: AOAM532AGXip2KG3ryXRfafJdI3lQ6LynDY5wtcJ7ZRiTQq5MaTCf6Dd
+ NTtTtmMssWQrDkoje7zLoGAhmVBwv2C0DPnscdP6VOXFNHU=
+X-Google-Smtp-Source: ABdhPJzvo/T1QkKsFVv9UMv+Hrwv0LCGsgH1nNb+yWmRV6qED9qO8IixxamTGX+L7stdNX9DpVCWVmQeU2hOC8TvyK8=
+X-Received: by 2002:a05:6122:8cf:: with SMTP id
+ 15mr37918707vkg.16.1636827114200; 
+ Sat, 13 Nov 2021 10:11:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Language: ru-RU
-Subject: [Buildroot] Using UUID to specify the root file system location.
- Orange pi zero
+References: <20211113143857.2741808-1-festevam@gmail.com>
+ <20211113180650.45de409e@windsurf>
+In-Reply-To: <20211113180650.45de409e@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 13 Nov 2021 15:11:43 -0300
+Message-ID: <CAOMZO5ACPGfYjga2d8O3SV+cQaM3e9VVPZ_ioR3dpZ84O8J_wg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH RESEND] imx/genimage: Place the rootfs at a
+ proper offset when BR2_LINUX_KERNEL_INSTALL_TARGET=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,24 +87,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ZGlmZiAtdSAtciAtTiBhL2JvYXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8vYm9vdC5jbWQgCmIv
-Ym9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVyby9ib290LmNtZAotLS0gYS9ib2FyZC9vcmFuZ2Vw
-aS9vcmFuZ2VwaS16ZXJvL2Jvb3QuY21kwqDCoMKgIDIwMjEtMTEtMTAgCjE1OjE3OjM4LjAwMDAw
-MDAwMCArMDMwMAorKysgYi9ib2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvL2Jvb3QuY21kwqDC
-oMKgIDIwMjEtMTEtMTMgCjIwOjU2OjE4LjA0NTA3NTc3OCArMDMwMApAQCAtMSw4ICsxLDEyIEBA
-CiDCoHNldGVudiBmZHRfaGlnaCBmZmZmZmZmZgoKLXNldGVudiBib290YXJncyBjb25zb2xlPXR0
-eVMwLDExNTIwMCBlYXJseXByaW50ayByb290PS9kZXYvbW1jYmxrMHAyIApyb290d2FpdAorcGFy
-dCB1dWlkIG1tYyAwOjIgdXVpZAorc2V0ZW52IGJvb3RhcmdzIGNvbnNvbGU9dHR5UzAsMTE1MjAw
-IHJvb3Q9UEFSVFVVSUQ9JHt1dWlkfSByb290d2FpdAoKIMKgZmF0bG9hZCBtbWMgMCAka2VybmVs
-X2FkZHJfciB6SW1hZ2UKIMKgZmF0bG9hZCBtbWMgMCAkZmR0X2FkZHJfciBzdW44aS1oMi1wbHVz
-LW9yYW5nZXBpLXplcm8uZHRiCgogwqBib290eiAka2VybmVsX2FkZHJfciAtICRmZHRfYWRkcl9y
-CisKKyMgUmVjb21waWxlIHdpdGg6CisjIG1raW1hZ2UgLUMgbm9uZSAtQSBhcm0gLVQgc2NyaXB0
-IC1kIGJvb3QuY21kIGJvb3Quc2NyCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+Hi Thomas,
+
+On Sat, Nov 13, 2021 at 2:06 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+
+> I don't see the relationship between BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> and changing the offset of the rootfs to avoid rootfs corruption.
+>
+> All what BR2_LINUX_KERNEL_INSTALL_TARGET=y does it add the kernel image
+> into the /boot directory of the rootfs. It makes the rootfs larger for
+> sure, but it would still start at the same place.
+>
+> Are you sure there's any relationship with
+> BR2_LINUX_KERNEL_INSTALL_TARGET=y here?
+
+Yes, this problem only happens with BR2_LINUX_KERNEL_INSTALL_TARGET=y.
+
+When BR2_LINUX_KERNEL_INSTALL_TARGET is not selected, then
+board/freescale/common/imx/genimage.cfg.template is used as per the logic
+inside board/freescale/common/imx/post-image.sh.
+
+board/freescale/common/imx/genimage.cfg.template correctly puts the
+rootfs at a safe offset.
+
+With BR2_LINUX_KERNEL_INSTALL_TARGET=y, then
+board/freescale/common/imx/genimage.cfg.template_no_boot_part is used and no
+offset to the rootfs is given, which may cause U-Boot environment
+area to write into the rootfs
+area, causing the rootfs corruption.
+
+Please let me know if you need more information as this problem is
+easy to reproduce.
+
+Regards,
+
+Fabio Estevam
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
