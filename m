@@ -2,86 +2,85 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8866C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:30:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8580DC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71EB160F70
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:30:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71EB160F70
+	by mail.kernel.org (Postfix) with ESMTPS id 512D660F22
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 512D660F22
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45AD3405DB;
-	Sat, 13 Nov 2021 13:30:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2002540264;
+	Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OPt9R4wsaSbe; Sat, 13 Nov 2021 13:30:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qjIkcHZ6zJBZ; Sat, 13 Nov 2021 13:31:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CDE8405DA;
-	Sat, 13 Nov 2021 13:30:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 47D891BF2FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4696E40245;
+	Sat, 13 Nov 2021 13:31:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2DA21BF2FD
  for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36EDB605AD
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE62A40219
  for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YYiBfaPcOkML for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 13:28:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id keJQeakFDi6i for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4518E60594
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F101C40017
  for <buildroot@buildroot.org>; Sat, 13 Nov 2021 13:28:38 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id d27so20646824wrb.6
+Received: by mail-wr1-x430.google.com with SMTP id u18so20645544wrg.5
  for <buildroot@buildroot.org>; Sat, 13 Nov 2021 05:28:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=E0BjKL88KniDiRhQLSpHNNzztWzb5dE6juSeAB3A6Ag=;
- b=mkOpHxue+OTOkUw0OnYkTKIcfHL4A04QXAgEt1NfEe61QG07Ti/wiUmp9IUyPdGfUt
- XlbrhxB/d9sW7tKktw/sg3A9OrKso6LvnIXtOSSl+p0KClknsmgBepC8Vzi9iIUUxhZ9
- rCB1rBOUkpff0i5KuBmUjT0pllMUdY1Nw7ZNvjW3bhBmAAFQQih2KCm6Br7FUYT8ZwiM
- AW92wtcru8RtLhBGOAKYMHzioX9usFzhGOVtRM8ip+NMAkGf7TdO93ZGSpqwQEpq2Wr2
- Gm/crE4uDhZY39QipQrRhEL2NeXfj2VImXQRMvQLvG9buLXymEl0EQYsbihdznQLSUL5
- M2tg==
+ bh=yaLpGg+51ueKLsTBiqRx6sXd9zY0vWeWuMLXu4vJAQs=;
+ b=HeufsgXr4TNvFeqSZ0h9mUjCIg4qu9KegzWOusbD4C8K/eOUcz2987cgz7zOHfvpmv
+ bylu347Ob7OFQoEHFwE7S7hXwGlKgz0kZqeXBXNE0XLnX6uCWPHA7TBrdpypYxlBSQC2
+ E11Drj/YKQBNxw+/9n0V0IzYe4KZwRH3nDfzg6Srs9/R+7xs0TP/NqxxKA4QCZcdm7G0
+ XXEvpASRtTJvbvBrXavHSy1SlWJ4VCuAdH291QV/GBZB7eB2eB0C+5RUFLwLPE0X+jEr
+ BTaCy0nZs8YPabhLMJussO/bIEtlTwIO86ViuiLenw9xF6t59LpzrykUDk8oAIvyAWwP
+ 2ZZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=E0BjKL88KniDiRhQLSpHNNzztWzb5dE6juSeAB3A6Ag=;
- b=lp4p7q0BZQFtUJTD+E5pEVWsM/AxjfZRB7XpqMqM15Dpwp6HKiN8+fjTuFlpbSKZsj
- JGVrIfhRL32U7DQtaBQbF6mNBBQ9hT5qtkkrw19nF4qng+uZ5k4nwQWYu009F82eVkZ9
- 8l9W8uOpvqZCJ3935iLe7XtCxsSzoZffWbpFGgAOBND/zxUdbUX0uP9qgeZq/m7vfejg
- pYVOUKOU6OezY6+aJiyWHlEMFQijRqdOdXlOwaCzinrTDlBWmDL1X0cyWFjJRm51QKYR
- C6Cjm63gXk13lcb36pYKW0rPRp3bCVIreCCqI/JeXtMGHw4Fw3+TyuZ+klQy2hOXv1OR
- zkmA==
-X-Gm-Message-State: AOAM531+C4Ezy/LaWiYFHNsKqua98cyWp8GBuvhnIKuROWbkpgl8RU3E
- lmhYglpYcrv2c9t3bNDaeNAu3McuEegjew==
-X-Google-Smtp-Source: ABdhPJyHkuJ0IPblNQ1uwBmITqxHlI1lXpVM4aCaY2zp43EmRhAqCCQH6fXFvIj6yD+jKU8WL561Tw==
-X-Received: by 2002:adf:ec90:: with SMTP id z16mr29263514wrn.247.1636810116568; 
- Sat, 13 Nov 2021 05:28:36 -0800 (PST)
+ bh=yaLpGg+51ueKLsTBiqRx6sXd9zY0vWeWuMLXu4vJAQs=;
+ b=qJbG3EQhHwzzNZz30L8SaKVouvgcX6rW7i7BN0wMYWY8g+g6keJjNNGvoTFsWAL3La
+ EgmegS1cIJMmuWYe/LNmlW3sWpbIusGmjLGjBS5hjmkj8CFhqy5FfLBEteBr4ELCY7tR
+ 0tJUnt5Url1FPrOSfvAxcUfpzJFi1+5cXm+bJyMLHRf66vnS7br+FhSCdCLxYcX6WeaS
+ D9iQ227TvxPhOXNPphvmbmY1s4yNSueXxYva3mSlPKREvE/zgs33sbrDo3TyYkCHT+Ja
+ k5ByuzWJ7uXGscJXNnyo6WuqJiM1Ze31A3Kny27UQqAAWLmxk5SoNm308ydOVQ5K5IQZ
+ b7BA==
+X-Gm-Message-State: AOAM530pg3YNBEmZWbv/GjutsRA1VH/qPt5/2dR4rqhQREsevQi+ue/T
+ 7MhwGyi/EWkMjztU2cmmXGELqNDh++pHqQ==
+X-Google-Smtp-Source: ABdhPJxsFXzslRQtTfAlJwuQ1Tp21ag0dKZvcaY4OQ7WKLit2pqZLiIDAahbYUstEfa5q0ojl9sS0g==
+X-Received: by 2002:a05:6000:1788:: with SMTP id
+ e8mr28632530wrg.45.1636810117307; 
+ Sat, 13 Nov 2021 05:28:37 -0800 (PST)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:68ab:b59:72c3:89f3])
- by smtp.gmail.com with ESMTPSA id p14sm5606890wms.29.2021.11.13.05.28.35
+ by smtp.gmail.com with ESMTPSA id p14sm5606890wms.29.2021.11.13.05.28.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Nov 2021 05:28:36 -0800 (PST)
+ Sat, 13 Nov 2021 05:28:37 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 14:28:23 +0100
-Message-Id: <57e124aa10e9242c88e6c2b934c68bf5c8cf0af4.1636810092.git.yann.morin.1998@free.fr>
+Date: Sat, 13 Nov 2021 14:28:24 +0100
+Message-Id: <04d568a84678569e4aed9a17d0609009271e146f.1636810092.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1636810092.git.yann.morin.1998@free.fr>
 References: <cover.1636810092.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 12/16 v2] package/pkg-utils: generate proper
- JSON strings where they are emitted
+Subject: [Buildroot] [PATCH 13/16 v2] core/show-info: report whether a
+ package is overriden
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,145 +92,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, eeppeliteloop@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, our clean-json macro does two things:
-  - remove excessive commas before a closing list or dictionary;
-  - escape the backslash.
+The show-info output can be used in quite some ways, like to assess the
+validity of the current configuration, like a production build in a CI
+would do for example. One such assessment would be to ensure that no
+package is overriden.
 
-We are going to need the comma-drop feature of clean-json, but on a
-JSON blurb where all the characters, backslash included, are already
-all properly escaped, so that we do not need further escape.
+Additionally, when we will (later!) want to check whether we can re-use
+cached artefacts of a package, we will not want to do so for packages
+that are overridden (nor would we want to actually cache such a result
+either).
 
-So, we drop the backslash escaping from clean-json, and use the newly
-introduced mk-json-str helper in every locations where we turn a
-Makefile variable into a JSON string.
+We do not expose the override location, because this is a purely-local
+information, and show info should never contain such local information
+(the output of show-info can be shared). Besides, that information is
+already known by the user, as they passed it to Buildroot via local.mk
+to begin with.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: eeppeliteloop@gmail.com
 ---
- package/pkg-utils.mk | 53 ++++++++++++++++++++++++++++----------------
- 1 file changed, 34 insertions(+), 19 deletions(-)
+ package/pkg-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 15e3e14e1b..0b0ff77419 100644
+index 0b0ff77419..da123a6ed2 100644
 --- a/package/pkg-utils.mk
 +++ b/package/pkg-utils.mk
-@@ -96,7 +96,7 @@ endef
- # $(1): upper-case package or filesystem name
- define json-info
- 	"$($(1)_NAME)": {
--		"type": "$($(1)_TYPE)",
-+		"type": $(call mk-json-str,$($(1)_TYPE)),
- 		$(if $(filter rootfs,$($(1)_TYPE)), \
- 			$(call _json-info-fs,$(1)), \
- 			$(call _json-info-pkg,$(1)), \
-@@ -107,47 +107,59 @@ endef
- # _json-info-pkg, _json-info-pkg-details, _json-info-fs: private helpers
- # for json-info, above
- define _json-info-pkg
--	"name": "$($(1)_RAWNAME)",
-+	"name": $(call mk-json-str,$($(1)_RAWNAME)),
- 	$(if $($(1)_IS_VIRTUAL), \
- 		"virtual": true$(comma),
+@@ -113,6 +113,7 @@ define _json-info-pkg
  		"virtual": false$(comma)
  		$(call _json-info-pkg-details,$(1)) \
  	)
--	"build_dir": "$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))",
-+	"build_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))),
++	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+ 	"build_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))),
  	$(if $(filter target,$($(1)_TYPE)), \
  		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
- 		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
- 		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
- 	)
- 	"dependencies": [
--		$(call make-dq-comma-list,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)))
-+		$(call make-comma-list, \
-+			$(foreach dep,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)), \
-+				$(call mk-json-str,$(dep)) \
-+			) \
-+		)
- 	],
- 	"reverse_dependencies": [
--		$(call make-dq-comma-list,$(sort $($(1)_RDEPENDENCIES)))
-+		$(call make-comma-list, \
-+			$(foreach dep,$(sort $($(1)_RDEPENDENCIES)), \
-+				$(call mk-json-str,$(dep)) \
-+			) \
-+		)
- 	]
- 	$(if $($(1)_CPE_ID_VALID), \
--		$(comma) "cpe-id": "$($(1)_CPE_ID)" \
-+		$(comma) "cpe-id": $(call mk-json-str,$($(1)_CPE_ID)) \
- 	)
- 	$(if $($(1)_IGNORE_CVES),
- 		$(comma) "ignore_cves": [
--			$(call make-dq-comma-list,$(sort $($(1)_IGNORE_CVES)))
-+			$(call make-comma-list, \
-+				$(foreach cve,$(sort $($(1)_IGNORE_CVES)), \
-+					$(call mk-json-str,$(cve)) \
-+				) \
-+			)
- 		]
- 	)
- endef
- 
- define _json-info-pkg-details
--	"version": "$($(1)_DL_VERSION)",
--	"licenses": "$($(1)_LICENSE)",
--	"dl_dir": "$($(1)_DL_SUBDIR)",
-+	"version": $(call mk-json-str,$($(1)_DL_VERSION)),
-+	"licenses": $(call mk-json-str,$($(1)_LICENSE)),
-+	"dl_dir": $(call mk-json-str,$($(1)_DL_SUBDIR)),
- 	"downloads": [
- 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
- 		{
--			"source": "$(notdir $(dl))",
-+			"source": $(call mk-json-str,$(notdir $(dl))),
- 			"uris": [
--				$(call make-dq-comma-list,
--					$(subst \|,|,
--						$(call DOWNLOAD_URIS,$(dl),$(1))
--					)
-+				$(call make-comma-list, \
-+					$(foreach uri,$(call DOWNLOAD_URIS,$(dl),$(1)), \
-+						$(call mk-json-str,$(subst \|,|,$(uri))) \
-+					) \
- 				)
- 			]
- 		},
-@@ -157,11 +169,15 @@ endef
- 
- define _json-info-fs
- 	"image_name": $(if $($(1)_FINAL_IMAGE_NAME), \
--				"$($(1)_FINAL_IMAGE_NAME)", \
-+				$(call mk-json-str,$($(1)_FINAL_IMAGE_NAME)), \
- 				null \
- 			),
- 	"dependencies": [
--		$(call make-dq-comma-list,$(sort $($(1)_DEPENDENCIES)))
-+		$(call make-comma-list, \
-+			$(foreach dep,$(sort $($(1)_DEPENDENCIES)), \
-+				$(call mk-json-str,$(dep)) \
-+			) \
-+		)
- 	]
- endef
- 
-@@ -171,9 +187,8 @@ endef
- clean-json = $(strip \
- 	$(subst $(comma)},}, $(subst $(comma)$(space)},$(space)}, \
- 	$(subst $(comma)],], $(subst $(comma)$(space)],$(space)], \
--	$(subst \,\\, \
- 		$(strip $(1)) \
--	))))) \
-+	)))) \
- )
- 
- # mk-json-str -- escape and double-quote a string to make it a valid json string
 -- 
 2.25.1
 
