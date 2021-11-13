@@ -2,86 +2,87 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B651C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:30:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24B55C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:49:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C52461152
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:30:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C52461152
+	by mail.kernel.org (Postfix) with ESMTPS id 8B73D611AD
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:49:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8B73D611AD
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4C9F60651;
-	Sat, 13 Nov 2021 17:30:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19040400A4;
+	Sat, 13 Nov 2021 17:49:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sjt0EnX_Mzfu; Sat, 13 Nov 2021 17:30:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aakDzMOJTMlm; Sat, 13 Nov 2021 17:49:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59F3360607;
-	Sat, 13 Nov 2021 17:30:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3179A1BF370
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:30:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E93E40150;
+	Sat, 13 Nov 2021 17:48:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 132DE1BF370
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E9E580E21
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:30:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F08BB40180
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:48:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Psn7wHYAwH9 for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 17:30:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4xiBw-wSeGXn for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 17:48:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 133B080CED
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:30:02 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- b184-20020a1c1bc1000000b0033140bf8dd5so9085948wmb.5
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 09:30:02 -0800 (PST)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 059B240165
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:48:56 +0000 (UTC)
+Received: by mail-lj1-x22b.google.com with SMTP id k2so17829491lji.4
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 09:48:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=VwohXBkkMa8K+Bh2CnXaUbX2iwf1A6CIBznJb8h9trg=;
- b=n65jKBnvHIIXJOI2v1825Hr2ZQToJmZn1CxDRsokM4DiYN9hY+e8zAuYRMSaNqmmmM
- f6qOkOIC2PEYwtdjwaJXRH6ldmaOJZ8ke1yp8566iURai3w9a2tRDHSaKgGUvRx9gh0R
- dtTdZvcKcEEoAhZmvhdpc5vEBivmMaV3WuUSEOA5EswztSN38N7LejnYgy7K+sQqtXt0
- cRRpsiUbevEw4Mxl+OF40W6kQXI7128FoK9NUdUbAysqFGQRPgndW1jVfrL5mTWIUpqH
- 4a5Behz8DqNCcV3KmHDUycsCRdwU4IRq5JLjw+G3xCzHKLmXY1Qp/DlehP9rxycmb5M2
- zP3A==
+ h=to:from:subject:message-id:date:user-agent:mime-version
+ :content-language;
+ bh=3RJTfwRiaI0W3wRVpHjGCWHbSgxjCLUtj9NyIJdzGpg=;
+ b=SlK2tReHXmEFsWrDV6XXZMOdMTXoWjE0pr4fgNwLnAUDtSsPdoJv0R+z5ys78hf/yk
+ JCEIgy1hzqZSMTlePCavD61XkhAMjuqkNrPeQ6E8droz7VBO+Y3v356AjYYmAejOZqn3
+ bHEPKr2+QgI0bXcqKBR1beHI40aB9VCy/m0ulyQculwJokvxkF0VgqGrezaXVemqiu/r
+ 6a05gx6Lu2a2hallSfeTiIedtDR12Nb55NSTLWOQmUZhbdo/lUPoBeAlG05NpK1gTTro
+ j+rJZ0hSIdFyp2DNXQr4Vn5Y3BUt2W5Q40lr+Fjo82X76YzMcY6A0rkgSqXoqeqHtkCN
+ fqAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=VwohXBkkMa8K+Bh2CnXaUbX2iwf1A6CIBznJb8h9trg=;
- b=a1wGxX+UUm0TJt6I4T3YRy7e1QzE3dzINjUh2jP3FCb0kPe0V2vvQs3DaihF1HRB58
- V/cpevEfLA9F7DOLoUs+t6etfLWrglZJiqSjc5q3v/fIK1GR0qTKrQU+2v9FTBpZ52mm
- LsUUuguzIRoZoTeMnvgAgS2FIQaddRrORXrI4y4om5fINcMqxY0B+WATF89GVWExHC6e
- tNdj3/7X/7yVUJHrKWhs7Oqe6M2LDdCq1V4j03kdVI2S7DNBe1P+U8DWGAQYx9TWE7LJ
- ObWNY+d5/g7KQiwS+++VoXazC1gOEfDCMSNigXf/QMGeeaJCWcnzuvZsMxDuzux0s2b5
- 4FvQ==
-X-Gm-Message-State: AOAM532iD5Te0OHD1H6vM5Echu4HUwHEMalwHmlcmuRgD6qGIWHsj7S2
- akpccAw8Oh4a9peoyC3JZyxXPbUqYWk=
-X-Google-Smtp-Source: ABdhPJwNstXYs7UHRBUmHO4ypKA5JoAhemJQQhbUp4taqPQhp5pYCc8USZjXpDzQOzo5/cy4agKv/w==
-X-Received: by 2002:a05:600c:290b:: with SMTP id
- i11mr44944924wmd.137.1636824601012; 
- Sat, 13 Nov 2021 09:30:01 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id e12sm10963484wrq.20.2021.11.13.09.30.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Nov 2021 09:30:00 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+ :mime-version:content-language;
+ bh=3RJTfwRiaI0W3wRVpHjGCWHbSgxjCLUtj9NyIJdzGpg=;
+ b=wGhCa10vIRfvjVsn2aNPkJrsWUvLCeYXcoBHd1GOYnGSljIvnwPA91xGvVK7OPbaDG
+ zmNTzBZEYxM6PMqK66EIIkMauqxMNqzZaCCfUdYqPzM01WNm60sUc7x+8RFi5oCisJvt
+ hMZTUOBXn7Hi06i3Lyf7930Ot9OLXXlK3nPkUO0kuQVuayYSMmWUNxbRjlWoYMXiQvdP
+ UHWm8UWOlzsrjGA0D7lohdJkgwHoxT3X9j5FLYMjBtJTfO4YydUkOn2ptfGEdj7D9Y/E
+ MlUYWBZZuSY7kcm5Z0MXVWngQokYfJHuqyrGShMLAlsQ6uH6ppNgSLMp8I3RUghUgRGp
+ Yngw==
+X-Gm-Message-State: AOAM533eF00T5EOgdQuPc+xRVZze1AdGQhShMr4pMCvvFrZWDu5uVr57
+ ihnTupf9YOe+GRVi62+1RxucqzlXzZo=
+X-Google-Smtp-Source: ABdhPJxdxOi1PTiNmDCA+K/YZ+AIOZdHofMQm5OLjBUgNXY20Uko658OEKFj7UkQ2hUpBVq7iJ9qvA==
+X-Received: by 2002:a2e:890c:: with SMTP id d12mr25467649lji.218.1636825734714; 
+ Sat, 13 Nov 2021 09:48:54 -0800 (PST)
+Received: from [192.168.10.7] ([178.155.5.87])
+ by smtp.gmail.com with ESMTPSA id r132sm247784lff.206.2021.11.13.09.48.53
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 13 Nov 2021 09:48:54 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 18:28:01 +0100
-Message-Id: <20211113172801.596096-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Message-ID: <492e9395-791c-b4bf-9caa-30513a7e9550@gmail.com>
+Date: Sat, 13 Nov 2021 20:48:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/memcached: bump to version
- 1.6.12
+Content-Type: multipart/mixed; boundary="------------5CFD4C98C7CABE32E4A0FDE4"
+Content-Language: ru-RU
+Subject: [Buildroot] Enable external RTC on orange pi zero
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +94,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1610
-https://github.com/memcached/memcached/wiki/ReleaseNotes1611
-https://github.com/memcached/memcached/wiki/ReleaseNotes1612
+This is a multi-part message in MIME format.
+--------------5CFD4C98C7CABE32E4A0FDE4
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Enable external RTC on orange pi zero.
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index a86a6f9f73..22c794d07b 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.9.tar.gz.sha1
--sha1  42ae062094fdf083cfe7b21ff377c781011c2be1  memcached-1.6.9.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.12.tar.gz.sha1
-+sha1  40d43e98f149e13e6c81eee813e6734f23413a01  memcached-1.6.12.tar.gz
- 
- # Locally computed
--sha256  d5a62ce377314dbffdb37c4467e7763e3abae376a16171e613cbe69956f092d1  memcached-1.6.9.tar.gz
-+sha256  f291a35f82ef9756ed1d952879ef5f4be870f932bdfcb2ab61356609abf82346  memcached-1.6.12.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index f233e11806..8f3506f9d4 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.9
-+MEMCACHED_VERSION = 1.6.12
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.33.0
+--------------5CFD4C98C7CABE32E4A0FDE4
+Content-Type: application/gzip;
+ name="Enable external RTC on orange pi zero.tar.gz"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="Enable external RTC on orange pi zero.tar.gz"
+
+H4sIACr6j2EAA+1a63OiSBDfr/JXzGWrtu6WoDPDy5jLViwlxqr4ODXu7icKlSTUKniAueSu
+7n+/HtD4CK5CVpKto4NiepruGX4zPY/uqeEP7wrvDkoYY1WWEdyJKuP5nbD7EyEiEUlUVRGr
+IsJExFR+h+TDViukmecbLlTFM91b83G73K7yeTue7j8JTQP8BwftATHwlyRFYvhTWczwT4MW
++A8cwx0dqBfEwJ+KCgb8JVHM8E+F1vF3XMO+NafWj+0I8fCXAX+FSFKGfxq0Bf/FD+Fv03Ve
+2hvizP+EUIQpVkmGfyq0F/5jy549COaD7xpefujYN9ZtHBvwPhRJ2oo/kUXyNP5lEMBUktn8
+jw/V6FX6n+P/HnlTa2Tec5VW86Je07vtOvtUtf7ZI8cFpch23EVxo1cF/vIfvXWht8udXned
+y7Q0W511ZoPK7SIO1f5luebY9Dw0dFxzIfS53tGutO6KrspFrYgpISuKypUNzkJG/6x96W1o
+H7nWvel6Twauys1QwrFH5sSwR2g4nd245p/o1gHBlYZW2tf6RUf7Q69qF+Xrq55ea/X1VrOq
+NcrNaqhDiEMg3zGNMfKtiYmGY2f4Df3a6VV+S6Cna/rIe/R8cxJqu3GdCXL9IUaGjwaO4wfs
+RUPAiH5Z6bW6X1fe6woTGtivV7SzI6bhiLWrPPOdieFbQ2M8fkSecW+umfOdwNiqKlDTa11W
+1vXPmc/1Vy3PGIxNNPNCkAYza+wLlh2+llUV1U5fL1cIxmf2Jrt73VTqkewvjA1mtAcfEIVX
+Hr5tx0b+nYksOgSD3upzzX5Da6zXvd7sXejhGNgwUO3C5lTdxtcrWrN33fkK5a89sPekvfx/
+IGR6SdcBseZ/Cvt/SkUp2/+nQrHwD9YB8XtBLPxhLYCpKONs/5cKJcAfmicL5U5DGPmeEAoK
+c0kB3Ksw8pgrzAcPBTZ2rf+wKC7wxwpREBapzMZ/tv47PI2smxskzJDgIqGJjILhQncw3EmB
+LSQKgHDBm9lFS7ijwnQ8W+A9hzsP5WgQ/xkOFjJJbOUoLPQEAhdFRC1huSTT/NKH8FjEmON5
+PkmdlrpFRHGJwCXni6JyQiVJpXPd5+dIgM3psYh4dgPR83MO5aAL+TMPnaEj55vxeHQKrJk3
+wLo10kemL9xOLYeV/v4BfiAFQe1r7XoLlja9el/TL+u1y0+nqPARtWtQ9LHAoX9POZ7jP8Bo
+wugfjn9uAEpz4TgrsdXYuVIM5HJDZwLjzmLLKxAewQrO8I5DQfZULueat6wm+EEpfgoYz1Xn
+mHX4vHbXzCgFCv0/8wJ57+5ANtj8j/H2+Z9QshH/kWACyPx/GvT+l8LAsgsDw7vjNucCcKPo
+E8rnC5rNNmzsACjYUQmw6REce2PuDyf8zGv8XBSOf+PtxP9kGsT/JDVb/6dBC/zfXPyPZvin
+Qev4v6H4X7b/T4W24P9a8T8qBed/WCWZ/0+F9sL/sPE/LKkh/lQV2XcQ/8vOf9KhLP6XLP73
+2rj9KIqxtUtsY8f4FxVVedr/U5H5f6IoWfw/Fdrc88edB1D81JH56W/cx5YHtDBbyCWilsTi
+lsPf5KqDs1+qlrCUpycq+wPW8uyXFNnRL3xTOTj55dD3XAna05fwHB83C4Dflk6QRNOeCQV8
+ZEZBBHcj5B80b8+kAj4yqyCCG2VjR2IBvyWzYJO/SC2I4Ae5BYGt72cX8BHpBXx0fsGmlacE
+g+iClQyDWEM3eQhv13hKrnkfR5Bce46cqFjABC6ExRLGcCXxFy+owbOQEvNYJ/IJlZWT1ZAS
+Pob6kGOiMqfCv05Ijj9wTO5wQTk+MirHR4Tl+BfG5fggMAfjfxmai4rNMYGI6Nzu8Nzz+Fxk
+gC6M0GUhuowyyuhl9B/xQdr0ADgAAA==
+--------------5CFD4C98C7CABE32E4A0FDE4
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--------------5CFD4C98C7CABE32E4A0FDE4--
