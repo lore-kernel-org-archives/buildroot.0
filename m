@@ -2,57 +2,52 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F220AC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85E32C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:03:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4426F6113B
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:02:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4426F6113B
+	by mail.kernel.org (Postfix) with ESMTPS id E902960FE3
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:03:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E902960FE3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F15E180E52;
-	Sat, 13 Nov 2021 17:01:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B331B81769;
+	Sat, 13 Nov 2021 17:03:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CEyGVnesV7K5; Sat, 13 Nov 2021 17:01:59 +0000 (UTC)
+	with ESMTP id wLhGMdDyatR6; Sat, 13 Nov 2021 17:03:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E6E88174C;
-	Sat, 13 Nov 2021 17:01:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28EA61BF299
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:01:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19EA48174C;
+	Sat, 13 Nov 2021 17:03:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B3AB1BF299
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18EC06066D
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:01:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27D948174C
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:02:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IU0tdrV5PuSX for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 17:01:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2BC7860668
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:01:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 598F7C0004;
- Sat, 13 Nov 2021 17:01:54 +0000 (UTC)
-Date: Sat, 13 Nov 2021 18:01:53 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CUweXZeitqbE for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 17:02:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53A6380E52
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:02:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id EDDFD8C9F5; Sat, 13 Nov 2021 16:58:52 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20211113180153.680cc0b8@windsurf>
-In-Reply-To: <20211113125620.1981211-5-bernd.kuhls@t-online.de>
-References: <20211113125620.1981211-1-bernd.kuhls@t-online.de>
- <20211113125620.1981211-5-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 5/5] package/x11r7/xserver_xorg-server:
- bump version to 21.1.1
+To: buildroot@buildroot.org
+Date: Sat, 13 Nov 2021 18:02:51 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d9185c6ba38430a017ed996c4180e141881ba570
+X-Git-Newrev: 345087ee5137a1aa28f1d0f54e914b9cc186c3f8
+X-Patchwork-Hint: ignore
+Message-Id: <20211113165852.EDDFD8C9F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/smcroute: bump version
+ to v2.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +59,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=345087ee5137a1aa28f1d0f54e914b9cc186c3f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 13 Nov 2021 13:56:20 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+- Drop backported patch, included in new release
+ - https://github.com/troglobit/smcroute/releases/tag/2.5.4
 
-> Removed xwayland options:
-> https://gitlab.freedesktop.org/xorg/xserver/-/commit/4ee66f574a70948ca90a5db94dd666a389a5ff3e
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0001-Avoid-trying-to-delete-inactive-VIFs.patch | 51 ----------------------
+ package/smcroute/smcroute.hash                     |  3 +-
+ package/smcroute/smcroute.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 54 deletions(-)
 
-XWayland is now apparently available as a separate component/package,
-so I guess it would be good to add a Buildroot package for it to keep
-this functionality available.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/smcroute/0001-Avoid-trying-to-delete-inactive-VIFs.patch b/package/smcroute/0001-Avoid-trying-to-delete-inactive-VIFs.patch
+deleted file mode 100644
+index 07f49dffcf..0000000000
+--- a/package/smcroute/0001-Avoid-trying-to-delete-inactive-VIFs.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 8ce1d117a31e35d97fb955b82edf13514267eaab Mon Sep 17 00:00:00 2001
+-From: Joachim Wiberg <troglobit@gmail.com>
+-Date: Tue, 28 Sep 2021 11:09:47 +0200
+-Subject: [PATCH] Avoid trying to delete inactive VIFs
+-Organization: Westermo Network Technologies AB
+-
+-When probing interfaces at startup, there's a check for IFF_MULTICAST,
+-if this flag is not set we try to delete its corresponding VIF/MIF.
+-This is for hanlding .conf reload scenarios where an interface has had
+-its MULTICAST flag dropped.
+-
+-However, when starting up on Linux systems, the loopback interface has
+-no MULTICAST flag set.  This leads to the following bogus warning:
+-
+-   Failed deleting VIF for iface lo: Resource temporarily unavailable
+-
+-This patch makes sure to check if we have a registered kernel VIF/MIF
+-for an interface before attempting to delete it.
+-
+-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+----
+- src/mroute.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/src/mroute.c b/src/mroute.c
+-index 291e9c4..6a80a47 100644
+---- a/src/mroute.c
+-+++ b/src/mroute.c
+-@@ -298,6 +298,9 @@ static int mroute4_del_vif(struct iface *iface)
+- 	if (iface->mrdisc)
+- 		rc = mrdisc_deregister(iface->vif);
+- 
+-+	if (iface->vif == ALL_VIFS)
+-+		return 0;
+-+
+- 	if (kern_vif_del(iface)) {
+- 		switch (errno) {
+- 		case ENOENT:
+-@@ -910,6 +913,9 @@ static int mroute6_del_mif(struct iface *iface)
+- {
+- 	int rc = 0;
+- 
+-+	if (iface->mif == ALL_VIFS)
+-+		return 0;
+-+
+- 	if (kern_mif_del(iface) && errno != ENOENT) {
+- 		switch (errno) {
+- 		case ENOENT:
+--- 
+-2.25.1
+-
+diff --git a/package/smcroute/smcroute.hash b/package/smcroute/smcroute.hash
+index 26d55adf88..ddc38eddd2 100644
+--- a/package/smcroute/smcroute.hash
++++ b/package/smcroute/smcroute.hash
+@@ -1,6 +1,5 @@
+ # Upstream .sha256 from GitHub
+-sha256	4342b95c99e410cab75e9ee80f20480e0170d8b07b8e31553ba1bec3e377fc56  smcroute-2.5.3.tar.gz
++sha256	96b890fd6fbf8553010f62beda991742f7b4e7e8aea3e75335fb6048b15869da  smcroute-2.5.4.tar.gz
+ 
+ # Locally generated
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+-sha256  d260ea4b9d4b01317568850c3271e3923b546ea4ad57c899e79434f1cc8bcf0b  0001-Avoid-trying-to-delete-inactive-VIFs.patch
+diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
+index 913647e7bf..81f540088a 100644
+--- a/package/smcroute/smcroute.mk
++++ b/package/smcroute/smcroute.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMCROUTE_VERSION = 2.5.3
++SMCROUTE_VERSION = 2.5.4
+ SMCROUTE_SITE = https://github.com/troglobit/smcroute/releases/download/$(SMCROUTE_VERSION)
+ SMCROUTE_LICENSE = GPL-2.0+
+ SMCROUTE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
