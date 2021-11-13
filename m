@@ -2,52 +2,54 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F369FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:06:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D28D1C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:06:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B73C260FE3
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:06:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B73C260FE3
+	by mail.kernel.org (Postfix) with ESMTPS id 8DB4E60FE3
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 17:06:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 8DB4E60FE3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96454404E4;
-	Sat, 13 Nov 2021 17:06:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63D4D40154;
+	Sat, 13 Nov 2021 17:06:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7PbPY5e_Bm73; Sat, 13 Nov 2021 17:06:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TBmvOf7XPYsE; Sat, 13 Nov 2021 17:06:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF48D4058A;
-	Sat, 13 Nov 2021 17:06:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3429E1BF42D
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:05:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9139C40281;
+	Sat, 13 Nov 2021 17:06:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9925A1BF370
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2462980DDD
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:05:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88EAC605AD
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 17:05:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6O1bocIKmHX5 for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 17:05:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7114880C86
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:05:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1A71B8CA27; Sat, 13 Nov 2021 17:01:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AGFjW8K-EHNo for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 17:05:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A74D3605AB
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 17:05:54 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id D6BD0240008;
+ Sat, 13 Nov 2021 17:05:52 +0000 (UTC)
+Date: Sat, 13 Nov 2021 18:05:52 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 18:05:00 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 345087ee5137a1aa28f1d0f54e914b9cc186c3f8
-X-Git-Newrev: 200f46b940965ea3eccab4b277f4990ec6ee755f
-X-Patchwork-Hint: ignore
-Message-Id: <20211113170108.1A71B8CA27@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libqb: bump to version
- 2.0.3
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211113180552.4ae7906c@windsurf>
+In-Reply-To: <20211113165110.574060-1-fontaine.fabrice@gmail.com>
+References: <20211113165110.574060-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libqb: bump to version 2.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +61,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=200f46b940965ea3eccab4b277f4990ec6ee755f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat, 13 Nov 2021 17:51:10 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Use official tarball and so drop autoreconf
+> Use official tarball and so drop autoreconf
+> 
+> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libqb/libqb.hash | 4 +++-
+>  package/libqb/libqb.mk   | 7 ++++---
+>  2 files changed, 7 insertions(+), 4 deletions(-)
 
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.3
+Applied to next, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libqb/libqb.hash | 4 +++-
- package/libqb/libqb.mk   | 7 ++++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
-index 0a01a9bbb5..b2c216f24c 100644
---- a/package/libqb/libqb.hash
-+++ b/package/libqb/libqb.hash
-@@ -1,3 +1,5 @@
-+# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.3/libqb-2.0.3.sha256
-+sha256  a74582bc886fa625f5238374c7c8ca98672a2519c8196b91276be55886d84e9c  libqb-2.0.3.tar.xz
-+
- # Locally calculated
--sha256  f72769c66479c51ac176b56837637b29d200f9dad40d23c5fdcb10f3a53ab1e4  libqb-2.0.2.tar.gz
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index a9cf5e3fb9..fb132365f1 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--LIBQB_VERSION = 2.0.2
--LIBQB_SITE = $(call github,ClusterLabs,libqb,v$(LIBQB_VERSION))
-+LIBQB_VERSION = 2.0.3
-+LIBQB_SOURCE = libqb-$(LIBQB_VERSION).tar.xz
-+LIBQB_SITE = \
-+	https://github.com/ClusterLabs/libqb/releases/download/v$(LIBQB_VERSION)
- LIBQB_LICENSE = LGPL-2.1+
- LIBQB_LICENSE_FILES = COPYING
- LIBQB_CPE_ID_VENDOR = clusterlabs
- LIBQB_INSTALL_STAGING = YES
--LIBQB_AUTORECONF = YES
- LIBQB_DEPENDENCIES = libxml2
- 
- # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
