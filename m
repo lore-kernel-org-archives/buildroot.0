@@ -2,85 +2,85 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8580DC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF7EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 512D660F22
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 512D660F22
+	by mail.kernel.org (Postfix) with ESMTPS id 9197B60F22
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 13:31:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9197B60F22
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2002540264;
-	Sat, 13 Nov 2021 13:31:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68CBC60676;
+	Sat, 13 Nov 2021 13:31:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qjIkcHZ6zJBZ; Sat, 13 Nov 2021 13:31:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G7Rea6THk1AZ; Sat, 13 Nov 2021 13:31:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4696E40245;
-	Sat, 13 Nov 2021 13:31:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C2DA21BF2FD
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9630605DF;
+	Sat, 13 Nov 2021 13:31:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B24C1BF2FD
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE62A40219
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 150C760676
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 13:28:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id keJQeakFDi6i for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AHn7z7Am2yTQ for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 13:28:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F101C40017
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 13:28:38 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id u18so20645544wrg.5
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 05:28:38 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A483C605AD
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 13:28:39 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ az33-20020a05600c602100b00333472fef04so11296611wmb.5
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 05:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=yaLpGg+51ueKLsTBiqRx6sXd9zY0vWeWuMLXu4vJAQs=;
- b=HeufsgXr4TNvFeqSZ0h9mUjCIg4qu9KegzWOusbD4C8K/eOUcz2987cgz7zOHfvpmv
- bylu347Ob7OFQoEHFwE7S7hXwGlKgz0kZqeXBXNE0XLnX6uCWPHA7TBrdpypYxlBSQC2
- E11Drj/YKQBNxw+/9n0V0IzYe4KZwRH3nDfzg6Srs9/R+7xs0TP/NqxxKA4QCZcdm7G0
- XXEvpASRtTJvbvBrXavHSy1SlWJ4VCuAdH291QV/GBZB7eB2eB0C+5RUFLwLPE0X+jEr
- BTaCy0nZs8YPabhLMJussO/bIEtlTwIO86ViuiLenw9xF6t59LpzrykUDk8oAIvyAWwP
- 2ZZg==
+ bh=e0qf4U/vhQnSimrP25oms7iDFGkaBAgYu/DEUcQsvkI=;
+ b=KTI8x2U6xuTKpS8QEEHVHID9icTSw79yMksbRKnRgJpVnd8hHpTWbfj9z+7+xIlosP
+ cZLxn3W75O0dI0qS4QARd0IYWN7pCs+J8S89lMMWv92y2C/P5sXiR6QDTKHTUZpPOK0d
+ adh0+lF/HzaK5rAEvGfAOVTpMyYw/Xq+mCZJGW0wzr+7Ekf6psOi4cvmlSLh6foLx7Nn
+ xn28f8xwpaJvQ27N54uenfYZXTPIkSUFeLaXvIE1VzP5dWrbjhGeFcA4Fb9aNsWaPF5r
+ YyUEt+yfPKvREnijJvPXJwtuSnGZtKWMN6k1lUnLbiOLSyHfqI/8S9jcGsTt5eYZgmYh
+ XTpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=yaLpGg+51ueKLsTBiqRx6sXd9zY0vWeWuMLXu4vJAQs=;
- b=qJbG3EQhHwzzNZz30L8SaKVouvgcX6rW7i7BN0wMYWY8g+g6keJjNNGvoTFsWAL3La
- EgmegS1cIJMmuWYe/LNmlW3sWpbIusGmjLGjBS5hjmkj8CFhqy5FfLBEteBr4ELCY7tR
- 0tJUnt5Url1FPrOSfvAxcUfpzJFi1+5cXm+bJyMLHRf66vnS7br+FhSCdCLxYcX6WeaS
- D9iQ227TvxPhOXNPphvmbmY1s4yNSueXxYva3mSlPKREvE/zgs33sbrDo3TyYkCHT+Ja
- k5ByuzWJ7uXGscJXNnyo6WuqJiM1Ze31A3Kny27UQqAAWLmxk5SoNm308ydOVQ5K5IQZ
- b7BA==
-X-Gm-Message-State: AOAM530pg3YNBEmZWbv/GjutsRA1VH/qPt5/2dR4rqhQREsevQi+ue/T
- 7MhwGyi/EWkMjztU2cmmXGELqNDh++pHqQ==
-X-Google-Smtp-Source: ABdhPJxsFXzslRQtTfAlJwuQ1Tp21ag0dKZvcaY4OQ7WKLit2pqZLiIDAahbYUstEfa5q0ojl9sS0g==
-X-Received: by 2002:a05:6000:1788:: with SMTP id
- e8mr28632530wrg.45.1636810117307; 
+ bh=e0qf4U/vhQnSimrP25oms7iDFGkaBAgYu/DEUcQsvkI=;
+ b=tQmvh/cT+sTK9LpfQgxak5EydFVOO06Ih7x2juIsESM0fOSK0pCuV0hXOyVAXJzU8g
+ nQSUijxIOt0gi2EvFq5WM+yO3NpJoC8fmtmak3omtImiAnyrDQXrMZQGiMpsFO1xTAGa
+ qSUVWk9CAzcvY6BxbSavb/yVdf/Iz2ZCR68tKkz9ryqMXEMnUmaKr6AWoJOW2Uab86b1
+ m/OiFIuRjK8Dyf6ZD9oKVV1j6oQggQyiU87HqjctbzUCW4+uWZ7JHmfYgj2tpgmDNEqv
+ nBqqA7f7CLQqHovcizxFsn62ha4NppLl+5ovbUXOPXKulrMkAgGEBjkpzsgAlwbn1/vE
+ Nvgg==
+X-Gm-Message-State: AOAM530LPJWW6W2VKbB1N1rnDaqkhbU0lr+blJ70sMMl++vA6fJ1rqJY
+ UVY50Zoxnmu3tj4TPtUgBU535jrVP5xBgQ==
+X-Google-Smtp-Source: ABdhPJyq+DnsEAjmkhSmxOeLTGbZpYllIELDJRFAF5Jw3PZNw147TK/vuOZTm90L4FemFzCQMXZ7Mg==
+X-Received: by 2002:a1c:9a16:: with SMTP id c22mr42409764wme.160.1636810117964; 
  Sat, 13 Nov 2021 05:28:37 -0800 (PST)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:68ab:b59:72c3:89f3])
- by smtp.gmail.com with ESMTPSA id p14sm5606890wms.29.2021.11.13.05.28.36
+ by smtp.gmail.com with ESMTPSA id p14sm5606890wms.29.2021.11.13.05.28.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sat, 13 Nov 2021 05:28:37 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 14:28:24 +0100
-Message-Id: <04d568a84678569e4aed9a17d0609009271e146f.1636810092.git.yann.morin.1998@free.fr>
+Date: Sat, 13 Nov 2021 14:28:25 +0100
+Message-Id: <ed84a285abd5f0aaff890734677bd099473e524e.1636810092.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1636810092.git.yann.morin.1998@free.fr>
 References: <cover.1636810092.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 13/16 v2] core/show-info: report whether a
- package is overriden
+Subject: [Buildroot] [PATCH 14/16 v2] core/show-info: also export source and
+ stamp directories in show-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,47 +92,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, eeppeliteloop@gmail.com
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The show-info output can be used in quite some ways, like to assess the
-validity of the current configuration, like a production build in a CI
-would do for example. One such assessment would be to ensure that no
-package is overriden.
+External tools may need to peek into the source tree (to check what the
+list of patches that were applied), or in the stamp directory (to check
+and report on the progress of a build)
 
-Additionally, when we will (later!) want to check whether we can re-use
-cached artefacts of a package, we will not want to do so for packages
-that are overridden (nor would we want to actually cache such a result
-either).
-
-We do not expose the override location, because this is a purely-local
-information, and show info should never contain such local information
-(the output of show-info can be shared). Besides, that information is
-already known by the user, as they passed it to Buildroot via local.mk
-to begin with.
+Currently, both locations are identical, but semantically different and
+an internal implementation detail. Exposing both separately will llow us
+to change either without breaking users' scripts. Hopefully.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: eeppeliteloop@gmail.com
 ---
- package/pkg-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-utils.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 0b0ff77419..da123a6ed2 100644
+index da123a6ed2..37a4d244d7 100644
 --- a/package/pkg-utils.mk
 +++ b/package/pkg-utils.mk
-@@ -113,6 +113,7 @@ define _json-info-pkg
- 		"virtual": false$(comma)
+@@ -114,6 +114,8 @@ define _json-info-pkg
  		$(call _json-info-pkg-details,$(1)) \
  	)
-+	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+ 	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
++	"stamp_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
++	"source_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
  	"build_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))),
  	$(if $(filter target,$($(1)_TYPE)), \
  		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
