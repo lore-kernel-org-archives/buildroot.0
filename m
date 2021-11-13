@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6FC1C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04AD2C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A096A401EB;
-	Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eAZTWORSIJbB; Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E18541C18;
-	Mon,  6 Dec 2021 18:14:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 24B151BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8886400CF
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95958404A6;
+	Mon,  6 Dec 2021 18:15:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qXhKmlGBGFRa for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gdL_3QRuXz49; Mon,  6 Dec 2021 18:15:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92EF040488;
+	Mon,  6 Dec 2021 18:15:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F2DC1BF983
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F73D41C19
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eWpnPEIZcyat for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EAFBC40474
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62FF941C10
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 857B681504; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
+ id 064CC81468; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 14:35:03 +0100
+Date: Sat, 13 Nov 2021 15:26:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc9b5797515b3c8f21c2d70c980dc3e0a93200c9
-X-Git-Newrev: 9e767b942f5985e1f9e7125d715bdb7334e4f81c
+X-Git-Oldrev: f82a83582520fa5bf5a05c9308da91ee20639710
+X-Git-Newrev: 4c44bf34ad706e36c779085ba35211bda7288240
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180737.857B681504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: add libkrb5 optional
- dependency
+Message-Id: <20211206180737.064CC81468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/globalscale_espressobin: update to
+ Linux 5.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e767b942f5985e1f9e7125d715bdb7334e4f81c
+commit: https://git.buildroot.net/buildroot/commit/?id=4c44bf34ad706e36c779085ba35211bda7288240
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libkrb5 is an optional dependency which is enabled by default (with no
-user option) since version 5.14.0 and
-https://github.com/qt/qtbase/commit/93b7b0ec76572427291d8e2eef9a10eb499417a9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/globalscale_espressobin_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index b04d710d78..ba2971dc08 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -233,6 +233,8 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),tslib)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index 37d9c1859c..8d44b25ae7 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -2,13 +2,13 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
  
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBKRB5),libkrb5)
-+
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+-# Linux headers same as kernel, a 5.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
++# Linux headers same as kernel, a 5.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
  
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.21"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.1"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
