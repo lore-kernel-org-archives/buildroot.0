@@ -2,69 +2,84 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B60FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 10:20:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F2CDC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 10:53:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 90284610F7
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 10:20:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 90284610F7
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id 71D35610A0
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 10:53:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 71D35610A0
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60276606C9;
-	Sat, 13 Nov 2021 10:20:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B7F1402A8;
+	Sat, 13 Nov 2021 10:53:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JD0qsSf6iEc9; Sat, 13 Nov 2021 10:20:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85FB9606DB;
-	Sat, 13 Nov 2021 10:20:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13BF91BF2F0
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 10:20:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F7504064B
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 10:20:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ff6JDiciwMMy for <buildroot@lists.busybox.net>;
- Sat, 13 Nov 2021 10:20:22 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZH0M8er1u1q6; Sat, 13 Nov 2021 10:53:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B4154029F;
+	Sat, 13 Nov 2021 10:53:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AD1401BF2F0
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 10:53:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BF9080BC8
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 10:53:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vy3o6O5fRFGC for <buildroot@lists.busybox.net>;
+ Sat, 13 Nov 2021 10:53:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1AD984064A
- for <buildroot@buildroot.org>; Sat, 13 Nov 2021 10:20:21 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [90.1.143.61])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id D97C319F59E;
- Sat, 13 Nov 2021 11:20:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636798819;
- bh=nMo9fggwhA2YCQ9HdjekIIsWgLmLHwfk+pehNbKn9bM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ICSUKUdSIO4u07JJ3pNQ5gwRUL8HViI5PyvM7uAP67nhPDgr8ZCKDRNzN4BlbA0kq
- PogKY6KzG8mgbRBQQlOJUf3V0kSDh1CpIGA3IKXsK9HyQlnvQ1zg3iAUuVgmR2N4NW
- wQl6k2AY2Uo3MmZG3f0Biq8Du/mnLA6QCUNEi7NxfYbqIaNj+QO4PfB5jHILPEi/a9
- 8DR/wbEjvPL/R3hh5+Zpu2ubHazGNvMeWz68o406JXIr0WlM17hfHWKCEV9TKvKzIF
- 69TNCDV+MFD92nWMgV8hDuf6a+guT7dBMxE+p7K0i+tmWhUiRj1WAkQk2p1dx9NP83
- PfVTYN4ipoFcg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 Nov 2021 11:20:12 +0100
-Date: Sat, 13 Nov 2021 11:20:11 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211113102011.GS247986@scaer>
-References: <20211112100749.2893614-1-fontaine.fabrice@gmail.com>
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7260180BB2
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 10:53:37 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id t30so20073436wra.10
+ for <buildroot@buildroot.org>; Sat, 13 Nov 2021 02:53:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/EmqQoKQsWQKKVxvpm9eA88GrtlH30Op4R106aPkyGE=;
+ b=YW8PssZZjqiwndH/1drSmINTuxvJaLyaMWTbKmoXSnMUuMlI/6NLCFnwpCld3KtgHw
+ eFchFtxqyrEADW8n+FyX3ILzOdEZwXoVFwOLnr/H+cfwJ+EzNoumPDxQTqurXJ2NTF5J
+ D6byjoNNZYqmDoNKGzBhMXHbIVS3CAs8Mpd1z21xWJuR6J1hEmB6g3OQ/jP8peKYj8U+
+ ANgaGzrt1ObuK3r1Kr7hNmVp07XUUsxuJrb2xsuB/Wy7EaFH+RfoMzlaTG9D4vsuI4Sb
+ JtSDbl37blogtA0zidgtOue6xQrFtJs8cZ1gwqgSDHVOtnB6vJvQLKgXf+8FwWk8xSu7
+ vg4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=/EmqQoKQsWQKKVxvpm9eA88GrtlH30Op4R106aPkyGE=;
+ b=1pfioFT0v6RNAb0lJWg9cdYc0EXAQ8J9a57GBTp1w4bgDuR3585p0lkItP2W9Yg4bi
+ r2K8MbrsoQwM0Gb3srwb3tSVzwZxvIzv6xFvR5cP790sRU+r01HaNsbCNDPilQGT8AWW
+ NaqGL0zc22wODMyz+ubF9wDT71llJ1ay01vM83CdtlGmdjEjjMOvaeLptf9Tv5A+1CES
+ SYfYaAN4WXhdnB73Cl9HDt2PaHLi07aY4PHjr/Vea44z70b9MD9DiaJsOQZJRlcUgxND
+ a0EBLhaZSoppeOGP7nmVagCyon1LJXpvbDFh6OVd3S6KQ17uB90fuQi0OqFDHan/+GRQ
+ jqYA==
+X-Gm-Message-State: AOAM532V85iFb9omjaOR/D8kct4wteBDmtrL/aESd/rDPeHliMHrHXv1
+ PEIGyZYuvsGrNPTI89pSvEVpKv9EUj0=
+X-Google-Smtp-Source: ABdhPJyMnkBT1pxfm605vivWLvnPTkh2xUmUVMgCZ//n5dYrS7a6QjjQN5B53F34XFtvzbS8bQGrKg==
+X-Received: by 2002:adf:f9d2:: with SMTP id w18mr27230539wrr.303.1636800815138; 
+ Sat, 13 Nov 2021 02:53:35 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id f81sm15160909wmf.22.2021.11.13.02.53.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Nov 2021 02:53:34 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 13 Nov 2021 11:51:30 +0100
+Message-Id: <20211113105130.541926-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211112100749.2893614-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/sg3_utils: bump to version 1.47
+Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: don't use
+ mysql_config outside static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,119 +91,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marek Belisko <marek.belisko@open-nandra.com>, buildroot@buildroot.org
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+uclibc (and glibc) installs the following ld script in
+$(STAGING_DIR)/usr/lib/libc.so in addition to the 'standard' library
+installed in $(STAGING_DIR)/lib:
 
-On 2021-11-12 11:07 +0100, Fabrice Fontaine spake thusly:
-> - Drop patch (already in version) and so autoreconf
-> - Update hash of COPYING (upodate in date and author's email:
->   https://github.com/doug-gilbert/sg3_utils/commit/f0195003bb0c66ba55084b2f7e0fe982f08c5675)
-> - Fix the following build failure raised on musl since bump to version
->   1.46 in commit a00ed30780819c72174ae959bdd6f15ed961e938:
-> 
-> sg_dd.c: At top level:
-> sg_dd.c:179:28: error: storage size of 'drand' isn't known
->   179 | static struct drand48_data drand;/* opaque, used by srand48_r and mrand48_r */
->       |                            ^~~~~
-> 
-> https://github.com/doug-gilbert/sg3_utils/blob/r1.47/ChangeLog
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/adc20fd52052daadfe1f16ee3f62c30e518cbd16
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+/* GNU ld script
+ * Use the shared library, but some functions are only in
+ * the static library, so try that secondarily. */
+OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
+	      "elf32-powerpc")
+GROUP ( /lib/libc.so.1 /usr/lib/uclibc_nonshared.a libpthread_nonshared.a AS_NEEDED ( /lib/ld-uClibc.so.1 ) )
 
-Since this fixes a build issue, removes a patch, and drops autoreconf,
-and even though this is a version bump: applied to master, thanks.
+For an unknown reason, if this script is used, this will result in
+the following build failure:
 
-Regards,
-Yann E. MORIN.
+configure:3286: /home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/powerpc-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -rdynamic -L/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/mysql -lmysqlclient -L/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/oracle-mysql/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib -lz -lnsl -lm >&5
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /lib/libc.so.1
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /usr/lib/uclibc_nonshared.a
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /lib/ld-uClibc.so.1
 
-> ---
->  .../0001-support-uclinux-as-a-linux.patch        | 16 ----------------
->  package/sg3_utils/sg3_utils.hash                 |  4 ++--
->  package/sg3_utils/sg3_utils.mk                   |  5 +----
->  3 files changed, 3 insertions(+), 22 deletions(-)
->  delete mode 100644 package/sg3_utils/0001-support-uclinux-as-a-linux.patch
-> 
-> diff --git a/package/sg3_utils/0001-support-uclinux-as-a-linux.patch b/package/sg3_utils/0001-support-uclinux-as-a-linux.patch
-> deleted file mode 100644
-> index d9106cd9f8..0000000000
-> --- a/package/sg3_utils/0001-support-uclinux-as-a-linux.patch
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -Recognise uclinux as a linux
-> -
-> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -
-> -diff -durN sg3_utils-1.42.orig/configure.ac sg3_utils-1.42/configure.ac
-> ---- sg3_utils-1.42.orig/configure.ac	2015-10-21 01:10:59.000000000 +0200
-> -+++ sg3_utils-1.42/configure.ac	2016-08-14 19:30:37.841766149 +0200
-> -@@ -71,7 +71,7 @@
-> - 
-> - # Define platform-specific symbol.
-> - AM_CONDITIONAL(OS_FREEBSD, [echo $host_os | grep 'freebsd' > /dev/null])
-> --AM_CONDITIONAL(OS_LINUX, [echo $host_os | grep '^linux' > /dev/null])
-> -+AM_CONDITIONAL(OS_LINUX, [echo $host_os | grep -E '^(uc)?linux' > /dev/null])
-> - AM_CONDITIONAL(OS_OSF, [echo $host_os | grep '^osf' > /dev/null])
-> - AM_CONDITIONAL(OS_SOLARIS, [echo $host_os | grep '^solaris' > /dev/null])
-> - AM_CONDITIONAL(OS_WIN32_MINGW, [echo $host_os | grep '^mingw' > /dev/null])
-> diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
-> index 39510b4dc2..ff2ef55180 100644
-> --- a/package/sg3_utils/sg3_utils.hash
-> +++ b/package/sg3_utils/sg3_utils.hash
-> @@ -1,6 +1,6 @@
->  # Locally calculated from download (no sig, hash)
-> -sha256  59c268b10b93ce31a517af13e19c88f285c12b7dd065f50e36b16a7b6fa7b9a0  sg3_utils-1.46.tar.xz
-> +sha256  ddb0cab85fedd8b0db020f3e3f02f6967a055616bf16ea9d5c7408cde41472b2  sg3_utils-1.47.tar.xz
->  
->  # Hash for license files
-> -sha256  256ec2d7e4e79faabb105ed1ddf32aec11d830c3dadb955a4ab2616eb87439ba  COPYING
-> +sha256  d212debdb0a5d7754c977f6dc53bb6c88b4ace7ab784ddbccd06bb970adb1a37  COPYING
->  sha256  8ddd1d82f2be2f5cbd5b5c3b5c2ee94a90d2ca7112958448da74dd78384fd96a  BSD_LICENSE
-> diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-> index 1983a12261..055f7befb9 100644
-> --- a/package/sg3_utils/sg3_utils.mk
-> +++ b/package/sg3_utils/sg3_utils.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SG3_UTILS_VERSION = 1.46
-> +SG3_UTILS_VERSION = 1.47
->  SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
->  SG3_UTILS_SITE = http://sg.danny.cz/sg/p
->  SG3_UTILS_LICENSE = BSD-2-Clause (library)
-> @@ -14,9 +14,6 @@ SG3_UTILS_LICENSE += , GPL-2.0+ (programs), BSD-2-Clause (programs)
->  endif
->  SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
->  
-> -# Patching configure.ac/Makefile.am
-> -SG3_UTILS_AUTORECONF = YES
-> -
->  # install the libsgutils2 library
->  SG3_UTILS_INSTALL_STAGING = YES
->  
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+To fix this build failure, don't use mysql_config outside of static
+builds.
 
+It should be noted that this issue also affects open2300 and rsyslog
+which should also be updated.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9e3c09dd3d9bd55de14fc89a1d17ba9c008b195b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libodb-mysql/libodb-mysql.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
+index 88b6f4cb31..d2fa977209 100644
+--- a/package/libodb-mysql/libodb-mysql.mk
++++ b/package/libodb-mysql/libodb-mysql.mk
+@@ -12,8 +12,10 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
+ LIBODB_MYSQL_LICENSE = GPL-2.0
+ LIBODB_MYSQL_LICENSE_FILES = LICENSE
+ LIBODB_MYSQL_DEPENDENCIES = libodb mysql
+-LIBODB_MYSQL_CONF_ENV = \
+-	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
+-	LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
++LIBODB_MYSQL_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBODB_MYSQL_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/mysql_config --libs`"
++endif
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
