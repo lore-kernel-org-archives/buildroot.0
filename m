@@ -2,52 +2,52 @@ Return-Path: <SRS0=SOkI=QA=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B343C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 14:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2FDC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 14:27:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C99DC60F0F
-	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 14:27:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C99DC60F0F
+	by mail.kernel.org (Postfix) with ESMTPS id B926660F46
+	for <buildroot@archiver.kernel.org>; Sat, 13 Nov 2021 14:27:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B926660F46
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CC024027A;
-	Sat, 13 Nov 2021 14:27:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83B314024A;
+	Sat, 13 Nov 2021 14:27:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1fB08GX5Wd50; Sat, 13 Nov 2021 14:27:37 +0000 (UTC)
+	with ESMTP id gYgh0HJngE4T; Sat, 13 Nov 2021 14:27:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 852D140275;
-	Sat, 13 Nov 2021 14:27:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FCDE40277;
+	Sat, 13 Nov 2021 14:27:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 734AD1BF349
- for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 14:27:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76DC61BF349
+ for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 14:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C4BE4024A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BF9540264
  for <buildroot@lists.busybox.net>; Sat, 13 Nov 2021 14:27:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IZQZUOpvW27Y for <buildroot@lists.busybox.net>;
+ with ESMTP id F9MlxEPwkFx3 for <buildroot@lists.busybox.net>;
  Sat, 13 Nov 2021 14:27:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5374940264
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46E9B40255
  for <buildroot@buildroot.org>; Sat, 13 Nov 2021 14:27:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 375DA8C9BF; Sat, 13 Nov 2021 14:23:06 +0000 (UTC)
+ id 2DDB38C9BE; Sat, 13 Nov 2021 14:23:06 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 15:26:33 +0100
+Date: Sat, 13 Nov 2021 15:26:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 420c988045ccd1b82392f995e3d5cd9f79a73b3f
-X-Git-Newrev: 04b668e86803172d0c0354570a6b4b063dab7e51
+X-Git-Oldrev: 377c3e5f4c7580a5bf81586e1f41ddc0bdb83cff
+X-Git-Newrev: 420c988045ccd1b82392f995e3d5cd9f79a73b3f
 X-Patchwork-Hint: ignore
-Message-Id: <20211113142306.375DA8C9BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx6-sabreauto: bump
- U-Boot and kernel
+Message-Id: <20211113142306.2DDB38C9BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcurl: bump to
+ version 7.80.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04b668e86803172d0c0354570a6b4b063dab7e51
+commit: https://git.buildroot.net/buildroot/commit/?id=420c988045ccd1b82392f995e3d5cd9f79a73b3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump U-Boot to 2021.10 and kernel to 5.15.1 version.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6-sabreauto_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
-index a77b57e4f9..7df774988a 100644
---- a/configs/imx6-sabreauto_defconfig
-+++ b/configs/imx6-sabreauto_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index b13f01c874..c488df57b1 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.79.1.tar.xz.asc
++# https://curl.se/download/curl-7.80.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  0606f74b1182ab732a17c11613cbbaf7084f2e6cca432642d0e3ad7c224c3689  curl-7.79.1.tar.xz
++sha256  a132bd93188b938771135ac7c1f3ac1d3ce507c1fcbef8c471397639214ae2ab  curl-7.80.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a70ebe4113..24591f2e0a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_NEEDS_LZOP=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto imx6dl-sabreauto imx6qp-sabreauto"
+-LIBCURL_VERSION = 7.79.1
++LIBCURL_VERSION = 7.80.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
