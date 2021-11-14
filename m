@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 617A3C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92143C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B0D060D62;
-	Mon,  6 Dec 2021 18:24:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8D540274;
+	Mon,  6 Dec 2021 18:25:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 14dU3hwRf0Y1; Mon,  6 Dec 2021 18:24:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3nW4WIpBJOQw; Mon,  6 Dec 2021 18:25:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6394260619;
-	Mon,  6 Dec 2021 18:24:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B17C81BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C276340400;
+	Mon,  6 Dec 2021 18:25:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 91BAD1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38B6060D60
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 855DD41C33
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vqUhEnfT7tv9 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aJHQ3xqnXaZ3 for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42FEB60D70
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3ED6B41C1E
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D33C381468; Mon,  6 Dec 2021 18:07:39 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id CB45881503; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 21:48:30 +0100
+Date: Sun, 14 Nov 2021 14:53:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6170020898ca154f9a8c83bf9068207ae958594b
-X-Git-Newrev: c1723424b8189730087006fc879fdae0cc123ca1
+X-Git-Oldrev: f250847551b4f1314ea69e026125c225605fd840
+X-Git-Newrev: 0f31b1f19cd2f81c2e7fe7a0600c150b8f555fe2
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180739.D33C381468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p7zip: add 7za support
+Message-Id: <20211206180737.CB45881503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 13.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,87 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1723424b8189730087006fc879fdae0cc123ca1
+commit: https://git.buildroot.net/buildroot/commit/?id=0f31b1f19cd2f81c2e7fe7a0600c150b8f555fe2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add 7za stand-alone executable as 7zr is a "light-version" of 7za that
-only handles 7z archives and cannot handle encrypted archives.
+Release notes:
+https://www.postgresql.org/about/news/postgresql-141-135-129-1114-1019-and-9624-released-2349/
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=14266
+Fixes CVE-2021-23214 and CVE-2021-23222.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/p7zip/Config.in | 22 ++++++++++++++++++++++
- package/p7zip/p7zip.mk  | 11 +++++++++--
- 2 files changed, 31 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
-index badfb9b9e8..3b30fd71cc 100644
---- a/package/p7zip/Config.in
-+++ b/package/p7zip/Config.in
-@@ -12,6 +12,28 @@ config BR2_PACKAGE_P7ZIP
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 2dcc1823d6..7e25c08aad 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v13.4/postgresql-13.4.tar.bz2.sha256
+-sha256  ea93e10390245f1ce461a54eb5f99a48d8cabd3a08ce4d652ec2169a357bc0cd  postgresql-13.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v13.5/postgresql-13.5.tar.bz2.sha256
++sha256  9b81067a55edbaabc418aacef457dd8477642827499560b00615a6ea6c13f6b3  postgresql-13.5.tar.bz2
  
- 	  http://sourceforge.net/projects/p7zip
+ # License file, Locally calculated
+ sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 3b6c6e21e7..e40ab45c20 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+if BR2_PACKAGE_P7ZIP
-+
-+choice
-+	prompt "p7zip binary"
-+	default BR2_PACKAGE_P7ZIP_7ZR
-+
-+config BR2_PACKAGE_P7ZIP_7ZA
-+	bool "7za"
-+	help
-+	  Stand-alone executable that handles fewer archive formats
-+	  than 7z
-+
-+config BR2_PACKAGE_P7ZIP_7ZR
-+	bool "7zr"
-+	help
-+	  Stand-alone executable which is a "light-version" of 7za that
-+	  only handles 7z archives and cannot handle encrypted archives
-+
-+endchoice
-+
-+endif
-+
- comment "p7zip needs a toolchain w/ threads, wchar, C++"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
-index f94b55ecd2..b6c5adae26 100644
---- a/package/p7zip/p7zip.mk
-+++ b/package/p7zip/p7zip.mk
-@@ -10,6 +10,12 @@ P7ZIP_LICENSE = LGPL-2.1+ with unRAR restriction
- P7ZIP_LICENSE_FILES = DOC/License.txt
- P7ZIP_CPE_ID_VENDOR = 7-zip
- 
-+ifeq ($(BR2_PACKAGE_P7ZIP_7ZA),y)
-+P7ZIP_TARGET = 7za
-+else
-+P7ZIP_TARGET = 7zr
-+endif
-+
- # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
- # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
- # and ALLFLAGS_CPP as variables to pass the CFLAGS and CXXFLAGS.
-@@ -17,11 +23,12 @@ define P7ZIP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ALLFLAGS_C="$(TARGET_CFLAGS)" \
- 		CXX="$(TARGET_CXX)" ALLFLAGS_CPP="$(TARGET_CXXFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
--		-C $(@D) 7zr
-+		-C $(@D) $(P7ZIP_TARGET)
- endef
- 
- define P7ZIP_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/7zr $(TARGET_DIR)/usr/bin/7zr
-+	$(INSTALL) -D -m 0755 $(@D)/bin/$(P7ZIP_TARGET) \
-+		$(TARGET_DIR)/usr/bin/$(P7ZIP_TARGET)
- endef
- 
- $(eval $(generic-package))
+-POSTGRESQL_VERSION = 13.4
++POSTGRESQL_VERSION = 13.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
