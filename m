@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC271C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 460D3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:43:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 81EB460FE8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:43:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 81EB460FE8
+	by mail.kernel.org (Postfix) with ESMTPS id 0ECED60F38
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:43:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0ECED60F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53D7E40248;
-	Sun, 14 Nov 2021 14:43:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1EF540294;
+	Sun, 14 Nov 2021 14:43:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uJukNSsBOHEX; Sun, 14 Nov 2021 14:43:32 +0000 (UTC)
+	with ESMTP id eDLiPLJX-uVr; Sun, 14 Nov 2021 14:43:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3401C400DA;
-	Sun, 14 Nov 2021 14:43:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A7FF01BF20B
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:42:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5916400F3;
+	Sun, 14 Nov 2021 14:43:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E0BB51BF20B
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD25B80D4F
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:42:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EC1A401F6
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:42:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7PG9nSFnRP-6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HNPG85ItUEX0 for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 14:42:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 657FC80D21
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BB78401FC
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:42:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id ECAF98D2AE; Sun, 14 Nov 2021 14:37:57 +0000 (UTC)
+ id 20E918D2AD; Sun, 14 Nov 2021 14:37:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:31:57 +0100
+Date: Sun, 14 Nov 2021 15:40:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f89b3e14cf3510887d959e7c8f53c1dfde052935
-X-Git-Newrev: 11db258cd6e018227b6899632442b1753a2c3318
+X-Git-Oldrev: a76bc8bcf366cf57ea14d2de96f116b6daca10ee
+X-Git-Newrev: 0ac19f1bf0b7872f5913dcd9d60075c9ed3c2452
 X-Patchwork-Hint: ignore
-Message-Id: <20211114143757.ECAF98D2AE@busybox.osuosl.org>
+Message-Id: <20211114143758.20E918D2AD@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/altera/socrates_cyclone5/genimage.cfg: fix offset suffix
+ board/kontron/pitx-imx8m/genimage.cfg: fix option suffix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11db258cd6e018227b6899632442b1753a2c3318
+commit: https://git.buildroot.net/buildroot/commit/?id=0ac19f1bf0b7872f5913dcd9d60075c9ed3c2452
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For consistency 'offset = 256k' must be 'offset = 256K'
+Option 'offset = 33k' must be 'offset = 33K'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Acked-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/altera/socrates_cyclone5/genimage.cfg | 2 +-
+ board/kontron/pitx-imx8m/genimage.cfg | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/altera/socrates_cyclone5/genimage.cfg b/board/altera/socrates_cyclone5/genimage.cfg
-index 0af3f2ec60..d31c3838be 100644
---- a/board/altera/socrates_cyclone5/genimage.cfg
-+++ b/board/altera/socrates_cyclone5/genimage.cfg
-@@ -24,7 +24,7 @@ image uboot.img {
- 	partition uboot-full {
+diff --git a/board/kontron/pitx-imx8m/genimage.cfg b/board/kontron/pitx-imx8m/genimage.cfg
+index c335b0c026..c78ef0f910 100644
+--- a/board/kontron/pitx-imx8m/genimage.cfg
++++ b/board/kontron/pitx-imx8m/genimage.cfg
+@@ -5,7 +5,7 @@ image sdcard.img {
+ 	partition imx-boot {
  		in-partition-table = "no"
- 		image = "u-boot.img"
--		offset = 256k
-+		offset = 256K
+ 		image = "imx8-boot-sd.bin"
+-		offset = 33k
++		offset = 33K
  	}
  
- 	size = 1M
+ 	partition rootfs {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
