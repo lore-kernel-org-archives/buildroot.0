@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8BACC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:53:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15FEEC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:53:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A504F610A8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:53:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A504F610A8
+	by mail.kernel.org (Postfix) with ESMTPS id D69C361183
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:53:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D69C361183
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63AE14024C;
-	Sun, 14 Nov 2021 13:53:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A46974030A;
+	Sun, 14 Nov 2021 13:53:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jujLZGGDyQ_Q; Sun, 14 Nov 2021 13:53:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c_WDYdSpyBCU; Sun, 14 Nov 2021 13:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6ACB04022B;
-	Sun, 14 Nov 2021 13:53:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2EADE1BF3E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEFF940221;
+	Sun, 14 Nov 2021 13:53:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BEB31BF976
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E3436069F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59A0E80C44
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:53:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MGgH8U0EOxLM for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mg_qbkEwiM_7 for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 13:53:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B1E960592
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D6A680B9A
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 13:53:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1E5FD8CA99; Sun, 14 Nov 2021 13:49:27 +0000 (UTC)
+ id 32BFE8CA9F; Sun, 14 Nov 2021 13:49:27 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 14:53:12 +0100
+Date: Sun, 14 Nov 2021 14:53:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0f0b1f59c310447ff259499baab6093a7e17b512
-X-Git-Newrev: f250847551b4f1314ea69e026125c225605fd840
+X-Git-Oldrev: 0f31b1f19cd2f81c2e7fe7a0600c150b8f555fe2
+X-Git-Newrev: c9bd02911565819789120370178e82da5dfbacc0
 X-Patchwork-Hint: ignore
-Message-Id: <20211114134927.1E5FD8CA99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.5.0
+Message-Id: <20211114134927.32BFE8CA9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
+ version to 14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f250847551b4f1314ea69e026125c225605fd840
+commit: https://git.buildroot.net/buildroot/commit/?id=c9bd02911565819789120370178e82da5dfbacc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version adds support for PostgreSQL 14.
-
 Release notes:
-https://github.com/timescale/timescaledb/releases/tag/2.5.0
+https://www.postgresql.org/about/news/postgresql-14-released-2318/
+https://www.postgresql.org/about/news/postgresql-141-135-129-1114-1019-and-9624-released-2349/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 4e3e91e152..88390bc674 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b206a376251259eb745eee819e7a853b3fbab9dc8443303714484a0fef89a2a4  timescaledb-2.4.2.tar.gz
-+sha256  9d67fe70aa01cea5feceb084adc01eca8a082d847f917e68e073ab67e497af76  timescaledb-2.5.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 4adf2bdbb3..39ba9e6ef4 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 7e25c08aad..c2017a1226 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v13.5/postgresql-13.5.tar.bz2.sha256
+-sha256  9b81067a55edbaabc418aacef457dd8477642827499560b00615a6ea6c13f6b3  postgresql-13.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v14.1/postgresql-14.1.tar.bz2.sha256
++sha256  4d3c101ea7ae38982f06bdc73758b53727fb6402ecd9382006fa5ecc7c2ca41f  postgresql-14.1.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e40ab45c20..32aef0c68c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.4.2
-+TIMESCALEDB_VERSION = 2.5.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-POSTGRESQL_VERSION = 13.5
++POSTGRESQL_VERSION = 14.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
