@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C553C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:47:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE7BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:47:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1571860698
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:47:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1571860698
+	by mail.kernel.org (Postfix) with ESMTPS id AE1D560F38
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:47:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AE1D560F38
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E35A280E76;
-	Sun, 14 Nov 2021 14:47:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82C7360709;
+	Sun, 14 Nov 2021 14:47:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BpNuv68YA2wH; Sun, 14 Nov 2021 14:47:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VabvhqnOor0b; Sun, 14 Nov 2021 14:47:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3305C80E78;
-	Sun, 14 Nov 2021 14:47:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B106C1BF20B
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8C59606FA;
+	Sun, 14 Nov 2021 14:47:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2A811BF973
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE2D340246
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:45:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA98E400F3
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:45:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W_66EmYDHeU6 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ybdkQujwcm-8 for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 14:45:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A086A402B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3FE940116
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:45:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 34C798D31D; Sun, 14 Nov 2021 14:41:49 +0000 (UTC)
+ id 555388D31B; Sun, 14 Nov 2021 14:41:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:45:27 +0100
+Date: Sun, 14 Nov 2021 15:45:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 91a4a169eb8ee620aae7f5d1ec211ce14b02e1d6
-X-Git-Newrev: 3c55bba24b02ff8391753649ca63ec1363a3e8ea
+X-Git-Oldrev: 682c7e7bcbc24bb0993fe954356953448c2ba52a
+X-Git-Newrev: 99a47828c13acf82a6af921b26fda2f77ae25317
 X-Patchwork-Hint: ignore
-Message-Id: <20211114144149.34C798D31D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-libwww-perl: bump
- to version 6.57
+Message-Id: <20211114144149.555388D31B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl-path-tiny: bump
+ to version 0.120
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c55bba24b02ff8391753649ca63ec1363a3e8ea
+commit: https://git.buildroot.net/buildroot/commit/?id=99a47828c13acf82a6af921b26fda2f77ae25317
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff LICENSE: remove trailing spaces
+diff LICENSE:
+-   Copyright [yyyy] [name of copyright owner]
++   Copyright 2014 David Golden
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 6 +++---
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ package/perl-path-tiny/perl-path-tiny.hash | 6 +++---
+ package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index 709e94647b..2c9b19d6ef 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
+index 855af46e1a..6899d5c6b4 100644
+--- a/package/perl-path-tiny/perl-path-tiny.hash
++++ b/package/perl-path-tiny/perl-path-tiny.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  0ef270c43ee93e22c2086ba9998aa11a  libwww-perl-6.56.tar.gz
--sha256  94362e68e5c6782f3987a9dec6adc409d20e28665dbf28ff47d1d701443ce7ce  libwww-perl-6.56.tar.gz
-+md5  e0b7b07a01f19cc507d3a9b55951ce3a  libwww-perl-6.57.tar.gz
-+sha256  30c242359cb808f3fe2b115fb90712410557f0786ad74844f9801fd719bc42f8  libwww-perl-6.57.tar.gz
+-md5  cb34fd356725ec12b78e88ddac37db08  Path-Tiny-0.118.tar.gz
+-sha256  32138d8d0f4c9c1a84d2a8f91bc5e913d37d8a7edefbb15a10961bfed560b0fd  Path-Tiny-0.118.tar.gz
++md5  046d14dde6e3568aee5085487dd4769e  Path-Tiny-0.120.tar.gz
++sha256  66a1164981d449da46cc88383fe37f9e352e87e9570bfb960e43fe8ff016ee1b  Path-Tiny-0.120.tar.gz
  
  # computed by scancpan
--sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
-+sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 10fda9de60..23e2aa3bb8 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+-sha256  a999b03d2b80e5c7f987289ac835fa2d88cafa9f0df24adf8a1fd21e175acd79  LICENSE
++sha256  c1a19c0d83f668a784640c0b41e024f37b182ad38011b170f9200123e57f6070  LICENSE
+diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
+index 08cc66712e..cd4c3bc496 100644
+--- a/package/perl-path-tiny/perl-path-tiny.mk
++++ b/package/perl-path-tiny/perl-path-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.56
-+PERL_LIBWWW_PERL_VERSION = 6.57
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-PERL_PATH_TINY_VERSION = 0.118
++PERL_PATH_TINY_VERSION = 0.120
+ PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
+ PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_PATH_TINY_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
