@@ -2,52 +2,56 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ED94C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:14:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55415C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:15:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0A1B660EE7
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:14:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0A1B660EE7
+	by mail.kernel.org (Postfix) with ESMTPS id 1728E61104
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:15:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1728E61104
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF77F4022B;
-	Sun, 14 Nov 2021 14:14:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3dBRyYlhpyfM; Sun, 14 Nov 2021 14:14:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F48740248;
-	Sun, 14 Nov 2021 14:14:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F26011BF976
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:13:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E08BA4025C
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:13:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E201340285;
+	Sun, 14 Nov 2021 14:15:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gbwdKsDNUiGG for <buildroot@lists.busybox.net>;
- Sun, 14 Nov 2021 14:13:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1559E40253
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:13:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A6C458D216; Sun, 14 Nov 2021 14:09:30 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cKO2oXRu1Fdt; Sun, 14 Nov 2021 14:15:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CFD940282;
+	Sun, 14 Nov 2021 14:14:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E03E91BF3D9
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:14:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC72A80DB6
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:14:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sipL0_NCxV9J for <buildroot@lists.busybox.net>;
+ Sun, 14 Nov 2021 14:14:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED0D380D80
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:14:56 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 189D91BF205;
+ Sun, 14 Nov 2021 14:14:55 +0000 (UTC)
+Date: Sun, 14 Nov 2021 15:14:54 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:12:20 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b17f4ea1c639e610893e540a8f196d455e467abc
-X-Git-Newrev: 74d8e71cd72a2caf2e3089ada566be6ddf74d5ba
-X-Patchwork-Hint: ignore
-Message-Id: <20211114140930.A6C458D216@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libv4l: bump version
- to 1.22.1
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20211114151454.3b75b9d5@windsurf>
+In-Reply-To: <20211114135722.12386-1-ps.report@gmx.net>
+References: <20211114135722.12386-1-ps.report@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH/next v1] package/qt5declarative: move the
+ qt5gui select from qt5declarative to qt5quick
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,146 +63,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?B?0JrRg9C30YzQvNC40L3QvtCyINCh0LU=?= =?UTF-8?B?0YDQs9C10Lk=?=
+ <kuzminov.sergey81@gmail.com>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74d8e71cd72a2caf2e3089ada566be6ddf74d5ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-- remove 001-keymap.h-add-missing-includes-to-fix-musl-build.patch
-  (superseeded by upstream commit [1])
-
-- add handling of new --with-libudev/--without-libudev option
-
-For details see [2].
-
-[1] https://git.linuxtv.org/v4l-utils.git/commit/?id=976a2f681b4e4e16edffd972d53a623b895c5646
-[2] https://git.linuxtv.org/v4l-utils.git/tree/ChangeLog?h=stable-1.22
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ....h-add-missing-includes-to-fix-musl-build.patch | 68 ----------------------
- package/libv4l/libv4l.hash                         |  2 +-
- package/libv4l/libv4l.mk                           |  6 +-
- 3 files changed, 5 insertions(+), 71 deletions(-)
-
-diff --git a/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch b/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
-deleted file mode 100644
-index 238f8fc377..0000000000
---- a/package/libv4l/0001-keymap.h-add-missing-includes-to-fix-musl-build.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From baba68cdcb44fc11d0ba8ce2c13eb5b06bbd9b33 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Wed, 30 Oct 2019 07:15:23 +0100
--Subject: [PATCH] keymap.h: add missing includes to fix musl build
--
--Needed to fix these build errors:
--
--In file included from keymap.c:13:0:
--keymap.h:23:2: error: unknown type name 'u_int32_t'
--  u_int32_t scancode;
--
--keymap.h:36:1: error: unknown type name 'error_t'
-- error_t parse_keymap(char *fname, struct keymap **keymap, bool verbose);
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
--Patch was not sent upstream due to broken mailing list setup:
--
--<majordomo@vger.kernel.org>: host vger.kernel.org[209.132.180.67] said: 553
--    5.7.1 Hello [xx.xx.xx.xx], for your MAIL FROM address
--    <bernd.kuhls@t-online.de> policy analysis reported: Your address is not
--    liked source for email (in reply to MAIL FROM command)
--
--Hello [xx.xx.xx.xx], for your MAIL FROM address <berndkuhls@hotmail.com>
-- policy analysis reported: Your address is not liked source for email 
--
-- utils/common/keymap.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/utils/common/keymap.h b/utils/common/keymap.h
--index f2b29632..bb1edce9 100644
----- a/utils/common/keymap.h
--+++ b/utils/common/keymap.h
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: GPL-2.0 */
--+
--+#include <argp.h>
--+#include <sys/types.h>
--+
-- #ifndef __KEYMAP_H
-- #define __KEYMAP_H
-- 
--diff -uNr v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h v4l-utils-1.18.0/utils/ir-ctl/keymap.h
----- v4l-utils-1.18.0.orig/utils/ir-ctl/keymap.h	2019-09-22 11:22:54.000000000 +0200
--+++ v4l-utils-1.18.0/utils/ir-ctl/keymap.h	2019-10-30 07:06:18.250548011 +0100
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: GPL-2.0 */
--+
--+#include <argp.h>
--+#include <sys/types.h>
--+
-- #ifndef __KEYMAP_H
-- #define __KEYMAP_H
-- 
--diff -uNr v4l-utils-1.18.0.orig/utils/keytable/keymap.h v4l-utils-1.18.0/utils/keytable/keymap.h
----- v4l-utils-1.18.0.orig/utils/keytable/keymap.h	2019-09-22 11:22:54.000000000 +0200
--+++ v4l-utils-1.18.0/utils/keytable/keymap.h	2019-10-30 07:06:56.218816126 +0100
--@@ -1,4 +1,8 @@
-- /* SPDX-License-Identifier: GPL-2.0 */
--+
--+#include <argp.h>
--+#include <sys/types.h>
--+
-- #ifndef __KEYMAP_H
-- #define __KEYMAP_H
-- 
---- 
--2.20.1
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index e45dd576bd..d99d5e0992 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
- # https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2.asc
- # with key 05D0169C26E41593418129DF199A64FADFB500FF
--sha256 956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7  v4l-utils-1.20.0.tar.bz2
-+sha256  65c6fbe830a44ca105c443b027182c1b2c9053a91d1e72ad849dfab388b94e31  v4l-utils-1.22.1.tar.bz2
- 
- # Locally calculated
- sha256  391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 7b61823cec..b11c8975d1 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBV4L_VERSION = 1.20.0
-+LIBV4L_VERSION = 1.22.1
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
-@@ -45,8 +45,10 @@ LIBV4L_DEPENDENCIES += libgl
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
--LIBV4L_CONF_OPTS += --with-udevdir=/usr/lib/udev
-+LIBV4L_CONF_OPTS += --with-libudev --with-udevdir=/usr/lib/udev
- LIBV4L_DEPENDENCIES += udev
-+else
-+LIBV4L_CONF_OPTS += --without-libudev
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLU),y)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU3VuLCAxNCBOb3YgMjAyMSAxNDo1NzoyMiArMDEwMApQZXRlciBTZWlkZXJlciA8cHMucmVw
+b3J0QGdteC5uZXQ+IHdyb3RlOgoKPiBBcyByZXF1ZXN0ZWQvc3VnZ2VzdGVkIGJ5IFNlcmdleSBL
+dXptaW5vdihbMV0pIG1vdmUgdGhlIHF0NWd1aSBzZWxlY3QgZnJvbQo+IHF0NWRlY2xhcmF0aXZl
+IHRvIHF0NXF1aWNrLgo+IAo+IFRoZSBxdDVkZWNsYXJhdGl2ZSAod2l0aG91dCBxdDVxdWljaykg
+Y29tcGlsZXMgYW5kIGluc3RhbGxzIGZpbmUgd2l0aG91dAo+IHF0NWd1aSBlbmFibGVkIGFuZCBj
+b2RlIGluc3BlY3Rpb24gb2YgdGhlIHF0NWRlY2xhcmF0aXZlIHNvdWNlIHBhY2thZ2UgKi5wcm8K
+PiBmaWxlcyBzaG93cyB0aGUgdW5jb25kaXRpb25hbGx5IGd1aSBkZXBlbmRlbmNpZXMgb25seSBp
+biBmb3IgZG9jLXNuaXBwZXRzCj4gYW5kL29yIHRlc3QgcHJvamVjdGVzIG9yIHJlYWwgdGhlIHF0
+NXF1aWNrIG1vZHVscy4KPiAKPiBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290
+LzZmZDA1Zjk3LTdmYjktOTZkOC1jY2EwLTUwNjNiZThhZDYyMEBnbWFpbC5jb20KPiAKPiBSZXBv
+cnRlZC1ieTogItCa0YPQt9GM0LzQuNC90L7QsiDQodC10YDQs9C10LkiIDxrdXptaW5vdi5zZXJn
+ZXk4MUBnbWFpbC5jb20+Cj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9y
+dEBnbXgubmV0Pgo+IC0tLQo+IE5vdGVzOgo+ICAgLSBAU2VyZ2V5OiBJIHVzZWQgdGhlIEFTQ0lJ
+IHZlcnNpb24gb2YgeW91ciBuYW1lLCBob3BlIGl0IGlzIG8uay4gZm9yIHlvdT8KPiAtLS0KPiAg
+cGFja2FnZS9xdDUvcXQ1ZGVjbGFyYXRpdmUvQ29uZmlnLmluIHwgMiArLQo+ICAxIGZpbGUgY2hh
+bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCkFwcGxpZWQgdG8gbmV4dCwgdGhh
+bmtzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQg
+TGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
