@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD758C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D47DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:09:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4A06860FD8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:09:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A06860FD8
+	by mail.kernel.org (Postfix) with ESMTPS id 0105160F70
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:09:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0105160F70
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E57F40338;
-	Sun, 14 Nov 2021 14:09:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A795D40329;
+	Sun, 14 Nov 2021 14:09:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id glVXfON0-OdZ; Sun, 14 Nov 2021 14:09:45 +0000 (UTC)
+	with ESMTP id VatG08PmVWB6; Sun, 14 Nov 2021 14:09:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E0FD40277;
-	Sun, 14 Nov 2021 14:09:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AE3B61BF3D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBC8840352;
+	Sun, 14 Nov 2021 14:09:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CC4701BF973
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DA9640329
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAFE140248
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:09:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LzBI9KqGuGwl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V2xGBXkXbLpN for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 14:09:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF9F640272
+ by smtp2.osuosl.org (Postfix) with ESMTP id E278F4022B
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:09:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 921458D1DB; Sun, 14 Nov 2021 14:05:18 +0000 (UTC)
+ id 849E28D1DC; Sun, 14 Nov 2021 14:05:18 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:09:17 +0100
+Date: Sun, 14 Nov 2021 15:08:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7fcf5f3152f2881e2db3357e61abb793782e90e2
-X-Git-Newrev: 7ccfc1ffbddd9b6195967f83fc78833decd10ef1
+X-Git-Oldrev: c2c15af2b840c41d7bee34c1f244551eefce6ba5
+X-Git-Newrev: 7fcf5f3152f2881e2db3357e61abb793782e90e2
 X-Patchwork-Hint: ignore
-Message-Id: <20211114140518.921458D1DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/luarocks: bump to
- version 3.8.0
+Message-Id: <20211114140518.849E28D1DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mxml: bump to version
+ 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ccfc1ffbddd9b6195967f83fc78833decd10ef1
+commit: https://git.buildroot.net/buildroot/commit/?id=7fcf5f3152f2881e2db3357e61abb793782e90e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+mxml 3.3 is a bug fix release. Changes include:
+
+  - Cleaned up usage of free throughout the library
+  - Added more error handling to the library
+  - Fixed potential memory leak in mxmlLoad* functions
+  - Fixed mxmlSaveString with a buffer size of 0
+  - Fixed MXML_MINOR_VERSION value in "mxml.h"
+  - Fixed POSIX threading support for MingW
+  - Fixed some minor memory leaks found by Coverity.
+
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mxml/mxml.hash | 2 +-
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 42e039214c..d80e08a200 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9255d97fee95cec5b54fc6ac718b11bf5029e45bed7873e053314919cd448551  luarocks-3.7.0.tar.gz
-+sha256  56ab9b90f5acbc42eb7a94cf482e6c058a63e8a1effdf572b8b2a6323a06d923  luarocks-3.8.0.tar.gz
- sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 28a421925e..028e144e25 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 70f82cada8..38056f4c3a 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  b894f6c64964f2e77902564c17ba00f5d077a7a24054e7c1937903b0bd42c974  mxml-3.2.tar.gz
++sha256  7cf976366f9e8e4f8cff7d35a59bcf6201c769fce9e58015d64f4b6de1fe3dd8  mxml-3.3.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+ sha256  ed63aec4c75b9c21a5156b40052138032269bd27fd6f4bc0c51389807cdc7db9  NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 85930ab388..5563015b02 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAROCKS_VERSION = 3.7.0
--LUAROCKS_SITE = http://luarocks.org/releases
-+LUAROCKS_VERSION = 3.8.0
-+LUAROCKS_SITE = https://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
+-MXML_VERSION = 3.2
++MXML_VERSION = 3.3
+ MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
+ MXML_LICENSE = Apache-2.0 with exceptions
+ MXML_LICENSE_FILES = LICENSE NOTICE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
