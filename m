@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB68C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6FC1C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32BB640284;
-	Mon,  6 Dec 2021 18:14:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A096A401EB;
+	Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IYpmBDLLQj7w; Mon,  6 Dec 2021 18:14:44 +0000 (UTC)
+	with ESMTP id eAZTWORSIJbB; Mon,  6 Dec 2021 18:14:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 968D6401EB;
-	Mon,  6 Dec 2021 18:14:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E18541C18;
+	Mon,  6 Dec 2021 18:14:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 268981BF995
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24B151BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0B8740124
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8886400CF
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9GvL_4J_wCZ8 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
+ with ESMTP id qXhKmlGBGFRa for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E007A400CF
+ by smtp2.osuosl.org (Postfix) with ESMTP id EAFBC40474
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7BCB281503; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
+ id 857B681504; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 14:34:45 +0100
+Date: Sun, 14 Nov 2021 14:35:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 130a28d446564ce1053ddd977fcd4da9243e24c1
-X-Git-Newrev: cc9b5797515b3c8f21c2d70c980dc3e0a93200c9
+X-Git-Oldrev: cc9b5797515b3c8f21c2d70c980dc3e0a93200c9
+X-Git-Newrev: 9e767b942f5985e1f9e7125d715bdb7334e4f81c
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180737.7BCB281503@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: add zstd optional
+Message-Id: <20211206180737.857B681504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5base: add libkrb5 optional
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,38 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc9b5797515b3c8f21c2d70c980dc3e0a93200c9
+commit: https://git.buildroot.net/buildroot/commit/?id=9e767b942f5985e1f9e7125d715bdb7334e4f81c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-zstd is an optional dependency which is enabled by default since version
-5.13.0 and
-https://github.com/qt/qtbase/commit/f25bc30d8d9d13fffd34213dfbf5e7373a18222a
+libkrb5 is an optional dependency which is enabled by default (with no
+user option) since version 5.14.0 and
+https://github.com/qt/qtbase/commit/93b7b0ec76572427291d8e2eef9a10eb499417a9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/qt5/qt5base/qt5base.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 9da3de468a..b04d710d78 100644
+index b04d710d78..ba2971dc08 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -116,6 +116,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-cups
- endif
+@@ -233,6 +233,8 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),tslib)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+QT5BASE_DEPENDENCIES += zstd
-+QT5BASE_CONFIGURE_OPTS += -zstd
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-zstd
-+endif
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBKRB5),libkrb5)
 +
- # Qt5 SQL Plugins
- ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
- ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
