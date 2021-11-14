@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E0AC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:28:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DA66C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BF25403DA;
-	Mon,  6 Dec 2021 18:28:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HtQn6sxSJEc6; Mon,  6 Dec 2021 18:28:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4BC9403D7;
-	Mon,  6 Dec 2021 18:28:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 29B271BF983
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40AC860D64
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA99160D62;
+	Mon,  6 Dec 2021 18:28:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ifjwFUWE9gEG for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q3q2Pm8uZh6O; Mon,  6 Dec 2021 18:28:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54CB860609;
+	Mon,  6 Dec 2021 18:28:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 17C271BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AC2241C24
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id owZKPo7eMjtA for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92D1160D69
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2460641C0A
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 38AAB81504; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
+ id B11A981503; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 22:29:27 +0100
+Date: Sun, 14 Nov 2021 15:32:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4e462b1aed5bcb5629a4a606190877cbb8b3eb3
-X-Git-Newrev: 3030189585a2eb6eab18cdf0b02f93e8c966aff8
+X-Git-Oldrev: e89a95ca4a103a169007793a060d08acfd50901a
+X-Git-Newrev: 9fa7dbbbba298db9b99f442b171fa47640bf3cb8
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180741.38AAB81504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libabseil-cpp: bump to version
- 20211102.0
+Message-Id: <20211206180738.B11A981503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/orangepi/orangepi-pc2/genimage.cfg:
+ fix comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3030189585a2eb6eab18cdf0b02f93e8c966aff8
+commit: https://git.buildroot.net/buildroot/commit/?id=9fa7dbbbba298db9b99f442b171fa47640bf3cb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+For consistency comment '# 1MB - 40K' must be '# 1MB - 40KB'.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/orangepi/orangepi-pc2/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index 6429f5e9bf..2d6c598880 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  59b862f50e710277f8ede96f083a5bb8d7c9595376146838b9580be90374ee1f  libabseil-cpp-20210324.2.tar.gz
-+sha256  dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4  libabseil-cpp-20211102.0.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index 7646cf0ecd..738cd03c39 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/orangepi/orangepi-pc2/genimage.cfg b/board/orangepi/orangepi-pc2/genimage.cfg
+index 72adc47518..cc8695c9f1 100644
+--- a/board/orangepi/orangepi-pc2/genimage.cfg
++++ b/board/orangepi/orangepi-pc2/genimage.cfg
+@@ -24,7 +24,7 @@ image sdcard.img {
+ 		in-partition-table = "no"
+ 		image = "u-boot.itb"
+ 		offset = 40K
+-		size = 1M # 1MB - 40K
++		size = 1M # 1MB - 40KB
+ 	}
  
--LIBABSEIL_CPP_VERSION = 20210324.2
-+LIBABSEIL_CPP_VERSION = 20211102.0
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+ 	partition boot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
