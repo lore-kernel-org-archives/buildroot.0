@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B76C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AD30C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:46:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4975460FE8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:46:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4975460FE8
+	by mail.kernel.org (Postfix) with ESMTPS id 0007761027
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:46:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 0007761027
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 266F980E63;
-	Sun, 14 Nov 2021 14:46:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF48780E59;
+	Sun, 14 Nov 2021 14:46:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ClPfJHRs-MId; Sun, 14 Nov 2021 14:46:46 +0000 (UTC)
+	with ESMTP id uTfHPiS8mGpn; Sun, 14 Nov 2021 14:46:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 789E780E5F;
-	Sun, 14 Nov 2021 14:46:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A26A1BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 232FF80E6E;
+	Sun, 14 Nov 2021 14:46:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A2FE1BF20B
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56F04402DF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9359E401F7
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:45:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uGcI9-Rs5Qh1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6oVlD4a8PSlQ for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 14:45:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 983C640246
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABA8B400F3
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:45:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2A4988D31B; Sun, 14 Nov 2021 14:41:49 +0000 (UTC)
+ id 3F0628D31B; Sun, 14 Nov 2021 14:41:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:45:26 +0100
+Date: Sun, 14 Nov 2021 15:45:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84172271134260eb2c37e56f70f346857e28e998
-X-Git-Newrev: 91a4a169eb8ee620aae7f5d1ec211ce14b02e1d6
+X-Git-Oldrev: 3c55bba24b02ff8391753649ca63ec1363a3e8ea
+X-Git-Newrev: 6350bd24e53ab2a3038c1e30f1b40465c80f0344
 X-Patchwork-Hint: ignore
-Message-Id: <20211114144149.2A4988D31B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-convert-asn1:
- bump to version 0.33
+Message-Id: <20211114144149.3F0628D31B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mojolicious: bump to
+ version 9.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91a4a169eb8ee620aae7f5d1ec211ce14b02e1d6
+commit: https://git.buildroot.net/buildroot/commit/?id=6350bd24e53ab2a3038c1e30f1b40465c80f0344
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-diff LICENSE: remove trailing spaces
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-convert-asn1/perl-convert-asn1.hash | 6 +++---
- package/perl-convert-asn1/perl-convert-asn1.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-convert-asn1/perl-convert-asn1.hash b/package/perl-convert-asn1/perl-convert-asn1.hash
-index eb7973c313..644517af51 100644
---- a/package/perl-convert-asn1/perl-convert-asn1.hash
-+++ b/package/perl-convert-asn1/perl-convert-asn1.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index fbb1c7d991..cc29c35535 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  1e12b263a5042804bb1c59ddce899876  Convert-ASN1-0.31.tar.gz
--sha256  6fe4c1ba744c3a8212bf2c9b2703d93530acc153435cf2f93633540b439fbbeb  Convert-ASN1-0.31.tar.gz
-+md5  80425835020da77c48c05a40e25bbf7e  Convert-ASN1-0.33.tar.gz
-+sha256  1fdf004520c79e3a244cf9688616293516c11793d746c761f367496eb3d06076  Convert-ASN1-0.33.tar.gz
+-md5  ea3861504ab25b237f124842f8765b01  Mojolicious-9.19.tar.gz
+-sha256  45056d66b08e544fd77033fafe1730c1d45615e46a92892fc77fb241754a1a97  Mojolicious-9.19.tar.gz
++md5  c7a00b4bd8fa2db991c9b918d34041d3  Mojolicious-9.22.tar.gz
++sha256  6b76e024d3d6c077ad984ea3b3d229f093373d5e06438aca248235150d029043  Mojolicious-9.22.tar.gz
  
  # computed by scancpan
--sha256  db9e46a932b02253c8bddc05a44a0c1c6979627190afb2251dd76462dd370d79  LICENSE
-+sha256  70884b19a3537bf179538c3b7d7896a56ade509dafe6b8d545c5999a9c05f8a9  LICENSE
-diff --git a/package/perl-convert-asn1/perl-convert-asn1.mk b/package/perl-convert-asn1/perl-convert-asn1.mk
-index c39fe3412f..affe775aca 100644
---- a/package/perl-convert-asn1/perl-convert-asn1.mk
-+++ b/package/perl-convert-asn1/perl-convert-asn1.mk
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 8252dc7fd9..559b995cdc 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_CONVERT_ASN1_VERSION = 0.31
-+PERL_CONVERT_ASN1_VERSION = 0.33
- PERL_CONVERT_ASN1_SOURCE = Convert-ASN1-$(PERL_CONVERT_ASN1_VERSION).tar.gz
- PERL_CONVERT_ASN1_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TI/TIMLEGGE
- PERL_CONVERT_ASN1_LICENSE = Artistic or GPL-1.0+
+-PERL_MOJOLICIOUS_VERSION = 9.19
++PERL_MOJOLICIOUS_VERSION = 9.22
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
