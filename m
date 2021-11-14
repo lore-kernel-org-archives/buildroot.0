@@ -2,54 +2,51 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82933C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:12:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D92C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:12:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D994603E5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:12:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D994603E5
+	by mail.kernel.org (Postfix) with ESMTPS id DDFC3603E5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 14:12:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DDFC3603E5
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2978360736;
-	Sun, 14 Nov 2021 14:12:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B76DC80E6E;
+	Sun, 14 Nov 2021 14:12:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dz4mVJNNsF8R; Sun, 14 Nov 2021 14:12:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uo_8arJzgGRe; Sun, 14 Nov 2021 14:12:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 967EE60706;
-	Sun, 14 Nov 2021 14:12:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 266B580E6A;
+	Sun, 14 Nov 2021 14:12:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 602FA1BF3D9
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:11:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 556581BF973
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5039740346
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:11:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44EF34034E
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 14:11:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8EXKtceUFgx8 for <buildroot@lists.busybox.net>;
- Sun, 14 Nov 2021 14:11:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A43740329
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:11:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 9A512100005;
- Sun, 14 Nov 2021 14:11:42 +0000 (UTC)
-Date: Sun, 14 Nov 2021 15:11:41 +0100
+ with ESMTP id n_PpUD6AfTDW for <buildroot@lists.busybox.net>;
+ Sun, 14 Nov 2021 14:11:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9108640329
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:11:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 2D8F28D1FE; Sun, 14 Nov 2021 14:07:46 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20211114151141.0f760d0a@windsurf>
-In-Reply-To: <20211108223858.12626-1-ps.report@gmx.net>
-References: <20211108223858.12626-1-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/gst1-interpipe: bump version to
+To: buildroot@buildroot.org
+Date: Sun, 14 Nov 2021 15:11:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fb89f8634915f12b047fe4c19b4cd60358f0a3df
+X-Git-Newrev: 056e84b7131e32a96b2b4655cac59eb94c8502aa
+X-Patchwork-Hint: ignore
+Message-Id: <20211114140746.2D8F28D1FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-interpipe: bump version to
  1.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -62,38 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  8 Nov 2021 23:38:58 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=056e84b7131e32a96b2b4655cac59eb94c8502aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changelog (for details see [1]):
-> 
->   - Fix memory leak generated by last node not being freed.
-> 
-> [1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.7
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
->  package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Changelog (for details see [1]):
 
-Since this was really a purely bugfix release, with just one issue
-being fixed, I've decided to exceptionally apply this version bump to
-the master branch.
+  - Fix memory leak generated by last node not being freed.
 
-Thanks!
+[1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.7
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index b3fc8ef018..348abdb003 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  00d3a91625f6cc5d263f35b9330b4ba6eb40781be2e823231e5b2be9281e1fb4  gst1-interpipe-1.1.6-br1.tar.gz
++sha256  0fd29d3cba623163dd5852989d7ca21eee9033da9d14a467ccd5e527e3b4297b  gst1-interpipe-1.1.7-br1.tar.gz
+ 
+ # Hashes for license files:
+ sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index 80e5b577f6..fa4485e6f8 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_INTERPIPE_VERSION = 1.1.6
++GST1_INTERPIPE_VERSION = 1.1.7
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
