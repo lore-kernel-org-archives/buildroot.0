@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D462C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA5A4C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:19:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1483E81D16;
-	Mon,  6 Dec 2021 18:19:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A32440635;
+	Mon,  6 Dec 2021 18:19:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1cjaKwb8nFSO; Mon,  6 Dec 2021 18:19:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hof0m5LtVhdT; Mon,  6 Dec 2021 18:19:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 977C081AF5;
-	Mon,  6 Dec 2021 18:19:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E96921BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 011AD40386;
+	Mon,  6 Dec 2021 18:19:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 262901BF983
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9DFD60D6F
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF25C41C13
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3geke8Oza5gC for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PC-9qpoB8S3v for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1863E60D69
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDA1D41C08
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A8B2581506; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
+ id 70EF781468; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:31:59 +0100
+Date: Sun, 14 Nov 2021 14:15:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11db258cd6e018227b6899632442b1753a2c3318
-X-Git-Newrev: e89a95ca4a103a169007793a060d08acfd50901a
+X-Git-Oldrev: e87da5514c81a87736e3b8fc6dc1bc5077e4765c
+X-Git-Newrev: 130a28d446564ce1053ddd977fcd4da9243e24c1
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180738.A8B2581506@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- board/friendlyarm/nanopi-neo2/genimage.cfg: fix comment
+Message-Id: <20211206180737.70EF781468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: add gssapi support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,30 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e89a95ca4a103a169007793a060d08acfd50901a
+commit: https://git.buildroot.net/buildroot/commit/?id=130a28d446564ce1053ddd977fcd4da9243e24c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For consistency comment '# 1MB - 40K' must be '# 1MB - 40KB'.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/friendlyarm/nanopi-neo2/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/bind.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
-index 45d081e197..3163a06592 100644
---- a/board/friendlyarm/nanopi-neo2/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
-@@ -24,7 +24,7 @@ image sdcard.img {
- 		in-partition-table = "no"
- 		image = "u-boot.itb"
- 		offset = 40K
--		size = 1M # 1MB - 40K
-+		size = 1M # 1MB - 40KB
- 	}
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index ba32d6150a..e329c803a3 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -35,7 +35,6 @@ BIND_CONF_OPTS = \
+ 	--with-libjson=no \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+-	--with-gssapi=no \
+ 	--enable-filter-aaaa \
+ 	--disable-backtrace
  
- 	partition boot {
+@@ -53,6 +52,13 @@ else
+ BIND_CONF_OPTS += --disable-linux-caps
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++BIND_CONF_OPTS += --with-gssapi=$(STAGING_DIR)/usr/bin/krb5-config
++BIND_DEPENDENCIES += libkrb5
++else
++BIND_CONF_OPTS += --with-gssapi=no
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
+ BIND_DEPENDENCIES += libxml2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
