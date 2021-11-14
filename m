@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04713C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:21:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F597C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD943408E5;
-	Mon,  6 Dec 2021 18:21:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DD5782702;
+	Mon,  6 Dec 2021 18:21:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rbVTDPeMvbBy; Mon,  6 Dec 2021 18:21:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 01IFk21Xl13y; Mon,  6 Dec 2021 18:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F57F41C03;
-	Mon,  6 Dec 2021 18:21:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 326441BF3F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83AC0826B4;
+	Mon,  6 Dec 2021 18:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5092D1BF983
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFD5A40495
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0D5441C29
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0z_j0WC8SupJ for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tKHJwL5Nbbk5 for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDB7A4017A
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E912841C0D
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 696A481503; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
+ id 91ED681468; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 22:26:32 +0100
+Date: Sun, 14 Nov 2021 14:36:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2663af3409f8b45ddf6e6935ed9369ca49a3c52
-X-Git-Newrev: 53972c82964dd1337dff4ccbcdd484d243aef0ba
+X-Git-Oldrev: 9e767b942f5985e1f9e7125d715bdb7334e4f81c
+X-Git-Newrev: ed4ec60500b4973adbc73f1e0a1e860c0c7f41df
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.696A481503@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-zopfli: new package
+Message-Id: <20211206180737.91ED681468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dehydrated: bump to version 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,94 +58,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53972c82964dd1337dff4ccbcdd484d243aef0ba
+commit: https://git.buildroot.net/buildroot/commit/?id=ed4ec60500b4973adbc73f1e0a1e860c0c7f41df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://github.com/dehydrated-io/dehydrated/releases/tag/v0.7.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-zopfli/Config.in          |  7 +++++++
- package/python-zopfli/python-zopfli.hash |  5 +++++
- package/python-zopfli/python-zopfli.mk   | 21 +++++++++++++++++++++
- 5 files changed, 35 insertions(+)
+ package/dehydrated/Config.in       | 2 +-
+ package/dehydrated/dehydrated.hash | 4 ++--
+ package/dehydrated/dehydrated.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b31b89568..82853cdc18 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1272,6 +1272,7 @@ F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-tinycss2/
- F:	package/python-yarl/
-+F:	package/python-zopfli/
+diff --git a/package/dehydrated/Config.in b/package/dehydrated/Config.in
+index 979938d70c..13b3632f9d 100644
+--- a/package/dehydrated/Config.in
++++ b/package/dehydrated/Config.in
+@@ -30,4 +30,4 @@ config BR2_PACKAGE_DEHYDRATED
+ 	  You probably need to install a custom /etc/dehydrated/config
+ 	  with the rootfs overlay.
  
- N:	James Knight <james.knight@collins.com>
- F:	package/atkmm/
-diff --git a/package/Config.in b/package/Config.in
-index b9c2765830..e90d30e81c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1296,6 +1296,7 @@ menu "External python modules"
- 	source "package/python-zc-lockfile/Config.in"
- 	source "package/python-zeroconf/Config.in"
- 	source "package/python-zope-interface/Config.in"
-+	source "package/python-zopfli/Config.in"
- endmenu
- endif
- 	source "package/quickjs/Config.in"
-diff --git a/package/python-zopfli/Config.in b/package/python-zopfli/Config.in
-new file mode 100644
-index 0000000000..69d4b8b514
---- /dev/null
-+++ b/package/python-zopfli/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ZOPFLI
-+	bool "python-zopfli"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Zopfli module for python.
-+
-+	  https://github.com/fonttools/py-zopfli
-diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
-new file mode 100644
-index 0000000000..92b51bdf18
---- /dev/null
-+++ b/package/python-zopfli/python-zopfli.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/zopfli/json
-+md5  f66b6f4132533b9b0ab8b0af757237bf  zopfli-0.1.9.zip
-+sha256  78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b  zopfli-0.1.9.zip
-+# Locally computed sha256 checksums
-+sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
-diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
-new file mode 100644
-index 0000000000..95a0067b05
---- /dev/null
-+++ b/package/python-zopfli/python-zopfli.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python-zopfli
-+#
-+################################################################################
-+
-+PYTHON_ZOPFLI_VERSION = 0.1.9
-+PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
-+PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/10/7d/278fd896401b0ef76e06cd42c3ce1541572d83b1c713b6786795c60a1bbe
-+PYTHON_ZOPFLI_SETUP_TYPE = setuptools
-+PYTHON_ZOPFLI_LICENSE = Apache-2.0
-+PYTHON_ZOPFLI_LICENSE_FILES = COPYING
-+PYTHON_ZOPFLI_DEPENDENCIES = host-python-setuptools-scm
-+
-+define PYTHON_ZOPFLI_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_ZOPFLI_DL_DIR)/$(PYTHON_ZOPFLI_SOURCE)
-+	mv $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)
-+endef
-+
-+$(eval $(python-package))
+-	  https://github.com/lukas2511/dehydrated
++	  https://github.com/dehydrated-io/dehydrated
+diff --git a/package/dehydrated/dehydrated.hash b/package/dehydrated/dehydrated.hash
+index 388dd24749..0452645256 100644
+--- a/package/dehydrated/dehydrated.hash
++++ b/package/dehydrated/dehydrated.hash
+@@ -1,6 +1,6 @@
+ # Locally computed after verifying
+-# https://github.com/lukas2511/dehydrated/releases/download/v0.6.5/dehydrated-0.6.5.tar.gz.asc
++# https://github.com/dehydrated-io/dehydrated/releases/download/v0.7.0/dehydrated-0.7.0.tar.gz.asc
+ # with key 3C2F2605E078A1E18F4793909C4DBE6CF438F333 from https://keybase.io/lukas2511
+-sha256  10aabd0027450bc70a18e49acaca7a9697e0cfb92368d3e508b7a4d6d69bfa35 dehydrated-0.6.5.tar.gz
++sha256  1c5f12c2e57e64b1762803f82f0f7e767a72e65a6ce68e4d1ec197e61b9dc4f9  dehydrated-0.7.0.tar.gz
+ # License, locally computed
+ sha256  b4583b7dd07e3e2a08906de38e7e329d41f921ed9dcb6310b3886e013a6b8723  LICENSE
+diff --git a/package/dehydrated/dehydrated.mk b/package/dehydrated/dehydrated.mk
+index 17c67b8478..28fb5a4912 100644
+--- a/package/dehydrated/dehydrated.mk
++++ b/package/dehydrated/dehydrated.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DEHYDRATED_VERSION = 0.6.5
+-DEHYDRATED_SITE = https://github.com/lukas2511/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
++DEHYDRATED_VERSION = 0.7.0
++DEHYDRATED_SITE = https://github.com/dehydrated-io/dehydrated/releases/download/v$(DEHYDRATED_VERSION)
+ 
+ DEHYDRATED_LICENSE = MIT
+ DEHYDRATED_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
