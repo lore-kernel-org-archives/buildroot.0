@@ -2,56 +2,56 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA9BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:38:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52C3EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:38:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 471E66112E
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:38:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 471E66112E
+	by mail.kernel.org (Postfix) with ESMTPS id 1386D6112E
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:38:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1386D6112E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 179C980E44;
-	Sun, 14 Nov 2021 13:38:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBBFE606A8;
+	Sun, 14 Nov 2021 13:38:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3oFbPTkaEVZr; Sun, 14 Nov 2021 13:38:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nCm8kdFbtURY; Sun, 14 Nov 2021 13:38:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9149A80E47;
-	Sun, 14 Nov 2021 13:38:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 367351BF3E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47390606C8;
+	Sun, 14 Nov 2021 13:38:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F5C81BF973
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25EB34011A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CDF640282
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:38:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ueMgNe_g3jzX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PcS5ztFtYyEL for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 13:38:15 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0500F400F0
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B25140251
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 13:38:14 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 1EC62C0005;
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id DDD0FC0007;
  Sun, 14 Nov 2021 13:38:12 +0000 (UTC)
-Date: Sun, 14 Nov 2021 14:37:52 +0100
+Date: Sun, 14 Nov 2021 14:38:02 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211114143752.61a9a138@windsurf>
-In-Reply-To: <20211113172554.583637-1-fontaine.fabrice@gmail.com>
-References: <20211113172554.583637-1-fontaine.fabrice@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20211114143802.09b59518@windsurf>
+In-Reply-To: <20211113194605.931095-1-bernd.kuhls@t-online.de>
+References: <20211113194605.931095-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/squashfs: bump to version
- 4.5
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/xmrig: bump version to
+ 6.15.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,21 +69,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Nov 2021 18:25:54 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 13 Nov 2021 20:46:05 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> - Drop patch (already in version)
-> - Update indentation in hash file (two spaces)
+> Release notes: https://github.com/xmrig/xmrig/releases/tag/v6.15.3
 > 
-> https://github.com/plougher/squashfs-tools/blob/4.5/CHANGES
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...ols-fix-build-failure-against-gcc-10.patch | 49 -------------------
->  package/squashfs/squashfs.hash                |  4 +-
->  package/squashfs/squashfs.mk                  |  2 +-
->  3 files changed, 3 insertions(+), 52 deletions(-)
->  delete mode 100644 package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+>  package/xmrig/xmrig.hash | 2 +-
+>  package/xmrig/xmrig.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
