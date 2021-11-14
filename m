@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB63C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D462C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC4BE60715;
-	Mon,  6 Dec 2021 18:19:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1483E81D16;
+	Mon,  6 Dec 2021 18:19:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wyf8yvpsNAKz; Mon,  6 Dec 2021 18:19:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1cjaKwb8nFSO; Mon,  6 Dec 2021 18:19:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08CD060786;
-	Mon,  6 Dec 2021 18:19:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A3871BF989
+	by smtp1.osuosl.org (Postfix) with ESMTP id 977C081AF5;
+	Mon,  6 Dec 2021 18:19:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E96921BF3F2
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBDFB41C12
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9DFD60D6F
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H4mp3kX8XYaE for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3geke8Oza5gC for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B7AE41C13
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1863E60D69
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F044281503; Mon,  6 Dec 2021 18:07:36 +0000 (UTC)
+ id A8B2581506; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Nov 2021 15:26:42 +0100
+Date: Sun, 14 Nov 2021 15:31:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04b668e86803172d0c0354570a6b4b063dab7e51
-X-Git-Newrev: f82a83582520fa5bf5a05c9308da91ee20639710
+X-Git-Oldrev: 11db258cd6e018227b6899632442b1753a2c3318
+X-Git-Newrev: e89a95ca4a103a169007793a060d08acfd50901a
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180736.F044281503@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.4.8
+Message-Id: <20211206180738.A8B2581506@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ board/friendlyarm/nanopi-neo2/genimage.cfg: fix comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +59,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f82a83582520fa5bf5a05c9308da91ee20639710
+commit: https://git.buildroot.net/buildroot/commit/?id=e89a95ca4a103a169007793a060d08acfd50901a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a bug fix release which addresses quite a number of issues
+For consistency comment '# 1MB - 40K' must be '# 1MB - 40KB'.
 
-https://www.mail-archive.com/haproxy@formilux.org/msg41404.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/friendlyarm/nanopi-neo2/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 2e39fb4aa5..c29857cd9c 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.7.tar.gz.sha256
--sha256  52af97f72f22ffd8a7a995fafc696291d37818feda50a23caef7dc0622421845  haproxy-2.4.7.tar.gz
-+# From: http://www.haproxy.org/download/2.4/src/haproxy-2.4.8.tar.gz.sha256
-+sha256  e3e4c1ad293bc25e8d8790cc5e45133213dda008bfd0228bf3077259b32ebaa5  haproxy-2.4.8.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 0434c73348..33a2e92777 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
+index 45d081e197..3163a06592 100644
+--- a/board/friendlyarm/nanopi-neo2/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
+@@ -24,7 +24,7 @@ image sdcard.img {
+ 		in-partition-table = "no"
+ 		image = "u-boot.itb"
+ 		offset = 40K
+-		size = 1M # 1MB - 40K
++		size = 1M # 1MB - 40KB
+ 	}
  
- HAPROXY_VERSION_MAJOR = 2.4
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).7
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).8
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ 	partition boot {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
