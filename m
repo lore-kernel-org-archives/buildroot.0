@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35DDBC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 029C3C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F318B81AF3;
-	Mon,  6 Dec 2021 18:34:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD02D404C1;
+	Mon,  6 Dec 2021 18:34:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uo0BLxGy2giO; Mon,  6 Dec 2021 18:34:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2DhQb3pGPIWM; Mon,  6 Dec 2021 18:34:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AB8580D34;
-	Mon,  6 Dec 2021 18:34:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E6B0A1BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7CE6404C2;
+	Mon,  6 Dec 2021 18:34:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B31E1BF983
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 544A460D6B
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E8A341C0F
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w5JWSC_DAXRx for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Cd7ZpZ04MEf for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B55360D90
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E954641C21
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CC1DE81504; Mon,  6 Dec 2021 18:07:43 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 9249981468; Mon,  6 Dec 2021 18:07:39 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Dec 2021 16:21:29 +0100
+Date: Sun, 14 Nov 2021 16:29:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22ea19e8f952b290991b977870170f4d6ac0f24b
-X-Git-Newrev: ed7321051552366a8145c6486c24452aab6ff450
+X-Git-Oldrev: 6ad98fab7a2a4f84d9ec38d86af6282f27a4a4c9
+X-Git-Newrev: 7c8f98557324c8ef6bebb613402e2ee619004d8b
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180743.CC1DE81504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p7zip: update help text of 7za and
- 7zr
+Message-Id: <20211206180739.9249981468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +58,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed7321051552366a8145c6486c24452aab6ff450
+commit: https://git.buildroot.net/buildroot/commit/?id=7c8f98557324c8ef6bebb613402e2ee619004d8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update help text of 7za and 7zr options (added in commit
-c1723424b8189730087006fc879fdae0cc123ca1) as suggested by Peter
-Korsgaard in
-https://patchwork.ozlabs.org/project/buildroot/patch/20211025215520.3712974-1-fontaine.fabrice@gmail.com/
+This is stable bugfix release of libmdbx. So it is reasonable to backport
+this patch to all applicable releases/branches of buildroot.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Please refer to the ChangeLog for more historical information and actual TODOs.
+https://github.com/erthink/libmdbx/blob/master/ChangeLog.md
+
+Release notes: https://github.com/erthink/libmdbx/releases/tag/v0.11.1
+
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/p7zip/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
-index 3b30fd71cc..be2206eb76 100644
---- a/package/p7zip/Config.in
-+++ b/package/p7zip/Config.in
-@@ -21,14 +21,14 @@ choice
- config BR2_PACKAGE_P7ZIP_7ZA
- 	bool "7za"
- 	help
--	  Stand-alone executable that handles fewer archive formats
--	  than 7z
-+	  Full 7za archiver. The program supports 7z, ZIP, CAB, ARJ,
-+	  GZIP, BZIP2, TAR, CPIO, RPM and DEB formats
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 7cc835a96a..c8b50f9ac3 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://github.com/erthink/libmdbx/releases/
+-sha256  a8f2436c4d008886e044f568a22bda44329fb1c67f175d91a929ff8e2065340a  libmdbx-amalgamated-0.10.3.tar.gz
++sha256  f954ba8c9768914a92c2b46aac0d66bec674dbb4d7b0f01e362ea2921746ddaa  libmdbx-amalgamated-0.11.1.tar.gz
  
- config BR2_PACKAGE_P7ZIP_7ZR
- 	bool "7zr"
- 	help
--	  Stand-alone executable which is a "light-version" of 7za that
--	  only handles 7z archives and cannot handle encrypted archives
-+	  Lightweight 7zr archiver. The program only handles 7z archives
-+	  and cannot handle encrypted archives
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 76bd56dfd7..02d00b1a5a 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endchoice
- 
+-LIBMDBX_VERSION = 0.10.3
++LIBMDBX_VERSION = 0.11.1
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
+ LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
