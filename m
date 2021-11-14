@@ -2,52 +2,52 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B97C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:36:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C91AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:37:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1F5006109E
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:36:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1F5006109E
+	by mail.kernel.org (Postfix) with ESMTPS id F1E076112E
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 13:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F1E076112E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD956401F7;
-	Sun, 14 Nov 2021 13:36:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFC2580E39;
+	Sun, 14 Nov 2021 13:37:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4MAHzMCyIejr; Sun, 14 Nov 2021 13:36:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kqBF3vqiHung; Sun, 14 Nov 2021 13:37:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C482C40202;
-	Sun, 14 Nov 2021 13:36:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68B0C1BF3E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29EA380E3E;
+	Sun, 14 Nov 2021 13:37:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D9F81BF976
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:36:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 589406069F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C50B80E33
  for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 13:36:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vdx6oj8yRD5c for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cTx2ZeCQTOIw for <buildroot@lists.busybox.net>;
  Sun, 14 Nov 2021 13:36:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92D1E60699
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E32780E30
  for <buildroot@buildroot.org>; Sun, 14 Nov 2021 13:36:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 420858CA82; Sun, 14 Nov 2021 13:32:31 +0000 (UTC)
+ id 4B68E8CA81; Sun, 14 Nov 2021 13:32:31 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 14:36:15 +0100
+Date: Sun, 14 Nov 2021 14:36:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ed4ec60500b4973adbc73f1e0a1e860c0c7f41df
-X-Git-Newrev: e68fba55fd80022c691e677b71462b60d1083838
+X-Git-Oldrev: e68fba55fd80022c691e677b71462b60d1083838
+X-Git-Newrev: f727b6da04c21732bbd07d8c70aa814bc56014a1
 X-Patchwork-Hint: ignore
-Message-Id: <20211114133231.420858CA82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/squashfs: bump to
- version 4.5
+Message-Id: <20211114133231.4B68E8CA81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/memcached: bump to
+ version 1.6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,119 +60,53 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3880510798888086722=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3880510798888086722==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e68fba55fd80022c691e677b71462b60d1083838
+commit: https://git.buildroot.net/buildroot/commit/?id=f727b6da04c21732bbd07d8c70aa814bc56014a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Drop patch (already in version)
-- Update indentation in hash file (two spaces)
-
-https://github.com/plougher/squashfs-tools/blob/4.5/CHANGES
+https://github.com/memcached/memcached/wiki/ReleaseNotes1610
+https://github.com/memcached/memcached/wiki/ReleaseNotes1611
+https://github.com/memcached/memcached/wiki/ReleaseNotes1612
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fs-tools-fix-build-failure-against-gcc-10.patch | 49 ----------------------
- package/squashfs/squashfs.hash                     |  4 +-
- package/squashfs/squashfs.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 52 deletions(-)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
-deleted file mode 100644
-index a5fc487aac..0000000000
---- a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From e1cdcfd94172a0b1ba4c9df70f4d69a41c687404 Mon Sep 17 00:00:00 2001
--From: Sergei Trofimovich <slyfox@gentoo.org>
--Date: Sun, 26 Jan 2020 18:35:13 +0000
--Subject: [PATCH] squashfs-tools: fix build failure against gcc-10
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--On gcc-10 (and gcc-9 -fno-common) build fails as:
--
--```
--cc ... -o mksquashfs
--ld: read_fs.o:(.bss+0x0):
--  multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
--ld: read_fs.o:(.bss+0x8):
--  multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
--```
--
--gcc-10 will change the default from -fcommon to fno-common:
--https://gcc.gnu.org/PR85678.
--
--The error also happens if CFLAGS=-fno-common passed explicitly.
--
--Reported-by: Toralf Förster
--Bug: https://bugs.gentoo.org/706456
--Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
--
--[Upstream: https://github.com/plougher/squashfs-tools/commit/fe2f5da4b0f8994169c53e84b7cb8a0feefc97b5.patch]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- squashfs-tools/mksquashfs.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
--index 1beefef..b650306 100644
----- a/squashfs-tools/mksquashfs.h
--+++ b/squashfs-tools/mksquashfs.h
--@@ -143,7 +143,7 @@ struct append_file {
-- #endif
-- 
-- extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
---struct cache *bwriter_buffer, *fwriter_buffer;
--+extern struct cache *bwriter_buffer, *fwriter_buffer;
-- extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
-- 	*to_frag, *locked_fragment, *to_process_frag;
-- extern struct append_file **file_mapping;
---- 
--2.26.2
--
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index 1f08b530a0..09a2bae364 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 a7fa4845e9908523c38d4acf92f8a41fdfcd19def41bd5090d7ad767a6dc75c3 squashfs-4.4.tar.gz
-+sha256  b9e16188e6dc1857fe312633920f7d71cc36b0162eb50f3ecb1f0040f02edddd  squashfs-4.5.tar.gz
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index a86a6f9f73..22c794d07b 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.6.9.tar.gz.sha1
+-sha1  42ae062094fdf083cfe7b21ff377c781011c2be1  memcached-1.6.9.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.12.tar.gz.sha1
++sha1  40d43e98f149e13e6c81eee813e6734f23413a01  memcached-1.6.12.tar.gz
  
- # License files
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index cbc3c906d8..f64d441c9b 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
+ # Locally computed
+-sha256  d5a62ce377314dbffdb37c4467e7763e3abae376a16171e613cbe69956f092d1  memcached-1.6.9.tar.gz
++sha256  f291a35f82ef9756ed1d952879ef5f4be870f932bdfcb2ab61356609abf82346  memcached-1.6.12.tar.gz
+ sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index f233e11806..8f3506f9d4 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQUASHFS_VERSION = 4.4
-+SQUASHFS_VERSION = 4.5
- SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
- SQUASHFS_LICENSE = GPL-2.0+
- SQUASHFS_LICENSE_FILES = COPYING
-
---===============3880510798888086722==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-MEMCACHED_VERSION = 1.6.9
++MEMCACHED_VERSION = 1.6.12
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3880510798888086722==--
