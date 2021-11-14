@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36224C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9239C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC28740190;
-	Mon,  6 Dec 2021 18:25:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B34C40283;
+	Mon,  6 Dec 2021 18:25:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M3mrzvk9yXJK; Mon,  6 Dec 2021 18:25:16 +0000 (UTC)
+	with ESMTP id T5ICSqU_M2Li; Mon,  6 Dec 2021 18:25:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4814641C3C;
-	Mon,  6 Dec 2021 18:25:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B3F021BF989
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8D8941C56;
+	Mon,  6 Dec 2021 18:25:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 038341BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52EF260D70
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCD4C41C38
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vrpxy8vJ4Ymh for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hcf4Ids6tQhu for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8710C60D6C
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FBE441C22
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 23A4C81504; Mon,  6 Dec 2021 18:07:39 +0000 (UTC)
+ id 1A23E81468; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:43:36 +0100
+Date: Sun, 14 Nov 2021 15:09:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d00e1d703698fa94ebd2fb5ec6d9252b2c1ba36
-X-Git-Newrev: 50610e7a4555e4c3493f8181dec6de835de48183
+X-Git-Oldrev: 7ccfc1ffbddd9b6195967f83fc78833decd10ef1
+X-Git-Newrev: bd06a3b9b507b14f3cf69f45ed165d132790ad75
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180739.23A4C81504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-timidity: bump
- version to 19.0.1-Matrix
+Message-Id: <20211206180738.1A23E81468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iproute2: bump version to 5.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50610e7a4555e4c3493f8181dec6de835de48183
+commit: https://git.buildroot.net/buildroot/commit/?id=bd06a3b9b507b14f3cf69f45ed165d132790ad75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For details see [1].
+
+[1] https://lore.kernel.org/all/20211101164705.6f4f2e41@hermes.local
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash | 2 +-
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk   | 2 +-
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index 19efb1dfd5..0120c1ff3b 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 2837edb09d..d8d619cbda 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  c2a0701978e71102859c7cb308422fe26fb87741d0eab9656650eaea156c3d56  kodi-audiodecoder-timidity-19.0.0-Matrix.tar.gz
-+sha256  c33bcf24a6a9ca8c594c3d587c0efa5f1469c9402b3a934aaa5d21f1cbf41e9a  kodi-audiodecoder-timidity-19.0.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index d6c47d11cd..824015a93f 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  210fa785a52f3763c4287fd5ae63e246f6311bfaa48c424baab6d383bb7591d4  iproute2-5.14.0.tar.xz
++sha256  38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b35b291ff  iproute2-5.15.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index fdf442a429..4162e38eb7 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIODECODER_TIMIDITY_VERSION = 19.0.0-Matrix
-+KODI_AUDIODECODER_TIMIDITY_VERSION = 19.0.1-Matrix
- KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
+-IPROUTE2_VERSION = 5.14.0
++IPROUTE2_VERSION = 5.15.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
