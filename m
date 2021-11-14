@@ -2,81 +2,77 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D059C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:31:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19E07C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:56:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C6036610FE
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:31:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6036610FE
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id DD9CD60C4D
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:56:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DD9CD60C4D
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CABB4023C;
-	Sun, 14 Nov 2021 16:31:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C3B780D82;
+	Sun, 14 Nov 2021 16:56:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gimXNQ6sJ8fZ; Sun, 14 Nov 2021 16:31:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k8eZpk9n2-kO; Sun, 14 Nov 2021 16:56:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99FC440248;
-	Sun, 14 Nov 2021 16:31:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E8D71BF30F
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:31:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86C7880D84;
+	Sun, 14 Nov 2021 16:56:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FAA11BF30F
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1DB8A40248
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:31:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FA2F80D82
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:56:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6GnV8_RNrX2O for <buildroot@lists.busybox.net>;
- Sun, 14 Nov 2021 16:31:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B9CB54023C
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 16:31:16 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id b12so25726020wrh.4
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 08:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4C8vtfbCG3q0DhXR5h0Bi8GRq15ZibOI5ZvhKyx3wVQ=;
- b=OD3MDAiNcytzAwN1rKuLEk5zuCe3p5+6HrUAlxkI2i8PcdN5/0jkle1nSXuTCqpGuc
- X3RufDEmm5gqlm9COgfqcWv0Ei344rzR3/uudh0nCC6vMr0hPyyu1HxXV2cSfo/hhsQO
- QcgeZEVqWW3qAPDIZVgLSjq1g9I3xKu0YZQMcPr6ggDZsGLPW6YhsGr5mB98p4I20xU0
- JdMSocy2rPqGbExBuXVqGrtGmbhn1XQ5+am4vDz8xv0kzuyVArxwtbAkVreps/0b6xsY
- bVbSKP7Md5aUyrHc+loknHxSVTvAMbqG0vofTn3Pg5OBW3AP5eu8lcOjBq/5vaN07mws
- RLDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4C8vtfbCG3q0DhXR5h0Bi8GRq15ZibOI5ZvhKyx3wVQ=;
- b=vmlWtyePEwWyv70Y0Tg1dTJLM3VYXT5WkHrqiyaz+qHkK2axhZ4VhOTK4jOCu0ca+0
- dc3P4t5KDeaK1ViYJ8Wddoi0d6E6Io7HYSVD6zo20nNV8zYVoJBRKB3YNvdEqNPC8rKm
- mi0mIJjqY5Rlh1nIWLxaGrVzqHHYVDAP7+p1TyVPJUU9KguITLUO8Cb7YKcv6kDV4fGD
- BPG/jq7YmhLcg/ZOEYmape2t+Mz0WuzU3aAZJJj3cmmWC03xnF4f9t7jv3yKTXzH365j
- G7UTD5PcxnmM0dQgt0SOLwyfklMdytQKjXhK2n7wZX78AYfQn+gBQ4onRO68DutbH7zl
- Fgww==
-X-Gm-Message-State: AOAM532JirQ3yITiqt9iZNduR4I1ekT3gQ4GKIFsAycKr21Aqoa9Hz/V
- U1k5cXiZEksKe6Lo8Fhe/bIXgdwu0u0=
-X-Google-Smtp-Source: ABdhPJyxVP5U5nOv60qQljNzRwi1rQ2dbUZP7d6Uy4jD9jHCe6zoEG9rDpU5UOoU3ceXLowV+a9Wfw==
-X-Received: by 2002:adf:f90a:: with SMTP id b10mr39723986wrr.255.1636907473956; 
- Sun, 14 Nov 2021 08:31:13 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id v15sm7924855wro.35.2021.11.14.08.31.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Nov 2021 08:31:13 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 17:29:04 +0100
-Message-Id: <20211114162904.2673696-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QgSWWAYhT-GJ for <buildroot@lists.busybox.net>;
+ Sun, 14 Nov 2021 16:56:18 +0000 (UTC)
+X-Greylist: delayed 00:08:15 by SQLgrey-1.8.0
+Received: from libero.it (smtp-18-i2.italiaonline.it [213.209.12.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C91F880D84
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 16:56:17 +0000 (UTC)
+Received: from oxapps-15-090.iol.local ([10.101.8.100])
+ by smtp-18.iol.local with ESMTPA
+ id mIfemIwGUilKSmIfemsciW; Sun, 14 Nov 2021 17:47:59 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+ t=1636908479; bh=JIE4RBx9wx6ecWD+x9kSX8PfWmBCIosDsjvQt7QlFOA=;
+ h=From;
+ b=aG5knPC6h03OFun3YwLXcwtLYBuN00UA9Z6HfRAVT9BLLd6L8eExCG+IVGOpEZtD+
+ SzaPCIxcZIAMDqbxApgir4wwXAEon9CK3xwgLxuFOsq8Q4LMTyaYNWYq5wztNR6Ty0
+ R6YxvUqX9OPB5TmpAsdmBHk/fjnZwfxARnnhhTYi+ZGfQ8RayR/amrXj5ZPteLMbmH
+ ddz86J8CCMUG2JYyJ9y8dl9xT6y2yIc3ud4sRamPkMKxJFwmNeMFlAgWrdqCHqSq1d
+ rhOAii1Qsbq9NY+nwA0HUhXAYvb6xv8mvANcXgIujG1U3LGw1Vm7nphYBb39QhtE+l
+ Xg7qkgNdZHzYQ==
+X-CNFS-Analysis: v=2.4 cv=aYqkITkt c=1 sm=1 tr=0 ts=61913dbf cx=a_exe
+ a=1zo9O5OOLDVXMJ/sd9tkAw==:117 a=HbgeEQMBq2gA:10 a=IkcTkHD0fZMA:10
+ a=Rcx2N4IabdcA:10 a=uP1ucDPQAAAA:8 a=xtXFGUsqcHPXvADOlXoA:9 a=QEXdDO2ut3YA:10
+ a=9a9ggB8z3XFZH39hjkD6:22
+Date: Sun, 14 Nov 2021 17:47:58 +0100 (CET)
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+Message-ID: <787392691.81637.1636908478851@mail1.libero.it>
+In-Reply-To: <60a8f99e-b1dd-02e7-9ee6-0ac569e58642@mind.be>
+References: <20211101182429.11450-1-dariobin@libero.it>
+ <60a8f99e-b1dd-02e7-9ee6-0ac569e58642@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,1/1] package/pppd: bump to version 2.4.9
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev35
+X-Originating-IP: 79.24.99.64
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: BQCvKrxGEiW5AQka2/R9lgx8WF98/IRq
+x-libjamv: fBSiQdc0I1Q=
+X-CMAE-Envelope: MS4xfJcmeZITAcQpymv0Yk6CvotgUbHbsLecnhJuYt7k0J2Y6BnsTJzEP2kEGQ+qn8MALSyQWM9RxWw0Ft25bHCZ2f3r5Uu6Ep+ak36NJeY3ueASd2z0YFbz
+ lR/vCmkwHfEdCINoYsftnLspKN83f0lp9FnhWzfxsHYZ2yDVJgQhIUB88pUAb6xhnkYzsXGe8P7XXS6OHR4TM+N9EKIF5zOPdMtX1yAHEiEgRiZz2DTOcyVj
+ eSV+Tju2Lt0WXH7AD/hHVtVfS8IuRmaOnawNAbqANn8=
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f429_disco: fix kernel
+ bootup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,204 +84,228 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Dario Binacchi via buildroot <buildroot@buildroot.org>
+Reply-To: Dario Binacchi <dariobin@libero.it>
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBEcm9wIHBhdGNoIChhbHJlYWR5IGluIHZlcnNpb24pCi0gVXBkYXRlIGhhc2ggb2YgYnNkLWNv
-bXAuYywgY2NwLmMgYW5kIHBhc3Nwcm9tcHQuYyAobm8gY2hhbmdlIGluCiAgbGljZW5zZSkKLSBy
-cC1wcHBvZSBoYXMgYmVlbiByZW5hbWVkIHRvIHBwcG9lIHNpbmNlCiAgaHR0cHM6Ly9naXRodWIu
-Y29tL3BhdWx1c21hY2svcHBwL2NvbW1pdC9iMmMzNmU2YzBlMTY1NWFlYTliMWIwYTAzYTgxNjBm
-NDJhMjZjODg0Ci0gTWFuYWdlIEVBUC1UTFMgd2hpY2ggZGVwZW5kcyBvbiBvcGVuc3NsIGFuZCBo
-YXMgYmVlbiBhZGRlZCBhbmQgaXMKICBlbmFibGVkIGJ5IGRlZmF1bHQgc2luY2UKICBodHRwczov
-L2dpdGh1Yi5jb20vcGF1bHVzbWFjay9wcHAvY29tbWl0L2U4N2ZlMWJiZDM3YTE0ODZjNTIyM2Yx
-MTBlOWNlM2VmNzU5NzFmOTMKICBJdCBzaG91bGQgYmUgbm90ZWQgdGhhdCBvcGVuc3NsIGlzIHN0
-aWxsIG1hbmRhdG9yeSB3aXRoIGdsaWJjIGJlY2F1c2UKICBlbmNyeXB0IGFuZCBzZXRrZXkgaGF2
-ZSBiZWVuIHJlbW92ZWQgc2luY2UgdmVyc2lvbiAyLjI4IChzZWUgY29tbWl0CiAgYjUxOWJjYWZl
-NzVkMTI1NmQxZmM0MmFhMjYzOTM0MDViODk2MjliMykKLSBtdXNsIGlzIG5vdyBzdXBwb3J0ZWQK
-LSBVcGRhdGUgaW5kZW50YXRpb24gaW4gaGFzaCBmaWxlICh0d28gc3BhY2VzKQoKaHR0cHM6Ly9n
-aXRodWIuY29tL3BhdWx1c21hY2svcHBwL2Jsb2IvMi40LjkvUkVBRE1FCgpGaXhlczoKIC0gaHR0
-cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xMzQzNgoKU2lnbmVkLW9mZi1i
-eTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci0tLQpDaGFu
-Z2VzIHYxIC0+IHYyIChhZnRlciByZXZpZXcgb2YgVGhvbWFzIFBldGF6em9uaSk6CiAtIEFkZCBt
-dXNsIHN1cHBvcnQKIC0gVXBkYXRlIGNvbW1pdCBtZXNzYWdlIGNvbmNlcm5pbmcgb3BlbnNzbCBh
-bmQgZ2xpYmMKCiBwYWNrYWdlL25ldHdvcmstbWFuYWdlci9Db25maWcuaW4gICAgICAgICAgICAg
-fCAgNCAtLQogcGFja2FnZS9wcHBkLzAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoIHwg
-MzcgLS0tLS0tLS0tLS0tCiAuLi5uLXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMu
-cGF0Y2ggfCA2MCArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL3BwcGQvQ29uZmlnLmluICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgNSArLQogcGFja2FnZS9wcHBkL3BwcGQuaGFzaCAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgMTIgKystLQogcGFja2FnZS9wcHBkL3BwcGQubWsgICAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgMTkgKysrLS0tCiBwYWNrYWdlL3JwLXBwcG9lL0NvbmZpZy5p
-biAgICAgICAgICAgICAgICAgICAgfCAgNSArLQogNyBmaWxlcyBjaGFuZ2VkLCA4MCBpbnNlcnRp
-b25zKCspLCA2MiBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BwcGQv
-MDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1jb21waWxhdGlvbi13aXRoLW9sZGVyLWdsaWJjLW9yLWtl
-cm5lbC1oZWFkZXJzLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9uZXR3b3JrLW1hbmFnZXIv
-Q29uZmlnLmluIGIvcGFja2FnZS9uZXR3b3JrLW1hbmFnZXIvQ29uZmlnLmluCmluZGV4IDQzOTg3
-NDUxYjYuLmI5YmFmNTk0NTMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbmV0d29yay1tYW5hZ2VyL0Nv
-bmZpZy5pbgorKysgYi9wYWNrYWdlL25ldHdvcmstbWFuYWdlci9Db25maWcuaW4KQEAgLTQ2LDE0
-ICs0NiwxMCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTkVUV09SS19NQU5BR0VSX01PREVNX01BTkFH
-RVIKIAogY29uZmlnIEJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUl9QUFBECiAJYm9vbCAicHBw
-ZCBzdXBwb3J0IgotCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMICMgcHBwZAog
-CXNlbGVjdCBCUjJfUEFDS0FHRV9QUFBECiAJaGVscAogCSAgVGhpcyBvcHRpb24gZW5hYmxlcyBz
-dXBwb3J0IGZvciBQUFBEIGRhZW1vbgogCi1jb21tZW50ICJwcHBkIHN1cHBvcnQgbmVlZHMgYSBn
-bGliYyBvciB1Q2xpYmMgdG9vbGNoYWluIgotCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9VU0VT
-X01VU0wKLQogY29uZmlnIEJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUl9PVlMKIAlib29sICJP
-cGVuVlN3aXRjaCBzdXBwb3J0IgogCXNlbGVjdCBCUjJfUEFDS0FHRV9KQU5TU09OCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2ggYi9wYWNr
-YWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2gKZGVsZXRlZCBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDVkN2M1MWJjYWMuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9wcHBk
-LzAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMzcg
-KzAsMCBAQAotRnJvbSA4ZDc5NzBiOGYzZGI3MjdmZTc5OGI2NWYzMzc3ZmU2Nzg3NTc1NDI2IE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogUGF1bCBNYWNrZXJyYXMgPHBhdWx1c0Bvemxh
-YnMub3JnPgotRGF0ZTogTW9uLCAzIEZlYiAyMDIwIDE1OjUzOjI4ICsxMTAwCi1TdWJqZWN0OiBb
-UEFUQ0hdIHBwcGQ6IEZpeCBib3VuZHMgY2hlY2sgaW4gRUFQIGNvZGUKLQotR2l2ZW4gdGhhdCB3
-ZSBoYXZlIGp1c3QgY2hlY2tlZCB2YWxsZW4gPCBsZW4sIGl0IGNhbiBuZXZlciBiZSB0aGUgY2Fz
-ZQotdGhhdCB2YWxsZW4gPj0gbGVuICsgc2l6ZW9mKHJob3N0bmFtZSkuICBUaGlzIGZpeGVzIHRo
-ZSBjaGVjayBzbyB3ZQotYWN0dWFsbHkgYXZvaWQgb3ZlcmZsb3dpbmcgdGhlIHJob3N0bmFtZSBh
-cnJheS4KLQotUmVwb3J0ZWQtYnk6IElsamEgVmFuIFNwcnVuZGVsIDxpdmFuc3BydW5kZWxAaW9h
-Y3RpdmUuY29tPgotU2lnbmVkLW9mZi1ieTogUGF1bCBNYWNrZXJyYXMgPHBhdWx1c0BvemxhYnMu
-b3JnPgotLS0tCi0gcHBwZC9lYXAuYyB8IDQgKystLQotIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9wcHBkL2VhcC5jIGIvcHBw
-ZC9lYXAuYwotaW5kZXggOTQ0MDdmNTYuLjFiOTNkYjAxIDEwMDY0NAotLS0tIGEvcHBwZC9lYXAu
-YwotKysrIGIvcHBwZC9lYXAuYwotQEAgLTE0MjAsNyArMTQyMCw3IEBAIGludCBsZW47Ci0gCQl9
-Ci0gCi0gCQkvKiBOb3Qgc28gbGlrZWx5IHRvIGhhcHBlbi4gKi8KLS0JCWlmICh2YWxsZW4gPj0g
-bGVuICsgc2l6ZW9mIChyaG9zdG5hbWUpKSB7Ci0rCQlpZiAobGVuIC0gdmFsbGVuID49IHNpemVv
-ZiAocmhvc3RuYW1lKSkgewotIAkJCWRiZ2xvZygiRUFQOiB0cmltbWluZyByZWFsbHkgbG9uZyBw
-ZWVyIG5hbWUgZG93biIpOwotIAkJCUJDT1BZKGlucCArIHZhbGxlbiwgcmhvc3RuYW1lLCBzaXpl
-b2YgKHJob3N0bmFtZSkgLSAxKTsKLSAJCQlyaG9zdG5hbWVbc2l6ZW9mIChyaG9zdG5hbWUpIC0g
-MV0gPSAnXDAnOwotQEAgLTE4NDYsNyArMTg0Niw3IEBAIGludCBsZW47Ci0gCQl9Ci0gCi0gCQkv
-KiBOb3Qgc28gbGlrZWx5IHRvIGhhcHBlbi4gKi8KLS0JCWlmICh2YWxsZW4gPj0gbGVuICsgc2l6
-ZW9mIChyaG9zdG5hbWUpKSB7Ci0rCQlpZiAobGVuIC0gdmFsbGVuID49IHNpemVvZiAocmhvc3Ru
-YW1lKSkgewotIAkJCWRiZ2xvZygiRUFQOiB0cmltbWluZyByZWFsbHkgbG9uZyBwZWVyIG5hbWUg
-ZG93biIpOwotIAkJCUJDT1BZKGlucCArIHZhbGxlbiwgcmhvc3RuYW1lLCBzaXplb2YgKHJob3N0
-bmFtZSkgLSAxKTsKLSAJCQlyaG9zdG5hbWVbc2l6ZW9mIChyaG9zdG5hbWUpIC0gMV0gPSAnXDAn
-OwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wcHBkLzAwMDEtcHBwZC1GaXgtY29tcGlsYXRpb24td2l0
-aC1vbGRlci1nbGliYy1vci1rZXJuZWwtaGVhZGVycy5wYXRjaCBiL3BhY2thZ2UvcHBwZC8wMDAx
-LXBwcGQtRml4LWNvbXBpbGF0aW9uLXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMu
-cGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uODZkOGI4ZjRlMwot
-LS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHBwZC8wMDAxLXBwcGQtRml4LWNvbXBpbGF0aW9u
-LXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMucGF0Y2gKQEAgLTAsMCArMSw2MCBA
-QAorRnJvbSA5OGVjMThmMDk4ZTVlZjY4ZTNhOGNjNjk1NGZjYWY1YTdmYjhiN2JlIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQorRnJvbTogcGFsaSA8NzE0MTg3MStwYWxpQHVzZXJzLm5vcmVwbHku
-Z2l0aHViLmNvbT4KK0RhdGU6IE1vbiwgMTUgRmViIDIwMjEgMDc6NTQ6MDEgKzAxMDAKK1N1Ympl
-Y3Q6IFtQQVRDSF0gcHBwZDogRml4IGNvbXBpbGF0aW9uIHdpdGggb2xkZXIgZ2xpYmMgb3Iga2Vy
-bmVsIGhlYWRlcnMKKyAoIzI0OCkKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRl
-eHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQK
-KworZ2xpYmMgdmVyc2lvbnMgcHJpb3IgdG8gMi4yNCBkbyBub3QgZGVmaW5lIFNPTF9ORVRMSU5L
-IGFuZCBsaW51eCBrZXJuZWwKK3ZlcnNpb25zIHByaW9yIHRvIDQuMyBkbyBub3QgZGVmaW5lIE5F
-VExJTktfQ0FQX0FDSy4gU28gYWRkIGZhbGxiYWNrCitkZWZpbml0aW9ucyBmb3IgdGhlc2UgbWFj
-cm9zIGludG8gcHBwZC9zeXMtbGludXguYyBmaWxlLgorCitBbHNvIGV4dGVuZCBkZXNjcmlwdGlv
-biB3aHkgd2UgY2FsbCBTT0xfTkVUTElOSy9ORVRMSU5LX0NBUF9BQ0sgb3B0aW9uLgorCitTaWdu
-ZWQtb2ZmLWJ5OiBQYWxpIFJvaMOhciA8cGFsaUBrZXJuZWwub3JnPgorCitbUmV0cmlldmVkIGZy
-b206CitodHRwczovL2dpdGh1Yi5jb20vcHBwLXByb2plY3QvcHBwL2NvbW1pdC85OGVjMThmMDk4
-ZTVlZjY4ZTNhOGNjNjk1NGZjYWY1YTdmYjhiN2JlXQorU2lnbmVkLW9mZi1ieTogRmFicmljZSBG
-b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CistLS0KKyBwcHBkL3N5cy1saW51
-eC5jIHwgMTggKysrKysrKysrKysrKysrKystCisgMSBmaWxlIGNoYW5nZWQsIDE3IGluc2VydGlv
-bnMoKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL3BwcGQvc3lzLWxpbnV4LmMgYi9w
-cHBkL3N5cy1saW51eC5jCitpbmRleCA4NTAzM2Q5Ny4uNTBjNGYyZGEgMTAwNjQ0CistLS0gYS9w
-cHBkL3N5cy1saW51eC5jCisrKysgYi9wcHBkL3N5cy1saW51eC5jCitAQCAtMTI1LDYgKzEyNSwx
-NCBAQAorICNpbmNsdWRlIDxsaW51eC9uZXRsaW5rLmg+CisgI2luY2x1ZGUgPGxpbnV4L3J0bmV0
-bGluay5oPgorICNpbmNsdWRlIDxsaW51eC9pZl9hZGRyLmg+CisrLyogZ2xpYmMgdmVyc2lvbnMg
-cHJpb3IgdG8gMi4yNCBkbyBub3QgZGVmaW5lIFNPTF9ORVRMSU5LICovCisrI2lmbmRlZiBTT0xf
-TkVUTElOSworKyNkZWZpbmUgU09MX05FVExJTksgMjcwCisrI2VuZGlmCisrLyogbGludXgga2Vy
-bmVsIHZlcnNpb25zIHByaW9yIHRvIDQuMyBkbyBub3QgZGVmaW5lL3N1cHBvcnQgTkVUTElOS19D
-QVBfQUNLICovCisrI2lmbmRlZiBORVRMSU5LX0NBUF9BQ0sKKysjZGVmaW5lIE5FVExJTktfQ0FQ
-X0FDSyAxMAorKyNlbmRpZgorICNlbmRpZgorIAorICNpbmNsdWRlICJwcHBkLmgiCitAQCAtMjg0
-Myw3ICsyODUxLDE1IEBAIHN0YXRpYyBpbnQgYXBwZW5kX3BlZXJfaXB2Nl9hZGRyZXNzKHVuc2ln
-bmVkIGludCBpZmFjZSwgc3RydWN0IGluNl9hZGRyICpsb2NhbF9hCisgICAgIGlmIChmZCA8IDAp
-CisgICAgICAgICByZXR1cm4gMDsKKyAKKy0gICAgLyogZG8gbm90IGFzayBmb3IgZXJyb3IgbWVz
-c2FnZSBjb250ZW50ICovCisrICAgIC8qCisrICAgICAqIFRlbGwga2VybmVsIHRvIG5vdCBzZW5k
-IHRvIHVzIHBheWxvYWQgb2YgYWNrbm93bGVkZ21lbnQgZXJyb3IgbWVzc2FnZS4KKysgICAgICog
-TkVUTElOS19DQVBfQUNLIG9wdGlvbiBpcyBzdXBwb3J0ZWQgc2luY2UgTGludXgga2VybmVsIHZl
-cnNpb24gNC4zIGFuZAorKyAgICAgKiBvbGRlciBrZXJuZWwgdmVyc2lvbnMgYWx3YXlzIHNlbmQg
-ZnVsbCBwYXlsb2FkIGluIGFja25vd2xlZGdtZW50IG5ldGxpbmsKKysgICAgICogbWVzc2FnZS4g
-V2UgaWdub3JlIHBheWxvYWQgb2YgdGhpcyBtZXNzYWdlIGFzIHdlIG5lZWQgb25seSBlcnJvciBj
-b2RlLAorKyAgICAgKiB0byBjaGVjayBpZiBvdXIgc2V0IHJlbW90ZSBwZWVyIGFkZHJlc3MgcmVx
-dWVzdCBzdWNjZWVkZWQgb3IgZmFpbGVkLgorKyAgICAgKiBTbyBpZ25vcmUgcmV0dXJuIHZhbHVl
-IGZyb20gdGhlIGZvbGxvd2luZyBzZXRzb2Nrb3B0KCkgY2FsbCBhcyBzZXR0aW5nCisrICAgICAq
-IG9wdGlvbiBORVRMSU5LX0NBUF9BQ0sgbWVhbnMgZm9yIHVzIGp1c3QgYSBrZXJuZWwgaGludCAv
-IG9wdGltaXphdGlvbi4KKysgICAgICovCisgICAgIG9uZSA9IDE7CisgICAgIHNldHNvY2tvcHQo
-ZmQsIFNPTF9ORVRMSU5LLCBORVRMSU5LX0NBUF9BQ0ssICZvbmUsIHNpemVvZihvbmUpKTsKKyAK
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHBwZC9Db25maWcuaW4gYi9wYWNrYWdlL3BwcGQvQ29uZmln
-LmluCmluZGV4IDY2YzkzNWFiYjEuLmNhMTM5YTUwZTkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBw
-ZC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9wcHBkL0NvbmZpZy5pbgpAQCAtMSw3ICsxLDYgQEAK
-IGNvbmZpZyBCUjJfUEFDS0FHRV9QUFBECiAJYm9vbCAicHBwZCIKIAlkZXBlbmRzIG9uICFCUjJf
-U1RBVElDX0xJQlMKLQlkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX1VTRVNfTVVTTCAjIFVzZSBf
-X1AoKSBtYWNybyBhbGwgb3ZlciB0aGUgdHJlZQogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKIAlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTCBpZiBCUjJfVE9PTENIQUlOX1VTRVNfR0xJQkMKIAlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfTElCT1BFTlNTTF9FTkFCTEVfREVTIGlmIEJSMl9QQUNLQUdFX0xJ
-Qk9QRU5TU0wgXApAQCAtNDAsNiArMzksNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUFBQRF9PVkVS
-V1JJVEVfUkVTT0xWX0NPTkYKIAogZW5kaWYKIAotY29tbWVudCAicHBwZCBuZWVkcyBhIHVDbGli
-YyBvciBnbGliYyB0b29sY2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24gQlIy
-X1NUQVRJQ19MSUJTIHx8IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMCitjb21tZW50ICJwcHBkIG5l
-ZWRzIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSIKKwlkZXBlbmRzIG9uIEJSMl9TVEFU
-SUNfTElCUwogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHBw
-ZC9wcHBkLmhhc2ggYi9wYWNrYWdlL3BwcGQvcHBwZC5oYXNoCmluZGV4IGE5MjMxNTg1NzYuLjNk
-NDcxNjk1YmIgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBwZC9wcHBkLmhhc2gKKysrIGIvcGFja2Fn
-ZS9wcHBkL3BwcGQuaGFzaApAQCAtMSw3ICsxLDcgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkCi1z
-aGEyNTYJOTFmYmZmNzg0YWQxNmExMTExYTdmMjJkZjQ2NzVhZWIxNjFkOTU4YmI3OWYxY2M0YzFm
-MGM4MTk0NGU3Y2I0MAlwcHBkLTIuNC44LnRhci5negotc2hhMjU2CTM5OTBjNjVjNTA2ODg1Zjdi
-Yjc1NDU1ZDFkNjE4ODc0M2ExNGFkNDZmNWI2MmUxMzZlZjM3MzlhZWQ1MmM1MzIJcHBwZC90ZGIu
-Ywotc2hhMjU2CTE4MjJlYWQ5ZDI4NTRhZGZiZDI4MjMyMmIyOTczMGEzZmVjNGNjNjdmNmY2YTJl
-NDg3YWFkMzQ3NmUzYWZkNTkJcHBwZC9wbHVnaW5zL3BwcG9hdG0vQ09QWUlORwotc2hhMjU2CTkx
-YTVlOWMxNzNlMGUwMDFlMDgxZTE1YmY3ODUwY2ZkNzgyYTBiYWEwMmY1OTIxZTMyN2FlM2I0NDli
-ZWZmM2YJcHBwZHVtcC9ic2QtY29tcC5jCi1zaGEyNTYJZWUxYzI4NTUxYzg3Y2RjZGFmODBlYjM5
-MjI3MjZmMDE1MjAxNjE0Y2I1NjBhNWVkMThhN2EwYzE1ZjJiNGFhNAlwcHBkL2NjcC5jCi1zaGEy
-NTYJNmZhNGMzZGFkMDU5ZjZlZjE1YzFjNWU1MjE5ZDlkMGQ0MDk5MWRkM2ExNjIwOThhODk5Njdh
-MTcyMGRlMDU5ZQlwcHBkL3BsdWdpbnMvcGFzc3Byb21wdC5jCitzaGEyNTYgIDY3NWJmZjRmMzY2
-MTc0NjQ5ZjRhM2M5MmZkMzJhYzQ3NmU2OTQxNjRmZjJiMGI3NzEwMDE5YjZlYWQ5YzU2MWUgIHBw
-cGQtMi40LjkudGFyLmd6CitzaGEyNTYgIDM5OTBjNjVjNTA2ODg1ZjdiYjc1NDU1ZDFkNjE4ODc0
-M2ExNGFkNDZmNWI2MmUxMzZlZjM3MzlhZWQ1MmM1MzIgIHBwcGQvdGRiLmMKK3NoYTI1NiAgMTgy
-MmVhZDlkMjg1NGFkZmJkMjgyMzIyYjI5NzMwYTNmZWM0Y2M2N2Y2ZjZhMmU0ODdhYWQzNDc2ZTNh
-ZmQ1OSAgcHBwZC9wbHVnaW5zL3BwcG9hdG0vQ09QWUlORworc2hhMjU2ICBkNzU5ZWMxNjg3NWE2
-OWMyZDU1MjlmOGNiM2MwNDBmZWY4ZmUzOGQyNmY3MDQ1N2FhZGI3M2M5MWI3Mjc0NmM4ICBwcHBk
-dW1wL2JzZC1jb21wLmMKK3NoYTI1NiAgYzBkMGYxNGI2ZWM5OTQ4MzMyZjEwZGVkNzQxMjkzZWQx
-ZjNiOTZlMGQyNjZlNDkwM2I2MDVhNmUxZjhhZjdjZCAgcHBwZC9jY3AuYworc2hhMjU2ICAzNjdm
-MzM0YzUwOWRiMmIyOTNhZWE1Y2U5ZjU0Mjg0ZDlhOWY2ZTBhOWUwYzZlMzA1ZDU0NDA3OWJhZjhh
-YjYzICBwcHBkL3BsdWdpbnMvcGFzc3Byb21wdC5jCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BwcGQv
-cHBwZC5tayBiL3BhY2thZ2UvcHBwZC9wcHBkLm1rCmluZGV4IDA5OGM2YThlNmYuLjcxYmZjZWI2
-MDcgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBwZC9wcHBkLm1rCisrKyBiL3BhY2thZ2UvcHBwZC9w
-cHBkLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotUFBQ
-RF9WRVJTSU9OID0gMi40LjgKK1BQUERfVkVSU0lPTiA9IDIuNC45CiBQUFBEX1NJVEUgPSAkKGNh
-bGwgZ2l0aHViLHBhdWx1c21hY2sscHBwLHBwcC0kKFBQUERfVkVSU0lPTikpCiBQUFBEX0xJQ0VO
-U0UgPSBMR1BMLTIuMCssIExHUEwsIEJTRC00LUNsYXVzZSwgQlNELTMtQ2xhdXNlLCBHUEwtMi4w
-KwogUFBQRF9MSUNFTlNFX0ZJTEVTID0gXApAQCAtMTQsMTQgKzE0LDE1IEBAIFBQUERfQ1BFX0lE
-X1ZFTkRPUiA9IHNhbWJhCiBQUFBEX0NQRV9JRF9QUk9EVUNUID0gcHBwCiBQUFBEX1NFTElOVVhf
-TU9EVUxFUyA9IHBwcAogCi0jIDAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoCi1QUFBE
-X0lHTk9SRV9DVkVTICs9IENWRS0yMDIwLTg1OTcKLQogUFBQRF9NQUtFX09QVFMgPSBIQVZFX0lO
-RVQ2PXkKLWlmZXEgKCQoQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDKSx5KQorCitpZmVxICgkKEJS
-Ml9QQUNLQUdFX09QRU5TU0wpLHkpCiBQUFBEX0RFUEVOREVOQ0lFUyArPSBvcGVuc3NsCitQUFBE
-X01BS0VfT1BUUyArPSBVU0VfRUFQVExTPXkKIGVsc2UKLVBQUERfTUFLRV9PUFRTICs9IFVTRV9D
-UllQVD15CitQUFBEX01BS0VfT1BUUyArPSBcCisJVVNFX0NSWVBUPXkgXAorCVVTRV9FQVBUTFM9
-CiBlbmRpZgogCiBQUFBEX0lOU1RBTExfU1RBR0lORyA9IFlFUwpAQCAtMTAxLDkgKzEwMiw5IEBA
-IGRlZmluZSBQUFBEX0lOU1RBTExfVEFSR0VUX0NNRFMKIAkJJChUQVJHRVRfRElSKS91c3IvbGli
-L3BwcGQvJChQUFBEX1ZFUlNJT04pL3Bhc3N3b3JkZmQuc28KIAkkKElOU1RBTEwpIC1EICQoUFBQ
-RF9ESVIpL3BwcGQvcGx1Z2lucy9wcHBvYXRtL3BwcG9hdG0uc28gXAogCQkkKFRBUkdFVF9ESVIp
-L3Vzci9saWIvcHBwZC8kKFBQUERfVkVSU0lPTikvcHBwb2F0bS5zbwotCSQoSU5TVEFMTCkgLUQg
-JChQUFBEX0RJUikvcHBwZC9wbHVnaW5zL3JwLXBwcG9lL3JwLXBwcG9lLnNvIFwKLQkJJChUQVJH
-RVRfRElSKS91c3IvbGliL3BwcGQvJChQUFBEX1ZFUlNJT04pL3JwLXBwcG9lLnNvCi0JJChJTlNU
-QUxMKSAtRCAkKFBQUERfRElSKS9wcHBkL3BsdWdpbnMvcnAtcHBwb2UvcHBwb2UtZGlzY292ZXJ5
-IFwKKwkkKElOU1RBTEwpIC1EICQoUFBQRF9ESVIpL3BwcGQvcGx1Z2lucy9wcHBvZS9wcHBvZS5z
-byBcCisJCSQoVEFSR0VUX0RJUikvdXNyL2xpYi9wcHBkLyQoUFBQRF9WRVJTSU9OKS9wcHBvZS5z
-bworCSQoSU5TVEFMTCkgLUQgJChQUFBEX0RJUikvcHBwZC9wbHVnaW5zL3BwcG9lL3BwcG9lLWRp
-c2NvdmVyeSBcCiAJCSQoVEFSR0VUX0RJUikvdXNyL3NiaW4vcHBwb2UtZGlzY292ZXJ5CiAJJChJ
-TlNUQUxMKSAtRCAkKFBQUERfRElSKS9wcHBkL3BsdWdpbnMvd2luYmluZC5zbyBcCiAJCSQoVEFS
-R0VUX0RJUikvdXNyL2xpYi9wcHBkLyQoUFBQRF9WRVJTSU9OKS93aW5iaW5kLnNvCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3JwLXBwcG9lL0NvbmZpZy5pbiBiL3BhY2thZ2UvcnAtcHBwb2UvQ29uZmln
-LmluCmluZGV4IDEyZjk4MWQ4YzcuLjJhYzgxY2JiMmQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcnAt
-cHBwb2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvcnAtcHBwb2UvQ29uZmlnLmluCkBAIC0xLDEx
-ICsxLDEwIEBACi1jb21tZW50ICJycC1wcHBvZSBuZWVkcyBhIHVDbGliYyBvciBnbGliYyB0b29s
-Y2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24gQlIyX1NUQVRJQ19MSUJTIHx8
-IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMCitjb21tZW50ICJycC1wcHBvZSBuZWVkcyBhIHRvb2xj
-aGFpbiB3LyBkeW5hbWljIGxpYnJhcnkiCisJZGVwZW5kcyBvbiBCUjJfU1RBVElDX0xJQlMKIAlk
-ZXBlbmRzIG9uIEJSMl9VU0VfTU1VCiAKIGNvbmZpZyBCUjJfUEFDS0FHRV9SUF9QUFBPRQogCWJv
-b2wgInJwLXBwcG9lIgogCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUwotCWRlcGVuZHMgb24g
-IUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMICMgcHBwZAogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUg
-IyBmb3JrKCkKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUFBQRAogCWhlbHAKLS0gCjIuMzMuMAoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Arnout,
+
+> Il 09/11/2021 23:00 Arnout Vandecappelle <arnout@mind.be> ha scritto:
+> 
+>  
+> On 01/11/2021 19:24, Dario Binacchi wrote:
+> > The kernel generated by the configuration for the STM32f429-discovery
+> > board is buggy:
+> > 
+> >   Unhandled exception: IPSR = 00000006 LR = fffffff1
+> >   CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
+> >   Hardware name: STM32 (Device Tree Support)
+> >   task: 9041a000 task.stack: 907c0000
+> >   PC is at ret_fast_syscall+0x2/0x4a
+> >   LR is at tty_ioctl+0x1ad/0x75c
+> >   pc : [<0800d942>]    lr : [<080c2e05>]    psr: 4000000b
+> >   sp : 907c1fa8  ip : 0000001c  fp : 905961a2
+> >   r10: 00000000  r9 : 907c0000  r8 : 0800dae0
+> >   r7 : 00000036  r6 : 905e7e60  r5 : 00000000  r4 : 905e7ebc
+> >   r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000000
+> >   xPSR: 4000000b
+> >   CPU: 0 PID: 1 Comm: init Not tainted 4.11.0 #2
+> >   Hardware name: STM32 (Device Tree Support)
+> >   [<0800fbf9>] (unwind_backtrace) from [<0800f05b>] (show_stack+0xb/0xc)
+> >   [<0800f05b>] (show_stack) from [<0800f553>] (__invalid_entry+0x4b/0x4c)
+> > 
+> > Inspired by commit a3e3d9c198 ("configs/stm32f469_disco_xip_defconfig:
+> > alternative defconfig for XIP") I updated the stm32f429_disco_defconfig
+> > configuration to use a newer kernel. Current setup kernel + rootfs fits
+> > in 1.6MB on-chip flash memory.
+> > 
+> > Fixes:
+> 
+>   (nitpick) you normally put the fixes tag before the thing that gets fixed, not 
+> before the changes you made to fix them. So in this case, it would become before 
+> the Unhandled exception above.
+
+Ok, I will do it.
+
+> 
+> >   - Move kernel to new flash bank due to growth of dtb size.
+> >   - Fix kernel start address in afboot-stm32 bootloader.
+> > 
+> > For better binary size optimization gcc LTO is turned on.
+> > 
+> > Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> > ---
+> >   .../stm32f429-disco/flash.sh                  |   2 +-
+> >   .../stm32f429-disco/linux.config              | 120 ++++++++++++++++++
+> >   ...9i-disco-update-kernel-start-address.patch |  30 +++++
+> >   ...sco-don-t-force-init-in-chosen-boota.patch |  32 -----
+> >   configs/stm32f429_disco_defconfig             |   9 +-
+> >   5 files changed, 156 insertions(+), 37 deletions(-)
+> >   create mode 100644 board/stmicroelectronics/stm32f429-disco/linux.config
+> >   create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+> >   delete mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+> > 
+> > diff --git a/board/stmicroelectronics/stm32f429-disco/flash.sh b/board/stmicroelectronics/stm32f429-disco/flash.sh
+> > index b19e0a6019..3e2bf121d3 100755
+> > --- a/board/stmicroelectronics/stm32f429-disco/flash.sh
+> > +++ b/board/stmicroelectronics/stm32f429-disco/flash.sh
+> > @@ -21,6 +21,6 @@ ${OUTPUT_DIR}/host/bin/openocd -f board/${BOARD_NAME}.cfg \
+> >     -c "flash info 0" \
+> >     -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429i-disco.bin 0x08000000" \
+> >     -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f429-disco.dtb 0x08004000" \
+> > -  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08008000" \
+> > +  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x0800C000" \
+> 
+>   I'm a bit confused, but I think I get it now... We have 3 disco configs:
+> 
+> - stm32f429_disco_defconfig is XIP
+> - stm32f469_disco_defconfig is in spiflash
+> - stm32f469_disco_xip_defconfig is XIP
+> 
+>   So, perhaps, to make things clearer, we should rename this defconfig to 
+> stm32f429_disco_xip_defconfig?
+
+Yes, I agree with you, and I would rename stm32f469_disco_defconfig to stm32f469_disco_sd_defconfig too. 
+
+> 
+> [snip]
+> > diff --git a/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+> > new file mode 100644
+> > index 0000000000..715ade694d
+> > --- /dev/null
+> > +++ b/board/stmicroelectronics/stm32f429-disco/patches/afboot-stm32/0001-stm32f429i-disco-update-kernel-start-address.patch
+> > @@ -0,0 +1,30 @@
+> > +From 9cdee858b36e2de7d6717e56fd3d08ad9ad25cde Mon Sep 17 00:00:00 2001
+> > +From: Dario Binacchi <dariobin@libero.it>
+> > +Date: Sun, 31 Oct 2021 08:52:52 +0100
+> > +Subject: [PATCH] stm32f429i-disco: update kernel start address
+> > +
+> > +As of GNU/Linux v5.14 kernel device tree binary grows above 0x08008000
+> > +and overwrites kernel binary.
+> > +Therefore this commit moves kernel to the next flash bank.
+> > +
+> > +Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> 
+>   Since the DTS comes from the upstream kernel AFAICS, it would seem that this 
+> patch should be sent upstream as well. Have you done that? If so, please add an 
+> Upstream: <URL>.
+
+I have not sent any patches, which probably would be rejected as I only see now 
+that the commit 2e499dcff3ef8 ("Add possibility to use custom kernel load address") 
+allows you to override the the default kernel load address. So, I thinks it's better
+to patch the afboot package in buildroot. 
+ 
+> 
+> > +---
+> > + stm32f429i-disco.c | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/stm32f429i-disco.c b/stm32f429i-disco.c
+> > +index 8b27641..14a6f1e 100644
+> > +--- a/stm32f429i-disco.c
+> > ++++ b/stm32f429i-disco.c
+> > +@@ -88,7 +88,7 @@ static void fmc_wait_busy(void)
+> > +
+> > + void start_kernel(void)
+> > + {
+> > +-	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
+> > ++	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x0800C000 | 1);
+> > +
+> > + 	kernel(0, ~0UL, 0x08004000);
+> > + }
+> > +--
+> > +2.17.1
+> > +
+> > diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch b/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+> > deleted file mode 100644
+> > index d6d5c61aae..0000000000
+> > --- a/board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+> > +++ /dev/null
+> > @@ -1,32 +0,0 @@
+> > -From ded9afa688184b3240a92c2b8f114c545a09bc3f Mon Sep 17 00:00:00 2001
+> > -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > -Date: Sat, 12 Mar 2016 23:14:41 +0100
+> > -Subject: [PATCH] ARM: stm32f249-disco: don't force init= in /chosen/bootargs
+> > -
+> > -There is no reason to override the kernel's default init= value, as
+> > -this breaks userspace that assumes the kernel default of /init is
+> > -used. Since stm32 is often used with a minimal bootloader
+> > -(afboot-stm32) that doesn't provide any mechanism to override the DTB,
+> > -we need to adjust the kernel command line in the Device Tree source.
+> > -
+> > -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ----
+> > - arch/arm/boot/dts/stm32f429-disco.dts | 2 +-
+> > - 1 file changed, 1 insertion(+), 1 deletion(-)
+> > -
+> > -diff --git a/arch/arm/boot/dts/stm32f429-disco.dts b/arch/arm/boot/dts/stm32f429-disco.dts
+> > -index f0b731d..2bae81c 100644
+> > ---- a/arch/arm/boot/dts/stm32f429-disco.dts
+> > -+++ b/arch/arm/boot/dts/stm32f429-disco.dts
+> > -@@ -53,7 +53,7 @@
+> > - 	compatible = "st,stm32f429i-disco", "st,stm32f429";
+> > -
+> > - 	chosen {
+> > --		bootargs = "root=/dev/ram rdinit=/linuxrc";
+> > -+		bootargs = "root=/dev/ram";
+> > - 		stdout-path = "serial0:115200n8";
+> > - 	};
+> > -
+> > ---
+> > -2.6.4
+> > -
+> > diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
+> > index 2c0641a6c5..58367fca0b 100644
+> > --- a/configs/stm32f429_disco_defconfig
+> > +++ b/configs/stm32f429_disco_defconfig
+> > @@ -1,13 +1,14 @@
+> >   BR2_arm=y
+> >   BR2_cortex_m4=y
+> >   BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+> > +# BR2_UCLIBC_INSTALL_UTILS is not set
+> > +BR2_GCC_ENABLE_LTO=y
+> >   BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+> >   BR2_LINUX_KERNEL=y
+> > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
+> 
+>   You *must* keep this (and the linux-headers version) explicitly, relying on 
+> the default is not OK. Indeed, if the default kernel is update in Buildroot 
+> (which happens every couple of weeks), then it's possible it will grow again and 
+> doesn't fit any more.
+
+OK
+
+> 
+> 
+> > -BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+> > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
+> >   BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> > +BR2_LINUX_KERNEL_XZ=y
+> 
+>   Err, now I'm really confused, this is a XIP kernel right, so it shouldn't be 
+> compressed?
+
+Yes, you are right.
+> 
+>   Regards,
+>   Arnout
+
+Thanks and regards,
+Dario
+
+> 
+> >   BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
+> >   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> >   BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f429-disco"
+> >
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
