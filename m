@@ -2,69 +2,89 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C17FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 21:25:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D7BC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 22:58:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CB9FF61056
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 21:25:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CB9FF61056
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id D36A06112F
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 22:58:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D36A06112F
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F2DB606BE;
-	Sun, 14 Nov 2021 21:25:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CF5480B38;
+	Sun, 14 Nov 2021 22:58:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 355WFR6aKjWZ; Sun, 14 Nov 2021 21:25:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9DEXWZ_Z69-A; Sun, 14 Nov 2021 22:58:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E779C606B6;
-	Sun, 14 Nov 2021 21:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1CA780B2B;
+	Sun, 14 Nov 2021 22:58:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C782A1BF34D
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 21:25:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 205C71BF909
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 22:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4B33606B6
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 21:25:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0298D60585
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 22:58:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3IiGHDq5766p for <buildroot@lists.busybox.net>;
- Sun, 14 Nov 2021 21:25:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1C7B60684
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 21:25:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:588e:4f72:56a8:ef3a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7A33E780326;
- Sun, 14 Nov 2021 22:25:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636925140;
- bh=WyNdeXpAUIpM/SmrsbxCWIqRuqS+3yP4Wq8nZsIw6iw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SkdO2oR7mmbQNrtnKk1dFaSFtEPu0sizvi/F/qbX06unGKPWeY85F/RVt3TelgEYy
- ZTAJH4zhvWUEbt8wjJ++lJLvopsEUN9v9QVFTiftul2G2TjAdNODsptNb9YcquSazG
- WS3/eSYVYIjsmcEzQyIgxdfNQY+i2FkW45DZgxRxHZNDgsxmdJmUzuLllPOiqFJicx
- CdAqN45JUM6hXzuvdFN6m/h4Bg/kcIRKfa/LT5UyqE5F2W/vxbATbKgVFNobDHsHK+
- Eyi3ps+5BxYm9JlNemAPOse9zIORs9T/qM/hHxGkMh7OILkAUIBtFIOsoLB9u43GQr
- 7djT4B7Qys/jw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 Nov 2021 22:25:36 +0100
-Date: Sun, 14 Nov 2021 22:25:36 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: unixmania@gmail.com
-Message-ID: <20211114212536.GA247986@scaer>
-References: <20211114210316.1403514-1-unixmania@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211114210316.1403514-1-unixmania@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2] package/mksh: use plain HTTP in download
- and license links
+ with ESMTP id hJGpQts3IDGM for <buildroot@lists.busybox.net>;
+ Sun, 14 Nov 2021 22:58:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com
+ [IPv6:2607:f8b0:4864:20::92b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB7E5600B9
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 22:58:36 +0000 (UTC)
+Received: by mail-ua1-x92b.google.com with SMTP id t13so30958757uad.9
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 14:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=date:from:to:cc:message-id:references:subject:mime-version
+ :content-transfer-encoding;
+ bh=v4ltFyvxavdwgz1UIrHmGkEYpSAz/Brv3kyjPj884sI=;
+ b=hivI905HrF7qz2HWSJs2ShLGKNI8ZMOeLN+nSt+opYhsypu+DxwlTzhlq1PK+etnJc
+ To455ir0ZVT08qWQKRtmAp50prhZ+pwMxHDKweQBb974yl0saFkTrfC1UOM8XSTuqRAJ
+ fBMbTYoe9M0Ru1uRmbNmy/Us+61hVYhPs1wD94H2NH7ZLlTdjjAb/gryNlz0FPsytEDO
+ VnzKgWrvq3llD36xHaRDTqlf7UM9YcyGCKQHkJEEi9TEqTJDlDUBElY3uu1dM+5bSaEZ
+ IYZW35xoTqsK7AJFqLsuAzIYlCyJgSy0itgSIznMA5sQnOYIVVBMC6kSZC1WNGqJb+nA
+ 1CsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:date:from:to:cc:message-id:references:subject
+ :mime-version:content-transfer-encoding;
+ bh=v4ltFyvxavdwgz1UIrHmGkEYpSAz/Brv3kyjPj884sI=;
+ b=z1BFD+2tE9OZIGVSayVeGchtvLUbBDj7ClXNN2ufLD/wc356zU9hplQ6P7W5c5Dy+a
+ 9wKEtX2xsXQrIr7eiqDthtmIk2TTI/2sBMnR1ZChee7pBrEPTumkKZ4n9hTe0sV4ctI5
+ XFombYeDit1an5HHRqv8fp8Ihch2whUm9BA9vc3NIFd26jhjLvyxeLrudwO8/QuhewSx
+ nsN0reOQz1o+lpcjynKJdh8EjkrXLsfGSoKtwdGouGicGwkakXJvSyonEm0U4CWp9A/1
+ 7PzNoo1vsZDfPQ1DKAGOb65KDNs9cKP4DGov57Sz/I+r1IjXRGWUpvHMJOLAECapsXNE
+ 7sUA==
+X-Gm-Message-State: AOAM532lcythr/FvHY94+zUsmnUnSu+na9l8f0R8FryFfPuM5rDwByWW
+ dUlKxW+vGozGe1DVrexGICY=
+X-Google-Smtp-Source: ABdhPJxmBaZJSFMvdg0Q6L7Kykr4IpPZaCgZSjaKo8Cs7gWYdeXsz6jr/3oPEeKeBXT1hwFDryMNpQ==
+X-Received: by 2002:a05:6102:3ece:: with SMTP id
+ n14mr36723009vsv.55.1636930715625; 
+ Sun, 14 Nov 2021 14:58:35 -0800 (PST)
+Received: from gmail.com ([179.232.77.5])
+ by smtp.gmail.com with ESMTPSA id d13sm9517719uaf.6.2021.11.14.14.58.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Nov 2021 14:58:35 -0800 (PST)
+Date: Sun, 14 Nov 2021 19:58:33 -0300
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <61919499f2915_76574a14-36b@xultri.mail>
+References: <20211110175218.1927678-1-fontaine.fabrice@gmail.com>
+Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="--==_mimepart_6191949835cb6_76574a14-454";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Subject: Re: [Buildroot] [PATCH 1/1] utils/checkpackagelib/lib_mk.py: check
+ DEPENDENCIES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,65 +97,37 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Carlos, All,
 
-On 2021-11-14 18:03 -0300, unixmania@gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
+----==_mimepart_6191949835cb6_76574a14-454
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On Wed, Nov 10, 2021 at 02:52 PM, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> from: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> date: Wed, Nov 10 06:52 PM +01:00 2021
+> to: buildroot@buildroot.org
+> cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> subject: [PATCH 1/1] utils/checkpackagelib/lib_mk.py: check DEPENDENCIES
 > 
-> The server does not support TLS v1.2, causing dowloads to fall back to
-> sources.buildroot.net. Mail sent to the project owner bounces, so it
-> looks like this issue will not be solved anytime soon. Switch to HTTP
-> and rely on the hashes to verify the integrity and authenticity of the
-> download.
+> Check that {FOO}_DEPENDENCIES are never overriden in a conditional
 > 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, after adding a reference to your recent commit for
-the homepage, thanks!
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----==_mimepart_6191949835cb6_76574a14-454
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mksh/mksh.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
-> index 386b1bd016..c4818e8692 100644
-> --- a/package/mksh/mksh.mk
-> +++ b/package/mksh/mksh.mk
-> @@ -6,8 +6,8 @@
->  
->  MKSH_VERSION = 59c
->  MKSH_SOURCE = mksh-R$(MKSH_VERSION).tgz
-> -MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
-> -# For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
-> +MKSH_SITE = http://www.mirbsd.org/MirOS/dist/mir/mksh
-> +# For MirOS License see http://www.mirbsd.org/TaC-mksh.txt
->  MKSH_LICENSE = MirOS, ISC
->  MKSH_LICENSE_FILES = mksh.1
->  
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+----==_mimepart_6191949835cb6_76574a14-454--
