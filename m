@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10822C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 230FFC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6AFF40124;
-	Mon,  6 Dec 2021 18:26:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB4A5403D7;
+	Mon,  6 Dec 2021 18:26:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LIRWqfr0k37Y; Mon,  6 Dec 2021 18:26:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 61zLrOJ5VTrC; Mon,  6 Dec 2021 18:26:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE2C34017A;
-	Mon,  6 Dec 2021 18:26:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BB9240336;
+	Mon,  6 Dec 2021 18:26:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A4A41BF983
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 06DE11BF983
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14DD741C3A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1747A41C3B
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kw9dkBVLgF7m for <buildroot@lists.busybox.net>;
+ with ESMTP id 5Iu10zSBjEY1 for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54ACA41C1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9ABC41C11
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F213281468; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
+ id 5E39681504; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:08:41 +0100
+Date: Sun, 14 Nov 2021 15:23:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9ec3b986e66ba481de4ca3abb4d83470e8861264
-X-Git-Newrev: c2c15af2b840c41d7bee34c1f244551eefce6ba5
+X-Git-Oldrev: 914a8133a0e4c7e356a3016cf10bf65441a08e9a
+X-Git-Newrev: c9ddee54a5971823dd3cdeb2727ca0950e245365
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180737.F213281468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/socat: bump to version 1.7.4.2
+Message-Id: <20211206180738.5E39681504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/trace-cmd: bump to version 2.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2c15af2b840c41d7bee34c1f244551eefce6ba5
+commit: https://git.buildroot.net/buildroot/commit/?id=c9ddee54a5971823dd3cdeb2727ca0950e245365
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bug fixes release.
+Update to version 2.9.6.
 
-Update README hash for version update.
-
-Update comment; we do not patch configure.in.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/socat/socat.hash | 6 +++---
- package/socat/socat.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 5a4c520455..0d9d0ba76c 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,8 +1,8 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5  36cad050ecf4981ab044c3fbd75c643f  socat-1.7.4.1.tar.bz2
-+md5  003686f80d820072649660b85f80c58f  socat-1.7.4.2.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256  3faca25614e89123dff5045680549ecef519d02e331aaf3c4f5a8f6837c675e9  socat-1.7.4.1.tar.bz2
-+sha256  6690a9f9990457b505097a272bbf2cbf4cc35576176f76646e3524b0e91c1763  socat-1.7.4.2.tar.bz2
- # Locally calculated
--sha256  b1ebebbce145027f4268211f36d121b083aeeabdc1736eb144b8afd8e86ce8da  README
-+sha256  062e425b43da6b3df6d8657639b5e2c781781572b5d8867444fd6d2487ac7644  README
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 61c9852565..cf2a31b096 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index 78ff3472c3..1f34a0da60 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  026cce03b4ae61f19848646acecf151dd7dd62617859edcf73ae954eb65b2653  trace-cmd-trace-cmd-v2.9.5-br1.tar.gz
++sha256  9401a43bda4837dfde5e64e0dbe5d3918bf50eb86b4d23fa89713b0f2defcbc1  trace-cmd-trace-cmd-v2.9.6-br1.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index f9b54ed765..a592b1f027 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOCAT_VERSION = 1.7.4.1
-+SOCAT_VERSION = 1.7.4.2
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
-@@ -24,7 +24,7 @@ SOCAT_CONF_ENV += \
- endif
- 
- # We need to run autoconf to regenerate the configure script, since we patch
--# configure.in and Makefile.in. However, the package only uses autoconf and not
-+# Makefile.in. However, the package only uses autoconf and not
- # automake, so we can't use the normal autoreconf logic.
- 
- SOCAT_DEPENDENCIES = host-autoconf
+-TRACE_CMD_VERSION = trace-cmd-v2.9.5
++TRACE_CMD_VERSION = trace-cmd-v2.9.6
+ TRACE_CMD_SITE = https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
