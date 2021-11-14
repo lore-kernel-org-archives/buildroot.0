@@ -2,83 +2,81 @@ Return-Path: <SRS0=+oVz=QB=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB1F2C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:29:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D059C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:31:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 75349610F9
-	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:29:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 75349610F9
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id C6036610FE
+	for <buildroot@archiver.kernel.org>; Sun, 14 Nov 2021 16:31:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C6036610FE
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4337F60594;
-	Sun, 14 Nov 2021 16:29:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CABB4023C;
+	Sun, 14 Nov 2021 16:31:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xn2DXhHnYty1; Sun, 14 Nov 2021 16:29:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gimXNQ6sJ8fZ; Sun, 14 Nov 2021 16:31:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BADD605BF;
-	Sun, 14 Nov 2021 16:29:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99FC440248;
+	Sun, 14 Nov 2021 16:31:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9111F1BF973
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:29:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E8D71BF30F
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80EB74023E
- for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:29:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DB8A40248
+ for <buildroot@lists.busybox.net>; Sun, 14 Nov 2021 16:31:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Humn81V4jnRg for <buildroot@lists.busybox.net>;
- Sun, 14 Nov 2021 16:29:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 741114023C
- for <buildroot@buildroot.org>; Sun, 14 Nov 2021 16:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1636907366;
- bh=ubbH3FZbWt/h4rBmRv+wiwIJUbmGMDR4ShaCaH1GfWA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=jIutnI0SvHmF+9AZH/qzH+GbK/NoIOpPvLGBt0U3MOuR+9nmw10Ron0v0EXgR4thX
- ueD7XODnlhN3Q3ybJxutijbiQ30HU6pgM1V5QFIopHirMxslUHiV3arCShLISmkqpf
- u5kCSWofp6Mk5wut+xUXz2LvBkCazdisC2qmGtTQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.16]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSbxD-1nEdvb1aG1-00SvW5; Sun, 14
- Nov 2021 17:29:26 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+ with ESMTP id 6GnV8_RNrX2O for <buildroot@lists.busybox.net>;
+ Sun, 14 Nov 2021 16:31:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B9CB54023C
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 16:31:16 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id b12so25726020wrh.4
+ for <buildroot@buildroot.org>; Sun, 14 Nov 2021 08:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4C8vtfbCG3q0DhXR5h0Bi8GRq15ZibOI5ZvhKyx3wVQ=;
+ b=OD3MDAiNcytzAwN1rKuLEk5zuCe3p5+6HrUAlxkI2i8PcdN5/0jkle1nSXuTCqpGuc
+ X3RufDEmm5gqlm9COgfqcWv0Ei344rzR3/uudh0nCC6vMr0hPyyu1HxXV2cSfo/hhsQO
+ QcgeZEVqWW3qAPDIZVgLSjq1g9I3xKu0YZQMcPr6ggDZsGLPW6YhsGr5mB98p4I20xU0
+ JdMSocy2rPqGbExBuXVqGrtGmbhn1XQ5+am4vDz8xv0kzuyVArxwtbAkVreps/0b6xsY
+ bVbSKP7Md5aUyrHc+loknHxSVTvAMbqG0vofTn3Pg5OBW3AP5eu8lcOjBq/5vaN07mws
+ RLDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4C8vtfbCG3q0DhXR5h0Bi8GRq15ZibOI5ZvhKyx3wVQ=;
+ b=vmlWtyePEwWyv70Y0Tg1dTJLM3VYXT5WkHrqiyaz+qHkK2axhZ4VhOTK4jOCu0ca+0
+ dc3P4t5KDeaK1ViYJ8Wddoi0d6E6Io7HYSVD6zo20nNV8zYVoJBRKB3YNvdEqNPC8rKm
+ mi0mIJjqY5Rlh1nIWLxaGrVzqHHYVDAP7+p1TyVPJUU9KguITLUO8Cb7YKcv6kDV4fGD
+ BPG/jq7YmhLcg/ZOEYmape2t+Mz0WuzU3aAZJJj3cmmWC03xnF4f9t7jv3yKTXzH365j
+ G7UTD5PcxnmM0dQgt0SOLwyfklMdytQKjXhK2n7wZX78AYfQn+gBQ4onRO68DutbH7zl
+ Fgww==
+X-Gm-Message-State: AOAM532JirQ3yITiqt9iZNduR4I1ekT3gQ4GKIFsAycKr21Aqoa9Hz/V
+ U1k5cXiZEksKe6Lo8Fhe/bIXgdwu0u0=
+X-Google-Smtp-Source: ABdhPJyxVP5U5nOv60qQljNzRwi1rQ2dbUZP7d6Uy4jD9jHCe6zoEG9rDpU5UOoU3ceXLowV+a9Wfw==
+X-Received: by 2002:adf:f90a:: with SMTP id b10mr39723986wrr.255.1636907473956; 
+ Sun, 14 Nov 2021 08:31:13 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id v15sm7924855wro.35.2021.11.14.08.31.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Nov 2021 08:31:13 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 17:29:22 +0100
-Message-Id: <20211114162923.21474-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+Date: Sun, 14 Nov 2021 17:29:04 +0100
+Message-Id: <20211114162904.2673696-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Gr+2rgdcVxPyhA+Pt4Pjq3bqHx5Wy620cbTuBELoKdQkimAkxig
- NXFsiW5p2cDRj/z1eri6aYzUwqsJ2l/Tea3qNJa/MJtYGjY5OK3TUuc8kvez3CJTojBtzR+
- oZo7wCm4Lz7bz93Ix/5apmfC1iTot7/NVBMX9m3EUOFc8G6AASge/hoZNCVBnAAWvRVJNwm
- Gwj1FTR1ls2buonESONZg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MNRzugHf0C4=:8sUeKLNJ4HNlbSYegI7Tc7
- nBCLMuAUXW4czgt1kEqxsoan6KmUG5wl6fQ2mzL4UMzJ6Bthxkw+xsmvQgDP2iibq8ihKqI5q
- KjCXxM4ChQrlM9ePBf8XpspJA3rUnTuxN8xdTdzOyBFClXy9xUl5irG16MfRBzXH9GX9rQJZD
- 5905MYbeFjvWwS+tw7gqzteM04tFmBzL3F9Gv8swY0VOZpDMxqZgSaZIBkaRaaBYPvJtTRimJ
- VIjIPF5RLG4ZDZJOruIHVjl6O0xbDSIqtAquahlceoo73L0M0bUh5k1FJ84FcmZvT1yT2SoUf
- kpfJKHLz+sxx9evh5NvOcyB1HBoHrujoShYQUTl62k3Vob8uUWUwT6eGGmlppIHwuEKtFtu/S
- 0rcNpuZw8JnE2L0r61qHYyIRTeXTrFd3WYdSqMpfpIPj3jFTdduvlrVJM5jZqqjcq6OQ25B/2
- VubbRCMlFi1BEuHue9oeP/GknmKy413wYlkzYEumAVKsPGnztkgd5JJiLAnFQo9XwCsinyMHR
- t+OjgleieIzqr3FCxKEk/IujrtXF8D0J34lJ8o8r4GsA3lxvNvPNe2iVnC3C/GYiy3MCDVZJz
- Rt1XKXAtIgtewPfXb6DkSPg+x7GGLQvuO8pgj2k0wlSyZpsv9114ATsCHX2Iu+lyOhyzkxkOX
- JlGLEEDTol4qhrJw1VOLfdIYo0t7TMWPNNKmBncMMjl2xYEW4zvSwfTTbMPmln1i6F6fS5kZo
- DZhJifDc23SUoIlXepnnpX5LHOwpTKHn3M36SOD6sLe7JpgPzqYuwYgTG5GmA24HS9NqxMqce
- PEhKlv5ykO2gLoQdRWe7KGdX6yYopWsv4mfh41yncXMCX92aamMxxRRuyah8HkOxdUO6EUdgI
- PsHySzeTJiQ9sv8QPg9ynmuMzD55BWt+5xE9wOrwz5BtvDVnR49yefh1H2iUw4kaVL4rnP8P0
- eECpwczBzQ1tFRzqmD3baoMw4VwR1Vv9YNd96x87FNR09j+ascYgUBATWeayeDO31KbluEXM8
- 1dEI5Vf0AX7OWYBqIahVWn7Zjf/GvhphurGYSb6y1hGodpoG1u+Ulr65JzWzKrMNo5s+lh7CI
- Ka419E5TquVG4k=
-Subject: [Buildroot] [PATCH/next v1 1/2] package/qt5*: change project URLs
- to https
+Subject: [Buildroot] [PATCH v2,1/1] package/pppd: bump to version 2.4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,311 +88,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joshua Henderson <joshua.henderson@microchip.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- =?UTF-8?q?Ga=C3=ABl=20Portay?= <gael.portay@collabora.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- change http project URLs to https
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt53d/Config.in               | 2 +-
- package/qt5/qt5base/Config.in             | 2 +-
- package/qt5/qt5connectivity/Config.in     | 4 ++--
- package/qt5/qt5declarative/Config.in      | 4 ++--
- package/qt5/qt5enginio/Config.in          | 2 +-
- package/qt5/qt5graphicaleffects/Config.in | 2 +-
- package/qt5/qt5imageformats/Config.in     | 2 +-
- package/qt5/qt5location/Config.in         | 2 +-
- package/qt5/qt5multimedia/Config.in       | 2 +-
- package/qt5/qt5quickcontrols/Config.in    | 2 +-
- package/qt5/qt5script/Config.in           | 2 +-
- package/qt5/qt5sensors/Config.in          | 2 +-
- package/qt5/qt5serialbus/Config.in        | 2 +-
- package/qt5/qt5serialport/Config.in       | 2 +-
- package/qt5/qt5svg/Config.in              | 2 +-
- package/qt5/qt5tools/Config.in            | 2 +-
- package/qt5/qt5wayland/Config.in          | 2 +-
- package/qt5/qt5webchannel/Config.in       | 2 +-
- package/qt5/qt5webengine/Config.in        | 2 +-
- package/qt5/qt5webkit/Config.in           | 2 +-
- package/qt5/qt5websockets/Config.in       | 2 +-
- package/qt5/qt5x11extras/Config.in        | 2 +-
- package/qt5/qt5xmlpatterns/Config.in      | 2 +-
- 23 files changed, 25 insertions(+), 25 deletions(-)
-
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-index 5126078d09..9187bee82b 100644
---- a/package/qt5/qt53d/Config.in
-+++ b/package/qt5/qt53d/Config.in
-@@ -17,7 +17,7 @@ config BR2_PACKAGE_QT53D
- 	  Enable the assimp package to gain the assimp sceneparser
- 	  plugin.
- 
--	  http://doc.qt.io/qt-5/qt3d-index.html
-+	  https://doc.qt.io/qt-5/qt3d-index.html
- 
- comment "qt53d module needs an OpenGL-capable backend"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index e93b2dec38..5b1749a4e9 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_QT5BASE
- 	  contains the base Qt libraries: QtCore, QtNetwork, QtGui,
- 	  QtWidgets, etc.
- 
--	  http://qt.io
-+	  https://qt.io
- 
- if BR2_PACKAGE_QT5BASE
- 
-diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
-index 51e8978f1f..244d01676d 100644
---- a/package/qt5/qt5connectivity/Config.in
-+++ b/package/qt5/qt5connectivity/Config.in
-@@ -10,8 +10,8 @@ config BR2_PACKAGE_QT5CONNECTIVITY
- 	  Qt Connectivity module provides support for Bluetooth/NFC
- 	  peripherials.
- 
--	  http://doc.qt.io/qt-5/qtbluetooth-index.html
--	  http://doc.qt.io/qt-5/qtnfc-index.html
-+	  https://doc.qt.io/qt-5/qtbluetooth-index.html
-+	  https://doc.qt.io/qt-5/qtnfc-index.html
- 
- comment "qt5connectivity needs neard and/or bluez5_utils"
- 	depends on !BR2_PACKAGE_NEARD && !BR2_PACKAGE_BLUEZ5_UTILS
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 5ec83daa27..477e1970a1 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -8,8 +8,8 @@ config BR2_PACKAGE_QT5DECLARATIVE
- 	  Qt Declarative module provides the Qt QML and Qt Quick
- 	  modules for developing UIs with the QML language
- 
--	  http://doc.qt.io/qt-5/qtqml-index.html
--	  http://doc.qt.io/qt-5/qtquick-index.html
-+	  https://doc.qt.io/qt-5/qtqml-index.html
-+	  https://doc.qt.io/qt-5/qtquick-index.html
- 
- if BR2_PACKAGE_QT5DECLARATIVE
- 
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index d445d91dea..b738f0db7c 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_QT5ENGINIO
- 	  This package has been tagged as deprecated since version
- 	  5.6 and not recommended for new design.
- 
--	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
-+	  https://doc.qt.io/archives/qt-5.5/enginio-index.html
-diff --git a/package/qt5/qt5graphicaleffects/Config.in b/package/qt5/qt5graphicaleffects/Config.in
-index 69b7fca413..01946d8b7a 100644
---- a/package/qt5/qt5graphicaleffects/Config.in
-+++ b/package/qt5/qt5graphicaleffects/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
- 	  for adding visually impressive and configurable effects to
- 	  user interfaces.
- 
--	  http://doc.qt.io/qt-5/qtgraphicaleffects-index.html
-+	  https://doc.qt.io/qt-5/qtgraphicaleffects-index.html
- 
- comment "qt5graphicaleffects needs an OpenGL-capable backend"
- 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-diff --git a/package/qt5/qt5imageformats/Config.in b/package/qt5/qt5imageformats/Config.in
-index 991f22f514..2504d23a59 100644
---- a/package/qt5/qt5imageformats/Config.in
-+++ b/package/qt5/qt5imageformats/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5IMAGEFORMATS
- 	  The Qt Image Formats module provides plugins for
- 	  additional image formats: TIFF, MNG, TGA, WBMP
- 
--	  http://doc.qt.io/qt-5/qtimageformats-index.html
-+	  https://doc.qt.io/qt-5/qtimageformats-index.html
-diff --git a/package/qt5/qt5location/Config.in b/package/qt5/qt5location/Config.in
-index c68deb1006..3d91adaf1f 100644
---- a/package/qt5/qt5location/Config.in
-+++ b/package/qt5/qt5location/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5LOCATION
- 	  solutions using the data available from some of the
- 	  popular location services.
- 
--	  http://doc.qt.io/qt-5/qtlocation-index.html
-+	  https://doc.qt.io/qt-5/qtlocation-index.html
-diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
-index dd46575d93..46608555b8 100644
---- a/package/qt5/qt5multimedia/Config.in
-+++ b/package/qt5/qt5multimedia/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5MULTIMEDIA
- 	  multimedia capabilities such as media playback and the use
- 	  of camera and radio devices.
- 
--	  http://doc.qt.io/qt-5/multimediaoverview.html
-+	  https://doc.qt.io/qt-5/multimediaoverview.html
-diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-index 56fcaf7053..ae090eb6e1 100644
---- a/package/qt5/qt5quickcontrols/Config.in
-+++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 	  The Qt Quick Controls module provides a set of controls
- 	  that can be used to build complete interfaces in Qt Quick.
- 
--	  http://doc.qt.io/qt-5/qtquickcontrols-index.html
-+	  https://doc.qt.io/qt-5/qtquickcontrols-index.html
-diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
-index 1926813e9f..6e08a3dfe8 100644
---- a/package/qt5/qt5script/Config.in
-+++ b/package/qt5/qt5script/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5SCRIPT
- 	  5.5.0 and should be replaced by Qt QML module in new
- 	  design.
- 
--	  http://doc.qt.io/qt-5/qtscript-index.html
-+	  https://doc.qt.io/qt-5/qtscript-index.html
-diff --git a/package/qt5/qt5sensors/Config.in b/package/qt5/qt5sensors/Config.in
-index 5e8ee65324..31a42e64aa 100644
---- a/package/qt5/qt5sensors/Config.in
-+++ b/package/qt5/qt5sensors/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_QT5SENSORS
- 	  The Qt Sensors API provides access to sensor hardware
- 	  via QML and C++ interfaces.
- 
--	  http://doc.qt.io/qt-5/qtsensors-index.html
-+	  https://doc.qt.io/qt-5/qtsensors-index.html
-diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
-index bcfec29b49..466ab7dc9c 100644
---- a/package/qt5/qt5serialbus/Config.in
-+++ b/package/qt5/qt5serialbus/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_QT5SERIALBUS
- 	  This module was in tech preview in Qt 5.6, and promoted
- 	  to a core module in Qt 5.8.0.
- 
--	  http://doc.qt.io/qt-5/qtserialbus-index.html
-+	  https://doc.qt.io/qt-5/qtserialbus-index.html
- 
- comment "qt5serialbus needs headers >= 3.6"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-diff --git a/package/qt5/qt5serialport/Config.in b/package/qt5/qt5serialport/Config.in
-index 16c2eaa619..90cff86456 100644
---- a/package/qt5/qt5serialport/Config.in
-+++ b/package/qt5/qt5serialport/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5SERIALPORT
- 	  includes configuring, I/O operations, getting and setting
- 	  the control signals of the RS-232 pinouts.
- 
--	  http://doc.qt.io/qt-5/qtserialport-index.html
-+	  https://doc.qt.io/qt-5/qtserialport-index.html
-diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
-index e9284913a0..02a5089b19 100644
---- a/package/qt5/qt5svg/Config.in
-+++ b/package/qt5/qt5svg/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5SVG
- 	  Qt SVG provides classes for rendering and displaying SVG
- 	  drawings in widgets and on other paint devices.
- 
--	  http://doc.qt.io/qt-5/qtsvg-index.html
-+	  https://doc.qt.io/qt-5/qtsvg-index.html
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-index 60106c1ee3..428413d5e2 100644
---- a/package/qt5/qt5tools/Config.in
-+++ b/package/qt5/qt5tools/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5TOOLS
- 	  Qt Tools provides tools facilitate the development
- 	  and design of applications.
- 
--	  http://doc.qt.io/qt-5/qtmodules.html#qt-tools
-+	  https://doc.qt.io/qt-5/qtmodules.html#qt-tools
- 
- if BR2_PACKAGE_QT5TOOLS
- 
-diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-index 0d5a108912..fe698fe876 100644
---- a/package/qt5/qt5wayland/Config.in
-+++ b/package/qt5/qt5wayland/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_QT5WAYLAND
- 
- 	  This package corresponds to the qt5wayland module.
- 
--	  http://qt.io
-+	  https://qt.io
- 
- if BR2_PACKAGE_QT5WAYLAND
- 
-diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
-index 436e3abb2b..1cd295b146 100644
---- a/package/qt5/qt5webchannel/Config.in
-+++ b/package/qt5/qt5webchannel/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5WEBCHANNEL
- 	  a server (QML/C++ application) and a client
- 	  (HTML/JavaScript or QML application).
- 
--	  http://doc.qt.io/qt-5/qtwebchannel-index.html
-+	  https://doc.qt.io/qt-5/qtwebchannel-index.html
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 4e923c7f31..5d537cdf84 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -74,7 +74,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	  be made fully editable by the user through the use of the
- 	  contenteditable attribute on HTML elements.
- 
--	  http://doc.qt.io/qt-5/qtwebengine-index.html
-+	  https://doc.qt.io/qt-5/qtwebengine-index.html
- 
- if BR2_PACKAGE_QT5WEBENGINE
- 
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
-index 4abb04844c..82e38dff52 100644
---- a/package/qt5/qt5webkit/Config.in
-+++ b/package/qt5/qt5webkit/Config.in
-@@ -29,7 +29,7 @@ config BR2_PACKAGE_QT5WEBKIT
- 	  without GPU since the successor (QtWebEngine) requires
- 	  OpenGL support.
- 
--	  http://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
-+	  https://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
- 
- comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.9, host gcc >= 4.9"
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-diff --git a/package/qt5/qt5websockets/Config.in b/package/qt5/qt5websockets/Config.in
-index 678fb6fa04..e7bd71b21d 100644
---- a/package/qt5/qt5websockets/Config.in
-+++ b/package/qt5/qt5websockets/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_QT5WEBSOCKETS
- 	  process WebSocket requests, or a client that can
- 	  consume data received from the server, or both.
- 
--	  http://doc.qt.io/qt-5/qtwebsockets-index.html
-+	  https://doc.qt.io/qt-5/qtwebsockets-index.html
-diff --git a/package/qt5/qt5x11extras/Config.in b/package/qt5/qt5x11extras/Config.in
-index ff4cc11531..240443a30a 100644
---- a/package/qt5/qt5x11extras/Config.in
-+++ b/package/qt5/qt5x11extras/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5X11EXTRAS
- 	  Qt X11 Extras enables the Qt programmer to write
- 	  applications for the Linux/X11 platform.
- 
--	  http://doc.qt.io/qt-5/qtx11extras-index.html
-+	  https://doc.qt.io/qt-5/qtx11extras-index.html
-diff --git a/package/qt5/qt5xmlpatterns/Config.in b/package/qt5/qt5xmlpatterns/Config.in
-index 2f3eb24f23..4fcf7e92e3 100644
---- a/package/qt5/qt5xmlpatterns/Config.in
-+++ b/package/qt5/qt5xmlpatterns/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_QT5XMLPATTERNS
- 	  The Qt XML Patterns module provides support for XPath,
- 	  XQuery, XSLT, and XML Schema validation.
- 
--	  http://doc.qt.io/qt-5/qtxmlpatterns-index.html
-+	  https://doc.qt.io/qt-5/qtxmlpatterns-index.html
--- 
-2.33.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+LSBEcm9wIHBhdGNoIChhbHJlYWR5IGluIHZlcnNpb24pCi0gVXBkYXRlIGhhc2ggb2YgYnNkLWNv
+bXAuYywgY2NwLmMgYW5kIHBhc3Nwcm9tcHQuYyAobm8gY2hhbmdlIGluCiAgbGljZW5zZSkKLSBy
+cC1wcHBvZSBoYXMgYmVlbiByZW5hbWVkIHRvIHBwcG9lIHNpbmNlCiAgaHR0cHM6Ly9naXRodWIu
+Y29tL3BhdWx1c21hY2svcHBwL2NvbW1pdC9iMmMzNmU2YzBlMTY1NWFlYTliMWIwYTAzYTgxNjBm
+NDJhMjZjODg0Ci0gTWFuYWdlIEVBUC1UTFMgd2hpY2ggZGVwZW5kcyBvbiBvcGVuc3NsIGFuZCBo
+YXMgYmVlbiBhZGRlZCBhbmQgaXMKICBlbmFibGVkIGJ5IGRlZmF1bHQgc2luY2UKICBodHRwczov
+L2dpdGh1Yi5jb20vcGF1bHVzbWFjay9wcHAvY29tbWl0L2U4N2ZlMWJiZDM3YTE0ODZjNTIyM2Yx
+MTBlOWNlM2VmNzU5NzFmOTMKICBJdCBzaG91bGQgYmUgbm90ZWQgdGhhdCBvcGVuc3NsIGlzIHN0
+aWxsIG1hbmRhdG9yeSB3aXRoIGdsaWJjIGJlY2F1c2UKICBlbmNyeXB0IGFuZCBzZXRrZXkgaGF2
+ZSBiZWVuIHJlbW92ZWQgc2luY2UgdmVyc2lvbiAyLjI4IChzZWUgY29tbWl0CiAgYjUxOWJjYWZl
+NzVkMTI1NmQxZmM0MmFhMjYzOTM0MDViODk2MjliMykKLSBtdXNsIGlzIG5vdyBzdXBwb3J0ZWQK
+LSBVcGRhdGUgaW5kZW50YXRpb24gaW4gaGFzaCBmaWxlICh0d28gc3BhY2VzKQoKaHR0cHM6Ly9n
+aXRodWIuY29tL3BhdWx1c21hY2svcHBwL2Jsb2IvMi40LjkvUkVBRE1FCgpGaXhlczoKIC0gaHR0
+cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xMzQzNgoKU2lnbmVkLW9mZi1i
+eTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci0tLQpDaGFu
+Z2VzIHYxIC0+IHYyIChhZnRlciByZXZpZXcgb2YgVGhvbWFzIFBldGF6em9uaSk6CiAtIEFkZCBt
+dXNsIHN1cHBvcnQKIC0gVXBkYXRlIGNvbW1pdCBtZXNzYWdlIGNvbmNlcm5pbmcgb3BlbnNzbCBh
+bmQgZ2xpYmMKCiBwYWNrYWdlL25ldHdvcmstbWFuYWdlci9Db25maWcuaW4gICAgICAgICAgICAg
+fCAgNCAtLQogcGFja2FnZS9wcHBkLzAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoIHwg
+MzcgLS0tLS0tLS0tLS0tCiAuLi5uLXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMu
+cGF0Y2ggfCA2MCArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL3BwcGQvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgNSArLQogcGFja2FnZS9wcHBkL3BwcGQuaGFzaCAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgMTIgKystLQogcGFja2FnZS9wcHBkL3BwcGQubWsgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgMTkgKysrLS0tCiBwYWNrYWdlL3JwLXBwcG9lL0NvbmZpZy5p
+biAgICAgICAgICAgICAgICAgICAgfCAgNSArLQogNyBmaWxlcyBjaGFuZ2VkLCA4MCBpbnNlcnRp
+b25zKCspLCA2MiBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BwcGQv
+MDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
+YWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1jb21waWxhdGlvbi13aXRoLW9sZGVyLWdsaWJjLW9yLWtl
+cm5lbC1oZWFkZXJzLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9uZXR3b3JrLW1hbmFnZXIv
+Q29uZmlnLmluIGIvcGFja2FnZS9uZXR3b3JrLW1hbmFnZXIvQ29uZmlnLmluCmluZGV4IDQzOTg3
+NDUxYjYuLmI5YmFmNTk0NTMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbmV0d29yay1tYW5hZ2VyL0Nv
+bmZpZy5pbgorKysgYi9wYWNrYWdlL25ldHdvcmstbWFuYWdlci9Db25maWcuaW4KQEAgLTQ2LDE0
+ICs0NiwxMCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTkVUV09SS19NQU5BR0VSX01PREVNX01BTkFH
+RVIKIAogY29uZmlnIEJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUl9QUFBECiAJYm9vbCAicHBw
+ZCBzdXBwb3J0IgotCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMICMgcHBwZAog
+CXNlbGVjdCBCUjJfUEFDS0FHRV9QUFBECiAJaGVscAogCSAgVGhpcyBvcHRpb24gZW5hYmxlcyBz
+dXBwb3J0IGZvciBQUFBEIGRhZW1vbgogCi1jb21tZW50ICJwcHBkIHN1cHBvcnQgbmVlZHMgYSBn
+bGliYyBvciB1Q2xpYmMgdG9vbGNoYWluIgotCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9VU0VT
+X01VU0wKLQogY29uZmlnIEJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUl9PVlMKIAlib29sICJP
+cGVuVlN3aXRjaCBzdXBwb3J0IgogCXNlbGVjdCBCUjJfUEFDS0FHRV9KQU5TU09OCmRpZmYgLS1n
+aXQgYS9wYWNrYWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2ggYi9wYWNr
+YWdlL3BwcGQvMDAwMS1wcHBkLUZpeC1ib3VuZHMtY2hlY2sucGF0Y2gKZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNjQ0CmluZGV4IDVkN2M1MWJjYWMuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9wcHBk
+LzAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMzcg
+KzAsMCBAQAotRnJvbSA4ZDc5NzBiOGYzZGI3MjdmZTc5OGI2NWYzMzc3ZmU2Nzg3NTc1NDI2IE1v
+biBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogUGF1bCBNYWNrZXJyYXMgPHBhdWx1c0Bvemxh
+YnMub3JnPgotRGF0ZTogTW9uLCAzIEZlYiAyMDIwIDE1OjUzOjI4ICsxMTAwCi1TdWJqZWN0OiBb
+UEFUQ0hdIHBwcGQ6IEZpeCBib3VuZHMgY2hlY2sgaW4gRUFQIGNvZGUKLQotR2l2ZW4gdGhhdCB3
+ZSBoYXZlIGp1c3QgY2hlY2tlZCB2YWxsZW4gPCBsZW4sIGl0IGNhbiBuZXZlciBiZSB0aGUgY2Fz
+ZQotdGhhdCB2YWxsZW4gPj0gbGVuICsgc2l6ZW9mKHJob3N0bmFtZSkuICBUaGlzIGZpeGVzIHRo
+ZSBjaGVjayBzbyB3ZQotYWN0dWFsbHkgYXZvaWQgb3ZlcmZsb3dpbmcgdGhlIHJob3N0bmFtZSBh
+cnJheS4KLQotUmVwb3J0ZWQtYnk6IElsamEgVmFuIFNwcnVuZGVsIDxpdmFuc3BydW5kZWxAaW9h
+Y3RpdmUuY29tPgotU2lnbmVkLW9mZi1ieTogUGF1bCBNYWNrZXJyYXMgPHBhdWx1c0BvemxhYnMu
+b3JnPgotLS0tCi0gcHBwZC9lYXAuYyB8IDQgKystLQotIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9wcHBkL2VhcC5jIGIvcHBw
+ZC9lYXAuYwotaW5kZXggOTQ0MDdmNTYuLjFiOTNkYjAxIDEwMDY0NAotLS0tIGEvcHBwZC9lYXAu
+YwotKysrIGIvcHBwZC9lYXAuYwotQEAgLTE0MjAsNyArMTQyMCw3IEBAIGludCBsZW47Ci0gCQl9
+Ci0gCi0gCQkvKiBOb3Qgc28gbGlrZWx5IHRvIGhhcHBlbi4gKi8KLS0JCWlmICh2YWxsZW4gPj0g
+bGVuICsgc2l6ZW9mIChyaG9zdG5hbWUpKSB7Ci0rCQlpZiAobGVuIC0gdmFsbGVuID49IHNpemVv
+ZiAocmhvc3RuYW1lKSkgewotIAkJCWRiZ2xvZygiRUFQOiB0cmltbWluZyByZWFsbHkgbG9uZyBw
+ZWVyIG5hbWUgZG93biIpOwotIAkJCUJDT1BZKGlucCArIHZhbGxlbiwgcmhvc3RuYW1lLCBzaXpl
+b2YgKHJob3N0bmFtZSkgLSAxKTsKLSAJCQlyaG9zdG5hbWVbc2l6ZW9mIChyaG9zdG5hbWUpIC0g
+MV0gPSAnXDAnOwotQEAgLTE4NDYsNyArMTg0Niw3IEBAIGludCBsZW47Ci0gCQl9Ci0gCi0gCQkv
+KiBOb3Qgc28gbGlrZWx5IHRvIGhhcHBlbi4gKi8KLS0JCWlmICh2YWxsZW4gPj0gbGVuICsgc2l6
+ZW9mIChyaG9zdG5hbWUpKSB7Ci0rCQlpZiAobGVuIC0gdmFsbGVuID49IHNpemVvZiAocmhvc3Ru
+YW1lKSkgewotIAkJCWRiZ2xvZygiRUFQOiB0cmltbWluZyByZWFsbHkgbG9uZyBwZWVyIG5hbWUg
+ZG93biIpOwotIAkJCUJDT1BZKGlucCArIHZhbGxlbiwgcmhvc3RuYW1lLCBzaXplb2YgKHJob3N0
+bmFtZSkgLSAxKTsKLSAJCQlyaG9zdG5hbWVbc2l6ZW9mIChyaG9zdG5hbWUpIC0gMV0gPSAnXDAn
+OwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9wcHBkLzAwMDEtcHBwZC1GaXgtY29tcGlsYXRpb24td2l0
+aC1vbGRlci1nbGliYy1vci1rZXJuZWwtaGVhZGVycy5wYXRjaCBiL3BhY2thZ2UvcHBwZC8wMDAx
+LXBwcGQtRml4LWNvbXBpbGF0aW9uLXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMu
+cGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uODZkOGI4ZjRlMwot
+LS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHBwZC8wMDAxLXBwcGQtRml4LWNvbXBpbGF0aW9u
+LXdpdGgtb2xkZXItZ2xpYmMtb3Ita2VybmVsLWhlYWRlcnMucGF0Y2gKQEAgLTAsMCArMSw2MCBA
+QAorRnJvbSA5OGVjMThmMDk4ZTVlZjY4ZTNhOGNjNjk1NGZjYWY1YTdmYjhiN2JlIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQorRnJvbTogcGFsaSA8NzE0MTg3MStwYWxpQHVzZXJzLm5vcmVwbHku
+Z2l0aHViLmNvbT4KK0RhdGU6IE1vbiwgMTUgRmViIDIwMjEgMDc6NTQ6MDEgKzAxMDAKK1N1Ympl
+Y3Q6IFtQQVRDSF0gcHBwZDogRml4IGNvbXBpbGF0aW9uIHdpdGggb2xkZXIgZ2xpYmMgb3Iga2Vy
+bmVsIGhlYWRlcnMKKyAoIzI0OCkKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRl
+eHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQK
+KworZ2xpYmMgdmVyc2lvbnMgcHJpb3IgdG8gMi4yNCBkbyBub3QgZGVmaW5lIFNPTF9ORVRMSU5L
+IGFuZCBsaW51eCBrZXJuZWwKK3ZlcnNpb25zIHByaW9yIHRvIDQuMyBkbyBub3QgZGVmaW5lIE5F
+VExJTktfQ0FQX0FDSy4gU28gYWRkIGZhbGxiYWNrCitkZWZpbml0aW9ucyBmb3IgdGhlc2UgbWFj
+cm9zIGludG8gcHBwZC9zeXMtbGludXguYyBmaWxlLgorCitBbHNvIGV4dGVuZCBkZXNjcmlwdGlv
+biB3aHkgd2UgY2FsbCBTT0xfTkVUTElOSy9ORVRMSU5LX0NBUF9BQ0sgb3B0aW9uLgorCitTaWdu
+ZWQtb2ZmLWJ5OiBQYWxpIFJvaMOhciA8cGFsaUBrZXJuZWwub3JnPgorCitbUmV0cmlldmVkIGZy
+b206CitodHRwczovL2dpdGh1Yi5jb20vcHBwLXByb2plY3QvcHBwL2NvbW1pdC85OGVjMThmMDk4
+ZTVlZjY4ZTNhOGNjNjk1NGZjYWY1YTdmYjhiN2JlXQorU2lnbmVkLW9mZi1ieTogRmFicmljZSBG
+b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CistLS0KKyBwcHBkL3N5cy1saW51
+eC5jIHwgMTggKysrKysrKysrKysrKysrKystCisgMSBmaWxlIGNoYW5nZWQsIDE3IGluc2VydGlv
+bnMoKyksIDEgZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL3BwcGQvc3lzLWxpbnV4LmMgYi9w
+cHBkL3N5cy1saW51eC5jCitpbmRleCA4NTAzM2Q5Ny4uNTBjNGYyZGEgMTAwNjQ0CistLS0gYS9w
+cHBkL3N5cy1saW51eC5jCisrKysgYi9wcHBkL3N5cy1saW51eC5jCitAQCAtMTI1LDYgKzEyNSwx
+NCBAQAorICNpbmNsdWRlIDxsaW51eC9uZXRsaW5rLmg+CisgI2luY2x1ZGUgPGxpbnV4L3J0bmV0
+bGluay5oPgorICNpbmNsdWRlIDxsaW51eC9pZl9hZGRyLmg+CisrLyogZ2xpYmMgdmVyc2lvbnMg
+cHJpb3IgdG8gMi4yNCBkbyBub3QgZGVmaW5lIFNPTF9ORVRMSU5LICovCisrI2lmbmRlZiBTT0xf
+TkVUTElOSworKyNkZWZpbmUgU09MX05FVExJTksgMjcwCisrI2VuZGlmCisrLyogbGludXgga2Vy
+bmVsIHZlcnNpb25zIHByaW9yIHRvIDQuMyBkbyBub3QgZGVmaW5lL3N1cHBvcnQgTkVUTElOS19D
+QVBfQUNLICovCisrI2lmbmRlZiBORVRMSU5LX0NBUF9BQ0sKKysjZGVmaW5lIE5FVExJTktfQ0FQ
+X0FDSyAxMAorKyNlbmRpZgorICNlbmRpZgorIAorICNpbmNsdWRlICJwcHBkLmgiCitAQCAtMjg0
+Myw3ICsyODUxLDE1IEBAIHN0YXRpYyBpbnQgYXBwZW5kX3BlZXJfaXB2Nl9hZGRyZXNzKHVuc2ln
+bmVkIGludCBpZmFjZSwgc3RydWN0IGluNl9hZGRyICpsb2NhbF9hCisgICAgIGlmIChmZCA8IDAp
+CisgICAgICAgICByZXR1cm4gMDsKKyAKKy0gICAgLyogZG8gbm90IGFzayBmb3IgZXJyb3IgbWVz
+c2FnZSBjb250ZW50ICovCisrICAgIC8qCisrICAgICAqIFRlbGwga2VybmVsIHRvIG5vdCBzZW5k
+IHRvIHVzIHBheWxvYWQgb2YgYWNrbm93bGVkZ21lbnQgZXJyb3IgbWVzc2FnZS4KKysgICAgICog
+TkVUTElOS19DQVBfQUNLIG9wdGlvbiBpcyBzdXBwb3J0ZWQgc2luY2UgTGludXgga2VybmVsIHZl
+cnNpb24gNC4zIGFuZAorKyAgICAgKiBvbGRlciBrZXJuZWwgdmVyc2lvbnMgYWx3YXlzIHNlbmQg
+ZnVsbCBwYXlsb2FkIGluIGFja25vd2xlZGdtZW50IG5ldGxpbmsKKysgICAgICogbWVzc2FnZS4g
+V2UgaWdub3JlIHBheWxvYWQgb2YgdGhpcyBtZXNzYWdlIGFzIHdlIG5lZWQgb25seSBlcnJvciBj
+b2RlLAorKyAgICAgKiB0byBjaGVjayBpZiBvdXIgc2V0IHJlbW90ZSBwZWVyIGFkZHJlc3MgcmVx
+dWVzdCBzdWNjZWVkZWQgb3IgZmFpbGVkLgorKyAgICAgKiBTbyBpZ25vcmUgcmV0dXJuIHZhbHVl
+IGZyb20gdGhlIGZvbGxvd2luZyBzZXRzb2Nrb3B0KCkgY2FsbCBhcyBzZXR0aW5nCisrICAgICAq
+IG9wdGlvbiBORVRMSU5LX0NBUF9BQ0sgbWVhbnMgZm9yIHVzIGp1c3QgYSBrZXJuZWwgaGludCAv
+IG9wdGltaXphdGlvbi4KKysgICAgICovCisgICAgIG9uZSA9IDE7CisgICAgIHNldHNvY2tvcHQo
+ZmQsIFNPTF9ORVRMSU5LLCBORVRMSU5LX0NBUF9BQ0ssICZvbmUsIHNpemVvZihvbmUpKTsKKyAK
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHBwZC9Db25maWcuaW4gYi9wYWNrYWdlL3BwcGQvQ29uZmln
+LmluCmluZGV4IDY2YzkzNWFiYjEuLmNhMTM5YTUwZTkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBw
+ZC9Db25maWcuaW4KKysrIGIvcGFja2FnZS9wcHBkL0NvbmZpZy5pbgpAQCAtMSw3ICsxLDYgQEAK
+IGNvbmZpZyBCUjJfUEFDS0FHRV9QUFBECiAJYm9vbCAicHBwZCIKIAlkZXBlbmRzIG9uICFCUjJf
+U1RBVElDX0xJQlMKLQlkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX1VTRVNfTVVTTCAjIFVzZSBf
+X1AoKSBtYWNybyBhbGwgb3ZlciB0aGUgdHJlZQogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKIAlz
+ZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTCBpZiBCUjJfVE9PTENIQUlOX1VTRVNfR0xJQkMKIAlz
+ZWxlY3QgQlIyX1BBQ0tBR0VfTElCT1BFTlNTTF9FTkFCTEVfREVTIGlmIEJSMl9QQUNLQUdFX0xJ
+Qk9QRU5TU0wgXApAQCAtNDAsNiArMzksNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUFBQRF9PVkVS
+V1JJVEVfUkVTT0xWX0NPTkYKIAogZW5kaWYKIAotY29tbWVudCAicHBwZCBuZWVkcyBhIHVDbGli
+YyBvciBnbGliYyB0b29sY2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24gQlIy
+X1NUQVRJQ19MSUJTIHx8IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMCitjb21tZW50ICJwcHBkIG5l
+ZWRzIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSIKKwlkZXBlbmRzIG9uIEJSMl9TVEFU
+SUNfTElCUwogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHBw
+ZC9wcHBkLmhhc2ggYi9wYWNrYWdlL3BwcGQvcHBwZC5oYXNoCmluZGV4IGE5MjMxNTg1NzYuLjNk
+NDcxNjk1YmIgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBwZC9wcHBkLmhhc2gKKysrIGIvcGFja2Fn
+ZS9wcHBkL3BwcGQuaGFzaApAQCAtMSw3ICsxLDcgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkCi1z
+aGEyNTYJOTFmYmZmNzg0YWQxNmExMTExYTdmMjJkZjQ2NzVhZWIxNjFkOTU4YmI3OWYxY2M0YzFm
+MGM4MTk0NGU3Y2I0MAlwcHBkLTIuNC44LnRhci5negotc2hhMjU2CTM5OTBjNjVjNTA2ODg1Zjdi
+Yjc1NDU1ZDFkNjE4ODc0M2ExNGFkNDZmNWI2MmUxMzZlZjM3MzlhZWQ1MmM1MzIJcHBwZC90ZGIu
+Ywotc2hhMjU2CTE4MjJlYWQ5ZDI4NTRhZGZiZDI4MjMyMmIyOTczMGEzZmVjNGNjNjdmNmY2YTJl
+NDg3YWFkMzQ3NmUzYWZkNTkJcHBwZC9wbHVnaW5zL3BwcG9hdG0vQ09QWUlORwotc2hhMjU2CTkx
+YTVlOWMxNzNlMGUwMDFlMDgxZTE1YmY3ODUwY2ZkNzgyYTBiYWEwMmY1OTIxZTMyN2FlM2I0NDli
+ZWZmM2YJcHBwZHVtcC9ic2QtY29tcC5jCi1zaGEyNTYJZWUxYzI4NTUxYzg3Y2RjZGFmODBlYjM5
+MjI3MjZmMDE1MjAxNjE0Y2I1NjBhNWVkMThhN2EwYzE1ZjJiNGFhNAlwcHBkL2NjcC5jCi1zaGEy
+NTYJNmZhNGMzZGFkMDU5ZjZlZjE1YzFjNWU1MjE5ZDlkMGQ0MDk5MWRkM2ExNjIwOThhODk5Njdh
+MTcyMGRlMDU5ZQlwcHBkL3BsdWdpbnMvcGFzc3Byb21wdC5jCitzaGEyNTYgIDY3NWJmZjRmMzY2
+MTc0NjQ5ZjRhM2M5MmZkMzJhYzQ3NmU2OTQxNjRmZjJiMGI3NzEwMDE5YjZlYWQ5YzU2MWUgIHBw
+cGQtMi40LjkudGFyLmd6CitzaGEyNTYgIDM5OTBjNjVjNTA2ODg1ZjdiYjc1NDU1ZDFkNjE4ODc0
+M2ExNGFkNDZmNWI2MmUxMzZlZjM3MzlhZWQ1MmM1MzIgIHBwcGQvdGRiLmMKK3NoYTI1NiAgMTgy
+MmVhZDlkMjg1NGFkZmJkMjgyMzIyYjI5NzMwYTNmZWM0Y2M2N2Y2ZjZhMmU0ODdhYWQzNDc2ZTNh
+ZmQ1OSAgcHBwZC9wbHVnaW5zL3BwcG9hdG0vQ09QWUlORworc2hhMjU2ICBkNzU5ZWMxNjg3NWE2
+OWMyZDU1MjlmOGNiM2MwNDBmZWY4ZmUzOGQyNmY3MDQ1N2FhZGI3M2M5MWI3Mjc0NmM4ICBwcHBk
+dW1wL2JzZC1jb21wLmMKK3NoYTI1NiAgYzBkMGYxNGI2ZWM5OTQ4MzMyZjEwZGVkNzQxMjkzZWQx
+ZjNiOTZlMGQyNjZlNDkwM2I2MDVhNmUxZjhhZjdjZCAgcHBwZC9jY3AuYworc2hhMjU2ICAzNjdm
+MzM0YzUwOWRiMmIyOTNhZWE1Y2U5ZjU0Mjg0ZDlhOWY2ZTBhOWUwYzZlMzA1ZDU0NDA3OWJhZjhh
+YjYzICBwcHBkL3BsdWdpbnMvcGFzc3Byb21wdC5jCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BwcGQv
+cHBwZC5tayBiL3BhY2thZ2UvcHBwZC9wcHBkLm1rCmluZGV4IDA5OGM2YThlNmYuLjcxYmZjZWI2
+MDcgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHBwZC9wcHBkLm1rCisrKyBiL3BhY2thZ2UvcHBwZC9w
+cHBkLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotUFBQ
+RF9WRVJTSU9OID0gMi40LjgKK1BQUERfVkVSU0lPTiA9IDIuNC45CiBQUFBEX1NJVEUgPSAkKGNh
+bGwgZ2l0aHViLHBhdWx1c21hY2sscHBwLHBwcC0kKFBQUERfVkVSU0lPTikpCiBQUFBEX0xJQ0VO
+U0UgPSBMR1BMLTIuMCssIExHUEwsIEJTRC00LUNsYXVzZSwgQlNELTMtQ2xhdXNlLCBHUEwtMi4w
+KwogUFBQRF9MSUNFTlNFX0ZJTEVTID0gXApAQCAtMTQsMTQgKzE0LDE1IEBAIFBQUERfQ1BFX0lE
+X1ZFTkRPUiA9IHNhbWJhCiBQUFBEX0NQRV9JRF9QUk9EVUNUID0gcHBwCiBQUFBEX1NFTElOVVhf
+TU9EVUxFUyA9IHBwcAogCi0jIDAwMDEtcHBwZC1GaXgtYm91bmRzLWNoZWNrLnBhdGNoCi1QUFBE
+X0lHTk9SRV9DVkVTICs9IENWRS0yMDIwLTg1OTcKLQogUFBQRF9NQUtFX09QVFMgPSBIQVZFX0lO
+RVQ2PXkKLWlmZXEgKCQoQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDKSx5KQorCitpZmVxICgkKEJS
+Ml9QQUNLQUdFX09QRU5TU0wpLHkpCiBQUFBEX0RFUEVOREVOQ0lFUyArPSBvcGVuc3NsCitQUFBE
+X01BS0VfT1BUUyArPSBVU0VfRUFQVExTPXkKIGVsc2UKLVBQUERfTUFLRV9PUFRTICs9IFVTRV9D
+UllQVD15CitQUFBEX01BS0VfT1BUUyArPSBcCisJVVNFX0NSWVBUPXkgXAorCVVTRV9FQVBUTFM9
+CiBlbmRpZgogCiBQUFBEX0lOU1RBTExfU1RBR0lORyA9IFlFUwpAQCAtMTAxLDkgKzEwMiw5IEBA
+IGRlZmluZSBQUFBEX0lOU1RBTExfVEFSR0VUX0NNRFMKIAkJJChUQVJHRVRfRElSKS91c3IvbGli
+L3BwcGQvJChQUFBEX1ZFUlNJT04pL3Bhc3N3b3JkZmQuc28KIAkkKElOU1RBTEwpIC1EICQoUFBQ
+RF9ESVIpL3BwcGQvcGx1Z2lucy9wcHBvYXRtL3BwcG9hdG0uc28gXAogCQkkKFRBUkdFVF9ESVIp
+L3Vzci9saWIvcHBwZC8kKFBQUERfVkVSU0lPTikvcHBwb2F0bS5zbwotCSQoSU5TVEFMTCkgLUQg
+JChQUFBEX0RJUikvcHBwZC9wbHVnaW5zL3JwLXBwcG9lL3JwLXBwcG9lLnNvIFwKLQkJJChUQVJH
+RVRfRElSKS91c3IvbGliL3BwcGQvJChQUFBEX1ZFUlNJT04pL3JwLXBwcG9lLnNvCi0JJChJTlNU
+QUxMKSAtRCAkKFBQUERfRElSKS9wcHBkL3BsdWdpbnMvcnAtcHBwb2UvcHBwb2UtZGlzY292ZXJ5
+IFwKKwkkKElOU1RBTEwpIC1EICQoUFBQRF9ESVIpL3BwcGQvcGx1Z2lucy9wcHBvZS9wcHBvZS5z
+byBcCisJCSQoVEFSR0VUX0RJUikvdXNyL2xpYi9wcHBkLyQoUFBQRF9WRVJTSU9OKS9wcHBvZS5z
+bworCSQoSU5TVEFMTCkgLUQgJChQUFBEX0RJUikvcHBwZC9wbHVnaW5zL3BwcG9lL3BwcG9lLWRp
+c2NvdmVyeSBcCiAJCSQoVEFSR0VUX0RJUikvdXNyL3NiaW4vcHBwb2UtZGlzY292ZXJ5CiAJJChJ
+TlNUQUxMKSAtRCAkKFBQUERfRElSKS9wcHBkL3BsdWdpbnMvd2luYmluZC5zbyBcCiAJCSQoVEFS
+R0VUX0RJUikvdXNyL2xpYi9wcHBkLyQoUFBQRF9WRVJTSU9OKS93aW5iaW5kLnNvCmRpZmYgLS1n
+aXQgYS9wYWNrYWdlL3JwLXBwcG9lL0NvbmZpZy5pbiBiL3BhY2thZ2UvcnAtcHBwb2UvQ29uZmln
+LmluCmluZGV4IDEyZjk4MWQ4YzcuLjJhYzgxY2JiMmQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcnAt
+cHBwb2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvcnAtcHBwb2UvQ29uZmlnLmluCkBAIC0xLDEx
+ICsxLDEwIEBACi1jb21tZW50ICJycC1wcHBvZSBuZWVkcyBhIHVDbGliYyBvciBnbGliYyB0b29s
+Y2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24gQlIyX1NUQVRJQ19MSUJTIHx8
+IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMCitjb21tZW50ICJycC1wcHBvZSBuZWVkcyBhIHRvb2xj
+aGFpbiB3LyBkeW5hbWljIGxpYnJhcnkiCisJZGVwZW5kcyBvbiBCUjJfU1RBVElDX0xJQlMKIAlk
+ZXBlbmRzIG9uIEJSMl9VU0VfTU1VCiAKIGNvbmZpZyBCUjJfUEFDS0FHRV9SUF9QUFBPRQogCWJv
+b2wgInJwLXBwcG9lIgogCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUwotCWRlcGVuZHMgb24g
+IUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMICMgcHBwZAogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUg
+IyBmb3JrKCkKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUFBQRAogCWhlbHAKLS0gCjIuMzMuMAoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
