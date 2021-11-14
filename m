@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87264C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A5E4C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4073941C1F;
-	Mon,  6 Dec 2021 18:21:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE14E41C46;
+	Mon,  6 Dec 2021 18:21:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vw5rsfntTfTi; Mon,  6 Dec 2021 18:21:47 +0000 (UTC)
+	with ESMTP id I9KJlJqeVgKI; Mon,  6 Dec 2021 18:21:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8407241C4F;
-	Mon,  6 Dec 2021 18:21:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 758CA1BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 218EC41C53;
+	Mon,  6 Dec 2021 18:21:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F6DA1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D68D60D6A
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F08BA41C2E
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ev49FQQJX86 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pr6FGS6Fp1Xx for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A11B60D65
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F66741C17
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E805F81468; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
+ id B80ED81503; Mon,  6 Dec 2021 18:07:37 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:43:29 +0100
+Date: Sun, 14 Nov 2021 14:51:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 425a1e9f2013fee5a39531268326ba8b861d5af4
-X-Git-Newrev: d191854b0e1049f052fb48155736c57cadb7003b
+X-Git-Oldrev: f84350e7255c94329fc87f3783bee03469fc0159
+X-Git-Newrev: 0f0b1f59c310447ff259499baab6093a7e17b512
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180738.E805F81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-modplug: bump
- version to 19.0.1-Matrix
+Message-Id: <20211206180737.B80ED81503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ntp: run ntpd as ntp user
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d191854b0e1049f052fb48155736c57cadb7003b
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0b1f59c310447ff259499baab6093a7e17b512
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- in case libcap is enabled use the now enabled '-u' option to run nptd as
+  user/group ntp
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash | 2 +-
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/{S49ntp => S49ntp.in}             |  2 +-
+ package/ntp/ntp.mk                            | 15 +++++++++++++--
+ package/ntp/{ntpd.service => ntpd.service.in} |  2 +-
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index f3736c192c..7bab017241 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ff3cb9816a30530d522f6a9a23eb49eb5301fb7880f402de6fc1dea31d3469f6  kodi-audiodecoder-modplug-19.0.0-Matrix.tar.gz
-+sha256  4c422cacf456ab9eda5e2836d2789c3756bfbae03265a01647dd8f935261d9ec  kodi-audiodecoder-modplug-19.0.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index ce5619e8c7..9b2cf98dbc 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp.in
+similarity index 96%
+rename from package/ntp/S49ntp
+rename to package/ntp/S49ntp.in
+index 66c5f70a5f..11c03b888f 100644
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp.in
+@@ -6,7 +6,7 @@
+ DAEMON="ntpd"
+ PIDFILE="/var/run/$DAEMON.pid"
  
--KODI_AUDIODECODER_MODPLUG_VERSION = 19.0.0-Matrix
-+KODI_AUDIODECODER_MODPLUG_VERSION = 19.0.1-Matrix
- KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
+-NTPD_ARGS="-g"
++NTPD_ARGS="@NTPD_EXTRA_ARGS@ -g"
+ 
+ # shellcheck source=/dev/null
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index ff23cdc2b6..96b099d5b1 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -44,6 +44,10 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ NTP_CONF_OPTS += --enable-linuxcaps
+ NTP_DEPENDENCIES += libcap
++define NTP_USERS
++	ntp -1 ntp -1 * - - - ntpd user
++endef
++NTP_DAEMON_EXTRA_ARGS = -u ntp:ntp
+ else
+ NTP_CONF_OPTS += --disable-linuxcaps
+ endif
+@@ -109,11 +113,18 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
+ define NTP_INSTALL_INIT_SYSV_NTPD
+-	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
++	mkdir -p $(TARGET_DIR)/etc/init.d
++	sed -e 's%@NTPD_EXTRA_ARGS@%$(NTP_DAEMON_EXTRA_ARGS)%g' \
++		package/ntp/S49ntp.in \
++		> $(TARGET_DIR)/etc/init.d/S49ntp
++	chmod 0755 $(TARGET_DIR)/etc/init.d/S49ntp
+ endef
+ 
+ define NTP_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
++	sed -e 's%@NTPD_EXTRA_ARGS@%$(NTP_DAEMON_EXTRA_ARGS)%g' \
++		package/ntp/ntpd.service.in \
++		> $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
+ endef
+ endif
+ 
+diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service.in
+similarity index 85%
+rename from package/ntp/ntpd.service
+rename to package/ntp/ntpd.service.in
+index 9a0f4c6dbf..b7db4a2878 100644
+--- a/package/ntp/ntpd.service
++++ b/package/ntp/ntpd.service.in
+@@ -9,7 +9,7 @@ PIDFile=/run/ntpd.pid
+ # correct time to work, but we likely won't acquire that without NTP. Let's
+ # break this chicken-and-egg cycle here.
+ Environment=SYSTEMD_NSS_RESOLVE_VALIDATE=0
+-ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
++ExecStart=/usr/sbin/ntpd @NTPD_EXTRA_ARGS@ -g -p /run/ntpd.pid
+ 
+ [Install]
+ WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
