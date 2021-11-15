@@ -2,80 +2,84 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62746C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:11:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1812C43217
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D321363253
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:11:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D321363253
+	by mail.kernel.org (Postfix) with ESMTPS id 4A21A63337
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A21A63337
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AA6740224;
-	Mon, 15 Nov 2021 17:11:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F01E605D2;
+	Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t3EIQ1F08lIU; Mon, 15 Nov 2021 17:11:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dhwkeg1-7Cfh; Mon, 15 Nov 2021 17:36:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEB0540211;
-	Mon, 15 Nov 2021 17:11:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E366066E;
+	Mon, 15 Nov 2021 17:35:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 691951BF40F
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:11:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A2C471BF40F
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 655FE40211
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:11:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91AAE40242
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:35:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DKWo1onxTtrW for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 17:11:32 +0000 (UTC)
+ with ESMTP id XY5IWcNw7Lzf for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 17:35:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
- [IPv6:2607:f8b0:4864:20::22d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6E03540209
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 17:11:32 +0000 (UTC)
-Received: by mail-oi1-x22d.google.com with SMTP id n66so36117390oia.9
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 09:11:32 -0800 (PST)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7922E401EC
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 17:35:57 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id u1so32245424wru.13
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 09:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ezEmuxE1o2QXYibs8wPGT0/01Ifj34DqgH95XgYLdFw=;
- b=qSsz2HC2GSwcg+4slKF1MeVxw9eTvFGpm9Z/AIDUWqjfqeTWU0MCsaUpWqXMyKlsTW
- CSuWxHOAca7CoA7jK0AIXNP+rJ+yVFBVFYAe/+q6hKDNBxPRAT10IceRYRL0g+vizyGU
- +kJ8CwCTQE8WCyTcXZ1/WHv02xJIH3Z5ZPWyi/5KC/EX9i/nLdF46HtDE24WRVUvArzM
- BGDx2Is+lS9qDTSWpCJSTNTMcYFO5eAayF3QE41648YQs5Dv/4uepfPkPrf71VtvEN1Z
- iOlvMzPAMveFmfZPPwKRQf6wVnlXZzPEOFuusWBmEYXKXOhC71DdkZUsnRgPvZ+iVDnD
- ycew==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NNDfXCRk9Utf5vI72H+tEqJnxHMzIXi2TLNM2JvQPC0=;
+ b=W/0+bA1CIag9a4Y6448B3XMxuDOaxy2MjyIy1iIVRgEauotHk7/qfiCcNL9ud/+ocx
+ kzEcZg5pRS5GP/L0F6zDfy86fh2ysvd4ulI075eNE8tXHEme5rJfrXxzo061N0AJcLqS
+ d8sGryF2EV89wgntMISXQXatNHbBtWg/CjyhmPqO+cJ80KSCDrgTnKoacFDPJuMHSBKC
+ 7ObCdb7UpFPV5uVxxf28Ze19IgpvgzsGzAmDvZM3UcI4JwSiauVLZBVdxFGgHvBOMDPJ
+ ibwBW6SL6MWLX3ncz1D6UQ/xznvHDXPziUR8yVmcKIrsU76xZ2S1BbVNcIx4yxu982xO
+ cEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ezEmuxE1o2QXYibs8wPGT0/01Ifj34DqgH95XgYLdFw=;
- b=5ypcTuhSXxISBfqeW42JOnQeaQ6ujBe24v/oaVg/AHpNMg9kJqVc3VOE2/aX/IeUmG
- SqNcxf3lg9cG4uoAHPGkhQUFDcA24D/i0+xTqplL5jgs5rsCqND7KOW35NMeI2pCuqCk
- AxGPxMB54Gdumt3B5FypxD0pYgPtu8xhWKiLCQGbDIqerHJGfdvZ/QeDLr3TYwYWz6Ax
- I8BY7IrmeEZg133tzCZNiDmPRLgSuJgR/A3gxDXrG2moHlxBspWPuaKZ5UwMv37CNlog
- P+FH3W3Iy/RAmb/b0dkTUQzbVcSdncylHe/KEFL9esylxFi0KlfWzjLip1Z4vF6sICUV
- CJ/A==
-X-Gm-Message-State: AOAM532V7pqyL2hn95I+dcTiSCVFgxEIFbbw3D99fpu6RQk2Z/rjm3VB
- suVBhf/kfCskULEaqxRIcYDnG6ViNn/1wA56fJE=
-X-Google-Smtp-Source: ABdhPJzbtz4vA1ubobzh+djtXkWX9ELV7VOYclgFayfWlJ1TZifUH9cdzURHgsJlM8owgAtTMGwMB9DTjxAE09yK7oQ=
-X-Received: by 2002:a05:6808:171c:: with SMTP id
- bc28mr47046201oib.18.1636996291382; 
- Mon, 15 Nov 2021 09:11:31 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NNDfXCRk9Utf5vI72H+tEqJnxHMzIXi2TLNM2JvQPC0=;
+ b=mcHW+ZCEptfx2wDiL/+0RNW9LgAIwZgBGlI636g9XqXXQGuxC8MsN3GaoVz881SPlS
+ cUOnwmmoH5e70ds0XXVSigtWO4FSZJGL/LzYFHMQ9j35ebMLuJY6jaM95Xy0338dCuNX
+ Q9b4GraD+9euafUTYxAh7mtSnxOQVGDq4aQSM/YGrWRsI3HM9oEcx8dS5M4MB7SwuXBL
+ 7YebCVwPrebKY90fXz0gI8dSJGzrG9X9R2sfF6UZuYUOTNgSBqWOYgM4Ku2i1oYpjgpu
+ cU6Qfrml0SBIcFr0HS+tN9EoDHfxwNiY2tdQ9xC5rgIyzKVRlf06BI9jYtgbC32lP5J7
+ mMAg==
+X-Gm-Message-State: AOAM530UJGCV97TwaxzfpPMyu4FxXM0rU2EXR4JcGHWCj1ohqtiUDZpc
+ TtxdOwWxNOoTxOnMyQjWBsf39eiX3Ec=
+X-Google-Smtp-Source: ABdhPJxmLNolV/lucua+LmsQMWVvUeCbFmEt5TL266Ja04RvYwdpM0m2fFS27Btuo7rm1ULyFSA9oQ==
+X-Received: by 2002:a05:6000:1a88:: with SMTP id
+ f8mr968512wry.54.1636997755437; 
+ Mon, 15 Nov 2021 09:35:55 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id m20sm22480486wmq.11.2021.11.15.09.35.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Nov 2021 09:35:54 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Nov 2021 18:33:44 +0100
+Message-Id: <20211115173344.3861620-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211112180802.3610653-1-fontaine.fabrice@gmail.com>
- <20211112232739.6211b3b0@windsurf>
-In-Reply-To: <20211112232739.6211b3b0@windsurf>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 15 Nov 2021 09:11:20 -0800
-Message-ID: <CAFSsvmqcOr2M3iuNkRSWMMpAWVXb8_TXmLOp5dZyzdKoovLeng@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: add girdir to
- glib-2.0.pc
+Subject: [Buildroot] [PATCH 1/1] package/mupdf: disable objcopy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,106 +91,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello;
-
-On Fri, Nov 12, 2021 at 2:27 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> I'm adding Adam Duskett in Cc of this one, to get his review on this
-> GOI related patch.
->
-> Thanks!
->
-> Thomas
->
-> On Fri, 12 Nov 2021 19:08:02 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Add girdir to glib-2.0.pc to fix the following build failure with atk,
-> > gcr or harfbuzz:
-> >
-> > /home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
-> > Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
-> >
-> > This build failure could also be fixed by removing our update of girdir
-> > in gobject-introspection.mk but this will have side effects as gir files
-> > won't be installed in the correct directory. So patch glib-2.0.pc
-> > instead.
-> >
-> > Note: autotools-based packages have already been fixed by
-> > https://git.buildroot.net/buildroot/commit/?id=8dda79970661090f202e1f20e5982ba53fdaeb95
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
-> >  - http://autobuild.buildroot.org/results/67a47386019c2a700df348ad6846064e0950e87b
-> >  - http://autobuild.buildroot.org/results/2c6a4470542af574f9407fa5867f0408ec2b4880
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...eson.build-add-girdir-to-glib.2.0.pc.patch | 33 +++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> >  create mode 100644 package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
-> >
-> > diff --git a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch b/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
-> > new file mode 100644
-> > index 0000000000..7eeecbe336
-> > --- /dev/null
-> > +++ b/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
-> > @@ -0,0 +1,33 @@
-> > +From 04bdfff007c91fc620ed0b7cd02fd2e1e83bdefc Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Fri, 12 Nov 2021 18:01:05 +0100
-> > +Subject: [PATCH] glib/meson.build: add girdir to glib.2.0.pc
-> > +
-> > +Add girdir to glib-2.0.pc to fix the following build failure with atk:
-> > +
-> > +/home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
-> > +Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
-> > +
-> > +Fixes:
-> > + - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +---
-> > + glib/meson.build | 1 +
-> > + 1 file changed, 1 insertion(+)
-> > +
-> > +diff --git a/glib/meson.build b/glib/meson.build
-> > +index f78f32969..6c5486699 100644
-> > +--- a/glib/meson.build
-> > ++++ b/glib/meson.build
-> > +@@ -377,6 +377,7 @@ pkg.generate(libglib,
-> > +   subdirs : ['glib-2.0'],
-> > +   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
-> > +   variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
-> > ++               'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
-> > +                'glib_genmarshal=' + join_paths('${bindir}', 'glib-genmarshal'),
-> > +                'gobject_query=' + join_paths('${bindir}', 'gobject-query'),
-> > +                'glib_mkenums=' + join_paths('${bindir}', 'glib-mkenums')],
-> > +--
-> > +2.33.0
-> > +
->
-I am wondering if this could be upstreamed by adding a meson option?
-Other than that, it looks good to me!
-
-Adam
->
->
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RHJvcCBmb3VydGggcGF0Y2ggYW5kIGRpc2FibGUgb2JqY29weSBhcyBzdWdnZXN0ZWQgYnkgdXBz
+dHJlYW0gaW4KaHR0cHM6Ly9idWdzLmdob3N0c2NyaXB0LmNvbS9zaG93X2J1Zy5jZ2k/aWQ9NzA0
+NDQyI2MyCgpUaGlzIHdpbGwgYWxzbyBmaXggdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIG9u
+IHNwYXJjOgoKICAgIE9CSkNPUFkgYnVpbGQvcmVsZWFzZS9yZXNvdXJjZXMvZm9udHMvdXJ3L0Rp
+bmdiYXRzLmNmZi5vCi9ob21lL2J1aWxkcm9vdC9hdXRvYnVpbGQvaW5zdGFuY2UtMy9vdXRwdXQt
+MS9ob3N0L29wdC9leHQtdG9vbGNoYWluL2Jpbi8uLi9saWIvZ2NjL3NwYXJjNjQtYnVpbGRyb290
+LWxpbnV4LWdudS85LjMuMC8uLi8uLi8uLi8uLi9zcGFyYzY0LWJ1aWxkcm9vdC1saW51eC1nbnUv
+YmluL2xkOiAtLXJlbGF4IGFuZCAtciBtYXkgbm90IGJlIHVzZWQgdG9nZXRoZXIKCldoaWxlIGF0
+IGl0LCBkcm9wIE1VUERGX0RJU0FCTEVfT1BFTkdMIGFuZCB1c2UgdGhlIG5ldyBNVVBERl9NQUtF
+X09QVFMKdmFyaWFibGUKCkZpeGVzOgogLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcv
+cmVzdWx0cy9lNjRkNDU2MTc0YTBmNzAxYzBlMGRlNjgzMTdkZWJjZGM0MjlhNjYwCgpTaWduZWQt
+b2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0t
+CiAuLi5maWxlLWNvbXBpbGUtaGV4ZHVtcC5leGUtd2l0aC1IT1NUQ0MucGF0Y2ggfCA0MCArKysr
+KysrKysrKysrKysrKwogLi4uMDA0LVVzZS1DQy1pbnN0ZWFkLW9mLUxELWZvci1PQkpDT1BZLnBh
+dGNoIHwgNDMgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9tdXBkZi9tdXBkZi5tayAgICAg
+ICAgICAgICAgICAgICAgICAgIHwgMTcgKysrKystLS0KIDMgZmlsZXMgY2hhbmdlZCwgNTAgaW5z
+ZXJ0aW9ucygrKSwgNTAgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9t
+dXBkZi8wMDA0LU1ha2VmaWxlLWNvbXBpbGUtaGV4ZHVtcC5leGUtd2l0aC1IT1NUQ0MucGF0Y2gK
+IGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQtb2Yt
+TEQtZm9yLU9CSkNPUFkucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL211cGRmLzAwMDQtTWFr
+ZWZpbGUtY29tcGlsZS1oZXhkdW1wLmV4ZS13aXRoLUhPU1RDQy5wYXRjaCBiL3BhY2thZ2UvbXVw
+ZGYvMDAwNC1NYWtlZmlsZS1jb21waWxlLWhleGR1bXAuZXhlLXdpdGgtSE9TVENDLnBhdGNoCm5l
+dyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmJjOWRlYmQzMzIKLS0tIC9kZXYv
+bnVsbAorKysgYi9wYWNrYWdlL211cGRmLzAwMDQtTWFrZWZpbGUtY29tcGlsZS1oZXhkdW1wLmV4
+ZS13aXRoLUhPU1RDQy5wYXRjaApAQCAtMCwwICsxLDQwIEBACitGcm9tIGMwMDM2NTczYTk5NWRj
+NzhkM2NmNjBhMzBmZjBhZjJiNDdmMzY4MGEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9t
+OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KK0RhdGU6IFN1
+biwgMTQgTm92IDIwMjEgMjM6MjQ6MjcgKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gTWFrZWZpbGU6
+IGNvbXBpbGUgaGV4ZHVtcC5leGUgd2l0aCBIT1NUQ0MKKworaGV4ZHVtcC5leGUgbXVzdCBiZSBj
+b21waWxlZCBmb3IgdGhlIGhvc3Qgb3IgdGhlIGJ1aWxkIHdpbGwgZmFpbCB3aGVuCitjcm9zcy1j
+b21waWxpbmcgd2l0aCBIQVZFX09CSkNPUFk9bm8KKworU2lnbmVkLW9mZi1ieTogRmFicmljZSBG
+b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CitbVXBzdHJlYW0gc3RhdHVzOiBo
+dHRwczovL2J1Z3MuZ2hvc3RzY3JpcHQuY29tL3Nob3dfYnVnLmNnaT9pZD03MDQ0NDJdCistLS0K
+KyBNYWtlZmlsZSB8IDUgKysrKysKKyAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCisK
+K2RpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCitpbmRleCA2NDkyYjFjYTMuLjA3MzJi
+MzU4ZiAxMDA2NDQKKy0tLSBhL01ha2VmaWxlCisrKysgYi9NYWtlZmlsZQorQEAgLTYwLDYgKzYw
+LDggQEAgQVJfQ01EID0gJChRVUlFVF9BUikgJChNS1RHVERJUikgOyAkKEFSKSBjciAkQCAkXgor
+IGlmZGVmIFJBTkxJQgorICAgUkFOTElCX0NNRCA9ICQoUVVJRVRfUkFOTElCKSAkKFJBTkxJQikg
+JEAKKyBlbmRpZgorK0hPU1RDQyA/PSAkKENDKQorK0hPU1RfTElOS19DTUQgPSAkKFFVSUVUX0xJ
+TkspICQoTUtUR1RESVIpIDsgJChIT1NUQ0MpIC1vICRAICReCisgTElOS19DTUQgPSAkKFFVSUVU
+X0xJTkspICQoTUtUR1RESVIpIDsgJChDQykgJChMREZMQUdTKSAtbyAkQCAkXiAkKExJQlMpCisg
+VEFHU19DTUQgPSAkKFFVSUVUX1RBR1MpIGN0YWdzIC1SIC0tYy1raW5kcz0rcCAtLWV4Y2x1ZGU9
+cGxhdGZvcm0vcHl0aG9uIC0tZXhjbHVkZT1wbGF0Zm9ybS9jKysKKyBXSU5EUkVTX0NNRCA9ICQo
+UVVJRVRfV0lORFJFUykgJChNS1RHVERJUikgOyAkKFdJTkRSRVMpICQ8ICRACitAQCAtODEsNiAr
+ODMsOSBAQCAkKE9VVCkvJS5hIDoKKyAJJChBUl9DTUQpCisgCSQoUkFOTElCX0NNRCkKKyAKKysk
+KE9VVCkvc2NyaXB0cy9oZXhkdW1wLmV4ZTogc2NyaXB0cy9oZXhkdW1wLmMKKysJJChIT1NUX0xJ
+TktfQ01EKQorKworICQoT1VUKS8lLmV4ZTogJS5jCisgCSQoTElOS19DTUQpCisgCistLSAKKzIu
+MzMuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQtb2Yt
+TEQtZm9yLU9CSkNPUFkucGF0Y2ggYi9wYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQt
+b2YtTEQtZm9yLU9CSkNPUFkucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDBl
+MGFhZGQyOWQuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9tdXBkZi8wMDA0LVVzZS1DQy1pbnN0
+ZWFkLW9mLUxELWZvci1PQkpDT1BZLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNDMgKzAsMCBA
+QAotRnJvbSBkYTRiOTg0NDc1NzNkYWY3NzgyOTgxMWU5NWUzNzcyZThhMjk2OTM0IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQotRnJvbTogPT9VVEYtOD9xP1JhcGhhPUMzPUFCbD0yME09QzM9QTls
+b3R0ZT89IDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KLURhdGU6IFRodSwgMiBTZXAgMjAyMSAy
+MDoxNzoyNiArMDIwMAotU3ViamVjdDogW1BBVENIXSBVc2UgQ0MgaW5zdGVhZCBvZiBMRCBmb3Ig
+T0JKQ09QWQotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hh
+cnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1XaGVuIGNyb3Nz
+LWNvbXBpbGluZyBmb3IgbWlwcyB0YXJnZXRzIHVzaW5nIEJ1aWxkcm9vdCwgdXNpbmcgTEQgZm9y
+Ci1wYXJ0aWFsIGxpbmtpbmcgZmFpbHMgaW4gdGhlIGZvbGxvd2luZyB3YXk6Ci0vdG1wL2luc3Rh
+bmNlLTEvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGliL2djYy9taXBz
+NjRlbC1idWlsZHJvb3QtbGludXgtdWNsaWJjLzguNC4wLy4uLy4uLy4uLy4uL21pcHM2NGVsLWJ1
+aWxkcm9vdC1saW51eC11Y2xpYmMvYmluL2xkOiBidWlsZC9yZWxlYXNlL2xpYm11cGRmLmEoRGlu
+Z2JhdHMuY2ZmLm8pOiBBQkkgaXMgaW5jb21wYXRpYmxlIHdpdGggdGhhdCBvZiB0aGUgc2VsZWN0
+ZWQgZW11bGF0aW9uCi0vdG1wL2luc3RhbmNlLTEvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xj
+aGFpbi9iaW4vLi4vbGliL2djYy9taXBzNjRlbC1idWlsZHJvb3QtbGludXgtdWNsaWJjLzguNC4w
+Ly4uLy4uLy4uLy4uL21pcHM2NGVsLWJ1aWxkcm9vdC1saW51eC11Y2xpYmMvYmluL2xkOiBmYWls
+ZWQgdG8gbWVyZ2UgdGFyZ2V0IHNwZWNpZmljIGRhdGEgb2YgZmlsZSBidWlsZC9yZWxlYXNlL2xp
+Ym11cGRmLmEoRGluZ2JhdHMuY2ZmLm8pCi0KLVRvIGZpeCBpdCwgdXNlIENDIGluc3RlYWQgb2Yg
+TEQgZm9yIHBhcnRpYWwgbGlua2luZy4KLQotJ25vc3RkbGliJyBoYXMgdG8gYmUgYWRkZWQsIG9y
+IGl0IHdpbGwgdHJ5IHRvIHVzZSBHQ0MgbGlicmFyaWVzIGZvcgotcGFydGlhbCBsaW5raW5nIGFu
+ZCBmYWlsIHdpdGggJ2Nhbm5vdCBmaW5kIC1sZ2NjX3MnLgotCi1GaXhlczoKLS0gaHR0cDovL2F1
+dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvMTU2ZmU5ZWU1ZjZkY2NkYzk4OTkwZjZjNWRl
+NTU2MjM4M2JjMmI3NAotCi1TaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFl
+bC5tZWxvdHRlQG1pbmQuYmU+Ci1bVXBzdHJlYW0gc3RhdHVzOiBodHRwczovL2J1Z3MuZ2hvc3Rz
+Y3JpcHQuY29tL3Nob3dfYnVnLmNnaT9pZD03MDQ0NDJdCi0tLS0KLSBNYWtlZmlsZSB8IDIgKy0K
+LSAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKLQotZGlmZiAt
+LWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKLWluZGV4IGIwZmI2MTdlMi4uMGE4Nzk1ZTBlIDEw
+MDY0NAotLS0tIGEvTWFrZWZpbGUKLSsrKyBiL01ha2VmaWxlCi1AQCAtNjQsNyArNjQsNyBAQCBl
+bmRpZgotIExJTktfQ01EID0gJChRVUlFVF9MSU5LKSAkKE1LVEdURElSKSA7ICQoQ0MpICQoTERG
+TEFHUykgLW8gJEAgJF4gJChMSUJTKQotIFRBR1NfQ01EID0gJChRVUlFVF9UQUdTKSBjdGFncyAt
+UiAtLWMta2luZHM9K3AKLSBXSU5EUkVTX0NNRCA9ICQoUVVJRVRfV0lORFJFUykgJChNS1RHVERJ
+UikgOyAkKFdJTkRSRVMpICQ8ICRACi0tT0JKQ09QWV9DTUQgPSAkKFFVSUVUX09CSkNPUFkpICQo
+TUtUR1RESVIpIDsgJChMRCkgLXIgLWIgYmluYXJ5IC16IG5vZXhlY3N0YWNrIC1vICRAICQ8Ci0r
+T0JKQ09QWV9DTUQgPSAkKFFVSUVUX09CSkNPUFkpICQoTUtUR1RESVIpIDsgJChDQykgLVdsLC1y
+IC1XbCwtYiAtV2wsYmluYXJ5IC1XbCwteiAtV2wsbm9leGVjc3RhY2sgLW5vc3RkbGliIC1vICRA
+ICQ8Ci0gCi0gIyAtLS0gUnVsZXMgLS0tCi0gCi0tLSAKLTIuMzMuMAotCmRpZmYgLS1naXQgYS9w
+YWNrYWdlL211cGRmL211cGRmLm1rIGIvcGFja2FnZS9tdXBkZi9tdXBkZi5tawppbmRleCBjOWQ1
+YjRhMTYyLi41NmVhN2NjNTA3IDEwMDY0NAotLS0gYS9wYWNrYWdlL211cGRmL211cGRmLm1rCisr
+KyBiL3BhY2thZ2UvbXVwZGYvbXVwZGYubWsKQEAgLTUyLDI1ICs1MiwyOCBAQCBNVVBERl9NQUtF
+X0VOViA9ICQoVEFSR0VUX01BS0VfRU5WKSAkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgXAogCVhM
+SUJTPSIkKE1VUERGX0xERkxBR1MpIiBcCiAJVVNFX1NZU1RFTV9MSUJTPXllcwogCitNVVBERl9N
+QUtFX09QVFMgPSBcCisJSEFWRV9PQkpDT1BZPW5vIFwKKwlwcmVmaXg9Ii91c3IiCisKIGlmZXEg
+KCQoQlIyX1BBQ0tBR0VfTElCRlJFRUdMVVQpLHkpCiBNVVBERl9ERVBFTkRFTkNJRVMgKz0gbGli
+ZnJlZWdsdXQKIGVsc2UKLWRlZmluZSBNVVBERl9ESVNBQkxFX09QRU5HTAotCXNlZCAtaSAncy9I
+QVZFX0dMVVQgOj0geWVzL0hBVkVfR0xVVCA6PSBuby9nJyAkKEBEKS9NYWtlcnVsZXMKLWVuZGVm
+Ci1NVVBERl9QT1NUX1BBVENIX0hPT0tTID0gTVVQREZfRElTQUJMRV9PUEVOR0wKK01VUERGX01B
+S0VfT1BUUyArPSBIQVZFX0dMVVQ9bm8KIGVuZGlmCiAKIGRlZmluZSBNVVBERl9CVUlMRF9DTURT
+Ci0JJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSBhbGwKKwkkKE1VUERGX01BS0Vf
+RU5WKSAkKE1BS0UpIC1DICQoQEQpICQoTVVQREZfTUFLRV9PUFRTKSBhbGwKIGVuZGVmCiAKIGRl
+ZmluZSBNVVBERl9JTlNUQUxMX1NUQUdJTkdfQ01EUwotCSQoTVVQREZfTUFLRV9FTlYpICQoTUFL
+RSkgLUMgJChARCkgREVTVERJUj0iJChTVEFHSU5HX0RJUikiIHByZWZpeD0iL3VzciIgaW5zdGFs
+bF9saWJzCisJJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSAkKE1VUERGX01BS0Vf
+T1BUUykgXAorCQlERVNURElSPSIkKFNUQUdJTkdfRElSKSIgaW5zdGFsbF9saWJzCiBlbmRlZgog
+CiBkZWZpbmUgTVVQREZfSU5TVEFMTF9UQVJHRVRfQ01EUwotCSQoTVVQREZfTUFLRV9FTlYpICQo
+TUFLRSkgLUMgJChARCkgREVTVERJUj0iJChUQVJHRVRfRElSKSIgcHJlZml4PSIvdXNyIiBpbnN0
+YWxsCisJJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSAkKE1VUERGX01BS0VfT1BU
+UykgXAorCQlERVNURElSPSIkKFRBUkdFVF9ESVIpIiBpbnN0YWxsCiBlbmRlZgogCiAkKGV2YWwg
+JChnZW5lcmljLXBhY2thZ2UpKQotLSAKMi4zMy4wCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
