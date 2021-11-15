@@ -2,84 +2,71 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1812C43217
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3BEC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:02:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4A21A63337
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4A21A63337
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+	by mail.kernel.org (Postfix) with ESMTPS id 2C90661A6C
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:02:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C90661A6C
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F01E605D2;
-	Mon, 15 Nov 2021 17:36:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFDFB6066E;
+	Mon, 15 Nov 2021 18:02:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dhwkeg1-7Cfh; Mon, 15 Nov 2021 17:36:00 +0000 (UTC)
+	with ESMTP id ZeyToLWN49jy; Mon, 15 Nov 2021 18:02:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35E366066E;
-	Mon, 15 Nov 2021 17:35:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A2C471BF40F
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:35:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13DAE606E9;
+	Mon, 15 Nov 2021 18:02:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EF631BF40F
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91AAE40242
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:35:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B4C680DB9
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:02:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XY5IWcNw7Lzf for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 17:35:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7922E401EC
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 17:35:57 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id u1so32245424wru.13
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 09:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NNDfXCRk9Utf5vI72H+tEqJnxHMzIXi2TLNM2JvQPC0=;
- b=W/0+bA1CIag9a4Y6448B3XMxuDOaxy2MjyIy1iIVRgEauotHk7/qfiCcNL9ud/+ocx
- kzEcZg5pRS5GP/L0F6zDfy86fh2ysvd4ulI075eNE8tXHEme5rJfrXxzo061N0AJcLqS
- d8sGryF2EV89wgntMISXQXatNHbBtWg/CjyhmPqO+cJ80KSCDrgTnKoacFDPJuMHSBKC
- 7ObCdb7UpFPV5uVxxf28Ze19IgpvgzsGzAmDvZM3UcI4JwSiauVLZBVdxFGgHvBOMDPJ
- ibwBW6SL6MWLX3ncz1D6UQ/xznvHDXPziUR8yVmcKIrsU76xZ2S1BbVNcIx4yxu982xO
- cEsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=NNDfXCRk9Utf5vI72H+tEqJnxHMzIXi2TLNM2JvQPC0=;
- b=mcHW+ZCEptfx2wDiL/+0RNW9LgAIwZgBGlI636g9XqXXQGuxC8MsN3GaoVz881SPlS
- cUOnwmmoH5e70ds0XXVSigtWO4FSZJGL/LzYFHMQ9j35ebMLuJY6jaM95Xy0338dCuNX
- Q9b4GraD+9euafUTYxAh7mtSnxOQVGDq4aQSM/YGrWRsI3HM9oEcx8dS5M4MB7SwuXBL
- 7YebCVwPrebKY90fXz0gI8dSJGzrG9X9R2sfF6UZuYUOTNgSBqWOYgM4Ku2i1oYpjgpu
- cU6Qfrml0SBIcFr0HS+tN9EoDHfxwNiY2tdQ9xC5rgIyzKVRlf06BI9jYtgbC32lP5J7
- mMAg==
-X-Gm-Message-State: AOAM530UJGCV97TwaxzfpPMyu4FxXM0rU2EXR4JcGHWCj1ohqtiUDZpc
- TtxdOwWxNOoTxOnMyQjWBsf39eiX3Ec=
-X-Google-Smtp-Source: ABdhPJxmLNolV/lucua+LmsQMWVvUeCbFmEt5TL266Ja04RvYwdpM0m2fFS27Btuo7rm1ULyFSA9oQ==
-X-Received: by 2002:a05:6000:1a88:: with SMTP id
- f8mr968512wry.54.1636997755437; 
- Mon, 15 Nov 2021 09:35:55 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id m20sm22480486wmq.11.2021.11.15.09.35.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Nov 2021 09:35:54 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 15 Nov 2021 18:33:44 +0100
-Message-Id: <20211115173344.3861620-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O5uBQT81cs67 for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 18:02:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D271B80CA2
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 18:02:08 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.138.59])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id mgIumSvng6mmLmgIumUpEe; Mon, 15 Nov 2021 19:02:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1636999326; bh=6No35a/OEYlNcU9cPbRMtAkDHl9bLso7YxJj3r0ph7s=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=lIGryDhL7AHitCR7H6Maly4zDcnBQzSoVOvElhOh50mMYP8IRXq79XAzh6GecLPHe
+ IhoW//8LwyqL6LixAOv2wsMHiRzX3u2l9MSpjJDP2dhHNhDNKbL0umRGrDA3MF+8en
+ XVSGkbIbH7PgUQtQYXBEwu+Dz8wtTlLq9JAOCDyM+VTAPYVo+3A38VcQ8HOcKPi7Ng
+ Hm+VTAjoHIjhVPcwNMgvrS+oSkEXJsUWChpfYfXc9PLKqpW7HdIctQQZF3h0R5E8i0
+ p384GYyuajvHDxHy5zji9aXqMkefjJyx8cBKuhnHjrX31/xgPdKOBA31/Bzx3T0gTg
+ eY/JM1fLJ8y7w==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Nov 2021 19:02:03 +0100
+Message-Id: <20211115180203.1358402-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211114150806.2e39e94c@windsurf>
+References: <20211114150806.2e39e94c@windsurf>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mupdf: disable objcopy
+X-CMAE-Envelope: MS4wfAgNuBfhCln5RxMOvPIr0XlgJFoIrxU/NHncrIFk0Em0tg5yTXA8O0NhS/1MqCTe/nRAID1UY4419oGDxaCh0a0DfDzWCdrzqn9+MonvSeH+tjm4Xawk
+ IzhRIfVnhKHLJmqWduT1wQMu8xc6GinT78u+EhQe9K9IbKd89aOiSxgZz+sxjn5ysvNwX9tqhHE2e+7jNkB6nH7oDzQEpof4aQ9MCWNSY4U9vG/1eZMpo5a+
+ Xbwz6CrvbbGH4WOzJJ1dLf/eqbRAVqmQycAQXPc8oJLUWOIMlUa0gLvRlV1arNnrWa5eWRpBPp36aYdsyNBMpFWqEVOFjJXlP4kt5V2wCPRFdLdBjU4VqBXn
+ 1gegogIjl2CdNDUBlH+AYxjY6XkbW7j3e00gdSzPRuyDTGJz9sTHcmiN7Xnmnmd3W+Bd5pezC0UzoCir9O0GGczfr5Jw66rgbFIvVKMGMe45pJ3WPsrBvryJ
+ a1vY6zGi1yEbeRnBdz01bBJ7zGLpjwseBhxcbqMeXTVvTFVOCrTMM6E53JmtTIpNMDusesSOqcYB/sQcli9zpBiJdgltZUCRGIl8RFzH3kn21/oMaXz3SCLh
+ eZo+jTLIxD0pPesJ5ersPUploC9tfcg9aWTHpYjipQnZMJY3A9+D7oww3C70aJvH6CjSf1exCzaawZ200kzqUjpS6bOkPHX8BCrVt6xUXaEt/w==
+Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,122 +78,555 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Samuel Martin <s.martin49@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Simon Dawson <spdawson@gmail.com>,
+ Julien Corjon <corjon.j@ecagroup.com>, Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RHJvcCBmb3VydGggcGF0Y2ggYW5kIGRpc2FibGUgb2JqY29weSBhcyBzdWdnZXN0ZWQgYnkgdXBz
-dHJlYW0gaW4KaHR0cHM6Ly9idWdzLmdob3N0c2NyaXB0LmNvbS9zaG93X2J1Zy5jZ2k/aWQ9NzA0
-NDQyI2MyCgpUaGlzIHdpbGwgYWxzbyBmaXggdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIG9u
-IHNwYXJjOgoKICAgIE9CSkNPUFkgYnVpbGQvcmVsZWFzZS9yZXNvdXJjZXMvZm9udHMvdXJ3L0Rp
-bmdiYXRzLmNmZi5vCi9ob21lL2J1aWxkcm9vdC9hdXRvYnVpbGQvaW5zdGFuY2UtMy9vdXRwdXQt
-MS9ob3N0L29wdC9leHQtdG9vbGNoYWluL2Jpbi8uLi9saWIvZ2NjL3NwYXJjNjQtYnVpbGRyb290
-LWxpbnV4LWdudS85LjMuMC8uLi8uLi8uLi8uLi9zcGFyYzY0LWJ1aWxkcm9vdC1saW51eC1nbnUv
-YmluL2xkOiAtLXJlbGF4IGFuZCAtciBtYXkgbm90IGJlIHVzZWQgdG9nZXRoZXIKCldoaWxlIGF0
-IGl0LCBkcm9wIE1VUERGX0RJU0FCTEVfT1BFTkdMIGFuZCB1c2UgdGhlIG5ldyBNVVBERl9NQUtF
-X09QVFMKdmFyaWFibGUKCkZpeGVzOgogLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcv
-cmVzdWx0cy9lNjRkNDU2MTc0YTBmNzAxYzBlMGRlNjgzMTdkZWJjZGM0MjlhNjYwCgpTaWduZWQt
-b2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KLS0t
-CiAuLi5maWxlLWNvbXBpbGUtaGV4ZHVtcC5leGUtd2l0aC1IT1NUQ0MucGF0Y2ggfCA0MCArKysr
-KysrKysrKysrKysrKwogLi4uMDA0LVVzZS1DQy1pbnN0ZWFkLW9mLUxELWZvci1PQkpDT1BZLnBh
-dGNoIHwgNDMgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9tdXBkZi9tdXBkZi5tayAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgMTcgKysrKystLS0KIDMgZmlsZXMgY2hhbmdlZCwgNTAgaW5z
-ZXJ0aW9ucygrKSwgNTAgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9t
-dXBkZi8wMDA0LU1ha2VmaWxlLWNvbXBpbGUtaGV4ZHVtcC5leGUtd2l0aC1IT1NUQ0MucGF0Y2gK
-IGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQtb2Yt
-TEQtZm9yLU9CSkNPUFkucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL211cGRmLzAwMDQtTWFr
-ZWZpbGUtY29tcGlsZS1oZXhkdW1wLmV4ZS13aXRoLUhPU1RDQy5wYXRjaCBiL3BhY2thZ2UvbXVw
-ZGYvMDAwNC1NYWtlZmlsZS1jb21waWxlLWhleGR1bXAuZXhlLXdpdGgtSE9TVENDLnBhdGNoCm5l
-dyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmJjOWRlYmQzMzIKLS0tIC9kZXYv
-bnVsbAorKysgYi9wYWNrYWdlL211cGRmLzAwMDQtTWFrZWZpbGUtY29tcGlsZS1oZXhkdW1wLmV4
-ZS13aXRoLUhPU1RDQy5wYXRjaApAQCAtMCwwICsxLDQwIEBACitGcm9tIGMwMDM2NTczYTk5NWRj
-NzhkM2NmNjBhMzBmZjBhZjJiNDdmMzY4MGEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9t
-OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KK0RhdGU6IFN1
-biwgMTQgTm92IDIwMjEgMjM6MjQ6MjcgKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gTWFrZWZpbGU6
-IGNvbXBpbGUgaGV4ZHVtcC5leGUgd2l0aCBIT1NUQ0MKKworaGV4ZHVtcC5leGUgbXVzdCBiZSBj
-b21waWxlZCBmb3IgdGhlIGhvc3Qgb3IgdGhlIGJ1aWxkIHdpbGwgZmFpbCB3aGVuCitjcm9zcy1j
-b21waWxpbmcgd2l0aCBIQVZFX09CSkNPUFk9bm8KKworU2lnbmVkLW9mZi1ieTogRmFicmljZSBG
-b250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CitbVXBzdHJlYW0gc3RhdHVzOiBo
-dHRwczovL2J1Z3MuZ2hvc3RzY3JpcHQuY29tL3Nob3dfYnVnLmNnaT9pZD03MDQ0NDJdCistLS0K
-KyBNYWtlZmlsZSB8IDUgKysrKysKKyAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCisK
-K2RpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCitpbmRleCA2NDkyYjFjYTMuLjA3MzJi
-MzU4ZiAxMDA2NDQKKy0tLSBhL01ha2VmaWxlCisrKysgYi9NYWtlZmlsZQorQEAgLTYwLDYgKzYw
-LDggQEAgQVJfQ01EID0gJChRVUlFVF9BUikgJChNS1RHVERJUikgOyAkKEFSKSBjciAkQCAkXgor
-IGlmZGVmIFJBTkxJQgorICAgUkFOTElCX0NNRCA9ICQoUVVJRVRfUkFOTElCKSAkKFJBTkxJQikg
-JEAKKyBlbmRpZgorK0hPU1RDQyA/PSAkKENDKQorK0hPU1RfTElOS19DTUQgPSAkKFFVSUVUX0xJ
-TkspICQoTUtUR1RESVIpIDsgJChIT1NUQ0MpIC1vICRAICReCisgTElOS19DTUQgPSAkKFFVSUVU
-X0xJTkspICQoTUtUR1RESVIpIDsgJChDQykgJChMREZMQUdTKSAtbyAkQCAkXiAkKExJQlMpCisg
-VEFHU19DTUQgPSAkKFFVSUVUX1RBR1MpIGN0YWdzIC1SIC0tYy1raW5kcz0rcCAtLWV4Y2x1ZGU9
-cGxhdGZvcm0vcHl0aG9uIC0tZXhjbHVkZT1wbGF0Zm9ybS9jKysKKyBXSU5EUkVTX0NNRCA9ICQo
-UVVJRVRfV0lORFJFUykgJChNS1RHVERJUikgOyAkKFdJTkRSRVMpICQ8ICRACitAQCAtODEsNiAr
-ODMsOSBAQCAkKE9VVCkvJS5hIDoKKyAJJChBUl9DTUQpCisgCSQoUkFOTElCX0NNRCkKKyAKKysk
-KE9VVCkvc2NyaXB0cy9oZXhkdW1wLmV4ZTogc2NyaXB0cy9oZXhkdW1wLmMKKysJJChIT1NUX0xJ
-TktfQ01EKQorKworICQoT1VUKS8lLmV4ZTogJS5jCisgCSQoTElOS19DTUQpCisgCistLSAKKzIu
-MzMuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQtb2Yt
-TEQtZm9yLU9CSkNPUFkucGF0Y2ggYi9wYWNrYWdlL211cGRmLzAwMDQtVXNlLUNDLWluc3RlYWQt
-b2YtTEQtZm9yLU9CSkNPUFkucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDBl
-MGFhZGQyOWQuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9tdXBkZi8wMDA0LVVzZS1DQy1pbnN0
-ZWFkLW9mLUxELWZvci1PQkpDT1BZLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNDMgKzAsMCBA
-QAotRnJvbSBkYTRiOTg0NDc1NzNkYWY3NzgyOTgxMWU5NWUzNzcyZThhMjk2OTM0IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQotRnJvbTogPT9VVEYtOD9xP1JhcGhhPUMzPUFCbD0yME09QzM9QTls
-b3R0ZT89IDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KLURhdGU6IFRodSwgMiBTZXAgMjAyMSAy
-MDoxNzoyNiArMDIwMAotU3ViamVjdDogW1BBVENIXSBVc2UgQ0MgaW5zdGVhZCBvZiBMRCBmb3Ig
-T0JKQ09QWQotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hh
-cnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1XaGVuIGNyb3Nz
-LWNvbXBpbGluZyBmb3IgbWlwcyB0YXJnZXRzIHVzaW5nIEJ1aWxkcm9vdCwgdXNpbmcgTEQgZm9y
-Ci1wYXJ0aWFsIGxpbmtpbmcgZmFpbHMgaW4gdGhlIGZvbGxvd2luZyB3YXk6Ci0vdG1wL2luc3Rh
-bmNlLTEvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGliL2djYy9taXBz
-NjRlbC1idWlsZHJvb3QtbGludXgtdWNsaWJjLzguNC4wLy4uLy4uLy4uLy4uL21pcHM2NGVsLWJ1
-aWxkcm9vdC1saW51eC11Y2xpYmMvYmluL2xkOiBidWlsZC9yZWxlYXNlL2xpYm11cGRmLmEoRGlu
-Z2JhdHMuY2ZmLm8pOiBBQkkgaXMgaW5jb21wYXRpYmxlIHdpdGggdGhhdCBvZiB0aGUgc2VsZWN0
-ZWQgZW11bGF0aW9uCi0vdG1wL2luc3RhbmNlLTEvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xj
-aGFpbi9iaW4vLi4vbGliL2djYy9taXBzNjRlbC1idWlsZHJvb3QtbGludXgtdWNsaWJjLzguNC4w
-Ly4uLy4uLy4uLy4uL21pcHM2NGVsLWJ1aWxkcm9vdC1saW51eC11Y2xpYmMvYmluL2xkOiBmYWls
-ZWQgdG8gbWVyZ2UgdGFyZ2V0IHNwZWNpZmljIGRhdGEgb2YgZmlsZSBidWlsZC9yZWxlYXNlL2xp
-Ym11cGRmLmEoRGluZ2JhdHMuY2ZmLm8pCi0KLVRvIGZpeCBpdCwgdXNlIENDIGluc3RlYWQgb2Yg
-TEQgZm9yIHBhcnRpYWwgbGlua2luZy4KLQotJ25vc3RkbGliJyBoYXMgdG8gYmUgYWRkZWQsIG9y
-IGl0IHdpbGwgdHJ5IHRvIHVzZSBHQ0MgbGlicmFyaWVzIGZvcgotcGFydGlhbCBsaW5raW5nIGFu
-ZCBmYWlsIHdpdGggJ2Nhbm5vdCBmaW5kIC1sZ2NjX3MnLgotCi1GaXhlczoKLS0gaHR0cDovL2F1
-dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvMTU2ZmU5ZWU1ZjZkY2NkYzk4OTkwZjZjNWRl
-NTU2MjM4M2JjMmI3NAotCi1TaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFl
-bC5tZWxvdHRlQG1pbmQuYmU+Ci1bVXBzdHJlYW0gc3RhdHVzOiBodHRwczovL2J1Z3MuZ2hvc3Rz
-Y3JpcHQuY29tL3Nob3dfYnVnLmNnaT9pZD03MDQ0NDJdCi0tLS0KLSBNYWtlZmlsZSB8IDIgKy0K
-LSAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKLQotZGlmZiAt
-LWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKLWluZGV4IGIwZmI2MTdlMi4uMGE4Nzk1ZTBlIDEw
-MDY0NAotLS0tIGEvTWFrZWZpbGUKLSsrKyBiL01ha2VmaWxlCi1AQCAtNjQsNyArNjQsNyBAQCBl
-bmRpZgotIExJTktfQ01EID0gJChRVUlFVF9MSU5LKSAkKE1LVEdURElSKSA7ICQoQ0MpICQoTERG
-TEFHUykgLW8gJEAgJF4gJChMSUJTKQotIFRBR1NfQ01EID0gJChRVUlFVF9UQUdTKSBjdGFncyAt
-UiAtLWMta2luZHM9K3AKLSBXSU5EUkVTX0NNRCA9ICQoUVVJRVRfV0lORFJFUykgJChNS1RHVERJ
-UikgOyAkKFdJTkRSRVMpICQ8ICRACi0tT0JKQ09QWV9DTUQgPSAkKFFVSUVUX09CSkNPUFkpICQo
-TUtUR1RESVIpIDsgJChMRCkgLXIgLWIgYmluYXJ5IC16IG5vZXhlY3N0YWNrIC1vICRAICQ8Ci0r
-T0JKQ09QWV9DTUQgPSAkKFFVSUVUX09CSkNPUFkpICQoTUtUR1RESVIpIDsgJChDQykgLVdsLC1y
-IC1XbCwtYiAtV2wsYmluYXJ5IC1XbCwteiAtV2wsbm9leGVjc3RhY2sgLW5vc3RkbGliIC1vICRA
-ICQ8Ci0gCi0gIyAtLS0gUnVsZXMgLS0tCi0gCi0tLSAKLTIuMzMuMAotCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL211cGRmL211cGRmLm1rIGIvcGFja2FnZS9tdXBkZi9tdXBkZi5tawppbmRleCBjOWQ1
-YjRhMTYyLi41NmVhN2NjNTA3IDEwMDY0NAotLS0gYS9wYWNrYWdlL211cGRmL211cGRmLm1rCisr
-KyBiL3BhY2thZ2UvbXVwZGYvbXVwZGYubWsKQEAgLTUyLDI1ICs1MiwyOCBAQCBNVVBERl9NQUtF
-X0VOViA9ICQoVEFSR0VUX01BS0VfRU5WKSAkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgXAogCVhM
-SUJTPSIkKE1VUERGX0xERkxBR1MpIiBcCiAJVVNFX1NZU1RFTV9MSUJTPXllcwogCitNVVBERl9N
-QUtFX09QVFMgPSBcCisJSEFWRV9PQkpDT1BZPW5vIFwKKwlwcmVmaXg9Ii91c3IiCisKIGlmZXEg
-KCQoQlIyX1BBQ0tBR0VfTElCRlJFRUdMVVQpLHkpCiBNVVBERl9ERVBFTkRFTkNJRVMgKz0gbGli
-ZnJlZWdsdXQKIGVsc2UKLWRlZmluZSBNVVBERl9ESVNBQkxFX09QRU5HTAotCXNlZCAtaSAncy9I
-QVZFX0dMVVQgOj0geWVzL0hBVkVfR0xVVCA6PSBuby9nJyAkKEBEKS9NYWtlcnVsZXMKLWVuZGVm
-Ci1NVVBERl9QT1NUX1BBVENIX0hPT0tTID0gTVVQREZfRElTQUJMRV9PUEVOR0wKK01VUERGX01B
-S0VfT1BUUyArPSBIQVZFX0dMVVQ9bm8KIGVuZGlmCiAKIGRlZmluZSBNVVBERl9CVUlMRF9DTURT
-Ci0JJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSBhbGwKKwkkKE1VUERGX01BS0Vf
-RU5WKSAkKE1BS0UpIC1DICQoQEQpICQoTVVQREZfTUFLRV9PUFRTKSBhbGwKIGVuZGVmCiAKIGRl
-ZmluZSBNVVBERl9JTlNUQUxMX1NUQUdJTkdfQ01EUwotCSQoTVVQREZfTUFLRV9FTlYpICQoTUFL
-RSkgLUMgJChARCkgREVTVERJUj0iJChTVEFHSU5HX0RJUikiIHByZWZpeD0iL3VzciIgaW5zdGFs
-bF9saWJzCisJJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSAkKE1VUERGX01BS0Vf
-T1BUUykgXAorCQlERVNURElSPSIkKFNUQUdJTkdfRElSKSIgaW5zdGFsbF9saWJzCiBlbmRlZgog
-CiBkZWZpbmUgTVVQREZfSU5TVEFMTF9UQVJHRVRfQ01EUwotCSQoTVVQREZfTUFLRV9FTlYpICQo
-TUFLRSkgLUMgJChARCkgREVTVERJUj0iJChUQVJHRVRfRElSKSIgcHJlZml4PSIvdXNyIiBpbnN0
-YWxsCisJJChNVVBERl9NQUtFX0VOVikgJChNQUtFKSAtQyAkKEBEKSAkKE1VUERGX01BS0VfT1BU
-UykgXAorCQlERVNURElSPSIkKFRBUkdFVF9ESVIpIiBpbnN0YWxsCiBlbmRlZgogCiAkKGV2YWwg
-JChnZW5lcmljLXBhY2thZ2UpKQotLSAKMi4zMy4wCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+Bump to version 3.1.1 by:
+- requiring BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 instead of _4_8 in this
+package taking care of reverse dependencies, since now harfbuzz requires
+gcc 4.9 to be built successfully.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* take care of all reverse dependencies, not only the first order ones,
+  fix also a comment. All this is suggested by Thomas.
+---
+ package/cwiid/Config.in                        |  2 +-
+ package/enlightenment/Config.in                |  6 +++---
+ package/gstreamer1/gst1-plugins-bad/Config.in  | 12 ++++++------
+ package/gstreamer1/gst1-plugins-base/Config.in |  6 +++---
+ package/harfbuzz/Config.in                     |  6 +++---
+ package/harfbuzz/harfbuzz.hash                 |  2 +-
+ package/harfbuzz/harfbuzz.mk                   |  2 +-
+ package/libass/Config.in                       |  6 +++---
+ package/libfm/Config.in                        |  6 +++---
+ package/libgtk2/Config.in                      |  6 +++---
+ package/libgtk3/Config.in                      |  6 +++---
+ package/librsvg/Config.in                      |  6 +++---
+ package/mupdf/Config.in                        |  6 +++---
+ package/openbox/Config.in                      |  6 +++---
+ package/pango/Config.in                        |  6 +++---
+ package/pcmanfm/Config.in                      |  6 +++---
+ package/pinentry/Config.in                     |  6 +++---
+ package/python-pymupdf/Config.in               |  6 +++---
+ package/qt5/qt5base/Config.in                  |  2 +-
+ package/rrdtool/Config.in                      |  6 +++---
+ package/supertuxkart/Config.in                 |  2 +-
+ package/xscreensaver/Config.in                 |  6 +++---
+ 22 files changed, 59 insertions(+), 59 deletions(-)
+
+diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+index e03248c722..6ae2ac9405 100644
+--- a/package/cwiid/Config.in
++++ b/package/cwiid/Config.in
+@@ -18,7 +18,7 @@ if BR2_PACKAGE_CWIID
+ config BR2_PACKAGE_CWIID_WMGUI
+ 	bool "wmgui"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	depends on BR2_PACKAGE_XORG7 # libgtk2
+ 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 91cdd896f6..cd2b8cfe54 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+@@ -29,10 +29,10 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 
+ 	  http://www.enlightenment.org/
+ 
+-comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.8"
++comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 1204a65681..d678e7eb14 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -328,13 +328,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
+ 	bool "assrender"
+ 	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libass -> harfbuzz
+ 	select BR2_PACKAGE_LIBASS
+ 
+-comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
++comment "assrender plugin needs a toolchain w/ C++, gcc => 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
+ 	bool "bluez"
+@@ -563,15 +563,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
+ 	help
+ 	  RSVG plugin library
+ 
+-comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.8"
++comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index ceed55890c..7ca94d7dc4 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -293,14 +293,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  Pango-based text rendering and overlay
+ 
+-comment "pango plugin needs a toolchain w/ C++, gcc >= 4.8"
++comment "pango plugin needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+index 8bc88f4284..2e4219ee22 100644
+--- a/package/harfbuzz/Config.in
++++ b/package/harfbuzz/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	bool "harfbuzz"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  HarfBuzz is an OpenType text shaping engine
+ 
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	  Harfbuzz can make optional use of cairo, freetype,
+ 	  glib2 and icu packages if they are selected.
+ 
+-comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
++comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 97fc5a2c5f..ec1a9a59ea 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  036b0ee118451539783ec7864148bb4106be42a2eb964df4e83e6703ec46f3d9  harfbuzz-3.0.0.tar.xz
++sha256  f3f3247bdeabf36765acc237a5f651e651e4e9706582b9cc2cf6c9b8102dfa93  harfbuzz-3.1.1.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 4534d166ef..2f9a166787 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 3.0.0
++HARFBUZZ_VERSION = 3.1.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+diff --git a/package/libass/Config.in b/package/libass/Config.in
+index 803f6b4438..d7725d5e1b 100644
+--- a/package/libass/Config.in
++++ b/package/libass/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBASS
+ 	bool "libass"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_LIBFRIBIDI
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBASS
+ 
+ 	  https://github.com/libass/libass
+ 
+-comment "libass needs a toolchain w/ C++, gcc >= 4.8"
++comment "libass needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/libfm/Config.in b/package/libfm/Config.in
+index 16676fbf25..e78bc99b76 100644
+--- a/package/libfm/Config.in
++++ b/package/libfm/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFM
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
+@@ -22,9 +22,9 @@ config BR2_PACKAGE_LIBFM
+ 
+ 	  http://wiki.lxde.org/en/Libfm
+ 
+-comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index 7c5762a585..c75c37fb63 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PS
+@@ -34,10 +34,10 @@ config BR2_PACKAGE_LIBGTK2_DEMO
+ 
+ endif
+ 
+-comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 093aacac51..bc8cacd9f5 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -1,9 +1,9 @@
+-comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend"
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_ATK
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index 3272ecd773..270b524b37 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_CAIRO_SCRIPT
+@@ -21,10 +21,10 @@ config BR2_PACKAGE_LIBRSVG
+ 
+ 	  https://wiki.gnome.org/Projects/LibRsvg
+ 
+-comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+index ff176f4b99..cf97711160 100644
+--- a/package/mupdf/Config.in
++++ b/package/mupdf/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_MUPDF
+ 	bool "mupdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GUMBO_PARSER
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_MUPDF
+ 
+ 	  https://www.mupdf.com/index.html
+ 
+-comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "mupdf needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+index fe6e886865..e042ed2b48 100644
+--- a/package/openbox/Config.in
++++ b/package/openbox/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPENBOX
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+@@ -20,10 +20,10 @@ config BR2_PACKAGE_OPENBOX
+ 
+ 	  http://openbox.org
+ 
+-comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
++comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index cf5170c8f3..e2b2e7fe2b 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_PANGO
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBFRIBIDI
+ 	select BR2_PACKAGE_EXPAT
+@@ -24,9 +24,9 @@ config BR2_PACKAGE_PANGO
+ 
+ 	  https://pango.gnome.org/
+ 
+-comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index f281599637..73b8c7c04c 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PCMANFM
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBFM
+ 	select BR2_PACKAGE_MENU_CACHE
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -18,10 +18,10 @@ config BR2_PACKAGE_PCMANFM
+ 
+ 	  http://wiki.lxde.org/en/PCManFM
+ 
+-comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 684e4eed4a..3f005f8c58 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -54,17 +54,17 @@ config BR2_PACKAGE_PINENTRY_GTK2
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  The pinentry-gtk2 tool
+ 
+-comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_PINENTRY_QT5
+diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
+index 65221d3e51..0ecb288922 100644
+--- a/package/python-pymupdf/Config.in
++++ b/package/python-pymupdf/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_PYMUPDF
+ 	bool "python-pymupdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP # mupdf -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mupdf -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mupdf -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # mupdf -> harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_FREETYPE
+@@ -18,8 +18,8 @@ comment "python-pymupdf needs Xorg"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+-comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e93b2dec38..a328190a98 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -237,7 +237,7 @@ config BR2_PACKAGE_QT5BASE_HARFBUZZ
+ 	bool "harfbuzz support"
+ 	select BR2_PACKAGE_HARFBUZZ if \
+ 		BR2_TOOLCHAIN_HAS_SYNC_4 && \
+-		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  This option enables HarfBuzz support (either system harfbuzz
+ 	  if the toolchain supports __sync for 4 bytes, or the qt
+diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
+index 5451353140..5ffdc92618 100644
+--- a/package/rrdtool/Config.in
++++ b/package/rrdtool/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
+ 	bool "rrd_graph"
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PDF
+@@ -28,9 +28,9 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
+ 	  This enables the graphing capabilities ('rrdgraph').
+ 	  Without this it will only act as a database backend.
+ 
+-comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.8"
++comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ endif
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index 8af006d632..a18b9c1a0a 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # openal
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz, openal
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index d773c69913..787c3130ae 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	depends on BR2_USE_WCHAR # gdk-pixbuf, libgtk2 -> glib2
+ 	depends on BR2_USE_MMU # gdk-pixbuf, libgtk2 -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_GDK_PIXBUF
+ 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBGTK2
+@@ -25,10 +25,10 @@ config BR2_PACKAGE_XSCREENSAVER
+ 
+ 	  http://www.jwz.org/xscreensaver/
+ 
+-comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.8"
++comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_USE_WCHAR
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
