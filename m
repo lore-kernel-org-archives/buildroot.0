@@ -2,71 +2,81 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3BEC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:02:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17B65C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:11:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2C90661A6C
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:02:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2C90661A6C
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
+	by mail.kernel.org (Postfix) with ESMTPS id 7BC7463480
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 18:11:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7BC7463480
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFDFB6066E;
-	Mon, 15 Nov 2021 18:02:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26D3F80D20;
+	Mon, 15 Nov 2021 18:11:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZeyToLWN49jy; Mon, 15 Nov 2021 18:02:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13DAE606E9;
-	Mon, 15 Nov 2021 18:02:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8EF631BF40F
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:02:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B4C680DB9
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:02:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O5uBQT81cs67 for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 18:02:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp1.osuosl.org (Postfix) with ESMTP id D271B80CA2
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 18:02:08 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id mgIumSvng6mmLmgIumUpEe; Mon, 15 Nov 2021 19:02:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1636999326; bh=6No35a/OEYlNcU9cPbRMtAkDHl9bLso7YxJj3r0ph7s=;
- h=From:To:Subject:Date:MIME-Version;
- b=lIGryDhL7AHitCR7H6Maly4zDcnBQzSoVOvElhOh50mMYP8IRXq79XAzh6GecLPHe
- IhoW//8LwyqL6LixAOv2wsMHiRzX3u2l9MSpjJDP2dhHNhDNKbL0umRGrDA3MF+8en
- XVSGkbIbH7PgUQtQYXBEwu+Dz8wtTlLq9JAOCDyM+VTAPYVo+3A38VcQ8HOcKPi7Ng
- Hm+VTAjoHIjhVPcwNMgvrS+oSkEXJsUWChpfYfXc9PLKqpW7HdIctQQZF3h0R5E8i0
- p384GYyuajvHDxHy5zji9aXqMkefjJyx8cBKuhnHjrX31/xgPdKOBA31/Bzx3T0gTg
- eY/JM1fLJ8y7w==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Nov 2021 19:02:03 +0100
-Message-Id: <20211115180203.1358402-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211114150806.2e39e94c@windsurf>
-References: <20211114150806.2e39e94c@windsurf>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rQ6HOEZJxIzf; Mon, 15 Nov 2021 18:11:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F6E280D11;
+	Mon, 15 Nov 2021 18:11:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E0A931BF475
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:11:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB83B40106
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 18:11:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PoJPBLGiuNcg for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 18:11:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5A92340223
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 18:11:10 +0000 (UTC)
+Received: by mail-lj1-x22c.google.com with SMTP id 1so37432544ljv.2
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 10:11:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=lJxotIZvyhTUXf6nDAzgXQZMWPMJyhdBdKuhKqKdJP8=;
+ b=JCJenGL0FQAVhp1Q4UD6yltDwO0C27hpXvuAqACBlUQ/sIAjrOFrdj2YNMnjRe0t/3
+ F8IcWlxCYTgIDbS6axppnyP8BAEXNCXSqOpG5f5zZFyDHEQ6QE4rJ7YEW9U3BRQCnJHz
+ gWAxPX8ZvgNiyYBE8eyFpCDuGfWQsyD0ee2Sy/1KLYN/i+1E17sdJ7GpHYBHwR5rrXio
+ hZ/K6I2XbWxkmVvZjL6J0jAKOsRYJZpCNCJYdCdeNijQRU+ucU8oMK5s9UwkMOXzvD6u
+ zXaNF3ua/K8PcQ0JLd0SRaxu1Bp+UGnNioLgIw+MNpfW2hEUsglCGJT2Omi85cGZ5XHx
+ e30w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=lJxotIZvyhTUXf6nDAzgXQZMWPMJyhdBdKuhKqKdJP8=;
+ b=OY+Phw7b/oDXCoEgUGJvQv4W5bZgx5/esugYp402U1yvvH1ZZ0+7m4uMtqRpPojtCH
+ zSyAuC2KyQF+kh1c31TIZ/Z0ez0fnc4ADAnjLWnov3ROm1Q6uBTHG9FJoymVUp4B/mXp
+ iZql08gPFD3znBhKx3Vt2B61O7eqPTgUybXaRaa/UZlP95zl533P1qr0uq9o5opVCDlt
+ XiuuIm3FcKcufC4d9E5XdEX8B8NFnNNNPSkDyDHtVcmBsX7MJYqauBGOTku4RhYr+nBj
+ 9ebCMOP///xTM37W+LvsTFcmIVN9PdauAqI9y/yOIhKWor9PEsEp6fK67qqiIxO6Ti/z
+ fQFw==
+X-Gm-Message-State: AOAM530fG3gMlJe584GF0QruT6X208E8BgpR/HpN21dm32Ys0Q5dPZ9q
+ xjuT21Og3W0ALqjZ/bdzva8kQWjvaXMumzvTV+EQkjO8
+X-Google-Smtp-Source: ABdhPJy9DllEqmJEMnpldcMLTWmvqbcxqBKsc9oD2A9Leb8DiqmuaS7TwDmc0OzIxN/cp/VdPFcDE0qacDj27kDiTo0=
+X-Received: by 2002:a2e:1510:: with SMTP id s16mr450771ljd.501.1636999868128; 
+ Mon, 15 Nov 2021 10:11:08 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfAgNuBfhCln5RxMOvPIr0XlgJFoIrxU/NHncrIFk0Em0tg5yTXA8O0NhS/1MqCTe/nRAID1UY4419oGDxaCh0a0DfDzWCdrzqn9+MonvSeH+tjm4Xawk
- IzhRIfVnhKHLJmqWduT1wQMu8xc6GinT78u+EhQe9K9IbKd89aOiSxgZz+sxjn5ysvNwX9tqhHE2e+7jNkB6nH7oDzQEpof4aQ9MCWNSY4U9vG/1eZMpo5a+
- Xbwz6CrvbbGH4WOzJJ1dLf/eqbRAVqmQycAQXPc8oJLUWOIMlUa0gLvRlV1arNnrWa5eWRpBPp36aYdsyNBMpFWqEVOFjJXlP4kt5V2wCPRFdLdBjU4VqBXn
- 1gegogIjl2CdNDUBlH+AYxjY6XkbW7j3e00gdSzPRuyDTGJz9sTHcmiN7Xnmnmd3W+Bd5pezC0UzoCir9O0GGczfr5Jw66rgbFIvVKMGMe45pJ3WPsrBvryJ
- a1vY6zGi1yEbeRnBdz01bBJ7zGLpjwseBhxcbqMeXTVvTFVOCrTMM6E53JmtTIpNMDusesSOqcYB/sQcli9zpBiJdgltZUCRGIl8RFzH3kn21/oMaXz3SCLh
- eZo+jTLIxD0pPesJ5ersPUploC9tfcg9aWTHpYjipQnZMJY3A9+D7oww3C70aJvH6CjSf1exCzaawZ200kzqUjpS6bOkPHX8BCrVt6xUXaEt/w==
-Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 3.1.1
+References: <20211115134205.4176891-1-troglobit@gmail.com>
+ <20211115161851.0897fb8b@gmx.net>
+In-Reply-To: <20211115161851.0897fb8b@gmx.net>
+From: Joachim Nilsson <troglobit@gmail.com>
+Date: Mon, 15 Nov 2021 19:10:57 +0100
+Message-ID: <CANP3Sck2vX1GV=T9+AUXLaQxE5bzMjoYp8pwSxh-oc4gx_qioQ@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump version to
+ v5.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,555 +88,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Samuel Martin <s.martin49@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Simon Dawson <spdawson@gmail.com>,
- Julien Corjon <corjon.j@ecagroup.com>, Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8024383527378912054=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to version 3.1.1 by:
-- requiring BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 instead of _4_8 in this
-package taking care of reverse dependencies, since now harfbuzz requires
-gcc 4.9 to be built successfully.
+--===============8024383527378912054==
+Content-Type: multipart/alternative; boundary="000000000000a3235a05d0d7bbac"
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* take care of all reverse dependencies, not only the first order ones,
-  fix also a comment. All this is suggested by Thomas.
----
- package/cwiid/Config.in                        |  2 +-
- package/enlightenment/Config.in                |  6 +++---
- package/gstreamer1/gst1-plugins-bad/Config.in  | 12 ++++++------
- package/gstreamer1/gst1-plugins-base/Config.in |  6 +++---
- package/harfbuzz/Config.in                     |  6 +++---
- package/harfbuzz/harfbuzz.hash                 |  2 +-
- package/harfbuzz/harfbuzz.mk                   |  2 +-
- package/libass/Config.in                       |  6 +++---
- package/libfm/Config.in                        |  6 +++---
- package/libgtk2/Config.in                      |  6 +++---
- package/libgtk3/Config.in                      |  6 +++---
- package/librsvg/Config.in                      |  6 +++---
- package/mupdf/Config.in                        |  6 +++---
- package/openbox/Config.in                      |  6 +++---
- package/pango/Config.in                        |  6 +++---
- package/pcmanfm/Config.in                      |  6 +++---
- package/pinentry/Config.in                     |  6 +++---
- package/python-pymupdf/Config.in               |  6 +++---
- package/qt5/qt5base/Config.in                  |  2 +-
- package/rrdtool/Config.in                      |  6 +++---
- package/supertuxkart/Config.in                 |  2 +-
- package/xscreensaver/Config.in                 |  6 +++---
- 22 files changed, 59 insertions(+), 59 deletions(-)
+--000000000000a3235a05d0d7bbac
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-index e03248c722..6ae2ac9405 100644
---- a/package/cwiid/Config.in
-+++ b/package/cwiid/Config.in
-@@ -18,7 +18,7 @@ if BR2_PACKAGE_CWIID
- config BR2_PACKAGE_CWIID_WMGUI
- 	bool "wmgui"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
- 	depends on BR2_PACKAGE_XORG7 # libgtk2
- 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 91cdd896f6..cd2b8cfe54 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
-@@ -29,10 +29,10 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 
- 	  http://www.enlightenment.org/
- 
--comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.8"
-+comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 1204a65681..d678e7eb14 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -328,13 +328,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
- 	bool "assrender"
- 	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libass -> harfbuzz
- 	select BR2_PACKAGE_LIBASS
- 
--comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
-+comment "assrender plugin needs a toolchain w/ C++, gcc => 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
- 	bool "bluez"
-@@ -563,15 +563,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
- 	help
- 	  RSVG plugin library
- 
--comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.8"
-+comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index ceed55890c..7ca94d7dc4 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -293,14 +293,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	bool "pango font renderer"
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  Pango-based text rendering and overlay
- 
--comment "pango plugin needs a toolchain w/ C++, gcc >= 4.8"
-+comment "pango plugin needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-index 8bc88f4284..2e4219ee22 100644
---- a/package/harfbuzz/Config.in
-+++ b/package/harfbuzz/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	bool "harfbuzz"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  HarfBuzz is an OpenType text shaping engine
- 
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	  Harfbuzz can make optional use of cairo, freetype,
- 	  glib2 and icu packages if they are selected.
- 
--comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
-+comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 97fc5a2c5f..ec1a9a59ea 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  036b0ee118451539783ec7864148bb4106be42a2eb964df4e83e6703ec46f3d9  harfbuzz-3.0.0.tar.xz
-+sha256  f3f3247bdeabf36765acc237a5f651e651e4e9706582b9cc2cf6c9b8102dfa93  harfbuzz-3.1.1.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 4534d166ef..2f9a166787 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 3.0.0
-+HARFBUZZ_VERSION = 3.1.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
-diff --git a/package/libass/Config.in b/package/libass/Config.in
-index 803f6b4438..d7725d5e1b 100644
---- a/package/libass/Config.in
-+++ b/package/libass/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBASS
- 	bool "libass"
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_LIBFRIBIDI
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBASS
- 
- 	  https://github.com/libass/libass
- 
--comment "libass needs a toolchain w/ C++, gcc >= 4.8"
-+comment "libass needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libfm/Config.in b/package/libfm/Config.in
-index 16676fbf25..e78bc99b76 100644
---- a/package/libfm/Config.in
-+++ b/package/libfm/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFM
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
-@@ -22,9 +22,9 @@ config BR2_PACKAGE_LIBFM
- 
- 	  http://wiki.lxde.org/en/Libfm
- 
--comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index 7c5762a585..c75c37fb63 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_ATK
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
-@@ -34,10 +34,10 @@ config BR2_PACKAGE_LIBGTK2_DEMO
- 
- endif
- 
--comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 093aacac51..bc8cacd9f5 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -1,9 +1,9 @@
--comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend"
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_ATK
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index 3272ecd773..270b524b37 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBRSVG
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_CAIRO_SCRIPT
-@@ -21,10 +21,10 @@ config BR2_PACKAGE_LIBRSVG
- 
- 	  https://wiki.gnome.org/Projects/LibRsvg
- 
--comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
-index ff176f4b99..cf97711160 100644
---- a/package/mupdf/Config.in
-+++ b/package/mupdf/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_MUPDF
- 	bool "mupdf"
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_GUMBO_PARSER
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_MUPDF
- 
- 	  https://www.mupdf.com/index.html
- 
--comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
-+comment "mupdf needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/openbox/Config.in b/package/openbox/Config.in
-index fe6e886865..e042ed2b48 100644
---- a/package/openbox/Config.in
-+++ b/package/openbox/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPENBOX
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBXML2
-@@ -20,10 +20,10 @@ config BR2_PACKAGE_OPENBOX
- 
- 	  http://openbox.org
- 
--comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
-+comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index cf5170c8f3..e2b2e7fe2b 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_PANGO
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBFRIBIDI
- 	select BR2_PACKAGE_EXPAT
-@@ -24,9 +24,9 @@ config BR2_PACKAGE_PANGO
- 
- 	  https://pango.gnome.org/
- 
--comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
-index f281599637..73b8c7c04c 100644
---- a/package/pcmanfm/Config.in
-+++ b/package/pcmanfm/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_PCMANFM
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBFM
- 	select BR2_PACKAGE_MENU_CACHE
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -18,10 +18,10 @@ config BR2_PACKAGE_PCMANFM
- 
- 	  http://wiki.lxde.org/en/PCManFM
- 
--comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
-index 684e4eed4a..3f005f8c58 100644
---- a/package/pinentry/Config.in
-+++ b/package/pinentry/Config.in
-@@ -54,17 +54,17 @@ config BR2_PACKAGE_PINENTRY_GTK2
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBGTK2
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  The pinentry-gtk2 tool
- 
--comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
-+comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_PINENTRY_QT5
-diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
-index 65221d3e51..0ecb288922 100644
---- a/package/python-pymupdf/Config.in
-+++ b/package/python-pymupdf/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_PYMUPDF
- 	bool "python-pymupdf"
- 	depends on BR2_INSTALL_LIBSTDCPP # mupdf -> harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mupdf -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mupdf -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # mupdf -> harfbuzz
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_FREETYPE
-@@ -18,8 +18,8 @@ comment "python-pymupdf needs Xorg"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_PACKAGE_XORG7
- 
--comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.8"
-+comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index e93b2dec38..a328190a98 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -237,7 +237,7 @@ config BR2_PACKAGE_QT5BASE_HARFBUZZ
- 	bool "harfbuzz support"
- 	select BR2_PACKAGE_HARFBUZZ if \
- 		BR2_TOOLCHAIN_HAS_SYNC_4 && \
--		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  This option enables HarfBuzz support (either system harfbuzz
- 	  if the toolchain supports __sync for 4 bytes, or the qt
-diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
-index 5451353140..5ffdc92618 100644
---- a/package/rrdtool/Config.in
-+++ b/package/rrdtool/Config.in
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
- 	bool "rrd_graph"
- 	default y
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PDF
-@@ -28,9 +28,9 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
- 	  This enables the graphing capabilities ('rrdgraph').
- 	  Without this it will only act as a database backend.
- 
--comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.8"
-+comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- endif
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index 8af006d632..a18b9c1a0a 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SUPERTUXKART
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP # openal
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz, openal
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
- 	depends on BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index d773c69913..787c3130ae 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 	depends on BR2_USE_WCHAR # gdk-pixbuf, libgtk2 -> glib2
- 	depends on BR2_USE_MMU # gdk-pixbuf, libgtk2 -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
- 	select BR2_PACKAGE_GDK_PIXBUF
- 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBGTK2
-@@ -25,10 +25,10 @@ config BR2_PACKAGE_XSCREENSAVER
- 
- 	  http://www.jwz.org/xscreensaver/
- 
--comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.8"
-+comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_USE_WCHAR
--- 
-2.25.1
+Ouch, sorry for the dupe!
+
+How does next vs master work?
+
+Regards
+ /Joachim
+
+On Mon, 15 Nov 2021 at 16:18, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Joachim,
+>
+>
+> On Mon, 15 Nov 2021 14:42:05 +0100, Joachim Wiberg <troglobit@gmail.com>
+> wrote:
+>
+> > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> > ---
+> >  package/iproute2/iproute2.hash | 2 +-
+> >  package/iproute2/iproute2.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/iproute2/iproute2.hash
+> b/package/iproute2/iproute2.hash
+> > index 2837edb09d..d8d619cbda 100644
+> > --- a/package/iproute2/iproute2.hash
+> > +++ b/package/iproute2/iproute2.hash
+> > @@ -1,3 +1,3 @@
+> >  # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+> > -sha256
+> 210fa785a52f3763c4287fd5ae63e246f6311bfaa48c424baab6d383bb7591d4
+> iproute2-5.14.0.tar.xz
+> > +sha256
+> 38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b35b291ff
+> iproute2-5.15.0.tar.xz
+> >  sha256
+> e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+> > diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+> > index fdf442a429..4162e38eb7 100644
+> > --- a/package/iproute2/iproute2.mk
+> > +++ b/package/iproute2/iproute2.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >
+> ################################################################################
+> >
+> > -IPROUTE2_VERSION = 5.14.0
+> > +IPROUTE2_VERSION = 5.15.0
+> >  IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+> >  IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+> >  IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+>
+>
+> Sorry, its a duplicate...., iproute2 version bump already suggested and
+> applied to the next branch, see:
+>
+>
+> https://git.buildroot.net/buildroot/commit/?h=next&id=bd06a3b9b507b14f3cf69f45ed165d132790ad75
+>
+> Regards,
+> Peter
+>
+
+--000000000000a3235a05d0d7bbac
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Ouch, sorry for the dupe!</div><div dir=3D"auto"><br></di=
+v><div dir=3D"auto">How does next vs master work?=C2=A0</div><div dir=3D"au=
+to"><br></div><div dir=3D"auto">Regards</div><div dir=3D"auto">=C2=A0/Joach=
+im</div><div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
+_attr">On Mon, 15 Nov 2021 at 16:18, Peter Seiderer &lt;<a href=3D"mailto:p=
+s.report@gmx.net">ps.report@gmx.net</a>&gt; wrote:<br></div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;=
+border-left-style:solid;padding-left:1ex;border-left-color:rgb(204,204,204)=
+">Hello Joachim,<br>
+<br>
+<br>
+On Mon, 15 Nov 2021 14:42:05 +0100, Joachim Wiberg &lt;<a href=3D"mailto:tr=
+oglobit@gmail.com" target=3D"_blank">troglobit@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; Signed-off-by: Joachim Wiberg &lt;<a href=3D"mailto:troglobit@gmail.co=
+m" target=3D"_blank">troglobit@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 package/iproute2/iproute2.hash | 2 +-<br>
+&gt;=C2=A0 package/iproute2/<a href=3D"http://iproute2.mk" rel=3D"noreferre=
+r" target=3D"_blank">iproute2.mk</a>=C2=A0 =C2=A0| 2 +-<br>
+&gt;=C2=A0 2 files changed, 2 insertions(+), 2 deletions(-)<br>
+&gt;<br>
+&gt; diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute=
+2.hash<br>
+&gt; index 2837edb09d..d8d619cbda 100644<br>
+&gt; --- a/package/iproute2/iproute2.hash<br>
+&gt; +++ b/package/iproute2/iproute2.hash<br>
+&gt; @@ -1,3 +1,3 @@<br>
+&gt;=C2=A0 # From <a href=3D"https://kernel.org/pub/linux/utils/net/iproute=
+2/sha256sums.asc" rel=3D"noreferrer" target=3D"_blank">https://kernel.org/p=
+ub/linux/utils/net/iproute2/sha256sums.asc</a><br>
+&gt; -sha256=C2=A0 210fa785a52f3763c4287fd5ae63e246f6311bfaa48c424baab6d383=
+bb7591d4=C2=A0 iproute2-5.14.0.tar.xz<br>
+&gt; +sha256=C2=A0 38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b=
+35b291ff=C2=A0 iproute2-5.15.0.tar.xz<br>
+&gt;=C2=A0 sha256=C2=A0 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de1=
+02ab66b722cb4=C2=A0 COPYING<br>
+&gt; diff --git a/package/iproute2/<a href=3D"http://iproute2.mk" rel=3D"no=
+referrer" target=3D"_blank">iproute2.mk</a> b/package/iproute2/<a href=3D"h=
+ttp://iproute2.mk" rel=3D"noreferrer" target=3D"_blank">iproute2.mk</a><br>
+&gt; index fdf442a429..4162e38eb7 100644<br>
+&gt; --- a/package/iproute2/<a href=3D"http://iproute2.mk" rel=3D"noreferre=
+r" target=3D"_blank">iproute2.mk</a><br>
+&gt; +++ b/package/iproute2/<a href=3D"http://iproute2.mk" rel=3D"noreferre=
+r" target=3D"_blank">iproute2.mk</a><br>
+&gt; @@ -4,7 +4,7 @@<br>
+&gt;=C2=A0 #<br>
+&gt;=C2=A0 ################################################################=
+################<br>
+&gt;<br>
+&gt; -IPROUTE2_VERSION =3D 5.14.0<br>
+&gt; +IPROUTE2_VERSION =3D 5.15.0<br>
+&gt;=C2=A0 IPROUTE2_SOURCE =3D iproute2-$(IPROUTE2_VERSION).tar.xz<br>
+&gt;=C2=A0 IPROUTE2_SITE =3D $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2<=
+br>
+&gt;=C2=A0 IPROUTE2_DEPENDENCIES =3D host-bison host-flex host-pkgconf \<br=
+>
+<br>
+<br>
+Sorry, its a duplicate...., iproute2 version bump already suggested and<br>
+applied to the next branch, see:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"https://git.buildroot.net/buildroot/=
+commit/?h=3Dnext&amp;id=3Dbd06a3b9b507b14f3cf69f45ed165d132790ad75" rel=3D"=
+noreferrer" target=3D"_blank">https://git.buildroot.net/buildroot/commit/?h=
+=3Dnext&amp;id=3Dbd06a3b9b507b14f3cf69f45ed165d132790ad75</a><br>
+<br>
+Regards,<br>
+Peter<br>
+</blockquote></div></div>
+
+--000000000000a3235a05d0d7bbac--
+
+--===============8024383527378912054==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8024383527378912054==--
