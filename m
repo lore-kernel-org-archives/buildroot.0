@@ -2,73 +2,80 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC44FC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 16:48:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62746C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:11:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2A3C961AFB
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 16:48:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2A3C961AFB
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
+	by mail.kernel.org (Postfix) with ESMTPS id D321363253
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 17:11:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D321363253
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C506360591;
-	Mon, 15 Nov 2021 16:48:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AA6740224;
+	Mon, 15 Nov 2021 17:11:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3NzcQDb0-dt; Mon, 15 Nov 2021 16:48:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t3EIQ1F08lIU; Mon, 15 Nov 2021 17:11:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37BBB605D8;
-	Mon, 15 Nov 2021 16:48:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C8E41BF574
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 16:48:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEB0540211;
+	Mon, 15 Nov 2021 17:11:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 691951BF40F
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:11:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C60080C43
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 16:48:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 655FE40211
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 17:11:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZTjaiTm8gTAh for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 16:48:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCAAB80C3B
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 16:48:50 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e1b9:10a:8619:7c87])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7F318780333;
- Mon, 15 Nov 2021 17:48:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1636994927;
- bh=Ie8MwTRJjwmvi+UoG7NGT5VKNMN6876rym7DMOfgaeQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Q3U+MHOktONJAPPn9IgdZ/55rpuZ0LD6uCKNzK34XEsiuOCvIAOAClSwEI0OT+A6P
- FvjhuUleU38ARO1hxIbfVRwIFelkVSXVj8eGwhParJzhlMCuBkiiKXMSSa3tj6etzW
- A01FJm9/PAywead3cT7mgh3XB1WIaGoBFbSMhSRqiJc30oJBq52pNdYa8q1EkoO/f4
- 4xPF65Xcqo90Kp+9kbUtALnZBJfw/6c67uY8qL5QWRwopTL2PXqLykc1TJTfVyl9cl
- DYcjhe9gPjLH6OantyPHtotS1L/m4Tu78VQ0r/36aBOf/ztC0t4uf+ZWzpscmgVROr
- zKpHC4NlT9g2A==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 15 Nov 2021 17:48:37 +0100
-Date: Mon, 15 Nov 2021 17:48:37 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <20211115164837.GB247986@scaer>
-References: <20211115133000.72041-1-kory.maincent@bootlin.com>
- <20211115133000.72041-2-kory.maincent@bootlin.com>
- <20211115153825.251bff20@windsurf> <87r1bhl97g.fsf@tarshish>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DKWo1onxTtrW for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 17:11:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com
+ [IPv6:2607:f8b0:4864:20::22d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E03540209
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 17:11:32 +0000 (UTC)
+Received: by mail-oi1-x22d.google.com with SMTP id n66so36117390oia.9
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 09:11:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=ezEmuxE1o2QXYibs8wPGT0/01Ifj34DqgH95XgYLdFw=;
+ b=qSsz2HC2GSwcg+4slKF1MeVxw9eTvFGpm9Z/AIDUWqjfqeTWU0MCsaUpWqXMyKlsTW
+ CSuWxHOAca7CoA7jK0AIXNP+rJ+yVFBVFYAe/+q6hKDNBxPRAT10IceRYRL0g+vizyGU
+ +kJ8CwCTQE8WCyTcXZ1/WHv02xJIH3Z5ZPWyi/5KC/EX9i/nLdF46HtDE24WRVUvArzM
+ BGDx2Is+lS9qDTSWpCJSTNTMcYFO5eAayF3QE41648YQs5Dv/4uepfPkPrf71VtvEN1Z
+ iOlvMzPAMveFmfZPPwKRQf6wVnlXZzPEOFuusWBmEYXKXOhC71DdkZUsnRgPvZ+iVDnD
+ ycew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=ezEmuxE1o2QXYibs8wPGT0/01Ifj34DqgH95XgYLdFw=;
+ b=5ypcTuhSXxISBfqeW42JOnQeaQ6ujBe24v/oaVg/AHpNMg9kJqVc3VOE2/aX/IeUmG
+ SqNcxf3lg9cG4uoAHPGkhQUFDcA24D/i0+xTqplL5jgs5rsCqND7KOW35NMeI2pCuqCk
+ AxGPxMB54Gdumt3B5FypxD0pYgPtu8xhWKiLCQGbDIqerHJGfdvZ/QeDLr3TYwYWz6Ax
+ I8BY7IrmeEZg133tzCZNiDmPRLgSuJgR/A3gxDXrG2moHlxBspWPuaKZ5UwMv37CNlog
+ P+FH3W3Iy/RAmb/b0dkTUQzbVcSdncylHe/KEFL9esylxFi0KlfWzjLip1Z4vF6sICUV
+ CJ/A==
+X-Gm-Message-State: AOAM532V7pqyL2hn95I+dcTiSCVFgxEIFbbw3D99fpu6RQk2Z/rjm3VB
+ suVBhf/kfCskULEaqxRIcYDnG6ViNn/1wA56fJE=
+X-Google-Smtp-Source: ABdhPJzbtz4vA1ubobzh+djtXkWX9ELV7VOYclgFayfWlJ1TZifUH9cdzURHgsJlM8owgAtTMGwMB9DTjxAE09yK7oQ=
+X-Received: by 2002:a05:6808:171c:: with SMTP id
+ bc28mr47046201oib.18.1636996291382; 
+ Mon, 15 Nov 2021 09:11:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87r1bhl97g.fsf@tarshish>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 2/2] package/psplash: add support to missing
- configure options
+References: <20211112180802.3610653-1-fontaine.fabrice@gmail.com>
+ <20211112232739.6211b3b0@windsurf>
+In-Reply-To: <20211112232739.6211b3b0@windsurf>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 15 Nov 2021 09:11:20 -0800
+Message-ID: <CAFSsvmqcOr2M3iuNkRSWMMpAWVXb8_TXmLOp5dZyzdKoovLeng@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: add girdir to
+ glib-2.0.pc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,47 +87,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, phil.eichinger@gmail.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Baruch, All,
+Hello;
 
-On 2021-11-15 17:37 +0200, Baruch Siach via buildroot spake thusly:
-> On Mon, Nov 15 2021, Thomas Petazzoni wrote:
-> > On Mon, 15 Nov 2021 14:30:00 +0100
-> > Kory Maincent <kory.maincent@bootlin.com> wrote:
+On Fri, Nov 12, 2021 at 2:27 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I'm adding Adam Duskett in Cc of this one, to get his review on this
+> GOI related patch.
+>
+> Thanks!
+>
+> Thomas
+>
+> On Fri, 12 Nov 2021 19:08:02 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Add girdir to glib-2.0.pc to fix the following build failure with atk,
+> > gcr or harfbuzz:
 > >
-> >> Add support to three configure options:
-> >> --disable-startup-msg: Disable text banner output on startup
-> >> --disable-progress-bar: Disable progress bar
-> >> --enable-img-fullscreen: Enable the logo image in fullscreen mode
-> >> 
-> >> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> >> ---
-> >>  package/psplash/.Config.in.swp | Bin 0 -> 12288 bytes
+> > /home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
+> > Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
 > >
-> > Are you sure we want this file in Buildroot ? :-)
-> 
-> A file of this name is already in current master branch. Introduced in
-> commit 70440e28c8eef ("package/python-pudb: bump to version 2021.1").
+> > This build failure could also be fixed by removing our update of girdir
+> > in gobject-introspection.mk but this will have side effects as gir files
+> > won't be installed in the correct directory. So patch glib-2.0.pc
+> > instead.
+> >
+> > Note: autotools-based packages have already been fixed by
+> > https://git.buildroot.net/buildroot/commit/?id=8dda79970661090f202e1f20e5982ba53fdaeb95
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
+> >  - http://autobuild.buildroot.org/results/67a47386019c2a700df348ad6846064e0950e87b
+> >  - http://autobuild.buildroot.org/results/2c6a4470542af574f9407fa5867f0408ec2b4880
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...eson.build-add-girdir-to-glib.2.0.pc.patch | 33 +++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
+> >  create mode 100644 package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
+> >
+> > diff --git a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch b/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
+> > new file mode 100644
+> > index 0000000000..7eeecbe336
+> > --- /dev/null
+> > +++ b/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
+> > @@ -0,0 +1,33 @@
+> > +From 04bdfff007c91fc620ed0b7cd02fd2e1e83bdefc Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Fri, 12 Nov 2021 18:01:05 +0100
+> > +Subject: [PATCH] glib/meson.build: add girdir to glib.2.0.pc
+> > +
+> > +Add girdir to glib-2.0.pc to fix the following build failure with atk:
+> > +
+> > +/home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
+> > +Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +---
+> > + glib/meson.build | 1 +
+> > + 1 file changed, 1 insertion(+)
+> > +
+> > +diff --git a/glib/meson.build b/glib/meson.build
+> > +index f78f32969..6c5486699 100644
+> > +--- a/glib/meson.build
+> > ++++ b/glib/meson.build
+> > +@@ -377,6 +377,7 @@ pkg.generate(libglib,
+> > +   subdirs : ['glib-2.0'],
+> > +   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
+> > +   variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
+> > ++               'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
+> > +                'glib_genmarshal=' + join_paths('${bindir}', 'glib-genmarshal'),
+> > +                'gobject_query=' + join_paths('${bindir}', 'gobject-query'),
+> > +                'glib_mkenums=' + join_paths('${bindir}', 'glib-mkenums')],
+> > +--
+> > +2.33.0
+> > +
+>
+I am wondering if this could be upstreamed by adding a meson option?
+Other than that, it looks good to me!
 
-Thanks for the report! I've cleaned up my mess now, by pushing commit
-5f92c032369e. Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Adam
+>
+>
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
