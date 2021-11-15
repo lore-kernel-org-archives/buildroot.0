@@ -2,85 +2,89 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA63C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 19:54:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A6EAC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 21:01:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7192761B3A
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 19:54:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7192761B3A
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmx.net
+	by mail.kernel.org (Postfix) with ESMTPS id BF95F61AFF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 21:01:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BF95F61AFF
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1620580CE9;
-	Mon, 15 Nov 2021 19:54:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63F77607B5;
+	Mon, 15 Nov 2021 21:01:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1wQwxwk23D7F; Mon, 15 Nov 2021 19:54:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50F3F80CDB;
-	Mon, 15 Nov 2021 19:54:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 46B1E1BF3F0
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 19:54:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F8686078A
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 19:54:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JdQlggusdsUK for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 19:54:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B56F4605E4
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 19:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1637006037;
- bh=xcn5ntOTMaWdXMCBZv+7+qyt1HAgoqaSwhBKjfOzd6o=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=JMgfRTP98Sx3NQRX8oTfLbN3sVkXznscRe3hEKCd8FwKfZxoZ4R+c1o8OUjjJMTsb
- e3pbovL1pPAorrAZH7UZ3mwcYgcOCw0CZcWHjx1AhwcT5pKOkOqG2/10etf4CJQP3P
- tEVmz6dFJ3B3zLZ3vmw9OgBdrvecbsZ51x/hjAyM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.243]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKbgE-1n7fkP1fJM-00KwMe; Mon, 15
- Nov 2021 20:53:57 +0100
-Date: Mon, 15 Nov 2021 20:53:56 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Joachim Nilsson <troglobit@gmail.com>
-Message-ID: <20211115205356.264286e5@gmx.net>
-In-Reply-To: <CANP3Sck2vX1GV=T9+AUXLaQxE5bzMjoYp8pwSxh-oc4gx_qioQ@mail.gmail.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g3XVNA_ZMQQR; Mon, 15 Nov 2021 21:01:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5AC8605CE;
+	Mon, 15 Nov 2021 21:01:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2A061BF3D9
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 21:01:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC626400CE
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 21:01:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9mWqFT8rppC4 for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 21:01:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B221A40012
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 21:01:08 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id v15so38438926ljc.0
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 13:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=subject:to:cc:references:from:message-id:date:user-agent
+ :mime-version:in-reply-to;
+ bh=1cOOX4Ggn5jA/XO9HrtBOiV4IIS8n8sRCgCk2RQ6z0Q=;
+ b=P5a9vfLlnjp4FkcGt/Yhk/VT9jR9KMRM4wU+yxyvpBmzTKMgwntaAO6a8IoZnKfB0u
+ lQwHJCVDiwiW92XfWDnh1NYphNnOz054BUiVcrMXR2fjY/QsrrbPXHHQoQUJHeWHr5yd
+ 1wZFxtSEUgD3++O6xz+NH1ZilYAAALbidCp3hlIxsBTdlT90ZRoMwPSLwyXMW54vV+nu
+ 3UixcgsF6CGzeL4aO+RHJl9N+IH0IxKP8GDJ4sZtxfrlE1pLbj+woGw5j2mCauhaTJK/
+ xKCoRQSi2ozYomBFxmBiWjODcz52U2ddY23VfJ2vpcpIzly0ZvfNWfI3WlJScjO3nSy0
+ EHwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+ :user-agent:mime-version:in-reply-to;
+ bh=1cOOX4Ggn5jA/XO9HrtBOiV4IIS8n8sRCgCk2RQ6z0Q=;
+ b=qBi4VXMUcGJCEphitrWBtiQyjRJ47CcMJrbnLjl9qwrhwaPXT5fDzw9a8iV5iUrrhX
+ eLdHyuo6vw5n4NgC4rIxkdeyyls2D+1D4Q98R5LWilX1J5OhDh672fKI0hydhZpCIDbB
+ qBEYPwaanMRiAd4eQT7sumDpzXBqJ7nWVNrwHt+UiKZFfa9FdBNzcxpqMWOg9bWrPGCZ
+ vBg6p2k0OpWSh1UXPB7sB2WzM3AOZAWdJAnnm4eRb1fP3jh9f1l6xCLFEIwlItewhD1p
+ TE+me+9IMud2AjEg8KH1KD+ulXkcC/2WvoWZYuEncMnrn4Uw7res+90Pfy761JAm0wYM
+ 6E0g==
+X-Gm-Message-State: AOAM531QzZKc5kG40wK2+k29YsTj3+uwB/J9FhtVnAe0fkbE2liR/Bma
+ NjD+TNWe/Be6r54IxHQIbrJpZfKasgY=
+X-Google-Smtp-Source: ABdhPJwLoUTgmvFmY6RY74ljzxdvudfTU0r8KvMySl68i6i6Y3deZrj6oXZpfqEEmnHs4qpnCAH8lQ==
+X-Received: by 2002:a05:651c:2103:: with SMTP id
+ a3mr1514428ljq.435.1637010066317; 
+ Mon, 15 Nov 2021 13:01:06 -0800 (PST)
+Received: from [10.0.196.136] ([176.10.248.197])
+ by smtp.googlemail.com with ESMTPSA id e7sm1601824ljk.24.2021.11.15.13.01.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 15 Nov 2021 13:01:05 -0800 (PST)
+To: Peter Seiderer <ps.report@gmx.net>
 References: <20211115134205.4176891-1-troglobit@gmail.com>
  <20211115161851.0897fb8b@gmx.net>
  <CANP3Sck2vX1GV=T9+AUXLaQxE5bzMjoYp8pwSxh-oc4gx_qioQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+ <20211115205356.264286e5@gmx.net>
+From: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <7969a0af-313e-ac79-14b5-e1ea674a146a@gmail.com>
+Date: Mon, 15 Nov 2021 22:01:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:9A2gIYx2SgNupNV1x3G/pPC+TI9rL7ynVHvrKzpHDgJm0Fu9LiE
- 5+JjlrwmxVyQ60/g6bIuEwdYr7lRsZOqr4nX3dKgcIsapbQ7oFU3lRxaJkeAzhfuC8pRlCS
- F652M1Puu5u26AWKsTPuQh7pzhvA9hhdUemHoOIFwnpSWB0MvC8Si02kqCkIkkl8/W4+Qtj
- nlaDWLPpJPERAwR1hMU+Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TtyGRBVb1v0=:AvEw43Rko/aBK71GoMeYtV
- 2HTjc/uUJI7JSc3C1n2GGgNv6LiecUGHX9stdDgHqdlbMjsGHBbWrNmwcLn6Mt5m4bAUkHyoy
- NsoElsib1u6N/HAMBpZFvFBfpi6ulyBvCsxMA234/KLeN9uhF2rOhgqM3xf4JgBfortkBlhC6
- H7rJ94JB78tyxJPkacP/UgyJDD66nnNOVwpS/cFGEwY2Xl4ge9MGtHTnDG3FR0WMsEtY4WpKS
- ZPOrdxATjjcNHZX8/K+pxZZ8GeBNDjHXX4nWWCj3/BfzA8BD0RI0vHB3ybjD85ktVtKvqu3NM
- wBtGOoV3nyOcmHiJja/5AAGnRHmNGRnttNcRylqoeIDiPBUjdaiOSDQcbYweAV2tLMWkRhuLp
- tgEFZ8VCmzfSbBtD1PCrEFmVchqdPRlk6GW8ScDWwt68zqDZXNQuwANaRGOqP3lHBLCac7ngN
- wcqvE5sgtwoagFUOAFZ9wNhqnju2Q4i9AJAEjJDurO/IQPsnSbjkfNsalaUPIwanoYXEqHiTr
- wDasNjdrIkUq4AJlhxQzjoEOpyo3uXk2H5/khGaj5A4noLM4f/BzlUxbWZ41mPSJ/Zvxdi5T6
- Yl3eUlXnvTyhYWQ/r97ptyrP3E0TpffBNfFUS1vntb46Lq3TjEXBflCa3hEwj/U1xiiKuJuZZ
- jd1kDMDfcS02xH+n1hiOmkkVus7KR091do7L6ZCJKlXBgaUG/CB6/7BvnpsKTjY+DKgvHQq7k
- e5kMk4gAaIYLKLIiRPCZk/dE5Wz+OOOlFnq49MHxT1A+zAkOIEI+UbPzrNsPqgFrdQzXAiccH
- KfiW4ZPmeWLNa+FYQE/iNDnjCpDpotHMJWiKRLj/m2XHinRkqYvqojRwoYO+uvgluFY0tDMzP
- fdwFej6srWwL+/Clz5g5RRYueM081M2dAu2d8uyFvIGj6E2SYRmAQFmeJH0S2R2xVoYPMQ5Om
- TK9n6rgnyVXVivZAz5ev1T3PlJbHoc0VXF/r4mJGBX1LtwQQHcw/TyssHH8RGQxKKduyeIo0W
- Jq19p1NcvH/m1cPNfarcPdITmzOm8fj2Y/2OlH0QseDwW6op30VofFWFN4qQdjy3Bjx39+B7U
- o1n64GHlq3E5IA=
+In-Reply-To: <20211115205356.264286e5@gmx.net>
 Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump version to
  v5.15.0
 X-BeenThere: buildroot@buildroot.org
@@ -95,86 +99,86 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8652547121936698319=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Joachim,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============8652547121936698319==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="SeMyegTxb3dSWIEWPU9zndSEp7ZIvY7N2"
 
-On Mon, 15 Nov 2021 19:10:57 +0100, Joachim Nilsson <troglobit@gmail.com> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--SeMyegTxb3dSWIEWPU9zndSEp7ZIvY7N2
+Content-Type: multipart/mixed; boundary="gi5H6yc3Nr5oO0MgT05EjKKZ93iriA3bB";
+ protected-headers="v1"
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Cc: buildroot@buildroot.org
+Message-ID: <7969a0af-313e-ac79-14b5-e1ea674a146a@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump version to v5.15.0
+References: <20211115134205.4176891-1-troglobit@gmail.com>
+ <20211115161851.0897fb8b@gmx.net>
+ <CANP3Sck2vX1GV=T9+AUXLaQxE5bzMjoYp8pwSxh-oc4gx_qioQ@mail.gmail.com>
+ <20211115205356.264286e5@gmx.net>
+In-Reply-To: <20211115205356.264286e5@gmx.net>
 
-> Ouch, sorry for the dupe!
->
-> How does next vs master work?
+--gi5H6yc3Nr5oO0MgT05EjKKZ93iriA3bB
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-Take a look at (for a short description):
+On 11/15/21 8:53 PM, Peter Seiderer wrote:
+> Hello Joachim,
+> On Mon, 15 Nov 2021 19:10:57 +0100, Joachim Nilsson <troglobit@gmail.co=
+m> wrote:
+>> How does next vs master work?
+> Take a look at (for a short description):
+> 	https://buildroot.org/downloads/manual/manual.html#RELENG
 
-	https://buildroot.org/downloads/manual/manual.html#RELENG
+Oh dear lord ... that's the biggest slice of humble pie I've been served
+in my lifetime LOL
 
-Regards,
-Peter
+    git show de2b78143c4
 
->
-> Regards
->  /Joachim
->
-> On Mon, 15 Nov 2021 at 16:18, Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Joachim,
-> >
-> >
-> > On Mon, 15 Nov 2021 14:42:05 +0100, Joachim Wiberg <troglobit@gmail.com>
-> > wrote:
-> >
-> > > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> > > ---
-> > >  package/iproute2/iproute2.hash | 2 +-
-> > >  package/iproute2/iproute2.mk   | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/package/iproute2/iproute2.hash
-> > b/package/iproute2/iproute2.hash
-> > > index 2837edb09d..d8d619cbda 100644
-> > > --- a/package/iproute2/iproute2.hash
-> > > +++ b/package/iproute2/iproute2.hash
-> > > @@ -1,3 +1,3 @@
-> > >  # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
-> > > -sha256
-> > 210fa785a52f3763c4287fd5ae63e246f6311bfaa48c424baab6d383bb7591d4
-> > iproute2-5.14.0.tar.xz
-> > > +sha256
-> > 38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b35b291ff
-> > iproute2-5.15.0.tar.xz
-> > >  sha256
-> > e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-> > > diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-> > > index fdf442a429..4162e38eb7 100644
-> > > --- a/package/iproute2/iproute2.mk
-> > > +++ b/package/iproute2/iproute2.mk
-> > > @@ -4,7 +4,7 @@
-> > >  #
-> > >
-> > ################################################################################
-> > >
-> > > -IPROUTE2_VERSION = 5.14.0
-> > > +IPROUTE2_VERSION = 5.15.0
-> > >  IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
-> > >  IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
-> > >  IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
-> >
-> >
-> > Sorry, its a duplicate...., iproute2 version bump already suggested and
-> > applied to the next branch, see:
-> >
-> >
-> > https://git.buildroot.net/buildroot/commit/?h=next&id=bd06a3b9b507b14f3cf69f45ed165d132790ad75
-> >
-> > Regards,
-> > Peter
-> >
+:-D
+
+Best regards
+ /Joachim
+_______
+I changed my last name the summer of 2020.
+
+
+--gi5H6yc3Nr5oO0MgT05EjKKZ93iriA3bB--
+
+--SeMyegTxb3dSWIEWPU9zndSEp7ZIvY7N2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmGSypEFAwAAAAAACgkQLCqwqW4MR1ju
+wgf/ZR4GqaCMZLnBFFnNSYqSpXUEs96hr299J4ZQ5KAxnffME+x9NTedPRxVTrznTGtZAoyBttmB
+gLLjr4s3dF/NKbvNNJD4revfBu6WsG86Bcr1nfG6lG7Iqh9DrOea9HOTh6YgRnaHSa0uYXzdllf3
+4wxIDxE2bD3pWxawgR2e5Ra51+XGT4to9qWlP0+aov4sb2jY8+aIGWvjqgQf0iE4PTQ+Bs7FOe9r
+qDKqpXC4E4L1SnGJmoGMBlZ3ja/eycFlYMnbiRp/4npwG8wyP21JdYm/d9aOOknkvHj2Xjl6Ud1A
+YDSDeoBpypGD96FrVAdCbp2V7qs8YFAzWvtOFmmIsg==
+=dllB
+-----END PGP SIGNATURE-----
+
+--SeMyegTxb3dSWIEWPU9zndSEp7ZIvY7N2--
+
+--===============8652547121936698319==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8652547121936698319==--
