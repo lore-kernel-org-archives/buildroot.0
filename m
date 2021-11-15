@@ -2,56 +2,55 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 420E1C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 09:04:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC00C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 12:33:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 644126321A
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 09:04:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 644126321A
+	by mail.kernel.org (Postfix) with ESMTPS id DB83A61A7E
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 12:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DB83A61A7E
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=umbiko.net
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7A36400D3;
-	Mon, 15 Nov 2021 09:04:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7523040220;
+	Mon, 15 Nov 2021 12:33:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I_E6XevBa7dT; Mon, 15 Nov 2021 09:04:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QLEl0m65PzUZ; Mon, 15 Nov 2021 12:33:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5A8D40399;
-	Mon, 15 Nov 2021 09:04:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C42014021D;
+	Mon, 15 Nov 2021 12:33:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 520D91BF336
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 09:04:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A3641BF343
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 12:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D74040442
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 09:04:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04D7D4021C
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 12:33:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xaZ-uDbEkmrz for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 09:04:21 +0000 (UTC)
+ with ESMTP id LcQFbQIp6pa6 for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 12:33:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7C7654044B
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 09:04:21 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id E8D99C04A925;
- Mon, 15 Nov 2021 10:04:18 +0100 (CET)
-MIME-Version: 1.0
-Date: Mon, 15 Nov 2021 09:04:18 +0000
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C7556401F1
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 12:33:16 +0000 (UTC)
+Received: from localhost.localdomain (unknown [151.43.3.160])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 19872C22A823;
+ Mon, 15 Nov 2021 13:33:14 +0100 (CET)
 From: Andreas Ziegler <br015@umbiko.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Nov 2021 13:32:10 +0100
+Message-Id: <20211115123212.11841-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211114160803.5ce09ba5@windsurf>
-References: <20211025094453.245364-1-br015@umbiko.net>
- <20211114160803.5ce09ba5@windsurf>
-Message-ID: <e488448ca4e861fb9ac1ffc30320edc3@umbiko.net>
-X-Sender: br015@umbiko.net
+References: <20211114160803.5ce09ba5@windsurf>
+MIME-Version: 1.0
 X-Virus-Scanned: clamav-milter 0.103.3 at serv15.avernis.de
 X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.23.2
+Subject: [Buildroot] [PATCH v2 0/2] package/mpd: update to version 0.23.y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,113 +62,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?J=C3=B6rg_Krause?= <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Andreas Ziegler <br015@umbiko.net>,
+ =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKdGhhbmsgeW91IGZvciB0YWtpbmcgYSBsb29rIGF0IHRoaXMgcGF0Y2guIFNv
-bWUgYW5zd2VycyB0byB5b3VyIHJlbWFya3MgCmJlbG93OyBJIHdpbGwgYWxzbyBwcmVwYXJlIGEg
-djIgb2YgdGhlIGNoYW5nZS4KCkkgYmVsaWV2ZSBhIGxlZ2FjeSBlbnRyeSBmb3IgQlIyX1BBQ0tB
-R0VfTVBEX1VQTlAgaXMgYWxzbyBuZWNlc3NhcnkgLi4uCgpPbiAyMDIxLTExLTE0IDE1OjA4LCBU
-aG9tYXMgUGV0YXp6b25pIHdyb3RlOgo+IEhlbGxvIEFuZHJlYXMsCj4gCj4gVGhhbmtzIGZvciB0
-aGlzIHBhdGNoLiBJIGhhdmUgc29tZSBjb21tZW50cyBiZWxvdywgYnV0IG1vcmUKPiBpbXBvcnRh
-bnRseSwgSSB3b3VsZCByZWFsbHkgbGlrZSB0byBnZXQgdGhlIHJldmlldy9hcHByb3ZhbCBmcm9t
-IErDtnJnCj4gS3JhdXNlIG9uIHRoaXMgcGF0Y2gsIGFzIGhlIGhhcyB1c3VhbGx5IGJlZW4gbWFp
-bnRhaW5pbmcgdGhpcyBwYWNrYWdlLgo+IAo+IE9uIE1vbiwgMjUgT2N0IDIwMjEgMTE6NDQ6NTMg
-KzAyMDAKPiBBbmRyZWFzIFppZWdsZXIgPGJyMDE1QHVtYmlrby5uZXQ+IHdyb3RlOgo+IAo+PiBJ
-biBhZGRpdGlvbiB0byB2YXJpb3VzIGJ1ZyBmaXhlcywgbXBkIHZlcnNpb24gMC4yMyBpbnRyb2R1
-Y2VzIGEgbmV3Cj4+IGRlcGVuZGVuY3kgKG1mdCkgYW5kIGEgY2hhbmdlIGluIHRoZSBjb25maWd1
-cmF0aW9uIG9mIHRoZSBVUG5QIGNsaWVudAo+PiBmdW5jdGlvbmFsaXR5Lgo+PiAKPj4gT3B0aW9u
-YWwgbmV3IGZlYXR1cmVzIChvcGVubXB0IGRlY29kZXIsIHBpcGV3aXJlIGFuZCBzbmFwY2FzdCBv
-dXRwdXRzKSAKPj4gYXJlCj4+IGN1cnJlbnRseSBub3QgYXZhaWxhYmxlIGFzIEJ1aWxkcm9vdCBw
-YWNrYWdlcyBhbmQgd2VyZSBub3QgY29uc2lkZXJlZC4KPiAKPiBXZSBkbyBoYXZlIHBpcGV3aXJl
-IGFzIGEgcGFja2FnZSBpbiBCdWlsZHJvb3QsIHNvIHRoYXQgYXNwZWN0IGRvZXNuJ3QKPiBzZWVt
-IGNvbXBsZXRlbHkgdHJ1ZS4gSWYgeW91IGRvbid0IGhhbmRsZSB0aG9zZSBkZXBlbmRlbmNpZXMg
-aW4gbXBkLm1rCj4gKHdoaWNoIGlzIGZpbmUpLCBjb3VsZCB5b3UgZGlzYWJsZSB0aGVtIGV4cGxp
-Y2l0bHkgYnkgcGFzc2luZyB0aGUKPiBhcHByb3ByaWF0ZSAtRGZvbz1kaXNhYmxlZCwgaWYgYXZh
-aWxhYmxlPwo+IAoKcGFja2FnZS9waXBld2lyZSBpcyB0aGUgc2VydmVyIGNvbXBvbmVudCAtIHVu
-Zm9ydHVuYXRlbHkgYWxzbyB0aGUgb25seSAKcHJvdmlkZXIgb2YgbGlicGlwZXdpcmUsIHdoaWNo
-IGlzIG5lZWRlZCBoZXJlLiBJbnN0YWxsaW5nIHRoZSBjb21wbGV0ZSAKcGFja2FnZSB3b3VsZCBw
-cm9iYWJseSBzYXRpc2Z5IHRoZSBkZXBlbmRlbmN5LCBidXQgaW4gYW4gZW1iZWRkZWQgCmNvbnRl
-eHQgaXQgd291bGQgYmUgYmV0dGVyIHRvIGJyZWFrIHBpcGV3aXJlIGludG8gdHdvIGNvbXBvbmVu
-dHMsIApsaWJwaXBld2lyZSBhbmQgcGlwZXdpcmVkLiBTaW5jZSBJIGhhdmUgbm8gdXNlIGZvciB0
-aGlzIGZlYXR1cmUsIEkgd291bGQgCnByZWZlciB0byBkaXNhYmxlIGl0OyBJIHdpbGwgYWxzbyBy
-ZS1waHJhc2UgdGhlIGNvbW1pdCBtZXNzYWdlLgoKPj4gVGhlIGNoYW5nZSBsb2cgY2FuIGJlIGZv
-dW5kIGluIFsxXQo+PiAKPj4gSW50cm9kdWNlIG5ldyBkZXBlbmRlbmN5IGZvciBmbXQgbGlicmFy
-eS4gQ2hhbmdlIGNvbmZpZ3VyYXRpb24gb2YgVVBuUCAKPj4gcGx1Z2luCj4+IHRvIHN1Ym1lbnUs
-IGFsbG93aW5nIHRvIG9wdGlvbmFsbHkgc2VsZWN0IGxpYnVwbnAsIGxpYm5wdXBucCBvciAKPj4g
-ZGlzYWJsZWQuIFRoZQo+PiBkZWZhdWx0IHNldHRpbmcgaXMgJ25vIFVQblAgY2xpZW50IGZ1bmN0
-aW9uYWxpdHknLiBDb3JyZWN0IGEgdHlwbyBpbiAKPj4gdG9vbGNoYWluCj4+IGRlcGVuZGVuY3kg
-Y29tbWVudC4gQWRhcHQgc3BhcmMgcGF0Y2ggdG8gY2hhbmdlcyBpbiBzb3VyY2UgbGF5b3V0Lgo+
-IAo+IFRoZSB0eXBvIGluIHRoZSB0b29sY2hhaW4gZGVwZW5kZW5jeSBjb21tZW50IHNob3VsZCBi
-ZSBhZGRyZXNzZWQgaW4gYQo+IHNlcGFyYXRlIHBhdGNoLCBhcyBpdCBpcyByZWFsbHkgYW4gdW5y
-ZWxhdGVkIGJ1ZyBmaXguCj4gCgpPSwoKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbXBkL0NvbmZp
-Zy5pbiBiL3BhY2thZ2UvbXBkL0NvbmZpZy5pbgo+PiBpbmRleCA3YTI1OTc1NThiLi43YjVhZWI0
-YmY2IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL21wZC9Db25maWcuaW4KPj4gKysrIGIvcGFja2Fn
-ZS9tcGQvQ29uZmlnLmluCj4+IEBAIC04LDYgKzgsNyBAQCBtZW51Y29uZmlnIEJSMl9QQUNLQUdF
-X01QRAo+PiAgCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfOCAjIEMrKzE3
-Cj4+ICAJZGVwZW5kcyBvbiBCUjJfSE9TVF9HQ0NfQVRfTEVBU1RfOCAjIEMrKzE3Cj4+ICAJc2Vs
-ZWN0IEJSMl9QQUNLQUdFX0JPT1NUCj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0ZNVAo+IAo+IFlv
-dSdyZSBhZGRpbmcgdGhpcyBoZXJlLCBidXQgaXQncyBub3QgYWRkZWQgaW4gTVBEX0RFUEVOREVO
-Q0lFUy4gSXMgZm10Cj4gYSBidWlsZC10aW1lIG9yIGEgcnVuLXRpbWUgZGVwZW5kZW5jeT8KPiAK
-PiBZb3UgY2FuIGNoZWNrIHRoaXMgYnkgZG9pbmcgIm1ha2UgY2xlYW4gJiYgbWFrZSBtcGQiIGFu
-ZCB2ZXJpZnkgdGhhdCBpdAo+IGRvZXMgYnVpbGQuCj4gCgpJdCBpcyBib3RoLCBhIGJ1aWxkLSBh
-bmQgYSBydW50aW1lIGRlcGVuZGVuY3kuIFByb2JhYmx5IHdvcmtzIG9ubHkgCmJlY2F1c2Ugb2Yg
-YWxwaGFiZXRpY2FsIHNvcnRpbmcgb2YgcGFja2FnZXMgLi4uCgo+PiAgCXNlbGVjdCBCUjJfUEFD
-S0FHRV9MSUJJQ09OViBpZiAhQlIyX0VOQUJMRV9MT0NBTEUKPj4gIAloZWxwCj4+ICAJICBNUEQg
-aXMgYSBmbGV4aWJsZSwgcG93ZXJmdWwsIHNlcnZlci1zaWRlIGFwcGxpY2F0aW9uCj4+IEBAIC0z
-NjEsNyArMzYyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX01QRF9MSUJNUERDTElFTlQKPj4gCj4+
-ICBjb25maWcgQlIyX1BBQ0tBR0VfTVBEX05FSUdIQk9SX0RJU0NPVkVSWV9TVVBQT1JUCj4+ICAJ
-Ym9vbCAibmVpZ2hib3IgZGlzY292ZXJ5IHN1cHBvcnQiCj4+IC0JZGVwZW5kcyBvbiBCUjJfUEFD
-S0FHRV9NUERfTElCU01CQ0xJRU5UIHx8IEJSMl9QQUNLQUdFX01QRF9VUE5QCj4+ICsJZGVwZW5k
-cyBvbiBCUjJfUEFDS0FHRV9NUERfTElCU01CQ0xJRU5UIHx8IAo+PiAhQlIyX1BBQ0tBR0VfTVBE
-X1VQTlBfRElTQUJMRUQKPj4gIAloZWxwCj4+ICAJICBFbmFibGUgc3VwcG9ydCBmb3IgbmVpZ2hi
-b3IgZGlzY292ZXJ5Lgo+PiAgCSAgVGhpcyBvcHRpb24gY2FuIGJlIHVzZWQgaW4gY29uanVuY3Rp
-b24gd2l0aCB0aGUgc21iY2xpZW50Cj4+IEBAIC0zODAsMTMgKzM4MSwzOSBAQCBjb25maWcgQlIy
-X1BBQ0tBR0VfTVBEX1RDUAo+PiAgCSAgWW91IHdhbnQgdGhpcyBvbiBpZiBNUEQgYW5kIHRoZSBj
-bGllbnQocykgd29yawo+PiAgCSAgb24gZGlmZmVyZW50IG1hY2hpbmVzICh0aGUgdXN1YWwgc2Nl
-bmFyaW8pLgo+PiAKPj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9NUERfVVBOUAo+PiAtCWJvb2wgIlVQ
-blAiCj4+ICtjaG9pY2UKPiAKPiBLaW5kIG9mIGFubm95aW5nIHRvIGhhdmUgYSAiY2hvaWNlIiBo
-ZXJlLiBJcyB0aGVyZSBhIGdvb2QgcmVhc29uIHRvCj4gc3VwcG9ydCBib3RoIHVQTlAgaW1wbGVt
-ZW50YXRpb25zPwo+IAoKQ3VycmVudGx5IGp1c3Qgb25lOiB0aGVyZSBpcyBhIGNob2ljZSwgdGhl
-cmUgaXMgbm8gJ2NvcnJlY3QnIG9wdGlvbiwgc28gCmRlZmVyIHRoZSBkZWNpc2lvbiB0byB0aGUg
-dXNlci4gbGlibnB1cG5wIGlzIHRoZSBtb3JlIG1vZGVybiAKaW1wbGVtZW50YXRpb24sIGJ1dCBp
-bXBvc3NpYmxlIHRvIGNvbmZpZ3VyZTogY29uZmlnIG9wdGlvbnMgZXhpc3QsIGJ1dCAKYnJlYWsg
-dGhlIGJ1aWxkLCBiZWNhdXNlIHRoZXkgYXJlIG5vdCBjb21wbGV0ZWx5IGltcGxlbWVudGVkLiBC
-dWlsZHJvb3QgCnRoZXJlZm9yZSBkb2VzIGEgZnVsbC1mZWF0dXJlZCBpbnN0YWxsLCB3aGljaCB1
-c2VzIG1vcmUgc3BhY2UgdGhhbiAKbGlicHVwbnAgYW5kIGFsc28gYnJpbmdzIGZlYXR1cmVzIG5v
-dCBuZWVkZWQgaW4gYSBjbGllbnQgY29udGV4dCAoZS5nLiBhIAp3ZWIgc2VydmVyKS4gU2luY2Ug
-dGhpcyByYWlzZXMgYWRkaXRpb25hbCBzZWN1cml0eSBjb25jZXJucywgSSB3b3VsZCAKcHJlZmVy
-IHRoZSBvbGRlciBsaWJyYXJ5ICh3aGljaCBpcyBjbGllbnQtb25seSkgLSB1bmxlc3MgbnB1cG5w
-IHNvbHZlcyAKYW4gaXNzdWUgb3IgYW5vdGhlciBwYWNrYWdlIGluc3RhbGxzIGl0IGFueXdheTsg
-Y3VycmVudGx5ICB1cG1wZGNsaSBkb2VzIAp0aGlzLiBPbiB0aGUgb3RoZXIgaGFuZCwgaGF2aW5n
-IGJvdGggVVBuUCBmcm9udC1lbmQgYW5kIGJhY2stZW5kIAppbnRlZ3JhdGlvbiBpcyBub3QgcmVh
-bGx5IGEgdmFsaWQgdXNlIGNhc2UgLi4uCgpBdCB0aGF0IHBvaW50IEkgZ2F2ZSB1cCBhbmQgaW1w
-bGVtZW50ZWQgdGhlIGNob2ljZS4gSSB3aWxsIHB1dCBzb21lIG1vcmUgCmluZm9ybWF0aW9uIGlu
-dG8gdGhlIENvbmZpZy5pbiBoZWxwIHRleHRzLgoKPj4gKwlwcm9tcHQgIlVQblAiCj4+ICsJZGVm
-YXVsdCBCUjJfUEFDS0FHRV9NUERfVVBOUF9ESVNBQkxFRAo+PiArCWhlbHAKPj4gKwkgIEVuYWJs
-ZSBNUEQgVVBuUCBjbGllbnQgc3VwcG9ydC4KPj4gKwo+PiArY29uZmlnIEJSMl9QQUNLQUdFX01Q
-RF9VUE5QX1BVUE5QCj4+ICsJYm9vbCAicHVwbnAiCj4+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0VY
-UEFUCj4+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlVQTlAKPj4gIAlzZWxlY3QgQlIyX1BBQ0tB
-R0VfTVBEX0NVUkwKPj4gIAloZWxwCj4+IC0JICBFbmFibGUgTVBEIFVQblAgY2xpZW50IHN1cHBv
-cnQuCj4+ICsJICBQcm92aWRlcyBVUG5QIGZ1bmN0aW9uYWxpdHkgdGhyb3VnaCBsaWJ1cG5wCj4+
-ICsJICAodGhlIGxlZ2FjeSBQb3J0YWJsZSBTREsgZm9yIFVQblAgZGV2aWNlcykuCj4+ICsKPj4g
-KwkgIEludHJvZHVjZXMgbGVhc3QgYWRkaXRpb25hbCBkZXBlbmRlbmNpZXMuCj4+ICsKPj4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9NUERfVVBOUF9OUFVQTlAKPj4gKwlib29sICJucHVwbnAiCj4+ICsJ
-c2VsZWN0IEJSMl9QQUNLQUdFX0xJQk5QVVBOUAo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9NUERf
-Q1VSTAo+PiArCWhlbHAKPj4gKwkgIFByb3ZpZGVzIFVQblAgZnVuY3Rpb25hbGl0eSB0aHJvdWdo
-IGxpYm5wdXBucAo+PiArCSAgKGEgQysrIHJlaW1wbGVtZW50YXRpb24gb2YgdGhlIFBvcnRhYmxl
-IFVQblAgbGlicmFyeSkuCj4+ICsKPj4gKwkgIFByZWZlciB0aGlzIG9wdGlvbiBpZiB5b3UgcGxh
-biB0byB1c2UgdXBtcGRjbGkuCj4+ICsKPj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9NUERfVVBOUF9E
-SVNBQkxFRAo+IAo+IEkgdGhpbmsgSSB3b3VsZCBwcmVmZXIgQlIyX1BBQ0tBR0VfTVBEX1VQTlBf
-Tk9ORS4KCkdvb2Qgc29sdXRpb24gOi1EIFRoZSBoZWxwIHRleHRzIGFyZSB0b28gdGVjaG5pY2Fs
-LCBJIHdpbGwgdHJ5IHRvIApwcm92aWRlIHNvbWUgbW9yZSBpbmZvcm1hdGlvbiBoZXJlLgoKS2lu
-ZCByZWdhcmRzLApBbmRyZWFzCgo+IAo+IFRoYW5rcyBhIGxvdCEKPiAKPiBUaG9tYXMKPiAtLQo+
-IFRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRlZCBM
-aW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9vdGxp
-bi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In addition to various bug fixes, mpd version 0.23 introduces a new
+dependency (mft) and a change in the configuration of the UPnP client
+library. 
+
+Both supported UPnP libraries are available as Buildroot packages,
+there is no clear favourite, so the choice is left to the user.
+
+The libraries necessary for optional new features (openmpt decoder,
+pipewire and snapcast outputs) are currently not available as separate
+Buildroot packages and were disabled.
+
+The change log can be found in [1]
+
+Buildroot changes:
+  Correct a typo in toolchain dependency comment.
+  Introduce new dependency for fmt library.
+  Change configuration of UPnP plugin to submenu, allowing to optionally 
+	select libupnp, libnpupnp or no UPnP. The default setting is 
+	'no UPnP client functionality'.
+  Adapt sparc patch to changes in source layout.
+  Add legacy entry for existing MPD UPnP configuration.
+
+This change updates mpd to version 0.23.3, tested on arm64 and i386. 
+
+[1] https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.3/NEWS
+
+Andreas Ziegler (2):
+  package/mpd: correct typo in help message
+  package/mpd: update to version 0.23.y
+
+ Config.in.legacy                              |  8 ++++
+ ...build-add-atomic-dependency-for-spar.patch |  4 +-
+ package/mpd/Config.in                         | 43 ++++++++++++++++---
+ package/mpd/mpd.hash                          |  2 +-
+ package/mpd/mpd.mk                            | 23 +++++++---
+ 5 files changed, 65 insertions(+), 15 deletions(-)
+
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
