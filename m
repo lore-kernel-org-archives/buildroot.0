@@ -2,55 +2,52 @@ Return-Path: <SRS0=AoHb=QC=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF71C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 12:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FCA4C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 13:30:08 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 55BFC619E5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 12:33:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 55BFC619E5
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=umbiko.net
+	by mail.kernel.org (Postfix) with ESMTPS id D780163212
+	for <buildroot@archiver.kernel.org>; Mon, 15 Nov 2021 13:30:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org D780163212
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E280560784;
-	Mon, 15 Nov 2021 12:33:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC86460791;
+	Mon, 15 Nov 2021 13:30:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UijdVydcMCyQ; Mon, 15 Nov 2021 12:33:44 +0000 (UTC)
+	with ESMTP id iDMT5RgFNfyf; Mon, 15 Nov 2021 13:30:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E08A607C0;
-	Mon, 15 Nov 2021 12:33:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A0F31BF343
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 12:33:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13B7C6072E;
+	Mon, 15 Nov 2021 13:30:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 37BF41BF301
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 13:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8388B401F1
- for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 12:33:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 232A780D5A
+ for <buildroot@lists.busybox.net>; Mon, 15 Nov 2021 13:30:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Su2Y-K8Q0OZR for <buildroot@lists.busybox.net>;
- Mon, 15 Nov 2021 12:33:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 697D64020B
- for <buildroot@buildroot.org>; Mon, 15 Nov 2021 12:33:18 +0000 (UTC)
-Received: from localhost.localdomain (unknown [151.43.3.160])
- by serv15.avernis.de (Postfix) with ESMTPSA id B74BCC22A828;
- Mon, 15 Nov 2021 13:33:15 +0100 (CET)
-From: Andreas Ziegler <br015@umbiko.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ygm9CNTZ7GbQ for <buildroot@lists.busybox.net>;
+ Mon, 15 Nov 2021 13:30:04 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD97C80D3C
+ for <buildroot@buildroot.org>; Mon, 15 Nov 2021 13:30:03 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id B55886000C;
+ Mon, 15 Nov 2021 13:30:00 +0000 (UTC)
+From: Kory Maincent <kory.maincent@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Nov 2021 13:32:12 +0100
-Message-Id: <20211115123212.11841-3-br015@umbiko.net>
+Date: Mon, 15 Nov 2021 14:29:59 +0100
+Message-Id: <20211115133000.72041-1-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211114160803.5ce09ba5@windsurf>
-References: <20211114160803.5ce09ba5@windsurf>
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.3 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH v2 2/2] package/mpd: update to version 0.23.y
+Subject: [Buildroot] [PATCH 1/2] package/psplash: bump to revision 44afb75
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,202 +59,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: phil.eichinger@gmail.com, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+This includes the following changes:
+
+44afb75 Add configure options to disable progress bar
+fdbd111 Improve warnings from probing for double buffering
+f5203fd Update mailing list details since the move to groups.io
+0a902f7 Fix psplash-systemd failures
+4cf1330 Remove generated psplash-poky-img.h
+aea172a Makefile.am: Fix out of tree builds
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
-Changes v1 -> v2 (after review by Thomas Petazzoni):
- - Config.in.legacy: add entry for legacy MPD UPnP configuration
- - Config.in: rewrite UPnP help messages
- - mpd.mk: add fmt to MPD_DEPENDENCIES
- - mpd.mk: disable openmpt, pipewire, snapcast
- - mpd.mk: update to version 0.23.3
+ package/psplash/psplash.hash | 2 +-
+ package/psplash/psplash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Config.in.legacy                              |  8 ++++
- ...build-add-atomic-dependency-for-spar.patch |  4 +-
- package/mpd/Config.in                         | 41 +++++++++++++++++--
- package/mpd/mpd.hash                          |  2 +-
- package/mpd/mpd.mk                            | 23 +++++++----
- 5 files changed, 64 insertions(+), 14 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5b48566f68..09b7e5983e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2021.11"
- 
-+config BR2_PACKAGE_MPD_UPNP
-+	bool "MPD UPnP configuration changed"
-+	select BR2_LEGACY
-+	help
-+	  From version 0.23, MPD supports npupnp in addition to pupnp to
-+	  provide database access to a UPnP media server. To preserve the
-+	  existing functionality, select pupnp in the MPD UPnP configuration.
-+
- config BR2_OPENJDK_VERSION_LTS
- 	bool "OpenJDK LTS version was renamed to OpenJDK 11"
- 	select BR2_LEGACY
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-index 81bd981d65..390cf12583 100644
---- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -20,7 +20,7 @@ diff --git a/src/event/meson.build b/src/event/meson.build
- index bc13bbcd2..88370c03a 100644
- --- a/src/event/meson.build
- +++ b/src/event/meson.build
--@@ -21,9 +21,13 @@ event = static_library(
-+@@ -47,9 +47,13 @@ event = declare_dependency(
-    ],
-  )
-  
-@@ -32,8 +32,8 @@ index bc13bbcd2..88370c03a 100644
-    dependencies: [
- +    atomic_dep,
-      thread_dep,
-+     net_dep,
-      system_dep,
--     boost_dep,
- -- 
- 2.20.1
- 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index eb05f25a0b..be43049f7a 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -8,6 +8,7 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # C++17
- 	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_FMT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  MPD is a flexible, powerful, server-side application
-@@ -354,7 +355,7 @@ config BR2_PACKAGE_MPD_LIBMPDCLIENT
- 
- config BR2_PACKAGE_MPD_NEIGHBOR_DISCOVERY_SUPPORT
- 	bool "neighbor discovery support"
--	depends on BR2_PACKAGE_MPD_LIBSMBCLIENT || BR2_PACKAGE_MPD_UPNP
-+	depends on BR2_PACKAGE_MPD_LIBSMBCLIENT || !BR2_PACKAGE_MPD_UPNP_DISABLED
- 	help
- 	  Enable support for neighbor discovery.
- 	  This option can be used in conjunction with the smbclient
-@@ -373,13 +374,45 @@ config BR2_PACKAGE_MPD_TCP
- 	  You want this on if MPD and the client(s) work
- 	  on different machines (the usual scenario).
- 
--config BR2_PACKAGE_MPD_UPNP
--	bool "UPnP"
-+choice
-+	prompt "UPnP"
-+	default BR2_PACKAGE_MPD_UPNP_DISABLED
-+	help
-+	  Enable MPD to access a UPnP based media server.
-+
-+	  For further information, see
-+	  https://www.lesbonscomptes.com/upmpdcli/pages/upmpdcli-or-mpdupnp.html
-+
-+
-+config BR2_PACKAGE_MPD_UPNP_PUPNP
-+	bool "pupnp"
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBUPNP
- 	select BR2_PACKAGE_MPD_CURL
- 	help
--	  Enable MPD UPnP client support.
-+	  Provides UPnP database access through libupnp
-+	  (the legacy Portable SDK for UPnP devices).
-+
-+	  Introduces least additional dependencies.
-+
-+config BR2_PACKAGE_MPD_UPNP_NPUPNP
-+	bool "npupnp"
-+	select BR2_PACKAGE_LIBNPUPNP
-+	select BR2_PACKAGE_MPD_CURL
-+	help
-+	  Provides UPnP database access through libnpupnp
-+	  (a C++ reimplementation of the Portable UPnP library).
-+
-+	  This implementation is more modern, but also brings
-+	  additional features not needed in this context, thus
-+	  consuming more space.
-+
-+config BR2_PACKAGE_MPD_UPNP_DISABLED
-+	bool "disabled"
-+	help
-+	  No UPnP client functionality.
-+
-+endchoice
- 
- comment "Tag plugins"
- 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 2501be65de..cb9d05cd32 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
+index 87fcdadd6d..77090d08f6 100644
+--- a/package/psplash/psplash.hash
++++ b/package/psplash/psplash.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  143f7f34aaee6e87888f3dd35d49aade6656052651b960ca42b46cbb518ca0a0  mpd-0.22.11.tar.xz
-+sha256  b300625701005c6b14649f11dac118d05540529a5385d05b7c3062c0ce08f399  mpd-0.23.3.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e105352b80..382c003e28 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,17 +4,20 @@
+ # Locally computed
+-sha256  2c1344dd8414415d80a01484b1cc29e78f99c31d5266189540e5966a7dc6e10e  psplash-fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c-br1.tar.gz
++sha256  c9f71754f4606e46212a4851d6c1145e4ae8752fd11a2b40e825f04bf79b22ec  psplash-44afb7506d43cca15582b4c5b90ba5580344d75d-br1.tar.gz
+ sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 199509ecd6..5e61f2392f 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPD_VERSION_MAJOR = 0.22
--MPD_VERSION = $(MPD_VERSION_MAJOR).11
-+MPD_VERSION_MAJOR = 0.23
-+MPD_VERSION = $(MPD_VERSION_MAJOR).3
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
--MPD_DEPENDENCIES = host-pkgconf boost
-+MPD_DEPENDENCIES = host-pkgconf boost fmt
- MPD_LICENSE = GPL-2.0+
- MPD_LICENSE_FILES = COPYING
- MPD_SELINUX_MODULES = mpd
- MPD_CONF_OPTS = \
- 	-Daudiofile=disabled \
--	-Ddocumentation=disabled
-+	-Ddocumentation=disabled \
-+	-Dopenmpt=disabled \
-+	-Dpipewire=disabled \
-+	-Dsnapcast=disabled
- 
- # Zeroconf support depends on libdns_sd from avahi.
- ifeq ($(BR2_PACKAGE_MPD_AVAHI_SUPPORT),y)
-@@ -291,12 +294,18 @@ else
- MPD_CONF_OPTS += -Dtwolame=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
-+ifeq ($(BR2_PACKAGE_MPD_UPNP_PUPNP),y)
- MPD_DEPENDENCIES += \
- 	expat \
- 	libupnp
--MPD_CONF_OPTS += -Dupnp=enabled
--else
-+MPD_CONF_OPTS += -Dupnp=pupnp
-+endif
-+ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
-+MPD_DEPENDENCIES += \
-+	libnpupnp
-+MPD_CONF_OPTS += -Dupnp=npupnp
-+endif
-+ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
- MPD_CONF_OPTS += -Dupnp=disabled
- endif
- 
+-PSPLASH_VERSION = fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c
++PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
+ PSPLASH_SITE = git://git.yoctoproject.org/psplash
+ PSPLASH_LICENSE = GPL-2.0+
+ PSPLASH_LICENSE_FILES = COPYING
 -- 
 2.25.1
 
