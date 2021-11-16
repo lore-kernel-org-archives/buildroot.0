@@ -2,87 +2,85 @@ Return-Path: <SRS0=m+kO=QD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCC35C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 17:21:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C90C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 18:00:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id ED95C61A03
-	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 17:21:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org ED95C61A03
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
+	by mail.kernel.org (Postfix) with ESMTPS id E94B961A08
+	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 18:00:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org E94B961A08
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=free.fr
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B53140224;
-	Tue, 16 Nov 2021 17:21:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D98A60751;
+	Tue, 16 Nov 2021 18:00:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjnz1ZoEJpPx; Tue, 16 Nov 2021 17:21:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4fC8THbZz3zm; Tue, 16 Nov 2021 18:00:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF9134039C;
-	Tue, 16 Nov 2021 17:21:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44CDD60782;
+	Tue, 16 Nov 2021 18:00:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EDBF1BF3FB
- for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 17:21:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A609B1BF3FB
+ for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 18:00:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AA8240224
- for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 17:21:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9303140142
+ for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 18:00:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DGZV7p-ddO0W for <buildroot@lists.busybox.net>;
- Tue, 16 Nov 2021 17:21:00 +0000 (UTC)
+ with ESMTP id KINip57e67MU for <buildroot@lists.busybox.net>;
+ Tue, 16 Nov 2021 18:00:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A0034039C
- for <buildroot@buildroot.org>; Tue, 16 Nov 2021 17:20:59 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id y13so16104259edd.13
- for <buildroot@buildroot.org>; Tue, 16 Nov 2021 09:20:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=subject:to:references:from:message-id:date:user-agent:mime-version
- :in-reply-to:content-language:content-transfer-encoding;
- bh=UGLlZ7e7l0UQs12+ni5FvDPzJ9ZXtNpfLpJ0ZYjXTF4=;
- b=CT1rARWWxNefqYlnXGIvvcdo7i9MT6J4Mq1SBocVec6jc02NRVnh0IRZoAnGA0D5dC
- LfP3dBYAgX5MQ4KCndCNAq2LMz+8uLN8ATPb9WGB79IjsOtIebZJ69S0h6g7MNdwVTx3
- RS0+6DDY2s+rkZAn4azUeq8q7NLlVEbdoR9o5EyLim/6xBxyjWgJk2XpcK2W9xX5+4F5
- Kz9fMMARI+Y+OJ/kRvZtpiaT5wbDjB2vumSshE+SVXj2pdsXFxhZfa5jTK7wJGKbUh7A
- CA3HGNk33cMl1dTJ16pUTAyLILW0KMYbAY9uw3+GFmS1a1mkhgo2TdCRpo9ke7J8YtkO
- IE+Q==
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C343D400BD
+ for <buildroot@buildroot.org>; Tue, 16 Nov 2021 18:00:48 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ n33-20020a05600c502100b0032fb900951eso2689885wmr.4
+ for <buildroot@buildroot.org>; Tue, 16 Nov 2021 10:00:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=mZUYjKX44SR5zrSczXdzRc/VDUMk8qiXAieL9rbN6uc=;
+ b=JBB/am47mYxj49O2e8zUXxH8UtyrqMaboooYp7/diRZEt/JeYhuRUR+sGiYJMVnP2a
+ uGU8J5eVW8o63ud7oYhRF6fL/ooeqjKvwh4P0XW4zzCf0fuBMGNfwPLukBNYKQMuRdCL
+ idKVlKIgkjFy50KFaUMcAsdF+uDwhKthcSBTNeHQ5ybNt8AyLnIo7Bvx5VGSswLUIokK
+ qgSa6/3Iz+mRBpfEu8PxKkMBsSYDQWkqykLCdToBy220Mt7h5ATQjsy03CPSGYmfIt3k
+ Jmg19vmaWgew7+a3XMzT9Ylq+qn3e628vcB/nvrTnDcJ8o4KXQGlU8Q9g9m+ltl39Wzy
+ W8TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
- :content-transfer-encoding;
- bh=UGLlZ7e7l0UQs12+ni5FvDPzJ9ZXtNpfLpJ0ZYjXTF4=;
- b=ObuT8T/FBSPy9rn7WiCVidNstnadHczov6SFByK9/oe/+ilNbhFrB3ASq0sZig5zpU
- Gxs4dnudq/rIWyFOF8KO+yItC6Q5vUL4nTQ4Ygqvhh+NLDjd07qAAtDhXCiK/F5EvcnF
- VK5k3DkSQlUjUz/dPAmXG3wwbkyY0Wi7JiJYjmr86SBiDhMiUJKSMccgKaug595OkP9Y
- 3zl03S2LrlGVH7bWPAqU/YBVPwY7yMCBA9PvJMsRtUHttwklYwpuHd5gRHkFmDXCUUgO
- ovX/CDgzcYl9FEKzlAZ2HrjJe/luBOOnnJfPqHUD/vncYbp5iuULZyu1urFCCGEUCCxw
- 57nw==
-X-Gm-Message-State: AOAM532DvzqfNvVBUS3AIFP7xqpOH9D4Le/TwbSpeVkrgkljdL8tOP3d
- JxqkWEOcSc3uYH3NPg8V1nEYOgoPV2e4jhtB
-X-Google-Smtp-Source: ABdhPJxRVCqeQ/XxY2lds7BidmX8ci5OYBnJ583w3C5nsfPw5WC0b4rFNDbw2RCxJBwzlQSa97L1ag==
-X-Received: by 2002:aa7:ca4f:: with SMTP id j15mr12311476edt.178.1637083258081; 
- Tue, 16 Nov 2021 09:20:58 -0800 (PST)
-Received: from ?IPv6:2a02:a03f:6bfb:d00:7eb0:c2ff:fef4:f493?
- ([2a02:a03f:6bfb:d00:7eb0:c2ff:fef4:f493])
- by smtp.gmail.com with ESMTPSA id de37sm8465205ejc.60.2021.11.16.09.20.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 16 Nov 2021 09:20:57 -0800 (PST)
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211115173344.3861620-1-fontaine.fabrice@gmail.com>
-From: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <a6dad847-a0ec-aeba-90ce-252d8907ad43@mind.be>
-Date: Tue, 16 Nov 2021 18:20:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=mZUYjKX44SR5zrSczXdzRc/VDUMk8qiXAieL9rbN6uc=;
+ b=x/odez6Q4MQjuru98aGf+cPVjPl47VvAim7sL54RY37C7isP7412FrwHsnrOZAh14D
+ Tv1PqYJvQ/MKFMYb1l4Al9UdkbpN00Kb2pTfD7H1VZzF2/3lEUeOm3R6TmQEcb93jWPd
+ BwOtkeQo00b3UvolpmCU1bSBGbuphHs+9h4AtqNGVDaQYs2ip4j6dcc/4eiYdiZmVs1o
+ 4GiYyo33p8yEAO8NdMLohG06kPB1j27kLLWZ2w0k5BtJuhzEILC+gAwZtroDx8nKo6nM
+ uuU+Z/STYG0JRiocTLIbM0rXNY01B7hPqAGT1jXSTPEoK2LIfvXrZ586EswwRvwZia5w
+ j4uQ==
+X-Gm-Message-State: AOAM532xO67H8/ceCEOKsSXh59Bv3bhlVusXCpeiXJW6OR0sFSBCNQjw
+ rmL2nKDFzOYHdAgSs77z9I3bvGzkRqv5Kw==
+X-Google-Smtp-Source: ABdhPJyn5KwJkdnOlZgWYAIHA6XdfoSffc5gSWKUTUVyYR9TxYRZJAatXLPPFC9pLicV26lJbQJ8mA==
+X-Received: by 2002:a05:600c:2f01:: with SMTP id
+ r1mr10089536wmn.153.1637085646869; 
+ Tue, 16 Nov 2021 10:00:46 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:e176:4ed7:f33:d40f])
+ by smtp.gmail.com with ESMTPSA id u16sm2934917wmc.21.2021.11.16.10.00.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Nov 2021 10:00:46 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 16 Nov 2021 19:00:41 +0100
+Message-Id: <20211116180041.1047747-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211115173344.3861620-1-fontaine.fabrice@gmail.com>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH 1/1] package/mupdf: disable objcopy
+Subject: [Buildroot] [PATCH] boot/uboot: kconfig needs the toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,35 +92,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpPbiAxMS8xNS8yMSA2OjMzIFBNLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+IERy
-b3AgZm91cnRoIHBhdGNoIGFuZCBkaXNhYmxlIG9iamNvcHkgYXMgc3VnZ2VzdGVkIGJ5IHVwc3Ry
-ZWFtIGluCj4gaHR0cHM6Ly9idWdzLmdob3N0c2NyaXB0LmNvbS9zaG93X2J1Zy5jZ2k/aWQ9NzA0
-NDQyI2MyCj4gCj4gVGhpcyB3aWxsIGFsc28gZml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVy
-ZSBvbiBzcGFyYzoKPiAKPiAgICAgIE9CSkNPUFkgYnVpbGQvcmVsZWFzZS9yZXNvdXJjZXMvZm9u
-dHMvdXJ3L0RpbmdiYXRzLmNmZi5vCj4gL2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9pbnN0YW5j
-ZS0zL291dHB1dC0xL2hvc3Qvb3B0L2V4dC10b29sY2hhaW4vYmluLy4uL2xpYi9nY2Mvc3BhcmM2
-NC1idWlsZHJvb3QtbGludXgtZ251LzkuMy4wLy4uLy4uLy4uLy4uL3NwYXJjNjQtYnVpbGRyb290
-LWxpbnV4LWdudS9iaW4vbGQ6IC0tcmVsYXggYW5kIC1yIG1heSBub3QgYmUgdXNlZCB0b2dldGhl
-cgoKTmljZSEKClRoaXMgd2lsbCBhbHNvIGZpeCB0aGUgYnVpbGQgZm9yIHh0ZW5zYToKICAgICAg
-T0JKQ09QWSBidWlsZC9yZWxlYXNlL3Jlc291cmNlcy9mb250cy91cncvRGluZ2JhdHMuY2ZmLm8K
-ICAgICAgT0JKQ09QWSBidWlsZC9yZWxlYXNlL3Jlc291cmNlcy9mb250cy91cncvTmltYnVzTW9u
-b1BTLUJvbGQuY2ZmLm8KIAovdG1wL2luc3RhbmNlLTEvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRv
-b2xjaGFpbi9iaW4vLi4vbGliL2djYy94dGVuc2EtYnVpbGRyb290LWxpbnV4LXVjbGliYy85LjMu
-MC8uLi8uLi8uLi8uLi94dGVuc2EtYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6IAotLXJl
-bGF4IGFuZCAtciBtYXkgbm90IGJlIHVzZWQgdG9nZXRoZXIKaHR0cDovL2F1dG9idWlsZC5idWls
-ZHJvb3QubmV0L3Jlc3VsdHMvMDk0NWYzMDVkMzE1MzA2NzcyODJmMzhmYTdjOTlhZjUyOTVkNDdi
-ZAoKCkkgaGF2ZW4ndCBoYWQgYSBjaGFuY2UgdG8gcnVudGltZS10ZXN0IGl0LCBidXQgSSBjYW4g
-Y29uZmlybSBpdCBidWlsZHMgZm9yOgogICAgICAgICAgICAgICAgICAgICAgYm9vdGxpbi14ODYt
-NjQtbXVzbCBbMS82XTogT0sKICAgICAgICAgICAgICAgICAgICBib290bGluLW1pcHNlbC11Y2xp
-YmMgWzIvNl06IE9LCiAgICAgICAgICAgICAgICAgYm9vdGxpbi1taXBzZWwzMnI2LWdsaWJjIFsz
-LzZdOiBPSwogICAgICAgICAgICAgICAgICAgICBib290bGluLXNwYXJjLXVjbGliYyBbNC82XTog
-U0tJUFBFRAogICAgICAgICAgICAgICAgICAgIGJvb3RsaW4tc3BhcmM2NC1nbGliYyBbNS82XTog
-T0sKICAgICAgICAgICAgICAgICAgICBib290bGluLXh0ZW5zYS11Y2xpYmMgWzYvNl06IE9LCgoK
-VGhhbmtzIQoKUmFwaGHDq2wKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Starting with uboot 2021.10, with upstream commit 473fc279c89 (kconfig /
+kbuild: Re-sync with Linux 4.20), the kconfig in uboot now needs the
+compiler to detect its features.
+
+Like was done for linux in 3fc990a7983 (linux: kconfig needs the
+toolchain) and barebox in 1c1a629d814 (boot/barebox: kconfig needs the
+toolchain), add the toolchain to the kconfig dependencies of uboot.
+
+Reported-by: Davian on IRC
+Reported-by: Xogium on IRC
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/uboot/uboot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a10e224501..9661f901ea 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -525,7 +525,11 @@ UBOOT_DEPENDENCIES += \
+ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
++# Starting with 2021.10, the kconfig in uboot calls the cross-compiler
++# to check its capabilities. So we need the toolchain before we can
++# call the configurators.
+ UBOOT_KCONFIG_DEPENDENCIES += \
++	toolchain \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
