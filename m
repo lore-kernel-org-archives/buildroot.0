@@ -2,90 +2,51 @@ Return-Path: <SRS0=m+kO=QD=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64DA1C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 08:09:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 216D9C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 08:13:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4D3EA6101B
-	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 08:09:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 4D3EA6101B
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=buildroot.org
+	by mail.kernel.org (Postfix) with ESMTPS id 7138161268
+	for <buildroot@archiver.kernel.org>; Tue, 16 Nov 2021 08:13:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7138161268
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2D0A40255;
-	Tue, 16 Nov 2021 08:09:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1907280B20;
+	Tue, 16 Nov 2021 08:13:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HGTK44uSo7NX; Tue, 16 Nov 2021 08:09:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cmiV9an0G9yt; Tue, 16 Nov 2021 08:13:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2180240237;
-	Tue, 16 Nov 2021 08:09:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21A3A1BF2F2
- for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 08:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B59F80B26;
+	Tue, 16 Nov 2021 08:13:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 18A361BF2F2
+ for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 08:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D3EC40237
- for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 08:09:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0753D60698
+ for <buildroot@lists.busybox.net>; Tue, 16 Nov 2021 08:13:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MIZfrbHyP9iJ for <buildroot@lists.busybox.net>;
- Tue, 16 Nov 2021 08:09:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2IvMNJpy6lf5 for <buildroot@lists.busybox.net>;
+ Tue, 16 Nov 2021 08:13:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from fallback20.mail.ru (fallback20.mail.ru [185.5.136.252])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 22A1640231
- for <buildroot@buildroot.org>; Tue, 16 Nov 2021 08:08:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru;
- s=mail3; 
- h=References:In-Reply-To:Content-Type:Message-ID:Reply-To:Date:MIME-Version:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=LhqS1jcO5vK9bKdv1/edYctUK0QdSc62WL3aWdeGmlY=; 
- t=1637050140;x=1637655540; 
- b=iZirpovFJy9IX48NzooPylmpRwZpa32oXoT9F+WKAyiOUb1eF9gL3ZOrrlMupGbRbRCijKF2O2YnTT1Eb+FifwgTwjQjtryUD29M/g0IccbP7cwdj9Xt9qmvI6PPFL6JLUpEHrAiQodvt9GSR/mYFKeNfSCuz0E9qTJ/4icVsvQ=;
-Received: from [10.161.199.6] (port=52026 helo=f553.i.mail.ru)
- by fallback20.m.smailru.net with esmtp (envelope-from <ivmai@mail.ru>)
- id 1mmtWT-0001Y9-68
- for buildroot@buildroot.org; Tue, 16 Nov 2021 11:08:57 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru;
- s=mail3; 
- h=References:In-Reply-To:Content-Type:Message-ID:Reply-To:Date:MIME-Version:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=LhqS1jcO5vK9bKdv1/edYctUK0QdSc62WL3aWdeGmlY=; 
- t=1637050137;x=1637655537; 
- b=mzBm/m7pKBuEuI2F2BnfoeAGnQox1IqP8QGvee0DSWSKRhduoG7/zoSb0oezndb+I6XU/IrGOuxKqfjmlhWtF+e4Y9jvhsfq4h8zrsyrFai5J39jRWiLhvl6/QYXndH+qaRpjJmi40KgSNK6j78MTOjbY+mUO43ipARlLaao6ao=;
-Received: by f553.i.mail.ru with local (envelope-from <ivmai@mail.ru>)
- id 1mmtWG-0005BY-TO; Tue, 16 Nov 2021 11:08:45 +0300
-Received: by e.mail.ru with HTTP;
-	Tue, 16 Nov 2021 11:08:44 +0300
-To: =?UTF-8?B?VGhvbWFzIFBldGF6em9uaQ==?= <thomas.petazzoni@bootlin.com>
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57B6B605BE
+ for <buildroot@buildroot.org>; Tue, 16 Nov 2021 08:13:47 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6CB362000F
+ for <buildroot@buildroot.org>; Tue, 16 Nov 2021 08:13:44 +0000 (UTC)
 MIME-Version: 1.0
-X-Mailer: Mail.Ru Mailer 1.0
-X-SenderField-ReMsg: 16370156781399780961
-X-SenderField-Remind: 0
-Date: Tue, 16 Nov 2021 11:08:44 +0300
-X-Priority: 3 (Normal)
-Message-ID: <1637050124.513463804@f553.i.mail.ru>
-In-Reply-To: <20211115233436.029a67dd@windsurf>
-References: <1637012444.996998717@f769.i.mail.ru>
- <20211115233436.029a67dd@windsurf>
-X-7564579A: 646B95376F6C166E
-X-77F55803: 119C1F4DF6A9251C4E04E4C44900C132B719C76E981E2DFEA318A9A586C59F9AABF6EAE57C0FACE97BEC366E279C630A4452BAA2A8B8E01F12AFEA9E3F1D53D79A2121EFDC19030F
-X-7FA49CB5: 70AAF3C13DB7016878DA827A17800CE79784AECD8B2106AFD82A6BABE6F325AC08BE7437D75B48FABCF491FFA38154B613377AFFFEAFD269176DF2183F8FC7C0FFEB5AA78C4D87BFC2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE759251087BE69EEF7EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BBCA57AF85F7723F21E29E7DF8D094F2AD9DB73D9A723D99F20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C012F9184CEE6480E98941B15DA834481FA18204E546F3947C062BEEFFB5F8EA3EF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006377C70927E34808485389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735E4A630A5B664A4FFC4224003CC83647689D4C264860C145E
-X-C1DE0DAB: 0D63561A33F958A5672E42AC635295C258D698378C998C64C64327EAB7118B2CBDC6A1CF3F042BAD6DF99611D93F60EF2E430E89EB05153F699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34F507C2EA0814E4507B08A2448224C96F66B961C691585A55420337B97F1CA688D288FC4F09E6EE2B1D7E09C32AA3244C61A8F5E220854708DCC0D124A8E4D9FF64EE5813BBCA3A9D729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5+wYjsrrSY/u8Y3PrTqANeitKFiSd6Yd7yPpbiiZ/d5BsxIjK0jGQgCHUM3Ry2Lt2G3MDkMauH3h0dBdQGj+BB/iPzQYh7XS329fgu+/vnDhJpW4VMZaM5CddnyoH6oLNg==
-X-Mailru-Sender: 29546553813C303C1E3905C44E55050F3DB31CCCFAC6DBFF332FEA52ECECF960228347604A659C4AA49192E8B7F1AE780F1A465C2FE6D2A52EA2A3F33737263513232A9A0118815C1E1601CB44F692FAB714F0C7AF89E02F0D4ABDE8C577C2ED
-X-Mras: Ok
-X-Spam: undefined
-X-4EC0790: 10
-X-7564579A: B8F34718100C35BD
-X-77F55803: 6242723A09DB00B4BE3FD1D532ABC33AF5D1A033524C2424BA051353CEAAD8CC049FFFDB7839CE9E668506C8E71D87C04CDE4D2AC9587278612FB0CCBEEA8D780F9BD32CFF29F532
-X-7FA49CB5: 0D63561A33F958A5124D89603D000AFB300BF1FAB255C0EF6B3DEF2B1DFED458CACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F7900637C17F2030349B6B04389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8A816C540FC8EEC30F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE7588D3C263EAE74EA731C566533BA786AA5CC5B56E945C8DA
-X-C1DE0DAB: 0D63561A33F958A5124D89603D000AFB300BF1FAB255C0EF8C45A656E22914C58E8E86DC7131B365E7726E8460B7C23C
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5+wYjsrrSY/u8Y3PrTqANeitKFiSd6Yd7yPpbiiZ/d5BsxIjK0jGQgCHUM3Ry2Lt2G3MDkMauH3h0dBdQGj+BB/iPzQYh7XS329fgu+/vnDhJpW4VMZaM5AmaqPHItFF0A==
-X-Mailru-MI: 400800
-X-Mras: Ok
-Subject: Re: [Buildroot] =?utf-8?q?package/bdwgc=3A_bump_to_8=2E0=2E6?=
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Nov 2021 08:13:44 -0000
+Message-Id: <20211116081349.0753D60698@smtp3.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-11-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,147 +58,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Ivan Maidanski via buildroot <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?SXZhbiBNYWlkYW5za2k=?= <ivmai@mail.ru>
-Cc: =?UTF-8?B?YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc=?= <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============8414973044130547001=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello,
 
---===============8414973044130547001==
-Content-Type: multipart/alternative;
-	boundary="--ALT--9fF3c00D25C3B702A19A166e0635B7321637050124"
+Autobuild statistics for 2021-11-15
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 47  | 10  |  1  | 58  |
+  2021.08.x  | 44  |  7  |  0  | 51  |
+    master   | 84  | 21  |  0  | 105 |
+     next    | 11  |  3  |  0  | 14  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+              tinydtls-0.9-rc1 | 9 
+              host-erlang-22.2 | 5 
+                log4cxx-0.12.0 | 2 
+                    bird-2.0.8 | 1 
+                   delve-1.6.1 | 1 
+libdbi-88b8477d57153b9f736d... | 1 
+                samba4-4.14.10 | 1 
+                 wavemon-0.9.4 | 1 
 
 
-----ALT--9fF3c00D25C3B702A19A166e0635B7321637050124
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+Detail of failures for master
+-----------------------------
 
-CkhlbGxvIFRob21hcywKwqAKR290IGl0LCBhZ3JlZS4KVGhhbmsgeW91IQrCoCAKPlR1ZSwgMTYg
-Tm92IDIwMjEsIDE6MzQgKzAzOjAwIGZyb23CoFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRh
-enpvbmlAYm9vdGxpbi5jb20+Ogo+wqAKPkhlbGxvIEl2YW4sCj4KPk9uIFR1ZSwgMTYgTm92IDIw
-MjEgMDA6NDA6NDQgKzAzMDAKPkl2YW4gTWFpZGFuc2tpIHZpYSBidWlsZHJvb3QgPCBidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZyA+IHdyb3RlOgo+Cj4+IEhlcmXigJlzIGEgcGF0Y2ggdXBkYXRpbmcg
-YmR3Z2MgZnJvbSA4LjAuNCB0byA4LjAuNi4KPgo+SSBoYXZlIGFwcGxpZWQgeW91ciBwYXRjaCB0
-byB0aGUgbmV4dCBicmFuY2gsIHdpdGggc29tZSBjaGFuZ2VzIChzZWUKPmJlbG93KS4gSG93ZXZl
-ciwgZm9yIGZ1dHVyZSBwYXRjaGVzLCBjb3VsZCB5b3UgdXNlICJnaXQgc2VuZC1lbWFpbCIgdG8K
-PnNlbmQgdGhlbSBzbyB0aGF0IHRoZSBwYXRjaCBhcHBlYXJzIGlubGluZSwgd2hpY2ggbWFrZXMg
-aXQgZWFzaWVyIHRvCj5yZXZpZXc/Cj4KPkhlcmUgaXMgeW91ciBwYXRjaDoKPgo+PiAtc2hhMjU2
-IDQzNmEwZGRjNjdiMWFjMGIwNDA1YjYxYTk2NzViY2E5ZTA3NWM4MTU2ZjRkZWJkMWQwNmYzYTU2
-YzdjZDI4OWQgZ2MtOC4wLjQudGFyLmd6Cj4+IC1zaGEyNTYgYWVlYWFiYmY0NGU2N2Q0MTNlMTg3
-MTlmMGM2YWM5YzIzMzg3YWIwYjMzZTdhMTVlZTQ2Y2Y1OWRkZWYxMmNjNyBSRUFETUUuUVVJQ0sK
-Pj4gK3NoYTI1NiAzYjQ5MTRhYmM5ZmE3NjU5MzU5Njc3M2U0ZGE2NzFkN2VkNGQ1MzkwZTNkNDZm
-YmYyZTVmMTU1ZTEyMWJlYTExIGdjLTguMC42LnRhci5nego+PiArc2hhMjU2IDBhYWI3YTU2YTky
-ZWQ4NzhjNGE1NDY0Y2YyODJkNjVmMzhiY2RlZTY0ZmU5Y2YyMTNlMjYyNTRiZGRiM2YzNDAgUkVB
-RE1FLlFVSUNLCj4KPldoZW4gdGhlIGxpY2Vuc2UgZmlsZSBoYXNoIGNoYW5nZXMsIHdlIHdhbnQg
-YW4gaW5kaWNhdGlvbiBpbiB0aGUgY29tbWl0Cj5sb2cgZXhwbGFpbmluZyB3aHkgaXQgaGFzIGNo
-YW5nZWQuIEluZGVlZCwgdGhlIHJlYXNvbiB3aHkgd2UgaGF2ZSBzdWNoCj5oYXNoZXMgaXMgdG8g
-ZGV0ZWN0IGNoYW5nZXMgaW4gdGhlIGxpY2Vuc2UgdGVybXMgb2YgdXBzdHJlYW0gcHJvamVjdHMu
-Cj5JZiB3ZSAic2lsZW50bHkiIGNoYW5nZSBzdWNoIGhhc2hlcyB3aXRob3V0IGEgcHJvcGVyIGp1
-c3RpZmljYXRpb24sIGl0Cj5raW5kIG9mIGRlZmVhdHMgdGhlIGVudGlyZSBwdXJwb3NlIG9mIHRo
-b3NlIGhhc2hlcy4gQWZ0ZXIgY2hlY2tpbmcgdGhlCj5kaWZmZXJlbmNlcyBpbiBSRUFETUUuUVVJ
-Q0sgYmV0d2VlbiA4LjAuNCBhbmQgOC4wLjYsIEkndmUgYWRkZWQgYW4KPmV4cGxhbmF0aW9uIGlu
-IHRoZSBjb21taXQgbG9nLgo+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Jkd2djL2Jkd2djLm1r
-IGIvcGFja2FnZS9iZHdnYy9iZHdnYy5tawo+PiBpbmRleCA1N2RkODJjYWI0Li41NGJjNGZkODg5
-IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL2Jkd2djL2Jkd2djLm1rCj4+ICsrKyBiL3BhY2thZ2Uv
-YmR3Z2MvYmR3Z2MubWsKPj4gQEAgLTQsOSArNCw5IEBACj4+ICMKPj4gIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMKPj4KPj4gLUJEV0dDX1ZFUlNJT04gPSA4LjAuNAo+PiArQkRXR0NfVkVSU0lPTiA9
-IDguMC42Cj4+IEJEV0dDX1NPVVJDRSA9IGdjLSQoQkRXR0NfVkVSU0lPTikudGFyLmd6Cj4+IC1C
-RFdHQ19TSVRFID0gIGh0dHA6Ly93d3cuaGJvZWhtLmluZm8vZ2MvZ2Nfc291cmNlCj4+ICtCRFdH
-Q19TSVRFID0gIGh0dHBzOi8vZ2l0aHViLmNvbS9pdm1haS9iZHdnYy9yZWxlYXNlcy9kb3dubG9h
-ZC92JChCRFdHQ19WRVJTSU9OICkKPj4gQkRXR0NfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4+IEJE
-V0dDX0xJQ0VOU0UgPSBiZHdnYyBsaWNlbnNlCj4+IEJEV0dDX0xJQ0VOU0VfRklMRVMgPSBSRUFE
-TUUuUVVJQ0sKPj4gQEAgLTI4LDggKzI4LDYgQEAgSE9TVF9CRFdHQ19DT05GX09QVFMgPSAtLXdp
-dGgtbGliYXRvbWljLW9wcz15ZXMKPj4KPj4gaWZlcSAoJChCUjJfSU5TVEFMTF9MSUJTVERDUFAp
-LHkpCj4+IEJEV0dDX0NPTkZfT1BUUyArPSAtLWVuYWJsZS1jcGx1c3BsdXMKPj4gLWVsc2UKPj4g
-LUJEV0dDX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtY3BsdXNwbHVzCj4KPk5vLCB3ZSB3YW50IHRv
-IGtlZXAgdGhpcywgZXZlbiBpZiB0aGlzIGlzIHRoZSBkZWZhdWx0LiBXZSB3YW50IHRvIGJlCj5l
-eHBsaWNpdCBhYm91dCBzdWNoIG9wdGlvbnMsIHdoaWNoIGlzIHdoYXQgd2UgZG8gaW4gdGhlIHZh
-c3QgbWFqb3JpdHkKPm9mIHBhY2thZ2VzLiBTbyBJJ3ZlIHJldmVydGVkIHRoYXQgcGFydGljdWxh
-ciBjaGFuZ2UgZnJvbSB5b3VyIHBhdGNoCj53aGVuIGFwcGx5aW5nLgo+Cj5UaGFua3MgYSBsb3Qh
-Cj4KPlRob21hcwo+LS0KPlRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3Rs
-aW4KPkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj5o
-dHRwczovL2Jvb3RsaW4uY29tIArCoArCoAotLQpJdmFuIE1haWRhbnNraQrCoA==
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/1e1c4537400b6b6018068976d812933b1db9c378 |     
+   x86_64    |          delve-1.6.1           | NOK | http://autobuild.buildroot.net/results/7a31db897210a1213d95a86380a38538de97fa38 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/76f5dd8717b124cf5ca77a2dfe690f315be4f269 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/64f5aa7c201f03fbaa4560019b44c538ebeb2207 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/65b26bcff69788af17f344641e081817def2f531 |     
+   mipsel    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/5684d2f7998be52c3cbf4d510f923ecdf9179a87 |     
+  riscv64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/03fcc35ba73b2403f2a37bf3494d6d29c2c5b687 |     
+    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/0dbf191f65f2d173359abd4ba4ee2c31e3b46f4d |     
+    arc      |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/6738deea8692bc858810a97f000fa02b721724a6 |     
+   x86_64    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/cb6c10a335d475b6b8cdf7abe996a6d23fc73c31 |     
+    arc      |         samba4-4.14.10         | NOK | http://autobuild.buildroot.net/results/870cdb9384d29e57c2a81d4755bbbe370dac34a1 |     
+microblazeel |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/9cd8fc3fb99e04d4ae2a5517d22fc9b765ea4cb9 |     
+    mips     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/d33888d3daa84f9cb499f65175890e499a2ee721 |     
+   sparc     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/9049c670cb172d37c52729d8e9b6f69cd5f18b0b |     
+  mips64el   |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/609f7c97523988a6b9eae0b0002f0ce944680ecb |     
+   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/bdb6cb4c37ab2f9eae23e25d559c8de3f663a425 |     
+    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/0ce7699eb2eed43ea1b03a88b6c20b10a3547ba9 |     
+microblazeel |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/a25147233fd984971c7a916c2bd21991db8d4c07 |     
+  powerpc    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/3248236ebb0f3e0605f207f780f090fff270b1c1 |     
+    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/a69659c7f8c1fa7f8713484cbf2d0466ea6fb1e5 |     
+    arm      |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/791ab5d975d9cb1f1a2b735a7593000ba0548a09 |     
 
-----ALT--9fF3c00D25C3B702A19A166e0635B7321637050124
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: base64
 
-CjxIVE1MPjxCT0RZPjxkaXY+PGRpdj5IZWxsbyBUaG9tYXMsPC9kaXY+PGRpdj4mbmJzcDs8L2Rp
-dj48ZGl2PkdvdCBpdCwgYWdyZWUuPC9kaXY+PGRpdj5UaGFuayB5b3UhPGJyPiZuYnNwOzwvZGl2
-PjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoxcHggc29saWQgIzA4NTdBNjsgbWFyZ2lu
-OjEwcHg7IHBhZGRpbmc6MCAwIDAgMTBweDsiPlR1ZSwgMTYgTm92IDIwMjEsIDE6MzQgKzAzOjAw
-IGZyb20mbmJzcDtUaG9tYXMgUGV0YXp6b25pICZsdDt0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4u
-Y29tJmd0Ozo8YnI+Jm5ic3A7PGRpdiBpZD0iIj48ZGl2IGNsYXNzPSJqcy1oZWxwZXIganMtcmVh
-ZG1zZy1tc2ciPjxkaXY+PGRpdiBpZD0ic3R5bGVfMTYzNzAxNTY3ODEzOTk3ODA5NjFfQk9EWSI+
-SGVsbG8gSXZhbiw8YnI+PGJyPk9uIFR1ZSwgMTYgTm92IDIwMjEgMDA6NDA6NDQgKzAzMDA8YnI+
-SXZhbiBNYWlkYW5za2kgdmlhIGJ1aWxkcm9vdCAmbHQ7PGEgaHJlZj0iL2NvbXBvc2U/VG89YnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmciPmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPC9hPiZndDsgd3Jv
-dGU6PGJyPjxicj4mZ3Q7IEhlcmXigJlzIGEgcGF0Y2ggdXBkYXRpbmcgYmR3Z2MgZnJvbSA4LjAu
-NCB0byA4LjAuNi48YnI+PGJyPkkgaGF2ZSBhcHBsaWVkIHlvdXIgcGF0Y2ggdG8gdGhlIG5leHQg
-YnJhbmNoLCB3aXRoIHNvbWUgY2hhbmdlcyAoc2VlPGJyPmJlbG93KS4gSG93ZXZlciwgZm9yIGZ1
-dHVyZSBwYXRjaGVzLCBjb3VsZCB5b3UgdXNlICJnaXQgc2VuZC1lbWFpbCIgdG88YnI+c2VuZCB0
-aGVtIHNvIHRoYXQgdGhlIHBhdGNoIGFwcGVhcnMgaW5saW5lLCB3aGljaCBtYWtlcyBpdCBlYXNp
-ZXIgdG88YnI+cmV2aWV3Pzxicj48YnI+SGVyZSBpcyB5b3VyIHBhdGNoOjxicj48YnI+Jmd0OyAt
-c2hhMjU2IDQzNmEwZGRjNjdiMWFjMGIwNDA1YjYxYTk2NzViY2E5ZTA3NWM4MTU2ZjRkZWJkMWQw
-NmYzYTU2YzdjZDI4OWQgZ2MtOC4wLjQudGFyLmd6PGJyPiZndDsgLXNoYTI1NiBhZWVhYWJiZjQ0
-ZTY3ZDQxM2UxODcxOWYwYzZhYzljMjMzODdhYjBiMzNlN2ExNWVlNDZjZjU5ZGRlZjEyY2M3IFJF
-QURNRS5RVUlDSzxicj4mZ3Q7ICtzaGEyNTYgM2I0OTE0YWJjOWZhNzY1OTM1OTY3NzNlNGRhNjcx
-ZDdlZDRkNTM5MGUzZDQ2ZmJmMmU1ZjE1NWUxMjFiZWExMSBnYy04LjAuNi50YXIuZ3o8YnI+Jmd0
-OyArc2hhMjU2IDBhYWI3YTU2YTkyZWQ4NzhjNGE1NDY0Y2YyODJkNjVmMzhiY2RlZTY0ZmU5Y2Yy
-MTNlMjYyNTRiZGRiM2YzNDAgUkVBRE1FLlFVSUNLPGJyPjxicj5XaGVuIHRoZSBsaWNlbnNlIGZp
-bGUgaGFzaCBjaGFuZ2VzLCB3ZSB3YW50IGFuIGluZGljYXRpb24gaW4gdGhlIGNvbW1pdDxicj5s
-b2cgZXhwbGFpbmluZyB3aHkgaXQgaGFzIGNoYW5nZWQuIEluZGVlZCwgdGhlIHJlYXNvbiB3aHkg
-d2UgaGF2ZSBzdWNoPGJyPmhhc2hlcyBpcyB0byBkZXRlY3QgY2hhbmdlcyBpbiB0aGUgbGljZW5z
-ZSB0ZXJtcyBvZiB1cHN0cmVhbSBwcm9qZWN0cy48YnI+SWYgd2UgInNpbGVudGx5IiBjaGFuZ2Ug
-c3VjaCBoYXNoZXMgd2l0aG91dCBhIHByb3BlciBqdXN0aWZpY2F0aW9uLCBpdDxicj5raW5kIG9m
-IGRlZmVhdHMgdGhlIGVudGlyZSBwdXJwb3NlIG9mIHRob3NlIGhhc2hlcy4gQWZ0ZXIgY2hlY2tp
-bmcgdGhlPGJyPmRpZmZlcmVuY2VzIGluIFJFQURNRS5RVUlDSyBiZXR3ZWVuIDguMC40IGFuZCA4
-LjAuNiwgSSd2ZSBhZGRlZCBhbjxicj5leHBsYW5hdGlvbiBpbiB0aGUgY29tbWl0IGxvZy48YnI+
-PGJyPiZndDsgZGlmZiAtLWdpdCBhL3BhY2thZ2UvYmR3Z2MvYmR3Z2MubWsgYi9wYWNrYWdlL2Jk
-d2djL2Jkd2djLm1rPGJyPiZndDsgaW5kZXggNTdkZDgyY2FiNC4uNTRiYzRmZDg4OSAxMDA2NDQ8
-YnI+Jmd0OyAtLS0gYS9wYWNrYWdlL2Jkd2djL2Jkd2djLm1rPGJyPiZndDsgKysrIGIvcGFja2Fn
-ZS9iZHdnYy9iZHdnYy5tazxicj4mZ3Q7IEBAIC00LDkgKzQsOSBAQDxicj4mZ3Q7ICM8YnI+Jmd0
-OyAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIzxicj4mZ3Q7PGJyPiZndDsgLUJEV0dDX1ZFUlNJT04g
-PSA4LjAuNDxicj4mZ3Q7ICtCRFdHQ19WRVJTSU9OID0gOC4wLjY8YnI+Jmd0OyBCRFdHQ19TT1VS
-Q0UgPSBnYy0kKEJEV0dDX1ZFUlNJT04pLnRhci5nejxicj4mZ3Q7IC1CRFdHQ19TSVRFID0gPGEg
-aHJlZj0iaHR0cDovL3d3dy5oYm9laG0uaW5mby9nYy9nY19zb3VyY2UiIHRhcmdldD0iX2JsYW5r
-Ij5odHRwOi8vd3d3Lmhib2VobS5pbmZvL2djL2djX3NvdXJjZTwvYT48YnI+Jmd0OyArQkRXR0Nf
-U0lURSA9IDxhIGhyZWY9Imh0dHBzOi8vZ2l0aHViLmNvbS9pdm1haS9iZHdnYy9yZWxlYXNlcy9k
-b3dubG9hZC92JChCRFdHQ19WRVJTSU9OIiB0YXJnZXQ9Il9ibGFuayI+aHR0cHM6Ly9naXRodWIu
-Y29tL2l2bWFpL2Jkd2djL3JlbGVhc2VzL2Rvd25sb2FkL3YkKEJEV0dDX1ZFUlNJT048L2E+KTxi
-cj4mZ3Q7IEJEV0dDX0lOU1RBTExfU1RBR0lORyA9IFlFUzxicj4mZ3Q7IEJEV0dDX0xJQ0VOU0Ug
-PSBiZHdnYyBsaWNlbnNlPGJyPiZndDsgQkRXR0NfTElDRU5TRV9GSUxFUyA9IFJFQURNRS5RVUlD
-Szxicj4mZ3Q7IEBAIC0yOCw4ICsyOCw2IEBAIEhPU1RfQkRXR0NfQ09ORl9PUFRTID0gLS13aXRo
-LWxpYmF0b21pYy1vcHM9eWVzPGJyPiZndDs8YnI+Jmd0OyBpZmVxICgkKEJSMl9JTlNUQUxMX0xJ
-QlNURENQUCkseSk8YnI+Jmd0OyBCRFdHQ19DT05GX09QVFMgKz0gLS1lbmFibGUtY3BsdXNwbHVz
-PGJyPiZndDsgLWVsc2U8YnI+Jmd0OyAtQkRXR0NfQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1jcGx1
-c3BsdXM8YnI+PGJyPk5vLCB3ZSB3YW50IHRvIGtlZXAgdGhpcywgZXZlbiBpZiB0aGlzIGlzIHRo
-ZSBkZWZhdWx0LiBXZSB3YW50IHRvIGJlPGJyPmV4cGxpY2l0IGFib3V0IHN1Y2ggb3B0aW9ucywg
-d2hpY2ggaXMgd2hhdCB3ZSBkbyBpbiB0aGUgdmFzdCBtYWpvcml0eTxicj5vZiBwYWNrYWdlcy4g
-U28gSSd2ZSByZXZlcnRlZCB0aGF0IHBhcnRpY3VsYXIgY2hhbmdlIGZyb20geW91ciBwYXRjaDxi
-cj53aGVuIGFwcGx5aW5nLjxicj48YnI+VGhhbmtzIGEgbG90ITxicj48YnI+VGhvbWFzPGJyPi0t
-PGJyPlRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW48YnI+RW1iZWRk
-ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmc8YnI+PGEgaHJlZj0i
-aHR0cHM6Ly9ib290bGluLmNvbSIgdGFyZ2V0PSJfYmxhbmsiPmh0dHBzOi8vYm9vdGxpbi5jb208
-L2E+PC9kaXY+PC9kaXY+PC9kaXY+PC9kaXY+PC9ibG9ja3F1b3RlPiZuYnNwOzxkaXY+Jm5ic3A7
-PC9kaXY+PGRpdj4tLTxicj5JdmFuIE1haWRhbnNraTwvZGl2PjxkaXY+Jm5ic3A7PC9kaXY+PC9k
-aXY+PC9CT0RZPjwvSFRNTD4K
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
 
-----ALT--9fF3c00D25C3B702A19A166e0635B7321637050124--
+        host-sentry-cli-1.57.0 | 2 
+azure-iot-sdk-c-LTS_07_2020... | 1 
+               host-efl-1.25.1 | 1 
+                 libp11-0.4.11 | 1 
+               luasyslog-2.2.0 | 1 
+               openldap-2.4.59 | 1 
+                 python-uvloop | 1 
+                  stunnel-5.57 | 1 
+                  waffle-1.6.1 | 1 
+ xdriver_xf86-video-tdfx-1.5.0 | 1 
 
---===============8414973044130547001==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv32    | azure-iot-sdk-c-LTS_07_2020... | NOK | http://autobuild.buildroot.net/results/72de5437492156caeecf842e15bc8e74c60dfe03 |     
+   x86_64    |        host-efl-1.25.1         | NOK | http://autobuild.buildroot.net/results/0f869b2c2f5a8114989ea3defef943ad0f6cd567 |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/ce08696b5a43de8cd8a87159a2db3ca355a131b3 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/6a23a5d54aa12dea0db4983a5af49aa133810752 |     
+  riscv32    |         libp11-0.4.11          | NOK | http://autobuild.buildroot.net/results/82867194b9dfcea5df2eb8e718a6af223612c095 | ORPH
+    arm      |        luasyslog-2.2.0         | NOK | http://autobuild.buildroot.net/results/e519b8057c39105b2f7a06873d8738a5a722c12d |     
+  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/dbe270d50a54ccdde833ffae0c23a16aefdfa30b |     
+    m68k     |         python-uvloop          | TIM | http://autobuild.buildroot.net/results/b2c2039190ee91ac0bd45b537b2006062a93aa16 |     
+  riscv32    |          stunnel-5.57          | NOK | http://autobuild.buildroot.net/results/74289ef82f02225a7235d580b6bcbac50feb5cc1 |     
+    arm      |          waffle-1.6.1          | NOK | http://autobuild.buildroot.net/results/9e311097df2398411afd232ba0178a25d3e91ac2 |     
+  riscv64    | xdriver_xf86-video-tdfx-1.5.0  | NOK | http://autobuild.buildroot.net/results/40d872a5f8bcd66a16457e26e568a4bd2c2eb817 |     
+
+
+Classification of failures by reason for 2021.08.x
+--------------------------------------------------
+
+                  zeromq-4.3.4 | 2 
+              asterisk-16.21.1 | 1 
+  gobject-introspection-1.68.0 | 1 
+           python-pybind-2.6.1 | 1 
+                       unknown | 1 
+                  xvisor-0.3.0 | 1 
+
+
+Detail of failures for 2021.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |        asterisk-16.21.1        | NOK | http://autobuild.buildroot.net/results/b22d865051fee63cab510897a44146487e6b5268 |     
+    mips     |  gobject-introspection-1.68.0  | NOK | http://autobuild.buildroot.net/results/9ac80aab504a297bfdfb92feece332a2b5855ec4 | ORPH
+    sh4      |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/e57acdd2b8b61ac17f0f9f6758fe201e49a22635 |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/13c512a8b9811a8c25c6fdd7b1435950c3cc0963 |     
+   x86_64    |          xvisor-0.3.0          | NOK | http://autobuild.buildroot.net/results/05a7aa54e6b9bef3ab09e69bba798f3675ab8696 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/e48dab37778bc8e77f8acb71e31b2e9495c1b923 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/1532e42a6089def50eed72f9605359e01ea3e1e1 |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+              host-erlang-22.2 | 1 
+                   mpd-0.22.11 | 1 
+                 wavemon-0.9.4 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/749a48295164dc3f3ba3b044e5d98d7f6499008e |     
+    i586     |          mpd-0.22.11           | NOK | http://autobuild.buildroot.net/results/ff1e260d55c3fad5272778cbb30a97935758c598 |     
+  mips64el   |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/fb4a8b3fcc657d146146ac6fdba03ccf6caadb45 |     
+
+
+Gitlab CI results for 2021-11-15
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+       TestPythonPy3Flask | https://gitlab.com/buildroot.org/buildroot/-/jobs/1781902632  | ORPH 
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8414973044130547001==--
