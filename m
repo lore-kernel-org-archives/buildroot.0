@@ -2,52 +2,59 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6AEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:03:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBC3AC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:03:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 463E1619EA
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:03:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 463E1619EA
+	by mail.kernel.org (Postfix) with ESMTPS id B607960E9C
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:03:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B607960E9C
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 214BD835E0;
-	Wed, 17 Nov 2021 22:03:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 736374060B;
+	Wed, 17 Nov 2021 22:03:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NreCLZzACubm; Wed, 17 Nov 2021 22:03:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FSdDedNgdVDX; Wed, 17 Nov 2021 22:03:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 463988354D;
-	Wed, 17 Nov 2021 22:03:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A368B1BF307
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:02:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89FED405E2;
+	Wed, 17 Nov 2021 22:03:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DC801BF307
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:03:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9EBAF409EF
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:02:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AB81405EC
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:03:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cg6ExWuuNJ6X for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 22:02:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8471B40964
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:02:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 736A58D5F6; Wed, 17 Nov 2021 21:58:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3GsbVXxn9DNR for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 22:03:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1EBE3405CA
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:03:48 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 3EF856000F;
+ Wed, 17 Nov 2021 22:03:47 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mnT1u-000728-I4; Wed, 17 Nov 2021 23:03:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:57:31 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 8dea79bf8544e6f0629d08ef29f387825192ac16
-X-Git-Newrev: 77bcdf3dd1460aba5ae8aa371e3c47197f161cda
-X-Patchwork-Hint: ignore
-Message-Id: <20211117215831.736A58D5F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/glmark2:
- drm-glesv2 needs libdrm
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20211113124234.524796-1-yann.morin.1998@free.fr>
+Date: Wed, 17 Nov 2021 23:03:46 +0100
+In-Reply-To: <20211113124234.524796-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 13 Nov 2021 13:42:34 +0100")
+Message-ID: <87czmytp6l.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] support/pkg-stats: support values with an
+ equal sign in them
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +66,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77bcdf3dd1460aba5ae8aa371e3c47197f161cda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/58a/58a498fac83cbb55b252ab54cd8db04570bb5ec9/
+ > The heuristic to extract the various variables of interest is pretty
+ > crude: we filter on variables ending with certain suffixes (like
+ > '%_VERSION' to get the version strings).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998@free.fr: comment on same line as depends-on]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5b401925baa99bc5a8c1a1f2f55ad51b3a05fc5a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glmark2/Config.in  | 2 ++
- package/glmark2/glmark2.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ > However, in doing so, we may dump variables that are not actual package
+ > versions (especially with br2-external trees), and those may contain one
+ > or more equal sign.  And anyway, an actual package version string may
+ > very well contain an equal sign too.
 
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-index ddc27479cf..130af129d2 100644
---- a/package/glmark2/Config.in
-+++ b/package/glmark2/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HAS_THREADS  # libpthread-stubs -> libdrm
- 	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
- 
- config BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GL
-@@ -61,6 +62,7 @@ config BR2_PACKAGE_GLMARK2
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_PACKAGE_GLMARK2_FLAVOR_ANY
- 	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GLESV2
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-index 9e47b426fe..98c47ac572 100644
---- a/package/glmark2/glmark2.mk
-+++ b/package/glmark2/glmark2.mk
-@@ -11,7 +11,7 @@ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
- GLMARK2_DEPENDENCIES = host-pkgconf jpeg libegl libpng
- 
- ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_DRM_GLESV2),y)
--GLMARK2_DEPENDENCIES += libgles udev
-+GLMARK2_DEPENDENCIES += libdrm libgles udev
- GLMARK2_FLAVORS += drm-glesv2
- endif
- 
+ > But the current situation is that the output of 'printvars' is split on
+ > all equal signs, which will not fit in the 2-tuple we assign the result,
+ > thus causing an exception.
+
+ > Fix that by limiting to a single split.
+
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2021.02.x and 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
