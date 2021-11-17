@@ -2,52 +2,57 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81912C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6791DC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 16:06:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 48DE2613D3
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48DE2613D3
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6B6DF61BE1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 16:06:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B6DF61BE1
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 220C880F79;
-	Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1725680F7B;
+	Wed, 17 Nov 2021 16:06:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T0o7Vj90cMmt; Wed, 17 Nov 2021 15:42:56 +0000 (UTC)
+	with ESMTP id zgtIxRK99QC9; Wed, 17 Nov 2021 16:06:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E4F880F76;
-	Wed, 17 Nov 2021 15:42:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 559961BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D77080CF9;
+	Wed, 17 Nov 2021 16:06:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1C271BF3F7
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 16:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43C7C401F4
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDB676068A
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 16:06:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id idtfZ-GWQBJe for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30CF8400C7
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B0F188D4AC; Wed, 17 Nov 2021 15:38:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 16:37:22 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 13398092dfd8120e2f8f7985f52fa0e1dddddbbd
-X-Git-Newrev: f1f1a0fd9bfb7644dc4a6a6c0ca587762e298928
-X-Patchwork-Hint: ignore
-Message-Id: <20211117153827.B0F188D4AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/binutils: zlib is
- mandatory
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IO9miJLJlhir for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 16:06:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8995060679
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 16:06:46 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 731F0E000B;
+ Wed, 17 Nov 2021 16:06:43 +0000 (UTC)
+Date: Wed, 17 Nov 2021 17:06:42 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20211117170642.75b555c7@windsurf>
+In-Reply-To: <87zgq9yfvv.fsf@dell.be.48ers.dk>
+References: <20211110065623.A90DB401FC@smtp2.osuosl.org>
+ <87zgq9yfvv.fsf@dell.be.48ers.dk>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2021-11-09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,94 +64,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1f1a0fd9bfb7644dc4a6a6c0ca587762e298928
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+On Fri, 12 Nov 2021 08:47:32 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-As found out by Yann [1], binutils will use its bundled copy of zlib,
-whether it is already provided by the system or not, and unless
-explicitly told to use the system zlib with --with-system-zlib, which
-is available since version 2.21 and
-https://github.com/bminor/binutils-gdb/commit/700d40ca16eb3ba1ecc1e602cb3eec175bdf70f0
+>  > nezha | https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966167  | ORPH  
+> 
+> Hmm, why is this listed as ORPH? I don't right away see any mistakes in
+> by DEVELOPERS entry.
 
-This will fix the following build failure with oprofile when compiling
-in a static configuration where zlib is not enabled:
+As explained on IRC, there was an issue in the scripting logic that
+runs all this mess, which made the daily-mail script rely on DEVELOPERS
+data from the 2021.08.x branch. This should now be fixed.
 
-    checking for bfd_openr in -lbfd... no
-    checking for compress in -lz... no
-    configure: error: libz library not found; required by libbfd
-
-As found out by Arnout [1], this fails infrequently because static is
-already pretty rare, but in addition zlib is almost always selected by
-some other package.
-
-Fixes:
- - http://autobuild.buildroot.org/results/0e1d16dfbb455a08db80ac5d35613908c3b4163f
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20211030214734.2154583-1-fontaine.fabrice@gmail.com/
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr:
-  - reword the explanations about the system zlib
-  - extend the oprofile example with static and !zlib
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a3c1ba68f4bbad17df57a408097b7e862df43b6b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in   | 1 +
- package/binutils/binutils.mk | 7 ++-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index e17a8ec65a..5e1a769998 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
- 	depends on !BR2_nios2
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Install binutils on the target
- 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index e469febbb4..44fe601998 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -31,7 +31,7 @@ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
--BINUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+BINUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
- BINUTILS_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
- BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
- BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
-@@ -57,6 +57,7 @@ BINUTILS_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--enable-install-libiberty \
- 	--enable-build-warnings=no \
-+	--with-system-zlib \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
-@@ -80,10 +81,6 @@ ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_OPTIMIZE_S),yy)
- BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
- endif
- 
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--BINUTILS_DEPENDENCIES += zlib
--endif
--
- # "host" binutils should actually be "cross"
- # We just keep the convention of "host utility" for now
- HOST_BINUTILS_CONF_OPTS = \
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
