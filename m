@@ -2,57 +2,93 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7066DC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:37:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF06CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:38:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3D68361AD0
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:37:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3D68361AD0
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+	by mail.kernel.org (Postfix) with ESMTPS id 6BF0F61AD0
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:38:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6BF0F61AD0
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A76C60A89;
-	Wed, 17 Nov 2021 21:37:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2603D40452;
+	Wed, 17 Nov 2021 21:38:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VAdpMMkZ1TcQ; Wed, 17 Nov 2021 21:37:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JWzMUU0DpuLU; Wed, 17 Nov 2021 21:38:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 502F460A83;
-	Wed, 17 Nov 2021 21:37:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2278E400EB;
+	Wed, 17 Nov 2021 21:38:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5021B1BF307
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:37:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 081871BF307
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EA97400EB
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:37:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB145400EB
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x8uJ1y0gB5ZC for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 21:37:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 212E4400D0
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:37:48 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id CCBC3200003;
- Wed, 17 Nov 2021 21:37:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mnSci-00062c-UB; Wed, 17 Nov 2021 22:37:44 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211110223244.2116243-1-fontaine.fabrice@gmail.com>
-Date: Wed, 17 Nov 2021 22:37:44 +0100
-In-Reply-To: <20211110223244.2116243-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 10 Nov 2021 23:32:44 +0100")
-Message-ID: <87y25mtqdz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ with ESMTP id 6JH_HXlLUBPv for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 21:38:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C1970400D0
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:38:05 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id y13so17116444edd.13
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 13:38:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=t+s7USTxYXl4yHb1ffkOGGNeiA1zINriBRzfgmmBmo4=;
+ b=gMpT9TwEUopZxqhuMhTa1hEbY0kQQSS8JkViSLLcHg3P0t31bu8rVBUohR85jpsUy2
+ 2zJm/B9I1OWVxNb36RJMGY6dixuiRHnGu1KTzGiX8F6d+LP/EftW0h05VcQHeETBchiG
+ 3hPVzWqZMvQLk08j742IthyAFDH6xRQVOXCWqiXRU6BtkbMWl2Eko1wKzrBw2xEWZSVx
+ YsKbP4a2VrKk5npMNgu8mHcJDC8zVYKNUacqQMraQia4sa5MiCU1h0x3sbqSH868//jC
+ yhMY0ThdWkyJGFirjh2PuZiRgXgJKw1ZUODzXv9Y83/JUlKDI+6jkrrwVkUWPGUgGoK0
+ JYIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=t+s7USTxYXl4yHb1ffkOGGNeiA1zINriBRzfgmmBmo4=;
+ b=X/DO6HlyRkyiGG0rhYyXP+ptgHSw4rHscaK+0t3QX2zn3Pc+xcn+Lq3veAZSgRQbiC
+ dxW9C9p14QT7kAFtFAG1U7w7US66uf69R9L/CI+XAmTIMjUbiRq1oDfEk62xpn2KTvuW
+ hgMx1ZzYO3vmhXyNE7UVrLF7cOgEa6M+oZFM8AxvswKNE4o/OnEwrWNhL7dbdlI6Szue
+ 6KQmFNwh1ONCnG91zHo+oT84QBOPS7IlIgm2sq8L2EwRHPIsvx14TY0fMTKqyTBLugn8
+ Uc1pvFghIiKKJ5OBlFX5Runk3Oq7negXVoCtPhrNKP5vcBJTmRe91o/y9pxI6TDJo+TM
+ cyCQ==
+X-Gm-Message-State: AOAM532JEjfDt7U07q/oEXAgpsRrxa3UnjNG8bZjsHwht7OGfB+af+cE
+ ndvTCYebW72v2n74EMlzlLgGRuvxmYIfaQ==
+X-Google-Smtp-Source: ABdhPJysH5Ehd9+rC4Hwxv+FnPTQKkJ8/18vLXjHJH6h/IV+7gF5W18SE7bP5Ig2f8Hx3L0w+Xr4ww==
+X-Received: by 2002:a05:6402:1c01:: with SMTP id
+ ck1mr3013134edb.262.1637185083886; 
+ Wed, 17 Nov 2021 13:38:03 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id e4sm489166ejs.13.2021.11.17.13.38.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 17 Nov 2021 13:38:03 -0800 (PST)
+Message-ID: <f67157e7-c19d-ac2f-380d-7f63d089ed84@mind.be>
+Date: Wed, 17 Nov 2021 22:38:02 +0100
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gdb: fix musl build on riscv
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
+ buildroot@buildroot.org
+References: <20211027083502.5530-1-sebastien.szymanski@armadeus.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211027083502.5530-1-sebastien.szymanski@armadeus.com>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/stress-ng: bump to version
+ 0.13.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +100,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-
- > Fix the following build failure raised since gdb 10.1 and
- > https://github.com/bminor/binutils-gdb/commit/bf84f7066626c78884436e1c39fb60f04c665f21:
-
- > ../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
- > ../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
- >   140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
- >       |                   ^~~~~~~~~~
- >       |                   ELF_NGREG
-
- > musl fixed the issue with
- > https://github.com/ifduyue/musl/commit/e5d2823631bbfebacf48e1a34ed28f28d7cb2570
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  .../10.2/0007-fix-musl-build-on-riscv.patch   | 60 +++++++++++++++++++
- >  .../11.1/0007-fix-musl-build-on-riscv.patch   | 60 +++++++++++++++++++
-
-Committed (without the 11.1 patch) to 2021.02.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyNy8xMC8yMDIxIDEwOjM1LCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPiBUaGUg
+cHJvamVjdCBVUkwgcmV0dXJucyA0MDQgZXJyb3IgYmVjYXVzZToKPiAKPiBRdW90aW5nIENvbGlu
+ZyBLaW5nOgo+ICJVbmZvcnR1bmF0ZWx5IHdoZW4gSSBsZWZ0IENhbm9uaWNhbCBsYXN0IHdlZWsg
+dGhleSByZW1vdmVkIG15IHRhcmJhbGxzIgo+IAo+IFNvIHVzZSBnaXRodWIgYW5kIHVwZGF0ZSBo
+YXNoLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4u
+c3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KCiAgQXBwbGllZCB0byBuZXh0LCB0aGFua3MuIE9yIHNo
+b3VsZCBJIGhhdmUgYXBwbGllZCBpdCB0byBtYXN0ZXI/IFdlIHNob3VsZCBhdCAKbGVhc3QgYXBw
+bHkgdGhlIGNoYW5nZSBvZiBfU0lURSB0byBtYXN0ZXIuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+
+IC0tLQo+IAo+IENoYW5nZXMgZm9yIHYyOgo+ICAgLSBmaXggdGFyYmFsbCBuYW1lIGluIC5oYXNo
+IGZpbGUKPiAKPiAgIHBhY2thZ2Uvc3RyZXNzLW5nL0NvbmZpZy5pbiAgICAgIHwgMiArLQo+ICAg
+cGFja2FnZS9zdHJlc3Mtbmcvc3RyZXNzLW5nLmhhc2ggfCAyICstCj4gICBwYWNrYWdlL3N0cmVz
+cy1uZy9zdHJlc3MtbmcubWsgICB8IDUgKystLS0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgNCBpbnNl
+cnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N0cmVz
+cy1uZy9Db25maWcuaW4gYi9wYWNrYWdlL3N0cmVzcy1uZy9Db25maWcuaW4KPiBpbmRleCA2NGI0
+NzNiNzVjLi44MzljYmIxY2MwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvc3RyZXNzLW5nL0NvbmZp
+Zy5pbgo+ICsrKyBiL3BhY2thZ2Uvc3RyZXNzLW5nL0NvbmZpZy5pbgo+IEBAIC0xMiw3ICsxMiw3
+IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9TVFJFU1NfTkcKPiAgIAkgIHN1YnN5c3RlbXMgb2YgYSBj
+b21wdXRlciBhcyB3ZWxsIGFzIHRoZSB2YXJpb3VzIG9wZXJhdGluZwo+ICAgCSAgc3lzdGVtIGtl
+cm5lbCBpbnRlcmZhY2VzLgo+ICAgCj4gLQkgIGh0dHA6Ly9rZXJuZWwudWJ1bnR1LmNvbS9+Y2tp
+bmcvc3RyZXNzLW5nLwo+ICsJICBodHRwczovL2dpdGh1Yi5jb20vQ29saW5JYW5LaW5nL3N0cmVz
+cy1uZwo+ICAgCj4gICBjb21tZW50ICJzdHJlc3MtbmcgbmVlZHMgYSB0b29sY2hhaW4gdy8gaGVh
+ZGVycyA+PSAzLjMiCj4gICAJZGVwZW5kcyBvbiAhQlIyX25pb3MyICYmICFCUjJfYXJjCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoIGIvcGFja2FnZS9zdHJl
+c3Mtbmcvc3RyZXNzLW5nLmhhc2gKPiBpbmRleCBmM2ViNzZmYTgyLi4yZTNmOTk4NzY5IDEwMDY0
+NAo+IC0tLSBhL3BhY2thZ2Uvc3RyZXNzLW5nL3N0cmVzcy1uZy5oYXNoCj4gKysrIGIvcGFja2Fn
+ZS9zdHJlc3Mtbmcvc3RyZXNzLW5nLmhhc2gKPiBAQCAtMSwzICsxLDMgQEAKPiAgICMgTG9jYWxs
+eSBjYWxjdWxhdGVkCj4gLXNoYTI1NiAgZjM3ZjczOWU0ZDE1MzQzMzYwYTQ3OTgwYjY3ZGM4YjJh
+NmJmM2Q0ZDNlZjcyN2Q1NWUyZGQ5OWEwYjY0ZjllYSAgc3RyZXNzLW5nLTAuMTMuMDEudGFyLnh6
+Cj4gK3NoYTI1NiAgM2RlNDllMTEwMDg2NjYzNGY1NDllOTljMTY0NDI4M2QwY2RlODE3Yjg0NGE2
+OWRjZjdmODBhZmEyMjI3ZDM1MCAgc3RyZXNzLW5nLTAuMTMuMDUudGFyLmd6Cj4gICBzaGEyNTYg
+IDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAxMDUy
+MWI4ODA2NDMgIENPUFlJTkcKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zdHJlc3Mtbmcvc3RyZXNz
+LW5nLm1rIGIvcGFja2FnZS9zdHJlc3Mtbmcvc3RyZXNzLW5nLm1rCj4gaW5kZXggZTBiMzg1ZTc1
+Ni4uMGIyMjg3YzdmYiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3N0cmVzcy1uZy9zdHJlc3Mtbmcu
+bWsKPiArKysgYi9wYWNrYWdlL3N0cmVzcy1uZy9zdHJlc3MtbmcubWsKPiBAQCAtNCw5ICs0LDgg
+QEAKPiAgICMKPiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICAKPiAtU1RSRVNTX05HX1ZF
+UlNJT04gPSAwLjEzLjAxCj4gLVNUUkVTU19OR19TT1VSQ0UgPSBzdHJlc3MtbmctJChTVFJFU1Nf
+TkdfVkVSU0lPTikudGFyLnh6Cj4gLVNUUkVTU19OR19TSVRFID0gaHR0cHM6Ly9rZXJuZWwudWJ1
+bnR1LmNvbS9+Y2tpbmcvdGFyYmFsbHMvc3RyZXNzLW5nCj4gK1NUUkVTU19OR19WRVJTSU9OID0g
+MC4xMy4wNQo+ICtTVFJFU1NfTkdfU0lURSA9ICQoY2FsbCBnaXRodWIsQ29saW5JYW5LaW5nLHN0
+cmVzcy1uZyxWJChTVFJFU1NfTkdfVkVSU0lPTikpCj4gICBTVFJFU1NfTkdfTElDRU5TRSA9IEdQ
+TC0yLjArCj4gICBTVFJFU1NfTkdfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiAgIAo+IApfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
