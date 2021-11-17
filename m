@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFFF1C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8EF0C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B641A61B95
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B641A61B95
+	by mail.kernel.org (Postfix) with ESMTPS id 9967361B95
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9967361B95
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 892E040483;
-	Wed, 17 Nov 2021 15:06:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76C6E404A9;
+	Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id enEv_jzVPLhO; Wed, 17 Nov 2021 15:06:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MpKXPF2n87RL; Wed, 17 Nov 2021 15:06:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACCE94048E;
-	Wed, 17 Nov 2021 15:06:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FCE340333;
+	Wed, 17 Nov 2021 15:06:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9BCBC1BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 318CB1BF36B
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD106606C5
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6282A60679
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ozWM2ducOzRk for <buildroot@lists.busybox.net>;
+ with ESMTP id JqN99auIc22h for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5434160679
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49EB160670
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E310F8D45D; Wed, 17 Nov 2021 15:01:19 +0000 (UTC)
+ id D91D18D45F; Wed, 17 Nov 2021 15:01:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 16:02:59 +0100
+Date: Wed, 17 Nov 2021 16:01:46 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d0222b4e8957e83fdb1b7900d2ca737302845f88
-X-Git-Newrev: 04c5b72118e08eb4039729f856d948397ee2f5bc
+X-Git-Oldrev: cfa225ea10148502964603a685ea5da22d353778
+X-Git-Newrev: d0222b4e8957e83fdb1b7900d2ca737302845f88
 X-Patchwork-Hint: ignore
-Message-Id: <20211117150119.E310F8D45D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/rcw-smarc-sal28:
- don't override dependencies
+Message-Id: <20211117150119.D91D18D45F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/freescale-imx/gpu-amd-bin-mx51: don't override dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04c5b72118e08eb4039729f856d948397ee2f5bc
+commit: https://git.buildroot.net/buildroot/commit/?id=d0222b4e8957e83fdb1b7900d2ca737302845f88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Don't override RCW_SMARC_SAL28_DEPENDENCIES in a conditional
+Don't override GPU_AMD_BIN_MX51_DEPENDENCIES in a conditional
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7d653a7abd7f5e2fccb73343cb3f50ad0858bd0d)
+(cherry picked from commit 7c9e88120d9545696afd5ff20f6422542811e4e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rcw-smarc-sal28/rcw-smarc-sal28.mk | 2 +-
+ package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rcw-smarc-sal28/rcw-smarc-sal28.mk b/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
-index 0dce543811..c2961b1311 100644
---- a/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
-+++ b/package/rcw-smarc-sal28/rcw-smarc-sal28.mk
-@@ -14,7 +14,7 @@ RCW_SMARC_SAL28_INSTALL_IMAGES = YES
- RCW_SMARC_SAL28_BOOT_VARIANT = $(call qstrip,$(BR2_PACKAGE_RCW_SMARC_SAL28_BOOT_VARIANT))
- 
- ifeq ($(BR2_PACKAGE_RCW_SMARC_SAL28_BUILD_UPDATE_SCRIPT),y)
--RCW_SMARC_SAL28_DEPENDENCIES = host-uboot-tools
-+RCW_SMARC_SAL28_DEPENDENCIES += host-uboot-tools
- define RCW_SMARC_SAL28_UPDATE_SCRIPT_BUILD_CMDS
- 	MKIMAGE=$(HOST_DIR)/bin/mkimage $(MAKE) -C $(@D)/contrib all
- endef
+diff --git a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
+index 5586073712..c99c568f73 100644
+--- a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
++++ b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
+@@ -12,7 +12,7 @@ GPU_AMD_BIN_MX51_SOURCE = amd-gpu-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
+ else
+ GPU_AMD_BIN_MX51_VERSION = $(GPU_AMD_BIN_MX51_BASE_VERSION)-x11
+ GPU_AMD_BIN_MX51_SOURCE = amd-gpu-x11-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
+-GPU_AMD_BIN_MX51_DEPENDENCIES = libxcb xlib_libX11 xlib_libXext \
++GPU_AMD_BIN_MX51_DEPENDENCIES += libxcb xlib_libX11 xlib_libXext \
+ 	xlib_libXrender xlib_libXau xlib_libXdmcp
+ endif
+ GPU_AMD_BIN_MX51_PROVIDES = libegl libgles libopenvg
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
