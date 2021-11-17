@@ -2,52 +2,92 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64876C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 060ECC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:39:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 070B8610CA
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:39:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 070B8610CA
+	by mail.kernel.org (Postfix) with ESMTPS id C11A461BC1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:39:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C11A461BC1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=mind.be
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3B1640268;
-	Wed, 17 Nov 2021 21:39:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B22740945;
+	Wed, 17 Nov 2021 21:39:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EAJg9m9iOSLc; Wed, 17 Nov 2021 21:39:13 +0000 (UTC)
+	with ESMTP id B6R0LfdMy2ca; Wed, 17 Nov 2021 21:39:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D240A403C4;
-	Wed, 17 Nov 2021 21:39:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5117B1BF307
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 729D94093F;
+	Wed, 17 Nov 2021 21:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B28561BF307
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 994D860A87
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E150404BD
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:38:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D4bstjJiHG_A for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 21:38:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48ABC60A83
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:38:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3D76A8D5A1; Wed, 17 Nov 2021 21:34:07 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:34:32 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84e90ce45c34eb21596e4208510605ddb507419a
-X-Git-Newrev: 3db4d486d689b4a9d59c8f7637211893b0a1cb1b
-X-Patchwork-Hint: ignore
-Message-Id: <20211117213407.3D76A8D5A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmediaart: bump to
- version 1.9.5
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HI0FEH00oMMV for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 21:38:33 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 92ECE40452
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:38:33 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id w1so17325682edc.6
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 13:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=m1BF2Pva67dazdcR87T/ykw9TxRW5zsY8LebE325i8I=;
+ b=FDIbZYXioA8uvZJ4kXlaUvIfIoTo6GlkMujmjyHE1qT9GdfnPl6VAeacBKw10LrEf0
+ BCJU4bkO3UL/GnZzuoSgE+v5D5OcCBirf6QDSncaHBAqjHpWoEUZX6/vOCkDjFDkov1u
+ FGo0xOedjuFYwDjSN1oEhP2lwsTnezkNBCkzYZbliSLxapkaJjueW7RPQGfo+dNgDIhP
+ CzJbRTFlQk/Rfgxl9BhvDrwJWn/0AKFu0KRLbtGglKfWlMgL59pLeG6zgCilQVsF4Nz/
+ sQfqA3yOPFdjnP5vtCa5KA48+9otUbVy5vanEO1COV/dxQHDf2ycOLk9NNQEpGcIzE0W
+ ZpOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=m1BF2Pva67dazdcR87T/ykw9TxRW5zsY8LebE325i8I=;
+ b=ke/A7SrlrRI/I+nnRTJJmtmk/ldMRe/TKEqUMSt3BIJFDlNwk4kZF01ApA6w2Qy9Ef
+ O8E09NQp1eApDWrD0I1Iuoo7s3JPE2QHppmWDLrEhy3g2DTOMDT5cAu2Te0ksYap16Kp
+ 60o3nVKgFDIGMEPK+p0/yt2D7SNy83gptMQqG3Kyh1GH4nqn7GI3sB4WhbFp8PLuN9LU
+ WIsXGxZLudgZzDzHZ3EoAXy8Mhusn5R0mWgsz2JvGfkt3cpFbWfwqV63yk3IHeaOUZcV
+ zuI1swuwHnmwr6ujFV8snmGikqdGtuIT94BRwcwdkEO+ugHOpfYxX/kjfFNlaRweEc/m
+ HhSA==
+X-Gm-Message-State: AOAM533nCFhqZkU0WgZ2DOPGslnlE23ZvkEomubycEGFRW9UrNwGb/5V
+ EQAwJAb0qf7IpgDHcHKErIQYWmKtZqENsw==
+X-Google-Smtp-Source: ABdhPJyBys4Ob0+Qrk+K8pa6SFtmHfiM9QB5n0lzsVCuRvbJhLoxiMSSpFHwlQ0Kg8Gcf/vFg+/HNQ==
+X-Received: by 2002:a17:906:7955:: with SMTP id
+ l21mr27597628ejo.6.1637185111872; 
+ Wed, 17 Nov 2021 13:38:31 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id gn16sm506863ejc.67.2021.11.17.13.38.31
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 17 Nov 2021 13:38:31 -0800 (PST)
+Message-ID: <936d4427-4733-8d06-7a94-c4fcf3ce31a1@mind.be>
+Date: Wed, 17 Nov 2021 22:38:30 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20211028153107.334373-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211028153107.334373-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: use libgbm virtual package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,285 +99,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3db4d486d689b4a9d59c8f7637211893b0a1cb1b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Switch to meson-package
-- Drop BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE which is not supported
-  anymore
-- Update indentation in hash file (two spaces)
 
-https://gitlab.gnome.org/GNOME/libmediaart/-/blob/1.9.5/NEWS
+On 28/10/2021 17:31, Bernd Kuhls wrote:
+> Kodi needs gbm_bo_get_fd:
+> https://github.com/xbmc/xbmc/blob/Matrix/xbmc/utils/GBMBufferObject.cpp#L54
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                                   |  9 +++
- .../0001-meson-add-introspection-option.patch      | 87 ++++++++++++++++++++++
- .../0002-meson-add-unit_tests-option.patch         | 48 ++++++++++++
- package/libmediaart/Config.in                      |  8 +-
- package/libmediaart/libmediaart.hash               |  6 +-
- package/libmediaart/libmediaart.mk                 | 25 +++----
- 6 files changed, 157 insertions(+), 26 deletions(-)
+  Applied to next, thanks.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 40011a1890..f3ecf981c0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,15 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2022.02"
-+
-+config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
-+	bool "libmediaart 'none' backend removed"
-+	select BR2_LEGACY
-+	help
-+	  'none' backend has been removed from libmediaart since version
-+	  1.9.5.
-+
- comment "Legacy options removed in 2021.11"
- 
- config BR2_OPENJDK_VERSION_LTS
-diff --git a/package/libmediaart/0001-meson-add-introspection-option.patch b/package/libmediaart/0001-meson-add-introspection-option.patch
-new file mode 100644
-index 0000000000..2b849040fe
---- /dev/null
-+++ b/package/libmediaart/0001-meson-add-introspection-option.patch
-@@ -0,0 +1,87 @@
-+From ee7d8736af172cd5ad71a0bd511c39daf401e3f6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 5 Oct 2021 23:35:26 +0200
-+Subject: [PATCH] meson: add introspection option
-+
-+Add introspection option
-+
-+Fix #3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/libmediaart/-/merge_requests/14]
-+---
-+ libmediaart/meson.build | 42 +++++++++++++++++++++--------------------
-+ meson_options.txt       |  2 ++
-+ 2 files changed, 24 insertions(+), 20 deletions(-)
-+
-+diff --git a/libmediaart/meson.build b/libmediaart/meson.build
-+index 56e00ab..2f44e63 100644
-+--- a/libmediaart/meson.build
-++++ b/libmediaart/meson.build
-+@@ -41,28 +41,30 @@ libmediaart = shared_library(
-+   install: true,
-+ )
-+ 
-+-gir_args = [
-+-  '--quiet',
-+-  '-DLIBMEDIAART_COMPILATION',
-+-]
-++if get_option('introspection')
-++  gir_args = [
-++    '--quiet',
-++    '-DLIBMEDIAART_COMPILATION',
-++  ]
-+ 
-+-libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
-+-  sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
-+-  nsversion: libmediaart_api_version,
-+-  namespace: 'MediaArt',
-+-  identifier_prefix: 'MediaArt',
-+-  symbol_prefix: 'media_art',
-+-  includes: ['Gio-2.0', 'GObject-2.0'],
-+-  header: 'libmediaart/mediaart.h',
-+-  export_packages: 'libmediaart-' + libmediaart_api_version,
-+-  extra_args: gir_args,
-+-  install: true
-+-)
-++  libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
-++    sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
-++    nsversion: libmediaart_api_version,
-++    namespace: 'MediaArt',
-++    identifier_prefix: 'MediaArt',
-++    symbol_prefix: 'media_art',
-++    includes: ['Gio-2.0', 'GObject-2.0'],
-++    header: 'libmediaart/mediaart.h',
-++    export_packages: 'libmediaart-' + libmediaart_api_version,
-++    extra_args: gir_args,
-++    install: true
-++  )
-+ 
-+-libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
-+-  sources: libmediaart_gir_and_typelib[0],
-+-  packages: 'gio-2.0',
-+-  install: true)
-++  libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
-++    sources: libmediaart_gir_and_typelib[0],
-++    packages: 'gio-2.0',
-++    install: true)
-++endif
-+ 
-+ libmediaart_dep = declare_dependency(
-+   link_with: libmediaart,
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 3ef49ba..b8c51b1 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -1,5 +1,7 @@
-+ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'qt5'],
-+        description: 'Which image processing backend to use')
-++option('introspection', type : 'boolean', value : 'true',
-++       description : 'Enable / disable the GObject-Introspection integration')
-+ option('gtk_doc',
-+   type: 'boolean',
-+   value: 'false',
-+-- 
-+2.33.0
-+
-diff --git a/package/libmediaart/0002-meson-add-unit_tests-option.patch b/package/libmediaart/0002-meson-add-unit_tests-option.patch
-new file mode 100644
-index 0000000000..3519ff1984
---- /dev/null
-+++ b/package/libmediaart/0002-meson-add-unit_tests-option.patch
-@@ -0,0 +1,48 @@
-+From 01d94777d9d1906750db0e27e2e7b8f228ae4343 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 9 Oct 2021 23:45:53 +0200
-+Subject: [PATCH] meson: add unit_tests option
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:  not sent yet (waiting feedback on first patch)]
-+---
-+ meson_options.txt |  2 ++
-+ tests/meson.build | 14 ++++++++------
-+ 2 files changed, 10 insertions(+), 6 deletions(-)
-+
-+diff --git a/meson_options.txt b/meson_options.txt
-+index b8c51b1..1172f93 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -2,6 +2,8 @@ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'q
-+        description: 'Which image processing backend to use')
-+ option('introspection', type : 'boolean', value : 'true',
-+        description : 'Enable / disable the GObject-Introspection integration')
-++option('unit_tests', type : 'boolean', value : 'true',
-++       description : 'Enable / disable unit tests')
-+ option('gtk_doc',
-+   type: 'boolean',
-+   value: 'false',
-+diff --git a/tests/meson.build b/tests/meson.build
-+index 28834c0..02c96a1 100644
-+--- a/tests/meson.build
-++++ b/tests/meson.build
-+@@ -1,7 +1,9 @@
-+-mediaart_test = executable('mediaart-test',
-+-  'mediaarttest.c',
-+-  dependencies: libmediaart_dep,
-+-)
-++if get_option('unit_tests')
-++  mediaart_test = executable('mediaart-test',
-++    'mediaarttest.c',
-++    dependencies: libmediaart_dep,
-++  )
-+ 
-+-test('mediaart', mediaart_test,
-+-     env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
-++  test('mediaart', mediaart_test,
-++       env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
-++endif
-+-- 
-+2.33.0
-+
-diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
-index c11d6f49d9..d7973444ae 100644
---- a/package/libmediaart/Config.in
-+++ b/package/libmediaart/Config.in
-@@ -18,13 +18,7 @@ if BR2_PACKAGE_LIBMEDIAART
- 
- choice
- 	prompt "media art backend"
--	default BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
--
--config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
--	bool "none"
--	help
--	  With no backend, libmediaart will not be able to process MP3
--	  album art.
-+	default BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 
- config BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 	bool "gdk-pixbuf"
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index d51c056223..d7115b20d4 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.4.sha256sum:
--sha256	a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d	libmediaart-1.9.4.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.5.sha256sum:
-+sha256  07def5a42c482ae71d3e1f77a4d0fdc337f74226059a65284d6d5a241f0e9cd6  libmediaart-1.9.5.tar.xz
- 
- # Locally computed:
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LESSER
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 0d110a43e5..b4c09d85e1 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -5,39 +5,32 @@
- ################################################################################
- 
- LIBMEDIAART_VERSION_MAJOR = 1.9
--LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).4
-+LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).5
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
- LIBMEDIAART_LICENSE = LGPL-2.1+
- LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
- LIBMEDIAART_INSTALL_STAGING = YES
--LIBMEDIAART_DEPENDENCIES = libglib2
--LIBMEDIAART_CONF_OPTS = --disable-unit-tests
-+LIBMEDIAART_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
-+LIBMEDIAART_CONF_OPTS = -Dunit_tests=false
-+LIBMEDIAART_LDFLAGS = $(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF),y)
- LIBMEDIAART_DEPENDENCIES += gdk-pixbuf
--LIBMEDIAART_CONF_OPTS += \
--	--enable-gdkpixbuf \
--	--disable-qt
-+LIBMEDIAART_CONF_OPTS += -Dimage_library=gdk-pixbuf
- else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- # qt5 needs c++11 (since qt-5.7)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- LIBMEDIAART_DEPENDENCIES += qt5base
--LIBMEDIAART_CONF_OPTS += \
--	--disable-gdkpixbuf \
--	--enable-qt
--else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE),y)
--LIBMEDIAART_CONF_OPTS += \
--	--disable-gdkpixbuf \
--	--disable-qt
-+LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
- endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBMEDIAART_CONF_OPTS += --enable-introspection
-+LIBMEDIAART_CONF_OPTS += -Dintrospection=true
- LIBMEDIAART_DEPENDENCIES += gobject-introspection
- else
--LIBMEDIAART_CONF_OPTS += --disable-introspection
-+LIBMEDIAART_CONF_OPTS += -Dintrospection=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+  Regards,
+  Arnout
+
+> ---
+>   package/kodi/Config.in | 3 ++-
+>   package/kodi/kodi.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 67cb33a6b5..21ef8dfd42 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -22,7 +22,8 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+>   	bool
+>   	default y
+>   	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+> -	depends on BR2_PACKAGE_MESA3D_GBM
+> +	depends on BR2_PACKAGE_HAS_LIBGBM
+> +	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+>   	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+>   
+>   config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 3c314533f4..646c6e0ab4 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -92,7 +92,7 @@ endif
+>   
+>   ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM),y)
+>   KODI_CORE_PLATFORM_NAME += gbm
+> -KODI_DEPENDENCIES += libinput libxkbcommon mesa3d
+> +KODI_DEPENDENCIES += libgbm libinput libxkbcommon
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND),y)
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
