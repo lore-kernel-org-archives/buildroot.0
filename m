@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24421C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D09C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C106860EE4
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C106860EE4
+	by mail.kernel.org (Postfix) with ESMTPS id CA62E610D1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CA62E610D1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AF19405E1;
-	Wed, 17 Nov 2021 21:49:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5F7340942;
+	Wed, 17 Nov 2021 21:49:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Evf-FjzCi1Nb; Wed, 17 Nov 2021 21:49:05 +0000 (UTC)
+	with ESMTP id ivsAtKGeqQd1; Wed, 17 Nov 2021 21:49:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D44B440600;
-	Wed, 17 Nov 2021 21:49:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D390B4093B;
+	Wed, 17 Nov 2021 21:49:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 85B721BF307
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 105401BF307
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70FCF80C56
+ by smtp1.osuosl.org (Postfix) with ESMTP id A221C801E0
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5HEuAkm8xs4g for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 21:48:26 +0000 (UTC)
+ with ESMTP id FY12lhYJQAAh for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 21:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E3EB80EFA
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:48:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDF6580CB6
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:48:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 03A528D5BC; Wed, 17 Nov 2021 21:44:12 +0000 (UTC)
+ id CF1928D5BC; Wed, 17 Nov 2021 21:44:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:36:52 +0100
+Date: Wed, 17 Nov 2021 22:19:34 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 84a8aa98101a0a18355f5c03e65816e23024a7cb
-X-Git-Newrev: 033c0b01514fd7a91463273b16f15e9b89a46bfc
+X-Git-Oldrev: bd2594cce7aa4f84b72003bbedacb804c0cee0f7
+X-Git-Newrev: eacad2319ac6c63219b7bba04e1d96a9be546455
 X-Patchwork-Hint: ignore
-Message-Id: <20211117214412.03A528D5BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/gdb: fix musl
- build on riscv
+Message-Id: <20211117214411.CF1928D5BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] support/scripts: don't
+ build board defconfigs with Gitlab's pipelines trigged on tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,100 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=033c0b01514fd7a91463273b16f15e9b89a46bfc
+commit: https://git.buildroot.net/buildroot/commit/?id=eacad2319ac6c63219b7bba04e1d96a9be546455
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fix the following build failure raised since gdb 10.1 and
-https://github.com/bminor/binutils-gdb/commit/bf84f7066626c78884436e1c39fb60f04c665f21:
+Currently when a tag is added to the Buildroot git tree, the gitlab-ci
+create a pipeline with several hundred of jobs (~750) to build all
+defconfigs and execute the Buildroot testsuite.
 
-../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
-../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
-  140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
-      |                   ^~~~~~~~~~
-      |                   ELF_NGREG
+However, there is only a limited number of gitlab-ci runner (9 runners)
+and some jobs reach the timeout limit (24h) while waiting for a runner
+[1]. Indeed, the Buildroot project doesn't use the Gitlab's shared
+runners.
 
-musl fixed the issue with
-https://github.com/ifduyue/musl/commit/e5d2823631bbfebacf48e1a34ed28f28d7cb2570
+In addition to the pipeline created when a new tag is added to the
+git repository, two pipelines are created each weeks to execute the
+Buildroot testsuite (on monday [2]) and build all defconfigs (on
+Thursday [3]).
 
-Fixes:
- - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
+At some point there are too many jobs waiting in gitlab due board
+defconfigs builds. Indded a board defconfig requires a lot of time
+(~30min) compared to other jobs in order to build a toolchain and a
+kernel linux along with a basic rootfs. There is currently 262
+defconfigs.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: use upstream repository for commit references]
+This is even worse when several pipelines are trigged at the same
+time (new git tag and scheduled pipeline trigger).
+
+In order to reduce the number of long jobs, don't build board
+defconfigs with pipelines trigged on tag, keeping only the runtime
+tests and the Qemu's defconfigs.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966541
+[2] https://gitlab.com/buildroot.org/buildroot/-/pipelines/404035190
+[3] https://gitlab.com/buildroot.org/buildroot/-/pipelines/401685550
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9d77dae55778eef05a90718f49914cf6eb3d6fc6)
-[Peter: drop 11.1 patch]
+(cherry picked from commit 8ea6eead60091587e51c38df5d2b6c0f5652a0c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gdb/10.2/0007-fix-musl-build-on-riscv.patch    | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ support/scripts/generate-gitlab-ci-yml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch b/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch
-new file mode 100644
-index 0000000000..34ab08a97a
---- /dev/null
-+++ b/package/gdb/10.2/0007-fix-musl-build-on-riscv.patch
-@@ -0,0 +1,60 @@
-+From c3fdbc0a24c83246f951ba79c7167547da979ae5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 10 Nov 2021 23:14:54 +0100
-+Subject: [PATCH] fix musl build on riscv
-+
-+Fix the following build failure raised with musl:
-+
-+../../gdbserver/linux-riscv-low.cc: In function 'void riscv_fill_fpregset(regcache*, void*)':
-+../../gdbserver/linux-riscv-low.cc:140:19: error: 'ELF_NFPREG' was not declared in this scope; did you mean 'ELF_NGREG'?
-+  140 |   for (i = 0; i < ELF_NFPREG - 1; i++, regbuf += flen)
-+      |                   ^~~~~~~~~~
-+      |                   ELF_NGREG
-+
-+musl fixed the issue with
-+https://git.musl-libc.org/cgit/musl/commit/?id=e5d2823631bbfebacf48e1a34ed28f28d7cb2570
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16b19198980ce9c81a618b3f6e8dc9fe28247a28
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gdb/nat/riscv-linux-tdesc.c  | 5 +++++
-+ gdbserver/linux-riscv-low.cc | 5 +++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/gdb/nat/riscv-linux-tdesc.c b/gdb/nat/riscv-linux-tdesc.c
-+index 837b1707e0f..667c013006a 100644
-+--- a/gdb/nat/riscv-linux-tdesc.c
-++++ b/gdb/nat/riscv-linux-tdesc.c
-+@@ -31,6 +31,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* See nat/riscv-linux-tdesc.h.  */
-+ 
-+ struct riscv_gdbarch_features
-+diff --git a/gdbserver/linux-riscv-low.cc b/gdbserver/linux-riscv-low.cc
-+index 8bf97ea4aa3..1142dbc7b16 100644
-+--- a/gdbserver/linux-riscv-low.cc
-++++ b/gdbserver/linux-riscv-low.cc
-+@@ -30,6 +30,11 @@
-+ # define NFPREG 33
-+ #endif
-+ 
-++/* Work around musl breakage since version 1.1.24.  */
-++#ifndef ELF_NFPREG
-++# define ELF_NFPREG 33
-++#endif
-++
-+ /* Linux target op definitions for the RISC-V architecture.  */
-+ 
-+ class riscv_target : public linux_process_target
-+-- 
-+2.33.0
-+
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 69c3fb275f..cf3e618873 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -36,6 +36,9 @@ gen_tests() {
+              )
+ 
+     if [ -n "${CI_COMMIT_TAG}" ]; then
++        # When a tag is added to the Buildroot git tree, we want
++        # to run the runtime tests and only test Qemu defconfigs.
++        defconfigs=( $(cd configs; LC_ALL=C ls -1 qemu_*_defconfig) )
+         do_basics=true
+         do_defconfigs=base
+         do_runtime=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
