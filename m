@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9239C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8B6C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B34C40283;
-	Mon,  6 Dec 2021 18:25:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA73482A53;
+	Mon,  6 Dec 2021 18:25:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T5ICSqU_M2Li; Mon,  6 Dec 2021 18:25:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LWHF7_j78yUx; Mon,  6 Dec 2021 18:25:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8D8941C56;
-	Mon,  6 Dec 2021 18:25:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 038341BF3F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E4E882893;
+	Mon,  6 Dec 2021 18:25:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C33121BF3F2
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCD4C41C38
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 636BE60D6C
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hcf4Ids6tQhu for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RMGbIvEJqxaK for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FBE441C22
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EA2960D63
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1A23E81468; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 0AC6A81503; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:09:37 +0100
+Date: Wed, 17 Nov 2021 22:00:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ccfc1ffbddd9b6195967f83fc78833decd10ef1
-X-Git-Newrev: bd06a3b9b507b14f3cf69f45ed165d132790ad75
+X-Git-Oldrev: 86f46249b397d01e1ed9bd9df0885d0034de0722
+X-Git-Newrev: 84e90ce45c34eb21596e4208510605ddb507419a
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180738.1A23E81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iproute2: bump version to 5.15.0
+Message-Id: <20211206180740.0AC6A81503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpewebkit: use lcms2 for if
+ available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd06a3b9b507b14f3cf69f45ed165d132790ad75
+commit: https://git.buildroot.net/buildroot/commit/?id=84e90ce45c34eb21596e4208510605ddb507419a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+Make wpewebkit support color management if the lcms2 package
+has been selected.
 
-[1] https://lore.kernel.org/all/20211101164705.6f4f2e41@hermes.local
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpewebkit/wpewebkit.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 2837edb09d..d8d619cbda 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  210fa785a52f3763c4287fd5ae63e246f6311bfaa48c424baab6d383bb7591d4  iproute2-5.14.0.tar.xz
-+sha256  38e3e4a5f9a7f5575c015027a10df097c149111eeb739993128e5b2b35b291ff  iproute2-5.15.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index fdf442a429..4162e38eb7 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 606a1531c0..fbe87862a7 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -23,7 +23,6 @@ WPEWEBKIT_CONF_OPTS = \
+ 	-DENABLE_ACCESSIBILITY=OFF \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_MINIBROWSER=OFF \
+-	-DUSE_LCMS=OFF \
+ 	-DUSE_SOUP2=ON \
+ 	-DSILENCE_CROSS_COMPILATION_NOTICES=ON
  
--IPROUTE2_VERSION = 5.14.0
-+IPROUTE2_VERSION = 5.15.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+@@ -67,6 +66,13 @@ else
+ WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++WPEWEBKIT_CONF_OPTS += -DUSE_LCMS=ON
++WPEWEBKIT_DEPENDENCIES += lcms2
++else
++WPEWEBKIT_CONF_OPTS += -DUSE_LCMS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_WOFF2),y)
+ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=ON
+ WPEWEBKIT_DEPENDENCIES += woff2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
