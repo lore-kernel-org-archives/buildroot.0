@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E525C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:47:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA05C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:47:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id CDC6161B51
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:47:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org CDC6161B51
+	by mail.kernel.org (Postfix) with ESMTPS id 50C5261B51
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:47:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 50C5261B51
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98C26400D0;
-	Wed, 17 Nov 2021 22:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CC3E80E0C;
+	Wed, 17 Nov 2021 22:47:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ENAf6uZtKspm; Wed, 17 Nov 2021 22:47:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PvHmLtWGpbxG; Wed, 17 Nov 2021 22:47:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59385404D8;
-	Wed, 17 Nov 2021 22:47:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12ACB1BF2FA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:46:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B66080E09;
+	Wed, 17 Nov 2021 22:47:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BFD41BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0101D60625
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:46:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78997402EA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:46:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 207EDbzfHThi for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 22:46:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sGjsHNdQUz8U for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 22:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00E46605DE
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:46:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B190F4015F
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:46:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D1E568D765; Wed, 17 Nov 2021 22:42:10 +0000 (UTC)
+ id 8F20C8DA65; Wed, 17 Nov 2021 22:42:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:45:01 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 419c5fbb2ea89caf094b625ca00caaf489ea3acf
-X-Git-Newrev: 29afb964e5a3376126a81b1a57945d692217c79b
+Date: Wed, 17 Nov 2021 23:42:49 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 4059ebe90205dc1dc74f0de9945ca5c69552f4f5
+X-Git-Newrev: dea560369c02cdec0336d2385af3c09c5343b311
 X-Patchwork-Hint: ignore
-Message-Id: <20211117224210.D1E568D765@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/mupdf: disable
- objcopy
+Message-Id: <20211117224219.8F20C8DA65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/oracle-mysql: add
+ mysql_config to ORACLE_MYSQL_CONFIG_SCRIPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,186 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7427966234056695879=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7427966234056695879==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=dea560369c02cdec0336d2385af3c09c5343b311
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29afb964e5a3376126a81b1a57945d692217c79b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+Add mysql_config to ORACLE_MYSQL_CONFIG_SCRIPTS so the per-package fix
+added by commit a18c828bed99d7e0db5128224ffcda4897cd8e80 will be applied
+to this file which will avoid the following build failures with
+libodb-mysql, open2300 or rsyslog:
 
-Drop fourth patch and disable objcopy as suggested by upstream in
-https://bugs.ghostscript.com/show_bug.cgi?id=704442#c2
-
-This will also fix the following build failure on sparc and xtensa:
-
-    OBJCOPY build/release/resources/fonts/urw/Dingbats.cff.o
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: --relax and -r may not be used together
-
-While at it, drop MUPDF_DISABLE_OPENGL and use the new MUPDF_MAKE_OPTS
-variable
+configure:3286: /home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/powerpc-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -rdynamic -L/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/mysql -lmysqlclient -L/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/oracle-mysql/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib -lz -lnsl -lm >&5
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /lib/libc.so.1
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /usr/lib/uclibc_nonshared.a
+/home/giuliobenetti/autobuild/run/instance-3/output-1/per-package/libodb-mysql/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/10.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find /lib/ld-uClibc.so.1
 
 Fixes:
- - http://autobuild.buildroot.org/results/e64d456174a0f701c0e0de68317debcdc429a660
- - http://autobuild.buildroot.net/results/0945f305d31530677282f38fa7c99af5295d47bd
+ - http://autobuild.buildroot.org/results/9e3c09dd3d9bd55de14fc89a1d17ba9c008b195b
+ - http://autobuild.buildroot.org/results/b42c8c86e9574ba9f2c04daa3476206270241a66
+ - http://autobuild.buildroot.org/results/08156c934e9b4d946c354dbaf78ea5d9ae9a4701
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit cf8900b0638e3d17c78ffa48655d4a972d1c7e8f)
+(cherry picked from commit 7413b8c6e4a2359b3f3f6e0fe8b83d77e0b46142)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Makefile-compile-hexdump.exe-with-HOSTCC.patch | 40 ++++++++++++++++++++
- .../0004-Use-CC-instead-of-LD-for-OBJCOPY.patch    | 43 ----------------------
- package/mupdf/mupdf.mk                             | 17 +++++----
- 3 files changed, 50 insertions(+), 50 deletions(-)
+ package/oracle-mysql/oracle-mysql.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mupdf/0004-Makefile-compile-hexdump.exe-with-HOSTCC.patch b/package/mupdf/0004-Makefile-compile-hexdump.exe-with-HOSTCC.patch
-new file mode 100644
-index 0000000000..bc9debd332
---- /dev/null
-+++ b/package/mupdf/0004-Makefile-compile-hexdump.exe-with-HOSTCC.patch
-@@ -0,0 +1,40 @@
-+From c0036573a995dc78d3cf60a30ff0af2b47f3680a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 14 Nov 2021 23:24:27 +0100
-+Subject: [PATCH] Makefile: compile hexdump.exe with HOSTCC
-+
-+hexdump.exe must be compiled for the host or the build will fail when
-+cross-compiling with HAVE_OBJCOPY=no
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=704442]
-+---
-+ Makefile | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 6492b1ca3..0732b358f 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -60,6 +60,8 @@ AR_CMD = $(QUIET_AR) $(MKTGTDIR) ; $(AR) cr $@ $^
-+ ifdef RANLIB
-+   RANLIB_CMD = $(QUIET_RANLIB) $(RANLIB) $@
-+ endif
-++HOSTCC ?= $(CC)
-++HOST_LINK_CMD = $(QUIET_LINK) $(MKTGTDIR) ; $(HOSTCC) -o $@ $^
-+ LINK_CMD = $(QUIET_LINK) $(MKTGTDIR) ; $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ TAGS_CMD = $(QUIET_TAGS) ctags -R --c-kinds=+p --exclude=platform/python --exclude=platform/c++
-+ WINDRES_CMD = $(QUIET_WINDRES) $(MKTGTDIR) ; $(WINDRES) $< $@
-+@@ -81,6 +83,9 @@ $(OUT)/%.a :
-+ 	$(AR_CMD)
-+ 	$(RANLIB_CMD)
-+ 
-++$(OUT)/scripts/hexdump.exe: scripts/hexdump.c
-++	$(HOST_LINK_CMD)
-++
-+ $(OUT)/%.exe: %.c
-+ 	$(LINK_CMD)
-+ 
-+-- 
-+2.33.0
-+
-diff --git a/package/mupdf/0004-Use-CC-instead-of-LD-for-OBJCOPY.patch b/package/mupdf/0004-Use-CC-instead-of-LD-for-OBJCOPY.patch
-deleted file mode 100644
-index 0e0aadd29d..0000000000
---- a/package/mupdf/0004-Use-CC-instead-of-LD-for-OBJCOPY.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From da4b98447573daf77829811e95e3772e8a296934 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
--Date: Thu, 2 Sep 2021 20:17:26 +0200
--Subject: [PATCH] Use CC instead of LD for OBJCOPY
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When cross-compiling for mips targets using Buildroot, using LD for
--partial linking fails in the following way:
--/tmp/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: build/release/libmupdf.a(Dingbats.cff.o): ABI is incompatible with that of the selected emulation
--/tmp/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: failed to merge target specific data of file build/release/libmupdf.a(Dingbats.cff.o)
--
--To fix it, use CC instead of LD for partial linking.
--
--'nostdlib' has to be added, or it will try to use GCC libraries for
--partial linking and fail with 'cannot find -lgcc_s'.
--
--Fixes:
--- http://autobuild.buildroot.net/results/156fe9ee5f6dccdc98990f6c5de5562383bc2b74
--
--Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
--[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=704442]
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index b0fb617e2..0a8795e0e 100644
----- a/Makefile
--+++ b/Makefile
--@@ -64,7 +64,7 @@ endif
-- LINK_CMD = $(QUIET_LINK) $(MKTGTDIR) ; $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-- TAGS_CMD = $(QUIET_TAGS) ctags -R --c-kinds=+p
-- WINDRES_CMD = $(QUIET_WINDRES) $(MKTGTDIR) ; $(WINDRES) $< $@
---OBJCOPY_CMD = $(QUIET_OBJCOPY) $(MKTGTDIR) ; $(LD) -r -b binary -z noexecstack -o $@ $<
--+OBJCOPY_CMD = $(QUIET_OBJCOPY) $(MKTGTDIR) ; $(CC) -Wl,-r -Wl,-b -Wl,binary -Wl,-z -Wl,noexecstack -nostdlib -o $@ $<
-- 
-- # --- Rules ---
-- 
---- 
--2.33.0
--
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index c9d5b4a162..56ea7cc507 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -52,25 +52,28 @@ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 	XLIBS="$(MUPDF_LDFLAGS)" \
- 	USE_SYSTEM_LIBS=yes
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index ccfa40cfb1..a7b8c7e251 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -14,6 +14,7 @@ ORACLE_MYSQL_AUTORECONF = YES
+ ORACLE_MYSQL_LICENSE = GPL-2.0
+ ORACLE_MYSQL_LICENSE_FILES = README COPYING
+ ORACLE_MYSQL_PROVIDES = mysql
++ORACLE_MYSQL_CONFIG_SCRIPTS = mysql_config
  
-+MUPDF_MAKE_OPTS = \
-+	HAVE_OBJCOPY=no \
-+	prefix="/usr"
-+
- ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
- MUPDF_DEPENDENCIES += libfreeglut
- else
--define MUPDF_DISABLE_OPENGL
--	sed -i 's/HAVE_GLUT := yes/HAVE_GLUT := no/g' $(@D)/Makerules
--endef
--MUPDF_POST_PATCH_HOOKS = MUPDF_DISABLE_OPENGL
-+MUPDF_MAKE_OPTS += HAVE_GLUT=no
- endif
- 
- define MUPDF_BUILD_CMDS
--	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) all
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) $(MUPDF_MAKE_OPTS) all
- endef
- 
- define MUPDF_INSTALL_STAGING_CMDS
--	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" prefix="/usr" install_libs
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) $(MUPDF_MAKE_OPTS) \
-+		DESTDIR="$(STAGING_DIR)" install_libs
- endef
- 
- define MUPDF_INSTALL_TARGET_CMDS
--	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" prefix="/usr" install
-+	$(MUPDF_MAKE_ENV) $(MAKE) -C $(@D) $(MUPDF_MAKE_OPTS) \
-+		DESTDIR="$(TARGET_DIR)" install
- endef
- 
- $(eval $(generic-package))
-
---===============7427966234056695879==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # Unix socket. This variable can also be consulted by other buildroot packages
+ MYSQL_SOCKET = /run/mysql/mysql.sock
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7427966234056695879==--
