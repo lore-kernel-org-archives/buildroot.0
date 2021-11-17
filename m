@@ -2,51 +2,51 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11061C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFF8C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C736361B4C
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C736361B4C
+	by mail.kernel.org (Postfix) with ESMTPS id 1EDA561B96
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:06:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1EDA561B96
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 905D040241;
-	Wed, 17 Nov 2021 15:06:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3B9C40250;
+	Wed, 17 Nov 2021 15:06:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6S9xom5Pj3D2; Wed, 17 Nov 2021 15:06:00 +0000 (UTC)
+	with ESMTP id 4HOqVNwf3RaS; Wed, 17 Nov 2021 15:06:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4B1F4024B;
-	Wed, 17 Nov 2021 15:05:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 526061BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 418F940452;
+	Wed, 17 Nov 2021 15:06:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 724A91BF36B
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 406E740241
+ by smtp3.osuosl.org (Postfix) with ESMTP id 145576064F
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lONx5ZC47dTE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 92jvSo7hf8G6 for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C936401F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57CDD606AA
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ED4F48D45E; Wed, 17 Nov 2021 15:01:19 +0000 (UTC)
+ id 02E198D45D; Wed, 17 Nov 2021 15:01:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 16:04:08 +0100
+Date: Wed, 17 Nov 2021 16:04:22 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 04c5b72118e08eb4039729f856d948397ee2f5bc
-X-Git-Newrev: 65f4cfec2c686938ca89f75ba3aaa7fab2f0bf7c
+X-Git-Oldrev: 65f4cfec2c686938ca89f75ba3aaa7fab2f0bf7c
+X-Git-Newrev: c4756b5d9f7fac755867f2a6f2d5855de1105a03
 X-Patchwork-Hint: ignore
-Message-Id: <20211117150119.ED4F48D45E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/uboot: don't
+Message-Id: <20211117150120.02E198D45D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/glog: don't
  override dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,32 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f4cfec2c686938ca89f75ba3aaa7fab2f0bf7c
+commit: https://git.buildroot.net/buildroot/commit/?id=c4756b5d9f7fac755867f2a6f2d5855de1105a03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Don't override UBOOT_DEPENDENCIES in a conditional
+Don't override GLOG_DEPENDENCIES in a conditional
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9de2c792e19d572645d1a2e813516fd8e541fa4f)
+(cherry picked from commit 1f9e65b2f34f11d93709a090df799150e00b519e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 2 +-
+ package/glog/glog.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a8a8bedc01..6f59018867 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -502,7 +502,7 @@ UBOOT_DEPENDENCIES += \
- $(eval $(generic-package))
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
--UBOOT_KCONFIG_DEPENDENCIES = \
-+UBOOT_KCONFIG_DEPENDENCIES += \
- 	$(BR2_MAKE_HOST_DEPENDENCY) \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+index 9d31732a88..2863e78345 100644
+--- a/package/glog/glog.mk
++++ b/package/glog/glog.mk
+@@ -13,7 +13,7 @@ GLOG_CONF_OPTS = \
+ 	$(if $(BR2_TOOLCHAIN_HAS_THREADS),-DWITH_THREADS=ON, -DWITH_THREADS=OFF)
+ 
+ ifeq ($(BR2_PACKAGE_GFLAGS),y)
+-GLOG_DEPENDENCIES = gflags
++GLOG_DEPENDENCIES += gflags
+ GLOG_CONF_OPTS += -DWITH_GFLAGS=ON
+ else
+ GLOG_CONF_OPTS += -DWITH_GFLAGS=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
