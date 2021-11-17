@@ -2,48 +2,59 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3627FC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:06:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F78CC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:12:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id BC8F061288
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:06:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org BC8F061288
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=crapouillou.net
+	by mail.kernel.org (Postfix) with ESMTPS id B049761B39
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:12:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B049761B39
+Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94E4980C84;
-	Wed, 17 Nov 2021 22:06:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 740B0400D0;
+	Wed, 17 Nov 2021 22:12:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2w_-ITUBDXK; Wed, 17 Nov 2021 22:06:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MzDry4MMyNSI; Wed, 17 Nov 2021 22:12:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2D3D80C7A;
-	Wed, 17 Nov 2021 22:06:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F7A5405C6;
+	Wed, 17 Nov 2021 22:12:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AA691BF2FA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:06:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C272F1BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:12:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1908980C7A
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:06:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B26BA825C3
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:12:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C46m5kqYtXef for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 22:06:47 +0000 (UTC)
+ with ESMTP id AaM8EHB3PTFp for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 22:12:31 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5EF0580C77
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:06:47 +0000 (UTC)
-From: Paul Cercueil <paul@crapouillou.net>
-To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:06:35 +0000
-Message-Id: <20211117220635.114549-1-paul@crapouillou.net>
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BA0881D72
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:12:31 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 929B1FF808;
+ Wed, 17 Nov 2021 22:12:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mnTAI-0007OY-TJ; Wed, 17 Nov 2021 23:12:26 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211113163241.547023-1-fontaine.fabrice@gmail.com>
+Date: Wed, 17 Nov 2021 23:12:26 +0100
+In-Reply-To: <20211113163241.547023-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Nov 2021 17:32:41 +0100")
+Message-ID: <874k8atos5.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] linux: add dependency on host-libyaml for
- v5.16+
+Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: security bump to
+ version 5.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,37 +66,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Grzegorz Blach <grzegorz@blach.pl>, Marcin Bis <marcin@bis.org.pl>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Starting with 5.16, host-libyaml seems to be required to build
-Device Tree blobs.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > - Drop second patch (already in version)
+ > - Fix CVE-2021-43400: An issue was discovered in gatt-database.c in BlueZ
+ >   5.61. A use-after-free can occur when a client disconnects during D-Bus
+ >   processing of a WriteValue call.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 61fdc0c76c..bbe19f494c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -375,6 +375,9 @@ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- # reproducibility, we use our owns rather than the host ones.
- LINUX_DEPENDENCIES += host-bison host-flex
- 
-+# Starting with 5.16, host-libyaml is required to build Device Tree blobs.
-+LINUX_DEPENDENCIES += host-libyaml
-+
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
+ > http://www.bluez.org/release-of-bluez-5-62
+
+This states "It recommends using the ELL version 0.44.". Do you know
+how important this is? 2021.08.x has 0.41 and 2021.02.x has 0.35. Does
+it need to be bumped as well?
+
 -- 
-2.33.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
