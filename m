@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A7CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F62DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:21:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 7CC0261B95
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:20:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 7CC0261B95
+	by mail.kernel.org (Postfix) with ESMTPS id 1A87661B72
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:21:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 1A87661B72
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53B4D81016;
-	Wed, 17 Nov 2021 22:20:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E982883455;
+	Wed, 17 Nov 2021 22:21:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Hvhg82OYMbJ; Wed, 17 Nov 2021 22:20:48 +0000 (UTC)
+	with ESMTP id iBE3JGoEwBPH; Wed, 17 Nov 2021 22:21:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BCD581B6D;
-	Wed, 17 Nov 2021 22:20:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E48082771;
+	Wed, 17 Nov 2021 22:20:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1064A1BF2FA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:19:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15BE71BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73DC360B73
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0018E60BC2
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:19:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BKZjuDsm4RTm for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 22:19:32 +0000 (UTC)
+ with ESMTP id ddB22W1L-aou for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 22:19:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A618860BC2
+ by smtp3.osuosl.org (Postfix) with ESMTP id D174C60BC4
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:19:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 878B48D665; Wed, 17 Nov 2021 22:15:18 +0000 (UTC)
+ id A7CFD8D665; Wed, 17 Nov 2021 22:15:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:12:59 +0100
+Date: Wed, 17 Nov 2021 23:18:29 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: fb21e06dc253b5d0efe7a7cee30006b9e58e0705
-X-Git-Newrev: 90ccff9ad8ff438328ee88ae4305ab5a42f20268
+X-Git-Oldrev: eae043fbf89cbec6343b6ab7efe4a4c80c535dbb
+X-Git-Newrev: 8ddf37c386c2f4b3409f872c44d669c8ab8b938d
 X-Patchwork-Hint: ignore
-Message-Id: <20211117221518.878B48D665@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] utils/genrandconfig:
- reduce the maximum "size" of random configurations
+Message-Id: <20211117221518.A7CFD8D665@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gst1-interpipe:
+ bump version to 1.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90ccff9ad8ff438328ee88ae4305ab5a42f20268
+commit: https://git.buildroot.net/buildroot/commit/?id=8ddf37c386c2f4b3409f872c44d669c8ab8b938d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-genrandconfig is used by the Buildroot autobuilders to generate
-semi-random configurations that we build test. As part of this, we use
-"make randpackageconfig" to randomize the selection of packages,
-together with a KCONFIG_PROBABILITY value, which indicates the
-probabibility for each option to be enabled. This probability is
-itself randomized, between 1% and 30% for every build.
+Changelog (for details see [1]):
 
-However, with our increasing number of packages (over 2900), when we
-use a 30% probability for options to be enabled, it means a *lot* of
-options are enabled, causing very large configurations to be
-tested. These configurations are not very realistic, and they take
-ages to build on our autobuilders: we have builds that take 4, 5 or
-even 7 hours to build.
+  - Fix memory leak generated by last node not being freed.
 
-In order to test a larger number of configurations and therefore a
-larger variety of configurations, this commit reduces the maximum
-probability to 20%.
+[1] https://github.com/RidgeRun/gst-interpipe/releases/tag/1.1.7
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0e64537917a5b27565b8c479fda83508a6da7b86)
+(cherry picked from commit 056e84b7131e32a96b2b4655cac59eb94c8502aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 93dc6d898b..90420596ff 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -422,7 +422,7 @@ def gen_config(args):
-             return 1
-         bounded_loop -= 1
-         subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
--                               "KCONFIG_PROBABILITY=%d" % randint(1, 30),
-+                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-                                "randpackageconfig"])
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index b3fc8ef018..348abdb003 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  00d3a91625f6cc5d263f35b9330b4ba6eb40781be2e823231e5b2be9281e1fb4  gst1-interpipe-1.1.6-br1.tar.gz
++sha256  0fd29d3cba623163dd5852989d7ca21eee9033da9d14a467ccd5e527e3b4297b  gst1-interpipe-1.1.7-br1.tar.gz
  
-         if fixup_config(sysinfo, configfile):
+ # Hashes for license files:
+ sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index 80e5b577f6..fa4485e6f8 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_INTERPIPE_VERSION = 1.1.6
++GST1_INTERPIPE_VERSION = 1.1.7
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
