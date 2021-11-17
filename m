@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A27C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4530C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3981461B51
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 3981461B51
+	by mail.kernel.org (Postfix) with ESMTPS id A33AB61B51
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A33AB61B51
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A9B0404D8;
-	Wed, 17 Nov 2021 22:41:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81BB660AA4;
+	Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BNaU15aV9bTU; Wed, 17 Nov 2021 22:41:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LcmDPxQjwOaR; Wed, 17 Nov 2021 22:41:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12CC74024E;
-	Wed, 17 Nov 2021 22:40:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 631CB1BF9B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB4CE60625;
+	Wed, 17 Nov 2021 22:41:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5A91BF2FA
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 787F34015F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7403D80BEE
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gRfXEMtQZpU4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qC5nISpJpheO for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 22:37:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEEE34018F
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCACB80CCC
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:37:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BE8F68D6B0; Wed, 17 Nov 2021 22:33:24 +0000 (UTC)
+ id 9DBCF8D6B1; Wed, 17 Nov 2021 22:33:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:28:04 +0100
+Date: Wed, 17 Nov 2021 23:26:56 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 055342cbc94f2bf7299757979fd633d39acc50de
-X-Git-Newrev: 21d4668f5f90a3be1e5d5baa464cda62ed61a1e6
+X-Git-Oldrev: 111197ef3e75bed5fb01be98bc77a699b47df51b
+X-Git-Newrev: 2357f9f6698b7501dfb8c8b1eeb8a715a66a6929
 X-Patchwork-Hint: ignore
-Message-Id: <20211117223324.BE8F68D6B0@busybox.osuosl.org>
+Message-Id: <20211117223324.9DBCF8D6B1@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.02.x]
- configs/beagleboneai_defconfig: backport gcc >= 10 u-boot patch
+ configs/armadeus_apf51_defconfig: bump linux kernel to 4.4.291
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21d4668f5f90a3be1e5d5baa464cda62ed61a1e6
+commit: https://git.buildroot.net/buildroot/commit/?id=2357f9f6698b7501dfb8c8b1eeb8a715a66a6929
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966041
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1758965994
 
-The old U-Boot version used does not build with hostcc >= 10.  Backport a
-patch fixing that issue.
+To correct a build breakage after the move to a gcc 10.x based host
+compiler, as the updated kernel contains a fix for:
+
+HOSTLD  scripts/dtc/dtc
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
+
+Also correct a mistake in the kernel headers version comment.
+
+Build-tested only.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4074fbd0aad1dc7c623aee68c8267d4f11e19fdc)
+(cherry picked from commit 9f66785d8cc739abebb3b0c76ffeb43d9d441dd1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Remove-redundant-YYLOC-global-declaration.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ configs/armadeus_apf51_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch b/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch
-new file mode 100644
-index 0000000000..c9d5d71ca1
---- /dev/null
-+++ b/board/beagleboneai/patches/uboot/0002-Remove-redundant-YYLOC-global-declaration.patch
-@@ -0,0 +1,28 @@
-+From 018921ee79d3f30893614b3b2b63b588d8544f73 Mon Sep 17 00:00:00 2001
-+From: Peter Robinson <pbrobinson@gmail.com>
-+Date: Thu, 30 Jan 2020 09:37:15 +0000
-+Subject: [PATCH] Remove redundant YYLOC global declaration
-+
-+Same as the upstream fix for building dtc with gcc 10.
-+
-+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ scripts/dtc/dtc-lexer.l | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
-+index fd825ebba6..24af549977 100644
-+--- a/scripts/dtc/dtc-lexer.l
-++++ b/scripts/dtc/dtc-lexer.l
-+@@ -38,7 +38,6 @@ LINECOMMENT	"//".*\n
-+ #include "srcpos.h"
-+ #include "dtc-parser.tab.h"
-+ 
-+-YYLTYPE yylloc;
-+ extern bool treesource_error;
-+ 
-+ /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
-+-- 
-+2.20.1
-+
+diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
+index 26b6a447d4..aa7c2f84ae 100644
+--- a/configs/armadeus_apf51_defconfig
++++ b/configs/armadeus_apf51_defconfig
+@@ -2,7 +2,7 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 3.12 series
++# Linux headers same as kernel, a 4.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ 
+ # System
+@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.186"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.291"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-4.4.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
