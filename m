@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150D8C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C24C2C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id C8896610D2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C8896610D2
+	by mail.kernel.org (Postfix) with ESMTPS id 88A14610D1
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:49:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 88A14610D1
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A525F8247F;
-	Wed, 17 Nov 2021 21:49:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64A2F40942;
+	Wed, 17 Nov 2021 21:49:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vPSBd0ODPHsl; Wed, 17 Nov 2021 21:49:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kbn3Rj-npYn5; Wed, 17 Nov 2021 21:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C02A282486;
-	Wed, 17 Nov 2021 21:49:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DA831BF307
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0ED64057E;
+	Wed, 17 Nov 2021 21:49:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9566F1BF9B2
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AB3460A96
+ by smtp4.osuosl.org (Postfix) with ESMTP id 853CA4057E
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id txuyT_7hn4dW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id maWLMCtk0b0N for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 21:48:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6B8260A83
+ by smtp4.osuosl.org (Postfix) with ESMTP id C048540578
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:48:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AB32D8D5D7; Wed, 17 Nov 2021 21:44:44 +0000 (UTC)
+ id B4BA88D5E5; Wed, 17 Nov 2021 21:44:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:19:10 +0100
+Date: Wed, 17 Nov 2021 22:20:24 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e1cc45314969ff78d1c3a453c5510a9fa67148ca
-X-Git-Newrev: ccd0d314d5f44429367b2e960106208d4a2b029e
+X-Git-Oldrev: ccd0d314d5f44429367b2e960106208d4a2b029e
+X-Git-Newrev: 7d11a39074bd23a144bfb1f7ae78b44a0692461f
 X-Patchwork-Hint: ignore
-Message-Id: <20211117214444.AB32D8D5D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] support/scripts: don't
- build board defconfigs with Gitlab's pipelines trigged on tag
+Message-Id: <20211117214444.B4BA88D5E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mosquitto: bump
+ to v2.0.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,66 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccd0d314d5f44429367b2e960106208d4a2b029e
+commit: https://git.buildroot.net/buildroot/commit/?id=7d11a39074bd23a144bfb1f7ae78b44a0692461f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Currently when a tag is added to the Buildroot git tree, the gitlab-ci
-create a pipeline with several hundred of jobs (~750) to build all
-defconfigs and execute the Buildroot testsuite.
+Mosquitto v2.0.13 is bugfix release, read the announcement on
+https://mosquitto.org/blog/2021/10/version-2-0-13-released/
 
-However, there is only a limited number of gitlab-ci runner (9 runners)
-and some jobs reach the timeout limit (24h) while waiting for a runner
-[1]. Indeed, the Buildroot project doesn't use the Gitlab's shared
-runners.
+Also update the checksum of license files, which have been whitespace-trimmed
 
-In addition to the pipeline created when a new tag is added to the
-git repository, two pipelines are created each weeks to execute the
-Buildroot testsuite (on monday [2]) and build all defconfigs (on
-Thursday [3]).
-
-At some point there are too many jobs waiting in gitlab due board
-defconfigs builds. Indded a board defconfig requires a lot of time
-(~30min) compared to other jobs in order to build a toolchain and a
-kernel linux along with a basic rootfs. There is currently 262
-defconfigs.
-
-This is even worse when several pipelines are trigged at the same
-time (new git tag and scheduled pipeline trigger).
-
-In order to reduce the number of long jobs, don't build board
-defconfigs with pipelines trigged on tag, keeping only the runtime
-tests and the Qemu's defconfigs.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/1758966541
-[2] https://gitlab.com/buildroot.org/buildroot/-/pipelines/404035190
-[3] https://gitlab.com/buildroot.org/buildroot/-/pipelines/401685550
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8ea6eead60091587e51c38df5d2b6c0f5652a0c6)
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a7ac3f0a4ac7e51980397e79a6fc6da404951159)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/generate-gitlab-ci-yml | 3 +++
- 1 file changed, 3 insertions(+)
+ package/mosquitto/mosquitto.hash | 8 ++++----
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 69c3fb275f..cf3e618873 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -36,6 +36,9 @@ gen_tests() {
-              )
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 2692aa1a9b..7b950208c8 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,8 +1,8 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.12.tar.gz.asc
+-sha256  31cf0065cb431d6f4e57a5f4d56663e839c9d177362eff89582d7cfde191c933  mosquitto-2.0.12.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.13.tar.gz.asc
++sha256  9cf83a558f1588e8798edd8647b1632af88e88ef2cd45054e903c517df5bd2cd  mosquitto-2.0.13.tar.gz
  
-     if [ -n "${CI_COMMIT_TAG}" ]; then
-+        # When a tag is added to the Buildroot git tree, we want
-+        # to run the runtime tests and only test Qemu defconfigs.
-+        defconfigs=( $(cd configs; LC_ALL=C ls -1 qemu_*_defconfig) )
-         do_basics=true
-         do_defconfigs=base
-         do_runtime=true
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+-sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+-sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
++sha256  8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c  epl-v20
++sha256  86fc4a3f97cb769c04e8da557036c1066eb8bb22b2d0a5dd31464990fe84047c  edl-v10
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 06b963a994..b02f0c2f43 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 2.0.12
++MOSQUITTO_VERSION = 2.0.13
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
