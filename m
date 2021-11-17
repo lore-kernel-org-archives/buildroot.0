@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4530C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03F25C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A33AB61B51
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A33AB61B51
+	by mail.kernel.org (Postfix) with ESMTPS id C610361B5F
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:41:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org C610361B5F
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81BB660AA4;
-	Wed, 17 Nov 2021 22:41:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BE154018F;
+	Wed, 17 Nov 2021 22:41:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LcmDPxQjwOaR; Wed, 17 Nov 2021 22:41:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FwI3FvLzo3u5; Wed, 17 Nov 2021 22:41:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB4CE60625;
-	Wed, 17 Nov 2021 22:41:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BF5A91BF2FA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:37:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E90C2401C4;
+	Wed, 17 Nov 2021 22:41:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6071BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:37:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7403D80BEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDD85605BC
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qC5nISpJpheO for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 22:37:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id icCDPo75b1vi for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 22:37:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCACB80CCC
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3E6060625
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:37:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9DBCF8D6B1; Wed, 17 Nov 2021 22:33:24 +0000 (UTC)
+ id D4E2C8D6B1; Wed, 17 Nov 2021 22:33:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:26:56 +0100
+Date: Wed, 17 Nov 2021 23:30:35 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 111197ef3e75bed5fb01be98bc77a699b47df51b
-X-Git-Newrev: 2357f9f6698b7501dfb8c8b1eeb8a715a66a6929
+X-Git-Oldrev: 5f55b60726726d318c4110a322374a3b43855d32
+X-Git-Newrev: 2a824ae39d563822d736a377dcd397c03d031426
 X-Patchwork-Hint: ignore
-Message-Id: <20211117223324.9DBCF8D6B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- configs/armadeus_apf51_defconfig: bump linux kernel to 4.4.291
+Message-Id: <20211117223324.D4E2C8D6B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mksh: fix project
+ URL in Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +65,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2357f9f6698b7501dfb8c8b1eeb8a715a66a6929
+commit: https://git.buildroot.net/buildroot/commit/?id=2a824ae39d563822d736a377dcd397c03d031426
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1758965994
+It's http://www.mirbsd.org/mksh.htm
 
-To correct a build breakage after the move to a gcc 10.x based host
-compiler, as the updated kernel contains a fix for:
-
-HOSTLD  scripts/dtc/dtc
-/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e33a814e772cdc36436c8c188d8c42d019fda639
-
-Also correct a mistake in the kernel headers version comment.
-
-Build-tested only.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9f66785d8cc739abebb3b0c76ffeb43d9d441dd1)
+(cherry picked from commit 399ad854cc210db728e06933b8a4ad9089176ec1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/armadeus_apf51_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mksh/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
-index 26b6a447d4..aa7c2f84ae 100644
---- a/configs/armadeus_apf51_defconfig
-+++ b/configs/armadeus_apf51_defconfig
-@@ -2,7 +2,7 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/mksh/Config.in b/package/mksh/Config.in
+index e6ccc90646..94f0d78ad5 100644
+--- a/package/mksh/Config.in
++++ b/package/mksh/Config.in
+@@ -22,4 +22,4 @@ config BR2_PACKAGE_MKSH
+ 	  operating environments
+ 	  (thus including patches from pdksh on e.g. Debian).
  
--# Linux headers same as kernel, a 3.12 series
-+# Linux headers same as kernel, a 4.4 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # System
-@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.186"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.291"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-4.4.config"
- BR2_LINUX_KERNEL_UIMAGE=y
+-	  http://mirbsd.de/mksh
++	  http://www.mirbsd.org/mksh.htm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
