@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B63C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 23:02:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCDE5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 23:02:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5168D61B7D
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 23:02:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 5168D61B7D
+	by mail.kernel.org (Postfix) with ESMTPS id A6E3B61B7D
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 23:02:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A6E3B61B7D
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14C3F4052B;
-	Wed, 17 Nov 2021 23:02:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OnfN8Xsd3kBC; Wed, 17 Nov 2021 23:02:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A4854024F;
-	Wed, 17 Nov 2021 23:01:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E89841BF2FA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 23:01:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E56F16073A
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 23:01:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75C5B60A8D;
+	Wed, 17 Nov 2021 23:02:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ojpjfC6Hhqd7 for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 23:01:36 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bz5l_FHKMVer; Wed, 17 Nov 2021 23:02:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA67560750;
+	Wed, 17 Nov 2021 23:02:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 46A321BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 23:01:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CC54405A2
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 23:01:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qpl_Vn9B9VrD for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 23:01:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29813606F9
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 23:01:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62CE940508
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 23:01:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F3C3D8DAA4; Wed, 17 Nov 2021 22:57:21 +0000 (UTC)
+ id 385938DAA7; Wed, 17 Nov 2021 22:57:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:50:44 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c29f8228e8754250a7a5d263d1c173a2227b8861
-X-Git-Newrev: 29632cdd2450a1b25bfb43986fe5362a8f29781a
+Date: Wed, 17 Nov 2021 23:47:22 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 29afb964e5a3376126a81b1a57945d692217c79b
+X-Git-Newrev: 8f52326acbd4c75d84ce08049dc1a8c6f7f16542
 X-Patchwork-Hint: ignore
-Message-Id: <20211117225721.F3C3D8DAA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/apparmor: fix
- per-package build with apache
+Message-Id: <20211117225732.385938DAA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/isl: switch to
+ new site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29632cdd2450a1b25bfb43986fe5362a8f29781a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f52326acbd4c75d84ce08049dc1a8c6f7f16542
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Fix the following per-package build failure with apache:
+isl.gforge.inria.fr no longer responds and the main site is now at
+sourceforge.io.  This change corresponds to the upstream commit that
+updates the documentation [1].
 
-/home/buildroot/autobuild/instance-3/output-1/per-package/apparmor/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../../usr/build-1/libtool --silent --mode=link /home/buildroot/autobuild/instance-3/output-1/per-package/apparmor/host/bin/aarch64-linux-gcc    -o mod_apparmor.la  -rpath /usr/modules -module -avoid-version    mod_apparmor.lo -L/home/buildroot/autobuild/instance-3/output-1/per-package/apparmor/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib -lapparmor
-/home/buildroot/autobuild/instance-3/output-1/per-package/apache/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: cannot find /lib64/libc.so.6
+[1] https://repo.or.cz/isl.git/commitdiff/002820d725479b456c97ca9b0d59d6b3e18f7ee4
 
-This build failure is raised because the fix added by commit
-3c836e54203b16015c9c52cbe007adc92d293a0d was incomplete as the apr
-special libtool script was not patched (see commit
-b747c29c4e8eb89b7b99658dfd34f4a6b6b0744d for a detailled explanation)
-
-Fixes:
- - http://autobuild.buildroot.org/results/6747b1cb11b129ea4bcb1ecc9645e94fb8e095e8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: John Keeping <john@metanate.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 8bd40a0303c697822f2c65b4ede80ad1252bbc07)
+(cherry picked from commit 748b7878e90ab5813a6f48e156410cf38ef087d9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apparmor/apparmor.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/isl/isl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 6c23e1bb89..2f6cb744f3 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -59,7 +59,8 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
- define APPARMOR_FIXUP_APXS
- 	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apparmor/@g" \
- 		$(STAGING_DIR)/usr/bin/apxs \
--		$(STAGING_DIR)/usr/build/config_vars.mk
-+		$(STAGING_DIR)/usr/build/config_vars.mk \
-+		$(STAGING_DIR)/usr/build-1/libtool
- endef
- APPARMOR_POST_CONFIGURE_HOOKS += APPARMOR_FIXUP_APXS
- endif
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index 3abd6640cb..df57c83f55 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
+@@ -6,7 +6,7 @@
+ 
+ ISL_VERSION = 0.23
+ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+-ISL_SITE = http://isl.gforge.inria.fr
++ISL_SITE = https://libisl.sourceforge.io
+ ISL_LICENSE = MIT
+ ISL_LICENSE_FILES = LICENSE
+ HOST_ISL_DEPENDENCIES = host-gmp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
