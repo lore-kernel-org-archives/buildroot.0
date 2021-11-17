@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D054C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0FFCC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:20:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6041061BCF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:19:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6041061BCF
+	by mail.kernel.org (Postfix) with ESMTPS id 9EBA861BCF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 22:20:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9EBA861BCF
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DCF2414C4;
-	Wed, 17 Nov 2021 22:19:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 751C94016F;
+	Wed, 17 Nov 2021 22:20:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ue2dTZCPXjHk; Wed, 17 Nov 2021 22:19:58 +0000 (UTC)
+	with ESMTP id yyjpdgw4jt60; Wed, 17 Nov 2021 22:20:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D85D405CB;
-	Wed, 17 Nov 2021 22:19:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 523F01BF2FA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 38886418B9;
+	Wed, 17 Nov 2021 22:20:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6355D1BF9B2
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:19:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EFAF60BBB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 526EA405CB
  for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 22:19:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MFOTGQgBx_Zx for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yk6liMLO6noa for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 22:19:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5184460A93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4116D40600
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 22:19:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 393ED8D64E; Wed, 17 Nov 2021 22:15:05 +0000 (UTC)
+ id 24DCE8D64F; Wed, 17 Nov 2021 22:15:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 23:17:38 +0100
+Date: Wed, 17 Nov 2021 23:13:04 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 9b51a0758deba5ed882955e6cf6e3ad2c5fa99bb
-X-Git-Newrev: 608c98510fe7b0918203c6d6740ffb18678bfd18
+X-Git-Oldrev: 8d41edbf29c84c71cf6bf39bfaa9a7c584266e84
+X-Git-Newrev: 53730fa828751b5d2cd67b783da7b33488f1d7fa
 X-Patchwork-Hint: ignore
-Message-Id: <20211117221505.393ED8D64E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] docs/manual: update the
- list of libffi unsupported archs
+Message-Id: <20211117221505.24DCE8D64F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] utils/genrandconfig:
+ reduce the maximum "size" of random configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=608c98510fe7b0918203c6d6740ffb18678bfd18
+commit: https://git.buildroot.net/buildroot/commit/?id=53730fa828751b5d2cd67b783da7b33488f1d7fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-libffi supports ARC since commit 34c2afeb750 ("libffi: back-port support
-for ARC") in 2014.
+genrandconfig is used by the Buildroot autobuilders to generate
+semi-random configurations that we build test. As part of this, we use
+"make randpackageconfig" to randomize the selection of packages,
+together with a KCONFIG_PROBABILITY value, which indicates the
+probabibility for each option to be enabled. This probability is
+itself randomized, between 1% and 30% for every build.
 
-Add nds32 and ARMv7-M to the list.
+However, with our increasing number of packages (over 2900), when we
+use a 30% probability for options to be enabled, it means a *lot* of
+options are enabled, causing very large configurations to be
+tested. These configurations are not very realistic, and they take
+ages to build on our autobuilders: we have builds that take 4, 5 or
+even 7 hours to build.
 
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+In order to test a larger number of configurations and therefore a
+larger variety of configurations, this commit reduces the maximum
+probability to 20%.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fb89f8634915f12b047fe4c19b4cd60358f0a3df)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0e64537917a5b27565b8c479fda83508a6da7b86)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/known-issues.txt | 2 +-
+ utils/genrandconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-index ae29a48b38..616430b91c 100644
---- a/docs/manual/known-issues.txt
-+++ b/docs/manual/known-issues.txt
-@@ -7,7 +7,7 @@
-   if such options contain a +$+ sign. For example, the following is known
-   to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 3db5da442b..57fbaa1b61 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -412,7 +412,7 @@ def gen_config(args):
+             return 1
+         bounded_loop -= 1
+         subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+-                               "KCONFIG_PROBABILITY=%d" % randint(1, 30),
++                               "KCONFIG_PROBABILITY=%d" % randint(1, 20),
+                                "randpackageconfig"])
  
--* The +libffi+ package is not supported on the SuperH 2 and ARC
-+* The +libffi+ package is not supported on the SuperH 2, nds32, and ARMv7-M
-   architectures.
- 
- * The +prboom+ package triggers a compiler failure with the SuperH 4
+         if fixup_config(sysinfo, configfile):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
