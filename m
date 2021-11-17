@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA9E0C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81912C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 80B7D613D3
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 80B7D613D3
+	by mail.kernel.org (Postfix) with ESMTPS id 48DE2613D3
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 48DE2613D3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF53606C5;
-	Wed, 17 Nov 2021 15:42:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 220C880F79;
+	Wed, 17 Nov 2021 15:42:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dD1C7AfNYAmE; Wed, 17 Nov 2021 15:42:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T0o7Vj90cMmt; Wed, 17 Nov 2021 15:42:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 997E26068A;
-	Wed, 17 Nov 2021 15:42:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B9ADA1BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E4F880F76;
+	Wed, 17 Nov 2021 15:42:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 559961BF36B
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B70106068A
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43C7C401F4
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:42:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i53f67-9LjqD for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id idtfZ-GWQBJe for <buildroot@lists.busybox.net>;
  Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23B0A60679
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30CF8400C7
  for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:42:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A38368D4A8; Wed, 17 Nov 2021 15:38:27 +0000 (UTC)
+ id B0F188D4AC; Wed, 17 Nov 2021 15:38:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 16:25:09 +0100
+Date: Wed, 17 Nov 2021 16:37:22 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c48d1af3f5d48c825ce8425102bd21b9666b82fb
-X-Git-Newrev: 13398092dfd8120e2f8f7985f52fa0e1dddddbbd
+X-Git-Oldrev: 13398092dfd8120e2f8f7985f52fa0e1dddddbbd
+X-Git-Newrev: f1f1a0fd9bfb7644dc4a6a6c0ca587762e298928
 X-Patchwork-Hint: ignore
-Message-Id: <20211117153827.A38368D4A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/meson: disable
- meson wrap downloads
+Message-Id: <20211117153827.B0F188D4AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/binutils: zlib is
+ mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13398092dfd8120e2f8f7985f52fa0e1dddddbbd
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f1a0fd9bfb7644dc4a6a6c0ca587762e298928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-We don't want to allow meson to download wrap dependencies as this
-bypasses buildroot's dependency resolution.
+As found out by Yann [1], binutils will use its bundled copy of zlib,
+whether it is already provided by the system or not, and unless
+explicitly told to use the system zlib with --with-system-zlib, which
+is available since version 2.21 and
+https://github.com/bminor/binutils-gdb/commit/700d40ca16eb3ba1ecc1e602cb3eec175bdf70f0
 
-This is badly documented in the meson manual, but there is at least
-an FAQ that refers to it:
+This will fix the following build failure with oprofile when compiling
+in a static configuration where zlib is not enabled:
 
-    https://mesonbuild.com/FAQ.html#does-wrap-download-sources-behind-my-back
+    checking for bfd_openr in -lbfd... no
+    checking for compress in -lz... no
+    configure: error: libz library not found; required by libbfd
 
-    Meson has a option called wrap-mode which can be used to disable
-    wrap downloads altogether with --wrap-mode=nodownload.
+As found out by Arnout [1], this fails infrequently because static is
+already pretty rare, but in addition zlib is almost always selected by
+some other package.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998@free.fr: add pointer to FAQ]
+Fixes:
+ - http://autobuild.buildroot.org/results/0e1d16dfbb455a08db80ac5d35613908c3b4163f
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20211030214734.2154583-1-fontaine.fabrice@gmail.com/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - reword the explanations about the system zlib
+  - extend the oprofile example with static and !zlib
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 12ba3563655e3ebab252e52daa6c710864fa869f)
+(cherry picked from commit a3c1ba68f4bbad17df57a408097b7e862df43b6b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/cross-compilation.conf.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/binutils/Config.in   | 1 +
+ package/binutils/binutils.mk | 7 ++-----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 37b49eea3b..7a7ece97ae 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -17,6 +17,7 @@ c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
-+wrap_mode = 'nodownload'
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index e17a8ec65a..5e1a769998 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Install binutils on the target
  
- [properties]
- needs_exe_wrapper = true
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index e469febbb4..44fe601998 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -31,7 +31,7 @@ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+ BINUTILS_INSTALL_STAGING = YES
+-BINUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++BINUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ BINUTILS_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
+ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+@@ -57,6 +57,7 @@ BINUTILS_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--enable-install-libiberty \
+ 	--enable-build-warnings=no \
++	--with-system-zlib \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+@@ -80,10 +81,6 @@ ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_OPTIMIZE_S),yy)
+ BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-BINUTILS_DEPENDENCIES += zlib
+-endif
+-
+ # "host" binutils should actually be "cross"
+ # We just keep the convention of "host utility" for now
+ HOST_BINUTILS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
