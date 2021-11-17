@@ -2,52 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8EF0C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4BDEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:09:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9967361B95
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 9967361B95
+	by mail.kernel.org (Postfix) with ESMTPS id 898E661BAA
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:09:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 898E661BAA
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76C6E404A9;
-	Wed, 17 Nov 2021 15:07:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5078B40926;
+	Wed, 17 Nov 2021 15:09:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MpKXPF2n87RL; Wed, 17 Nov 2021 15:06:59 +0000 (UTC)
+	with ESMTP id stmy0B_DK00n; Wed, 17 Nov 2021 15:09:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FCE340333;
-	Wed, 17 Nov 2021 15:06:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 318CB1BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADF3040937;
+	Wed, 17 Nov 2021 15:09:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13C271BF36B
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6282A60679
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EBC480CE6
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:09:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JqN99auIc22h for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MESD9WIl8Gug for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 15:09:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49EB160670
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BDF480CA4
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:09:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D91D18D45F; Wed, 17 Nov 2021 15:01:19 +0000 (UTC)
+ id 056F38D47B; Wed, 17 Nov 2021 15:05:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 16:01:46 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: cfa225ea10148502964603a685ea5da22d353778
-X-Git-Newrev: d0222b4e8957e83fdb1b7900d2ca737302845f88
+Date: Wed, 17 Nov 2021 16:01:26 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 4842afad1ea336fcf3a704bdc7becf3af85d7f71
+X-Git-Newrev: 3934f1ec89a77e916e0f862ae9c6008fadbd32fc
 X-Patchwork-Hint: ignore
-Message-Id: <20211117150119.D91D18D45F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/freescale-imx/gpu-amd-bin-mx51: don't override dependencies
+Message-Id: <20211117150507.056F38D47B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x]
+ package/freescale-imx/imx-vpuwrap: don't override dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0222b4e8957e83fdb1b7900d2ca737302845f88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3934f1ec89a77e916e0f862ae9c6008fadbd32fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Don't override GPU_AMD_BIN_MX51_DEPENDENCIES in a conditional
+Don't override IMX_VPUWRAP_DEPENDENCIES in a conditional
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: keep multi-line conditional blocks]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7c9e88120d9545696afd5ff20f6422542811e4e1)
+(cherry picked from commit 8e86c81418f681bce5d6507ee016d7786e048af0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
-index 5586073712..c99c568f73 100644
---- a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
-@@ -12,7 +12,7 @@ GPU_AMD_BIN_MX51_SOURCE = amd-gpu-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
- else
- GPU_AMD_BIN_MX51_VERSION = $(GPU_AMD_BIN_MX51_BASE_VERSION)-x11
- GPU_AMD_BIN_MX51_SOURCE = amd-gpu-x11-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
--GPU_AMD_BIN_MX51_DEPENDENCIES = libxcb xlib_libX11 xlib_libXext \
-+GPU_AMD_BIN_MX51_DEPENDENCIES += libxcb xlib_libX11 xlib_libXext \
- 	xlib_libXrender xlib_libXau xlib_libXdmcp
+diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+index fdad3a5f2b..4f89165403 100644
+--- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
++++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+@@ -10,11 +10,11 @@ IMX_VPUWRAP_SOURCE = imx-vpuwrap-$(IMX_VPUWRAP_VERSION).bin
+ IMX_VPUWRAP_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_IMX_VPU),y)
+-IMX_VPUWRAP_DEPENDENCIES = imx-vpu
++IMX_VPUWRAP_DEPENDENCIES += imx-vpu
  endif
- GPU_AMD_BIN_MX51_PROVIDES = libegl libgles libopenvg
+ 
+ ifeq ($(BR2_PACKAGE_IMX_VPU_HANTRO),y)
+-IMX_VPUWRAP_DEPENDENCIES = imx-vpu-hantro
++IMX_VPUWRAP_DEPENDENCIES += imx-vpu-hantro
+ endif
+ 
+ IMX_VPUWRAP_LICENSE = NXP Semiconductor Software License Agreement
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
