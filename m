@@ -2,51 +2,82 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D149CC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 07:58:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97244C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 12:49:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 75EC861BCF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 07:58:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 75EC861BCF
-Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=bootlin.com
+	by mail.kernel.org (Postfix) with ESMTPS id EB7C560EFE
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 12:49:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org EB7C560EFE
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BE4760A48;
-	Wed, 17 Nov 2021 07:58:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80A02400D2;
+	Wed, 17 Nov 2021 12:49:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BCkOkdl0T_nd; Wed, 17 Nov 2021 07:58:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yHo1vIQV74FV; Wed, 17 Nov 2021 12:49:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 287E96060A;
-	Wed, 17 Nov 2021 07:58:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83227400F7;
+	Wed, 17 Nov 2021 12:49:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 29DA11BF2EF
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 07:58:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D79A1BF283
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 12:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B01740384
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 07:58:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18456405AD
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 12:49:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VqP3XZyPYc9z for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 07:58:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 613654024E
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 07:58:29 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3FBCF20012
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 07:58:26 +0000 (UTC)
+ with ESMTP id LgLiYzA4b51b for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 12:49:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 166D6405AA
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 12:49:03 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id y13so10440326edd.13
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 04:49:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=yffLkaT9JfdfJif9Fkkp9lD4VY5os0XXYCxPyb6+6s4=;
+ b=AzJAZYO6hcv06E58R6jBwTqt4o8iD9bpTARtLaSG6mJcV+J5RpxVMnP7tES6OjyoG0
+ 30no9YiAJvpvOjsZn8OSLBW3l7Xr0F6P4FfZWbxKj+xu153AmQVMgizke9PuBpEjAR/B
+ 77L21tW5hh94zyBKCcIJO/kEvekms2efHNUzDL+nlUAswn2AWencmf359RQU+lOuicMT
+ 1/V/AKMVd2Xg8hAp0WR3f95U4SRk+gUUuR3tTXuHn4x7XXYhCtCNBeJlF9KqXf26oKH/
+ QbWQjYELk4k+/6efKUAhQbHUZmri/0KDaEOse0EFUdzLpoGz7skA8XBP7gUCZ7+cgn1J
+ RVyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=yffLkaT9JfdfJif9Fkkp9lD4VY5os0XXYCxPyb6+6s4=;
+ b=p9V+/prtZWwkTBev2nPiVZ5XAV2dFOjMH4qdLR24IHPgKXiFxEE+8qG6+lOxTGEhPu
+ 42qcLJIUswfZ2THUsJotNnmi1wm0wUWhXLwTYKGKFj4yxxQWCrTSbk/jj9RbsUf/lKrG
+ FWHq3D5AQ6H5DVSzh+d1f1oYBJNtI3HBDio2bAY2AJVQcBVGu6KoUX6iE4661FP8SvbR
+ sRPBU9ea7ibJnLlBO/i0WBJPHAxH4zzCUd/t4QYmjiWrDbbRXDv32vzVKRAk4ORypXuY
+ QZv99K98wsyha7tobKy0B961XoJCz6jVy9/zl+2GMhvWDsG6EDnUKehMs9L3+fR6E7l2
+ tJWA==
+X-Gm-Message-State: AOAM533wFuuLd9Abh+cEimDdMRL2zUj3NYTzC8vdmpqX06GRkcqNEtez
+ 5fbSCByqXoelS25PyTONODX+NRmqR+XAE9b+7O6XRg==
+X-Google-Smtp-Source: ABdhPJy42ODO2HvU3PBtkFQUyYj8O3J3jxDEEcbVyl7hVKc2SftEVBqB97o2XX4o/XcE6it6nGT+samk+lHVA+JlgTY=
+X-Received: by 2002:a17:906:2b12:: with SMTP id
+ a18mr21521707ejg.254.1637153341974; 
+ Wed, 17 Nov 2021 04:49:01 -0800 (PST)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Nov 2021 07:58:26 -0000
-Message-Id: <20211117075831.0B01740384@smtp4.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-11-16
+References: <CAJPV9MpFEQJk5otMfJkC0D2YNjLnanijNhHWSYT3ymtLYd2yeg@mail.gmail.com>
+ <20211116152552.0a9e32da@windsurf>
+In-Reply-To: <20211116152552.0a9e32da@windsurf>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Wed, 17 Nov 2021 14:48:51 +0200
+Message-ID: <CAJPV9MpMc6t5uty1VGHQm7KsABg7yKqRaXDQqGxyuFiG91DfLw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] Running script after init
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,144 +89,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============5633551380769090093=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============5633551380769090093==
+Content-Type: multipart/alternative; boundary="00000000000064482f05d0fb7717"
 
-Autobuild statistics for 2021-11-16
-===================================
+--00000000000064482f05d0fb7717
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 45  | 14  |  0  | 59  |
-  2021.08.x  | 50  |  0  |  0  | 50  |
-    master   | 86  | 32  |  0  | 118 |
-     next    | 11  |  6  |  0  | 17  |
+On Tue, Nov 16, 2021 at 4:25 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Classification of failures by reason for master
------------------------------------------------
+> Hello Jos=C3=A9,
+>
+> On Tue, 16 Nov 2021 14:08:02 +0200
+> Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com> wrote:
+>
+> > Any hint what would be the right place in buildroot
+> >
+> > userspace to put an script after the init process is over?
+>
+> The init process by itself is never over, it continues to run until you
+> reboot your system.
+>
+> Could you clarify your question? You want a service to be started after
+> all other services?
+>
 
-              tinydtls-0.9-rc1 | 10
-libdbi-88b8477d57153b9f736d... | 3 
-              host-erlang-22.2 | 2 
-               lighttpd-1.4.61 | 2 
-                log4cxx-0.12.0 | 2 
-                apparmor-3.0.3 | 1 
-                    bird-2.0.8 | 1 
-                 mesa3d-21.1.8 | 1 
-                  mupdf-1.18.0 | 1 
-   openvmtools-10.3.5-10430147 | 1 
-               pipewire-0.3.39 | 1 
-                    qemu-6.1.0 | 1 
-                samba4-4.14.10 | 1 
-                   seatd-0.6.3 | 1 
-                sg3_utils-1.47 | 1 
-                       unknown | 1 
-                 wavemon-0.9.4 | 1 
-                  zeromq-4.3.4 | 1 
+Hi,
 
+I want to run a script after the TTYs are up and running.
 
-Detail of failures for master
------------------------------
+Currently I run the script as S99myscript, and put a call in the
+start, and it fails. If I later logging as root and manually run the
+S99myscript start, it runs well.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |         apparmor-3.0.3         | NOK | http://autobuild.buildroot.net/results/6747b1cb11b129ea4bcb1ecc9645e94fb8e095e8 |     
-  mips64el   |           bird-2.0.8           | NOK | http://autobuild.buildroot.net/results/a2b46652a4ed7b1db9ddda0bf3d9f43756f92daf |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/b478174271c3b47010d615a59ed9e3ec755df693 |     
-  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/9da4ded18bdc79212b96a8a598fb9cb21aea296a |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/1eeb9054c65b62bab0bb3596556e93e027f138e8 |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/d8d5777c1eb0f93ef6558a7a567b62a8814993cd |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/ae7b419f8e78794670338ccb8227b6b742d1aac4 |     
-    arm      |        lighttpd-1.4.61         | NOK | http://autobuild.buildroot.net/results/cac49399561aea24be200e86f103a68991390cf9 |     
-    arm      |        lighttpd-1.4.61         | NOK | http://autobuild.buildroot.net/results/577179a3ec591e2948458919a9ce75c939a002b4 |     
-    arm      |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/a934e8f5682269822633fbe9722769ed471b63ed |     
-  aarch64    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/8ee45315091ea5df57bd278410ea2a8fbb0849de |     
-    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/54ed0f9bfe57fa419e1eb4ebb78003ca4fb85532 |     
-  mips64el   |          mupdf-1.18.0          | NOK | http://autobuild.buildroot.net/results/504569fab0e70ff35a4bfcaf537f07410bf2f593 |     
-    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/ecac99c326899b623421553368e1fefb029af110 |     
-    mips     |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/faec4ea02f4a6ddf44d54d5784d9de866c2d8a1f |     
-    arm      |           qemu-6.1.0           | NOK | http://autobuild.buildroot.net/results/64a36ff5c2f3251b828c6aa1363da6f5942d5189 |     
-   s390x     |         samba4-4.14.10         | NOK | http://autobuild.buildroot.net/results/0daa85ec63c3ba1c96c54f89f8b34e99ab856d00 |     
-    arm      |          seatd-0.6.3           | NOK | http://autobuild.buildroot.net/results/5219b6dac714886c7fa4d3687a13b9dff8338df2 | ORPH
-    arm      |         sg3_utils-1.47         | NOK | http://autobuild.buildroot.net/results/38a0dfc70a21ce574368b7a485deb231f778b3e7 |     
-  riscv64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/edfee34fbceeac90bcefe1a41330454f4a260a6d |     
-   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/084a5ca63c1c808419c11011e211995f955c3836 |     
-   sparc     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/14ccca5b160a67fa3015bf1967b4b2000f298a4a |     
-microblazeel |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/d6be38394278d920d77234259fd063dada380688 |     
-  mips64el   |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/fb1150a158eb98703059bdabf44508d8725f45ef |     
-microblazeel |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/32e5cacec27f6b37913791f9a35169dc1f1fb9a0 |     
-powerpc64le  |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/fe7cef4729ef8b7292244ae9b0a4227bbd6495eb |     
-    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/96cbc586fe0d02c66418424e6f800a8f4c9a74a3 |     
-    m68k     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/b83950df6b1e647d387a8b94e9bd8c9a540beede |     
-    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/5509b7e8b36828c73b6929eaed31010f36e5df18 |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/bad586545f3169ae7f7701204efbfebfc167ad7b |     
-   x86_64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/b988546be68e3674615cd929a55f5ff6c07d93a4 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/bb83cb0c2911741c10a5bf9c0740a40d3af1d41b |     
+Thanks!
 
+Jos=C3=A9.
 
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
+--00000000000064482f05d0fb7717
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-        host-sentry-cli-1.57.0 | 6 
-monkey-f54856ce250c4e257354... | 2 
-               capnproto-0.8.0 | 1 
-            docker-cli-20.10.9 | 1 
-             openjdk-17.0.1+12 | 1 
-           uboot-tools-2020.04 | 1 
-                       unknown | 1 
-                  zeromq-4.3.4 | 1 
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Nov 16, 2021 at 4:25 PM Thoma=
+s Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.peta=
+zzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">Hello Jos=C3=A9,<br>
+<br>
+On Tue, 16 Nov 2021 14:08:02 +0200<br>
+Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@unikie.com" targ=
+et=3D"_blank">jose.pekkarinen@unikie.com</a>&gt; wrote:<br>
+<br>
+&gt; Any hint what would be the right place in buildroot<br>
+&gt; <br>
+&gt; userspace to put an script after the init process is over?<br>
+<br>
+The init process by itself is never over, it continues to run until you<br>
+reboot your system.<br>
+<br>
+Could you clarify your question? You want a service to be started after<br>
+all other services?<br></blockquote><div><br></div></div><blockquote style=
+=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote"><=
+div>Hi,</div><div><br></div></div></blockquote><blockquote style=3D"margin:=
+0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote"><div>I want =
+to run a script after the TTYs are up and running.</div></div></blockquote>=
+Currently I run the script as S99myscript, and put a call in the<div>start,=
+ and it fails. If I later logging as root and manually run the</div><div>S9=
+9myscript start, it runs well.</div><div><br></div><blockquote style=3D"mar=
+gin:0 0 0 40px;border:none;padding:0px">Thanks!<br><br></blockquote><div><d=
+iv dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=
+=3D"margin:0px 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote=
+></div></div></div></div>
 
+--00000000000064482f05d0fb7717--
 
-Detail of failures for 2021.02.x
---------------------------------
+--===============5633551380769090093==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/6e1437ba045114211d4cc9b32d07135edf5477b3 |     
-    i686     |       docker-cli-20.10.9       | NOK | http://autobuild.buildroot.net/results/09fc440b0a445ac33fa07d1eefa36f46cf4fa262 |     
-  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/950f593620870f307fee85ea2670b1bebc7e789d |     
-   nios2     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/c3a454e5bbf377e1341c98a7fbe136345cc4ca02 |     
-    sh4      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/91f7b88a6ff64b586ad0aae3548a7b180305bda2 |     
- aarch64_be  |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3f87e535224855eee539c6edbd24ebdb724c4fd0 |     
-  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/707a817bc23c00645c9d9743826c619ea88f9bae |     
-   s390x     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/5620e9ed34d9b4f8dc468797451d0b7025ee72c6 |     
-  mips64el   | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/51d620152428fb6e6f60955b1da37712f54cd04c |     
-    mips     | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/6aa458979bcec5cd54f1d517354ce5444b2cfa31 |     
- powerpc64   |       openjdk-17.0.1+12        | NOK | http://autobuild.buildroot.net/results/6c83a3f8b17c491faf8c71c309dbae12db527064 |     
-    arm      |      uboot-tools-2020.04       | NOK | http://autobuild.buildroot.net/results/a12b9c50c05c82fdb67d7f0d093c98ff3c52c6ca |     
-    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/cfaf86eaf698663e931bb56d500cf8a8a593936c |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/c536f54e6ddc2f9e6a04c8313251c54ffd03fb2f |     
-
-
-Classification of failures by reason for next
----------------------------------------------
-
-              host-erlang-22.2 | 2 
-              tinydtls-0.9-rc1 | 2 
-                   mpd-0.22.11 | 1 
-               pipewire-0.3.39 | 1 
-
-
-Detail of failures for next
----------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/c32686af06a01685edc26d3df2b981711f21b64a |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/5aa902480a736be21d4ee7d161a42855f7fcdb65 |     
-  aarch64    |          mpd-0.22.11           | NOK | http://autobuild.buildroot.net/results/dd8fddbea705255c87f091fb429094d4ad2b432d |     
-    arm      |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/31014558b6ad72e0f602095c423d48219dd6ebfa |     
-    sh4      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/9da501535ac096397436baec1823f210358a89d9 |     
-    m68k     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/daedd055cb0c81deb87baae6c9e7c2d6f10e0dfe |     
-
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5633551380769090093==--
