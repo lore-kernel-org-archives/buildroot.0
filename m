@@ -2,57 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0514EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:42:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF1A8C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:48:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6B0D5613D3
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:42:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 6B0D5613D3
+	by mail.kernel.org (Postfix) with ESMTPS id 803A8613D3
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 21:48:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 803A8613D3
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 211E780F57;
-	Wed, 17 Nov 2021 21:42:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5511F60A8A;
+	Wed, 17 Nov 2021 21:48:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ErE2G1j-QTxa; Wed, 17 Nov 2021 21:42:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jz79fHOpFmYm; Wed, 17 Nov 2021 21:48:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68FCF80EFA;
-	Wed, 17 Nov 2021 21:42:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A617160A83;
+	Wed, 17 Nov 2021 21:48:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5CC8A1BF307
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:42:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D04251BF307
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4966480EFA
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:42:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD0B38247F
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 21:48:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oY_vHO3OSpzQ for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 21:42:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2064F80D22
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:42:12 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 8AF57100002;
- Wed, 17 Nov 2021 21:42:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mnSgy-0006KP-J4; Wed, 17 Nov 2021 22:42:08 +0100
+ with ESMTP id X93R_7VqzB4U for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 21:48:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0B4D80D22
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 21:48:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E45658D5BC; Wed, 17 Nov 2021 21:44:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211112131645.3334046-1-fontaine.fabrice@gmail.com>
-Date: Wed, 17 Nov 2021 22:42:08 +0100
-In-Reply-To: <20211112131645.3334046-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 12 Nov 2021 14:16:45 +0100")
-Message-ID: <87tugatq6n.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: fix build with gcc 4.8
+To: buildroot@buildroot.org
+Date: Wed, 17 Nov 2021 22:21:07 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 51094c698b1e87088dd46b707e0dcef301a3d72f
+X-Git-Newrev: ef978418465be783590aaca61056eab95559eea1
+X-Patchwork-Hint: ignore
+Message-Id: <20211117214411.E45658D5BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/samba4: security
+ bump version to 4.14.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +59,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ef978418465be783590aaca61056eab95559eea1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
- > Fix the following build failure with gcc 4.8 raised since the addition
- > of the package in commit c23612b5db036fe89accb8db48690d1ce1be4b1b:
+Release notes:
+https://www.samba.org/samba/history/samba-4.14.10.html
 
- > In file included from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_impl.hpp:100:0,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg.cpp:50:
- > /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_hw.hpp: In constructor 'HWAccelIterator::HWAccelIterator(cv::VideoAccelerationType, bool, AVDictionary*)':
- > /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_hw.hpp:939:23: error: use of deleted function 'std::basic_istringstream<char>& std::basic_istringstream<char>::operator=(const std::basic_istringstream<char>&)'
- >              s_stream_ = std::istringstream(accel_list);
- >                        ^
- > In file included from /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/complex:45:0,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/core/include/opencv2/core/cvstd.inl.hpp:47,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/core/include/opencv2/core.hpp:3306,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/include/opencv2/videoio.hpp:46,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/precomp.hpp:57,
- >                  from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg.cpp:42:
- > /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/sstream:272:11: note: 'std::basic_istringstream<char>& std::basic_istringstream<char>::operator=(const std::basic_istringstream<char>&)' is implicitly deleted because the default definition would be ill-formed:
- >      class basic_istringstream : public basic_istream<_CharT, _Traits>
- >            ^
- > /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/sstream:272:11: error: use of deleted function 'std::basic_istream<char>& std::basic_istream<char>::operator=(const std::basic_istream<char>&)'
+This is a security release in order to address the following defects:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/60f8846b435dafda0ced412d59ffe15bdff0810d
+o CVE-2016-2124:  SMB1 client connections can be downgraded to plaintext
+                  authentication.
+                  https://www.samba.org/samba/security/CVE-2016-2124.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+o CVE-2020-25717: A user on the domain can become root on domain members.
+                  https://www.samba.org/samba/security/CVE-2020-25717.html
+                  (PLEASE READ! There are important behaviour changes described)
 
-Committed to 2021.08.x, thanks.
+o CVE-2020-25718: Samba AD DC did not correctly sandbox Kerberos tickets issued
+                  by an RODC.
+                  https://www.samba.org/samba/security/CVE-2020-25718.html
 
--- 
-Bye, Peter Korsgaard
+o CVE-2020-25719: Samba AD DC did not always rely on the SID and PAC in Kerberos
+                  tickets.
+                  https://www.samba.org/samba/security/CVE-2020-25719.html
+
+o CVE-2020-25721: Kerberos acceptors need easy access to stable AD identifiers
+                  (eg objectSid).
+                  https://www.samba.org/samba/security/CVE-2020-25721.html
+
+o CVE-2020-25722: Samba AD DC did not do suffienct access and conformance
+                  checking of data stored.
+                  https://www.samba.org/samba/security/CVE-2020-25722.html
+
+o CVE-2021-3738:  Use after free in Samba AD DC RPC server.
+                  https://www.samba.org/samba/security/CVE-2021-3738.html
+
+o CVE-2021-23192: Subsequent DCE/RPC fragment injection vulnerability.
+                  https://www.samba.org/samba/security/CVE-2021-23192.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f69f27f06c6299f78993427518439a9aaa9982dc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index a571ba79f4..033d932732 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.14.9.tar.asc
+-sha256  7fb11818ef7f9bb817a3b21019358b1469aec98799057cc9e55933563361c409  samba-4.14.9.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.14.10.tar.asc
++sha256  107ee862f58062682cec362ec68a24251292805f89aa4c97e7ab80237f91c7af  samba-4.14.10.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 83eb2dacda..eb1f3b830e 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.14.9
++SAMBA4_VERSION = 4.14.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
