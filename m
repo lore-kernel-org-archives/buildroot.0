@@ -2,59 +2,52 @@ Return-Path: <SRS0=Sygv=QE=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A554C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:05:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03772C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:05:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DDE0661B72
-	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:05:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org DDE0661B72
+	by mail.kernel.org (Postfix) with ESMTPS id AC69361B72
+	for <buildroot@archiver.kernel.org>; Wed, 17 Nov 2021 15:05:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org AC69361B72
 Authentication-Results: mail.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACB6E80D7E;
-	Wed, 17 Nov 2021 15:05:16 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZI7rb3AR6IrA; Wed, 17 Nov 2021 15:05:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F4F780D3D;
-	Wed, 17 Nov 2021 15:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F24701BF36B
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1B8360670
- for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8731B606AA;
+	Wed, 17 Nov 2021 15:05:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BubcMWpGBNrQ for <buildroot@lists.busybox.net>;
- Wed, 17 Nov 2021 15:05:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 13D9D60620
- for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:05:12 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 8827E60016;
- Wed, 17 Nov 2021 15:05:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mnMUm-0000PK-OV; Wed, 17 Nov 2021 16:05:08 +0100
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SO3GVritJvZU; Wed, 17 Nov 2021 15:05:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F16A760670;
+	Wed, 17 Nov 2021 15:05:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E5F5C1BF36B
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E25B340319
+ for <buildroot@lists.busybox.net>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xjhvhrF8wAVS for <buildroot@lists.busybox.net>;
+ Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C00740312
+ for <buildroot@buildroot.org>; Wed, 17 Nov 2021 15:05:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C5A2F8D45D; Wed, 17 Nov 2021 15:01:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211109171723.456852-1-fontaine.fabrice@gmail.com>
-Date: Wed, 17 Nov 2021 16:05:08 +0100
-In-Reply-To: <20211109171723.456852-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 9 Nov 2021 18:17:23 +0100")
-Message-ID: <87zgq2vn4r.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdnet: don't override
- dependencies
+To: buildroot@buildroot.org
+Date: Wed, 17 Nov 2021 16:01:41 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 6e0019f9ca380a765dd79b3d3a80bb2bfc291522
+X-Git-Newrev: 48ef67212d6fc4b24a8b943e270f9e578f18ed2e
+X-Patchwork-Hint: ignore
+Message-Id: <20211117150119.C5A2F8D45D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/alsa-lib: don't
+ override dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,21 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=48ef67212d6fc4b24a8b943e270f9e578f18ed2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Don't override LIBDNET_DEPENDENCIES in a conditional
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Don't override ALSA_LIB_DEPENDENCIES in a conditional
 
-Committed to 2021.02.x and 2021.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5a3165e0977ad44ce487f8b346ebcfaf78237f9a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/alsa-lib/alsa-lib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index ad205aaa1d..b7dbf04a82 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -64,13 +64,13 @@ ALSA_LIB_CONF_OPTS += \
+ 	--with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
+ 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+ ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+-ALSA_LIB_DEPENDENCIES = python
++ALSA_LIB_DEPENDENCIES += python
+ else
+ ALSA_LIB_CONF_OPTS += \
+ 	--with-pythonlibs=-lpython$(PYTHON3_VERSION_MAJOR) \
+ 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+ ALSA_LIB_CFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+-ALSA_LIB_DEPENDENCIES = python3
++ALSA_LIB_DEPENDENCIES += python3
+ endif
+ else
+ ALSA_LIB_CONF_OPTS += --disable-python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
