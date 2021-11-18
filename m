@@ -2,84 +2,94 @@ Return-Path: <SRS0=a43l=QF=buildroot.org=buildroot-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51987C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 18 Nov 2021 10:18:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FC7EC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 18 Nov 2021 11:51:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 84D5B61246
-	for <buildroot@archiver.kernel.org>; Thu, 18 Nov 2021 10:18:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 84D5B61246
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=unikie.com
+	by mail.kernel.org (Postfix) with ESMTPS id B725C613DB
+	for <buildroot@archiver.kernel.org>; Thu, 18 Nov 2021 11:51:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org B725C613DB
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2486B40375;
-	Thu, 18 Nov 2021 10:18:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58C1B60769;
+	Thu, 18 Nov 2021 11:51:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id biBmiQ8yycY3; Thu, 18 Nov 2021 10:18:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eKAdOZINfZPO; Thu, 18 Nov 2021 11:51:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 507464037F;
-	Thu, 18 Nov 2021 10:18:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11AF81BF5A1
- for <buildroot@lists.busybox.net>; Thu, 18 Nov 2021 10:18:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D76166074B;
+	Thu, 18 Nov 2021 11:51:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C0E721BF239
+ for <buildroot@lists.busybox.net>; Thu, 18 Nov 2021 11:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CC194025E
- for <buildroot@lists.busybox.net>; Thu, 18 Nov 2021 10:18:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B00E84037F
+ for <buildroot@lists.busybox.net>; Thu, 18 Nov 2021 11:51:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id edaW1OLCYMFL for <buildroot@lists.busybox.net>;
- Thu, 18 Nov 2021 10:18:48 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gZsdO04uJcHT for <buildroot@lists.busybox.net>;
+ Thu, 18 Nov 2021 11:51:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8A2C94025C
- for <buildroot@buildroot.org>; Thu, 18 Nov 2021 10:18:48 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id g14so24737444edz.2
- for <buildroot@buildroot.org>; Thu, 18 Nov 2021 02:18:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=OrSpbaY4054DF8M5QCrzmwM6AcakGLG/NDE7RVURV30=;
- b=JQ79i0eQnNxcivmpHCeQz5LuTobdLQfE0GdqnDVFdrARj3dxSZJizVXBc6hUAfxqk9
- MnOla7v134npB9faDjP54XEIpxflsDxJEZJ+/Ko8np+RQBtD7vcL0cf9G2ZQT4keOh91
- 0XcLDueXIRLlDXhjsqVP6oBLUXa++uYcnmvsMS1qSAcEhKrXyNVYdt0ktgr59xSzg8Gf
- Jzo0uy+7/6sbIX7XZLUaP8jX4uwEWXeulVAdHSt2d+H+Z7I3r1SAMbbD1c7O9qHNbOBi
- 0eBjELb35vzCt2Ah+Aby2UzbuFo4ZqwRNxI8x0AVQjY3mbG/g0JnFDw30PqlyKoPiN8p
- ZEow==
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B79BB4037C
+ for <buildroot@buildroot.org>; Thu, 18 Nov 2021 11:51:32 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ k37-20020a05600c1ca500b00330cb84834fso7373557wms.2
+ for <buildroot@buildroot.org>; Thu, 18 Nov 2021 03:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=ZqMAfRpCE4NZ1tSPwkp9MKESlJtUMIoELrAi8iOevvs=;
+ b=Z018qOsFw/4r+Oq6xZAeXnHv9z0z/RfqqhNsEqls+HCISTmFBroInuUo9fj9PkRR8g
+ pp+vqplbFKTwMQpQYlsGztF/hobw/mkJCDDwlMKLwYCQhwWk8tEzkDKnJ7hVV3QMZBxs
+ E5hX9bTUEKcZZ+Tf3d4I46EQMUQmPYFybGpoXpBem2oPRbDyZMKiLn1y/Xhr7wd0njpB
+ STAATrQMR3+wk9m8sYphkq6pNYXOO0dM546Tv+nu86eKNIfqLE0MInYh318s8JQmovm9
+ t3QbXZYH3ovwn/Si36rVbMRSVT6vCZuwjOtoXMo7YnK7ibEYbE8jCVzuEIPAiwL1Nzln
+ r+kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=OrSpbaY4054DF8M5QCrzmwM6AcakGLG/NDE7RVURV30=;
- b=HWDsssuF658GKWxcxY/xFw7mIADDhvKfiMvJwdgoGThuS9KZBqqMgv5uY+IMRMhmfw
- q/sXGQVpq2C/9/0mqj7UTbroGNBK2PS0zFEWFx1Jjy4TZEqN/UsmqU1pRY+Hdu/7+E0z
- rL0CngaiYcxecSfiJ4QC1UJudUusQmUNR+ilwlUBfleyWVbBMoA7TclI6aaEVnNuRxNH
- TDEZ4p9fHhhO75DHDsJgKmaPvtkqT2fNs7UO7lzX5ajc8hVaNJGeDXj0cni7HQMX7Fnj
- Z8x34elQGd0tO8n382Yqz3JHVakTjnuP4EMEswTThCtTnWKidgHQ9hbj6YcYLFZiPGLI
- E3yA==
-X-Gm-Message-State: AOAM530GNSpJ0X+We2bbfNXShYppAYb6QK3VKkAD1sOc3sdhbi10fvi/
- B5ayOYpM97LJwidEZKGcDW+4d4siYq+w1vO05unvFQ==
-X-Google-Smtp-Source: ABdhPJzqkplO3AixVmr9gmnzRUs25dGF/J/xiFvWRHryv3chAX6zNIubBJoA+fiHaogBXbATYGgDS/TavC7StCj5f1k=
-X-Received: by 2002:a17:907:d0b:: with SMTP id
- gn11mr32025914ejc.355.1637230726477; 
- Thu, 18 Nov 2021 02:18:46 -0800 (PST)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=ZqMAfRpCE4NZ1tSPwkp9MKESlJtUMIoELrAi8iOevvs=;
+ b=d7c82mvv+6kmow3fd0NHgkTiQ+JvHyBVpjDAbmXZKhCZclVbRR4fMnqaJzRdmnD/mD
+ kJk7KTR/1JRkAWlxPWfsgPaYYm3D0og2B/wHcELhXQzQfUcQysVhYw16XH+GcwqJtktm
+ vyD3ION5OEBXX1dG01CuP1EzyQEocOz33DAEvA5iaUPN6lnMQhT9nbzova4w2KV49M57
+ mfyH7rr3lo285wKm5ipld3g77+P2r8toXR5oN82c83ngmkQ+UkmmBm9Ch2rcOu93viFA
+ FKmKmClRPYO3IJmz968TEgWv07O+JL2c6x3XmXXjmN6/ZjU+qYn0QNnTDqwtxygKukKy
+ x39A==
+X-Gm-Message-State: AOAM530kAm62UQ5DSZxhEf2meRYgwlhn6YTAgsCbLuON8gmk4b0mvQXL
+ 8VWSaPQ200zdcOB6X3jkw14=
+X-Google-Smtp-Source: ABdhPJy655LQYn9FNFsS+6JE/Nu/qeBhQplXPZcwu5sDuFEd92TZFX2e/Hqs0mWkHe/HwblOQhoCaA==
+X-Received: by 2002:a05:600c:a45:: with SMTP id
+ c5mr9227111wmq.79.1637236290810; 
+ Thu, 18 Nov 2021 03:51:30 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id c6sm11301183wmq.46.2021.11.18.03.51.29
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 18 Nov 2021 03:51:30 -0800 (PST)
+Message-ID: <9880ded2-bde8-8321-9a61-d281be2db2ff@gmail.com>
+Date: Thu, 18 Nov 2021 12:51:28 +0100
 MIME-Version: 1.0
-References: <CAJPV9MpFEQJk5otMfJkC0D2YNjLnanijNhHWSYT3ymtLYd2yeg@mail.gmail.com>
- <20211116152552.0a9e32da@windsurf>
- <CAJPV9MpMc6t5uty1VGHQm7KsABg7yKqRaXDQqGxyuFiG91DfLw@mail.gmail.com>
- <e058dfd3-ead4-d375-c088-90c891cecf24@mind.be>
-In-Reply-To: <e058dfd3-ead4-d375-c088-90c891cecf24@mind.be>
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Thu, 18 Nov 2021 12:18:35 +0200
-Message-ID: <CAJPV9Mo+Knr+pW31zw9dG1t6xtaGwrJJKuJhtTNR+kdNCf4c0Q@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] Running script after init
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20211117213348.231529-1-romain.naour@gmail.com>
+ <87ee7drf65.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <87ee7drf65.fsf@dell.be.48ers.dk>
+Subject: Re: [Buildroot] [PATCH for-2021.08.x] support/docker: remove
+ expired mozilla/DST_Root_CA_X3.crt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,171 +101,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============9102788189436215893=="
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9102788189436215893==
-Content-Type: multipart/alternative; boundary="000000000000de129705d10d7b0d"
-
---000000000000de129705d10d7b0d
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 17, 2021 at 10:29 PM Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
->
->
-> On 17/11/2021 13:48, Jos=C3=A9 Pekkarinen wrote:
-> >
-> >
-> > On Tue, Nov 16, 2021 at 4:25 PM Thomas Petazzoni <
-> thomas.petazzoni@bootlin.com
-> > <mailto:thomas.petazzoni@bootlin.com>> wrote:
-> >
-> >     Hello Jos=C3=A9,
-> >
-> >     On Tue, 16 Nov 2021 14:08:02 +0200
-> >     Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com
-> >     <mailto:jose.pekkarinen@unikie.com>> wrote:
-> >
-> >      > Any hint what would be the right place in buildroot
-> >      >
-> >      > userspace to put an script after the init process is over?
-> >
-> >     The init process by itself is never over, it continues to run until
-> you
-> >     reboot your system.
-> >
-> >     Could you clarify your question? You want a service to be started
-> after
-> >     all other services?
-> >
-> >
-> >     Hi,
-> >
-> >     I want to run a script after the TTYs are up and running.
-> >
-> > Currently I run the script as S99myscript, and put a call in the
-> > start, and it fails. If I later logging as root and manually run the
-> > S99myscript start, it runs well.
->
->   The ttys are started immediately after the last script in /etc/init.d
-> has
-> finished, so it's unlikely a problem due to sequencing. More likely, the
-> difference you observe is due to the difference in environment between an
-> interactive login and when the init script is executed directly by init.
->
->   To debug your init script, you can start it with
->
-> #! /bin/sh -x
->
-> This will echo each command before it is executed, which will help to
-> determine
-> where it fails.
->
-
-Thanks for the hints, the problem was actually in the script
-
-since it referenced some files relatively, and for the init script it
-requires
-absolute path. Now it works.
-
-Best regards.
-
-Jos=C3=A9.
-
---000000000000de129705d10d7b0d
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Nov 17, 2021 at 10:29 PM Arno=
-ut Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&g=
-t; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
-x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
-<br>
-On 17/11/2021 13:48, Jos=C3=A9 Pekkarinen wrote:<br>
-&gt; <br>
-&gt; <br>
-&gt; On Tue, Nov 16, 2021 at 4:25 PM Thomas Petazzoni &lt;<a href=3D"mailto=
-:thomas.petazzoni@bootlin.com" target=3D"_blank">thomas.petazzoni@bootlin.c=
-om</a> <br>
-&gt; &lt;mailto:<a href=3D"mailto:thomas.petazzoni@bootlin.com" target=3D"_=
-blank">thomas.petazzoni@bootlin.com</a>&gt;&gt; wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Hello Jos=C3=A9,<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0On Tue, 16 Nov 2021 14:08:02 +0200<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pek=
-karinen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:jose.pekkarinen@unikie=
-.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;&gt; wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Any hint what would be the right place in bui=
-ldroot<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; userspace to put an script after the init pro=
-cess is over?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0The init process by itself is never over, it contin=
-ues to run until you<br>
-&gt;=C2=A0 =C2=A0 =C2=A0reboot your system.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Could you clarify your question? You want a service=
- to be started after<br>
-&gt;=C2=A0 =C2=A0 =C2=A0all other services?<br>
-&gt; <br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Hi,<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0I want to run a script after the TTYs are up and ru=
-nning.<br>
-&gt; <br>
-&gt; Currently I run the script as S99myscript, and put a call in the<br>
-&gt; start, and it fails. If I later logging as root and manually run the<b=
-r>
-&gt; S99myscript start, it runs well.<br>
-<br>
-=C2=A0 The ttys are started immediately after the last script in /etc/init.=
-d has <br>
-finished, so it&#39;s unlikely a problem due to sequencing. More likely, th=
-e <br>
-difference you observe is due to the difference in environment between an <=
-br>
-interactive login and when the init script is executed directly by init.<br=
->
-<br>
-=C2=A0 To debug your init script, you can start it with<br>
-<br>
-#! /bin/sh -x<br>
-<br>
-This will echo each command before it is executed, which will help to deter=
-mine <br>
-where it fails.<br></blockquote><div><br></div></div><blockquote style=3D"m=
-argin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote"><div>T=
-hanks for the hints, the problem was actually in the script</div></div></bl=
-ockquote>since it referenced some files relatively, and for the init script=
- it requires<div>absolute path. Now it works.</div><div><br><blockquote sty=
-le=3D"margin:0 0 0 40px;border:none;padding:0px"><div>Best regards.</div><d=
-iv><br></div></blockquote><div dir=3D"ltr" class=3D"gmail_signature"><div d=
-ir=3D"ltr"><blockquote style=3D"margin:0px 0px 0px 40px;border:none;padding=
-:0px">Jos=C3=A9.</blockquote></div></div></div></div>
-
---000000000000de129705d10d7b0d--
-
---===============9102788189436215893==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9102788189436215893==--
+SGVsbG8gUGV0ZXIsCgpMZSAxOC8xMS8yMDIxIMOgIDEwOjIyLCBQZXRlciBLb3JzZ2FhcmQgYSDD
+qWNyaXTCoDoKPj4+Pj4+ICJSb21haW4iID09IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdt
+YWlsLmNvbT4gd3JpdGVzOgo+IAo+ICA+IFNpbmNlIHRoZSAzMHRoIFNlcCAyMDIxIHRoZSBkb2Nr
+ZXIgaW1hZ2UgdXNlZCB0aGUgZ2l0bGFiLWNpIGlzIG5vdCBhYmxlCj4gID4gdG8gZG93bmxvYWQg
+dGhlIHRvb2xjaGFpbiBhcmNoaXZlIGZyb20gaHR0cHM6Ly90b29sY2hhaW5zLmJvb3RsaW4uY29t
+IGR1ZQo+ICA+IHRvIGFuIGV4cGlyZWQgY2VydGlmaWNhdGUuCj4gCj4gID4gd2dldCBodHRwczov
+L3Rvb2xjaGFpbnMuYm9vdGxpbi5jb20vZG93bmxvYWRzL3JlbGVhc2VzL3Rvb2xjaGFpbnMvYWFy
+Y2g2NC90YXJiYWxscy9hYXJjaDY0LS1nbGliYy0tYmxlZWRpbmctZWRnZS0yMDIwLjA4LTEudGFy
+LmJ6Mgo+ICA+IENvbm5lY3RpbmcgdG8gdG9vbGNoYWlucy5ib290bGluLmNvbSAodG9vbGNoYWlu
+cy5ib290bGluLmNvbSl8NTEuMjU0LjE0OS4xOTl8OjQ0My4uLiBjb25uZWN0ZWQuCj4gID4gRVJS
+T1I6IFRoZSBjZXJ0aWZpY2F0ZSBvZiDigJh0b29sY2hhaW5zLmJvb3RsaW4uY29t4oCZIGlzIG5v
+dCB0cnVzdGVkLgo+ICA+IEVSUk9SOiBUaGUgY2VydGlmaWNhdGUgb2Yg4oCYdG9vbGNoYWlucy5i
+b290bGluLmNvbeKAmSBoYXMgZXhwaXJlZC4KPiAKPiAgPiBSZW1vdmUgZXhwaXJlZCBtb3ppbGxh
+L0RTVF9Sb290X0NBX1gzLmNydCBbMV0uCj4gCj4gID4gWzFdIGh0dHBzOi8vc3RhY2tvdmVyZmxv
+dy5jb20vcXVlc3Rpb25zLzY5NDA4Nzc2L2hvdy10by1mb3JjZS1vbGRlci1kZWJpYW4tdG8tZm9y
+Z2V0LWFib3V0LWRzdC1yb290LWNhLXgzLWV4cGlyYXRpb24tYW5kLXVzZS1pc3JnCj4gCj4gID4g
+U2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgo+ICA+
+IENjOiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiAgPiAtLS0KPiAg
+PiBCYWNrcG9ydCB0aGlzIHBhdGNoIGZvciAyMDIxLjA4LnggYW5kIDIwMjEuMDIueCB1c2luZyBi
+dWlsZHJvb3QvYmFzZToyMDIwMDgxNC4yMjI4Cj4gCj4gSG93IGRvZXMgdGhpcyBhY3R1YWxseSB3
+b3JrPyBXaG8gYnVpbGRzIHRoYXQgY29udGFpbmVyPyBEbyB3ZSBub3QgbmVlZAo+IGEgY29ycmVz
+cG9uZGluZyB1cGRhdGUgb2YgLmdpdGxhYi1jaS55bWwgdGhlbj8KCldlbGwsIHVzdWFsbHkgaXQn
+cyBBcm5vdXQgb3IgWWFubiB0aGF0IGJ1aWxkIGFuZCBwdXNoIGNvbnRhaW5lcnMgdG8gZG9ja2Vy
+aHViLgpPbiBtYXN0ZXIgd2UgcmVjZW50bHkgc3dpdGNoZWQgdG8gZ2l0bGFiIHJlZ2lzdHJ5LCBz
+byBtYWludGFpbmVycyBhbmQgZGV2ZWxvcGVycwpvZiBCdWlsZHJvb3QgZ2l0bGFiIHByb2plY3Qg
+Y2FuIHVwZGF0ZSBjb250YWluZXJzLgoKVGhlIC5naXRsYWItY2kueW1sIGlzIGNoYW5nZWQgYXMg
+c29vbiBhcyB0aGUgY29udGFpbmVyIGlzIHJlYnVpbGQgdXNpbmcgdGhlCnVwZGF0ZWQgRG9ja2Vy
+ZmlsZSAoYWZ0ZXIgdGhlIGNvbW1pdCBvZiBEb2NrZXJmaWxlIGNoYW5nZSkuCgo+IAo+IAo+ICA+
+IC0tLQo+ICA+ICBzdXBwb3J0L2RvY2tlci9Eb2NrZXJmaWxlIHwgMiArKwo+ICA+ICAxIGZpbGUg
+Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCj4gCj4gID4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvZG9j
+a2VyL0RvY2tlcmZpbGUgYi9zdXBwb3J0L2RvY2tlci9Eb2NrZXJmaWxlCj4gID4gaW5kZXggYTli
+YWNjYTNhMC4uZTY1Zjg0MGRhOCAxMDA2NDQKPiAgPiAtLS0gYS9zdXBwb3J0L2RvY2tlci9Eb2Nr
+ZXJmaWxlCj4gID4gKysrIGIvc3VwcG9ydC9kb2NrZXIvRG9ja2VyZmlsZQo+ICA+IEBAIC00Nyw2
+ICs0Nyw4IEBAIFJVTiBhcHQtZ2V0IGluc3RhbGwgLXkgLS1uby1pbnN0YWxsLXJlY29tbWVuZHMg
+XAo+ICA+ICAgICAgICAgIHVuemlwIFwKPiAgPiAgICAgICAgICB3Z2V0IFwKPiAgPiAgICAgICAg
+ICAmJiBcCj4gID4gKyAgICBzZWQgLWkgJy9ebW96aWxsYVwvRFNUX1Jvb3RfQ0FfWDMuY3J0JC8g
+cy9eLyEvJyAvZXRjL2NhLWNlcnRpZmljYXRlcy5jb25mICYmIFwKPiAgPiArICAgIHVwZGF0ZS1j
+YS1jZXJ0aWZpY2F0ZXMgJiYgXAo+IAo+IEFsdGVybmF0aXZlbHkgd2UgY291bGQganVzdCB1cGRh
+dGUgdG8gdGhlIGxhdGVzdCBzdHJldGNoIHJlbGVhc2UgaW5zdGVhZAo+IG9mIHRoaXMgc25hcHNo
+b3QgZnJvbSAyMDE3Ogo+IAo+IGRvY2tlciBydW4gLS1ybSAtaXQgZGViaWFuOjkuMTMKPiByb290
+QDQyZWM1Y2E3NWYwYTovIyBhcHQtZ2V0IHVwZGF0ZSAmJiBcCj4gICBhcHQtZ2V0IGluc3RhbGwg
+LXkgLS1uby1pbnN0YWxsLXJlY29tbWVuZHMgY2EtY2VydGlmaWNhdGVzIHdnZXQKPiAKPiByb290
+QDQyZWM1Y2E3NWYwYTovIyB3Z2V0IGh0dHBzOi8vdG9vbGNoYWlucy5ib290bGluLmNvbS9kb3du
+bG9hZHMvcmVsZWFzZXMvdG9vbGNoYWlucy9hYXJjaDY0L3RhcmJhbGxzL2FhcmNoNjQtLWdsaWJj
+LS1ibGVlZGluZy1lZGdlLTIwMjAuMDgtMS50YXIuYnoyCj4gLS0yMDIxLTExLTE4IDA5OjIwOjAz
+LS0gIGh0dHBzOi8vdG9vbGNoYWlucy5ib290bGluLmNvbS9kb3dubG9hZHMvcmVsZWFzZXMvdG9v
+bGNoYWlucy9hYXJjaDY0L3RhcmJhbGxzL2FhcmNoNjQtLWdsaWJjLS1ibGVlZGluZy1lZGdlLTIw
+MjAuMDgtMS50YXIuYnoyCj4gUmVzb2x2aW5nIHRvb2xjaGFpbnMuYm9vdGxpbi5jb20gKHRvb2xj
+aGFpbnMuYm9vdGxpbi5jb20pLi4uIDUxLjI1NC4xNDkuMTk5Cj4gQ29ubmVjdGluZyB0byB0b29s
+Y2hhaW5zLmJvb3RsaW4uY29tICh0b29sY2hhaW5zLmJvb3RsaW4uY29tKXw1MS4yNTQuMTQ5LjE5
+OXw6NDQzLi4uIGNvbm5lY3RlZC4KPiBIVFRQIHJlcXVlc3Qgc2VudCwgYXdhaXRpbmcgcmVzcG9u
+c2UuLi4gMjAwIE9LCj4gTGVuZ3RoOiAxMjc0NTY1NjMgKDEyMk0pIFthcHBsaWNhdGlvbi94LWJ6
+aXAyXQo+IFNhdmluZyB0bzogJ2FhcmNoNjQtLWdsaWJjLS1ibGVlZGluZy1lZGdlLTIwMjAuMDgt
+MS50YXIuYnoyJwo+IAo+IGluZy1lZGdlLTIwMjAuMDgtMS50ICA4NSVbPT09PT09PT09PT09PT09
+PT09PiAgICBdIDEwMy41MU0gIDE2LjlNQi9zICAgIGV0YSAxcyAgICAgRgo+IGFhcmNoNjQtLWds
+aWJjLS1ibGVlIDEwMCVbPT09PT09PT09PT09PT09PT09PT09PT5dIDEyMS41NU0gIDE2LjZNQi9z
+ICAgIGluIDcuNHMKPiAKPiAyMDIxLTExLTE4IDA5OjIwOjEwICgxNi41IE1CL3MpIC0gJ2FhcmNo
+NjQtLWdsaWJjLS1ibGVlZGluZy1lZGdlLTIwMjAuMDgtMS50YXIuYnoyJyBzYXZlZCBbMTI3NDU2
+NTYzLzEyNzQ1NjU2M10KPiAKSW5kZWVkIGJ1dCB3ZSBtYXkgaW50cm9kdWNlIHNvbWUgKHVubGlr
+ZWx5KSByZWdyZXNzaW9uIGluIHRoZSB0ZXN0c3VpdGUuCgpPciBhZGQgLS1uby1jaGVjay1jZXJ0
+aWZpY2F0ZSB0byBCUjJfV0dFVDoKCmh0dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290
+Ly0vY29tbWl0L2Q3ODI4ZjE4MTQ5YzdmZDcwYzk0ODJhYWMwMmRjMWExODU2OTQ0NDIKCkJlc3Qg
+cmVnYXJkcywKUm9tYWluCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
