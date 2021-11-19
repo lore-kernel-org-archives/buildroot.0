@@ -1,88 +1,80 @@
-Return-Path: <SRS0=y7vk=QG=buildroot.org=buildroot-bounces@kernel.org>
+Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FF4EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 19 Nov 2021 17:58:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2D99C61212
-	for <buildroot@archiver.kernel.org>; Fri, 19 Nov 2021 17:58:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 2D99C61212
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=buildroot.org
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57AC9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 19 Nov 2021 21:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F322A80DDE;
-	Fri, 19 Nov 2021 17:58:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3CEC40981;
+	Fri, 19 Nov 2021 21:53:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wzy7auL2DEqy; Fri, 19 Nov 2021 17:58:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X7RggD_vCki8; Fri, 19 Nov 2021 21:52:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F64980CC6;
-	Fri, 19 Nov 2021 17:58:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DBD8B403A5;
+	Fri, 19 Nov 2021 21:52:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B7F341BF37C
- for <buildroot@lists.busybox.net>; Fri, 19 Nov 2021 17:58:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C038D1BF3F2
+ for <buildroot@lists.busybox.net>; Fri, 19 Nov 2021 21:52:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A419040367
- for <buildroot@lists.busybox.net>; Fri, 19 Nov 2021 17:58:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD5FD402BD
+ for <buildroot@lists.busybox.net>; Fri, 19 Nov 2021 21:52:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pHdIbTcLF-AG for <buildroot@lists.busybox.net>;
- Fri, 19 Nov 2021 17:58:16 +0000 (UTC)
+ with ESMTP id SrTRiW_pM6aT for <buildroot@lists.busybox.net>;
+ Fri, 19 Nov 2021 21:52:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 67906402F7
- for <buildroot@buildroot.org>; Fri, 19 Nov 2021 17:58:16 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- n33-20020a05600c502100b0032fb900951eso11104941wmr.4
- for <buildroot@buildroot.org>; Fri, 19 Nov 2021 09:58:16 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DE24540215
+ for <buildroot@buildroot.org>; Fri, 19 Nov 2021 21:52:56 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id r8so20352786wra.7
+ for <buildroot@buildroot.org>; Fri, 19 Nov 2021 13:52:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=YwV2unrhli6uSX5Hl75EcmGVOdYLhi3MYfzbFMnwsjw=;
- b=o4CoDTcOZxQj73NVPFMKx8620A8bPKDW6YwJBLgeqJrFcGKz88o15ezUDa4B8s6DF1
- cpbWxhDY5V0nNq0K0EGa/v/wlYRXlwpJJDaSlLgwYzI9bbDEoUhSH5dHDJkkxaK5k/7O
- DQJXMwN69dHC4r1pUcrovUPd1CmXkorTNuN69DfeZBF8NJLXYrVtI5CW8+zx0wNQLiQk
- yWw+f8i9orfzo3Xc5FBqAZI/TdP9WVg+BnCRjuKfdO2WM5vt8p5qxwZkX551G4gt+UmI
- El/a65Df+0Wag8mXaCJePM5GO3EPf4STpJu6h1fgFTrCfNxh/tuN8dhcWtjkZKrSNYXk
- ySTw==
+ h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+ :content-disposition:in-reply-to;
+ bh=ZWpcTzQJHP2icEcEMMa3qKLLNf+Uv24GBvK9dfDKJps=;
+ b=I4GnJ7M5ukMVzhNjMTzdj0uY4wkq3OVx7dAyNqtYfjr+QOIPCZsqImHAmYOhUWUlKy
+ FEjc/9DAnm0lIWQB3GgEHuWq69cKNKnPDvPsGC0SnJ38bc3Sp7acrecQfAfMXGlCDDar
+ 4CaZZx9kcaZX7zh5vPANRWsqobPhaAp7fELrEfLgV09txpr/L4B0wV8mqTybAjLLi8eH
+ qfFAYnP4V0Zco1L8Z2wcTbzRuvyNfjV3FrwcD6wKRoyjJzY/C6jrgXmszAVGB+cWroce
+ iomdQwuLC90INhOMk5fGKAC+3eBr8vHhNiECGQ3ojIPOT8A+T56SkXWkeyg9abgmFVQp
+ wgOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=YwV2unrhli6uSX5Hl75EcmGVOdYLhi3MYfzbFMnwsjw=;
- b=4iIGOmLCG3DooRBWWSC3CIx/E+azWr1qi+kHLxQ7VhmLe8MkHWEoLOsz5oubbntpDO
- nggl7ggtu7z8s7WFb0hbfCpVXFCbb79lRYa+ndpzel02Ch/IcN8V4Hp6pGpNQSQkv+D3
- v67eBilqe1X1gs65Kx+vHm/FIzOnWzWnubOCDr1xSxeJuilq2qZAgFgQi90LWVqwDEf1
- 4ThQZQ327aId12ZLAm5GZraZp/FSmn0xl2M+i1Z6RTglEdMNftg5fw8M0nZhY+pax/of
- C7V1OV9MO7TPRK3ONKvkW8bk3Eztfd9c5SQP+5hFeqfEShIuhDLY3/UAst6xIB4MoCf+
- i59g==
-X-Gm-Message-State: AOAM531TeLnTN8sAymRWEPhkIXaU9qLMQlQFuEuejqVmPm33nt2zknkL
- bnKnxxyUNYBa0SRlLho+BwqEKnTWJ88=
-X-Google-Smtp-Source: ABdhPJx1mFvP/TM4g60m6TlO8W68PlxHRD6WAU+AeOozsvXRJkt09zmpHb9jkjmkCxkgfs8PLFUSKA==
-X-Received: by 2002:a05:600c:500b:: with SMTP id
- n11mr1948021wmr.38.1637344694352; 
- Fri, 19 Nov 2021 09:58:14 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id k37sm404225wms.21.2021.11.19.09.58.13
+ h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+ :references:mime-version:content-disposition:in-reply-to;
+ bh=ZWpcTzQJHP2icEcEMMa3qKLLNf+Uv24GBvK9dfDKJps=;
+ b=GIVJHl0TUID5XeS6sqIyxv1HCYO3QwjXhbMRcjfqVMH3EC0YO6VfgAAgypSwzyV/8j
+ BPWHQlpuA0kEsImNleEybuFkdwmkMoUfGeJtI29lDJXO42sO0zqoGVBOGA9zbdeKZ+e0
+ BtZ8GRG3mur3J92EPiQXgCB8rTfBwh4Sym2krn10x7wkSamK5Z+DOEQrYtTkh1++9BN0
+ EPWUpwv4wURSXwowHGKN57/G3+krMCDBRGflSjzWmLehPbuywV+lXlXuW8uIVGmXbFUr
+ p7W8DNrte9VjcncHWB2PIQibX6Q0IY2Ue2WRYXxfN0twtsS95WoBKHHTgWhn/4LNutxL
+ WmcA==
+X-Gm-Message-State: AOAM533+K6vMYFqWiJ8td4x2uDqmniq+tUw5WsVtZd/yF0ptIEIrD9X8
+ L4ErHuK+y959fMafScIPIgM=
+X-Google-Smtp-Source: ABdhPJx8KYcESYqYgqfC6fKI8etaIbk6B/rlLRSQxa/nkliZbk2/fvdNspqOLZdXool+vyXuQwpxag==
+X-Received: by 2002:adf:f08d:: with SMTP id n13mr11813029wro.395.1637358775142; 
+ Fri, 19 Nov 2021 13:52:55 -0800 (PST)
+Received: from pevik ([93.99.78.116])
+ by smtp.gmail.com with ESMTPSA id h2sm896671wrz.23.2021.11.19.13.52.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Nov 2021 09:58:14 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 19 Nov 2021 18:55:53 +0100
-Message-Id: <20211119175553.2413433-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211119175553.2413433-1-fontaine.fabrice@gmail.com>
-References: <20211119175553.2413433-1-fontaine.fabrice@gmail.com>
+ Fri, 19 Nov 2021 13:52:54 -0800 (PST)
+Date: Fri, 19 Nov 2021 22:52:51 +0100
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <YZgcsyig3To4ucTQ@pevik>
+References: <20211119164926.2410106-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2,2/2] package/boost: threads needs date-time
+Content-Disposition: inline
+In-Reply-To: <20211119164926.2410106-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: set CONFIG_NFSD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +86,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc >= 7 raised since commit
-4e267a7d3d5d350710a81ada188a1629348e4b4a because until cmake 3.21.3 and
-https://github.com/Kitware/CMake/commit/1ad0c5ae53fc0c4f774166337f0e9c93c578cf9b,
-cmake assumed that boost threads depends on boost date-time. As, we
-can't patch all cmake in the field, just select boost date-time.
+Hi Fabrice,
 
--- Found Boost: /home/buildroot/autobuild/instance-3/output-1/host/sh4-buildroot-linux-uclibc/sysroot/usr/include (found version "1.77.0") found components: thread chrono atomic missing components: date_time
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=14346
 
-Fixes:
- - http://autobuild.buildroot.org/results/e7443e3bc955e7eddd7bed63e2728880dabb31a7
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/nfs-utils/nfs-utils.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Update commit message to explain the relationship with cmake
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> index 763dd57ace..07b44b5a93 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -90,6 +90,10 @@ NFS_UTILS_CONF_OPTS += --without-systemd
+>  endif
 
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+>  ifeq ($(BR2_PACKAGE_NFS_UTILS_RPC_NFSD),y)
+> +define NFS_UTILS_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD)
+> +endef
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 1c405a36c3..8310294ffd 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -348,6 +348,7 @@ config BR2_PACKAGE_BOOST_THREAD
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
- 	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  Portable C++ multi-threading. C++11, C++14.
--- 
-2.33.0
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
+Thanks a lot!
+
+Kind regards,
+Petr
+
+> +
+>  define NFS_UTILS_INSTALL_INIT_SYSV
+>  	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+>  		$(TARGET_DIR)/etc/init.d/S60nfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
