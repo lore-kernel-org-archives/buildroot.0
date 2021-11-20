@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B0BDC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 15:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA32C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 11:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FAB4400CC;
-	Mon, 22 Nov 2021 15:19:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC44240384;
+	Sat, 20 Nov 2021 11:27:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ip5QRFmutzsk; Mon, 22 Nov 2021 15:19:38 +0000 (UTC)
+	with ESMTP id uEQnMhiamjpV; Sat, 20 Nov 2021 11:27:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 992EA400D2;
-	Mon, 22 Nov 2021 15:19:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF552402EC;
+	Sat, 20 Nov 2021 11:27:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DDDAE1BF2C3
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 15:19:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 60C1D1BF28D
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:27:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA5F340239
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 15:19:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DD71410B5
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:27:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ayIYoYLIfMor for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 15:19:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from 2.mo560.mail-out.ovh.net (2.mo560.mail-out.ovh.net
- [188.165.53.149])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9CFA840057
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 15:19:34 +0000 (UTC)
-Received: from player159.ha.ovh.net (unknown [10.110.208.168])
- by mo560.mail-out.ovh.net (Postfix) with ESMTP id 0852E20B2B
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 15:19:31 +0000 (UTC)
-Received: from armadeus.com (areims-654-1-107-29.w92-131.abo.wanadoo.fr
- [92.131.114.29])
- (Authenticated sender: sebastien.szymanski@armadeus.com)
- by player159.ha.ovh.net (Postfix) with ESMTPSA id 2A61524899163;
- Mon, 22 Nov 2021 15:19:30 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-99G003f1259c39-77e0-4b22-ad91-7e5788d61684,
- BC8332B12BEA9754997DEE75483A33FA83ACCE21)
- smtp.auth=sebastien.szymanski@armadeus.com
-X-OVh-ClientIp: 92.131.114.29
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-To: buildroot@buildroot.org
-Date: Mon, 22 Nov 2021 16:18:13 +0100
-Message-Id: <20211122151813.12079-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.32.0
+ with ESMTP id bk8KGTRmCsBT for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 11:27:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 944A1409B2
+ for <buildroot@uclibc.org>; Sat, 20 Nov 2021 11:27:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 9727087D3C; Sat, 20 Nov 2021 11:23:12 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Sat, 20 Nov 2021 11:27:32 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.02.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stsp2@yandex.ru
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-13756-163-jgXRvuUbfe@https.bugs.busybox.net/>
+In-Reply-To: <bug-13756-163@https.bugs.busybox.net/>
+References: <bug-13756-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 13043268946057751531
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrgeeggdejjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkffogggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhephffggefffeeigefhvdelgfdtieehjedvleevgfevtdegfeffgfejuedtudehtdefnecukfhppedtrddtrddtrddtpdelvddrudefuddruddugedrvdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhduheelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-Subject: [Buildroot] [PATCH 1/1] linux: fix typo in
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH in the help text
+Subject: [Buildroot] [Bug 13756] SDL2_KMSDRM depends on gbm and egl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,23 +69,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-IlBhdGggdG8gdG8gb3V0LW9mLXRyZWUuLi4iIC0+ICJQYXRoIHRvIHRoZSBvdXQtb2YtdHJlZS4u
-LiIKClNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFu
-c2tpQGFybWFkZXVzLmNvbT4KLS0tCiBsaW51eC9Db25maWcuaW4gfCAyICstCiAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9saW51eC9D
-b25maWcuaW4gYi9saW51eC9Db25maWcuaW4KaW5kZXggZDM1ZGFjYzc1Ni4uMGY2NzdkMWU0ZSAx
-MDA2NDQKLS0tIGEvbGludXgvQ29uZmlnLmluCisrKyBiL2xpbnV4L0NvbmZpZy5pbgpAQCAtNDEx
-LDcgKzQxMSw3IEBAIGNvbmZpZyBCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRQogY29u
-ZmlnIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRICiAJc3RyaW5nICJPdXQtb2YtdHJl
-ZSBEZXZpY2UgVHJlZSBTb3VyY2UgZmlsZSBwYXRocyIKIAloZWxwCi0JICBQYXRoIHRvIHRvIG91
-dC1vZi10cmVlIGRldmljZSB0cmVlIHNvdXJjZSBmaWxlcy4KKwkgIFBhdGggdG8gdGhlIG91dC1v
-Zi10cmVlIGRldmljZSB0cmVlIHNvdXJjZSBmaWxlcy4KIAkgIFlvdSBjYW4gcHJvdmlkZSBhIGxp
-c3Qgb2YgZHRzIHBhdGhzIHRvIGNvcHkgYW5kCiAJICBidWlsZCwgc2VwYXJhdGVkIGJ5IHNwYWNl
-cy4KIAotLSAKMi4zMi4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+https://bugs.busybox.net/show_bug.cgi?id=13756
+
+stsp <stsp2@yandex.ru> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from stsp <stsp2@yandex.ru> ---
+I think this was fixed by 6d664e9cfe
+and a new sdl.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
