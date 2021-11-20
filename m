@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA32C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 11:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA7EFC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 11:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC44240384;
-	Sat, 20 Nov 2021 11:27:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uEQnMhiamjpV; Sat, 20 Nov 2021 11:27:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF552402EC;
-	Sat, 20 Nov 2021 11:27:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 60C1D1BF28D
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:27:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DD71410B5
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:27:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A17C941BF3;
+	Sat, 20 Nov 2021 11:29:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bk8KGTRmCsBT for <buildroot@lists.busybox.net>;
- Sat, 20 Nov 2021 11:27:32 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fIdI0iRZxRka; Sat, 20 Nov 2021 11:29:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CA5841BEC;
+	Sat, 20 Nov 2021 11:29:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 745331BF28D
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:29:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62385402EC
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:29:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HfYdTka-Q9DM for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 11:29:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 944A1409B2
- for <buildroot@uclibc.org>; Sat, 20 Nov 2021 11:27:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7A2E401C4
+ for <buildroot@uclibc.org>; Sat, 20 Nov 2021 11:29:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9727087D3C; Sat, 20 Nov 2021 11:23:12 +0000 (UTC)
+ id A888A87D3C; Sat, 20 Nov 2021 11:25:30 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 20 Nov 2021 11:27:32 +0000
+Date: Sat, 20 Nov 2021 11:29:50 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.02.1
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: stsp2@yandex.ru
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-13756-163-jgXRvuUbfe@https.bugs.busybox.net/>
-In-Reply-To: <bug-13756-163@https.bugs.busybox.net/>
-References: <bug-13756-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14351-163-4Ij77s1Djs@https.bugs.busybox.net/>
+In-Reply-To: <bug-14351-163@https.bugs.busybox.net/>
+References: <bug-14351-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 13756] SDL2_KMSDRM depends on gbm and egl
+Subject: [Buildroot] [Bug 14351] needs to mount sysfs before mount -a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,18 +74,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=13756
-
-stsp <stsp2@yandex.ru> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+https://bugs.busybox.net/show_bug.cgi?id=14351
 
 --- Comment #1 from stsp <stsp2@yandex.ru> ---
-I think this was fixed by 6d664e9cfe
-and a new sdl.
+This was fixed in util-linux:
+https://github.com/util-linux/util-linux/issues/1492
+Please consider updating, or adding
+an explicit /sys mount before "mount -a".
 
 -- 
 You are receiving this mail because:
