@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 063DBC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 11:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F0CDC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 11:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 940E040386;
-	Sat, 20 Nov 2021 11:38:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 281D76070E;
+	Sat, 20 Nov 2021 11:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KYZZ3Xy9lalO; Sat, 20 Nov 2021 11:38:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA8D0402EC;
-	Sat, 20 Nov 2021 11:38:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 869FA1BF28D
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:38:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6784B60706
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:38:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kjFluVLe_114 for <buildroot@lists.busybox.net>;
- Sat, 20 Nov 2021 11:38:05 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SqM8JYulls3t; Sat, 20 Nov 2021 11:39:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 826CA60706;
+	Sat, 20 Nov 2021 11:39:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 719F21BF28D
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:39:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 605EF41BE7
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 11:39:47 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tRXRcFhMUR86 for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 11:39:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7EC516058D
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 11:38:05 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- g191-20020a1c9dc8000000b0032fbf912885so9496836wme.4
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 03:38:05 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57580410B6
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 11:39:45 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id d24so22943654wra.0
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 03:39:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cnUjsDKTdt43sRV73frKGNrXqNxMT2+jwWWINMO3uFQ=;
- b=Hlk/KofaMAJVFwjVRnVaP8LsRgyfacZ3LOjUoW1+pHtZDxTMzrO4BDOQiRqyD/jl1j
- PPCXsDILhojWOKuqCcpDM/WoKzb0alLpreozOVZCOwGm9IZclwvnx90K9VQ4WlEcnZmJ
- //6VwMv2UE8CxEYi8FArVIfPfAWtnB9/TM5cu1I/KbxHWz0IV1R0VrLKHZpH/4CecfyA
- 0jpXaY90AwneXZ3yN6g9GJJBAxGEc7lbQ6S8AtvkP47A8pJucvPWw1QzVtdqfyWcMQbh
- V5L4n8uTDBbHYQv6igbe9ctVyzCk96jrxzMu88+EGsHAUWVysUX4SFI71HeppHjmmnTs
- qD8Q==
+ bh=dxoDOa+/UcJGkJPP8eVZK1y/tZwV2RQhbPfV4tIFwWY=;
+ b=HoP02U9soVlsIUvnekobhauegRhhDxIB0Gqa0Ar1pO9fuXUVi1h1r4t90TDe5yIB4K
+ k19b73K1gPklZadx0w0UQez8OOon3moNkeLWlDbziqMz9aa5HV+GLveU31ePwE85CvuG
+ Hlcb/EAcXLvOXexv4uXYcfX5uNKtbmzeDALXJclRI+a90TxM9VlKobyevuPiR/VHZhoL
+ HJ1MfaDbkhw+L00GUS/6O9f7/TYTgFlFsNectM59jF3zH4LNsEE8VlFJv+T2UwA24C8i
+ 18d+iKTxEmK3z/D24JjcJHZ95riqnAPdsR+fZcTDhnkgr38Wx06oqp72gDVi7myYWLfn
+ mhcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cnUjsDKTdt43sRV73frKGNrXqNxMT2+jwWWINMO3uFQ=;
- b=XGL9S/QuHn0V7Ryo8MjQa941Fr94uTqutZ87wvTXTlOXWU5YxkkpTmgvgNYga0Vrve
- 0x7gaK5ou2MFiRoDIV8j5PdkMfREEFW1ltmCeXFaIfDcrz5Oa87/2Rc8MI4wY8xyZwzm
- mHmMcchv52Eta3yCnruCEg/TU0Qbg+PACvjgq3qgFqNctFxnq0iXNaK2M/Y16wvjdDim
- 8DPFFPQlz5AF2Z1OVBGUBW81alQwpGJKcbU3buhgrM4DLAOiRh+32b8nyzV28+Xa8H+V
- 1LawCCCNiS9VoCXXHFbj34IyahqprhCigBrik6yUrtQifV2fl1mUbQXlQsbj3J3bYRIs
- xPAg==
-X-Gm-Message-State: AOAM532Er/Dqjn2PMCc2qkX865qzRjEO+7D0RENKmuMRICvu1zIGhdC2
- SHNzQeRxHsMOme+StVoVG4v6KFficTM=
-X-Google-Smtp-Source: ABdhPJwPoSywanAGhr+vx1Ut662b8eI8jwyPMjHVfYe3CK4ck0kW4DUitI0XMm1HHyixfk1bA23BGg==
-X-Received: by 2002:a05:600c:4ed2:: with SMTP id
- g18mr8952905wmq.18.1637408283334; 
- Sat, 20 Nov 2021 03:38:03 -0800 (PST)
+ bh=dxoDOa+/UcJGkJPP8eVZK1y/tZwV2RQhbPfV4tIFwWY=;
+ b=ciKTl4mfsPD8jN5VBd7a6a5QVSxGJT6woD0PRTdokBzTvXzPW7Z1IJOoegyr9l+NWf
+ F1l+Q1hJqiuTQrOB1V6KsnKnilwQLnpqzXFcpCPLj9HAUMUheimtBlR7ZopT0fGRM4QN
+ xX7KjMCCIr9SfMWhGaISs3tKDhmK39+QtHjPXHNqoYWOPmf7KFGq/V1NL8g1z7+H9aEY
+ o8Hd6dPcMoMZSCXuu3yv7kflICPwf/VTqHYMfQGpYPHoOakFNDYJd0qmgZZ4mGyOKMsG
+ OW/24iUcYuHhrSy4UoJIexE28g/jsu1Bdij2t04iHc4F/UAM7vWeVoxXyKF+nR+Nr1tl
+ VTvA==
+X-Gm-Message-State: AOAM533646+NEZ5v1s4HMBdobVNtVVK91oT8b78VQBokWhVpsCfZXK0N
+ Hf3eVqAegWzbBBoJdjEU66Ce0yKseek=
+X-Google-Smtp-Source: ABdhPJzvxwpDtvmR19YxwQXlzm0ZOUFys0MG7Gom6Kb3VME3IhHncry2141QfXVWoXJ49KdH9ZnfOA==
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr17165770wrd.114.1637408383307; 
+ Sat, 20 Nov 2021 03:39:43 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id h1sm2638439wmb.7.2021.11.20.03.38.02
+ by smtp.gmail.com with ESMTPSA id u14sm2524589wrt.49.2021.11.20.03.39.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Nov 2021 03:38:03 -0800 (PST)
+ Sat, 20 Nov 2021 03:39:42 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 20 Nov 2021 12:35:49 +0100
-Message-Id: <20211120113549.2887418-1-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Nov 2021 12:37:28 +0100
+Message-Id: <20211120113728.2887574-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: replace BSD-2-clause by
- BSD-2-Clause
+Subject: [Buildroot] [PATCH 1/1] package/micropython: replace BSD-{1,
+ 3}-clause
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,31 +85,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>,
+Cc: Chris Packham <judge.packham@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Replace BSD-{1,3}-clause by BSD-{1,3}-Clause
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/glorytun/glorytun.mk | 2 +-
+ package/micropython/micropython.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index d128ae835d..389c7a07e4 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -7,7 +7,7 @@
- GLORYTUN_VERSION = 0.3.4
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
--GLORYTUN_LICENSE = BSD-2-clause
-+GLORYTUN_LICENSE = BSD-2-Clause
- GLORYTUN_LICENSE_FILES = LICENSE
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index c49ca23449..55c00ba08a 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -9,7 +9,7 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION)
+ # Micropython has a lot of code copied from other projects, and also a number
+ # of submodules for various libs. However, we don't even clone the submodules,
+ # and most of the copied code is not used in the unix build.
+-MICROPYTHON_LICENSE = MIT, BSD-1-clause, BSD-3-clause, Zlib
++MICROPYTHON_LICENSE = MIT, BSD-1-Clause, BSD-3-Clause, Zlib
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi host-python3
  
- $(eval $(autotools-package))
 -- 
 2.33.0
 
