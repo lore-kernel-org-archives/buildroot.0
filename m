@@ -1,56 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2FC5C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 10:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3518DC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 10:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B37060704;
-	Sat, 20 Nov 2021 10:05:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F742400F0;
+	Sat, 20 Nov 2021 10:09:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yzpwTTNEaeGM; Sat, 20 Nov 2021 10:04:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HPWAvDGPp48d; Sat, 20 Nov 2021 10:09:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B674606DA;
-	Sat, 20 Nov 2021 10:04:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B4A81BF420
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 10:04:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CF7D402C5;
+	Sat, 20 Nov 2021 10:09:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 990921BF420
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 10:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7ACA0606DA
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 10:04:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95A99405EC
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 10:08:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UdnY2p6aNDyz for <buildroot@lists.busybox.net>;
- Sat, 20 Nov 2021 10:04:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9BIwSRsRqPc2 for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 10:08:58 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4C7CC605DB
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 10:04:55 +0000 (UTC)
-Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
- by mailout08.t-online.de (Postfix) with SMTP id D35001C72
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 11:04:52 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.197.220]) by fwd74.t-online.de
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9CB12404B6
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 10:08:58 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout01.t-online.de (Postfix) with SMTP id C210E57BC
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 11:07:48 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.197.220]) by fwd80.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1moNEo-1BR9o90; Sat, 20 Nov 2021 11:04:50 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45092)
+ esmtp id 1moNHe-0FdJOj0; Sat, 20 Nov 2021 11:07:46 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45094)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1moNEn-0005yR-Mx
- for buildroot@buildroot.org; Sat, 20 Nov 2021 11:04:49 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1moNHe-0006Tf-0W
+ for buildroot@buildroot.org; Sat, 20 Nov 2021 11:07:46 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 20 Nov 2021 11:04:49 +0100
-Message-Id: <20211120100449.1963204-1-bernd.kuhls@t-online.de>
+Date: Sat, 20 Nov 2021 11:07:45 +0100
+Message-Id: <20211120100745.2030431-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1637402690-00001446-5BDC66FC/0/0 CLEAN NORMAL
-X-TOI-MSGID: b40dad9b-ea34-4016-9649-7bb9e860f10d
-Subject: [Buildroot] [PATCH/next 1/1] package/fetchmail: bump version to
- 6.4.24
+X-TOI-EXPURGATEID: 150726::1637402866-000010D9-D16EC7C0/0/0 CLEAN NORMAL
+X-TOI-MSGID: 892f3160-bd0e-43a9-ba55-da13386a593c
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 8.0.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,39 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/37388106/
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.13
+
+Fixes CVE-2021-21707: http://bugs.php.net/79971
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 9935858b20..3d4c3da3dc 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37376434/
--sha256  5f7a5e13731431134a2ca535bbced7adc666d3aeb93169a0830945d91f492300  fetchmail-6.4.23.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37388106/
-+sha256  9c961df25cd922f539218b0b56a77e7a47778e49ed907edaa5b4941ad3b253cf  fetchmail-6.4.24.tar.xz
- # Locally computed:
- sha256  001d1b8d111a83e3bab8b4d511ea4767d37d3bd0583560fccece630df1ba8f3c  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index c909bb5cfb..7d6be71954 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 64ea95b9ba..254484e72f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  a501017b3b0fd3023223ea25d98e87369b782f8a82310c4033d7ea6a989fea0a  php-8.0.12.tar.xz
++sha256  cd976805ec2e9198417651027dfe16854ba2c2c388151ab9d4d268513d52ed52  php-8.0.13.tar.xz
+ 
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b7cd356282..8c45da77a2 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).23
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).24
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-PHP_VERSION = 8.0.12
++PHP_VERSION = 8.0.13
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.30.2
 
