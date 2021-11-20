@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4769EC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 21:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 322B4C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 21:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BB386076F;
-	Sat, 20 Nov 2021 21:08:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEF9740167;
+	Sat, 20 Nov 2021 21:09:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a8fpU5ChN95J; Sat, 20 Nov 2021 21:08:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RgNQZpuOt02p; Sat, 20 Nov 2021 21:08:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06595606EB;
-	Sat, 20 Nov 2021 21:08:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 867121BF362
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 21:08:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7FD74014B;
+	Sat, 20 Nov 2021 21:08:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BF061BF362
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 21:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82F8A606EB
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 21:08:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B61640459
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 21:08:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7z1aemcgw6L1 for <buildroot@lists.busybox.net>;
- Sat, 20 Nov 2021 21:08:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F36A605F1
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 21:08:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 52B3160006;
- Sat, 20 Nov 2021 21:08:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1moXbD-0005Cp-GA; Sat, 20 Nov 2021 22:08:39 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WL1JPxP-2ULo for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 21:08:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70BBF40448
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 21:08:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 83F68883F0; Sat, 20 Nov 2021 21:04:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20211120195750.1919374-1-yann.morin.1998@free.fr>
-Date: Sat, 20 Nov 2021 22:08:39 +0100
-In-Reply-To: <20211120195750.1919374-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 20 Nov 2021 20:57:50 +0100")
-Message-ID: <87h7c6pmaw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH:LTS] suport/docker: update the strech image
+To: buildroot@buildroot.org
+Date: Sat, 20 Nov 2021 22:08:27 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 7adae74a3883c657d6b559bab5ebbd8bc29c219e
+X-Git-Newrev: 39f6f91b9b485869f7e99ddf68d0b259c56be556
+X-Patchwork-Hint: ignore
+Message-Id: <20211120210430.83F68883F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] support/docker: update
+ the stretch image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,29 +53,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=39f6f91b9b485869f7e99ddf68d0b259c56be556
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
- > The current stretch image we are usign on the maintenance branches still
- > has the old Let's Encrypt certificate that expired a few weeks ago,
- > causign a lot of download errors:
+The current stretch image we are using on the maintenance branches still
+has the old Let's Encrypt certificate that expired a few weeks ago,
+causign a lot of download errors:
 
- > Suggested-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Romain Naour <romain.naour@gmail.com>
- > ---
- > Note: when this is accepted, I'll regenerate and push a new image to the
- > docker hub, and send an new patch to use that image.
+Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/docker/Dockerfile       | 4 ++--
+ support/docker/apt-sources.list | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Committed to 2021.02.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index a9bacca3a0..9bd62a04fe 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -4,9 +4,9 @@
+ #   sudo docker push buildroot/base:YYYYMMDD.HHMM
+ 
+ # We use a specific tag for the base image *and* the corresponding date
+-# for the repository., so do not forget to update the apt-sources.list
++# for the repository, so do not forget to update the apt-sources.list
+ # file that is shipped next to this Dockerfile.
+-FROM debian:stretch-20171210
++FROM debian:stretch-20211115
+ 
+ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+       vendor="Buildroot" \
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+index 789fb8fc17..785b6a0d4e 100644
+--- a/support/docker/apt-sources.list
++++ b/support/docker/apt-sources.list
+@@ -1,4 +1,4 @@
+-# Latest just before 20171210T000000Z:
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20171209T220346Z/ stretch-updates main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20171209T224618Z/ stretch/updates main
++# Latest just before 20211115T000000Z:
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20211114T204852Z/ stretch main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20211115T000000Z/ stretch-updates main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20211114T121535Z/ stretch/updates main
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
