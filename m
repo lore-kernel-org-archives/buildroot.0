@@ -1,90 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47ED5C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 13:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7B3BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 20 Nov 2021 15:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E59498104F;
-	Sat, 20 Nov 2021 13:44:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1381040177;
+	Sat, 20 Nov 2021 15:05:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KJS3c_mT54Xd; Sat, 20 Nov 2021 13:44:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7FmmTTJa1V_9; Sat, 20 Nov 2021 15:05:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BE4180E2F;
-	Sat, 20 Nov 2021 13:44:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8AB9E1BF348
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 13:44:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7576F4012E;
+	Sat, 20 Nov 2021 15:05:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 898AF1BF470
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 15:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79B81405DD
- for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 13:44:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 780AE400AF
+ for <buildroot@lists.busybox.net>; Sat, 20 Nov 2021 15:05:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m5Nxcn9aioTG for <buildroot@lists.busybox.net>;
- Sat, 20 Nov 2021 13:44:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 60862405BA
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 13:44:22 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id o29so11014779wms.2
- for <buildroot@buildroot.org>; Sat, 20 Nov 2021 05:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=3bLZSFHXu7QDj81vxdZZcFDHcAv75bf+Zn/MLhixRbM=;
- b=I1b9V7cMtM1d68AgeKrciMFR5gR8ZM1aLbjnCt6LiPKsf1YI3q3+NNS24squ3XFXdE
- tzc9acm7qCN8lXZ5CpKTLugTH9jMmHns7laWk0yMAs8VXpU2EdISSqFNXN2vXW6L4/54
- Q2kd+EaPHydsEOw0gLb1mDILJHPSAEhE2fCilFHXbYuRfBSFfLlWghaO3ZMELUw0Mr4d
- PhBTA4C+TQ1VQiZk5eSWgERa6jFXafZKWj9tfwPuTnG6eHy0U0SiZFk9uYJ31cYXH/nV
- Y9dsh7rsqtb0wI7TMJm8D9NilujP9KC33h+izH7PHJRw5/2iMULA+WtA4iUNDwuPTow/
- jb3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=3bLZSFHXu7QDj81vxdZZcFDHcAv75bf+Zn/MLhixRbM=;
- b=tc/82F55StRFE0Y6vzUK09Gq4O7Hg/p9oQFv6t1Hhdg4EhygZfSN1MQYJg6buwYax9
- dATOiX1zYPq2Hts89fndjFIFeUTZK2tHhnouL7E4aEDa8DwYpMUkvc5KYb0i5WpUetr3
- VmH+zdjv24M3whvCsHyw0T11KUAM/JZIXLqsQbKWLJoSxN40zZtyC/xuzILP5An8OPqt
- xHGfRSpQd5Cnr3goR0Fm9TtD6II5/0gi+IeNS2zFDARxDf3euVP6qTwrH2+nVe2RpnnS
- Xdt4Iuw7ueewN3uS+kSt2IMdUq1vXzYPNlDcmZc0w0F4pudHddNYEZ6MIIMJWcbsDa9j
- lR/Q==
-X-Gm-Message-State: AOAM531P3LjUXl9K2L7fQmi9NjajF2f2pHpnz3yyUmJs8Sm41ZbnIrgd
- sHEXK0QqMZ5enAJlWBOPWbdt6GdeoJk=
-X-Google-Smtp-Source: ABdhPJzrfbHwwaQjtsT1vgLeIXGvvdiwmcBkTqUG/b1HQyR45hAcGDoluqjAsZgyG/yeXKQFpYfBpA==
-X-Received: by 2002:a7b:cd02:: with SMTP id f2mr10252982wmj.115.1637415860474; 
- Sat, 20 Nov 2021 05:44:20 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id g13sm3783294wrd.57.2021.11.20.05.44.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 20 Nov 2021 05:44:19 -0800 (PST)
-Message-ID: <ddafc6ef-d8e5-3750-6d3b-2a8267028f0a@gmail.com>
-Date: Sat, 20 Nov 2021 14:44:18 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gz6235jTFTkN for <buildroot@lists.busybox.net>;
+ Sat, 20 Nov 2021 15:05:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 825724012E
+ for <buildroot@buildroot.org>; Sat, 20 Nov 2021 15:05:03 +0000 (UTC)
+Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
+ by mailout07.t-online.de (Postfix) with SMTP id 3CB8317E4A;
+ Sat, 20 Nov 2021 16:04:49 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.197.220]) by fwd72.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1moRv6-23BwZ70; Sat, 20 Nov 2021 16:04:48 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45110)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1moRv4-0006Zz-A3;
+ Sat, 20 Nov 2021 16:04:47 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat, 20 Nov 2021 16:04:45 +0100
+Message-Id: <20211120150446.447240-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Peter Korsgaard <peter@korsgaard.com>
-References: <20211117213348.231529-1-romain.naour@gmail.com>
- <87ee7drf65.fsf@dell.be.48ers.dk>
- <9880ded2-bde8-8321-9a61-d281be2db2ff@gmail.com>
- <87a6i1r6va.fsf@dell.be.48ers.dk> <20211120085004.GS247986@scaer>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20211120085004.GS247986@scaer>
-Subject: Re: [Buildroot] [PATCH for-2021.08.x] support/docker: remove
- expired mozilla/DST_Root_CA_X3.crt
+X-TOI-EXPURGATEID: 150726::1637420688-00001454-C9AFF3DF/0/0 CLEAN NORMAL
+X-TOI-MSGID: 1227ce6e-ad03-49f8-9a9f-35f77865ebe2
+Subject: [Buildroot] [PATCH/next 1/2] package/x265: bump version to 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,50 +61,534 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thijs Vermeir <thijsvermeir@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUGV0ZXIsIFlhbm4sCgpMZSAyMC8xMS8yMDIxIMOgIDA5OjUwLCBZYW5uIEUuIE1PUklO
-IGEgw6ljcml0wqA6Cj4gUGV0ZXIsIFJvbWFpbiwgQWxsLAo+IAo+IE9uIDIwMjEtMTEtMTggMTM6
-MjIgKzAxMDAsIFBldGVyIEtvcnNnYWFyZCBzcGFrZSB0aHVzbHk6Cj4+Pj4+Pj4gIlJvbWFpbiIg
-PT0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPiB3cml0ZXM6Cj4+ICA+PiA+
-IGh0dHBzOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzY5NDA4Nzc2L2hvdy10by1mb3Jj
-ZS1vbGRlci1kZWJpYW4tdG8tZm9yZ2V0LWFib3V0LWRzdC1yb290LWNhLXgzLWV4cGlyYXRpb24t
-YW5kLXVzZS1pc3JnCj4+ICA+PiA+IFNpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWlu
-Lm5hb3VyQGdtYWlsLmNvbT4KPj4gID4+ID4gQ2M6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4u
-MTk5OEBmcmVlLmZyPgo+PiAgPj4gPiAtLS0KPj4gID4+ID4gQmFja3BvcnQgdGhpcyBwYXRjaCBm
-b3IgMjAyMS4wOC54IGFuZCAyMDIxLjAyLnggdXNpbmcgYnVpbGRyb290L2Jhc2U6MjAyMDA4MTQu
-MjIyOAo+PiAgPj4gCj4+ICA+PiBIb3cgZG9lcyB0aGlzIGFjdHVhbGx5IHdvcms/IFdobyBidWls
-ZHMgdGhhdCBjb250YWluZXI/IERvIHdlIG5vdCBuZWVkCj4+ICA+PiBhIGNvcnJlc3BvbmRpbmcg
-dXBkYXRlIG9mIC5naXRsYWItY2kueW1sIHRoZW4/Cj4+Cj4+ICA+IFdlbGwsIHVzdWFsbHkgaXQn
-cyBBcm5vdXQgb3IgWWFubiB0aGF0IGJ1aWxkIGFuZCBwdXNoIGNvbnRhaW5lcnMgdG8gZG9ja2Vy
-aHViLgo+PiAgPiBPbiBtYXN0ZXIgd2UgcmVjZW50bHkgc3dpdGNoZWQgdG8gZ2l0bGFiIHJlZ2lz
-dHJ5LCBzbyBtYWludGFpbmVycyBhbmQgZGV2ZWxvcGVycwo+PiAgPiBvZiBCdWlsZHJvb3QgZ2l0
-bGFiIHByb2plY3QgY2FuIHVwZGF0ZSBjb250YWluZXJzLgo+Pgo+PiAgPiBUaGUgLmdpdGxhYi1j
-aS55bWwgaXMgY2hhbmdlZCBhcyBzb29uIGFzIHRoZSBjb250YWluZXIgaXMgcmVidWlsZCB1c2lu
-ZyB0aGUKPj4gID4gdXBkYXRlZCBEb2NrZXJmaWxlIChhZnRlciB0aGUgY29tbWl0IG9mIERvY2tl
-cmZpbGUgY2hhbmdlKS4KPj4KPj4gT2ssIHNvIGFsbCBtYW51YWxseS4KPj4KPj4gID4+IDIwMjEt
-MTEtMTggMDk6MjA6MTAgKDE2LjUgTUIvcykgLSAnYWFyY2g2NC0tZ2xpYmMtLWJsZWVkaW5nLWVk
-Z2UtMjAyMC4wOC0xLnRhci5iejInIHNhdmVkIFsxMjc0NTY1NjMvMTI3NDU2NTYzXQo+PiAgPj4g
-Cj4+ICA+IEluZGVlZCBidXQgd2UgbWF5IGludHJvZHVjZSBzb21lICh1bmxpa2VseSkgcmVncmVz
-c2lvbiBpbiB0aGUgdGVzdHN1aXRlLgo+Pgo+PiBJZiB0aGVyZSBhcmUgcmVncmVzc2lvbnMsIHRo
-ZW4gaXQgd291bGQgYmUgYmV0dGVyIHRvIGhhbmRsZSB0aGVtIGFzCj4+IHBlb3BsZSBtaWdodCBy
-dW4gaW50byB0aGUgc2FtZSBpc3N1ZXMuIERlYmlhbiA5IGlzIG9sZCwgbm8gbWF0dGVyIGlmIHdl
-Cj4+IGxvb2sgYXQgdGhlIDIwMTcgc25hcHNob3Qgb3IgdGhlIGxhc3QgYnVnZml4ICgyMDIwKSwg
-c28gSSB0ZXN0aW5nCj4+IGFnYWluc3QgdGhhdCBtaWdodCBiZSB0aGUgYmVzdCBzb2x1dGlvbj8K
-PiAKPiBJIHdhcyBub3Qgc3VyZSBTdHJldGNoIHdhcyBzdGlsbCBtYWludGFpbmVkIChJIGRpZCBu
-b3QgZXZlbiBjaGVjayksIGJ1dAo+IG5vdyBJIHRlc3RlZCB0aGUgc3RyZXRjaC0yMDIxMTExNSBz
-bmFwc2hvdCwgYW5kIGluZGVlZCB0aGUgY2VydGlmaWNhdGUKPiBpc3N1ZSBpcyBubyBsb25nZXIu
-Cj4gCj4gVGhlIHJpc2sgb2YgcmVncmVzc2lvbmkgaWYgd2UgdXBkYXRlIGlzIHZlcnkgbG93LCBi
-ZWNhdXNlIERlYmlhbiByZWFsbHkKPiBpcyBzdGFibGU7IGFmdGVyIDQgeWVhcnMgb2YgbWFpbnRl
-bmFuY2UsIHRoZXJlIGlzIG5vdCBtYW55IHRoaW5ncyB0aGF0Cj4gbW92ZSBhbnltb3JlLgo+IAo+
-IFNvIEkgYWdyZWUgdGhhdCB1cGRhdGluZyB0byB0aGUgbGF0ZXN0IHN0cmV0Y2ggaW1hZ2UgaXMg
-YmV0dGVyIHRoYW4KPiBoYWNraW5nIG91ciB3YXlzIGJ5IHJlbW92aW5nIHNvbWUgY2VydGlmaWNh
-dGUuCgpPSywgY2FuIHlvdSB1cGRhdGUgdGhlIGRvY2tlciBpbWFnZSA/CgpCZXN0IHJlZ2FyZHMs
-ClJvbWFpbgoKCj4gCj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklOLgo+IAoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Rebased patch 0001 based on Gentoo patch
+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch
+
+Removed patch 0002, a different fix was applied upstream:
+https://bitbucket.org/multicoreware/x265_git/commits/ec7396adaa6afd2c8aab1918cfe4bb6e384740c3
+
+Update project URL and _SITE.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x265/0001-fix-gcc-options.patch    |  78 +++--
+ package/x265/0002-arm-asm-primitives.patch | 354 ---------------------
+ package/x265/Config.in                     |   2 +-
+ package/x265/x265.hash                     |   6 +-
+ package/x265/x265.mk                       |   4 +-
+ 5 files changed, 63 insertions(+), 381 deletions(-)
+ delete mode 100644 package/x265/0002-arm-asm-primitives.patch
+
+diff --git a/package/x265/0001-fix-gcc-options.patch b/package/x265/0001-fix-gcc-options.patch
+index 81518212b4..0283da25ea 100644
+--- a/package/x265/0001-fix-gcc-options.patch
++++ b/package/x265/0001-fix-gcc-options.patch
+@@ -17,36 +17,72 @@ Backported from upstream pull request:
+ https://bitbucket.org/multicoreware/x265/pull-requests/21
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 3.5 based on
++ https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch]
+ 
+ diff -r 58dddcf01b7d source/CMakeLists.txt
+ --- a/source/CMakeLists.txt	Mon Jan 23 09:50:33 2017 +0530
+ +++ b/source/CMakeLists.txt	Mon Jan 23 21:03:10 2017 +0100
+-@@ -194,28 +194,6 @@
+-     if(NATIVE_BUILD)
+-         if(INTEL_CXX)
+-             add_definitions(-xhost)
++@@ -40,7 +40,7 @@ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_
++ # System architecture detection
++ string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
++ set(X86_ALIASES x86 i386 i686 x86_64 amd64)
++-set(ARM_ALIASES armv6l armv7l aarch64)
+++set(ARM_ALIASES armv6l armv6l armv7l armv7a aarch64)
++ list(FIND X86_ALIASES "${SYSPROC}" X86MATCH)
++ list(FIND ARM_ALIASES "${SYSPROC}" ARMMATCH)
++ set(POWER_ALIASES ppc64 ppc64le)
++@@ -239,11 +239,7 @@ if(GCC)
++         endif()
++     endif()
++     if(ARM AND CROSS_COMPILE_ARM)
++-        if(ARM64)
++-            set(ARM_ARGS -fPIC)
+ -        else()
+--            add_definitions(-march=native)
+--        endif()
+--    elseif(X86 AND NOT X64)
+--        string(FIND "${CMAKE_CXX_FLAGS}" "-march" marchPos)
+--        if(marchPos LESS "0")
+--            add_definitions(-march=i686)
+--            if(WIN32 AND NOT INTEL_CXX AND NOT CLANG AND
+--               CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
+--                add_definitions(-mpreferred-stack-boundary=2)
+--            endif()
++-            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+ -        endif()
+--    endif()
+--    if(ARM AND CROSS_COMPILE_ARM)
+++        set(ARM_ARGS -fPIC)
++         message(STATUS "cross compile arm")
++     elseif(ARM)
++         if(ARM64)
++@@ -252,10 +248,10 @@ if(GCC)
++         else()
++             find_package(Neon)
++             if(CPU_HAS_NEON)
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+++                set(ARM_ARGS -mfpu=neon -fPIC)
++                 add_definitions(-DHAVE_NEON)
++             else()
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++	        set(ARM_ARGS -fPIC)
++             endif()
++         endif()
++     endif()
++--- a/source/dynamicHDR10/CMakeLists.txt
+++++ b/source/dynamicHDR10/CMakeLists.txt
++@@ -43,14 +43,14 @@ if(GCC)
++         endif()
++     endif()
++     if(ARM AND CROSS_COMPILE_ARM)
+ -        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+--    elseif(ARM)
+--        find_package(Neon)
+--        if(CPU_HAS_NEON)
+++        set(ARM_ARGS -fPIC)
++     elseif(ARM)
++         find_package(Neon)
++         if(CPU_HAS_NEON)
+ -            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+--            add_definitions(-DHAVE_NEON)
+--        else()
+++            set(ARM_ARGS -fPIC)
++             add_definitions(-DHAVE_NEON)
++         else()
+ -            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++            set(ARM_ARGS -fPIC)
+          endif()
+      endif()
+      add_definitions(${ARM_ARGS})
++@@ -150,4 +150,4 @@ set(BIN_INSTALL_DIR bin CACHE STRING "Install location of executables")
++ option(ENABLE_SHARED "Build shared library" OFF)
++ 
++ install(FILES hdr10plus.h DESTINATION include)
++-endif()
++\ No newline at end of file
+++endif()
++
+diff --git a/package/x265/0002-arm-asm-primitives.patch b/package/x265/0002-arm-asm-primitives.patch
+deleted file mode 100644
+index e500443429..0000000000
+--- a/package/x265/0002-arm-asm-primitives.patch
++++ /dev/null
+@@ -1,354 +0,0 @@
+-Fixes "arm assembly fail to compile on 1.8"
+-
+-Downloaded from upstream bug report:
+-https://bitbucket.org/multicoreware/x265/issues/406
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+---- ./source/common/arm/asm-primitives.cpp.orig	2018-05-21 02:33:10.000000000 -0600
+-+++ ./source/common/arm/asm-primitives.cpp	2018-05-28 20:38:37.302378303 -0600
+-@@ -48,77 +48,77 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.ssim_4x4x2_core = PFX(ssim_4x4x2_core_neon);
+- 
+-         // addAvg
+--         p.pu[LUMA_4x4].addAvg   = PFX(addAvg_4x4_neon);
+--         p.pu[LUMA_4x8].addAvg   = PFX(addAvg_4x8_neon);
+--         p.pu[LUMA_4x16].addAvg  = PFX(addAvg_4x16_neon);
+--         p.pu[LUMA_8x4].addAvg   = PFX(addAvg_8x4_neon);
+--         p.pu[LUMA_8x8].addAvg   = PFX(addAvg_8x8_neon);
+--         p.pu[LUMA_8x16].addAvg  = PFX(addAvg_8x16_neon);
+--         p.pu[LUMA_8x32].addAvg  = PFX(addAvg_8x32_neon);
+--         p.pu[LUMA_12x16].addAvg = PFX(addAvg_12x16_neon);
+--         p.pu[LUMA_16x4].addAvg  = PFX(addAvg_16x4_neon);
+--         p.pu[LUMA_16x8].addAvg  = PFX(addAvg_16x8_neon);
+--         p.pu[LUMA_16x12].addAvg = PFX(addAvg_16x12_neon);
+--         p.pu[LUMA_16x16].addAvg = PFX(addAvg_16x16_neon);
+--         p.pu[LUMA_16x32].addAvg = PFX(addAvg_16x32_neon);
+--         p.pu[LUMA_16x64].addAvg = PFX(addAvg_16x64_neon);
+--         p.pu[LUMA_24x32].addAvg = PFX(addAvg_24x32_neon);
+--         p.pu[LUMA_32x8].addAvg  = PFX(addAvg_32x8_neon);
+--         p.pu[LUMA_32x16].addAvg = PFX(addAvg_32x16_neon);
+--         p.pu[LUMA_32x24].addAvg = PFX(addAvg_32x24_neon);
+--         p.pu[LUMA_32x32].addAvg = PFX(addAvg_32x32_neon);
+--         p.pu[LUMA_32x64].addAvg = PFX(addAvg_32x64_neon);
+--         p.pu[LUMA_48x64].addAvg = PFX(addAvg_48x64_neon);
+--         p.pu[LUMA_64x16].addAvg = PFX(addAvg_64x16_neon);
+--         p.pu[LUMA_64x32].addAvg = PFX(addAvg_64x32_neon);
+--         p.pu[LUMA_64x48].addAvg = PFX(addAvg_64x48_neon);
+--         p.pu[LUMA_64x64].addAvg = PFX(addAvg_64x64_neon);
+-+         p.pu[LUMA_4x4].addAvg[ALIGNED]   = PFX(addAvg_4x4_neon);
+-+         p.pu[LUMA_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+-+         p.pu[LUMA_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+-+         p.pu[LUMA_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+-+         p.pu[LUMA_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+-+         p.pu[LUMA_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+-+         p.pu[LUMA_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+-+         p.pu[LUMA_12x16].addAvg[ALIGNED] = PFX(addAvg_12x16_neon);
+-+         p.pu[LUMA_16x4].addAvg[ALIGNED]  = PFX(addAvg_16x4_neon);
+-+         p.pu[LUMA_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+-+         p.pu[LUMA_16x12].addAvg[ALIGNED] = PFX(addAvg_16x12_neon);
+-+         p.pu[LUMA_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+-+         p.pu[LUMA_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+-+         p.pu[LUMA_16x64].addAvg[ALIGNED] = PFX(addAvg_16x64_neon);
+-+         p.pu[LUMA_24x32].addAvg[ALIGNED] = PFX(addAvg_24x32_neon);
+-+         p.pu[LUMA_32x8].addAvg[ALIGNED]  = PFX(addAvg_32x8_neon);
+-+         p.pu[LUMA_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+-+         p.pu[LUMA_32x24].addAvg[ALIGNED] = PFX(addAvg_32x24_neon);
+-+         p.pu[LUMA_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+-+         p.pu[LUMA_32x64].addAvg[ALIGNED] = PFX(addAvg_32x64_neon);
+-+         p.pu[LUMA_48x64].addAvg[ALIGNED] = PFX(addAvg_48x64_neon);
+-+         p.pu[LUMA_64x16].addAvg[ALIGNED] = PFX(addAvg_64x16_neon);
+-+         p.pu[LUMA_64x32].addAvg[ALIGNED] = PFX(addAvg_64x32_neon);
+-+         p.pu[LUMA_64x48].addAvg[ALIGNED] = PFX(addAvg_64x48_neon);
+-+         p.pu[LUMA_64x64].addAvg[ALIGNED] = PFX(addAvg_64x64_neon);
+- 
+-         // chroma addAvg
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg   = PFX(addAvg_4x2_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg   = PFX(addAvg_4x4_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg   = PFX(addAvg_4x8_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg  = PFX(addAvg_4x16_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg   = PFX(addAvg_6x8_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg   = PFX(addAvg_8x2_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg   = PFX(addAvg_8x4_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg   = PFX(addAvg_8x6_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg   = PFX(addAvg_8x8_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg  = PFX(addAvg_8x16_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg  = PFX(addAvg_8x32_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg = PFX(addAvg_12x16_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg  = PFX(addAvg_16x4_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg  = PFX(addAvg_16x8_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg = PFX(addAvg_16x12_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg = PFX(addAvg_16x16_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg = PFX(addAvg_16x32_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg = PFX(addAvg_24x32_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg  = PFX(addAvg_32x8_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg = PFX(addAvg_32x16_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg = PFX(addAvg_32x24_neon);
+--        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg = PFX(addAvg_32x32_neon);
+--
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg   = PFX(addAvg_4x8_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg  = PFX(addAvg_4x16_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg  = PFX(addAvg_4x32_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg  = PFX(addAvg_6x16_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg   = PFX(addAvg_8x4_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg   = PFX(addAvg_8x8_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg  = PFX(addAvg_8x12_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg  = PFX(addAvg_8x16_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg  = PFX(addAvg_8x32_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg  = PFX(addAvg_8x64_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg = PFX(addAvg_12x32_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg  = PFX(addAvg_16x8_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg = PFX(addAvg_16x16_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg = PFX(addAvg_16x24_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg = PFX(addAvg_16x32_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg = PFX(addAvg_16x64_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg = PFX(addAvg_24x64_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg = PFX(addAvg_32x16_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg = PFX(addAvg_32x32_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg = PFX(addAvg_32x48_neon);
+--        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg = PFX(addAvg_32x64_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg[ALIGNED]   = PFX(addAvg_4x2_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg[ALIGNED]   = PFX(addAvg_4x4_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg[ALIGNED]   = PFX(addAvg_6x8_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg[ALIGNED]   = PFX(addAvg_8x2_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg[ALIGNED]   = PFX(addAvg_8x6_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg[ALIGNED] = PFX(addAvg_12x16_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg[ALIGNED]  = PFX(addAvg_16x4_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg[ALIGNED] = PFX(addAvg_16x12_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg[ALIGNED] = PFX(addAvg_24x32_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg[ALIGNED]  = PFX(addAvg_32x8_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg[ALIGNED] = PFX(addAvg_32x24_neon);
+-+        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+-+
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg[ALIGNED]  = PFX(addAvg_4x32_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg[ALIGNED]  = PFX(addAvg_6x16_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg[ALIGNED]  = PFX(addAvg_8x12_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg[ALIGNED]  = PFX(addAvg_8x64_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg[ALIGNED] = PFX(addAvg_12x32_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg[ALIGNED] = PFX(addAvg_16x24_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg[ALIGNED] = PFX(addAvg_16x64_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg[ALIGNED] = PFX(addAvg_24x64_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg[ALIGNED] = PFX(addAvg_32x48_neon);
+-+        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg[ALIGNED] = PFX(addAvg_32x64_neon);
+- 
+-         // quant
+-          p.quant = PFX(quant_neon);
+-@@ -402,7 +402,7 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.scale2D_64to32  = PFX(scale2D_64to32_neon);
+- 
+-         // scale1D_128to64
+--        p.scale1D_128to64 = PFX(scale1D_128to64_neon);
+-+        p.scale1D_128to64[ALIGNED] = PFX(scale1D_128to64_neon);
+- 
+-         // copy_count
+-         p.cu[BLOCK_4x4].copy_cnt     = PFX(copy_cnt_4_neon);
+-@@ -411,37 +411,37 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.cu[BLOCK_32x32].copy_cnt   = PFX(copy_cnt_32_neon);
+- 
+-         // filterPixelToShort
+--        p.pu[LUMA_4x4].convert_p2s   = PFX(filterPixelToShort_4x4_neon);
+--        p.pu[LUMA_4x8].convert_p2s   = PFX(filterPixelToShort_4x8_neon);
+--        p.pu[LUMA_4x16].convert_p2s  = PFX(filterPixelToShort_4x16_neon);
+--        p.pu[LUMA_8x4].convert_p2s   = PFX(filterPixelToShort_8x4_neon);
+--        p.pu[LUMA_8x8].convert_p2s   = PFX(filterPixelToShort_8x8_neon);
+--        p.pu[LUMA_8x16].convert_p2s  = PFX(filterPixelToShort_8x16_neon);
+--        p.pu[LUMA_8x32].convert_p2s  = PFX(filterPixelToShort_8x32_neon);
+--        p.pu[LUMA_12x16].convert_p2s = PFX(filterPixelToShort_12x16_neon);
+--        p.pu[LUMA_16x4].convert_p2s  = PFX(filterPixelToShort_16x4_neon);
+--        p.pu[LUMA_16x8].convert_p2s  = PFX(filterPixelToShort_16x8_neon);
+--        p.pu[LUMA_16x12].convert_p2s = PFX(filterPixelToShort_16x12_neon);
+--        p.pu[LUMA_16x16].convert_p2s = PFX(filterPixelToShort_16x16_neon);
+--        p.pu[LUMA_16x32].convert_p2s = PFX(filterPixelToShort_16x32_neon);
+--        p.pu[LUMA_16x64].convert_p2s = PFX(filterPixelToShort_16x64_neon);
+--        p.pu[LUMA_24x32].convert_p2s = PFX(filterPixelToShort_24x32_neon);
+--        p.pu[LUMA_32x8].convert_p2s  = PFX(filterPixelToShort_32x8_neon);
+--        p.pu[LUMA_32x16].convert_p2s = PFX(filterPixelToShort_32x16_neon);
+--        p.pu[LUMA_32x24].convert_p2s = PFX(filterPixelToShort_32x24_neon);
+--        p.pu[LUMA_32x32].convert_p2s = PFX(filterPixelToShort_32x32_neon);
+--        p.pu[LUMA_32x64].convert_p2s = PFX(filterPixelToShort_32x64_neon);
+--        p.pu[LUMA_48x64].convert_p2s = PFX(filterPixelToShort_48x64_neon);
+--        p.pu[LUMA_64x16].convert_p2s = PFX(filterPixelToShort_64x16_neon);
+--        p.pu[LUMA_64x32].convert_p2s = PFX(filterPixelToShort_64x32_neon);
+--        p.pu[LUMA_64x48].convert_p2s = PFX(filterPixelToShort_64x48_neon);
+--        p.pu[LUMA_64x64].convert_p2s = PFX(filterPixelToShort_64x64_neon);
+-+        p.pu[LUMA_4x4].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_4x4_neon);
+-+        p.pu[LUMA_4x8].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_4x8_neon);
+-+        p.pu[LUMA_4x16].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_4x16_neon);
+-+        p.pu[LUMA_8x4].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_8x4_neon);
+-+        p.pu[LUMA_8x8].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_8x8_neon);
+-+        p.pu[LUMA_8x16].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_8x16_neon);
+-+        p.pu[LUMA_8x32].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_8x32_neon);
+-+        p.pu[LUMA_12x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_12x16_neon);
+-+        p.pu[LUMA_16x4].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_16x4_neon);
+-+        p.pu[LUMA_16x8].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_16x8_neon);
+-+        p.pu[LUMA_16x12].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x12_neon);
+-+        p.pu[LUMA_16x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x16_neon);
+-+        p.pu[LUMA_16x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x32_neon);
+-+        p.pu[LUMA_16x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x64_neon);
+-+        p.pu[LUMA_24x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_24x32_neon);
+-+        p.pu[LUMA_32x8].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_32x8_neon);
+-+        p.pu[LUMA_32x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x16_neon);
+-+        p.pu[LUMA_32x24].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x24_neon);
+-+        p.pu[LUMA_32x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x32_neon);
+-+        p.pu[LUMA_32x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x64_neon);
+-+        p.pu[LUMA_48x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_48x64_neon);
+-+        p.pu[LUMA_64x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x16_neon);
+-+        p.pu[LUMA_64x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x32_neon);
+-+        p.pu[LUMA_64x48].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x48_neon);
+-+        p.pu[LUMA_64x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x64_neon);
+- 
+-         // Block_fill
+--        p.cu[BLOCK_4x4].blockfill_s   = PFX(blockfill_s_4x4_neon);
+--        p.cu[BLOCK_8x8].blockfill_s   = PFX(blockfill_s_8x8_neon);
+--        p.cu[BLOCK_16x16].blockfill_s = PFX(blockfill_s_16x16_neon);
+--        p.cu[BLOCK_32x32].blockfill_s = PFX(blockfill_s_32x32_neon);
+-+        p.cu[BLOCK_4x4].blockfill_s[ALIGNED]   = PFX(blockfill_s_4x4_neon);
+-+        p.cu[BLOCK_8x8].blockfill_s[ALIGNED]   = PFX(blockfill_s_8x8_neon);
+-+        p.cu[BLOCK_16x16].blockfill_s[ALIGNED] = PFX(blockfill_s_16x16_neon);
+-+        p.cu[BLOCK_32x32].blockfill_s[ALIGNED] = PFX(blockfill_s_32x32_neon);
+- 
+-         // Blockcopy_ss
+-         p.cu[BLOCK_4x4].copy_ss   = PFX(blockcopy_ss_4x4_neon);
+-@@ -495,21 +495,21 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].copy_sp = PFX(blockcopy_sp_32x64_neon);
+- 
+-         // pixel_add_ps
+--        p.cu[BLOCK_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
+--        p.cu[BLOCK_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
+--        p.cu[BLOCK_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
+--        p.cu[BLOCK_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
+--        p.cu[BLOCK_64x64].add_ps = PFX(pixel_add_ps_64x64_neon);
+-+        p.cu[BLOCK_4x4].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+-+        p.cu[BLOCK_8x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+-+        p.cu[BLOCK_16x16].add_ps[ALIGNED] = PFX(pixel_add_ps_16x16_neon);
+-+        p.cu[BLOCK_32x32].add_ps[ALIGNED] = PFX(pixel_add_ps_32x32_neon);
+-+        p.cu[BLOCK_64x64].add_ps[ALIGNED] = PFX(pixel_add_ps_64x64_neon);
+- 
+-         // chroma add_ps
+--        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
+--        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
+--        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
+--        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
+--        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps   = PFX(pixel_add_ps_4x8_neon);
+--        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps  = PFX(pixel_add_ps_8x16_neon);
+--        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps = PFX(pixel_add_ps_16x32_neon);
+--        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps = PFX(pixel_add_ps_32x64_neon);
+-+        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+-+        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+-+        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps[ALIGNED] = PFX(pixel_add_ps_16x16_neon);
+-+        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps[ALIGNED] = PFX(pixel_add_ps_32x32_neon);
+-+        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x8_neon);
+-+        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps[ALIGNED]  = PFX(pixel_add_ps_8x16_neon);
+-+        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps[ALIGNED] = PFX(pixel_add_ps_16x32_neon);
+-+        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps[ALIGNED] = PFX(pixel_add_ps_32x64_neon);
+- 
+-         // cpy2Dto1D_shr
+-         p.cu[BLOCK_4x4].cpy2Dto1D_shr   = PFX(cpy2Dto1D_shr_4x4_neon);
+-@@ -518,10 +518,10 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.cu[BLOCK_32x32].cpy2Dto1D_shr = PFX(cpy2Dto1D_shr_32x32_neon);
+- 
+-         // ssd_s
+--        p.cu[BLOCK_4x4].ssd_s   = PFX(pixel_ssd_s_4x4_neon);
+--        p.cu[BLOCK_8x8].ssd_s   = PFX(pixel_ssd_s_8x8_neon);
+--        p.cu[BLOCK_16x16].ssd_s = PFX(pixel_ssd_s_16x16_neon);
+--        p.cu[BLOCK_32x32].ssd_s = PFX(pixel_ssd_s_32x32_neon);
+-+        p.cu[BLOCK_4x4].ssd_s[ALIGNED]   = PFX(pixel_ssd_s_4x4_neon);
+-+        p.cu[BLOCK_8x8].ssd_s[ALIGNED]   = PFX(pixel_ssd_s_8x8_neon);
+-+        p.cu[BLOCK_16x16].ssd_s[ALIGNED] = PFX(pixel_ssd_s_16x16_neon);
+-+        p.cu[BLOCK_32x32].ssd_s[ALIGNED] = PFX(pixel_ssd_s_32x32_neon);
+- 
+-         // sse_ss
+-         p.cu[BLOCK_4x4].sse_ss   = PFX(pixel_sse_ss_4x4_neon);
+-@@ -548,10 +548,10 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].sub_ps = PFX(pixel_sub_ps_32x64_neon);
+- 
+-         // calc_Residual
+--        p.cu[BLOCK_4x4].calcresidual   = PFX(getResidual4_neon);
+--        p.cu[BLOCK_8x8].calcresidual   = PFX(getResidual8_neon);
+--        p.cu[BLOCK_16x16].calcresidual = PFX(getResidual16_neon);
+--        p.cu[BLOCK_32x32].calcresidual = PFX(getResidual32_neon);
+-+        p.cu[BLOCK_4x4].calcresidual[ALIGNED]   = PFX(getResidual4_neon);
+-+        p.cu[BLOCK_8x8].calcresidual[ALIGNED]   = PFX(getResidual8_neon);
+-+        p.cu[BLOCK_16x16].calcresidual[ALIGNED] = PFX(getResidual16_neon);
+-+        p.cu[BLOCK_32x32].calcresidual[ALIGNED] = PFX(getResidual32_neon);
+- 
+-         // sse_pp
+-         p.cu[BLOCK_4x4].sse_pp   = PFX(pixel_sse_pp_4x4_neon);
+-@@ -722,31 +722,31 @@ void setupAssemblyPrimitives(EncoderPrim
+-         p.pu[LUMA_64x64].sad_x4 = PFX(sad_x4_64x64_neon);
+- 
+-         // pixel_avg_pp
+--        p.pu[LUMA_4x4].pixelavg_pp   = PFX(pixel_avg_pp_4x4_neon);
+--        p.pu[LUMA_4x8].pixelavg_pp   = PFX(pixel_avg_pp_4x8_neon);
+--        p.pu[LUMA_4x16].pixelavg_pp  = PFX(pixel_avg_pp_4x16_neon);
+--        p.pu[LUMA_8x4].pixelavg_pp   = PFX(pixel_avg_pp_8x4_neon);
+--        p.pu[LUMA_8x8].pixelavg_pp   = PFX(pixel_avg_pp_8x8_neon);
+--        p.pu[LUMA_8x16].pixelavg_pp  = PFX(pixel_avg_pp_8x16_neon);
+--        p.pu[LUMA_8x32].pixelavg_pp  = PFX(pixel_avg_pp_8x32_neon);
+--        p.pu[LUMA_12x16].pixelavg_pp = PFX(pixel_avg_pp_12x16_neon);
+--        p.pu[LUMA_16x4].pixelavg_pp  = PFX(pixel_avg_pp_16x4_neon);
+--        p.pu[LUMA_16x8].pixelavg_pp  = PFX(pixel_avg_pp_16x8_neon);
+--        p.pu[LUMA_16x12].pixelavg_pp = PFX(pixel_avg_pp_16x12_neon);
+--        p.pu[LUMA_16x16].pixelavg_pp = PFX(pixel_avg_pp_16x16_neon);
+--        p.pu[LUMA_16x32].pixelavg_pp = PFX(pixel_avg_pp_16x32_neon);
+--        p.pu[LUMA_16x64].pixelavg_pp = PFX(pixel_avg_pp_16x64_neon);
+--        p.pu[LUMA_24x32].pixelavg_pp = PFX(pixel_avg_pp_24x32_neon);
+--        p.pu[LUMA_32x8].pixelavg_pp  = PFX(pixel_avg_pp_32x8_neon);
+--        p.pu[LUMA_32x16].pixelavg_pp = PFX(pixel_avg_pp_32x16_neon);
+--        p.pu[LUMA_32x24].pixelavg_pp = PFX(pixel_avg_pp_32x24_neon);
+--        p.pu[LUMA_32x32].pixelavg_pp = PFX(pixel_avg_pp_32x32_neon);
+--        p.pu[LUMA_32x64].pixelavg_pp = PFX(pixel_avg_pp_32x64_neon);
+--        p.pu[LUMA_48x64].pixelavg_pp = PFX(pixel_avg_pp_48x64_neon);
+--        p.pu[LUMA_64x16].pixelavg_pp = PFX(pixel_avg_pp_64x16_neon);
+--        p.pu[LUMA_64x32].pixelavg_pp = PFX(pixel_avg_pp_64x32_neon);
+--        p.pu[LUMA_64x48].pixelavg_pp = PFX(pixel_avg_pp_64x48_neon);
+--        p.pu[LUMA_64x64].pixelavg_pp = PFX(pixel_avg_pp_64x64_neon);
+-+        p.pu[LUMA_4x4].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_4x4_neon);
+-+        p.pu[LUMA_4x8].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_4x8_neon);
+-+        p.pu[LUMA_4x16].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_4x16_neon);
+-+        p.pu[LUMA_8x4].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_8x4_neon);
+-+        p.pu[LUMA_8x8].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_8x8_neon);
+-+        p.pu[LUMA_8x16].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_8x16_neon);
+-+        p.pu[LUMA_8x32].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_8x32_neon);
+-+        p.pu[LUMA_12x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_12x16_neon);
+-+        p.pu[LUMA_16x4].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_16x4_neon);
+-+        p.pu[LUMA_16x8].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_16x8_neon);
+-+        p.pu[LUMA_16x12].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x12_neon);
+-+        p.pu[LUMA_16x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x16_neon);
+-+        p.pu[LUMA_16x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x32_neon);
+-+        p.pu[LUMA_16x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x64_neon);
+-+        p.pu[LUMA_24x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_24x32_neon);
+-+        p.pu[LUMA_32x8].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_32x8_neon);
+-+        p.pu[LUMA_32x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x16_neon);
+-+        p.pu[LUMA_32x24].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x24_neon);
+-+        p.pu[LUMA_32x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x32_neon);
+-+        p.pu[LUMA_32x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x64_neon);
+-+        p.pu[LUMA_48x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_48x64_neon);
+-+        p.pu[LUMA_64x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x16_neon);
+-+        p.pu[LUMA_64x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x32_neon);
+-+        p.pu[LUMA_64x48].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x48_neon);
+-+        p.pu[LUMA_64x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x64_neon);
+- 
+-         // planecopy
+-         p.planecopy_cp = PFX(pixel_planecopy_cp_neon);
+diff --git a/package/x265/Config.in b/package/x265/Config.in
+index 180931db66..1067505d31 100644
+--- a/package/x265/Config.in
++++ b/package/x265/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
+ 	  General Public License (GPL) 2 license or a commercial
+ 	  license, similar to the x264 project.
+ 
+-	  https://bitbucket.org/multicoreware/x265/wiki/Home
++	  https://bitbucket.org/multicoreware/x265_git/wiki/Home
+ 
+ if BR2_PACKAGE_X265
+ 
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 3d70ac0c67..fb9a5b5910 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,5 +1,5 @@
+-# From https://mailman.videolan.org/pipermail/x265-devel/2020-February/012880.html
+-md5  0c8c747b59b5411dea8cf557554636c1  x265_3.3.tar.gz
++# From https://mailman.videolan.org/pipermail/x265-devel/2021-March/013257.html
++md5  deb5df5cb2ec17bdbae6ac6bbc3b1eef  x265_3.5.tar.gz
+ # Locally generated
+-sha256  f26e148ed1f4dfb33fd1eb3ff5e60e08078d1b2017e88bcbb045b3fb58300b9c  x265_3.3.tar.gz
++sha256  e70a3335cacacbba0b3a20ec6fecd6783932288ebc8163ad74bcc9606477cae8  x265_3.5.tar.gz
+ sha256  d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 872753eea8..85c4ade768 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-X265_VERSION = 3.3
++X265_VERSION = 3.5
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+-X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
++X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
+ X265_LICENSE = GPL-2.0+
+ X265_LICENSE_FILES = COPYING
+ X265_CPE_ID_VENDOR = multicorewareinc
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
