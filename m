@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61420C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9173C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21AC9401F9;
-	Mon,  6 Dec 2021 18:38:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D7A960D68;
+	Mon,  6 Dec 2021 18:38:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q5sPHXLeiVuK; Mon,  6 Dec 2021 18:37:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lMQ3xjwPoCxj; Mon,  6 Dec 2021 18:38:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85ABB401D5;
-	Mon,  6 Dec 2021 18:37:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F261860D63;
+	Mon,  6 Dec 2021 18:38:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F06A1BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 375AA1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BFBA41C6D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E08141C10
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 25mvRLeymQUV for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+ with ESMTP id DaEqtIXJa2hp for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31B7541C10
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55D7841C52
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BDDB781468; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
+ id F1DA281468; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 14:52:05 +0100
+Date: Sun, 21 Nov 2021 21:48:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d3a43f23f88aab33d645c81dd46a9fc5f23cd80
-X-Git-Newrev: d6e79bde26cd723f8843f7604292304b356a9369
+X-Git-Oldrev: 724bc9b83d48d8fc6849aff1e4740404dadbf81b
+X-Git-Newrev: 7093957e9b52bb87a97249a276c0c4f86b7a410d
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180740.BDDB781468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ytree: bump version to 2.04
+Message-Id: <20211206180740.F1DA281468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x265: enable parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6e79bde26cd723f8843f7604292304b356a9369
+commit: https://git.buildroot.net/buildroot/commit/?id=7093957e9b52bb87a97249a276c0c4f86b7a410d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://www.han.de/~werner/ytree.html
+Parallel builds were disabled in 2018:
+https://git.buildroot.net/buildroot/commit/?id=03bfbc5ab26c9aed0c0cfce55341a1d1f05deca3
+
+Build-testing the version bump to 3.5 showed no errors with 32 threads.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ytree/ytree.hash | 2 +-
- package/ytree/ytree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x265/x265.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
-index 17d0d24c74..88ca8282bf 100644
---- a/package/ytree/ytree.hash
-+++ b/package/ytree/ytree.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  583aa71552d1347e0eabe39a236fa5a174bf67dde98871853b9fe2a233bcaef1  ytree-2.03.tar.gz
-+sha256  6e7a8b7f68efe6d365abe33a1d06d739ad85f22a3d54ddd0aec24a3478d66642  ytree-2.04.tar.gz
- sha256  eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
-diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
-index fdecc0b19b..a64ebe83ed 100644
---- a/package/ytree/ytree.mk
-+++ b/package/ytree/ytree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 85c4ade768..51c39df4cd 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -12,7 +12,6 @@ X265_LICENSE_FILES = COPYING
+ X265_CPE_ID_VENDOR = multicorewareinc
+ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
+-X265_MAKE = $(MAKE1)
  
--YTREE_VERSION = 2.03
-+YTREE_VERSION = 2.04
- YTREE_SITE = https://www.han.de/~werner
- YTREE_LICENSE = GPL-2.0+
- YTREE_LICENSE_FILES = COPYING
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-nasm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
