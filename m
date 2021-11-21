@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C7EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 13:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED19CC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 13:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0ACE480E28;
-	Sun, 21 Nov 2021 13:53:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F58A40286;
+	Sun, 21 Nov 2021 13:54:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gh656rr26Vql; Sun, 21 Nov 2021 13:53:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZfLTMjXKQ6Aj; Sun, 21 Nov 2021 13:54:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C28B80DA0;
-	Sun, 21 Nov 2021 13:53:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 16DD51BF964
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CEF34026F;
+	Sun, 21 Nov 2021 13:54:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 257FB1BF95F
  for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C780280F39
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:53:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E8B440124
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:53:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MFrxG5peX6_T for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LmEPIGPrWpBs for <buildroot@lists.busybox.net>;
  Sun, 21 Nov 2021 13:53:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2EB5A814B4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41A6F400C8
  for <buildroot@buildroot.org>; Sun, 21 Nov 2021 13:53:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id ACFF78DC04; Sun, 21 Nov 2021 13:48:44 +0000 (UTC)
+ id C051D8DC03; Sun, 21 Nov 2021 13:48:44 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 14:52:03 +0100
+Date: Sun, 21 Nov 2021 14:52:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5373215617d5e9747335ec3354207933a4bd9ba5
-X-Git-Newrev: c95b9b98b811fcad463890ac6e57ff9eb5008967
+X-Git-Oldrev: 7d3a43f23f88aab33d645c81dd46a9fc5f23cd80
+X-Git-Newrev: d6e79bde26cd723f8843f7604292304b356a9369
 X-Patchwork-Hint: ignore
-Message-Id: <20211121134844.ACFF78DC04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcodec2: bump
- version to 1.0.1
+Message-Id: <20211121134844.C051D8DC03@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ytree: bump version to
+ 2.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c95b9b98b811fcad463890ac6e57ff9eb5008967
+commit: https://git.buildroot.net/buildroot/commit/?id=d6e79bde26cd723f8843f7604292304b356a9369
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Reformatted hashes.
-
-Release notes:
-https://github.com/drowe67/codec2/releases/tag/v1.0.1
+Release notes: https://www.han.de/~werner/ytree.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcodec2/libcodec2.hash | 4 ++--
- package/libcodec2/libcodec2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ytree/ytree.hash | 2 +-
+ package/ytree/ytree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcodec2/libcodec2.hash b/package/libcodec2/libcodec2.hash
-index ec4f1f1a32..795ca37006 100644
---- a/package/libcodec2/libcodec2.hash
-+++ b/package/libcodec2/libcodec2.hash
+diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
+index 17d0d24c74..88ca8282bf 100644
+--- a/package/ytree/ytree.hash
++++ b/package/ytree/ytree.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 19181a446f4df3e6d616b50cabdac4485abb9cd3242cf312a0785f892ed4c76c  libcodec2-0.9.2.tar.gz
--sha256 9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
-+sha256  14227963940d79e0ec5af810f37101b30e1c7e8555abd96c56b3c0473abac8ef  libcodec2-1.0.1.tar.gz
-+sha256  9ebb6f82b7380a62ac74c5f0322c88e6744dedf2ebe1f54d6f088282b39844bf  COPYING
-diff --git a/package/libcodec2/libcodec2.mk b/package/libcodec2/libcodec2.mk
-index 8410ffc90a..b4f08a496e 100644
---- a/package/libcodec2/libcodec2.mk
-+++ b/package/libcodec2/libcodec2.mk
+-sha256  583aa71552d1347e0eabe39a236fa5a174bf67dde98871853b9fe2a233bcaef1  ytree-2.03.tar.gz
++sha256  6e7a8b7f68efe6d365abe33a1d06d739ad85f22a3d54ddd0aec24a3478d66642  ytree-2.04.tar.gz
+ sha256  eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
+diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
+index fdecc0b19b..a64ebe83ed 100644
+--- a/package/ytree/ytree.mk
++++ b/package/ytree/ytree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCODEC2_VERSION = 0.9.2
-+LIBCODEC2_VERSION = 1.0.1
- LIBCODEC2_SITE = $(call github,drowe67,codec2,v$(LIBCODEC2_VERSION))
- LIBCODEC2_LICENSE = LGPL-2.1
- LIBCODEC2_LICENSE_FILES = COPYING
+-YTREE_VERSION = 2.03
++YTREE_VERSION = 2.04
+ YTREE_SITE = https://www.han.de/~werner
+ YTREE_LICENSE = GPL-2.0+
+ YTREE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
