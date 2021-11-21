@@ -1,51 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F0F1C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 21:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27B99C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 21:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B222A607D1;
-	Sun, 21 Nov 2021 21:28:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEFD040283;
+	Sun, 21 Nov 2021 21:28:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xAslNx8rKD_e; Sun, 21 Nov 2021 21:28:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w8X6qhgBZ0Qs; Sun, 21 Nov 2021 21:28:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 135F9607CF;
-	Sun, 21 Nov 2021 21:28:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C4A21BF3BB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:28:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CEC434019D;
+	Sun, 21 Nov 2021 21:28:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 32A201BF3BB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:28:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CA3180F3B
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:28:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DE9B4019D
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:28:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x2a3ODJPa0zo for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 21:28:07 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF70D80F36
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 21:28:06 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 20FC320007;
- Sun, 21 Nov 2021 21:28:05 +0000 (UTC)
-Date: Sun, 21 Nov 2021 22:28:04 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NdgvrH3xY8FD for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 21:28:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4583240153
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 21:28:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 11E958E49A; Sun, 21 Nov 2021 21:24:19 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>
-Message-ID: <20211121222804.71784787@windsurf>
-In-Reply-To: <20211118174547.3939-1-vincent.stehle@arm.com>
-References: <20211118174547.3939-1-vincent.stehle@arm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/uboot-tools: add support for
- mkeficapsule
+To: buildroot@buildroot.org
+Date: Sun, 21 Nov 2021 22:28:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 73248c03fd04eddad78fea5096cd98b2a2d43e81
+X-Git-Newrev: c224e7e5c673b8a9c7eb7f3def1a2df2e959df4d
+X-Patchwork-Hint: ignore
+Message-Id: <20211121212419.11E958E49A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot: kconfig needs the toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,25 +52,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAxOCBOb3YgMjAyMSAxODo0NTo0NyArMDEwMApWaW5jZW50IFN0ZWhsw6kgPHZpbmNl
-bnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgoKPiBUaGUgbWtlZmljYXBzdWxlIFUtQm9vdCB0b29s
-IGNhbiBiZSB1c2VkIHRvIGdlbmVyYXRlIFVFRkkgY2Fwc3VsZSBiaW5hcmllcy4KPiBBZGQgYW4g
-b3B0aW9uIHRvIGNyb3NzLWJ1aWxkIGl0IGFuZCBpbnN0YWxsIGl0IHRvIHRoZSB0YXJnZXQgZmls
-ZXN5c3RlbS4KPiBBbHNvLCBidWlsZCBpdCBhbmQgaW5zdGFsbCBpdCB1bmNvbmRpdGlvbmFsbHkg
-dG8gdGhlIGhvc3QgZGlyLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmlu
-Y2VudC5zdGVobGVAYXJtLmNvbT4KPiBDYzogTWF0dCBXZWJlciA8bWF0dGhldy53ZWJlckBjb2xs
-aW5zLmNvbT4KPiAtLS0KPiAgcGFja2FnZS91Ym9vdC10b29scy9Db25maWcuaW4gICAgICB8ICA4
-ICsrKysrKysrCj4gIHBhY2thZ2UvdWJvb3QtdG9vbHMvdWJvb3QtdG9vbHMubWsgfCAxOSArKysr
-KysrKysrKysrKysrKystCj4gIDIgZmlsZXMgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwgMSBk
-ZWxldGlvbigtKQoKQXBwbGllZCB0byBuZXh0LCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQ
-ZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVy
-aW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=c224e7e5c673b8a9c7eb7f3def1a2df2e959df4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Starting with uboot 2021.10, with upstream commit 473fc279c89 (kconfig /
+kbuild: Re-sync with Linux 4.20), the kconfig in uboot now needs the
+compiler to detect its features.
+
+Like was done for linux in 3fc990a7983 (linux: kconfig needs the
+toolchain) and barebox in 1c1a629d814 (boot/barebox: kconfig needs the
+toolchain), add the toolchain to the kconfig dependencies of uboot.
+
+Reported-by: Davian on IRC
+Reported-by: Xogium on IRC
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/uboot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a10e224501..9661f901ea 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -525,7 +525,11 @@ UBOOT_DEPENDENCIES += \
+ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
++# Starting with 2021.10, the kconfig in uboot calls the cross-compiler
++# to check its capabilities. So we need the toolchain before we can
++# call the configurators.
+ UBOOT_KCONFIG_DEPENDENCIES += \
++	toolchain \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
