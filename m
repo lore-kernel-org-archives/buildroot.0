@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D31EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60167C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF19440461;
-	Sun, 21 Nov 2021 20:36:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1A6D403A7;
+	Sun, 21 Nov 2021 20:37:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c78H144GWth6; Sun, 21 Nov 2021 20:37:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0331A401B9;
+	Sun, 21 Nov 2021 20:37:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AD801BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77DC74045F
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CFg4DQ29yXBc; Sun, 21 Nov 2021 20:36:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 234D04045F;
-	Sun, 21 Nov 2021 20:36:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE7011BF3EB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:36:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE7A180E6F
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:36:41 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nj2jykFgf7E5 for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 20:36:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9968080E12
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:36:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 8848E1BF205;
- Sun, 21 Nov 2021 20:36:37 +0000 (UTC)
-Date: Sun, 21 Nov 2021 21:36:36 +0100
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZQtQPvYE-xy9 for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 20:37:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D86124045D
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:37:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id BB89D8DC36; Sun, 21 Nov 2021 20:32:50 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211121213636.385049f0@windsurf>
-In-Reply-To: <20211120111727.2884761-1-fontaine.fabrice@gmail.com>
-References: <20211120111727.2884761-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cycler: set license to
- BSD-3-Clause
+To: buildroot@buildroot.org
+Date: Sun, 21 Nov 2021 21:37:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df729d9c250845dd23235ae3014a0bf2791b4bb6
+X-Git-Newrev: eaaa756bbe0cfaf572ff74372f418e0a8fe47912
+X-Patchwork-Hint: ignore
+Message-Id: <20211121203250.BB89D8DC36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qdecoder: set license to
+ BSD-2-Clause
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,32 +53,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Nov 2021 12:17:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=eaaa756bbe0cfaf572ff74372f418e0a8fe47912
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> License is BSD-3-Clause since the addition of the package in commit
-> e96c1b244e4283f5c8596728423c4d3b8a6487cb and
-> https://github.com/matplotlib/cycler/commit/a1c8a50ce79d37517d58552d8f0ee8f41f4ba9be
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-cycler/python-cycler.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Set license to BSD-2-Clause instead of BSD-2
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qdecoder/qdecoder.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index 12784fc451..8cb5d3bc97 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
+@@ -6,7 +6,7 @@
+ 
+ QDECODER_VERSION = 12.0.8
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+-QDECODER_LICENSE = BSD-2
++QDECODER_LICENSE = BSD-2-Clause
+ QDECODER_LICENSE_FILES = COPYING
+ QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
