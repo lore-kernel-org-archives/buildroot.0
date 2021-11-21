@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2800C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 160DEC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D69B60D62;
-	Mon,  6 Dec 2021 18:26:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D20A082862;
+	Mon,  6 Dec 2021 18:26:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YRX7MBH9dkOZ; Mon,  6 Dec 2021 18:26:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iL900nLudbd5; Mon,  6 Dec 2021 18:26:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD318607AB;
-	Mon,  6 Dec 2021 18:26:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B1091BF3F2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3581E82893;
+	Mon,  6 Dec 2021 18:26:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E326C1BF3F2
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF2D041C22
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8290360D76
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WY_iSYhrYeVM for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Quo1-9BtUVdU for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D12F41C21
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4D2160D69
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 23B9A81504; Mon,  6 Dec 2021 18:07:38 +0000 (UTC)
+ id 80C2981468; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Nov 2021 15:09:58 +0100
+Date: Sun, 21 Nov 2021 14:49:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd06a3b9b507b14f3cf69f45ed165d132790ad75
-X-Git-Newrev: c8bff717dfbde3c461a8fad3409293e7fccee621
+X-Git-Oldrev: 0db05a3d0a57187a017199aad66e97645078f3a1
+X-Git-Newrev: 76a9c46b766e093ebb2e1705a5448fd9469e121c
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180738.23B9A81504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ima-evm-utils: bump version to 1.4
+Message-Id: <20211206180740.80C2981468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.4.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8bff717dfbde3c461a8fad3409293e7fccee621
+commit: https://git.buildroot.net/buildroot/commit/?id=76a9c46b766e093ebb2e1705a5448fd9469e121c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37388106/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ima-evm-utils/ima-evm-utils.hash | 4 ++--
- package/ima-evm-utils/ima-evm-utils.mk   | 2 +-
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-index 2cdba227ad..2267a59b79 100644
---- a/package/ima-evm-utils/ima-evm-utils.hash
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 9935858b20..3d4c3da3dc 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
 @@ -1,4 +1,4 @@
- # sha1 from sourceforge, sha256 locally computed
--sha1  034d163533ae5f9c06001b375ec7e5a1b09a3853  ima-evm-utils-1.3.2.tar.gz
--sha256 c2b206e7f9fbe62a938b7ae59e31906fefae4d5351fe01db739bd8346b75d4a7  ima-evm-utils-1.3.2.tar.gz
-+sha1  f23d8a406759a469b0223b0bfb302ada4407a1d1  ima-evm-utils-1.4.tar.gz
-+sha256 fcf85b31d6292051b3679e5f17ffa7f89b6898957aad0f59aa4e9878884b27d1  ima-evm-utils-1.4.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index cc53e02dd6..7ee34d5e1a 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37376434/
+-sha256  5f7a5e13731431134a2ca535bbced7adc666d3aeb93169a0830945d91f492300  fetchmail-6.4.23.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37388106/
++sha256  9c961df25cd922f539218b0b56a77e7a47778e49ed907edaa5b4941ad3b253cf  fetchmail-6.4.24.tar.xz
+ # Locally computed:
+ sha256  001d1b8d111a83e3bab8b4d511ea4767d37d3bd0583560fccece630df1ba8f3c  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index c909bb5cfb..7d6be71954 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMA_EVM_UTILS_VERSION = 1.3.2
-+IMA_EVM_UTILS_VERSION = 1.4
- IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
- IMA_EVM_UTILS_LICENSE = GPL-2.0
- IMA_EVM_UTILS_LICENSE_FILES = COPYING
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).23
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).24
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
