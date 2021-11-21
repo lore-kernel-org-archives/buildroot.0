@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE7B6C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26CB0C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 745B641C3B;
-	Mon,  6 Dec 2021 18:36:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF95A41C13;
+	Mon,  6 Dec 2021 18:36:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Py6BaIm8s5MA; Mon,  6 Dec 2021 18:36:36 +0000 (UTC)
+	with ESMTP id EJQkoB3JPrPN; Mon,  6 Dec 2021 18:36:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCCFA41C13;
-	Mon,  6 Dec 2021 18:36:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 479B641C73;
+	Mon,  6 Dec 2021 18:36:47 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0ED901BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0ECBE1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6524E41C64
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7070F41C45
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MT6J7eV6mNZm for <buildroot@lists.busybox.net>;
+ with ESMTP id sIdmeIIGRogo for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF95641C2B
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16BF141C35
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8A05B81503; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
+ id 9F98F81061; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 14:51:59 +0100
+Date: Sun, 21 Nov 2021 14:52:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76a9c46b766e093ebb2e1705a5448fd9469e121c
-X-Git-Newrev: 93dec5ec24cb909d42107658291494460f52a2cc
+X-Git-Oldrev: b5da5e55451d280fac82b97749bbb51f3e5213c6
+X-Git-Newrev: 5373215617d5e9747335ec3354207933a4bd9ba5
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180740.8A05B81503@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
- to 0.5.17
+Message-Id: <20211206180740.9F98F81061@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jsoncpp: bump version to 1.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +58,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93dec5ec24cb909d42107658291494460f52a2cc
+commit: https://git.buildroot.net/buildroot/commit/?id=5373215617d5e9747335ec3354207933a4bd9ba5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Updates license hash due to upstream whitespace fixes:
+https://github.com/open-source-parsers/jsoncpp/commit/be4a512887e350adc8b1ae19bc2cb81d15c8846f#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
+
 Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-October/000467.html
+https://github.com/open-source-parsers/jsoncpp/releases/tag/1.9.5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jsoncpp/jsoncpp.hash | 4 ++--
+ package/jsoncpp/jsoncpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 3b7c04834c..c70c48a5a8 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index 0070a1874e..99266ae42d 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
 @@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256  5ca36780e23b99e6206440f1b3fe3c6598eda5b699b99cebb15d418ba3c6e938  dovecot-2.3-pigeonhole-0.5.16.tar.gz
-+sha256  031e823966c53121e289b3ecdcfa4bc35ed9d22ecbf5d93a8eb140384e78d648  dovecot-2.3-pigeonhole-0.5.17.tar.gz
- sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 490bad35c6..dddb7f31e0 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+ # Locally computed
+-sha256  e34a628a8142643b976c7233ef381457efad79468c67cb1ae0b83a33d7493999  jsoncpp-1.9.4.tar.gz
+-sha256  95039d77a20e75b428207740d9a8f97b2dce3c89da4b21f1ad862b5997160e0a  LICENSE
++sha256  f409856e5920c18d0c2fb85276e24ee607d2a09b5e7d5f0a371368903c275da2  jsoncpp-1.9.5.tar.gz
++sha256  cec0db5f6d7ed6b3a72647bd50aed02e13c3377fd44382b96dc2915534c042ad  LICENSE
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 829459df4d..e7022bfd39 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.16
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.17
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+-JSONCPP_VERSION = 1.9.4
++JSONCPP_VERSION = 1.9.5
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
