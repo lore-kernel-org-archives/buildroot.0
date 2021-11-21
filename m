@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C900C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 13:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2831EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 13:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11EFD80F06;
-	Sun, 21 Nov 2021 13:51:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D555F606C0;
+	Sun, 21 Nov 2021 13:51:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yYBgrlmc-NZN; Sun, 21 Nov 2021 13:51:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DS_CgdLZ_woH; Sun, 21 Nov 2021 13:51:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9D280F12;
-	Sun, 21 Nov 2021 13:51:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D3601BF964
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:50:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CB03607A8;
+	Sun, 21 Nov 2021 13:51:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E7B0D1BF25B
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2BA7340124
+ by smtp3.osuosl.org (Postfix) with ESMTP id D58D460775
  for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 13:50:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4feXbn3KsQbt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5YQU-FKSRNyQ for <buildroot@lists.busybox.net>;
  Sun, 21 Nov 2021 13:50:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A1E1400C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F10E606C0
  for <buildroot@buildroot.org>; Sun, 21 Nov 2021 13:50:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A79838D367; Sun, 21 Nov 2021 13:46:09 +0000 (UTC)
+ id 8A9A88D367; Sun, 21 Nov 2021 13:46:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 14:49:52 +0100
+Date: Sun, 21 Nov 2021 14:49:49 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5563869d26e47e89cd56c6ddf256358e2c2b8cda
-X-Git-Newrev: 0db05a3d0a57187a017199aad66e97645078f3a1
+X-Git-Oldrev: 033ef8497aba5a87e3812ca474af2320fbabe72f
+X-Git-Newrev: 147e2a27151f5e35311f66e374f0ec5ea9c10505
 X-Patchwork-Hint: ignore
-Message-Id: <20211121134609.A79838D367@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediasdk: bump
- version to 21.4.1
+Message-Id: <20211121134609.8A9A88D367@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/jpeg-turbo: bump
+ version to 2.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0db05a3d0a57187a017199aad66e97645078f3a1
+commit: https://git.buildroot.net/buildroot/commit/?id=147e2a27151f5e35311f66e374f0ec5ea9c10505
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Changelogs:
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.0
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.1
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.2
+
+Updated license hashes due to upstream commits:
+https://github.com/libjpeg-turbo/libjpeg-turbo/commits/main/LICENSE.md
+https://github.com/libjpeg-turbo/libjpeg-turbo/commits/main/README.ijg
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediasdk/intel-mediasdk.hash | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 12 ++++++------
+ package/jpeg-turbo/jpeg-turbo.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index 8143867995..69a7422741 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 1a22b1d6ff..de82199659 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/
+-sha1  5406c7676d7df89fb4da791ad5af51202910fb25  libjpeg-turbo-2.0.6.tar.gz
+-md5  4cada3f0bdc93d826fa31bf9e4469ef6  libjpeg-turbo-2.0.6.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.2/
++sha1  65c51c543b1fbba6db9ff5bee474ccb0b52a929f  libjpeg-turbo-2.1.2.tar.gz
++md5  e181bd78884dd5392a869209bfa41d4a  libjpeg-turbo-2.1.2.tar.gz
  # Locally computed
--sha256  3f13869298d3946d7d91e58846e274ef62cd5af2473f59f36b57b2c27ebfd87c  intel-mediasdk-21.3.5.tar.gz
-+sha256  d9358dc784c4146fd21faffbba03c304684978de1ce34d3714bd2c6b50233d14  intel-mediasdk-21.4.1.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index a0492412e8..57276bbd74 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
+-sha256  d74b92ac33b0e3657123ddcf6728788c90dc84dcb6a52013d758af3c4af481bb  libjpeg-turbo-2.0.6.tar.gz
+-sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
+-sha256  01ccef626ec864773c681d4a4056f72af9052d619e0609df0d369117f8b3efdf  README.ijg
++sha256  09b96cb8cbff9ea556a9c2d173485fd19488844d55276ed4f42240e1e2073ce5  libjpeg-turbo-2.1.2.tar.gz
++sha256  7d8683a7f048e715e08b4cada8b7f0d9a6ab8afad88ed09c1143ef764ecbc0f2  LICENSE.md
++sha256  4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 5c977dc029..ddae019839 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MEDIASDK_VERSION = 21.3.5
-+INTEL_MEDIASDK_VERSION = 21.4.1
- INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+-JPEG_TURBO_VERSION = 2.0.6
++JPEG_TURBO_VERSION = 2.1.2
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
