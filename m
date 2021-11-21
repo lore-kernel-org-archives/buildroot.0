@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39701C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980B0C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED0B780DA3;
-	Mon,  6 Dec 2021 18:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F22560D62;
+	Mon,  6 Dec 2021 18:39:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 78v6fD0hy0nI; Mon,  6 Dec 2021 18:38:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FS5SQnCIY1cc; Mon,  6 Dec 2021 18:39:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 483F880E54;
-	Mon,  6 Dec 2021 18:38:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AED8660D67;
+	Mon,  6 Dec 2021 18:39:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A9BA1BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A8781BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6E4D41C78
+ by smtp4.osuosl.org (Postfix) with ESMTP id B396841C76
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bz61gRpjhXww for <buildroot@lists.busybox.net>;
+ with ESMTP id Q3R-aH2Z-cqo for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB33441C3C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A89341C59
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4F02581468; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2F91281468; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Nov 2021 18:42:55 +0100
+Date: Sun, 21 Nov 2021 22:28:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07a9b860bed9bff7146b1889db046789b2f517f2
-X-Git-Newrev: 386cf00e6f32f3dd6d13ee38577d959dc4addc6f
+X-Git-Oldrev: a5cb09bf621e252091c5eba3982c568c3e4e5adc
+X-Git-Newrev: a4e462b1aed5bcb5629a4a606190877cbb8b3eb3
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180741.4F02581468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beagleboneai_defconfig: move to
- u-boot 2021.04 / mainline linux 5.10.79
+Message-Id: <20211206180741.2F91281468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
+ 3.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,24 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=386cf00e6f32f3dd6d13ee38577d959dc4addc6f
+commit: https://git.buildroot.net/buildroot/commit/?id=a4e462b1aed5bcb5629a4a606190877cbb8b3eb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This board is now supported by mainline u-boot and Linux.  For U-Boot we
-unfortunately still need a patch as the available (<rev A2) boards do not
-have an identification eeprom, causing boot failures.
-
-Use the workaround patch by Robert Nelson also used by the official bb.org
-builds.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../patches/uboot/0001-BeagleBone-AI-support.patch | 1783 --------------------
- .../patches/uboot/0001-am57xx_evm-fixes.patch      |  839 +++++++++
- configs/beagleboneai_defconfig                     |   11 +-
- 3 files changed, 845 insertions(+), 1788 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 777f19d6b9..60e64f54d4 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  7308590dbb95e77066b99c5674eed855c8257e70658d2af586f4a81ff0eea2b1  protobuf-cpp-3.18.0.tar.gz
++sha256  645192532f28254152b51c01868efdf9b766b1dbe49c77cccd6efcdb2d7c7bc2  protobuf-cpp-3.19.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index bb9c6bf37c..80764f0216 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 3.18.0
++PROTOBUF_VERSION = 3.19.1
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index e9a5ac4904..2bfef96676 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4f792034070915819065c162a310142d66835333824e2e0a2ca26ed54b013408  protobuf-python-3.18.0.tar.gz
++sha256  2286615a3ae3e24c3524d171b6728b77b72cd2f3aab905f6a8d3fcaf6209dd00  protobuf-python-3.19.1.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
