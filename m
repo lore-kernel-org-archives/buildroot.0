@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBFC6C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 319F9C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 893A380F3B;
-	Sun, 21 Nov 2021 20:47:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8207F607AE;
+	Sun, 21 Nov 2021 20:48:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fnv16dDtb2aL; Sun, 21 Nov 2021 20:47:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p4fSsFXTg6sM; Sun, 21 Nov 2021 20:48:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00F0180F3F;
-	Sun, 21 Nov 2021 20:47:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE8786069D;
+	Sun, 21 Nov 2021 20:48:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C08691BF3EB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:46:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1CDF21BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEA6260673
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:46:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C55D6069D
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:48:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yXWM-by_mKG2 for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 20:46:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CDD556069D
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:46:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id C77DEC000A;
- Sun, 21 Nov 2021 20:46:54 +0000 (UTC)
-Date: Sun, 21 Nov 2021 21:46:53 +0100
+ with ESMTP id L60wvUleVLvr for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 20:48:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6987060673
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:48:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 46C908DCA0; Sun, 21 Nov 2021 20:43:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Alexander Egorenkov <egorenar-dev@posteo.net>
-Message-ID: <20211121214653.30068d7c@windsurf>
-In-Reply-To: <20211120114729.10837-1-egorenar-dev@posteo.net>
-References: <20211120114729.10837-1-egorenar-dev@posteo.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/makedumpfile: bump to version
- 1.7.0
+To: buildroot@buildroot.org
+Date: Sun, 21 Nov 2021 21:48:15 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 724bc9b83d48d8fc6849aff1e4740404dadbf81b
+X-Git-Newrev: 7093957e9b52bb87a97249a276c0c4f86b7a410d
+X-Patchwork-Hint: ignore
+Message-Id: <20211121204358.46C908DCA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x265: enable parallel
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,31 +53,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Nov 2021 11:47:29 +0000
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7093957e9b52bb87a97249a276c0c4f86b7a410d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fixes:
-> - https://release-monitoring.org/project/131396/
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-> ---
->  package/makedumpfile/makedumpfile.hash | 2 +-
->  package/makedumpfile/makedumpfile.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Parallel builds were disabled in 2018:
+https://git.buildroot.net/buildroot/commit/?id=03bfbc5ab26c9aed0c0cfce55341a1d1f05deca3
 
-Applied to next, thanks.
+Build-testing the version bump to 3.5 showed no errors with 32 threads.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x265/x265.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 85c4ade768..51c39df4cd 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -12,7 +12,6 @@ X265_LICENSE_FILES = COPYING
+ X265_CPE_ID_VENDOR = multicorewareinc
+ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
+-X265_MAKE = $(MAKE1)
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-nasm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
