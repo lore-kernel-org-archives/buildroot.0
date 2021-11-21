@@ -1,50 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E79CC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 21:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E509FC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 21:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A505F80F29;
-	Sun, 21 Nov 2021 21:24:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E3AF40153;
+	Sun, 21 Nov 2021 21:27:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IcYh3Cuf52wL; Sun, 21 Nov 2021 21:24:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bgb7MtL5-N8Z; Sun, 21 Nov 2021 21:27:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1666180DEF;
-	Sun, 21 Nov 2021 21:24:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52D4A4019D;
+	Sun, 21 Nov 2021 21:27:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F5F01BF3BB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:24:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1036F1BF3BB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:27:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88349607CE
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:24:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3927607CF
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 21:27:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xaFN81i1SAom for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 21:24:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6571B607CA
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 21:24:14 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id B618C240006;
- Sun, 21 Nov 2021 21:24:12 +0000 (UTC)
-Date: Sun, 21 Nov 2021 22:24:12 +0100
+ with ESMTP id Zl5Hmx0iBhDV for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 21:27:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27755607CA
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 21:27:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E81018E29D; Sun, 21 Nov 2021 21:23:30 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211121222412.469aabf0@windsurf>
-In-Reply-To: <20211119080600.2347947-1-fontaine.fabrice@gmail.com>
-References: <20211119080600.2347947-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/strace: fix build with kernel
- >= 5.15
+To: buildroot@buildroot.org
+Date: Sun, 21 Nov 2021 22:25:37 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d55b228cb39b34164de8026da0642f2c7079cb82
+X-Git-Newrev: a5cb09bf621e252091c5eba3982c568c3e4e5adc
+X-Patchwork-Hint: ignore
+Message-Id: <20211121212330.E81018E29D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uboot-tools: add
+ support for mkeficapsule
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,39 +53,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6649359626538335053=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 19 Nov 2021 09:06:00 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============6649359626538335053==
+Content-Type: text/plain
 
-> Fix the following build failure with kernel >= 5.15:
-> 
-> net.c:34:11: fatal error: linux/ipx.h: No such file or directory
->    34 | # include <linux/ipx.h>
->       |           ^~~~~~~~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d413258fab75c12da29bddb7e0f9e133a34e0160
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...1-Avoid-relying-on-presence-of-ipx-h.patch | 149 ++++++++++++++++++
->  package/strace/strace.mk                      |   2 +
->  2 files changed, 151 insertions(+)
->  create mode 100644 package/strace/0001-Avoid-relying-on-presence-of-ipx-h.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=a5cb09bf621e252091c5eba3982c568c3e4e5adc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to master, thanks.
+The mkeficapsule U-Boot tool can be used to generate UEFI capsule binaries.
+Add an option to cross-build it and install it to the target filesystem.
+Also, build it and install it unconditionally to the host dir.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uboot-tools/Config.in      |  8 ++++++++
+ package/uboot-tools/uboot-tools.mk | 19 ++++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index 681f87b45f..e8bbf3a16e 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -66,6 +66,14 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+ 	  The mkimage tool from Das U-Boot bootloader, which allows
+ 	  generation of U-Boot images in various formats.
+ 
++config BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE
++	bool "mkeficapsule"
++	help
++	  Install the mkeficapsule tool on the target system
++
++	  The mkeficapsule tool from Das U-Boot bootloader, which allows
++	  generation of UEFI capsule binaries.
++
+ config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
+ 	bool "mkenvimage"
+ 	help
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 81f60963ec..37e329a2af 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -22,6 +22,8 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
+ 	touch $(@D)/include/config/auto.conf
+ 	mkdir -p $(@D)/include/generated
+ 	touch $(@D)/include/generated/autoconf.h
++	mkdir -p $(@D)/include/asm
++	touch $(@D)/include/asm/linkage.h
+ endef
+ 
+ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
+@@ -40,6 +42,10 @@ UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x
+ UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE),y)
++UBOOT_TOOLS_MAKE_OPTS += CONFIG_EFI_HAVE_CAPSULE_SUPPORT=y
++endif
++
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_CHECK_SIGN),y)
+ define UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(TARGET_DIR)/usr/bin/fit_check_sign
+@@ -59,6 +65,12 @@ define UBOOT_TOOLS_INSTALL_MKIMAGE
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE),y)
++define UBOOT_TOOLS_INSTALL_MKEFICAPSULE
++	$(INSTALL) -m 0755 -D $(@D)/tools/mkeficapsule $(TARGET_DIR)/usr/bin/mkeficapsule
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE),y)
+ define UBOOT_TOOLS_INSTALL_MKENVIMAGE
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(TARGET_DIR)/usr/bin/mkenvimage
+@@ -85,6 +97,7 @@ endef
+ 
+ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+ 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
++	$(UBOOT_TOOLS_INSTALL_MKEFICAPSULE)
+ 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
+ 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
+ 	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
+@@ -98,11 +111,14 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+ 	touch $(@D)/include/config/auto.conf
+ 	mkdir -p $(@D)/include/generated
+ 	touch $(@D)/include/generated/autoconf.h
++	mkdir -p $(@D)/include/asm
++	touch $(@D)/include/asm/linkage.h
+ endef
+ 
+ HOST_UBOOT_TOOLS_MAKE_OPTS = HOSTCC="$(HOSTCC)" \
+ 	HOSTCFLAGS="$(HOST_CFLAGS)" \
+-	HOSTLDFLAGS="$(HOST_LDFLAGS)"
++	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
++	CONFIG_EFI_HAVE_CAPSULE_SUPPORT=y
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
+ HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y CONFIG_MKIMAGE_DTC_PATH=dtc
+@@ -193,6 +209,7 @@ endef
+ 
+ define HOST_UBOOT_TOOLS_INSTALL_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/bin/mkimage
++	$(INSTALL) -m 0755 -D $(@D)/tools/mkeficapsule $(HOST_DIR)/bin/mkeficapsule
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/bin/mkenvimage
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/bin/dumpimage
+ 	$(HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE)
+
+--===============6649359626538335053==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6649359626538335053==--
