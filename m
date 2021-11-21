@@ -4,53 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E489C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 07:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5C4C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 07:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0B0E4047B;
-	Sun, 21 Nov 2021 07:01:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04F7F4047B;
+	Sun, 21 Nov 2021 07:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xTAc7nkURWS5; Sun, 21 Nov 2021 07:01:01 +0000 (UTC)
+	with ESMTP id jU8lIBg6BQdM; Sun, 21 Nov 2021 07:22:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 559584045B;
-	Sun, 21 Nov 2021 07:01:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C37951BF314
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 07:00:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44C9140439;
+	Sun, 21 Nov 2021 07:22:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CCA001BF2F8
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 07:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD3FC40160
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 07:00:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B5F1E606DE
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 07:22:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zn7gcDuEAK3H for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 07:00:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CAFDA400D7
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 07:00:57 +0000 (UTC)
-Received: from fwd89.dcpf.telekom.de (fwd89.aul.t-online.de [10.223.144.115])
- by mailout02.t-online.de (Postfix) with SMTP id 87D4E7FFE
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 08:00:17 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.197.220]) by fwd89.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mogpf-17XAll0; Sun, 21 Nov 2021 08:00:11 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51098)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mogpe-0001U2-Gz
- for buildroot@buildroot.org; Sun, 21 Nov 2021 08:00:10 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 08:00:10 +0100
-Message-Id: <20211121070010.199584-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yRmkVmuo1l5T for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 07:22:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 83767605E2
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 07:22:18 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a1df:22c7:4448:7943])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C458813F85F;
+ Sun, 21 Nov 2021 08:22:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1637479335;
+ bh=8vhMQYlBFs/By9vCWRDGlpEk6aHeouCpKrDcRJELrQY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uMp3WrUcp1cGzE3E+t/7D4elHwVqVWY6BWr7irOOTr9dKPjA9r9b6vf1ZmYDEVGvo
+ V/Iq7lXhkEGsddPgY5/VI4kJRp3jb8McG8YyxwbmbW+n9/Tmx6chNrJQT/xpGOQHQB
+ hdk8sy+c1U6gEgRzl9ARrJCaXOfSO6EwCi4X/jMXBGdss82DZGv1dA16cmtQf2hpoo
+ LXODMMPAltGWXU1rQyUwRbHmH9BPLt1JkrwnpKi6H76DSfahR4S/5+3N38PJ14StYT
+ if7dfLany9XQJ1xamZbBAienCW01deihuIb5D2HBzRw4kQfV/FtkHEexBUNYUqCfw4
+ frsG/8T0StxiA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 21 Nov 2021 08:22:11 +0100
+Date: Sun, 21 Nov 2021 08:22:11 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211121072211.GU247986@scaer>
+References: <20211120222857.3110528-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1637478011-0000145D-37BB3A2F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 561420c2-3295-4969-875d-9d4c680b1210
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-hts: bump version to
- 19.0.3-Matrix
+Content-Disposition: inline
+In-Reply-To: <20211120222857.3110528-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: mount /sys
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +71,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fabrice, All,
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index 3e309d55a5..4ac0f3e785 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9aaa8933a23bcdcdc4b4be6dd10adc19f5f27b8915fa5c39f58202c5d1399dc9  kodi-pvr-hts-19.0.2-Matrix.tar.gz
-+sha256  b97e48b70ab0c3769f0ab2c613ac3a0741a7751bb5bb20187bd47bc2a99d86d3  kodi-pvr-hts-19.0.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index eb331b8002..d1fc4d0ed2 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_HTS_VERSION = 19.0.2-Matrix
-+KODI_PVR_HTS_VERSION = 19.0.3-Matrix
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+On 2021-11-20 23:28 +0100, Fabrice Fontaine spake thusly:
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=14351
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/busybox/inittab | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/busybox/inittab b/package/busybox/inittab
+> index ff1725c775..22e63d1603 100644
+> --- a/package/busybox/inittab
+> +++ b/package/busybox/inittab
+
+You missed package/sysvinit/inittab
+
+But we already have /sys in package/skeleton-init-sysv/skeleton/etc/fstab
+so how is going to play together?
+
+Adn finalyl, the 1-cent question (I can't afford the one-million dollar
+question): how does thing happen with systemd? With openrc?
+
+Regards,
+Yann E. MORIN.
+
+> @@ -15,6 +15,7 @@
+>  
+>  # Startup the system
+>  ::sysinit:/bin/mount -t proc proc /proc
+> +::sysinit:/bin/mount -t sysfs sysfs /sys
+>  ::sysinit:/bin/mount -o remount,rw /
+>  ::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+>  ::sysinit:/bin/mount -a
+> -- 
+> 2.33.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.30.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
