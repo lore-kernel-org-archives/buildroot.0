@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6B96C43217
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44123C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78340401EF;
-	Mon,  6 Dec 2021 18:27:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09FE8403D7;
+	Mon,  6 Dec 2021 18:27:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7uHBAnsG6zhK; Mon,  6 Dec 2021 18:27:01 +0000 (UTC)
+	with ESMTP id jjK8h_k1muxx; Mon,  6 Dec 2021 18:27:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3590403D7;
-	Mon,  6 Dec 2021 18:27:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 527D041C6D;
+	Mon,  6 Dec 2021 18:27:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F33BD1BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F5BB1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F35060D77
+ by smtp3.osuosl.org (Postfix) with ESMTP id B515B60D67
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G2S1XLnvde_g for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ with ESMTP id xtm0l69TYpMa for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA0F060D67
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1711560D73
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 468DF81468; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id B4E1481504; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:34:33 +0100
+Date: Sun, 21 Nov 2021 14:52:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12c01079bdb4a82ac91dee3e9826b070faaddb78
-X-Git-Newrev: 033ef8497aba5a87e3812ca474af2320fbabe72f
+X-Git-Oldrev: c95b9b98b811fcad463890ac6e57ff9eb5008967
+X-Git-Newrev: 7d3a43f23f88aab33d645c81dd46a9fc5f23cd80
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180740.468DF81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: use libgbm virtual package
+Message-Id: <20211206180740.B4E1481504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.108
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=033ef8497aba5a87e3812ca474af2320fbabe72f
+commit: https://git.buildroot.net/buildroot/commit/?id=7d3a43f23f88aab33d645c81dd46a9fc5f23cd80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kodi needs gbm_bo_get_fd:
-https://github.com/xbmc/xbmc/blob/Matrix/xbmc/utils/GBMBufferObject.cpp#L54
+Updated license due to upstream commits:
+https://cgit.freedesktop.org/mesa/drm/log/xf86drm.c?h=main
+
+Release notes:
+https://lists.freedesktop.org/archives/dri-devel/2021-November/330279.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi/Config.in | 3 ++-
- package/kodi/kodi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash | 8 ++++----
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index af7604428e..e594219418 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -22,7 +22,8 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_MESA3D_GBM
-+	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index d3f35b3de0..ee14d4c124 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2021-July/313594.html
+-sha256  c554cef03b033636a975543eab363cc19081cb464595d3da1ec129f87370f888  libdrm-2.4.107.tar.xz
+-sha512  c7542ba15c4c934519a6a1f3cb1ec21effa820a805a030d0175313bb1cc796cd311f39596ead883f9f251679d701e262894c5a297d5cf45093c80a6cd818def0  libdrm-2.4.107.tar.xz
++# From https://lists.freedesktop.org/archives/dri-devel/2021-November/330279.html
++sha256  a1d7948cbc536763fde14b4beb5e4da7867607966d4cf46301087e8b8fe3d6a0  libdrm-2.4.108.tar.xz
++sha512  6a841dc3eb8eae7d75e1d35d23a14d51aff758e5a251dbcf6fc8c28d973d935a4a2f6751b405e956b2777d93c651721199ac80c3cd14b87d021668120d6bc974  libdrm-2.4.108.tar.xz
  
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 934cce6de2..a2c42b64c9 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -92,7 +92,7 @@ endif
+ # Hash for license file
+-sha256  7e952c6666ed17c99f91ee7af13c688b8769b0feaf6f4558bf6ad3e07512e1e6  xf86drm.c
++sha256  e64a695d0f18bfba26071afdfe19dd6ff4030d0dc1c47304059b724b23955ddb  xf86drm.c
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index c15be3e671..0e4029fed2 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM),y)
- KODI_CORE_PLATFORM_NAME += gbm
--KODI_DEPENDENCIES += libinput libxkbcommon mesa3d
-+KODI_DEPENDENCIES += libgbm libinput libxkbcommon
- endif
- 
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND),y)
+-LIBDRM_VERSION = 2.4.107
++LIBDRM_VERSION = 2.4.108
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
