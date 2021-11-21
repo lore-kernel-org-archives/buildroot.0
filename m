@@ -1,76 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB657C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 09:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1491C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 09:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41F4C81764;
-	Sun, 21 Nov 2021 09:30:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D8D460710;
+	Sun, 21 Nov 2021 09:38:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yhMPTTVKjeI6; Sun, 21 Nov 2021 09:30:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5PgsM--dmZdV; Sun, 21 Nov 2021 09:38:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 964638102A;
-	Sun, 21 Nov 2021 09:30:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4812460785;
+	Sun, 21 Nov 2021 09:38:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1EAF61BF2EB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 09:30:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8090D1BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 09:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E165403E7
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 09:30:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D00E402A1
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 09:38:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rJLw34d2RLyv for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 09:30:45 +0000 (UTC)
+ with ESMTP id PHmQXj4mwnw0 for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 09:38:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1039403D4
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 09:30:44 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id y26so65517035lfa.11
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 01:30:44 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 353C84024A
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 09:38:13 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id d24so26809769wra.0
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 01:38:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=mDap8SzAHE8uzHNx7o8k1gLMy+jfmDishTgrMx+UVP4=;
- b=IdKY4YORFQQR9udM6yL81RZBbCINYixtGoqOHvi7g+1XsUPUGxZlGy3234Ne/G6dWC
- 9bupRxshJ4czRyGJlEWhk4LP3iudw4QEq2B2Miq/KfYyy02b7wwG+hmGz2ztIROYyc5+
- Q28/klO95WGCnz0ntO8v0YbVn7YYoZAeqnCx5X2rTXqEaFRQKAT0Wd3LQ/zOk478Tqjg
- TQc63ijEsUox0BcKPAYBdvxm++o7ohu8LyOEjlqjHQEcun92hBzCUvVSap6EKWVnrV5Z
- 32+DH9wsNI1ckc39IKjNWsF/aJPvKCaTduE+8kz960Tl7PgxhadlIRak6JsJiw236gOG
- tx3w==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sJRO1YwpHsRQOSmZgM5AAv7zxKWu8UBPixXDoqyBT9s=;
+ b=kbb3ykbKMB0Sdt/jIbYkZcHNP4XAPJL9LutwRMSviebL5IzqQ9lwUeDNfyexDhg8Su
+ CBrknI2O0ZV+yHHOUMqGX8oehtIt3lTpeFg77+00xXu4VwWngeHnmoUfpBV1tZuL6NQk
+ Iiey9jFSwjPsku+mdDXjKNwFcZZ/W7yhDjmxXtbhASilDV/FPzJOEBIX6HESXL9P3KwD
+ xG1NWzIPoeADg8UqMVqn9xO1QiUMljU2Hhm1bOsCgsyGbU++AecbobpJGBXpKYUIJcL0
+ ITFVgy4lopU8+cZIY5ONINsjWLa7bVVxLKfdD/3rGuQwbv1i9AurhuE/yD++Ff5Xgp5r
+ i4Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=mDap8SzAHE8uzHNx7o8k1gLMy+jfmDishTgrMx+UVP4=;
- b=AsJTMDX56bZXEKgOP0zWcuksi329bStTa5U/utC/S9tbQYF9fyrsQ5sp3iHVToFr/H
- f4GN8peB5kd7Dg8HRMSScKLZGBZNaOfzJSWFRs4blyysb0oOhtgdJGmrKsQ5ll+wFiNc
- Tp0MmzpD69qrPbi2mCyHZhBbAKKUbexu3WojCfgtOqd/pbv1ggoFMTMHeucaYYhuIpxZ
- H6gP00AaggnhUKXO0tqXo2swZDm6WxTRpVfo1APgeicaLGU1cy8Dp8G3h3xcJGbrQaga
- IKlhIKT4CJUd/nHE3DiILUVv52+3ySAbdih10aYAU9EXKo2eP6264IGlisagKdoEYZfI
- pn7A==
-X-Gm-Message-State: AOAM530VxX0KbMyWfbXkZGZq0odATZHsjuE8/709H0oERhISIPM1WlC7
- N3/74i1OT/g5EfeEuHqX/CJ5cB16YJ+y0t4nvms=
-X-Google-Smtp-Source: ABdhPJxaBvMlqHsoXfX3Btmifz4+TQTUf7YXO6E7VzOXWR4K4TtYWtsLYCaW75G2lyNCXmJBVfLCNhP8Thk25Kn3nDc=
-X-Received: by 2002:a2e:b947:: with SMTP id 7mr42292176ljs.89.1637487042843;
- Sun, 21 Nov 2021 01:30:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20211120222857.3110528-1-fontaine.fabrice@gmail.com>
- <20211121072211.GU247986@scaer>
-In-Reply-To: <20211121072211.GU247986@scaer>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sJRO1YwpHsRQOSmZgM5AAv7zxKWu8UBPixXDoqyBT9s=;
+ b=W6Kn9dghCda3J5R1c3Zc99t/2HTn9n0SML+Cmf34AHKl7pHdbp3hzjIigQ67Fs8HRl
+ 4jbXnkp6J1kGtEtD0QL0T6X8yOC5EgmrjewqdHIrQb0ZxYhSesqDTX4qxmmU6GwiUAzv
+ y5bfNq5raNOHQXoMpImLvE+zKr2Q42ZfxP5B04TgqsfMT7slLgEo+4RcK3qlAi29GRrz
+ dlbl+ltkAJ0PF1hlfGOQVdqnyagDvJWAKq2/rassnyiM9tEXtODStT1zAx+mxmGp30oO
+ zcFsiYjsQHexUZeJNRzhRdqbTVWNPS9hnAM2/HxzHjOsckLkktVkBXXSPCjE9azm1U8h
+ GRIw==
+X-Gm-Message-State: AOAM531OqQEU3bZZrbX8taAaIwwStaYg5K1zh2qwP+fZsrbJs6RQ/snx
+ z+z0j6gQ3SJyD/prcKSS756Og2I0vp0=
+X-Google-Smtp-Source: ABdhPJzB63bGGYAwpfpyE9QuqZsTHkfNgUIBHmHxAAGy28yNOFsSpVFU/ZOBV8JDkZeF/MvCuDKTew==
+X-Received: by 2002:a5d:6351:: with SMTP id b17mr25386054wrw.151.1637487491097; 
+ Sun, 21 Nov 2021 01:38:11 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id f7sm22294518wmg.6.2021.11.21.01.38.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Nov 2021 01:38:10 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Nov 2021 10:28:17 +0100
-Message-ID: <CAPi7W821JT3=jukPMGRTumeBJYLDk-1RM6KNbiF0MxQgsH=4Zw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: mount /sys
+To: buildroot@buildroot.org
+Date: Sun, 21 Nov 2021 10:35:48 +0100
+Message-Id: <20211121093548.3425517-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/libgee: fix introspection build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,46 +84,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WWFubiwKCkxlIGRpbS4gMjEgbm92LiAyMDIxIMOgIDA4OjIyLCBZYW5uIEUuIE1PUklOIDx5YW5u
-Lm1vcmluLjE5OThAZnJlZS5mcj4gYSDDqWNyaXQgOgo+Cj4gRmFicmljZSwgQWxsLAo+Cj4gT24g
-MjAyMS0xMS0yMCAyMzoyOCArMDEwMCwgRmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4g
-PiBGaXhlczoKPiA+ICAtIGh0dHBzOi8vYnVncy5idWlsZHJvb3Qub3JnL3Nob3dfYnVnLmNnaT9p
-ZD0xNDM1MQo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5l
-LmZhYnJpY2VAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgcGFja2FnZS9idXN5Ym94L2luaXR0YWIg
-fCAxICsKPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiA+Cj4gPiBkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9idXN5Ym94L2luaXR0YWIgYi9wYWNrYWdlL2J1c3lib3gvaW5pdHRhYgo+
-ID4gaW5kZXggZmYxNzI1Yzc3NS4uMjJlNjNkMTYwMyAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2Uv
-YnVzeWJveC9pbml0dGFiCj4gPiArKysgYi9wYWNrYWdlL2J1c3lib3gvaW5pdHRhYgo+Cj4gWW91
-IG1pc3NlZCBwYWNrYWdlL3N5c3Zpbml0L2luaXR0YWIKPgo+IEJ1dCB3ZSBhbHJlYWR5IGhhdmUg
-L3N5cyBpbiBwYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdi9za2VsZXRvbi9ldGMvZnN0YWIKPiBz
-byBob3cgaXMgZ29pbmcgdG8gcGxheSB0b2dldGhlcj8KPgo+IEFkbiBmaW5hbHlsLCB0aGUgMS1j
-ZW50IHF1ZXN0aW9uIChJIGNhbid0IGFmZm9yZCB0aGUgb25lLW1pbGxpb24gZG9sbGFyCj4gcXVl
-c3Rpb24pOiBob3cgZG9lcyB0aGluZyBoYXBwZW4gd2l0aCBzeXN0ZW1kPyBXaXRoIG9wZW5yYz8K
-SW5kZWVkLCBJJ2xsIGJhY2twb3J0IHRoZSB0d28gdXBzdHJlYW0gcGF0Y2hlcyBvbiB1dGwtbGlu
-dXggaW5zdGVhZCBvZgptb3VudGluZyAvc3lzLgo+Cj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklO
-Lgo+Cj4gPiBAQCAtMTUsNiArMTUsNyBAQAo+ID4KPiA+ICAjIFN0YXJ0dXAgdGhlIHN5c3RlbQo+
-ID4gIDo6c3lzaW5pdDovYmluL21vdW50IC10IHByb2MgcHJvYyAvcHJvYwo+ID4gKzo6c3lzaW5p
-dDovYmluL21vdW50IC10IHN5c2ZzIHN5c2ZzIC9zeXMKPiA+ICA6OnN5c2luaXQ6L2Jpbi9tb3Vu
-dCAtbyByZW1vdW50LHJ3IC8KPiA+ICA6OnN5c2luaXQ6L2Jpbi9ta2RpciAtcCAvZGV2L3B0cyAv
-ZGV2L3NobQo+ID4gIDo6c3lzaW5pdDovYmluL21vdW50IC1hCj4gPiAtLQo+ID4gMi4zMy4wCj4g
-Pgo+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+
-IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPiBo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPgo+
-IC0tCj4gLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
-LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KPiB8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwt
-VGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAo+
-IHwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAg
-ICB8ICBfX18gICAgICAgICAgICAgICB8Cj4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0t
-LS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiB8IGh0
-dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAg
-IHYgICBjb25zcGlyYWN5LiAgfAo+ICctLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0t
-LS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCkJlc3QgUmVnYXJk
-cywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following build failure raised since the addition of
+introspection in commit 3915e17e7734ee3abe088d4ce1893eecd7cc4663:
+
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler -l `/usr/bin/sed -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libgee-0.8.la` -o Gee-0.8.typelib Gee-0.8.gir libgee-0.8.la
+Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+error parsing file Gee-0.8.gir: Failed to parse included gir GObject-2.0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/884faa0f84c8dc43ed1ca6cde9caf21c731a4b35
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...le.am-include-Makefile.introspection.patch | 40 +++++++++++++++++++
+ package/libgee/libgee.mk                      |  2 +
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+
+diff --git a/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch b/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+new file mode 100644
+index 0000000000..0906275ae3
+--- /dev/null
++++ b/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+@@ -0,0 +1,40 @@
++From d771e8ddb5e40f234459966e46880d10f34aaa1a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 20 Nov 2021 23:57:33 +0100
++Subject: [PATCH] gee/Makefile.am: include Makefile.introspection
++
++Include Makefile.introspection instead of using a custom rule which will
++result in the following build failure when cross-compiling on buildroot
++because of missing --includedir:
++
++/home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler -l `/usr/bin/sed -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libgee-0.8.la` -o Gee-0.8.typelib Gee-0.8.gir libgee-0.8.la
++Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
++error parsing file Gee-0.8.gir: Failed to parse included gir GObject-2.0
++
++Fixes:
++ - http://autobuild.buildroot.org/results/884faa0f84c8dc43ed1ca6cde9caf21c731a4b35
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/libgee/-/merge_requests/8]
++---
++ gee/Makefile.am | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/gee/Makefile.am b/gee/Makefile.am
++index 5634bcb..e0d950e 100644
++--- a/gee/Makefile.am
+++++ b/gee/Makefile.am
++@@ -167,7 +167,8 @@ INTROSPECTION_COMPILER_ARGS= \
++ 	-l $(libgee_dlname)
++ Gee-0.8.gir: libgee_0_8_la_vala.stamp
++ Gee-0.8.typelib: Gee-0.8.gir libgee-0.8.la
++-	@INTROSPECTION_COMPILER@ $(INTROSPECTION_COMPILER_ARGS) -o $@ $^
+++
+++-include $(INTROSPECTION_MAKEFILE)
++ endif
++ 
++ MOSTLYCLEANFILES = \
++-- 
++2.33.0
++
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 48bc9c9e41..0a05a63635 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -12,6 +12,8 @@ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+ LIBGEE_INSTALL_STAGING = YES
+ LIBGEE_LICENSE = LGPL-2.1+
+ LIBGEE_LICENSE_FILES = COPYING
++# We're patching gee/Makefile.am
++LIBGEE_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBGEE_CONF_OPTS += --enable-introspection
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
