@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0594AC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8020C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 21 Nov 2021 20:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F55C40463;
-	Sun, 21 Nov 2021 20:37:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A42680EE6;
+	Sun, 21 Nov 2021 20:37:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f7pyXbhxVCsy; Sun, 21 Nov 2021 20:37:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lgh2Imyb4E3K; Sun, 21 Nov 2021 20:37:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB56740460;
-	Sun, 21 Nov 2021 20:37:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ADFD61BF3EB
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A4F680E6F;
+	Sun, 21 Nov 2021 20:37:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 92DEB1BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C73F401B9
- for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 907EF80E6F
+ for <buildroot@lists.busybox.net>; Sun, 21 Nov 2021 20:37:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K_3tI3Q2o-8p for <buildroot@lists.busybox.net>;
- Sun, 21 Nov 2021 20:37:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4F1B40194
- for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:37:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A5C378DC3C; Sun, 21 Nov 2021 20:33:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ASTu3DC6RvO for <buildroot@lists.busybox.net>;
+ Sun, 21 Nov 2021 20:37:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC87C80E12
+ for <buildroot@buildroot.org>; Sun, 21 Nov 2021 20:37:49 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id CAB0B1BF207;
+ Sun, 21 Nov 2021 20:37:47 +0000 (UTC)
+Date: Sun, 21 Nov 2021 21:37:47 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 21:37:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eaaa756bbe0cfaf572ff74372f418e0a8fe47912
-X-Git-Newrev: e22572d1a109f4010c552d72e91da86a3fd1e3fa
-X-Patchwork-Hint: ignore
-Message-Id: <20211121203318.A5C378DC3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/asterisk: replace BSD-{3,4}c
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211121213747.4a631dc9@windsurf>
+In-Reply-To: <20211120112645.2885991-1-fontaine.fabrice@gmail.com>
+References: <20211120112645.2885991-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/asterisk: replace BSD-{3,4}c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,36 +56,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e22572d1a109f4010c552d72e91da86a3fd1e3fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Nov 2021 12:26:45 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Replace BSD-{3,4}c by BSD-{3,4}-Clause
+> Replace BSD-{3,4}c by BSD-{3,4}-Clause
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/asterisk/asterisk.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/asterisk/asterisk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index d3a1cd08ff..a8f9127c94 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -14,7 +14,7 @@ ASTERISK_EXTRA_DOWNLOADS = \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz
- 
--ASTERISK_LICENSE = GPL-2.0, BSD-3c (SHA1, resample), BSD-4c (db1-ast)
-+ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
- ASTERISK_LICENSE_FILES = \
- 	COPYING \
- 	main/sha1.c \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
