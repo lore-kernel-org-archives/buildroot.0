@@ -1,92 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844D2C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 20:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F980C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:03:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28D1F605EB;
-	Mon, 22 Nov 2021 20:53:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C477400FF;
+	Mon, 22 Nov 2021 21:03:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PhU7Qb0lBmkf; Mon, 22 Nov 2021 20:53:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UucyBLSBhxTU; Mon, 22 Nov 2021 21:02:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8030B60732;
-	Mon, 22 Nov 2021 20:53:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 681FE40235;
+	Mon, 22 Nov 2021 21:02:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E45C1BF5AD
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:53:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 739221BF5AD
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46E0540235
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:53:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61E0640235
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:02:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gSqdwVKevzpy for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 20:53:22 +0000 (UTC)
+ with ESMTP id BJlBshf9WO_r for <buildroot@lists.busybox.net>;
+ Mon, 22 Nov 2021 21:02:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1FFE2400FF
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 20:53:21 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id y12so82507428eda.12
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 12:53:21 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE2C3400FF
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:02:50 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id x6so70518406edr.5
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 13:02:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=SJPzUGBHKNbuyoqleN6wfIhA3WkzghIRVyP37xFwwYY=;
- b=hHyKecRbQfPZDOTn4h+QWDTxD16Arocbr+IBLZtiBCHeXGYCI/sAC46zQOLO0/uvr3
- rKXi8HZGCCaAqJk8kJPxQ9h1vXv84NraSzEnkOm+wRblHxq2XG+E2LUmWUHXNCU7qINY
- R2SuQIl838W2T5qOmyL9UT/t9vbfago3WztLVQvoLf2y9ZzhgpE+N3VeNI0430vJBYO4
- u6HgsrexNADRt9chNuHAj+MLrwI5Jym5y1MJAOrKmXWseEqDtW2IOfickzs7J2pBy84N
- ffKnznKaplfq33e1TQbkm3esAJk+BrikNm2DzSXqucw5jDHaFSaIA1PryvdJJ43daEHF
- z0aA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=D9vI21yuIIXE1mHrLmH63kPYI1hDz6blupEqWI7uIVw=;
+ b=Wtciy6eLRNx3cg0Tm1xitJ9TvUbvVeuEnXmv8ZqAalynNStTQ9UcLvNUb/GN1ST/b8
+ +1jwwQAKLGNVdUYlzolbMsBqk7IdpxOEmfNxlOvcq69EfxWTRsZpP9kFJP+m7TTtga/u
+ +kiPxrL5fZ9zCNMQTkJa8FvdZeNGBb8sXt4Vo1quaF3acpbcLgyG+/JRT/jEVn0KdXt3
+ Q/jGXk5DBkPQ/pBcqlzkdKJf2q16wcgJ/ZQjHJo8IByRanDE/4jkDVj2LpmwRJ9Z2ZO2
+ L7mCuK1cg5CZjezB0t/fIcQ5NHK5J94VVrly0pGxZrPjrQblK0cEBNTfRoYRAlPEDq9m
+ E3iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=SJPzUGBHKNbuyoqleN6wfIhA3WkzghIRVyP37xFwwYY=;
- b=RTx52N87ISczqT6v5AZXKNHnjXFNYu+lpU51nNlii4Wy/+qrFfN1cEpC8+uAOBwWMt
- e5LAWtxmAejR8rWiLZ1jN2gUOHwR5SbUW4iL6qYahJfFapD8qvqicSRY4wJp4qMHOpfd
- Ygt/lKCOdvxOeC8GWR3kuW9ar0ujj26H3VsXeKX74TRp8kAi7V0RBBXMx9GAGVoBwgEk
- +ErEy6K/bXtmUf1rpeEQZy9PYeZm2coeeG7m7EmbGSML4zbC6PDxAaM8n+dJn5FR1VHc
- hlbhdGck0hzmYenzpG1o2+NrDsVWiPvts5H4bbNly7KLY27PMH3x5isfMoxD73jcu7Ep
- z7QA==
-X-Gm-Message-State: AOAM5302LieVl+hmORYjKphzfp6ZTYxkow+FUY6TznnO2YcIPWXmoblO
- zQ9fvJ57yk3MedXCV9vX8yOuAg==
-X-Google-Smtp-Source: ABdhPJyBgL7lI6sg8L73+bq84kAmMFIzpyPfiKrVEnXh/Y/gOegupi6JYVakUMpcwNd2POX1QV0AMA==
-X-Received: by 2002:a05:6402:2d9:: with SMTP id
- b25mr70284345edx.383.1637614400396; 
- Mon, 22 Nov 2021 12:53:20 -0800 (PST)
+ bh=D9vI21yuIIXE1mHrLmH63kPYI1hDz6blupEqWI7uIVw=;
+ b=XjDnjjPLXez572wrnKPxS2RV3nLNeCwq98djInZOK9/s1Vc97G9xn3G2rGgAWLGL8F
+ txmj/QAIywuEadIrwtylNY2PwL2gywTkppGtq+NoHxZarmGXj8gdjxNQQfSHLGZFTLcL
+ SwqYT8fUGCs4ODutFUJkeLDodLKknUJ/VITjnCoWLnjUHX0eniGVxv6CpKxvy58V8YBy
+ eUXjeTmn+Ygjb7ZF77GxbO8r8MEjy3tAXfjkRhnCwy6WxZQBxoePwmMU+Ur+uH/RXRVm
+ dyR0hbaodabRWoqwoVegFnGwRVi59/oBU4M9DwhiioJoMJR4MBV2wPM/bPNNwUHh6/XG
+ JndA==
+X-Gm-Message-State: AOAM5318p8j6IsXB6cW980EVAJKmtvZe4NXZKXF4InmmyG9bBEvkq6bN
+ I2IkACiZx/b8FmZvGVhb7ayQtA==
+X-Google-Smtp-Source: ABdhPJw1zxvG40hrs8aaQ90Tp84vtFZE5HbWxTjE/D4HGGRAA4Vf8O9bClW4SnOoOZyJBIgrWBa6Sw==
+X-Received: by 2002:a05:6402:1911:: with SMTP id
+ e17mr69368118edz.43.1637614968058; 
+ Mon, 22 Nov 2021 13:02:48 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id my2sm4186613ejc.109.2021.11.22.12.53.19
+ by smtp.gmail.com with ESMTPSA id hz15sm4268081ejc.63.2021.11.22.13.02.47
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 22 Nov 2021 12:53:19 -0800 (PST)
-Message-ID: <ffad9a85-953f-0663-261b-57ffc46224ca@mind.be>
-Date: Mon, 22 Nov 2021 21:53:18 +0100
+ Mon, 22 Nov 2021 13:02:47 -0800 (PST)
+Message-ID: <dea61a9d-beb3-b445-ec99-9b6d98e0ac2e@mind.be>
+Date: Mon, 22 Nov 2021 22:02:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211119175553.2413433-1-fontaine.fabrice@gmail.com>
- <20211119175553.2413433-2-fontaine.fabrice@gmail.com>
- <20211121204348.5c21a803@windsurf>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211121093548.3425517-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211121204348.5c21a803@windsurf>
-Subject: Re: [Buildroot] [PATCH v2,
- 2/2] package/boost: threads needs date-time
+In-Reply-To: <20211121093548.3425517-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgee: fix introspection build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,7 +91,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -106,38 +98,90 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/11/2021 20:43, Thomas Petazzoni wrote:
-> On Fri, 19 Nov 2021 18:55:53 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On 21/11/2021 10:35, Fabrice Fontaine wrote:
+> Fix the following build failure raised since the addition of
+> introspection in commit 3915e17e7734ee3abe088d4ce1893eecd7cc4663:
 > 
->> Fix the following build failure with gcc >= 7 raised since commit
->> 4e267a7d3d5d350710a81ada188a1629348e4b4a because until cmake 3.21.3 and
->> https://github.com/Kitware/CMake/commit/1ad0c5ae53fc0c4f774166337f0e9c93c578cf9b,
->> cmake assumed that boost threads depends on boost date-time. As, we
->> can't patch all cmake in the field, just select boost date-time.
->>
->> -- Found Boost: /home/buildroot/autobuild/instance-3/output-1/host/sh4-buildroot-linux-uclibc/sysroot/usr/include (found version "1.77.0") found components: thread chrono atomic missing components: date_time
->>
->> Fixes:
->>   - http://autobuild.buildroot.org/results/e7443e3bc955e7eddd7bed63e2728880dabb31a7
+> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler -l `/usr/bin/sed -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libgee-0.8.la` -o Gee-0.8.typelib Gee-0.8.gir libgee-0.8.la
+> Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> error parsing file Gee-0.8.gir: Failed to parse included gir GObject-2.0
 > 
-> So just to work-around a CMake < 3.21.3 bug, we force this select in
-> Boost? This doesn't feel like a very good solution :-/
+> Fixes:
+>   - http://autobuild.buildroot.org/results/884faa0f84c8dc43ed1ca6cde9caf21c731a4b35
 > 
-> Even in Buildroot, we're still using CMake 3.16.9.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  So what we could do instead is to bump CMake to 3.22, and set our mininum 
-CMake version to 3.21.3. This is going to hurt the build time for some people, 
-but I guess it's better than forcing boost date-time?
-
-  On the other hand, boost date-time probably has a very small additional size 
-cost compared to the rest of boost, so this patch is probably a better ad hoc 
-solution. I'd just add a comment in the Config.in file to explain that this is 
-just a workaround, with a longer explanation in the commit message.
-
+  Applied to master, thanks.
 
   Regards,
   Arnout
+
+> ---
+>   ...le.am-include-Makefile.introspection.patch | 40 +++++++++++++++++++
+>   package/libgee/libgee.mk                      |  2 +
+>   2 files changed, 42 insertions(+)
+>   create mode 100644 package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+> 
+> diff --git a/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch b/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+> new file mode 100644
+> index 0000000000..0906275ae3
+> --- /dev/null
+> +++ b/package/libgee/0001-gee-Makefile.am-include-Makefile.introspection.patch
+> @@ -0,0 +1,40 @@
+> +From d771e8ddb5e40f234459966e46880d10f34aaa1a Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 20 Nov 2021 23:57:33 +0100
+> +Subject: [PATCH] gee/Makefile.am: include Makefile.introspection
+> +
+> +Include Makefile.introspection instead of using a custom rule which will
+> +result in the following build failure when cross-compiling on buildroot
+> +because of missing --includedir:
+> +
+> +/home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/../riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler -l `/usr/bin/sed -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libgee-0.8.la` -o Gee-0.8.typelib Gee-0.8.gir libgee-0.8.la
+> +Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+> +error parsing file Gee-0.8.gir: Failed to parse included gir GObject-2.0
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/884faa0f84c8dc43ed1ca6cde9caf21c731a4b35
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status:
+> +https://gitlab.gnome.org/GNOME/libgee/-/merge_requests/8]
+> +---
+> + gee/Makefile.am | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/gee/Makefile.am b/gee/Makefile.am
+> +index 5634bcb..e0d950e 100644
+> +--- a/gee/Makefile.am
+> ++++ b/gee/Makefile.am
+> +@@ -167,7 +167,8 @@ INTROSPECTION_COMPILER_ARGS= \
+> + 	-l $(libgee_dlname)
+> + Gee-0.8.gir: libgee_0_8_la_vala.stamp
+> + Gee-0.8.typelib: Gee-0.8.gir libgee-0.8.la
+> +-	@INTROSPECTION_COMPILER@ $(INTROSPECTION_COMPILER_ARGS) -o $@ $^
+> ++
+> ++-include $(INTROSPECTION_MAKEFILE)
+> + endif
+> +
+> + MOSTLYCLEANFILES = \
+> +--
+> +2.33.0
+> +
+> diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+> index 48bc9c9e41..0a05a63635 100644
+> --- a/package/libgee/libgee.mk
+> +++ b/package/libgee/libgee.mk
+> @@ -12,6 +12,8 @@ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+>   LIBGEE_INSTALL_STAGING = YES
+>   LIBGEE_LICENSE = LGPL-2.1+
+>   LIBGEE_LICENSE_FILES = COPYING
+> +# We're patching gee/Makefile.am
+> +LIBGEE_AUTORECONF = YES
+>   
+>   ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+>   LIBGEE_CONF_OPTS += --enable-introspection
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
