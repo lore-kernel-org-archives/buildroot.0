@@ -1,47 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F93C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D0DAC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E64580CCA;
-	Mon, 22 Nov 2021 21:33:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8B3B607BB;
+	Mon, 22 Nov 2021 21:35:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VzZonjPHPuRu; Mon, 22 Nov 2021 21:33:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hineAramBR87; Mon, 22 Nov 2021 21:35:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACD9B80C35;
-	Mon, 22 Nov 2021 21:33:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 148541BF82C
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D487160758;
+	Mon, 22 Nov 2021 21:35:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BF0961BF82C
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F162340394
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD3774049F
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:35:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vJE3RMQs8K3Z for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 249F2403E0
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 98BD38EE2F; Mon, 22 Nov 2021 21:28:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 22 Nov 2021 22:32:10 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 33e7fd97f264546ef09089c49c06013bcf8b3a7a
-X-Git-Newrev: 36b9d87e192b208565a436dec26b2b80c8058976
-X-Patchwork-Hint: ignore
-Message-Id: <20211122212858.98BD38EE2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/stress-ng: fix
- broken URL
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rnfKmrM4zPcW for <buildroot@lists.busybox.net>;
+ Mon, 22 Nov 2021 21:35:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 60089404BD
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:35:21 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id x15so82551647edv.1
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 13:35:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=baI+fo7y/vjEdWor2GI9+HLzwREtTtMcWUzMCHiz8K0=;
+ b=EXYHnkyeJjUmNh+wb0byTF2f2ddalcw90zzv0dYx7Xu/JsinsCfgv2JolkcXTSajZQ
+ siFLYY6v976qqWMgZZFEko4FP5snW1OdQ2AUOoQ9HrAibohPN63Nk7Ck7m9CyFEipMLM
+ U4EK4uwm1N76VDkfuhs4sHoVNdu5fRTjIpxa6vak4XmXIG3/qEmc81oJgb7CbkqBfNva
+ 3nJgYcXeYmxasKpcqlxgI+YFJvINavBTTIoBkRq5fbxD1Xa765JmAdX1fTzifEXKT8JY
+ fizGO/4534QiEbI6ryQbuplPQi1dYOwPJ8pM/JWP1SjPvfXLv33pqF/cEwu43fkYjUGf
+ DqSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=baI+fo7y/vjEdWor2GI9+HLzwREtTtMcWUzMCHiz8K0=;
+ b=iSjfhW5Z5HA+r7TSNRdV0zG3FiRI+A9OUSxiCEa/5m56ZFfFNXsgmmvnpKnvUjUBv2
+ OMhkJjlbCGLnoYK2eLdI79Er//KO01AzDZcplYQI0u5tqC/zgSCOXsRl88OOQbIGORGf
+ AAJbWCq+amFRpIFhaP9etiDUWison3SS0I0H6SsuzWBj6mzdxsPDfSwRIowbKl4O2JLQ
+ qujLmTrwZIkb9R9PJUuCf14mihA5806sL+4PsY2Sokxeqsa8KPS3Rir+oO5J7eERue9Y
+ xqvGNXS9+PWGf0XwDm9apIsvOYNBAFSTwiqs82LF5C89RUQRl8WWFcSpRQL6xKNn4SoF
+ VsVg==
+X-Gm-Message-State: AOAM530u34szzMnWyZuCBcY9XybB5CY+dxDLl2futUTZW2LWu0I7TImB
+ 3Xx17dfxfe/EeQFtHAmhiNmmUw==
+X-Google-Smtp-Source: ABdhPJwFVQMDQGYprPmJT/RXwB8R2DjL+Mig6wycdEXA49LxmPXG8ALsCbbcmSpvKEWZ6X0GPmRAGw==
+X-Received: by 2002:a17:906:90da:: with SMTP id
+ v26mr523701ejw.442.1637616919480; 
+ Mon, 22 Nov 2021 13:35:19 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id hg19sm4233743ejc.1.2021.11.22.13.35.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 22 Nov 2021 13:35:19 -0800 (PST)
+Message-ID: <f69f2d5d-57ac-3ec1-1fd8-9d3c3b44987b@mind.be>
+Date: Mon, 22 Nov 2021 22:35:11 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+References: <20211104003607.2022984-1-aduskett@gmail.com>
+ <20211104003607.2022984-2-aduskett@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211104003607.2022984-2-aduskett@gmail.com>
+Subject: Re: [Buildroot] [PATCH vRFC 1/4] package/gcr/gcr.mk: enable gtk
+ backend for wayland
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,87 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4127253652368199924=="
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Adrian Perez de Castro <aperez@igalia.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4127253652368199924==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b9d87e192b208565a436dec26b2b80c8058976
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Do the same as commit "12c01079bd package/stress-ng: bump to version
-0.13.05" did for 2022.02 but without the version bump.
+On 04/11/2021 01:36, Adam Duskett wrote:
+> gcr has supported wayland since commit
+> 685e1da9642b7a3fb0dbe1afda482f7bd5b05f33.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-The project URL returns 404 error because:
+  Applied to next, thanks.
 
-Quoting Coling King:
-"Unfortunately when I left Canonical last week they removed my tarballs"
+  Regards,
+  Arnout
 
-So use github and update hash.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Ricardo: do not bump the version.
- There will be no version clash at sources.buildroot.net since the file
- format changed]
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/stress-ng/Config.in      | 2 +-
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
-index 64b473b75c..839cbb1cc0 100644
---- a/package/stress-ng/Config.in
-+++ b/package/stress-ng/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_STRESS_NG
- 	  subsystems of a computer as well as the various operating
- 	  system kernel interfaces.
- 
--	  http://kernel.ubuntu.com/~cking/stress-ng/
-+	  https://github.com/ColinIanKing/stress-ng
- 
- comment "stress-ng needs a toolchain w/ headers >= 3.3"
- 	depends on !BR2_nios2 && !BR2_arc
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 41e2801915..24fc6d4d56 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f847be115f60d3ad7d37c806fd1bfb1412aa3c631fca581d6dc233322f50d6a5  stress-ng-0.12.02.tar.xz
-+sha256  0b4557a511be985dfacccc23f1782620b217b1172cdc276a8eee82872b8258c5  stress-ng-0.12.02.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 53d7b7e5b7..b13417839d 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- STRESS_NG_VERSION = 0.12.02
--STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
--STRESS_NG_SITE = https://kernel.ubuntu.com/~cking/tarballs/stress-ng
-+STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
- 
-
---===============4127253652368199924==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> ---
+>   package/gcr/gcr.mk | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+> index d51e853f3f..ef253b4ef9 100644
+> --- a/package/gcr/gcr.mk
+> +++ b/package/gcr/gcr.mk
+> @@ -30,10 +30,12 @@ else
+>   GCR_CONF_OPTS += -Dintrospection=false
+>   endif
+>   
+> -# Only the X11 backend is supported for the simple GUI
+>   ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+>   GCR_DEPENDENCIES += libgtk3
+>   GCR_CONF_OPTS += -Dgtk=true
+> +else ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+> +GCR_DEPENDENCIES += libgtk3
+> +GCR_CONF_OPTS += -Dgtk=true
+>   else
+>   GCR_CONF_OPTS += -Dgtk=false
+>   endif
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4127253652368199924==--
