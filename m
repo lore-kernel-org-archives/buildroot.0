@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D5BC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 20:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 654A0C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 20:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A2276061C;
-	Mon, 22 Nov 2021 20:44:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0462A40537;
+	Mon, 22 Nov 2021 20:49:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bk5q1iGXbZ0j; Mon, 22 Nov 2021 20:49:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07EA6402F8;
+	Mon, 22 Nov 2021 20:49:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F0DB01BF5AD
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:49:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0DAE6064F
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:49:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TiQHtabCTnad; Mon, 22 Nov 2021 20:44:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC0C60636;
-	Mon, 22 Nov 2021 20:44:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B9DB1BF5AD
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:43:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3ADD380DFA
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 20:43:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WqO51xz3GOH6 for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 20:43:58 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UGqyhR5nyfp0 for <buildroot@lists.busybox.net>;
+ Mon, 22 Nov 2021 20:49:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6391E80DF9
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 20:43:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3FAF60600
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 20:49:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EFC6B8ED88; Mon, 22 Nov 2021 20:39:32 +0000 (UTC)
+ id 68D1A8ED91; Mon, 22 Nov 2021 20:44:36 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 22 Nov 2021 21:43:44 +0100
+Date: Mon, 22 Nov 2021 21:46:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f3e2a6678e173782748e3981a4bcfb06fb7f980
-X-Git-Newrev: 136c9b2a1e080ff0c285c3ec028f23083f4a9e94
+X-Git-Oldrev: 136c9b2a1e080ff0c285c3ec028f23083f4a9e94
+X-Git-Newrev: 2da1267c1e223c416a2f428dcf5dcb6ea1257956
 X-Patchwork-Hint: ignore
-Message-Id: <20211122203932.EFC6B8ED88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lighttpd: run autoreconf
+Message-Id: <20211122204436.68D1A8ED91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +58,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=136c9b2a1e080ff0c285c3ec028f23083f4a9e94
+commit: https://git.buildroot.net/buildroot/commit/?id=2da1267c1e223c416a2f428dcf5dcb6ea1257956
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since upstream commit bb1d35dc1767 [1] (which is part of the bump to
-version 1.4.60), configure.ac no longer checks for a specific C
-standard. It will therefore use the "default" standard. With autoconf
-2.69 (which is what is used to generate the configure script in the
-tarball), the default standard is C89, which requires no option to be
-passed to the compiler. However, that means that older compilers, e.g.
-GCC 4.8, will indeed use C89 and not C99. This leads to the following
-error.
+Fix the following build failure raised since version 10.1 and
+https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=9a665d62266e75f0519f3a663784c458885b5c63:
 
-array.c:140:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (uint32_t i = 0; i < sz; ++i) {
-  ^
-
-In autoconf 2.71 (which is used by Buildroot), the default standard has
-changed: it is now C11 if available, C99 failing that, and finally fall
-back to C89. Since GCC 4.8 (and later) support C11, that's what will be
-selected, so C99 is allowed as well. Thus, running autoreconf fixes the
-build.
-
-The issue was reported upstream [2].
+  CXXLD  libinproctrace.so
+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: gdbsupport/tdesc-ipa.o: in function `print_xml_feature::visit(tdesc_type_builtin const*)':
+/home/buildroot/autobuild/instance-2/output-1/build/gdb-10.2/build/gdbserver/../../gdbserver/../gdbsupport/tdesc.cc:310: undefined reference to `libintl_gettext'
 
 Fixes:
- - http://autobuild.buildroot.org/results/0349d8fed35b0766796dd9ba3b8de6ff8bd68fe7
-
-[1] https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/bb1d35dc17671bc308e25651b4f5fa0c3008cc69
-[2] https://redmine.lighttpd.net/issues/3116
+ - http://autobuild.buildroot.org/results/faacc874fe9d32b74cb3d3dea988ef661cb0e3d0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lighttpd/lighttpd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0008-gdbserver-Makefile.in-fix-NLS-build.patch | 38 ++++++++++++++++++++++
+ .../0009-gdbserver-Makefile.in-fix-NLS-build.patch | 38 ++++++++++++++++++++++
+ package/gdb/gdb.mk                                 |  1 +
+ 3 files changed, 77 insertions(+)
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 9c18a6038e..c39a5db20f 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -12,6 +12,8 @@ LIGHTTPD_LICENSE = BSD-3-Clause
- LIGHTTPD_LICENSE_FILES = COPYING
- LIGHTTPD_CPE_ID_VENDOR = lighttpd
- LIGHTTPD_DEPENDENCIES = host-pkgconf
-+# Issue in configure script provided in tarball
-+LIGHTTPD_AUTORECONF = YES
- LIGHTTPD_CONF_OPTS = \
- 	--without-wolfssl \
- 	--libdir=/usr/lib/lighttpd \
+diff --git a/package/gdb/10.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/10.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
+new file mode 100644
+index 0000000000..3d7534a48a
+--- /dev/null
++++ b/package/gdb/10.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
+@@ -0,0 +1,38 @@
++From c098500aee945ee7a3021649eb0a2655b004103c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Nov 2021 22:52:08 +0100
++Subject: [PATCH] gdbserver/Makefile.in: fix NLS build
++
++Fix the following build failure raised since gdb version 10.1 and
++https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=9a665d62266e75f0519f3a663784c458885b5c63:
++
++  CXXLD  libinproctrace.so
++/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: gdbsupport/tdesc-ipa.o: in function `print_xml_feature::visit(tdesc_type_builtin const*)':
++/home/buildroot/autobuild/instance-2/output-1/build/gdb-10.2/build/gdbserver/../../gdbserver/../gdbsupport/tdesc.cc:310: undefined reference to `libintl_gettext'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/faacc874fe9d32b74cb3d3dea988ef661cb0e3d0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://sourceware.org/pipermail/gdb-patches/2021-November/183580.html]
++---
++ gdbserver/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdbserver/Makefile.in b/gdbserver/Makefile.in
++index 71c3c4ad959..e69fbc4dae4 100644
++--- a/gdbserver/Makefile.in
+++++ b/gdbserver/Makefile.in
++@@ -383,7 +383,7 @@ $(IPA_LIB): $(sort $(IPA_OBJS)) ${CDEPS}
++	$(SILENCE) rm -f $(IPA_LIB)
++ 	$(ECHO_CXXLD) $(CC_LD) -shared -fPIC -Wl,--soname=$(IPA_LIB) \
++ 		-Wl,--no-undefined $(INTERNAL_CFLAGS) $(INTERNAL_LDFLAGS) \
++-		-o $(IPA_LIB) ${IPA_OBJS} -ldl -pthread
+++		-o $(IPA_LIB) ${IPA_OBJS} -ldl -pthread $(INTL)
++ 
++ # Put the proper machine-specific files first, so M-. on a machine
++ # specific routine gets the one for the correct machine.
++-- 
++2.33.0
++
+diff --git a/package/gdb/11.1/0009-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/11.1/0009-gdbserver-Makefile.in-fix-NLS-build.patch
+new file mode 100644
+index 0000000000..903dc61df8
+--- /dev/null
++++ b/package/gdb/11.1/0009-gdbserver-Makefile.in-fix-NLS-build.patch
+@@ -0,0 +1,38 @@
++From c098500aee945ee7a3021649eb0a2655b004103c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Nov 2021 22:52:08 +0100
++Subject: [PATCH] gdbserver/Makefile.in: fix NLS build
++
++Fix the following build failure raised since gdb version 10.1 and
++https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=9a665d62266e75f0519f3a663784c458885b5c63:
++
++  CXXLD  libinproctrace.so
++/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: gdbsupport/tdesc-ipa.o: in function `print_xml_feature::visit(tdesc_type_builtin const*)':
++/home/buildroot/autobuild/instance-2/output-1/build/gdb-10.2/build/gdbserver/../../gdbserver/../gdbsupport/tdesc.cc:310: undefined reference to `libintl_gettext'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/faacc874fe9d32b74cb3d3dea988ef661cb0e3d0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://sourceware.org/pipermail/gdb-patches/2021-November/183580.html]
++---
++ gdbserver/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdbserver/Makefile.in b/gdbserver/Makefile.in
++index 71c3c4ad959..e69fbc4dae4 100644
++--- a/gdbserver/Makefile.in
+++++ b/gdbserver/Makefile.in
++@@ -383,7 +383,7 @@ $(IPA_LIB): $(sort $(IPA_OBJS)) ${CDEPS}
++ 	$(ECHO_CXXLD) $(CC_LD) -shared -fPIC -Wl,--soname=$(IPA_LIB) \
++ 		-Wl,--no-undefined $(INTERNAL_CFLAGS) $(INTERNAL_LDFLAGS) \
++ 		 $(CXXFLAGS) \
++-		-o $(IPA_LIB) ${IPA_OBJS} $(LIBIBERTY_FOR_SHLIB) -ldl -pthread
+++		-o $(IPA_LIB) ${IPA_OBJS} $(LIBIBERTY_FOR_SHLIB) -ldl -pthread $(INTL)
++ 
++ # Put the proper machine-specific files first, so M-. on a machine
++ # specific routine gets the one for the correct machine.
++-- 
++2.33.0
++
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 15515d6d33..4ff498230a 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -171,6 +171,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+ GDB_CONF_OPTS += --enable-gdbserver
++GDB_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+ else
+ GDB_CONF_OPTS += --disable-gdbserver
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
