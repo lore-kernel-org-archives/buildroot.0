@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8BBC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F93C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:33:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B386B6073C;
-	Mon, 22 Nov 2021 21:33:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NZrKs6iW7Qzb; Mon, 22 Nov 2021 21:33:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 175A960629;
-	Mon, 22 Nov 2021 21:33:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E7AC61BF82C
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4ED081092
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E64580CCA;
+	Mon, 22 Nov 2021 21:33:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p-lErzcJYhcX for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 21:33:18 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VzZonjPHPuRu; Mon, 22 Nov 2021 21:33:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACD9B80C35;
+	Mon, 22 Nov 2021 21:33:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 148541BF82C
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F162340394
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vJE3RMQs8K3Z for <buildroot@lists.busybox.net>;
+ Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8678080DDC
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:33:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 249F2403E0
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:33:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0E0A98EDC2; Mon, 22 Nov 2021 21:28:53 +0000 (UTC)
+ id 98BD38EE2F; Mon, 22 Nov 2021 21:28:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Nov 2021 22:31:24 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 052d7a6ef4539d756e5910334e5001ac90a1de12
-X-Git-Newrev: 8d31d09bac527f1a6b20e3b8621eea6a7e28f095
+Date: Mon, 22 Nov 2021 22:32:10 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 33e7fd97f264546ef09089c49c06013bcf8b3a7a
+X-Git-Newrev: 36b9d87e192b208565a436dec26b2b80c8058976
 X-Patchwork-Hint: ignore
-Message-Id: <20211122212853.0E0A98EDC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/stress-ng: fix
+Message-Id: <20211122212858.98BD38EE2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/stress-ng: fix
  broken URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -54,15 +54,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6984259181129844665=="
+Content-Type: multipart/mixed; boundary="===============4127253652368199924=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6984259181129844665==
+--===============4127253652368199924==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d31d09bac527f1a6b20e3b8621eea6a7e28f095
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=36b9d87e192b208565a436dec26b2b80c8058976
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Do the same as commit "12c01079bd package/stress-ng: bump to version
 0.13.05" did for 2022.02 but without the version bump.
@@ -125,7 +125,7 @@ index 53d7b7e5b7..b13417839d 100644
  STRESS_NG_LICENSE_FILES = COPYING
  
 
---===============6984259181129844665==
+--===============4127253652368199924==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -136,4 +136,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6984259181129844665==--
+--===============4127253652368199924==--
