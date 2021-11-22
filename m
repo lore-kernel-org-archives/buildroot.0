@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7521BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E44C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 22 Nov 2021 21:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07F47404BD;
-	Mon, 22 Nov 2021 21:42:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C1054038A;
+	Mon, 22 Nov 2021 21:43:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2tAAJZqkwACr; Mon, 22 Nov 2021 21:42:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nbDaOfqoD2Nm; Mon, 22 Nov 2021 21:43:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68F0440483;
-	Mon, 22 Nov 2021 21:42:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B07840252;
+	Mon, 22 Nov 2021 21:43:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F6791BF82C
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:42:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E0AE91BF82C
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:42:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1D5E4035D
- for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:42:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBE5940252
+ for <buildroot@lists.busybox.net>; Mon, 22 Nov 2021 21:42:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6YiUiCARQ7sA for <buildroot@lists.busybox.net>;
- Mon, 22 Nov 2021 21:42:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85688400FF
- for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:42:44 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id A03B4FF809;
- Mon, 22 Nov 2021 21:42:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mpH5F-00009y-WF; Mon, 22 Nov 2021 22:42:42 +0100
+ with ESMTP id 0_5VfBuHAzEM for <buildroot@lists.busybox.net>;
+ Mon, 22 Nov 2021 21:42:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0559400FF
+ for <buildroot@buildroot.org>; Mon, 22 Nov 2021 21:42:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 748FB8EF4D; Mon, 22 Nov 2021 21:38:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-References: <20211122101633.814059-1-fido_max@inbox.ru>
-Date: Mon, 22 Nov 2021 22:42:41 +0100
-In-Reply-To: <20211122101633.814059-1-fido_max@inbox.ru> (Maxim Kochetkov via
- buildroot's message of "Mon, 22 Nov 2021 13:16:33 +0300")
-Message-ID: <87czmrooj2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgeos: bump version to 3.10.1
+To: buildroot@buildroot.org
+Date: Mon, 22 Nov 2021 22:38:50 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 386cf00e6f32f3dd6d13ee38577d959dc4addc6f
+X-Git-Newrev: 2dd2f3751ff2aa60df7de5453e65aa148f64645d
+X-Patchwork-Hint: ignore
+Message-Id: <20211122213831.748FB8EF4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgeos: bump version
+ to 3.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,20 +53,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Maxim" == Maxim Kochetkov via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2dd2f3751ff2aa60df7de5453e65aa148f64645d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Changelog: https://github.com/libgeos/geos/blob/3.10.1/NEWS
+Changelog: https://github.com/libgeos/geos/blob/3.10.1/NEWS
 
-Committed to next, thanks.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 3508ba9077..d2c27955ac 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e630507dcac9dc07565d249a26f06a15c9f5b0c52dd29129a0e3d381d7e382a  geos-3.9.1.tar.bz2
++sha256  a8148eec9636814c8ab0f8f5266ce6f9b914ed65b0d083fc43bb0bbb01f83648  geos-3.10.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 097ad54d03..745eb32256 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.9.1
++LIBGEOS_VERSION = 3.10.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
