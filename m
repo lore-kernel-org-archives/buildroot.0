@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980B0C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85D60C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F22560D62;
-	Mon,  6 Dec 2021 18:39:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 454B6402E0;
+	Mon,  6 Dec 2021 18:39:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FS5SQnCIY1cc; Mon,  6 Dec 2021 18:39:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id r3ANnXGZxjhJ; Mon,  6 Dec 2021 18:39:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AED8660D67;
-	Mon,  6 Dec 2021 18:39:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B9E740281;
+	Mon,  6 Dec 2021 18:39:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A8781BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B0DC51BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B396841C76
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD84941C7E
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q3R-aH2Z-cqo for <buildroot@lists.busybox.net>;
+ with ESMTP id vicIAFx0ZTjy for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A89341C59
+ by smtp4.osuosl.org (Postfix) with ESMTP id B039941C56
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2F91281468; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 58F3D81503; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Nov 2021 22:28:58 +0100
+Date: Mon, 22 Nov 2021 22:38:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5cb09bf621e252091c5eba3982c568c3e4e5adc
-X-Git-Newrev: a4e462b1aed5bcb5629a4a606190877cbb8b3eb3
+X-Git-Oldrev: 386cf00e6f32f3dd6d13ee38577d959dc4addc6f
+X-Git-Newrev: 2dd2f3751ff2aa60df7de5453e65aa148f64645d
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180741.2F91281468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
- 3.19.1
+Message-Id: <20211206180741.58F3D81503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4e462b1aed5bcb5629a4a606190877cbb8b3eb3
+commit: https://git.buildroot.net/buildroot/commit/?id=2dd2f3751ff2aa60df7de5453e65aa148f64645d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Changelog: https://github.com/libgeos/geos/blob/3.10.1/NEWS
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 777f19d6b9..60e64f54d4 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 3508ba9077..d2c27955ac 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  7308590dbb95e77066b99c5674eed855c8257e70658d2af586f4a81ff0eea2b1  protobuf-cpp-3.18.0.tar.gz
-+sha256  645192532f28254152b51c01868efdf9b766b1dbe49c77cccd6efcdb2d7c7bc2  protobuf-cpp-3.19.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index bb9c6bf37c..80764f0216 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.18.0
-+PROTOBUF_VERSION = 3.19.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index e9a5ac4904..2bfef96676 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4f792034070915819065c162a310142d66835333824e2e0a2ca26ed54b013408  protobuf-python-3.18.0.tar.gz
-+sha256  2286615a3ae3e24c3524d171b6728b77b72cd2f3aab905f6a8d3fcaf6209dd00  protobuf-python-3.19.1.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  7e630507dcac9dc07565d249a26f06a15c9f5b0c52dd29129a0e3d381d7e382a  geos-3.9.1.tar.bz2
++sha256  a8148eec9636814c8ab0f8f5266ce6f9b914ed65b0d083fc43bb0bbb01f83648  geos-3.10.1.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 097ad54d03..745eb32256 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.9.1
++LIBGEOS_VERSION = 3.10.1
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
