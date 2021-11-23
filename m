@@ -1,78 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44BC3C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 18:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D63B5C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 18:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BCBB401BA;
-	Tue, 23 Nov 2021 18:27:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B52360A6F;
+	Tue, 23 Nov 2021 18:33:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RmiEV7rUoy7I; Tue, 23 Nov 2021 18:27:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB53C40234;
-	Tue, 23 Nov 2021 18:27:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D51781BF39C
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:27:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1DD260A55
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:27:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jQ0VNOnQEPPQ for <buildroot@lists.busybox.net>;
- Tue, 23 Nov 2021 18:27:11 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3KyznzshPFZQ; Tue, 23 Nov 2021 18:33:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B0F660A60;
+	Tue, 23 Nov 2021 18:33:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E32B01BF39C
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:33:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D35FC80C87
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:33:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X6QK-pzand53 for <buildroot@lists.busybox.net>;
+ Tue, 23 Nov 2021 18:33:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 62C9D60A43
- for <buildroot@buildroot.org>; Tue, 23 Nov 2021 18:27:11 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 36AF180C0B
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 18:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1637692025;
- bh=R05CEQ3su0V1HLlKjW0CzBh7E2bOr+EHQmRwyW97Da0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=RTJAXILKnpUNuhum/LirNn7spVWfDSl2TLbbmF6KAOi7wIUXMJlaYtSnqnSQGbm3E
- vZbntOXcKtxOkno4xzhaN3/Lo+9QOSXLpWaNaptxoGSVU5/qnjJa5YQHKPumb4ZGon
- WrX/E3PWVE0RRTh+Vw5uqUns2yad74af5isoQl/Q=
+ s=badeba3b8450; t=1637692403;
+ bh=njbel35JggygoOWbMu6494OuuT/AuN9cQLUCJ2kLWyE=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=jxnA9gTLE5L3f5EMaXqBoaYOkIQGdZxm9BW9DXDjo/Ve3LaBDytzTB9KzixCg1mB4
+ Yl/kb0XdppDKHuIisy1px70OqHUpbRTNWaOYC/qlTJ1gTQNtvxZkmghNj5HpADKgW8
+ 5rzLIc2xwj/hbXSUYX07hTgaWdFQ6EbiVVFQUnbY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.142]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MAONd-1mwR3S0ddT-00Bucy; Tue, 23 Nov 2021 19:27:05 +0100
+Received: from localhost ([62.216.209.142]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1n6yrj3tQn-00HvWh; Tue, 23
+ Nov 2021 19:33:23 +0100
+Date: Tue, 23 Nov 2021 19:33:21 +0100
 From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Tue, 23 Nov 2021 19:27:04 +0100
-Message-Id: <20211123182704.8741-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.33.1
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20211123193321.074e7cd8@gmx.net>
+In-Reply-To: <e4c35292-8807-37f1-086c-95d9b274df44@mind.be>
+References: <20211118210623.1598934-1-fontaine.fabrice@gmail.com>
+ <e4c35292-8807-37f1-086c-95d9b274df44@mind.be>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:rJd/JgrMFC4KGTDCCWCqSoch7GZSgO+cgFXmxxa6TDsdFrAZcL0
- l2VTVhRISHT4WeuOpgFZ/CF7kifF0N6x2YgHSIxSeAbs6d3TUfuQnkERpSZvXpENmeW5VLP
- zHXWGVuUAnZMvyo6LNo5rcQJAM0HGDrqgzl28qdkZi14BTbkfjtWy7Tg/7pHAshWLc2DDyx
- HLsFEskDBdi3zI45jbpsQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cEK415ybIM8=:/+SdUK5n7I0DJdv/dNc3UB
- bFkkf/KbSG68Y/64M3Xfxvf901BUeasJvUkwp1DOI/EH0LuTL+7HfuT1YzNLnewq7rse+4see
- v5KJPPFVDLLxpGr0E+Q5hFzMsFNXD+6oyVMQi+KORJG6+e6/rPDGdrz6vQH887MF1O11lij6s
- TL1h6fUrD4UCBf3Rm5TqR60cQHwsU7wieQVDtJ4mkX3Dk4NcAhgrQ8t6iM0rhiu8Vvl3vatb5
- T5WcK35NDpHSnnRon26z0G9e3MY9s+IWniwDkCGq0DMZAOYyDo/qpTMLYwBuf1yYZmDwVh7Na
- seb/qdtXv6d9IWT1lu3T6r/jb3UV1NWdymTzO5QjffZrok1O0wPnS4b0+Pss4tNmdqd9ftPAt
- VukL1zQlxiTN5yLRuqDOoFEhJxIcXjJSYo+UUh8qjYBiuBfb4s4wrsBy2F6MCx1QS6pRWcakW
- iTyuTrQ42Hf/oIY8k8un6xQOXmR+ZYF2y/ot2tqCkZ8RHl2+eCo1oIUltA3int1cW7mWR3bRX
- m2WDkqqY2Nld4in12eACh3IqF5aNq9+S56NPu8tzZqwrVRhfjweYAgCSMIvQLrvg2eDWMM3f6
- 8/tShyUJrkCiTb8x9F3YNP3KC6RmrkagA9MOFao3a46UBa3xSRa/aBVPHwNfzwzI2LykAMpLN
- Xv/3GBctI/Fde171SUdrze2mSwegbccBqi76wxhQRkHHvFUapx0256qX+3AX0UuBMzvtnHDsU
- XrWT+wG4o3b51CMvGr+iwh+2aw8tr0g75c/1Addk94SATmfqJrpIhBVA3lJodS4LVkQKawRmI
- jCKDeV8jD/wwSpwN9LPVdxONJOA+dAF+etTgBuxk1o8+UxiFCZqUydVCKI4tdfSTzplUuV+rL
- vksRTyTUhfJbLqor7iu/CBtgv+bFQWQBsMLYtOz+e0jOBkelrS+l0PEas/xNKrcT3bJGql2zb
- dpG4XYCQ4XyBPU6F7r9BKzkm+tJBD5Plvgdx0K8OoY9LtwJYVE7AuFxUGkaI3oOfw99lcYv5X
- kbKFufI52ffHCd8eHknyLlT+nRBtKlsLNjjG5gkVDPdzCici25rGyj0GJRLWAMeWHddsDBXfN
- yv0FdvKAfyQExE=
-Subject: [Buildroot] [PATCH/next v2] package/lighttpd: switch to meson build
- system
+X-Provags-ID: V03:K1:J22LC2msFuYNu7qXMfcp5ZBEeZDFpUrl18HCaikqR4yfnlLlgZO
+ KD3VDyx7zE7O7cURCJZ1uIChD+8rW07VF3KRc9VENkTTu78iho7gKhxOXrpQ8KifZjfWsrU
+ EBgRYDsbDsuvqLQRA8Tjey37cgUNJxbDKGOeCxbrbtgX9uozDnuz9i4O++RV37Wr7z1LFOO
+ 3MV0PddqTgz+1gLKYPt1Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Wbjt58FV7j8=:TKm8CYmVXyK1C0Bz3l/N8O
+ idaCeCEbh1HZDsLAbAPx+cn3bNvc4gRz6U2ML1fHvpYxKRbnISh7TWr24lOi/9bQmu+DLMU8P
+ JFc7oSjVWSLYe+0aJ3pIkzuuuBPvyNayarHmUj3nTTRb2HU0HyLhHMmYyRAEOvQ7/fH3mthBT
+ GOz0eixkQ8kTK18zIjXXeSYWIwaQ3j2iELIUF3XYzjaHTpatWJSfTCofTgRdtGaCrynA1rE/R
+ jng9ZDMY4Lu4QGO7RSCRee+uuQj/B+BjMQaQW0LdA1v5hdqbVuu9hBnZNoiNCHafeIZN2mrvI
+ gYT7/53hhaFuYl1+n61MuSMvLApyk+OyZBNL57diAmuMzd4erRw9xek5ii4EIwUlV3LpS9szj
+ cuou3uXmT/H/XYHfWfW2d/obiBjguS1gLmHamfhVyiHqYu2w5qMAik+ew7K3LsjjPxOktxMXM
+ 7n/htLwuV0IfT+u292j6gt4oFXqsG0+IBvSqpxRmOVdiG5hiXHX2+h/aWqISejOL8rSQHun81
+ dw95ohB15HNJrztRLsPmnFUiuflXd9No7Ng4neJIXpgXj+UvmX6dEOr6lgslOzZvKmTqW5as7
+ 1ndeZK2DGAuiZASF4LtKoJUAIeO77i2xb1bucsg4FhQhpBdI/pw/WKZwBXn/tmcsLBZ5rcsZh
+ YT6WNf4mr6Cip97SjP2L07C70wN4P6QDuoYXm/qwFU7Rbf02iToaAzJ91+4vz76zy1GZIyjDs
+ PKbJekWeaZwDwIg/X1vK+49Wt/t/t/wB/iiuxCXl3A9knsn/Rjp4CgZ/YNpHJhfyDjDv6VYqb
+ j2xrM8eQpg3sk4mJqRLcqip/DOWQKkL8cBoL+GDUR9EyT6bjWaRPNeLfNS/Abn5B/dzy2dDcV
+ XscxDtlUxuBdFV0h53i6k3ZAC0bZgT7ub2B5xURfEBTPJwy6lcMmD/Cg31J0m46Md6M/vDxz1
+ magElUppHAa7GxEDKPz8lLARKuE/4G1KfjdQiJe8XhIpkk/UiAr0vfyHxFTY07WoBRPwVMSHV
+ DJwJCVh+G25mGVRQaugGUONUcu41/mvrkMaRYN2sjsA3Msh0BXeZJHBRFf6/puq+FRnWQZBBb
+ eUuAy9hrTr8v30=
+Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: run autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,148 +86,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to meson build system (alternative solution to autoreconf
-to fix C standard detection/compile flags, see [1]).
+Hello Arnout,
 
-- remove unneeded pcre-config (only used by the autoconf build)
+On Mon, 22 Nov 2021 21:42:39 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-[1] http://lists.busybox.net/pipermail/buildroot/2021-November/629075.html
+> On 18/11/2021 22:06, Fabrice Fontaine wrote:
+> > For an unknown reason, the build fails since bump to version 1.4.60 in
+> > commit d62b7f54f00291a50274409fb5510527fd725ffe on:
+> >
+> > array.c:140:2: error: 'for' loop initial declarations are only allowed in C99 mode
+> >    for (uint32_t i = 0; i < sz; ++i) {
+> >    ^
+> >
+> > Running autoreconf fixes the build.
+> >
+> > Fixes:
+> >   - http://autobuild.buildroot.org/results/0349d8fed35b0766796dd9ba3b8de6ff8bd68fe7
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+>   After reading this thread and the upstream bug report, I did a bunch more
+> analysis and drilled it down to the real issue. See the bug report and the
+> updated commit message:
+>
+>      Since upstream commit bb1d35dc1767 [1] (which is part of the bump to
+>      version 1.4.60), configure.ac no longer checks for a specific C
+>      standard. It will therefore use the "default" standard. With autoconf
+>      2.69 (which is what is used to generate the configure script in the
+>      tarball), the default standard is C89, which requires no option to be
+>      passed to the compiler. However, that means that older compilers, e.g.
+>      GCC 4.8, will indeed use C89 and not C99. This leads to the following
+>      error.
+>
+>      array.c:140:2: error: 'for' loop initial declarations are only allowed in
+> C99 mode
+>        for (uint32_t i = 0; i < sz; ++i) {
+>        ^
+>
+>      In autoconf 2.71 (which is used by Buildroot), the default standard has
+>      changed: it is now C11 if available, C99 failing that, and finally fall
+>      back to C89. Since GCC 4.8 (and later) support C11, that's what will be
+>      selected, so C99 is allowed as well. Thus, running autoreconf fixes the
+>      build.
+>
+>      The issue was reported upstream [2].
+>
+>      Fixes:
+>       -
+> http://autobuild.buildroot.org/results/0349d8fed35b0766796dd9ba3b8de6ff8bd68fe7
+>
+>      [1]
+> https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/bb1d35dc17671bc308e25651b4f5fa0c3008cc69
+>      [2] https://redmine.lighttpd.net/issues/3116
+>
+>
+>   Applied to master, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - remove unneeded pcre-config (only used by the autoconf build)
-    (Fabrice Fontaine)
----
- package/lighttpd/lighttpd.mk | 63 ++++++++++++++++++++++++------------
- 1 file changed, 42 insertions(+), 21 deletions(-)
+Wow, thanks for further investigation and detailed/proper write up!
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 9c18a6038e..7ca71e356a 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -13,64 +13,85 @@ LIGHTTPD_LICENSE_FILES = COPYING
- LIGHTTPD_CPE_ID_VENDOR = lighttpd
- LIGHTTPD_DEPENDENCIES = host-pkgconf
- LIGHTTPD_CONF_OPTS = \
--	--without-wolfssl \
--	--libdir=/usr/lib/lighttpd \
--	--libexecdir=/usr/lib
-+	-Dwith_brotli=false \
-+	-Dwith_dbi=false \
-+	-Dwith_fam=false \
-+	-Dwith_gdbm=false \
-+	-Dwith_geoip=false \
-+	-Dwith_gnutls=false \
-+	-Dwith_krb5=false \
-+	-Dwith_ldap=false \
-+	-Dwith_libev=false \
-+	-Dwith_libunwind=false \
-+	-Dwith_maxminddb=false \
-+	-Dwith_mbedtls=false \
-+	-Dwith_memcached=false \
-+	-Dwith_mysql=false \
-+	-Dwith_nettle=false \
-+	-Dwith_nss=false \
-+	-Dwith_pgsql=false \
-+	-Dwith_sasl=false \
-+	-Dwith_wolfssl=false \
-+	-Dwith_xattr=false \
-+	-Dwith_xxhash=false \
-+	-Dwith_zstd=false \
-+	-Dbuild_extra_warnings=false \
-+	-Dbuild_static=false \
-+	-Dmoduledir=lib/lighttpd
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
- LIGHTTPD_DEPENDENCIES += openssl
--LIGHTTPD_CONF_OPTS += --with-openssl
-+LIGHTTPD_CONF_OPTS += -Dwith_openssl=true
- else
--LIGHTTPD_CONF_OPTS += --without-openssl
-+LIGHTTPD_CONF_OPTS += -Dwith_openssl=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
- LIGHTTPD_DEPENDENCIES += linux-pam
--LIGHTTPD_CONF_OPTS += --with-pam
-+LIGHTTPD_CONF_OPTS += -Dwith_pam=true
- else
--LIGHTTPD_CONF_OPTS += --without-pam
-+LIGHTTPD_CONF_OPTS += -Dwith_pam=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)
- LIGHTTPD_DEPENDENCIES += zlib
--LIGHTTPD_CONF_OPTS += --with-zlib
-+LIGHTTPD_CONF_OPTS += -Dwith_zlib=true
- else
--LIGHTTPD_CONF_OPTS += --without-zlib
-+LIGHTTPD_CONF_OPTS += -Dwith_zlib=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_BZIP2),y)
- LIGHTTPD_DEPENDENCIES += bzip2
--LIGHTTPD_CONF_OPTS += --with-bzip2
-+LIGHTTPD_CONF_OPTS += -Dwith_bzip=true
- else
--LIGHTTPD_CONF_OPTS += --without-bzip2
-+LIGHTTPD_CONF_OPTS += -Dwith_bzip=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_PCRE),y)
--LIGHTTPD_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/bin/pcre-config
- LIGHTTPD_DEPENDENCIES += pcre
--LIGHTTPD_CONF_OPTS += --with-pcre
-+LIGHTTPD_CONF_OPTS += -Dwith_pcre=true
- else
--LIGHTTPD_CONF_OPTS += --without-pcre
-+LIGHTTPD_CONF_OPTS += -Dwith_pcre=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
- LIGHTTPD_DEPENDENCIES += libxml2 sqlite
--LIGHTTPD_CONF_OPTS += --with-webdav-props
-+LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
--LIGHTTPD_CONF_OPTS += --with-webdav-locks
-+LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=true
- LIGHTTPD_DEPENDENCIES += util-linux
- else
--LIGHTTPD_CONF_OPTS += --without-webdav-locks
-+LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=false
- endif
- else
--LIGHTTPD_CONF_OPTS += --without-webdav-props --without-webdav-locks
-+LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=false -Dwith_webdav_locks=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
- LIGHTTPD_DEPENDENCIES += lua
--LIGHTTPD_CONF_OPTS += --with-lua
-+LIGHTTPD_CONF_OPTS += -Dwith_lua=true
- else
--LIGHTTPD_CONF_OPTS += --without-lua
-+LIGHTTPD_CONF_OPTS += -Dwith_lua=false
- endif
- 
- define LIGHTTPD_INSTALL_CONFIG
-@@ -104,4 +125,4 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/tmpfiles.d/lighttpd.conf
- endef
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
--- 
-2.33.1
+Regards,
+Peter
+
+>
+>   Regards,
+>   Arnout
+>
+> > ---
+> >   package/lighttpd/lighttpd.mk | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+> > index 9c18a6038e..c39a5db20f 100644
+> > --- a/package/lighttpd/lighttpd.mk
+> > +++ b/package/lighttpd/lighttpd.mk
+> > @@ -12,6 +12,8 @@ LIGHTTPD_LICENSE = BSD-3-Clause
+> >   LIGHTTPD_LICENSE_FILES = COPYING
+> >   LIGHTTPD_CPE_ID_VENDOR = lighttpd
+> >   LIGHTTPD_DEPENDENCIES = host-pkgconf
+> > +# Issue in configure script provided in tarball
+> > +LIGHTTPD_AUTORECONF = YES
+> >   LIGHTTPD_CONF_OPTS = \
+> >   	--without-wolfssl \
+> >   	--libdir=/usr/lib/lighttpd \
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
