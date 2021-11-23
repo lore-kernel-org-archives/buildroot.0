@@ -1,80 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D63B5C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 18:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C9BBC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 19:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B52360A6F;
-	Tue, 23 Nov 2021 18:33:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 940E24037C;
+	Tue, 23 Nov 2021 19:17:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3KyznzshPFZQ; Tue, 23 Nov 2021 18:33:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6FFzW3hICv4Q; Tue, 23 Nov 2021 19:17:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B0F660A60;
-	Tue, 23 Nov 2021 18:33:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E32B01BF39C
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:33:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78D1440374;
+	Tue, 23 Nov 2021 19:17:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0724D1BF30C
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 19:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D35FC80C87
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 18:33:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00A88402FA
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 19:17:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X6QK-pzand53 for <buildroot@lists.busybox.net>;
- Tue, 23 Nov 2021 18:33:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 36AF180C0B
- for <buildroot@buildroot.org>; Tue, 23 Nov 2021 18:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1637692403;
- bh=njbel35JggygoOWbMu6494OuuT/AuN9cQLUCJ2kLWyE=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=jxnA9gTLE5L3f5EMaXqBoaYOkIQGdZxm9BW9DXDjo/Ve3LaBDytzTB9KzixCg1mB4
- Yl/kb0XdppDKHuIisy1px70OqHUpbRTNWaOYC/qlTJ1gTQNtvxZkmghNj5HpADKgW8
- 5rzLIc2xwj/hbXSUYX07hTgaWdFQ6EbiVVFQUnbY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.142]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzFx-1n6yrj3tQn-00HvWh; Tue, 23
- Nov 2021 19:33:23 +0100
-Date: Tue, 23 Nov 2021 19:33:21 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20211123193321.074e7cd8@gmx.net>
-In-Reply-To: <e4c35292-8807-37f1-086c-95d9b274df44@mind.be>
-References: <20211118210623.1598934-1-fontaine.fabrice@gmail.com>
- <e4c35292-8807-37f1-086c-95d9b274df44@mind.be>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3Xx-3qS1U6W for <buildroot@lists.busybox.net>;
+ Tue, 23 Nov 2021 19:17:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com
+ [IPv6:2607:f8b0:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 29E8E402D3
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 19:17:26 +0000 (UTC)
+Received: by mail-ot1-x32a.google.com with SMTP id
+ 35-20020a9d08a6000000b00579cd5e605eso507377otf.0
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 11:17:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=EaNExUAJZFXUxV3T6yty5YRh1TP6CcdI7BXzHpTTikA=;
+ b=EPo4sgCD8DwKTl4RvxEGU3vPJ90uQbP6oo3tGYDZT7YEFikD2AJIZBOFY8VfkqVz0M
+ xUte+7u8EFyn+is8R7ZLpAXlECy5xmI7hkftnxN8HpCMMxbOZ30nGrS41UY2NsVkUQYG
+ TTQ/OCuGXPyQAEBzeED3a+XkgvPSOshTafpyqkhg7COBHZ+dCxXHVXYIZ5PCD0OkWomm
+ +gNhS66LO3ImntWF4lsGWT5CtakkwylOuEpqL/xiCQ7u3w+3QQJvu9vXVMBYBQkbvxuU
+ GG23oQIkf//NS5hx7ustzsxbpwcO659h1xicEkm6U6SPJndkYIdY8x59NKWyAmVwwLly
+ v8ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=EaNExUAJZFXUxV3T6yty5YRh1TP6CcdI7BXzHpTTikA=;
+ b=FNzT6reHlZ7b00rIghyTpkZhhiSx0+LDKRSzTpONZtsb+LiL8jKJdzmZZ/GtdYgl9e
+ fxTNXvpis0bwABmxGOnOHAMBtdC6jAjfs5hguQiCYejvnp5Z7APZ8p0rRcpPQ/ItJ4WF
+ 5GQcwel45xmWezCm5jtCT3M+TtQi4yr1lrc81PTr7j9BbIAo7xh5kEcmXq2bib6VehHa
+ kIuHkU+psVye2XUI+OhmAuutDAgYpVnwEVIPA0Y/O8poctD391T4HngaWyy7Knv0w+bF
+ Ke6Es3bp79aBBWEZtG40SaJ3Y6R2vI0M7AgZ4oywkAtmbI1hi57roaHXyp0/kbDhLSWi
+ GcUQ==
+X-Gm-Message-State: AOAM531cCehi+WxQiOOtpXcxr6LFmtvKTi7o7Z0hSc1k98WdYU4DHiMx
+ fE3NbRJmhkc8TBmdFnhjfJzFtxktNJ9VGKZpWiE=
+X-Google-Smtp-Source: ABdhPJxi+wKLlFCJVn6fXtvmS+SrYPcEl0ndfU9Gk18cmfM2Lg1eqnVmNkNcaEO96W7X96kXjaPmCpj+fz55eJia2to=
+X-Received: by 2002:a05:6830:1681:: with SMTP id
+ k1mr7058071otr.242.1637695045022; 
+ Tue, 23 Nov 2021 11:17:25 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:J22LC2msFuYNu7qXMfcp5ZBEeZDFpUrl18HCaikqR4yfnlLlgZO
- KD3VDyx7zE7O7cURCJZ1uIChD+8rW07VF3KRc9VENkTTu78iho7gKhxOXrpQ8KifZjfWsrU
- EBgRYDsbDsuvqLQRA8Tjey37cgUNJxbDKGOeCxbrbtgX9uozDnuz9i4O++RV37Wr7z1LFOO
- 3MV0PddqTgz+1gLKYPt1Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Wbjt58FV7j8=:TKm8CYmVXyK1C0Bz3l/N8O
- idaCeCEbh1HZDsLAbAPx+cn3bNvc4gRz6U2ML1fHvpYxKRbnISh7TWr24lOi/9bQmu+DLMU8P
- JFc7oSjVWSLYe+0aJ3pIkzuuuBPvyNayarHmUj3nTTRb2HU0HyLhHMmYyRAEOvQ7/fH3mthBT
- GOz0eixkQ8kTK18zIjXXeSYWIwaQ3j2iELIUF3XYzjaHTpatWJSfTCofTgRdtGaCrynA1rE/R
- jng9ZDMY4Lu4QGO7RSCRee+uuQj/B+BjMQaQW0LdA1v5hdqbVuu9hBnZNoiNCHafeIZN2mrvI
- gYT7/53hhaFuYl1+n61MuSMvLApyk+OyZBNL57diAmuMzd4erRw9xek5ii4EIwUlV3LpS9szj
- cuou3uXmT/H/XYHfWfW2d/obiBjguS1gLmHamfhVyiHqYu2w5qMAik+ew7K3LsjjPxOktxMXM
- 7n/htLwuV0IfT+u292j6gt4oFXqsG0+IBvSqpxRmOVdiG5hiXHX2+h/aWqISejOL8rSQHun81
- dw95ohB15HNJrztRLsPmnFUiuflXd9No7Ng4neJIXpgXj+UvmX6dEOr6lgslOzZvKmTqW5as7
- 1ndeZK2DGAuiZASF4LtKoJUAIeO77i2xb1bucsg4FhQhpBdI/pw/WKZwBXn/tmcsLBZ5rcsZh
- YT6WNf4mr6Cip97SjP2L07C70wN4P6QDuoYXm/qwFU7Rbf02iToaAzJ91+4vz76zy1GZIyjDs
- PKbJekWeaZwDwIg/X1vK+49Wt/t/t/wB/iiuxCXl3A9knsn/Rjp4CgZ/YNpHJhfyDjDv6VYqb
- j2xrM8eQpg3sk4mJqRLcqip/DOWQKkL8cBoL+GDUR9EyT6bjWaRPNeLfNS/Abn5B/dzy2dDcV
- XscxDtlUxuBdFV0h53i6k3ZAC0bZgT7ub2B5xURfEBTPJwy6lcMmD/Cg31J0m46Md6M/vDxz1
- magElUppHAa7GxEDKPz8lLARKuE/4G1KfjdQiJe8XhIpkk/UiAr0vfyHxFTY07WoBRPwVMSHV
- DJwJCVh+G25mGVRQaugGUONUcu41/mvrkMaRYN2sjsA3Msh0BXeZJHBRFf6/puq+FRnWQZBBb
- eUuAy9hrTr8v30=
-Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: run autoreconf
+References: <20211104003607.2022984-1-aduskett@gmail.com>
+ <1ac1eba2-b623-b962-fc24-f17a76495e41@mind.be>
+In-Reply-To: <1ac1eba2-b623-b962-fc24-f17a76495e41@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 23 Nov 2021 11:17:14 -0800
+Message-ID: <CAFSsvmqku1TN9TE96PHEzgV0S=XDN_h1NipV9bAWbjVY_SScAQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH vRFC 0/4] package/midori: bump to version 9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,101 +83,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Adrian Perez de Castro <aperez@igalia.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Arnout,
+Wow, I didn't expect it to be pretty much perfect! That's fantastic!
+Thank you so much! And yes, I will be checking the autobuilders
+for failures!
 
-On Mon, 22 Nov 2021 21:42:39 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+Adam
 
-> On 18/11/2021 22:06, Fabrice Fontaine wrote:
-> > For an unknown reason, the build fails since bump to version 1.4.60 in
-> > commit d62b7f54f00291a50274409fb5510527fd725ffe on:
+On Mon, Nov 22, 2021 at 3:11 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 04/11/2021 01:36, Adam Duskett wrote:
+> > This is a huge update that took me a few weeks of playing around with
+> > to get going.
 > >
-> > array.c:140:2: error: 'for' loop initial declarations are only allowed in C99 mode
-> >    for (uint32_t i = 0; i < sz; ++i) {
-> >    ^
+> > Heres the tldr version:
+> >    - Midori now lives at https://github.com/midori-browser/core
+> >    - The latest version builds with host-python3
+> >    - libpeas is a requirement of midori 9.0
+> >    - webkitgtk has to be compiled with introspection support
+> >    - gcr and it's ui plugin is no longer optional
+> >    - gcr ui also works with wayland and x11
 > >
-> > Running autoreconf fixes the build.
+> > I tested this with test-pkg -a
+> > 45 builds, 38 skipped, 0 build failed, 0 legal-info failed
 > >
-> > Fixes:
-> >   - http://autobuild.buildroot.org/results/0349d8fed35b0766796dd9ba3b8de6ff8bd68fe7
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > It's huge, it's complicated, and it needs review.
 >
->   After reading this thread and the upstream bug report, I did a bunch more
-> analysis and drilled it down to the real issue. See the bug report and the
-> updated commit message:
+>   Although I did spend quit a bit of time on it, it was pretty much perfect :-)
 >
->      Since upstream commit bb1d35dc1767 [1] (which is part of the bump to
->      version 1.4.60), configure.ac no longer checks for a specific C
->      standard. It will therefore use the "default" standard. With autoconf
->      2.69 (which is what is used to generate the configure script in the
->      tarball), the default standard is C89, which requires no option to be
->      passed to the compiler. However, that means that older compilers, e.g.
->      GCC 4.8, will indeed use C89 and not C99. This leads to the following
->      error.
->
->      array.c:140:2: error: 'for' loop initial declarations are only allowed in
-> C99 mode
->        for (uint32_t i = 0; i < sz; ++i) {
->        ^
->
->      In autoconf 2.71 (which is used by Buildroot), the default standard has
->      changed: it is now C11 if available, C99 failing that, and finally fall
->      back to C89. Since GCC 4.8 (and later) support C11, that's what will be
->      selected, so C99 is allowed as well. Thus, running autoreconf fixes the
->      build.
->
->      The issue was reported upstream [2].
->
->      Fixes:
->       -
-> http://autobuild.buildroot.org/results/0349d8fed35b0766796dd9ba3b8de6ff8bd68fe7
->
->      [1]
-> https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/bb1d35dc17671bc308e25651b4f5fa0c3008cc69
->      [2] https://redmine.lighttpd.net/issues/3116
->
->
->   Applied to master, thanks.
-
-Wow, thanks for further investigation and detailed/proper write up!
-
-Regards,
-Peter
-
+>   You're not in DEVELOPERS for any of these packages, so I guess you'll be
+> monitoring the autobuilders by hand for the coming month or so?
 >
 >   Regards,
 >   Arnout
 >
-> > ---
-> >   package/lighttpd/lighttpd.mk | 2 ++
-> >   1 file changed, 2 insertions(+)
 > >
-> > diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-> > index 9c18a6038e..c39a5db20f 100644
-> > --- a/package/lighttpd/lighttpd.mk
-> > +++ b/package/lighttpd/lighttpd.mk
-> > @@ -12,6 +12,8 @@ LIGHTTPD_LICENSE = BSD-3-Clause
-> >   LIGHTTPD_LICENSE_FILES = COPYING
-> >   LIGHTTPD_CPE_ID_VENDOR = lighttpd
-> >   LIGHTTPD_DEPENDENCIES = host-pkgconf
-> > +# Issue in configure script provided in tarball
-> > +LIGHTTPD_AUTORECONF = YES
-> >   LIGHTTPD_CONF_OPTS = \
-> >   	--without-wolfssl \
-> >   	--libdir=/usr/lib/lighttpd \
+> > You're welcome ;)
 > >
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+> > Adam
+> >
+> > Adam Duskett (4):
+> >    package/gcr/gcr.mk: enable gtk backend for wayland
+> >    package/webkitgtk: add gobject-introspection optional dependency
+> >    package/libpeas: new package
+> >    package/midori: bump to version 9.0
+> >
+> >   package/Config.in                             |  3 +-
+> >   package/gcr/gcr.mk                            |  4 +-
+> >   package/libpeas/Config.in                     | 45 ++++++++++++++++++
+> >   package/libpeas/libpeas.hash                  |  4 ++
+> >   package/libpeas/libpeas.mk                    | 38 +++++++++++++++
+> >   .../0001-disable-vala-fatal-warnings.patch    | 30 ++++++++++++
+> >   package/midori/0001-fix-bug-1492932.patch     | 44 ------------------
+> >   ...ion-to-specify-path-to-g-ir-compiler.patch | 37 +++++++++++++++
+> >   package/midori/0002-gcr-for-x11-only.patch    | 32 -------------
+> >   package/midori/Config.in                      | 46 ++++++++++++++-----
+> >   package/midori/midori.hash                    |  4 +-
+> >   package/midori/midori.mk                      | 19 ++++----
+> >   package/webkitgtk/webkitgtk.mk                |  8 +++-
+> >   13 files changed, 210 insertions(+), 104 deletions(-)
+> >   create mode 100644 package/libpeas/Config.in
+> >   create mode 100644 package/libpeas/libpeas.hash
+> >   create mode 100644 package/libpeas/libpeas.mk
+> >   create mode 100644 package/midori/0001-disable-vala-fatal-warnings.patch
+> >   delete mode 100644 package/midori/0001-fix-bug-1492932.patch
+> >   create mode 100644 package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
+> >   delete mode 100644 package/midori/0002-gcr-for-x11-only.patch
+> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
