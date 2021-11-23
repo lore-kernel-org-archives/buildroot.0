@@ -1,49 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83AABC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 20:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B79A1C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 20:47:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECBB0402A5;
-	Tue, 23 Nov 2021 20:44:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KFI9NMysUlNf; Tue, 23 Nov 2021 20:44:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 680164029B;
-	Tue, 23 Nov 2021 20:44:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E41D91BF3A8
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 20:44:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3C8F80E7D
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 20:44:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 195FE818B5;
+	Tue, 23 Nov 2021 20:47:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f5jqbSjK8b-l for <buildroot@lists.busybox.net>;
- Tue, 23 Nov 2021 20:44:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4672180E4C
- for <buildroot@buildroot.org>; Tue, 23 Nov 2021 20:44:48 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (4)
-Received: from zm (pub-198.183.29.194.multiplay.pl [194.29.183.198])
- by server220076.nazwa.pl (Postfix) with ESMTP id 5FAF81C3B20;
- Tue, 23 Nov 2021 21:44:45 +0100 (CET)
-References: <20211123160833.29036-1-b.bilas@grinn-global.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-To: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 23 Nov 2021 21:42:59 +0100
-In-reply-to: <20211123160833.29036-1-b.bilas@grinn-global.com>
-Message-ID: <87ee76mwjn.fsf@grinn-global.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xIulaDAcxfXA; Tue, 23 Nov 2021 20:47:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C1D581882;
+	Tue, 23 Nov 2021 20:47:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C62881BF3A8
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 20:47:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B819E4018D
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 20:47:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XpwmWsfyRdlz for <buildroot@lists.busybox.net>;
+ Tue, 23 Nov 2021 20:47:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE8D0400BF
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 20:47:31 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b92e:f94:7d9a:74f6])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 499A3B0029D;
+ Tue, 23 Nov 2021 21:47:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1637700448;
+ bh=Ve2r2bXYxMt/KLL8fOSt8EMUD2iX2YAiFLGc0djwo5A=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=gBwpXU1GpASbCnrr8pJdsMijtmcD9ZVvza4RyIDsv10Igslnt55IpAoIO2IGUSTsI
+ jOp4Hc1BKPKx3RlcHbSy5kFlgir6fQSG53LLG7mw4+YckFTmoRcctxZgOkODUc6OPJ
+ OQ2a2N1aUjJeAysYbFfj52GsZPQbO3KnnhtwoP72TOer47ULkAAPSorC/eZPMqngiS
+ 5ZJBjXDOZ8WVH+SAPLSknsRapM8oZfj6wJGS+f0p+H0HtmvXkXQl+2T2Xr0waJII8W
+ VqWOpLZTKLt1g/V2RE3Tpl2lzQ2SURbCu7g63Y4G0hoXh2C3J5tyI8EeBzIbEKt2yS
+ 4b+G61rVailpw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 23 Nov 2021 21:47:10 +0100
+Date: Tue, 23 Nov 2021 21:47:10 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20211123204710.GW247986@scaer>
+References: <20211120231007.1944130-1-yann.morin.1998@free.fr>
+ <66122ac8-f802-d8e6-eae5-6288edaedc11@gmail.com>
+ <8735noozvf.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] configs/chiliboard: bump to u-boot 2020.10
+Content-Disposition: inline
+In-Reply-To: <8735noozvf.fsf@dell.be.48ers.dk>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH:LTS] gitlab-ci: update the image version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,35 +73,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CkJhcnRvc3ogQmlsYXMgPGIuYmlsYXNAZ3Jpbm4tZ2xvYmFsLmNvbT4gd3JpdGVzOgoKPiBGaXhl
-czoKPiAgL3Vzci9iaW4vbGQ6IHNjcmlwdHMvZHRjL2R0Yy1wYXJzZXIudGFiLm86KC5ic3MrMHgx
-MCk6IG11bHRpcGxlIGRlZmluaXRpb24gb2YgYHl5bGxvYyc7Cj4gCXNjcmlwdHMvZHRjL2R0Yy1s
-ZXhlci5sZXgubzooLmJzcysweDApOiBmaXJzdCBkZWZpbmVkIGhlcmUKPgo+IFNpZ25lZC1vZmYt
-Ynk6IEJhcnRvc3ogQmlsYXMgPGIuYmlsYXNAZ3Jpbm4tZ2xvYmFsLmNvbT4KPiAtLS0KPiAgMjAy
-MC4xMCB2ZXJzaW9uIGlzIHRoZSBsYXRlc3Qgb25lIHRoYXQgYm9vdHMgY29ycmVjdGx5LAo+ICB0
-aGUgbmV3ZXIgb25lcyBhcmUgYmVpbmcgc3R1Y2sgZHVyaW5nIGNsb2NrcyBpbml0aWFsaXphdGlv
-bi4KPgoKVGhlcmUgaXMgYWxyZWFkeSBhIGZpeCBwdWxsZWQgaW50byBtYXN0ZXIgYnJhbmNoIG9m
-IHUtYm9vdCwgc28gdXBjb21pbmcKdS1ib290IHJlbGVhc2Ugc2hvdWxkIGJlIHdvcmtpbmcgZmlu
-ZS4KCj4KPiAgY29uZmlncy9ncmlubl9jaGlsaWJvYXJkX2RlZmNvbmZpZyB8IDIgKy0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4KPiBkaWZmIC0tZ2l0
-IGEvY29uZmlncy9ncmlubl9jaGlsaWJvYXJkX2RlZmNvbmZpZyBiL2NvbmZpZ3MvZ3Jpbm5fY2hp
-bGlib2FyZF9kZWZjb25maWcKPiBpbmRleCBlNzJhODJjZWU4Li44MGYzMDc3Yjc2IDEwMDY0NAo+
-IC0tLSBhL2NvbmZpZ3MvZ3Jpbm5fY2hpbGlib2FyZF9kZWZjb25maWcKPiArKysgYi9jb25maWdz
-L2dyaW5uX2NoaWxpYm9hcmRfZGVmY29uZmlnCj4gQEAgLTE2LDcgKzE2LDcgQEAgQlIyX1RBUkdF
-VF9ST09URlNfRVhUMl80PXkKPiAgQlIyX1RBUkdFVF9VQk9PVD15Cj4gIEJSMl9UQVJHRVRfVUJP
-T1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+ICBCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJT
-SU9OPXkKPiAtQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyMC4wMSIK
-PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyMC4xMCIKPiAgQlIy
-X1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9ImNoaWxpYm9hcmQiCj4gIEJSMl9UQVJHRVRf
-VUJPT1RfRk9STUFUX0lNRz15Cj4gIEJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RPTT15CgpS
-ZXZpZXdlZC1ieTogTWFyY2luIE5pZXN0cm9qIDxtLm5pZXN0cm9qQGdyaW5uLWdsb2JhbC5jb20+
-CgotLQpNYXJjaW4gTmllc3Ryw7NqCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+UGV0ZXIsIEFsbCwKCk9uIDIwMjEtMTEtMjIgMTg6MzcgKzAxMDAsIFBldGVyIEtvcnNnYWFyZCBz
+cGFrZSB0aHVzbHk6Cj4gPj4+Pj4gIlJvbWFpbiIgPT0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFv
+dXJAZ21haWwuY29tPiB3cml0ZXM6Cj4gID4gSGVsbG8gWWFubiwKPiAgPiBMZSAyMS8xMS8yMDIx
+IMOgIDAwOjEwLCBZYW5uIEUuIE1PUklOIGEgw6ljcml0wqA6Cj4gID4+IFdlIGdldCBuZXdlciBD
+QSBjZXJ0aWZpY2F0ZXMsIHRvIGdldCByaWQgb2YgdGhlIGFubm95aW5nIGlzc3VlcyB3aXRoIHRo
+ZQo+ICA+PiBub3ctZXhwaXJlZCBMZXQncyBFbmNyeXB0IHJvb3QgY2VydGlmaWNhdGUuCj4gQ29t
+bWl0dGVkIHRvIDIwMjEuMDIueCBhbmQgMjAyMS4wOC54LCB0aGFua3MuCj4gID4gTWF5YmUgd2Ug
+Y2FuIGFsc28gYmFja3BvcnQgdGhlIHBhdGNoIHN3aXRjaGluZyB0byB0aGUgZ2l0bGFiIHJlZ2lz
+dHJ5Pwo+ICA+IGh0dHA6Ly9saXN0cy5idXN5Ym94Lm5ldC9waXBlcm1haWwvYnVpbGRyb290LzIw
+MjEtTm92ZW1iZXIvNjI4NTAyLmh0bWwKCkFncmVlZC4gQWZ0ZXIgaXQgaXMgYmFja3BvcnRlZCB0
+byBhbGwgcmVsZXZhbnQgYnJhbmNoZXMsIHdlIGNhbgpldmVudHVhbGx5IGRyb3AgdXNpbmcgdGhl
+IERvY2tlciBodWIuIEknbGwgc2VuZCBhIHBhdGNoIHVwZGF0aW5nIHRoZQptb2R1cy1vcGVyYW5k
+aSBpbiB0aGUgRG9ja2VyZmlsZXMuCgo+IFdlIGNhbi4gSXMgdGhlIDIwMjExMTIwLjE5MjUgaW1h
+Z2UgdGhlcmUgYWxyZWFkeT8KCkl0IGlzIGJlaW5nIHB1c2hlZCBhcyBJIGFtIHdyaXRpbmcgdGhp
+cy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
+fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
+IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
+aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
+IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
+VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
+IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
+LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
