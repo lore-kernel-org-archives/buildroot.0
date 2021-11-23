@@ -1,87 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5661DC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 21:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F29FC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 23 Nov 2021 22:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88CE460A8E;
-	Tue, 23 Nov 2021 21:42:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FDA240374;
+	Tue, 23 Nov 2021 22:38:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HDdMN-bhnV3I; Tue, 23 Nov 2021 21:42:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ne-HKbbfOVTS; Tue, 23 Nov 2021 22:38:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD6B860A88;
-	Tue, 23 Nov 2021 21:42:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A66DB1BF47F
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 21:42:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41DA4400BF;
+	Tue, 23 Nov 2021 22:38:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B7F841BF317
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 22:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95529402D3
- for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 21:42:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F292400BF
+ for <buildroot@lists.busybox.net>; Tue, 23 Nov 2021 22:38:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xahmfXUa7aKb for <buildroot@lists.busybox.net>;
- Tue, 23 Nov 2021 21:42:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bN7Y3d5D3TGV for <buildroot@lists.busybox.net>;
+ Tue, 23 Nov 2021 22:38:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87A5B402CB
- for <buildroot@buildroot.org>; Tue, 23 Nov 2021 21:42:17 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id u18so372564wrg.5
- for <buildroot@buildroot.org>; Tue, 23 Nov 2021 13:42:17 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 82AE9400B5
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 22:38:52 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id j3so607158wrp.1
+ for <buildroot@buildroot.org>; Tue, 23 Nov 2021 14:38:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=BgrHR6zdjq+AkTG1EIS/R4AurSFL/fHPkhThKeE36Sg=;
- b=ahFGDUDr/eDVCht1upxeZboxU5P1v2CxuuUVa2BwTqfAcNxGySezZb464zPzUGiI12
- 8ReUEXED5Fg40lErZ5bbJ9UFQlcs/nX3/lR76lfEim+rxsPOccsAYtVI/Z7TwM4g2g9/
- OJhBpPGjnUiFUZKU758pscClZGW200UmCc9UCDogtlEHaqAt6O57WV+pYsrxJ2TQdTBY
- 5C0XnPXUMnljDAq/ypx9GV0O3He1T0LUa5AcILvvs4L0viLjDd1XJ9pqcb6Yc/1Otci/
- RFRBXSgv8Tjgwz3zoPaktnkTX7Vhg1y6Njw4/m1hVCDi/IorODTf73s4tf4nQh4AtuS8
- GZSQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=oO2+pMohLMrtDIyHCSFcyINJfjj42tuJulykdEiSy+Q=;
+ b=ch6YHJJ5Xd6m/3GdgaefMfG9G1JAyVNjKa7xD8rlIq9U3ZrqUh29yw4O0ypNcR9821
+ DrfpMQNS76j/kPENeJQ8zzwQKmq2sfxA3ExFW72mczV/YJfnbfI5sXkl3+OvxgbrGfYE
+ GxjJ9DhaDryV1Dn/X5c82s5kcekqLnfyjnaWM1InzEkCh7L3bamL3kXFpO1PQMCiOGZD
+ h3JczSW2vjWKRRYz04eMVXthbzegKiueUjyqHK4ahbFxp3G5vWgW9DiVOCPs95T0WuCz
+ IokNbTg6lEsQmbtbOSnd5WK01ar6IMbcuvO32UFhh8SmyDLlXq80DIm+uWXLIFF2ftjV
+ mttg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BgrHR6zdjq+AkTG1EIS/R4AurSFL/fHPkhThKeE36Sg=;
- b=AwsfZYoikPEBKQKMqt4F6Hv5zlHwhlr7ufmWswphgvcp8/CxbksEDDRiGK+NLVaVnT
- kV+oVsR7ChLovrd5e0kiPE4KTYvsuYrW+79omPJV181Rip9+CtM+ZreahznpgRHxScWi
- mw0ReZv8z89cESc1nmOGFy9hr4GIWaJrvB2znicqJdeDjjSfLE/h5DoVMMR1J1/CSB4l
- 1e8q87JY4lwGlZUuE3eUmk6Bpzxb7qgT1T10U12hIOdt/DbdwO1oV2xtKeeVlSkIP4w2
- TUwQoh2NH70+ZQVGA7s1xNd3BHdKAKiAV/LWXhEW9Lxcs8uCUSspxt1iEFMrn7ts73AO
- hfxQ==
-X-Gm-Message-State: AOAM531TMcKITDReSwxbWw3ffekYo+LHJqdB12l/UYU2cwn8C2kImbiW
- NjTK4plx2cE+i+7reTM4xOM=
-X-Google-Smtp-Source: ABdhPJzkPthQNInu3H6UrRfxebUNVuy5BJ8JVo5r0s8OK8DDut890qq++C/6rnHEszfKdx0jteZZuw==
-X-Received: by 2002:a5d:4fcc:: with SMTP id h12mr11435445wrw.434.1637703735849; 
- Tue, 23 Nov 2021 13:42:15 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id d1sm12516284wrz.92.2021.11.23.13.42.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 23 Nov 2021 13:42:15 -0800 (PST)
-Message-ID: <9f9392a7-855e-7632-bf5e-b15c495df5d6@gmail.com>
-Date: Tue, 23 Nov 2021 22:42:14 +0100
+ bh=oO2+pMohLMrtDIyHCSFcyINJfjj42tuJulykdEiSy+Q=;
+ b=Q3JCgABvX08rb4QvIolcdX1IrnhgHLLnpPxuKU/c89EwuZFjFu24ySLFXyD4zOxOfZ
+ 97CnvnBWYJGfgoz0kO4nldnf7xiDS7X/JOpPlifG1A1OyaVn0if0uInLDN4EStvmlGos
+ x79nB7D8KX0FAw4dG6lLWfUj38p/L6dUcEx2MKD251ZpsJQ3fizD09FlVF1z3YdOp5P9
+ kKwakqWDLZO7PERoxFmMrTRDgby3AAYMaN93asvVWRcR/VAE34gJruWjV2jRNfLAUqoW
+ Pw8tTWbV10XRPq0uK+l7e6kg2TbsEOXRqG2Na5xvEySyRSBuPjQ7n2LzZdNSpY0prGFq
+ JilQ==
+X-Gm-Message-State: AOAM5306HJO1Bf/awg6J76euwPW29zl9piOdWEK7jLoQhXP9Xy1Eu/lT
+ U8zBPitkYp/T9hHYm42Mu7aHTO435JM=
+X-Google-Smtp-Source: ABdhPJygixOJXVdTPkkl0YHAMoTGdHADuxwHzdgqhlaxR+9mSmtoEgIYGjiFHhZ5KXfbpGChKrtikQ==
+X-Received: by 2002:a5d:6e04:: with SMTP id h4mr12300217wrz.127.1637707130425; 
+ Tue, 23 Nov 2021 14:38:50 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id n7sm13117822wro.68.2021.11.23.14.38.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Nov 2021 14:38:49 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Nov 2021 23:36:21 +0100
+Message-Id: <20211123223621.3804258-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1637700992.git.yann.morin.1998@free.fr>
- <ca903288a1b6f678294d96d3e7024433156866f7.1637700992.git.yann.morin.1998@free.fr>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <ca903288a1b6f678294d96d3e7024433156866f7.1637700992.git.yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 2/2] support/docker: drop use of Docker hub,
- use Gitlab registry
+Subject: [Buildroot] [PATCH v2,1/1] package/pure-ftpd: fix CVE-2021-40524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,35 +82,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwKCkxlIDIzLzExLzIwMjEgw6AgMjE6NTYsIFlhbm4gRS4gTU9SSU4gYSDDqWNy
-aXTCoDoKPiBOb3cgdGhhdCBvdXIgcGlwZWxpbmVzIGFyZSB1c2luZyB0aGUgRG9ja2VyIGltYWdl
-IGZyb20gdGhlIEdpdGxhYgo+IHJlZ2lzdHJ5LCB0aGVyZSBpcyBubyBsb25nZXIgYW55IHJlYXNv
-biB0byBwdXNoIHRoZSBpbWFnZSB0byB0aGUKPiBEb2NrZXIgaHViLgo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgo+IENjOiBSb21haW4g
-TmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Cj4gQ2M6IEFybm91dCBWYW5kZWNhcHBlbGxl
-IChFc3NlbnNpdW0vTWluZCkgPGFybm91dEBtaW5kLmJlPgo+IC0tLQo+ICBzdXBwb3J0L2RvY2tl
-ci9Eb2NrZXJmaWxlIHwgNCArKy0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
-IDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvZG9ja2VyL0RvY2tlcmZp
-bGUgYi9zdXBwb3J0L2RvY2tlci9Eb2NrZXJmaWxlCj4gaW5kZXggNTc0NDVkNWNkMS4uYWQ4NzA0
-ODczYyAxMDA2NDQKPiAtLS0gYS9zdXBwb3J0L2RvY2tlci9Eb2NrZXJmaWxlCj4gKysrIGIvc3Vw
-cG9ydC9kb2NrZXIvRG9ja2VyZmlsZQo+IEBAIC0xLDcgKzEsNyBAQAo+ICAjIFRoaXMgRG9ja2Vy
-ZmlsZSBnZW5lcmF0ZXMgdGhlIGRvY2tlciBpbWFnZSB0aGF0IGdldHMgdXNlZCBieSBHaXRsYWIg
-Q0kKPiAgIyBUbyBidWlsZCBpdCAoWVlZWU1NREQuSEhNTSBpcyB0aGUgY3VycmVudCBkYXRlIGFu
-ZCB0aW1lIGluIFVUQyk6Cj4gLSMgICBkb2NrZXIgYnVpbGQgLXQgYnVpbGRyb290L2Jhc2U6WVlZ
-WU1NREQuSEhNTSBzdXBwb3J0L2RvY2tlcgo+IC0jICAgZG9ja2VyIHB1c2ggYnVpbGRyb290L2Jh
-c2U6WVlZWU1NREQuSEhNTQo+ICsjICAgZG9ja2VyIGJ1aWxkIC10IHJlZ2lzdHJ5LmdpdGxhYi5j
-b20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvYmFzZTpZWVlZTU1ERC5ISE1NIHN1cHBvcnQvZG9j
-a2VyCj4gKyMgICBkb2NrZXIgcHVzaCByZWdpc3RyeS5naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcv
-YnVpbGRyb290L2Jhc2U6WVlZWU1NREQuSEhNTQoKUmV2aWV3ZWQtYnk6IFJvbWFpbiBOYW91ciA8
-cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+ICAKPiAgIyBX
-ZSB1c2UgYSBzcGVjaWZpYyB0YWcgZm9yIHRoZSBiYXNlIGltYWdlICphbmQqIHRoZSBjb3JyZXNw
-b25kaW5nIGRhdGUKPiAgIyBmb3IgdGhlIHJlcG9zaXRvcnkuLCBzbyBkbyBub3QgZm9yZ2V0IHRv
-IHVwZGF0ZSB0aGUgYXB0LXNvdXJjZXMubGlzdAo+IAoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+In Pure-FTPd 1.0.49, an incorrect max_filesize quota mechanism in the
+server allows attackers to upload files of unbounded size, which may
+lead to denial of service or a server hang. This occurs because a
+certain greater-than-zero test does not anticipate an initial -1 value.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add PURE_FTPD_IGNORE_CVES entry
+
+ ...ad-file-size-when-quotas-are-enabled.patch | 33 +++++++++++++++++++
+ package/pure-ftpd/pure-ftpd.mk                |  3 ++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+
+diff --git a/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch b/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+new file mode 100644
+index 0000000000..b269e6cfe7
+--- /dev/null
++++ b/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+@@ -0,0 +1,33 @@
++From 37ad222868e52271905b94afea4fc780d83294b4 Mon Sep 17 00:00:00 2001
++From: Frank Denis <github@pureftpd.org>
++Date: Tue, 23 Nov 2021 18:53:34 +0100
++Subject: [PATCH] Initialize the max upload file size when quotas are enabled
++
++Due to an unwanted check, files causing the quota to be exceeded
++were deleted after the upload, but not during the upload.
++
++The bug was introduced in 2009 in version 1.0.23
++
++Spotted by @DroidTest, thanks!
++
++[Retrieved from:
++https://github.com/jedisct1/pure-ftpd/commit/37ad222868e52271905b94afea4fc780d83294b4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/ftpd.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/ftpd.c b/src/ftpd.c
++index d856839..be2fd78 100644
++--- a/src/ftpd.c
+++++ b/src/ftpd.c
++@@ -4247,8 +4247,7 @@ void dostor(char *name, const int append, const int autorename)
++     if (quota_update(&quota, 0LL, 0LL, &overflow) == 0 &&
++         (overflow > 0 || quota.files >= user_quota_files ||
++          quota.size > user_quota_size ||
++-         (max_filesize >= (off_t) 0 &&
++-          (max_filesize = user_quota_size - quota.size) < (off_t) 0))) {
+++         (max_filesize = user_quota_size - quota.size) < (off_t) 0)) {
++         overflow = 1;
++         (void) close(f);
++         goto afterquota;
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 7e3d18b433..35a1aac917 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -21,6 +21,9 @@ PURE_FTPD_IGNORE_CVES += CVE-2020-9365
+ # 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
+ PURE_FTPD_IGNORE_CVES += CVE-2020-9274
+ 
++# 0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
++PURE_FTPD_IGNORE_CVES += CVE-2021-40524
++
+ PURE_FTPD_CONF_OPTS = \
+ 	--with-altlog \
+ 	--with-puredb
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
