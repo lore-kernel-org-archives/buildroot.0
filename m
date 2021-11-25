@@ -1,82 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C0FC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 20:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 051DCC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 21:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33DDE60653;
-	Thu, 25 Nov 2021 20:27:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 638DA401D7;
+	Thu, 25 Nov 2021 21:37:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 03OA_4__X2Fp; Thu, 25 Nov 2021 20:27:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CHsf685EsMq7; Thu, 25 Nov 2021 21:37:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47B8060737;
-	Thu, 25 Nov 2021 20:27:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 36B3E1BF3F3
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 20:26:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BEDD401D2;
+	Thu, 25 Nov 2021 21:37:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AF8D1BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 21:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 259D360737
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 20:26:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AE2582726
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 21:37:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x5osEJjcjQQB for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 20:26:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8A63B60653
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 20:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1637872011;
- bh=JeK99AU6cg0YvMlKbUXeJXcEem3TuBfgcbN8eghk6qM=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=V65PWT0uZRJTBacBrA2WODPyY1uc5Uergxzv+NNZ1BiIgwenguVjSX0+yHPq5rySC
- 9B0GDEuTAR2q/UR6YPZPrJtzffG+iAFCWVDoJqxhE/pWWBr6aNdbFEEhX98RTNfHGS
- tz464TYMk02jc3V0TpteDeXdhbaBwOZOf5u5Rw0E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.164]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M59GA-1mpFOx2qY8-001ByU; Thu, 25
- Nov 2021 21:26:51 +0100
-Date: Thu, 25 Nov 2021 21:26:50 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20211125212650.60f9062e@gmx.net>
-In-Reply-To: <YYzbH6nnjt5O7SxF@waldemar-brodkorb.de>
-References: <20211025212541.12280-1-ps.report@gmx.net>
- <20211028230131.5f50d6e7@gmx.net>
- <YX3NuMeoXJyNSD8S@waldemar-brodkorb.de>
- <20211104213045.1d702c3d@gmx.net>
- <YYzbH6nnjt5O7SxF@waldemar-brodkorb.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZjZNJepgqdna for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 21:37:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A65D980CB1
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 21:37:11 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id k1so7053541ilo.7
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 13:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=m8B/PT2HcCy85XifilQSWOeBIISrb4+1IXwSl7jtQ8E=;
+ b=Yga+WmdTNDWEf+QGtOpVtb0F4Uh6AhCFIUx9CkzxhwKEu1cFfP8Ui3X3K+EewmB8cg
+ tYJm7IleLmIYomG7VGvLxN8Dy/EHyoHzVE7Xtbdf1azmxUIavDiioko2zovwzRdhl1/r
+ 2PnQpH+cZ9XZPDrz8SKoQqKeLk0r0Zv/dBbwIIGJ4qYeGVQ/UrZt3IovFK2iIO8O7gcf
+ 6oYl9xjFRNgZTpPhFRXIKtjr4fSK7qzJt/LhcWmnDvij/u69nbmkLEytn097WIvyx/3U
+ lM0eq/YupLUUFByJgFIN2tDzfQBLTxTwRpG8xxFbvbnZ1iWkQ9dDxIndohHwUrD2KtXM
+ MrHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=m8B/PT2HcCy85XifilQSWOeBIISrb4+1IXwSl7jtQ8E=;
+ b=5st5Ayhq9gtL+JfcARqqBEZH9TTPF7mv3YDZVsA9eR4SVSPRMt+CzaM15W4FdG/ORc
+ RavAK+2SFTJPx2gGBn8f5U05o1LWbRL2yr8B/sqcVpDtwC01/B7LHgQHxGrPrTim5epT
+ XGGKGTo9QEWNOY4e2qq5E/gOMsZ6PStHWr9sOUklh1haN2vfvWdZgH9GW/ZvH2F3/Ian
+ Qsb/J9hht4iQEbr7mF/QU5jDRJBP/PvfzbJyhBD4UxHyzU/OVZ0YaEKkhwON6BchNymb
+ iEKu+mlbdTj+7gO4gANd0DIQWVYF9Vu7X27Xd/v9WO+woNjmbJfDkOos5y6rZWQBIfE8
+ c7Vw==
+X-Gm-Message-State: AOAM5301m5ILdHRwOGNXLgz48FWUVIApZdOZ78VRDWnRXbGoZl6KN5Jk
+ mUcY1nZUC3I0ICruhSMp6hRvjXVKu7g=
+X-Google-Smtp-Source: ABdhPJzGuROAfIKYlAOepQMEtGRnjDN0ph4kUsimWOhS80lGGscjqRWZERyHVgkMvblZq8Qs9c0TTQ==
+X-Received: by 2002:a92:2a06:: with SMTP id r6mr26269488ile.34.1637876230512; 
+ Thu, 25 Nov 2021 13:37:10 -0800 (PST)
+Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
+ [71.33.128.47])
+ by smtp.gmail.com with ESMTPSA id w1sm1741579ilq.1.2021.11.25.13.37.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 25 Nov 2021 13:37:10 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 25 Nov 2021 14:37:07 -0700
+Message-Id: <20211125213707.2050547-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:7GeEzooSvPKDcmUFq/jRQJKNSE4LVKxQTNR7/h1uPV6rVpgQ3jC
- LjEhtPzQyJsRs9o0ZDDWbDw2QeKvVYFSH5N9hjmkCGrxIfg+U4Nnrssc/OPuDDkAbGoIM6f
- qodpJfl0Ka+9iAFe6thI6VmNkE89+FG/Bv4mEv8aYqMbT1yuNjNmRpZ4ZJeZnZRkzHWXe+I
- QT9Ja7swsJZfnq8obIvcg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I1FQUvA/xeg=:3uvb1lDLGFtCTtQIzlh07q
- qEA5Q/pftEuCy1VIwYcQHPzxAMP1nznJEEX0pv6lAwKjnxy7NtApA/5QSkXARfdjPRY5dg8Iw
- vIctxXxJmvGaEJpcqXfQQWDxZD6VbhS0wLm7Y8A2081e2h5uv9kIb6lWATjF++0E0+a/IfcXN
- SK/hOZVF6Z29nszUzK3zdT0v1548MkgriAULWu1m/uJ7lpihmaBi4O880cWRYDye+WYh8l5Zw
- YddGbyE3uQtWU8E3EXpxlLobIDYbM/GHRh4FB5OUpDQqOFCIs3PT1KbiJKEY/00mOTytJiG9r
- abqSe7eAdkDwX33Z+NdnSWhVKlANm03C04pKjmHsDsKtKpar12pEyffcx2BEfE3SS3Q47eNTA
- TsYXL7ZfIIirCddTkeqU8UbOGnJ0BGLJDVQ+CqVH8kZpprw3qU3RW6/HHecbZfSMLri2OEzrs
- du19GESVDQnU14bmJcyVlNWFBtXyHctHNBegh+lxJqbHk/Iw8tXche1doAgrvJJUIOYlc20iq
- ewMypCtan4oBoNLQCoI81vP5CCblX1rkxIr5QpLoWfpOJjLpy9Y/eqXn8nxy1TO7wQ4M3qGb5
- dZfioSqIPE3ahf//Nju2nJtBq3LpUPBW1smsgMNZ/Szbw6eb07m6AclH8x6FYZiFTfAE0H+fu
- Gv67oH8WakZ0rGCu3TopMRWUw2EFrHcqoEUMl5IQ4pL+1dUhYMO/QomxrodUlcd8/s+UTDeX9
- ryscQyj2rgkIUwGctLSwJCBClwnpo4LDU2mZLTsFWLhNpXFZNYgOkXpmvqazawJ0z0bUcfA7f
- lCPbAi+QSshxx2U9mkDQwcJcAKYk2UgVhH9ad2iYgEq/9OtWXh8hElwAHwJeSjyjLVyiDMi+Q
- T8tX8sHjclLchf0zEbAxO55AF5XPvtA16bK9axV9UPBNE5eSaIC1KEy+JhBVuwMCJoaReiFa6
- MSu89y9PiER5Ns6c3eH6s12ZO2zRQEc3Z8mo5CvqeGnPs2BNtSg7CMyiehJzo9VqEdrmyVVCR
- HmOA1rTyUDpsKqqJEathxZvai6EGJUJPTVyTwibz/QCtSrMgyU5KIO8sRdmS5iq25PgS4Dcbo
- WzKLEl3sQ35PR8=
-Subject: Re: [Buildroot] [uclibc-ng-devel] Re: [PATCH v1] package/ntpsec:
- new package
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: fix buildutils check in
+ python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,219 +86,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: devel@uclibc-ng.org, Waldemar Brodkorb <mail@waldemar-brodkorb.de>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+The message attribute does not exist in python3, see PEP-0352:
+https://www.python.org/dev/peps/pep-0352/
 
-On Thu, 11 Nov 2021 09:58:07 +0100, Waldemar Brodkorb <wbx@openadk.org> wrote:
+Fixes:
+Traceback (most recent call last):
+  File "utils/scanpypi", line 743, in <module>
+    main()
+  File "utils/scanpypi", line 693, in main
+    if 'buildutils' in err.message:
+AttributeError: 'ImportError' object has no attribute 'message'
 
-> Hi Peter,
-> Peter Seiderer wrote,
->
-> > Hello Waldemar,
-> >
-> > On Sun, 31 Oct 2021 00:56:56 +0200, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> >
-> > > Hi Peter,
-> > > Peter Seiderer wrote,
-> > >
-> > > > Hello Waldemar, *,
-> > > >
-> > > > On Mon, 25 Oct 2021 23:25:41 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-> > > >
-> > > > The resulting ntpd runs fine with the raspberrypi3_defconfig, but segfaults
-> > > > when compiled/used with raspberrypi3_64_defconfig (uclibc, -Os):
-> > > >
-> > > > 	$ /usr/sbin/ntpd -n -d -g
-> > > > 1970-01-01T00:04:18 ntpd[263]: INIT: ntpd ntpsec-1.2.0 2021-10-24T13:39:21Z: Starting
-> > > > 1970-01-01T00:04:18 ntpd[263]: INIT: Command line: /usr/sbin/ntpd -n -d
-> > > > 1970-01-01T00:04:18 ntpd[263]: INIT: precision = 7.291 usec (-17)
-> > > > 1970-01-01T00:04:18 ntpd[263]: INIT: successfully locked into RAM
-> > > > 1970-01-01T00:04:18 ntpd[263]: CONFIG: readconfig: parsing file: /etc/ntp.conf
-> > > > 1970-01-01T00:04:18 ntpd[263]: CONFIG: restrict nopeer ignored
-> > > > 1970-01-01T00:04:18 ntpd[263]: INIT: Using SO_TIMESTAMPNS
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen and drop on 0 v6wildcard [::]:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen and drop on 1 v4wildcard 0.0.0.0:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen normally on 2 lo 127.0.0.1:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen normally on 3 eth0 172.16.0.30:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen normally on 4 lo [::1]:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listen normally on 5 eth0 [fe80::ba27:ebff:fea6:340%2]:123
-> > > > 1970-01-01T00:04:18 ntpd[263]: IO: Listening on routing socket on fd #22 for interface updates
-> > > > 1970-01-01T00:04:19 ntpd[263]: SYNC: Found 10 servers, suggest minsane at least 3
-> > > > 1970-01-01T00:04:19 ntpd[263]: INIT: MRU 10922 entries, 13 hash bits, 65536 bytes
-> > > > 1970-01-01T00:04:20 ntpd[263]: DNS: dns_probe: 0.pool.ntp.org, cast_flags:8, flags:101
-> > > > Segmentation fault (core dumped)
-> > >
-> > > Could you add a small C test program to uClibc-ng-test to trigger
-> > > the bug? That would help to find any regression to targets without
-> > > TLS support.
-> >
-> > Did take a first look at the uClibc-ng-test regarding the problem,
-> > there is already one test/inet/tst-res test...
-> >
-> >
-> > For the raspberrypi3_defconfig case (uclibc unpatched):
-> >
-> > 	$ sh uclibcng-testrunner.sh
-> > [...]
-> > FAIL tst-ethers-line got 1 expected 0
-> > 	Cannot open file /etc/ethers: No such file or directory
-> > FAIL tst-ethers got 1 expected 0
-> > 	Either /etc/ethers is missing or it has incorrect contents
-> > [...]
-> > FAIL tst-cancel18 got 1 expected 0
-> > 	going to cancel in-time
-> > 	Timed out: killed the child process
-> > [...]
-> > FAIL tst-cancelx18 got 1 expected 0
-> > 	going to cancel in-time
-> > 	Timed out: killed the child process
-> > [...]
-> > Total skipped: 15
-> > Total failed: 4
-> > Total passed: 460
-> >
-> >
-> >
-> > For the raspberrypi3_64_defconfig case (uclibc unpatched):
-> >
-> > 	$ sh uclibcng-testrunner.sh
-> > [...]
-> > FAIL tst-ethers-line got 1 expected 0
-> > 	Cannot open file /etc/ethers: No such file or directory
-> > FAIL tst-ethers got 1 expected 0
-> > 	Either /etc/ethers is missing or it has incorrect contents
-> > [...]
-> > FAIL tst-res got 139 expected 0
-> > 	Segmentation fault (core dumped)
-> > [...]
-> > FAIL tst-seekdir got 1 expected 0
-> > 	.
-> > 	..
-> > 	tst-seekdir.out
-> > 	tst-utmpx
-> > 	tst-inotify
-> > 	tst-mkostemps.out
-> > 	seek.out
-> > 	tst-scandir
-> > 	tst-seekdir
-> > 	tst-statvfs.out
-> > 	sem
-> > 	stdarg.out
-> > 	fdopen.out
-> > 	tst-utmp
-> > 	tst-preadvwritev.out
-> > 	bug-glob2.out
-> > 	popen
-> > 	dirent64.out
-> > 	tst-scandir.out
-> > 	tst-hasmntopt.out
-> > 	tst-statvfs
-> > 	bug-glob2
-> > 	popen.out
-> > 	Makefile
-> > 	opendir-tst1
-> > 	sem.out
-> > 	tst-inotify.out
-> > 	tst-syscall0
-> > 	tst-statfs.out
-> > 	bug-readdir1
-> > 	dirent.out
-> > 	tst-statfs
-> > 	tst-syscall1.out
-> > 	tst-syscall0.out
-> > 	stdarg
-> > 	tst-preadvwritev
-> > 	tst-syscall6.out
-> > 	tst-mkostemps
-> > 	Makefile.in
-> > 	tst-utmp.out
-> > 	tst-nftw
-> > 	opendir-tst1.out
-> > 	tst-syscall1
-> > 	bug-readdir1.out
-> > 	tst-hasmntopt
-> > 	tst-syscall6
-> > 	fdopen
-> > 	seek
-> > 	tst-nftw.out
-> > 	dirent64
-> > 	tst-fnmatch.input
-> > 	tst-utmpx.out
-> > 	dirent
-> > 	going back past 4-th entry...
-> > 	seekdir (d, -1600443765); telldir (d) == -1
-> > [...]
-> > FAIL tst-cancel18 got 1 expected 0
-> > 	going to cancel in-time
-> > 	Timed out: killed the child process
-> > [...]
-> > FAIL tst-cancelx18 got 1 expected 0
-> > 	going to cancel in-time
-> > 	Timed out: killed the child process
-> > [...]
-> > FAIL tst-tls3 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls3: symbol 'baz': can't handle reloc type 0x404
-> > FAIL tst-tls4 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls4: symbol 'foo': can't handle reloc type 0x404
-> > FAIL tst-tls5 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls5: symbol 'foo': can't handle reloc type 0x404
-> > FAIL tst-tls6 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls6: symbol 'foo': can't handle reloc type 0x404
-> > FAIL tst-tls7 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls7: symbol 'foo': can't handle reloc type 0x404
-> > FAIL tst-tls8 got 1 expected 0
-> >
-> > 	/usr/lib/uclibc-ng-test/test/tls/tst-tls8: symbol 'foo': can't handle reloc type 0x404
-> > [...]
-> > Total skipped: 15
-> > Total failed: 12
-> > Total passed: 454
-> >
-> >
-> > The tst-res Segmentation fault failure can be fixed by
-> > this additional uclibc patch:
-> >
-> > --- a/include/resolv.h
-> > +++ b/include/resolv.h
-> > @@ -457,7 +457,7 @@ __END_DECLS
-> >  #    ifndef NOT_IN_libc
-> >  #     define __resp __libc_resp
-> >  #    endif
-> > -#    define _res (*__resp)
-> > +#    define _res (*__res_state())
-> >  extern __thread struct __res_state *__resp attribute_tls_model_ie;
-> >  #   endif
-> >  #  else
-> >
-> >
-> > Will take a look at some glibc resolv tests and try to port
-> > them (and, if I find enough time, at some of the other
-> > failures)...
->
-> Can you sent the two existing patches with your SoB Line added?
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And finally done (sorry for the delay):
-
-	https://patchwork.ozlabs.org/project/uclibc-ng/patch/20211125201825.22354-1-ps.report@gmx.net/
-
-Regards,
-Peter
-
->
-> best regards
->  Waldemar
->
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 1f3326cf4d..17d8a0017a 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -690,7 +690,7 @@ def main():
+             try:
+                 package.load_setup()
+             except ImportError as err:
+-                if 'buildutils' in err.message:
++                if 'buildutils' in str(err):
+                     print('This package needs buildutils')
+                 else:
+                     raise
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
