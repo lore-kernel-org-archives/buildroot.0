@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66E1CC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 07:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C45DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 07:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0416608DD;
-	Thu, 25 Nov 2021 07:27:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6364401E4;
+	Thu, 25 Nov 2021 07:28:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8-nU6uhjBH_u; Thu, 25 Nov 2021 07:27:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5340608E7;
-	Thu, 25 Nov 2021 07:27:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A6C781BF36C
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:27:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95C1540611
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:27:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uSMqMS3Ev-My for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 07:27:42 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2pUGDC_OZhTl; Thu, 25 Nov 2021 07:28:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04C4740236;
+	Thu, 25 Nov 2021 07:28:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F17EF1BF36C
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:28:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0EBD607B2
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:28:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XiHNGvqSCvaz for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 07:28:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 196D6405F3
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 07:27:42 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id u18so9500455wrg.5
- for <buildroot@buildroot.org>; Wed, 24 Nov 2021 23:27:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:subject:date:message-id:mime-version
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52F60606CA
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 07:28:36 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id a9so9493160wrr.8
+ for <buildroot@buildroot.org>; Wed, 24 Nov 2021 23:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QbFmvZ055+1+LS1jv+j1n1vAO2BD34gPp2fRar4bT/o=;
- b=uTWd0mP5zKXihMnT3fjJYToMs7P75us7i3UoYa2EqI86WP6Ze6xVe0JMvJO2e2Izhg
- bLJfnIaAaxX7kHx8PsfIO8GW/2XA8Vx9Ha+X5iNh8QJisBerUBW0y+JTJZj5sBY938uu
- dEjWbsxDiz0Srv0jSyrWejubeduvporgXBb4XqkaezEOI5wQM7BV1a3hbXW8XBe4K+aN
- mMoKBIl2M6bIacIZFkLeUi9Co/r9e27bW8XH5f4/sA2SVYfZod06dvjp+4Scvdz+5kZo
- gfTyGiNpBwJtemb/2R3SJM3cDRQPQfrYoJyXFGEIAoa9TZUWBIpEes3xe7cXZaRg/GSF
- 6xYQ==
+ bh=ZUDeTYAxMoh3XL8BpCkGFn6VMTJniygxGq6LnaGrlPU=;
+ b=ea8dgI59mYpX+mYuWsAjQMS6FHLlEdtgPKaMy4MWos1GibVLoy5iVTwBPaCLHIKtF+
+ 4mnzQhgjKSE7D4hkM6QnAsxLOWz8hsRiofnuEU3e2CqS3l0X6dJYNKXktrKnHnUf96pi
+ ZTET9/W0v8K1Hx/u844idK+j5id4KJwcVvLUNBjYZGQHWVnrldwCnK0cVNMBlbnACC6w
+ THYhuwn5UcA6ynf99+5l6IUJg81pOGqDewvgSDSggdmeltpHgp2dUySaLAuMVFFfX84l
+ xATDckcPDpNy3fLNwiYrLMxulObz90LHp++TeZwqeFfZCJkBo0GPWCGdVrtPISaOfftp
+ Dq4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=QbFmvZ055+1+LS1jv+j1n1vAO2BD34gPp2fRar4bT/o=;
- b=uNimU1XvPn+pf5LM0HTtLMrD482q+F7LKAkEPFDLrzUGtiTlk1FARZRYjdMv/ilUiy
- 4nTVtM5/PT/n+QTsSLdPi+N3GklI7RSQ+D9mh+9n1sSBRx7B8dbyy++1qhrw5y2y4qgC
- 2DxDHI0TE4JuZi+ToqnPo5ZgWQyuXYRJ8MxbG+7S7VEXAAHjbeFXkHLnckoKPTP6Dc2H
- stUSi7YW7+n5+1U4W/AgBymKS9StZ7yI9dWtKB0OIuOQk4CU/q2naJdd2ZnWnXfb1lLS
- JO/KDkY2+A+ze2MYP7DUFA0aKZnEZQ+43mDevEZjmjqKO30fYB4BgfilOCqaFf08sSEm
- /H6Q==
-X-Gm-Message-State: AOAM530U6PY/dqSyROfCxTgHx4CXnIGbJQ07FrgbfwCDL02/NLSaRpkh
- zag7/pxAKGvRTjsmrvH8ZmjuKmmujzAMQF3gufcf0Q==
-X-Google-Smtp-Source: ABdhPJydHEf2SG3+2n/NYOGASghRtPq8eItqX+viRDpfnsb4h05/73ykFD+b8jbd49oFpFARqvAf6w==
-X-Received: by 2002:a5d:464c:: with SMTP id j12mr4110685wrs.150.1637825260270; 
- Wed, 24 Nov 2021 23:27:40 -0800 (PST)
-Received: from woodpecker.madriguera.foxhound.fi ([194.59.250.59])
- by smtp.gmail.com with ESMTPSA id a10sm7540627wmq.27.2021.11.24.23.27.39
+ bh=ZUDeTYAxMoh3XL8BpCkGFn6VMTJniygxGq6LnaGrlPU=;
+ b=B6wZ3Ghv/fN/WyDeKD0r/3gNZCQ8QEd3KD6Mqbr2e6lQP67AmGWePf1ULivO4s7ORw
+ 68XWNny8IXfbwn/GTqINZ+qGKNI1+ZOe1pX2ysiT2Cw5B3lETz4UY65IePWQRrE5XSna
+ N/+Uyw4jG+/o1mtCBVrXkrmubBptOX0U9MWLNrhJhrmdG9m/bN9C0m++TXVNuPapmLod
+ loPKdwEM++JXdTkanJGi7EgVfpqr93PLZ/fdxO4B/m7++c3pXdMhPdwbU8R1W1dgtguw
+ r5Sigrdshi6x8/cjJ2h/GGdQDv0PomdHuQl9X4q2lSuKvLJlQ0z7W6fHaoR2DLGn0a1/
+ rC1Q==
+X-Gm-Message-State: AOAM5328FHrJ+XieoyB4J9W1hidesnCiEbcvbhRCXSsS2jvQcHr/9eK9
+ HQX0Z2jcCiQh9nx8Ap1VHd/i1LLljaA=
+X-Google-Smtp-Source: ABdhPJxpikhcVipb4xrixKjJAqKlj6jrzvbsynGbuuB6+y3nelw8dYEuiJaa8ikC8W4iHXbYBLp++w==
+X-Received: by 2002:a5d:584e:: with SMTP id i14mr4269791wrf.386.1637825314274; 
+ Wed, 24 Nov 2021 23:28:34 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id b10sm1997898wrt.36.2021.11.24.23.28.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Nov 2021 23:27:40 -0800 (PST)
-From: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>
-To: jose.pekkarinen@unikie.com,
-	buildroot@buildroot.org
-Date: Thu, 25 Nov 2021 09:27:37 +0200
-Message-Id: <20211125072737.3284-1-jose.pekkarinen@unikie.com>
-X-Mailer: git-send-email 2.30.2
+ Wed, 24 Nov 2021 23:28:33 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 25 Nov 2021 08:25:22 +0100
+Message-Id: <20211125072522.4179056-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3] package/opensc: new package
+Subject: [Buildroot] [PATCH/next 1/1] package/jitterentropy-library: bump to
+ version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,232 +85,235 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIHBhdGNoIHdpbGwgYWRkIGEgYmFzaWMgb3BlbnNjIHBhY2thZ2UgdG8gYnVpbGQKb24gYnVp
-bGRyb290LgoKU2lnbmVkLW9mZi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVu
-QHVuaWtpZS5jb20+Ci0tLQpbdjEgLT4gdjJdIEFkZHJlc3NlZCBtdWx0aXBsZSBjb21tZW50cyBm
-cm9tIGZvcm1lciByZXYKW3YyIC0+IHYzXSBGaXhlZCB3YXJuaW5nIG9mIG1pc3Npbmcgc2lnbmVk
-IG9mZiBwYXRjaAoKIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgMSArCiBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgIDEgKwogLi4uY2thZ2Utb3BlbnNjLWZpeC1tYXliZS11bmluaXRpYWxpemVkLnBhdGNoIHwg
-IDY5ICsrKysrKysrKwogLi4ueC1zdHJpY3QtYWxpYXNpbmctd2FybmluZ3MtYXMtZXJyb3JzLnBh
-dGNoIHwgMTMyICsrKysrKysrKysrKysrKysrKwogcGFja2FnZS9vcGVuc2MvQ29uZmlnLmluICAg
-ICAgICAgICAgICAgICAgICAgIHwgIDExICsrCiBwYWNrYWdlL29wZW5zYy9vcGVuc2MuaGFzaCAg
-ICAgICAgICAgICAgICAgICAgfCAgIDUgKwogcGFja2FnZS9vcGVuc2Mvb3BlbnNjLm1rICAgICAg
-ICAgICAgICAgICAgICAgIHwgIDE0ICsrCiA3IGZpbGVzIGNoYW5nZWQsIDIzMyBpbnNlcnRpb25z
-KCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9vcGVuc2MvMDAwMS1wYWNrYWdlLW9wZW5z
-Yy1maXgtbWF5YmUtdW5pbml0aWFsaXplZC5wYXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2th
-Z2Uvb3BlbnNjLzAwMDItcGFja2FnZS1vcGVuc2MtZml4LXN0cmljdC1hbGlhc2luZy13YXJuaW5n
-cy1hcy1lcnJvcnMucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29wZW5zYy9Db25m
-aWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29wZW5zYy9vcGVuc2MuaGFzaAogY3Jl
-YXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvb3BlbnNjL29wZW5zYy5tawoKZGlmZiAtLWdpdCBhL0RF
-VkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDcwMjYyZWFjOGMuLmQ5MmMzOGYwN2QgMTAwNjQ0
-Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMTQ1NSw2ICsxNDU1LDcgQEAg
-RjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKIAogTjoJSm9zw6kg
-UGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+CiBGOglwYWNrYWdlL3NvZnRo
-c20yLworRjoJcGFja2FnZS9vcGVuc2MvCiAKIE46CUpvc2VwaCBLb2d1dCA8am9zZXBoLmtvZ3V0
-QGdtYWlsLmNvbT4KIEY6CXBhY2thZ2UvYXQtc3BpMi1hdGsvCmRpZmYgLS1naXQgYS9wYWNrYWdl
-L0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCmluZGV4IGUzNTVhYjE5ODcuLjNjZmNmMzcy
-ZjMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvQ29uZmlnLmlu
-CkBAIC0xNjE3LDYgKzE2MTcsNyBAQCBtZW51ICJIYXJkd2FyZSBoYW5kbGluZyIKIAlzb3VyY2Ug
-InBhY2thZ2UvdHNsaWIvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS91aGQvQ29uZmlnLmlu
-IgogCXNvdXJjZSAicGFja2FnZS91cmcvQ29uZmlnLmluIgorCXNvdXJjZSAicGFja2FnZS9vcGVu
-c2MvQ29uZmlnLmluIgogZW5kbWVudQogCiBtZW51ICJKYXZhc2NyaXB0IgpkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9vcGVuc2MvMDAwMS1wYWNrYWdlLW9wZW5zYy1maXgtbWF5YmUtdW5pbml0aWFsaXpl
-ZC5wYXRjaCBiL3BhY2thZ2Uvb3BlbnNjLzAwMDEtcGFja2FnZS1vcGVuc2MtZml4LW1heWJlLXVu
-aW5pdGlhbGl6ZWQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4u
-MWY2YTJlNmY0MgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uvb3BlbnNjLzAwMDEtcGFja2Fn
-ZS1vcGVuc2MtZml4LW1heWJlLXVuaW5pdGlhbGl6ZWQucGF0Y2gKQEAgLTAsMCArMSw2OSBAQAor
-cGFja2FnZTpvcGVuc2M6IEZpeCBtYXliZSB1bmluaXRpYWxpemVkIGlzc3VlcworCitUaGlzIHBh
-dGNoIHdpbGwgZml4IHNvbWUgd2FybmluZyB0cmVhdGVkIGFzIGVycm9ycwordGhhdCBoaWdobGln
-aHQgbWF5YmUgdW5pbml0aWFsaXplZCB2YXJpYWJsZXMuCisKK1NpZ25lZC1vZmYtYnk6IEpvc8Op
-IFBla2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPgorSW5kZXg6IG9wZW5zYy0w
-LjIyLjAvc3JjL3BrY3MxNWluaXQvcGtjczE1LWFzZXBjb3MuYworPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0tIG9w
-ZW5zYy0wLjIyLjAub3JpZy9zcmMvcGtjczE1aW5pdC9wa2NzMTUtYXNlcGNvcy5jCisrKysgb3Bl
-bnNjLTAuMjIuMC9zcmMvcGtjczE1aW5pdC9wa2NzMTUtYXNlcGNvcy5jCitAQCAtMjIxLDcgKzIy
-MSw3IEBAIHN0YXRpYyBpbnQgYXNlcGNvc19kb19zdG9yZV9waW4oc2NfcHJvZmkKKyB7CisgCXNj
-X2ZpbGVfdCAqbmZpbGUgPSBOVUxMOworIAl1OCAgYnVmWzY0XSwgc2J1Zls2NF0sICpwID0gYnVm
-LCAqcSA9IHNidWY7CistCWludCByLCBha247CisrCWludCByLCBha24gPSAwOworIAorIAlpZiAo
-YXV0aF9pbmZvLT5hdXRoX3R5cGUgIT0gU0NfUEtDUzE1X1BJTl9BVVRIX1RZUEVfUElOKQorIAkJ
-cmV0dXJuIFNDX0VSUk9SX09CSkVDVF9OT1RfVkFMSUQ7CitJbmRleDogb3BlbnNjLTAuMjIuMC9z
-cmMvbGlib3BlbnNjL3BrY3MxNS1jb29sa2V5LmMKKz09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KKy0tLSBvcGVuc2MtMC4y
-Mi4wLm9yaWcvc3JjL2xpYm9wZW5zYy9wa2NzMTUtY29vbGtleS5jCisrKysgb3BlbnNjLTAuMjIu
-MC9zcmMvbGlib3BlbnNjL3BrY3MxNS1jb29sa2V5LmMKK0BAIC0xNDcsOSArMTQ3LDkgQEAgY29v
-bGtleV9maW5kX21hdGNoaW5nX2NlcnQoc2NfY2FyZF90ICpjYQorIHN0YXRpYyBpbnQKKyBjb29s
-a2V5X2dldF9hdHRyaWJ1dGVfdWxvbmcoc2NfY2FyZF90ICpjYXJkLCBzY19jYXJkY3RsX2Nvb2xr
-ZXlfb2JqZWN0X3QgKm9iaiwgQ0tfQVRUUklCVVRFX1RZUEUgdHlwZSwgQ0tfVUxPTkcgKnZhbHVl
-KQorIHsKKy0JY29uc3QgdTggKnZhbDsKKy0Jc2l6ZV90IHZhbF9sZW47CistCXU4IGRhdGFfdHlw
-ZTsKKysJY29uc3QgdTggKnZhbCA9IG1hbGxvYyhzaXplb2YodTgpKTsKKysJc2l6ZV90IHZhbF9s
-ZW4gPSAwOworKwl1OCBkYXRhX3R5cGUgPSAwOworIAlpbnQgcjsKKyAKKyAJciAgPSBjb29sa2V5
-X2dldF9hdHRyaWJ1dGUoY2FyZCwgb2JqLCB0eXBlLCAmdmFsLCAmdmFsX2xlbiwgJmRhdGFfdHlw
-ZSk7CitAQCAtMTY4LDggKzE2OCw4IEBAIHN0YXRpYyBpbnQKKyBjb29sa2V5X2dldF9hdHRyaWJ1
-dGVfYm9vbGVhbihzY19jYXJkX3QgKmNhcmQsIHNjX2NhcmRjdGxfY29vbGtleV9vYmplY3RfdCAq
-b2JqLCBDS19BVFRSSUJVVEVfVFlQRSBhdHRyX3R5cGUpCisgeworIAlpbnQgcjsKKy0JY29uc3Qg
-dTggKnZhbDsKKy0Jc2l6ZV90IHZhbF9sZW47CisrCWNvbnN0IHU4ICp2YWwgPSBtYWxsb2Moc2l6
-ZW9mKHU4KSk7CisrCXNpemVfdCB2YWxfbGVuID0gMDsKKyAKKyAJciA9IGNvb2xrZXlfZ2V0X2F0
-dHJpYnV0ZShjYXJkLCBvYmosIGF0dHJfdHlwZSwgJnZhbCwgJnZhbF9sZW4sIE5VTEwpOworIAlp
-ZiAociA8IDApIHsKK0BAIC0xODYsNyArMTg2LDcgQEAgc3RhdGljIGludAorIGNvb2xrZXlfZ2V0
-X2F0dHJpYnV0ZV9ieXRlcyhzY19jYXJkX3QgKmNhcmQsIHNjX2NhcmRjdGxfY29vbGtleV9vYmpl
-Y3RfdCAqb2JqLCBDS19BVFRSSUJVVEVfVFlQRSB0eXBlLCB1OCAqZGF0YSwgc2l6ZV90ICpkYXRh
-X2xlbiwgc2l6ZV90IG1heF9kYXRhX2xlbikKKyB7CisgCWNvbnN0IHU4ICp2YWw7CistCXNpemVf
-dCB2YWxfbGVuOworKwlzaXplX3QgdmFsX2xlbiA9IDA7CisgCWludCByOworIAorIAlyID0gY29v
-bGtleV9nZXRfYXR0cmlidXRlKGNhcmQsIG9iaiwgdHlwZSwgJnZhbCwgJnZhbF9sZW4sIE5VTEwp
-OworSW5kZXg6IG9wZW5zYy0wLjIyLjAvc3JjL3Rvb2xzL29wZW5zYy1leHBsb3Jlci5jCis9PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09CistLS0gb3BlbnNjLTAuMjIuMC5vcmlnL3NyYy90b29scy9vcGVuc2MtZXhwbG9yZXIu
-YworKysrIG9wZW5zYy0wLjIyLjAvc3JjL3Rvb2xzL29wZW5zYy1leHBsb3Jlci5jCitAQCAtMjQ3
-Miw3ICsyNDcyLDcgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkKKyAJCWNoYXIg
-KmxpbmU7CisgCQlpbnQgY2FyZ2M7CisgCQljaGFyICpjYXJndlsyNjBdOworLQkJaW50IG11bHRp
-cGxlOworKwkJaW50IG11bHRpcGxlID0gMDsKKyAJCXN0cnVjdCBjb21tYW5kICpjbWQ7CisgCQlj
-aGFyIHByb21wdFszKlNDX01BWF9QQVRIX1NUUklOR19TSVpFXTsKKyAKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2Uvb3BlbnNjLzAwMDItcGFja2FnZS1vcGVuc2MtZml4LXN0cmljdC1hbGlhc2luZy13YXJu
-aW5ncy1hcy1lcnJvcnMucGF0Y2ggYi9wYWNrYWdlL29wZW5zYy8wMDAyLXBhY2thZ2Utb3BlbnNj
-LWZpeC1zdHJpY3QtYWxpYXNpbmctd2FybmluZ3MtYXMtZXJyb3JzLnBhdGNoCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmU2NmZjMjE2NTcKLS0tIC9kZXYvbnVsbAorKysg
-Yi9wYWNrYWdlL29wZW5zYy8wMDAyLXBhY2thZ2Utb3BlbnNjLWZpeC1zdHJpY3QtYWxpYXNpbmct
-d2FybmluZ3MtYXMtZXJyb3JzLnBhdGNoCkBAIC0wLDAgKzEsMTMyIEBACitJbmRleDogb3BlbnNj
-LTAuMjIuMC9zcmMvbGlib3BlbnNjL2NhcmQtZ2lkcy5jCis9PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0gb3BlbnNj
-LTAuMjIuMC5vcmlnL3NyYy9saWJvcGVuc2MvY2FyZC1naWRzLmMKKysrKyBvcGVuc2MtMC4yMi4w
-L3NyYy9saWJvcGVuc2MvY2FyZC1naWRzLmMKK0BAIC02OTEsNyArNjkxLDggQEAgc3RhdGljIGlu
-dCBnaWRzX2ZpbmlzaChzY19jYXJkX3QgKmNhcmQpCisgLy8gdGhlIGNtYXAgZmlsZSBpcyB1c2Vk
-IHRvIGRldGVjdCB0aGUga2V5IGFsZ29yaXRobSAvIHNpemUKKyBzdGF0aWMgaW50IGdpZHNfZ2V0
-X2NyeXB0b19pZGVudGlmaWVyX2Zyb21fa2V5X3JlZihzY19jYXJkX3QgKmNhcmQsIGNvbnN0IHVu
-c2lnbmVkIGNoYXIga2V5cmVmLCB1bnNpZ25lZCBjaGFyICpjcnlwdG9pZGVudGlmaWVyKSB7Cisg
-CXN0cnVjdCBnaWRzX3ByaXZhdGVfZGF0YSAqZGF0YSA9IChzdHJ1Y3QgZ2lkc19wcml2YXRlX2Rh
-dGEgKikgY2FyZC0+ZHJ2X2RhdGE7CistCVBDT05UQUlORVJfTUFQX1JFQ09SRCByZWNvcmRzID0g
-KFBDT05UQUlORVJfTUFQX1JFQ09SRCkgZGF0YS0+Y21hcGZpbGU7CisrCVBDT05UQUlORVJfTUFQ
-X1JFQ09SRCByZWNvcmRzID0gbWFsbG9jKHNpemVvZihDT05UQUlORVJfTUFQX1JFQ09SRCkpOwor
-KwltZW1jcHkocmVjb3JkcywgZGF0YS0+Y21hcGZpbGUsIHNpemVvZihDT05UQUlORVJfTUFQX1JF
-Q09SRCkpOworIAlpbnQgcmVjb3Jkc251bSA9IChpbnQpIChkYXRhLT5jbWFwZmlsZXNpemUgLyBz
-aXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKyAJaW50IGluZGV4ID0ga2V5cmVmIC0gR0lE
-U19GSVJTVF9LRVlfSURFTlRJRklFUjsKKyAJaWYgKGluZGV4ID49IHJlY29yZHNudW0pIHsKK0BA
-IC0xMTEyLDEwICsxMTEzLDEwIEBAIGdpZHNfZ2V0X2FsbF9jb250YWluZXJzKHNjX2NhcmRfdCog
-Y2FyZCwKKyAvLyByZXR1cm4gdGhlIGRldGFpbCBhYm91dCBhIGNvbnRhaW5lciB0byBlbXVsYXRl
-IGEgcGtjczE1IGNhcmQKKyBzdGF0aWMgaW50CisgZ2lkc19nZXRfY29udGFpbmVyX2RldGFpbChz
-Y19jYXJkX3QqIGNhcmQsIHNjX2NhcmRjdGxfZ2lkc19nZXRfY29udGFpbmVyX3QqIGNvbnRhaW5l
-cikgeworLQlQQ09OVEFJTkVSX01BUF9SRUNPUkQgcmVjb3JkcyA9IE5VTEw7CisrCVBDT05UQUlO
-RVJfTUFQX1JFQ09SRCByZWNvcmRzID0gbWFsbG9jKHNpemVvZihDT05UQUlORVJfTUFQX1JFQ09S
-RCkpOworIAlzdHJ1Y3QgZ2lkc19wcml2YXRlX2RhdGEgKnByaXZhdGVkYXRhID0gKHN0cnVjdCBn
-aWRzX3ByaXZhdGVfZGF0YSAqKSBjYXJkLT5kcnZfZGF0YTsKKyAJc2l6ZV90IHJlY29yZHNudW0s
-IG51bSwgaTsKKy0JcmVjb3JkcyA9IChQQ09OVEFJTkVSX01BUF9SRUNPUkQpIHByaXZhdGVkYXRh
-IC0+Y21hcGZpbGU7CisrCW1lbWNweShyZWNvcmRzLCBwcml2YXRlZGF0YS0+Y21hcGZpbGUsIHNp
-emVvZihDT05UQUlORVJfTUFQX1JFQ09SRCkpOworIAlyZWNvcmRzbnVtID0gKHByaXZhdGVkYXRh
-IC0+Y21hcGZpbGVzaXplIC8gc2l6ZW9mKENPTlRBSU5FUl9NQVBfUkVDT1JEKSk7CisgCisgCW51
-bSA9IGNvbnRhaW5lci0+Y29udGFpbmVybnVtIDsKK0BAIC0xMTU4LDcgKzExNTksOCBAQCBnaWRz
-X2dldF9jb250YWluZXJfZGV0YWlsKHNjX2NhcmRfdCogY2FyCisgc3RhdGljIGludAorIGdpZHNf
-c2VsZWN0X2tleV9yZWZlcmVuY2Uoc2NfY2FyZF90ICpjYXJkLCBzY19wa2NzMTVfcHJrZXlfaW5m
-b190KiBrZXlfaW5mbykgeworIAlzdHJ1Y3QgZ2lkc19wcml2YXRlX2RhdGEgKmRhdGEgPSAoc3Ry
-dWN0IGdpZHNfcHJpdmF0ZV9kYXRhICopIGNhcmQtPmRydl9kYXRhOworLQlQQ09OVEFJTkVSX01B
-UF9SRUNPUkQgcmVjb3JkcyA9IChQQ09OVEFJTkVSX01BUF9SRUNPUkQpIGRhdGEtPmNtYXBmaWxl
-OworKwlQQ09OVEFJTkVSX01BUF9SRUNPUkQgcmVjb3JkcyA9IG1hbGxvYyhzaXplb2YoQ09OVEFJ
-TkVSX01BUF9SRUNPUkQpKTsKKysJbWVtY3B5KHJlY29yZHMsIGRhdGEtPmNtYXBmaWxlLCBzaXpl
-b2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKyAJc2l6ZV90IHJlY29yZHNudW07CisgCWludCBy
-OworIAljaGFyIGNoX3RtcFsxMF07CitAQCAtMTMwMiw3ICsxMzA0LDggQEAgc3RhdGljIGludCBn
-aWRzX2NyZWF0ZV9rZXlmaWxlKHNjX2NhcmRfdAorIAlzdHJ1Y3QgZ2lkc19wcml2YXRlX2RhdGEg
-KmRhdGEgPSAoc3RydWN0IGdpZHNfcHJpdmF0ZV9kYXRhICopIGNhcmQtPmRydl9kYXRhOworIAlz
-aXplX3QgcmVjb3JkbnVtOworIAlzaXplX3QgY29udGFpbmVybnVtID0ga2V5X2luZm8tPmtleV9y
-ZWZlcmVuY2UgLSBHSURTX0ZJUlNUX0tFWV9JREVOVElGSUVSOworLQlQQ09OVEFJTkVSX01BUF9S
-RUNPUkQgcmVjb3JkcyA9ICgoUENPTlRBSU5FUl9NQVBfUkVDT1JEKSBjbWFwYnVmZmVyKSArIGNv
-bnRhaW5lcm51bTsKKysJUENPTlRBSU5FUl9NQVBfUkVDT1JEIHJlY29yZHMgPSBtYWxsb2Moc2l6
-ZW9mKENPTlRBSU5FUl9NQVBfUkVDT1JEKSk7CisrCW1lbWNweShyZWNvcmRzLCBjbWFwYnVmZmVy
-ICsgY29udGFpbmVybnVtLCBzaXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKyAJc3RydWN0
-IGdpZHNfa2V5bWFwX3JlY29yZCoga2V5bWFwcmVjb3JkID0gTlVMTDsKKyAJaW50IGk7CisgCitA
-QCAtMTM5MCwxMiArMTM5MywxMiBAQCBzdGF0aWMgaW50IGdpZHNfY3JlYXRlX2tleWZpbGUoc2Nf
-Y2FyZF90CisgCisgCS8vIGNvbnZlcnQgY2hhciB0byB3Y2hhcgorIAlmb3IoaSA9IDA7IGkgPCBN
-QVhfQ09OVEFJTkVSX05BTUVfTEVOICYmIG9iamVjdC0+bGFiZWxbaV07IGkrKykgeworLQkJcmVj
-b3Jkcy0+d3N6R3VpZFtpXSA9IG9iamVjdC0+bGFiZWxbaV07CisrCQlyZWNvcmRzLT53c3pHdWlk
-W2ldID0gKHVuc2lnbmVkIHNob3J0KSBvYmplY3QtPmxhYmVsW2ldOworIAl9CisgCisgCS8vIFRP
-RE86IGNoZWNrIGlmIGEgY29udGFpbmVyIHdpdGggdGhlIHNhbWUgbmFtZSBhbHJlYWR5IGV4aXN0
-cyBhbmQgcHJldmVudCBpcyBjcmVhdGlvbiBvciBjaGFuZ2UgaXRzIG5hbWUKKyAKKy0JcmVjb3Jk
-cy0+YkZsYWdzID0gQ09OVEFJTkVSX01BUF9WQUxJRF9DT05UQUlORVI7CisrCXJlY29yZHMtPmJG
-bGFncyA9ICh1bnNpZ25lZCBjaGFyKSBDT05UQUlORVJfTUFQX1ZBTElEX0NPTlRBSU5FUjsKKyAJ
-aWYgKHJlY29yZG51bSA9PSAwKSB7CisgCQlyZWNvcmRzLT5iRmxhZ3MgfD0gQ09OVEFJTkVSX01B
-UF9ERUZBVUxUX0NPTlRBSU5FUjsKKyAJfQorQEAgLTE2MzgsNyArMTY0MSw4IEBAIHN0YXRpYyBp
-bnQgZ2lkc19kZWxldGVfY29udGFpbmVyX251bShzY18KKyAJc2l6ZV90IGtleW1hcHJlY29yZG51
-bSA9IDA7CisgCXN0cnVjdCBnaWRzX3ByaXZhdGVfZGF0YSAqZGF0YSA9IChzdHJ1Y3QgZ2lkc19w
-cml2YXRlX2RhdGEgKikgY2FyZC0+ZHJ2X2RhdGE7CisgCXNpemVfdCByZWNvcmRudW07CistCVBD
-T05UQUlORVJfTUFQX1JFQ09SRCByZWNvcmRzID0gKChQQ09OVEFJTkVSX01BUF9SRUNPUkQpIGNt
-YXBidWZmZXIpICsgY29udGFpbmVybnVtOworKwlQQ09OVEFJTkVSX01BUF9SRUNPUkQgcmVjb3Jk
-cyA9IG1hbGxvYyhzaXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKysJbWVtY3B5KHJlY29y
-ZHMsIGNtYXBidWZmZXIgKyBjb250YWluZXJudW0sIHNpemVvZihDT05UQUlORVJfTUFQX1JFQ09S
-RCkpOworIAlzdHJ1Y3QgZ2lkc19rZXltYXBfcmVjb3JkKiBrZXltYXByZWNvcmQgPSBOVUxMOwor
-IAorIAlTQ19GVU5DX0NBTExFRChjYXJkLT5jdHgsIFNDX0xPR19ERUJVR19WRVJCT1NFKTsKK0lu
-ZGV4OiBvcGVuc2MtMC4yMi4wL3NyYy9saWJvcGVuc2MvY2FyZC1ncGsuYworPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQor
-LS0tIG9wZW5zYy0wLjIyLjAub3JpZy9zcmMvbGlib3BlbnNjL2NhcmQtZ3BrLmMKKysrKyBvcGVu
-c2MtMC4yMi4wL3NyYy9saWJvcGVuc2MvY2FyZC1ncGsuYworQEAgLTIyOCwxMSArMjI4LDEyIEBA
-IHN0YXRpYyBpbnQKKyBtYXRjaF9wYXRoKHNjX2NhcmRfdCAqY2FyZCwgdW5zaWduZWQgc2hvcnQg
-aW50ICoqcGF0aHB0ciwgc2l6ZV90ICpwYXRobGVuLAorIAkJaW50IG5lZWRfaW5mbykKKyB7Cist
-CXVuc2lnbmVkIHNob3J0IGludAkqY3VycHRyLCAqcHRyOworKwl1OAkJCSpjdXJwdHI7CisrCXVu
-c2lnbmVkIHNob3J0IGludAkqcHRyOworIAlzaXplX3QJCWN1cmxlbiwgbGVuOworIAlzaXplX3QJ
-CWk7CisgCistCWN1cnB0ciA9ICh1bnNpZ25lZCBzaG9ydCBpbnQgKikgY2FyZC0+Y2FjaGUuY3Vy
-cmVudF9wYXRoLnZhbHVlOworKwljdXJwdHIgPSAodTggKikgY2FyZC0+Y2FjaGUuY3VycmVudF9w
-YXRoLnZhbHVlOworIAljdXJsZW4gPSBjYXJkLT5jYWNoZS5jdXJyZW50X3BhdGgubGVuOworIAlw
-dHIgICAgPSAqcGF0aHB0cjsKKyAJbGVuICAgID0gKnBhdGhsZW47CitAQCAtMjQyLDcgKzI0Myw3
-IEBAIG1hdGNoX3BhdGgoc2NfY2FyZF90ICpjYXJkLCB1bnNpZ25lZCBzaG8KKyAKKyAJLyogTWFr
-ZSBzdXJlIHBhdGggc3RhcnRzIHdpdGggTUYuCisgCSAqIE5vdGUgdGhlIGNhY2hlZCBwYXRoIHNo
-b3VsZCBhbHdheXMgYmVnaW4gd2l0aCBNRi4gKi8KKy0JaWYgKHB0clswXSAhPSBHUEtfRklEX01G
-IHx8IGN1cnB0clswXSAhPSBHUEtfRklEX01GKQorKwlpZiAocHRyWzBdICE9IChHUEtfRklEX01G
-ID4+IDgpIHx8IGN1cnB0clswXSAhPSAoR1BLX0ZJRF9NRiA+PiA4KSkKKyAJCXJldHVybiAwOwor
-IAorIAlmb3IgKGkgPSAxOyBpIDwgbGVuICYmIGkgPCBjdXJsZW47IGkrKykgeworQEAgLTU0NSw3
-ICs1NDYsNyBAQCBncGtfc2VsZWN0X2lkKHNjX2NhcmRfdCAqY2FyZCwgaW50IGtpbmQsCisgCS8q
-IEZpeCB1cCB0aGUgcGF0aCBjYWNoZS4KKyAJICogTkIgd2UgbmV2ZXIgY2FjaGUgdGhlIElEIG9m
-IGFuIEVGLCBqdXN0IHRoZSBERiBwYXRoICovCisgCWlmIChyID09IDApIHsKKy0JCXVuc2lnbmVk
-IHNob3J0IGludAkqcGF0aDsKKysJCXU4CSpwYXRoOworIAorIAkJc3dpdGNoIChraW5kKSB7Cisg
-CQljYXNlIEdQS19TRUxfTUY6CitAQCAtNTU1LDcgKzU1Niw3IEBAIGdwa19zZWxlY3RfaWQoc2Nf
-Y2FyZF90ICpjYXJkLCBpbnQga2luZCwKKyAJCQlpZiAoY3AtPmxlbiArIDEgPiBTQ19NQVhfUEFU
-SF9TSVpFIC8gMikgeworIAkJCQlyZXR1cm4gU0NfRVJST1JfSU5URVJOQUw7CisgCQkJfQorLQkJ
-CXBhdGggPSAodW5zaWduZWQgc2hvcnQgaW50ICopIGNwLT52YWx1ZTsKKysJCQlwYXRoID0gKHU4
-ICopIGNwLT52YWx1ZTsKKyAJCQlwYXRoW2NwLT5sZW4rK10gPSBmaWQ7CisgCQl9CisgCX0gZWxz
-ZSB7CitJbmRleDogb3BlbnNjLTAuMjIuMC9zcmMvdG9vbHMvZ2lkcy10b29sLmMKKz09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0KKy0tLSBvcGVuc2MtMC4yMi4wLm9yaWcvc3JjL3Rvb2xzL2dpZHMtdG9vbC5jCisrKysgb3Bl
-bnNjLTAuMjIuMC9zcmMvdG9vbHMvZ2lkcy10b29sLmMKK0BAIC00MDEsNyArNDAxLDggQEAgc3Rh
-dGljIGludCBwcmludF9pbmZvKHNjX2NhcmRfdCAqY2FyZCkgeworIAkJaWYgKGNtYXBmaWxlc2l6
-ZSA9PSBzaXplb2YoY21hcGZpbGUpKSB7CisgCQkJcHJpbnRmKCJVbmFibGUgdG8gZmluZCB0aGUg
-Y29udGFpbmVyIGZpbGUgKG1zY3BcXGNtYXBmaWxlKVxuIik7CisgCQl9IGVsc2UgeworLQkJCVBD
-T05UQUlORVJfTUFQX1JFQ09SRCBjbWFwcmVjb3JkcyA9IChQQ09OVEFJTkVSX01BUF9SRUNPUkQp
-IGNtYXBmaWxlOworKwkJCVBDT05UQUlORVJfTUFQX1JFQ09SRCBjbWFwcmVjb3JkcyA9IG1hbGxv
-YyhzaXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKysJCQltZW1jcHkoY21hcHJlY29yZHMs
-IGNtYXBmaWxlLCBzaXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsKKyAJCQlpbnQgY21hcHJl
-Y29yZG51bSA9IChjbWFwZmlsZXNpemUgLyBzaXplb2YoQ09OVEFJTkVSX01BUF9SRUNPUkQpKTsK
-KyAJCQlpbnQga2V5bWFwcmVjb3JkbnVtID0gLTE7CisgCQkJc3RydWN0IGdpZHNfa2V5bWFwX3Jl
-Y29yZCoga2V5bWFwcmVjb3JkID0gKChzdHJ1Y3QgZ2lkc19rZXltYXBfcmVjb3JkKikoa2V5bWFw
-ICsxKSk7CmRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zYy9Db25maWcuaW4gYi9wYWNrYWdlL29w
-ZW5zYy9Db25maWcuaW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uZDZi
-MTM3YTg3ZgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uvb3BlbnNjL0NvbmZpZy5pbgpAQCAt
-MCwwICsxLDExIEBACitjb25maWcgQlIyX1BBQ0tBR0VfT1BFTlNDCisJYm9vbCAib3BlbnNjIgor
-CWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIGRsb3BlbigpCisJc2VsZWN0IEJSMl9QQUNL
-QUdFX1BDU0NfTElURQorCXNlbGVjdCBCUjJfUEFDS0FHRV9PUEVOU1NMCisJc2VsZWN0IEJSMl9Q
-QUNLQUdFX09QRU5TU0xfRk9SQ0VfTElCT1BFTlNTTAorCWhlbHAKKwkgIE9wZW5TQyBwcm92aWRl
-cyBhIHNldCBvZiBsaWJyYXJpZXMgYW5kIHV0aWxpdGllcyB0byB3b3JrCisJICB3aXRoIHNtYXJ0
-IGNhcmRzLgorCisJICBodHRwczovL2dpdGh1Yi5jb20vT3BlblNDL09wZW5TQy93aWtpCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL29wZW5zYy9vcGVuc2MuaGFzaCBiL3BhY2thZ2Uvb3BlbnNjL29wZW5z
-Yy5oYXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjFlMzQ3MmJhMmEK
-LS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL29wZW5zYy9vcGVuc2MuaGFzaApAQCAtMCwwICsx
-LDUgQEAKKyMgRnJvbSBodHRwczovL2h0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0MvT3BlblNDL3Jl
-bGVhc2VzLworc2hhMjU2ICA4ZDRlNTM0NzE5NWViZWEzMzJiZTU4NWRmNjFkY2M0NzAzMzFjMjY5
-NjllNGIwNDQ3Yzg1MWZiMDg0NGM3MTg2ICBvcGVuc2MtMC4yMi4wLnRhci5negorCisjIENvbXB1
-dGVkIGxvY2FsbHkKK3NoYTI1NiAgMzc2YjU0ZDRjNWY0YWE5OTQyMTgyM2ZhNGRhOTNlM2FiNzMw
-OTZmY2UyNDAwZTg5ODU4NjMyYWE3ZGEyNGExNCAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9vcGVuc2Mvb3BlbnNjLm1rIGIvcGFja2FnZS9vcGVuc2Mvb3BlbnNjLm1rCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjcyMjFlZWU5NDQKLS0tIC9kZXYvbnVsbAorKysg
-Yi9wYWNrYWdlL29wZW5zYy9vcGVuc2MubWsKQEAgLTAsMCArMSwxNCBAQAorIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKKyMKKyMgb3BlbnNjCisjCisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIworCitP
-UEVOU0NfVkVSU0lPTiA9IDAuMjIuMAorT1BFTlNDX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20v
-T3BlblNDL09wZW5TQy9yZWxlYXNlcy9kb3dubG9hZC8kKE9QRU5TQ19WRVJTSU9OKQorT1BFTlND
-X0xJQ0VOU0UgPSBMR1BMLTIuMSsKK09QRU5TQ19MSUNFTlNFX0ZJTEVTID0gQ09QWUlORworT1BF
-TlNDX0RFUEVOREVOQ0lFUyA9IG9wZW5zc2wgcGNzYy1saXRlCitPUEVOU0NfSU5TVEFMTF9TVEFH
-SU5HID0gWUVTCisKKyQoZXZhbCAkKGF1dG90b29scy1wYWNrYWdlKSkKLS0gCjIuMzAuMgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Use official tarball
+- Drop patches (already in version)
+- license files renamed with
+  https://github.com/smuellerDD/jitterentropy-library/commit/a08ae564c422b54ad3332d38be033933ade4df6d
+- Update indentation in hash file (two spaces)
+
+https://github.com/smuellerDD/jitterentropy-library/blob/v3.3.1/CHANGES.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-Makefile-cleanup-install.patch       | 54 ------------------
+ ...efile-add-additional-install-targets.patch | 56 -------------------
+ ...-the-user-to-disable-stack-protector.patch | 36 ------------
+ .../jitterentropy-library.hash                |  8 +--
+ .../jitterentropy-library.mk                  |  8 ++-
+ 5 files changed, 9 insertions(+), 153 deletions(-)
+ delete mode 100644 package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+ delete mode 100644 package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+ delete mode 100644 package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+
+diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+deleted file mode 100644
+index 9c7e40369a..0000000000
+--- a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 060b9b4147f6e5ff386a8b017796118d783e59fa Mon Sep 17 00:00:00 2001
+-From: Matt Weber <matthew.weber@rockwellcollins.com>
+-Date: Tue, 22 Oct 2019 12:44:30 -0500
+-Subject: [PATCH] Makefile: cleanup install for rebuilds
+-
+-Support the ability to rebuild and redeploy without a clean. This
+-required some force linking and man archive creation.
+-
+-Provide the ability to override the stripping of the shared lib for
+-cases where a embedded target build may want to control stripping
+-or provide cross arch tools.
+-
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-Signed-off-by: Stephan Mueller <smueller@chronox.de>
+-[Retrieved from:
+-https://github.com/smuellerDD/jitterentropy-library/commit/060b9b4147f6e5ff386a8b017796118d783e59fa]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 10 ++++++----
+- 1 file changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 4ff069b..2e78607 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -14,6 +14,8 @@ LIBDIR := lib
+- # include target directory
+- INCDIR := include
+- 
+-+INSTALL_STRIP ?= install -s
+-+
+- NAME := jitterentropy
+- LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
+- LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
+-@@ -58,15 +60,15 @@ cppcheck:
+- install:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+--	gzip -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+-+	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+--	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+-+	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+- 	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+--	ln -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+--	ln -s lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+-+	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+-+	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+- 
+- clean:
+- 	@- $(RM) $(NAME)
+diff --git a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+deleted file mode 100644
+index a331c9f33b..0000000000
+--- a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From d545d76cb3173cc98e1421604929248f2d882821 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 24 Oct 2019 18:48:47 +0200
+-Subject: [PATCH] Makefile: add additional install targets
+-
+-Add install-includes, install-man, install-shared and install-static
+-targets to allow the user to configure what must be installed
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/smuellerDD/jitterentropy-library/pull/11]
+----
+- Makefile | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 2e78607..41bc4f7 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -57,19 +57,29 @@ scan: $(analyze_plists)
+- cppcheck:
+- 	cppcheck --force -q --enable=performance --enable=warning --enable=portability *.h *.c
+- 
+--install:
+-+install: install-man install-shared install-includes
+-+
+-+install-man:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+- 	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+-+
+-+install-shared:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+- 	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+--	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+--	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+--	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+- 	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+- 	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+- 
+-+install-includes:
+-+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+-+	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+-+	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+-+
+-+install-static:
+-+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+-+	install -m 0755 lib$(NAME).a $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+-+
+- clean:
+- 	@- $(RM) $(NAME)
+- 	@- $(RM) $(OBJS)
+--- 
+-2.23.0
+-
+diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+deleted file mode 100644
+index eeff0a0fec..0000000000
+--- a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 28 Oct 2019 09:47:49 +0100
+-Subject: [PATCH] Makefile: allow the user to disable stack protector
+-
+-Allow the user to disable stack-protector by overriding CFLAGS as it is
+-not supported by all toolchains.
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/smuellerDD/jitterentropy-library/pull/12]
+----
+- Makefile | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 41bc4f7..b0f20e2 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,9 +1,9 @@
+- # Compile Noise Source as user space application
+- 
+- CC ?= gcc
+--CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
+- #Hardening
+--CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
+-+CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
+-+CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv
+- LDFLAGS +=-Wl,-z,relro,-z,now
+- 
+- # Change as necessary
+--- 
+-2.23.0
+-
+diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
+index 5ff38f6fea..760befab53 100644
+--- a/package/jitterentropy-library/jitterentropy-library.hash
++++ b/package/jitterentropy-library/jitterentropy-library.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256	42d4bd1050b5f0d7b45b5453e5b6cfc45c0492bb428791f571d8f69b066351a4  jitterentropy-library-2.2.0.tar.gz
+-sha256	96b5a6b49aaeeba9036f9b80e6e299d613a8eca158741a25a67dc78792413e23  COPYING
+-sha256	13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
+-sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
++sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
++sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
++sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
+diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+index d9dc031c35..830da0e065 100644
+--- a/package/jitterentropy-library/jitterentropy-library.mk
++++ b/package/jitterentropy-library/jitterentropy-library.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
+ 
+-JITTERENTROPY_LIBRARY_VERSION = 2.2.0
+-JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
++JITTERENTROPY_LIBRARY_VERSION = 3.3.1
++JITTERENTROPY_LIBRARY_SOURCE = \
++	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
++JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
+ JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
+-JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
++JITTERENTROPY_LIBRARY_LICENSE_FILES = LICENSE LICENSE.bsd LICENSE.gplv2
+ JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
+ JITTERENTROPY_LIBRARY_INSTALL_TARGETS = install-includes
+ JITTERENTROPY_LIBRARY_SELINUX_MODULES = entropyd
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
