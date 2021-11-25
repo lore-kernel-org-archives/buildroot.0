@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EC57C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 03:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F28BC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 07:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A571140018;
-	Thu, 25 Nov 2021 03:00:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEEDE82553;
+	Thu, 25 Nov 2021 07:12:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id idpFnjFdotOz; Thu, 25 Nov 2021 03:00:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9124D4015E;
-	Thu, 25 Nov 2021 03:00:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3E71BF32D
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 03:00:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AE0D81D70
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 03:00:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XttTUFT2tqkF for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 03:00:18 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c2id43RzLH1u; Thu, 25 Nov 2021 07:12:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1653082410;
+	Thu, 25 Nov 2021 07:12:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 105EB1BF36C
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:12:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDB5D4019B
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:12:55 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4MuyoD49GB9o for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 07:12:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F36881D5A
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 03:00:18 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id j21so4473145ila.5
- for <buildroot@buildroot.org>; Wed, 24 Nov 2021 19:00:18 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C124D40018
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 07:12:54 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id a9so9412634wrr.8
+ for <buildroot@buildroot.org>; Wed, 24 Nov 2021 23:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=128ma48tFtQPWUXRHxm/tZ0BR4B3GNCtVytmrTulOdI=;
- b=fIVqUOJQF6O6+EqSbjLnQKYr8NknQ58wjZg7gfngz/T8oq9j0hZ8oSRkEkhNOtyew9
- R2fjpEY3Grg2YQvOCo4aDeQA98Ejek55qbA9zZ9W3dCUGg6OyDlDBRF1dHlJoyuVAYJ6
- U3ELHa0F6jBeE5XrWZDIuSzdo5jeMQnjJYBmCh3pumBdrRetdy5S+OH0fA+esj9It6Vo
- RWfI2M8JWqj/xYfYXi0o1KLDNIuj3bLB8aRtf5i33a9jtECUvg6/QFntD0WfkKP48Rwu
- /s4bpMCKvuLsRSjUiDoxRWrGKmOKGBQMuJ0XCzEVbOkzRD2nZJ+N4Mk8kPrbzCDK2AKy
- dhkA==
+ bh=xsCmpcQhTfDvfT8dq2+9RcslIkVHwY2sMGxsR+JBN94=;
+ b=FW3+hThg63UirwBTzsfJ025EFUivYefPVE69yo1SpysKu2GSTWZr7XUv+aT6h2uYMG
+ HARnccdVsYa5vySXwMaWCwJiU83puf/CpdU3hTblKVngUkK8y14pcGphxvS1kKUgwkxW
+ TvnDw9EnlLidOLh1uxKu6m0AOfyXBbJ408ji95NOfdWsVrAOiNDEYeOheTI/uYcZu6kD
+ Y3XfToeNeejlHoqvp4VRzBWvapmgU6Wi+JtV3BccpckBt5kkx9Ed3TDeRrXTpOljihMG
+ +KOVYsARFxzZGXMn/65qkAgECRaExteGVJR98tAVEHj3XRGG294pe94YnjjbmLCH5UJk
+ RubQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=128ma48tFtQPWUXRHxm/tZ0BR4B3GNCtVytmrTulOdI=;
- b=jF8a/1J5kfimAfUrUri3hoT0HI0nNMjKb8GpNKWFE8RSa24UGtgSSNuhi5lWb4v4S3
- GFmn3mh3WJQ3RO5U9kZ/8bLGUN/sKdrReaHhTX56PUd8p1Gaf5xkL1AEpC2jGAVy7aC8
- Y2EZI2TwAcE7siJxjcaKggRSWzH+DNpY3IhOMdiOOQrKeIfxwXATaqeoVU2SC8sE+W9a
- yfPrNrTkj/LK+ff9KY5kLhNNrdk0KAvRTguyYU8iC0dxiL4wcUeVfjaTJlNVZovI9FOW
- tezXceTTyw2DDAtFZAJjzlO3AW0KclKUFLzarN0KQUpSZi+pVEYidXc4bINtnyRed6fr
- VHOA==
-X-Gm-Message-State: AOAM530Kjn0Pi33CoKkj7CwZrErkzKxxZtFhMlp1EauumNwVwSKsMjOQ
- fx2xI+ggpF5q3WTEg7kwPFvHNB8bjVs=
-X-Google-Smtp-Source: ABdhPJxixKcBIb0jJHhNkR1wUKiE8bMfBtTgwWp9dafGrZlWEN/6BF97bLtHVbY6VgR/hfrsKvL0VA==
-X-Received: by 2002:a05:6e02:1d8a:: with SMTP id
- h10mr18433023ila.51.1637809217039; 
- Wed, 24 Nov 2021 19:00:17 -0800 (PST)
-Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
- [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id d2sm956441ilv.73.2021.11.24.19.00.16
+ bh=xsCmpcQhTfDvfT8dq2+9RcslIkVHwY2sMGxsR+JBN94=;
+ b=ww+3+STZLk0VMr3kyzCAaJa2ipmZgM1Js+5PxxessZvg5is/Z6sAwDnXu87ATFVdyL
+ 6E9iBgXLSh4psSZF88zQU0XfjOaC4Ap+DlB3WKHYGBCJDfM2INYZj81Cz9615HwAocKu
+ 8InapCM/9/5u6BqDoosFOx4L7MUeOFP8VKBGUbucfm8vgoJFv35msEDJpquu82RC+bfw
+ OMOFOfmceDi4ci974f9ws0OYl61rK/0t91ZU7nG6AOuFRGYohahBGWTxQ3MHSdWrVfck
+ jItvuCk33UhLefc2j8AWOoJs8gja5xPtXLEut2+40xnaEPT9rvYjdWrreQ5ajOgJepHU
+ duVA==
+X-Gm-Message-State: AOAM533xtpQUHyg7LR5UPX4B5k9sdZFxQBvVYiADo6PpHIiVC0aUD6xg
+ YogOI6R7J3IOfacQxdUBYgQbOad4ry4=
+X-Google-Smtp-Source: ABdhPJwWUNkE+DgjkBozFmpaASVlA25YpehZNdZe7bq+cvYVTjFQV855iraWFb2bvHTUBoBU8/Tf5g==
+X-Received: by 2002:adf:fed0:: with SMTP id q16mr4365187wrs.276.1637824372627; 
+ Wed, 24 Nov 2021 23:12:52 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id n184sm6538978wme.2.2021.11.24.23.12.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Nov 2021 19:00:16 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Wed, 24 Nov 2021 23:12:51 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 24 Nov 2021 19:59:52 -0700
-Message-Id: <20211125025952.1694072-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Thu, 25 Nov 2021 08:10:23 +0100
+Message-Id: <20211125071023.4163954-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cups-pk-helper: new package
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: security bump to
+ version 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,92 +85,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Frank Vanbever <frank.vanbever@essensium.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/Config.in                          |  1 +
- package/cups-pk-helper/Config.in           | 17 +++++++++++++++++
- package/cups-pk-helper/cups-pk-helper.hash |  3 +++
- package/cups-pk-helper/cups-pk-helper.mk   | 14 ++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/cups-pk-helper/Config.in
- create mode 100644 package/cups-pk-helper/cups-pk-helper.hash
- create mode 100644 package/cups-pk-helper/cups-pk-helper.mk
+Support configurable limit on depth of JSON parsing (possible DoS issue)
 
-diff --git a/package/Config.in b/package/Config.in
-index cb94e30be3..bdadbd2799 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2140,6 +2140,7 @@ menu "Networking applications"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
- 	source "package/cups-filters/Config.in"
-+	source "package/cups-pk-helper/Config.in"
- 	source "package/dante/Config.in"
- 	source "package/darkhttpd/Config.in"
- 	source "package/dehydrated/Config.in"
-diff --git a/package/cups-pk-helper/Config.in b/package/cups-pk-helper/Config.in
-new file mode 100644
-index 0000000000..63a0d3acd8
---- /dev/null
-+++ b/package/cups-pk-helper/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_CUPS_PK_HELPER
-+	bool "cups-pk-helper"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> c++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, polkit
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_PACKAGE_CUPS
-+	select BR2_PACKAGE_POLKIT
-+	help
-+	  cups-pk-helper is a PolicyKit helper to configure cups with
-+	  fine-grained privileges.
-+
-+	  https://wiki.freedesktop.org/www/Software/cups-pk-helper/
-+
-+comment "cups-pk-helper support needs a toolchain with threads, wchar, gcc >= 7"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cups-pk-helper/cups-pk-helper.hash b/package/cups-pk-helper/cups-pk-helper.hash
-new file mode 100644
-index 0000000000..18fe789389
---- /dev/null
-+++ b/package/cups-pk-helper/cups-pk-helper.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  959af8f2f5a2761e7e498b61c9caf25ae963335031eae9972d999e9a0d97a228  cups-pk-helper-0.2.6.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/cups-pk-helper/cups-pk-helper.mk b/package/cups-pk-helper/cups-pk-helper.mk
-new file mode 100644
-index 0000000000..c90b94da14
---- /dev/null
-+++ b/package/cups-pk-helper/cups-pk-helper.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# cups-pk-helper
-+#
-+################################################################################
-+
-+CUPS_PK_HELPER_VERSION = 0.2.6
-+CUPS_PK_HELPER_SITE = https://www.freedesktop.org/software/cups-pk-helper/releases
-+CUPS_PK_HELPER_SOURCE = cups-pk-helper-$(CUPS_PK_HELPER_VERSION).tar.xz
-+CUPS_PK_HELPER_LICENSE = GPL-2.0+
-+CUPS_PK_HELPER_LICENSE_FILES = COPYING
-+CUPS_PK_HELPER_DEPENDENCIES = cups libglib2 polkit
-+
-+$(eval $(autotools-package))
+https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmodsecurity/libmodsecurity.hash | 4 ++--
+ package/libmodsecurity/libmodsecurity.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+index dff39569c1..341dbc3765 100644
+--- a/package/libmodsecurity/libmodsecurity.hash
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.5/modsecurity-v3.0.5.tar.gz.sha256
+-sha256  751bf95a7a8d39c440d0c26ec1f73961550ca2eb2ac9e2e7a56dce2dd7b959e9  modsecurity-v3.0.5.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.6/modsecurity-v3.0.6.tar.gz.sha256
++sha256  06315d9a32fc830997178f30a69e933c9c2364b263a2f036959bebc4dde59a08  modsecurity-v3.0.6.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index be46eb6e02..8fa3d59845 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMODSECURITY_VERSION = 3.0.5
++LIBMODSECURITY_VERSION = 3.0.6
+ LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
+ LIBMODSECURITY_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
