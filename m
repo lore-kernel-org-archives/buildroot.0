@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AB70C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 21:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C24FC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 22:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 040E6408D4;
-	Thu, 25 Nov 2021 21:59:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F17CE4090F;
+	Thu, 25 Nov 2021 22:33:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u1sA_xGFGaHA; Thu, 25 Nov 2021 21:59:32 +0000 (UTC)
+	with ESMTP id qor48YtXYnCt; Thu, 25 Nov 2021 22:33:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52416408D0;
-	Thu, 25 Nov 2021 21:59:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 165091BF263
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 21:59:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40B8140250;
+	Thu, 25 Nov 2021 22:33:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8E2B1BF311
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 22:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB4C760653
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 21:59:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD57F401FC
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 22:33:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rRAgdqsmwN4A for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 21:59:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fP7ZF7nTpV8P for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 22:33:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 42AD760633
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 21:59:29 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id s13so14461767wrb.3
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 13:59:29 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A29A6400A4
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 22:33:19 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id a18so14537486wrn.6
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 14:33:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JCh8fLbBDkNBYZqzI+/jmSb3M6Z9Nyu/FXPh7w8y9FE=;
- b=LdyeMZ+qPmgVeTU424fzognk+8FZLIJR4BwcEr5BToGzPrVnyVm0q7hmLtSGmcADHR
- +xqacQppiXzGYJaOlh5/++5MxBrvI+KSswbTB2x7BRFDXkukuDlmezWPQX1SZAXo3sKW
- 8pKPTCWC7fyGK9tlLuCgzjFWfY5zQzm8vTh4adGJHJEE8HQmealm+3XpV0LpXV/lHBdX
- 7l754K7/qo0fTfYcRCYTgwix0V/Ze49DHlEnx6ULDPS7NHrNKsA6z36P3RVMTYrf5Cin
- mnIIrLcnDWxp6eKLXCcygPU7mAvQFDfsImK7udlACVMaUf/KoaYC+ipARY3kgeayzSkc
- PZOQ==
+ bh=qE4sem+F5WnvP+xS2UBEZqeiF2WZFdIIrKzkZzCmiKg=;
+ b=Dk3gFC847NeMiC2f0v7Ye409xLUowRTDeYN5tJA0g3oB4skw79cnJ1F3HUQ9wJTamI
+ jPYE7b6aroKISpnEc/KxWLCR3C+p2iff+jI15eyZMC9qzn2TfPghHo8AVDRTtadnIAAi
+ iXwRMygZo2t8fw362EfgM/nyU9AIeuqSC4EqLcyYpIxcp1tGpCkzVD/8hPmOgmwtvGuV
+ ov5jQ+OVi/IDwx2WUQFQVdRZrKtC4T2cpih3KBOvgR6AKyGWQUxg+2IZ12LblVkU5MZv
+ 451NWPA/C83u3q1Pmz8AAJYgBNcewSSXnAIi4T34Q7W43CpYSDL49R767sy6eHBb9uCA
+ 9MVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JCh8fLbBDkNBYZqzI+/jmSb3M6Z9Nyu/FXPh7w8y9FE=;
- b=Zl06pjP+v8JM+rZK/bC8PtN5gllzp/L2ACsU5V2N4+iRK5gjfQjUeBSxeAQAjvuAzu
- euWEquLidb0MP3+/6SvfNqatN//dGl86ukZGHIurL7Uyk2woEPhdNF/304WACgfK/Fax
- gqkHeb5Wyyw6bRDpWym2WaGCjM3CgWGJlMNmjIK4ATm1MLwiX+xyOycnb/NeuLnOTmgk
- p0YI7e6bQQl/YPSHr0yL2y0mDxxRhRjI4i4phTPevNPI38QDozULUMP0t8hzLZG6Nwkq
- gHxkVhQJG2cmw1SZtah4DTWW5V1V4fP5uE9V2G0xnM394u3dLBBtKpWJEvhf/dP0oRTX
- 0k1Q==
-X-Gm-Message-State: AOAM5332yXugjD5FzupxF+5gNUBpYyyI7sOdNhPsjaMWJdigUtbYHnKA
- W+WjlV8ln+I+9izbB+Hj4/qlRIos5Qo=
-X-Google-Smtp-Source: ABdhPJwVzwOIzXYEi+OQw7SxtQlyBIvjmv9dMdZXchPXXioo/rcLAxDMubo5TRht7V0iTwmjQ+qrWQ==
-X-Received: by 2002:a5d:4a52:: with SMTP id v18mr9992593wrs.499.1637877567088; 
- Thu, 25 Nov 2021 13:59:27 -0800 (PST)
+ bh=qE4sem+F5WnvP+xS2UBEZqeiF2WZFdIIrKzkZzCmiKg=;
+ b=MAO9MAF3pGGEBehBM89EwQ2BPTNmOtOTgp/66SezlBCEAzgxJ/YJD+EaUol01OYOLf
+ ioi7lbXkKa1Fi8WfgAqXVKYinaRZrYGmBxDaMigByTsQw21DKYnxV9DTzBj7psB9lI28
+ XXhVkAVAkINnb4KZ2to64/wEAqIu9yTFVlwJyS55XLxeNY5Lx+At33OcsWtKxmsLCzU/
+ 3j9IfPj/JYFXsoejclA3wbpigCc77GkAktoQXv5byYtSQBHS0dtbc3DuaOKazqkdkyHE
+ WqCkG+cu+2k+fwiHTlACqGS/5ODoIVY+hXZ+BSNb+maZNvNHYsE5Ei4GntH8G8DHtvcJ
+ Hn+g==
+X-Gm-Message-State: AOAM532RfUGSGAjbe2i2MOdx06T35xP6bPqnELQPsY1PFU22VIdRWiu6
+ hGSJyLC6FVmQVMxeybvJFrl5Q31ySL4=
+X-Google-Smtp-Source: ABdhPJwFT4Ot0aVQfGOuWp+ChP7vwHSachWkYi/Hg8JTjS5xu3WTb/j1HQ984dw2pZGpb6yRdJ65mw==
+X-Received: by 2002:a05:6000:162b:: with SMTP id
+ v11mr10017959wrb.481.1637879597714; 
+ Thu, 25 Nov 2021 14:33:17 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id k8sm3691637wrn.91.2021.11.25.13.59.25
+ by smtp.gmail.com with ESMTPSA id v6sm9042897wmh.8.2021.11.25.14.33.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Nov 2021 13:59:26 -0800 (PST)
+ Thu, 25 Nov 2021 14:33:17 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 25 Nov 2021 22:56:54 +0100
-Message-Id: <20211125215654.4189447-1-fontaine.fabrice@gmail.com>
+Date: Thu, 25 Nov 2021 23:30:43 +0100
+Message-Id: <20211125223043.397316-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] utils/checkpackagelib/lib_mk.py: check
- typo in define
+Subject: [Buildroot] [PATCH/next 1/1] package/azmq: bump to version 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,71 +85,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: RJ Ascani <rj.ascani@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Check typo in define to detect SMAKE_LINUX_CONFIG_FIXUPS in smack
-(fixed by 41e2132fbe8a8fc237ca4a2cd2eff9bd9ced09a6)
+- Drop patch and use AZMQ_NO_TESTS which is available since
+  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
+- boost log (and so NPTL) is not a dependency since
+  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
+- boost regex is not a dependency since
+  https://github.com/zeromq/azmq/commit/209ccdc318bee195c92eaf86ed2fcc4acf08be1e
+- Update indentation in hash file (two spaces)
 
-Add GCC_TARGET in ALLOWED variable to avoid the following warnings:
-
-arch/arch.mk:12: possible typo: GCC_TARGET_ARCH -> *ARCH*
-arch/arch.mk:13: possible typo: GCC_TARGET_ABI -> *ARCH*
-arch/arch.mk:14: possible typo: GCC_TARGET_NAN -> *ARCH*
-arch/arch.mk:15: possible typo: GCC_TARGET_FP32_MODE -> *ARCH*
-arch/arch.mk:16: possible typo: GCC_TARGET_CPU -> *ARCH*
-arch/arch.mk:17: possible typo: GCC_TARGET_FPU -> *ARCH*
-arch/arch.mk:18: possible typo: GCC_TARGET_FLOAT_ABI -> *ARCH*
-arch/arch.mk:19: possible typo: GCC_TARGET_MODE -> *ARCH*
+https://github.com/zeromq/azmq/releases/tag/v1.0.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- utils/checkpackagelib/lib_mk.py | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ ...tionally-disable-test-and-doc-builds.patch | 43 -------------------
+ package/azmq/Config.in                        |  8 ++--
+ package/azmq/azmq.hash                        |  5 +--
+ package/azmq/azmq.mk                          |  4 +-
+ 4 files changed, 8 insertions(+), 52 deletions(-)
+ delete mode 100644 package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index d09922f724..9178931276 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -236,6 +236,7 @@ class TypoInPackageVariable(_CheckFunction):
-         "BR_CCACHE_INITIAL_SETUP",
-         "BR_LIBC",
-         "BR_NO_CHECK_HASH_FOR",
-+        "GCC_TARGET",
-         "LINUX_EXTENSIONS",
-         "LINUX_POST_PATCH_HOOKS",
-         "LINUX_TOOLS",
-@@ -248,7 +249,7 @@ class TypoInPackageVariable(_CheckFunction):
-         "TARGET_FINALIZE_HOOKS",
-         "TARGETS_ROOTFS",
-         "XTENSA_CORE_NAME"]))
--    VARIABLE = re.compile(r"^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
-+    VARIABLE = re.compile(r"^(define )?([A-Z0-9_]+_[A-Z0-9_]+)")
+diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+deleted file mode 100644
+index 98975d27ed..0000000000
+--- a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
+-From: RJ Ascani <rj.ascani@gmail.com>
+-Date: Thu, 20 Jul 2017 15:53:40 -0700
+-Subject: [PATCH] Conditionally disable test and doc builds
+-
+-Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+----
+- CMakeLists.txt | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 5b5b9cc..97006a4 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
+-                     ${ZeroMQ_INCLUDE_DIRS}
+-                     ${PROJECT_SOURCE_DIR})
+-
+--enable_testing()
+-+if (BUILD_TESTING)
+-+    enable_testing()
+-+endif()
+-
+- macro(add_catch_test name)
+-     if (TEST_REPORT_FORMAT)
+-@@ -59,8 +61,12 @@ macro(add_catch_test name)
+-     endif()
+- endmacro()
+-
+--add_subdirectory(test)
+--add_subdirectory(doc)
+-+if (BUILD_TESTING)
+-+    add_subdirectory(test)
+-+endif()
+-+if (BUILD_DOC)
+-+    add_subdirectory(doc)
+-+endif()
+-
+- install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
+-         DESTINATION include)
+---
+-2.13.3
+-
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 37131a260a..7bdd07ebf8 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
+ 	bool "azmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, zeromq
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+@@ -11,9 +11,7 @@ config BR2_PACKAGE_AZMQ
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+-	select BR2_PACKAGE_BOOST_LOG
+ 	select BR2_PACKAGE_BOOST_RANDOM
+-	select BR2_PACKAGE_BOOST_REGEX
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+@@ -21,10 +19,10 @@ config BR2_PACKAGE_AZMQ
  
-     def before(self):
-         package, _ = os.path.splitext(os.path.basename(self.filename))
-@@ -258,7 +259,7 @@ class TypoInPackageVariable(_CheckFunction):
-         # linux extensions do not use LINUX_EXT_ prefix for variables
-         package = package.replace("LINUX_EXT_", "")
-         self.package = package
--        self.REGEX = re.compile(r"^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-+        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-         self.FIND_VIRTUAL = re.compile(
-             r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
-         self.virtual = []
-@@ -268,7 +269,7 @@ class TypoInPackageVariable(_CheckFunction):
-         if m is None:
-             return
+ 	  https://github.com/zeromq/azmq
  
--        variable = m.group(1)
-+        variable = m.group(2)
+-comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
++comment "azmq needs a toolchain w/ C++11, wchar and threads"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+-		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
  
-         # allow to set variables for virtual package this package provides
-         v = self.FIND_VIRTUAL.search(text)
+ comment "azmq needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
+index f5d24e79ce..6caf53582a 100644
+--- a/package/azmq/azmq.hash
++++ b/package/azmq/azmq.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+-# https://github.com/zeromq/azmq/archive/v1.0.2.tar.gz
+-sha256 25fa8b07756cffae95e25a55c7ea42efe02e8cd797552201aa771dd69cfc8fbf  azmq-1.0.2.tar.gz
+-sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
++sha256  80cfb951c5614b8c2e55a59ea2e5723a18ebed08da80e5420e525d6bf273771a  azmq-1.0.3.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
+diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
+index 918c6e1a36..a72b155664 100644
+--- a/package/azmq/azmq.mk
++++ b/package/azmq/azmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AZMQ_VERSION = 1.0.2
++AZMQ_VERSION = 1.0.3
+ AZMQ_SITE = $(call github,zeromq,azmq,v$(AZMQ_VERSION))
+ AZMQ_DEPENDENCIES = boost zeromq
+ AZMQ_LICENSE = BSL-1.0
+@@ -15,4 +15,6 @@ AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
+ AZMQ_INSTALL_STAGING = YES
+ AZMQ_INSTALL_TARGET = NO
+ 
++AZMQ_CONF_OPTS = -DAZMQ_NO_TESTS=ON
++
+ $(eval $(cmake-package))
 -- 
 2.33.0
 
