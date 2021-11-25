@@ -4,76 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C45DC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 07:28:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B56F2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 07:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6364401E4;
-	Thu, 25 Nov 2021 07:28:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BBFB401E4;
+	Thu, 25 Nov 2021 07:29:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2pUGDC_OZhTl; Thu, 25 Nov 2021 07:28:40 +0000 (UTC)
+	with ESMTP id NjfTir4o_XL9; Thu, 25 Nov 2021 07:29:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04C4740236;
-	Thu, 25 Nov 2021 07:28:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C12684027B;
+	Thu, 25 Nov 2021 07:29:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F17EF1BF36C
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:28:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6CE731BF36C
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0EBD607B2
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:28:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 524D2607B2
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 07:29:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XiHNGvqSCvaz for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 07:28:36 +0000 (UTC)
+ with ESMTP id uRuvK3XJNtzn for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 07:29:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 52F60606CA
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 07:28:36 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id a9so9493160wrr.8
- for <buildroot@buildroot.org>; Wed, 24 Nov 2021 23:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZUDeTYAxMoh3XL8BpCkGFn6VMTJniygxGq6LnaGrlPU=;
- b=ea8dgI59mYpX+mYuWsAjQMS6FHLlEdtgPKaMy4MWos1GibVLoy5iVTwBPaCLHIKtF+
- 4mnzQhgjKSE7D4hkM6QnAsxLOWz8hsRiofnuEU3e2CqS3l0X6dJYNKXktrKnHnUf96pi
- ZTET9/W0v8K1Hx/u844idK+j5id4KJwcVvLUNBjYZGQHWVnrldwCnK0cVNMBlbnACC6w
- THYhuwn5UcA6ynf99+5l6IUJg81pOGqDewvgSDSggdmeltpHgp2dUySaLAuMVFFfX84l
- xATDckcPDpNy3fLNwiYrLMxulObz90LHp++TeZwqeFfZCJkBo0GPWCGdVrtPISaOfftp
- Dq4A==
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 19FDC606CA
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 07:29:16 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id bu18so14122355lfb.0
+ for <buildroot@buildroot.org>; Wed, 24 Nov 2021 23:29:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+ bh=sV5a8S/SVxs29iw6LnrtIQHb69VkA1m8FzcQ1Hr3FRE=;
+ b=VYhStZRNeiMJuDk65SK1x3MVyibdVTkizgq5QeaXpW0lI3kN9Z8JcGqeZr4xUzYcfN
+ ouhVYQUxk4Fd/vWTr4HvEYqPAriDIPJJ2zkkDx4qXMEn+S9Te1DdUt0+BgdwLf3MmHjH
+ zFlUiQoWHWWcRQmbblUl3dF1LePFwc5+qCu6ldFcP++GxRfuG6E0kY0UUznD88G3B03y
+ J5x9x8swfZhfaQ3RGh2SAPqe6/3Kaf8iG6QXRPPpc0xs8xffKKNf7ppZw7yHNQEJeXOa
+ 9RXzZ/fCc85oXtejAHO+hqB1NJMtJVUlhP6dUZVD+5rGdO+oqf4ajwWZpj9cD/FqY0jw
+ IE3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ZUDeTYAxMoh3XL8BpCkGFn6VMTJniygxGq6LnaGrlPU=;
- b=B6wZ3Ghv/fN/WyDeKD0r/3gNZCQ8QEd3KD6Mqbr2e6lQP67AmGWePf1ULivO4s7ORw
- 68XWNny8IXfbwn/GTqINZ+qGKNI1+ZOe1pX2ysiT2Cw5B3lETz4UY65IePWQRrE5XSna
- N/+Uyw4jG+/o1mtCBVrXkrmubBptOX0U9MWLNrhJhrmdG9m/bN9C0m++TXVNuPapmLod
- loPKdwEM++JXdTkanJGi7EgVfpqr93PLZ/fdxO4B/m7++c3pXdMhPdwbU8R1W1dgtguw
- r5Sigrdshi6x8/cjJ2h/GGdQDv0PomdHuQl9X4q2lSuKvLJlQ0z7W6fHaoR2DLGn0a1/
- rC1Q==
-X-Gm-Message-State: AOAM5328FHrJ+XieoyB4J9W1hidesnCiEbcvbhRCXSsS2jvQcHr/9eK9
- HQX0Z2jcCiQh9nx8Ap1VHd/i1LLljaA=
-X-Google-Smtp-Source: ABdhPJxpikhcVipb4xrixKjJAqKlj6jrzvbsynGbuuB6+y3nelw8dYEuiJaa8ikC8W4iHXbYBLp++w==
-X-Received: by 2002:a5d:584e:: with SMTP id i14mr4269791wrf.386.1637825314274; 
- Wed, 24 Nov 2021 23:28:34 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id b10sm1997898wrt.36.2021.11.24.23.28.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Nov 2021 23:28:33 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 25 Nov 2021 08:25:22 +0100
-Message-Id: <20211125072522.4179056-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to;
+ bh=sV5a8S/SVxs29iw6LnrtIQHb69VkA1m8FzcQ1Hr3FRE=;
+ b=wrMe9BLeVTXhZadC8wcy15rjKfZ0c9CM0BDZu1nvntvyLSh8vESwL3kpxBqH1hvmTw
+ XtdwnyzMFiQ8++M9Vv/b3lL1lEz55hpKOBANHQqlnrAmOuBEo/kmvpaqbJPnUOquBsns
+ zcwHFj2hDK+dglj1qwAiOr3wIUpOxYr008ujL83xIuAwt4QUi/Zu8rvVuIb9tjqZOmC4
+ N+UoNFCF4E9K8W3OAEA1ersd2EwKPZymJdtEHvTtSiwoTh9PvaBt09FUOWlANBh454kk
+ 8D4DhlmunchTE1siWLUxznO0k0t+I2z+eOsqew7X/Da4TATUIQUtAfhonrjcP7WRBtj3
+ ERhw==
+X-Gm-Message-State: AOAM531eGKqJgfuqYGHKdWwtr68oi76FdsE/BbehFT4M1xIhjZbXfD3+
+ 8BJKNeQDcPx/GDj/9sYz7GNwI08FR/vRMYiezqpKYA==
+X-Google-Smtp-Source: ABdhPJxHhESKp2Pqbigx6uc1b1i6ZmPvDRzXjq9QTlmSYXqxujhPSbcnFhmG9ZjLUU2NP/eEi0dsoQBzcjpA9EpRabk=
+X-Received: by 2002:a05:6512:3d88:: with SMTP id
+ k8mr22334193lfv.111.1637825353738; 
+ Wed, 24 Nov 2021 23:29:13 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next 1/1] package/jitterentropy-library: bump to
- version 3.3.1
+References: <20211125072737.3284-1-jose.pekkarinen@unikie.com>
+In-Reply-To: <20211125072737.3284-1-jose.pekkarinen@unikie.com>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Thu, 25 Nov 2021 09:29:02 +0200
+Message-ID: <CAJPV9MqYuyb2LvgHj+cfv7vMS2zpgS54r1n=hVLO136u5GH+3A@mail.gmail.com>
+To: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>, 
+ buildroot <buildroot@buildroot.org>
+Subject: Re: [Buildroot] [PATCH v3] package/opensc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,235 +83,896 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2015075203670379916=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Use official tarball
-- Drop patches (already in version)
-- license files renamed with
-  https://github.com/smuellerDD/jitterentropy-library/commit/a08ae564c422b54ad3332d38be033933ade4df6d
-- Update indentation in hash file (two spaces)
+--===============2015075203670379916==
+Content-Type: multipart/alternative; boundary="00000000000069fe6705d197ee77"
 
-https://github.com/smuellerDD/jitterentropy-library/blob/v3.3.1/CHANGES.md
+--00000000000069fe6705d197ee77
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Makefile-cleanup-install.patch       | 54 ------------------
- ...efile-add-additional-install-targets.patch | 56 -------------------
- ...-the-user-to-disable-stack-protector.patch | 36 ------------
- .../jitterentropy-library.hash                |  8 +--
- .../jitterentropy-library.mk                  |  8 ++-
- 5 files changed, 9 insertions(+), 153 deletions(-)
- delete mode 100644 package/jitterentropy-library/0001-Makefile-cleanup-install.patch
- delete mode 100644 package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
- delete mode 100644 package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+Hi,
 
-diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-deleted file mode 100644
-index 9c7e40369a..0000000000
---- a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 060b9b4147f6e5ff386a8b017796118d783e59fa Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Tue, 22 Oct 2019 12:44:30 -0500
--Subject: [PATCH] Makefile: cleanup install for rebuilds
--
--Support the ability to rebuild and redeploy without a clean. This
--required some force linking and man archive creation.
--
--Provide the ability to override the stripping of the shared lib for
--cases where a embedded target build may want to control stripping
--or provide cross arch tools.
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
--Signed-off-by: Stephan Mueller <smueller@chronox.de>
--[Retrieved from:
--https://github.com/smuellerDD/jitterentropy-library/commit/060b9b4147f6e5ff386a8b017796118d783e59fa]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4ff069b..2e78607 100644
----- a/Makefile
--+++ b/Makefile
--@@ -14,6 +14,8 @@ LIBDIR := lib
-- # include target directory
-- INCDIR := include
-- 
--+INSTALL_STRIP ?= install -s
--+
-- NAME := jitterentropy
-- LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
-- LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
--@@ -58,15 +60,15 @@ cppcheck:
-- install:
-- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
-- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
---	gzip -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
--+	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
-- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
---	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
--+	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
-- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
-- 	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-- 	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
---	ln -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
---	ln -s lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
--+	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
--+	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
-- 
-- clean:
-- 	@- $(RM) $(NAME)
-diff --git a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
-deleted file mode 100644
-index a331c9f33b..0000000000
---- a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From d545d76cb3173cc98e1421604929248f2d882821 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 24 Oct 2019 18:48:47 +0200
--Subject: [PATCH] Makefile: add additional install targets
--
--Add install-includes, install-man, install-shared and install-static
--targets to allow the user to configure what must be installed
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://github.com/smuellerDD/jitterentropy-library/pull/11]
-----
-- Makefile | 18 ++++++++++++++----
-- 1 file changed, 14 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 2e78607..41bc4f7 100644
----- a/Makefile
--+++ b/Makefile
--@@ -57,19 +57,29 @@ scan: $(analyze_plists)
-- cppcheck:
-- 	cppcheck --force -q --enable=performance --enable=warning --enable=portability *.h *.c
-- 
---install:
--+install: install-man install-shared install-includes
--+
--+install-man:
-- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
-- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
-- 	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
--+
--+install-shared:
-- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
-- 	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
---	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
---	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
---	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
-- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-- 	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
-- 	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
-- 
--+install-includes:
--+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
--+	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
--+	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
--+
--+install-static:
--+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
--+	install -m 0755 lib$(NAME).a $(DESTDIR)$(PREFIX)/$(LIBDIR)/
--+
-- clean:
-- 	@- $(RM) $(NAME)
-- 	@- $(RM) $(OBJS)
---- 
--2.23.0
--
-diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-deleted file mode 100644
-index eeff0a0fec..0000000000
---- a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 28 Oct 2019 09:47:49 +0100
--Subject: [PATCH] Makefile: allow the user to disable stack protector
--
--Allow the user to disable stack-protector by overriding CFLAGS as it is
--not supported by all toolchains.
--
--Fixes:
-- - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/smuellerDD/jitterentropy-library/pull/12]
-----
-- Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 41bc4f7..b0f20e2 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,9 +1,9 @@
-- # Compile Noise Source as user space application
-- 
-- CC ?= gcc
---CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
-- #Hardening
---CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
--+CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
--+CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv
-- LDFLAGS +=-Wl,-z,relro,-z,now
-- 
-- # Change as necessary
---- 
--2.23.0
--
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index 5ff38f6fea..760befab53 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256	42d4bd1050b5f0d7b45b5453e5b6cfc45c0492bb428791f571d8f69b066351a4  jitterentropy-library-2.2.0.tar.gz
--sha256	96b5a6b49aaeeba9036f9b80e6e299d613a8eca158741a25a67dc78792413e23  COPYING
--sha256	13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
--sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
-+sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
-+sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
-+sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
-+sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index d9dc031c35..830da0e065 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--JITTERENTROPY_LIBRARY_VERSION = 2.2.0
--JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
-+JITTERENTROPY_LIBRARY_VERSION = 3.3.1
-+JITTERENTROPY_LIBRARY_SOURCE = \
-+	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
-+JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
- JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
--JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
-+JITTERENTROPY_LIBRARY_LICENSE_FILES = LICENSE LICENSE.bsd LICENSE.gplv2
- JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
- JITTERENTROPY_LIBRARY_INSTALL_TARGETS = install-includes
- JITTERENTROPY_LIBRARY_SELINUX_MODULES = entropyd
--- 
-2.33.0
+Please ignore this last test, and consider v3 send
+
+few minutes ago. Apologies for the confusion.
+
+Jos=C3=A9.
+
+
+On Thu, Nov 25, 2021 at 9:27 AM Jos=C3=A9 Pekkarinen <jose.pekkarinen@uniki=
+e.com>
+wrote:
+
+> The patch will add a basic opensc package to build
+> on buildroot.
+>
+> Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+> ---
+> [v1 -> v2] Addressed multiple comments from former rev
+> [v2 -> v3] Fixed warning of missing signed off patch
+>
+>  DEVELOPERS                                    |   1 +
+>  package/Config.in                             |   1 +
+>  ...ckage-opensc-fix-maybe-uninitialized.patch |  69 +++++++++
+>  ...x-strict-aliasing-warnings-as-errors.patch | 132 ++++++++++++++++++
+>  package/opensc/Config.in                      |  11 ++
+>  package/opensc/opensc.hash                    |   5 +
+>  package/opensc/opensc.mk                      |  14 ++
+>  7 files changed, 233 insertions(+)
+>  create mode 100644
+> package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch
+>  create mode 100644
+> package/opensc/0002-package-opensc-fix-strict-aliasing-warnings-as-errors=
+.patch
+>  create mode 100644 package/opensc/Config.in
+>  create mode 100644 package/opensc/opensc.hash
+>  create mode 100644 package/opensc/opensc.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 70262eac8c..d92c38f07d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1455,6 +1455,7 @@ F:        support/testing/tests/package/test_zfs.py
+>
+>  N:     Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+>  F:     package/softhsm2/
+> +F:     package/opensc/
+>
+>  N:     Joseph Kogut <joseph.kogut@gmail.com>
+>  F:     package/at-spi2-atk/
+> diff --git a/package/Config.in b/package/Config.in
+> index e355ab1987..3cfcf372f3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1617,6 +1617,7 @@ menu "Hardware handling"
+>         source "package/tslib/Config.in"
+>         source "package/uhd/Config.in"
+>         source "package/urg/Config.in"
+> +       source "package/opensc/Config.in"
+>  endmenu
+>
+>  menu "Javascript"
+> diff --git
+> a/package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch
+> b/package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch
+> new file mode 100644
+> index 0000000000..1f6a2e6f42
+> --- /dev/null
+> +++ b/package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch
+> @@ -0,0 +1,69 @@
+> +package:opensc: Fix maybe uninitialized issues
+> +
+> +This patch will fix some warning treated as errors
+> +that highlight maybe uninitialized variables.
+> +
+> +Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+> +Index: opensc-0.22.0/src/pkcs15init/pkcs15-asepcos.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/pkcs15init/pkcs15-asepcos.c
+> ++++ opensc-0.22.0/src/pkcs15init/pkcs15-asepcos.c
+> +@@ -221,7 +221,7 @@ static int asepcos_do_store_pin(sc_profi
+> + {
+> +       sc_file_t *nfile =3D NULL;
+> +       u8  buf[64], sbuf[64], *p =3D buf, *q =3D sbuf;
+> +-      int r, akn;
+> ++      int r, akn =3D 0;
+> +
+> +       if (auth_info->auth_type !=3D SC_PKCS15_PIN_AUTH_TYPE_PIN)
+> +               return SC_ERROR_OBJECT_NOT_VALID;
+> +Index: opensc-0.22.0/src/libopensc/pkcs15-coolkey.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/libopensc/pkcs15-coolkey.c
+> ++++ opensc-0.22.0/src/libopensc/pkcs15-coolkey.c
+> +@@ -147,9 +147,9 @@ coolkey_find_matching_cert(sc_card_t *ca
+> + static int
+> + coolkey_get_attribute_ulong(sc_card_t *card, sc_cardctl_coolkey_object_=
+t
+> *obj, CK_ATTRIBUTE_TYPE type, CK_ULONG *value)
+> + {
+> +-      const u8 *val;
+> +-      size_t val_len;
+> +-      u8 data_type;
+> ++      const u8 *val =3D malloc(sizeof(u8));
+> ++      size_t val_len =3D 0;
+> ++      u8 data_type =3D 0;
+> +       int r;
+> +
+> +       r  =3D coolkey_get_attribute(card, obj, type, &val, &val_len,
+> &data_type);
+> +@@ -168,8 +168,8 @@ static int
+> + coolkey_get_attribute_boolean(sc_card_t *card,
+> sc_cardctl_coolkey_object_t *obj, CK_ATTRIBUTE_TYPE attr_type)
+> + {
+> +       int r;
+> +-      const u8 *val;
+> +-      size_t val_len;
+> ++      const u8 *val =3D malloc(sizeof(u8));
+> ++      size_t val_len =3D 0;
+> +
+> +       r =3D coolkey_get_attribute(card, obj, attr_type, &val, &val_len,
+> NULL);
+> +       if (r < 0) {
+> +@@ -186,7 +186,7 @@ static int
+> + coolkey_get_attribute_bytes(sc_card_t *card, sc_cardctl_coolkey_object_=
+t
+> *obj, CK_ATTRIBUTE_TYPE type, u8 *data, size_t *data_len, size_t
+> max_data_len)
+> + {
+> +       const u8 *val;
+> +-      size_t val_len;
+> ++      size_t val_len =3D 0;
+> +       int r;
+> +
+> +       r =3D coolkey_get_attribute(card, obj, type, &val, &val_len, NULL=
+);
+> +Index: opensc-0.22.0/src/tools/opensc-explorer.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/tools/opensc-explorer.c
+> ++++ opensc-0.22.0/src/tools/opensc-explorer.c
+> +@@ -2472,7 +2472,7 @@ int main(int argc, char *argv[])
+> +               char *line;
+> +               int cargc;
+> +               char *cargv[260];
+> +-              int multiple;
+> ++              int multiple =3D 0;
+> +               struct command *cmd;
+> +               char prompt[3*SC_MAX_PATH_STRING_SIZE];
+> +
+> diff --git
+> a/package/opensc/0002-package-opensc-fix-strict-aliasing-warnings-as-erro=
+rs.patch
+> b/package/opensc/0002-package-opensc-fix-strict-aliasing-warnings-as-erro=
+rs.patch
+> new file mode 100644
+> index 0000000000..e66fc21657
+> --- /dev/null
+> +++
+> b/package/opensc/0002-package-opensc-fix-strict-aliasing-warnings-as-erro=
+rs.patch
+> @@ -0,0 +1,132 @@
+> +Index: opensc-0.22.0/src/libopensc/card-gids.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/libopensc/card-gids.c
+> ++++ opensc-0.22.0/src/libopensc/card-gids.c
+> +@@ -691,7 +691,8 @@ static int gids_finish(sc_card_t *card)
+> + // the cmap file is used to detect the key algorithm / size
+> + static int gids_get_crypto_identifier_from_key_ref(sc_card_t *card,
+> const unsigned char keyref, unsigned char *cryptoidentifier) {
+> +       struct gids_private_data *data =3D (struct gids_private_data *)
+> card->drv_data;
+> +-      PCONTAINER_MAP_RECORD records =3D (PCONTAINER_MAP_RECORD)
+> data->cmapfile;
+> ++      PCONTAINER_MAP_RECORD records =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> ++      memcpy(records, data->cmapfile, sizeof(CONTAINER_MAP_RECORD));
+> +       int recordsnum =3D (int) (data->cmapfilesize /
+> sizeof(CONTAINER_MAP_RECORD));
+> +       int index =3D keyref - GIDS_FIRST_KEY_IDENTIFIER;
+> +       if (index >=3D recordsnum) {
+> +@@ -1112,10 +1113,10 @@ gids_get_all_containers(sc_card_t* card,
+> + // return the detail about a container to emulate a pkcs15 card
+> + static int
+> + gids_get_container_detail(sc_card_t* card,
+> sc_cardctl_gids_get_container_t* container) {
+> +-      PCONTAINER_MAP_RECORD records =3D NULL;
+> ++      PCONTAINER_MAP_RECORD records =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> +       struct gids_private_data *privatedata =3D (struct gids_private_da=
+ta
+> *) card->drv_data;
+> +       size_t recordsnum, num, i;
+> +-      records =3D (PCONTAINER_MAP_RECORD) privatedata ->cmapfile;
+> ++      memcpy(records, privatedata->cmapfile,
+> sizeof(CONTAINER_MAP_RECORD));
+> +       recordsnum =3D (privatedata ->cmapfilesize /
+> sizeof(CONTAINER_MAP_RECORD));
+> +
+> +       num =3D container->containernum ;
+> +@@ -1158,7 +1159,8 @@ gids_get_container_detail(sc_card_t* car
+> + static int
+> + gids_select_key_reference(sc_card_t *card, sc_pkcs15_prkey_info_t*
+> key_info) {
+> +       struct gids_private_data *data =3D (struct gids_private_data *)
+> card->drv_data;
+> +-      PCONTAINER_MAP_RECORD records =3D (PCONTAINER_MAP_RECORD)
+> data->cmapfile;
+> ++      PCONTAINER_MAP_RECORD records =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> ++      memcpy(records, data->cmapfile, sizeof(CONTAINER_MAP_RECORD));
+> +       size_t recordsnum;
+> +       int r;
+> +       char ch_tmp[10];
+> +@@ -1302,7 +1304,8 @@ static int gids_create_keyfile(sc_card_t
+> +       struct gids_private_data *data =3D (struct gids_private_data *)
+> card->drv_data;
+> +       size_t recordnum;
+> +       size_t containernum =3D key_info->key_reference -
+> GIDS_FIRST_KEY_IDENTIFIER;
+> +-      PCONTAINER_MAP_RECORD records =3D ((PCONTAINER_MAP_RECORD)
+> cmapbuffer) + containernum;
+> ++      PCONTAINER_MAP_RECORD records =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> ++      memcpy(records, cmapbuffer + containernum,
+> sizeof(CONTAINER_MAP_RECORD));
+> +       struct gids_keymap_record* keymaprecord =3D NULL;
+> +       int i;
+> +
+> +@@ -1390,12 +1393,12 @@ static int gids_create_keyfile(sc_card_t
+> +
+> +       // convert char to wchar
+> +       for(i =3D 0; i < MAX_CONTAINER_NAME_LEN && object->label[i]; i++)=
+ {
+> +-              records->wszGuid[i] =3D object->label[i];
+> ++              records->wszGuid[i] =3D (unsigned short) object->label[i]=
+;
+> +       }
+> +
+> +       // TODO: check if a container with the same name already exists
+> and prevent is creation or change its name
+> +
+> +-      records->bFlags =3D CONTAINER_MAP_VALID_CONTAINER;
+> ++      records->bFlags =3D (unsigned char) CONTAINER_MAP_VALID_CONTAINER=
+;
+> +       if (recordnum =3D=3D 0) {
+> +               records->bFlags |=3D CONTAINER_MAP_DEFAULT_CONTAINER;
+> +       }
+> +@@ -1638,7 +1641,8 @@ static int gids_delete_container_num(sc_
+> +       size_t keymaprecordnum =3D 0;
+> +       struct gids_private_data *data =3D (struct gids_private_data *)
+> card->drv_data;
+> +       size_t recordnum;
+> +-      PCONTAINER_MAP_RECORD records =3D ((PCONTAINER_MAP_RECORD)
+> cmapbuffer) + containernum;
+> ++      PCONTAINER_MAP_RECORD records =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> ++      memcpy(records, cmapbuffer + containernum,
+> sizeof(CONTAINER_MAP_RECORD));
+> +       struct gids_keymap_record* keymaprecord =3D NULL;
+> +
+> +       SC_FUNC_CALLED(card->ctx, SC_LOG_DEBUG_VERBOSE);
+> +Index: opensc-0.22.0/src/libopensc/card-gpk.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/libopensc/card-gpk.c
+> ++++ opensc-0.22.0/src/libopensc/card-gpk.c
+> +@@ -228,11 +228,12 @@ static int
+> + match_path(sc_card_t *card, unsigned short int **pathptr, size_t
+> *pathlen,
+> +               int need_info)
+> + {
+> +-      unsigned short int      *curptr, *ptr;
+> ++      u8                      *curptr;
+> ++      unsigned short int      *ptr;
+> +       size_t          curlen, len;
+> +       size_t          i;
+> +
+> +-      curptr =3D (unsigned short int *) card->cache.current_path.value;
+> ++      curptr =3D (u8 *) card->cache.current_path.value;
+> +       curlen =3D card->cache.current_path.len;
+> +       ptr    =3D *pathptr;
+> +       len    =3D *pathlen;
+> +@@ -242,7 +243,7 @@ match_path(sc_card_t *card, unsigned sho
+> +
+> +       /* Make sure path starts with MF.
+> +        * Note the cached path should always begin with MF. */
+> +-      if (ptr[0] !=3D GPK_FID_MF || curptr[0] !=3D GPK_FID_MF)
+> ++      if (ptr[0] !=3D (GPK_FID_MF >> 8) || curptr[0] !=3D (GPK_FID_MF >=
+> 8))
+> +               return 0;
+> +
+> +       for (i =3D 1; i < len && i < curlen; i++) {
+> +@@ -545,7 +546,7 @@ gpk_select_id(sc_card_t *card, int kind,
+> +       /* Fix up the path cache.
+> +        * NB we never cache the ID of an EF, just the DF path */
+> +       if (r =3D=3D 0) {
+> +-              unsigned short int      *path;
+> ++              u8      *path;
+> +
+> +               switch (kind) {
+> +               case GPK_SEL_MF:
+> +@@ -555,7 +556,7 @@ gpk_select_id(sc_card_t *card, int kind,
+> +                       if (cp->len + 1 > SC_MAX_PATH_SIZE / 2) {
+> +                               return SC_ERROR_INTERNAL;
+> +                       }
+> +-                      path =3D (unsigned short int *) cp->value;
+> ++                      path =3D (u8 *) cp->value;
+> +                       path[cp->len++] =3D fid;
+> +               }
+> +       } else {
+> +Index: opensc-0.22.0/src/tools/gids-tool.c
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +--- opensc-0.22.0.orig/src/tools/gids-tool.c
+> ++++ opensc-0.22.0/src/tools/gids-tool.c
+> +@@ -401,7 +401,8 @@ static int print_info(sc_card_t *card) {
+> +               if (cmapfilesize =3D=3D sizeof(cmapfile)) {
+> +                       printf("Unable to find the container file
+> (mscp\\cmapfile)\n");
+> +               } else {
+> +-                      PCONTAINER_MAP_RECORD cmaprecords =3D
+> (PCONTAINER_MAP_RECORD) cmapfile;
+> ++                      PCONTAINER_MAP_RECORD cmaprecords =3D
+> malloc(sizeof(CONTAINER_MAP_RECORD));
+> ++                      memcpy(cmaprecords, cmapfile,
+> sizeof(CONTAINER_MAP_RECORD));
+> +                       int cmaprecordnum =3D (cmapfilesize /
+> sizeof(CONTAINER_MAP_RECORD));
+> +                       int keymaprecordnum =3D -1;
+> +                       struct gids_keymap_record* keymaprecord =3D ((str=
+uct
+> gids_keymap_record*)(keymap +1));
+> diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+> new file mode 100644
+> index 0000000000..d6b137a87f
+> --- /dev/null
+> +++ b/package/opensc/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_OPENSC
+> +       bool "opensc"
+> +       depends on !BR2_STATIC_LIBS # dlopen()
+> +       select BR2_PACKAGE_PCSC_LITE
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+> +       help
+> +         OpenSC provides a set of libraries and utilities to work
+> +         with smart cards.
+> +
+> +         https://github.com/OpenSC/OpenSC/wiki
+> diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+> new file mode 100644
+> index 0000000000..1e3472ba2a
+> --- /dev/null
+> +++ b/package/opensc/opensc.hash
+> @@ -0,0 +1,5 @@
+> +# From https://https://github.com/OpenSC/OpenSC/releases/
+> +sha256  8d4e5347195ebea332be585df61dcc470331c26969e4b0447c851fb0844c7186
+> opensc-0.22.0.tar.gz
+> +
+> +# Computed locally
+> +sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14
+> COPYING
+> diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+> new file mode 100644
+> index 0000000000..7221eee944
+> --- /dev/null
+> +++ b/package/opensc/opensc.mk
+> @@ -0,0 +1,14 @@
+>
+> +########################################################################=
+########
+> +#
+> +# opensc
+> +#
+>
+> +########################################################################=
+########
+> +
+> +OPENSC_VERSION =3D 0.22.0
+> +OPENSC_SITE =3D
+> https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+> +OPENSC_LICENSE =3D LGPL-2.1+
+> +OPENSC_LICENSE_FILES =3D COPYING
+> +OPENSC_DEPENDENCIES =3D openssl pcsc-lite
+> +OPENSC_INSTALL_STAGING =3D YES
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.30.2
+>
+>
+
+--=20
+
+Jos=C3=A9.
+
+--00000000000069fe6705d197ee77
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><div><blockquote style=3D"margin:0 0 0 40px;border:non=
+e;padding:0px"><div>Hi,</div><div><br></div></blockquote><blockquote style=
+=3D"margin:0 0 0 40px;border:none;padding:0px"><div>Please ignore this last=
+ test, and consider v3 send</div></blockquote>few minutes ago. Apologies fo=
+r the confusion.</div><div><br></div><div><blockquote style=3D"margin:0 0 0=
+ 40px;border:none;padding:0px"><div>Jos=C3=A9.</div></blockquote></div></di=
+v><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On T=
+hu, Nov 25, 2021 at 9:27 AM Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose=
+.pekkarinen@unikie.com">jose.pekkarinen@unikie.com</a>&gt; wrote:<br></div>=
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">The patch will add a basi=
+c opensc package to build<br>
+on buildroot.<br>
+<br>
+Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@u=
+nikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+---<br>
+[v1 -&gt; v2] Addressed multiple comments from former rev<br>
+[v2 -&gt; v3] Fixed warning of missing signed off patch<br>
+<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+=C2=A01 +<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A01 +<br>
+=C2=A0...ckage-opensc-fix-maybe-uninitialized.patch |=C2=A0 69 +++++++++<br=
+>
+=C2=A0...x-strict-aliasing-warnings-as-errors.patch | 132 +++++++++++++++++=
++<br>
+=C2=A0package/opensc/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 11 ++<br>
+=C2=A0package/opensc/opensc.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A05 +<br>
+=C2=A0package/opensc/<a href=3D"http://opensc.mk" rel=3D"noreferrer" target=
+=3D"_blank">opensc.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 14 ++<br>
+=C2=A07 files changed, 233 insertions(+)<br>
+=C2=A0create mode 100644 package/opensc/0001-package-opensc-fix-maybe-unini=
+tialized.patch<br>
+=C2=A0create mode 100644 package/opensc/0002-package-opensc-fix-strict-alia=
+sing-warnings-as-errors.patch<br>
+=C2=A0create mode 100644 package/opensc/Config.in<br>
+=C2=A0create mode 100644 package/opensc/opensc.hash<br>
+=C2=A0create mode 100644 package/opensc/<a href=3D"http://opensc.mk" rel=3D=
+"noreferrer" target=3D"_blank">opensc.mk</a><br>
+<br>
+diff --git a/DEVELOPERS b/DEVELOPERS<br>
+index 70262eac8c..d92c38f07d 100644<br>
+--- a/DEVELOPERS<br>
++++ b/DEVELOPERS<br>
+@@ -1455,6 +1455,7 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 support/testing/tests/p=
+ackage/test_zfs.py<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose=
+.pekkarinen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt=
+;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/softhsm2/<br>
++F:=C2=A0 =C2=A0 =C2=A0package/opensc/<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Joseph Kogut &lt;<a href=3D"mailto:joseph.kogut=
+@gmail.com" target=3D"_blank">joseph.kogut@gmail.com</a>&gt;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/at-spi2-atk/<br>
+diff --git a/package/Config.in b/package/Config.in<br>
+index e355ab1987..3cfcf372f3 100644<br>
+--- a/package/Config.in<br>
++++ b/package/Config.in<br>
+@@ -1617,6 +1617,7 @@ menu &quot;Hardware handling&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/tslib/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/uhd/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/urg/Config.in&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/opensc/Config.in&quot;<br>
+=C2=A0endmenu<br>
+<br>
+=C2=A0menu &quot;Javascript&quot;<br>
+diff --git a/package/opensc/0001-package-opensc-fix-maybe-uninitialized.pat=
+ch b/package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch<br>
+new file mode 100644<br>
+index 0000000000..1f6a2e6f42<br>
+--- /dev/null<br>
++++ b/package/opensc/0001-package-opensc-fix-maybe-uninitialized.patch<br>
+@@ -0,0 +1,69 @@<br>
++package:opensc: Fix maybe uninitialized issues<br>
++<br>
++This patch will fix some warning treated as errors<br>
++that highlight maybe uninitialized variables.<br>
++<br>
++Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@=
+unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
++Index: opensc-0.22.0/src/pkcs15init/pkcs15-asepcos.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/pkcs15init/pkcs15-asepcos.c<br>
+++++ opensc-0.22.0/src/pkcs15init/pkcs15-asepcos.c<br>
++@@ -221,7 +221,7 @@ static int asepcos_do_store_pin(sc_profi<br>
++ {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0sc_file_t *nfile =3D NULL;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0u8=C2=A0 buf[64], sbuf[64], *p =3D buf, *q =3D =
+sbuf;<br>
++-=C2=A0 =C2=A0 =C2=A0 int r, akn;<br>
+++=C2=A0 =C2=A0 =C2=A0 int r, akn =3D 0;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (auth_info-&gt;auth_type !=3D SC_PKCS15_PIN_=
+AUTH_TYPE_PIN)<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return SC_ERROR_OBJ=
+ECT_NOT_VALID;<br>
++Index: opensc-0.22.0/src/libopensc/pkcs15-coolkey.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/libopensc/pkcs15-coolkey.c<br>
+++++ opensc-0.22.0/src/libopensc/pkcs15-coolkey.c<br>
++@@ -147,9 +147,9 @@ coolkey_find_matching_cert(sc_card_t *ca<br>
++ static int<br>
++ coolkey_get_attribute_ulong(sc_card_t *card, sc_cardctl_coolkey_object_t =
+*obj, CK_ATTRIBUTE_TYPE type, CK_ULONG *value)<br>
++ {<br>
++-=C2=A0 =C2=A0 =C2=A0 const u8 *val;<br>
++-=C2=A0 =C2=A0 =C2=A0 size_t val_len;<br>
++-=C2=A0 =C2=A0 =C2=A0 u8 data_type;<br>
+++=C2=A0 =C2=A0 =C2=A0 const u8 *val =3D malloc(sizeof(u8));<br>
+++=C2=A0 =C2=A0 =C2=A0 size_t val_len =3D 0;<br>
+++=C2=A0 =C2=A0 =C2=A0 u8 data_type =3D 0;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int r;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0r=C2=A0 =3D coolkey_get_attribute(card, obj, ty=
+pe, &amp;val, &amp;val_len, &amp;data_type);<br>
++@@ -168,8 +168,8 @@ static int<br>
++ coolkey_get_attribute_boolean(sc_card_t *card, sc_cardctl_coolkey_object_=
+t *obj, CK_ATTRIBUTE_TYPE attr_type)<br>
++ {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int r;<br>
++-=C2=A0 =C2=A0 =C2=A0 const u8 *val;<br>
++-=C2=A0 =C2=A0 =C2=A0 size_t val_len;<br>
+++=C2=A0 =C2=A0 =C2=A0 const u8 *val =3D malloc(sizeof(u8));<br>
+++=C2=A0 =C2=A0 =C2=A0 size_t val_len =3D 0;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0r =3D coolkey_get_attribute(card, obj, attr_typ=
+e, &amp;val, &amp;val_len, NULL);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (r &lt; 0) {<br>
++@@ -186,7 +186,7 @@ static int<br>
++ coolkey_get_attribute_bytes(sc_card_t *card, sc_cardctl_coolkey_object_t =
+*obj, CK_ATTRIBUTE_TYPE type, u8 *data, size_t *data_len, size_t max_data_l=
+en)<br>
++ {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0const u8 *val;<br>
++-=C2=A0 =C2=A0 =C2=A0 size_t val_len;<br>
+++=C2=A0 =C2=A0 =C2=A0 size_t val_len =3D 0;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int r;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0r =3D coolkey_get_attribute(card, obj, type, &a=
+mp;val, &amp;val_len, NULL);<br>
++Index: opensc-0.22.0/src/tools/opensc-explorer.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/tools/opensc-explorer.c<br>
+++++ opensc-0.22.0/src/tools/opensc-explorer.c<br>
++@@ -2472,7 +2472,7 @@ int main(int argc, char *argv[])<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0char *line;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int cargc;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0char *cargv[260];<b=
+r>
++-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 int multiple;<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 int multiple =3D 0;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct command *cmd=
+;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0char prompt[3*SC_MA=
+X_PATH_STRING_SIZE];<br>
++ <br>
+diff --git a/package/opensc/0002-package-opensc-fix-strict-aliasing-warning=
+s-as-errors.patch b/package/opensc/0002-package-opensc-fix-strict-aliasing-=
+warnings-as-errors.patch<br>
+new file mode 100644<br>
+index 0000000000..e66fc21657<br>
+--- /dev/null<br>
++++ b/package/opensc/0002-package-opensc-fix-strict-aliasing-warnings-as-er=
+rors.patch<br>
+@@ -0,0 +1,132 @@<br>
++Index: opensc-0.22.0/src/libopensc/card-gids.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/libopensc/card-gids.c<br>
+++++ opensc-0.22.0/src/libopensc/card-gids.c<br>
++@@ -691,7 +691,8 @@ static int gids_finish(sc_card_t *card)<br>
++ // the cmap file is used to detect the key algorithm / size<br>
++ static int gids_get_crypto_identifier_from_key_ref(sc_card_t *card, const=
+ unsigned char keyref, unsigned char *cryptoidentifier) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_private_data *data =3D (struct gids=
+_private_data *) card-&gt;drv_data;<br>
++-=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D (PCONTAINER_MAP_RE=
+CORD) data-&gt;cmapfile;<br>
+++=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D malloc(sizeof(CONT=
+AINER_MAP_RECORD));<br>
+++=C2=A0 =C2=A0 =C2=A0 memcpy(records, data-&gt;cmapfile, sizeof(CONTAINER_=
+MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int recordsnum =3D (int) (data-&gt;cmapfilesize=
+ / sizeof(CONTAINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int index =3D keyref - GIDS_FIRST_KEY_IDENTIFIE=
+R;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (index &gt;=3D recordsnum) {<br>
++@@ -1112,10 +1113,10 @@ gids_get_all_containers(sc_card_t* card,<br>
++ // return the detail about a container to emulate a pkcs15 card<br>
++ static int<br>
++ gids_get_container_detail(sc_card_t* card, sc_cardctl_gids_get_container_=
+t* container) {<br>
++-=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D NULL;<br>
+++=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D malloc(sizeof(CONT=
+AINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_private_data *privatedata =3D (stru=
+ct gids_private_data *) card-&gt;drv_data;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t recordsnum, num, i;<br>
++-=C2=A0 =C2=A0 =C2=A0 records =3D (PCONTAINER_MAP_RECORD) privatedata -&gt=
+;cmapfile;<br>
+++=C2=A0 =C2=A0 =C2=A0 memcpy(records, privatedata-&gt;cmapfile, sizeof(CON=
+TAINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0recordsnum =3D (privatedata -&gt;cmapfilesize /=
+ sizeof(CONTAINER_MAP_RECORD));<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0num =3D container-&gt;containernum ;<br>
++@@ -1158,7 +1159,8 @@ gids_get_container_detail(sc_card_t* car<br>
++ static int<br>
++ gids_select_key_reference(sc_card_t *card, sc_pkcs15_prkey_info_t* key_in=
+fo) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_private_data *data =3D (struct gids=
+_private_data *) card-&gt;drv_data;<br>
++-=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D (PCONTAINER_MAP_RE=
+CORD) data-&gt;cmapfile;<br>
+++=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D malloc(sizeof(CONT=
+AINER_MAP_RECORD));<br>
+++=C2=A0 =C2=A0 =C2=A0 memcpy(records, data-&gt;cmapfile, sizeof(CONTAINER_=
+MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t recordsnum;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int r;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0char ch_tmp[10];<br>
++@@ -1302,7 +1304,8 @@ static int gids_create_keyfile(sc_card_t<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_private_data *data =3D (struct gids=
+_private_data *) card-&gt;drv_data;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t recordnum;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t containernum =3D key_info-&gt;key_refere=
+nce - GIDS_FIRST_KEY_IDENTIFIER;<br>
++-=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D ((PCONTAINER_MAP_R=
+ECORD) cmapbuffer) + containernum;<br>
+++=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D malloc(sizeof(CONT=
+AINER_MAP_RECORD));<br>
+++=C2=A0 =C2=A0 =C2=A0 memcpy(records, cmapbuffer + containernum, sizeof(CO=
+NTAINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_keymap_record* keymaprecord =3D NUL=
+L;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int i;<br>
++ <br>
++@@ -1390,12 +1393,12 @@ static int gids_create_keyfile(sc_card_t<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0// convert char to wchar<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0for(i =3D 0; i &lt; MAX_CONTAINER_NAME_LEN &amp=
+;&amp; object-&gt;label[i]; i++) {<br>
++-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 records-&gt;wszGuid[i] =
+=3D object-&gt;label[i];<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 records-&gt;wszGuid[i] =
+=3D (unsigned short) object-&gt;label[i];<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0// TODO: check if a container with the same nam=
+e already exists and prevent is creation or change its name<br>
++ <br>
++-=C2=A0 =C2=A0 =C2=A0 records-&gt;bFlags =3D CONTAINER_MAP_VALID_CONTAINER=
+;<br>
+++=C2=A0 =C2=A0 =C2=A0 records-&gt;bFlags =3D (unsigned char) CONTAINER_MAP=
+_VALID_CONTAINER;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (recordnum =3D=3D 0) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0records-&gt;bFlags =
+|=3D CONTAINER_MAP_DEFAULT_CONTAINER;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++@@ -1638,7 +1641,8 @@ static int gids_delete_container_num(sc_<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t keymaprecordnum =3D 0;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_private_data *data =3D (struct gids=
+_private_data *) card-&gt;drv_data;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t recordnum;<br>
++-=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D ((PCONTAINER_MAP_R=
+ECORD) cmapbuffer) + containernum;<br>
+++=C2=A0 =C2=A0 =C2=A0 PCONTAINER_MAP_RECORD records =3D malloc(sizeof(CONT=
+AINER_MAP_RECORD));<br>
+++=C2=A0 =C2=A0 =C2=A0 memcpy(records, cmapbuffer + containernum, sizeof(CO=
+NTAINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0struct gids_keymap_record* keymaprecord =3D NUL=
+L;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0SC_FUNC_CALLED(card-&gt;ctx, SC_LOG_DEBUG_VERBO=
+SE);<br>
++Index: opensc-0.22.0/src/libopensc/card-gpk.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/libopensc/card-gpk.c<br>
+++++ opensc-0.22.0/src/libopensc/card-gpk.c<br>
++@@ -228,11 +228,12 @@ static int<br>
++ match_path(sc_card_t *card, unsigned short int **pathptr, size_t *pathlen=
+,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int need_info)<br>
++ {<br>
++-=C2=A0 =C2=A0 =C2=A0 unsigned short int=C2=A0 =C2=A0 =C2=A0 *curptr, *ptr=
+;<br>
+++=C2=A0 =C2=A0 =C2=A0 u8=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 *curptr;<br>
+++=C2=A0 =C2=A0 =C2=A0 unsigned short int=C2=A0 =C2=A0 =C2=A0 *ptr;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 curlen=
+, len;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0size_t=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i;<br>
++ <br>
++-=C2=A0 =C2=A0 =C2=A0 curptr =3D (unsigned short int *) card-&gt;cache.cur=
+rent_path.value;<br>
+++=C2=A0 =C2=A0 =C2=A0 curptr =3D (u8 *) card-&gt;cache.current_path.value;=
+<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0curlen =3D card-&gt;cache.current_path.len;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0ptr=C2=A0 =C2=A0 =3D *pathptr;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0len=C2=A0 =C2=A0 =3D *pathlen;<br>
++@@ -242,7 +243,7 @@ match_path(sc_card_t *card, unsigned sho<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Make sure path starts with MF.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 * Note the cached path should always begin wit=
+h MF. */<br>
++-=C2=A0 =C2=A0 =C2=A0 if (ptr[0] !=3D GPK_FID_MF || curptr[0] !=3D GPK_FID=
+_MF)<br>
+++=C2=A0 =C2=A0 =C2=A0 if (ptr[0] !=3D (GPK_FID_MF &gt;&gt; 8) || curptr[0]=
+ !=3D (GPK_FID_MF &gt;&gt; 8))<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return 0;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0for (i =3D 1; i &lt; len &amp;&amp; i &lt; curl=
+en; i++) {<br>
++@@ -545,7 +546,7 @@ gpk_select_id(sc_card_t *card, int kind,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Fix up the path cache.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 * NB we never cache the ID of an EF, just the =
+DF path */<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (r =3D=3D 0) {<br>
++-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 unsigned short int=C2=A0=
+ =C2=A0 =C2=A0 *path;<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 u8=C2=A0 =C2=A0 =C2=A0 *=
+path;<br>
++ <br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0switch (kind) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0case GPK_SEL_MF:<br=
+>
++@@ -555,7 +556,7 @@ gpk_select_id(sc_card_t *card, int kind,<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0if (cp-&gt;len + 1 &gt; SC_MAX_PATH_SIZE / 2) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return SC_ERROR_INTERNAL;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0}<br>
++-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 path =3D (unsigned short int *) cp-&gt;value;<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 path =3D (u8 *) cp-&gt;value;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0path[cp-&gt;len++] =3D fid;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0} else {<br>
++Index: opensc-0.22.0/src/tools/gids-tool.c<br>
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
++--- opensc-0.22.0.orig/src/tools/gids-tool.c<br>
+++++ opensc-0.22.0/src/tools/gids-tool.c<br>
++@@ -401,7 +401,8 @@ static int print_info(sc_card_t *card) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (cmapfilesize =
+=3D=3D sizeof(cmapfile)) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0printf(&quot;Unable to find the container file (mscp\\cmapfile)\n=
+&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0} else {<br>
++-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 PCONTAINER_MAP_RECORD cmaprecords =3D (PCONTAINER_MAP_RECORD) cmapfile;=
+<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 PCONTAINER_MAP_RECORD cmaprecords =3D malloc(sizeof(CONTAINER_MAP_RECOR=
+D));<br>
+++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 memcpy(cmaprecords, cmapfile, sizeof(CONTAINER_MAP_RECORD));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0int cmaprecordnum =3D (cmapfilesize / sizeof(CONTAINER_MAP_RECORD=
+));<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0int keymaprecordnum =3D -1;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0struct gids_keymap_record* keymaprecord =3D ((struct gids_keymap_=
+record*)(keymap +1));<br>
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in<br>
+new file mode 100644<br>
+index 0000000000..d6b137a87f<br>
+--- /dev/null<br>
++++ b/package/opensc/Config.in<br>
+@@ -0,0 +1,11 @@<br>
++config BR2_PACKAGE_OPENSC<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;opensc&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # dlopen()<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_PCSC_LITE<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_OPENSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0OpenSC provides a set of libraries and u=
+tilities to work<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0with smart cards.<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/OpenSC/Ope=
+nSC/wiki" rel=3D"noreferrer" target=3D"_blank">https://github.com/OpenSC/Op=
+enSC/wiki</a><br>
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash<br>
+new file mode 100644<br>
+index 0000000000..1e3472ba2a<br>
+--- /dev/null<br>
++++ b/package/opensc/opensc.hash<br>
+@@ -0,0 +1,5 @@<br>
++# From https://<a href=3D"https://github.com/OpenSC/OpenSC/releases/" rel=
+=3D"noreferrer" target=3D"_blank">https://github.com/OpenSC/OpenSC/releases=
+/</a><br>
++sha256=C2=A0 8d4e5347195ebea332be585df61dcc470331c26969e4b0447c851fb0844c7=
+186=C2=A0 opensc-0.22.0.tar.gz<br>
++<br>
++# Computed locally<br>
++sha256=C2=A0 376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24=
+a14=C2=A0 COPYING<br>
+diff --git a/package/opensc/<a href=3D"http://opensc.mk" rel=3D"noreferrer"=
+ target=3D"_blank">opensc.mk</a> b/package/opensc/<a href=3D"http://opensc.=
+mk" rel=3D"noreferrer" target=3D"_blank">opensc.mk</a><br>
+new file mode 100644<br>
+index 0000000000..7221eee944<br>
+--- /dev/null<br>
++++ b/package/opensc/<a href=3D"http://opensc.mk" rel=3D"noreferrer" target=
+=3D"_blank">opensc.mk</a><br>
+@@ -0,0 +1,14 @@<br>
++##########################################################################=
+######<br>
++#<br>
++# opensc<br>
++#<br>
++##########################################################################=
+######<br>
++<br>
++OPENSC_VERSION =3D 0.22.0<br>
++OPENSC_SITE =3D <a href=3D"https://github.com/OpenSC/OpenSC/releases/downl=
+oad/$(OPENSC_VERSION)" rel=3D"noreferrer" target=3D"_blank">https://github.=
+com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)</a><br>
++OPENSC_LICENSE =3D LGPL-2.1+<br>
++OPENSC_LICENSE_FILES =3D COPYING<br>
++OPENSC_DEPENDENCIES =3D openssl pcsc-lite<br>
++OPENSC_INSTALL_STAGING =3D YES<br>
++<br>
++$(eval $(autotools-package))<br>
+-- <br>
+2.30.2<br>
+<br>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0px=
+ 0px 0px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></div>
+
+--00000000000069fe6705d197ee77--
+
+
+--===============2015075203670379916==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2015075203670379916==--
+
+
