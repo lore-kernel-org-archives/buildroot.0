@@ -1,72 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D10C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 12:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D066C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Nov 2021 12:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56A6E400DE;
-	Thu, 25 Nov 2021 12:27:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE6F48247F;
+	Thu, 25 Nov 2021 12:28:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Ytt3cdCHllC; Thu, 25 Nov 2021 12:27:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4aQoatWpWEeK; Thu, 25 Nov 2021 12:28:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C920402A1;
-	Thu, 25 Nov 2021 12:27:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D4428239A;
+	Thu, 25 Nov 2021 12:28:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DA541BF3CC
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 12:27:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D4611BF3CC
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 12:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D02F60737
- for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 12:27:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C77B60760
+ for <buildroot@lists.busybox.net>; Thu, 25 Nov 2021 12:28:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
+ dkim=pass (1024-bit key) header.d=senzilla.io
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dDXCLIQpD7uk for <buildroot@lists.busybox.net>;
- Thu, 25 Nov 2021 12:27:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F8AA606CA
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 12:27:14 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id e3so24947691edu.4
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 04:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=unikie-com.20210112.gappssmtp.com; s=20210112;
- h=mime-version:from:date:message-id:subject:to;
- bh=oJ9Ajakij2gRHseIIhgTd7PS3ugfbWRvmX6nVrS5Z2s=;
- b=JeaOn0tqjtzJ5bYnfoGSxBHgXOJaU49DEQtrJqhiM1k3NURnxB0v0OiocvrkA+bt3x
- C+BcB6qj8h8nr4N8OxzMOavkHcI7lsq1juLU94sCEr255SrCRH/WR12VhetnKRJOz1By
- uxoQq2JQYvQvV/3oHTyFufZrzdaldx52EqWdquraRrNSslsy1IvkIVD1MdwAAG+P1b+y
- w+QjFL67RbGOf+UJIHd9asDjwsmo5FATpEQxn0ecK5cNgzpBGIhsuYFyyrVw0/uluyuI
- Sh1uJBuh+Og4e5wsT94CQcdE7X5JpLyo4xv+05zA5PLfHkIHcD9uX9KpvHHMZRJMnF4y
- YOLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=oJ9Ajakij2gRHseIIhgTd7PS3ugfbWRvmX6nVrS5Z2s=;
- b=ksdEFImnaB5geszeGe28K+ri25snW21EOUBnblhTiz8RqU/rvHKiKUkZvOBNJNPgvf
- oE2hupjxDFnkNgATNkI2VI/BFfScbief61v9JXitaDTaAvhfKxCF+9htQBlpBXXZNkff
- aB5JwCdre0vWogxgNkwmyC87tAfzi9eMsX3Z8vGDtqYEsMj1rjFq825kXlC8TUq5w4Bl
- fvYmzcICOW06Tg5fzXX06ChyezY0qG/ggFSYhvrav2T6/b1T2gMACXFQsalZBHSZmsK6
- yrBJ1CazOmlBcm02uowE23FaIMtd5weamA52wZ30/Mklv5cJxnNhAZbEPvv499OJp7dA
- HIog==
-X-Gm-Message-State: AOAM5325p2z7vdibNbuaHGFkMMqW90PozVwvUHc0tIPH0U8f5ss/m/4O
- FtsZ8HFkRiwC7Skhm/y04dJyO6inMhcxtw8DpQd1KV4x1kHvq8AbqnAHIQ==
-X-Google-Smtp-Source: ABdhPJzqfhoOSQbyrNsG1tfncHSCCU6wSEXvbSn6PO1Ax+al67ek6Zo8bSrRVKrlCHdrqO5q29Pq7CI/hVhJ1qV/4zY=
-X-Received: by 2002:a50:da0a:: with SMTP id z10mr37818069edj.298.1637843232413; 
- Thu, 25 Nov 2021 04:27:12 -0800 (PST)
+ with ESMTP id UhNGfHI1VwjO for <buildroot@lists.busybox.net>;
+ Thu, 25 Nov 2021 12:28:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3569360737
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 12:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=senzilla.io; s=key1;
+ t=1637843298;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6b46NdhIdL1Mz1H2x9sFJJio7YKnJNo6sucTHyCcHb4=;
+ b=DIH3YIg5XtD7eLy/SBrz9MLE1PXY0ktvJQmrC9tGl5nAsiZaX3jzE65k7ioOcPKwk/92FS
+ mown91737YH4szfPlp6vBIVKONaG7w2F+FwmiJ3n+PSua5wr2OTsqWK9LX7PCxDM/p4rjG
+ FkvafB5gLIU6ymo2q78uDBUOLJPSEdA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
+ include these headers.
 MIME-Version: 1.0
-From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
-Date: Thu, 25 Nov 2021 14:27:01 +0200
-Message-ID: <CAJPV9MrtNQVuADbYs1HWE89Hnnf7h=68tRZEQ6=0n8XPMPYb6g@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
-Subject: [Buildroot] Package dependency
+Date: Thu, 25 Nov 2021 13:28:16 +0100
+Message-Id: <97980B85-6CCC-45FB-8ED2-CDD2430ECFBD@senzilla.io>
+References: <20211125102441.5351-1-vincent.stehle@arm.com>
+In-Reply-To: <20211125102441.5351-1-vincent.stehle@arm.com>
+To: =?utf-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: hi@senzilla.io
+Subject: Re: [Buildroot] [PATCH next] configs/aarch64_efi: bump kernel
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,154 +66,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1055067940768458422=="
+From: "D. Olsson via buildroot" <buildroot@buildroot.org>
+Reply-To: "D. Olsson" <hi@senzilla.io>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1055067940768458422==
-Content-Type: multipart/alternative; boundary="00000000000010f38e05d19c184a"
-
---00000000000010f38e05d19c184a
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi buildroot list,
-
-I'm working on a package for minijail that
-
-has a build dependency on libcap. I'm having
-troubles to set the dependency in the recipe and
-I fail to find what is wrong, so I want to ask for hints.
-
-Current Config.in:
-
-
-config BR2_PACKAGE_MINIJAIL
-       bool "minijail"
-       select BR2_PACKAGE_HOST_LIBCAP
-       select BR2_PACKAGE_LIBCAP
-       help
-         Minijail is a sandboxing tool maintained by google.
-
-         https://google.github.io/minijail/
-
-Current recipe:
-
-
-###########################################################################=
-#####
-
-#
-# minijail
-#
-###########################################################################=
-#####
-
-
-MINIJAIL_VERSION =3D linux-v17
-MINIJAIL_SOURCE =3D $(MINIJAIL_VERSION).tar.gz
-MINIJAIL_SITE =3D "https://github.com/google/minijail/archive/refs/tags"
-MINIJAIL_LICENSE =3D BSD-Style
-MINIJAIL_LICENSE_FILES =3D LICENSE
-MINIJAIL_DEPENDENCY=3Dlibcap host-libcap
-
-define MINIJAIL_BUILD_CMDS
-       (cd $(@D); \
-       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) CC=3D"$(TARGET_CC)")
-endef
-
-define MINIJAIL_INSTALL_TARGET_CMDS
-       $(INSTALL) -m 0755 -D $(@D)/minijail0 \
-               $(TARGET_DIR)/usr/bin/minijail0
-       $(INSTALL) -m 0755 -D $(@D)/libminijailpreload.so \
-               $(TARGET_DIR)/lib/libminijailpreload.so
-       $(INSTALL) -m 0755 -D $(@D)/libminijail.so \
-               $(TARGET_DIR)/lib/libminijail.so
-endef
-
-$(eval $(generic-package))
-
-Thanks!
-
-Jos=C3=A9 Pekkarinen.
-
---00000000000010f38e05d19c184a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><br></div><blockquote style=3D"margin:0 0 0 40px;bord=
-er:none;padding:0px">Hi buildroot list,<br><br>I&#39;m working on a package=
- for minijail that<br></blockquote>has a build dependency on libcap. I&#39;=
-m having<div>troubles to set the dependency in the recipe and</div><div>I f=
-ail to find what is wrong, so I want to ask for hints.</div><div><br></div>=
-<div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div>C=
-urrent Config.in:</div></blockquote><div><br></div>config BR2_PACKAGE_MINIJ=
-AIL<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;minijail&quot;<br>=C2=A0 =C2=
-=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_LIBCAP<br>=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0select BR2_PACKAGE_LIBCAP<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>=C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0Minijail is a sandboxing tool maintained by goog=
-le.<br><br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://google.gith=
-ub.io/minijail/">https://google.github.io/minijail/</a></div><div><br></div=
-><div><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div>=
-Current recipe:</div></blockquote><br></div><div><span style=3D"font-family=
-:monospace"><span style=3D"color:rgb(0,0,0)">##############################=
-##################################################
-</span><br>#
-<br># minijail
-<br>#
-<br>#######################################################################=
-#########
-<br>
-<br>MINIJAIL_VERSION =3D linux-v17
-<br>MINIJAIL_SOURCE =3D $(MINIJAIL_VERSION).tar.gz
-<br>MINIJAIL_SITE =3D &quot;<a href=3D"https://github.com/google/minijail/a=
-rchive/refs/tags">https://github.com/google/minijail/archive/refs/tags</a>&=
-quot;
-<br>MINIJAIL_LICENSE =3D BSD-Style
-<br>MINIJAIL_LICENSE_FILES =3D LICENSE
-<br>MINIJAIL_DEPENDENCY=3Dlibcap host-libcap
-<br>
-<br>define MINIJAIL_BUILD_CMDS
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(cd $(@D); \
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$(TARGET_MAKE_ENV) $(MAKE) -=
-C $(@D)/$(d) CC=3D&quot;$(TARGET_CC)&quot;)
-<br>endef
-<br>
-<br>define MINIJAIL_INSTALL_TARGET_CMDS
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$(INSTALL) -m 0755 -D $(@D)/=
-minijail0 \
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0$(TARGET_DIR)/usr/bin/minijail0
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$(INSTALL) -m 0755 -D $(@D)/=
-libminijailpreload.so \
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0$(TARGET_DIR)/lib/libminijailpreload.so
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$(INSTALL) -m 0755 -D $(@D)/=
-libminijail.so \
-<br> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0$(TARGET_DIR)/lib/libminijail.so
-<br>endef
-<br>
-<br>$(eval $(generic-package))<br></span></div><div><span style=3D"font-fam=
-ily:monospace"><br></span></div><blockquote style=3D"margin:0 0 0 40px;bord=
-er:none;padding:0px"><div><span style=3D"font-family:monospace">Thanks!</sp=
-an></div><div><span style=3D"font-family:monospace"><br></span></div></bloc=
-kquote><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gm=
-ail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0 0 0 40px;bord=
-er:none;padding:0px">Jos=C3=A9 Pekkarinen.</blockquote></div></div></div></=
-div>
-
---00000000000010f38e05d19c184a--
-
---===============1055067940768458422==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1055067940768458422==--
+SGkgVmluY2VudCwKCj4gT24gMjUgTm92IDIwMjEsIGF0IDExOjI1LCBWaW5jZW50IFN0ZWhsw6kg
+PHZpbmNlbnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgo+IAo+IO+7v0J1bXAgTGludXgga2VybmVs
+IHZlcnNpb24gdG8gNS4xNS40Lgo+IAo+IFdlIGVubGFyZ2UgdGhlIGJvb3QgcGFydGl0aW9uIHRv
+IGZvbGxvdyB0aGUga2VybmVsIGltYWdlIHNpemUgaW5jcmVhc2UgYW5kCj4gdXBkYXRlIHRoZSBp
+bnN0cnVjdGlvbnMgdG8gcnVuIG9uIHFlbXUgd2l0aCBhIFUtQm9vdCBiYXNlZCBmaXJtd2FyZS4K
+CkkgdW5kZXJzdGFuZCB0aGF0IHlvdSBtaWdodCBoYXZlIHRlc3RlZCB0aGlzIHdpdGggVS1Cb290
+IGZpcm13YXJlLiBCdXQgdGhlIHVwZGF0ZWQgaW5zdHJ1Y3Rpb25zIGRvZXNuJ3QgbWFrZSBhbnkg
+cmVmZXJlbmNlcyB0byBVLUJvb3QsIHNvIHlvdXIgZGVzY3JpcHRpb24gaXMgYSBsaXR0bGUgYml0
+IGNvbmZ1c2luZy4gTWF5YmUgc2ltcGxpZnkgdGhlIGNvbW1pdCBtZXNzYWdlPwoKPiBib2FyZC9h
+YXJjaDY0LWVmaS9nZW5pbWFnZS1lZmkuY2ZnIHwgMiArLQo+IGJvYXJkL2FhcmNoNjQtZWZpL3Jl
+YWRtZS50eHQgICAgICAgfCAyICstCj4gY29uZmlncy9hYXJjaDY0X2VmaV9kZWZjb25maWcgICAg
+ICB8IDYgKysrLS0tCj4gMyBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRp
+b25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2JvYXJkL2FhcmNoNjQtZWZpL2dlbmltYWdlLWVmaS5j
+ZmcgYi9ib2FyZC9hYXJjaDY0LWVmaS9nZW5pbWFnZS1lZmkuY2ZnCj4gaW5kZXggOGVjMWYxMGZk
+ODIuLjEzZDY5ZTVlNDI1IDEwMDY0NAo+IC0tLSBhL2JvYXJkL2FhcmNoNjQtZWZpL2dlbmltYWdl
+LWVmaS5jZmcKPiArKysgYi9ib2FyZC9hYXJjaDY0LWVmaS9nZW5pbWFnZS1lZmkuY2ZnCj4gQEAg
+LTgsNyArOCw3IEBAIGltYWdlIGVmaS1wYXJ0LnZmYXQgewo+ICAgICAgICB9Cj4gICAgfQo+IAo+
+IC0gICAgc2l6ZSA9IDMyTQo+ICsgICAgc2l6ZSA9IDY0TQo+IH0KPiAKPiBpbWFnZSBkaXNrLmlt
+ZyB7Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL2FhcmNoNjQtZWZpL3JlYWRtZS50eHQgYi9ib2FyZC9h
+YXJjaDY0LWVmaS9yZWFkbWUudHh0Cj4gaW5kZXggMTY0OTkzZWVhNDkuLjBlN2VhMGI1ZGQ3IDEw
+MDY0NAo+IC0tLSBhL2JvYXJkL2FhcmNoNjQtZWZpL3JlYWRtZS50eHQKPiArKysgYi9ib2FyZC9h
+YXJjaDY0LWVmaS9yZWFkbWUudHh0Cj4gQEAgLTQ1LDcgKzQ1LDcgQEAgdGhlIGluc3RydWN0aW9u
+cyBpbiBbM10sIHdpdGggcWVtdV9hcm02NF9kZWZjb25maWcuCj4gCj4gVGhpcyBzaG91bGQgZ2l2
+ZSB5b3UgYSBub3JfZmxhc2guYmluLCB3aGljaCB5b3UgY2FuIHVzZSB3aXRoIHFlbXUgYXMgYW4K
+PiBhbHRlcm5hdGl2ZSB0byBRRU1VX0VGSS5mZC4gWW91IHdpbGwgYWxzbyBuZWVkIHRvIGNoYW5n
+ZSB0aGUgbWFjaGluZQo+IC1zcGVjaWZpY2F0aW9uIHRvICItTSB2aXJ0LHNlY3VyZSIgb24gcWVt
+dSBjb21tYW5kIGxpbmUsIHRvIGVuYWJsZSBUcnVzdFpvbmUKPiArc3BlY2lmaWNhdGlvbiB0byAi
+LU0gdmlydCxzZWN1cmU9b24iIG9uIHFlbXUgY29tbWFuZCBsaW5lLCB0byBlbmFibGUgVHJ1c3Ra
+b25lCj4gc3VwcG9ydCwgYW5kIHlvdSB3aWxsIG5lZWQgdG8gaW5jcmVhc2UgdGhlIG1lbW9yeSB3
+aXRoICItbSAxMDI0Ii4KPiAKPiBbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS9BUk0tc29mdHdhcmUv
+ZWJicgo+IGRpZmYgLS1naXQgYS9jb25maWdzL2FhcmNoNjRfZWZpX2RlZmNvbmZpZyBiL2NvbmZp
+Z3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnCj4gaW5kZXggNmNiOGQxZmFjMjEuLjFiZDA2YzUxZjM3
+IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnCj4gKysrIGIvY29u
+Zmlncy9hYXJjaDY0X2VmaV9kZWZjb25maWcKPiBAQCAtMjIsMTMgKzIyLDEzIEBAIEJSMl9UQVJH
+RVRfUk9PVEZTX0VYVDJfU0laRT0iMjAwTSIKPiBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBU
+PSJib2FyZC9hYXJjaDY0LWVmaS9wb3N0LWltYWdlLnNoIHN1cHBvcnQvc2NyaXB0cy9nZW5pbWFn
+ZS5zaCIKPiBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIGJvYXJkL2FhcmNoNjQtZWZp
+L2dlbmltYWdlLWVmaS5jZmciCj4gCj4gLSMgTGludXggaGVhZGVycyBzYW1lIGFzIGtlcm5lbCwg
+YSA1LjExIHNlcmllcwo+IC1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzVf
+MTE9eQo+ICsjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwsIGEgNS4xNSBzZXJpZXMKPiAr
+QlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKPiAKPiAjIEtlcm5l
+bAo+IEJSMl9MSU5VWF9LRVJORUw9eQo+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049
+eQo+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjExLjE2Igo+ICtC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjQiCj4gQlIyX0xJTlVY
+X0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15Cj4gQlIyX0xJTlVYX0tFUk5FTF9ORUVE
+U19IT1NUX09QRU5TU0w9eQo+IAo+IC0tIAo+IDIuMzMuMAoKSG93ZXZlciwgdGhlIGNvZGUgY2hh
+bmdlcyBsb29rIGdvb2QuCgpSZXZpZXdlZC1ieTogRGljayBPbHNzb24gPGhpQHNlbnppbGxhLmlv
+PgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
