@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A3A6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 26 Nov 2021 07:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB6DC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 26 Nov 2021 07:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCDEB403F8;
-	Fri, 26 Nov 2021 07:33:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E427D401E1;
+	Fri, 26 Nov 2021 07:42:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MMzto6v0sDqa; Fri, 26 Nov 2021 07:33:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T_EEMtusXf0S; Fri, 26 Nov 2021 07:42:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19585403EC;
-	Fri, 26 Nov 2021 07:33:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C1D21BF395
- for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 07:33:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCFDA4033C;
+	Fri, 26 Nov 2021 07:42:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C7E801BF395
+ for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 07:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C69780C84
- for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 07:33:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A920140344
+ for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 07:42:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id amidHobe427B for <buildroot@lists.busybox.net>;
- Fri, 26 Nov 2021 07:33:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tmx1oavuODrw for <buildroot@lists.busybox.net>;
+ Fri, 26 Nov 2021 07:42:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com
- [209.85.216.67])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9780180C7D
- for <buildroot@buildroot.org>; Fri, 26 Nov 2021 07:33:36 +0000 (UTC)
-Received: by mail-pj1-f67.google.com with SMTP id gt5so6658824pjb.1
- for <buildroot@buildroot.org>; Thu, 25 Nov 2021 23:33:36 -0800 (PST)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BCEF401E1
+ for <buildroot@buildroot.org>; Fri, 26 Nov 2021 07:42:29 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id r25so35102373edq.7
+ for <buildroot@buildroot.org>; Thu, 25 Nov 2021 23:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=sqQGBNw0PTX7JpfaWk10K2mHQIJvPowNfybv0hMq1NA=;
+ b=SViMMCRn8uZR8qbjGPTxbJwv2gqzNNaBdQy0dxl7uzBDC0OQkdcdqCg9H4xt35l638
+ AuA0q0YoV35hpUvssGww29GQrbfLSQKEaQMF4RKRoNoppQGkNhQ+iO2QZDg14Gj6CJ6u
+ Y1gOPVptW9MgJYZWZqW6wGqB5FHIGZTaHqPao7oVTphlGo/oH7TQ+m4YxSmZCjVzzT4u
+ K+e4A41DPM5oGwwS8+GS7mwWGYFqm63DMQ9HRYhTVRwhzG3CbDVBPhPEPQpnB6X3yXza
+ SH7a+42iWjr+w2ChQQ6shqpc0l0hNYD2Dw+okRpa9unZKe9cZb+xY/B0rI/pV27Mqske
+ y48w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:message-id:subject:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=3NA7sBFspO9zj3uInyJXZ/LiWHESRj2Es+NDM9XgHHM=;
- b=jQ4F/l/pWjwpAlY5CPgVpkvXjeqSeaYp7h2n6Q0wkzeRiex0EudMbg7b+oR0PSPIAs
- F+B8WBBiI1iDI4P04JIEYAyT4M0QtM14Yw4HfbcGO43MtHPSDh23TorlL2fPWW03QkgN
- DQh1OT+Vi1A+Sb71CrVwlMGmCH/bTwjA9PC509HamwtWRCQMgF2qBuLh0ILqtkmlAHEH
- lGVRSLP4crYfnJ/JhnTd0yf6mSu6ijvMS0z6Sti25KbL9jMz2Dw8xVmqMITKqXxEdnmq
- mnosi9ibMgBtNExfWarBf5ycEKGFn3DwrZTnL8jWsxygB4emz9ji+Dh5TKlo3UuFYQXm
- /ubw==
-X-Gm-Message-State: AOAM532MO0+hZb97oQdG4BOXydVwRxT/Cd4fiVmMaAYOPNfox2DMTEYU
- 52c0PKD+csRKuEl28+L0taND2AqgtaIbEQ==
-X-Google-Smtp-Source: ABdhPJz//0J18JiWVl8SCc+mdE4lXNyBlqqW9dw5okLYbtrmO9EP2pj0JvM/n6Djudx9v3mxdTDwSA==
-X-Received: by 2002:a17:903:230d:b0:141:e3ce:2738 with SMTP id
- d13-20020a170903230d00b00141e3ce2738mr35445913plh.57.1637912015917; 
- Thu, 25 Nov 2021 23:33:35 -0800 (PST)
-Received: from GI-0403 ([103.129.252.60])
- by smtp.gmail.com with ESMTPSA id o23sm5457957pfp.209.2021.11.25.23.33.35
- for <buildroot@buildroot.org>
- (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
- Thu, 25 Nov 2021 23:33:35 -0800 (PST)
-Date: Fri, 26 Nov 2021 15:33:34 +0800
-From: kelly.devilliv <kelly.devilliv@gmail.com>
-To: =?utf-8?Q?buildroot=40buildroot.org?= <buildroot@buildroot.org>
-Message-ID: <DA4933D9-0555-4EE2-9423-A697BFDEA99B@gmail.com>
-X-Mailer: MailMasterPC/4.15.8.1002 (Windows 10 20H2)
-X-CUSTOM-MAIL-MASTER-SENT-ID: C5C07DC1-9F6C-43B8-92CD-B88CE579B416
+ bh=sqQGBNw0PTX7JpfaWk10K2mHQIJvPowNfybv0hMq1NA=;
+ b=mBUOgiAC/RU3jrBHYscuSGnuEO/ZQ34Au9w4cvOFXXh3JNcM6L8L2bJXO5r4p6MtwJ
+ ZS5JlvEnFlCQRf/U/7nOTUZGdlS0m5NGseqYrv+q+LROCmAHgE8IDXC1/oj/ulVkO6zg
+ TvuaEoaO5la4EzTDd400g+UA6MmEUMHhtx5GaRwn5f597NUE2GjTr7SG0HNzVLumZ/ke
+ 8SIF7wSSEDJDKUA3vnPpyqot+Cccnx+OaFW1QWiVVEUle9VEPAVcUon4zgO8eV3uylMh
+ LIyaycwILrQiY2xQHthUaIGJ/VFWhqoohTQdTqfnEdW1oO3xkgvAXvebpr9tT3kZpcMI
+ CsCA==
+X-Gm-Message-State: AOAM531CaYF/pfZqaJmPH6LM3n4RW4i0sDxJ51M5u2Vf1JyGLm6mHghr
+ xNwZ/RzaujS5IHUZ2BM9uIlgvg==
+X-Google-Smtp-Source: ABdhPJyKx0jyVvvPkWWP894gthdWIzSf0RIzXu05I2d4FeIK2+SKeIPmrWmoSF2fWm7v9MLh20eTvw==
+X-Received: by 2002:a05:6402:289e:: with SMTP id
+ eg30mr45438627edb.253.1637912548220; 
+ Thu, 25 Nov 2021 23:42:28 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id sh33sm2954857ejc.56.2021.11.25.23.42.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 25 Nov 2021 23:42:27 -0800 (PST)
+Message-ID: <fc493f23-3579-93d7-92d9-9caa80c0041f@mind.be>
+Date: Fri, 26 Nov 2021 08:42:26 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] =?utf-8?q?How_to_uninstall_packages_that_already_ins?=
- =?utf-8?q?talled_in_output/target?=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211125215654.4189447-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211125215654.4189447-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH/next 1/1] utils/checkpackagelib/lib_mk.py:
+ check typo in define
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,58 +93,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2198147920487637686=="
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2198147920487637686==
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
 
-PGh0bWw+DQo8aGVhZD4NCiAgICA8bWV0YSBodHRwLWVxdWl2PSdDb250ZW50LVR5cGUnIGNvbnRl
-bnQ9J3RleHQvaHRtbDsgY2hhcnNldD1VVEYtOCc+DQo8L2hlYWQ+DQo8Ym9keT4NCjxzdHlsZT4N
-CiAgICBmb250ew0KICAgICAgICBsaW5lLWhlaWdodDogMS42Ow0KICAgIH0NCiAgICB1bCxvbHsN
-CiAgICAgICAgcGFkZGluZy1sZWZ0OiAyMHB4Ow0KICAgICAgICBsaXN0LXN0eWxlLXBvc2l0aW9u
-OiBpbnNpZGU7DQogICAgfQ0KPC9zdHlsZT4NCjxkaXYgc3R5bGUgPSAnZm9udC1mYW1pbHk65b6u
-6L2v6ZuF6buRLFZlcmRhbmEsJnF1b3Q7TWljcm9zb2Z0IFlhaGVpJnF1b3Q7LFNpbVN1bixzYW5z
-LXNlcmlmO2ZvbnQtc2l6ZToxNHB4OyBsaW5lLWhlaWdodDoxLjY7Jz4NCiAgICA8c3BhbiBzdHls
-ZT0iY29sb3I6IHJnYig0OSwgNTMsIDU5KTsgZm9udC1mYW1pbHk6IOW+rui9r+mbhem7kSwgVmVy
-ZGFuYSwgJ01pY3Jvc29mdCBZYWhlaScsIFNpbVN1biwgc2Fucy1zZXJpZjsgbGluZS1oZWlnaHQ6
-IDIyLjRweDsiPkRlYXIgZnJpZW5kcyw8L3NwYW4+PGJyIHN0eWxlPSJjb2xvcjogcmdiKDQ5LCA1
-MywgNTkpOyBmb250LWZhbWlseTog5b6u6L2v6ZuF6buRLCBWZXJkYW5hLCAnTWljcm9zb2Z0IFlh
-aGVpJywgU2ltU3VuLCBzYW5zLXNlcmlmOyBsaW5lLWhlaWdodDogMjIuNHB4OyI+PGJyIHN0eWxl
-PSJjb2xvcjogcmdiKDQ5LCA1MywgNTkpOyBmb250LWZhbWlseTog5b6u6L2v6ZuF6buRLCBWZXJk
-YW5hLCAnTWljcm9zb2Z0IFlhaGVpJywgU2ltU3VuLCBzYW5zLXNlcmlmOyBsaW5lLWhlaWdodDog
-MjIuNHB4OyI+PHNwYW4gc3R5bGU9ImNvbG9yOiByZ2IoNDksIDUzLCA1OSk7IGZvbnQtZmFtaWx5
-OiDlvq7ova/pm4Xpu5EsIFZlcmRhbmEsICdNaWNyb3NvZnQgWWFoZWknLCBTaW1TdW4sIHNhbnMt
-c2VyaWY7IGxpbmUtaGVpZ2h0OiAyMi40cHg7Ij5UaGVyZSBpcyBhIHByb2JsZW0gd2hpY2ggY29u
-ZnVzZWQgbWUgZm9yIGEgbG9uZyB0aW1lLiBXaGVuIEkgZmlyc3RseSBjb21waWxlIGJ1aWxkcm9v
-dCB3aXRoIHBhY2thZ2UgJ0EnIGVuYWJsZWQsIHRoZW4gaXQgd2lsbCBpbnN0YWxsIGFsbCAnQScg
-cmVsYXRlZCBmaWxlcyAobGlicywgYmluLCBlLmcuKSBpbnRvIG91dHB1dC90YXJnZXQgZGlyZWN0
-b3J5LiBUaGVuIEkgZGlzYWJsZSAnQScgaW4gbWVudWNvbmZpZyBhbmQgcmVidWlsZCwgYnV0IHRo
-ZSBwcmUtaW5zdGFsbCBmaWxlcyBzdGlsbCByZW1haW4gaW4gb3V0cHV0L3RhcmdldCBkaXJlY3Rv
-cnkgYW5kIGFyZSBiZWluZyBwYWNrZWQgaW50byB0aGUgcm9vdGZzLiBIb3cgY2FuIEkgdW5pbnN0
-YWxsIGFsbCAnQScgcmVsYXRlZCBmaWxlcyBhZnRlciBJIGRpc2FibGUgdGhhdCBwYWNrYWdlPyBG
-b3Igbm93IEkgY2FuIG9ubHkgZGVsZXRlIHRoZW0gbWFudWFsbHkgb3IgY2xlYW4gdGhlIHdob2xl
-IHByb2plY3QgYW5kIHJlYnVpbGQgaXQgYWdhaW4uPC9zcGFuPjxiciBzdHlsZT0iY29sb3I6IHJn
-Yig0OSwgNTMsIDU5KTsgZm9udC1mYW1pbHk6IOW+rui9r+mbhem7kSwgVmVyZGFuYSwgJ01pY3Jv
-c29mdCBZYWhlaScsIFNpbVN1biwgc2Fucy1zZXJpZjsgbGluZS1oZWlnaHQ6IDIyLjRweDsiPjxi
-ciBzdHlsZT0iY29sb3I6IHJnYig0OSwgNTMsIDU5KTsgZm9udC1mYW1pbHk6IOW+rui9r+mbhem7
-kSwgVmVyZGFuYSwgJ01pY3Jvc29mdCBZYWhlaScsIFNpbVN1biwgc2Fucy1zZXJpZjsgbGluZS1o
-ZWlnaHQ6IDIyLjRweDsiPjxzcGFuIHN0eWxlPSJjb2xvcjogcmdiKDQ5LCA1MywgNTkpOyBmb250
-LWZhbWlseTog5b6u6L2v6ZuF6buRLCBWZXJkYW5hLCAnTWljcm9zb2Z0IFlhaGVpJywgU2ltU3Vu
-LCBzYW5zLXNlcmlmOyBsaW5lLWhlaWdodDogMjIuNHB4OyI+VGhhbmsgeW91IGZvciB5b3VyIHRp
-bWUuPC9zcGFuPjwhLS3wn5iALS0+DQo8L2Rpdj4NCjwvYm9keT4NCjwvaHRtbD4=
 
---===============2198147920487637686==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+On 25/11/2021 22:56, Fabrice Fontaine wrote:
+> Check typo in define to detect SMAKE_LINUX_CONFIG_FIXUPS in smack
+> (fixed by 41e2132fbe8a8fc237ca4a2cd2eff9bd9ced09a6)
+> 
+> Add GCC_TARGET in ALLOWED variable to avoid the following warnings:
+> 
+> arch/arch.mk:12: possible typo: GCC_TARGET_ARCH -> *ARCH*
+> arch/arch.mk:13: possible typo: GCC_TARGET_ABI -> *ARCH*
+> arch/arch.mk:14: possible typo: GCC_TARGET_NAN -> *ARCH*
+> arch/arch.mk:15: possible typo: GCC_TARGET_FP32_MODE -> *ARCH*
+> arch/arch.mk:16: possible typo: GCC_TARGET_CPU -> *ARCH*
+> arch/arch.mk:17: possible typo: GCC_TARGET_FPU -> *ARCH*
+> arch/arch.mk:18: possible typo: GCC_TARGET_FLOAT_ABI -> *ARCH*
+> arch/arch.mk:19: possible typo: GCC_TARGET_MODE -> *ARCH*
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   utils/checkpackagelib/lib_mk.py | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+> index d09922f724..9178931276 100644
+> --- a/utils/checkpackagelib/lib_mk.py
+> +++ b/utils/checkpackagelib/lib_mk.py
+> @@ -236,6 +236,7 @@ class TypoInPackageVariable(_CheckFunction):
+>           "BR_CCACHE_INITIAL_SETUP",
+>           "BR_LIBC",
+>           "BR_NO_CHECK_HASH_FOR",
+> +        "GCC_TARGET",
+>           "LINUX_EXTENSIONS",
+>           "LINUX_POST_PATCH_HOOKS",
+>           "LINUX_TOOLS",
+> @@ -248,7 +249,7 @@ class TypoInPackageVariable(_CheckFunction):
+>           "TARGET_FINALIZE_HOOKS",
+>           "TARGETS_ROOTFS",
+>           "XTENSA_CORE_NAME"]))
+> -    VARIABLE = re.compile(r"^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
+> +    VARIABLE = re.compile(r"^(define )?([A-Z0-9_]+_[A-Z0-9_]+)")
 
+  This no longer matches inline assignments... So I think this should be 
+something like
+^(define )?([A-Z0-9_]+_[A-Z0-9_]+)|^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=
+
+  Ideally, we should have a runtime test that validates that check-package 
+catches the errors we want it to catch...
+
+>   
+>       def before(self):
+>           package, _ = os.path.splitext(os.path.basename(self.filename))
+> @@ -258,7 +259,7 @@ class TypoInPackageVariable(_CheckFunction):
+>           # linux extensions do not use LINUX_EXT_ prefix for variables
+>           package = package.replace("LINUX_EXT_", "")
+>           self.package = package
+> -        self.REGEX = re.compile(r"^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
+> +        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
+>           self.FIND_VIRTUAL = re.compile(
+>               r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
+>           self.virtual = []
+> @@ -268,7 +269,7 @@ class TypoInPackageVariable(_CheckFunction):
+>           if m is None:
+>               return
+>   
+> -        variable = m.group(1)
+> +        variable = m.group(2)
+
+  Ah, with the regex that matches both, this will be tricky... Perhaps we should 
+use named groups then.
+
+
+  Regards,
+  Arnout
+
+
+>   
+>           # allow to set variables for virtual package this package provides
+>           v = self.FIND_VIRTUAL.search(text)
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2198147920487637686==--
