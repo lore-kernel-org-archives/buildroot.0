@@ -1,77 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F039DC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 26 Nov 2021 17:04:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87BDFC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 26 Nov 2021 17:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E41240189;
-	Fri, 26 Nov 2021 17:04:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2882B607BC;
+	Fri, 26 Nov 2021 17:20:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d5v4GFEH7kkc; Fri, 26 Nov 2021 17:04:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L1V5KchyKNTh; Fri, 26 Nov 2021 17:20:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6546C401A3;
-	Fri, 26 Nov 2021 17:04:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 079231BF2C0
- for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 17:04:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F56660780;
+	Fri, 26 Nov 2021 17:20:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CA7B1BF2B0
+ for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 17:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02EBB401A3
- for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 17:04:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BE0382AC6
+ for <buildroot@lists.busybox.net>; Fri, 26 Nov 2021 17:20:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YZ8UeU1LaWne for <buildroot@lists.busybox.net>;
- Fri, 26 Nov 2021 17:04:04 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BD4s0Z5e-_YM for <buildroot@lists.busybox.net>;
+ Fri, 26 Nov 2021 17:20:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AFCB40189
- for <buildroot@buildroot.org>; Fri, 26 Nov 2021 17:04:04 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id l16so19979033wrp.11
- for <buildroot@buildroot.org>; Fri, 26 Nov 2021 09:04:04 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 581F980E2D
+ for <buildroot@buildroot.org>; Fri, 26 Nov 2021 17:20:45 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id d24so20166074wra.0
+ for <buildroot@buildroot.org>; Fri, 26 Nov 2021 09:20:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vf+NdqVNh76l4GL3t2J7G4lZKuXM5PfK8TU2KzmkUbw=;
- b=I1Xx0GB4lNfqwvPmQkINYRhvrnnMPdyaZiS5VoFWEYmOLKips+LxH67v6YIXtsVw1B
- OLTG9B1yUUmKOSl1CED8TWaWUczgQGoGECKZ8y2yypBhmpef9pfO8LS6be4FO8GssdEE
- kdBEybc6AA7zHzETIweZXj3NFUgJsQ5yzmSSsaGDaSAMg8Do/Wub/WuyFmlwDzuFVTr4
- bpGOM5a4Gp6Oft/O4F8/mulz8oT6jdX6z0zll0r2p6bH0hEA4R+RF/ENF9PmxupQ37Ma
- DS39jA0MIOPaKTmmD14amCByRFVTbYwekw+byRUpk4hRP/cLwl97ffbFaVj8zSElot8v
- xZJw==
+ bh=Q2lE0wTx5PG7L1M+tCGbGNj51M5jMBkq5kfHccb48TI=;
+ b=MXqgJpTUxdoBUFZfGfVbhZ5vupnzUVkaKWbC0j0qGontFIaSa/4vVwrGTZ6iM5H6XT
+ JaAAEyoKf2aYWMp8JNI/ULNvRKpcxXCI+mwN3sotf8UOT2eA6ji25cBWMbaX4fS+lU5G
+ TJ0KpIj3MbcxBXy9ytmF1haZwKxEMT/5ltcmxYIq9dV9UAcTVmsc+IOKw/zolRMeYhJh
+ X7Lu39bvK1GNVRKHgZ41IKqpg2BzvMF4mH5btyie4QUhh40OII3pL0W5pH4hVk27IrpY
+ Azsvi46ljgtcebOyQrzQf0/gS7aC7VD4pLM4O8ivmTh4ResnV3d9jUgRRpEUyEJiB30m
+ I0dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=vf+NdqVNh76l4GL3t2J7G4lZKuXM5PfK8TU2KzmkUbw=;
- b=gUzZIarwzuLZ3/3W58Lfq9wd7TKwJrRqT4r3aW2qIG9LlaCgUdAK5O3krwRTECe8oN
- Yq6lwN3GML7neU8olFeGmY6Q3CqsSnsd+mh5kqXjLDANarfDa0NHbRzTfePxi3YRQjWI
- jlzperO2cB6xQuKU5qHBe6RlqVgw8RUUTRbKJ+dw5wPZe3qzIp1/Lcw/zNrvhczalYgR
- 9upMJ4q4eLPH3iTB42lk2Zls6ox2M16yk+l7mB0Pja+PAqCspyC6Zc6B9qxAufFrWtNn
- 8Q1Z/2NS3j3N2RydaHY6ytrGzfJqqjinPv85lQzLBuXIzyhAUCLVcu3KzIlsI9INEou8
- 7VUQ==
-X-Gm-Message-State: AOAM530b8JNfsNGX1jyqoI2kewCAaZEjChC8S9/y2wxwtbZ1qkCNbY42
- Q+P/AYJ7OC8BqC4s4/AKInClD52h+ko=
-X-Google-Smtp-Source: ABdhPJyB+rkuopRDuPrBuocLY1n4jiCIkUKqBxciHAnYeKQC2jKwMNXidlwr93KWfYxetnYkW5IRlg==
-X-Received: by 2002:adf:f2ca:: with SMTP id d10mr15093294wrp.79.1637946242232; 
- Fri, 26 Nov 2021 09:04:02 -0800 (PST)
+ bh=Q2lE0wTx5PG7L1M+tCGbGNj51M5jMBkq5kfHccb48TI=;
+ b=nUGhQB74z5Lkht20mTIe6/C0YFAQxcigkDNGq3Pf7F6tU/njdaQQSMyFwvz1d1NXiZ
+ 2mqF3fBduyhpXEdIKx7lVjhDMJD0wh2wEUrhiBqj/EQx/xaHhmn62jdLD+mkTwGfvv1P
+ 5iHf2RLD5EYI1dinVF6nX8k1bUho1NGP+4b96hYXren5rtc/rt23Ucmn65V8zc4C8bXI
+ 0TX2BOmnMEXS53zcSidyXXOIpljUmOlvhy5Ra1oJigXLGdiFN9LKT2waTxgoyiXmgaio
+ 7CBLUVry4vwuSpOeQEd+FOcQtvqk+oSMkz3FM3f07laA3v9YUEfm0Dju8QmP0kIuuuUv
+ qiog==
+X-Gm-Message-State: AOAM530xM2pFv1x84WvlnDcEED50nRB30EXWkrlsnQ1PmOz6MpevIciJ
+ AADdJYBxPkk874U6AJud3mX7BapeS/o=
+X-Google-Smtp-Source: ABdhPJxAp8uBWxnkOjYeNkZQDnTI/7OrOWGHDnBpouu4q/L5P7+XKmnaUzqQBSTPrDhtgL2zvxwV9A==
+X-Received: by 2002:a5d:6ac7:: with SMTP id u7mr15219123wrw.57.1637947243039; 
+ Fri, 26 Nov 2021 09:20:43 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id b197sm6602160wmb.24.2021.11.26.09.04.00
+ by smtp.gmail.com with ESMTPSA id f18sm6011135wre.7.2021.11.26.09.20.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Nov 2021 09:04:01 -0800 (PST)
+ Fri, 26 Nov 2021 09:20:42 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Nov 2021 18:01:16 +0100
-Message-Id: <20211126170116.920009-1-fontaine.fabrice@gmail.com>
+Date: Fri, 26 Nov 2021 18:18:04 +0100
+Message-Id: <20211126171804.920644-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
- 3.4.10
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: security bump to version 3.4.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,10 +118,51 @@ https://www.wireshark.org/docs/relnotes/wireshark-3.4.10.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireshark/wireshark.hash |  6 +++---
- package/wireshark/wireshark.mk   | 23 +++--------------------
- 2 files changed, 6 insertions(+), 23 deletions(-)
+Changes v1 -> v2:
+ - Add patch
 
+ ...e-lemon-wipe-CMAKE_SYSROOT-if-needed.patch | 30 +++++++++++++++++++
+ package/wireshark/wireshark.hash              |  6 ++--
+ package/wireshark/wireshark.mk                | 23 ++------------
+ 3 files changed, 36 insertions(+), 23 deletions(-)
+ create mode 100644 package/wireshark/0001-cmake-lemon-wipe-CMAKE_SYSROOT-if-needed.patch
+
+diff --git a/package/wireshark/0001-cmake-lemon-wipe-CMAKE_SYSROOT-if-needed.patch b/package/wireshark/0001-cmake-lemon-wipe-CMAKE_SYSROOT-if-needed.patch
+new file mode 100644
+index 0000000000..51875fd267
+--- /dev/null
++++ b/package/wireshark/0001-cmake-lemon-wipe-CMAKE_SYSROOT-if-needed.patch
+@@ -0,0 +1,30 @@
++From 982e5ab072816e29f6f2dc84d9a00ee7c4fdee40 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 26 Nov 2021 17:45:23 +0100
++Subject: [PATCH] cmake: lemon: wipe CMAKE_SYSROOT if needed
++
++Wipe CMAKE_SYSROOT when LEMON_C_COMPILER is set to avoid a build failure
++when cross-compiling (e.g. with buildroot)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/wireshark/wireshark/-/merge_requests/5224]
++---
++ tools/lemon/CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tools/lemon/CMakeLists.txt b/tools/lemon/CMakeLists.txt
++index 8742aa9fc9..7c8cc23a35 100644
++--- a/tools/lemon/CMakeLists.txt
+++++ b/tools/lemon/CMakeLists.txt
++@@ -12,6 +12,7 @@ add_executable(lemon lemon.c)
++ if(DEFINED LEMON_C_COMPILER)
++ 	set(CMAKE_C_COMPILER "${LEMON_C_COMPILER}")
++ 	set(CMAKE_C_FLAGS "")
+++	set(CMAKE_SYSROOT "")
++ endif()
++ 
++ # To keep lemon.c as close to upstream as possible, deliberately ignore
++-- 
++2.33.0
++
 diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
 index 0876703e49..bc7c9f4d7e 100644
 --- a/package/wireshark/wireshark.hash
