@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 022D0C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 08:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D51BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 10:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95EA6409A7;
-	Sat, 27 Nov 2021 08:44:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03D064034C;
+	Sat, 27 Nov 2021 10:02:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2oOAaw2Nxxjs; Sat, 27 Nov 2021 08:44:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y1f8M6o4fcKW; Sat, 27 Nov 2021 10:02:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D116040455;
-	Sat, 27 Nov 2021 08:44:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E47121BF376
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 08:44:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E6204014E;
+	Sat, 27 Nov 2021 10:02:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01DC41BF33F
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 10:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0D138105B
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 08:44:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F309B408F2
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 10:02:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EmZNdkx66aHe for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 08:44:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0RLg28187a7t for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 10:02:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B7A3D80F75
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 08:44:46 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id p18so9943982wmq.5
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 00:44:46 -0800 (PST)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 474B7408D7
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 10:02:27 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id x10so14457374ioj.9
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 02:02:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=lptMzD3jgdfEX5B5tJCDa0qD3Gq82YuoCiaz2pYt74U=;
- b=nm2ENHBQepKRH70Swv/BDEyyXoWRipUOWqDBvu2pFnoFWi9yPGB9LMqHk9bGGqEEzz
- e03zDXbtPJh1oGHxlWc9YsgJ9JjTL5sz4xO1hDpgsdyYSYMDH9z803TUF7Vr6C0ySMsJ
- KxNc9llMyA+8mJX6vVT/pgDV0Y8/ukZq3mWOpBrURrT2+9i+2KCIldH5JOx/Ik9EC56c
- ZFGl+BA+8MGVmBjaebKqevSwuTZUmS4E20y5NEPLZN2n5EjnrYwd4nwdlvKULCoctLfx
- TenwVOs1pTqnfsSqJYccNaWGc/Wg7JdGUl2tqP4qpG6wFYg1vYrHhCGPhuJVOu7aq8Fy
- iqoA==
+ bh=9r2gKxwDB9vJpTNCpgLzqTaCJAPonh5t16m/JiHZ2AU=;
+ b=C7ghcbMlj7dUMjlG2H/t8tVTaRF7pbjcg9N/nQHV/7kmNc5JX43B//ZOLO8cML99TF
+ uEttpc4TvTUC/Kt10bwuS3Sr0ry6KrPB3A/w30rYIPxMg02xK3CnwtR+UL4nj8wouvgp
+ ozt8b2/D2v2tKR564A4eXH1G7uL6YBQg2mvWkaaQG2izIOEP+n42U1/gHZQY4M4kJ3x3
+ ClVn/Ntmlz1WDxrLj27oOpGep+iBfeSQ8aey7fgkgIoLko3yCbZZCpVQfc0OwltCk3g6
+ gcByXkPhTGodaI3dDCz13w4xcFA2nuiEOyay6W1Rm/UJk2BE1M4ycFgQjWngGm/HhXXX
+ H0vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=lptMzD3jgdfEX5B5tJCDa0qD3Gq82YuoCiaz2pYt74U=;
- b=d+BIa8qJN/cud3yoKROR/A4w7LO4m34mWWRRjOFSC2I6HjxvdEAtsjPnJThZuZ2/pJ
- 8btHQdYIYsPf3wggi+Wz4CfXfbcopiddKOsPGy3Ekc2UH9PyWR535tgUu9793DIuaMw1
- uf1kPIQtiVi2l9DY4+jpUL2YWHz7cqZLgsfoY/PtJXfelQOzyZSe5eY5zsKc2/GsSJy7
- cGEql+phQirHDplMuzDKBMwPGsHuQ3FBrVIztqEK5Ixk237itiS9LM8bDo+LSsRYBVfD
- VUHof8BdQs87xltpM2NIjQ4ogggxQb896ccd6PmHD+gxd9Ajc8HBRion7riNPQRj+Zpu
- CQqw==
-X-Gm-Message-State: AOAM5321ILbvWIn6IuBYuAJ6PeS56ZarPBgSzoOTaO0Vwl02Fapcsiai
- oVzMDsjM13kbPRhUCmpND3QrVkhTKiw=
-X-Google-Smtp-Source: ABdhPJwBvhHOEGXoYYVO7XhsaJ3J9FTgT8sxG2rVMQcLFY31kHcTLc6XmsW0iAosH5cwWp/McY0H9A==
-X-Received: by 2002:a7b:c7cb:: with SMTP id z11mr21324005wmk.152.1638002684572; 
- Sat, 27 Nov 2021 00:44:44 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id m20sm15773232wmq.11.2021.11.27.00.44.43
+ bh=9r2gKxwDB9vJpTNCpgLzqTaCJAPonh5t16m/JiHZ2AU=;
+ b=0WI6DggzNx00R0g+eW8xEIuwlD7peCNYNge6dq/Zbn4xuvcnbGAg2J7hq+eoBoYd1K
+ 1ykCKB/hooRcI1vkEc3QxnDPTAW+9H8p/gep1llfxJ7XklI4WFIydVM+ag3PmyBrWuX7
+ 0WzIXnEjnl1ygTAP0bKNev1oAZbG7Fz+WuKI+iD1Byck4rBBpcEQuY9hSXcK6Yupcr6E
+ ozEId7Gr3M8NFAXH3xKFpaF0YMbrzlt4JPuuSSveq2FIbL3EHmtGwZPFFMZPSq2i98JP
+ aRwCUPt75KJ0sojE/Apm8l1oI2riZpd/BlKmC+sc1UX+RpnTWwioCYTXdlt8wJdBBZRX
+ CUzg==
+X-Gm-Message-State: AOAM532KRa9rlBGyWWkjEsqab9k3/6j8BU/HLxQECrbhsYcBoZM2zyqQ
+ Kty+REtpfL0TzA4HRNu/sB0rPVJoKog=
+X-Google-Smtp-Source: ABdhPJyxfi+K7WYNFhRXxqA8bKxCxzJXCzYCelWnX0tfBrlC6K4xqsW07ig+RXy6o91/7xc4tepeqA==
+X-Received: by 2002:a05:6638:2512:: with SMTP id
+ v18mr48887573jat.22.1638007346275; 
+ Sat, 27 Nov 2021 02:02:26 -0800 (PST)
+Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
+ [71.33.128.47])
+ by smtp.gmail.com with ESMTPSA id f16sm5105710iov.33.2021.11.27.02.02.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Nov 2021 00:44:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 27 Nov 2021 02:02:26 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 09:42:14 +0100
-Message-Id: <20211127084214.1525965-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Sat, 27 Nov 2021 03:02:16 -0700
+Message-Id: <20211127100219.2121658-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: update fourth patch
+Subject: [Buildroot] [PATCH 1/4] package/python-charset-normalizer: add host
+ variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,78 +87,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update fourth patch to add girdir in gio-2.0.pc. This will fix the
-following build failure with libnice raised since commit
-aade2fd293fc8a13bc5665fa70a4002ddac9aae6:
+A host variant of the python-charset-normalizer package will be needed
+for the host-python-requests package.
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler nice/Nice-0.1.gir --output nice/Nice-0.1.typelib --includedir=/usr/share/gir-1.0
-Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
-
-Fixes:
- - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...irdir-to-gio-2.0.pc-and-glib-2.0.pc.patch} | 23 +++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
- rename package/libglib2/{0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch => 0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch} (53%)
+ package/python-charset-normalizer/python-charset-normalizer.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-similarity index 53%
-rename from package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
-rename to package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-index 7eeecbe336..a29587bd31 100644
---- a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
-+++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-@@ -1,21 +1,36 @@
--From 04bdfff007c91fc620ed0b7cd02fd2e1e83bdefc Mon Sep 17 00:00:00 2001
-+From ff3db531608eb0f9de8a88c1bc34fe0f1d93121c Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Fri, 12 Nov 2021 18:01:05 +0100
--Subject: [PATCH] glib/meson.build: add girdir to glib.2.0.pc
-+Subject: [PATCH] meson.build: add girdir to gio-2.0.pc and glib-2.0.pc
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index e1b805fbfb..7fe9f96996 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
+@@ -10,5 +10,7 @@ PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/9f/c5/3
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
++HOST_PYTHON_CHARSET_NORMALIZER_NEEDS_HOST_PYTHON = python3
  
--Add girdir to glib-2.0.pc to fix the following build failure with atk:
-+Add girdir to gio-2.0.pc and glib-2.0.pc to fix the following build
-+failure with atk or libnice:
- 
- /home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
- Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
- 
- Fixes:
-  - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
-+ - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-+ gio/meson.build  | 1 +
-  glib/meson.build | 1 +
-- 1 file changed, 1 insertion(+)
-+ 2 files changed, 2 insertions(+)
- 
-+diff --git a/gio/meson.build b/gio/meson.build
-+index 29473d26b..112d4ada9 100644
-+--- a/gio/meson.build
-++++ b/gio/meson.build
-+@@ -831,6 +831,7 @@ pkg.generate(libgio,
-+   variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
-+                'schemasdir=' + join_paths('${datadir}', schemas_subdir),
-+                'bindir=' + join_paths('${prefix}', get_option('bindir')),
-++               'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
-+                'giomoduledir=' + pkgconfig_giomodulesdir,
-+                'gio=' + join_paths('${bindir}', 'gio'),
-+                'gio_querymodules=' + join_paths('${bindir}', 'gio-querymodules'),
- diff --git a/glib/meson.build b/glib/meson.build
- index f78f32969..6c5486699 100644
- --- a/glib/meson.build
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
