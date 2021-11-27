@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 710E6C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66866C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD2740157;
-	Sat, 27 Nov 2021 11:38:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E51A782B2F;
+	Sat, 27 Nov 2021 11:38:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9LJMd72iuZwk; Sat, 27 Nov 2021 11:38:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YQSKavbbfdMX; Sat, 27 Nov 2021 11:38:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B47F4013D;
-	Sat, 27 Nov 2021 11:38:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B4BD82B1E;
+	Sat, 27 Nov 2021 11:38:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6220E1BF30D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A49CA1BF30D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F91E40415
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94A4C40415
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aplk5pj5InBw for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
+ with ESMTP id JMQ_M8LdchVF for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 79B604039E
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id a11so11423896ilj.6
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:45 -0800 (PST)
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B5C994039E
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id w22so14713825ioa.1
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=zTe2p8XgXpS9yny1Ywef2WTzNY75RquOD+a0v/FITrU=;
- b=HDYGyyLPov7USALl/4fcUUPH8EFwZyVhQp+sa9KmObIg6Cn0iB4JZtY9lxONel8MY4
- /mfUMZpj+IClmcn1YY7ioOA2M44H3k+3PcSL+1ZHOg2mjN0y/yKzDihzv2y2OkT+9c1S
- yxSvSlGUEYwu7gnPiXGADRVP/gdNNnRAzer0evqSaoG0Jwm51NaMRziZvsDQ8AB59CcC
- CSEjT+L0kL0jUGZSb9ew/8zTSkxQsJ9dSsfK+e75qP2mQwtLELn+tzIS2HQqgRw8hXgb
- Zvm456cbiBJ9EAXZI+1Zw73i7cnfAqgRHdlDSP6lYEKvNmCMWbHREIJ3Vn1tIHE+mYuZ
- dfdg==
+ bh=2Z3z6LMH8X6+1SIqSGaRvl9DyxFDCWdHgASK3gWPq9M=;
+ b=Zv/SXtrQjHSXRSOYlyt81LOUvDvUYhAYbM8voAgx4j0epkkdW2IPaM0Xm/YKnjmnZJ
+ mRBNO8fubIf7d/8fOVmTrCGY+TdRI3zZCwdyMs8JbYilHxz7uGiHqpnXf/BdkvqcFb8M
+ NxiSZzApy9J/Z+7z+Y+CwSeq928GYRsDpWZGpXqjmmtagFdSAbe7NnTzvyeTzw0z2Adq
+ hNvbrMggXgGBWZHclwyiteRg02ES7JFlOfp4L31pPw6xOdxz391oBJ6lWqnIvN5RodpF
+ JbiR0Rm3wtMkhDj2UHKRAylFmxBHzADlfLxy21cb2RrqiDonaYiotWbg8t8GfEdUPiDB
+ 1SSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=zTe2p8XgXpS9yny1Ywef2WTzNY75RquOD+a0v/FITrU=;
- b=Ltag1j2pooYxWncGN/7TdjHMc2RoxVKDzVNf3mFkR3j4GmzOAcqTLj5XqDcTrxgctO
- 9yJXfURdlo4A/API7Ngn7KnN+My0K+t29ZS8YblA/KVixZhHtVU3sS+Whbmj0/NaNopn
- VfIqESvHW15BxaHJwSr0+J26ybeWjHG2+B9xoc3IH+R7lUn1ZvkywpR5wcIHDAvZDuj1
- i8/RSvC5SFI+ULL//KZCmp1nlgqsDBi3xKaXGhsFPGFBH8bKQGgORCTFUL1SXu9h+wfo
- unqlIhsv27jFVNgIb1fo3Q6mslGL9bF9HOpwi4rrIaakaHYQ/NysTjyI4WZCHbcmswGo
- 4CLA==
-X-Gm-Message-State: AOAM530n7UxvWQIwm5vbco3B25clVieqUg73/2XaVQ+SXKkr/GmO9nJI
- wS7g3mhroa2AQtY6gyLIH0+5dNyvRxs=
-X-Google-Smtp-Source: ABdhPJzwOspWTay76+JrHEygr1SwhTQETFwKB1sVQJXO3w1uT33eJgoWXVxYW4mfoOVA7pZwCF4iUg==
-X-Received: by 2002:a92:d2cc:: with SMTP id w12mr38485010ilg.111.1638013064439; 
- Sat, 27 Nov 2021 03:37:44 -0800 (PST)
+ bh=2Z3z6LMH8X6+1SIqSGaRvl9DyxFDCWdHgASK3gWPq9M=;
+ b=rSrGKeEzUc+Y0dZjSnBdg9n6or4AJz/PrLMD1UcrIDILUlK19rcLf56GFKWTd9Vx9E
+ AocEoWNhe8L4wIGAUkZsU4aAsA+smriJnMeVcg25MgHOgtxRfTberiay3t6vMf8Mac4d
+ bEcMS5RTvHNX0/pvLUkuYNdRPMeq4SYSpmiemE6n/I8BdzCct0rxgu79n+/u720Qk+jc
+ D6K1kgm+s3O9LKx6G4zYfaTnMVa71iq1Vv51V9ReBKd33JEFgJ+qhfzaSBXhXGOAg3Fj
+ yxXRVOY68A47OrY4KK2d6kRlgyzGDJLYmt7FC/+ismyu6jyx5M6n4wAa4xPcoX49HiwB
+ ljFg==
+X-Gm-Message-State: AOAM5335+OqbkY01zimZTigwP2Ruh6PoVplRWtzEeZ8t0I6Q9vqWXt8F
+ BLWZHxrmynp7Qy6mz5Kqtmvw6OqDFYc=
+X-Google-Smtp-Source: ABdhPJxo1ZZQPU1PKmnPYHmac706jdUMPK+EvJHm9/7tSmAKYRyyjRzkiS3S/iwLkJduIcSxr2oVzQ==
+X-Received: by 2002:a05:6638:dd5:: with SMTP id
+ m21mr50582074jaj.44.1638013065470; 
+ Sat, 27 Nov 2021 03:37:45 -0800 (PST)
 Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
  [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.44
+ by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Nov 2021 03:37:44 -0800 (PST)
+ Sat, 27 Nov 2021 03:37:45 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 04:37:31 -0700
-Message-Id: <20211127113735.2178776-3-james.hilliard1@gmail.com>
+Date: Sat, 27 Nov 2021 04:37:32 -0700
+Message-Id: <20211127113735.2178776-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 References: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/7] package/python-pyphen: bump to version
- 0.11.0
+Subject: [Buildroot] [PATCH 4/7] package/python-fonttools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,69 +98,77 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/python-pyphen/Config.in          |  7 +++++++
- package/python-pyphen/python-pyphen.hash |  5 +++++
- package/python-pyphen/python-pyphen.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-pyphen/Config.in
- create mode 100644 package/python-pyphen/python-pyphen.hash
- create mode 100644 package/python-pyphen/python-pyphen.mk
+ package/Config.in                             |  1 +
+ package/python-fonttools/Config.in            |  7 ++++++
+ .../python-fonttools/python-fonttools.hash    |  5 +++++
+ package/python-fonttools/python-fonttools.mk  | 22 +++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/python-fonttools/Config.in
+ create mode 100644 package/python-fonttools/python-fonttools.hash
+ create mode 100644 package/python-fonttools/python-fonttools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e5b161c86c..2bb4a0b4f4 100644
+index 2bb4a0b4f4..b4520f43c3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1161,6 +1161,7 @@ menu "External python modules"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-+	source "package/python-pyphen/Config.in"
- 	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyratemp/Config.in"
-diff --git a/package/python-pyphen/Config.in b/package/python-pyphen/Config.in
+@@ -1013,6 +1013,7 @@ menu "External python modules"
+ 	source "package/python-flask-wtf/Config.in"
+ 	source "package/python-flatbuffers/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-fonttools/Config.in"
+ 	source "package/python-frozenlist/Config.in"
+ 	source "package/python-functools32/Config.in"
+ 	source "package/python-future/Config.in"
+diff --git a/package/python-fonttools/Config.in b/package/python-fonttools/Config.in
 new file mode 100644
-index 0000000000..30ccafcda4
+index 0000000000..714f547430
 --- /dev/null
-+++ b/package/python-pyphen/Config.in
++++ b/package/python-fonttools/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYPHEN
-+	bool "python-pyphen"
++config BR2_PACKAGE_PYTHON_FONTTOOLS
++	bool "python-fonttools"
 +	depends on BR2_PACKAGE_PYTHON3
 +	help
-+	  Pure Python module to hyphenate text.
++	  Tools to manipulate font files.
 +
-+	  https://www.courtbouillon.org/pyphen
-diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
++	  https://github.com/fonttools/fonttools
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
 new file mode 100644
-index 0000000000..3e87fbf032
+index 0000000000..2e79861e2c
 --- /dev/null
-+++ b/package/python-pyphen/python-pyphen.hash
++++ b/package/python-fonttools/python-fonttools.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/Pyphen/json
-+md5  f8ec095e4fe30dc2b518a918788b33ed  pyphen-0.11.0.tar.gz
-+sha256  e2c3ed82c3a04317df5102addafe89652b0876bc6c6265f5dd4c3efaf02315e8  pyphen-0.11.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/fonttools/json
++md5  fcf1425460855b5892c990027b5396c8  fonttools-4.28.2.zip
++sha256  dca694331af74c8ad47acc5171e57f6b78fac5692bf050f2ab572964577ac0dd  fonttools-4.28.2.zip
 +# Locally computed sha256 checksums
-+sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
-diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
++sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
 new file mode 100644
-index 0000000000..8124f66f73
+index 0000000000..9ec369d550
 --- /dev/null
-+++ b/package/python-pyphen/python-pyphen.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-fonttools/python-fonttools.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# python-pyphen
++# python-fonttools
 +#
 +################################################################################
 +
-+PYTHON_PYPHEN_VERSION = 0.11.0
-+PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
-+PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/f8/af869a4983c1b3159945479510260985714265d48baf27d61f72b1ec8cbf
-+PYTHON_PYPHEN_SETUP_TYPE = distutils
-+PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
-+PYTHON_PYPHEN_LICENSE_FILES = LICENSE
++PYTHON_FONTTOOLS_VERSION = 4.28.2
++PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/3c/d5/f722e0d1aed0d547383913c6bc3c4ff35772952057b8e2b8fe3be8df4216
++PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
++PYTHON_FONTTOOLS_LICENSE = MIT
++PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
++PYTHON_FONTTOOLS_DEPENDENCIES = host-python3-cython
++PYTHON_FONTTOOLS_ENV = FONTTOOLS_WITH_CYTHON=1
++
++define PYTHON_FONTTOOLS_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_FONTTOOLS_DL_DIR)/$(PYTHON_FONTTOOLS_SOURCE)
++	mv $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)/* $(@D)
++	$(RM) -r $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)
++endef
 +
 +$(eval $(python-package))
 -- 
