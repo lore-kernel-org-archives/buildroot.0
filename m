@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6C01C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 20:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2D8EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 21:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E68F402F1;
-	Sat, 27 Nov 2021 20:28:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7719360627;
+	Sat, 27 Nov 2021 21:12:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mrcjA0qD48b0; Sat, 27 Nov 2021 20:28:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5jHq7eBB8vEI; Sat, 27 Nov 2021 21:12:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDB24402DC;
-	Sat, 27 Nov 2021 20:28:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E59721BF360
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 20:28:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFA766061C;
+	Sat, 27 Nov 2021 21:12:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CCD181BF5A7
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 21:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D377040172
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 20:28:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5B9A80F2D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 21:12:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id efVl3BH2IxFF for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 20:28:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V9iMGCs743YM for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 21:12:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21F95400C7
- for <buildroot@uclibc.org>; Sat, 27 Nov 2021 20:28:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2956880F1D
+ for <buildroot@uclibc.org>; Sat, 27 Nov 2021 21:12:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4A04C88520; Sat, 27 Nov 2021 20:24:10 +0000 (UTC)
+ id 3BFB287F72; Sat, 27 Nov 2021 21:07:39 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 27 Nov 2021 20:28:46 +0000
+Date: Sat, 27 Nov 2021 21:12:15 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,15 +43,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2021.08.2
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: okitain@gmail.com
 X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc assigned_to bug_status
-Message-ID: <bug-14396-163-L5PmtXtZ2U@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14396-163-XEZWRkchDC@https.bugs.busybox.net/>
 In-Reply-To: <bug-14396-163@https.bugs.busybox.net/>
 References: <bug-14396-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,14 +76,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14396
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #2 from Olga <okitain@gmail.com> ---
+To save maintainers some trouble, I've been brainstorming how to fix this
+issue.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998@free.fr
-           Assignee|unassigned@buildroot.uclibc |yann.morin.1998@free.fr
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
+The main problem that I see in this is that the value that should be assigned
+to <PACKAGE>_SOURCE and the actual name of the .tar.gz differ. The bluntest
+solution is to define <PACKAGE>_SOURCE for each package as something like
+release-$(PACKAGE_VERSION).tar.gz, but that means that all mirrors of those
+packages will fail and have to be rebuilt.
+
+Instead, maybe $(call github,author,repo,version) should define a fake URI
+protocol called github, which allows us to bodge the download process via a new
+script located in support/download/github, saving the original <PACKAGE>_SOURCE
+definitions while allowing download from unusual URLs that github provides.
 
 -- 
 You are receiving this mail because:
