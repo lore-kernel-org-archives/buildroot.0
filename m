@@ -1,82 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980E2C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 710E6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3605182B1A;
-	Sat, 27 Nov 2021 11:38:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD2740157;
+	Sat, 27 Nov 2021 11:38:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j0757a0VBYqR; Sat, 27 Nov 2021 11:37:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9LJMd72iuZwk; Sat, 27 Nov 2021 11:38:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 642A48299D;
-	Sat, 27 Nov 2021 11:37:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 564191BF30D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B47F4013D;
+	Sat, 27 Nov 2021 11:38:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6220E1BF30D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45E996062D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F91E40415
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MYzqqpbL6GVM for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 11:37:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aplk5pj5InBw for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5D57360598
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:44 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id z18so14682930iof.5
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:44 -0800 (PST)
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 79B604039E
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:45 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id a11so11423896ilj.6
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=y3RgqN9PGME6h5Q0FMRRFo2hSuUS3vKdkgNIN0Vxk4I=;
- b=Y2yzoBEIxEXsZZBlYsS9ZWowhH2A8pJqYc1TobrHKXWpxv1sI4quYnF1Vp0QK19sje
- qb6QsJ7DI06aMTGKWT9eb2Kx5I2VaI2CMSPDYyDQcQ2GG19KyDVx1e5auDrmGil7jxUV
- JgkjadxI0QDQ4eoAG2orBMg4Nu1OSmxAS6m8FIuuGWeTd/N21CtSjhdh06waS5UfAIb9
- M8mLrfVan/H0/MKFz3GEKlhzj+fKK/ExZmyf1BBQ1ci1Bx8nMhR5qRXnuxam+NtnvrGo
- kCUF+hXpOTnvhQCaeMKWH3KIFxuVsjfgnLyKPUmWBvPVP7oIOEXUjSqj4Ry+3WbMcFoF
- u/dA==
+ bh=zTe2p8XgXpS9yny1Ywef2WTzNY75RquOD+a0v/FITrU=;
+ b=HDYGyyLPov7USALl/4fcUUPH8EFwZyVhQp+sa9KmObIg6Cn0iB4JZtY9lxONel8MY4
+ /mfUMZpj+IClmcn1YY7ioOA2M44H3k+3PcSL+1ZHOg2mjN0y/yKzDihzv2y2OkT+9c1S
+ yxSvSlGUEYwu7gnPiXGADRVP/gdNNnRAzer0evqSaoG0Jwm51NaMRziZvsDQ8AB59CcC
+ CSEjT+L0kL0jUGZSb9ew/8zTSkxQsJ9dSsfK+e75qP2mQwtLELn+tzIS2HQqgRw8hXgb
+ Zvm456cbiBJ9EAXZI+1Zw73i7cnfAqgRHdlDSP6lYEKvNmCMWbHREIJ3Vn1tIHE+mYuZ
+ dfdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=y3RgqN9PGME6h5Q0FMRRFo2hSuUS3vKdkgNIN0Vxk4I=;
- b=zMSCUs4/V+Iz5Llet8WIh8wmtpelPz0m6+Vvnq3INxADjXDysnDQaNHxppoWJiCeSa
- i75hUkuA4cxq6sSHacXh2H5pIFwa20Z6++GgxL+voX0RmMvN8q+3iRsNcZJ71PeC3k0X
- KqIGSWTL2q26vZCw2fMWhdjXjQT2pJJTv7Si7h1ZgU8Z3gBm/SmjO9M1c8nqG2aHr1ko
- GTkjk4FkBR/SCaS/Nf9WfEcp6tWrFYO6Kl+OZiQuQ/yvwR3joYdP5boLRQifcz+xnKnm
- EuPMxCXilFxV4Pg6GFsiB3bHbkg0jQ5etl3pf6All+1OWlt0gLmGsbRhfRTxvxRZTSQ3
- ouZA==
-X-Gm-Message-State: AOAM533N9U63KN8PTTzxJhhmAtNRJ33thHT8V9wq4LJOropi0oFI9vc/
- QlYxKa5UBAi+Oqi9R/OWQlpqNxAy7zI=
-X-Google-Smtp-Source: ABdhPJwxwboW8zcrW0bA2TwsvRaYKEVq9oJtMw+XYZcWWeARyLpidQ1cb0E8K60c48OiRbfcAbdXgA==
-X-Received: by 2002:a05:6638:41a4:: with SMTP id
- az36mr53135162jab.135.1638013063293; 
- Sat, 27 Nov 2021 03:37:43 -0800 (PST)
+ bh=zTe2p8XgXpS9yny1Ywef2WTzNY75RquOD+a0v/FITrU=;
+ b=Ltag1j2pooYxWncGN/7TdjHMc2RoxVKDzVNf3mFkR3j4GmzOAcqTLj5XqDcTrxgctO
+ 9yJXfURdlo4A/API7Ngn7KnN+My0K+t29ZS8YblA/KVixZhHtVU3sS+Whbmj0/NaNopn
+ VfIqESvHW15BxaHJwSr0+J26ybeWjHG2+B9xoc3IH+R7lUn1ZvkywpR5wcIHDAvZDuj1
+ i8/RSvC5SFI+ULL//KZCmp1nlgqsDBi3xKaXGhsFPGFBH8bKQGgORCTFUL1SXu9h+wfo
+ unqlIhsv27jFVNgIb1fo3Q6mslGL9bF9HOpwi4rrIaakaHYQ/NysTjyI4WZCHbcmswGo
+ 4CLA==
+X-Gm-Message-State: AOAM530n7UxvWQIwm5vbco3B25clVieqUg73/2XaVQ+SXKkr/GmO9nJI
+ wS7g3mhroa2AQtY6gyLIH0+5dNyvRxs=
+X-Google-Smtp-Source: ABdhPJzwOspWTay76+JrHEygr1SwhTQETFwKB1sVQJXO3w1uT33eJgoWXVxYW4mfoOVA7pZwCF4iUg==
+X-Received: by 2002:a92:d2cc:: with SMTP id w12mr38485010ilg.111.1638013064439; 
+ Sat, 27 Nov 2021 03:37:44 -0800 (PST)
 Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
  [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.42
+ by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Nov 2021 03:37:43 -0800 (PST)
+ Sat, 27 Nov 2021 03:37:44 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 04:37:30 -0700
-Message-Id: <20211127113735.2178776-2-james.hilliard1@gmail.com>
+Date: Sat, 27 Nov 2021 04:37:31 -0700
+Message-Id: <20211127113735.2178776-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 References: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/7] package/python-cssselect2: new package
+Subject: [Buildroot] [PATCH 3/7] package/python-pyphen: bump to version
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,71 +96,69 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                                |  1 +
- package/python-cssselect2/Config.in              |  9 +++++++++
- package/python-cssselect2/python-cssselect2.hash |  5 +++++
- package/python-cssselect2/python-cssselect2.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-cssselect2/Config.in
- create mode 100644 package/python-cssselect2/python-cssselect2.hash
- create mode 100644 package/python-cssselect2/python-cssselect2.mk
+ package/Config.in                        |  1 +
+ package/python-pyphen/Config.in          |  7 +++++++
+ package/python-pyphen/python-pyphen.hash |  5 +++++
+ package/python-pyphen/python-pyphen.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-pyphen/Config.in
+ create mode 100644 package/python-pyphen/python-pyphen.hash
+ create mode 100644 package/python-pyphen/python-pyphen.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8efcecc90f..e5b161c86c 100644
+index e5b161c86c..2bb4a0b4f4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -970,6 +970,7 @@ menu "External python modules"
- 	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
-+	source "package/python-cssselect2/Config.in"
- 	source "package/python-cssutils/Config.in"
- 	source "package/python-cycler/Config.in"
- 	source "package/python-daemon/Config.in"
-diff --git a/package/python-cssselect2/Config.in b/package/python-cssselect2/Config.in
+@@ -1161,6 +1161,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pypcap/Config.in"
++	source "package/python-pyphen/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+diff --git a/package/python-pyphen/Config.in b/package/python-pyphen/Config.in
 new file mode 100644
-index 0000000000..0196471253
+index 0000000000..30ccafcda4
 --- /dev/null
-+++ b/package/python-cssselect2/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_CSSSELECT2
-+	bool "python-cssselect2"
++++ b/package/python-pyphen/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYPHEN
++	bool "python-pyphen"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_TINYCSS2 # runtime
-+	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
 +	help
-+	  CSS selectors for Python ElementTree.
++	  Pure Python module to hyphenate text.
 +
-+	  https://doc.courtbouillon.org/cssselect2/
-diff --git a/package/python-cssselect2/python-cssselect2.hash b/package/python-cssselect2/python-cssselect2.hash
++	  https://www.courtbouillon.org/pyphen
+diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
 new file mode 100644
-index 0000000000..ed5b863302
+index 0000000000..3e87fbf032
 --- /dev/null
-+++ b/package/python-cssselect2/python-cssselect2.hash
++++ b/package/python-pyphen/python-pyphen.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/cssselect2/json
-+md5  6dfd5963c8a5d85f2634d1650b1ddfe1  cssselect2-0.4.1.tar.gz
-+sha256  93fbb9af860e95dd40bf18c3b2b6ed99189a07c0f29ba76f9c5be71344664ec8  cssselect2-0.4.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/Pyphen/json
++md5  f8ec095e4fe30dc2b518a918788b33ed  pyphen-0.11.0.tar.gz
++sha256  e2c3ed82c3a04317df5102addafe89652b0876bc6c6265f5dd4c3efaf02315e8  pyphen-0.11.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  6fd97229a1d1b0f6a8b41e109f413426dbc0874b1e03746d66cc33282601c2c2  LICENSE
-diff --git a/package/python-cssselect2/python-cssselect2.mk b/package/python-cssselect2/python-cssselect2.mk
++sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
+diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
 new file mode 100644
-index 0000000000..18e0fba839
+index 0000000000..8124f66f73
 --- /dev/null
-+++ b/package/python-cssselect2/python-cssselect2.mk
++++ b/package/python-pyphen/python-pyphen.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cssselect2
++# python-pyphen
 +#
 +################################################################################
 +
-+PYTHON_CSSSELECT2_VERSION = 0.4.1
-+PYTHON_CSSSELECT2_SOURCE = cssselect2-$(PYTHON_CSSSELECT2_VERSION).tar.gz
-+PYTHON_CSSSELECT2_SITE = https://files.pythonhosted.org/packages/ad/3d/fb764303deb34cbc1a32fcecdfd239367cb16323920c88390b2f5ad751f0
-+PYTHON_CSSSELECT2_SETUP_TYPE = distutils
-+PYTHON_CSSSELECT2_LICENSE = BSD-3-Clause
-+PYTHON_CSSSELECT2_LICENSE_FILES = LICENSE
++PYTHON_PYPHEN_VERSION = 0.11.0
++PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
++PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/f8/af869a4983c1b3159945479510260985714265d48baf27d61f72b1ec8cbf
++PYTHON_PYPHEN_SETUP_TYPE = distutils
++PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
++PYTHON_PYPHEN_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
