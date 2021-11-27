@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF45C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 21:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C0D3C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 22:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6475A40172;
-	Sat, 27 Nov 2021 21:54:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7EE260631;
+	Sat, 27 Nov 2021 22:14:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pcZnrFAgEO0z; Sat, 27 Nov 2021 21:54:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Jcm72siw625g; Sat, 27 Nov 2021 22:14:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BBAE4013E;
-	Sat, 27 Nov 2021 21:54:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CB1B91BF5A7
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 21:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3655360627;
+	Sat, 27 Nov 2021 22:14:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 57F0C1BF318
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 22:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE3BA400C7
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 21:54:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5466C60627
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 22:14:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H2MGNG7k3y6H for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 21:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vPciYAUU57Zq for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 22:14:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1A0D4013E
- for <buildroot@uclibc.org>; Sat, 27 Nov 2021 21:54:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABD046061C
+ for <buildroot@uclibc.org>; Sat, 27 Nov 2021 22:14:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id E65AB88F66; Sat, 27 Nov 2021 21:49:47 +0000 (UTC)
+ id A942088F66; Sat, 27 Nov 2021 22:09:44 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 27 Nov 2021 21:54:24 +0000
+Date: Sat, 27 Nov 2021 22:14:21 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -43,7 +43,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2021.08.2
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: okitain@gmail.com
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14396-163-WztpdkYEj1@https.bugs.busybox.net/>
+Message-ID: <bug-14396-163-eO0ZygqhSC@https.bugs.busybox.net/>
 In-Reply-To: <bug-14396-163@https.bugs.busybox.net/>
 References: <bug-14396-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,20 +76,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14396
 
---- Comment #4 from Olga <okitain@gmail.com> ---
-(In reply to Yann E. MORIN from comment #3)
-> This unfortunately does not work either: it returns 500:
->
->    wget wget https://github.com/google/googletest/refs/tags/release-1.11.0.tar.gz
->    [...]
->    HTTP request sent, awaiting response... 500 Internal Server Error
->
->Another try a few minutes later yielded:
->
->    HTTP request sent, awaiting response... 502 Bad Gateway
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Olga from comment #4)
+> That was because you missed the "/archive/" part of the URL between <project> and /refs/tags/.
 
-That was because you missed the "/archive/" part of the URL between <project>
-and /refs/tags/. With that part, it currently works.
+Indeed. And although this does work for tags, it does not for hashes.
+
+It seems the old schema works for hashes, though. But given a FOO_VERSION,
+there is no systematic solution to automatically tell hashes apart from tags,
+so we don't have a solution to expand the github macro one way or the other.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
