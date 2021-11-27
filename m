@@ -1,82 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66866C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F209CC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E51A782B2F;
-	Sat, 27 Nov 2021 11:38:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD1540172;
+	Sat, 27 Nov 2021 11:38:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YQSKavbbfdMX; Sat, 27 Nov 2021 11:38:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UQYwosa0nN1c; Sat, 27 Nov 2021 11:38:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B4BD82B1E;
-	Sat, 27 Nov 2021 11:38:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A49CA1BF30D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59009400B9;
+	Sat, 27 Nov 2021 11:38:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E9B7C1BF30D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94A4C40415
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D80BC40162
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JMQ_M8LdchVF for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2SrIxva5K-wL for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5C994039E
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:46 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id w22so14713825ioa.1
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:46 -0800 (PST)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 977CB40194
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:47 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id b187so3507162iof.11
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=2Z3z6LMH8X6+1SIqSGaRvl9DyxFDCWdHgASK3gWPq9M=;
- b=Zv/SXtrQjHSXRSOYlyt81LOUvDvUYhAYbM8voAgx4j0epkkdW2IPaM0Xm/YKnjmnZJ
- mRBNO8fubIf7d/8fOVmTrCGY+TdRI3zZCwdyMs8JbYilHxz7uGiHqpnXf/BdkvqcFb8M
- NxiSZzApy9J/Z+7z+Y+CwSeq928GYRsDpWZGpXqjmmtagFdSAbe7NnTzvyeTzw0z2Adq
- hNvbrMggXgGBWZHclwyiteRg02ES7JFlOfp4L31pPw6xOdxz391oBJ6lWqnIvN5RodpF
- JbiR0Rm3wtMkhDj2UHKRAylFmxBHzADlfLxy21cb2RrqiDonaYiotWbg8t8GfEdUPiDB
- 1SSQ==
+ bh=h9DmAXGB4RNTGkrNARW3OM9hk6LXk27LSXsJwVrjFaQ=;
+ b=CfxKT/MmzAGc/UeewxGyDycxuomDIrJr5Vfp3Xq52nGg2wXXxKYUc+oUrdJMBY1rO4
+ 7ln699GWLxOHsytOeUWMCYey7r+ySuc11d2HKlkTqdK4vsLZcq90eMZpc3kFRaq24AfR
+ J/tmdVlSmvv63kdHIBjfN5MtZp8RWr9TLfWVT+EYI9yAOVmTa7EB2Pc1+VoTfW9B7HBm
+ FYf7LgVmCgoBtG2K19JzgMSExSrSBFHq3s8fI2Dk6/0HF9fUYxxg/T4g3hUbb7sVuqyb
+ fYpFZpDIQyUu0RbSyl1AwSHgCIqssA4G5rhUyzoPZL9hXbNG66JKX9qvTsrQ22vcykkC
+ 9+2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=2Z3z6LMH8X6+1SIqSGaRvl9DyxFDCWdHgASK3gWPq9M=;
- b=rSrGKeEzUc+Y0dZjSnBdg9n6or4AJz/PrLMD1UcrIDILUlK19rcLf56GFKWTd9Vx9E
- AocEoWNhe8L4wIGAUkZsU4aAsA+smriJnMeVcg25MgHOgtxRfTberiay3t6vMf8Mac4d
- bEcMS5RTvHNX0/pvLUkuYNdRPMeq4SYSpmiemE6n/I8BdzCct0rxgu79n+/u720Qk+jc
- D6K1kgm+s3O9LKx6G4zYfaTnMVa71iq1Vv51V9ReBKd33JEFgJ+qhfzaSBXhXGOAg3Fj
- yxXRVOY68A47OrY4KK2d6kRlgyzGDJLYmt7FC/+ismyu6jyx5M6n4wAa4xPcoX49HiwB
- ljFg==
-X-Gm-Message-State: AOAM5335+OqbkY01zimZTigwP2Ruh6PoVplRWtzEeZ8t0I6Q9vqWXt8F
- BLWZHxrmynp7Qy6mz5Kqtmvw6OqDFYc=
-X-Google-Smtp-Source: ABdhPJxo1ZZQPU1PKmnPYHmac706jdUMPK+EvJHm9/7tSmAKYRyyjRzkiS3S/iwLkJduIcSxr2oVzQ==
-X-Received: by 2002:a05:6638:dd5:: with SMTP id
- m21mr50582074jaj.44.1638013065470; 
- Sat, 27 Nov 2021 03:37:45 -0800 (PST)
+ bh=h9DmAXGB4RNTGkrNARW3OM9hk6LXk27LSXsJwVrjFaQ=;
+ b=de+CCxESnkgutMMw4yFe3/Qlzn4dHrbsBz9UifZiQa9e4b0Y49doLCPfAANnVYeJVA
+ Py1RkzRIxJ4JOB3YEoSZWiAal/Mfb40pzz6xyzc7YdC5+SIM2vPoit62UTv2SqgzxvA6
+ dX7ucdNgwWKOO9qCayxnd4ayK/0VwD7D4YTRZ48OoHFtzg7+T/5F99CULxOUjLldvtob
+ fIm2H65I2ecLF6Jl0uGNdJ/fuSDi8DKWKs8Pt+4REXAY32z90bfTotvXjhLbvkxRrd70
+ +TfFzAgVA3Vt3CioiC4nooJqOdkOEZG/cv+xIzw0zppZ0NXQC+cHGPE/60rvxf7teRqj
+ b/YA==
+X-Gm-Message-State: AOAM533P9l+qSN3+KVcYfDK52GU2c1dMaJ8y/FUOzOgG9v/zgwaVeQTN
+ QN+5IzU/OVDJmE46lUSeC0aLBv9Vz84=
+X-Google-Smtp-Source: ABdhPJwLq7aaP/HwjTMM3zfKDWKwulLI8/3sIhle1GBpTWoShDulyqLAleJqvQKBZ14pME3vrTT3TA==
+X-Received: by 2002:a05:6638:2727:: with SMTP id
+ m39mr50866199jav.75.1638013066581; 
+ Sat, 27 Nov 2021 03:37:46 -0800 (PST)
 Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
  [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.45
+ by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Nov 2021 03:37:45 -0800 (PST)
+ Sat, 27 Nov 2021 03:37:46 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 04:37:32 -0700
-Message-Id: <20211127113735.2178776-4-james.hilliard1@gmail.com>
+Date: Sat, 27 Nov 2021 04:37:33 -0700
+Message-Id: <20211127113735.2178776-5-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 References: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/7] package/python-fonttools: new package
+Subject: [Buildroot] [PATCH 5/7] package/python-zopfli: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,76 +96,75 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                             |  1 +
- package/python-fonttools/Config.in            |  7 ++++++
- .../python-fonttools/python-fonttools.hash    |  5 +++++
- package/python-fonttools/python-fonttools.mk  | 22 +++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/python-fonttools/Config.in
- create mode 100644 package/python-fonttools/python-fonttools.hash
- create mode 100644 package/python-fonttools/python-fonttools.mk
+ package/Config.in                        |  1 +
+ package/python-zopfli/Config.in          |  7 +++++++
+ package/python-zopfli/python-zopfli.hash |  5 +++++
+ package/python-zopfli/python-zopfli.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/python-zopfli/Config.in
+ create mode 100644 package/python-zopfli/python-zopfli.hash
+ create mode 100644 package/python-zopfli/python-zopfli.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2bb4a0b4f4..b4520f43c3 100644
+index b4520f43c3..c138911eb9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1013,6 +1013,7 @@ menu "External python modules"
- 	source "package/python-flask-wtf/Config.in"
- 	source "package/python-flatbuffers/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-fonttools/Config.in"
- 	source "package/python-frozenlist/Config.in"
- 	source "package/python-functools32/Config.in"
- 	source "package/python-future/Config.in"
-diff --git a/package/python-fonttools/Config.in b/package/python-fonttools/Config.in
+@@ -1296,6 +1296,7 @@ menu "External python modules"
+ 	source "package/python-zc-lockfile/Config.in"
+ 	source "package/python-zeroconf/Config.in"
+ 	source "package/python-zope-interface/Config.in"
++	source "package/python-zopfli/Config.in"
+ endmenu
+ endif
+ 	source "package/quickjs/Config.in"
+diff --git a/package/python-zopfli/Config.in b/package/python-zopfli/Config.in
 new file mode 100644
-index 0000000000..714f547430
+index 0000000000..69d4b8b514
 --- /dev/null
-+++ b/package/python-fonttools/Config.in
++++ b/package/python-zopfli/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_FONTTOOLS
-+	bool "python-fonttools"
++config BR2_PACKAGE_PYTHON_ZOPFLI
++	bool "python-zopfli"
 +	depends on BR2_PACKAGE_PYTHON3
 +	help
-+	  Tools to manipulate font files.
++	  Zopfli module for python.
 +
-+	  https://github.com/fonttools/fonttools
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
++	  https://github.com/fonttools/py-zopfli
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
 new file mode 100644
-index 0000000000..2e79861e2c
+index 0000000000..92b51bdf18
 --- /dev/null
-+++ b/package/python-fonttools/python-fonttools.hash
++++ b/package/python-zopfli/python-zopfli.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/fonttools/json
-+md5  fcf1425460855b5892c990027b5396c8  fonttools-4.28.2.zip
-+sha256  dca694331af74c8ad47acc5171e57f6b78fac5692bf050f2ab572964577ac0dd  fonttools-4.28.2.zip
++# md5, sha256 from https://pypi.org/pypi/zopfli/json
++md5  f66b6f4132533b9b0ab8b0af757237bf  zopfli-0.1.9.zip
++sha256  78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b  zopfli-0.1.9.zip
 +# Locally computed sha256 checksums
-+sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
++sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
 new file mode 100644
-index 0000000000..9ec369d550
+index 0000000000..95a0067b05
 --- /dev/null
-+++ b/package/python-fonttools/python-fonttools.mk
-@@ -0,0 +1,22 @@
++++ b/package/python-zopfli/python-zopfli.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# python-fonttools
++# python-zopfli
 +#
 +################################################################################
 +
-+PYTHON_FONTTOOLS_VERSION = 4.28.2
-+PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/3c/d5/f722e0d1aed0d547383913c6bc3c4ff35772952057b8e2b8fe3be8df4216
-+PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
-+PYTHON_FONTTOOLS_LICENSE = MIT
-+PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
-+PYTHON_FONTTOOLS_DEPENDENCIES = host-python3-cython
-+PYTHON_FONTTOOLS_ENV = FONTTOOLS_WITH_CYTHON=1
++PYTHON_ZOPFLI_VERSION = 0.1.9
++PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/10/7d/278fd896401b0ef76e06cd42c3ce1541572d83b1c713b6786795c60a1bbe
++PYTHON_ZOPFLI_SETUP_TYPE = setuptools
++PYTHON_ZOPFLI_LICENSE = Apache-2.0
++PYTHON_ZOPFLI_LICENSE_FILES = COPYING
++PYTHON_ZOPFLI_DEPENDENCIES = host-python-setuptools-scm
 +
-+define PYTHON_FONTTOOLS_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_FONTTOOLS_DL_DIR)/$(PYTHON_FONTTOOLS_SOURCE)
-+	mv $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)
++define PYTHON_ZOPFLI_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_ZOPFLI_DL_DIR)/$(PYTHON_ZOPFLI_SOURCE)
++	mv $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)/* $(@D)
++	$(RM) -r $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)
 +endef
 +
 +$(eval $(python-package))
