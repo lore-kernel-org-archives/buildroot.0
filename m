@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F343FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22255C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 27 Nov 2021 11:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B748D40186;
-	Sat, 27 Nov 2021 11:38:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D934681016;
+	Sat, 27 Nov 2021 11:39:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rocdE4jfMgwJ; Sat, 27 Nov 2021 11:38:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10FA740155;
-	Sat, 27 Nov 2021 11:38:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 871A01BF30D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 771608299D
- for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uj_Sf7nlicMX for <buildroot@lists.busybox.net>;
- Sat, 27 Nov 2021 11:37:48 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qMygz_8bbJkw; Sat, 27 Nov 2021 11:39:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B70D81024;
+	Sat, 27 Nov 2021 11:38:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E21241BF30D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D227D6062D
+ for <buildroot@lists.busybox.net>; Sat, 27 Nov 2021 11:37:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L1-nX3OTWTNG for <buildroot@lists.busybox.net>;
+ Sat, 27 Nov 2021 11:37:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9487481CE3
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:48 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id x10so14660169ioj.9
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:48 -0800 (PST)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA54360598
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 11:37:49 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id z26so14630016iod.10
+ for <buildroot@buildroot.org>; Sat, 27 Nov 2021 03:37:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=W8YJBzPQTRsJi/kUD+jhnJvUJvFnogJA+hbBdgOpRr0=;
- b=lw5w+J2rtCLGFI1iztxkrKAiHnLjIs06KqbMojHvv/YpIQemVwB3dNYirSylylRozJ
- Ub7bDrildIE2IHvzmHcFthyXswZ6NROzeh23jBCKdQ7yW58ta3LAaaqgHGR+CJqey9xv
- Gs/+1CrdmVwGhcHSto8H1FP3Ox+J9NjejCUGELERxoAlyT1I/y56jYVbC1MXL82QLLP/
- sjfnRAgUrp0UymYQJSE1gnqhpl3jhLoFYijTQ0CWiShLM0WT+z7UXcPoAbaKM9yYwlTw
- 7XH38A6G7Mv1Od9euz8UltZdfw16Y5KAaoAktHm1YYBawzEi8hFOzpLx1Oo79e1G6bJE
- qYKg==
+ bh=HgfUksnCXJvCGooKgCEdYPghhOc0RaWrYJbhp0N/464=;
+ b=i+h8yKbmOVHRjmHeuOdD68XX1nq3Jh4E+1EODXX4pcacgxfHswhfx35WwdegJDboLa
+ g15LRo6frRU09NekgYIm+jLDwkfZIKQFIfUw7o7uS7z9bFYdJL6rXtOV7LXnzCPSWPmK
+ 6wmpbjjOCJdXdPDqb9ZSBz7dW+wvUWHcYgfWsHL1tJ7MZUaMXopWDQdoQRqqv3Ym212f
+ eTSq1mUM+rWcC5YopXSBkl4U4b4w6RpJyu3hBAoyCIf1ERBBr00ISsrpmcutnEy78Ux6
+ XlsQivZR/+gJ8gSD+8YKy/9SQTL2AGSW+AD0UDw9Jd6C9p4C1AxaaOb6c1bXnOZx+V7f
+ hPpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=W8YJBzPQTRsJi/kUD+jhnJvUJvFnogJA+hbBdgOpRr0=;
- b=mjAnNTPh+S2BVEEwFABzhOzlO+FTWXMp1ZEH0Rbx/FobHABKl4m6ajYU2BUoKFf0vD
- +fk2A6lwzI8RsiTynRmZnryjrABxtb9m74MYmmpvYYqzn0exVjRnpP5+RS61a/NDieeC
- Iedp3+Owa9QmaHAkHAmL3xq83MnLaTzhFQe3gcU93yhGs/Nat3sizuKBXCGmF5vmhprc
- HVNn3B4bKzNOWYHpkzxc39ITdHQLoDWWZSkecywr5dEPgqI7MaUcME2VGG6DE57Uja/y
- RO8eq7M1jJeyw2Rs5iQG9LHfEtiB5W7HSk9FwP0k7RI5Moy6o/XTuqkIu+LScHgSAC29
- aUCg==
-X-Gm-Message-State: AOAM530tX7suXHVxCYjY3U8rraZFGoZCY5mkl8fVexCPn8DiUnD0tgD3
- U9NkFo6W+R3bPZsH0TUrKDsEqTGpiBk=
-X-Google-Smtp-Source: ABdhPJx3EitZQRNqr0m24cz5qXR1/PWVpGqbUeeMytnYEOFrp1FcdG2LMRgtVdjDG0n6I6ZyFoAa/Q==
-X-Received: by 2002:a02:85a9:: with SMTP id d38mr51737831jai.71.1638013067569; 
- Sat, 27 Nov 2021 03:37:47 -0800 (PST)
+ bh=HgfUksnCXJvCGooKgCEdYPghhOc0RaWrYJbhp0N/464=;
+ b=QzWWGW34qa9OdXcZ+jdHg7Xi2YTQiHgII7EUOKm37qt5/aV6cQ1EmZIHm6vPR6PoiK
+ q6ESd8aonbOHUgr/mhY0BYQ40I8nzT/wgDGIbAMyjotnz7LFbReCJHoCMR6UEAwnxBpf
+ dony43MpDaMzr5f9ooaUurGyH146eMMKQMujjiLWeSv1R+p+1Iwpahk1inVTPKYcDuFB
+ 42HNxx9OYikqmmrZc8w6VTAIK+NeX5WKmG/nKGlxIV3imtAYI58Vs3XpFwj2Qql//Nnc
+ OehvY+qhReIO5+MoTMlxjQAzs1905CMKsYBDer4op8+ZCEXql0QHVF7SSiY/NotpJi/T
+ PORg==
+X-Gm-Message-State: AOAM53359DdEpU2qWdYSyGnkCVtZDkxyOcvenTWMopZLPSS5tjj9gOHc
+ BG8AgHHAx2D//QTDEwAq9DXKPnF9+18=
+X-Google-Smtp-Source: ABdhPJzSHPwykziQ0TNIp9quCLwyVz5uIAmBpxfLECQBSO/8FXGyhg3iSQa42XNZ0HUe7Xtakzttkg==
+X-Received: by 2002:a05:6638:25c8:: with SMTP id
+ u8mr52821540jat.23.1638013068967; 
+ Sat, 27 Nov 2021 03:37:48 -0800 (PST)
 Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
  [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.47
+ by smtp.gmail.com with ESMTPSA id g4sm6389435ila.78.2021.11.27.03.37.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Nov 2021 03:37:47 -0800 (PST)
+ Sat, 27 Nov 2021 03:37:48 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 04:37:34 -0700
-Message-Id: <20211127113735.2178776-6-james.hilliard1@gmail.com>
+Date: Sat, 27 Nov 2021 04:37:35 -0700
+Message-Id: <20211127113735.2178776-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 References: <20211127113735.2178776-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 6/7] package/python-pydyf: new package
+Subject: [Buildroot] [PATCH 7/7] package/python-weasyprint: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,69 +98,79 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/python-pydyf/Config.in         |  7 +++++++
- package/python-pydyf/python-pydyf.hash |  5 +++++
- package/python-pydyf/python-pydyf.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-pydyf/Config.in
- create mode 100644 package/python-pydyf/python-pydyf.hash
- create mode 100644 package/python-pydyf/python-pydyf.mk
+ package/Config.in                               |  1 +
+ package/python-weasyprint/Config.in             | 17 +++++++++++++++++
+ .../python-weasyprint/python-weasyprint.hash    |  5 +++++
+ package/python-weasyprint/python-weasyprint.mk  | 14 ++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/python-weasyprint/Config.in
+ create mode 100644 package/python-weasyprint/python-weasyprint.hash
+ create mode 100644 package/python-weasyprint/python-weasyprint.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c138911eb9..f348edb8c3 100644
+index f348edb8c3..da7eca7679 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1143,6 +1143,7 @@ menu "External python modules"
- 	source "package/python-pycups/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
-+	source "package/python-pydyf/Config.in"
- 	source "package/python-pyelftools/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
-diff --git a/package/python-pydyf/Config.in b/package/python-pydyf/Config.in
+@@ -1271,6 +1271,7 @@ menu "External python modules"
+ 	source "package/python-visitor/Config.in"
+ 	source "package/python-watchdog/Config.in"
+ 	source "package/python-wcwidth/Config.in"
++	source "package/python-weasyprint/Config.in"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webencodings/Config.in"
+ 	source "package/python-webob/Config.in"
+diff --git a/package/python-weasyprint/Config.in b/package/python-weasyprint/Config.in
 new file mode 100644
-index 0000000000..f283a6d6aa
+index 0000000000..3e0d716fb1
 --- /dev/null
-+++ b/package/python-pydyf/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYDYF
-+	bool "python-pydyf"
++++ b/package/python-weasyprint/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PYTHON_WEASYPRINT
++	bool "python-weasyprint"
 +	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
++	select BR2_PACKAGE_PYTHON_CSSSELECT2 # runtime
++	select BR2_PACKAGE_PYTHON_FONTTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_BROTLI # runtime
++	select BR2_PACKAGE_PYTHON_ZOPFLI # runtime
++	select BR2_PACKAGE_PYTHON_HTML5LIB # runtime
++	select BR2_PACKAGE_PYTHON_PILLOW # runtime
++	select BR2_PACKAGE_PYTHON_PYDYF # runtime
++	select BR2_PACKAGE_PYTHON_PYPHEN # runtime
++	select BR2_PACKAGE_PYTHON_TINYCSS2 # runtime
 +	help
-+	  A low-level PDF generator.
++	  The Awesome Document Factory.
 +
-+	  https://www.courtbouillon.org/pydyf
-diff --git a/package/python-pydyf/python-pydyf.hash b/package/python-pydyf/python-pydyf.hash
++	  https://www.courtbouillon.org/weasyprint
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
 new file mode 100644
-index 0000000000..90774457a1
+index 0000000000..8d231c50ba
 --- /dev/null
-+++ b/package/python-pydyf/python-pydyf.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pydyf/json
-+md5  f78ee205b0637c92197f5d584d60cb8e  pydyf-0.1.2.tar.gz
-+sha256  1e2f5de48174f505de025a7d1e7cf01bbdd9422ca8ab9451782bf00ee178602c  pydyf-0.1.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/weasyprint/json
++md5  a90fd2d5a581a0e218943af3a8b64a31  weasyprint-53.4.tar.gz
++sha256  10ccb17d55c73096bdf1edd3efe58cb855b07e4c307d9bad4ebc9a3f13ff4580  weasyprint-53.4.tar.gz
 +# Locally computed sha256 checksums
-+sha256  75461e438973e1ba0f93a7de9e3fe5b2f49e1ab49251d392878a9cdae8ce7e47  LICENSE
-diff --git a/package/python-pydyf/python-pydyf.mk b/package/python-pydyf/python-pydyf.mk
++sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
 new file mode 100644
-index 0000000000..7cc0df2643
+index 0000000000..0a944825bb
 --- /dev/null
-+++ b/package/python-pydyf/python-pydyf.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pydyf
++# python-weasyprint
 +#
 +################################################################################
 +
-+PYTHON_PYDYF_VERSION = 0.1.2
-+PYTHON_PYDYF_SOURCE = pydyf-$(PYTHON_PYDYF_VERSION).tar.gz
-+PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/78/ed/2ccc153d50d21a56916fd5c9d367cad798d4ca8a450cef03e7faa3b920c4
-+PYTHON_PYDYF_SETUP_TYPE = distutils
-+PYTHON_PYDYF_LICENSE = BSD-3-Clause
-+PYTHON_PYDYF_LICENSE_FILES = LICENSE
++PYTHON_WEASYPRINT_VERSION = 53.4
++PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/72/25/336e274fde0e48cf9979d44667411fbcfa55d323fd7672068807b6de2f89
++PYTHON_WEASYPRINT_SETUP_TYPE = distutils
++PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
++PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
