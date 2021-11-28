@@ -1,54 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3CECC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 13:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE12C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 13:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8978F60733;
-	Sun, 28 Nov 2021 13:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E70441C51;
+	Sun, 28 Nov 2021 13:40:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jL1rEAvHHwVM; Sun, 28 Nov 2021 13:40:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cZ02z4n3Yiin; Sun, 28 Nov 2021 13:40:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFAC760726;
-	Sun, 28 Nov 2021 13:40:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F03311BF2CF
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:39:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A325541C58;
+	Sun, 28 Nov 2021 13:40:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 59A781BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFE8F817E4
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5616341C4D
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:40:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2Qf66N0Mqm8Z for <buildroot@lists.busybox.net>;
- Sun, 28 Nov 2021 13:39:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oicB8tAZKcOT for <buildroot@lists.busybox.net>;
+ Sun, 28 Nov 2021 13:40:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EFDA281763
- for <buildroot@buildroot.org>; Sun, 28 Nov 2021 13:39:58 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 418D141C4A
+ for <buildroot@buildroot.org>; Sun, 28 Nov 2021 13:40:18 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 150AC60002;
- Sun, 28 Nov 2021 13:39:56 +0000 (UTC)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id A6E72FF804;
+ Sun, 28 Nov 2021 13:40:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mrKPM-0000MI-Dp; Sun, 28 Nov 2021 14:39:56 +0100
+ id 1mrKPd-0000Nd-Pd; Sun, 28 Nov 2021 14:40:13 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <cover.1637700992.git.yann.morin.1998@free.fr>
- <5c509bf436607ed0fad88c8588973edbee3d0713.1637700992.git.yann.morin.1998@free.fr>
-Date: Sun, 28 Nov 2021 14:39:56 +0100
-In-Reply-To: <5c509bf436607ed0fad88c8588973edbee3d0713.1637700992.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 23 Nov 2021 21:56:54 +0100")
-Message-ID: <87wnksl7pv.fsf@dell.be.48ers.dk>
+ <ca903288a1b6f678294d96d3e7024433156866f7.1637700992.git.yann.morin.1998@free.fr>
+Date: Sun, 28 Nov 2021 14:40:13 +0100
+In-Reply-To: <ca903288a1b6f678294d96d3e7024433156866f7.1637700992.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 23 Nov 2021 21:56:55 +0100")
+Message-ID: <87sfvgl7pe.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] support/docker: don't use sudo to build
+Subject: Re: [Buildroot] [PATCH 2/2] support/docker: drop use of Docker hub,
+ use Gitlab registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,9 +69,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > On a properly setup machine, it is totally useless to use sudo to run
- > docker; it is very bad practice. Instead, users really should add
- > themselves to the docker group.
+ > Now that our pipelines are using the Docker image from the Gitlab
+ > registry, there is no longer any reason to push the image to the
+ > Docker hub.
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
  > Cc: Romain Naour <romain.naour@gmail.com>
