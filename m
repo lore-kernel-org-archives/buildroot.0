@@ -4,79 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 054EBC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 13:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07CC6C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 13:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93DAF81934;
-	Sun, 28 Nov 2021 13:14:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0368831F1;
+	Sun, 28 Nov 2021 13:19:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PWTBPFKdVvQy; Sun, 28 Nov 2021 13:14:54 +0000 (UTC)
+	with ESMTP id D_-RJ9YSusMg; Sun, 28 Nov 2021 13:19:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4AAA8102F;
-	Sun, 28 Nov 2021 13:14:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A823F1BF2CF
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:14:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B9C6831CB;
+	Sun, 28 Nov 2021 13:19:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A32C1BF2CF
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A147D8102F
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:14:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E6E4940106
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 13:19:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YCA-_0SBWnXN for <buildroot@lists.busybox.net>;
- Sun, 28 Nov 2021 13:14:51 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DzVoQ8M8qZaJ for <buildroot@lists.busybox.net>;
+ Sun, 28 Nov 2021 13:19:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ABFFD8100F
- for <buildroot@buildroot.org>; Sun, 28 Nov 2021 13:14:51 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id e11so28974320ljo.13
- for <buildroot@buildroot.org>; Sun, 28 Nov 2021 05:14:51 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3074C40019
+ for <buildroot@buildroot.org>; Sun, 28 Nov 2021 13:19:30 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id o13so30344901wrs.12
+ for <buildroot@buildroot.org>; Sun, 28 Nov 2021 05:19:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:subject:to:cc:references:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=qg/aHWury9TwTGgxzGfvu7nR5HnjCcHwjbRnfPKfh1k=;
- b=U6U65fMeI3TdTBE+h9CLr38QDCmnkGAcGrk6RRV+KyQA0kBRotnsoE+mRchaBsCp7V
- wCXbpm2WOVq2W33Hw4RzO9z/VdCwt/swx7bSxyhUAystn3BM7XFwzga0dKjmbMajXdkL
- FxaPZn24LW5GVaLr9A0kl92yWlhF3tVYxPnmht2VEyEOW5lyM/gMDAVH8kEG6jGMH6zG
- dhKmLSveKMpGre/wQLC7mTHqgCNjGeVJqKqfqp2b0ykQtg0BIMy7T8XcyrbRivtfJJWQ
- s1z2xL/L8ZKbhOOZzk84iDqOxKk0VTsScbm+27y1hbQn+VVbqhfNtUuR9gkyWNBUoXiX
- uH9Q==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=veBoRBl10YAXwFpfy/9tLEZvJfA//azBrI1vx1zsYus=;
+ b=TpGH2X+PLL6q+Uw3Mvz+CxBHVRNxap9E3UPoLxsjwuPAeR3Hip93MoIjilXYDqmJ1j
+ q57FrhFJAw+T1fHffridokG+3kQeFaN0YtsgDBk3xBJvJiIXPOXcUdknucKM3IgXIAr9
+ h/14g9xUa7TwmsYqw4jxROU9s0yU8oU+rBDC07jQhhdN26V3UBXjmVFjPgSabrcPlqoR
+ ldwEO0i5fM6SuwfzACSs8WX15YUHVGZhr0arnDkJ5d5rTc9lU8hQFneD86sF0NCdk87R
+ Z1q6Ud9C25n+khIjsaIgqJZ5yJV1960y74cfYa55TkHBYhRqQntrzrl+Q4ZxeVfPJqe+
+ HkbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:subject:to:cc:references:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=qg/aHWury9TwTGgxzGfvu7nR5HnjCcHwjbRnfPKfh1k=;
- b=ZeU0tOryJRMTMJ9UFNNLn8gg7q3rVXAZ5Zvu5nXllohi2mmKq43NViW/Cn2RYKnxLn
- SDZsp8Vopj+ozoN2xqHpEYrpLZcu3aVWR5XaSej/WyCF7V8ovpyCVERR5hcszi5MFVGw
- SZKdFeqHdavUoD9mYttIqwhh4L/+ySM5vb4Hwwb81290Vb13K/g4ZZ2GCw69B+5Ph/mE
- Iu8x8OnKKjTrXdr3r9z0QLPfEx+/lSTiuROnWiCQ41w4+odkbwtW3c6yUGAQccZbfjum
- 1U4+cULOAcy8JLfSthh03Td33tMgA5qvye86jLCKVJYiEtwPY139XEhwY3/tgM0GL4mu
- daVQ==
-X-Gm-Message-State: AOAM532JuqbO9kdHsnZ4aEZmPRBI5k03T/v5vHfcGuvEqtUYPvPluu0j
- vzGjvW/LPrBV1kaAtgWPBnMGPWpKMLM=
-X-Google-Smtp-Source: ABdhPJwPpExhEt7pnUQbvFTzJLUAz6qimGbf9y9bQmEMBBaHNM/lItLl4zm/qQVywLVK0sCwsxsWeA==
-X-Received: by 2002:a2e:9450:: with SMTP id o16mr41821902ljh.444.1638105289626; 
- Sun, 28 Nov 2021 05:14:49 -0800 (PST)
-Received: from [10.0.196.136] ([176.10.248.198])
- by smtp.googlemail.com with ESMTPSA id f23sm1193566ljg.90.2021.11.28.05.14.49
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 28 Nov 2021 05:14:49 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <61a33668.1c69fb81.7f203.a37cSMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <d8ea8ae9-8fb5-9eb0-8569-4334c52a25da@gmail.com>
-Date: Sun, 28 Nov 2021 14:14:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ bh=veBoRBl10YAXwFpfy/9tLEZvJfA//azBrI1vx1zsYus=;
+ b=58hZbiQ1vUOq/0+iDmZKy9MWbq9k0ufQs8FDo3tiuvgwJ+t3Yh6ekbpWtgONEN2bWm
+ X56ubmgF0U9ZR78WvoQpgmXx7y+Iry6tkKBh5bL660kwTBbN5q9pqJGYcDBoq7QSxW9L
+ 8BxvaumsGEbAqfWuE3JI0smxKpgKKl5UG/UcQb2l/hdpSwmh5oa1jiCYAZ42PgIGDzel
+ rHChX/3pDOtN2TcxBeMDj5ISH/NKzCaxAY7/D/S0/ZnpT9nTVSFbeXiUjQSiypsE55Fd
+ /RkBvIQ3fHFc7StsWm3vmKmn3BA5ByIA/3crTQEwKQNmwbk+5ioahLR36xod/jtlai8N
+ OgjA==
+X-Gm-Message-State: AOAM531ACj9naLlyGLplir9uhCzpTcn1RfNm+8euPDsuUIQoQBXvqCoK
+ PeKaR4YKSSrfY4RVblSQdwnhLI//Q/n54Q==
+X-Google-Smtp-Source: ABdhPJxQVQbS0WepnQ46+6iAXmjyaLtGJ2dAJhzwUyYJ+mHCoIdIjRYq3DbTy4P8z8wT4s2hw+IBkQ==
+X-Received: by 2002:adf:c605:: with SMTP id n5mr27482194wrg.564.1638105568209; 
+ Sun, 28 Nov 2021 05:19:28 -0800 (PST)
+Received: from menoah.home ([2a01:cb19:190:c500:a036:1bc6:9134:5d0f])
+ by smtp.gmail.com with ESMTPSA id m20sm19347568wmq.11.2021.11.28.05.19.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 28 Nov 2021 05:19:27 -0800 (PST)
+From: Pierre-Jean Texier <texier.pj2@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 28 Nov 2021 14:18:42 +0100
+Message-Id: <20211128131842.274555-1-texier.pj2@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <61a33668.1c69fb81.7f203.a37cSMTPIN_ADDED_MISSING@mx.google.com>
-Content-Language: en-US
-Subject: [Buildroot] Name clash in headers: LiTE and libite (Was: Re:
- [autobuild.buildroot.net] Your daily results for 2021-11-27)
+Subject: [Buildroot] [PATCH] package/genimage: bump to version 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,38 +84,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/28/21 8:57 AM, Thomas Petazzoni wrote:
-> watchdogd-3.4 :: http://autobuild.buildroot.net/results/185c753af2aa159b494b13f78b0826dddbe4aed6
+This includes the following changes:
 
-TL;DR == ignore autobuilder warnings for watchdogd for now ==
+aa76b22 release version 15
+dd49fec util: Fix warn_unused_result build warnings
+6ba2b4d image-hd: more error output when bootloaders overlap with the partition table
+90b83ba allow specifying 'holes' in the partition section
+09fde2e [ci skip] typo "used used fill" -> "used to fill"
+b0d794c image-flash: don't ignore truncate errors except ENOENT
+93d1f26 .github: replace ubuntu-16.04 with ubuntu-18.04
+1e9b9be util: systemp(): don't use shell defined in SHELL, but GENIMAGE_SHELL
+1c53012 util: systemp(): use shell defined in SHELL rather than /bin/sh
+89490b9 image-android-sparse: use off_t instead of int for lseek return values
+f1cab39 test: add tests for --includepath
+9e7f23a README.rst: reflow paragraph
+0778817 add --includepath option
+e210857 config.c: remove redundant helper add_opt()
+18b3cfd config.c: allow hiding specific command line options from --help
+65548f6 config.c: remove unused member cmdlineopt
+f606a33 util: remove unused pad_file function
+62e1d4f image-flash: use insert_image instead of pad_file
+8c0fe58 image-ext2: use insert_image instead of pad_file
+7d0003b util: insert_image: allow specifying the fill value
+b847f3e image-hd: resize the image to the final size at the begining
+8e3bf8b test: hdimage: check the disk usage of the second image as well
+e2bd4c3 test: handle new genext2fs and e2fsprogs versions
+06ac16e insert_image: fix read/write loop
+17e2c3c test: filter 'rauc info' output for newer distros
+1d72d80 image-hd: stricter option handling
+d912549 image-hd.c: make GPT backup handling a little less special
+69f6644 add test for partitions out of order
+9190a2b image-hd.c: correct computation of first_usable_lba
+8505aed image-hd.c: switch to insert_image() instead of pad_file()
+5cc31c6 image-hd.c: truncate output file before looping over partitions
+2194e31 image-hd.c: replace use of pad_file() with extend_file()
+5638a9e util.c: add insert_image() helper
+8eef854 test: add tests for "bootloader with holes allowing some overlap"
+a72ca69 image-hd.c: take image holes into consideration when checking for overlap
+564e359 document "file" image type and "hole" syntax in particular
+998a118 image-file.c: allow specifying "don't care" regions
+7f8f19d image-hd.c: fix missing check for overlap with GPT table
+e91c8e2 image-hd.c: check all partitions for overlap
+44d5346 image-hd.c: allow partitions to appear out-of-order
+cd3ceac image-hd.c: ensure an autoresize partition has a size consistent with its alignment
+0a61f64 README.rst: add description of how default align/size/offset are computed
+efaae46 test: fix copy/paste error in the test refactoring
+086380a config: don't try to access non-existent section
+fe74ea1 image-vfat: drop '-b' from mcopy
+7ef351d test: factor out some test data generation
+94af174 image-hd.c: fix extended partition with offset
+649602b image-hd.c: prepare for fake partitions
+cc13e78 image-hd.c: don't sanity check partition_type_uuid for !part->in_partition_table
+5f53df3 image-hd.c: move overlap check below partition size determination
+b77f38b image-hd.c: allow specifying minimum size for auto-resize partitions
+5f07c1c image-hd.c: do not require the autoresize partition to be specified last
+8269fa7 image-hd.c: enforce proper alignment of all partitions
+5bd7283 image-hd.c: ignore in-partition-table when the image has no partition table
+3e2b616 image-hd.c: always sanity check child->size v part->size
+fa619fb image-hd.c: separate computation of part->offset from the sanity checks
+030e7a3 allow each partition to have its own align value
+cf192fd image-hd.c: fix computation of autoresize size
+d6c477c image-hd.c: don't lazily initialize now
+6cbbf86 README.rst: document default value of in-partition-table option
+e43e02e test: add some tests for overlap of GPT
+11f3528 image-hd.c: refactor updating chs values
+8c74183 image-hd.c: add and use "struct mbr_tail"
+9ffd5e0 add macro for compile-time assertions
+9e59a27 change insert_data() to take const void* instead of const char*
+bcd7fa6 util: strtoul_suffix: allow s suffix for sector size (512 bytes)
+41d77c4 image-hd.c: fix copy-pasto access of random memory
+5dc2e22 list.h: drop prefetch()
+be29822 image-rauc: add intermediate option
+344416f util: add save string concat with formated string
+351d50e image-rauc: ensure clean-up on rauc_generate() exit
+5cba95c image-rauc: free keyringargs after use
+23adab0 image-ext: ensure size is always interpreted as kilobytes
+8014c7e .github: run apt-get update to update package cache
 
-I've looked into this autobuilder issue with watchdogd.  The root cause
-turned out to be a name clash between two packages in Buildroot: LiTE
-and libite.  Both providing the include file(s) lite/lite.h (lite/*.h)
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+---
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This is a potentially really bad situation, although the overlap in
-users of LiTE and libite is likely very small, if any.
-
-I discussed a way forward with Yann on IRC and we agreed that since I'm
-the upstream maintainer (of both libite and watchdogd) libite should be
-changed to use another name space prefix, e.g. libite/lite.h.
-
-I've started the release circus for updating all this, but it'll take a
-few days, up to a week I'm afraid, before there are changes available
-for merging to the 2021.11 branch.  Please let me know if this turns
-into a headache and I'll try to expedite it.
-
-Best regards
- /Joachim
-
-
-
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 9f60261b53..80065d53b1 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9d1d53b33309fe24ea367ea057eb689bdb8ea33cb99d796de31127ca44ccf44c  genimage-14.tar.xz
++sha256  9bca24bf883310b30ee4511cbc3a580e40ad4540826e5ed3992c595ce72d003e  genimage-15.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 1934223b23..44963b48fb 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 14
++GENIMAGE_VERSION = 15
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
