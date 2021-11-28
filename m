@@ -4,77 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E369AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 01:34:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C78C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 28 Nov 2021 07:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56F1E80DF3;
-	Sun, 28 Nov 2021 01:34:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A360283051;
+	Sun, 28 Nov 2021 07:57:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8j7jVrUg95Go; Sun, 28 Nov 2021 01:34:21 +0000 (UTC)
+	with ESMTP id t0rkk0eab_sz; Sun, 28 Nov 2021 07:57:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E1A180DFA;
-	Sun, 28 Nov 2021 01:34:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E3E31BF4E6
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 01:34:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C199B8303C;
+	Sun, 28 Nov 2021 07:57:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D75571BF2F5
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 07:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AC41606A5
- for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 01:34:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE7F440103
+ for <buildroot@lists.busybox.net>; Sun, 28 Nov 2021 07:57:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key)
- header.d=troodon-software-com.20210112.gappssmtp.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2qV6vn9oTRG6 for <buildroot@lists.busybox.net>;
- Sun, 28 Nov 2021 01:34:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com
- [IPv6:2607:f8b0:4864:20::735])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 67861605B0
- for <buildroot@buildroot.org>; Sun, 28 Nov 2021 01:34:17 +0000 (UTC)
-Received: by mail-qk1-x735.google.com with SMTP id q64so18874485qkd.5
- for <buildroot@buildroot.org>; Sat, 27 Nov 2021 17:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=troodon-software-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ckV9J5LDa9Csllc4vrlwxMCpMDY3n9uL/TXaG26mIh4=;
- b=FOKVRJYSQ1L4rhFGQrZQdluWpL3hgB5Y3qE48A0MOsuUZUH9kVYly1Lad2Rv/ugcDc
- Bsz0QR1zuteIR5UzxCYtk6H3cHpHwS8zJkLr9uwvHZucMqbyo59dtP1G849jBVW1MLH3
- 6O1RXCYmkK02xVmlkMPRf3CHdrWzRAEjZP0XX0dQ1GnYERWfCRFRuk2n+7UIVKS8WUwM
- Y134NeobChsE5iwwGtK6VRJKVCqRMPVTbComsMk6Gd4HlaMriErGTRIVv0cUzTVv6fEN
- nxKNFJzs3FWfPSadgBYC2+soFzS7k4WnyYUmEDIswAvA57WeQRaX09sNkRHwVtKlBmwL
- ksjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ckV9J5LDa9Csllc4vrlwxMCpMDY3n9uL/TXaG26mIh4=;
- b=m67bBNYeJlrZyefNZex2Wx31GVASRdvbLWKnA1VEs+V+Sg/qufpruGBK/W5N/3Qcq1
- 1zz9cz8N/hUTrkaVuJxMk/xmXoJZYtY87p4y7f+iF3ZxRUD4ZSlOGgWmyaL70mbY6T/p
- AIZ9Wa2q7+iPeFRYw9A1DdWMN1pIrjHrKpLE2fU6pYDP3S0L9n8K7Tlufc8jrIk+eteh
- yN8wFWyOjRPebQg7q48qB8ajcC0UlDqZ6vSvmWofzG3auXuTUADuieqdNgaLwb+4H56j
- 8X2keBoysrb2/el/eiR5RHUcAkP6CXJc0xdCiX3xgs+ZDxPyUmtzXBY+C8TcA5d6tFeb
- xrlg==
-X-Gm-Message-State: AOAM533hCk0+47kNmaZwcUluz/XIX4JYsYaCHD0Ff1iFnAOXujT5OuOm
- f+dqLmCN9wfYbsjD9geF3SgdJMbnOvww7//oDUk=
-X-Google-Smtp-Source: ABdhPJwVBFMvXt2P2wrSQ678I5iBRUpy+PhgoCl4H4Jk6FsvlQBNM6NDzaA/5CqyDVB+5FP+180h0Q==
-X-Received: by 2002:a37:91c1:: with SMTP id
- t184mr31513424qkd.129.1638063256059; 
- Sat, 27 Nov 2021 17:34:16 -0800 (PST)
-Received: from localhost.localdomain ([50.225.254.130])
- by smtp.gmail.com with ESMTPSA id c22sm6041235qtd.76.2021.11.27.17.34.14
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Sat, 27 Nov 2021 17:34:15 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Sat, 27 Nov 2021 20:33:41 -0500
-Message-Id: <20211128013341.84004-1-fhunleth@troodon-software.com>
-X-Mailer: git-send-email 2.33.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OVivDZqwsyHJ for <buildroot@lists.busybox.net>;
+ Sun, 28 Nov 2021 07:57:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AF829400F5
+ for <buildroot@buildroot.org>; Sun, 28 Nov 2021 07:57:32 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 8D40F4000E
+ for <buildroot@buildroot.org>; Sun, 28 Nov 2021 07:57:29 +0000 (UTC)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/fwup: bump to v1.9.0
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Nov 2021 07:57:29 -0000
+Message-Id: <20211128075734.BE7F440103@smtp2.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-11-27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,48 +52,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Frank Hunleth via buildroot <buildroot@buildroot.org>
-Reply-To: Frank Hunleth <fhunleth@troodon-software.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also update download site to point to new location.
+Hello,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/fwup/fwup.hash | 2 +-
- package/fwup/fwup.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Autobuild statistics for 2021-11-27
+===================================
 
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index 87263192e4..2e5b2b1f6c 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9890f0328796f4315e6c1188df5c103855c530fbc14fbc8c12f4b24066c975f1  fwup-1.8.0.tar.gz
-+sha256  18ae6753145cef2fd5f5fc83e29c2d883e570668d8aa064ee6c94d4c5e44d73d  fwup-1.9.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 77eaa528f3..62016d94e3 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FWUP_VERSION = 1.8.0
--FWUP_SITE = $(call github,fhunleth,fwup,v$(FWUP_VERSION))
-+FWUP_VERSION = 1.9.0
-+FWUP_SITE = $(call github,fwup-home,fwup,v$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
- FWUP_DEPENDENCIES = host-pkgconf libconfuse libarchive
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 69  |  6  |  0  | 75  |
+  2021.08.x  | 54  |  1  |  0  | 55  |
+    master   | 95  | 20  |  1  | 116 |
+     next    | 15  | 12  |  0  | 27  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+              host-erlang-22.2 | 3 
+               pipewire-0.3.39 | 3 
+              tinydtls-0.9-rc1 | 3 
+               capnproto-0.8.0 | 2 
+libdbi-88b8477d57153b9f736d... | 2 
+                 wavemon-0.9.4 | 2 
+             openjdk-17.0.1+12 | 1 
+           python-pybind-2.6.1 | 1 
+                          qpdf | 1 
+          refpolicy-2.20210908 | 1 
+                samba4-4.14.10 | 1 
+                 watchdogd-3.4 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/6bef67c83be8c31131e10bd0b0567c107a159c30 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/db7b9f990fbc05df305847a7c38cedbd59f65112 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/997926ebe05bac3821bf71aa12af449edd3d1744 |     
+    i586     |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/de43001af1bd33614a14010398e652c43761dab6 |     
+  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/c6bdc6452d094453ababe5599ab10caf497f5396 |     
+    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/b61d7bec3063a6c35398cb5a307bd29173de0234 |     
+    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/653058da4fa002e269a35ef39c4690783fd60fdb |     
+  aarch64    |       openjdk-17.0.1+12        | NOK | http://autobuild.buildroot.net/results/7f76298cd61525f51c7a7f420b9e0d42596e9c62 |     
+  mips64el   |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/66724a089dd31652f339b8fc6a7243d1bc85a713 |     
+  mips64el   |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/0519a2fcf9ad23e8e192521699a2d669ac7c74fa |     
+    sh4      |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/b763fd86feb3ac691761e02d4c1708161b1c137b |     
+    arc      |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/79677cd758a79f4ffc4663a2f6ade7107da3aa53 |     
+  riscv32    |              qpdf              | TIM | http://autobuild.buildroot.net/results/6ed66b04cbcceb2bc111a1a30d4b48386188adcb |     
+  aarch64    |      refpolicy-2.20210908      | NOK | http://autobuild.buildroot.net/results/610484c288fa1923d9ee28a3cb780dcb67579eee |     
+    arm      |         samba4-4.14.10         | NOK | http://autobuild.buildroot.net/results/b7a08e5d6c131912c0c8f16d2f280cf1b46de015 |     
+   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/edb621c4ca67a5d786b7a6c98b0aba8eac78c395 |     
+   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/8f67980585cf0138f937c10655c51b7fc0c3e3fe |     
+  powerpc    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/2a6014a5188885e62266f62bc12bbabf034162ce |     
+    arm      |         watchdogd-3.4          | NOK | http://autobuild.buildroot.net/results/185c753af2aa159b494b13f78b0826dddbe4aed6 |     
+   mipsel    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/e714ac7f9cb2dfa9a1f46df72a67363514f0d470 |     
+  sparc64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/d5ee77ef4b431709253e3eda46830c0c9c189170 |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 4 
+monkey-f54856ce250c4e257354... | 1 
+                suricata-6.0.3 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/602e149eefdc2fec84e0064081e204a4db9420e5 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7e9fa4c662282bca631710d8071daea7ccf16e42 |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/f9f5b3621a73675a3b632e59200444c39fd00bc0 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/36d4b28280e1322a642f5699013934b87292d906 |     
+  mips64el   | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/4625b182448c9216ab95ceb843bc171dc1afb940 |     
+   x86_64    |         suricata-6.0.3         | NOK | http://autobuild.buildroot.net/results/4b88749e36e2c096e53ccdcbe6c3d968e9034d0b |     
+
+
+Classification of failures by reason for 2021.08.x
+--------------------------------------------------
+
+                       unknown | 1 
+
+
+Detail of failures for 2021.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |            unknown             | NOK | http://autobuild.buildroot.net/results/59c57e42a187f85e5d0726e9013cd75d3f84e154 |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+              tinydtls-0.9-rc1 | 2 
+                  uhd-3.15.0.0 | 2 
+                  assimp-5.1.0 | 1 
+                  botan-2.18.2 | 1 
+              host-erlang-22.2 | 1 
+libdbi-88b8477d57153b9f736d... | 1 
+               qt5webkit-5.9.1 | 1 
+                       unknown | 1 
+                 wavemon-0.9.4 | 1 
+xdriver_xf86-video-fbturbo-... | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |          assimp-5.1.0          | NOK | http://autobuild.buildroot.net/results/4dc029f0cf4e89f842420bc5b812596a655e7d4e |     
+  mips64el   |          botan-2.18.2          | NOK | http://autobuild.buildroot.net/results/4078d265bdc71ad91f2afae42d7c35d20fa33a17 | ORPH
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/26455fd0aaf9c767c299a847b521c693a40683bd |     
+    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/15500abbe02b3bf504a52f1742ac260dea67cfe9 |     
+   mipsel    |        qt5webkit-5.9.1         | NOK | http://autobuild.buildroot.net/results/6897ec9bb22e8e67e6313c88eb385031224060f8 |     
+  sparc64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/d5295376a673c082d57b1699332b4afc489796ea |     
+    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/db43aea1f4612fdb8444036e615aba9d218d8ec7 |     
+    arc      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/8f6d4182b472d776ae8d82d5da62c14c4268d71d |     
+ powerpc64   |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/2ff6415828a1dff046706208f0e95512bb8c0ca2 |     
+   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/e2837f66bde36f989c122c503cbec536f44cfb77 |     
+microblazeel |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/c4a4ac9080560a4078f78a71b19a6ad53d9fc11f |     
+    arm      | xdriver_xf86-video-fbturbo-... | NOK | http://autobuild.buildroot.net/results/7351c4b124e52c92b3f2a7cddb10827c72677048 |     
+
+
+
 -- 
-2.33.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
