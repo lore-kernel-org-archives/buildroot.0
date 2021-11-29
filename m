@@ -1,79 +1,136 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11907C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 08:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7AF0C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 10:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B61D4608EF;
-	Mon, 29 Nov 2021 08:57:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C16C80F3B;
+	Mon, 29 Nov 2021 10:04:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g-2KEbKGYWHi; Mon, 29 Nov 2021 08:57:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ugEp95Y8eE3U; Mon, 29 Nov 2021 10:04:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 129C7608AA;
-	Mon, 29 Nov 2021 08:56:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 474E31BF3F4
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 08:56:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 509BA80E48;
+	Mon, 29 Nov 2021 10:04:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AD471BF3E8
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 10:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 373C2608AA
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 08:56:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4087280E48
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 10:04:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hDc1v7UkLnXU for <buildroot@lists.busybox.net>;
- Mon, 29 Nov 2021 08:56:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 10uoz9tEwpPc for <buildroot@lists.busybox.net>;
+ Mon, 29 Nov 2021 10:04:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 653B760899
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 08:56:21 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id z8so6444694ilu.7
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 00:56:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=Y5Uoyxm9F11SskRpbRD1EtTWgOmDoiCdtghVt+5/6ZI=;
- b=KJ8NE9iKttPFkWjxLPoFxgQEoR8WB3Zaltb9Fg1ApwEcZtbZT3EEZRYty+Jgtq7TKI
- n+fbPZ9NWVmZH0P0brXYQe+3ud5lz9A/ZuavSka4T58muKswoA0qzwC/RSyQMYWiPsfe
- 77kfszbw1ofYyTwKOJZU8RSNs/Cm/NfyrKC/wvEHyqLOqg5N38unRVocUhRuY+zp+vuW
- K+EteSFXC26KMpu/7VkwK/7e1FwcJ5WL7yjSf2aUoihSEi+9Y/XSm7EPamUN7E7jL6C2
- wEbAYtN0ilwCUlODOe12HoXVbBa9tsKet4rSpfak69TcO5BdDub7jPQGDqKlbiLNGv0i
- Zx+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=Y5Uoyxm9F11SskRpbRD1EtTWgOmDoiCdtghVt+5/6ZI=;
- b=p8ioh+QXn6w9CHGCtB5dbKq5SDpgdPl2jIRig+isuPV847w2A1s5EjdC8ktAFKav5o
- usWaNT5XpfNTPgAfKKCmo1A2duFXKbBIrryTGNNjcHKVn9/ifzHhL1BRlE93Pyt+Kqt7
- MyBOrWL60Zos9nrqnw7bR4vYq89Y3ypJ9bUV3YB7/53CSYMAQ7wPLekAsXcbkZzj1sWD
- BRk3uwH9l8/Dnl4aQSjWXMLStfsBBNKMLSRL/pGqjeJZ8s+x+JOOoBz2vHw2ziQ3zacK
- L5GAOIDmDnWk25CmAnUQGoSNHZw/YAft7D3tCyBzgBUtaDLUue4tJJPdkqzJSwczC9QT
- tLIg==
-X-Gm-Message-State: AOAM530wS2BUV40vlFXqzZMLR5E2tjSUh2vvKZh7Rl8iq7TaYiQlOg0n
- hbYe2Mrzo6ryD+9wwoQCNKO8Jp+XmV4=
-X-Google-Smtp-Source: ABdhPJyicoLDRdWOp4AT1iE9n6HMmgfpx4Ap4clTjyj+Pz20L9TJSjJOVwT60th23NxnNUuN/ebQRA==
-X-Received: by 2002:a92:cad0:: with SMTP id m16mr51631731ilq.86.1638176180360; 
- Mon, 29 Nov 2021 00:56:20 -0800 (PST)
-Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
- [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id l3sm7127145ilv.37.2021.11.29.00.56.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Nov 2021 00:56:20 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 29 Nov 2021 01:56:10 -0700
-Message-Id: <20211129085610.3701585-4-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211129085610.3701585-1-james.hilliard1@gmail.com>
-References: <20211129085610.3701585-1-james.hilliard1@gmail.com>
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+ (mail-eopbgr60062.outbound.protection.outlook.com [40.107.6.62])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6354E80E19
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 10:04:07 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UsRAN/7bw3i3Qn6l1DDpBSLMAQNIk94Xln/65avgYrhRbP5wupm68dGyEwntcx7grE33HMHx00DFH6yBoA+nCqselZDd8pivAIbNkA2wdP1KHeZkampnkR0N2jpC5r/x0Vn/+iqTWkVazbJ2E7guFM/g6WaNUALsSq02NcL6wKJMjtm6om5xJrwHwIvzPHtLTcfItgl6J1gKzPgip8mEfBOjSsfIbV91eHzF1/0udcR5Czw+DsPOGtta59tWLb4kPb1NcvpJg5YbJf4aF/RpHRne8Lr/0uKhbyDw2fle2DftIBei1XNlnnPzB2u1eIpsykBU/lupplH9N3kh+sN19g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ReklwNsh/ONQKxf9SgdyOcn+R+Ob/qfF7MDG+NhUZng=;
+ b=W6lGoHuOAcN14sjgYI0JFil/jLvtUCDOEwyqzUcPRj/+Nz52wGrV3Keunagg6O91zGT3jl2X5kVlg7qFXl3Dc16r9Y/+pkYuFvQlJeucSzLQyJ6aXPMPp7y31FRH805ShJuaxzGZBzGdyWbc5l3U6Xy3HIBdhsltPwhq8iDBoO4KLnNCMpjdZaCYwqDjxEYjPXhR7zikLSF/pvsXASmAUmtH0zB5HBUm8QXGB/uqn7vaY2DUEPsiX2/vEJ7qJ8jp6YWCwrjaxfnk2GYgteg8V8H0A/lTi4aKzsuYCZ8kK4PD7/H8TaWY3wjfnbxTmUdqVIUotSzQKr5v0+mkw8CwVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ReklwNsh/ONQKxf9SgdyOcn+R+Ob/qfF7MDG+NhUZng=;
+ b=UEd4cT1dGz9g5j1Dr6HiFgnTaEKW8heVZR33LKdMpM8T1pkMPI9Knwt6YDwp5X4O9/d/mbNra6YsuBDnoRaLheG6N+DHwGfmB2R97ozGjwN1QcRAwni7keB2S6TiirFsX7cQRkMW8E0Eq6vaXfa+N2z7Vh54VXPEReKgcSYMcuM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from AM0PR0402MB3348.eurprd04.prod.outlook.com
+ (2603:10a6:208:24::24) by AM9PR04MB8275.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3ec::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.19; Mon, 29 Nov
+ 2021 10:04:00 +0000
+Received: from AM0PR0402MB3348.eurprd04.prod.outlook.com
+ ([fe80::d56f:ec59:3bd0:6d7a]) by AM0PR0402MB3348.eurprd04.prod.outlook.com
+ ([fe80::d56f:ec59:3bd0:6d7a%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 10:03:59 +0000
+Date: Mon, 29 Nov 2021 11:03:58 +0100
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Message-ID: <20211129100358.tjhpwco7sxfdmecv@fedora>
+References: <20211125155040.90840-1-kory.maincent@bootlin.com>
+Content-Disposition: inline
+In-Reply-To: <20211125155040.90840-1-kory.maincent@bootlin.com>
+X-ClientProxiedBy: AS9PR06CA0359.eurprd06.prod.outlook.com
+ (2603:10a6:20b:466::29) To AM0PR0402MB3348.eurprd04.prod.outlook.com
+ (2603:10a6:208:24::24)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/4] package/python-tinycss2: new package
+Received: from fedora (92.42.140.82) by
+ AS9PR06CA0359.eurprd06.prod.outlook.com (2603:10a6:20b:466::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend
+ Transport; Mon, 29 Nov 2021 10:03:59 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5cb4692b-65e4-46cd-048d-08d9b31f9067
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8275:
+X-Microsoft-Antispam-PRVS: <AM9PR04MB827524A04B8A8F3B797A3DB0C2669@AM9PR04MB8275.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VR0u7OM9s9S15NvBXHo0AT+0SiggkUILR1t0Hg6JNkbLu1Yon0n9FsJO2ntsSXE/MJx+aFqIrUtt1VQ55JIkft0ZkD9h5DP3DF/wA/FroFNxiWpMp/UJ+CSDqWpS5atcIjxnCzP4horjWIEbTLGTD3xwSG7drDj1ETQni0gYNGiuRMEqRJGFyHjG20uWYCcf4yBGfAdduliJJCWWiVJ/6yy/qx15h34TcPCuj2qH4czHEBp4wLd3zcxKgdOQVR6+8Dodh1P3R08Ntq3jLm7gi/zN1RoldJgt0Xy65oytpRZkIBsQksuziVX6wO9ymsEyb44Kjq/15nI8YiFz9j/uo7KUfey0erQM39Q2/z54rZGzBicpSER97XyFUs2COG+0FpO3dwZHVrV2H5xbnAas85qZybvl13+KOLRK3XKvJ9tG2taBeibH+ywdDctsp3YNG1o5dpXN//9CoKezUvtaRR5LYVpUC3E1O89xN+KuGxMj5AgHkHDs9oq6j+WypI9Z7kMu7+nKcDGS9qcI8lSHxy8UjQ1xUauGFqG9TwQZc0tIqDcUzqQA4s2fDDXw00p7PxO8vSQjpifqLdu3ldPO5XWn+Nl3qVxXMkgMCJl5sf7Ez/TwCHODyfSbMDaaslm0oDQij3XbUWB+xRh8jUw5w/pFAVUYWiZwSYbveJdCNrV12PdsAfxty20A7F2Rqkx2qXIKm7aM1UCmIEtbcOxJy1LbzC9lgM0vJm9iEdsekicJjpATyeGo66trDTPjUYQhsynebhMwHKXqzAxp7TOSoCHZz8LeKu4EUFkmwCQt1Hc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AM0PR0402MB3348.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(366004)(38350700002)(38100700002)(5660300002)(66556008)(316002)(55016003)(1076003)(66476007)(66946007)(9686003)(8676002)(26005)(508600001)(6916009)(9576002)(2906002)(52116002)(44832011)(4326008)(966005)(86362001)(33716001)(6496006)(186003)(8936002)(956004);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?pG298KBdWVDQwBhJAbaoSmNLH1tZI0UmAawaWgP1zFVjL5PDdXRuInh77d?=
+ =?iso-8859-1?Q?EJZi27ImzVSRSgwH7S9Yks1NM/nUx4A2otaFHHBC/bCJ55Vt00MHi2qp8y?=
+ =?iso-8859-1?Q?jq0H600bxgBBnBZy95EXMQRnwPRnPO96vV9g5oH2WMKU8dAwEGnAB9ieix?=
+ =?iso-8859-1?Q?i+KkdSlWSpgXW8kTMGh929Z3gfezSxEtaFRAcRmrS2IEE9YNHrTsX1h84A?=
+ =?iso-8859-1?Q?q/6tmv8owEo1/iI65mkqRXrqbXaqjI2TfhqN0FpBH+vsst745ablTYUE2j?=
+ =?iso-8859-1?Q?/kuuDdmagOeeeFkbqZO5oZ31CRNqdPYg+FnYF49B57KnD0nYiXRFfTiQqN?=
+ =?iso-8859-1?Q?KAa8ey6hmrCELpTR+4hGyZ1ApKZBaRdWK0jVAUfanRl31JpuZdjUSkBhIl?=
+ =?iso-8859-1?Q?9hDw+7wC61W3M0LQI8o74tnKGBlK31xoxpKIFBxZ9ox5ZFnaq+WLRw+qfV?=
+ =?iso-8859-1?Q?hVfuK96XSssinIpRGSiMVODEWtbmY8V8Tvu1+fgPajV06QpkSLGT6G1y2Y?=
+ =?iso-8859-1?Q?k29PqL007ZhrzXvI7Z0QEiHLvR/l1B1pxSjeD5uXEBh+Z88+XSsohp+mr+?=
+ =?iso-8859-1?Q?wHvPiUDDd522uhMRj2BTMRBUozTXXEMcM4y9MNukIVt0JloXZMXrIWy6hB?=
+ =?iso-8859-1?Q?/SECs58knRC49wPQFSvvcCd6E7V5W9Hd2W0+yzFDg+wWSO+vfTTc/JrzPP?=
+ =?iso-8859-1?Q?HWo9hGKtnZHgLf8v8dUnaNZgDCwGsEb3Nl0SQXSpE7Cc/TgNllE1O6dtwa?=
+ =?iso-8859-1?Q?31HDyP4QUbLWk70+aR+da6JAyuxbdlXdxsPXrnWIriros43JUprsdUeNxs?=
+ =?iso-8859-1?Q?D4qlOCoBfNTiC3HzDvGXcbD3U+PTS2EOyTmOl04AjtIgbUO4kZ5zyxzNKW?=
+ =?iso-8859-1?Q?nddHn1XUE69d0NUALBLJYBulHe16XAwSMbcQ0S5FTGtSlIxGs+PXkAUo/f?=
+ =?iso-8859-1?Q?nIU8qzlNiuQIsQ2FIhMRv4SaIZu7hNzWJ2xkYEPKYeZQcO1UXpPgMh03QC?=
+ =?iso-8859-1?Q?N3xN34GJRQj5Lz0aTXmLTLlGJPlDH63f4Siojx3Z26oFPQJgckwZoNXsgr?=
+ =?iso-8859-1?Q?3R8Mv72qzSF8FDWUBbIv2Yvb9wU6R8GzZ+iemuefrrmOXeyGcRRBmFiRzD?=
+ =?iso-8859-1?Q?LDWWXwN+hZDzlh2l/KGM/DI8wF5udzRNZm8Wkv/Mta/7fV5smizHdDk4HS?=
+ =?iso-8859-1?Q?jbVc50Q5lrJ/VJo/2gnn5Fwfkr73GXmAbZBO1jZDdB1cCk3Q057z86+slU?=
+ =?iso-8859-1?Q?c8BnhtX7Gt/HByedDq01x5iiI1XwX6LGKmxy4XJZZWznxuxhHX0XySvbFV?=
+ =?iso-8859-1?Q?KNllxHk30J5LbwEevmJQoCnZdQa9D06PbTf0miruKBBhwGOY3MKY104Ypp?=
+ =?iso-8859-1?Q?WljQUZ092RZrJUvsr9nZSMUkS0mYKgkHtU8jojgGoqQmXz5bczYXvptYJ4?=
+ =?iso-8859-1?Q?amXUHHLIa1eiemv7/wzxbIdwNs0EEN/WXWUMihBcGDvB9yLZup41i/3TOO?=
+ =?iso-8859-1?Q?sRfXDA6MQQAOrMdNFOiRb7G61zmy/LYxDXDKofR0YMGBG70gs4ZYBvd+n3?=
+ =?iso-8859-1?Q?X36MUw34pvV7j259a4f2j56MknBMYJfRcZCKxBlVAxkTVF3kOfY/FQXokY?=
+ =?iso-8859-1?Q?VqC5fairfUR2JHZSSuo6GJC9oB/qUNpLNdOr1HOcrLS8jblcCFUhxMEgkU?=
+ =?iso-8859-1?Q?6+Bv+Ewsk2YodlW3ry+DwCGkrrFxHe2AErQVnZVLRvLoVVPrfwhe+PCwfI?=
+ =?iso-8859-1?Q?mUuK5RevHUUcjpOeS8A/IWh06Tn5+s1mQuE2kmWsTGk8FGIgdWbauKeRCA?=
+ =?iso-8859-1?Q?vcn5m63dCQ=3D=3D?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cb4692b-65e4-46cd-048d-08d9b31f9067
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3348.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 10:03:59.8833 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oZ+x07FYfd8kqtIAK2ZJ+gf+Q/tEZolKtP1QHhBb4cpm1cZKpuvHZ63PUbmNhw+ofhOI8irOG78vOl8HgfT8oLFDiXCyKG7mGKYP4IBoIlC5QGyGEN3k/DWqTlIA7Dzh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8275
+Subject: Re: [Buildroot] [PATCH] package/rkdeveloptool: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,84 +142,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/Config.in                            |  1 +
- package/python-tinycss2/Config.in            |  8 ++++++++
- package/python-tinycss2/python-tinycss2.hash |  5 +++++
- package/python-tinycss2/python-tinycss2.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-tinycss2/Config.in
- create mode 100644 package/python-tinycss2/python-tinycss2.hash
- create mode 100644 package/python-tinycss2/python-tinycss2.mk
+Hi K=F6ry,
 
-diff --git a/package/Config.in b/package/Config.in
-index 52ef33ab97..bb8374a213 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1240,6 +1240,7 @@ menu "External python modules"
- 	source "package/python-terminaltables/Config.in"
- 	source "package/python-texttable/Config.in"
- 	source "package/python-thrift/Config.in"
-+	source "package/python-tinycss2/Config.in"
- 	source "package/python-tinyrpc/Config.in"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
-diff --git a/package/python-tinycss2/Config.in b/package/python-tinycss2/Config.in
-new file mode 100644
-index 0000000000..e7a5bb3659
---- /dev/null
-+++ b/package/python-tinycss2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TINYCSS2
-+	bool "python-tinycss2"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
-+	help
-+	  A tiny CSS parser.
-+
-+	  https://www.courtbouillon.org/tinycss2
-diff --git a/package/python-tinycss2/python-tinycss2.hash b/package/python-tinycss2/python-tinycss2.hash
-new file mode 100644
-index 0000000000..e8e1d93f83
---- /dev/null
-+++ b/package/python-tinycss2/python-tinycss2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tinycss2/json
-+md5  60272f58f8d5834b2e09ffbc9bd5de53  tinycss2-1.1.1.tar.gz
-+sha256  b2e44dd8883c360c35dd0d1b5aad0b610e5156c2cb3b33434634e539ead9d8bf  tinycss2-1.1.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  6b94acee20ec9f2709333134f3ba70322535fb420af0ce8c1455d9cbe297f1d5  LICENSE
-diff --git a/package/python-tinycss2/python-tinycss2.mk b/package/python-tinycss2/python-tinycss2.mk
-new file mode 100644
-index 0000000000..e4fc5dc9c5
---- /dev/null
-+++ b/package/python-tinycss2/python-tinycss2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-tinycss2
-+#
-+################################################################################
-+
-+PYTHON_TINYCSS2_VERSION = 1.1.1
-+PYTHON_TINYCSS2_SOURCE = tinycss2-$(PYTHON_TINYCSS2_VERSION).tar.gz
-+PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/1e/5a/576828164b5486f319c4323915b915a8af3fa4a654bbb6f8fc8e87b5cb17
-+PYTHON_TINYCSS2_SETUP_TYPE = flit
-+PYTHON_TINYCSS2_LICENSE = BSD-3-Clause
-+PYTHON_TINYCSS2_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.25.1
+On Thu, Nov 25, 2021 at 04:50:40PM +0100, Kory Maincent wrote:
+> This package is a tool from Rockchip to communicate with Rockusb devices.
+> =
 
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+>  DEVELOPERS                             |  3 +++
+>  package/Config.in.host                 |  1 +
+>  package/rkdeveloptool/Config.in.host   |  7 +++++++
+>  package/rkdeveloptool/rkdeveloptool.mk | 15 +++++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/rkdeveloptool/Config.in.host
+>  create mode 100644 package/rkdeveloptool/rkdeveloptool.mk
+> =
+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index b190c0f356..b92727a3f5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1562,6 +1562,9 @@ N:	Koen Martens <gmc@sonologic.nl>
+>  F:	package/capnproto/
+>  F:	package/linuxconsoletools/
+>  =
+
+> +N:	K=F6ry Maincent <kory.maincent@bootlin.com>
+> +F:	package/rkdeveloptool/
+> +
+>  N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+>  F:	package/bcusdk/
+>  F:	package/libpthsem/
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 6e5a5c5fc5..dfdd4c3eb1 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -76,6 +76,7 @@ menu "Host utilities"
+>  	source "package/qoriq-rcw/Config.in.host"
+>  	source "package/raspberrypi-usbboot/Config.in.host"
+>  	source "package/rauc/Config.in.host"
+> +	source "package/rkdeveloptool/Config.in.host"
+>  	source "package/rustc/Config.in.host"
+>  	source "package/s6-rc/Config.in.host"
+>  	source "package/sam-ba/Config.in.host"
+> diff --git a/package/rkdeveloptool/Config.in.host b/package/rkdeveloptool=
+/Config.in.host
+> new file mode 100644
+> index 0000000000..c5af34510d
+> --- /dev/null
+> +++ b/package/rkdeveloptool/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_RKDEVELOPTOOL
+> +	bool "host rkdeveloptool"
+> +	help
+> +	  rkdeveloptool gives you a simple way to read/write rockusb
+> +	  devices.
+> +
+> +	  https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_roc=
+kchip-2Dlinux_rkdeveloptool&d=3DDwIGaQ&c=3D_sEr5x9kUWhuk4_nFwjJtA&r=3DLYjLe=
+xDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=3Dn5eBBRFXU6F=
+d9z7euAAt8lQcSXD_gx0NejtlfudGc6ABGfTrEYVwVjfWd7jqfDDo&s=3DSOxg93OG8XbLFuec6=
+FWRdGDRNly00jjChoJL1CWYCPE&e=3D =
+
+> diff --git a/package/rkdeveloptool/rkdeveloptool.mk b/package/rkdevelopto=
+ol/rkdeveloptool.mk
+> new file mode 100644
+> index 0000000000..2345dcefc0
+> --- /dev/null
+> +++ b/package/rkdeveloptool/rkdeveloptool.mk
+> @@ -0,0 +1,15 @@
+> +########################################################################=
+########
+> +#
+> +# rkdeveloptool
+> +#
+> +########################################################################=
+########
+> +
+> +RKDEVELOPTOOL_VERSION =3D 46bb4c073624226c3f05b37b9ecc50bbcf543f5a
+> +RKDEVELOPTOOL_SITE =3D $(call github,rockchip-linux,rkdeveloptool,$(RKDE=
+VELOPTOOL_VERSION))
+> +RKDEVELOPTOOL_LICENSE =3D GPL2
+> +RKDEVELOPTOOL_LICENSE_FILES =3D license.txt
+> +HOST_RKDEVELOPTOOL_DEPENDENCIES =3D host-libusb
+> +
+
+Isn't it missing the host-eudev? I had it in my local package that I
+forgot to upstream. I assume building it in a minimal container would
+give us the answer.
+
+c.f.
+https://github.com/rockchip-linux/rkdeveloptool/blob/master/Readme.txt#L4-L5
+
+Otherwise, I had the same for everything else.
+
+By the way, no .hash in this patch.. Is this expected/okay?
+
+Otherwise, looks good :)
+
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
