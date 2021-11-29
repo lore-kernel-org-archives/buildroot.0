@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 789C6C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 22:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EA73C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 22:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0CAB74021B;
-	Mon, 29 Nov 2021 22:43:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFD9E4057D;
+	Mon, 29 Nov 2021 22:46:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OLzwzmsEUwxp; Mon, 29 Nov 2021 22:43:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A414401BD;
-	Mon, 29 Nov 2021 22:43:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 969F71BF384
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:43:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86A7340221
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:43:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DOZORZLmViA1 for <buildroot@lists.busybox.net>;
- Mon, 29 Nov 2021 22:43:12 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AiizJsLe3mAr; Mon, 29 Nov 2021 22:46:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AF704046D;
+	Mon, 29 Nov 2021 22:46:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C63F71BF384
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:46:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B38E4401BD
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:46:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9vU9eG15YeqW for <buildroot@lists.busybox.net>;
+ Mon, 29 Nov 2021 22:46:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E0FDD401B8
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 22:43:11 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id i5so40119438wrb.2
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 14:43:11 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5024C400D4
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 22:46:25 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ i8-20020a7bc948000000b0030db7b70b6bso18030449wml.1
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 14:46:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=M5LHb2rGykdPWsV3Ia81llBNwcbER1sQaRmjvWIv7cw=;
- b=ngLLrqTwSejj3Q2K69ofn45LBgn54WN59E/Whq1xGTgkQtHO+bTBbhr+xiGI37CBOP
- fUybdfSRkEKc09vcOa/U1ofchXDu0DPD2JfAlZyUwTyFWlSpCgSZHqIpwQJEjfOEEM+X
- BUj1X3gQ2VNnotm82cwHjMBSBceEDe1Tz5QH0o5M+srpDNCKWLvBYW/rNxdOogxrvJBR
- mkKE4QzixCkZ9hFmc5Pyz6pNCJvqZat7oXInK6AqsZ1s5bRuH3uFwcivoXzd7/iZ4a0V
- 6ux93/CMvfRMpnrkBccTdcdvh0YGiy3GtloXthvdQVePOrSw1SngZAxhlSqgQvpNDzLy
- 87uA==
+ bh=OjpYPIWrBfZSxMuKBShPZwaywydiQv9ov218X3UrGnc=;
+ b=FNzTIU6+CoRg9sb6HIoCCyfKW+MgD7khc0sj7EWzRgKNdk88xVBbZsSaiWLTFNko++
+ NF9Kjj+/VpMEnUxaROrIgjs9cz4gsnAIYRctNjSN9Wtv5aPhkYWZm9pmjhKiP66eB3WW
+ P0zh7wTWAOqLOPINsjh8je60cJO9UA8fJ/q4kYalfoVDTmE9CVUVJvoZHwIB6+EUzoVZ
+ ix4B+nU36trbc/S4h0X4mP+DR/99x9Z+HZjs4AumkP4+1+/hdGuh5YhzEWfqZexnOooR
+ fSyL0AOsR78QwPWGggCZtQuX/ofOma8T759QfDJ3zRkYzkRirXv55ZktxVr1SevlSEXF
+ AoJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=M5LHb2rGykdPWsV3Ia81llBNwcbER1sQaRmjvWIv7cw=;
- b=FYahytdOfrdsCBAYTtUOgCljAta2PQH6RXPeWiQpjMftFOeeGr9hCry0WSWfVBrHQv
- OQVz0slbKgZK/QJK0D8tFZDXm2DU4Owppztp1DqcLkSbqTeXtyBLt6+kGU4TPe7Wveni
- hS0qv14pRDsjJSdpqx6/xVxVzxgKF4I4C1VZ+8uSE6e41iemuPpGZkyca8QZg5Kk1dMP
- ZRg/Zu8iPG6oKntX2OWqn4F0chQ4kuP8SvKnPEvKcQGCWTwTefTPB2807d97JVt4El3x
- 6f/Sr5WrKCwniPJajM0ls+2a6Vr47x5dCj3CNfshPvgowy5OZiJB2SWY5QKUXtF0dTDD
- 9D+w==
-X-Gm-Message-State: AOAM530zQUF7dKkBCe/lth2zpHoQE48JMcQwTxWpFVUaO8CsGKy1bmym
- qHXbK2hb2n9hTXpXZa2R8JTb3KyvJ8c=
-X-Google-Smtp-Source: ABdhPJzxsWPO8RtC0cJ4spRSchpE9xMzJr/W2axE9EocqydhoAKY8MUMWLZ34wRcMVJcDMcBL8rflg==
-X-Received: by 2002:adf:f708:: with SMTP id r8mr36912951wrp.198.1638225789859; 
- Mon, 29 Nov 2021 14:43:09 -0800 (PST)
+ bh=OjpYPIWrBfZSxMuKBShPZwaywydiQv9ov218X3UrGnc=;
+ b=F5C9P2hM6+ozGBNS+cbDk1mIGhN+mCbUBnQ+F3izJKSUvaWI1RXshYkNFFKPLU7yTO
+ Vfs0DBt+CT4vjOPCudnX2QMVv88/3uX4SN1essMChs3n8DpEquB1/f0OaiAV5uwULJ6F
+ kf+Q3KvggpD0+Uiu8eIvcQaqwXmUwY1N60YY618oryiB7XPU5Fz0ksUow8pFOhksqj+d
+ 78UKjtl2nFqILEnbdiy23FgiKpH18/NOSyr7gY/fAm+BnX74S6YVx6NW179uKs8XCKe1
+ zn3K3sh9wEGKUcd8wR72XSoUgunc+yvpKx5sDB+boC3fhkQKf67RvC/KG5YZzdq9WoJu
+ p2WA==
+X-Gm-Message-State: AOAM5306sr0dPrXDrPgJOwfnpZgEj3DYyMwK5xPGzMYGPtLTloaoGvlw
+ JvQOw4oWwmCxG8QOh2lQ+c2VO0Qc04E=
+X-Google-Smtp-Source: ABdhPJySzCro94uvoM/X+nulI4l3bdnuHRVtqyADZln/oahOvP5Rs0X9AFTmdWac708Gpd5pUN2u/g==
+X-Received: by 2002:a05:600c:5125:: with SMTP id
+ o37mr864724wms.81.1638225983280; 
+ Mon, 29 Nov 2021 14:46:23 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id p13sm596906wmi.0.2021.11.29.14.43.09
+ by smtp.gmail.com with ESMTPSA id h17sm14943813wrp.34.2021.11.29.14.46.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Nov 2021 14:43:09 -0800 (PST)
+ Mon, 29 Nov 2021 14:46:22 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 29 Nov 2021 23:40:35 +0100
-Message-Id: <20211129224035.2186968-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Nov 2021 23:43:47 +0100
+Message-Id: <20211129224347.2187144-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/input-event-daemon: drop spurious
- space
+Subject: [Buildroot] [PATCH 1/1] package/coremark-pro: drop spurious space
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,33 +86,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Chris Packham <judge.packham@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Drop spurious space added by commit
-c17f4134384666e1ae6116a08b2ce92da633abef
+b9a2e4e8612b96483a20e75f2077f024b3594f45
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/input-event-daemon/input-event-daemon.mk | 2 +-
+ package/coremark-pro/coremark-pro.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
-index dbe2d4bfb2..37fe2241d0 100644
---- a/package/input-event-daemon/input-event-daemon.mk
-+++ b/package/input-event-daemon/input-event-daemon.mk
-@@ -10,7 +10,7 @@ INPUT_EVENT_DAEMON_LICENSE = input-event-daemon license
- INPUT_EVENT_DAEMON_LICENSE_FILES = README
+diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
+index e797f66840..6a85088560 100644
+--- a/package/coremark-pro/coremark-pro.mk
++++ b/package/coremark-pro/coremark-pro.mk
+@@ -48,7 +48,7 @@ COREMARK_PRO_MARKS = cjpeg-rose7-preset core linear_alg-mid-100x100-sp loops-all
+ COREMARK_PRO_SCRIPTS = results_parser.pl cert_median.pl cert_mark.pl headings.txt
  
- define INPUT_EVENT_DAEMON_BUILD_CMDS
--	touch  $(@D)/input-event-table.h
-+	touch $(@D)/input-event-table.h
- 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
- endef
+ define COREMARK_PRO_INSTALL_TARGET_CMDS
+-	mkdir -p  $(TARGET_DIR)/usr/share/coremark-pro/logs
++	mkdir -p $(TARGET_DIR)/usr/share/coremark-pro/logs
+ 	$(foreach m,$(COREMARK_PRO_MARKS),\
+ 		$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/bin/$(m) $(TARGET_DIR)/usr/bin/$(m)$(sep) \
+ 		size $(TARGET_DIR)/usr/bin/$(m) > $(TARGET_DIR)/usr/share/coremark-pro/logs/$(m).size.log$(sep))
 -- 
 2.33.0
 
