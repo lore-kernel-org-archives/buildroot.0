@@ -1,76 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA194C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 22:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C918C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 22:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0A1E81064;
-	Mon, 29 Nov 2021 22:12:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CC7860DED;
+	Mon, 29 Nov 2021 22:14:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R0dzSjHEuZAr; Mon, 29 Nov 2021 22:12:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2P6f_iYjRdCf; Mon, 29 Nov 2021 22:14:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D1CA80E29;
-	Mon, 29 Nov 2021 22:12:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 33AC61BF384
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:12:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 012EC60D54;
+	Mon, 29 Nov 2021 22:14:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 63E281BF384
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2375380E29
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:12:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F2DA40362
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 22:14:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NQVePRF32Z5z for <buildroot@lists.busybox.net>;
- Mon, 29 Nov 2021 22:12:36 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D1ceWHF9Hy_X for <buildroot@lists.busybox.net>;
+ Mon, 29 Nov 2021 22:14:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4E75180E25
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 22:12:36 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id a9so39971955wrr.8
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 14:12:36 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 64C85400EF
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 22:14:08 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id o13so39855688wrs.12
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 14:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BP8Fked90GDh3Rvjl60tC3uC5exD6jDvvlU7k1QcCIw=;
- b=Uqm9DQV723XXyoQeFtmC2xxvVydNAlY0zvJ+Kj4qVs11lGMDOd9+2SfmPpGtIKJhq9
- 8astLgNAKO1Ej0J0G+rKLO9DpG2ZMdsy8BmYgVUXEopIuVQRKhpzenv2iEczGDqg/gEb
- 2i44oJlu+0rPrShJqwTCt4HVjFo+pd3dCbrtFGDEMbrHIE63NtGAk9RBW1xrGWg/EAyk
- i1C+Q8ATERyFmzFOYOFUDu7rx5Yb1hnWDgdvxGw+UdD8afLV8QXH/ygER7qjEe2KpSCJ
- rpBYg3TN+O0T8XdrPCkMqkeJUVVMfNsfA0jDUxwDLpASzI6sYARilAfGaMvkT/AS5Mcc
- WSqw==
+ bh=gKDvuqJF96AgHr7lzpnmfJKIIglVkVUCNeNRoLrLQ0E=;
+ b=R6ZJP/NFFteNRjdxsx/FjwZwN6nBipJUWSkAwiCsIizu4rTP1ZjLxcWJ5Cw1vQAdma
+ N5cyy4R7BKgAS2x19AmGAhBpH8ci96mzWPTAgn7VYROc66T9C9fhE+JGdqi1py4T2FXy
+ z8RInmxbXchXpQhhNqr8NSAtM3IarG8KnC6IJ0QTJFUlrh3pmqLdtnYR1f++CzQopvQ8
+ HdKU5z2u6lkfIwM5sD3tkWjk3yRNyRlwKDN1jfy7hjTGEZtcTA9aM3B4ZDpMjNexBe1d
+ PSKIusDpO1k1TKozXjLTJSzZjMjgEAVLBFShxtEoWjfSBHF7vHg0Ppwmu0AgppfFfQPX
+ nqXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=BP8Fked90GDh3Rvjl60tC3uC5exD6jDvvlU7k1QcCIw=;
- b=PL4zWZRkpJxzEbxtoE/AvidnD0fGp1MnXW6fMdM2o2S08E+LWb5KgjjhA88yYVsHOD
- 0LWRZXfyuu4ch3v6zexXBHNc5aqHahOabnXACx5nwTfZMOQzWTRuZNb1I14875JULj+R
- XyCnvB6XH9lu8bORXS18Q3L7+qiZk+gEBMN1kkU4O0Jdp0o5pGcc2aEYVegdgpROtNDC
- z7Gck8d3TAzz2KrFSL90zzme30fji/lnVaE+wW6yHMXxYgD+6yfEhLetbA3PGD/iwPJs
- UbM94U/m35Yd7txieJzmEd1756g5UC0+Nc+J0+6xF8GHu/gdKFXqa3e8gyap4AFrRQb7
- MIqg==
-X-Gm-Message-State: AOAM530aTd8GCa6eHK9dCezPtmELMoVbVva20F5td7glrivITJOHV/h6
- BokbmVfxgFCTSj2iOwb9Y0cyFSe6S1w=
-X-Google-Smtp-Source: ABdhPJzXyl4KLvE+fjnJP9Uw54iKJtZlBtUUX0UZrs+fEgQuwFamSqMHmi1ECKboQ8zq656zEcwMLA==
-X-Received: by 2002:a5d:5151:: with SMTP id u17mr37662748wrt.126.1638223954376; 
- Mon, 29 Nov 2021 14:12:34 -0800 (PST)
+ bh=gKDvuqJF96AgHr7lzpnmfJKIIglVkVUCNeNRoLrLQ0E=;
+ b=DYCJon0udH9ab04CQxWAaajAycNKzr6nHArmFCdoFFcRpNqlDS+Wcg6D9YKTtPQQ83
+ NbiaYqvOuWm3zVl9eIvd5vitB8lciOiVR0bVdZk8mjkO1OWdyAwTC10uxSS0FVOMsnyP
+ cvFKSwV1TaLlNe0n3IJ+HQyNWANOgaNOvmoCHG9/vjahOh4rQ8s3XWQ2huLUfuls2E8O
+ QLKNe6DnZeNjZ6izf0tVqtET2lOzXKS5va8j2wuC270QDicwQV7UIuT/1dkfb5AB3U0S
+ BLjT+sqoYPUFkzVnwQ8FPlB4+kVJUfVHTERi0jB/ap7wehkH9629kW4wREOKTJG3ewj3
+ 6JLg==
+X-Gm-Message-State: AOAM530idK5oeNow/I4Eia3VrKCyBwOm65zEq4p2QhLK05meS6Olnlsc
+ Qdcheuz+CWRn9oHqSZ+dFs8k/IeJgko=
+X-Google-Smtp-Source: ABdhPJw1uKM6wXVHl64vx16ZCfS6LTVY4NAQvJq0FLz1eHsKza9lfYtAbXBerKf+3GxizNN+SGaDnw==
+X-Received: by 2002:adf:e7c2:: with SMTP id e2mr35555453wrn.349.1638224046508; 
+ Mon, 29 Nov 2021 14:14:06 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id r17sm581746wmq.11.2021.11.29.14.12.33
+ by smtp.gmail.com with ESMTPSA id o1sm14974420wrn.63.2021.11.29.14.14.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 29 Nov 2021 14:12:34 -0800 (PST)
+ Mon, 29 Nov 2021 14:14:06 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 29 Nov 2021 23:10:00 +0100
-Message-Id: <20211129221000.2183298-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Nov 2021 23:11:29 +0100
+Message-Id: <20211129221129.2183411-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/datatables-fixedcolumns: drop
+Subject: [Buildroot] [PATCH 1/1] package/datatables-responsive: drop
  spurious space
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,25 +93,25 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Drop spurious space added by commit
-c0a0e9b710aff7d1fce1b277fd9c614a9892d9e5
+08c11e21a7c6ed16a92b9507160f020c9b7e8c54
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/datatables-fixedcolumns/datatables-fixedcolumns.mk | 2 +-
+ package/datatables-responsive/datatables-responsive.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/datatables-fixedcolumns/datatables-fixedcolumns.mk b/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
-index 3c744990ca..33174e106f 100644
---- a/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
-+++ b/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
+diff --git a/package/datatables-responsive/datatables-responsive.mk b/package/datatables-responsive/datatables-responsive.mk
+index bc9644701f..2809a52280 100644
+--- a/package/datatables-responsive/datatables-responsive.mk
++++ b/package/datatables-responsive/datatables-responsive.mk
 @@ -6,7 +6,7 @@
  
- DATATABLES_FIXEDCOLUMNS_VERSION = 3.3.0
- DATATABLES_FIXEDCOLUMNS_SITE = https://datatables.net/releases
--DATATABLES_FIXEDCOLUMNS_SOURCE =  FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION).zip
-+DATATABLES_FIXEDCOLUMNS_SOURCE = FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION).zip
- DATATABLES_FIXEDCOLUMNS_LICENSE = MIT
- DATATABLES_FIXEDCOLUMNS_LICENSE_FILES = License.txt
+ DATATABLES_RESPONSIVE_VERSION = 2.2.3
+ DATATABLES_RESPONSIVE_SITE = https://datatables.net/releases
+-DATATABLES_RESPONSIVE_SOURCE =  Responsive-$(DATATABLES_RESPONSIVE_VERSION).zip
++DATATABLES_RESPONSIVE_SOURCE = Responsive-$(DATATABLES_RESPONSIVE_VERSION).zip
+ DATATABLES_RESPONSIVE_LICENSE = MIT
+ DATATABLES_RESPONSIVE_LICENSE_FILES = License.txt
  
 -- 
 2.33.0
