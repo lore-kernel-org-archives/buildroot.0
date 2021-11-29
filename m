@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3034CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 21:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD62AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 29 Nov 2021 21:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B15F440440;
-	Mon, 29 Nov 2021 21:31:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FB3560A86;
+	Mon, 29 Nov 2021 21:32:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mpW1Y3ssiXSj; Mon, 29 Nov 2021 21:31:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id W9bVEHBqRchW; Mon, 29 Nov 2021 21:31:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1ECC4042F;
-	Mon, 29 Nov 2021 21:31:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 366E31BF38C
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 21:31:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4C9760BC5;
+	Mon, 29 Nov 2021 21:31:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DF38A1BF38C
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 21:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19EBB400EF
- for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 21:31:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCE7981A29
+ for <buildroot@lists.busybox.net>; Mon, 29 Nov 2021 21:31:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LauorItg9dqe for <buildroot@lists.busybox.net>;
- Mon, 29 Nov 2021 21:31:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZvNfV5uzMw-b for <buildroot@lists.busybox.net>;
+ Mon, 29 Nov 2021 21:31:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 023CA4042F
- for <buildroot@buildroot.org>; Mon, 29 Nov 2021 21:31:39 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 30A5C81A27
+ for <buildroot@buildroot.org>; Mon, 29 Nov 2021 21:31:54 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 72A51200009;
- Mon, 29 Nov 2021 21:31:37 +0000 (UTC)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 46C3A240007;
+ Mon, 29 Nov 2021 21:31:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mroFM-0003nW-G7; Mon, 29 Nov 2021 22:31:36 +0100
+ id 1mroFc-0003p1-MD; Mon, 29 Nov 2021 22:31:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211129062703.2173877-1-fontaine.fabrice@gmail.com>
-Date: Mon, 29 Nov 2021 22:31:36 +0100
-In-Reply-To: <20211129062703.2173877-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Nov 2021 07:27:03 +0100")
-Message-ID: <87a6hmlkcn.fsf@dell.be.48ers.dk>
+References: <20211129063215.2174139-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Nov 2021 22:31:52 +0100
+In-Reply-To: <20211129063215.2174139-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Nov 2021 07:32:15 +0100")
+Message-ID: <875ysalkc7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc/gcc-final: drop spurious
- space
+Subject: Re: [Buildroot] [PATCH 1/1] package/leptonica: drop spurious spaces
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,9 +58,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -69,8 +66,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Drop spurious space added by commit
- > 7d6c79ed887e67ccb87f993150c1ca65dec390cc
+ > Drop spurious spaces added by commit
+ > ccab2d636fbee6eb8073ea2010442d7678a9ec54
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
