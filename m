@@ -4,67 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1736CC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 09:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21969C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 09:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C97A81BCB;
-	Tue, 30 Nov 2021 09:10:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC01681DCB;
+	Tue, 30 Nov 2021 09:21:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id phIzaAObI6x7; Tue, 30 Nov 2021 09:10:26 +0000 (UTC)
+	with ESMTP id 1SHCScT84D_F; Tue, 30 Nov 2021 09:21:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC0E181A0D;
-	Tue, 30 Nov 2021 09:10:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2686081DAB;
+	Tue, 30 Nov 2021 09:21:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5F631BF281
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 09:10:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9AC7C1BF281
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 09:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B350281A0D
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 09:10:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8947581DAB
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 09:21:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uaIOaH0F3_EA for <buildroot@lists.busybox.net>;
- Tue, 30 Nov 2021 09:10:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from eu-smtp-delivery-151.mimecast.com
- (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 912B2819E6
- for <buildroot@buildroot.org>; Tue, 30 Nov 2021 09:10:23 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-225-ZlZqmEZSNrCd6LoDvLlkfg-1; Tue, 30 Nov 2021 09:10:20 +0000
-X-MC-Unique: ZlZqmEZSNrCd6LoDvLlkfg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Tue, 30 Nov 2021 09:10:19 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Tue, 30 Nov 2021 09:10:19 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Nicolas Cavallari' <nicolas.cavallari@green-communications.fr>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] DHCP default.script
-Thread-Index: AdflRRWl50vMBTqNTvKf7Q5EylNhqQAIS5IAABhwE1A=
-Date: Tue, 30 Nov 2021 09:10:19 +0000
-Message-ID: <fb221bb348514a8892165ee3aec34139@AcuMS.aculab.com>
-References: <e3ba29bfce7a4de3aa95a105146eadbf@AcuMS.aculab.com>
- <cb21affd-1ab4-ddd5-1cbe-03861208eda4@green-communications.fr>
-In-Reply-To: <cb21affd-1ab4-ddd5-1cbe-03861208eda4@green-communications.fr>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ with ESMTP id d_uc-TPzVLEq for <buildroot@lists.busybox.net>;
+ Tue, 30 Nov 2021 09:21:36 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A435781D7C
+ for <buildroot@buildroot.org>; Tue, 30 Nov 2021 09:21:36 +0000 (UTC)
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 540821C0006;
+ Tue, 30 Nov 2021 09:21:32 +0000 (UTC)
+Date: Tue, 30 Nov 2021 10:21:32 +0100
+From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To: Alexey Lukyanchuk <skif@skif-web.ru>
+Message-ID: <20211130102132.1277c684@kmaincent-XPS-13-7390>
+In-Reply-To: <ff892e05-06aa-1f08-e534-2a5cd656592b@skif-web.ru>
+References: <20200309095540.15448-1-skif@skif-web.ru>
+ <20211024084531.GM2400@scaer>
+ <ff892e05-06aa-1f08-e534-2a5cd656592b@skif-web.ru>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
- auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Subject: Re: [Buildroot] DHCP default.script
+Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: add '--memdisk' option to
+ grub-makeimage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +59,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Nicolas Cavallari
-> Sent: 29 November 2021 21:16
-> 
-> On 29/11/2021 18:19, David Laight wrote:
-> > I was looking at the DHCP default.script (that ends up in /usr/share/udhcpd)
-> > and found some quite nasty problems.
-> > I've fixed them locally and ended up with the script below.
-> > (Which is probably easier to read than a diff.)
-> > I've ripped out ahavi - we don't need it (and i don't know what it does!).
-> 
-> It gives IPv4 link-local addresses (169.254.0.0/16) when DHCP fails.
-
-Ah - that 'useful' feature.
-I thought it was also responsible to the 'popup windows' every time
-someone turns on/off a printer - that I don't seem to be able to disable.
-
-> > 2) On a 'renew' it would delete all routes, not just the one added
-> >     by dhcp.
-> >     The 'proto dhcp' parameter can be used to identify routes added by
-> >     dhcp so that they are the only ones deleted (this matches my desktop).
-> 
-> Busybox's iproute is very limited (e.g. it does not display the proto
-> when listing routes) and 'dhcp' is not a builtin proto, so this needs a
-> /etc/iproute2/rt_protos file to list 'dhcp'...
-
-I've got the full 'ip' program installed to get namespace support.
-The number could be used instead of the name - but that might
-still need minor enhancements to the program.
-If you've got dhcp installed the extra bit of code probably isn't
-a problem - I suspect even the smallest embedded systems have more
-memory and 'disk' space for slightly larger versions of many of
-the 'busybox' programs - especially if they are running a recent
-Linux kernel.
-
-> > nl="$(printf '\nx')"
-> > nl="${nl%x}"
-> 
-> or just
-> 
-> nl='
-> '
-
-Yes, but I've fallen foul of shell script files with dos line endings.
-So I always use the longer form for safety.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWxleGV5LAoKT24gVGh1LCAyNSBOb3YgMjAyMSAxNTowMToxOSArMDMwMApBbGV4ZXkg
+THVreWFuY2h1ayA8c2tpZkBza2lmLXdlYi5ydT4gd3JvdGU6Cgo+IFlhbm4sIEFsbCwKPiAKPiBJ
+IGdvdCBzZXJpb3VzIHRyb3VibGUgd2l0aCBhcmNoIGNyZWF0aW9uLsKgIEJ1aWxkcm9vdCBjYW4g
+dXNlIG9ubHkgc2ltcGxlIAo+IHRhciB3aXRob3V0IGNvbXByZXNzaW9uLiBTbywgd2UgY2FuIG5v
+dCB1c2UgYnVpbGRyb290IGhlbHBlci4gTWF5IGJlIEkgCj4gY2FuIHdyaXRlIHNwZWNpYWwgZnVu
+Y3Rpb24gZm8gaXQ/CgpBcmUgeW91IHN1cmUgYWJvdXQgdGhhdD8KVGhlIGhvc3QtdGFyIHBhY2th
+Z2Ugc2VlbXMgdG8gYmUgYWJsZSB0byBjb21wcmVzcyBhbiBhcmNoaXZlLiAKCj4gCj4gQW5kIHdo
+ZXJlIGRpZCB5b3UgZmluZCAidGFyZnMiIG1vZHVsZT8KClRoaXMgbW9kdWxlIGlzIGJ1aWxkIGxp
+a2UgdGhlIG90aGVyIG1vZHVsZSBpbiB0aGUKYnVpbGQtJHR1cGxlL2dydWItY29yZS90YXIubW9k
+dWxlCgo+IAo+ICJBbHNvLCB0aGlzIHJlcXVpcmVzIHRoYXQgYm90aCB0aGUgJ21lbWRpc2snIGFu
+ZCAndGFyZnMnIG1vZHVsZXMgYmUgYnVpbHQKPiBpbnRvIHRoZSBncnViIGltYWdlLiBNYXliZSB3
+ZSBzaG91bGQgdmFsaWRhdGUgdGhhdCB0aGV5IGFyZSBpbiB0aGUgbGlzdD8KPiBPciB0aGF0IHdl
+IHNob3VsZCBqdXN0IGFwcGVuZCB0aGVtIGlmIG5vdD8iCgpNYXliZSBqdXN0IGVkaXQgdGhlIGRl
+ZmF1bHQgbGlzdCBvZiBtb2R1bGUgc2VsZWN0ZWQ6CmRlZmF1bHQgIi4uLiBtZW1kaXNrIHRhciIg
+aWYgQlIyX1RBUkdFVF9HUlVCMl9NRU1ESVNLCgpPciBhcHBlbmQgdGhlc2UgdHdvIG1vZHVsZXMg
+dG8gdGhlIGxpc3Qgb2YgaW5zdGFsbGVkIG1vZHVsZXMgd2hlbiB0aGUgTUVNRElTSwpvcHRpb24g
+aXMgc2VsZWN0ZWQuCgpSZWdhcmRzLAoKS8O2cnkKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
