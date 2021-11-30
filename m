@@ -1,46 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D16C0C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 16:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89251C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 16:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C3924045C;
-	Tue, 30 Nov 2021 16:14:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52173826B4;
+	Tue, 30 Nov 2021 16:24:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tzKyPnLacimv; Tue, 30 Nov 2021 16:14:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NWjyHh65IZ-R; Tue, 30 Nov 2021 16:24:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9D3B4045F;
-	Tue, 30 Nov 2021 16:14:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0971826BB;
+	Tue, 30 Nov 2021 16:24:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 838141BF2F0
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E9261BF2F0
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4099F61BBF
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B7BC6070E
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:24:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vdlvXCANqvjb for <buildroot@lists.busybox.net>;
- Tue, 30 Nov 2021 16:11:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A80461BB4
- for <buildroot@buildroot.org>; Tue, 30 Nov 2021 16:11:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DED0A920D8; Tue, 30 Nov 2021 16:07:02 +0000 (UTC)
+ with ESMTP id 8BQ9KuD3uTxH for <buildroot@lists.busybox.net>;
+ Tue, 30 Nov 2021 16:24:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8015E6070A
+ for <buildroot@buildroot.org>; Tue, 30 Nov 2021 16:24:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8EF0020000D;
+ Tue, 30 Nov 2021 16:24:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ms5vo-0005Xw-0A; Tue, 30 Nov 2021 17:24:36 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 30 Nov 2021 17:10:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e47d01c995b6a8329a4dafd4d5b2645b73cc9f2
-X-Git-Newrev: 06f7a9bbf01e99644a146688f583c0a12309f107
-X-Patchwork-Hint: ignore
-Message-Id: <20211130160702.DED0A920D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flare-engine: drop spurious space
+To: Pierre-Jean Texier <texier.pj2@gmail.com>
+References: <20211128131842.274555-1-texier.pj2@gmail.com>
+Date: Tue, 30 Nov 2021 17:24:35 +0100
+In-Reply-To: <20211128131842.274555-1-texier.pj2@gmail.com> (Pierre-Jean
+ Texier's message of "Sun, 28 Nov 2021 14:18:42 +0100")
+Message-ID: <87tuftfw70.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/genimage: bump to version 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,37 +58,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06f7a9bbf01e99644a146688f583c0a12309f107
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Pierre-Jean" == Pierre-Jean Texier <texier.pj2@gmail.com> writes:
 
-Drop spurious space added by commit
-419b68eef5bc98b53514eff41b56a11f66e3898a
+ > This includes the following changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flare-engine/flare-engine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[snip]
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index b91fc16af3..14d2681fda 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FLARE_ENGINE_VERSION = 1.11
--FLARE_ENGINE_SITE =  $(call github,flareteam,flare-engine,v$(FLARE_ENGINE_VERSION))
-+FLARE_ENGINE_SITE = $(call github,flareteam,flare-engine,v$(FLARE_ENGINE_VERSION))
- FLARE_ENGINE_LICENSE = GPL-3.0+
- FLARE_ENGINE_LICENSE_FILES = COPYING
- 
+Not exactly the most useful summary to read, but OK. Diff'ing the
+readme, I notice:
+
+ > 1d72d80 image-hd: stricter option handling
+
+Which introduces a partition-table-type = none/mbr/gpt/hybrid and
+deprecates partition-table, which is used by:
+
+board/altera/socrates_cyclone5/genimage.cfg
+
+Care to send a followup patch to update that? Given
+
+ > 5bd7283 image-hd.c: ignore in-partition-table when the image has no partition table
+
+You can presumably drop the explicit in-partition-table from that file
+as well.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
