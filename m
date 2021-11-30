@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EC51C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 16:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B167AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 30 Nov 2021 16:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 353D3404B4;
-	Tue, 30 Nov 2021 16:13:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7724F605CE;
+	Tue, 30 Nov 2021 16:13:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CWugKDL-d82R; Tue, 30 Nov 2021 16:13:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m1yOnp2qH6tR; Tue, 30 Nov 2021 16:13:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E963404AB;
-	Tue, 30 Nov 2021 16:13:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBFA1605C3;
+	Tue, 30 Nov 2021 16:13:42 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 521311BF2F0
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 074C31BF2F0
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4E2A61BAD
- for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17A7B61BAF
+ for <buildroot@lists.busybox.net>; Tue, 30 Nov 2021 16:11:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n-SeLArtqd3y for <buildroot@lists.busybox.net>;
+ with ESMTP id xbzKmwFhb9FY for <buildroot@lists.busybox.net>;
  Tue, 30 Nov 2021 16:11:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C47B61BAF
- for <buildroot@buildroot.org>; Tue, 30 Nov 2021 16:11:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B1DE61BB3
+ for <buildroot@buildroot.org>; Tue, 30 Nov 2021 16:11:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A0ECB920D8; Tue, 30 Nov 2021 16:07:02 +0000 (UTC)
+ id BF9B3920D8; Tue, 30 Nov 2021 16:07:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Nov 2021 17:07:53 +0100
+Date: Tue, 30 Nov 2021 17:09:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0652b855dd6fa7af572f7ba17a82ec1c4068fe0a
-X-Git-Newrev: e37fefb1b8cf7cc46cc14b55d01e5fcd696173f9
+X-Git-Oldrev: 4c995498abd261481690ba0ae41f1b77892683c1
+X-Git-Newrev: 3e1222fae295af63adbae03dde8e6fe3840c3ccc
 X-Patchwork-Hint: ignore
-Message-Id: <20211130160702.A0ECB920D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-rcw: drop spurious space
+Message-Id: <20211130160702.BF9B3920D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/initscripts: drop spurious space
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,28 +58,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e37fefb1b8cf7cc46cc14b55d01e5fcd696173f9
+commit: https://git.buildroot.net/buildroot/commit/?id=3e1222fae295af63adbae03dde8e6fe3840c3ccc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop spurious space added by commit
+89d39fc7a392530be043bac541ade0bef746edb6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qoriq-rcw/qoriq-rcw.mk | 2 +-
+ package/initscripts/initscripts.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index ecc5ce5eb4..bad4a451d3 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
-@@ -59,7 +59,7 @@ endif
- # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
- # could use a post image or SDK to build/install PBL files.
- define HOST_QORIQ_RCW_INSTALL_CMDS
--	mkdir -p  $(HOST_DIR)/share/rcw
-+	mkdir -p $(HOST_DIR)/share/rcw
- 	cp -a $(@D)/* $(HOST_DIR)/share/rcw
- 	$(HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE)
+diff --git a/package/initscripts/initscripts.mk b/package/initscripts/initscripts.mk
+index cfee155570..2e997dcd6f 100644
+--- a/package/initscripts/initscripts.mk
++++ b/package/initscripts/initscripts.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ define INITSCRIPTS_INSTALL_TARGET_CMDS
+-	mkdir -p  $(TARGET_DIR)/etc/init.d
++	mkdir -p $(TARGET_DIR)/etc/init.d
+ 	$(INSTALL) -D -m 0755 package/initscripts/init.d/* $(TARGET_DIR)/etc/init.d/
  endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
