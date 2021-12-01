@@ -1,78 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8832AC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 13:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2BEBC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E802240352;
-	Wed,  1 Dec 2021 13:51:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64CB382ACD;
+	Wed,  1 Dec 2021 17:29:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oW5VV5GxYp5c; Wed,  1 Dec 2021 13:51:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6O9F9hjBbDzI; Wed,  1 Dec 2021 17:29:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C770E40345;
-	Wed,  1 Dec 2021 13:51:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8391082A6C;
+	Wed,  1 Dec 2021 17:29:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E79F41BF349
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 13:51:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4202A1BF2A0
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D599240345
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 13:51:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3016240533
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:29:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MFIEGuKETgoI for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 13:51:08 +0000 (UTC)
+ with ESMTP id 0DfFRUUHqTa8 for <buildroot@lists.busybox.net>;
+ Wed,  1 Dec 2021 17:29:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E496400FB
- for <buildroot@buildroot.org>; Wed,  1 Dec 2021 13:51:08 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id k21so30899423ioh.4
- for <buildroot@buildroot.org>; Wed, 01 Dec 2021 05:51:08 -0800 (PST)
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
+ [IPv6:2607:f8b0:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1973340168
+ for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:29:49 +0000 (UTC)
+Received: by mail-ot1-x334.google.com with SMTP id
+ a23-20020a9d4717000000b0056c15d6d0caso36198822otf.12
+ for <buildroot@buildroot.org>; Wed, 01 Dec 2021 09:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=P3bY/frkSOyQo6y3RzwxzA2ffoiBSeD96/d4qt1D0Lo=;
- b=Yxgy68ibUMxVGVv4kE0fJDL9vp/JqR8GGoufIvEd+T3cp/GWKK1Ny70er2qIQyihgA
- HYwTCaNH/gEADa257gtnzsrwp9y26Yu2En9WhR10fdoLSyVDjWfbCgF9UvQI/VqHukVL
- UY9EGnLdRWYem7bZjMkWMC07tuBSVr/aqWGGtGFSgliVDZ5clIcay7KROBq+4fGLBNi3
- Q1QUW/I7qkohQxDcFeAC1BF1s2nVvD9GHZqYZNFM+5R4L21YQ7pO7hzOV717OFe6rwSD
- +Wc/MmwllpvmIB51iLWpDWsrX18qhkrkGy/SSSUrVVI0of9jdRdztKiKTOykyI45zzmE
- 3BJA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=X6SPFeBjS8VZoaoIeueNIeFbR/iGIv0kEwynsR3WhuM=;
+ b=nlZhlmJMAeX9+OM3YMvL5bwA0/pJEtzlMKjECNU17tllOlnuN2Mq7Wbkuc9p1luLBV
+ xMgdFnt3MV2YwGQzAHsgA3LKFjTDddNnY1GGs1gxDtoj55mYZDaDz7cqBe2B42xdyUZx
+ hZPYom7GEM8DbiZtODqArh49k8OxeAQGJudoGCryFMv56fyh3c8XCp4Dw/WEquEpJKq9
+ uAPDXbklT5RsbHHejWKkUvVx1Lklf3vZ/XfDmd7WdXihuYQ5goEjI5fifQEdbdRiAmh/
+ 5F1njcbNmWwWQoxt/cpcXIOb9sSVYsQEcnDf5m3CP3PbZwL604UFfx5hAqEughNNVhA9
+ WFqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=P3bY/frkSOyQo6y3RzwxzA2ffoiBSeD96/d4qt1D0Lo=;
- b=eRBiRhdqetlk+2YmBDJSViPAiUpUNQhkD68uVVG7ryKosQHbDPtCuCNGLUVMzIlYJ1
- 6VmJtnhdP+pSVzPcer2OJVeyk+vCUjU4cqr8kVgUw4JNUxY9RfoJlyFEPukVNEmz80XG
- m+jnEHn6S/u60DeGR3OVpBeW4D024nyFVl0VcxulZSxWUaydxjhr3ukrClzJI8uQAUzJ
- HxnCNMwbC+OnLimuPOcAO1wY/OlbvdHIBNdQAF0M8WdpTUOgPqyEYOgGNf7vIIOrLP4R
- iTmsYVkOdmjywQAYFxEbWeO71/OJuRlzdwQOEBQaMPbqgD3AA+xd0qE67Q+H7t8Q+BuX
- beUw==
-X-Gm-Message-State: AOAM532aJmQKyMz0Zc3n2/ApPucanUJqRM+kPRhikmtEO/KQQAtGakyc
- izKig+8GDJ+tmGDsUJABZoEZUq3rYG4=
-X-Google-Smtp-Source: ABdhPJwptHYaDH2JW2hu1PW38XAlQseg4R5dAhVlKsrrpN2gOjDGvcHHNlyUDXoFt6H/oKjS3t5wVA==
-X-Received: by 2002:a02:85a9:: with SMTP id d38mr10326090jai.71.1638366667405; 
- Wed, 01 Dec 2021 05:51:07 -0800 (PST)
-Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
- [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id 11sm9875170ilq.23.2021.12.01.05.51.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Dec 2021 05:51:06 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  1 Dec 2021 06:51:03 -0700
-Message-Id: <20211201135103.2302297-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=X6SPFeBjS8VZoaoIeueNIeFbR/iGIv0kEwynsR3WhuM=;
+ b=SohprbZzgj1+c5TArV98LmZHJOZ7eevzw75kPnax4pLYN5yKfcO4sB1o8BYaMIjHbP
+ 7YakLviQ8zeXpWwEeV3AF+ML3npXzVm+0+fvHq+oGb16QBHYnrUudPqViLu5jPIzf1EN
+ 3fy3VAmWHu59FsSwJvBzUo0KqLAf3Nh+VnEsyr/QtvRmd0CBgzJmkdMOBq4pdi004RWi
+ C0jH3htZ2Pwyjp6YCGbilr2dVfyKDIaSc0BeiSl35SKrXhL9PO/QxUzckS2df5SSnoOw
+ elgnHSoARqN2Qme0IRog/cnwHTPJcy8o9FOsMwyEh5Gtswtjh/9UbenOvC16Xot7gQmU
+ eGOw==
+X-Gm-Message-State: AOAM531mZMDhqOVB4w0nOGBJ6EpuOWa9UmtjV5N9emsEG8UBI/hRFQBf
+ H3UTXGm4qqg+4zQKKhjbaG1OwaNQvCf2llCuQV0=
+X-Google-Smtp-Source: ABdhPJyBZ1OkRSB6MrM6ffVAV+gQdVB4VA9C7B6pMa7z+9+17jx6vWuhpLxj4pJ5sPrOY4c/qDHIAvSHqkmHfLRhzJ0=
+X-Received: by 2002:a9d:4509:: with SMTP id w9mr6710636ote.214.1638379788006; 
+ Wed, 01 Dec 2021 09:29:48 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/iwd: enable required kernel
- dependencies
+References: <20211130215547.3717152-1-yann.morin.1998@free.fr>
+In-Reply-To: <20211130215547.3717152-1-yann.morin.1998@free.fr>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 1 Dec 2021 09:29:37 -0800
+Message-ID: <CAFSsvmotx0kvnVsKf+bCwh4SCecsfUyds0zDUytMDfcgeH0-NA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCHv5] package/mender-grubenv: fix grub module
+ checks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,63 +82,180 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Matt Weber <matthew.weber@collins.com>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Required kernel options are listed in check_crypto() in srv/main.c:
-https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/main.c?h=1.20#n268
+Hello;
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/iwd/iwd.mk | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Thank you for the help Yann! I really appreciate your time!
 
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 96bdc56e93..8bcd406ea0 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -63,4 +63,34 @@ define IWD_INSTALL_INIT_SYSV
- 	ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
- endef
- 
-+define IWD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_KEY_TYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_NI_INTEL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_X86_64)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CBC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES3_EDE_X86_64)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_ECB)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_HMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD5)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1_SSSE3)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256_SSSE3)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512_SSSE3)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_HASH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_SKCIPHER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PKCS7_MESSAGE_PARSER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PKCS8_PRIVATE_KEY_PARSER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_X509_CERTIFICATE_PARSER)
-+endef
-+
- $(eval $(autotools-package))
--- 
-2.25.1
+On Tue, Nov 30, 2021 at 1:55 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> From: Adam Duskett <aduskett@gmail.com>
+>
+> Commit b68810e70cbd (boot/grub2: add support to build multiple Grub2
+> configurations in the same build) broke mender-grubenv by splititng up
+> BR2_TARGET_GRUB2_BUILTIN_MODULES into two separate symbols, one for
+> legacy boot, and one for EFI boot.
+>
+> This causes a systematic build failure now, as the legacy variable
+> BR2_TARGET_GRUB2_BUILTIN_MODULES is now always empty (during build).
+>
+> We fix that by suplicating the missing modules check: one for EFI and
+> one for legacy boot.
+>
+> The EFI check is tricky: idneed, there can be more than one EFI platform
+> enabled simlutaneouslyl indeed, on x86_64 we can have bothe ehte 32-bit
+> and 64-bit EFI platforms enabled. So the check is inverted, and we check
+> that no platform is not enabled (yeah, double negation). For consistency,
+> we do the same for the legacy b oot, even though in that case there can
+> only ever be only one enabled at once at most.
+>
+> Finally, the install commands are split into two macros, that are also
+> defined conditionally under the same conditions as the checks are done.
+>
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> [yann.morin.1998@free.fr:
+>   - drop superfluous check on empty modules lists
+>   - move EFI and legacy commands under same condition as checks
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> changes v1 -> v2:
+>   - Change ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y) to
+>     ifneq ($(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI),) to cover all grub2
+> efi
+>     scenarios. (Thomas)
+>
+>   - Change BR2_TARGET_GRUB2_BUILTIN_MODULES to
+>     BR2_TARGET_GRUB2_BUILTIN_MODULES_PC (thomas)
+>
+> Changes v2 -> v3:
+>   - Check for both MODULES_EFI and MODULES_PC (Thomas)
+>
+> Changes v3 -> v4:
+>   - Add qstrips to needed variables (Thomas)
+>   - Check for empty module lists (Thomas)
+>   - Split up MENDER_GRUBENV_INSTALL_IMAGES_CMDS to work with pc and efi
+>     at the
+>     same time.
+>
+> Changes v4 -> v5 (Yann):
+>   - drop superfluous check on empty modules lists
+>   - move EFI and legacy commands under same condition as checks
+> ---
+>  package/mender-grubenv/mender-grubenv.mk | 56 ++++++++++++++++--------
+>  1 file changed, 37 insertions(+), 19 deletions(-)
+>
+> diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+> index 07df25512c..a910f55cb4 100644
+> --- a/package/mender-grubenv/mender-grubenv.mk
+> +++ b/package/mender-grubenv/mender-grubenv.mk
+> @@ -31,14 +31,44 @@ MENDER_GRUBENV_DEFINES = \
+>  # These grub modules must be built in for the grub scripts to work properly.
+>  # Without them, the system will not boot.
+>  MENDER_GRUBENV_MANDATORY_MODULES=loadenv hashsum echo halt gcry_sha256 test regexp
+> -MENDER_GRUBENV_MODULES_MISSING = \
+> -       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES)),\
+> +
+> +# grub2 does not provide a syntetic EFI option, so check all of them
+> +ifneq ($(BR2_TARGET_GRUB2_I386_EFI)$(BR2_TARGET_GRUB2_X86_64_EFI)$(BR2_TARGET_GRUB2_ARM_EFI)$(BR2_TARGET_GRUB2_ARM64_EFI),)
+> +MENDER_GRUBENV_MODULES_MISSING_EFI = \
+> +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
+>                 $(MENDER_GRUBENV_MANDATORY_MODULES))
+>
+> +define MENDER_GRUBENV_INSTALL_EFI_CFG
+> +       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+> +       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+> +               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+> +               $(BINARIES_DIR)/efi-part/EFI/BOOT
+> +endef
+> +endif
+> +
+> +# grub2 does not provide a syntetic legacy boot option, so check all of them
+> +ifneq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),)
+> +MENDER_GRUBENV_MODULES_MISSING_PC = \
+> +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
+> +               $(MENDER_GRUBENV_MANDATORY_MODULES))
+> +
+> +define MENDER_GRUBENV_INSTALL_I386_CFG
+> +       mkdir -p $(BINARIES_DIR)/boot-part/grub
+> +       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+> +               $(TARGET_DIR)/boot/grub/mender_grubenv* \
+> +               $(BINARIES_DIR)/boot-part/grub
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+> -ifneq ($(MENDER_GRUBENV_MODULES_MISSING),)
+> -$(error The following missing grub2 modules must be enabled for mender-grubenv \
+> -       to work: $(MENDER_GRUBENV_MODULES_MISSING))
+> +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_EFI),)
+> +$(error The following missing grub2 efi modules must be enabled for mender-grubenv \
+> +       to work: $(MENDER_GRUBENV_MODULES_MISSING_EFI))
+> +endif
+> +
+> +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_PC),)
+> +$(error The following missing grub2 pc modules must be enabled for mender-grubenv \
+> +       to work: $(MENDER_GRUBENV_MODULES_MISSING_PC))
+>  endif
+>  endif
+>
+> @@ -54,21 +84,9 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+>         $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+>  endef
+>
+> -# Overwrite the default grub2 config files with the ones in this package.
+> -ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
+>  define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+> -       mkdir -p $(BINARIES_DIR)/boot-part/grub
+> -       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+> -               $(TARGET_DIR)/boot/grub/mender_grubenv* \
+> -               $(BINARIES_DIR)/boot-part/grub
+> +       $(MENDER_GRUBENV_INSTALL_I386_CFG)
+> +       $(MENDER_GRUBENV_INSTALL_EFI_CFG)
+>  endef
+> -else
+> -define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+> -       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+> -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+> -               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+> -               $(BINARIES_DIR)/efi-part/EFI/BOOT
+> -endef
+> -endif
+>
+Bleh, unfortunately, this fails if multiple grubs are selected thanks
+to the following lines in the .mk file:
 
+ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
+MENDER_GRUBENV_ENV_DIR = /boot/grub
+else
+MENDER_GRUBENV_ENV_DIR = /boot/EFI/BOOT
+endif
+
+This fails with the following error:
+mkdir -p output/images/boot-part/grub
+cp -dpfr output/target/boot/grub/grub.cfg
+output/target/boot/grub/mender_grubenv* output/images/boot-part/grub
+mkdir -p output/images/efi-part/EFI/BOOT
+cp -dpfr output/target/boot/EFI/BOOT/grub.cfg
+output/target/boot/EFI/BOOT/mender_grubenv*
+output/images/efi-part/EFI/BOOT
+cp: cannot stat 'output/target/boot/EFI/BOOT/grub.cfg': No such file
+or directory
+cp: cannot stat 'output/target/boot/EFI/BOOT/mender_grubenv*': No such
+file or directory
+
+What would you suggest?
+
+Adam
+>  $(eval $(generic-package))
+> --
+> 2.25.1
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
