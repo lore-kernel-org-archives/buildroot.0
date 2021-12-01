@@ -4,73 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B74CC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 23:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1052C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 23:15:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E07F7607BD;
-	Wed,  1 Dec 2021 23:15:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A48A361CE0;
+	Wed,  1 Dec 2021 23:15:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nbff2GRij_u6; Wed,  1 Dec 2021 23:15:42 +0000 (UTC)
+	with ESMTP id 2hydb5cwwVej; Wed,  1 Dec 2021 23:15:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36FAD60799;
-	Wed,  1 Dec 2021 23:15:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF90F61CCB;
+	Wed,  1 Dec 2021 23:15:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39CB51BF2BA
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 23:15:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F14A1BF2BA
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 23:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 268A3607BD
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD4B66073D
  for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 23:15:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jRkbKJgVLtBI for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 23:15:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com
- [IPv6:2607:f8b0:4864:20::c31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6BF526073D
- for <buildroot@buildroot.org>; Wed,  1 Dec 2021 23:15:36 +0000 (UTC)
-Received: by mail-oo1-xc31.google.com with SMTP id
- v30-20020a4a315e000000b002c52d555875so8298823oog.12
- for <buildroot@buildroot.org>; Wed, 01 Dec 2021 15:15:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=DNVm6WgQPmtv1UzuhWbhaf1WTQJ4KZmD1lump4pTNWU=;
- b=bkW4/FK+J9yhLkaisd27DTJqBiYGOY02oSnqYSLLxCdKZPH61CdlLP8x+3HK3D7Vnk
- C0oY0YdrPm8Gqk3RdfB6nZXz9jXJINjOlVD6W0r+/zEVrLDHue/PunCnU6ugLTjISwSY
- xhJKg7xYAgVkL7Awo1uRdGRdnBrmdouRQ7RRRlzseBLUv3GP09fT6Fy/QIxTdkRpb/nZ
- 0qgb1IMPiyywkK1rvGXVijNIV/ORU9SlIj9XmRsJ0SZV+N4bG8eIyEUWpAQq0Vh/eyQc
- 6Ds+jz/QjbDURzoJAeADiBSwct/2KdXqhtnoDS5HQjJn6FsT0gHpoi1rAPXznp/bKLyN
- gnqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=DNVm6WgQPmtv1UzuhWbhaf1WTQJ4KZmD1lump4pTNWU=;
- b=MARaj8pvrtkZgU/xiJNsJAbjkGCbeNzsS2rS/cyYsCs9oF2/R3cjG+f/CsYa5iueox
- UwGgopUqF60OsM0jQZm1Dy6vn2FRo7CbfkIu+/9WvNTlltuY/zrUAkgZ/KLGSse1Qu4j
- JiwNAhvj5LDwupdDTF57Fv7PrlyIAVGHEJkZU6NlvOBPeCqjh6w1kC8n2qJuLaQGvno5
- OEsvtqFWyM1otiIk+SUemjvN921An6UjVgMwbV7V9oEW/KgS8E3DG4gSne56lSHHWAlr
- WwT71UPWAG8ee6Bv0nYBF0bAEVEFGozPLNnMQeTKkEBO6OL2uYe+sJ6g0Xr9OVZZqF4a
- eE7w==
-X-Gm-Message-State: AOAM530ejdF0HvIDpY1MpGhsrCxFoChqtAAAe/7IDz7r7FNzC0R1xbfT
- IjnAca8JdTZwVModX2ik4x9ZJA8RDu00dKBiKE0=
-X-Google-Smtp-Source: ABdhPJzYvL8E/veHl2jWFTl8p/sAZcaUpN8rI6WXu1IbnU/h49/7RTFys1h3AgzI3baKhGO8QXeqDi8OFw0zh+ICZPU=
-X-Received: by 2002:a05:6820:151b:: with SMTP id
- ay27mr6415179oob.22.1638400535349; 
- Wed, 01 Dec 2021 15:15:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20211201135103.2302297-1-james.hilliard1@gmail.com>
- <20211201183413.2a98291c@gmx.net>
-In-Reply-To: <20211201183413.2a98291c@gmx.net>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 1 Dec 2021 16:15:24 -0700
-Message-ID: <CADvTj4p6pRZj=iTihdDXAZf7_sT6h0i-=krpMW+OE3YX55a7rA@mail.gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: enable required kernel
- dependencies
+ with ESMTP id Y4dWWil-l8pM for <buildroot@lists.busybox.net>;
+ Wed,  1 Dec 2021 23:15:39 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from secvs04.rockwellcollins.com (secvs04.rockwellcollins.com
+ [205.175.225.130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E8DE9607BC
+ for <buildroot@buildroot.org>; Wed,  1 Dec 2021 23:15:38 +0000 (UTC)
+IronPort-SDR: nrDUlnBH/eCM8OdpwcxM5451D17N7erj1AwJUfDUUzSpSEo40tE7FOzhjE561iMo5tsIGaihIR
+ TZvznr3ynRXaBRYjtcMVqYY53DfPyZzLdVCgPZF3x7FnJcvGlNOvLqktOilIRfMyxJcRN0HSoX
+ 6NQEb9RBGRI+pmHRGnDFXQ2KXKbfjcj9ZbCZyHs0QN9iZvchCll4AyLVq12nlVbXXVoEMI8Xzl
+ fH2iJNxeMOM7ltkfPkwaui1+JwFGDi7brcnllYT7py+07/q2fQ6qHuA9okptMqU+dkKKnTpGmU
+ Jbs=
+Received: from ofwgwc03.rockwellcollins.com (HELO
+ crulimr01.rockwellcollins.com) ([205.175.225.12])
+ by secvs04.rockwellcollins.com with ESMTP; 01 Dec 2021 17:08:29 -0600
+X-Received: from biscuits.rockwellcollins.com (biscuits.rockwellcollins.lab
+ [10.148.119.137])
+ by crulimr01.rockwellcollins.com (Postfix) with ESMTP id C8FC2603ED;
+ Wed,  1 Dec 2021 17:08:28 -0600 (CST)
+To: buildroot@buildroot.org
+Date: Wed,  1 Dec 2021 17:08:27 -0600
+Message-Id: <20211201230827.35080-3-matthew.weber@collins.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211201230827.35080-1-matthew.weber@collins.com>
+References: <20211201230827.35080-1-matthew.weber@collins.com>
+Subject: [Buildroot] [PATCH 3/3] docs/manual: add section describing testing
+ external applications
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,79 +63,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot <buildroot@buildroot.org>
+From: Matthew Weber via buildroot <buildroot@buildroot.org>
+Reply-To: Matthew Weber <matthew.weber@collins.com>
+Cc: Matthew Weber <matthew.weber@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Dec 1, 2021 at 10:34 AM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello James,
->
-> On Wed,  1 Dec 2021 06:51:03 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Required kernel options are listed in check_crypto() in srv/main.c:
-> > https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/main.c?h=1.20#n268
->
-> Thanks for doing this (one less point on my long standing ToDo list) ;-)
->
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  package/iwd/iwd.mk | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> >
-> > diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> > index 96bdc56e93..8bcd406ea0 100644
-> > --- a/package/iwd/iwd.mk
-> > +++ b/package/iwd/iwd.mk
-> > @@ -63,4 +63,34 @@ define IWD_INSTALL_INIT_SYSV
-> >       ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
-> >  endef
-> >
-> > +define IWD_LINUX_CONFIG_FIXUPS
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_KEY_TYPE)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_NI_INTEL)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_X86_64)
->
-> Not sure if it is good idea to add the x86_64 specific ones unconditionally
-> (they are marked in check_crypto() with ADD_OPTIONAL instead of ADD_MISSING)?
+Buildroot-provided utilities can easily be leveraged to improve the
+testing of applications across multiple toolchains. Add section which
+describes considerations to take about reducing false positives if this
+approach is taken in your br2-external.
 
-Doesn't the infrastructure drop them automatically if they aren't selectable?
+Signed-off-by: Matthew Weber <matthew.weber@collins.com>
+---
+ docs/manual/customize-outside-br.txt | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
->
-> Regards,
-> Peter
->
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CBC)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CMAC)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES3_EDE_X86_64)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_ECB)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_HMAC)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD4)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD5)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1_SSSE3)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256_SSSE3)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512_SSSE3)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_HASH)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_SKCIPHER)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_PKCS7_MESSAGE_PARSER)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_PKCS8_PRIVATE_KEY_PARSER)
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_X509_CERTIFICATE_PARSER)
-> > +endef
-> > +
-> >  $(eval $(autotools-package))
->
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 348f2b089c..e7aeeed8c1 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -228,6 +228,21 @@ Additional Linux kernel extensions (see xref:linux-kernel-ext[]) can
+ be added by storing them in the `linux/` directory at the root of a
+ br2-external tree.
+ 
++===== Leveraging test infrastructure for your packages
++
++Buildroot provides utilities for testing packages across multiple toolchain
++conditions, as described in xref:testing-package[] below. Packages that live
++exclusively in an external environment may not be candidates for upstream and
++only have specific toolchain targets due to being internal by nature.
++Leveraging these utilities with a list of toolchains you wish to guarantee
++support (instead of depending on the utility picking toolchains for you
++randomly) is an easy way to improve the test surface of your application.
++
++In this configuration, ideally, false positives should be minimized, and
+++utils/test-pkg+ should be run with the +--fail-on-skip+ flag. This option
++covers the case of a configuration dependency change (for example, between
++Buildroot versions).
++
+ ===== Example layout
+ 
+ Here is an example layout using all features of br2-external (the sample
+-- 
+2.17.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
