@@ -1,75 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38A8EC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E86B3C433FE
+	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA13E41C66;
-	Wed,  1 Dec 2021 17:55:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B544400C8;
+	Wed,  1 Dec 2021 17:56:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3gDZ_xL7EV_4; Wed,  1 Dec 2021 17:55:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MgOvt-QoAbIL; Wed,  1 Dec 2021 17:56:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1933141C6B;
-	Wed,  1 Dec 2021 17:55:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A1B51BF2A0
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:55:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7DF9E4014C;
+	Wed,  1 Dec 2021 17:56:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CE841BF2A0
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58F3082AC6
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:55:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BA5661BD5
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:56:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lmNvlhhF3JkN for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 17:55:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kswMo_PS7Mn8 for <buildroot@lists.busybox.net>;
+ Wed,  1 Dec 2021 17:56:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4BFF282AB6
- for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:55:44 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id p19so24850263qtw.12
- for <buildroot@buildroot.org>; Wed, 01 Dec 2021 09:55:43 -0800 (PST)
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
+ [IPv6:2607:f8b0:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6BBEC60665
+ for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:56:55 +0000 (UTC)
+Received: by mail-ot1-x334.google.com with SMTP id
+ i5-20020a05683033e500b0057a369ac614so14875218otu.10
+ for <buildroot@buildroot.org>; Wed, 01 Dec 2021 09:56:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=/pEbhejOZTVBGNM0YXsVGwd73hSHcmvbnPLblAR46kI=;
- b=AuWC1FaoIhgePDwgI/PhlL4gvoLpFeSXHnvngJf84NNTcWvkLYuR1FJCi0WvJsrd5J
- DlZiheBOwI/CirIwv5LygveHF6NDh1MGGW2tqELD6Shp7jBfzE10izT4k9SPuPQWpabG
- zGrzVYy0VzFPhon7P+MjfuDoEjrVvza9oB0WkaJf7Hjo4DvT9o/3PrPW6gyZwWaXUbB0
- 5vPiaqP/nRWClytI7bJbO9ekcZ5PfoTDRG1Jmc9ijMPEDXSar3ZSpq71heobC6ZoZDHG
- puHZaYJOt65+uIR3/Z61HgeKl2cDbo3CHcZ58mSw4yJc/wbYIOxM5vGHqQR9pS4vKO1W
- oGAQ==
+ :cc; bh=LF9jO6/RMfB+yoN695QaJWDp+ztrnsba397o6x3Bdsk=;
+ b=C7+5ydKrLCvHI6wwWd/jbru1Se7+0UXTaIvREN+WJeMnsBLVl3kRTeR/AjpEn0OdRO
+ tKloNKaCo7iLPDr48GoRg6+Z1Zmas0haGJY924uSX22wHOmS5W7louWNplRxDVUek/b4
+ HMQ2thT9NAGnRsF/HFSnFPGxvFY99A/8gNoJgKgMiWoUjRnuWyorYiNeXg4g6+BkLFxy
+ j55DamciBsI9lpperdaV+c9HHyuQjwkWByzvqsQkDyuVbqtUL3q756+sKnD4KSlKTB7H
+ VGI4yoAmg1QGlIkS5eVfWeOVbEbu4T7ClqxJUoSh9U4fBZqPRCb7JOTs+Oqt6NUg5PhJ
+ SZMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=/pEbhejOZTVBGNM0YXsVGwd73hSHcmvbnPLblAR46kI=;
- b=a3snvYwHJNq5/ixt6tHq2ficbG4brFSaG6Vy/IR7IQA2cn4yvvF08lKVHiwdnvkVMh
- rISFxv7DGHx0CdfhA3LKJRyPtX38xDLsIRoxydDricsiq6M3ivGzcxAVQyR8357MUTcq
- v/nEH+nhstAUn6bbFRa7P9BCGc2oGfr538gW0SZroZm0hAoly9/8eRAfRkTM16ohObj9
- 53zyyxEcbRDRz6ibC3QKZGqU9vPfj2Ympx/uwfc9sroTEiom94/YXuNymG80hIIj9eJW
- 4SA81brEPA5EAyKJMnXFxnYQ+dyuOJ/uEX7nvQuEIr5AHOPqp4g8p8PGbakqWvGuAsD5
- J2EQ==
-X-Gm-Message-State: AOAM530d3mbDlQvjIO8H0u3kdEzVNB4DuJZ3w9YlfZYOBgBGcwvPfmNc
- xgTR2CauqAqMStgt1V1WVXRyPcSg4b9pasnOq3Y=
-X-Google-Smtp-Source: ABdhPJwwsHYaM3/PlsQVXFy2UnCrU1/uQyai2/3outxfiPmK7j9SKb6DMnJwG/0sMWdnkxwpQa84nN9PiWFs4ipT0+A=
-X-Received: by 2002:ac8:4d87:: with SMTP id a7mr8695169qtw.410.1638381342868; 
- Wed, 01 Dec 2021 09:55:42 -0800 (PST)
+ bh=LF9jO6/RMfB+yoN695QaJWDp+ztrnsba397o6x3Bdsk=;
+ b=KDiIyHHpCa64si56g5Fh1IPSlMqoPjrYw2YPGBcwS2d4D9ObWF+zQcy59Ebt9jHCi6
+ ofrERjiI8ZwlKAl1ijdSZaxCwaShQp52m2zmyMeG+T0tJyyV4Dv4jp7ffH+zqPnltsVp
+ H5lWijRmbgvWeQCUiEK04fJJ2/krh+Y1HU+V59GQlMpNo1d1eFegjgIvCoMeATQnUJXw
+ bDXvP+P6AHKpvr5AHJ+A/u3IuIUg+9mvxc06m29GVP2oVurAenB0ZzCqWinCJeO58cxU
+ +cEIztYxJ9itavcXINfBaDnkFsKgcB1eqXttL8CJiG3pJM4uv5GVNVSoqdPEnNqukJgf
+ Ksgg==
+X-Gm-Message-State: AOAM531y1PVULaOFXAUYCsAHz3IaFDcCnMJBP9Kz7owpGJbGa8b9cyJE
+ nfT5hY7O0meYtRMTkkTLH7Y+ctw9bIQsZCpGdd5Vpvrwg406lA==
+X-Google-Smtp-Source: ABdhPJyxiyfodYEDnfdyJXPYrgEUOiKBfcvtbgUNYpRuJ8PZV/wD62NrrsuCrr0ws7MONlIBR6oDdjyMRUqf+lOa5Es=
+X-Received: by 2002:a9d:4509:: with SMTP id w9mr6841712ote.214.1638381414340; 
+ Wed, 01 Dec 2021 09:56:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20211116104534.18868-1-kory.maincent@bootlin.com>
-In-Reply-To: <20211116104534.18868-1-kory.maincent@bootlin.com>
-From: bryce.schober@gmail.com
-Date: Wed, 1 Dec 2021 09:55:06 -0800
-Message-ID: <CAJpxd06GN22pCL6SFLGomaZ174D09W-c-9RdhNqpfH=wt9Eezw@mail.gmail.com>
-To: Kory Maincent <kory.maincent@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3] package/psplash: add support for missing
- configure options
+References: <20211130215547.3717152-1-yann.morin.1998@free.fr>
+ <CAFSsvmotx0kvnVsKf+bCwh4SCecsfUyds0zDUytMDfcgeH0-NA@mail.gmail.com>
+In-Reply-To: <CAFSsvmotx0kvnVsKf+bCwh4SCecsfUyds0zDUytMDfcgeH0-NA@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 1 Dec 2021 09:56:43 -0800
+Message-ID: <CAFSsvmqi7q7EEQyLLrXk89zPAr6GEhYJ9dER59mAK7Ceb000dw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCHv5] package/mender-grubenv: fix grub module
+ checks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,179 +83,205 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: phil.eichinger@gmail.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8788388098682603247=="
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8788388098682603247==
-Content-Type: multipart/alternative; boundary="000000000000f2c97d05d2196152"
+May I suggest:
 
---000000000000f2c97d05d2196152
-Content-Type: text/plain; charset="UTF-8"
+define MENDER_GRUBENV_INSTALL_EFI_CFG
+mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+cp -dpfr $(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/grub.cfg \
+$(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/mender_grubenv* \
+$(BINARIES_DIR)/efi-part/EFI/BOOT
+endef
+endif
 
-On Tue, Nov 16, 2021 at 2:46 AM Kory Maincent <kory.maincent@bootlin.com>
-wrote:
->
-> Add support to three configure options:
-> --enable-startup-msg: Enable text banner output on startup
-> --enable-progress-bar: Enable progress bar
-> --enable-img-fullscreen: Enable the logo image in fullscreen mode
->
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+and
 
-Tested-by: Bryce Schober <bryce.schober@gmail.com>
+define MENDER_GRUBENV_INSTALL_I386_CFG
+mkdir -p $(BINARIES_DIR)/boot-part/grub
+cp -dpfr $(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/grub.cfg \
+$(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/mender_grubenv* \
+$(BINARIES_DIR)/boot-part/grub
+endef
+endif
 
-> ---
->
-> Change since v1:
-> Remove the crap .config.in.swp
->
-> Change since v2:
-> Use both side of enable/disable configure option condition.
-> Use positive options in Kconfig.
->
->
->  package/psplash/Config.in  | 17 +++++++++++++++++
->  package/psplash/psplash.mk | 18 ++++++++++++++++++
->  2 files changed, 35 insertions(+)
->
-> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
-> index da99b264e0..edd30dcb4d 100644
-> --- a/package/psplash/Config.in
-> +++ b/package/psplash/Config.in
-> @@ -35,6 +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE
->           Use a personalized png image as boot splash.
->           Let it empty if you want to keep the psplash default image.
->
-> +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
-> +       bool "use fullscreen mode"
-> +       help
-> +         Enable the psplash image in fullscreen mode.
-> +
-> +config BR2_PACKAGE_PSPLASH_STARTUP_MSG
-> +       bool "enable startup message"
-> +       default y
-> +       help
-> +         Enable text banner output on startup.
-> +
-> +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR
-> +       bool "enable progress bar"
-> +       default y
-> +       help
-> +         Enable the management of the progress bar.
-> +
->  endif
->
->  comment "psplash needs a toolchain w/ wchar"
-> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-> index 5e61f2392f..e5b212381a 100644
-> --- a/package/psplash/psplash.mk
-> +++ b/package/psplash/psplash.mk
-> @@ -18,6 +18,24 @@ else
->  PSPLASH_CONF_OPTS += --without-systemd
->  endif
->
-> +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
-> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
-> +else
-> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)
-> +PSPLASH_CONF_OPTS += --enable-startup-msg
-> +else
-> +PSPLASH_CONF_OPTS += --disable-startup-msg
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)
-> +PSPLASH_CONF_OPTS += --enable-progress-bar
-> +else
-> +PSPLASH_CONF_OPTS += --disable-progress-bar
-> +endif
-> +
->  PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
->
->  ifneq ($(PSPLASH_IMAGE),)
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+?
 
---000000000000f2c97d05d2196152
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">On Tue, Nov 16, 2021 at 2:46 AM Kory Maincent &lt;<a href=
-=3D"mailto:kory.maincent@bootlin.com">kory.maincent@bootlin.com</a>&gt; wro=
-te:<br>&gt;<br>&gt; Add support to three configure options:<br>&gt; --enabl=
-e-startup-msg: Enable text banner output on startup<br>&gt; --enable-progre=
-ss-bar: Enable progress bar<br>&gt; --enable-img-fullscreen: Enable the log=
-o image in fullscreen mode<br>&gt;<br>&gt; Signed-off-by: Kory Maincent &lt=
-;<a href=3D"mailto:kory.maincent@bootlin.com">kory.maincent@bootlin.com</a>=
-&gt;<div><div><br></div><div>Tested-by: Bryce Schober &lt;<a href=3D"mailto=
-:bryce.schober@gmail.com">bryce.schober@gmail.com</a>&gt;</div><div><br>&gt=
-; ---<br>&gt;<br>&gt; Change since v1:<br>&gt; Remove the crap .config.in.s=
-wp<br>&gt;<br>&gt; Change since v2:<br>&gt; Use both side of enable/disable=
- configure option condition.<br>&gt; Use positive options in Kconfig.<br>&g=
-t;<br>&gt;<br>&gt; =C2=A0package/psplash/Config.in =C2=A0| 17 +++++++++++++=
-++++<br>&gt; =C2=A0package/psplash/<a href=3D"http://psplash.mk">psplash.mk=
-</a> | 18 ++++++++++++++++++<br>&gt; =C2=A02 files changed, 35 insertions(+=
-)<br>&gt;<br>&gt; diff --git a/package/psplash/Config.in b/package/psplash/=
-Config.in<br>&gt; index da99b264e0..edd30dcb4d 100644<br>&gt; --- a/package=
-/psplash/Config.in<br>&gt; +++ b/package/psplash/Config.in<br>&gt; @@ -35,6=
- +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE<br>&gt; =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 Use a personalized png image as boot splash.<br>&gt; =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Let it empty if you want to keep the psplash de=
-fault image.<br>&gt;<br>&gt; +config BR2_PACKAGE_PSPLASH_FULL_SCREEN<br>&gt=
-; + =C2=A0 =C2=A0 =C2=A0 bool &quot;use fullscreen mode&quot;<br>&gt; + =C2=
-=A0 =C2=A0 =C2=A0 help<br>&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable the psp=
-lash image in fullscreen mode.<br>&gt; +<br>&gt; +config BR2_PACKAGE_PSPLAS=
-H_STARTUP_MSG<br>&gt; + =C2=A0 =C2=A0 =C2=A0 bool &quot;enable startup mess=
-age&quot;<br>&gt; + =C2=A0 =C2=A0 =C2=A0 default y<br>&gt; + =C2=A0 =C2=A0 =
-=C2=A0 help<br>&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable text banner output=
- on startup.<br>&gt; +<br>&gt; +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR<br>=
-&gt; + =C2=A0 =C2=A0 =C2=A0 bool &quot;enable progress bar&quot;<br>&gt; + =
-=C2=A0 =C2=A0 =C2=A0 default y<br>&gt; + =C2=A0 =C2=A0 =C2=A0 help<br>&gt; =
-+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable the management of the progress bar.<br=
->&gt; +<br>&gt; =C2=A0endif<br>&gt;<br>&gt; =C2=A0comment &quot;psplash nee=
-ds a toolchain w/ wchar&quot;<br>&gt; diff --git a/package/psplash/<a href=
-=3D"http://psplash.mk">psplash.mk</a> b/package/psplash/<a href=3D"http://p=
-splash.mk">psplash.mk</a><br>&gt; index 5e61f2392f..e5b212381a 100644<br>&g=
-t; --- a/package/psplash/<a href=3D"http://psplash.mk">psplash.mk</a><br>&g=
-t; +++ b/package/psplash/<a href=3D"http://psplash.mk">psplash.mk</a><br>&g=
-t; @@ -18,6 +18,24 @@ else<br>&gt; =C2=A0PSPLASH_CONF_OPTS +=3D --without-s=
-ystemd<br>&gt; =C2=A0endif<br>&gt;<br>&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_FUL=
-L_SCREEN),y)<br>&gt; +PSPLASH_CONF_OPTS +=3D --enable-img-fullscreen<br>&gt=
-; +else<br>&gt; +PSPLASH_CONF_OPTS +=3D --disable-img-fullscreen<br>&gt; +e=
-ndif<br>&gt; +<br>&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)<br>&gt;=
- +PSPLASH_CONF_OPTS +=3D --enable-startup-msg<br>&gt; +else<br>&gt; +PSPLAS=
-H_CONF_OPTS +=3D --disable-startup-msg<br>&gt; +endif<br>&gt; +<br>&gt; +if=
-eq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)<br>&gt; +PSPLASH_CONF_OPTS +=3D =
---enable-progress-bar<br>&gt; +else<br>&gt; +PSPLASH_CONF_OPTS +=3D --disab=
-le-progress-bar<br>&gt; +endif<br>&gt; +<br>&gt; =C2=A0PSPLASH_IMAGE =3D $(=
-call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))<br>&gt;<br>&gt; =C2=A0ifneq ($(PS=
-PLASH_IMAGE),)<br>&gt; --<br>&gt; 2.25.1<br>&gt;<br>&gt; __________________=
-_____________________________<br>&gt; buildroot mailing list<br>&gt; <a hre=
-f=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org</a><br>&gt; <a=
- href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot">https://li=
-sts.buildroot.org/mailman/listinfo/buildroot</a></div></div></div>
-
---000000000000f2c97d05d2196152--
-
---===============8788388098682603247==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+On Wed, Dec 1, 2021 at 9:29 AM Adam Duskett <aduskett@gmail.com> wrote:
+>
+> Hello;
+>
+> Thank you for the help Yann! I really appreciate your time!
+>
+> On Tue, Nov 30, 2021 at 1:55 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > From: Adam Duskett <aduskett@gmail.com>
+> >
+> > Commit b68810e70cbd (boot/grub2: add support to build multiple Grub2
+> > configurations in the same build) broke mender-grubenv by splititng up
+> > BR2_TARGET_GRUB2_BUILTIN_MODULES into two separate symbols, one for
+> > legacy boot, and one for EFI boot.
+> >
+> > This causes a systematic build failure now, as the legacy variable
+> > BR2_TARGET_GRUB2_BUILTIN_MODULES is now always empty (during build).
+> >
+> > We fix that by suplicating the missing modules check: one for EFI and
+> > one for legacy boot.
+> >
+> > The EFI check is tricky: idneed, there can be more than one EFI platform
+> > enabled simlutaneouslyl indeed, on x86_64 we can have bothe ehte 32-bit
+> > and 64-bit EFI platforms enabled. So the check is inverted, and we check
+> > that no platform is not enabled (yeah, double negation). For consistency,
+> > we do the same for the legacy b oot, even though in that case there can
+> > only ever be only one enabled at once at most.
+> >
+> > Finally, the install commands are split into two macros, that are also
+> > defined conditionally under the same conditions as the checks are done.
+> >
+> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> > [yann.morin.1998@free.fr:
+> >   - drop superfluous check on empty modules lists
+> >   - move EFI and legacy commands under same condition as checks
+> > ]
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > ---
+> > changes v1 -> v2:
+> >   - Change ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y) to
+> >     ifneq ($(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI),) to cover all grub2
+> > efi
+> >     scenarios. (Thomas)
+> >
+> >   - Change BR2_TARGET_GRUB2_BUILTIN_MODULES to
+> >     BR2_TARGET_GRUB2_BUILTIN_MODULES_PC (thomas)
+> >
+> > Changes v2 -> v3:
+> >   - Check for both MODULES_EFI and MODULES_PC (Thomas)
+> >
+> > Changes v3 -> v4:
+> >   - Add qstrips to needed variables (Thomas)
+> >   - Check for empty module lists (Thomas)
+> >   - Split up MENDER_GRUBENV_INSTALL_IMAGES_CMDS to work with pc and efi
+> >     at the
+> >     same time.
+> >
+> > Changes v4 -> v5 (Yann):
+> >   - drop superfluous check on empty modules lists
+> >   - move EFI and legacy commands under same condition as checks
+> > ---
+> >  package/mender-grubenv/mender-grubenv.mk | 56 ++++++++++++++++--------
+> >  1 file changed, 37 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+> > index 07df25512c..a910f55cb4 100644
+> > --- a/package/mender-grubenv/mender-grubenv.mk
+> > +++ b/package/mender-grubenv/mender-grubenv.mk
+> > @@ -31,14 +31,44 @@ MENDER_GRUBENV_DEFINES = \
+> >  # These grub modules must be built in for the grub scripts to work properly.
+> >  # Without them, the system will not boot.
+> >  MENDER_GRUBENV_MANDATORY_MODULES=loadenv hashsum echo halt gcry_sha256 test regexp
+> > -MENDER_GRUBENV_MODULES_MISSING = \
+> > -       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES)),\
+> > +
+> > +# grub2 does not provide a syntetic EFI option, so check all of them
+> > +ifneq ($(BR2_TARGET_GRUB2_I386_EFI)$(BR2_TARGET_GRUB2_X86_64_EFI)$(BR2_TARGET_GRUB2_ARM_EFI)$(BR2_TARGET_GRUB2_ARM64_EFI),)
+> > +MENDER_GRUBENV_MODULES_MISSING_EFI = \
+> > +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
+> >                 $(MENDER_GRUBENV_MANDATORY_MODULES))
+> >
+> > +define MENDER_GRUBENV_INSTALL_EFI_CFG
+> > +       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+> > +       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+> > +               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+> > +               $(BINARIES_DIR)/efi-part/EFI/BOOT
+> > +endef
+> > +endif
+> > +
+> > +# grub2 does not provide a syntetic legacy boot option, so check all of them
+> > +ifneq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),)
+> > +MENDER_GRUBENV_MODULES_MISSING_PC = \
+> > +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
+> > +               $(MENDER_GRUBENV_MANDATORY_MODULES))
+> > +
+> > +define MENDER_GRUBENV_INSTALL_I386_CFG
+> > +       mkdir -p $(BINARIES_DIR)/boot-part/grub
+> > +       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+> > +               $(TARGET_DIR)/boot/grub/mender_grubenv* \
+> > +               $(BINARIES_DIR)/boot-part/grub
+> > +endef
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+> > -ifneq ($(MENDER_GRUBENV_MODULES_MISSING),)
+> > -$(error The following missing grub2 modules must be enabled for mender-grubenv \
+> > -       to work: $(MENDER_GRUBENV_MODULES_MISSING))
+> > +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_EFI),)
+> > +$(error The following missing grub2 efi modules must be enabled for mender-grubenv \
+> > +       to work: $(MENDER_GRUBENV_MODULES_MISSING_EFI))
+> > +endif
+> > +
+> > +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_PC),)
+> > +$(error The following missing grub2 pc modules must be enabled for mender-grubenv \
+> > +       to work: $(MENDER_GRUBENV_MODULES_MISSING_PC))
+> >  endif
+> >  endif
+> >
+> > @@ -54,21 +84,9 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+> >         $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+> >  endef
+> >
+> > -# Overwrite the default grub2 config files with the ones in this package.
+> > -ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
+> >  define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+> > -       mkdir -p $(BINARIES_DIR)/boot-part/grub
+> > -       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+> > -               $(TARGET_DIR)/boot/grub/mender_grubenv* \
+> > -               $(BINARIES_DIR)/boot-part/grub
+> > +       $(MENDER_GRUBENV_INSTALL_I386_CFG)
+> > +       $(MENDER_GRUBENV_INSTALL_EFI_CFG)
+> >  endef
+> > -else
+> > -define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+> > -       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+> > -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+> > -               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
+> > -               $(BINARIES_DIR)/efi-part/EFI/BOOT
+> > -endef
+> > -endif
+> >
+> Bleh, unfortunately, this fails if multiple grubs are selected thanks
+> to the following lines in the .mk file:
+>
+> ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
+> MENDER_GRUBENV_ENV_DIR = /boot/grub
+> else
+> MENDER_GRUBENV_ENV_DIR = /boot/EFI/BOOT
+> endif
+>
+> This fails with the following error:
+> mkdir -p output/images/boot-part/grub
+> cp -dpfr output/target/boot/grub/grub.cfg
+> output/target/boot/grub/mender_grubenv* output/images/boot-part/grub
+> mkdir -p output/images/efi-part/EFI/BOOT
+> cp -dpfr output/target/boot/EFI/BOOT/grub.cfg
+> output/target/boot/EFI/BOOT/mender_grubenv*
+> output/images/efi-part/EFI/BOOT
+> cp: cannot stat 'output/target/boot/EFI/BOOT/grub.cfg': No such file
+> or directory
+> cp: cannot stat 'output/target/boot/EFI/BOOT/mender_grubenv*': No such
+> file or directory
+>
+> What would you suggest?
+>
+> Adam
+> >  $(eval $(generic-package))
+> > --
+> > 2.25.1
+> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8788388098682603247==--
