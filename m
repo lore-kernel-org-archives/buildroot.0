@@ -4,77 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A0DCC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38A8EC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC94741C58;
-	Wed,  1 Dec 2021 17:34:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA13E41C66;
+	Wed,  1 Dec 2021 17:55:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LWYqyb4BVAbf; Wed,  1 Dec 2021 17:34:29 +0000 (UTC)
+	with ESMTP id 3gDZ_xL7EV_4; Wed,  1 Dec 2021 17:55:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1408441C5F;
-	Wed,  1 Dec 2021 17:34:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 746C91BF2A0
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:34:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1933141C6B;
+	Wed,  1 Dec 2021 17:55:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A1B51BF2A0
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60E7440168
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:34:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58F3082AC6
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:55:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nVbZ6MZQfAQq for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 17:34:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B5C4040539
- for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1638380055;
- bh=2ntZVb5tm4/MS+RCCOqjiOggg9LBNpwtaE9X7cwHDgk=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=R8DVakuKlPTGP9iHeMYt3Fvr/Z41TTpphZ5lvEgwA2jwhTc6wDOC3qdKpnnJStMss
- h2tId1QP1LkgKiIJQJDusRILsF4PMnbHkLeUc9OJ990VtjHWJ8qDTetFoIgHpinoXb
- SpsUY5MlA9ecmhVRh/6hfGkV1k/Uf6Y1FcMzN/UI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.208.65]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuUjC-1maFvB1VDe-00rY0T; Wed, 01
- Dec 2021 18:34:15 +0100
-Date: Wed, 1 Dec 2021 18:34:13 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20211201183413.2a98291c@gmx.net>
-In-Reply-To: <20211201135103.2302297-1-james.hilliard1@gmail.com>
-References: <20211201135103.2302297-1-james.hilliard1@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lmNvlhhF3JkN for <buildroot@lists.busybox.net>;
+ Wed,  1 Dec 2021 17:55:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
+ [IPv6:2607:f8b0:4864:20::832])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BFF282AB6
+ for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:55:44 +0000 (UTC)
+Received: by mail-qt1-x832.google.com with SMTP id p19so24850263qtw.12
+ for <buildroot@buildroot.org>; Wed, 01 Dec 2021 09:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=/pEbhejOZTVBGNM0YXsVGwd73hSHcmvbnPLblAR46kI=;
+ b=AuWC1FaoIhgePDwgI/PhlL4gvoLpFeSXHnvngJf84NNTcWvkLYuR1FJCi0WvJsrd5J
+ DlZiheBOwI/CirIwv5LygveHF6NDh1MGGW2tqELD6Shp7jBfzE10izT4k9SPuPQWpabG
+ zGrzVYy0VzFPhon7P+MjfuDoEjrVvza9oB0WkaJf7Hjo4DvT9o/3PrPW6gyZwWaXUbB0
+ 5vPiaqP/nRWClytI7bJbO9ekcZ5PfoTDRG1Jmc9ijMPEDXSar3ZSpq71heobC6ZoZDHG
+ puHZaYJOt65+uIR3/Z61HgeKl2cDbo3CHcZ58mSw4yJc/wbYIOxM5vGHqQR9pS4vKO1W
+ oGAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=/pEbhejOZTVBGNM0YXsVGwd73hSHcmvbnPLblAR46kI=;
+ b=a3snvYwHJNq5/ixt6tHq2ficbG4brFSaG6Vy/IR7IQA2cn4yvvF08lKVHiwdnvkVMh
+ rISFxv7DGHx0CdfhA3LKJRyPtX38xDLsIRoxydDricsiq6M3ivGzcxAVQyR8357MUTcq
+ v/nEH+nhstAUn6bbFRa7P9BCGc2oGfr538gW0SZroZm0hAoly9/8eRAfRkTM16ohObj9
+ 53zyyxEcbRDRz6ibC3QKZGqU9vPfj2Ympx/uwfc9sroTEiom94/YXuNymG80hIIj9eJW
+ 4SA81brEPA5EAyKJMnXFxnYQ+dyuOJ/uEX7nvQuEIr5AHOPqp4g8p8PGbakqWvGuAsD5
+ J2EQ==
+X-Gm-Message-State: AOAM530d3mbDlQvjIO8H0u3kdEzVNB4DuJZ3w9YlfZYOBgBGcwvPfmNc
+ xgTR2CauqAqMStgt1V1WVXRyPcSg4b9pasnOq3Y=
+X-Google-Smtp-Source: ABdhPJwwsHYaM3/PlsQVXFy2UnCrU1/uQyai2/3outxfiPmK7j9SKb6DMnJwG/0sMWdnkxwpQa84nN9PiWFs4ipT0+A=
+X-Received: by 2002:ac8:4d87:: with SMTP id a7mr8695169qtw.410.1638381342868; 
+ Wed, 01 Dec 2021 09:55:42 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:bOZjmndmaVA8E84UZyT2HICCz0BNP4amK7gt5yE86KW5M2cudwu
- yZJ+SeU+itq+MJEicQbLrQfTDn8m/v8klgpLp5eKbzbkvcepC5mTm6OpLTqot5VU9iByY23
- UtEXqE5VbWCMg4v+aKaKlx3XYg7nmY8pqPtX31KQ1F6SgE1gK0YkjMqFXj/GOxSrq/kois+
- fb+rf/31MkgjYX1hy3xCA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iOzmGSmgQho=:sfy+uAXTbRos6tcgxo0Pbk
- unN+NKfUZSUxaOv8wIZNE8R3hlzFy5oiiCfb1WK/dgrmGeqOg0uq4sx2DcnlkvCkiY3ZZ0cm8
- qYCSgPm1CXmpZrpnbr2RWpgMCCITl/VuSImL9xOeI+ckO89SkjN1CVjW2LuDQjBa1ip1PbmB+
- PX9wdYjygGqm0Nf6X9YmPTpU6INHqraUxNdGoHj2CewHBQ7+V4ztajS+iL4+8sawK3JNVJlhM
- 9JiI396gCrr3Nq8WFnQKJ5HQxwrNIhhvm4zVfD/hZjsy+buv72wTH+0JgOIQvV3H/C7atPqgR
- iawhzid7zMVaa4cS0Bckojav2ZZd723Hb2Mjp5CcmqpwrUMnSnLG0nUSfmaIC1sBuz837X9yG
- 7n0ASghlDAwHOi1MsWVbr/vxXx6KF78FzRyu4G2gBaFWziGgt6DZpwpOsjNIcSaDyL7N+ulvJ
- K+wy2SIYlCWkoZqW5mQgO4vkJ3HHfo+ZSiHBz6BeV8vT3QhrnzeHheCuYE18U12TeAmLmuf1a
- HRLuxJn5t1s/gqbd/nv5ec7Mle20aQ/LhixWR8SzPAVBR+3z1h/SreuSF9+iqPTz/8Op/0jxU
- ENlJfZa+ranIlG9+PU4P1+19Z33sBn4/QNOAQyKC8MJoAhXML4jqeryxDvNjyouypXvzqgAW8
- lHlQpCF2CXUpjmad9pN/vZhalluH7nRc1D5LqrLdUl07ozTenj4jru75a0AxwH6+8UNq31f+S
- YZ6wr4a0SGp1A+no5fHG51q85n7KN46ShFoRlOCHl+7HNit7FhHxauifpRNbjxZuZ4ZRuF7hf
- RlXv1+a2NAXNqLSyzJUmqShP5HShgEd6/BK+23ORNLfp6E1bHI6/0lYMJlBPYLdz2/sVoMRYw
- HDtR6wIvisWJ2urI6SGBBgcOVUZaDcZZqt4y/Bf8YhZ3UtJ05zd/UKCo+X5b3ThIjoB4GL0HS
- oAG2c/svOKRbjbdQvZwFtirrhDEYYpKVyptfSkTdei2TgjqPSHllouwIUljI94/NSL2698TLK
- MKwGLD3jqwrdooyBynrPnv5sbyL+LRArDv+Bx/Affc2NbG3CvsQpKA5qheUArIdKUSdp21BGq
- pUBUd7vlopcLyo=
-Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: enable required kernel
- dependencies
+References: <20211116104534.18868-1-kory.maincent@bootlin.com>
+In-Reply-To: <20211116104534.18868-1-kory.maincent@bootlin.com>
+From: bryce.schober@gmail.com
+Date: Wed, 1 Dec 2021 09:55:06 -0800
+Message-ID: <CAJpxd06GN22pCL6SFLGomaZ174D09W-c-9RdhNqpfH=wt9Eezw@mail.gmail.com>
+To: Kory Maincent <kory.maincent@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v3] package/psplash: add support for missing
+ configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,75 +81,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: phil.eichinger@gmail.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8788388098682603247=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+--===============8788388098682603247==
+Content-Type: multipart/alternative; boundary="000000000000f2c97d05d2196152"
 
-On Wed,  1 Dec 2021 06:51:03 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
+--000000000000f2c97d05d2196152
+Content-Type: text/plain; charset="UTF-8"
 
-> Required kernel options are listed in check_crypto() in srv/main.c:
-> https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/src/main.c?h=1.20#n268
-
-Thanks for doing this (one less point on my long standing ToDo list) ;-)
-
+On Tue, Nov 16, 2021 at 2:46 AM Kory Maincent <kory.maincent@bootlin.com>
+wrote:
 >
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Add support to three configure options:
+> --enable-startup-msg: Enable text banner output on startup
+> --enable-progress-bar: Enable progress bar
+> --enable-img-fullscreen: Enable the logo image in fullscreen mode
+>
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+
+Tested-by: Bryce Schober <bryce.schober@gmail.com>
+
 > ---
->  package/iwd/iwd.mk | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
 >
-> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> index 96bdc56e93..8bcd406ea0 100644
-> --- a/package/iwd/iwd.mk
-> +++ b/package/iwd/iwd.mk
-> @@ -63,4 +63,34 @@ define IWD_INSTALL_INIT_SYSV
->  	ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
->  endef
+> Change since v1:
+> Remove the crap .config.in.swp
 >
-> +define IWD_LINUX_CONFIG_FIXUPS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_KEY_TYPE)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_NI_INTEL)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_AES_X86_64)
-
-Not sure if it is good idea to add the x86_64 specific ones unconditionally
-(they are marked in check_crypto() with ADD_OPTIONAL instead of ADD_MISSING)?
-
-Regards,
-Peter
-
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CBC)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_CMAC)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DES3_EDE_X86_64)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_ECB)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_HMAC)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD4)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MD5)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA1_SSSE3)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA256_SSSE3)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_SHA512_SSSE3)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_HASH)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_USER_API_SKCIPHER)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_PKCS7_MESSAGE_PARSER)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_PKCS8_PRIVATE_KEY_PARSER)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_X509_CERTIFICATE_PARSER)
-> +endef
+> Change since v2:
+> Use both side of enable/disable configure option condition.
+> Use positive options in Kconfig.
+>
+>
+>  package/psplash/Config.in  | 17 +++++++++++++++++
+>  package/psplash/psplash.mk | 18 ++++++++++++++++++
+>  2 files changed, 35 insertions(+)
+>
+> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+> index da99b264e0..edd30dcb4d 100644
+> --- a/package/psplash/Config.in
+> +++ b/package/psplash/Config.in
+> @@ -35,6 +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE
+>           Use a personalized png image as boot splash.
+>           Let it empty if you want to keep the psplash default image.
+>
+> +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
+> +       bool "use fullscreen mode"
+> +       help
+> +         Enable the psplash image in fullscreen mode.
 > +
->  $(eval $(autotools-package))
+> +config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+> +       bool "enable startup message"
+> +       default y
+> +       help
+> +         Enable text banner output on startup.
+> +
+> +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR
+> +       bool "enable progress bar"
+> +       default y
+> +       help
+> +         Enable the management of the progress bar.
+> +
+>  endif
+>
+>  comment "psplash needs a toolchain w/ wchar"
+> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+> index 5e61f2392f..e5b212381a 100644
+> --- a/package/psplash/psplash.mk
+> +++ b/package/psplash/psplash.mk
+> @@ -18,6 +18,24 @@ else
+>  PSPLASH_CONF_OPTS += --without-systemd
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
+> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
+> +else
+> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)
+> +PSPLASH_CONF_OPTS += --enable-startup-msg
+> +else
+> +PSPLASH_CONF_OPTS += --disable-startup-msg
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)
+> +PSPLASH_CONF_OPTS += --enable-progress-bar
+> +else
+> +PSPLASH_CONF_OPTS += --disable-progress-bar
+> +endif
+> +
+>  PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+>
+>  ifneq ($(PSPLASH_IMAGE),)
+> --
+> 2.25.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--000000000000f2c97d05d2196152
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">On Tue, Nov 16, 2021 at 2:46 AM Kory Maincent &lt;<a href=
+=3D"mailto:kory.maincent@bootlin.com">kory.maincent@bootlin.com</a>&gt; wro=
+te:<br>&gt;<br>&gt; Add support to three configure options:<br>&gt; --enabl=
+e-startup-msg: Enable text banner output on startup<br>&gt; --enable-progre=
+ss-bar: Enable progress bar<br>&gt; --enable-img-fullscreen: Enable the log=
+o image in fullscreen mode<br>&gt;<br>&gt; Signed-off-by: Kory Maincent &lt=
+;<a href=3D"mailto:kory.maincent@bootlin.com">kory.maincent@bootlin.com</a>=
+&gt;<div><div><br></div><div>Tested-by: Bryce Schober &lt;<a href=3D"mailto=
+:bryce.schober@gmail.com">bryce.schober@gmail.com</a>&gt;</div><div><br>&gt=
+; ---<br>&gt;<br>&gt; Change since v1:<br>&gt; Remove the crap .config.in.s=
+wp<br>&gt;<br>&gt; Change since v2:<br>&gt; Use both side of enable/disable=
+ configure option condition.<br>&gt; Use positive options in Kconfig.<br>&g=
+t;<br>&gt;<br>&gt; =C2=A0package/psplash/Config.in =C2=A0| 17 +++++++++++++=
+++++<br>&gt; =C2=A0package/psplash/<a href=3D"http://psplash.mk">psplash.mk=
+</a> | 18 ++++++++++++++++++<br>&gt; =C2=A02 files changed, 35 insertions(+=
+)<br>&gt;<br>&gt; diff --git a/package/psplash/Config.in b/package/psplash/=
+Config.in<br>&gt; index da99b264e0..edd30dcb4d 100644<br>&gt; --- a/package=
+/psplash/Config.in<br>&gt; +++ b/package/psplash/Config.in<br>&gt; @@ -35,6=
+ +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE<br>&gt; =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 Use a personalized png image as boot splash.<br>&gt; =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Let it empty if you want to keep the psplash de=
+fault image.<br>&gt;<br>&gt; +config BR2_PACKAGE_PSPLASH_FULL_SCREEN<br>&gt=
+; + =C2=A0 =C2=A0 =C2=A0 bool &quot;use fullscreen mode&quot;<br>&gt; + =C2=
+=A0 =C2=A0 =C2=A0 help<br>&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable the psp=
+lash image in fullscreen mode.<br>&gt; +<br>&gt; +config BR2_PACKAGE_PSPLAS=
+H_STARTUP_MSG<br>&gt; + =C2=A0 =C2=A0 =C2=A0 bool &quot;enable startup mess=
+age&quot;<br>&gt; + =C2=A0 =C2=A0 =C2=A0 default y<br>&gt; + =C2=A0 =C2=A0 =
+=C2=A0 help<br>&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable text banner output=
+ on startup.<br>&gt; +<br>&gt; +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR<br>=
+&gt; + =C2=A0 =C2=A0 =C2=A0 bool &quot;enable progress bar&quot;<br>&gt; + =
+=C2=A0 =C2=A0 =C2=A0 default y<br>&gt; + =C2=A0 =C2=A0 =C2=A0 help<br>&gt; =
++ =C2=A0 =C2=A0 =C2=A0 =C2=A0 Enable the management of the progress bar.<br=
+>&gt; +<br>&gt; =C2=A0endif<br>&gt;<br>&gt; =C2=A0comment &quot;psplash nee=
+ds a toolchain w/ wchar&quot;<br>&gt; diff --git a/package/psplash/<a href=
+=3D"http://psplash.mk">psplash.mk</a> b/package/psplash/<a href=3D"http://p=
+splash.mk">psplash.mk</a><br>&gt; index 5e61f2392f..e5b212381a 100644<br>&g=
+t; --- a/package/psplash/<a href=3D"http://psplash.mk">psplash.mk</a><br>&g=
+t; +++ b/package/psplash/<a href=3D"http://psplash.mk">psplash.mk</a><br>&g=
+t; @@ -18,6 +18,24 @@ else<br>&gt; =C2=A0PSPLASH_CONF_OPTS +=3D --without-s=
+ystemd<br>&gt; =C2=A0endif<br>&gt;<br>&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_FUL=
+L_SCREEN),y)<br>&gt; +PSPLASH_CONF_OPTS +=3D --enable-img-fullscreen<br>&gt=
+; +else<br>&gt; +PSPLASH_CONF_OPTS +=3D --disable-img-fullscreen<br>&gt; +e=
+ndif<br>&gt; +<br>&gt; +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)<br>&gt;=
+ +PSPLASH_CONF_OPTS +=3D --enable-startup-msg<br>&gt; +else<br>&gt; +PSPLAS=
+H_CONF_OPTS +=3D --disable-startup-msg<br>&gt; +endif<br>&gt; +<br>&gt; +if=
+eq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)<br>&gt; +PSPLASH_CONF_OPTS +=3D =
+--enable-progress-bar<br>&gt; +else<br>&gt; +PSPLASH_CONF_OPTS +=3D --disab=
+le-progress-bar<br>&gt; +endif<br>&gt; +<br>&gt; =C2=A0PSPLASH_IMAGE =3D $(=
+call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))<br>&gt;<br>&gt; =C2=A0ifneq ($(PS=
+PLASH_IMAGE),)<br>&gt; --<br>&gt; 2.25.1<br>&gt;<br>&gt; __________________=
+_____________________________<br>&gt; buildroot mailing list<br>&gt; <a hre=
+f=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org</a><br>&gt; <a=
+ href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot">https://li=
+sts.buildroot.org/mailman/listinfo/buildroot</a></div></div></div>
+
+--000000000000f2c97d05d2196152--
+
+--===============8788388098682603247==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8788388098682603247==--
