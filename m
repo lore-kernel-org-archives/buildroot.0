@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E86B3C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 17:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741D9C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 20:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B544400C8;
-	Wed,  1 Dec 2021 17:56:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D483F40004;
+	Wed,  1 Dec 2021 20:37:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MgOvt-QoAbIL; Wed,  1 Dec 2021 17:56:58 +0000 (UTC)
+	with ESMTP id 3Ta2o7ZgA94Y; Wed,  1 Dec 2021 20:37:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DF9E4014C;
-	Wed,  1 Dec 2021 17:56:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CE841BF2A0
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:56:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D799D40274;
+	Wed,  1 Dec 2021 20:37:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A93B31BF34C
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 20:37:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BA5661BD5
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 17:56:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A455340545
+ for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 20:37:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kswMo_PS7Mn8 for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 17:56:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
- [IPv6:2607:f8b0:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6BBEC60665
- for <buildroot@buildroot.org>; Wed,  1 Dec 2021 17:56:55 +0000 (UTC)
-Received: by mail-ot1-x334.google.com with SMTP id
- i5-20020a05683033e500b0057a369ac614so14875218otu.10
- for <buildroot@buildroot.org>; Wed, 01 Dec 2021 09:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=LF9jO6/RMfB+yoN695QaJWDp+ztrnsba397o6x3Bdsk=;
- b=C7+5ydKrLCvHI6wwWd/jbru1Se7+0UXTaIvREN+WJeMnsBLVl3kRTeR/AjpEn0OdRO
- tKloNKaCo7iLPDr48GoRg6+Z1Zmas0haGJY924uSX22wHOmS5W7louWNplRxDVUek/b4
- HMQ2thT9NAGnRsF/HFSnFPGxvFY99A/8gNoJgKgMiWoUjRnuWyorYiNeXg4g6+BkLFxy
- j55DamciBsI9lpperdaV+c9HHyuQjwkWByzvqsQkDyuVbqtUL3q756+sKnD4KSlKTB7H
- VGI4yoAmg1QGlIkS5eVfWeOVbEbu4T7ClqxJUoSh9U4fBZqPRCb7JOTs+Oqt6NUg5PhJ
- SZMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=LF9jO6/RMfB+yoN695QaJWDp+ztrnsba397o6x3Bdsk=;
- b=KDiIyHHpCa64si56g5Fh1IPSlMqoPjrYw2YPGBcwS2d4D9ObWF+zQcy59Ebt9jHCi6
- ofrERjiI8ZwlKAl1ijdSZaxCwaShQp52m2zmyMeG+T0tJyyV4Dv4jp7ffH+zqPnltsVp
- H5lWijRmbgvWeQCUiEK04fJJ2/krh+Y1HU+V59GQlMpNo1d1eFegjgIvCoMeATQnUJXw
- bDXvP+P6AHKpvr5AHJ+A/u3IuIUg+9mvxc06m29GVP2oVurAenB0ZzCqWinCJeO58cxU
- +cEIztYxJ9itavcXINfBaDnkFsKgcB1eqXttL8CJiG3pJM4uv5GVNVSoqdPEnNqukJgf
- Ksgg==
-X-Gm-Message-State: AOAM531y1PVULaOFXAUYCsAHz3IaFDcCnMJBP9Kz7owpGJbGa8b9cyJE
- nfT5hY7O0meYtRMTkkTLH7Y+ctw9bIQsZCpGdd5Vpvrwg406lA==
-X-Google-Smtp-Source: ABdhPJyxiyfodYEDnfdyJXPYrgEUOiKBfcvtbgUNYpRuJ8PZV/wD62NrrsuCrr0ws7MONlIBR6oDdjyMRUqf+lOa5Es=
-X-Received: by 2002:a9d:4509:: with SMTP id w9mr6841712ote.214.1638381414340; 
- Wed, 01 Dec 2021 09:56:54 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t7SRYKqXw0qh for <buildroot@lists.busybox.net>;
+ Wed,  1 Dec 2021 20:37:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 62C704056E
+ for <buildroot@buildroot.org>; Wed,  1 Dec 2021 20:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1638391020;
+ bh=cfjqOta6UEXIi+eFAMLc5Bek3oQCz/Iux6Ow8iISp4E=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=dIfBQxWCgKEtCLjKSa6mD8sNojbeSOHfcxDDWZqvDO3MMgjZ4Jr3tfbrYA7ZSc9Bv
+ Ez8R7hZwK4HpH3jD/t05iPOFTOcAds2jxq/ELPKmlc9OdFrg/4/ZJB77VwBkdfMfu5
+ 3iURtQZJwhpOUvQ7I/Jre5E8PbP0j7PIsSsGH47c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.208.65]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuUj2-1maAPu2gLK-00rXCL; Wed, 01
+ Dec 2021 21:37:00 +0100
+Date: Wed, 1 Dec 2021 21:36:59 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20211201213659.2bc3b6ed@gmx.net>
+In-Reply-To: <20211201095225.90511-1-james.hilliard1@gmail.com>
+References: <20211201095225.90511-1-james.hilliard1@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20211130215547.3717152-1-yann.morin.1998@free.fr>
- <CAFSsvmotx0kvnVsKf+bCwh4SCecsfUyds0zDUytMDfcgeH0-NA@mail.gmail.com>
-In-Reply-To: <CAFSsvmotx0kvnVsKf+bCwh4SCecsfUyds0zDUytMDfcgeH0-NA@mail.gmail.com>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 1 Dec 2021 09:56:43 -0800
-Message-ID: <CAFSsvmqi7q7EEQyLLrXk89zPAr6GEhYJ9dER59mAK7Ceb000dw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCHv5] package/mender-grubenv: fix grub module
- checks
+X-Provags-ID: V03:K1:biu+ZuLDZbqey8A706vOgsWu3d7th+zXhz9R0BzgiJBmJdD+Etw
+ DNYYRG/dfAKkR1+LZYMPhwVKOjjG6l2J7Wsg4m5zio+iuIQ0SJ6gTixI2krnZii6ifZ6R43
+ n0H41V/Iaof/ULcZZg0Yk60jj6UyZilH9ncYEOyk7dWA4qOjCo1xSYQcyPpHMyWts4vTsAZ
+ /X/aJ4jlWkfB1jKjkMsFw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:o+0+0V/JhfE=:WT1LrTtp/CA1CbDnq8jmPu
+ mwsY3wC8dqWN6PvRN9WXp+fjDtEkaxy83TIgUkfbKcvTv5o++zrsxn/1skEGGXrvemjsvJFyM
+ 5Twj0xi8WntLx+yrpkpOa3yBBiu4lCap7vuG5IZSMSUecaqZZk+jAMMlgJ9f3J9jg7SM7ymus
+ lqHDt7P36we/UURc/VMeoCRVXu00LN1lGlqppyC6IsgP4ObsS9Wef45opsxh6WL48vdshUPvD
+ xtMpuBs6VZfOpaZdnH6W1p+HtgBNZ80scEBa24FAXIU1a9It8uYUSkxJ/ugbvkokpP4SOpWsG
+ tHhaFujwLvs31w0iMgvhUdyhX/kkDPw0NqFXOmcuZbCoUhEfIS37DeRNfv6hs8EwGrzr3ZAZB
+ AWxI4K+JC5giAoBLY7rag46doo3yehlguGvcRL8xOFiE3XW4qJl5FFby72deGJiycQE81PYvS
+ TFoNHmDddkG/25UGjHmzJledadCIuxQvjquIQFaBtJvkBPJ5vE0EJkRSyDTsAexJgx/s6pPeA
+ mRWfum0dSAHuf/WGJOsNSsE7olG0zqpKSbdSBmuLlzlQnkcEbnXO4JVBICBxF20R73+gA/WsM
+ u4F4YrFsk8QvdMvQLOn+HV7JilJgRTuYnnt2quzF2KKEla111wablsAjdxUjc4yMvFTON3mZe
+ M1NBK06I1IP6uFHnkGq9EyPY9YFxKbPXrWByrwtYID/3X9XdLCuA0AqMFePts2z46DX1yAlcx
+ Kxuefs70bjug59SdBc6wz+BfHIuwmwptC9UnifdCg9MmoPYJV9FA9ewInK/xy++FkJ8eaQ+U5
+ HeVeJ2RTerrnPIBHj0hDSDIspMfvVZ5vu8tPe1xh4xP5HDcF6IjREhbNuaDVyM6t1bFAEMJWo
+ 1UBNkf9HrtxcRV79qeBCl93FvGFDvMtb2AWnHaBrm+C1rYrUYilT3I357HVk9Nw83QOx2PYmC
+ IZzTFvkg1X34VvyAyqpEIXeTmaGWoks1Qkwqe9agenSgLFh0dqfHDBqhh9cmqxxqRPm8T7p59
+ Z2vHCfr7bsbdGR3lI0RLAex+YaBuvwNC37PjAfpZlIuEyT2xAd27Ezn61veyIATsIO3h1TE5q
+ oJGKy7IMaf4xmA=
+Subject: Re: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,204 +83,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-May I suggest:
+Hello James,
 
-define MENDER_GRUBENV_INSTALL_EFI_CFG
-mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
-cp -dpfr $(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/grub.cfg \
-$(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/mender_grubenv* \
-$(BINARIES_DIR)/efi-part/EFI/BOOT
-endef
-endif
+thanks for the update, but...
 
-and
+On Wed,  1 Dec 2021 02:52:24 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
 
-define MENDER_GRUBENV_INSTALL_I386_CFG
-mkdir -p $(BINARIES_DIR)/boot-part/grub
-cp -dpfr $(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/grub.cfg \
-$(TARGET_DIR)$(MENDER_GRUBENV_ENV_DIR)/mender_grubenv* \
-$(BINARIES_DIR)/boot-part/grub
-endef
-endif
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-?
+Changelog is a nice to have, see [3] for example...
 
-On Wed, Dec 1, 2021 at 9:29 AM Adam Duskett <aduskett@gmail.com> wrote:
+> ---
+>  package/ell/ell.hash | 2 +-
+>  package/ell/ell.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> Hello;
+> diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+> index 84016c0ce0..20b568dde4 100644
+> --- a/package/ell/ell.hash
+> +++ b/package/ell/ell.hash
+> @@ -1,5 +1,5 @@
+>  # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+> -sha256  41a6f8fa4d285b52cb7a5a87bda3e7370ecaac02d94aaa7ec1a23f0480b8bc3f  ell-0.44.tar.xz
+> +sha256  f4fc647eff32f622e21f8851ed0c8b7270f4800149c91be601754e22d82cbb4d  ell-0.46.tar.xz
 >
-> Thank you for the help Yann! I really appreciate your time!
+>  # License files
+>  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+> diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+> index 47137e2530..4fad6e8d1b 100644
+> --- a/package/ell/ell.mk
+> +++ b/package/ell/ell.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
-> On Tue, Nov 30, 2021 at 1:55 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > From: Adam Duskett <aduskett@gmail.com>
-> >
-> > Commit b68810e70cbd (boot/grub2: add support to build multiple Grub2
-> > configurations in the same build) broke mender-grubenv by splititng up
-> > BR2_TARGET_GRUB2_BUILTIN_MODULES into two separate symbols, one for
-> > legacy boot, and one for EFI boot.
-> >
-> > This causes a systematic build failure now, as the legacy variable
-> > BR2_TARGET_GRUB2_BUILTIN_MODULES is now always empty (during build).
-> >
-> > We fix that by suplicating the missing modules check: one for EFI and
-> > one for legacy boot.
-> >
-> > The EFI check is tricky: idneed, there can be more than one EFI platform
-> > enabled simlutaneouslyl indeed, on x86_64 we can have bothe ehte 32-bit
-> > and 64-bit EFI platforms enabled. So the check is inverted, and we check
-> > that no platform is not enabled (yeah, double negation). For consistency,
-> > we do the same for the legacy b oot, even though in that case there can
-> > only ever be only one enabled at once at most.
-> >
-> > Finally, the install commands are split into two macros, that are also
-> > defined conditionally under the same conditions as the checks are done.
-> >
-> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> > [yann.morin.1998@free.fr:
-> >   - drop superfluous check on empty modules lists
-> >   - move EFI and legacy commands under same condition as checks
-> > ]
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > ---
-> > changes v1 -> v2:
-> >   - Change ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y) to
-> >     ifneq ($(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI),) to cover all grub2
-> > efi
-> >     scenarios. (Thomas)
-> >
-> >   - Change BR2_TARGET_GRUB2_BUILTIN_MODULES to
-> >     BR2_TARGET_GRUB2_BUILTIN_MODULES_PC (thomas)
-> >
-> > Changes v2 -> v3:
-> >   - Check for both MODULES_EFI and MODULES_PC (Thomas)
-> >
-> > Changes v3 -> v4:
-> >   - Add qstrips to needed variables (Thomas)
-> >   - Check for empty module lists (Thomas)
-> >   - Split up MENDER_GRUBENV_INSTALL_IMAGES_CMDS to work with pc and efi
-> >     at the
-> >     same time.
-> >
-> > Changes v4 -> v5 (Yann):
-> >   - drop superfluous check on empty modules lists
-> >   - move EFI and legacy commands under same condition as checks
-> > ---
-> >  package/mender-grubenv/mender-grubenv.mk | 56 ++++++++++++++++--------
-> >  1 file changed, 37 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-> > index 07df25512c..a910f55cb4 100644
-> > --- a/package/mender-grubenv/mender-grubenv.mk
-> > +++ b/package/mender-grubenv/mender-grubenv.mk
-> > @@ -31,14 +31,44 @@ MENDER_GRUBENV_DEFINES = \
-> >  # These grub modules must be built in for the grub scripts to work properly.
-> >  # Without them, the system will not boot.
-> >  MENDER_GRUBENV_MANDATORY_MODULES=loadenv hashsum echo halt gcry_sha256 test regexp
-> > -MENDER_GRUBENV_MODULES_MISSING = \
-> > -       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES)),\
-> > +
-> > +# grub2 does not provide a syntetic EFI option, so check all of them
-> > +ifneq ($(BR2_TARGET_GRUB2_I386_EFI)$(BR2_TARGET_GRUB2_X86_64_EFI)$(BR2_TARGET_GRUB2_ARM_EFI)$(BR2_TARGET_GRUB2_ARM64_EFI),)
-> > +MENDER_GRUBENV_MODULES_MISSING_EFI = \
-> > +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI)),\
-> >                 $(MENDER_GRUBENV_MANDATORY_MODULES))
-> >
-> > +define MENDER_GRUBENV_INSTALL_EFI_CFG
-> > +       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
-> > +       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
-> > +               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
-> > +               $(BINARIES_DIR)/efi-part/EFI/BOOT
-> > +endef
-> > +endif
-> > +
-> > +# grub2 does not provide a syntetic legacy boot option, so check all of them
-> > +ifneq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),)
-> > +MENDER_GRUBENV_MODULES_MISSING_PC = \
-> > +       $(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
-> > +               $(MENDER_GRUBENV_MANDATORY_MODULES))
-> > +
-> > +define MENDER_GRUBENV_INSTALL_I386_CFG
-> > +       mkdir -p $(BINARIES_DIR)/boot-part/grub
-> > +       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
-> > +               $(TARGET_DIR)/boot/grub/mender_grubenv* \
-> > +               $(BINARIES_DIR)/boot-part/grub
-> > +endef
-> > +endif
-> > +
-> >  ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
-> > -ifneq ($(MENDER_GRUBENV_MODULES_MISSING),)
-> > -$(error The following missing grub2 modules must be enabled for mender-grubenv \
-> > -       to work: $(MENDER_GRUBENV_MODULES_MISSING))
-> > +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_EFI),)
-> > +$(error The following missing grub2 efi modules must be enabled for mender-grubenv \
-> > +       to work: $(MENDER_GRUBENV_MODULES_MISSING_EFI))
-> > +endif
-> > +
-> > +ifneq ($(MENDER_GRUBENV_MODULES_MISSING_PC),)
-> > +$(error The following missing grub2 pc modules must be enabled for mender-grubenv \
-> > +       to work: $(MENDER_GRUBENV_MODULES_MISSING_PC))
-> >  endif
-> >  endif
-> >
-> > @@ -54,21 +84,9 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
-> >         $(MENDER_GRUBENV_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-> >  endef
-> >
-> > -# Overwrite the default grub2 config files with the ones in this package.
-> > -ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
-> >  define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
-> > -       mkdir -p $(BINARIES_DIR)/boot-part/grub
-> > -       cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
-> > -               $(TARGET_DIR)/boot/grub/mender_grubenv* \
-> > -               $(BINARIES_DIR)/boot-part/grub
-> > +       $(MENDER_GRUBENV_INSTALL_I386_CFG)
-> > +       $(MENDER_GRUBENV_INSTALL_EFI_CFG)
-> >  endef
-> > -else
-> > -define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
-> > -       mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
-> > -       cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
-> > -               $(TARGET_DIR)/boot/EFI/BOOT/mender_grubenv* \
-> > -               $(BINARIES_DIR)/efi-part/EFI/BOOT
-> > -endef
-> > -endif
-> >
-> Bleh, unfortunately, this fails if multiple grubs are selected thanks
-> to the following lines in the .mk file:
->
-> ifeq ($(BR2_TARGET_GRUB2_I386_PC)$(BR2_TARGET_GRUB2_ARM_UBOOT),y)
-> MENDER_GRUBENV_ENV_DIR = /boot/grub
-> else
-> MENDER_GRUBENV_ENV_DIR = /boot/EFI/BOOT
-> endif
->
-> This fails with the following error:
-> mkdir -p output/images/boot-part/grub
-> cp -dpfr output/target/boot/grub/grub.cfg
-> output/target/boot/grub/mender_grubenv* output/images/boot-part/grub
-> mkdir -p output/images/efi-part/EFI/BOOT
-> cp -dpfr output/target/boot/EFI/BOOT/grub.cfg
-> output/target/boot/EFI/BOOT/mender_grubenv*
-> output/images/efi-part/EFI/BOOT
-> cp: cannot stat 'output/target/boot/EFI/BOOT/grub.cfg': No such file
-> or directory
-> cp: cannot stat 'output/target/boot/EFI/BOOT/mender_grubenv*': No such
-> file or directory
->
-> What would you suggest?
->
-> Adam
-> >  $(eval $(generic-package))
-> > --
-> > 2.25.1
-> >
+> -ELL_VERSION = 0.44
+> +ELL_VERSION = 0.46
+>  ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+>  ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+>  ELL_LICENSE = LGPL-2.1+
+
+At this phase of the buildroot release schedule (see [1] and [2]) version bumps
+which are not security related should be done against the next branch, which
+will conflict with your patch as there are already ell/iwd version bumps applied
+(see [3] and [4])...
+
+
+[1] https://buildroot.org/downloads/manual/manual.html#RELENG
+[2] http://lists.busybox.net/pipermail/buildroot/2021-November/629532.html
+[3] https://git.buildroot.net/buildroot/commit/?h=next&id=ab4e346c52b804949c9e2da2e4374654e0abe54d
+[4] https://git.buildroot.net/buildroot/commit/?h=next&id=ff0d53405157ce82f6b56c74654c75c07b9ce92d
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
