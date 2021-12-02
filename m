@@ -1,77 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E969C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 18:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81DAC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 18:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0121740A62;
-	Thu,  2 Dec 2021 18:31:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 363526F4C5;
+	Thu,  2 Dec 2021 18:37:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yhng0bRuUcCa; Thu,  2 Dec 2021 18:31:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m_RhQ3HyL_jK; Thu,  2 Dec 2021 18:37:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2156140A65;
-	Thu,  2 Dec 2021 18:30:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3ED201BF330
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:30:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA056F4C2;
+	Thu,  2 Dec 2021 18:37:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 295D11BF330
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 388D440A65
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:30:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1802B41E09
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:37:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PnSwg30U-yCX for <buildroot@lists.busybox.net>;
- Thu,  2 Dec 2021 18:30:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B048E40A62
- for <buildroot@buildroot.org>; Thu,  2 Dec 2021 18:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1638469851;
- bh=F1xzMd926xLgU6GZJuyYIvAByEodEs8uH1i4cEhBcXU=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=LnBImxSEZCptGaktmlxIrng7qPmEaJzWc+4rrzN7ZC/MzIhkTGQsvkXaO4+yKiC/d
- 52HlhcnlcE+qon2ldOCyZ7VUJqzwQMP4uGVytmITzghieiy5sgl2ku0rPV1kgaEzwK
- 13w+qP4SGoFwkb1vvbgNGG2FfN1bcCTIaNfXcRqc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.208.208]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2f5T-1ms2ho0zTL-004Cn3; Thu, 02
- Dec 2021 19:30:51 +0100
-Date: Thu, 2 Dec 2021 19:30:49 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
-Message-ID: <20211202193049.13ceb96e@gmx.net>
-In-Reply-To: <CAJPV9MrzFk0obQYSyFKeF-PgQfnOi6GKow3tSPomtLcmdor3Yw@mail.gmail.com>
-References: <CAJPV9MrzFk0obQYSyFKeF-PgQfnOi6GKow3tSPomtLcmdor3Yw@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7mMD_nsOrQpu for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 18:37:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B26FA41DEE
+ for <buildroot@buildroot.org>; Thu,  2 Dec 2021 18:37:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 1078160013;
+ Thu,  2 Dec 2021 18:37:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1msqxU-0008Go-Sq; Thu, 02 Dec 2021 19:37:28 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Dec 2021 19:37:26 +0100
+Message-Id: <20211202183728.31726-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:R8iA96jXiS1r4+ne2bXlHu7EIvDiHqysTGqZ1B4fjB3dDilzlEC
- GSKtHhZyQhGjeBvHeLN4n0GD2dSRaxB2pCWJQrSay9FvjBghJJRtZWkj/Tj6MbWZtRnqg29
- RAP2Z2RlKlCt1itlouyfsIhUqki7yoZtxMd3oRlFdXLaV7I6XwstquJgmfHR4DVrAY7a7wK
- eBgj2QXXX+hSF3tFvMUig==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LAJZMmxBn84=:5Il7PntqjPtM3iAGaBcSgD
- h5IITkF9N9zoxRjibsPuCt4i1jUxsZxX8rwkC/HzKkEfGoAp+nWU8sG3xdBPggKbGc30mx0q9
- WoePjr0FmCs7UMOoe5VLd56H6/bjQ0qA4+easr8wVXQyFczmnvNuSBq7R3XiAISZ0OrtD3Ryp
- tOJih2YozCrKf2bdNFN8HQbA06U7Fq3KoevKOwK/CGXI0vFF3hejoLwZoQsGeQKOni/4Y8U4b
- J6o118gnYnmfCSiEgKjyZ1TBRi5lF+frJttG/1hGkYzXeYHVoYVzAChHRxJBaDJbQwMkftFyR
- 86R9xPT/4kFVvAV0wWu8SEp4pD7jPNvphqKabVWcwNs1BCyG2qdcy9WDw3mBvsnRPZRoSCI/F
- haFoXA2tbS9VmRQuxsowQqGZgGHwXGjcqRV2QZcvToFEIdCJQOToUIjfopnbD4LnJzuwgxm+w
- bV6+CnRlwzpYkuQe/hkOZ1TFjJghonQGCTwxLv1RdZ1gFquI+kM3WGopHtxVbWcWIQeIFb8sN
- hsdV9ZqvRRoYdjS9qACR12290wWygwrPS5TBM6Ebt0VBS8Jy2zanm3YntDzmfdYPfmglLb0mO
- Xj9v7E4tFcRjTcImlI73mdeRlCHO/DHdD+fGeJ9fzIabjEcJi50HLqGmqI5piJ+jN6meqn42S
- f55RT0A7s4zyk5PLo9J+/uug2QRI+4D8c5ztFKWjvhriHqc9sXoP+uE84eX5T1tqBiYllJSoV
- 7h8LfqI0q7NkmZFd/8bAmFViRWjQ7UHA6qKAmwkPM0/8DEqIrsn9n7ZfXvhj7Q1eRkj2cVRWF
- ZvNDAUjf7dHVea5cActJ3ogbyd+yrzNGPtgzIDfH5eQ4T4o7q8B+6ECBeCjzpCPhLh1kQJgQv
- pek3/LNVNQDRwX6IGxUAEsKZo0pr09n0ZCw9A5bCC/lGEIQJHuTW2SAyo1nEls8DWyyiiOMa7
- r92bClKm5uI3dEOEECKFi4NQFnFNat4OXfyoUlUDYsDaZm2tKRR+6yB0dYSZpumTazQ06ES0f
- PcfoDrW0aOwCdkchBEA6lI5IOu0DXVeeGdiJTRAU2rMfE3/czBqtu6YTvDHwmikL87/8fwW5G
- HH4rVD9WEJ623U=
-Subject: Re: [Buildroot] New packages question
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{4, 10, 15}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,33 +57,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zw6ksCgpPbiBUaHUsIDIgRGVjIDIwMjEgMTI6NDE6MzAgKzAyMDAsIEpvc8OpIFBl
-a2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gSGksCj4gCj4g
-SSdtIHJlYWRpbmcgYSBwYWNrYWdlIGZvciBibXg3IHRvIGJlIHVwc3RyZWFtZWQuCj4gCj4gSSBm
-b3VuZCB0aGUgZm9sbG93aW5nIGVycm9yIGluIG9uZSBvZiB0aGUgdG9vbGNoYWlucwo+IChib290
-bGluLXg4Ni02NC1tdXNsKSwgYW5kIEkgd29uZGVyIHdoZXRoZXIgaXQgaXMgYW4gaXNzdWUKPiBp
-biB0aGUgdG9vbGNoYWluLCBhbmQgaWYgaXQgY2FuIGJlIGEgYmxvY2tlciBmb3IgdGhlIHBhY2th
-Z2UgdG8KPiBiZSBtZXJnZWQ6Cj4gCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tCj4gL2hvbWUvZGVi
-aWFuL2JyLXRlc3QtcGtnL2Jvb3RsaW4teDg2LTY0LW11c2wvaG9zdC94ODZfNjQtYnVpbGRyb290
-LWxpbnV4LW11c2wvc3lzcm9vdC91c3IvaW5jbHVkZS9uZXQvZXRoZXJuZXQuaDoxMCwKPiAgICAg
-ICAgICAgICAgICAgZnJvbQo+IC9ob21lL2RlYmlhbi9ici10ZXN0LXBrZy9ib290bGluLXg4Ni02
-NC1tdXNsL2hvc3QveDg2XzY0LWJ1aWxkcm9vdC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1
-ZGUvaXdsaWIuaDoyOSwKPiAgICAgICAgICAgICAgICAgZnJvbSBpcC5jOjUxOgo+IC9ob21lL2Rl
-Ymlhbi9ici10ZXN0LXBrZy9ib290bGluLXg4Ni02NC1tdXNsL2hvc3QveDg2XzY0LWJ1aWxkcm9v
-dC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1ZGUvbmV0aW5ldC9pZl9ldGhlci5oOjExNjo4
-Ogo+IGVycm9yOiByZWRlZmluaXRpb24gb2Yg4oCYc3RydWN0IGV0aGhkcuKAmQo+ICAxMTYgfCBz
-dHJ1Y3QgZXRoaGRyIHsKPiAgICAgIHwgICAgICAgIF5+fn5+fgo+IAo+IEJlc3QgcmVnYXJkcy4K
-ClNvbWV0aW1lcyB0aGUgbXVzbCBidWlsZCBmYWlsdXJlIGlzIGZpeGFibGUsIHNlYXJjaCB0aGUg
-Z2l0IGhpc3RvcnkgZm9yCmV4YW1wbGVzLCBlLmcuIFsxXSwgb3IgYXQgbGVhc3QgcmVzb3J0IGRp
-c2FibGUgZm9yIG11c2wuLi4KClJlZ2FyZHMsClBldGVyCgpbMV0gaHR0cHM6Ly9naXQuYnVpbGRy
-b290Lm5ldC9idWlsZHJvb3QvY29tbWl0Lz9pZD1lMGMxY2UwMTlmOGE1YWFmOWY1NGFlODVlMTg4
-MjEwNDhiMjNkOTQwCgo+IAo+IAo+IEpvc8OpIFBla2thcmluZW4uCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+5.14.x is EOL, so no more updates for that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 42724c7d3c..db0c58129f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.15.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 8a6f77be36..9062b72a0e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  549d0fb75e65f6158e6f4becc648f249d386843da0e1211460bde8b1ea99cbca  linux-5.15.4.tar.xz
++sha256  b3e9ba06a299a3e2ead4a15753bc46a3e0c90d3b92ffeed1034ccc9f13a717f0  linux-5.15.6.tar.xz
+ sha256  f41a259cb2002dd2e3286524b2bb4e803f4f982992d092706ecea613584023b3  linux-5.14.21.tar.xz
+-sha256  a2e1686132c4598c0adfdf52acbf1ab4bb327b2398badef346a0eff849da5adb  linux-5.10.81.tar.xz
+-sha256  3149c6b52a3079218a60bd369a80d18275b574d84908ffee32a0a8f9ddf939a7  linux-5.4.161.tar.xz
++sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
++sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  2729aa644e174418764eaf60f9f1ee1bd6505290a327c2f24385b4a02cfab96c  linux-4.4.292.tar.xz
+-sha256  cdde5aa24633fcac929b15f2c2fe0c43053dc7439ab3d9c7223d82fdd8ea40db  linux-4.9.290.tar.xz
+-sha256  f00b8001424e3f185990f6ee24a7a393b7f0996f739cd4ee6a79532b23e6b2d7  linux-4.14.255.tar.xz
+-sha256  8551110cc7184b1402a21b42e498088c5b0bb824a658c5fab173c12d9904a004  linux-4.19.217.tar.xz
++sha256  6d2f83619493e656276dbf22afcdb80f42320e697570419380773bb4916130fd  linux-4.4.293.tar.xz
++sha256  b55d77774ed631f57f736bcdab021f68167455c9daede7e9e4161b4d564d8b53  linux-4.9.291.tar.xz
++sha256  9784204f95cfc7de1c933088e6f9364e99a29988ae4e6b9353677637eb171aa0  linux-4.14.256.tar.xz
++sha256  8f4ecd71fbcdd733c2849e2e5afe59d351c463c9a699bdbf428d88fa911009db  linux-4.19.219.tar.xz
+ # Locally computed
+ sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
+ sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index fb9086d0a9..9bc3c873c5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -374,14 +374,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.292"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.290"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.255"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.217"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.161"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.81"	if BR2_KERNEL_HEADERS_5_10
++	default "4.4.293"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.291"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.256"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.14.21"	if BR2_KERNEL_HEADERS_5_14
+-	default "5.15.4"	if BR2_KERNEL_HEADERS_5_15
++	default "5.15.6"	if BR2_KERNEL_HEADERS_5_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
