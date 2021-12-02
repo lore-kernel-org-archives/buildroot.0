@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850E7C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 17:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B78B1C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 17:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B75540A53;
-	Thu,  2 Dec 2021 17:40:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B721340A69;
+	Thu,  2 Dec 2021 17:40:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m1e9sMxAuYo6; Thu,  2 Dec 2021 17:40:23 +0000 (UTC)
+	with ESMTP id 9hpQr4y00U-8; Thu,  2 Dec 2021 17:40:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 264DE40162;
-	Thu,  2 Dec 2021 17:40:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46D7A1BF3F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id C448240A65;
+	Thu,  2 Dec 2021 17:40:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E2CA1BF9D1
  for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3492341DF0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D14060644
  for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mQI7hQUo830w for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hSeDKLNaer9m for <buildroot@lists.busybox.net>;
  Thu,  2 Dec 2021 17:40:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8013E41DC7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 767046063F
  for <buildroot@buildroot.org>; Thu,  2 Dec 2021 17:40:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5320C922BB; Thu,  2 Dec 2021 17:35:31 +0000 (UTC)
+ id 489DE922AF; Thu,  2 Dec 2021 17:35:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 Dec 2021 18:33:43 +0100
+Date: Thu, 2 Dec 2021 18:20:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd89074e8338b2114832469e2a188ff7824a7e25
-X-Git-Newrev: 30107f026e0d4a44344a51199a24a01979bf556b
+X-Git-Oldrev: 76e66240da9b5dac8177fca4deb0f66c3c994023
+X-Git-Newrev: dd89074e8338b2114832469e2a188ff7824a7e25
 X-Patchwork-Hint: ignore
-Message-Id: <20211202173531.5320C922BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/heimdal: install compile_et
+Message-Id: <20211202173531.489DE922AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/e2fsprogs: don't install compile_et
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +58,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30107f026e0d4a44344a51199a24a01979bf556b
+commit: https://git.buildroot.net/buildroot/commit/?id=dd89074e8338b2114832469e2a188ff7824a7e25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-compile_et is not installed anymore by heimdal since version 7.0.1 and
-https://github.com/heimdal/heimdal/commit/e40ef47b57f3c62f94c4056f02ced3af2ed083ca
+Don't install compile_et as it raises the following build failure with
+samba4 since, at least, bump to version 4.14.7 in commit
+630e85f8f5ed64933b45599fc4332d9609177c5c:
 
-So remove the broken symlink and install it manually as it is needed for
-samba4 because compile_et provided by e2fsprogs raises a build failure
+source4/heimdal/lib/asn1/asn1_err.c:47:23: error: 'link' redeclared as different kind of symbol
+   47 | static struct et_list link = { 0, 0 };
+      |                       ^~~~
+In file included from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/bits/sigstksz.h:24,
+                 from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/signal.h:328,
+                 from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/sys/param.h:28,
+                 from ../../lib/replace/../replace/replace.h:659,
+                 from ../../source4/heimdal_build/config.h:10,
+                 from source4/heimdal/lib/asn1/asn1_err.c:1:
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/s390x-buildroot-linux-gnu/sysroot/usr/include/unistd.h:819:12: note: previous declaration of 'link' was here
+  819 | extern int link (const char *__from, const char *__to)
+      |            ^~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d6de6ed59c553f6f413d280f3c65184945bb3850
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heimdal/heimdal.mk | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 9a1a68f046..ce509c7afa 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -28,19 +28,26 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--disable-ndbm-db \
- 	--disable-heimdal-documentation
- 
--HOST_HEIMDAL_CONF_ENV = MAKEINFO=true
-+# Don't use compile_et from e2fsprogs as it raises a build failure with samba4
-+HOST_HEIMDAL_CONF_ENV = ac_cv_prog_COMPILE_ET=no MAKEINFO=true
- HEIMDAL_LICENSE = BSD-3-Clause
- HEIMDAL_LICENSE_FILES = LICENSE
- HEIMDAL_CPE_ID_VENDOR = heimdal_project
- 
-+# We need compile_et for samba4
-+define HOST_HEIMDAL_INSTALL_COMPILE_ET
-+	$(INSTALL) -m 0755 $(@D)/lib/com_err/compile_et \
-+		$(HOST_DIR)/bin/compile_et
-+endef
-+
- # We need asn1_compile in the PATH for samba4
- define HOST_HEIMDAL_MAKE_SYMLINK
- 	ln -sf $(HOST_DIR)/libexec/heimdal/asn1_compile \
- 		$(HOST_DIR)/bin/asn1_compile
--	ln -sf $(HOST_DIR)/bin/compile_et \
--		$(HOST_DIR)/libexec/heimdal/compile_et
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index ca891066a2..76215e8c34 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -90,5 +90,11 @@ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install install-libs
  endef
  
--HOST_HEIMDAL_POST_INSTALL_HOOKS += HOST_HEIMDAL_MAKE_SYMLINK
-+HOST_HEIMDAL_POST_INSTALL_HOOKS += \
-+	HOST_HEIMDAL_INSTALL_COMPILE_ET \
-+	HOST_HEIMDAL_MAKE_SYMLINK
- 
++# Remove compile_et which raises a build failure with samba4
++define HOST_E2FSPROGS_REMOVE_COMPILE_ET
++	$(RM) $(HOST_DIR)/bin/compile_et
++endef
++HOST_E2FSPROGS_POST_INSTALL_HOOKS += HOST_E2FSPROGS_REMOVE_COMPILE_ET
++
+ $(eval $(autotools-package))
  $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
