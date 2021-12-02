@@ -1,81 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7730DC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 01:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3179C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 01:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00C2C82779;
-	Thu,  2 Dec 2021 01:19:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A0FD4011A;
+	Thu,  2 Dec 2021 01:39:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ThVNRWtriO7C; Thu,  2 Dec 2021 01:19:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GDs2kn_UYw2i; Thu,  2 Dec 2021 01:39:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEA881A50;
-	Thu,  2 Dec 2021 01:19:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C53A81BF5DB
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 01:19:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2884C40109;
+	Thu,  2 Dec 2021 01:39:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C7051BF5DB
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 01:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B581D80F40
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 01:19:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED4F160602
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 01:39:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0NqiGMg35Ivt for <buildroot@lists.busybox.net>;
- Thu,  2 Dec 2021 01:19:27 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iy5KUdEozzpL for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 01:39:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
- [IPv6:2607:f8b0:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8E8D080FF2
- for <buildroot@buildroot.org>; Thu,  2 Dec 2021 01:19:27 +0000 (UTC)
-Received: by mail-ot1-x332.google.com with SMTP id
- h19-20020a9d3e53000000b0056547b797b2so37822121otg.4
- for <buildroot@buildroot.org>; Wed, 01 Dec 2021 17:19:27 -0800 (PST)
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
+ [IPv6:2a00:1450:4864:20::12f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0A7A4605E3
+ for <buildroot@buildroot.org>; Thu,  2 Dec 2021 01:39:07 +0000 (UTC)
+Received: by mail-lf1-x12f.google.com with SMTP id l22so67573488lfg.7
+ for <buildroot@buildroot.org>; Wed, 01 Dec 2021 17:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=CAKF2so9544cVKz1SFLJIZks8tbhS2ZC7ddG1/d3sD0=;
- b=HDI1Hp8Yid8aLS8I/YpM6um6MCLAUinGMFLVVsCD5+0WJdxgKHIuSPftqcy7w6ddjE
- xaSRbTbuZBgJ3TdJdlOcwRr/jjHmIrIhr2Et56+zOPcBUkH5oDhpt98nYIiXsOi0Dzb+
- sn76iSPZ06eHdcF5cr12vQlxepbisxhDk//qLMf4TsVizvw5ma9aTJ8TIC5ztSGaLImr
- x/WMb2gE1AiTYxfuMb48VDPwQCFe3CeU9Hpo6YTCI5OKXzJMxjaQ9P5YmYcsSuyrBLpc
- voFQltga5SKOi618SphLSvILr6EdXK1QsTgfTdL4J0OTpCf36DYshuLhofknVGBQsf2Y
- TZYg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RMYDWdU8n27bBY1Ac5quRKfBay5jImBQ+mKmNVLhNjg=;
+ b=Pqj+5I9L+8sJpbllIzxCfx20gIndZAM/pbF0/dr4MF7VhtrwHrpip7xbuXzOM9qodh
+ WM4c6ngoeNPlBf4N9Z67ifnT68gJ0GFFkPNbevlVsjJjictnT0CCKy/QuImbnhc+vM2V
+ nIdpDp8Hk6vtDTPF9ExIEe/FyFo27ui88F9WrIeqAufVdWTleIv0yXznybJ+lovNl3HU
+ KopFo1bEx7pWeB7lf3xXYwAlCBXbhmrw9pMlRm7fyrUrH5AOcjXyI85cDSDznLMjukWE
+ fGytdf0685caJWbILyls6GH+Ndk9dUmOKqAmTZtVDrtla0Pd5Ugt1FkK/NmgmKF6zw4D
+ vwfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=CAKF2so9544cVKz1SFLJIZks8tbhS2ZC7ddG1/d3sD0=;
- b=xnKH8LLPVKYaAMXwuY0onMN36vRe8/4uf7ls/wMF64rQQL8nQr2V87ew8Ey3/brdGI
- Ffl+I3lUS+pGp6ORzpRli9nIHbTAowrWvcC+XaXhO06UvOBc+k+7+Oai7u/xQnoyLDef
- T89V2rTRt/qA113yL0VSUWPNTdzuq7PMTvhu/OjXat1kcamtbcchX2leCAKXSR+BDEjc
- 9tNOvW26omOOBQfA3xK0Xgw8SbZpFAx6/slyY634urd7bSaxb9IAnlmkYeOkVV2RO5U0
- QreG6WEjgKRA5GUi0ABhWViXztIrljBpiciduXbYwwYZq8Gj8zVXb9RSe+929L+jgTS+
- F8mg==
-X-Gm-Message-State: AOAM5305ktHegd/aBwNv9zWM1cWlZHrodw878neJZRS3wVasrmdCJjIz
- eo+jrZ6+8I4DderfmX5ZZjLp65lEI+I=
-X-Google-Smtp-Source: ABdhPJzs6/iK0zaQ2yvDa6tr+DxflYnx8Jgxjphg/LzvQtQ85KdzPNZ3zKQlWoKdaVb+cSGTFfofCg==
-X-Received: by 2002:a05:6830:1be9:: with SMTP id
- k9mr8927665otb.123.1638407964909; 
- Wed, 01 Dec 2021 17:19:24 -0800 (PST)
-Received: from james-x399.localdomain (71-33-128-47.hlrn.qwest.net.
- [71.33.128.47])
- by smtp.gmail.com with ESMTPSA id o2sm824253oik.11.2021.12.01.17.19.24
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=RMYDWdU8n27bBY1Ac5quRKfBay5jImBQ+mKmNVLhNjg=;
+ b=5GV1OZJBFNcmiSQIrCstVSwBYhG7M/lPVIbAh3x07X9xMnrIhdC0lAav5UMrqx26pm
+ uU3wpL6O81wfr5PbqxpawntVchGmcJ61Ir26ROfl07Sf5mJancBHM3ROEjLOjsS6lTNd
+ uE2cnuJP7uPeFBdXCMZvFCtYrLoxGqeZRA3msuUjrI1LHtLwLTRCBRZAxEvFg6AiejtE
+ 0o90OeZHaDPZEhTO6RjmOt8PGOzSvnlS1AtdfmxgVyehE2IFHctxAnwQaqJm3v5n5Gi4
+ BHkRNlqurRKL74ICHhU3lz+Muh9eq8/0g7ZIl4hoFtCInMEjsgHJQmXdlzxm+VpmvSAc
+ vuIA==
+X-Gm-Message-State: AOAM533HeTWzudvo8bqeotuB5Rhe99EOcT7wfQyuk5Xx9yK8iz/jKuVo
+ OfJUbYYLDGSgjQRDCVLdNWtMF08z2JM=
+X-Google-Smtp-Source: ABdhPJwclgCJbltPRgfcyuimfiwK2wO7dVtDn0HYL9VRubmvXhbYnuxQ5e0S3tlu8L4VKBkjtk0pFA==
+X-Received: by 2002:ac2:5932:: with SMTP id v18mr9038647lfi.611.1638409145700; 
+ Wed, 01 Dec 2021 17:39:05 -0800 (PST)
+Received: from localhost.localdomain ([176.10.248.198])
+ by smtp.gmail.com with ESMTPSA id b13sm176939lfv.200.2021.12.01.17.39.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 Dec 2021 17:19:24 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Wed, 01 Dec 2021 17:39:05 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  1 Dec 2021 18:19:19 -0700
-Message-Id: <20211202011919.2331133-2-james.hilliard1@gmail.com>
+Date: Thu,  2 Dec 2021 02:39:00 +0100
+Message-Id: <20211202013902.1593562-1-troglobit@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211202011919.2331133-1-james.hilliard1@gmail.com>
-References: <20211202011919.2331133-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH/next v2 2/2] package/iwd: bump to version 1.20
+Subject: [Buildroot] [PATCH next 0/2] fix name clash between libite and LiTE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,52 +84,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Matt Weber <matthew.weber@collins.com>
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Changelog (since 1.19, from [1]):
+Hi,
 
-  ver 1.20:
-    Fix issue with handling Hotspot 2.0 requirements.
-    Add support for evict_nocarrier setting during roaming.
-    Add support for experimental NetworkConfigurationAgent API.
+this patch series updates libite and watchdogd to correct the
+unfortunate name clash between libite and the DirectFB LiTE
+project's header files.
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog
+http://autobuild.buildroot.net/results/185c753af2aa159b494b13f78b0826dddbe4aed6
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Note: if applying this series in fragments, please update watchdogd
+      first, otherwise the build will fail due to the relocation of
+      the libite headers.
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 008a2db011..58224170e6 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  dd65a8795f6127fb1b9e29f2092686b0590a0d3738c2b90c792ccd320deaf966  iwd-1.19.tar.xz
-+sha256  7d51e2ccabe7c500e44061ac725dbd4f6b0fb518b5e3de1681063d0f15d3050f  iwd-1.20.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index afa6e3bdeb..7b122811c5 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 1.19
-+IWD_VERSION = 1.20
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
+Best regards
+ /Joachim
+
+Joachim Wiberg (2):
+  package/watchdogd: bump to version 3.5
+  package/libite: bump to version 2.5.1
+
+ package/libite/libite.hash       | 2 +-
+ package/libite/libite.mk         | 3 ++-
+ package/watchdogd/watchdogd.hash | 2 +-
+ package/watchdogd/watchdogd.mk   | 2 +-
+ 4 files changed, 5 insertions(+), 4 deletions(-)
+
 -- 
 2.25.1
 
