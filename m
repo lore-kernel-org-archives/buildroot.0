@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55BFAC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF330C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 224EE41C36;
-	Mon,  6 Dec 2021 18:39:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE3D3402E0;
+	Mon,  6 Dec 2021 18:40:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7t9x1kztw17y; Mon,  6 Dec 2021 18:39:55 +0000 (UTC)
+	with ESMTP id 8Aa53I2IlJNl; Mon,  6 Dec 2021 18:40:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6466140413;
-	Mon,  6 Dec 2021 18:39:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D320E41C6A;
+	Mon,  6 Dec 2021 18:40:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 122F61BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F2191BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F33441C42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9098541C80
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hS5XuurDon2c for <buildroot@lists.busybox.net>;
+ with ESMTP id mtmDq1ZPkLuu for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E65F441C54
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDE0941C5A
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7E14F81468; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 93E0381503; Mon,  6 Dec 2021 18:07:41 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Nov 2021 00:06:23 +0100
+Date: Thu, 2 Dec 2021 19:58:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b134c8a2409aca6921a94e2e12c8062ad483c08e
-X-Git-Newrev: 351dbaef4e9c5bc94a67b8a92a92f6e101cf6bf6
+X-Git-Oldrev: 42f19d49fb2da891be9266a2f843292d24847f18
+X-Git-Newrev: c0d0961d29e2ca4332a9b1f456a4c24696c57809
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180741.7E14F81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpeas: new package
+Message-Id: <20211206180741.93E0381503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/genimage: bump to version 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,142 +58,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=351dbaef4e9c5bc94a67b8a92a92f6e101cf6bf6
+commit: https://git.buildroot.net/buildroot/commit/?id=c0d0961d29e2ca4332a9b1f456a4c24696c57809
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-midori 9.0 requires libpeas.
+This includes the following changes:
 
-Lua and python loaders are disabled since they have not been tested.
+aa76b22 release version 15
+dd49fec util: Fix warn_unused_result build warnings
+6ba2b4d image-hd: more error output when bootloaders overlap with the partition table
+90b83ba allow specifying 'holes' in the partition section
+09fde2e [ci skip] typo "used used fill" -> "used to fill"
+b0d794c image-flash: don't ignore truncate errors except ENOENT
+93d1f26 .github: replace ubuntu-16.04 with ubuntu-18.04
+1e9b9be util: systemp(): don't use shell defined in SHELL, but GENIMAGE_SHELL
+1c53012 util: systemp(): use shell defined in SHELL rather than /bin/sh
+89490b9 image-android-sparse: use off_t instead of int for lseek return values
+f1cab39 test: add tests for --includepath
+9e7f23a README.rst: reflow paragraph
+0778817 add --includepath option
+e210857 config.c: remove redundant helper add_opt()
+18b3cfd config.c: allow hiding specific command line options from --help
+65548f6 config.c: remove unused member cmdlineopt
+f606a33 util: remove unused pad_file function
+62e1d4f image-flash: use insert_image instead of pad_file
+8c0fe58 image-ext2: use insert_image instead of pad_file
+7d0003b util: insert_image: allow specifying the fill value
+b847f3e image-hd: resize the image to the final size at the begining
+8e3bf8b test: hdimage: check the disk usage of the second image as well
+e2bd4c3 test: handle new genext2fs and e2fsprogs versions
+06ac16e insert_image: fix read/write loop
+17e2c3c test: filter 'rauc info' output for newer distros
+1d72d80 image-hd: stricter option handling
+d912549 image-hd.c: make GPT backup handling a little less special
+69f6644 add test for partitions out of order
+9190a2b image-hd.c: correct computation of first_usable_lba
+8505aed image-hd.c: switch to insert_image() instead of pad_file()
+5cc31c6 image-hd.c: truncate output file before looping over partitions
+2194e31 image-hd.c: replace use of pad_file() with extend_file()
+5638a9e util.c: add insert_image() helper
+8eef854 test: add tests for "bootloader with holes allowing some overlap"
+a72ca69 image-hd.c: take image holes into consideration when checking for overlap
+564e359 document "file" image type and "hole" syntax in particular
+998a118 image-file.c: allow specifying "don't care" regions
+7f8f19d image-hd.c: fix missing check for overlap with GPT table
+e91c8e2 image-hd.c: check all partitions for overlap
+44d5346 image-hd.c: allow partitions to appear out-of-order
+cd3ceac image-hd.c: ensure an autoresize partition has a size consistent with its alignment
+0a61f64 README.rst: add description of how default align/size/offset are computed
+efaae46 test: fix copy/paste error in the test refactoring
+086380a config: don't try to access non-existent section
+fe74ea1 image-vfat: drop '-b' from mcopy
+7ef351d test: factor out some test data generation
+94af174 image-hd.c: fix extended partition with offset
+649602b image-hd.c: prepare for fake partitions
+cc13e78 image-hd.c: don't sanity check partition_type_uuid for !part->in_partition_table
+5f53df3 image-hd.c: move overlap check below partition size determination
+b77f38b image-hd.c: allow specifying minimum size for auto-resize partitions
+5f07c1c image-hd.c: do not require the autoresize partition to be specified last
+8269fa7 image-hd.c: enforce proper alignment of all partitions
+5bd7283 image-hd.c: ignore in-partition-table when the image has no partition table
+3e2b616 image-hd.c: always sanity check child->size v part->size
+fa619fb image-hd.c: separate computation of part->offset from the sanity checks
+030e7a3 allow each partition to have its own align value
+cf192fd image-hd.c: fix computation of autoresize size
+d6c477c image-hd.c: don't lazily initialize now
+6cbbf86 README.rst: document default value of in-partition-table option
+e43e02e test: add some tests for overlap of GPT
+11f3528 image-hd.c: refactor updating chs values
+8c74183 image-hd.c: add and use "struct mbr_tail"
+9ffd5e0 add macro for compile-time assertions
+9e59a27 change insert_data() to take const void* instead of const char*
+bcd7fa6 util: strtoul_suffix: allow s suffix for sector size (512 bytes)
+41d77c4 image-hd.c: fix copy-pasto access of random memory
+5dc2e22 list.h: drop prefetch()
+be29822 image-rauc: add intermediate option
+344416f util: add save string concat with formated string
+351d50e image-rauc: ensure clean-up on rauc_generate() exit
+5cba95c image-rauc: free keyringargs after use
+23adab0 image-ext: ensure size is always interpreted as kilobytes
+8014c7e .github: run apt-get update to update package cache
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in            |  1 +
- package/libpeas/Config.in    | 45 ++++++++++++++++++++++++++++++++++++++++++++
- package/libpeas/libpeas.hash |  4 ++++
- package/libpeas/libpeas.mk   | 41 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 91 insertions(+)
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e355ab1987..4dc7bca443 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1959,6 +1959,7 @@ menu "Other"
- 	source "package/libnpth/Config.in"
- 	source "package/libnspr/Config.in"
- 	source "package/libosmium/Config.in"
-+	source "package/libpeas/Config.in"
- 	source "package/libpfm4/Config.in"
- 	source "package/libplatform/Config.in"
- 	source "package/libplist/Config.in"
-diff --git a/package/libpeas/Config.in b/package/libpeas/Config.in
-new file mode 100644
-index 0000000000..430e668ee7
---- /dev/null
-+++ b/package/libpeas/Config.in
-@@ -0,0 +1,45 @@
-+config BR2_PACKAGE_LIBPEAS
-+	bool "libpeas"
-+	depends on BR2_USE_MMU # gobject-introspection
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-+	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  libpeas is a gobject-based plugins engine, and is targetted at
-+	  giving every application the chance to assume its own
-+	  extensibility. It also has a set of features including, but
-+	  not limited to:
-+	    - multiple extension points
-+	    - On demand (lazy) programming language support for C,
-+	      Python and Lua
-+	    - Simplicity of the API
-+
-+	  https://wiki.gnome.org/Projects/Libpeas
-+
-+if BR2_PACKAGE_LIBPEAS
-+
-+config BR2_PACKAGE_LIBPEAS_WIDGETS
-+	bool "widgets"
-+	depends on BR2_PACKAGE_LIBGTK3
-+	help
-+	  Build GTK+ widgetry
-+
-+comment "widget support needs libgtk3"
-+	depends on !BR2_PACKAGE_LIBGTK3
-+
-+endif
-+
-+comment "libpeas needs python3"
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_PYTHON3
-+
-+comment "libpeas needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_8
-diff --git a/package/libpeas/libpeas.hash b/package/libpeas/libpeas.hash
-new file mode 100644
-index 0000000000..2b030c01c5
---- /dev/null
-+++ b/package/libpeas/libpeas.hash
-@@ -0,0 +1,4 @@
-+# From https://ftp.gnome.org/pub/GNOME/sources/libpeas/1.30/libpeas-1.30.0.sha256sum
-+sha256  0bf5562e9bfc0382a9dcb81f64340787542568762a3a367d9d90f6185898b9a3  libpeas-1.30.0.tar.xz
-+# Locally calculated
-+sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-diff --git a/package/libpeas/libpeas.mk b/package/libpeas/libpeas.mk
-new file mode 100644
-index 0000000000..097cc860eb
---- /dev/null
-+++ b/package/libpeas/libpeas.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# libpeas
-+#
-+################################################################################
-+
-+LIBPEAS_VERSION_MAJOR = 1.30
-+LIBPEAS_VERSION = $(LIBPEAS_VERSION_MAJOR).0
-+LIBPEAS_SOURCE = libpeas-$(LIBPEAS_VERSION).tar.xz
-+LIBPEAS_SITE = http://ftp.gnome.org/pub/gnome/sources/libpeas/$(LIBPEAS_VERSION_MAJOR)
-+LIBPEAS_LICENSE = LGPL-2.1+
-+LIBPEAS_LICENSE_FILES = COPYING
-+LIBPEAS_CPE_ID_VENDOR = gnome
-+LIBPEAS_INSTALL_STAGING = YES
-+LIBPEAS_DEPENDENCIES = \
-+	host-libglib2 \
-+	host-pkgconf \
-+	gobject-introspection \
-+	libglib2 \
-+	$(TARGET_NLS_DEPENDENCIES)
-+
-+LIBPEAS_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-+
-+LIBPEAS_CONF_OPTS = \
-+	-Ddemos=false \
-+	-Dglade_catalog=false \
-+	-Dgtk_doc=false \
-+	-Dintrospection=true \
-+	-Dlua51=false \
-+	-Dpython2=false \
-+	-Dpython3=false \
-+	-Dvapi=false
-+
-+ifeq ($(BR2_PACKAGE_LIBPEAS_WIDGETS),y)
-+LIBPEAS_DEPENDENCIES += libgtk3
-+LIBPEAS_CONF_OPTS += -Dwidgetry=true
-+else
-+LIBPEAS_CONF_OPTS += -Dwidgetry=false
-+endif
-+
-+$(eval $(meson-package))
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 9f60261b53..80065d53b1 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9d1d53b33309fe24ea367ea057eb689bdb8ea33cb99d796de31127ca44ccf44c  genimage-14.tar.xz
++sha256  9bca24bf883310b30ee4511cbc3a580e40ad4540826e5ed3992c595ce72d003e  genimage-15.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 1934223b23..44963b48fb 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 14
++GENIMAGE_VERSION = 15
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
