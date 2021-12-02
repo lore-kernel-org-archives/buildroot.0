@@ -1,63 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76E95C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 21:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9C0EC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 22:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E204340179;
-	Thu,  2 Dec 2021 21:38:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FA9D83FB0;
+	Thu,  2 Dec 2021 22:32:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qkRhe85Ycli7; Thu,  2 Dec 2021 22:32:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64DBB83FAA;
+	Thu,  2 Dec 2021 22:32:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 908AE1BF475
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 22:32:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 891C440A95
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 22:32:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fZ7iJ41KR0gB; Thu,  2 Dec 2021 21:38:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C969C40A92;
-	Thu,  2 Dec 2021 21:38:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B7291BF3BA
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 21:38:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58AF480F8A
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 21:38:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QWK41TG7tySM for <buildroot@lists.busybox.net>;
- Thu,  2 Dec 2021 21:38:40 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1yRe3_qhd0uB for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 22:32:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB9F480F39
- for <buildroot@buildroot.org>; Thu,  2 Dec 2021 21:38:39 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPA
- id stmnmQ7c5z3hmstmnmqWXr; Thu, 02 Dec 2021 22:38:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1638481118; bh=d94qs/oEC1FBLjsgtR3o+QWtl19K75AlvSdIqqZzwB8=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=ixLmvB8MlX66mVWVJjvTkOBHmq2O99th393IBxst2KndsYsfSRDEVMD3SYBicje85
- BZjN5WpGej3Z4NTOYJTtRX7Auv/RU8a9+Ep/Al+v3KknkxTyrZmIQrpA4N8ANDZ9Uk
- CmolzR/HQn/pTWiBLUbx9MRffUwmDeGnfTdvmc5/aETGhbQTw0XLP78Kv57zcySHFy
- faCb7PHxSg1Spcb65yOZ9lmwjt4Qv8HNz/qvJewtlFBFk5JdWrcOFk8OS7LsSKGy4R
- KpQV8m5VdGtovnrzHz/3GVXbe9s3eIwFfaOBp2xDZk7N4Z8c0GjqFrJGBW2xCQe4Wq
- OInw7gVqFqakA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Thu, 2 Dec 2021 22:38:37 +0100
-Message-Id: <E2DB973E-9C90-49F0-8D20-DA9014FD05F2@benettiengineering.com>
-References: <20211202213347.14374-1-peter@korsgaard.com>
-In-Reply-To: <20211202213347.14374-1-peter@korsgaard.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailer: iPhone Mail (19B74)
-X-CMAE-Envelope: MS4xfBxkVothtPcEDSRxZNEMeOjYJsv9h5PNEQFBwsZxYN3rRm9VGPAR9xfOOdJ4YO2yLDIQsxjhP9peF+Aq8cZPkKCxv2QUR54+BEs8JJhyPhtxJnSEzO6U
- +c0/tnhNRiNkUfzJkACXK7bZenue9pBPTsQ/sukTMN3ne/KtHhR241He9TVwWyKN5Utj7wfo4ibzw89TGG2RAy9SR4z1R+YjwYHdW18ukgTdzskI/X3e9qJQ
- 15t8PpUP+rDMQOQxBMcRcrcfdOvzSwK/EuUsjod7RPvT6C2RCESANH0PC4evXyjn
-Subject: Re: [Buildroot] [PATCH] package/libnss: security bump to version
- 3.73
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76F5E40A94
+ for <buildroot@buildroot.org>; Thu,  2 Dec 2021 22:32:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 1258C40003;
+ Thu,  2 Dec 2021 22:32:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1msudG-0004JJ-4k; Thu, 02 Dec 2021 23:32:50 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Dec 2021 23:32:43 +0100
+Message-Id: <20211202223245.16511-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/icu: backport upstream security fix for
+ CVE-2021-30535
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,45 +57,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGV0ZXIsCgo+IElsIGdpb3JubyAyIGRpYyAyMDIxLCBhbGxlIG9yZSAyMjozNCwgUGV0ZXIg
-S29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiBoYSBzY3JpdHRvOgo+IAo+IO+7v0ZpeGVz
-IHRoZSBmb2xsb3dpbmcgc2VjdXJpdHkgaXNzdWU6Cj4gCj4gLSBDVkUtMjAyMS00MzUyNzogSGVh
-cCBvdmVyZmxvdyBpbiBOU1Mgd2hlbiB2ZXJpZnlpbmcgRFNBL1JTQS1QU1MKPiAgREVSLWVuY29k
-ZWQgc2lnbmF0dXJlcwo+IAo+IEZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgYWR2aXNvcnk6Cj4g
-aHR0cHM6Ly93d3cubW96aWxsYS5vcmcvZW4tVVMvc2VjdXJpdHkvYWR2aXNvcmllcy9tZnNhMjAy
-MS01MS8KPiAKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFy
-ZC5jb20+CgpZb3XigJl2ZSBiZWF0ZW4gbWUgb24gdGltZSA6LSkKClJldmlld2VkLWJ5OiBHaXVs
-aW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KCkJlc3Qg
-cmVnYXJkcwpHaXVsaW8gQmVuZXR0aQoKPiAtLS0KPiBwYWNrYWdlL2xpYm5zcy9saWJuc3MuaGFz
-aCB8IDQgKystLQo+IHBhY2thZ2UvbGlibnNzL2xpYm5zcy5tayAgIHwgMiArLQo+IDIgZmlsZXMg
-Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL2xpYm5zcy9saWJuc3MuaGFzaCBiL3BhY2thZ2UvbGlibnNzL2xpYm5zcy5oYXNo
-Cj4gaW5kZXggM2RjNmNiMTg1YS4uODAzYjIzNGM4MyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xp
-Ym5zcy9saWJuc3MuaGFzaAo+ICsrKyBiL3BhY2thZ2UvbGlibnNzL2xpYm5zcy5oYXNoCj4gQEAg
-LTEsNCArMSw0IEBACj4gLSMgRnJvbSBodHRwczovL2Z0cC5tb3ppbGxhLm9yZy9wdWIvc2VjdXJp
-dHkvbnNzL3JlbGVhc2VzL05TU18zXzcyX1JUTS9zcmMvU0hBMjU2U1VNUwo+IC1zaGEyNTYgIDZl
-YTYwYTlmZjExM2U0OTNlYTJhYjI1ZjQxZWE3NWE5ZmJkMTBhZjc5MDNmMjZmNzAzZGFjODY4MDcz
-MmQwMmUgIG5zcy0zLjcyLnRhci5nego+ICsjIEZyb20gaHR0cHM6Ly9mdHAubW96aWxsYS5vcmcv
-cHViL3NlY3VyaXR5L25zcy9yZWxlYXNlcy9OU1NfM183M19SVE0vc3JjL1NIQTI1NlNVTVMKPiAr
-c2hhMjU2ICA1NjZkM2E2OGRhOWIxMGQ3ZGE5ZWY4NGViNGZlMTgyZjhmMDRlMjBkODVjNTVkMWJm
-MzYwYmIyYzAwOTZkOGU1ICBuc3MtMy43My50YXIuZ3oKPiAjIExvY2FsbHkgY2FsY3VsYXRlZAo+
-IHNoYTI1NiAgYTIwYzFhMzJkMWY4MTAyNDMyMzYwYjQyZTkzMjg2OWY3YzExYzdjZGJhY2Y5Y2Fj
-NTU0YzQyMjEzMmFmNDdmNCAgbnNzL0NPUFlJTkcKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJu
-c3MvbGlibnNzLm1rIGIvcGFja2FnZS9saWJuc3MvbGlibnNzLm1rCj4gaW5kZXggMmQ4ODBkMjMz
-Ni4uNjUwNGYzMGQzMSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xpYm5zcy9saWJuc3MubWsKPiAr
-KysgYi9wYWNrYWdlL2xpYm5zcy9saWJuc3MubWsKPiBAQCAtNCw3ICs0LDcgQEAKPiAjCj4gIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAKPiAtTElCTlNTX1ZFUlNJT04gPSAzLjcyCj4gK0xJQk5T
-U19WRVJTSU9OID0gMy43Mwo+IExJQk5TU19TT1VSQ0UgPSBuc3MtJChMSUJOU1NfVkVSU0lPTiku
-dGFyLmd6Cj4gTElCTlNTX1NJVEUgPSBodHRwczovL2Z0cC5tb3ppbGxhLm9yZy9wdWIvbW96aWxs
-YS5vcmcvc2VjdXJpdHkvbnNzL3JlbGVhc2VzL05TU18kKHN1YnN0IC4sXywkKExJQk5TU19WRVJT
-SU9OKSlfUlRNL3NyYwo+IExJQk5TU19ESVNURElSID0gZGlzdAo+IC0tIAo+IDIuMjAuMQo+IAoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fixes CVE-2021-30535: Double free in ICU in Google Chrome prior to
+91.0.4472.77 allowed a remote attacker to potentially exploit heap
+corruption via a crafted HTML page.
+
+https://nvd.nist.gov/vuln/detail/CVE-2021-30535
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-ICU-21587-Fix-memory-bug-w-baseName.patch | 112 ++++++++++++++++++
+ package/icu/icu.mk                            |   3 +
+ 2 files changed, 115 insertions(+)
+ create mode 100644 package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch
+
+diff --git a/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch b/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch
+new file mode 100644
+index 0000000000..15af976e49
+--- /dev/null
++++ b/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch
+@@ -0,0 +1,112 @@
++From 2dc5bea9061b4fb05cd03e21b775dd944a0eb81d Mon Sep 17 00:00:00 2001
++From: Frank Tang <ftang@chromium.org>
++Date: Tue, 13 Apr 2021 15:16:50 -0700
++Subject: [PATCH] ICU-21587 Fix memory bug w/ baseName
++
++Edge cases not fixed in assign and move assign operator
++while the locale is long and call setKeywordValue with incorrect
++keyword/values.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Peter: Fixes CVE-2021-30535, adjust paths for tarball]
++---
++ source/common/locid.cpp          | 11 +++++++++--
++ source/test/intltest/loctest.cpp | 26 ++++++++++++++++++++++++++
++ source/test/intltest/loctest.h   |  2 ++
++ 3 files changed, 37 insertions(+), 2 deletions(-)
++
++diff --git a/source/common/locid.cpp b/source/common/locid.cpp
++index 02cd82a7b8..3c6e5b0669 100644
++--- a/source/common/locid.cpp
+++++ b/source/common/locid.cpp
++@@ -469,14 +469,18 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
++     if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
++     if (fullName != fullNameBuffer) uprv_free(fullName);
++ 
++-    if (other.fullName == other.fullNameBuffer) {
+++    if (other.fullName == other.fullNameBuffer || other.baseName == other.fullNameBuffer) {
++         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+++    }
+++    if (other.fullName == other.fullNameBuffer) {
++         fullName = fullNameBuffer;
++     } else {
++         fullName = other.fullName;
++     }
++ 
++-    if (other.baseName == other.fullName) {
+++    if (other.baseName == other.fullNameBuffer) {
+++        baseName = fullNameBuffer;
+++    } else if (other.baseName == other.fullName) {
++         baseName = fullName;
++     } else {
++         baseName = other.baseName;
++@@ -2681,6 +2685,9 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
++         if (fullName != fullNameBuffer) {
++             // if full Name is already on the heap, need to free it.
++             uprv_free(fullName);
+++            if (baseName == fullName) {
+++                baseName = newFullName; // baseName should not point to freed memory.
+++            }
++         }
++         fullName = newFullName;
++         status = U_ZERO_ERROR;
++diff --git a/source/test/intltest/loctest.cpp b/source/test/intltest/loctest.cpp
++index ce41a4c00e..5503b008b0 100644
++--- a/source/test/intltest/loctest.cpp
+++++ b/source/test/intltest/loctest.cpp
++@@ -284,6 +284,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
++     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
++     TESTCASE_AUTO(TestCanonicalize);
++     TESTCASE_AUTO(TestLeak21419);
+++    TESTCASE_AUTO(TestLongLocaleSetKeywordAssign);
+++    TESTCASE_AUTO(TestLongLocaleSetKeywordMoveAssign);
++     TESTCASE_AUTO_END;
++ }
++ 
++@@ -6520,6 +6522,30 @@ void LocaleTest::TestSetUnicodeKeywordValueInLongLocale() {
++     }
++ }
++ 
+++void LocaleTest::TestLongLocaleSetKeywordAssign() {
+++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordAssign");
+++    // A long base name, with an illegal keyword and copy constructor
+++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
+++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
+++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17_AAAAAA18");
+++    Locale l2;
+++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
+++    status.reset();
+++    l2 = l; // copy operator on such bogus locale.
+++}
+++
+++void LocaleTest::TestLongLocaleSetKeywordMoveAssign() {
+++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordMoveAssign");
+++    // A long base name, with an illegal keyword and copy constructor
+++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
+++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
+++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17");
+++    Locale l2;
+++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
+++    status.reset();
+++    Locale l3 = std::move(l); // move assign
+++}
+++
++ void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
++     IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueNullInLongLocale");
++     const char *exts[] = {"cf", "cu", "em", "kk", "kr", "ks", "kv", "lb", "lw",
++diff --git a/source/test/intltest/loctest.h b/source/test/intltest/loctest.h
++index 05be4037bd..12a93bde53 100644
++--- a/source/test/intltest/loctest.h
+++++ b/source/test/intltest/loctest.h
++@@ -156,6 +156,8 @@ class LocaleTest: public IntlTest {
++     void TestSetUnicodeKeywordValueInLongLocale();
++     void TestSetUnicodeKeywordValueNullInLongLocale();
++     void TestLeak21419();
+++    void TestLongLocaleSetKeywordAssign();
+++    void TestLongLocaleSetKeywordMoveAssign();
++ 
++ private:
++     void _checklocs(const char* label,
++-- 
++2.20.1
++
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 0a17c61462..2c04c3c775 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -17,6 +17,9 @@ ICU_CPE_ID_VENDOR = icu-project
+ ICU_CPE_ID_PRODUCT = international_components_for_unicode
+ ICU_CPE_ID_VERSION = $(subst -,.,$(ICU_VERSION))
+ 
++# 0005-ICU-21587-Fix-memory-bug-w-baseName.patch
++ICU_IGNORE_CVES += CVE-2021-30535
++
+ ICU_DEPENDENCIES = host-icu
+ ICU_INSTALL_STAGING = YES
+ ICU_CONFIG_SCRIPTS = icu-config
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
