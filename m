@@ -1,51 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81DAC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 18:37:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 150DEC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 18:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 363526F4C5;
-	Thu,  2 Dec 2021 18:37:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C88B83EE4;
+	Thu,  2 Dec 2021 18:59:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m_RhQ3HyL_jK; Thu,  2 Dec 2021 18:37:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ReksLVX9N_9N; Thu,  2 Dec 2021 18:59:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA056F4C2;
-	Thu,  2 Dec 2021 18:37:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 295D11BF330
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:37:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C703783EE0;
+	Thu,  2 Dec 2021 18:59:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F2FB91BF20B
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1802B41E09
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:37:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E046D40A68
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 18:59:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7mMD_nsOrQpu for <buildroot@lists.busybox.net>;
- Thu,  2 Dec 2021 18:37:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GyyO05kbK0yI for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 18:59:28 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B26FA41DEE
- for <buildroot@buildroot.org>; Thu,  2 Dec 2021 18:37:33 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1CF1E40010
+ for <buildroot@buildroot.org>; Thu,  2 Dec 2021 18:59:27 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 1078160013;
- Thu,  2 Dec 2021 18:37:29 +0000 (UTC)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id AFFDF4000F;
+ Thu,  2 Dec 2021 18:59:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1msqxU-0008Go-Sq; Thu, 02 Dec 2021 19:37:28 +0100
+ (envelope-from <peter@korsgaard.com>)
+ id 1msrIj-0000LB-0S; Thu, 02 Dec 2021 19:59:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu,  2 Dec 2021 19:37:26 +0100
-Message-Id: <20211202183728.31726-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+To: Pierre-Jean Texier <texier.pj2@gmail.com>
+References: <20211128131842.274555-1-texier.pj2@gmail.com>
+Date: Thu, 02 Dec 2021 19:59:24 +0100
+In-Reply-To: <20211128131842.274555-1-texier.pj2@gmail.com> (Pierre-Jean
+ Texier's message of "Sun, 28 Nov 2021 14:18:42 +0100")
+Message-ID: <87k0gmde9f.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 10, 15}.x series
+Subject: Re: [Buildroot] [PATCH] package/genimage: bump to version 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,87 +59,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-5.14.x is EOL, so no more updates for that.
+>>>>> "Pierre-Jean" == Pierre-Jean Texier <texier.pj2@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ > This includes the following changes:
+ > aa76b22 release version 15
+ > dd49fec util: Fix warn_unused_result build warnings
+ > 6ba2b4d image-hd: more error output when bootloaders overlap with the partition table
+ > 90b83ba allow specifying 'holes' in the partition section
+ > 09fde2e [ci skip] typo "used used fill" -> "used to fill"
+ > b0d794c image-flash: don't ignore truncate errors except ENOENT
+ > 93d1f26 .github: replace ubuntu-16.04 with ubuntu-18.04
+ > 1e9b9be util: systemp(): don't use shell defined in SHELL, but GENIMAGE_SHELL
+ > 1c53012 util: systemp(): use shell defined in SHELL rather than /bin/sh
+ > 89490b9 image-android-sparse: use off_t instead of int for lseek return values
+ > f1cab39 test: add tests for --includepath
+ > 9e7f23a README.rst: reflow paragraph
+ > 0778817 add --includepath option
+ > e210857 config.c: remove redundant helper add_opt()
+ > 18b3cfd config.c: allow hiding specific command line options from --help
+ > 65548f6 config.c: remove unused member cmdlineopt
+ > f606a33 util: remove unused pad_file function
+ > 62e1d4f image-flash: use insert_image instead of pad_file
+ > 8c0fe58 image-ext2: use insert_image instead of pad_file
+ > 7d0003b util: insert_image: allow specifying the fill value
+ > b847f3e image-hd: resize the image to the final size at the begining
+ > 8e3bf8b test: hdimage: check the disk usage of the second image as well
+ > e2bd4c3 test: handle new genext2fs and e2fsprogs versions
+ > 06ac16e insert_image: fix read/write loop
+ > 17e2c3c test: filter 'rauc info' output for newer distros
+ > 1d72d80 image-hd: stricter option handling
+ > d912549 image-hd.c: make GPT backup handling a little less special
+ > 69f6644 add test for partitions out of order
+ > 9190a2b image-hd.c: correct computation of first_usable_lba
+ > 8505aed image-hd.c: switch to insert_image() instead of pad_file()
+ > 5cc31c6 image-hd.c: truncate output file before looping over partitions
+ > 2194e31 image-hd.c: replace use of pad_file() with extend_file()
+ > 5638a9e util.c: add insert_image() helper
+ > 8eef854 test: add tests for "bootloader with holes allowing some overlap"
+ > a72ca69 image-hd.c: take image holes into consideration when checking for overlap
+ > 564e359 document "file" image type and "hole" syntax in particular
+ > 998a118 image-file.c: allow specifying "don't care" regions
+ > 7f8f19d image-hd.c: fix missing check for overlap with GPT table
+ > e91c8e2 image-hd.c: check all partitions for overlap
+ > 44d5346 image-hd.c: allow partitions to appear out-of-order
+ > cd3ceac image-hd.c: ensure an autoresize partition has a size consistent with its alignment
+ > 0a61f64 README.rst: add description of how default align/size/offset are computed
+ > efaae46 test: fix copy/paste error in the test refactoring
+ > 086380a config: don't try to access non-existent section
+ > fe74ea1 image-vfat: drop '-b' from mcopy
+ > 7ef351d test: factor out some test data generation
+ > 94af174 image-hd.c: fix extended partition with offset
+ > 649602b image-hd.c: prepare for fake partitions
+ > cc13e78 image-hd.c: don't sanity check partition_type_uuid for !part->in_partition_table
+ > 5f53df3 image-hd.c: move overlap check below partition size determination
+ > b77f38b image-hd.c: allow specifying minimum size for auto-resize partitions
+ > 5f07c1c image-hd.c: do not require the autoresize partition to be specified last
+ > 8269fa7 image-hd.c: enforce proper alignment of all partitions
+ > 5bd7283 image-hd.c: ignore in-partition-table when the image has no partition table
+ > 3e2b616 image-hd.c: always sanity check child->size v part->size
+ > fa619fb image-hd.c: separate computation of part->offset from the sanity checks
+ > 030e7a3 allow each partition to have its own align value
+ > cf192fd image-hd.c: fix computation of autoresize size
+ > d6c477c image-hd.c: don't lazily initialize now
+ > 6cbbf86 README.rst: document default value of in-partition-table option
+ > e43e02e test: add some tests for overlap of GPT
+ > 11f3528 image-hd.c: refactor updating chs values
+ > 8c74183 image-hd.c: add and use "struct mbr_tail"
+ > 9ffd5e0 add macro for compile-time assertions
+ > 9e59a27 change insert_data() to take const void* instead of const char*
+ > bcd7fa6 util: strtoul_suffix: allow s suffix for sector size (512 bytes)
+ > 41d77c4 image-hd.c: fix copy-pasto access of random memory
+ > 5dc2e22 list.h: drop prefetch()
+ > be29822 image-rauc: add intermediate option
+ > 344416f util: add save string concat with formated string
+ > 351d50e image-rauc: ensure clean-up on rauc_generate() exit
+ > 5cba95c image-rauc: free keyringargs after use
+ > 23adab0 image-ext: ensure size is always interpreted as kilobytes
+ > 8014c7e .github: run apt-get update to update package cache
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 42724c7d3c..db0c58129f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.15.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8a6f77be36..9062b72a0e 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  549d0fb75e65f6158e6f4becc648f249d386843da0e1211460bde8b1ea99cbca  linux-5.15.4.tar.xz
-+sha256  b3e9ba06a299a3e2ead4a15753bc46a3e0c90d3b92ffeed1034ccc9f13a717f0  linux-5.15.6.tar.xz
- sha256  f41a259cb2002dd2e3286524b2bb4e803f4f982992d092706ecea613584023b3  linux-5.14.21.tar.xz
--sha256  a2e1686132c4598c0adfdf52acbf1ab4bb327b2398badef346a0eff849da5adb  linux-5.10.81.tar.xz
--sha256  3149c6b52a3079218a60bd369a80d18275b574d84908ffee32a0a8f9ddf939a7  linux-5.4.161.tar.xz
-+sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
-+sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  2729aa644e174418764eaf60f9f1ee1bd6505290a327c2f24385b4a02cfab96c  linux-4.4.292.tar.xz
--sha256  cdde5aa24633fcac929b15f2c2fe0c43053dc7439ab3d9c7223d82fdd8ea40db  linux-4.9.290.tar.xz
--sha256  f00b8001424e3f185990f6ee24a7a393b7f0996f739cd4ee6a79532b23e6b2d7  linux-4.14.255.tar.xz
--sha256  8551110cc7184b1402a21b42e498088c5b0bb824a658c5fab173c12d9904a004  linux-4.19.217.tar.xz
-+sha256  6d2f83619493e656276dbf22afcdb80f42320e697570419380773bb4916130fd  linux-4.4.293.tar.xz
-+sha256  b55d77774ed631f57f736bcdab021f68167455c9daede7e9e4161b4d564d8b53  linux-4.9.291.tar.xz
-+sha256  9784204f95cfc7de1c933088e6f9364e99a29988ae4e6b9353677637eb171aa0  linux-4.14.256.tar.xz
-+sha256  8f4ecd71fbcdd733c2849e2e5afe59d351c463c9a699bdbf428d88fa911009db  linux-4.19.219.tar.xz
- # Locally computed
- sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
- sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fb9086d0a9..9bc3c873c5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -374,14 +374,14 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.292"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.290"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.255"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.217"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.161"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.81"	if BR2_KERNEL_HEADERS_5_10
-+	default "4.4.293"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.291"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.256"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.14.21"	if BR2_KERNEL_HEADERS_5_14
--	default "5.15.4"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.15.6"	if BR2_KERNEL_HEADERS_5_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ > Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+
+Committed to next, thanks.
+
 -- 
-2.20.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
