@@ -4,61 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83750C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  1 Dec 2021 21:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FED9C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 06:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA19183155;
-	Wed,  1 Dec 2021 21:17:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6DF282C04;
+	Thu,  2 Dec 2021 06:25:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ys5oGRAfSTk6; Wed,  1 Dec 2021 21:17:45 +0000 (UTC)
+	with ESMTP id LAo4b_ORTHG3; Thu,  2 Dec 2021 06:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68275828F7;
-	Wed,  1 Dec 2021 21:17:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5FEC01BF86D
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 21:17:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33DAF81B17;
+	Thu,  2 Dec 2021 06:25:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A0461BF340
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 06:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D27341CAD
- for <buildroot@lists.busybox.net>; Wed,  1 Dec 2021 21:17:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3826D40181
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 06:25:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3u9WkkU3w422 for <buildroot@lists.busybox.net>;
- Wed,  1 Dec 2021 21:17:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC90341CA9
- for <buildroot@uclibc.org>; Wed,  1 Dec 2021 21:17:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 74AE78EA58; Wed,  1 Dec 2021 21:12:56 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OpXUt7fC4Xb3 for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 06:25:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D6381400DE
+ for <buildroot@uclibc.org>; Thu,  2 Dec 2021 06:25:41 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1msfXG-0006Ix-Qh
+ for buildroot@uclibc.org; Thu, 02 Dec 2021 07:25:38 +0100
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Wed, 01 Dec 2021 21:17:42 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.02.7
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: ps.report@gmx.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14356-163-bpJdZsjyMw@https.bugs.busybox.net/>
-In-Reply-To: <bug-14356-163@https.bugs.busybox.net/>
-References: <bug-14356-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14356] cronstamp jobs are not performed with
- bumped version of dcron
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 02 Dec 2021 07:24:47 +0100
+Message-ID: <pan$cec66$f51dbfab$bb733bd2$2be5b0d8@ID-313208.user.individual.net>
+References: <20211013184307.1869426-1-fontaine.fabrice__26650.7906302408$1634150681$gmane$org@gmail.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/tinydtls: fix build with
+ automake >= 1.16.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,24 +60,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14356
+Am Wed, 13 Oct 2021 20:43:07 +0200 schrieb Fabrice Fontaine:
 
---- Comment #5 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Dominique Tronche from comment #4)
+> Touch ar-lib as suggested by upstream in
+> https://github.com/eclipse/tinydtls/pull/103 and
+> https://github.com/eclipse/tinydtls/commit/
+5c6fd178e83cec7ccc40ac3ab13a15ce611da8a8
+> to avoid the following build failure since bump of automake to version
+> 1.16.4 in commit fe90272b5128987ee7492fff950660e05324838d:
+> 
+> configure.ac: error: required file 'ar-lib' not found
+> 
+> Fixes:
+>  -
+>  http://autobuild.buildroot.org/results/
+fa23cdf0d454c2ad11af3cdcc2810cd442918667
+> 
+> Signed-off-by: Fabrice Fontaine
+> <fontaine.fabrice@gmail.com>
+> ---
+>  package/tinydtls/tinydtls.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
+> index 6d839bc05a..bba9e5f6fa 100644 --- a/package/tinydtls/tinydtls.mk
+> +++ b/package/tinydtls/tinydtls.mk @@ -16,4 +16,10 @@
+> TINYDTLS_AUTORECONF = YES
+>  # use inttypes.h data types instead of u_intXX_t for musl compatibility
+>  TINYDTLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DSHA2_USE_INTTYPES_H"
+>  
+> +# Fix build with automake >= 1.16.4 +define TINYDTLS_TOUCH_AR_LIB +
+> touch $(@D)/ar-lib +endef +TINYDTLS_PRE_CONFIGURE_HOOKS +=
+> TINYDTLS_TOUCH_AR_LIB +
+>  $(eval $(autotools-package))
 
-Any updates on this one? I can confirm the changed behavior/failure for the
-default /etc/cron.d/system @hourly entry (did not run the test longer),
-can confirm that the offending commit seems to be [1] (upstream issue already
-exists [2], dating back to May 2018)...
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[build-tested defconfig 2ec4d2e0fc0a1832774a4f3ce918492427302ba2]
 
-[1]
-https://github.com/dubiousjim/dcron/commit/f048a83da348c1d62204fcbdf407b7abf33e3db0
-
-[2] https://github.com/dubiousjim/dcron/issues/15
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
