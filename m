@@ -1,46 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62781C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 17:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E16AC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  2 Dec 2021 17:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B56583F40;
-	Thu,  2 Dec 2021 17:40:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF9586F497;
+	Thu,  2 Dec 2021 17:41:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NxphbQdS3ncU; Thu,  2 Dec 2021 17:41:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B9716065C;
+	Thu,  2 Dec 2021 17:41:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A29AA1BF3F9
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:41:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A00EB83F46
+ for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:41:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id igHOU0PBCIFG; Thu,  2 Dec 2021 17:40:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AC4183EE4;
-	Thu,  2 Dec 2021 17:40:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5AB1C1BF3F9
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:40:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 45FD841DC7
- for <buildroot@lists.busybox.net>; Thu,  2 Dec 2021 17:40:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uLm5AsuPWOJR for <buildroot@lists.busybox.net>;
- Thu,  2 Dec 2021 17:40:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89D9C41DCC
- for <buildroot@buildroot.org>; Thu,  2 Dec 2021 17:40:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5D934922C3; Thu,  2 Dec 2021 17:35:31 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uUACxpjJOrIb for <buildroot@lists.busybox.net>;
+ Thu,  2 Dec 2021 17:41:22 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8114383F20
+ for <buildroot@buildroot.org>; Thu,  2 Dec 2021 17:41:22 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 9D86D200015;
+ Thu,  2 Dec 2021 17:41:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1msq59-00076u-Vp; Thu, 02 Dec 2021 18:41:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 2 Dec 2021 18:35:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30107f026e0d4a44344a51199a24a01979bf556b
-X-Git-Newrev: 5847208213952c5d2e1ce44d2db19ead9706d5d7
-X-Patchwork-Hint: ignore
-Message-Id: <20211202173531.5D934922C3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: drop third patch
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211201070004.563142-1-fontaine.fabrice@gmail.com>
+ <875ys7diyy.fsf@dell.be.48ers.dk>
+ <CAPi7W83yET5Hu32DaboR8G3E2Eg-LkUMwhoxo4-5TU5Y1d758Q@mail.gmail.com>
+Date: Thu, 02 Dec 2021 18:41:19 +0100
+In-Reply-To: <CAPi7W83yET5Hu32DaboR8G3E2Eg-LkUMwhoxo4-5TU5Y1d758Q@mail.gmail.com>
+ (Fabrice Fontaine's message of "Thu, 2 Dec 2021 18:29:08 +0100")
+Message-ID: <87o85ydhvk.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/diffutils: fix build with uclibc < 1.0.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,80 +61,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5847208213952c5d2e1ce44d2db19ead9706d5d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop third patch as it is not needed when using compile_et from heimdal
-instead of compile_et from e2fprogs as spotted by upstream in:
-https://bugzilla.samba.org/show_bug.cgi?id=13856#c20
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/0003-Fix-unistd.h-include.patch     | 38 ----------------------
- ...e_test.c-include-stdint.h-before-cmoka.h.patch} |  0
- ...uild.patch => 0004-dcesrv_core-fix-build.patch} |  0
- 3 files changed, 38 deletions(-)
-
-diff --git a/package/samba4/0003-Fix-unistd.h-include.patch b/package/samba4/0003-Fix-unistd.h-include.patch
-deleted file mode 100644
-index f01b899a18..0000000000
---- a/package/samba4/0003-Fix-unistd.h-include.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 85c33f89df8607ace0707e1360ff0f79f3e8f5f3 Mon Sep 17 00:00:00 2001
--From: Andy Walsh <andy.walsh44+github@gmail.com>
--Date: Wed, 6 Nov 2019 19:28:30 +0100
--Subject: [PATCH] Fix unistd.h include
--
--Fixes build error
--
--source4/heimdal/lib/asn1/asn1_err.c:47:23: error: 'link' redeclared as different kind of symbol
-- static struct et_list link = { 0, 0 };
--
--Downloaded from
--https://github.com/Andy2244/openwrt-extra/blob/samba-4.10/samba4/patches/006-samba-4-10-musl_rm_unistd_incl.patch
--
--Upstream bug report: https://bugzilla.samba.org/show_bug.cgi?id=13856
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- lib/replace/replace.h | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/lib/replace/replace.h b/lib/replace/replace.h
--index 1658465866e..e6768c4ae51 100644
----- a/lib/replace/replace.h
--+++ b/lib/replace/replace.h
--@@ -168,10 +168,6 @@
-- #include <bsd/unistd.h>
-- #endif
-- 
---#ifdef HAVE_UNISTD_H
---#include <unistd.h>
---#endif
---
-- #ifdef HAVE_STRING_H
-- #include <string.h>
-- #endif
---- 
--2.20.1
--
-diff --git a/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-similarity index 100%
-rename from package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-rename to package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-diff --git a/package/samba4/0005-dcesrv_core-fix-build.patch b/package/samba4/0004-dcesrv_core-fix-build.patch
-similarity index 100%
-rename from package/samba4/0005-dcesrv_core-fix-build.patch
-rename to package/samba4/0004-dcesrv_core-fix-build.patch
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cml0ZXM6CgogPiBMZSBqZXUuIDIgZMOpYy4gMjAyMSDDoCAxODoxNywgUGV0ZXIg
+S29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiBhIMOpY3JpdCA6CiA+PiA+ICsrIyBpZm5k
+ZWYgX19HTElCQ19fCiA+PiA+ICsgIyAgaW5jbHVkZSA8c3RkZGVmLmg+CiA+PiAKID4+IEFyZSB5
+b3Ugc3VyZSB0aGF0IHdvcmtzPyB1Q2xpYmMtbmcgZGVmaW5lcyBfX0dMSUJDX18uCiA+IEluZGVl
+ZCwgYnV0IGFzIGZlYXR1cmVzLmggaXMgbm90IGluY2x1ZGVkIGJlZm9yZSB0aGlzIGlmbmRlZiwg
+aXQgd29ya3MKID4gKEkgYnVpbGQgdGVzdGVkIGl0KS4KID4gSW4gbXkgaW5pdGlhbCBwcm9wb3Nh
+bCwgSSBpbmNsdWRlZCBmZWF0dXJlcy5oIGFuZCBrZXB0IHRoZSBpZmRlZgogPiBfX1VDTElCQ19f
+IDogaHR0cHM6Ly9saXN0cy5nbnUub3JnL2FyY2hpdmUvaHRtbC9idWctZ251bGliLzIwMjEtMTEv
+bXNnMDAwNDUuaHRtbAogPiBIb3dldmVyLCB1cHN0cmVhbSBwcmVmZXJyZWQgdGhpcyBzb2x1dGlv
+bi4KID4gSSBkb24ndCByZWFsbHkga25vdyBpZiBmZWF0dXJlcy5oIGlzIGEgdWNsaWJjLWhlYWRl
+ciBvciBub3QuCgpPayAtIENvbW1pdHRlZCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dh
+YXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
