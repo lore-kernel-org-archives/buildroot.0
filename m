@@ -1,78 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 788ACC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 07:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA8CC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 07:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E26F740306;
-	Fri,  3 Dec 2021 07:34:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F02B5400EB;
+	Fri,  3 Dec 2021 07:51:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oUZPAuuxf7cE; Fri,  3 Dec 2021 07:34:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47ED0402F2;
-	Fri,  3 Dec 2021 07:34:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CDA51BF2F9
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 07:34:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B19D4022F
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 07:34:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dfV7LyC_0KPX for <buildroot@lists.busybox.net>;
- Fri,  3 Dec 2021 07:34:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0354340229
- for <buildroot@buildroot.org>; Fri,  3 Dec 2021 07:34:18 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id d9so3823208wrw.4
- for <buildroot@buildroot.org>; Thu, 02 Dec 2021 23:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nkrex5spbOWQ/8fN80I9mKv6v1RvLCeIniRzQMuGmew=;
- b=kFmUUiH2x5VlSHQwlUIdkf0gig9Upzkv4QRUYEeJ/FugWCrxBy7D1kIroQ+Sbf42BZ
- 0j0Yyr1Vnj2qyQx3kWl54TTnftDfWgG59ogFTKTjxdNfv+E+kTlgZFiL4T0Yo537+hUh
- AxVY7uNmjPmNpC+VHeYo9adCr+GYdDmOFMpKStX1Wcsot7Og1O6Pf78tJi45OE9RiEhL
- PG2IvdVPJO7h6Wa17ixO9iUu2zLIXkp3Gj0Trs5xGIdRRrt2BgSX0NUFamzVF6C7AK2+
- xVXu2n4Ib1R3mckpi8oOms+AHKoHSIq/ibmBNUJ2ydTneqr+rcykUtWtPPceyo//G8QJ
- CM/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nkrex5spbOWQ/8fN80I9mKv6v1RvLCeIniRzQMuGmew=;
- b=zVxojiMH0MFZFSJUvM34ZS/5fzQnm0xWAcJ3HMwx7QGtlzD8HmggYN7cep6vuLCzxK
- NIiqeVFoWqqvWxDjI9JuuayvOXnRcC4ow7fAvgoEfquonYWw2jaoXuCULGoeCn5bzStm
- CQUET9ZY/cwfkQoZG0Dxph4uClgXX/LgMfcfXdQz1jI4gh44TS3Iz7GVL+XUhUHCeeqz
- sub/YvWQWFG6xbdbF9/4FpVRT2HrZYH+2xg+2jmY9Hg6XwmqwM9Bad44Bhai7T0b6/xa
- nNokVTeRIXVo1n1nZcPDXI20W8h7rMhAw16FmUN13KfBtzTrXAW0EVMHgOXd2Co3AJjQ
- ofPA==
-X-Gm-Message-State: AOAM530Y/L3AnTdK0i+xrgPO6HE5lrvAHJ5dW8m59YrH4TrwdBq7rALR
- RRsgZY2ufA10Bos+uJiwe+f7cILEQxSp8w==
-X-Google-Smtp-Source: ABdhPJzKo4KcyWbcg8bpwdb6Hm3/39yCSJRkSsjdfR6wTlRFEgMYTEzZsbRzttnQ8gZtxwBf1ZX1MA==
-X-Received: by 2002:a5d:54c5:: with SMTP id x5mr19741314wrv.442.1638516856858; 
- Thu, 02 Dec 2021 23:34:16 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id g19sm4373456wmg.12.2021.12.02.23.34.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Dec 2021 23:34:16 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  3 Dec 2021 08:34:20 +0100
-Message-Id: <20211203073420.1890466-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bXY_6kY9In5W; Fri,  3 Dec 2021 07:51:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0B2C4013F;
+	Fri,  3 Dec 2021 07:51:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B78BF1BF2F9
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 07:51:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A61566063F
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 07:51:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xkPIumDt-pzL for <buildroot@lists.busybox.net>;
+ Fri,  3 Dec 2021 07:51:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6250060639
+ for <buildroot@buildroot.org>; Fri,  3 Dec 2021 07:51:30 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B24724000A
+ for <buildroot@buildroot.org>; Fri,  3 Dec 2021 07:51:27 +0000 (UTC)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gstreamer1: fix girdir
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 03 Dec 2021 07:51:27 -0000
+Message-Id: <20211203075132.A61566063F@smtp3.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-12-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,49 +52,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As already done for libglib2 in commit
-b094f88a4d501101bfba9b65491209e6a0fe0397, fix girdir to avoid the
-following build failure with gst1-plugins-base and introspection:
+Hello,
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst-libs/gst/tag/GstTag-1.0.gir --output gst-libs/gst/tag/GstTag-1.0.typelib --includedir=/usr/share/gir-1.0
-Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
+Autobuild statistics for 2021-12-02
+===================================
 
-Fixes:
- - http://autobuild.buildroot.org/results/d1e2bdde97777ff61c185d375ba412a93e7ca467
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 54  |  7  |  0  | 61  |
+  2021.08.x  | 58  |  2  |  0  | 60  |
+    master   | 96  | 14  |  0  | 110 |
+     next    |  7  |  6  |  0  | 13  |
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gstreamer1/gstreamer1/gstreamer1.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Classification of failures by reason for master
+-----------------------------------------------
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 9bdd00caec..1aab035e05 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -49,4 +49,14 @@ endif
- 
- GSTREAMER1_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
-+# By default, girdir uses datadir as its prefix of which pkg-config will not
-+# append the sysroot directory. This results in a build failure with
-+# gst1-plugins-base. Changing prefix to ${libdir}/../share prevents this error.
-+define GSTREAMER1_FIX_GIRDIR
-+	$(SED) "s%girdir=.*%girdir=\$${libdir}/../share/gir-1.0%g" \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/gstreamer-1.0.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/gstreamer-base-1.0.pc
-+endef
-+GSTREAMER1_POST_INSTALL_STAGING_HOOKS += GSTREAMER1_FIX_GIRDIR
-+
- $(eval $(meson-package))
+              tinydtls-0.9-rc1 | 5 
+              host-erlang-22.2 | 2 
+                       unknown | 2 
+libdbi-88b8477d57153b9f736d... | 1 
+                log4cxx-0.12.0 | 1 
+           python-pybind-2.6.1 | 1 
+                 wavemon-0.9.4 | 1 
+              wireshark-3.4.10 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/1e1161a37135e5482141ea09e23764ffce4e5ea9 |     
+   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/6ec66a29711b6e0b721f0c1f8d67b85b4c77bac3 |     
+    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/f7cf28ff11e85615106bf9d5c181789829d2b892 |     
+  riscv64    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/6d393b6121a11bdf2805b73e6c023f114e3c72e0 |     
+microblazeel |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce |     
+    i586     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/08e33c04085a480ed1563e003325a7cf544d6d7f |     
+  aarch64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/bffd137589296b0406ab32822194fa0283d27f5f |     
+    m68k     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/85eaabde09d3adbb329cbf1e7d914505fc432608 |     
+powerpc64le  |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/7c0b1f7f0cd94a794eac175fdac2f35a3e1c6035 |     
+    arc      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/6c285f8ecac563eb31c166b1c4a864924f96d608 |     
+  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/621d30ccbc8bec20f69c87be97736b18ef4405e3 |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/68627afcb0b1278b9cf643d09daf6e35cdff0556 |     
+    m68k     |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/4ac77d81721879ace3783fb528e5a2cdedb40d33 |     
+   s390x     |        wireshark-3.4.10        | NOK | http://autobuild.buildroot.net/results/41c9cf6378792e329abd1672d14e5515e23bfa72 | ORPH
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 4 
+            erlang-jiffy-1.0.6 | 1 
+monkey-f54856ce250c4e257354... | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/1309bcaa16d28fda66770c5d81e860134df9e3db |     
+    or1k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/6674612509a9f25ecbf8bb75f91df6c5bfaf468a |     
+    i686     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/1fca6749f4b9744868bfa3f2587beacb4e0fe9a9 |     
+microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7d5452a6151a72c77f11ccbc374d244d2519970c |     
+    or1k     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/95bcec66f784fe63a98a4e15e7fab2d1f4009162 |     
+   s390x     | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/ac44017f20f56859d24bf99089cad9b206c590b6 |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/86d2fcea223d2382053415a78ce93734315d5a65 |     
+
+
+Classification of failures by reason for 2021.08.x
+--------------------------------------------------
+
+            erlang-jiffy-1.0.6 | 1 
+glmark2-c493520253fbfe3676c... | 1 
+
+
+Detail of failures for 2021.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/c1b244fddd19d8104aa1964cd278da1b0d75e48b |     
+  aarch64    | glmark2-c493520253fbfe3676c... | NOK | http://autobuild.buildroot.net/results/3e7c1da2d4da648f4642083203244cc33b284a9a |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+                  assimp-5.1.0 | 2 
+              host-erlang-22.2 | 2 
+            python-ujson-4.2.0 | 2 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |          assimp-5.1.0          | NOK | http://autobuild.buildroot.net/results/84b050828f73caab59125dd9b19d3106a3ad3b58 |     
+   nios2     |          assimp-5.1.0          | NOK | http://autobuild.buildroot.net/results/c6e703bc367c58853005a2f0410354c55d6366b8 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/c6ca871e17cbc6fca1d4b90f2e4571ebc95dd46d |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/55a850addab804db660e82bbb03e97760aa2c309 |     
+  riscv32    |       python-ujson-4.2.0       | NOK | http://autobuild.buildroot.net/results/f48ffe29a02b6589ea63094e7637cd6111591173 |     
+    arc      |       python-ujson-4.2.0       | NOK | http://autobuild.buildroot.net/results/33336a40e7b8d7a47a92594805f050738d68dbfc |     
+
+
+
 -- 
-2.33.0
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
