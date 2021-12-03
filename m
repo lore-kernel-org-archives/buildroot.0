@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8E6C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 16:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE310C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 16:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DBFA4090E;
-	Fri,  3 Dec 2021 16:43:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82F1A4092A;
+	Fri,  3 Dec 2021 16:44:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eoP7KPCWfucD; Fri,  3 Dec 2021 16:43:36 +0000 (UTC)
+	with ESMTP id 896DzPmNubOQ; Fri,  3 Dec 2021 16:44:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 047C3408D9;
-	Fri,  3 Dec 2021 16:43:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AB601BF589
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:43:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8DAA4091B;
+	Fri,  3 Dec 2021 16:44:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CA8461BF589
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28178405A5
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:43:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B86CD40263
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:44:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B3EgJcJdP8Mo for <buildroot@lists.busybox.net>;
- Fri,  3 Dec 2021 16:43:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cfDO79IH9ypX for <buildroot@lists.busybox.net>;
+ Fri,  3 Dec 2021 16:44:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5775D40220
- for <buildroot@buildroot.org>; Fri,  3 Dec 2021 16:43:23 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 87DB24025B
+ for <buildroot@buildroot.org>; Fri,  3 Dec 2021 16:44:55 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E3938E000D;
- Fri,  3 Dec 2021 16:43:20 +0000 (UTC)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 826081C0002;
+ Fri,  3 Dec 2021 16:44:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mtBea-0006In-BG; Fri, 03 Dec 2021 17:43:20 +0100
+ id 1mtBg3-0006M5-Ta; Fri, 03 Dec 2021 17:44:51 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211202175148.1464234-1-fontaine.fabrice@gmail.com>
-Date: Fri, 03 Dec 2021 17:43:20 +0100
-In-Reply-To: <20211202175148.1464234-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 2 Dec 2021 18:51:48 +0100")
-Message-ID: <87tufpbpw7.fsf@dell.be.48ers.dk>
+References: <20211203073420.1890466-1-fontaine.fabrice@gmail.com>
+Date: Fri, 03 Dec 2021 17:44:51 +0100
+In-Reply-To: <20211203073420.1890466-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 3 Dec 2021 08:34:20 +0100")
+Message-ID: <87pmqdbpto.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libfuse3: drop spurious spaces
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gstreamer1: fix
+ girdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,8 +60,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,8 +68,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Drop spurious spaces added by commit
- > 45bce2575d8dd3f08fbf0870f7cfc2fbd3c7a3e5
+ > As already done for libglib2 in commit
+ > b094f88a4d501101bfba9b65491209e6a0fe0397, fix girdir to avoid the
+ > following build failure with gst1-plugins-base and introspection:
+
+ > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler
+ > gst-libs/gst/tag/GstTag-1.0.gir --output
+ > gst-libs/gst/tag/GstTag-1.0.typelib --includedir=/usr/share/gir-1.0
+ > Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d1e2bdde97777ff61c185d375ba412a93e7ca467
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
