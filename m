@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE310C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 16:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5FA3C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  3 Dec 2021 16:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82F1A4092A;
-	Fri,  3 Dec 2021 16:44:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35A098317B;
+	Fri,  3 Dec 2021 16:45:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 896DzPmNubOQ; Fri,  3 Dec 2021 16:44:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pvwxm-jJCLWQ; Fri,  3 Dec 2021 16:45:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8DAA4091B;
-	Fri,  3 Dec 2021 16:44:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA8461BF589
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:44:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98DFB83112;
+	Fri,  3 Dec 2021 16:45:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DC731BF589
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B86CD40263
- for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:44:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1945383123
+ for <buildroot@lists.busybox.net>; Fri,  3 Dec 2021 16:45:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cfDO79IH9ypX for <buildroot@lists.busybox.net>;
- Fri,  3 Dec 2021 16:44:55 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 87DB24025B
- for <buildroot@buildroot.org>; Fri,  3 Dec 2021 16:44:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 826081C0002;
- Fri,  3 Dec 2021 16:44:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mtBg3-0006M5-Ta; Fri, 03 Dec 2021 17:44:51 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 87t5dM2bPgro for <buildroot@lists.busybox.net>;
+ Fri,  3 Dec 2021 16:45:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58598830FB
+ for <buildroot@buildroot.org>; Fri,  3 Dec 2021 16:45:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id E653E92403; Fri,  3 Dec 2021 16:40:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211203073420.1890466-1-fontaine.fabrice@gmail.com>
-Date: Fri, 03 Dec 2021 17:44:51 +0100
-In-Reply-To: <20211203073420.1890466-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 3 Dec 2021 08:34:20 +0100")
-Message-ID: <87pmqdbpto.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gstreamer1: fix
- girdir
+To: buildroot@buildroot.org
+Date: Fri, 3 Dec 2021 17:42:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 64cb922db7db08d180f59010e59f3adef5ae2e0b
+X-Git-Newrev: a9bd2b8685ee9cbc6b00e0aa684978fe5f6ca2eb
+X-Patchwork-Hint: ignore
+Message-Id: <20211203164018.E653E92403@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: release: use .tar.xz instead of
+ .tar.bz2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,32 +53,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a9bd2b8685ee9cbc6b00e0aa684978fe5f6ca2eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As already done for libglib2 in commit
- > b094f88a4d501101bfba9b65491209e6a0fe0397, fix girdir to avoid the
- > following build failure with gst1-plugins-base and introspection:
+xz compresses better than bzip2, and is (getting) more popular, so build
+release tarballs as .tar.xz (in addition to .tar.gz) instead of .tar.bz2,
+similar to how the kernel did ~8 years ago:
 
- > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler
- > gst-libs/gst/tag/GstTag-1.0.gir --output
- > gst-libs/gst/tag/GstTag-1.0.typelib --includedir=/usr/share/gir-1.0
- > Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
+https://www.kernel.org/happy-new-year-and-good-bye-bzip2.html
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d1e2bdde97777ff61c185d375ba412a93e7ca467
+-rw-r--r-- 1 peko peko 5,1M Dec  2 17:55 buildroot-2021.11-rc3.tar.xz
+-rw-r--r-- 1 peko peko 5,7M Nov 30 18:15 buildroot-2021.11-rc3.tar.bz2
+-rw-r--r-- 1 peko peko 6,8M Nov 30 18:15 buildroot-2021.11-rc3.tar.gz
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 53f6ae9173..0f84122bd3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1210,7 +1210,7 @@ release:
+ 	$(MAKE) O=$(OUT) distclean
+ 	tar rf $(OUT).tar $(OUT)
+ 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+-	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
++	xz -9 -c < $(OUT).tar > $(OUT).tar.xz
+ 	rm -rf $(OUT) $(OUT).tar
+ 
+ print-version:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
