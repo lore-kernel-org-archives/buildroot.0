@@ -1,53 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F302DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9A72C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DDAD60A8B;
-	Sat,  4 Dec 2021 22:47:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91B99401FE;
+	Sat,  4 Dec 2021 22:48:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OUaA2nehdZpP; Sat,  4 Dec 2021 22:47:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hQWue617FZ_7; Sat,  4 Dec 2021 22:47:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0715E60A7C;
-	Sat,  4 Dec 2021 22:47:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08B97401E2;
+	Sat,  4 Dec 2021 22:47:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A02EF1BF3F7
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:47:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80ABB1BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C54660A7C
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:47:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FF5E60A96
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:47:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wSP3CWQG7WVh for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 22:47:33 +0000 (UTC)
+ with ESMTP id xgGuzlUeZ5jY for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 22:47:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4536C6077A
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:47:32 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C0D660A89
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:47:45 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id E1FAEFF802;
- Sat,  4 Dec 2021 22:47:29 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id F11B160007;
+ Sat,  4 Dec 2021 22:47:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mtdoW-0006Fp-HD; Sat, 04 Dec 2021 23:47:28 +0100
+ id 1mtdoj-0006GZ-N7; Sat, 04 Dec 2021 23:47:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211204215356.2020727-1-fontaine.fabrice@gmail.com>
-Date: Sat, 04 Dec 2021 23:47:28 +0100
-In-Reply-To: <20211204215356.2020727-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 Dec 2021 22:53:56 +0100")
-Message-ID: <878rx0asxr.fsf@dell.be.48ers.dk>
+References: <20211204220354.2021338-1-fontaine.fabrice@gmail.com>
+Date: Sat, 04 Dec 2021 23:47:41 +0100
+In-Reply-To: <20211204220354.2021338-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 4 Dec 2021 23:03:54 +0100")
+Message-ID: <874k7oasxe.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/speex: add SPEEX_CPE_ID_VENDOR
+Subject: Re: [Buildroot] [PATCH 1/1] package/libunwind: add
+ LIBUNWIND_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,8 +68,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:xiph:speex is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axiph%3Aspeex
+ > cpe:2.3:a:libunwind_project:libunwind is a valid CPE identifier for this
+ > package:
+
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibunwind_project%3Alibunwind
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
