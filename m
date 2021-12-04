@@ -4,62 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FDDAC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 11:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E68EC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 12:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B54983466;
-	Sat,  4 Dec 2021 11:29:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E26C183096;
+	Sat,  4 Dec 2021 12:06:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pxJJmLAgbSvx; Sat,  4 Dec 2021 11:29:41 +0000 (UTC)
+	with ESMTP id t-W_F-cOePwD; Sat,  4 Dec 2021 12:06:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2EB583490;
-	Sat,  4 Dec 2021 11:29:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE1651BF35A
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 11:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22294831F2;
+	Sat,  4 Dec 2021 12:06:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 166BA1BF30A
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 12:06:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C95C7405EE
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 11:29:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03E1A831F2
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 12:06:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W7-SGD9D0SaS for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 11:29:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65BD6401EC
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 11:29:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:44c6:1f1c:4326:e15f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id BE3265FF9E;
- Sat,  4 Dec 2021 12:29:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638617376;
- bh=ZnBva8w9vS1mkaEDFKfSGvUazggFKuIx6ryJEspIkOc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=NalFdh8vnP48dSuqgf84GOG2dZppEtQ92bAOZuC8xqVliiKc+oPcKhIPAkz5tIhro
- VUrkW+dV57uRXLwycUuzkDJIKJWnMfhZ1xACN+1o6O864R9HKn+66+48hG4q3sKgN1
- Jmvg+lPKysMV8OI9lzEjauZw+wF3ZJx5MIV/RbsjXzrtiU5modXoNWMX3FeDuDebzg
- mCRBoFStIuWFzIJTwKPhcuC7SHDbdV0Gz/CivvVuqkuu03FCKzG+XQbL2Zp18sPrBw
- UX5m/mIW8oPeE3pFSaiZgUr5/hit2O0vGkwPDWaFf4+5fPYP9vrpbKJsXC8DnXKOtV
- WlYMebuES+DQw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Dec 2021 12:29:29 +0100
-Date: Sat, 4 Dec 2021 12:29:29 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211204112929.GH50662@scaer>
-References: <20211203210434.1924441-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l-Cb8BJhxBCO for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 12:05:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25CED83096
+ for <buildroot@busybox.net>; Sat,  4 Dec 2021 12:05:58 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id j3so11635999wrp.1
+ for <buildroot@busybox.net>; Sat, 04 Dec 2021 04:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5KGLi5UBn/Z3GMXk1ThtQV295ypA77rJ6cVkZgKFrio=;
+ b=StIGz2rrTByddXh7HkmxSE1xfXcFgG8C1cN8Y8/KZQ/YXq0RgYVRrWiStwc0URYrey
+ vF0WQgDFNwoTzEW9lEwRYKxD7WKhuLwqzyUYI8/64RRruKjRetRAz1LOoJpLansodkxF
+ ygJpqYb7rQ7EHYZpyKTchi/VNkd3bfzjYKXFTsaiiK9y2nUgAetx1ZXW6kpYSPi38GFM
+ vz1PnDkRTDqAe8ZFRAnyLwQvk8XlW0Da6o0Dssb4XexS/eacDLMw6isjTPCtlrdLoBic
+ K/kMbi1g9k46IbNTo5kVXydrtoxi32+vGYVtgtZ4HPcOquN2TLBo3K1s6J29L47/0wRF
+ +NvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5KGLi5UBn/Z3GMXk1ThtQV295ypA77rJ6cVkZgKFrio=;
+ b=6Is47/FiDaxcLLZICbuqQBw4qN+GK3H/nLsfgEZHxaUZqaLxIm9m92jf5KCjqAeJDD
+ nqROcxfWIkbupBtNqQKqUx3LbAp0cRPra01MYbKGMjGMdagY95WWNGthGQF+TopGZNdq
+ sRECX4vqsN6OG+cj3fEqO4TDHzOEQDZhkNfqovBqobkOg7RzbOUPJnA5uBlRAf1l+JRq
+ G4BebMce8JF1ZmLlB0/MLMtJNfKYHNx/uPlYdqk+bTA5Q35OgscOOewIbxmNmVLIN4lk
+ cSfay6Lf/rNz2fKbScg9RFUc3AtR+0gYMPAO1Zw0KcyXSbgw5Obc/dnCc8aFr9/l66Cp
+ h8FQ==
+X-Gm-Message-State: AOAM531rb+ePrLlGEvCdt17Nrkyy6N7iakN4BwZbdp0Q+iWvFMoHGpu1
+ K49guix9TtBV5czd2/qFLZZp0s2rWOg=
+X-Google-Smtp-Source: ABdhPJyLqWwGDWFG8EwnNDNLOeT8oB+Gbq13u9sCEg21pJt4ovKRQ+uIDPW+YWxUhO18JGYqXYUChw==
+X-Received: by 2002:a5d:588b:: with SMTP id n11mr28362451wrf.344.1638619555943; 
+ Sat, 04 Dec 2021 04:05:55 -0800 (PST)
+Received: from pc-140.home ([2a01:cb15:81e5:ad00:7afb:407b:e9ac:7e79])
+ by smtp.gmail.com with ESMTPSA id b10sm5437927wrt.36.2021.12.04.04.05.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Dec 2021 04:05:55 -0800 (PST)
+From: guillaume.bressaix@gmail.com
+To: buildroot@busybox.net
+Date: Sat,  4 Dec 2021 13:05:47 +0100
+Message-Id: <20211204120548.31170-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211203210434.1924441-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/janus-gateway: fix CVE-2021-4020
+Subject: [Buildroot] [PATCH/next v2 1/2]: pybind11: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,426 +82,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
+Cc: thomas.petazzoni@bootlin.com, yann.morin.1998@free.fr, asafka7@gmail.com,
+ "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-On 2021-12-03 22:04 +0100, Fabrice Fontaine spake thusly:
-> Fix CVE-2021-4020: janus-gateway is vulnerable to Improper
-> Neutralization of Input During Web Page Generation ('Cross-site
-> Scripting')
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+fixes http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
+fixes http://autobuild.buildroot.net/results/d0287b7f64f206b0f074908c5780a3632e0cb799
+fixes http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce
+fixes http://autobuild.buildroot.net/results/d2f0a0ad8f6c7178517df109e7d885dac9134c3a
+fixes http://autobuild.buildroot.net/results/b57e9a3279260dae4a590f9421238fcabb2f7cab
+fixes http://autobuild.buildroot.net/results/515e6f2fc6b5780260d98d6bb52b541ce4bf1afe
+fixes http://autobuild.buildroot.net/results/d89c4ecc81222d4f80c951da2232d2e393fa1c69
+list goes on..
 
-Applied to master, thanks.
+---
+v2: Reviewed by gwen@trabucayre.com,
+Removed some non needed empty lines,
+force -DFINDPYTHON=OFF when using pybind11 without python,
+handle legacy package properly in a seperate patch
 
-Gregory, what about updating to a newer version with the fix ? ;-)
+v1: python-pybind was not the right approach and is in failure since
+it's been upgraded to V2.6.1.
 
-Regards,
-Yann E. MORIN.
+Building with setup.py now requires a cmake build first.
+With this new approach we can build the package with cmake
+for python bindings in C++ AND we also have the
+C++ bindings in python as an option (depending & requiring the first one).
 
-> ---
->  ...site-Scripting-XSS-exploits-in-demos.patch | 357 ++++++++++++++++++
->  package/janus-gateway/janus-gateway.mk        |   3 +
->  2 files changed, 360 insertions(+)
->  create mode 100644 package/janus-gateway/0003-Fix-potential-Cross-site-Scripting-XSS-exploits-in-demos.patch
-> 
-> diff --git a/package/janus-gateway/0003-Fix-potential-Cross-site-Scripting-XSS-exploits-in-demos.patch b/package/janus-gateway/0003-Fix-potential-Cross-site-Scripting-XSS-exploits-in-demos.patch
-> new file mode 100644
-> index 0000000000..9f3adfcc8e
-> --- /dev/null
-> +++ b/package/janus-gateway/0003-Fix-potential-Cross-site-Scripting-XSS-exploits-in-demos.patch
-> @@ -0,0 +1,357 @@
-> +From ba166e9adebfe5343f826c6a9e02299d35414ffd Mon Sep 17 00:00:00 2001
-> +From: Lorenzo Miniero <lminiero@gmail.com>
-> +Date: Thu, 25 Nov 2021 17:20:53 +0100
-> +Subject: [PATCH] Fix potential Cross-site Scripting (XSS) exploits in demos
-> + (#2817)
-> +
-> +[Retrieved (and backported) from:
-> +https://github.com/meetecho/janus-gateway/commit/ba166e9adebfe5343f826c6a9e02299d35414ffd]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + html/audiobridgetest.js   | 17 +++++++++++++----
-> + html/recordplaytest.js    | 13 +++++++++++--
-> + html/screensharingtest.js | 11 ++++++++++-
-> + html/streamingtest.js     | 13 +++++++++++--
-> + html/textroomtest.js      | 23 ++++++++++++++---------
-> + html/videocalltest.js     | 15 ++++++++++++---
-> + html/videoroomtest.js     | 13 +++++++++++--
-> + html/vp9svctest.js        | 13 +++++++++++--
-> + 8 files changed, 93 insertions(+), 25 deletions(-)
-> +
-> +diff --git a/html/audiobridgetest.js b/html/audiobridgetest.js
-> +index 18e1cc1839..f757789708 100644
-> +--- a/html/audiobridgetest.js
-> ++++ b/html/audiobridgetest.js
-> +@@ -178,7 +178,7 @@ $(document).ready(function() {
-> + 												Janus.debug("Got a list of participants:", list);
-> + 												for(var f in list) {
-> + 													var id = list[f]["id"];
-> +-													var display = list[f]["display"];
-> ++													var display = escapeXmlTags(list[f]["display"]);
-> + 													var setup = list[f]["setup"];
-> + 													var muted = list[f]["muted"];
-> + 													var spatial = list[f]["spatial_position"];
-> +@@ -222,7 +222,7 @@ $(document).ready(function() {
-> + 												Janus.debug("Got a list of participants:", list);
-> + 												for(var f in list) {
-> + 													var id = list[f]["id"];
-> +-													var display = list[f]["display"];
-> ++													var display = escapeXmlTags(list[f]["display"]);
-> + 													var setup = list[f]["setup"];
-> + 													var muted = list[f]["muted"];
-> + 													var spatial = list[f]["spatial_position"];
-> +@@ -267,7 +267,7 @@ $(document).ready(function() {
-> + 												Janus.debug("Got a list of participants:", list);
-> + 												for(var f in list) {
-> + 													var id = list[f]["id"];
-> +-													var display = list[f]["display"];
-> ++													var display = escapeXmlTags(list[f]["display"]);
-> + 													var setup = list[f]["setup"];
-> + 													var muted = list[f]["muted"];
-> + 													var spatial = list[f]["spatial_position"];
-> +@@ -429,7 +429,7 @@ function registerUsername() {
-> + 			return;
-> + 		}
-> + 		var register = { request: "join", room: myroom, display: username };
-> +-		myusername = username;
-> ++		myusername = escapeXmlTags(username);
-> + 		mixertest.send({ message: register});
-> + 	}
-> + }
-> +@@ -448,3 +448,12 @@ function getQueryStringValue(name) {
-> + 		results = regex.exec(location.search);
-> + 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-> + }
-> ++
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> +diff --git a/html/recordplaytest.js b/html/recordplaytest.js
-> +index 74ee7bed95..52b5ccbc4c 100644
-> +--- a/html/recordplaytest.js
-> ++++ b/html/recordplaytest.js
-> +@@ -423,11 +423,11 @@ function updateRecsList() {
-> + 			Janus.debug("Got a list of available recordings:", list);
-> + 			for(var mp in list) {
-> + 				Janus.debug("  >> [" + list[mp]["id"] + "] " + list[mp]["name"] + " (" + list[mp]["date"] + ")");
-> +-				$('#recslist').append("<li><a href='#' id='" + list[mp]["id"] + "'>" + list[mp]["name"] + " [" + list[mp]["date"] + "]" + "</a></li>");
-> ++				$('#recslist').append("<li><a href='#' id='" + list[mp]["id"] + "'>" + escapeXmlTags(list[mp]["name"]) + " [" + list[mp]["date"] + "]" + "</a></li>");
-> + 			}
-> + 			$('#recslist a').unbind('click').click(function() {
-> + 				selectedRecording = $(this).attr("id");
-> +-				selectedRecordingInfo = $(this).text();
-> ++				selectedRecordingInfo = escapeXmlTags($(this).text());
-> + 				$('#recset').html($(this).html()).parent().removeClass('open');
-> + 				$('#play').removeAttr('disabled').click(startPlayout);
-> + 				return false;
-> +@@ -545,3 +545,12 @@ function getQueryStringValue(name) {
-> + 		results = regex.exec(location.search);
-> + 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-> + }
-> ++
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> +diff --git a/html/screensharingtest.js b/html/screensharingtest.js
-> +index 61eac70f43..c64d8dbd67 100644
-> +--- a/html/screensharingtest.js
-> ++++ b/html/screensharingtest.js
-> +@@ -161,7 +161,7 @@ $(document).ready(function() {
-> + 										if(event === "joined") {
-> + 											myid = msg["id"];
-> + 											$('#session').html(room);
-> +-											$('#title').html(msg["description"]);
-> ++											$('#title').html(escapeXmlTags(msg["description"]));
-> + 											Janus.log("Successfully joined room " + msg["room"] + " with ID " + myid);
-> + 											if(role === "publisher") {
-> + 												// This is our session, publish our stream
-> +@@ -514,3 +514,12 @@ function newRemoteFeed(id, display) {
-> + 			}
-> + 		});
-> + }
-> ++
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> +diff --git a/html/streamingtest.js b/html/streamingtest.js
-> +index 7dd2e1f681..3f9937f11c 100644
-> +--- a/html/streamingtest.js
-> ++++ b/html/streamingtest.js
-> +@@ -323,7 +323,7 @@ function updateStreamsList() {
-> + 			Janus.debug(list);
-> + 			for(var mp in list) {
-> + 				Janus.debug("  >> [" + list[mp]["id"] + "] " + list[mp]["description"] + " (" + list[mp]["type"] + ")");
-> +-				$('#streamslist').append("<li><a href='#' id='" + list[mp]["id"] + "'>" + list[mp]["description"] + " (" + list[mp]["type"] + ")" + "</a></li>");
-> ++				$('#streamslist').append("<li><a href='#' id='" + list[mp]["id"] + "'>" + escapeXmlTags(list[mp]["description"]) + " (" + list[mp]["type"] + ")" + "</a></li>");
-> + 			}
-> + 			$('#streamslist a').unbind('click').click(function() {
-> + 				selectedStream = $(this).attr("id");
-> +@@ -345,7 +345,7 @@ function getStreamInfo() {
-> + 	var body = { request: "info", id: parseInt(selectedStream) || selectedStream };
-> + 	streaming.send({ message: body, success: function(result) {
-> + 		if(result && result.info && result.info.metadata) {
-> +-			$('#metadata').html(result.info.metadata);
-> ++			$('#metadata').html(escapeXmlTags(result.info.metadata));
-> + 			$('#info').removeClass('hide').show();
-> + 		}
-> + 	}});
-> +@@ -394,6 +394,15 @@ function stopStream() {
-> + 	simulcastStarted = false;
-> + }
-> + 
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> ++
-> + // Helpers to create Simulcast-related UI, if enabled
-> + function addSimulcastButtons() {
-> + 	$('#curres').parent().append(
-> +diff --git a/html/textroomtest.js b/html/textroomtest.js
-> +index 082ae44905..3d0697e35a 100644
-> +--- a/html/textroomtest.js
-> ++++ b/html/textroomtest.js
-> +@@ -153,9 +153,7 @@ $(document).ready(function() {
-> + 									var what = json["textroom"];
-> + 									if(what === "message") {
-> + 										// Incoming message: public or private?
-> +-										var msg = json["text"];
-> +-										msg = msg.replace(new RegExp('<', 'g'), '&lt');
-> +-										msg = msg.replace(new RegExp('>', 'g'), '&gt');
-> ++										var msg = escapeXmlTags(json["text"]);
-> + 										var from = json["from"];
-> + 										var dateString = getDateString(json["date"]);
-> + 										var whisper = json["whisper"];
-> +@@ -170,9 +168,7 @@ $(document).ready(function() {
-> + 										}
-> + 									} else if(what === "announcement") {
-> + 										// Room announcement
-> +-										var msg = json["text"];
-> +-										msg = msg.replace(new RegExp('<', 'g'), '&lt');
-> +-										msg = msg.replace(new RegExp('>', 'g'), '&gt');
-> ++										var msg = escapeXmlTags(json["text"]);
-> + 										var dateString = getDateString(json["date"]);
-> + 										$('#chatroom').append('<p style="color: purple;">[' + dateString + '] <i>' + msg + '</i>');
-> + 										$('#chatroom').get(0).scrollTop = $('#chatroom').get(0).scrollHeight;
-> +@@ -180,7 +176,7 @@ $(document).ready(function() {
-> + 										// Somebody joined
-> + 										var username = json["username"];
-> + 										var display = json["display"];
-> +-										participants[username] = display ? display : username;
-> ++										participants[username] = escapeXmlTags(display ? display : username);
-> + 										if(username !== myid && $('#rp' + username).length === 0) {
-> + 											// Add to the participants list
-> + 											$('#list').append('<li id="rp' + username + '" class="list-group-item">' + participants[username] + '</li>');
-> +@@ -282,7 +278,7 @@ function registerUsername() {
-> + 			username: myid,
-> + 			display: username
-> + 		};
-> +-		myusername = username;
-> ++		myusername = escapeXmlTags(username);
-> + 		transactions[transaction] = function(response) {
-> + 			if(response["textroom"] === "error") {
-> + 				// Something went wrong
-> +@@ -312,7 +308,7 @@ function registerUsername() {
-> + 			if(response.participants && response.participants.length > 0) {
-> + 				for(var i in response.participants) {
-> + 					var p = response.participants[i];
-> +-					participants[p.username] = p.display ? p.display : p.username;
-> ++					participants[p.username] = escapeXmlTags(p.display ? p.display : p.username);
-> + 					if(p.username !== myid && $('#rp' + p.username).length === 0) {
-> + 						// Add to the participants list
-> + 						$('#list').append('<li id="rp' + p.username + '" class="list-group-item">' + participants[p.username] + '</li>');
-> +@@ -418,3 +414,12 @@ function getQueryStringValue(name) {
-> + 		results = regex.exec(location.search);
-> + 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-> + }
-> ++
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> +diff --git a/html/videocalltest.js b/html/videocalltest.js
-> +index d1c1ab8d07..18ccbc2c47 100644
-> +--- a/html/videocalltest.js
-> ++++ b/html/videocalltest.js
-> +@@ -148,7 +148,7 @@ $(document).ready(function() {
-> + 										} else if(result["event"]) {
-> + 											var event = result["event"];
-> + 											if(event === 'registered') {
-> +-												myusername = result["username"];
-> ++												myusername = escapeXmlTags(result["username"]);
-> + 												Janus.log("Successfully registered as " + myusername + "!");
-> + 												$('#youok').removeClass('hide').show().html("Registered as '" + myusername + "'");
-> + 												// Get a list of available peers, just for fun
-> +@@ -163,7 +163,7 @@ $(document).ready(function() {
-> + 												bootbox.alert("Waiting for the peer to answer...");
-> + 											} else if(event === 'incomingcall') {
-> + 												Janus.log("Incoming call from " + result["username"] + "!");
-> +-												yourusername = result["username"];
-> ++												yourusername = escapeXmlTags(result["username"]);
-> + 												// Notify user
-> + 												bootbox.hideAll();
-> + 												incoming = bootbox.dialog({
-> +@@ -213,7 +213,7 @@ $(document).ready(function() {
-> + 												});
-> + 											} else if(event === 'accepted') {
-> + 												bootbox.hideAll();
-> +-												var peer = result["username"];
-> ++												var peer = escapeXmlTags(result["username"]);
-> + 												if(!peer) {
-> + 													Janus.log("Call started!");
-> + 												} else {
-> +@@ -598,6 +598,15 @@ function getQueryStringValue(name) {
-> + 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-> + }
-> + 
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> ++
-> + // Helpers to create Simulcast-related UI, if enabled
-> + function addSimulcastButtons(temporal) {
-> + 	$('#curres').parent().append(
-> +diff --git a/html/videoroomtest.js b/html/videoroomtest.js
-> +index 6a566891d8..5a3ade9be9 100644
-> +--- a/html/videoroomtest.js
-> ++++ b/html/videoroomtest.js
-> +@@ -400,7 +400,7 @@ function registerUsername() {
-> + 			ptype: "publisher",
-> + 			display: username
-> + 		};
-> +-		myusername = username;
-> ++		myusername = escapeXmlTags(username);
-> + 		sfutest.send({ message: register });
-> + 	}
-> + }
-> +@@ -530,7 +530,7 @@ function newRemoteFeed(id, display, audio, video) {
-> + 							}
-> + 						}
-> + 						remoteFeed.rfid = msg["id"];
-> +-						remoteFeed.rfdisplay = msg["display"];
-> ++						remoteFeed.rfdisplay = escapeXmlTags(msg["display"]);
-> + 						if(!remoteFeed.spinner) {
-> + 							var target = document.getElementById('videoremote'+remoteFeed.rfindex);
-> + 							remoteFeed.spinner = new Spinner({top:100}).spin(target);
-> +@@ -685,6 +685,15 @@ function getQueryStringValue(name) {
-> + 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-> + }
-> + 
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> ++
-> + // Helpers to create Simulcast-related UI, if enabled
-> + function addSimulcastButtons(feed, temporal) {
-> + 	var index = feed;
-> +diff --git a/html/vp9svctest.js b/html/vp9svctest.js
-> +index eca0239c32..b22ccf3340 100644
-> +--- a/html/vp9svctest.js
-> ++++ b/html/vp9svctest.js
-> +@@ -387,7 +387,7 @@ function registerUsername() {
-> + 			ptype: "publisher",
-> + 			display: username
-> + 		};
-> +-		myusername = username;
-> ++		myusername = escapeXmlTags(username);
-> + 		sfutest.send({ message: register });
-> + 	}
-> + }
-> +@@ -486,7 +486,7 @@ function newRemoteFeed(id, display, audio, video) {
-> + 							}
-> + 						}
-> + 						remoteFeed.rfid = msg["id"];
-> +-						remoteFeed.rfdisplay = msg["display"];
-> ++						remoteFeed.rfdisplay = escapeXmlTags(msg["display"]);
-> + 						if(!remoteFeed.spinner) {
-> + 							var target = document.getElementById('videoremote'+remoteFeed.rfindex);
-> + 							remoteFeed.spinner = new Spinner({top:100}).spin(target);
-> +@@ -630,6 +630,15 @@ function newRemoteFeed(id, display, audio, video) {
-> + 		});
-> + }
-> + 
-> ++// Helper to escape XML tags
-> ++function escapeXmlTags(value) {
-> ++	if(value) {
-> ++		var escapedValue = value.replace(new RegExp('<', 'g'), '&lt');
-> ++		escapedValue = escapedValue.replace(new RegExp('>', 'g'), '&gt');
-> ++		return escapedValue;
-> ++	}
-> ++}
-> ++
-> + // Helpers to create SVC-related UI for a new viewer
-> + function addSvcButtons(feed) {
-> + 	var index = feed;
-> diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-> index 40652d802a..98e00aeeb8 100644
-> --- a/package/janus-gateway/janus-gateway.mk
-> +++ b/package/janus-gateway/janus-gateway.mk
-> @@ -11,6 +11,9 @@ JANUS_GATEWAY_LICENSE_FILES = COPYING
->  JANUS_GATEWAY_CPE_ID_VENDOR = meetecho
->  JANUS_GATEWAY_CPE_ID_PRODUCT = janus
->  
-> +# 0003-Fix-potential-Cross-site-Scripting-XSS-exploits-in-demos.patch
-> +JANUS_GATEWAY_IGNORE_CVES += CVE-2021-4020
-> +
->  # ding-libs provides the ini_config library
->  JANUS_GATEWAY_DEPENDENCIES = host-pkgconf jansson libnice \
->  	libsrtp host-gengetopt libglib2 openssl libconfig \
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+I make this a host-only package, in the sense that other packages will
+require it at build time, and I don't forsee any reasons to have
+such a package as a target package.
 
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/pybind11/Config.in     | 25 +++++++++++++++++++++
+ package/pybind11/pybind11.hash |  3 +++
+ package/pybind11/pybind11.mk   | 41 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 71 insertions(+)
+ create mode 100644 package/pybind11/Config.in
+ create mode 100644 package/pybind11/pybind11.hash
+ create mode 100644 package/pybind11/pybind11.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6f812eb564..8a04efa63f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1105,6 +1105,7 @@ F:	package/libxcrypt/
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+ F:	package/python-pybind/
++F:	package/pybind11/
+ F:	package/reaver/
+ 
+ N:	Guo Ren <ren_guo@c-sky.com>
+diff --git a/package/Config.in b/package/Config.in
+index 311004db2c..5749118ee3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2006,6 +2006,7 @@ endif
+ 	source "package/protobuf/Config.in"
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/protozero/Config.in"
++	source "package/pybind11/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/riemann-c-client/Config.in"
+diff --git a/package/pybind11/Config.in b/package/pybind11/Config.in
+new file mode 100644
+index 0000000000..4fc6c5eebc
+--- /dev/null
++++ b/package/pybind11/Config.in
+@@ -0,0 +1,25 @@
++comment "pybind11 needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++
++config BR2_PACKAGE_PYBIND11
++	bool "pybind11"
++	depends on BR2_USE_WCHAR # boost
++	depends on BR2_INSTALL_LIBSTDCPP # boost
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
++	select BR2_PACKAGE_BOOST
++	help
++	  Pybind11 is a lightweight header-only library that exposes C++
++	  types in Python and vice versa, mainly to create Python
++	  bindings of existing C++ code.
++
++	  http://pybind11.readthedocs.org/en/master
++
++if BR2_PACKAGE_PYBIND11
++
++config BR2_PACKAGE_PYBIND11_WITH_PYTHON
++	bool "pybind11-python"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Activate support for python
++
++endif
+diff --git a/package/pybind11/pybind11.hash b/package/pybind11/pybind11.hash
+new file mode 100644
+index 0000000000..ab8825bf04
+--- /dev/null
++++ b/package/pybind11/pybind11.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 f1bcc07caa568eb312411dde5308b1e250bd0e1bc020fae855bf9f43209940cc  pybind11-2.8.1.tar.gz
++sha256 83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
+diff --git a/package/pybind11/pybind11.mk b/package/pybind11/pybind11.mk
+new file mode 100644
+index 0000000000..a67ce237ea
+--- /dev/null
++++ b/package/pybind11/pybind11.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# pybind11
++#
++################################################################################
++
++PYBIND11_VERSION = 2.8.1
++PYBIND11_SITE = $(call github,pybind,pybind11,v$(PYBIND11_VERSION))
++PYBIND11_LICENSE = BSD-3-Clause
++PYBIND11_LICENSE_FILES = LICENSE
++PYBIND11_INSTALL_STAGING = YES
++PYBIND11_SUPPORTS_IN_SOURCE_BUILD = YES
++
++HOST_PYBIND11_CONF_OPTS = \
++	-DBUILD_DOCS=OFF \
++	-DDOWNLOAD_EIGEN=OFF
++
++# pybind11 python support activation
++ifeq ($(BR2_PACKAGE_PYBIND11_WITH_PYTHON),y)
++HOST_PYBIND11_DEPENDENCIES += host-python3
++
++# pybind11 with python requires cmake install in $(@D)
++HOST_PYBIND11_CONF_OPTS += \
++	-DCMAKE_INSTALL_PREFIX=$(@D)/pybind11 \
++	-DPYTHON=$(HOST_DIR)/bin/python3 \
++	-DPYTHON_PREFIX=$(STAGING_DIR)/usr \
++	-DPYBIND_FINDPYTHON=ON \
++	-DPYBIND11_NOPYTHON=OFF
++
++define PYBIND11_PYTHON_BUILD
++	cd $(@D) && $(HOST_DIR)/bin/python setup.py install
++endef
++
++HOST_PYBIND11_POST_INSTALL_HOOKS += PYBIND11_PYTHON_BUILD
++else
++HOST_PYBIND11_CONF_OPTS += \
++	-DPYBIND_FINDPYTHON=OFF \
++	-DPYBIND11_NOPYTHON=ON
++endif
++
++$(eval $(host-cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
