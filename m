@@ -1,78 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94A75C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0462C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52A0D834AE;
-	Sat,  4 Dec 2021 21:25:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55F2140261;
+	Sat,  4 Dec 2021 21:26:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2WoZ-WebS_45; Sat,  4 Dec 2021 21:25:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5VYmJstNtDbd; Sat,  4 Dec 2021 21:26:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2943832D8;
-	Sat,  4 Dec 2021 21:25:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD7F21BF36B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:25:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46B5D40156;
+	Sat,  4 Dec 2021 21:26:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D1731BF36B
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:26:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA47B832D8
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:25:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B39140156
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:26:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o2vMH6hMzmOX for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 21:25:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6585B832D4
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:25:47 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id u17so6266844wrt.3
- for <buildroot@buildroot.org>; Sat, 04 Dec 2021 13:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7vOvM3TFOZ8bX65PcCkKbCMiDDeMx+S5VWyz+Tka0co=;
- b=XZnVfNv7T8iAeJMgoBt2kpw0M1O5T+XP0yD3aYkJTwqdC9RG442Utr//a8ZCf9oE5r
- XB47o4g4CkrHhBUv9uiOxttQ5k/l+hnXeTHDpolXsbHQzgT8/KnlXTVz0Y9cWHV4737J
- wjEBO3Cha14Kpfg0qAqkm7X/J7e5hc/1HSgpc+m3TKbKFMikDRSv7t+AzZb7BpRf5pgW
- f+Yt6VhM1xwb5m9PRWvlj3bRRv+gzZbf37AAXWclyDUbhXsM3r5in4BoQ8r0RFdK2owo
- IZeSkQ6mo7yKaevEXoCh6zMCPhWcDKa989kXjRidpVLzjzW9rR2WJIGxMJH24cfAkRj7
- vrsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7vOvM3TFOZ8bX65PcCkKbCMiDDeMx+S5VWyz+Tka0co=;
- b=2/oS2XStYiP7hoAlNB6qCSf+H+KPc6wiDXeLcmtjqfXMidfCZrCVJi/RB7IMCyWFK4
- Qq6lYuTAqkRYzO9yTorj3K++DGRvbb2/7soViFZYs2Mzm9dMl0duaiVFn1j+3IRLhfrY
- QxIKLFB47HqQUjH7nCRHGPyxKaGqaL499MypQ2Sr0B1J5z3kF0asCqhfBr6KwjjwYLvt
- aKsQUwapf2i8+juIGhipO+wEPZIZiT/TBa/UZJKU+0wezlepBODItJ4bFMv8Pu64q0gz
- RHswMY7mYeG+KnhXztB6Ufhc7S9CzfKC91ubHWiwAJ9FlMUNYrgU3g6eQcAiZan26swk
- mUEw==
-X-Gm-Message-State: AOAM533Y9bhczqXms873CxG/J/sjLYSf5v3wmBKhE/WIfYqlSim8Ui9E
- lDNGkUqg2ee+xl1i85L/LuNn/ekKwaMNZg==
-X-Google-Smtp-Source: ABdhPJwj6rQ64Vh7jBaC7Jumucn+isucjdAAF8t2VTG0ygQCLyENBQA9MRzJaugahGRqDnvA0E+qCw==
-X-Received: by 2002:a05:6000:184e:: with SMTP id
- c14mr31269055wri.241.1638653145291; 
- Sat, 04 Dec 2021 13:25:45 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id t8sm8036370wmq.32.2021.12.04.13.25.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Dec 2021 13:25:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3WF5Z_y0ich6 for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 21:26:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E89E400E9
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:26:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 031D193523; Sat,  4 Dec 2021 21:21:49 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Dec 2021 22:25:47 +0100
-Message-Id: <20211204212547.2019391-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/util-linux/util-linux-libs: add CPE
- variables
+Date: Sat, 4 Dec 2021 22:26:32 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: a2663af3409f8b45ddf6e6935ed9369ca49a3c52
+X-Git-Newrev: 53972c82964dd1337dff4ccbcdd484d243aef0ba
+X-Patchwork-Hint: ignore
+Message-Id: <20211204212149.031D193523@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-zopfli: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,37 +53,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:kernel:util-linux is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=53972c82964dd1337dff4ccbcdd484d243aef0ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akernel%3Autil-linux
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/util-linux/util-linux-libs/util-linux-libs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-zopfli/Config.in          |  7 +++++++
+ package/python-zopfli/python-zopfli.hash |  5 +++++
+ package/python-zopfli/python-zopfli.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 35 insertions(+)
 
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-index 3a3a655e62..f1a4334c5c 100644
---- a/package/util-linux/util-linux-libs/util-linux-libs.mk
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -19,6 +19,8 @@ UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.BSD-3-Clause \
- 	Documentation/licenses/COPYING.LGPL-2.1-or-later
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3b31b89568..82853cdc18 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1272,6 +1272,7 @@ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-tinycss2/
+ F:	package/python-yarl/
++F:	package/python-zopfli/
  
-+UTIL_LINUX_LIBS_CPE_ID_VENDOR = kernel
-+UTIL_LINUX_LIBS_CPE_ID_PRODUCT = util-linux
- UTIL_LINUX_LIBS_INSTALL_STAGING = YES
- UTIL_LINUX_LIBS_DEPENDENCIES = \
- 	host-pkgconf \
--- 
-2.33.0
-
+ N:	James Knight <james.knight@collins.com>
+ F:	package/atkmm/
+diff --git a/package/Config.in b/package/Config.in
+index b9c2765830..e90d30e81c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1296,6 +1296,7 @@ menu "External python modules"
+ 	source "package/python-zc-lockfile/Config.in"
+ 	source "package/python-zeroconf/Config.in"
+ 	source "package/python-zope-interface/Config.in"
++	source "package/python-zopfli/Config.in"
+ endmenu
+ endif
+ 	source "package/quickjs/Config.in"
+diff --git a/package/python-zopfli/Config.in b/package/python-zopfli/Config.in
+new file mode 100644
+index 0000000000..69d4b8b514
+--- /dev/null
++++ b/package/python-zopfli/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ZOPFLI
++	bool "python-zopfli"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Zopfli module for python.
++
++	  https://github.com/fonttools/py-zopfli
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
+new file mode 100644
+index 0000000000..92b51bdf18
+--- /dev/null
++++ b/package/python-zopfli/python-zopfli.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/zopfli/json
++md5  f66b6f4132533b9b0ab8b0af757237bf  zopfli-0.1.9.zip
++sha256  78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b  zopfli-0.1.9.zip
++# Locally computed sha256 checksums
++sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
+new file mode 100644
+index 0000000000..95a0067b05
+--- /dev/null
++++ b/package/python-zopfli/python-zopfli.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python-zopfli
++#
++################################################################################
++
++PYTHON_ZOPFLI_VERSION = 0.1.9
++PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/10/7d/278fd896401b0ef76e06cd42c3ce1541572d83b1c713b6786795c60a1bbe
++PYTHON_ZOPFLI_SETUP_TYPE = setuptools
++PYTHON_ZOPFLI_LICENSE = Apache-2.0
++PYTHON_ZOPFLI_LICENSE_FILES = COPYING
++PYTHON_ZOPFLI_DEPENDENCIES = host-python-setuptools-scm
++
++define PYTHON_ZOPFLI_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_ZOPFLI_DL_DIR)/$(PYTHON_ZOPFLI_SOURCE)
++	mv $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)/* $(@D)
++	$(RM) -r $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)
++endef
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
