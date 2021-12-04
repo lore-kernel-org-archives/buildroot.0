@@ -1,51 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD88CC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 06:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9865C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 06:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E0B783440;
-	Sat,  4 Dec 2021 06:01:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kCMuD_jz3gTm; Sat,  4 Dec 2021 06:01:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D8CD8341E;
-	Sat,  4 Dec 2021 06:00:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6AD81BF83B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 06:00:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4484402B0
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 06:00:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 325BF4025F;
+	Sat,  4 Dec 2021 06:01:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h0nEMtQX3swd for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 06:00:56 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kc1OTGUQ6WkZ; Sat,  4 Dec 2021 06:01:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C12C402B0;
+	Sat,  4 Dec 2021 06:01:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 016DC1BF83B
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 06:01:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2BDF41295
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 06:01:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ju8JkcciW7kU for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 06:01:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtpfb1-g21.free.fr (smtpfb1-g21.free.fr [212.27.42.9])
- by smtp2.osuosl.org (Postfix) with ESMTP id 800FB4025F
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 06:00:54 +0000 (UTC)
+Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEED8410B5
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 06:01:00 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtpfb1-g21.free.fr (Postfix) with ESMTP id 3C374DF9891
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 07:00:52 +0100 (CET)
+ by smtpfb2-g21.free.fr (Postfix) with ESMTP id 381804C29E
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 07:00:53 +0100 (CET)
 Received: from x230.trabucayre.com (unknown
  [IPv6:2a01:e34:efc8:1080:3e97:eff:fe89:644f])
- by smtp2-g21.free.fr (Postfix) with ESMTP id 693B120039F;
- Sat,  4 Dec 2021 07:00:44 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTP id B528D2003AE;
+ Sat,  4 Dec 2021 07:00:46 +0100 (CET)
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Dec 2021 06:59:43 +0100
-Message-Id: <20211204055944.19323-1-gwenj@trabucayre.com>
+Date: Sat,  4 Dec 2021 06:59:44 +0100
+Message-Id: <20211204055944.19323-2-gwenj@trabucayre.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211204055944.19323-1-gwenj@trabucayre.com>
+References: <20211204055944.19323-1-gwenj@trabucayre.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/openfpgaloader: bump to version
- 0.6.1
+Subject: [Buildroot] [PATCH 2/2] package/openfpgaloader: add cmsis-dap
+ support option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,59 +68,55 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-- Update version to latest release
-- change license type and hash
-- add zlib dependency
+CMSIS-DAP support depends on hidapi, but this package has depends on
+udev so instead of adding this option by default, this let user decide.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/openfpgaloader/Config.in           | 1 +
- package/openfpgaloader/openfpgaloader.hash | 4 ++--
- package/openfpgaloader/openfpgaloader.mk   | 8 ++++----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/openfpgaloader/Config.in         | 13 +++++++++++++
+ package/openfpgaloader/openfpgaloader.mk |  7 +++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-index f1b34ef5dd..c998369bed 100644
+index c998369bed..c3712a8ea0 100644
 --- a/package/openfpgaloader/Config.in
 +++ b/package/openfpgaloader/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_OPENFPGALOADER
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libftdi1 -> libusb
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBFTDI1
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Universal utility for programming FPGA
+@@ -10,6 +10,19 @@ config BR2_PACKAGE_OPENFPGALOADER
  
-diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
-index 990149cded..6c9d8a2b91 100644
---- a/package/openfpgaloader/openfpgaloader.hash
-+++ b/package/openfpgaloader/openfpgaloader.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ef3ed60297ab560f15cd4362d61b7da86c44b84e18937e0411023f8d1cf6a606  openfpgaloader-381c67de00a3102cf6e9bb20ca84030a71c7a0f2.tar.gz
--sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
-+sha256  a862a209d696becff915a77512e6a8c22f92d73480a45cc12273d9ad1db60d23  openfpgaloader-0.6.1.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+ 	  https://github.com/trabucayre/openFPGALoader/
+ 
++if BR2_PACKAGE_OPENFPGALOADER
++
++config BR2_PACAKGE_OPENFPGALOADER_CMSIS
++	bool "CMSIS-DAP support"
++	depends on BR2_PACKAGE_HIDAPI
++	help
++	  openfpgaloader CMSIS-DAP support
++
++comment "openfpgaloader CMSIS-DAP needs hidapi"
++	depends on !BR2_PACKAGE_HIDAPI
++
++endif
++
+ comment "openfpgaloader needs a toolchain w/ threads, C++, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
 diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-index 1bb3de37fb..73117cb994 100644
+index 73117cb994..0c39aad687 100644
 --- a/package/openfpgaloader/openfpgaloader.mk
 +++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+@@ -17,4 +17,11 @@ else
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_UDEV=OFF
+ endif
  
--OPENFPGALOADER_VERSION = 381c67de00a3102cf6e9bb20ca84030a71c7a0f2
--OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,$(OPENFPGALOADER_VERSION))
--OPENFPGALOADER_LICENSE = AGPL-3.0
-+OPENFPGALOADER_VERSION = 0.6.1
-+OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,v$(OPENFPGALOADER_VERSION))
-+OPENFPGALOADER_LICENSE = Apache-2.0
- OPENFPGALOADER_LICENSE_FILES = LICENSE
--OPENFPGALOADER_DEPENDENCIES = libftdi1
-+OPENFPGALOADER_DEPENDENCIES = libftdi1 zlib
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- OPENFPGALOADER_DEPENDENCIES += udev
++ifeq ($(BR2_PACAKGE_OPENFPGALOADER_CMSIS),y)
++OPENFPGALOADER_DEPENDENCIES += hidapi
++OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=ON
++else
++OPENFPGALOADER_CONF_OPTS += -DENABLE_CMSISDAP=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.30.2
 
