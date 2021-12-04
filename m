@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFF6C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DAC7C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE808401AF;
-	Sat,  4 Dec 2021 22:09:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BD4680D80;
+	Sat,  4 Dec 2021 22:09:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0VQxw-6I3IMc; Sat,  4 Dec 2021 22:09:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 711sTqXyCyac; Sat,  4 Dec 2021 22:09:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C313400E9;
-	Sat,  4 Dec 2021 22:09:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 76ABD1BF3F7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 800D180D79;
+	Sat,  4 Dec 2021 22:09:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CDC01BF95C
  for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62DAE605B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68DB0408CE
  for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F4cWkeim1v4S for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vmmKQpSJ4Vp8 for <buildroot@lists.busybox.net>;
  Sat,  4 Dec 2021 22:09:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC6D6605B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id A411040647
  for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:09:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 78C1D935CE; Sat,  4 Dec 2021 22:04:11 +0000 (UTC)
+ id 6E5AE935CD; Sat,  4 Dec 2021 22:04:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 23:04:50 +0100
+Date: Sat, 4 Dec 2021 23:04:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3904da8ba3d620700f39867f6a1c4c391624b9e
-X-Git-Newrev: 570b6deff906c24e6609c46ce69e00d9e8be04fc
+X-Git-Oldrev: eaa442089072ba431e606d4a8332fe414bec4327
+X-Git-Newrev: d3904da8ba3d620700f39867f6a1c4c391624b9e
 X-Patchwork-Hint: ignore
-Message-Id: <20211204220411.78C1D935CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fswebcam: bump to
- release 20200725
+Message-Id: <20211204220411.6E5AE935CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/barebox: bump version to
+ 2021.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=570b6deff906c24e6609c46ce69e00d9e8be04fc
+commit: https://git.buildroot.net/buildroot/commit/?id=d3904da8ba3d620700f39867f6a1c4c391624b9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to latest release.
-
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fswebcam/fswebcam.hash | 2 +-
- package/fswebcam/fswebcam.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
-index bac1626785..6ecb0d9794 100644
---- a/package/fswebcam/fswebcam.hash
-+++ b/package/fswebcam/fswebcam.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5702771cee6e3fa0f2bbbb72ecf3e5a253ff458c1f648f7e7c0d477e39f0ec80  fswebcam-e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33.tar.gz
-+sha256  d5439b2bf49bb634100d7e42ed9854f84bfd355c1d40bc3d4d81593eeadd8aee  fswebcam-20200725.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
-index 3a5b8c9eef..12e7860e7b 100644
---- a/package/fswebcam/fswebcam.mk
-+++ b/package/fswebcam/fswebcam.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index dd7985381f..01d66dce70 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--FSWEBCAM_VERSION = e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33
-+FSWEBCAM_VERSION = 20200725
- FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
- FSWEBCAM_LICENSE = GPL-2.0
- FSWEBCAM_LICENSE_FILES = LICENSE
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2021.10.0"
++	bool "2021.11.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2021.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2021.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index ebd81cf18d..371bf15029 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2021.10.0.tar.bz2.md5
+-md5  7d79102fd8d45bf3756b4f3a569654a8  barebox-2021.10.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2021.11.0.tar.bz2.md5
++md5  e7f7629701e9e8b9566b6799b422de5e  barebox-2021.11.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  4bb077b54d03743b3e8c20751d318dcc3ef03b20abe1a64a79c413ea03de3632  barebox-2021.10.0.tar.bz2
++sha256  34fbd33e17d052a7d8d64918183170675008768fe7618c31c16b9f5c92803c6a  barebox-2021.11.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
