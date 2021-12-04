@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D63DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 20:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37921C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 20:21:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23E5883F12;
-	Sat,  4 Dec 2021 20:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2FAF40977;
+	Sat,  4 Dec 2021 20:21:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7fbnAbmtvLKq; Sat,  4 Dec 2021 20:21:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t5meOUqQ3IqC; Sat,  4 Dec 2021 20:21:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8510E82B24;
-	Sat,  4 Dec 2021 20:21:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDDB91BF861
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:21:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41E0E40A03;
+	Sat,  4 Dec 2021 20:21:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 348A71BF861
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB03560A75
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:21:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AF0240179
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:21:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UdrYAPgVsldX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MHsjlXxdOpMJ for <buildroot@lists.busybox.net>;
  Sat,  4 Dec 2021 20:21:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 463BF60A6B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4024940156
  for <buildroot@buildroot.org>; Sat,  4 Dec 2021 20:21:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3D65E922AA; Sat,  4 Dec 2021 20:16:23 +0000 (UTC)
+ id 32FB69229C; Sat,  4 Dec 2021 20:16:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 21:21:03 +0100
+Date: Sat, 4 Dec 2021 21:19:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7b5271ecfd64e6cc2562c5911266f107236cef22
-X-Git-Newrev: 5ca414c07dc83862eca679767cb72e0233a2de24
+X-Git-Oldrev: d925c1260f14cebff0b479a2abff8e95a8da222d
+X-Git-Newrev: 7b5271ecfd64e6cc2562c5911266f107236cef22
 X-Patchwork-Hint: ignore
-Message-Id: <20211204201623.3D65E922AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgis: adjust
- libgeos dependency coments
+Message-Id: <20211204201623.32FB69229C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgeos: add threads
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,37 +59,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ca414c07dc83862eca679767cb72e0233a2de24
+commit: https://git.buildroot.net/buildroot/commit/?id=7b5271ecfd64e6cc2562c5911266f107236cef22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since 3.10.0 libgeos needs toolchain with threads support.
-So add it to BR2_TOOLCHAIN_HAS_THREADS comment list.
+In Buildroot commit 2dd2f3751ff2aa60df7de5453e65aa148f64645d, the
+libgeos package was bumped from 3.9.1 to 3.10.1.
 
-libgeos depends on BR2_INSTALL_LIBSTDCPP, so add it to
-BR2_INSTALL_LIBSTDCPP comment list.
+Since version 3.10.0, libgeos uses mutex since (commit https://github.com/libgeos/geos/commit/3fcbd1e0c52843c2ae0b4809c9f89f74ce529afe#diff-38d1bc63228770a179e474aef4fd26b1a2ab5f5758a5d98d07ac556498dd1f3d)
+
+Toolchains without threads support fails to build:
+/home/giuliobenetti/autobuild/run/instance-1/output-1/build/libgeos-3.10.1/include/geos/index/strtree/TemplateSTRtree.h:376:10: error: 'mutex' in namespace 'std' does not name a type
+  376 |     std::mutex lock_;
+      |          ^~~~~
+
+So it needs threads.
+
+Fixes:
+
+ http://autobuild.buildroot.net/results/2d5fe2866dfa24f5747fbc826fea1108a2a6cb47/
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgis/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libgeos/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 04705f7e16..2642115026 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -2,9 +2,9 @@ config BR2_PACKAGE_POSTGIS
- 	bool "postgis"
- 	depends on BR2_PACKAGE_POSTGRESQL_FULL
- 	depends on !BR2_microblazeel && !BR2_microblazebe # ICE
--	depends on BR2_INSTALL_LIBSTDCPP # proj
-+	depends on BR2_INSTALL_LIBSTDCPP # libgeos, proj
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
--	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgeos, proj
- 	depends on BR2_USE_WCHAR # libgeos, proj
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 # libgeos
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index 86a1cddcf3..5e861ab010 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBGEOS
+ 	bool "libgeos"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+ 	help
+@@ -13,7 +14,8 @@ config BR2_PACKAGE_LIBGEOS
+ 
+ 	  https://trac.osgeo.org/geos
+ 
+-comment "libgeos needs a toolchain w/ C++, wchar, not binutils bug 21464, 27597"
++comment "libgeos needs a toolchain w/ C++, wchar, threads not binutils bug 21464, 27597"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		   !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 || \
+ 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
