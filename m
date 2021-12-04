@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A1AC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 10:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C361C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 11:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9685B40533;
-	Sat,  4 Dec 2021 10:44:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0A26401EC;
+	Sat,  4 Dec 2021 11:23:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aO7GbatDJMGm; Sat,  4 Dec 2021 10:44:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WEQYs1FZKxTZ; Sat,  4 Dec 2021 11:23:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C74644045B;
-	Sat,  4 Dec 2021 10:44:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB00B1BF5DA
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 10:44:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFA3F405CF;
+	Sat,  4 Dec 2021 11:23:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CB7E51BF35A
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 11:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B74A14045B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 10:44:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B89DD405CF
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 11:23:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 31AzzmfqAh_L for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 10:44:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HSBgcHSiksjo for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 11:23:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 89556403CB
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 10:44:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9F326401EC
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 11:23:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:44c6:1f1c:4326:e15f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A39235FFAE;
- Sat,  4 Dec 2021 11:44:37 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 176215FF20;
+ Sat,  4 Dec 2021 12:23:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638614681;
- bh=axy3Zje7XZs/Q4TpmkMsJCbnbNllCWp8rT2a4uhGzLo=;
+ s=smtp-20201208; t=1638616996;
+ bh=D027e0PX/3Sn5S53zyJBlGyaJYaWgH2Qj/KCT9eA5xo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FCu+4uWprh833tCb+41Ehi6XQM5nwxN3eS2QilFCsXCy+1zFIkFzHfsD5IVfpee1C
- 3lz9sLBdi5E3/PglV44v5WoXf3k2f1LNLwtKLdUa+cKQsdtF+gNpYXGNkNOE3XHNKt
- l8grIq+wgJiLCvHXoN3N/eTuZ4oQwmGLrspFMrNS+HRJtcqPkhhT0Qvh1R7XThP44H
- CFGKTpzNU1fiZFc70+4a5uBHvZyacSZbU9X/8WsRH2yrfu7M176yJXVz2cHfyar+UN
- O5ARHIZH376cJdAJLLfS/A5wotq8S3r/j5BjFv11l6v9jLT9y3H4a2EXQQkGsZVFN5
- EMGyq7kZKFDhA==
+ b=qvCqNZVpwuhzccmgXKWrfsG55KNHTcWbE8wYturBd/iw9WTooGvId31fFYQSEf9YU
+ 3SXtqiyafHMO0rAhYQaglakwvE9L9TOm+bc1dRyinbmzG3vN7s+S+5V5M8+4prXa4o
+ dFL/OYHckzRWKBLS/VKQXqAB4/DtK6cydkCmSnsVgGovm4x/XCMcW33eN1SOl5cygn
+ 2KBCsRz+vvihFi/sM3Q5Fm+KIbE9dpniKDzXlc0S0x/FYg//mOze581jngCnqirAjT
+ rI/HQpZToXQS5B1ihBGq55wJDR4ABV3m3gurAxwHoxQpvIBrpmU5QqQbLIkDbnehk2
+ VbP6zBTnwIusA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Dec 2021 11:44:37 +0100
-Date: Sat, 4 Dec 2021 11:44:37 +0100
+ Sat, 04 Dec 2021 12:23:11 +0100
+Date: Sat, 4 Dec 2021 12:23:11 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211204104437.GF50662@scaer>
-References: <20211013210117.1929839-1-fontaine.fabrice@gmail.com>
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Message-ID: <20211204112311.GG50662@scaer>
+References: <20211114232525.691816-1-ricardo.martincoski@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211013210117.1929839-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211114232525.691816-1-ricardo.martincoski@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] Revert "package/coreutils: ignore
- CVE-2013-0221, CVE-2013-0222, CVE-2013-0223"
+Subject: Re: [Buildroot] [PATCH] package/atop: ignore already fixed
+ CVE-2011-3618
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,46 +76,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Ricardo, All,
 
-On 2021-10-13 23:01 +0200, Fabrice Fontaine spake thusly:
-> This reverts commit 8ae9156d8b730689484927fba2ec2fa6c1dc0433 as those
-> CVEs are not tagged as affecting gnu:coreutils in NVD NIST database but
-> opensuse:opensuse and redhat:entreprise_linux:
-> - https://nvd.nist.gov/vuln/detail/CVE-2013-0221
-> - https://nvd.nist.gov/vuln/detail/CVE-2013-0222
-> - https://nvd.nist.gov/vuln/detail/CVE-2013-0223
+On 2021-11-14 20:25 -0300, Ricardo Martincoski spake thusly:
+> https://security-tracker.debian.org/tracker/CVE-2011-3618
+> 
+> The patch used by debian
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=622794
+> has equivalent code merged in upstream:
+> 
+> rawlog.c, changed in 2012, release v2.1
+> https://github.com/Atoptool/atop/commit/7c17a309ef97a59a8ee1f5a593f48eeac9d46bc8
+> 
+> acctproc.c, changed in 2016, release v2.3.0
+> https://github.com/Atoptool/atop/commit/2820b1144ce403c7917cd2e09b05e78d2c9dbc07
+> 
+> So ignore the wrong CVE report.
 
-Indeed, pkg-stats does not list those CVEs.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
+Instead, shouldn't the CVE be updated to state that it does not affect
+version >= 2.3.0 ?
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > ---
->  package/coreutils/coreutils.mk | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/atop/atop.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index 6822c58a32..9c0f46cb29 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -10,10 +10,6 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
->  COREUTILS_LICENSE = GPL-3.0+
->  COREUTILS_LICENSE_FILES = COPYING
->  COREUTILS_CPE_ID_VENDOR = gnu
-> -# Only when including SUSE coreutils-i18n.patch
-> -COREUTILS_IGNORE_CVES = CVE-2013-0221
-> -COREUTILS_IGNORE_CVES += CVE-2013-0222
-> -COREUTILS_IGNORE_CVES += CVE-2013-0223
+> diff --git a/package/atop/atop.mk b/package/atop/atop.mk
+> index 88f292b6b3..8369f639c3 100644
+> --- a/package/atop/atop.mk
+> +++ b/package/atop/atop.mk
+> @@ -11,6 +11,11 @@ ATOP_LICENSE_FILES = COPYING
+>  ATOP_CPE_ID_VENDOR = atop_project
+>  ATOP_DEPENDENCIES = ncurses zlib
 >  
->  COREUTILS_CONF_OPTS = --disable-rpath \
->  	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
+> +# Equivalent code for the debian patch was merged in upstream in commits
+> +# 7c17a309ef97a59a8ee1f5a593f48eeac9d46bc8 (v2.1) and
+> +# 2820b1144ce403c7917cd2e09b05e78d2c9dbc07 (v2.3.0).
+> +ATOP_IGNORE_CVES += CVE-2011-3618
+> +
+>  ATOP_CFLAGS = $(TARGET_CFLAGS)
+>  
+>  ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
 > -- 
-> 2.33.0
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
