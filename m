@@ -1,50 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44EE1C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFF6C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3AF66064B;
-	Sat,  4 Dec 2021 22:04:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE808401AF;
+	Sat,  4 Dec 2021 22:09:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0VQxw-6I3IMc; Sat,  4 Dec 2021 22:09:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C313400E9;
+	Sat,  4 Dec 2021 22:09:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 76ABD1BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62DAE605B7
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i8tdHxAkQ5tu; Sat,  4 Dec 2021 22:04:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A35160585;
-	Sat,  4 Dec 2021 22:04:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0610A1BF3F7
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:04:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 036EE82F84
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:04:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J_UfSpKqX6gC for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 22:04:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A59B183211
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:04:24 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 82D31240002;
- Sat,  4 Dec 2021 22:04:21 +0000 (UTC)
-Date: Sat, 4 Dec 2021 23:04:20 +0100
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F4cWkeim1v4S for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 22:09:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC6D6605B5
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:09:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 78C1D935CE; Sat,  4 Dec 2021 22:04:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20211204230420.53d126ac@windsurf>
-In-Reply-To: <20211126210921.23675-1-bernd.kuhls@t-online.de>
-References: <20211126210921.23675-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to
- 2.4.109
+To: buildroot@buildroot.org
+Date: Sat, 4 Dec 2021 23:04:50 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d3904da8ba3d620700f39867f6a1c4c391624b9e
+X-Git-Newrev: 570b6deff906c24e6609c46ce69e00d9e8be04fc
+X-Patchwork-Hint: ignore
+Message-Id: <20211204220411.78C1D935CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fswebcam: bump to
+ release 20200725
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,34 +53,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Nov 2021 22:09:21 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=570b6deff906c24e6609c46ce69e00d9e8be04fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Release notes:
-> https://lists.freedesktop.org/archives/dri-devel/2021-November/332386.html
-> 
-> Changed _LICENSE_FILES to data/meson.build as it receives less updates
-> than xf86drm.c and therefore requires less changes of its hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libdrm/libdrm.hash | 8 ++++----
->  package/libdrm/libdrm.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 6 deletions(-)
+Bump to latest release.
 
-Applied to next, thanks.
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fswebcam/fswebcam.hash | 2 +-
+ package/fswebcam/fswebcam.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index bac1626785..6ecb0d9794 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5702771cee6e3fa0f2bbbb72ecf3e5a253ff458c1f648f7e7c0d477e39f0ec80  fswebcam-e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33.tar.gz
++sha256  d5439b2bf49bb634100d7e42ed9854f84bfd355c1d40bc3d4d81593eeadd8aee  fswebcam-20200725.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 3a5b8c9eef..12e7860e7b 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FSWEBCAM_VERSION = e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33
++FSWEBCAM_VERSION = 20200725
+ FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
