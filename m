@@ -4,64 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62F96C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 20:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D56C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1850860A7C;
-	Sat,  4 Dec 2021 20:59:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC9960618;
+	Sat,  4 Dec 2021 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5BN1pDHJDKhp; Sat,  4 Dec 2021 20:59:37 +0000 (UTC)
+	with ESMTP id hyBi98mRFSlu; Sat,  4 Dec 2021 21:09:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FF2D60A83;
-	Sat,  4 Dec 2021 20:59:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BBCE11BF2C6
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:59:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAAF160A88;
+	Sat,  4 Dec 2021 21:09:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D4B41BF36B
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABC4C60A83
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 20:59:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CF7E81987
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:09:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UXGhOFYkInHa for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 20:59:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 679B860A7C
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 20:59:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:44c6:1f1c:4326:e15f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id F2DC05FF9E;
- Sat,  4 Dec 2021 21:59:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638651570;
- bh=pRG5wrp5CI1fSMFTewcTtkJE+eWahTCDNN1D9FlVc1M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZIFy9r5CujeWC81GRYvN4wSWddXJaHA2XQrEsoSIlJBIRLRVEFlaqVp+vWw9ibiGd
- idmcGMUZ6ixD9AvuGSgGQHirnLfUoz3dPGPKtUPzkvUTW2SNyL2CGlLW36Wgi64cp2
- od6d7nw+7ILAsj7WTbHVlmdT9A9ZLB92S+j6q5AzJM4jrM67qJPIARklgocdLbLRsi
- DV724IfOz0U04OAWqhD5BXNAseP11X8jg1dmmrlG5fp5YwpvO998XtnSrI1DfpEhjj
- X25ujawW9qmFA9DDapinwXiZWUXgo1cABh5eNLgffB7pvA0MebAAYPDEaoWbdg4Hm4
- 5TwlyfLGlvbJg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Dec 2021 21:59:21 +0100
-Date: Sat, 4 Dec 2021 21:59:21 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20211204205921.GD472627@scaer>
-References: <20211202013902.1593562-1-troglobit@gmail.com>
- <20211202013902.1593562-2-troglobit@gmail.com>
- <20211204210459.461e4f39@windsurf>
- <0f7d1dfe-07c3-198f-3449-9179db0e385c@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <0f7d1dfe-07c3-198f-3449-9179db0e385c@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH next 1/2] package/watchdogd: bump to version
- 3.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nyrUs-_54tDy for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 21:09:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2B9C8197D
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:09:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C12E6934D6; Sat,  4 Dec 2021 21:04:54 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Sat, 4 Dec 2021 22:09:24 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ebc0d88434174b58f32183d7f74dbd9149170eb7
+X-Git-Newrev: 6861933d22006fbe8c961a41506beac826881f33
+X-Patchwork-Hint: ignore
+Message-Id: <20211204210454.C12E6934D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/harfbuzz: bump to
+ version 3.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,63 +53,546 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alejandro =?utf-8?B?R29uesOhbGV6?= <alejandro.gonzalez.correo@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6861933d22006fbe8c961a41506beac826881f33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2021-12-04 21:23 +0100, Joachim Wiberg spake thusly:
-> On 12/4/21 9:04 PM, Thomas Petazzoni wrote:
-> > On Thu,  2 Dec 2021 02:39:01 +0100
-> > Joachim Wiberg <troglobit@gmail.com> wrote:
-> >> This addresses the autobuilder failure for master as per 2021-11-27.
-> >> The root cause was a name clash in a dependency, the libite library,
-> >> clashing with the DirectFB LiTE library header files.  
-> > Thanks, I've applied both to next, as indicated in the patch title.
-> > However, in the commit log, you seem to indicate that it's fixing a
-> > build issue in master. Could you confirm?
+Bump to version 3.1.2 by:
+- requiring BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 instead of _4_8 in this
+package taking care of reverse dependencies, since now harfbuzz requires
+gcc 4.9 to be built successfully.
+- local patch is still necessary since upstream harfbuzz points the problem
+to meson itself.
 
-We've discussed this on IRC with Joachim, and it was my expectation that
-the patches would be aimed at master, because they *do* fix an actual
-build failure in master.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cwiid/Config.in                        |  2 +-
+ package/enlightenment/Config.in                |  6 +++---
+ package/gstreamer1/gst1-plugins-bad/Config.in  | 12 ++++++------
+ package/gstreamer1/gst1-plugins-base/Config.in |  6 +++---
+ package/harfbuzz/Config.in                     |  6 +++---
+ package/harfbuzz/harfbuzz.hash                 |  2 +-
+ package/harfbuzz/harfbuzz.mk                   |  2 +-
+ package/libass/Config.in                       |  6 +++---
+ package/libfm/Config.in                        |  6 +++---
+ package/libgtk2/Config.in                      |  6 +++---
+ package/libgtk3/Config.in                      |  6 +++---
+ package/librsvg/Config.in                      |  6 +++---
+ package/mupdf/Config.in                        |  6 +++---
+ package/openbox/Config.in                      |  6 +++---
+ package/pango/Config.in                        |  6 +++---
+ package/pcmanfm/Config.in                      |  6 +++---
+ package/pinentry/Config.in                     |  6 +++---
+ package/python-pymupdf/Config.in               |  6 +++---
+ package/qt5/qt5base/Config.in                  |  2 +-
+ package/rrdtool/Config.in                      |  6 +++---
+ package/supertuxkart/Config.in                 |  2 +-
+ package/xscreensaver/Config.in                 |  6 +++---
+ 22 files changed, 59 insertions(+), 59 deletions(-)
 
-The reasoning for accepting the bump in master was that libite is only
-ever used by watchdogd in Buldroot. Both packages are maintained
-upstream and in Buildroot by Joachim, which is pretty fast at addressing
-build issues.
-
-> Very unfortunate name clash between include files in two packages.
-> http://autobuild.buildroot.net/results/185c753af2aa159b494b13f78b0826dddbe4aed6
-> 
-> However, I think it's highly unlikely they'll be enabled at the same
-> time. My recommendation is to go for next and let 2021.11 out the door.
-
-Even if that were true, it will still happen in our CI and thus cause
-build failures, which creates noise and may hide other, more intersting
-failures. Besides, once a package is in the tree, people are going to
-use it.
-
-DirectFB is often used in embedded, and watchdogd is a process
-supervisor for embedded, and so it is not too far-fetched to see that
-the two could be easily used on the same system. For real. We want to
-avoid name-clashing for those.
-
-So I would say that we should also apply them to master.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+index e03248c722..6ae2ac9405 100644
+--- a/package/cwiid/Config.in
++++ b/package/cwiid/Config.in
+@@ -18,7 +18,7 @@ if BR2_PACKAGE_CWIID
+ config BR2_PACKAGE_CWIID_WMGUI
+ 	bool "wmgui"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	depends on BR2_PACKAGE_XORG7 # libgtk2
+ 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 91cdd896f6..cd2b8cfe54 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+@@ -29,10 +29,10 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 
+ 	  http://www.enlightenment.org/
+ 
+-comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.8"
++comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 1204a65681..d678e7eb14 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -328,13 +328,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
+ 	bool "assrender"
+ 	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libass -> harfbuzz
+ 	select BR2_PACKAGE_LIBASS
+ 
+-comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
++comment "assrender plugin needs a toolchain w/ C++, gcc => 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
+ 	bool "bluez"
+@@ -563,15 +563,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
+ 	help
+ 	  RSVG plugin library
+ 
+-comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.8"
++comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index ceed55890c..7ca94d7dc4 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -293,14 +293,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  Pango-based text rendering and overlay
+ 
+-comment "pango plugin needs a toolchain w/ C++, gcc >= 4.8"
++comment "pango plugin needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+index 8bc88f4284..2e4219ee22 100644
+--- a/package/harfbuzz/Config.in
++++ b/package/harfbuzz/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	bool "harfbuzz"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  HarfBuzz is an OpenType text shaping engine
+ 
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	  Harfbuzz can make optional use of cairo, freetype,
+ 	  glib2 and icu packages if they are selected.
+ 
+-comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
++comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 97fc5a2c5f..d5a376830a 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  036b0ee118451539783ec7864148bb4106be42a2eb964df4e83e6703ec46f3d9  harfbuzz-3.0.0.tar.xz
++sha256  4056b1541dd8bbd8ec29207fe30e568805c0705515632d7fec53a94399bc7945  harfbuzz-3.1.2.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 4534d166ef..97b28ce236 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 3.0.0
++HARFBUZZ_VERSION = 3.1.2
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+diff --git a/package/libass/Config.in b/package/libass/Config.in
+index 803f6b4438..d7725d5e1b 100644
+--- a/package/libass/Config.in
++++ b/package/libass/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBASS
+ 	bool "libass"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_LIBFRIBIDI
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBASS
+ 
+ 	  https://github.com/libass/libass
+ 
+-comment "libass needs a toolchain w/ C++, gcc >= 4.8"
++comment "libass needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/libfm/Config.in b/package/libfm/Config.in
+index 16676fbf25..e78bc99b76 100644
+--- a/package/libfm/Config.in
++++ b/package/libfm/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFM
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
+@@ -22,9 +22,9 @@ config BR2_PACKAGE_LIBFM
+ 
+ 	  http://wiki.lxde.org/en/Libfm
+ 
+-comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libfm needs X.org and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index 7c5762a585..c75c37fb63 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PS
+@@ -34,10 +34,10 @@ config BR2_PACKAGE_LIBGTK2_DEMO
+ 
+ endif
+ 
+-comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 093aacac51..bc8cacd9f5 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -1,9 +1,9 @@
+-comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend"
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_ATK
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index 3272ecd773..270b524b37 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_CAIRO_SCRIPT
+@@ -21,10 +21,10 @@ config BR2_PACKAGE_LIBRSVG
+ 
+ 	  https://wiki.gnome.org/Projects/LibRsvg
+ 
+-comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
+index ff176f4b99..cf97711160 100644
+--- a/package/mupdf/Config.in
++++ b/package/mupdf/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_MUPDF
+ 	bool "mupdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GUMBO_PARSER
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_MUPDF
+ 
+ 	  https://www.mupdf.com/index.html
+ 
+-comment "mupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "mupdf needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+index fe6e886865..e042ed2b48 100644
+--- a/package/openbox/Config.in
++++ b/package/openbox/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPENBOX
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+@@ -20,10 +20,10 @@ config BR2_PACKAGE_OPENBOX
+ 
+ 	  http://openbox.org
+ 
+-comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
++comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index cf5170c8f3..e2b2e7fe2b 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_PANGO
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBFRIBIDI
+ 	select BR2_PACKAGE_EXPAT
+@@ -24,9 +24,9 @@ config BR2_PACKAGE_PANGO
+ 
+ 	  https://pango.gnome.org/
+ 
+-comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index f281599637..73b8c7c04c 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PCMANFM
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBFM
+ 	select BR2_PACKAGE_MENU_CACHE
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -18,10 +18,10 @@ config BR2_PACKAGE_PCMANFM
+ 
+ 	  http://wiki.lxde.org/en/PCManFM
+ 
+-comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pcmanfm needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 684e4eed4a..3f005f8c58 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -54,17 +54,17 @@ config BR2_PACKAGE_PINENTRY_GTK2
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  The pinentry-gtk2 tool
+ 
+-comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_PINENTRY_QT5
+diff --git a/package/python-pymupdf/Config.in b/package/python-pymupdf/Config.in
+index 65221d3e51..0ecb288922 100644
+--- a/package/python-pymupdf/Config.in
++++ b/package/python-pymupdf/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_PYMUPDF
+ 	bool "python-pymupdf"
+ 	depends on BR2_INSTALL_LIBSTDCPP # mupdf -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mupdf -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mupdf -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # mupdf -> harfbuzz
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_FREETYPE
+@@ -18,8 +18,8 @@ comment "python-pymupdf needs Xorg"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+-comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.8"
++comment "python-pymupdf needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e93b2dec38..a328190a98 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -237,7 +237,7 @@ config BR2_PACKAGE_QT5BASE_HARFBUZZ
+ 	bool "harfbuzz support"
+ 	select BR2_PACKAGE_HARFBUZZ if \
+ 		BR2_TOOLCHAIN_HAS_SYNC_4 && \
+-		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  This option enables HarfBuzz support (either system harfbuzz
+ 	  if the toolchain supports __sync for 4 bytes, or the qt
+diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
+index 5451353140..5ffdc92618 100644
+--- a/package/rrdtool/Config.in
++++ b/package/rrdtool/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
+ 	bool "rrd_graph"
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PDF
+@@ -28,9 +28,9 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
+ 	  This enables the graphing capabilities ('rrdgraph').
+ 	  Without this it will only act as a database backend.
+ 
+-comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.8"
++comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ endif
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index 8af006d632..a18b9c1a0a 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # openal
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # openal
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz, openal
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index d773c69913..787c3130ae 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	depends on BR2_USE_WCHAR # gdk-pixbuf, libgtk2 -> glib2
+ 	depends on BR2_USE_MMU # gdk-pixbuf, libgtk2 -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_GDK_PIXBUF
+ 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBGTK2
+@@ -25,10 +25,10 @@ config BR2_PACKAGE_XSCREENSAVER
+ 
+ 	  http://www.jwz.org/xscreensaver/
+ 
+-comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.8"
++comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
