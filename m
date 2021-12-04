@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BBE3C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0798EC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D79E408CE;
-	Sat,  4 Dec 2021 22:10:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2C9B831C1;
+	Sat,  4 Dec 2021 22:10:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id loO-o88gX_0A; Sat,  4 Dec 2021 22:10:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pu9DPLQ8iKO2; Sat,  4 Dec 2021 22:10:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92CF6408D0;
-	Sat,  4 Dec 2021 22:10:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B6A1C1BF3F7
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25CCC8319F;
+	Sat,  4 Dec 2021 22:10:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DA6201BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B370D6064B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA10080DF6
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zA8l3S9L4mFB for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 22:09:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jH7WOCyZSXs2 for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 22:09:52 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 84CE8605B5
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:09:43 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A51C080DED
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:09:52 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 0A88B20003;
- Sat,  4 Dec 2021 22:09:39 +0000 (UTC)
-Date: Sat, 4 Dec 2021 23:09:38 +0100
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 67CE040004;
+ Sat,  4 Dec 2021 22:09:49 +0000 (UTC)
+Date: Sat, 4 Dec 2021 23:09:48 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211204230938.0d218b4b@windsurf>
-In-Reply-To: <20211123182336.3780328-1-fontaine.fabrice@gmail.com>
-References: <20211123182336.3780328-1-fontaine.fabrice@gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20211204230948.03781046@windsurf>
+In-Reply-To: <20211123182704.8741-1-ps.report@gmx.net>
+References: <20211123182704.8741-1-ps.report@gmx.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/easyframes: bump to
- version 0.4
+Subject: Re: [Buildroot] [PATCH/next v2] package/lighttpd: switch to meson
+ build system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,29 +57,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 Nov 2021 19:23:36 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 23 Nov 2021 19:27:04 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> - Drop patches (already in version)
-> - Update indentation in hash file (two spaces)
+> Switch to meson build system (alternative solution to autoreconf
+> to fix C standard detection/compile flags, see [1]).
 > 
-> https://github.com/microchip-ung/easyframes/releases/tag/v0.4
+> - remove unneeded pcre-config (only used by the autoconf build)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [1] http://lists.busybox.net/pipermail/buildroot/2021-November/629075.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...Lists.txt-fix-static-build-with-pcap.patch | 57 ------------
->  .../0002-Fix-different-compiling-issues.patch | 91 -------------------
->  package/easyframes/easyframes.hash            |  4 +-
->  package/easyframes/easyframes.mk              |  2 +-
->  4 files changed, 3 insertions(+), 151 deletions(-)
->  delete mode 100644 package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
->  delete mode 100644 package/easyframes/0002-Fix-different-compiling-issues.patch
+> Changes v1 -> v2:
+>   - remove unneeded pcre-config (only used by the autoconf build)
+>     (Fabrice Fontaine)
+> ---
+>  package/lighttpd/lighttpd.mk | 63 ++++++++++++++++++++++++------------
+>  1 file changed, 42 insertions(+), 21 deletions(-)
 
 Applied to next, thanks.
 
