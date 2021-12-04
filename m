@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEFD0C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3951CC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BDF360D62;
-	Mon,  6 Dec 2021 18:22:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0286F60D62;
+	Mon,  6 Dec 2021 18:22:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pZMI5PjoL0ow; Mon,  6 Dec 2021 18:22:10 +0000 (UTC)
+	with ESMTP id N2lQ-D5_b4e7; Mon,  6 Dec 2021 18:22:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C680660D67;
-	Mon,  6 Dec 2021 18:22:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F2B11BF3F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49CF960D60;
+	Mon,  6 Dec 2021 18:22:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 609691BF983
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55AC640497
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2701184B91
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R5MFNCzVBNpi for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UykmvoNBHlZa for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4344840474
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69C2284B8A
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D283381504; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
+ id 0533081503; Mon,  6 Dec 2021 18:07:43 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 23:01:44 +0100
+Date: Sat, 4 Dec 2021 23:05:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3fbc731441225c45dd2c8badfec3ec63c1226828
-X-Git-Newrev: eaa442089072ba431e606d4a8332fe414bec4327
+X-Git-Oldrev: abd6f2d69b4cc5a7e9bca79638cfc2f7977ec518
+X-Git-Newrev: 5d8a611540c4818f046ccb5224cc2205a2c333e7
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.D283381504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.109
+Message-Id: <20211206180743.0533081503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: switch to meson build
+ system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +59,138 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaa442089072ba431e606d4a8332fe414bec4327
+commit: https://git.buildroot.net/buildroot/commit/?id=5d8a611540c4818f046ccb5224cc2205a2c333e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.freedesktop.org/archives/dri-devel/2021-November/332386.html
+Switch to meson build system (alternative solution to autoreconf
+to fix C standard detection/compile flags, see [1]).
 
-Changed _LICENSE_FILES to data/meson.build as it receives less updates
-than xf86drm.c and therefore requires less changes of its hash.
+- remove unneeded pcre-config (only used by the autoconf build)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] http://lists.busybox.net/pipermail/buildroot/2021-November/629075.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdrm/libdrm.hash | 8 ++++----
- package/libdrm/libdrm.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/lighttpd/lighttpd.mk | 63 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 42 insertions(+), 21 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index ee14d4c124..ca7332dd76 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2021-November/330279.html
--sha256  a1d7948cbc536763fde14b4beb5e4da7867607966d4cf46301087e8b8fe3d6a0  libdrm-2.4.108.tar.xz
--sha512  6a841dc3eb8eae7d75e1d35d23a14d51aff758e5a251dbcf6fc8c28d973d935a4a2f6751b405e956b2777d93c651721199ac80c3cd14b87d021668120d6bc974  libdrm-2.4.108.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2021-November/332386.html
-+sha256  629352e08c1fe84862ca046598d8a08ce14d26ab25ee1f4704f993d074cb7f26  libdrm-2.4.109.tar.xz
-+sha512  45194bb28207421afcff3e247930d2eeab77a5fea58e6be22f67525f2e0aab2f410a9ae0ab315b55ef56b80c481bba40b1660468b7cda539758b2bbb8e814fd8  libdrm-2.4.109.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 9c18a6038e..7ca71e356a 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -13,64 +13,85 @@ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
+ LIGHTTPD_CONF_OPTS = \
+-	--without-wolfssl \
+-	--libdir=/usr/lib/lighttpd \
+-	--libexecdir=/usr/lib
++	-Dwith_brotli=false \
++	-Dwith_dbi=false \
++	-Dwith_fam=false \
++	-Dwith_gdbm=false \
++	-Dwith_geoip=false \
++	-Dwith_gnutls=false \
++	-Dwith_krb5=false \
++	-Dwith_ldap=false \
++	-Dwith_libev=false \
++	-Dwith_libunwind=false \
++	-Dwith_maxminddb=false \
++	-Dwith_mbedtls=false \
++	-Dwith_memcached=false \
++	-Dwith_mysql=false \
++	-Dwith_nettle=false \
++	-Dwith_nss=false \
++	-Dwith_pgsql=false \
++	-Dwith_sasl=false \
++	-Dwith_wolfssl=false \
++	-Dwith_xattr=false \
++	-Dwith_xxhash=false \
++	-Dwith_zstd=false \
++	-Dbuild_extra_warnings=false \
++	-Dbuild_static=false \
++	-Dmoduledir=lib/lighttpd
  
- # Hash for license file
--sha256  e64a695d0f18bfba26071afdfe19dd6ff4030d0dc1c47304059b724b23955ddb  xf86drm.c
-+sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 0e4029fed2..9b614bf421 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
+ LIGHTTPD_DEPENDENCIES += openssl
+-LIGHTTPD_CONF_OPTS += --with-openssl
++LIGHTTPD_CONF_OPTS += -Dwith_openssl=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-openssl
++LIGHTTPD_CONF_OPTS += -Dwith_openssl=false
+ endif
  
--LIBDRM_VERSION = 2.4.108
-+LIBDRM_VERSION = 2.4.109
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--LIBDRM_LICENSE_FILES = xf86drm.c
-+LIBDRM_LICENSE_FILES = data/meson.build
- LIBDRM_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
+ LIGHTTPD_DEPENDENCIES += linux-pam
+-LIGHTTPD_CONF_OPTS += --with-pam
++LIGHTTPD_CONF_OPTS += -Dwith_pam=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-pam
++LIGHTTPD_CONF_OPTS += -Dwith_pam=false
+ endif
  
- LIBDRM_DEPENDENCIES = \
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)
+ LIGHTTPD_DEPENDENCIES += zlib
+-LIGHTTPD_CONF_OPTS += --with-zlib
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-zlib
++LIGHTTPD_CONF_OPTS += -Dwith_zlib=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BZIP2),y)
+ LIGHTTPD_DEPENDENCIES += bzip2
+-LIGHTTPD_CONF_OPTS += --with-bzip2
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-bzip2
++LIGHTTPD_CONF_OPTS += -Dwith_bzip=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_PCRE),y)
+-LIGHTTPD_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/bin/pcre-config
+ LIGHTTPD_DEPENDENCIES += pcre
+-LIGHTTPD_CONF_OPTS += --with-pcre
++LIGHTTPD_CONF_OPTS += -Dwith_pcre=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-pcre
++LIGHTTPD_CONF_OPTS += -Dwith_pcre=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
+ LIGHTTPD_DEPENDENCIES += libxml2 sqlite
+-LIGHTTPD_CONF_OPTS += --with-webdav-props
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+-LIGHTTPD_CONF_OPTS += --with-webdav-locks
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=true
+ LIGHTTPD_DEPENDENCIES += util-linux
+ else
+-LIGHTTPD_CONF_OPTS += --without-webdav-locks
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_locks=false
+ endif
+ else
+-LIGHTTPD_CONF_OPTS += --without-webdav-props --without-webdav-locks
++LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=false -Dwith_webdav_locks=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
+ LIGHTTPD_DEPENDENCIES += lua
+-LIGHTTPD_CONF_OPTS += --with-lua
++LIGHTTPD_CONF_OPTS += -Dwith_lua=true
+ else
+-LIGHTTPD_CONF_OPTS += --without-lua
++LIGHTTPD_CONF_OPTS += -Dwith_lua=false
+ endif
+ 
+ define LIGHTTPD_INSTALL_CONFIG
+@@ -104,4 +125,4 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/lighttpd.conf
+ endef
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
