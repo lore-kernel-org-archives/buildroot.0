@@ -1,65 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FFE8C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 13:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6089BC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 17:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8B9841C02;
-	Sat,  4 Dec 2021 13:46:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE6E160A72;
+	Sat,  4 Dec 2021 17:23:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s7Hvygdzh-7z; Sat,  4 Dec 2021 13:46:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lhEGb8hmoaWW; Sat,  4 Dec 2021 17:23:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D50D41BFB;
-	Sat,  4 Dec 2021 13:46:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 29B8C1BF2EF
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 13:46:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CD9F60A42;
+	Sat,  4 Dec 2021 17:23:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C441C1BF40B
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 17:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18ADF83F62
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 13:46:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB3F54019E
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 17:23:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4qwKHpbCXTi6 for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 13:46:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EBF2B83F5B
- for <buildroot@busybox.net>; Sat,  4 Dec 2021 13:46:36 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:44c6:1f1c:4326:e15f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id B257D5FF23;
- Sat,  4 Dec 2021 14:46:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638625594;
- bh=t16fGEFucfVQ0xT1/9qpY3EGBywBJhqQramUNm/Mttk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZQW1iYA/qg3KSo5RARCJ0yRfM7MyQ8eBia0wPVHNgDNuzrFcwJck71oDqEjgbJEvm
- i5Elmhu9RPW5K2HFfJLlcH5ao087qH1Bj6lrSsJPPsFBdjlIrOf35WS3NJGRTK5964
- 03KHYtLpsWmbHsvqHAfB2K+k3lMjKoqs/pDYtb8bJou6xGHGArN2ffJQ5kWQ5TGeSJ
- JRyTION4ebCrreXfUvcYoMu1s3vlf6qxvjnOYV1MBNzhr2N74fbD2SIkb6HQDdMh/T
- po3z/jWndberJerYM7Wu65Boj4iw/iSY2tU/dXt3q20NNlfgupk+KSknlb7Dzdh40t
- iSKdeL5egm7RQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Dec 2021 14:46:25 +0100
-Date: Sat, 4 Dec 2021 14:46:25 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: guillaume.bressaix@gmail.com
-Message-ID: <20211204134625.GK50662@scaer>
-References: <20211204120548.31170-1-guillaume.bressaix@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211204120548.31170-1-guillaume.bressaix@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH/next v2 1/2]: pybind11: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYcbthQv465j for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 17:23:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8679E40116
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 17:23:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BF9698A538; Sat,  4 Dec 2021 17:18:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 4 Dec 2021 18:04:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6950e10d9306e4475fd63060b0b14455784f9fdb
+X-Git-Newrev: 7a68960b682c06681473f396a4c6d10b77c444fa
+X-Patchwork-Hint: ignore
+Message-Id: <20211204171828.BF9698A538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/grub2/Config.in: add symbols to
+ represent legacy and EFI boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,97 +53,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, asafka7@gmail.com, thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7926494083976349730=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Guillaume, All,
+--===============7926494083976349730==
+Content-Type: text/plain
 
-On 2021-12-04 13:05 +0100, guillaume.bressaix@gmail.com spake thusly:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-> 
-> fixes http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
-> fixes http://autobuild.buildroot.net/results/d0287b7f64f206b0f074908c5780a3632e0cb799
-> fixes http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce
-> fixes http://autobuild.buildroot.net/results/d2f0a0ad8f6c7178517df109e7d885dac9134c3a
-> fixes http://autobuild.buildroot.net/results/b57e9a3279260dae4a590f9421238fcabb2f7cab
-> fixes http://autobuild.buildroot.net/results/515e6f2fc6b5780260d98d6bb52b541ce4bf1afe
-> fixes http://autobuild.buildroot.net/results/d89c4ecc81222d4f80c951da2232d2e393fa1c69
-> list goes on..
-> 
-> ---
-> v2: Reviewed by gwen@trabucayre.com,
-> Removed some non needed empty lines,
-> force -DFINDPYTHON=OFF when using pybind11 without python,
-> handle legacy package properly in a seperate patch
-> 
-> v1: python-pybind was not the right approach and is in failure since
-> it's been upgraded to V2.6.1.
+commit: https://git.buildroot.net/buildroot/commit/?id=7a68960b682c06681473f396a4c6d10b77c444fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This form here:
+There are cases to want a synthetic information whether the legacy BIOS
+or U-Boot boot scheme, or the EFI boot scheme, are enabled, without
+resorting to testing all and each platforms.
 
-> Building with setup.py now requires a cmake build first.
-> With this new approach we can build the package with cmake
-> for python bindings in C++ AND we also have the
-> C++ bindings in python as an option (depending & requiring the first one).
-> 
-> I make this a host-only package, in the sense that other packages will
-> require it at build time, and I don't forsee any reasons to have
-> such a package as a target package.
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+This is already the cae in grub2 itself, for the configuration of the
+BIOS/U-Boot boot partition, and builtin modules and configuration on one
+hand, and the EFI builtin modules and configuraiton on the other hand.
 
-... to here, should be part of the commit log, i.e. before the first
-'---' line, above. Otherwise, it is dropped by git when the patch is
-applied.
+It is also the case for mender-grubenv, which will want to know if
+either or both are enabled, but without having to resort to testing all
+the cases.
 
-However, I am still not sure what is going on here...
+Add two new symbols, that each represent those conditions:
+  * BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+  * BR2_TARGET_GRUB2_HAS_EFI_BOOT
 
-First, you are removing pybind to then introduce pybind11, although they
-are the exact same package upstream:
-    http://pybind11.readthedocs.org/en/master (home)
-    https://github.com/pybind/pybind11 (repo)
+Each target selects the appropriate bool, which makes it much more
+simple for other packages such as mender-grubenv to check if grub legacy
+or EFI is selected.
 
-But since this is the same upstream, you should just fix the existing
-pybind package in-place; there is no reason to intriduce a new pacjage
-to fix an existing one.
+And of course, we also make use of those symbols in grub2 itself, to
+simplify the conditions for showing.hiding legacy and EFI options.
 
-Then, I did not find the explanations in the commit log very convincing.
-Why state that "python-pybind was not the right approach"? As far as I
-understand, it was working as expected until the bump to 2.6.1, and thus
-was not a "failure".
+Additionally (but that does not merit being in its own patch), add a
+comment on the closing 'endif' for the EFI part.
 
-If the bump to 2.6.1 broke the package, then that means the bump was not
-careful, not that the package is a failure.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[yann.morin.1998@free.fr:
+  - s/BR2_TARGET_GRUB_/BR2_TARGET_GRUB2_/
+  - rename variables anyway
+  - use variables in grub2 itself
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Köry Maincent <kory.maincent@bootlin.com>
+---
+ boot/grub2/Config.in | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-Fionally, why is a host-only package? If it installs C++ headers, then
-we can expect packages built for the target to include those ehaders,
-and so we need them in staging too. And this is made obvious by your
-post-install hook, that uses STAGING_DIR. This is ultimately wrong,
-because then that means that host packages won't be able to find/use
-those headers.
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index 7bbe697932..92b5dd501b 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -34,12 +34,19 @@ config BR2_TARGET_GRUB2
+ 
+ if BR2_TARGET_GRUB2
+ 
++config BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
++	bool
++
++config BR2_TARGET_GRUB2_HAS_EFI_BOOT
++	bool
++
+ config BR2_TARGET_GRUB2_HAS_PTF
+ 	bool
+ 
+ config BR2_TARGET_GRUB2_I386_PC
+ 	bool "i386-pc"
+ 	depends on BR2_i386 || BR2_x86_64
++	select BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting is a
+ 	  x86 or x86-64 legacy BIOS based platform.
+@@ -48,6 +55,7 @@ config BR2_TARGET_GRUB2_I386_EFI
+ 	bool "i386-efi"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_TARGET_GRUB2_HAS_PTF
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
+@@ -57,6 +65,7 @@ config BR2_TARGET_GRUB2_X86_64_EFI
+ 	bool "x86-64-efi"
+ 	depends on BR2_x86_64
+ 	select BR2_TARGET_GRUB2_HAS_PTF
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting has a
+ 	  64 bits EFI BIOS.
+@@ -64,6 +73,7 @@ config BR2_TARGET_GRUB2_X86_64_EFI
+ config BR2_TARGET_GRUB2_ARM_UBOOT
+ 	bool "arm-uboot"
+ 	depends on BR2_arm
++	select BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting is an
+ 	  ARM u-boot platform, and you want to boot Grub 2 as an u-boot
+@@ -73,6 +83,7 @@ config BR2_TARGET_GRUB2_ARM_EFI
+ 	bool "arm-efi"
+ 	depends on BR2_arm
+ 	select BR2_TARGET_GRUB2_HAS_PTF
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting is an
+ 	  ARM platform and you want to boot Grub 2 as an EFI
+@@ -81,12 +92,13 @@ config BR2_TARGET_GRUB2_ARM_EFI
+ config BR2_TARGET_GRUB2_ARM64_EFI
+ 	bool "arm64-efi"
+ 	depends on BR2_aarch64
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 	help
+ 	  Select this option if the platform you're targetting is an
+ 	  Aarch64 platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
+-if BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
++if BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 
+ comment "Options for the x86 legacy BIOS or ARM U-Boot support"
+ 
+@@ -114,10 +126,9 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG_PC
+ 	  device and other configuration parameters, but however menu
+ 	  entries cannot be described in this embedded configuration.
+ 
+-endif # BR2_TARGET_GRUB2_I386_PC || BR2_TARGET_GRUB2_ARM_UBOOT
++endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 
+-if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI || \
+-	BR2_TARGET_GRUB2_ARM_EFI  || BR2_TARGET_GRUB2_ARM64_EFI
++if BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 
+ comment "Options for the EFI BIOS or ARM EFI support"
+ 
+@@ -135,7 +146,8 @@ config BR2_TARGET_GRUB2_BUILTIN_CONFIG_EFI
+ 	  device and other configuration parameters, but however menu
+ 	  entries cannot be described in this embedded configuration.
+ 
+-endif
++endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
++
+ config BR2_TARGET_GRUB2_INSTALL_TOOLS
+ 	bool "install tools"
+ 	help
 
-Minor nit: the commit log should not be in the first singular person,
-ie.e do not use "I", but in the `neutral' first person plural, i.e. use
-"we".
+--===============7926494083976349730==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-However, I admit that the whole situation evades my understanding, so I
-may have miss more tricky details... I will gladly accept being
-corrected on those. ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7926494083976349730==--
