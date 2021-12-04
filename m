@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A795EC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:40:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B3DC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:41:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6846E60790;
-	Mon,  6 Dec 2021 18:40:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79674400CF;
+	Mon,  6 Dec 2021 18:41:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dER7WFRV5MSm; Mon,  6 Dec 2021 18:40:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3-UWM1cRlo_U; Mon,  6 Dec 2021 18:41:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74A5B60D76;
-	Mon,  6 Dec 2021 18:40:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55B9440124;
+	Mon,  6 Dec 2021 18:41:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 052831BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DFEF1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF90241C1E
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2221B41C32
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XhwpfQRKppzB for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
+ with ESMTP id fBYGYR7izOUq for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D84541C32
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3C6641C69
  for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4552B81468; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
+ id 5DC3A81468; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 22:11:54 +0100
+Date: Sat, 4 Dec 2021 22:24:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e27b38bf3c429144bbc1e0155654dbc157fe86c2
-X-Git-Newrev: 3e7eb3ce3d1b3338d5b7d105be688485b9a6aa2d
+X-Git-Oldrev: 3f5f8abd415fbe1fadc8d1358179af684a08f29c
+X-Git-Newrev: a2663af3409f8b45ddf6e6935ed9369ca49a3c52
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.4552B81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cssselect2: new package
+Message-Id: <20211206180742.5DC3A81468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-fonttools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,87 +58,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e7eb3ce3d1b3338d5b7d105be688485b9a6aa2d
+commit: https://git.buildroot.net/buildroot/commit/?id=a2663af3409f8b45ddf6e6935ed9369ca49a3c52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-cssselect2/Config.in              |  9 +++++++++
- package/python-cssselect2/python-cssselect2.hash |  5 +++++
- package/python-cssselect2/python-cssselect2.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-fonttools/Config.in             |  7 +++++++
+ package/python-fonttools/python-fonttools.hash |  5 +++++
+ package/python-fonttools/python-fonttools.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a1565f375a..19a2b0986f 100644
+index 35218fecfd..3b31b89568 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1257,6 +1257,7 @@ F:	package/python-brotli/
- F:	package/python-cbor2/
- F:	package/python-cchardet/
+@@ -1259,6 +1259,7 @@ F:	package/python-cchardet/
  F:	package/python-charset-normalizer/
-+F:	package/python-cssselect2/
+ F:	package/python-cssselect2/
  F:	package/python-flatbuffers/
++F:	package/python-fonttools/
  F:	package/python-frozenlist/
  F:	package/python-greenlet/
+ F:	package/python-janus/
 diff --git a/package/Config.in b/package/Config.in
-index de03cd7375..ed17bd3b5d 100644
+index d5107f3be2..b9c2765830 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -970,6 +970,7 @@ menu "External python modules"
- 	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
-+	source "package/python-cssselect2/Config.in"
- 	source "package/python-cssutils/Config.in"
- 	source "package/python-cycler/Config.in"
- 	source "package/python-daemon/Config.in"
-diff --git a/package/python-cssselect2/Config.in b/package/python-cssselect2/Config.in
+@@ -1013,6 +1013,7 @@ menu "External python modules"
+ 	source "package/python-flask-wtf/Config.in"
+ 	source "package/python-flatbuffers/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-fonttools/Config.in"
+ 	source "package/python-frozenlist/Config.in"
+ 	source "package/python-functools32/Config.in"
+ 	source "package/python-future/Config.in"
+diff --git a/package/python-fonttools/Config.in b/package/python-fonttools/Config.in
 new file mode 100644
-index 0000000000..0196471253
+index 0000000000..714f547430
 --- /dev/null
-+++ b/package/python-cssselect2/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_CSSSELECT2
-+	bool "python-cssselect2"
++++ b/package/python-fonttools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_FONTTOOLS
++	bool "python-fonttools"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_TINYCSS2 # runtime
-+	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
 +	help
-+	  CSS selectors for Python ElementTree.
++	  Tools to manipulate font files.
 +
-+	  https://doc.courtbouillon.org/cssselect2/
-diff --git a/package/python-cssselect2/python-cssselect2.hash b/package/python-cssselect2/python-cssselect2.hash
++	  https://github.com/fonttools/fonttools
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
 new file mode 100644
-index 0000000000..ed5b863302
+index 0000000000..2e79861e2c
 --- /dev/null
-+++ b/package/python-cssselect2/python-cssselect2.hash
++++ b/package/python-fonttools/python-fonttools.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/cssselect2/json
-+md5  6dfd5963c8a5d85f2634d1650b1ddfe1  cssselect2-0.4.1.tar.gz
-+sha256  93fbb9af860e95dd40bf18c3b2b6ed99189a07c0f29ba76f9c5be71344664ec8  cssselect2-0.4.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/fonttools/json
++md5  fcf1425460855b5892c990027b5396c8  fonttools-4.28.2.zip
++sha256  dca694331af74c8ad47acc5171e57f6b78fac5692bf050f2ab572964577ac0dd  fonttools-4.28.2.zip
 +# Locally computed sha256 checksums
-+sha256  6fd97229a1d1b0f6a8b41e109f413426dbc0874b1e03746d66cc33282601c2c2  LICENSE
-diff --git a/package/python-cssselect2/python-cssselect2.mk b/package/python-cssselect2/python-cssselect2.mk
++sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
 new file mode 100644
-index 0000000000..18e0fba839
+index 0000000000..9ec369d550
 --- /dev/null
-+++ b/package/python-cssselect2/python-cssselect2.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-fonttools/python-fonttools.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# python-cssselect2
++# python-fonttools
 +#
 +################################################################################
 +
-+PYTHON_CSSSELECT2_VERSION = 0.4.1
-+PYTHON_CSSSELECT2_SOURCE = cssselect2-$(PYTHON_CSSSELECT2_VERSION).tar.gz
-+PYTHON_CSSSELECT2_SITE = https://files.pythonhosted.org/packages/ad/3d/fb764303deb34cbc1a32fcecdfd239367cb16323920c88390b2f5ad751f0
-+PYTHON_CSSSELECT2_SETUP_TYPE = distutils
-+PYTHON_CSSSELECT2_LICENSE = BSD-3-Clause
-+PYTHON_CSSSELECT2_LICENSE_FILES = LICENSE
++PYTHON_FONTTOOLS_VERSION = 4.28.2
++PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/3c/d5/f722e0d1aed0d547383913c6bc3c4ff35772952057b8e2b8fe3be8df4216
++PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
++PYTHON_FONTTOOLS_LICENSE = MIT
++PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
++PYTHON_FONTTOOLS_DEPENDENCIES = host-python3-cython
++PYTHON_FONTTOOLS_ENV = FONTTOOLS_WITH_CYTHON=1
++
++define PYTHON_FONTTOOLS_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_FONTTOOLS_DL_DIR)/$(PYTHON_FONTTOOLS_SOURCE)
++	mv $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)/* $(@D)
++	$(RM) -r $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)
++endef
 +
 +$(eval $(python-package))
 _______________________________________________
