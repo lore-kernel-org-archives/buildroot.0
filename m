@@ -1,76 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E841C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 08:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F00C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 10:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0885C4056A;
-	Sun,  5 Dec 2021 08:49:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19CE682496;
+	Sun,  5 Dec 2021 10:06:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2Piz3rF_TGpQ; Sun,  5 Dec 2021 08:49:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GWavABMl8-2C; Sun,  5 Dec 2021 10:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E2D24039C;
-	Sun,  5 Dec 2021 08:49:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1284782F57;
+	Sun,  5 Dec 2021 10:06:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D05A1BF593
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 08:49:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF9F51BF283
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 165CE4039C
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 08:49:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC658403F0
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:06:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lZNXdq72SOns for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 08:49:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CBEDD40384
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 08:48:59 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id c4so15554699wrd.9
- for <buildroot@buildroot.org>; Sun, 05 Dec 2021 00:48:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rOYX6SUrRRq/FHyNCcCrmlPrTHvsGgHlE+QlvbEP6DI=;
- b=fuwu8FdMGB4Z5C38oT9y6DikfcLHG7QQwHCLOCVfPCwzIGNEoT/2JLFn84gDmpfjYH
- 7s2h1mmXUxmAsmDc0zoPTpZY9vZqnAKStnwHn0LrgMUYy+x5egPa+OqFyRnz9nfNrjCl
- uy+ftw0/GGDFLxmUzfuB2RQoTzc1fQfmaHwfvOFQy+PifdGcVnsAywRrdFHDit0RUcAz
- R+9VqEcYTM6POukLRMpPPJerw74Zr5gDbqisjwY22lhLh5208uKHdOVukuVa1dcZzi41
- DlWr2uk5eIobw4MnR0P+RgyImGBkSAxVcVOYaSq/O7ZCoteCpzxOss54evAR4/sg4UmZ
- nk+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=rOYX6SUrRRq/FHyNCcCrmlPrTHvsGgHlE+QlvbEP6DI=;
- b=j0NtECHjaloItXN2Hh+w5v51YWGbfj/4UlB2FMrYaU0Cb1ZoEPKUDwAZtiDsOfR0zm
- sZ0+7LhwWZJ5AnebcM2vPAdSMqj9kSZ5KZhMFfU/f/F/zRwoRaKev8hUUWSJp6zhEeSq
- S7I+eIUiCqGPZPHigcM18391IW2YgKekiPsvk5pBCeLM4df8VraEW/snomlfIq6K7yEj
- Oyg8T7hY1o88pWD/+d5wXDkvswCWOu+l6EOKAl7R0MjrJUkgCgFw2octJNvM4vWRDzRR
- pTf+kAHP0FbRXeBpXYNR5+FpngivI9ytrcKslYCdLeGDs9FeOITA5zvrZ5uH9rKH5o1j
- x4ug==
-X-Gm-Message-State: AOAM530OTSZFFnVw+2dl1SaK18Ae0RmVa0DdNNeOUL809QKn7jkLYLp0
- fEJStATs3fF9RH/hgfGiDOCFvQigbfbhag==
-X-Google-Smtp-Source: ABdhPJxkLNb4lp42LIKF+rda6xKieD82Fux+jmioLu7lXg7Uac0YtsT7tQCCBe4o7xd4wOXvBnmz2A==
-X-Received: by 2002:a5d:6547:: with SMTP id z7mr33702804wrv.597.1638694137787; 
- Sun, 05 Dec 2021 00:48:57 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id j18sm12683249wmq.44.2021.12.05.00.48.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Dec 2021 00:48:57 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id s8DHS1bXc6nv for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 10:06:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FBA0403D9
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 10:06:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E8B0A947D6; Sun,  5 Dec 2021 10:01:07 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Dec 2021 09:49:00 +0100
-Message-Id: <20211205084900.2108940-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/apr: add CPE variables
+Date: Sat, 4 Dec 2021 23:13:00 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: e53e43da1277dfdd7bef564c179b918320757e51
+X-Git-Newrev: 3ee7c86c8dde6baadf746ee74e81eb31f1f25a66
+X-Patchwork-Hint: ignore
+Message-Id: <20211205100107.E8B0A947D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/inadyn: replace local
+ systemd unit file with upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,39 +53,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:apache:portable_runtime is a valid CPE identifier for this
-package:
+commit: https://git.buildroot.net/buildroot/commit/?id=3ee7c86c8dde6baadf746ee74e81eb31f1f25a66
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapache%3Aportable_runtime
+If systemd is available at configure time, the inadyn configure script
+detects it and generates the unit file.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also, the local unit file had the wrong absolute path to the binary.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apr/apr.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/inadyn/inadyn.mk      |  2 +-
+ package/inadyn/inadyn.service | 10 ----------
+ 2 files changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 466222586c..c45829aacc 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -9,6 +9,8 @@ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
- APR_LICENSE_FILES = LICENSE
-+APR_CPE_ID_VENDOR = apache
-+APR_CPE_ID_PRODUCT = portable_runtime
- APR_INSTALL_STAGING = YES
- # We have a patch touching configure.in and Makefile.in,
- # so we need to autoreconf:
--- 
-2.33.0
-
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index fc04fd5f25..9ccb16ddfe 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -31,7 +31,7 @@ define INADYN_INSTALL_INIT_SYSV
+ endef
+ 
+ define INADYN_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/inadyn/inadyn.service \
++	$(INSTALL) -D -m 644 $(@D)/inadyn.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/inadyn.service
+ endef
+ 
+diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
+deleted file mode 100644
+index abc0a1e401..0000000000
+--- a/package/inadyn/inadyn.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=DDNS client
+-After=syslog.target network.target
+-
+-[Service]
+-ExecStart=/usr/bin/inadyn
+-Restart=always
+-
+-[Install]
+-WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
