@@ -4,48 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA1FAC43217
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FE2CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A12A40400;
-	Sat,  4 Dec 2021 21:58:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 447B740276;
+	Sat,  4 Dec 2021 21:59:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pb5NNTm_9OIy; Sat,  4 Dec 2021 21:58:29 +0000 (UTC)
+	with ESMTP id xIIIgocCrRqL; Sat,  4 Dec 2021 21:59:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB40D40372;
-	Sat,  4 Dec 2021 21:58:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C9321BF36B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:57:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F3D0401AF;
+	Sat,  4 Dec 2021 21:59:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B36B1BF2C6
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47A9A40260
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:57:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEF54405B3
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:59:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qriaZbqzOWyC for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 21:57:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F114D401AF
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:57:45 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id B3339200005;
- Sat,  4 Dec 2021 21:57:42 +0000 (UTC)
-Date: Sat, 4 Dec 2021 22:57:41 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6d4z_RGVQ8u2 for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 21:59:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27345405B2
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:59:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id E93C093595; Sat,  4 Dec 2021 21:54:52 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20211204225741.48a38e26@windsurf>
-In-Reply-To: <20211125125558.1087094-2-heiko.thiery@gmail.com>
-References: <20211125125558.1087094-1-heiko.thiery@gmail.com>
- <20211125125558.1087094-2-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/4] package/libyang: bump verstion to
- 2.0.112
+To: buildroot@buildroot.org
+Date: Sat, 4 Dec 2021 22:58:29 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 13d4856b916d797c3c771669edd3eb883336766f
+X-Git-Newrev: fe0e1020a3ec1c00fd1c8615bace962c720e0e46
+X-Patchwork-Hint: ignore
+Message-Id: <20211204215452.E93C093595@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-plutotv: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,30 +53,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>,
- Vadim Kochan <vadim4j@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 25 Nov 2021 13:55:57 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fe0e1020a3ec1c00fd1c8615bace962c720e0e46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/libyang/Config.in    | 3 +--
->  package/libyang/libyang.hash | 4 ++--
->  package/libyang/libyang.mk   | 6 +++---
->  3 files changed, 6 insertions(+), 7 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-plutotv/Config.in             |  7 +++++++
+ package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash |  3 +++
+ package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk   | 13 +++++++++++++
+ package/kodi/Config.in                         |  1 +
+ 4 files changed, 24 insertions(+)
 
-Series applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-plutotv/Config.in b/package/kodi-pvr-plutotv/Config.in
+new file mode 100644
+index 0000000000..37441283ce
+--- /dev/null
++++ b/package/kodi-pvr-plutotv/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_PLUTOTV
++	bool "kodi-pvr-plutotv"
++	select BR2_PACKAGE_RAPIDJSON
++	help
++	  Pluto.tv PVR Client for Kodi
++
++	  https://github.com/kodi-pvr/pvr.plutotv
+diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
+new file mode 100644
+index 0000000000..3ad0d4e875
+--- /dev/null
++++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  0b85c5c9583239bcecccccc2c43fc6d604bf5a4e4304238c8635410823ab8ae3  kodi-pvr-plutotv-19.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
+new file mode 100644
+index 0000000000..15c7135880
+--- /dev/null
++++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-pvr-plutotv
++#
++################################################################################
++
++KODI_PVR_PLUTOTV_VERSION = 19.0.0-Matrix
++KODI_PVR_PLUTOTV_SITE = $(call github,kodi-pvr,pvr.plutotv,$(KODI_PVR_PLUTOTV_VERSION))
++KODI_PVR_PLUTOTV_LICENSE = GPL-2.0+
++KODI_PVR_PLUTOTV_LICENSE_FILES = LICENSE.md
++KODI_PVR_PLUTOTV_DEPENDENCIES = kodi rapidjson
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 38c14555ab..f436a444d3 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -305,6 +305,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-njoy/Config.in"
+ 	source "package/kodi-pvr-octonet/Config.in"
+ 	source "package/kodi-pvr-pctv/Config.in"
++	source "package/kodi-pvr-plutotv/Config.in"
+ 	source "package/kodi-pvr-stalker/Config.in"
+ 	source "package/kodi-pvr-vbox/Config.in"
+ 	source "package/kodi-pvr-vdr-vnsi/Config.in"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
