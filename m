@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD20C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FD3C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6056B40522;
-	Mon,  6 Dec 2021 18:46:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F174F84BAA;
+	Mon,  6 Dec 2021 18:46:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v01JPFXatA-I; Mon,  6 Dec 2021 18:46:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uwCS_gDV9veJ; Mon,  6 Dec 2021 18:46:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 477E540453;
-	Mon,  6 Dec 2021 18:46:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3622280DC0;
+	Mon,  6 Dec 2021 18:46:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58E291BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:14:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C22E41BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 874B141C15
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEE9041C29
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LxWpBidrtW1r for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
+ with ESMTP id wW6N2p04vql8 for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB49041C6C
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3ACA141C25
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 80E5F81503; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
+ id BFDEF81468; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 22:47:52 +0100
+Date: Sat, 4 Dec 2021 23:00:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee80fbcc791c47a3b722f59eccea5dfec1d0c8c1
-X-Git-Newrev: b33e39e3ea5078cc80d9658e8af63049189bd475
+X-Git-Oldrev: fe0e1020a3ec1c00fd1c8615bace962c720e0e46
+X-Git-Newrev: 2db0ec06924d7f337755b9b920f5dd4c28f95e7f
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.80E5F81503@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-weasyprint: new package
+Message-Id: <20211206180742.BFDEF81468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/azmq: bump to version 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,97 +58,144 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b33e39e3ea5078cc80d9658e8af63049189bd475
+commit: https://git.buildroot.net/buildroot/commit/?id=2db0ec06924d7f337755b9b920f5dd4c28f95e7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- Drop patch and use AZMQ_NO_TESTS which is available since
+  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
+- boost log (and so NPTL) is not a dependency since
+  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
+- boost regex is not a dependency since
+  https://github.com/zeromq/azmq/commit/209ccdc318bee195c92eaf86ed2fcc4acf08be1e
+- Update indentation in hash file (two spaces)
+
+https://github.com/zeromq/azmq/releases/tag/v1.0.3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-weasyprint/Config.in              | 17 +++++++++++++++++
- package/python-weasyprint/python-weasyprint.hash |  5 +++++
- package/python-weasyprint/python-weasyprint.mk   | 14 ++++++++++++++
- 5 files changed, 38 insertions(+)
+ ...Conditionally-disable-test-and-doc-builds.patch | 43 ----------------------
+ package/azmq/Config.in                             |  8 ++--
+ package/azmq/azmq.hash                             |  5 +--
+ package/azmq/azmq.mk                               |  4 +-
+ 4 files changed, 8 insertions(+), 52 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6fc6c6286f..fd3ee964b2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1272,6 +1272,7 @@ F:	package/python-snappy/
- F:	package/python-sockjs/
- F:	package/python-terminaltables/
- F:	package/python-tinycss2/
-+F:	package/python-weasyprint/
- F:	package/python-yarl/
- F:	package/python-zopfli/
+diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
+deleted file mode 100644
+index 98975d27ed..0000000000
+--- a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
+-From: RJ Ascani <rj.ascani@gmail.com>
+-Date: Thu, 20 Jul 2017 15:53:40 -0700
+-Subject: [PATCH] Conditionally disable test and doc builds
+-
+-Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
+----
+- CMakeLists.txt | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 5b5b9cc..97006a4 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
+-                     ${ZeroMQ_INCLUDE_DIRS}
+-                     ${PROJECT_SOURCE_DIR})
+-
+--enable_testing()
+-+if (BUILD_TESTING)
+-+    enable_testing()
+-+endif()
+-
+- macro(add_catch_test name)
+-     if (TEST_REPORT_FORMAT)
+-@@ -59,8 +61,12 @@ macro(add_catch_test name)
+-     endif()
+- endmacro()
+-
+--add_subdirectory(test)
+--add_subdirectory(doc)
+-+if (BUILD_TESTING)
+-+    add_subdirectory(test)
+-+endif()
+-+if (BUILD_DOC)
+-+    add_subdirectory(doc)
+-+endif()
+-
+- install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
+-         DESTINATION include)
+---
+-2.13.3
+-
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 37131a260a..7bdd07ebf8 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
+ 	bool "azmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, zeromq
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+@@ -11,9 +11,7 @@ config BR2_PACKAGE_AZMQ
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+-	select BR2_PACKAGE_BOOST_LOG
+ 	select BR2_PACKAGE_BOOST_RANDOM
+-	select BR2_PACKAGE_BOOST_REGEX
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+@@ -21,10 +19,10 @@ config BR2_PACKAGE_AZMQ
  
-diff --git a/package/Config.in b/package/Config.in
-index 871295e66f..006d3cf284 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1271,6 +1271,7 @@ menu "External python modules"
- 	source "package/python-visitor/Config.in"
- 	source "package/python-watchdog/Config.in"
- 	source "package/python-wcwidth/Config.in"
-+	source "package/python-weasyprint/Config.in"
- 	source "package/python-web2py/Config.in"
- 	source "package/python-webencodings/Config.in"
- 	source "package/python-webob/Config.in"
-diff --git a/package/python-weasyprint/Config.in b/package/python-weasyprint/Config.in
-new file mode 100644
-index 0000000000..de68fe2f5b
---- /dev/null
-+++ b/package/python-weasyprint/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_PYTHON_WEASYPRINT
-+	bool "python-weasyprint"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_BROTLI # runtime
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	select BR2_PACKAGE_PYTHON_CSSSELECT2 # runtime
-+	select BR2_PACKAGE_PYTHON_FONTTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_HTML5LIB # runtime
-+	select BR2_PACKAGE_PYTHON_PILLOW # runtime
-+	select BR2_PACKAGE_PYTHON_PYDYF # runtime
-+	select BR2_PACKAGE_PYTHON_PYPHEN # runtime
-+	select BR2_PACKAGE_PYTHON_TINYCSS2 # runtime
-+	select BR2_PACKAGE_PYTHON_ZOPFLI # runtime
-+	help
-+	  The Awesome Document Factory.
+ 	  https://github.com/zeromq/azmq
+ 
+-comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
++comment "azmq needs a toolchain w/ C++11, wchar and threads"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+-		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+ 
+ comment "azmq needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
+index f5d24e79ce..6caf53582a 100644
+--- a/package/azmq/azmq.hash
++++ b/package/azmq/azmq.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+-# https://github.com/zeromq/azmq/archive/v1.0.2.tar.gz
+-sha256 25fa8b07756cffae95e25a55c7ea42efe02e8cd797552201aa771dd69cfc8fbf  azmq-1.0.2.tar.gz
+-sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
++sha256  80cfb951c5614b8c2e55a59ea2e5723a18ebed08da80e5420e525d6bf273771a  azmq-1.0.3.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
+diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
+index 918c6e1a36..a72b155664 100644
+--- a/package/azmq/azmq.mk
++++ b/package/azmq/azmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AZMQ_VERSION = 1.0.2
++AZMQ_VERSION = 1.0.3
+ AZMQ_SITE = $(call github,zeromq,azmq,v$(AZMQ_VERSION))
+ AZMQ_DEPENDENCIES = boost zeromq
+ AZMQ_LICENSE = BSL-1.0
+@@ -15,4 +15,6 @@ AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
+ AZMQ_INSTALL_STAGING = YES
+ AZMQ_INSTALL_TARGET = NO
+ 
++AZMQ_CONF_OPTS = -DAZMQ_NO_TESTS=ON
 +
-+	  https://www.courtbouillon.org/weasyprint
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-new file mode 100644
-index 0000000000..8d231c50ba
---- /dev/null
-+++ b/package/python-weasyprint/python-weasyprint.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/weasyprint/json
-+md5  a90fd2d5a581a0e218943af3a8b64a31  weasyprint-53.4.tar.gz
-+sha256  10ccb17d55c73096bdf1edd3efe58cb855b07e4c307d9bad4ebc9a3f13ff4580  weasyprint-53.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-new file mode 100644
-index 0000000000..0a944825bb
---- /dev/null
-+++ b/package/python-weasyprint/python-weasyprint.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-weasyprint
-+#
-+################################################################################
-+
-+PYTHON_WEASYPRINT_VERSION = 53.4
-+PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/72/25/336e274fde0e48cf9979d44667411fbcfa55d323fd7672068807b6de2f89
-+PYTHON_WEASYPRINT_SETUP_TYPE = distutils
-+PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
-+PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
