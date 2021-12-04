@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27A8FC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C02C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9643540156;
-	Sat,  4 Dec 2021 21:24:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1EC6405D6;
+	Sat,  4 Dec 2021 21:25:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hamXDnOWFvIU; Sat,  4 Dec 2021 21:24:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E7tN_29KCupl; Sat,  4 Dec 2021 21:25:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36BC44041B;
-	Sat,  4 Dec 2021 21:24:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB360405CE;
+	Sat,  4 Dec 2021 21:25:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D38671BF36B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:24:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8496A1BF36B
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C367360A89
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:24:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74AB060659
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:24:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P7A0ccVIy3Lm for <buildroot@lists.busybox.net>;
+ with ESMTP id D1M4QFiA8zPl for <buildroot@lists.busybox.net>;
  Sat,  4 Dec 2021 21:24:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8AA060659
+ by smtp3.osuosl.org (Postfix) with ESMTP id D69A9605C9
  for <buildroot@buildroot.org>; Sat,  4 Dec 2021 21:24:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C8EC69351A; Sat,  4 Dec 2021 21:19:42 +0000 (UTC)
+ id B3B0A93519; Sat,  4 Dec 2021 21:19:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 22:24:28 +0100
+Date: Sat, 4 Dec 2021 22:18:57 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3f5f8abd415fbe1fadc8d1358179af684a08f29c
-X-Git-Newrev: a2663af3409f8b45ddf6e6935ed9369ca49a3c52
+X-Git-Oldrev: 3e7eb3ce3d1b3338d5b7d105be688485b9a6aa2d
+X-Git-Newrev: 3f5f8abd415fbe1fadc8d1358179af684a08f29c
 X-Patchwork-Hint: ignore
-Message-Id: <20211204211942.C8EC69351A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-fonttools: new
+Message-Id: <20211204211942.B3B0A93519@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyphen: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,93 +59,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2663af3409f8b45ddf6e6935ed9369ca49a3c52
+commit: https://git.buildroot.net/buildroot/commit/?id=3f5f8abd415fbe1fadc8d1358179af684a08f29c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-fonttools/Config.in             |  7 +++++++
- package/python-fonttools/python-fonttools.hash |  5 +++++
- package/python-fonttools/python-fonttools.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-pyphen/Config.in          |  7 +++++++
+ package/python-pyphen/python-pyphen.hash |  8 ++++++++
+ package/python-pyphen/python-pyphen.mk   | 14 ++++++++++++++
+ 5 files changed, 31 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 35218fecfd..3b31b89568 100644
+index 19a2b0986f..35218fecfd 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1259,6 +1259,7 @@ F:	package/python-cchardet/
- F:	package/python-charset-normalizer/
- F:	package/python-cssselect2/
- F:	package/python-flatbuffers/
-+F:	package/python-fonttools/
- F:	package/python-frozenlist/
- F:	package/python-greenlet/
- F:	package/python-janus/
+@@ -1265,6 +1265,7 @@ F:	package/python-janus/
+ F:	package/python-logstash/
+ F:	package/python-multidict/
+ F:	package/python-pycares/
++F:	package/python-pyphen/
+ F:	package/python-snappy/
+ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
 diff --git a/package/Config.in b/package/Config.in
-index d5107f3be2..b9c2765830 100644
+index ed17bd3b5d..d5107f3be2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1013,6 +1013,7 @@ menu "External python modules"
- 	source "package/python-flask-wtf/Config.in"
- 	source "package/python-flatbuffers/Config.in"
- 	source "package/python-flup/Config.in"
-+	source "package/python-fonttools/Config.in"
- 	source "package/python-frozenlist/Config.in"
- 	source "package/python-functools32/Config.in"
- 	source "package/python-future/Config.in"
-diff --git a/package/python-fonttools/Config.in b/package/python-fonttools/Config.in
+@@ -1161,6 +1161,7 @@ menu "External python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pypcap/Config.in"
++	source "package/python-pyphen/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+diff --git a/package/python-pyphen/Config.in b/package/python-pyphen/Config.in
 new file mode 100644
-index 0000000000..714f547430
+index 0000000000..30ccafcda4
 --- /dev/null
-+++ b/package/python-fonttools/Config.in
++++ b/package/python-pyphen/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_FONTTOOLS
-+	bool "python-fonttools"
++config BR2_PACKAGE_PYTHON_PYPHEN
++	bool "python-pyphen"
 +	depends on BR2_PACKAGE_PYTHON3
 +	help
-+	  Tools to manipulate font files.
++	  Pure Python module to hyphenate text.
 +
-+	  https://github.com/fonttools/fonttools
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
++	  https://www.courtbouillon.org/pyphen
+diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
 new file mode 100644
-index 0000000000..2e79861e2c
+index 0000000000..75ee909351
 --- /dev/null
-+++ b/package/python-fonttools/python-fonttools.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/fonttools/json
-+md5  fcf1425460855b5892c990027b5396c8  fonttools-4.28.2.zip
-+sha256  dca694331af74c8ad47acc5171e57f6b78fac5692bf050f2ab572964577ac0dd  fonttools-4.28.2.zip
++++ b/package/python-pyphen/python-pyphen.hash
+@@ -0,0 +1,8 @@
++# md5, sha256 from https://pypi.org/pypi/Pyphen/json
++md5  f8ec095e4fe30dc2b518a918788b33ed  pyphen-0.11.0.tar.gz
++sha256  e2c3ed82c3a04317df5102addafe89652b0876bc6c6265f5dd4c3efaf02315e8  pyphen-0.11.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
++sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
++sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
++sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING.LGPL
++sha256  ad192a67649aa23ac9681939840f4f241643a98da9cd8aec8de28c3b8c6ee854  COPYING.MPL
+diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
 new file mode 100644
-index 0000000000..9ec369d550
+index 0000000000..80f67c77c7
 --- /dev/null
-+++ b/package/python-fonttools/python-fonttools.mk
-@@ -0,0 +1,22 @@
++++ b/package/python-pyphen/python-pyphen.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-fonttools
++# python-pyphen
 +#
 +################################################################################
 +
-+PYTHON_FONTTOOLS_VERSION = 4.28.2
-+PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/3c/d5/f722e0d1aed0d547383913c6bc3c4ff35772952057b8e2b8fe3be8df4216
-+PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
-+PYTHON_FONTTOOLS_LICENSE = MIT
-+PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
-+PYTHON_FONTTOOLS_DEPENDENCIES = host-python3-cython
-+PYTHON_FONTTOOLS_ENV = FONTTOOLS_WITH_CYTHON=1
-+
-+define PYTHON_FONTTOOLS_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(PYTHON_FONTTOOLS_DL_DIR)/$(PYTHON_FONTTOOLS_SOURCE)
-+	mv $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)
-+endef
++PYTHON_PYPHEN_VERSION = 0.11.0
++PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
++PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/f8/af869a4983c1b3159945479510260985714265d48baf27d61f72b1ec8cbf
++PYTHON_PYPHEN_SETUP_TYPE = distutils
++PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
++PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
 +
 +$(eval $(python-package))
 _______________________________________________
