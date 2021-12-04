@@ -4,64 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77834C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 09:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F1BDC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 09:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21059607FC;
-	Sat,  4 Dec 2021 09:18:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2D88607FC;
+	Sat,  4 Dec 2021 09:19:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X_DWu8SOzeg7; Sat,  4 Dec 2021 09:18:04 +0000 (UTC)
+	with ESMTP id Wkx0Xgjs4-eg; Sat,  4 Dec 2021 09:19:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60F9860727;
-	Sat,  4 Dec 2021 09:18:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E8231BF5DC
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 09:18:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55BFD6072F;
+	Sat,  4 Dec 2021 09:19:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 789711BF5DC
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 09:19:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C6C0402E7
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 09:18:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 741DD405C5
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 09:19:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sjUqb4-MmYXT for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 09:18:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0925440287
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 09:17:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:44c6:1f1c:4326:e15f])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C9CE85FFC1;
- Sat,  4 Dec 2021 10:17:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638609477;
- bh=O3v8VoGetKUsJVtygbQdru7xZsSo/n70ver1j3F2nRA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TeIHcpByhf06QiVQxAKmdQTX6O8xVaskBYCflEXX3uBVQEq9jzepehv8WK5lHokUt
- BfiFK0mmR3wXzzNnGyObaAcosLWRHrYg65uuFcML2FSZ/8rPs8yCi5A5A99gTNLkSJ
- EvsN5GXJQvT+6aLsL+W9s0LVHyu4RI+tflh2S76pebS5zvgnI01MPstObxB7sDABms
- TIMXbXJIzJp6/Jvgg2W4/J1KaHWrxi+Ak9elCak2n2aZlkv/owBnIlJ0iosC/nTumn
- 9k0PZQxoc2hn3lj3nJDHrz48vgXn5gHogo3mc8bO7K8RH8afPhRrF7uNuy5BDVGq5c
- tpcwIDMuveLOQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 04 Dec 2021 10:17:50 +0100
-Date: Sat, 4 Dec 2021 10:17:50 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q74dpq-7fPxj for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 09:19:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C22440376
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 09:19:20 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ m25-20020a7bcb99000000b0033aa12cdd33so5720674wmi.1
+ for <buildroot@buildroot.org>; Sat, 04 Dec 2021 01:19:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NnlWjWRjW61LcSuVzNXs5eBz5NEdFZxyboXFuSFQgNo=;
+ b=QFACnI2oRN0u3MWt3g/wR/l4Qx/Gouz5GBRkToNYNV8tH17Z3UPGTrbmMgCc0RY+/P
+ kRv5B8995A2slYYRVRhZvttvWooOeFwpbvUMmGC8cHF7d9mqRjqG1Byna1qzOSK0N6Qe
+ lqeeP8T3dnwc06tPQpuLUznDjCFnLMoASJ3I1JRUkfXjxwB1xUcn7mpPIUvIrwpMi/wI
+ GCZWSz4x3N3H6uBXZOjx+Cp/P+9WqSGjrZ+Ry2xKIiaryUp8KsY3PsHYNb/Ay1y+3zK0
+ sjQ8d05pfbFJBu4vLBBnLyN3gABxl/xALgyu61mv95PiuqCCS+96maEjQ9oiEZJoMo0O
+ wugQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NnlWjWRjW61LcSuVzNXs5eBz5NEdFZxyboXFuSFQgNo=;
+ b=vSMTuHO/x2zxLPMg1zEGL3CSORqVz0RlYIpsJtBBFDEutkqmiu+IGnOYiALtSp3lxO
+ jxi+/8DwVY8/7Oc0wkeUXiirwtqftqqkl0pcrpDpYmC3s6jH9fMAINS+kIjgTtHAfTpn
+ +H+ddA60ZW6Vh6J32pUsSkx/3Ef86xPTDdUedUoN4LJIHVcu4ZX0iC53p/qbEpKRCg/A
+ PI9kspKQDgILJVMGIcdaNeEuc+dptZTcRqDXf58LUFiUtr8LrVcq8gRIkXsyNTNn9WEO
+ UIH/gm9YgLHAERkJjy5r7F/W6NAhUmAeYlv+DhN4J79T59oGh3iRgVyCw1zmxyZh5AoF
+ zWDw==
+X-Gm-Message-State: AOAM531BflYdQmxtMYttyBjDf9IiXz6Gjk28fS+VQhTfnSrMzbCMKMXf
+ aU94w+X2SybgTSnErTbrx70cfZ0G2tSR8g==
+X-Google-Smtp-Source: ABdhPJxFg2gfGMFHDfFHpjjN2qOGopWZTPPbudUnlh376qt/c/SgNPK4tV1JSPTnwR3xhXCJbzHEFA==
+X-Received: by 2002:a05:600c:2308:: with SMTP id
+ 8mr21368277wmo.179.1638609558134; 
+ Sat, 04 Dec 2021 01:19:18 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
+ by smtp.gmail.com with ESMTPSA id r11sm4971589wrw.5.2021.12.04.01.19.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Dec 2021 01:19:17 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <20211204091750.GD50662@scaer>
-References: <cover.1638573387.git.yann.morin.1998@free.fr>
- <82bf2ffa3ad531e8e93cf4b2f65193438b8b7199.1638573387.git.yann.morin.1998@free.fr>
+Date: Sat,  4 Dec 2021 10:19:27 +0100
+Message-Id: <20211204091927.2016305-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <82bf2ffa3ad531e8e93cf4b2f65193438b8b7199.1638573387.git.yann.morin.1998@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 3/3] package/mender-grubenv: fix grub module
- checks
+Subject: [Buildroot] [PATCH 1/1] package/motion: add MOTION_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,71 +86,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>,
- Adam Duskett <aduskett@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TWUsIEFsbCwKCk9uIDIwMjEtMTItMDQgMDA6MTcgKzAxMDAsIFlhbm4gRS4gTU9SSU4gc3Bha2Ug
-dGh1c2x5Ogo+IEZyb206IEFkYW0gRHVza2V0dCA8YWR1c2tldHRAZ21haWwuY29tPgo+IENvbW1p
-dCBiNjg4MTBlNzBjYmQgKGJvb3QvZ3J1YjI6IGFkZCBzdXBwb3J0IHRvIGJ1aWxkIG11bHRpcGxl
-IEdydWIyCj4gY29uZmlndXJhdGlvbnMgaW4gdGhlIHNhbWUgYnVpbGQpIGJyb2tlIG1lbmRlci1n
-cnViZW52IGJ5IHNwbGl0aXRuZyB1cAo+IEJSMl9UQVJHRVRfR1JVQjJfQlVJTFRJTl9NT0RVTEVT
-IGludG8gdHdvIHNlcGFyYXRlIHN5bWJvbHMsIG9uZSBmb3IKPiBsZWdhY3kgYm9vdCBhbmQgb25l
-IGZvciBFRkkgYm9vdC4KPiAKPiBUaGlzIGNoYW5nZSBjYXVzZXMgYSBzeXN0ZW1hdGljIGJ1aWxk
-IGZhaWx1cmUgbm93LCBhcyB0aGUgbGVnYWN5IHZhcmlhYmxlCj4gQlIyX1RBUkdFVF9HUlVCMl9C
-VUlMVElOX01PRFVMRVMgaXMgbm93IGFsd2F5cyBlbXB0eSAoZHVyaW5nIGJ1aWxkKS4KPiAKPiBX
-ZSBmaXggdGhhdCBieSBzdXBwbGljYXRpbmcgdGhlIG1pc3NpbmcgbW9kdWxlcyB0byBjaGVjazog
-b25lIGZvciBFRkkgYW5kCj4gb25lIGZvciBsZWdhY3kgYm9vdC4KPiAKPiBUaGUgRUZJIGNoZWNr
-IGlzIHRyaWNreTogSW5kZWVkLCB0aGVyZSBjYW4gYmUgbW9yZSB0aGFuIG9uZSBFRkkgcGxhdGZv
-cm0KPiBlbmFibGVkIHNpbXVsdGFuZW91c2x5OyBpbmRlZWQsIG9uIHg4Nl82NCwgd2UgY2FuIGhh
-dmUgYm90aCB0aGUgMzItYml0Cj4gYW5kIDY0LWJpdCBFRkkgcGxhdGZvcm1zIGVuYWJsZWQuIFNv
-IHRoZSBjaGVjayBpcyBpbnZlcnRlZCwgYW5kIHdlIGNoZWNrCj4gdGhhdCBubyBwbGF0Zm9ybSBp
-cyBub3QgZW5hYmxlZCAoeWVhaCwgZG91YmxlIG5lZ2F0aW9uKS4gRm9yIGNvbnNpc3RlbmN5LAo+
-IHdlIGRvIHRoZSBzYW1lIGZvciB0aGUgbGVnYWN5IGJvb3QsIGV2ZW4gdGhvdWdoIGluIHRoYXQg
-Y2FzZSwgdGhlcmUgY2FuCj4gb25seSBldmVyIGJlIG9ubHkgb25lIGVuYWJsZWQgYXQgb25jZSBh
-dCBtb3N0Lgo+IAo+IEZ1cnRoZXJtb3JlLCBtZW5kZXItZ3J1YmVudiBkb2VzIG5vdCBzdXBwb3J0
-IG11bHRpcGxlIGluc3RhbGxhdGlvbnMgb2YKPiBncnViIGNvbmN1cnJlbnRseTsgaXQgY2FuIG9u
-bHkgYmUgaW5zdGFsbGVkIGZvciBlaXRoZXIgbGVnYWN5IG9yIEVGSSwKPiBub3QgYm90aCBhdCB0
-aGUgc2FtZSB0aW1lOiAvZXRjL21lbmRlci1ncnViZW52LmNmZywgaXRzIGNvbmZpZ3VyYXRpb24K
-PiBmaWxlLCBjYW4gb25seSBjb250YWluIHNldHRpbmdzIGZvciBvbmUgb3IgdGhlIG90aGVyLCBu
-b3QgYm90aC4KPiAKPiBTbyB3ZSBhZGQgYSBuZXcgY2hlY2sgdG8gQ29uZmlnLmluIHRvIHN1cHBv
-cnQgb25seSBvbmUgZ3J1YiBpbnN0YWxsYXRpb24KPiB0eXBlIGF0IGEgdGltZS4KPiAKPiBTaWdu
-ZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkdXNrZXR0QGdtYWlsLmNvbT4KPiBTaWduZWQtb2Zm
-LWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiBDYzogS8O2cnkg
-TWFpbmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+ClstLVNOSVAtLV0KPiBkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9tZW5kZXItZ3J1YmVudi9Db25maWcuaW4gYi9wYWNrYWdlL21lbmRlci1n
-cnViZW52L0NvbmZpZy5pbgo+IGluZGV4IDM4ZGE1Yjg0ZmUuLjMzZDYzZmJmYTMgMTAwNjQ0Cj4g
-LS0tIGEvcGFja2FnZS9tZW5kZXItZ3J1YmVudi9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL21l
-bmRlci1ncnViZW52L0NvbmZpZy5pbgpbLS1TTklQLS1dCj4gQEAgLTM0LDMgKzM2LDYgQEAgY29t
-bWVudCAibWVuZGVyLWdydWJlbnYgbmVlZHMgYSBncnViMiBib290bG9hZGVyIgo+ICAJZGVwZW5k
-cyBvbiBCUjJfVEFSR0VUX0dSVUIyX0FSQ0hfU1VQUE9SVFMKPiAgCWRlcGVuZHMgb24gQlIyX1BB
-Q0tBR0VfTUVOREVSCj4gIAlkZXBlbmRzIG9uICFCUjJfVEFSR0VUX0dSVUIyCj4gKwo+ICtjb21t
-ZW50ICJtZW5kZXItZ3J1YmVudiBkb2VzIG5vdCBzdXBwb3J0IGJvdGggbGVnYWN5IGFuZCBFRkkg
-Z3J1YjIgYm9vdGxvYWRlcnMgYXQgdGhlIHNhbWUgdGltZSIKPiArCWRlcGVuZHMgb24gQlIyX1RB
-UkdFVF9HUlVCMl9IQVNfTEVHQUNZX0JPT1QgJiYgQlIyX1RBUkdFVF9HUlVCMl9IQVNfRUZJX0JP
-T1QKCk1pc3NpbmcgZGVwZW5kZW5jeSBvbiBCUjJfUEFDS0FHRV9NRU5ERVIKCj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbWVuZGVyLWdydWJlbnYvbWVuZGVyLWdydWJlbnYubWsgYi9wYWNrYWdlL21l
-bmRlci1ncnViZW52L21lbmRlci1ncnViZW52Lm1rCj4gaW5kZXggZDdiZGNjOTllYi4uZGQwY2Y3
-ZTRmOSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL21lbmRlci1ncnViZW52L21lbmRlci1ncnViZW52
-Lm1rCj4gKysrIGIvcGFja2FnZS9tZW5kZXItZ3J1YmVudi9tZW5kZXItZ3J1YmVudi5tawo+IEBA
-IC0xMyw3ICsxMyw3IEBAIE1FTkRFUl9HUlVCRU5WX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4g
-IE1FTkRFUl9HUlVCRU5WX0RFUEVOREVOQ0lFUyA9IGdydWIyCj4gIE1FTkRFUl9HUlVCRU5WX0lO
-U1RBTExfSU1BR0VTID0gWUVTCj4gIAo+IC1pZmVxICgkKEJSMl9UQVJHRVRfR1JVQjJfSTM4Nl9Q
-QykkKEJSMl9UQVJHRVRfR1JVQjJfQVJNX1VCT09UKSx5KQo+ICtpZmVxICgkKEJSMl9UQVJHRVRf
-R1JVQl9MRUdBQ1kpJChCUjJfVEFSR0VUX0dSVUIyX0FSTV9VQk9PVCkseSkKClRoZSBBUk0gVS1C
-b290IHBhcnQgaXMgc3VwZXJmbHVvdXMsIG5vdy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgot
-LSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
-LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUg
-RW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMg
-NjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9f
-XyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0t
-OiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmlu
-LmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3Bp
-cmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0t
-LS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+cpe:2.3:a:motion_project:motion is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amotion_project%3Amotion
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/motion/motion.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index dae812b9a4..5d54ecea01 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -8,6 +8,7 @@ MOTION_VERSION = 4.4.0
+ MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
+ MOTION_LICENSE = GPL-2.0
+ MOTION_LICENSE_FILES = LICENSE
++MOTION_CPE_ID_VENDOR = motion_project
+ MOTION_DEPENDENCIES = host-pkgconf jpeg libmicrohttpd $(TARGET_NLS_DEPENDENCIES)
+ # From git
+ MOTION_AUTORECONF = YES
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
