@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71A8EC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07781C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 22:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2309660A89;
-	Sat,  4 Dec 2021 22:50:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B01024058B;
+	Sat,  4 Dec 2021 22:50:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aI97A1VrETvv; Sat,  4 Dec 2021 22:50:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WpB6T9o6xkvi; Sat,  4 Dec 2021 22:50:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91ABB60A7C;
-	Sat,  4 Dec 2021 22:49:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E85D40424;
+	Sat,  4 Dec 2021 22:50:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 536C21BF3F7
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:49:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 984101BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 422F2401AF
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:49:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86924401AF
+ for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 22:50:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v8hPF7E3SFyV for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 22:49:47 +0000 (UTC)
+ with ESMTP id d1imv1pNqytp for <buildroot@lists.busybox.net>;
+ Sat,  4 Dec 2021 22:50:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7556400E9
- for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:49:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 28176400E9
+ for <buildroot@buildroot.org>; Sat,  4 Dec 2021 22:50:36 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 5A2C21C0002;
- Sat,  4 Dec 2021 22:49:43 +0000 (UTC)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 490C01C0002;
+ Sat,  4 Dec 2021 22:50:35 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mtdqg-0006M7-Nb; Sat, 04 Dec 2021 23:49:42 +0100
+ id 1mtdrW-0006OM-Mv; Sat, 04 Dec 2021 23:50:34 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20211204223640.2022478-1-fontaine.fabrice@gmail.com>
-Date: Sat, 04 Dec 2021 23:49:42 +0100
+Date: Sat, 04 Dec 2021 23:50:34 +0100
 In-Reply-To: <20211204223640.2022478-1-fontaine.fabrice@gmail.com> (Fabrice
  Fontaine's message of "Sat, 4 Dec 2021 23:36:40 +0100")
-Message-ID: <87r1as9e9l.fsf@dell.be.48ers.dk>
+Message-ID: <87mtlg9e85.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Subject: Re: [Buildroot] [PATCH 1/1] package/hplip: add CPE variables
@@ -73,8 +73,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahp%3Alinux_imaging_and_printing_project
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/hplip/hplip.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+ > index 9eac83d567..c3aae157d4 100644
+ > --- a/package/hplip/hplip.mk
+ > +++ b/package/hplip/hplip.mk
+ > @@ -10,6 +10,8 @@ HPLIP_AUTORECONF = YES
+ >  HPLIP_DEPENDENCIES = cups libusb jpeg host-pkgconf
+ >  HPLIP_LICENSE = GPL-2.0, BSD-3-Clause, MIT
+ >  HPLIP_LICENSE_FILES = COPYING
+ > +HPLIP_CPE_ID_VENDOR = hp
+ > +HPLIB_CPE_ID_PRODUCT = linux_imaging_and_printing_project
+
+s/HPLIB/HPLIP/
+
+Fixed it while committing.
+
+ >  HPLIP_CONF_OPTS = \
+ >  	--disable-qt4 \
+ > -- 
+ > 2.33.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
