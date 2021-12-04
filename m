@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CC9C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04713C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B5F060D60;
-	Mon,  6 Dec 2021 18:21:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD943408E5;
+	Mon,  6 Dec 2021 18:21:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FIqHBiwcLRV8; Mon,  6 Dec 2021 18:21:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rbVTDPeMvbBy; Mon,  6 Dec 2021 18:21:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 520ED60D63;
-	Mon,  6 Dec 2021 18:21:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F57F41C03;
+	Mon,  6 Dec 2021 18:21:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EDB21BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 326441BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A1E5400CF
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFD5A40495
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T5oXYRF4KC3L for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ with ESMTP id 0z_j0WC8SupJ for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C8E64017A
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDB7A4017A
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1830B81504; Mon,  6 Dec 2021 18:07:40 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ id 696A481503; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Nov 2021 22:34:32 +0100
+Date: Sat, 4 Dec 2021 22:26:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84e90ce45c34eb21596e4208510605ddb507419a
-X-Git-Newrev: 3db4d486d689b4a9d59c8f7637211893b0a1cb1b
+X-Git-Oldrev: a2663af3409f8b45ddf6e6935ed9369ca49a3c52
+X-Git-Newrev: 53972c82964dd1337dff4ccbcdd484d243aef0ba
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180740.1830B81504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmediaart: bump to version 1.9.5
+Message-Id: <20211206180742.696A481503@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zopfli: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,279 +58,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3db4d486d689b4a9d59c8f7637211893b0a1cb1b
+commit: https://git.buildroot.net/buildroot/commit/?id=53972c82964dd1337dff4ccbcdd484d243aef0ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to meson-package
-- Drop BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE which is not supported
-  anymore
-- Update indentation in hash file (two spaces)
-
-https://gitlab.gnome.org/GNOME/libmediaart/-/blob/1.9.5/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                                   |  9 +++
- .../0001-meson-add-introspection-option.patch      | 87 ++++++++++++++++++++++
- .../0002-meson-add-unit_tests-option.patch         | 48 ++++++++++++
- package/libmediaart/Config.in                      |  8 +-
- package/libmediaart/libmediaart.hash               |  6 +-
- package/libmediaart/libmediaart.mk                 | 25 +++----
- 6 files changed, 157 insertions(+), 26 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-zopfli/Config.in          |  7 +++++++
+ package/python-zopfli/python-zopfli.hash |  5 +++++
+ package/python-zopfli/python-zopfli.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 35 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 40011a1890..f3ecf981c0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,15 @@ endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3b31b89568..82853cdc18 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1272,6 +1272,7 @@ F:	package/python-sockjs/
+ F:	package/python-terminaltables/
+ F:	package/python-tinycss2/
+ F:	package/python-yarl/
++F:	package/python-zopfli/
  
- ###############################################################################
- 
-+comment "Legacy options removed in 2022.02"
-+
-+config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
-+	bool "libmediaart 'none' backend removed"
-+	select BR2_LEGACY
+ N:	James Knight <james.knight@collins.com>
+ F:	package/atkmm/
+diff --git a/package/Config.in b/package/Config.in
+index b9c2765830..e90d30e81c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1296,6 +1296,7 @@ menu "External python modules"
+ 	source "package/python-zc-lockfile/Config.in"
+ 	source "package/python-zeroconf/Config.in"
+ 	source "package/python-zope-interface/Config.in"
++	source "package/python-zopfli/Config.in"
+ endmenu
+ endif
+ 	source "package/quickjs/Config.in"
+diff --git a/package/python-zopfli/Config.in b/package/python-zopfli/Config.in
+new file mode 100644
+index 0000000000..69d4b8b514
+--- /dev/null
++++ b/package/python-zopfli/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ZOPFLI
++	bool "python-zopfli"
++	depends on BR2_PACKAGE_PYTHON3
 +	help
-+	  'none' backend has been removed from libmediaart since version
-+	  1.9.5.
++	  Zopfli module for python.
 +
- comment "Legacy options removed in 2021.11"
- 
- config BR2_OPENJDK_VERSION_LTS
-diff --git a/package/libmediaart/0001-meson-add-introspection-option.patch b/package/libmediaart/0001-meson-add-introspection-option.patch
++	  https://github.com/fonttools/py-zopfli
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
 new file mode 100644
-index 0000000000..2b849040fe
+index 0000000000..92b51bdf18
 --- /dev/null
-+++ b/package/libmediaart/0001-meson-add-introspection-option.patch
-@@ -0,0 +1,87 @@
-+From ee7d8736af172cd5ad71a0bd511c39daf401e3f6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 5 Oct 2021 23:35:26 +0200
-+Subject: [PATCH] meson: add introspection option
-+
-+Add introspection option
-+
-+Fix #3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/libmediaart/-/merge_requests/14]
-+---
-+ libmediaart/meson.build | 42 +++++++++++++++++++++--------------------
-+ meson_options.txt       |  2 ++
-+ 2 files changed, 24 insertions(+), 20 deletions(-)
-+
-+diff --git a/libmediaart/meson.build b/libmediaart/meson.build
-+index 56e00ab..2f44e63 100644
-+--- a/libmediaart/meson.build
-++++ b/libmediaart/meson.build
-+@@ -41,28 +41,30 @@ libmediaart = shared_library(
-+   install: true,
-+ )
-+ 
-+-gir_args = [
-+-  '--quiet',
-+-  '-DLIBMEDIAART_COMPILATION',
-+-]
-++if get_option('introspection')
-++  gir_args = [
-++    '--quiet',
-++    '-DLIBMEDIAART_COMPILATION',
-++  ]
-+ 
-+-libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
-+-  sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
-+-  nsversion: libmediaart_api_version,
-+-  namespace: 'MediaArt',
-+-  identifier_prefix: 'MediaArt',
-+-  symbol_prefix: 'media_art',
-+-  includes: ['Gio-2.0', 'GObject-2.0'],
-+-  header: 'libmediaart/mediaart.h',
-+-  export_packages: 'libmediaart-' + libmediaart_api_version,
-+-  extra_args: gir_args,
-+-  install: true
-+-)
-++  libmediaart_gir_and_typelib = gnome.generate_gir(libmediaart,
-++    sources: libmediaart_sources + libmediaart_introspection_sources + libmediaart_public_headers,
-++    nsversion: libmediaart_api_version,
-++    namespace: 'MediaArt',
-++    identifier_prefix: 'MediaArt',
-++    symbol_prefix: 'media_art',
-++    includes: ['Gio-2.0', 'GObject-2.0'],
-++    header: 'libmediaart/mediaart.h',
-++    export_packages: 'libmediaart-' + libmediaart_api_version,
-++    extra_args: gir_args,
-++    install: true
-++  )
-+ 
-+-libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
-+-  sources: libmediaart_gir_and_typelib[0],
-+-  packages: 'gio-2.0',
-+-  install: true)
-++  libmediaart_vapi = gnome.generate_vapi('libmediaart-' + libmediaart_api_version,
-++    sources: libmediaart_gir_and_typelib[0],
-++    packages: 'gio-2.0',
-++    install: true)
-++endif
-+ 
-+ libmediaart_dep = declare_dependency(
-+   link_with: libmediaart,
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 3ef49ba..b8c51b1 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -1,5 +1,7 @@
-+ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'qt5'],
-+        description: 'Which image processing backend to use')
-++option('introspection', type : 'boolean', value : 'true',
-++       description : 'Enable / disable the GObject-Introspection integration')
-+ option('gtk_doc',
-+   type: 'boolean',
-+   value: 'false',
-+-- 
-+2.33.0
-+
-diff --git a/package/libmediaart/0002-meson-add-unit_tests-option.patch b/package/libmediaart/0002-meson-add-unit_tests-option.patch
++++ b/package/python-zopfli/python-zopfli.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/zopfli/json
++md5  f66b6f4132533b9b0ab8b0af757237bf  zopfli-0.1.9.zip
++sha256  78de3cc08a8efaa8013d61528907d91ac4d6cc014ffd8a41cc10ee75e9e60d7b  zopfli-0.1.9.zip
++# Locally computed sha256 checksums
++sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
 new file mode 100644
-index 0000000000..3519ff1984
+index 0000000000..95a0067b05
 --- /dev/null
-+++ b/package/libmediaart/0002-meson-add-unit_tests-option.patch
-@@ -0,0 +1,48 @@
-+From 01d94777d9d1906750db0e27e2e7b8f228ae4343 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 9 Oct 2021 23:45:53 +0200
-+Subject: [PATCH] meson: add unit_tests option
++++ b/package/python-zopfli/python-zopfli.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python-zopfli
++#
++################################################################################
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:  not sent yet (waiting feedback on first patch)]
-+---
-+ meson_options.txt |  2 ++
-+ tests/meson.build | 14 ++++++++------
-+ 2 files changed, 10 insertions(+), 6 deletions(-)
++PYTHON_ZOPFLI_VERSION = 0.1.9
++PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).zip
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/10/7d/278fd896401b0ef76e06cd42c3ce1541572d83b1c713b6786795c60a1bbe
++PYTHON_ZOPFLI_SETUP_TYPE = setuptools
++PYTHON_ZOPFLI_LICENSE = Apache-2.0
++PYTHON_ZOPFLI_LICENSE_FILES = COPYING
++PYTHON_ZOPFLI_DEPENDENCIES = host-python-setuptools-scm
 +
-+diff --git a/meson_options.txt b/meson_options.txt
-+index b8c51b1..1172f93 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -2,6 +2,8 @@ option('image_library', type: 'combo', choices: ['auto', 'gdk-pixbuf', 'qt4', 'q
-+        description: 'Which image processing backend to use')
-+ option('introspection', type : 'boolean', value : 'true',
-+        description : 'Enable / disable the GObject-Introspection integration')
-++option('unit_tests', type : 'boolean', value : 'true',
-++       description : 'Enable / disable unit tests')
-+ option('gtk_doc',
-+   type: 'boolean',
-+   value: 'false',
-+diff --git a/tests/meson.build b/tests/meson.build
-+index 28834c0..02c96a1 100644
-+--- a/tests/meson.build
-++++ b/tests/meson.build
-+@@ -1,7 +1,9 @@
-+-mediaart_test = executable('mediaart-test',
-+-  'mediaarttest.c',
-+-  dependencies: libmediaart_dep,
-+-)
-++if get_option('unit_tests')
-++  mediaart_test = executable('mediaart-test',
-++    'mediaarttest.c',
-++    dependencies: libmediaart_dep,
-++  )
-+ 
-+-test('mediaart', mediaart_test,
-+-     env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
-++  test('mediaart', mediaart_test,
-++       env: 'G_TEST_SRCDIR=' + meson.current_source_dir())
-++endif
-+-- 
-+2.33.0
++define PYTHON_ZOPFLI_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(PYTHON_ZOPFLI_DL_DIR)/$(PYTHON_ZOPFLI_SOURCE)
++	mv $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)/* $(@D)
++	$(RM) -r $(@D)/zopfli-$(PYTHON_ZOPFLI_VERSION)
++endef
 +
-diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
-index c11d6f49d9..d7973444ae 100644
---- a/package/libmediaart/Config.in
-+++ b/package/libmediaart/Config.in
-@@ -18,13 +18,7 @@ if BR2_PACKAGE_LIBMEDIAART
- 
- choice
- 	prompt "media art backend"
--	default BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
--
--config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
--	bool "none"
--	help
--	  With no backend, libmediaart will not be able to process MP3
--	  album art.
-+	default BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 
- config BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 	bool "gdk-pixbuf"
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index d51c056223..d7115b20d4 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.4.sha256sum:
--sha256	a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d	libmediaart-1.9.4.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.5.sha256sum:
-+sha256  07def5a42c482ae71d3e1f77a4d0fdc337f74226059a65284d6d5a241f0e9cd6  libmediaart-1.9.5.tar.xz
- 
- # Locally computed:
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LESSER
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 0d110a43e5..b4c09d85e1 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -5,39 +5,32 @@
- ################################################################################
- 
- LIBMEDIAART_VERSION_MAJOR = 1.9
--LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).4
-+LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).5
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
- LIBMEDIAART_LICENSE = LGPL-2.1+
- LIBMEDIAART_LICENSE_FILES = COPYING.LESSER
- LIBMEDIAART_INSTALL_STAGING = YES
--LIBMEDIAART_DEPENDENCIES = libglib2
--LIBMEDIAART_CONF_OPTS = --disable-unit-tests
-+LIBMEDIAART_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
-+LIBMEDIAART_CONF_OPTS = -Dunit_tests=false
-+LIBMEDIAART_LDFLAGS = $(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF),y)
- LIBMEDIAART_DEPENDENCIES += gdk-pixbuf
--LIBMEDIAART_CONF_OPTS += \
--	--enable-gdkpixbuf \
--	--disable-qt
-+LIBMEDIAART_CONF_OPTS += -Dimage_library=gdk-pixbuf
- else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- # qt5 needs c++11 (since qt-5.7)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- LIBMEDIAART_DEPENDENCIES += qt5base
--LIBMEDIAART_CONF_OPTS += \
--	--disable-gdkpixbuf \
--	--enable-qt
--else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE),y)
--LIBMEDIAART_CONF_OPTS += \
--	--disable-gdkpixbuf \
--	--disable-qt
-+LIBMEDIAART_CONF_OPTS += -Dimage_library=qt5
- endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--LIBMEDIAART_CONF_OPTS += --enable-introspection
-+LIBMEDIAART_CONF_OPTS += -Dintrospection=true
- LIBMEDIAART_DEPENDENCIES += gobject-introspection
- else
--LIBMEDIAART_CONF_OPTS += --disable-introspection
-+LIBMEDIAART_CONF_OPTS += -Dintrospection=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
