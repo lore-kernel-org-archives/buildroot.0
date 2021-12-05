@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27246C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  4 Dec 2021 21:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 953F2C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 15:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C345760A8A;
-	Sat,  4 Dec 2021 21:47:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54951606A8;
+	Sun,  5 Dec 2021 15:41:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 87ApeawyiJWG; Sat,  4 Dec 2021 21:47:56 +0000 (UTC)
+	with ESMTP id NcrveY1XMR2B; Sun,  5 Dec 2021 15:41:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4367C60622;
-	Sat,  4 Dec 2021 21:47:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDB841BF36B
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:47:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC0446062E;
+	Sun,  5 Dec 2021 15:41:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C0F51BF57C
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 15:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCE9460A89
- for <buildroot@lists.busybox.net>; Sat,  4 Dec 2021 21:47:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 670F7401FF
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 15:41:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WtWcwnh40z3f for <buildroot@lists.busybox.net>;
- Sat,  4 Dec 2021 21:47:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eAzPWCUz6oRv for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 15:41:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37A3460622
- for <buildroot@uclibc.org>; Sat,  4 Dec 2021 21:47:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB82C400D3
+ for <buildroot@uclibc.org>; Sun,  5 Dec 2021 15:41:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 0D3DB93543; Sat,  4 Dec 2021 21:43:00 +0000 (UTC)
+ id E64EE8013B; Sun,  5 Dec 2021 15:36:10 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 04 Dec 2021 21:47:52 +0000
+Date: Sun, 05 Dec 2021 15:41:05 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -42,22 +42,22 @@ X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: arnout@mind.be
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution cc
-Message-ID: <bug-14411-163-Da2oe09wzw@https.bugs.busybox.net/>
-In-Reply-To: <bug-14411-163@https.bugs.busybox.net/>
-References: <bug-14411-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-14351-163-XRyiNcL8Jl@https.bugs.busybox.net/>
+In-Reply-To: <bug-14351-163@https.bugs.busybox.net/>
+References: <bug-14351-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14411] 2021.11-rc2: Samba doesn't compile
+Subject: [Buildroot] [Bug 14351] needs to mount sysfs before mount -a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,26 +74,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14411
+https://bugs.busybox.net/show_bug.cgi?id=14351
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Arnout Vandecappelle <arnout@mind.be> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
          Resolution|---                         |FIXED
-                 CC|                            |yann.morin.1998@free.fr
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Daniel, All,
-
-Thanks for your report.
-
-We believe this is now fixed in master, now that the three patches mentioned
-in this report have been applied.
-
-Regards,
-Yann E. MORIN.
+--- Comment #5 from Arnout Vandecappelle <arnout@mind.be> ---
+Fixed by https://git.buildroot.org/buildroot/commit/?id=2f50686401
 
 -- 
 You are receiving this mail because:
