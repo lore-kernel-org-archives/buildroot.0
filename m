@@ -1,81 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46E83C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 11:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3751C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 11:27:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9F4B607FD;
-	Sun,  5 Dec 2021 11:22:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81B44832DC;
+	Sun,  5 Dec 2021 11:27:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mtqof7-1QqKM; Sun,  5 Dec 2021 11:22:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XcGxbV75hOYK; Sun,  5 Dec 2021 11:27:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40B55607D9;
-	Sun,  5 Dec 2021 11:22:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0446B1BF27E
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:22:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F12A8832D0;
+	Sun,  5 Dec 2021 11:27:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C84231BF27E
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2F6D4040E
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:22:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4F41405D0
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:27:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DSPgYynW_own for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 11:22:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2774B40155
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 11:22:17 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id a11so7375051ilj.6
- for <buildroot@buildroot.org>; Sun, 05 Dec 2021 03:22:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AA0mqCWEEzVa7ZXdVCFcl27Q9F+RJm9G40LpMXoeg3k=;
- b=UYdes6BgHgbnBLzQr3jLUg6UlciW1JlY47G4sAO0oTVNt7asIZZt+ShkHh4VU+gUFp
- h9t9mycdaOGqFEhUyYq8PYJAPiUMjQmJW79lwsUFj4cZmaTr1Iw3KkzueDGQkRwZtiZi
- 9bZyNCxPUN908eEsmeKiX4phZjioMStqNZmuCryqaY5JTg+36Vj6YALg8D64x+1PjWDT
- dzQATjAhL0bbh9RxGSWgwbBbCEYbxZ4AYwWKwtVDEQJmiPN9vltCqqW2VQeltkkE+CXV
- j+58IukGztvkPGFxIx3YJodsl7IWzyg/zPagl9xsKz0KfjOVYk/fuL7gIlAmtV1U7CEH
- tGIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=AA0mqCWEEzVa7ZXdVCFcl27Q9F+RJm9G40LpMXoeg3k=;
- b=vBuLZbjfE0SyXBjZiNEjcDZWPhQ+aUmhUBzvaNTZ5Kyp4aNA5Of27fugCCaXNtY/Qa
- OnPcChjEFesFeKC5PCjPim6Ymj9ynvCBdQCAso0zZPDD4V7TDOuvYMKCXkx82qqVlaEP
- DvxAK3wH4W7TLlYd1MSWMU36nDwOgEE1v41RwoB1Zo7FLMuLvnoseuTEmq5KERnrn4bA
- GT/s1J8/YUuYzWgKaHNfFifG//+Xqr/7kgCRq1k8ld7svGse1D2TVK4BlQeMzHsNAAae
- PVPnNJShT2rUxP1R7HHf4LLl/SAiP5+rP9AXqoX//jFyKz4rMRGJSjuAPkqhTFyJm74H
- xj3A==
-X-Gm-Message-State: AOAM532TrcA03SbRpV/JIwgNyzevA59RpkS5VC42e+SODTfoO6eQV0i1
- SI7hxyVYTi6PXG2UBNJSlblSrAscNmU=
-X-Google-Smtp-Source: ABdhPJzczaoM0s8dU7KiCWkysAP/YhcQhM+V6FUxtcdQXpt21uAH7fmXHyN02w7NRxRd47xyiFTuhw==
-X-Received: by 2002:a05:6e02:1c85:: with SMTP id
- w5mr29152546ill.211.1638703336093; 
- Sun, 05 Dec 2021 03:22:16 -0800 (PST)
-Received: from james-x399.localdomain (71-218-107-26.hlrn.qwest.net.
- [71.218.107.26])
- by smtp.gmail.com with ESMTPSA id f2sm5543906ilu.2.2021.12.05.03.22.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Dec 2021 03:22:15 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Dec 2021 04:22:11 -0700
-Message-Id: <20211205112211.2919028-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C1easvGUQqoe for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 11:27:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AE72405CE
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 11:27:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id C4C9960006;
+ Sun,  5 Dec 2021 11:27:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mtpgD-0008O2-R5; Sun, 05 Dec 2021 12:27:41 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20211204231325.562144-1-yann.morin.1998@free.fr>
+Date: Sun, 05 Dec 2021 12:27:41 +0100
+In-Reply-To: <20211204231325.562144-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 5 Dec 2021 00:13:25 +0100")
+Message-ID: <87a6hf9tqq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/1] package/network-manager: add optional
- systemd support
+Subject: Re: [Buildroot] [PATCH] package/mender-grubenv: fix install for
+ legacy BIOS or ARM U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,47 +60,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?utf-8?Q?K=C3=B6ry?= Maincent <kory.maincent@bootlin.com>,
+ Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/network-manager/network-manager.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index a787c25c00..974320fce0 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -113,6 +113,21 @@ else
- NETWORK_MANAGER_CONF_OPTS += --without-ofono
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+NETWORK_MANAGER_DEPENDENCIES += systemd
-+NETWORK_MANAGER_CONF_OPTS += \
-+	--with-systemd-journal \
-+	--with-config-logging-backend-default=journal \
-+	--with-session-tracking=systemd \
-+	--with-suspend-resume=systemd
-+else
-+NETWORK_MANAGER_CONF_OPTS += \
-+	--without-systemd-journal \
-+	--with-config-logging-backend-default=syslog \
-+	--without-session-tracking \
-+	--with-suspend-resume=upower
-+endif
-+
- ifeq ($(BR2_PACKAGE_POLKIT),y)
- NETWORK_MANAGER_DEPENDENCIES += polkit
- NETWORK_MANAGER_CONF_OPTS += --enable-polkit
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIllhbm4iID09IFlhbm4gRSBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdy
+aXRlczoKCiA+IFNvbWUgbGFzdC1taW51dGUgY2hhbmdlcyB3ZXJlIG1hZGUgd2hlbiBhcHBseWlu
+ZyBjb21taXRzIDdhNjg5NjBiNjgyYzAKID4gKGJvb3QvZ3J1YjIvQ29uZmlnLmluOiBhZGQgc3lt
+Ym9scyB0byByZXByZXNlbnQgbGVnYWN5IGFuZCBFRkkgYm9vdCkgYW5kCiA+IDRkNWIyMDkzODRl
+MCAocGFja2FnZS9tZW5kZXItZ3J1YmVudjogZml4IGdydWIgbW9kdWxlIGNoZWNrcyksIGFuZCB0
+aGUKID4gcmVuYW1pbmcgb2YgdGhlIEJSMl9UQVJHRVRfR1JVQl9MRUdBQ1kgd2FzIG5vdCBmdWxs
+eSBwcm9wYWdhdGVkLgoKID4gVGhpcyBjYXVzZWQgdGhlIHBhdGggdG8gdGhlIGJvb3QgZmlsZXMg
+dG8gYWx3YXlzIGJlIGludGVycHJldGVkIGFzIGJlaW5nCiA+IHRoZSBFRkkgb25lLCBhbmQgbmV2
+ZXIgdGhlIGxlZ2FjeSBvbmUuIEluIHByYWN0aWNlLCB0aGF0IHdhcyBub3QgY2F1c2luZwogPiBh
+bnkgYnVpbGQgZmFpbHVyZSwgYmVjYXVzZSB0aGUgcGF0aCB3YXMgcGFzc2VkIGF0IGJ1aWxkLXRp
+bWUgdG8KID4gbWVuZGVyLWdydWJlbnYsIHRoYXQgd291bGQgdXNlIGl0IGFzIHRoZSBsb2NhdGlv
+biB3aGVyZSB0byBpbnN0YWxsIGl0cwogPiBmaWxlcywgYW5kIGZpbmFsbHkgYXMgdGhlIGxvY2F0
+aW9uIHdoZXJlIG91ciBpbWFnZS1pc250YWxsIGNvbW1hbmRzCiA+IHdvdWxkIGxvb2sgZm9yIHRo
+ZW0uCgogPiBTdGlsbCB0aGlzIGlzIGluY29ycmVjdCBiZWNhdXNlIGl0IHdvdWxkIG5vdCBtYXRj
+aCB3aGVyZSBncnViMiB3b3VsZAogPiBldmVudHVhbGx5IGVuZCB1cCBsb29raWcgZm9yIGl0cyBm
+aWxlcyBhdCBydW50aW1lLi4uCgogPiBUbyBhdm9pZCBmdXJ0aGVyIGlzc3VlLCBkcm9wIHRoZSBj
+b25kaXRpb25hbCBibG9jayBkZWRpY2F0ZWQgdG8gc2V0dGluZwogPiB0aGUgcGF0aCB0byB0aGUg
+Ym9vdCBmaWxlcywgZHJvcCB0aGUgaW50ZXJtZWRpYXRlIHZhcmlhYmxlLCBhbmQgbW92ZQogPiBz
+ZXR0aW5nIHRoZSBlbnZpcm9ubWVudCB2YXJpYWJsZSBkb3duIGludG8gdGhlIGV4aXN0aW5nIGNv
+bmRpdGlvbmFsCiA+IGJsb2NrLgoKID4gV2UgZG8gZHJvcCB0aGUgaW50ZXJtZWRpYXRlIHZhcmlh
+YmxlLCBiZWNhdXNlIHRoZXJlIGlzIG5vIGxvbmdlciBhbnkKID4gZ2VuZXJpY2l0eSBuZWVkZWQ6
+IHRoZSBpbnN0YWxsYXRpb24gY29tbWFuZHMgYXJlIGFscmVhZHkgZHVwbGljYXRlZCBmb3IKID4g
+dGhlIHR3byBjYXNlcyBhbnl3YXkuCgogPiBSZXBvcnRlZC1ieTogUGV0ZXIgS29yc2dhYXJkIDxw
+ZXRlckBrb3JzZ2FhcmQuY29tPgogPiBTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5u
+Lm1vcmluLjE5OThAZnJlZS5mcj4KID4gQ2M6IEFkYW0gRHVza2V0dCA8YWR1c2tldHRAZ21haWwu
+Y29tPgogPiBDYzogS8O2cnkgTWFpbmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+CgpD
+b21taXR0ZWQsIHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
