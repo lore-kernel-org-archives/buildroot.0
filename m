@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9957EC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 10:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 399BBC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 10:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55BF582F57;
-	Sun,  5 Dec 2021 10:07:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8C766071A;
+	Sun,  5 Dec 2021 10:07:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ybNL8St8OO6W; Sun,  5 Dec 2021 10:07:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nZaCHy3Fn9fd; Sun,  5 Dec 2021 10:07:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FFE683268;
-	Sun,  5 Dec 2021 10:07:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38AD66069C;
+	Sun,  5 Dec 2021 10:07:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 112161BF283
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:06:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B29961BF283
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73D7F82AED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 887B682F50
  for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:06:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZUeL3YxgnGJK for <buildroot@lists.busybox.net>;
+ with ESMTP id KRavXRGotjeq for <buildroot@lists.busybox.net>;
  Sun,  5 Dec 2021 10:06:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9482482F50
+ by smtp1.osuosl.org (Postfix) with ESMTP id A826682F57
  for <buildroot@buildroot.org>; Sun,  5 Dec 2021 10:06:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3699F947D6; Sun,  5 Dec 2021 10:01:08 +0000 (UTC)
+ id 4DD5A947D8; Sun,  5 Dec 2021 10:01:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Dec 2021 11:01:00 +0100
+Date: Sun, 5 Dec 2021 11:05:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 066b9a232fdd76c9761fbe128d059796af6c7522
-X-Git-Newrev: f4d2d927fddb59e0648442b03ccac234742f1d42
+X-Git-Oldrev: 33ad16bea96f3068c27c7282d8aaa7a03c42bc15
+X-Git-Newrev: 4d0caefb9c83b106f2bb038926861670df128fff
 X-Patchwork-Hint: ignore
-Message-Id: <20211205100108.3699F947D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/network-manager: add
- optional polkit support
+Message-Id: <20211205100108.4DD5A947D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/network-manager:
+ alphabetically order conditional blocks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4d2d927fddb59e0648442b03ccac234742f1d42
+commit: https://git.buildroot.net/buildroot/commit/?id=4d0caefb9c83b106f2bb038926861670df128fff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+No functional changes, code is just moved around. Ordering is based on
+the name of the Buildroot option being tested.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/network-manager/network-manager.mk | 70 +++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
 diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 91bc6479b8..7213b69e15 100644
+index 40da992089..a787c25c00 100644
 --- a/package/network-manager/network-manager.mk
 +++ b/package/network-manager/network-manager.mk
-@@ -105,6 +105,13 @@ else
- NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
- endif
+@@ -35,11 +35,19 @@ NETWORK_MANAGER_CONF_OPTS = \
+ 	--disable-ifupdown \
+ 	--without-nm-cloud-setup
  
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+NETWORK_MANAGER_DEPENDENCIES += polkit
-+NETWORK_MANAGER_CONF_OPTS += --enable-polkit
-+else
-+NETWORK_MANAGER_CONF_OPTS += --disable-polkit
+-ifeq ($(BR2_PACKAGE_OFONO),y)
+-NETWORK_MANAGER_DEPENDENCIES += ofono
+-NETWORK_MANAGER_CONF_OPTS += --with-ofono
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++NETWORK_MANAGER_DEPENDENCIES += audit
++NETWORK_MANAGER_CONF_OPTS += --with-libaudit
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-ofono
++NETWORK_MANAGER_CONF_OPTS += --without-libaudit
 +endif
 +
- ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
- NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
++ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
++NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
++endif
++
++ifeq ($(BR2_PACKAGE_DHCPCD),y)
++NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
  endif
+ 
+ ifeq ($(BR2_PACKAGE_IWD),y)
+@@ -49,13 +57,6 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --without-iwd
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_AUDIT),y)
+-NETWORK_MANAGER_DEPENDENCIES += audit
+-NETWORK_MANAGER_CONF_OPTS += --with-libaudit
+-else
+-NETWORK_MANAGER_CONF_OPTS += --without-libaudit
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libcurl
+ NETWORK_MANAGER_CONF_OPTS += --enable-concheck
+@@ -77,18 +78,18 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --without-selinux
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_READLINE),y)
+-NETWORK_MANAGER_DEPENDENCIES += readline
+-NETWORK_MANAGER_CONF_OPTS += --with-nmcli
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
++NETWORK_MANAGER_DEPENDENCIES += modem-manager
++NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmcli
++NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
+-NETWORK_MANAGER_DEPENDENCIES += newt
+-NETWORK_MANAGER_CONF_OPTS += --with-nmtui
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
++NETWORK_MANAGER_CONF_OPTS += --enable-ovs
++NETWORK_MANAGER_DEPENDENCIES += jansson
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-nmtui
++NETWORK_MANAGER_CONF_OPTS += --disable-ovs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
+@@ -98,11 +99,18 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --disable-ppp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
+-NETWORK_MANAGER_DEPENDENCIES += modem-manager
+-NETWORK_MANAGER_CONF_OPTS += --with-modem-manager-1
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
++NETWORK_MANAGER_DEPENDENCIES += newt
++NETWORK_MANAGER_CONF_OPTS += --with-nmtui
+ else
+-NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
++NETWORK_MANAGER_CONF_OPTS += --without-nmtui
++endif
++
++ifeq ($(BR2_PACKAGE_OFONO),y)
++NETWORK_MANAGER_DEPENDENCIES += ofono
++NETWORK_MANAGER_CONF_OPTS += --with-ofono
++else
++NETWORK_MANAGER_CONF_OPTS += --without-ofono
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POLKIT),y)
+@@ -112,19 +120,11 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --disable-polkit
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
+-endif
+-
+-ifeq ($(BR2_PACKAGE_DHCPCD),y)
+-NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
+-NETWORK_MANAGER_CONF_OPTS += --enable-ovs
+-NETWORK_MANAGER_DEPENDENCIES += jansson
++ifeq ($(BR2_PACKAGE_READLINE),y)
++NETWORK_MANAGER_DEPENDENCIES += readline
++NETWORK_MANAGER_CONF_OPTS += --with-nmcli
+ else
+-NETWORK_MANAGER_CONF_OPTS += --disable-ovs
++NETWORK_MANAGER_CONF_OPTS += --without-nmcli
+ endif
+ 
+ define NETWORK_MANAGER_INSTALL_INIT_SYSV
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
