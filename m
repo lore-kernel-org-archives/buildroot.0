@@ -4,77 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26BE8C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 10:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBB99C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 10:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D750682C75;
-	Sun,  5 Dec 2021 10:09:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3F1C82A17;
+	Sun,  5 Dec 2021 10:10:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yqAWHZgHK8jB; Sun,  5 Dec 2021 10:09:58 +0000 (UTC)
+	with ESMTP id AogrYkrN1qvp; Sun,  5 Dec 2021 10:10:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2967D82AED;
-	Sun,  5 Dec 2021 10:09:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2FAD81BF96B
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:09:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACDE282AED;
+	Sun,  5 Dec 2021 10:10:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 969731BF283
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BBEC4045D
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8713160686
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 10:10:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tn0JV-ceTnS6 for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 10:09:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E15654045B
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 10:09:49 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id v11so15806548wrw.10
- for <buildroot@buildroot.org>; Sun, 05 Dec 2021 02:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=sender:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ugA03wUdd/LYw5pgjlGBtB4I8ru1cz7uIL7K2INMJ98=;
- b=lC28DcYMaekCvGTKE0jwJdNM2NFVxPGd/O2o6Xzi0RwzbHDi9rsPiV+7TYKyma2RgM
- tJH8jmSbUYdHrV36ZBJUduXYCXa2oVF1CUEwAyYCSAW/LHKQcUY6BEgiYioyBBqCuu1I
- Yb0SrCOkUXCb8MwxZ+D6lBD59nszNrDtuAaQ+bXKEGaiq44PtXoLn4dzZ5L/wqqleRse
- CEhdgKuZtC+j8/Cg5NhECsNaBRriOFX5hqT/njugq+MhSZQDaZ3bxIONm2L+nRbK2Mll
- g+6OfAqU8dZNlXsKLn/r08Iv5oAI016405TG8l9UlD0s5YnTtfIwdz94/6yXJI8rM8Q7
- EmkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
- :mime-version:content-transfer-encoding;
- bh=ugA03wUdd/LYw5pgjlGBtB4I8ru1cz7uIL7K2INMJ98=;
- b=YmiNABWDyyOYuvGOpV77/wRpwpZLW6TIP+km822lDESmFMnIzM1t0/AoJh0ymjEgpd
- O6azJ+DDcNEnRwVj9t5lLUQLuH/zatvHma/e/VxVDJ1BMf2ABWoM5KsrvFb+m5MGCAIh
- eBzsPxNySsgXgehffkv3UmUWZFMpYtEotka49MwgLhW/qB/FF31gY7IzDo7qZcaD9vsA
- MWE+lEC0gT653BdntRNpDqDyt7dk6XoT/JmENK2ntRIhQkla1SJvoEXTezZjnwytvbr3
- 1eN/+6B8Hpwu06ts0CCQB3IB77KGZ5euN3uRHdRSxWiop+4Mu0AOr34NyroRazvV0U1p
- msqA==
-X-Gm-Message-State: AOAM531DmYnKqDKwP0xL1lIqMEUbgSQ2bP+uQfavKkhwpdO0Sj9dCg83
- YoUuTOCZZL31Tr94bDCHAz9sGDoKLWQ=
-X-Google-Smtp-Source: ABdhPJyfoO/HD4BhAMS6YDMmQu3WfPmLUKPHbQCmXG3iIXaAP2OE1U28YXlwsC4rP5b/Tj3Rtqu21w==
-X-Received: by 2002:a05:6000:18ac:: with SMTP id
- b12mr36047255wri.355.1638698987956; 
- Sun, 05 Dec 2021 02:09:47 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8b51:cb00:61fe:1eac:b67b:59f4])
- by smtp.gmail.com with ESMTPSA id e12sm10259959wrq.20.2021.12.05.02.09.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Dec 2021 02:09:47 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yy7xNZaqSCHH for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 10:10:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AFC96066B
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 10:10:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 237BF94A79; Sun,  5 Dec 2021 10:05:22 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Dec 2021 11:09:42 +0100
-Message-Id: <20211205100942.1324791-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_bios_defconfig: fix image
- generation after grub2 rework
+Date: Sun, 5 Dec 2021 11:10:10 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: fa27346fc8723fde88e4ff255cf2744cc7f5f483
+X-Git-Newrev: 736932c71552adc4dfa95c5236d1064860900e8a
+X-Patchwork-Hint: ignore
+Message-Id: <20211205100522.237BF94A79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dmalloc: bump to
+ version 5.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,57 +53,229 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q29tbWl0IDgyZDFlOGM2MjhjYyAoYm9vdC9ncnViMjogdXNlIG5vbmUgcGxhdGZvcm0gd2hlbiBi
-dWlsZGluZyBmb3IKaG9zdCkgY2hhbmdlZCBob3N0LWdydWIyIHRvIG9ubHkgaW5zdGFsbCB0aGUg
-dG9vbHMsIG5vdCB0aGUgYWN0dWFsCmJvb3Rsb2FkZXIgb3IgaXRzIG1vZHVsZXMsIGFzIHRoZXkg
-YXJlIG9mIG5vIHVzZSBvbiB0aGUgaG9zdC4KCkl0IHNvIGhhcGVubmVkIHRoYXQsIHdoZW4gbm90
-IGlzbnRydWN0ZWQgdG8gYnVpbHQgZm9yIGEgc3BlY2lmaWMKcGxhdGZvcm0sIHRoZSBncnViMiBi
-dWlsZHN5c3RlbSB3b3VsZCBkZWZhdWx0IHRvIGJ1aWxkIHRoZSBsZWdhY3kgYmlvcwpwbGF0Zm9y
-bSAoYXQgbGVhc3Qgd2hlbiB0aGUgYnVpbGQgaGFwcGVucyBvbiBhbiB4ODYgb3IgeDg2XzY0IGhv
-c3QpLgoKSG93ZXZlciwgYmVjYXVzZSB0aGUgaG9zdCBpcyBtb3JlIG9mdGVuIHRoYW4gbm90IGFu
-IHg4NiBvciB4ODZfNjQsIHdoZW4KdGhlIHRhcmdldCB3YXMgYWxzbyBhbiB4Njggb3IgeDg2XzY0
-LCB0aGUgbW9kdWxlcyBidWlsdCBmb3IgdGhlIGhvc3QKY291bGQgYmUgcmUtdXNlZCBmb3IgdGhl
-IHRhcmdldCwgYW5kIHRoaXMgaXMgd2hhdCB3YXMgZG9uZSBmb3Igb3VyCnBjX3g4Nl82NF9iaW9z
-X2RlZmNvbmZpZy4KCkJ1dCBub3cgdGhhdCB3ZSBleHBsaWNpdGx5IHRlbGwgdGhlIGdydWIyIGJ1
-aWxkc3lzdGVtIHRvIG5vdCBidWlsZCBhbnkKcGxhdGZvcm0gd2hlbiB3ZSBidWlsZCBob3N0LWdy
-dWIyLCB3ZSBubyBsb25nZXIgaGF2ZSBhY2Nlc3MgdG8gdGhlIGdydWIyCm1vZHVsZXMgZnJvbSB0
-aGUgaG9zdCBkaXJlY3RvcnksIGFkbiB0aGUgYnVpbGQgZmFpbHMgd2hlbiBhc3NlbWJsaW5nIHRo
-ZQpmaW5hbCBpbWFnZS4KCldlIGZpeCB0aGF0IGluIHR3byB3YXkuCgpGaXJzdCwgd2UgZW5zdXJl
-IHRoYXQgaW5kaXZpZHVhbCBtb2R1bGVzIGZyb20gdGhlIHRhcmdldCBncnViMiBnZXQKaW5zdGFs
-bGVkIGluIHRhcmdldC87IHdlIGNhbiBvbmx5IGRvIHRoYXRpZiB0aGUgdGFyZ2V0IGdydWIyIHRv
-b2xzIGFyZQphbHNvIGluc3RhbGxlZCwgc28gd2UgZW5hYmxlIHRoYXQgaW4gdGhlIGNvbmZpZ3Vy
-YXRpb24uCgpTZWNvbmQsIHdlIGZpeCB0aGUgcG9zdC1idWlsZCBzY3JpcHQgdG8gbG9vayBpbiB0
-YXJnZXQvIHJhdGhlciB0aGFuIGluCmhvc3QvLgoKQWxsIHRoYXQsIGp1c3QgZm9yIHRoZSA1MTIt
-Ynl0ZSBib290LmltZyBib290c3RyYXAsIHdoaWNoIHB1bGxzIGluIGFsbAp0aGUgb3RoZXIgbW9k
-dWxlcyAoNC4zTWlCKSwgdGhlIHRvb2xzICg4LjhNaUIpLi4uIEJ1dCB3ZSBhcmUgbm90IGdvaW5n
-CnRvIGNoZXJyeS1waWNrIGluZGl2aWR1YWwgbW9kdWxlczsgdGhpcyBpcyBlcnJvciBwcm9uZSBh
-bmQKdW5tYWludGFpbmFibGUuLi4KClJlcG9ydGVkLWJ5OiBBZGFtIER1c2tldHQgPGFkdXNrZXR0
-QGdtYWlsLmNvbT4KU2lnbmVkLW9mZi1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4
-QGZyZWUuZnI+CkNjOiBLw7ZyeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4K
-LS0tCiBib2FyZC9wYy9wb3N0LWJ1aWxkLnNoICAgICAgICAgICB8IDIgKy0KIGNvbmZpZ3MvcGNf
-eDg2XzY0X2Jpb3NfZGVmY29uZmlnIHwgMSArCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9u
-cygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2JvYXJkL3BjL3Bvc3QtYnVpbGQuc2gg
-Yi9ib2FyZC9wYy9wb3N0LWJ1aWxkLnNoCmluZGV4IGRiMjM3OTVlMjcuLmM3NmRlZTI2NzYgMTAw
-NzU1Ci0tLSBhL2JvYXJkL3BjL3Bvc3QtYnVpbGQuc2gKKysrIGIvYm9hcmQvcGMvcG9zdC1idWls
-ZC5zaApAQCAtMTEsNSArMTEsNSBAQCBlbHNlCiAgICAgY3AgLWYgIiRCT0FSRF9ESVIvZ3J1Yi1i
-aW9zLmNmZyIgIiRUQVJHRVRfRElSL2Jvb3QvZ3J1Yi9ncnViLmNmZyIKIAogICAgICMgQ29weSBn
-cnViIDFzdCBzdGFnZSB0byBiaW5hcmllcywgcmVxdWlyZWQgZm9yIGdlbmltYWdlCi0gICAgY3Ag
-LWYgIiRIT1NUX0RJUi9saWIvZ3J1Yi9pMzg2LXBjL2Jvb3QuaW1nIiAiJEJJTkFSSUVTX0RJUiIK
-KyAgICBjcCAtZiAiJFRBUkdFVF9ESVIvbGliL2dydWIvaTM4Ni1wYy9ib290LmltZyIgIiRCSU5B
-UklFU19ESVIiCiBmaQpkaWZmIC0tZ2l0IGEvY29uZmlncy9wY194ODZfNjRfYmlvc19kZWZjb25m
-aWcgYi9jb25maWdzL3BjX3g4Nl82NF9iaW9zX2RlZmNvbmZpZwppbmRleCAzMjkwYTFkZGEwLi5k
-ZjU5ODhkNzVlIDEwMDY0NAotLS0gYS9jb25maWdzL3BjX3g4Nl82NF9iaW9zX2RlZmNvbmZpZwor
-KysgYi9jb25maWdzL3BjX3g4Nl82NF9iaW9zX2RlZmNvbmZpZwpAQCAtMTMsNiArMTMsNyBAQCBC
-UjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKIAogIyBCb290bG9hZGVyCiBCUjJfVEFSR0VUX0dS
-VUIyPXkKK0JSMl9UQVJHRVRfR1JVQjJfSU5TVEFMTF9UT09MUz15CiAKICMgRmlsZXN5c3RlbSAv
-IGltYWdlCiBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKLS0gCjIuMjUuMQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=736932c71552adc4dfa95c5236d1064860900e8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+- Drop second to fifth patches (already in version)
+- License is ISC since version 5.6.2 and
+  https://github.com/j256/dmalloc/commit/eda734a8ba3ab4c03b3593636186dc3fc777b09d
+- Update indentation in hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dmalloc/0001-mips.patch               | 18 ++++++-----
+ package/dmalloc/0002-fix-parallel-build.patch | 18 -----------
+ package/dmalloc/0003-fix-shlibs.patch         | 46 ---------------------------
+ package/dmalloc/0004-fix-strdup.patch         | 24 --------------
+ package/dmalloc/0005-fix-strndup.patch        | 24 --------------
+ package/dmalloc/dmalloc.hash                  |  4 +--
+ package/dmalloc/dmalloc.mk                    |  7 ++--
+ 7 files changed, 15 insertions(+), 126 deletions(-)
+
+diff --git a/package/dmalloc/0001-mips.patch b/package/dmalloc/0001-mips.patch
+index 3e6b00e361..3150d030ec 100644
+--- a/package/dmalloc/0001-mips.patch
++++ b/package/dmalloc/0001-mips.patch
+@@ -1,14 +1,16 @@
++[Fabrice: Updated for 5.6.5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ --- a/configure
+ +++ b/configure
+ @@ -7107,7 +7107,7 @@
+- echo $ECHO_N "checking return.h macros work... $ECHO_C" >&6
+- if test "$cross_compiling" = yes; then
+-    cat >>confdefs.h <<\_ACEOF
+--#define RETURN_MACROS_WORK 0
+-+#define RETURN_MACROS_WORK 1
+- _ACEOF
+-  echo "$as_me:$LINENO: result: no" >&5
+- echo "${ECHO_T}no" >&6
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking return.h macros work" >&5
++ $as_echo_n "checking return.h macros work... " >&6; }
++ if test "$cross_compiling" = yes; then :
++-   $as_echo "#define RETURN_MACROS_WORK 0" >>confdefs.h
+++   $as_echo "#define RETURN_MACROS_WORK 1" >>confdefs.h
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++ $as_echo "no" >&6; }
++ 
+ --- a/return.h
+ +++ b/return.h
+ @@ -106,26 +106,16 @@
+diff --git a/package/dmalloc/0002-fix-parallel-build.patch b/package/dmalloc/0002-fix-parallel-build.patch
+deleted file mode 100644
+index c521a114bb..0000000000
+--- a/package/dmalloc/0002-fix-parallel-build.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Fix parallel build issue
+-
+-Missing dmallocc.o <- dmalloc.h dependency may break parallel builds.
+-dmalloc.h is generated,and may not be around by the time gcc starts
+-parsing dmallocc.cc.
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -401,6 +401,7 @@
+- compat.o: compat.c conf.h settings.h dmalloc.h compat.h dmalloc_loc.h
+- dmalloc.o: dmalloc.c conf.h settings.h dmalloc_argv.h dmalloc.h compat.h \
+-   debug_tok.h dmalloc_loc.h env.h error_val.h version.h
+-+dmallocc.o: dmallocc.cc dmalloc.h return.h conf.h settings.h
+- dmalloc_argv.o: dmalloc_argv.c conf.h settings.h dmalloc_argv.h \
+-   dmalloc_argv_loc.h compat.h
+- dmalloc_fc_t.o: dmalloc_fc_t.c conf.h settings.h dmalloc.h dmalloc_argv.h \
+diff --git a/package/dmalloc/0003-fix-shlibs.patch b/package/dmalloc/0003-fix-shlibs.patch
+deleted file mode 100644
+index a99d926daf..0000000000
+--- a/package/dmalloc/0003-fix-shlibs.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-Fix shared library rules
+-
+-dmalloc uses ld -shared --whole-archive -o lib.so lib.a,
+-but for some reason lists regular objects in addition
+-to the archive, ending up with two copies of each symbol.
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -257,7 +257,7 @@ shlib : $(BUILD_SL)
+- # via: http://256.com/gray/email.html
+- $(LIB_SL) : $(LIBRARY)
+- 	rm -f $@ $@.t
+--	@shlinkargs@ $(LIBRARY) $(OBJS) $(NORMAL_OBJS)
+-+	@shlinkargs@ $(LIBRARY)
+- 	mv $@.t $@
+- 
+- $(LIBRARY) : $(OBJS) $(NORMAL_OBJS)
+-@@ -270,7 +270,7 @@ $(LIB_TH) : $(OBJS) $(THREAD_OBJS)
+- 
+- $(LIB_TH_SL) : $(LIB_TH)
+- 	rm -f $@ $@.t
+--	@shlinkargs@ $(LIB_TH) $(OBJS) $(THREAD_OBJS)
+-+	@shlinkargs@ $(LIB_TH)
+- 	mv $@.t $@
+- 
+- $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
+-@@ -279,7 +279,7 @@ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
+- 
+- $(LIB_CXX_SL) : $(LIB_CXX)
+- 	rm -f $@ $@.t
+--	@shlinkargs@ $(LIB_CXX) $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
+-+	@shlinkargs@ $(LIB_CXX)
+- 	mv $@.t $@
+- 
+- $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
+-@@ -288,7 +288,7 @@ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
+- 
+- $(LIB_TH_CXX_SL) : $(LIB_TH_CXX)
+- 	rm -f $@ $@.t
+--	@shlinkargs@ $(LIB_TH_CXX) $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
+-+	@shlinkargs@ $(LIB_TH_CXX)
+- 	mv $@.t $@
+- 
+- threadssl : $(LIB_TH_SL)
+diff --git a/package/dmalloc/0004-fix-strdup.patch b/package/dmalloc/0004-fix-strdup.patch
+deleted file mode 100644
+index 5884df6a89..0000000000
+--- a/package/dmalloc/0004-fix-strdup.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 59d73a473f1c1a31bcba90d314f956d0bcc3de95 Mon Sep 17 00:00:00 2001
+-From: Siana Gearz <siana.sg@live.de>
+-Date: Sat, 8 Sep 2012 22:55:17 +0200
+-Subject: [PATCH] Fix strdup
+-
+-[Retrieved from:
+-https://github.com/siana/dmalloc/commit/59d73a473f1c1a31bcba90d314f956d0bcc3de95]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- dmalloc.h.3 | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/dmalloc.h.3 b/dmalloc.h.3
+-index d3d1c13..3fc573a 100644
+---- a/dmalloc.h.3
+-+++ b/dmalloc.h.3
+-@@ -459,6 +459,7 @@ DMALLOC_PNT	valloc(DMALLOC_SIZE size);
+-  *
+-  * string -> String we are duplicating.
+-  */
+-+#undef strdup
+- extern
+- char	*strdup(const char *string);
+- #endif /* ifndef DMALLOC_STRDUP_MACRO */
+diff --git a/package/dmalloc/0005-fix-strndup.patch b/package/dmalloc/0005-fix-strndup.patch
+deleted file mode 100644
+index a1865acb85..0000000000
+--- a/package/dmalloc/0005-fix-strndup.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 005d92c2cebbde5c8623daa29725f7a62b18df7c Mon Sep 17 00:00:00 2001
+-From: Siana Gearz <siana.sg@live.de>
+-Date: Sat, 8 Sep 2012 22:44:35 +0200
+-Subject: [PATCH] Fix strndup
+-
+-[Retrieved from:
+-https://github.com/siana/dmalloc/commit/005d92c2cebbde5c8623daa29725f7a62b18df7c]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- dmalloc.h.3 | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/dmalloc.h.3 b/dmalloc.h.3
+-index 8bda997..fb538a8 100644
+---- a/dmalloc.h.3
+-+++ b/dmalloc.h.3
+-@@ -429,6 +429,7 @@ char	*strdup(const char *string);
+-  *
+-  * len -> Length of the string to duplicate.
+-  */
+-+#undef strndup
+- extern
+- char	*strndup(const char *string, const DMALLOC_SIZE len);
+- 
+diff --git a/package/dmalloc/dmalloc.hash b/package/dmalloc/dmalloc.hash
+index 113751656c..f4cc98e813 100644
+--- a/package/dmalloc/dmalloc.hash
++++ b/package/dmalloc/dmalloc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a  dmalloc-5.5.2.tgz
+-sha256  8659d49ceeeb006288ad246164e504ccfe33f7a4c1680439fb6ff6a393b0722b  dmalloc.h.1
++sha256  480e3414ab6cedca837721c756b7d64b01a84d2d0e837378d98444e2f63a7c01  dmalloc-5.6.5.tgz
++sha256  8657f6bc5ebb765dd792b2c3c54d5dc37b8b4e6bbe8aa48d464fd92081b1e720  LICENSE.txt
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 749c35359c..05943943d6 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-DMALLOC_VERSION = 5.5.2
++DMALLOC_VERSION = 5.6.5
+ DMALLOC_SOURCE = dmalloc-$(DMALLOC_VERSION).tgz
+ DMALLOC_SITE = http://dmalloc.com/releases
+ 
+-DMALLOC_LICENSE = MIT-like
+-# license is in each file, dmalloc.h.1 is the smallest one
+-DMALLOC_LICENSE_FILES = dmalloc.h.1
++DMALLOC_LICENSE = ISC
++DMALLOC_LICENSE_FILES = LICENSE.txt
+ 
+ DMALLOC_INSTALL_STAGING = YES
+ DMALLOC_CFLAGS = $(TARGET_CFLAGS)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
