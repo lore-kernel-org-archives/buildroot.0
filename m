@@ -1,68 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F11C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 00:54:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 217D2C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 00:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C11F360685;
-	Sun,  5 Dec 2021 00:54:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9038400E9;
+	Sun,  5 Dec 2021 00:55:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K1aiD6cO5Cba; Sun,  5 Dec 2021 00:54:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yHd60wd-IdrP; Sun,  5 Dec 2021 00:55:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40E96605C4;
-	Sun,  5 Dec 2021 00:54:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E76A140261;
+	Sun,  5 Dec 2021 00:55:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 864C41BF966
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 00:54:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DCC01BF963
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 00:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 746634038A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9A5F40261
  for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 00:54:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Ddt35i6aSiC for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 00:54:22 +0000 (UTC)
+ with ESMTP id qH2z7KdQ_kZJ for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 00:54:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C2AA40261
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 00:54:22 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id a11so6611455ilj.6
- for <buildroot@buildroot.org>; Sat, 04 Dec 2021 16:54:22 -0800 (PST)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CF8C2400E9
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 00:54:21 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id a11so6611449ilj.6
+ for <buildroot@buildroot.org>; Sat, 04 Dec 2021 16:54:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=TYimJ3eNxwSDfDr893n7aQz6BdgJxWG8Y9wVTFy8fZQ=;
- b=iDIXcaal3EIXi8dheVYN8sDmoJVWoAkPe8A5ui27/upugxJpuaQ9y/gfXJf82XpzNV
- 8eEyE4SM89VbfP1mYxyJ3umoZVUnbPJNlgQ0ZFnrEIkgzWQIUy8tIERbKKJ1mMWAQPtA
- 9Dwp5HAvni7BpnDHVZjC0RsaVpyIXx7O0YZ5Pqq4Ah4Z04nEZA5g2vzvKVK/Flb8TEUx
- yWaPmtcCrBZcpPh3L5SXWBv2aFUmfkF73jAFMVqC7YUXhk4t1WzdPmHglA+C4S+/PxzH
- /PJplBUaQ1yWb6ul68UsFHA/OKPYLycdAezqZaAL9rD135fDxWdeEoDQSUAU5szMy/67
- F4lg==
+ bh=wMWTncipjZD6XmNhrJs51V/M+may0ggYGSATpbnTrVk=;
+ b=F50fscK9Mup7dHR1gSpCdNJZ6u4h33I1IpNW+CG03GXEUxF+nYh/5nZJiRTkQJtoDx
+ R+dUfh8N0hz9iPqWCd+kSbsBkqBM13614MLoWUj8yWx2DJcVzzsuxep+TWKqeUPy3vN1
+ WwQrDV/EVqxszo+ZAffjIbBD7W9VkkTXLZnQMYGZqtRjlhNw8Lz116ybDLZDnkuAqz5l
+ xm3uwCp0gfmwMlXOF//kQswNASO8zGC37g9zk6LspzODLHL/vRZ02fEmSW3tPKmv//QF
+ W3klOa79qtvl0Q5NXhAt3fikRM0+KsxYmfZ5X/qSXFWZ/tpoguuOTjrjxNq+gjzDEHtm
+ QozQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=TYimJ3eNxwSDfDr893n7aQz6BdgJxWG8Y9wVTFy8fZQ=;
- b=nAS88bZU8XCHl8XtnyoVGjfxAV2WB4KySwhIj6EnXb3Mac8loWbY+OcmUkzfZxawIK
- lrILsNwfe03e+7JeTe+wcJifXqq+xe+8KtqHOfaAdHAiYSLQ1EiyN3x1k69l84rFfmAe
- 0mLOq9DefdjXXPuzW/Ium0/GKcgIAiekvX4V8tdVJ0Na4VqcPkKS5KkCx7BO6hDLOOSG
- bEPKKY8Y8uLK8WrWIVaIPxWW3tuoENA5wwR3VWbbLYM1OmdWZr6PDD8yu0tq4udfB7GB
- /HCxSZXJ9w8yFdnpdjdbUNcbYNEmg3UWG/ZfqT/InLHw6KWqvu9B+McMZfcBYNun3SaZ
- IG4w==
-X-Gm-Message-State: AOAM531r3+6JYwTxeV8KCtsngZ0dsK92/hQWJj8JaClr+znPzARM/4MK
- 2Zi6bTFTrp8Y+zR9srk2la2uFhPOKMU=
-X-Google-Smtp-Source: ABdhPJxgsQQCIJqLyT23d+iagYHUa0fGT+vtjckP1y/nkSubxl9CZK5BK/t2E+77nhOVnrOQCT0i8A==
-X-Received: by 2002:a05:6e02:18ca:: with SMTP id
- s10mr25308146ilu.166.1638665661261; 
- Sat, 04 Dec 2021 16:54:21 -0800 (PST)
+ bh=wMWTncipjZD6XmNhrJs51V/M+may0ggYGSATpbnTrVk=;
+ b=n+ckNh97VWKhmfbOzZDac81e7kDS8THicx25iDmsWd0PKb4tLonw2xRwiavTeNbt9g
+ K/umOhR5Nre7u4wx/h7MEzzExYp5my6sxXF9igNJv5GU4VYVUMBIglm+3tTnx+LITNaJ
+ BkzLt+k+Ifvjdbazxzdp7GHwcUTDQ6bd9YzIUpOFCDlGrt2B02ET4vqUfiQWnd4D0aEr
+ pClKYR6a4p+8ZmkwqXo8gZZ0SHc95H3kjW8i5eS7yquOBBsdV2BxCXMgf5Q/2xhILr6/
+ tDfBB0AiNHKf2FKQ8iKyb+WHngSirJmMzbT/vTP8fVO1OusZ0v5hlGteCWG2HUojNBbf
+ cRUg==
+X-Gm-Message-State: AOAM532nrDiQ85g/0UPa4/3yC7kqoDdcVEgeE5sI1977VT8ybxMoa/9m
+ fK9kSHX7/K1uTEvPIYBLoBETVnDUukI=
+X-Google-Smtp-Source: ABdhPJxhB6hCVoevDZaP7vj/CYaMM9zPSXC9bCSkGeeHkjpxUKddQh5BpbOEJ90D5DOdTCqhC5jvFg==
+X-Received: by 2002:a05:6e02:b25:: with SMTP id
+ e5mr1989890ilu.304.1638665660759; 
+ Sat, 04 Dec 2021 16:54:20 -0800 (PST)
 Received: from james-x399.localdomain (71-218-107-26.hlrn.qwest.net.
  [71.218.107.26])
  by smtp.gmail.com with ESMTPSA id g7sm3903914iln.67.2021.12.04.16.54.20
@@ -70,14 +68,14 @@ Received: from james-x399.localdomain (71-218-107-26.hlrn.qwest.net.
  Sat, 04 Dec 2021 16:54:20 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Dec 2021 17:54:11 -0700
-Message-Id: <20211205005412.2888068-6-james.hilliard1@gmail.com>
+Date: Sat,  4 Dec 2021 17:54:10 -0700
+Message-Id: <20211205005412.2888068-5-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211205005412.2888068-1-james.hilliard1@gmail.com>
 References: <20211205005412.2888068-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 6/7] package/network-manager: add optional
- polkit support
+Subject: [Buildroot] [PATCH v2 5/7] package/network-manager: add optional
+ selinux support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,23 +99,23 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 4ed66c2f9d..14bf0d4dd1 100644
+index 25dcb563c1..4ed66c2f9d 100644
 --- a/package/network-manager/network-manager.mk
 +++ b/package/network-manager/network-manager.mk
-@@ -105,6 +105,13 @@ else
- NETWORK_MANAGER_CONF_OPTS += --without-modem-manager-1
+@@ -70,6 +70,13 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --with-libpsl=no
  endif
  
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+NETWORK_MANAGER_DEPENDENCIES += polkit
-+NETWORK_MANAGER_CONF_OPTS += --enable-polkit=yes
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++NETWORK_MANAGER_DEPENDENCIES += libselinux
++NETWORK_MANAGER_CONF_OPTS += --with-selinux=yes
 +else
-+NETWORK_MANAGER_CONF_OPTS += --enable-polkit=no
++NETWORK_MANAGER_CONF_OPTS += --with-selinux=no
 +endif
 +
- ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
- NETWORK_MANAGER_CONF_OPTS += --with-dhclient=/sbin/dhclient
- endif
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NETWORK_MANAGER_DEPENDENCIES += readline
+ NETWORK_MANAGER_CONF_OPTS += --with-nmcli=yes
 -- 
 2.25.1
 
