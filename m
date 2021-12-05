@@ -4,80 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DA07C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 07:56:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E3ADC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 08:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9446607CC;
-	Sun,  5 Dec 2021 07:56:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9D246071A;
+	Sun,  5 Dec 2021 08:08:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sXhICCsIzjw0; Sun,  5 Dec 2021 07:56:27 +0000 (UTC)
+	with ESMTP id GKIg22fiqxBb; Sun,  5 Dec 2021 08:08:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43B856071A;
-	Sun,  5 Dec 2021 07:56:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 59E931BF294
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 07:56:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 263A86069C;
+	Sun,  5 Dec 2021 08:08:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 990891BF593
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 08:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49D88405A1
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 07:56:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 948A1401F1
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 08:08:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aW-90WzyLa5S for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 07:56:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7F09D40594
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 07:56:24 +0000 (UTC)
-Received: by mail-lj1-x235.google.com with SMTP id z8so14787785ljz.9
- for <buildroot@buildroot.org>; Sat, 04 Dec 2021 23:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to;
- bh=GgTLcOkYu5hN/D6wDNYxg7M2xVGDL+w6fb0MhzzjmXY=;
- b=V7/UR9W88LYKwUxCk0RzLpuwmK1NgofIE6RDGALP97LI/JiqPvDBg/LuODBD1wN6w8
- ne8pNcShc40vllc5UAl7cOufHXRgnhnK5Sf9VDlp9lRfKYlveS1OYunFwlymUXU+OEoa
- WJRSDBR3hnjr+Dn0amkOUYxkmM5W7vWl9Wr1jvspBoRT06kfKsiiCJ/92spozcE5Zmxk
- ZaLJGtw3ntWWea3f5+hDP0ORSx2KoKurx9gwdsI90Jnn3GLm79dypC6f1C6BKQENBobo
- z1gI8QyzBEAhOQaO5X/C/s9VXohcN75TlzKrsZ/TsJ1vWLr2Vlm/iMSjUew6Ecwun9xX
- hIKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to;
- bh=GgTLcOkYu5hN/D6wDNYxg7M2xVGDL+w6fb0MhzzjmXY=;
- b=lGS9vJ7GzaAXur8gD9Ue/ir3cGkH7bAMqKnZho8SxeKSqaU7/wYfNqPw02kzYojpnV
- F0prDWj2blo40IfM1XM0wTPEFd7RLio2u8yAwDvZQaWUzTWrggonaRnCxDkjUpYhM6zi
- 2BHQ016tekbj4bK3mv8xJQSfChwMD5hSElG8goKT4P78NMV4DNecPmI6IQK47wFu2R+V
- cNkbcNr/vBvP9L/O73mW5m2aF1l2Gaxvdnc5nqT6iVyeuLPnm+m5a04Hu/j+7R6QeolK
- UsbMyOUAAA4w/sNIMm/ODVwjfUGYMhgOVhDf9CBTulWphe5SxsaBJI/J2oob6M+fAeB/
- MVuw==
-X-Gm-Message-State: AOAM531JTSmzWRfv+zzKHdI7/zdP0VlF8i8hxDSE3jZJDtbi7EYw8fwl
- z53FL4y7rx/q7bwuo/ZXuCWsBQ6rDcE=
-X-Google-Smtp-Source: ABdhPJxE6jBLU5aa2JHJHTWNaauDcr5Dx8w1aztVwnuH28rHS4ec0+0uyeA1KEtNgspwmJ54OCvFUw==
-X-Received: by 2002:a2e:81c6:: with SMTP id s6mr28660939ljg.302.1638690982161; 
- Sat, 04 Dec 2021 23:56:22 -0800 (PST)
-Received: from [10.0.196.136] ([176.10.248.198])
- by smtp.googlemail.com with ESMTPSA id l12sm1014927lfk.212.2021.12.04.23.56.21
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Dec 2021 23:56:21 -0800 (PST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211122020804.535891-1-troglobit@gmail.com>
- <20211122020804.535891-5-troglobit@gmail.com>
- <20211204231509.2507f151@windsurf>
-From: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <002ef1ea-f890-e812-e677-ee9a3787cc3b@gmail.com>
-Date: Sun, 5 Dec 2021 08:56:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XeCTE6epv7A2 for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 08:08:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D6EC1400A8
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 08:08:24 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 189F520004
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 08:08:22 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20211204231509.2507f151@windsurf>
-Subject: Re: [Buildroot] [PATCH 4/5] package/inadyn: refactor start script
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 05 Dec 2021 08:08:21 -0000
+Message-Id: <20211205080826.948A1401F1@smtp2.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-12-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,98 +52,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0959145509228256422=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---===============0959145509228256422==
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="i0uWRfmF5T7SJygWuq4302YyX0TX8IebD"
+Hello,
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---i0uWRfmF5T7SJygWuq4302YyX0TX8IebD
-Content-Type: multipart/mixed; boundary="OVmd4IP5Lp1ZJhIH1oYrJVyvC7CcBSDhW";
- protected-headers="v1"
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Message-ID: <002ef1ea-f890-e812-e677-ee9a3787cc3b@gmail.com>
-Subject: Re: [Buildroot] [PATCH 4/5] package/inadyn: refactor start script
-References: <20211122020804.535891-1-troglobit@gmail.com>
- <20211122020804.535891-5-troglobit@gmail.com>
- <20211204231509.2507f151@windsurf>
-In-Reply-To: <20211204231509.2507f151@windsurf>
+Autobuild statistics for 2021-12-04
+===================================
 
---OVmd4IP5Lp1ZJhIH1oYrJVyvC7CcBSDhW
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 44  |  5  |  0  | 49  |
+  2021.08.x  | 35  |  2  |  0  | 37  |
+    master   | 94  | 24  |  0  | 118 |
+     next    | 15  |  4  |  0  | 19  |
 
-Hi Thomas!
+Classification of failures by reason for master
+-----------------------------------------------
 
-On 12/4/21 11:15 PM, Thomas Petazzoni wrote:
-> On Mon, 22 Nov 2021 03:08:03 +0100
-> Joachim Wiberg <troglobit@gmail.com> wrote:
->> This patch is a complete rewrite of the start script, reducing code
->> duplication by using a helper cmd() function and adding support for:
->> [snip]
-> Actually, for init script, we are now trying to use a common style and
-> construction for all, based on package/busybox/S01syslogd.
-
-Ah, I was actually wondering about that, couldn't find any info on it
-though.
-
-> We don't want each init script of each package to be its own creative
-> work of art, but instead we prefer consistency.
-Understandable.  That's good policy actually.
-
-> It would actually be good to document this in the Buildroot manual.
-
-I'll see if I can whip something up :)
-
-> Could you try to rework your init script according to
-> package/busybox/S01syslogd ?
-
-Sure, no problem!
+              tinydtls-0.9-rc1 | 6 
+                       unknown | 3 
+                 wavemon-0.9.4 | 3 
+              host-erlang-22.2 | 2 
+libdbi-88b8477d57153b9f736d... | 2 
+               apcupsd-3.14.14 | 1 
+               capnproto-0.8.0 | 1 
+                host-go-1.17.3 | 1 
+               linux-pam-1.5.1 | 1 
+               luasyslog-2.2.0 | 1 
+                 mesa3d-21.1.8 | 1 
+                    qemu-6.1.0 | 1 
+                 watchdogd-3.4 | 1 
 
 
-Best regards
- /Joachim
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/02c6024b5216e412d08e808841eee207d8ff9219 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/ddf3710e79832e3cf9e3dc04010c310a7f7b9961 |     
+   mipsel    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/f219bad07c69a1a7911117433057e72439ab1d28 |     
+  aarch64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/0df7faa5d4ef565ca28007ddd3506b56c4d05820 |     
+  mips64el   |         host-go-1.17.3         | NOK | http://autobuild.buildroot.net/results/a07ac6a4823392d23fa599c375bfd54855e29854 |     
+    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/7f2eeec44e115150109173b39c84976b8a7923a8 |     
+    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/7a9298dce50a1976173cfac5bbe3041a510f47c3 |     
+    sh4      |        linux-pam-1.5.1         | NOK | http://autobuild.buildroot.net/results/2e5d25f0c357fafc876f9e1f6035d5b917443846 | ORPH
+   nios2     |        luasyslog-2.2.0         | NOK | http://autobuild.buildroot.net/results/bd073c8d208e6efa53d033b7b8d6d36d43584ec6 |     
+    arm      |         mesa3d-21.1.8          | NOK | http://autobuild.buildroot.net/results/5350ed29076ce17cdd4e04c3babd42d82c6ddb20 |     
+    arm      |           qemu-6.1.0           | NOK | http://autobuild.buildroot.net/results/6d102f005cfaeba582a78a11460bf38014f56bf9 |     
+   xtensa    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/6ef069f1531524ead2876b68b198b1cdb308b630 |     
+    arm      |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/942c26b4e202bdae6b0e425f0c5c47c01fcd4bc3 |     
+  mips64el   |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/2db14fb8d51e6ef19799e0efd623fb1466d61f92 |     
+    mips     |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/021b35dd8adde5dbb8d59d3c4eb3986f38d3d0fa |     
+  powerpc    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/aebaaf327bcf587aada77bd312dc07d499299c4d |     
+   x86_64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/80d3e855e579545a7550b07ed6f3b027934dfc8e |     
+   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/071339d4cbc910b758b3f41dcc248838679a3745 |     
+    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/a1157d6d38d6079197c3dbeda2497103d31f37bc |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/bc468cba6269beacffa011c2adde4e15d382cbf9 |     
+  powerpc    |         watchdogd-3.4          | NOK | http://autobuild.buildroot.net/results/e8c150da1e6e4eb887d5872e7d8ad8dfebc8e65a |     
+    arm      |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/cb38c75ee1a2c497c1b8a86caf73243b8cec676e |     
+    mips     |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/c52e5abc80d7398c0941ee689cc2207c1237345d |     
+    arm      |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/15a74c46fa6eee9cfd0fa2f41f336533f1997f4e |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 2 
+android-tools-4.2.2+git2013... | 1 
+          gstreamer1-mm-1.10.0 | 1 
+               openldap-2.4.59 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ powerpc64   | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/0bdcce24126babe52a4f5b58e4782f00c205f80b |     
+    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/5eec7813582ac150a9eadcd71b2d996aac4b5136 | ORPH
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8e91219019fbc62d3ab61e3bcb55266c1410a9e9 |     
+   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/141759052776f2f11b0e63e3eb198022b4d06f9a |     
+  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/49671a41776afd1042eff764844251ec7555c4b4 |     
+
+
+Classification of failures by reason for 2021.08.x
+--------------------------------------------------
+
+            erlang-jiffy-1.0.6 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2021.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/0a661252399ab1b92e9330e0ce2b838e4b490a48 |     
+   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/bc003cb3f647f2f4db0a7a863dedf4bf6fe9705d |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+              gnuradio-3.8.2.0 | 1 
+              host-erlang-22.2 | 1 
+                 mesa3d-21.3.0 | 1 
+                       unknown | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arc      |        gnuradio-3.8.2.0        | NOK | http://autobuild.buildroot.net/results/dac2f1ca50c3ecbcda7b6e5ea4a7aebf452a500e |     
+  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/d473070cc66ca5ebfede3c4cd7d00ed4cb01a1bb |     
+    arm      |         mesa3d-21.3.0          | NOK | http://autobuild.buildroot.net/results/ab44e28cb0d562643f187f3d6d433d638e430b25 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/4c6675eb7c4b49d4b7beff74a6e7703fc8e7ce34 |     
 
 
 
---OVmd4IP5Lp1ZJhIH1oYrJVyvC7CcBSDhW--
-
---i0uWRfmF5T7SJygWuq4302YyX0TX8IebD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEE3gkxgy2/gzkZH7KyLCqwqW4MR1gFAmGscKQFAwAAAAAACgkQLCqwqW4MR1ju
-pAf/QmdrxwkRV5iOwnd5Hc5ty35zDGCPPOvllcYEg/I9wN/CSYRA5cj8NdC5dFXyUD4cnjMiNcTk
-G3JOVi4QpXltun1oSprFBTUmvWw9WN3JVV6o5yNhDFmOSQ07nFcvRKbK/2g7G0NebtAc1Qfqa4JB
-NZAVIz/p6befg9cV1VoT8JDA/1WAdpKBWYUwD2rsRf4X+CmrARrhaGsNlI/8nEPBN4PM/KocP9pr
-J9m4B7TvyQDsag3Z71DAhkILne4U9dATB8BofWhuBRguGxGUmW0WQudgJNjkQO8XeBsNkAZRAcSv
-+L9Rp4Y10rui25liRMfKCJpo3c7e/yQa3Li7EHRneA==
-=4h2B
------END PGP SIGNATURE-----
-
---i0uWRfmF5T7SJygWuq4302YyX0TX8IebD--
-
---===============0959145509228256422==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0959145509228256422==--
