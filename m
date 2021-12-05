@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FD3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB30FC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:46:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F174F84BAA;
-	Mon,  6 Dec 2021 18:46:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C7D141499;
+	Mon,  6 Dec 2021 18:46:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uwCS_gDV9veJ; Mon,  6 Dec 2021 18:46:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SORNLuzpH0nh; Mon,  6 Dec 2021 18:46:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3622280DC0;
-	Mon,  6 Dec 2021 18:46:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A510E41BE2;
+	Mon,  6 Dec 2021 18:46:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C22E41BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:14:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 168581BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:14:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEE9041C29
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1D9541C25
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wW6N2p04vql8 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:42 +0000 (UTC)
+ with ESMTP id 5z7XEx-Fiv3S for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:12:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3ACA141C25
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4004E41C7D
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BFDEF81468; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id D876181468; Mon,  6 Dec 2021 18:07:43 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 23:00:40 +0100
+Date: Sun, 5 Dec 2021 16:35:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe0e1020a3ec1c00fd1c8615bace962c720e0e46
-X-Git-Newrev: 2db0ec06924d7f337755b9b920f5dd4c28f95e7f
+X-Git-Oldrev: ed7321051552366a8145c6486c24452aab6ff450
+X-Git-Newrev: e821078031e14df69e5142f23e9cb7b5a1ea0e77
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.BFDEF81468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/azmq: bump to version 1.0.3
+Message-Id: <20211206180743.D876181468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-rgb-led-matrix: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,144 +58,244 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2db0ec06924d7f337755b9b920f5dd4c28f95e7f
+commit: https://git.buildroot.net/buildroot/commit/?id=e821078031e14df69e5142f23e9cb7b5a1ea0e77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch and use AZMQ_NO_TESTS which is available since
-  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
-- boost log (and so NPTL) is not a dependency since
-  https://github.com/zeromq/azmq/commit/3548638b9b3452a0526a1acb340ca7a92acf4f7c
-- boost regex is not a dependency since
-  https://github.com/zeromq/azmq/commit/209ccdc318bee195c92eaf86ed2fcc4acf08be1e
-- Update indentation in hash file (two spaces)
+A library to control commonly available 64x64, 32x32 or 16x32
+RGB LED panels with the Raspberry Pi. Can support PWM up to
+11Bit per channel, providing true 24bpp color with CIE1931
+profile.
 
-https://github.com/zeromq/azmq/releases/tag/v1.0.3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+[Arnout: reorder build/install hooks inside conditions]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...Conditionally-disable-test-and-doc-builds.patch | 43 ----------------------
- package/azmq/Config.in                             |  8 ++--
- package/azmq/azmq.hash                             |  5 +--
- package/azmq/azmq.mk                               |  4 +-
- 4 files changed, 8 insertions(+), 52 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch       | 46 +++++++++++++
+ package/rpi-rgb-led-matrix/Config.in               | 43 ++++++++++++
+ package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash |  3 +
+ package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk   | 78 ++++++++++++++++++++++
+ 6 files changed, 172 insertions(+)
 
-diff --git a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch b/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-deleted file mode 100644
-index 98975d27ed..0000000000
---- a/package/azmq/0001-Conditionally-disable-test-and-doc-builds.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From d960f93fb52e373f76cfedbee5f4fb0c5276856a Mon Sep 17 00:00:00 2001
--From: RJ Ascani <rj.ascani@gmail.com>
--Date: Thu, 20 Jul 2017 15:53:40 -0700
--Subject: [PATCH] Conditionally disable test and doc builds
--
--Signed-off-by: RJ Ascani <rj.ascani@gmail.com>
-----
-- CMakeLists.txt | 12 +++++++++---
-- 1 file changed, 9 insertions(+), 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 5b5b9cc..97006a4 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -49,7 +49,9 @@ include_directories(${Boost_INCLUDE_DIRS}
--                     ${ZeroMQ_INCLUDE_DIRS}
--                     ${PROJECT_SOURCE_DIR})
--
---enable_testing()
--+if (BUILD_TESTING)
--+    enable_testing()
--+endif()
--
-- macro(add_catch_test name)
--     if (TEST_REPORT_FORMAT)
--@@ -59,8 +61,12 @@ macro(add_catch_test name)
--     endif()
-- endmacro()
--
---add_subdirectory(test)
---add_subdirectory(doc)
--+if (BUILD_TESTING)
--+    add_subdirectory(test)
--+endif()
--+if (BUILD_DOC)
--+    add_subdirectory(doc)
--+endif()
--
-- install(DIRECTORY ${PROJECT_SOURCE_DIR}/azmq
--         DESTINATION include)
----
--2.13.3
--
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-index 37131a260a..7bdd07ebf8 100644
---- a/package/azmq/Config.in
-+++ b/package/azmq/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
- 	bool "azmq"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, zeromq
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR # boost
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
-@@ -11,9 +11,7 @@ config BR2_PACKAGE_AZMQ
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_DATE_TIME
--	select BR2_PACKAGE_BOOST_LOG
- 	select BR2_PACKAGE_BOOST_RANDOM
--	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
-@@ -21,10 +19,10 @@ config BR2_PACKAGE_AZMQ
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fd3ee964b2..1018bce420 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1098,6 +1098,7 @@ F:	package/python-pyjwt/
+ F:	package/python-redis/
+ F:	package/python-rpi-ws281x/
+ F:	package/python-wtforms/
++F:	package/rpi-rgb-led-matrix/
  
- 	  https://github.com/zeromq/azmq
- 
--comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
-+comment "azmq needs a toolchain w/ C++11, wchar and threads"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
--		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
- 
- comment "azmq needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-index f5d24e79ce..6caf53582a 100644
---- a/package/azmq/azmq.hash
-+++ b/package/azmq/azmq.hash
-@@ -1,4 +1,3 @@
- # Locally calculated
--# https://github.com/zeromq/azmq/archive/v1.0.2.tar.gz
--sha256 25fa8b07756cffae95e25a55c7ea42efe02e8cd797552201aa771dd69cfc8fbf  azmq-1.0.2.tar.gz
--sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
-+sha256  80cfb951c5614b8c2e55a59ea2e5723a18ebed08da80e5420e525d6bf273771a  azmq-1.0.3.tar.gz
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-index 918c6e1a36..a72b155664 100644
---- a/package/azmq/azmq.mk
-+++ b/package/azmq/azmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZMQ_VERSION = 1.0.2
-+AZMQ_VERSION = 1.0.3
- AZMQ_SITE = $(call github,zeromq,azmq,v$(AZMQ_VERSION))
- AZMQ_DEPENDENCIES = boost zeromq
- AZMQ_LICENSE = BSL-1.0
-@@ -15,4 +15,6 @@ AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
- AZMQ_INSTALL_STAGING = YES
- AZMQ_INSTALL_TARGET = NO
- 
-+AZMQ_CONF_OPTS = -DAZMQ_NO_TESTS=ON
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/libnids/
+diff --git a/package/Config.in b/package/Config.in
+index 006d3cf284..916bbfd836 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1621,6 +1621,7 @@ menu "Hardware handling"
+ 	source "package/neardal/Config.in"
+ 	source "package/owfs/Config.in"
+ 	source "package/pcsc-lite/Config.in"
++	source "package/rpi-rgb-led-matrix/Config.in"
+ 	source "package/tslib/Config.in"
+ 	source "package/uhd/Config.in"
+ 	source "package/urg/Config.in"
+diff --git a/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch b/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch
+new file mode 100644
+index 0000000000..f7a92f5fb2
+--- /dev/null
++++ b/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch
+@@ -0,0 +1,46 @@
++From 056a189836a82b832cd8e6f886cb2090344bfa08 Mon Sep 17 00:00:00 2001
++From: Grzegorz Blach <grzegorz@blach.pl>
++Date: Sat, 29 Aug 2020 20:48:57 +0200
++Subject: [PATCH] Rename LDFLAGS to RGB_LDFLAGS.
 +
- $(eval $(cmake-package))
++This change allows additional flags to be added to the linker
++from the command line.
++
++Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
++---
++ utils/Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/utils/Makefile b/utils/Makefile
++index e751adc..e704442 100644
++--- a/utils/Makefile
+++++ b/utils/Makefile
++@@ -12,7 +12,7 @@ RGB_INCDIR=$(RGB_LIB_DISTRIBUTION)/include
++ RGB_LIBDIR=$(RGB_LIB_DISTRIBUTION)/lib
++ RGB_LIBRARY_NAME=rgbmatrix
++ RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
++-LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
+++RGB_LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
++ 
++ # Imagemagic flags, only needed if actually compiled.
++ MAGICK_CXXFLAGS?=$(shell GraphicsMagick++-config --cppflags --cxxflags)
++@@ -28,13 +28,13 @@ $(RGB_LIBRARY): FORCE
++ 	$(MAKE) -C $(RGB_LIBDIR)
++ 
++ text-scroller: text-scroller.o $(RGB_LIBRARY)
++-	$(CXX) $(CXXFLAGS) text-scroller.o -o $@ $(LDFLAGS)
+++	$(CXX) $(CXXFLAGS) text-scroller.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS)
++ 
++ led-image-viewer: led-image-viewer.o $(RGB_LIBRARY)
++-	$(CXX) $(CXXFLAGS) led-image-viewer.o -o $@ $(LDFLAGS) $(MAGICK_LDFLAGS)
+++	$(CXX) $(CXXFLAGS) led-image-viewer.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS) $(MAGICK_LDFLAGS)
++ 
++ video-viewer: video-viewer.o $(RGB_LIBRARY)
++-	$(CXX) $(CXXFLAGS) video-viewer.o -o $@ $(LDFLAGS) $(AV_LDFLAGS)
+++	$(CXX) $(CXXFLAGS) video-viewer.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS) $(AV_LDFLAGS)
++ 
++ %.o : %.cc
++ 	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) -c -o $@ $<
++-- 
++2.24.3 (Apple Git-128)
++
+diff --git a/package/rpi-rgb-led-matrix/Config.in b/package/rpi-rgb-led-matrix/Config.in
+new file mode 100644
+index 0000000000..ca945a92af
+--- /dev/null
++++ b/package/rpi-rgb-led-matrix/Config.in
+@@ -0,0 +1,43 @@
++config BR2_PACKAGE_RPI_RGB_LED_MATRIX
++	bool "rpi-rgb-led-matrix"
++	depends on BR2_aarch64 || BR2_arm
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	help
++	  A library to control commonly available 64x64, 32x32 or 16x32
++	  RGB LED panels with the Raspberry Pi. Can support PWM up to
++	  11Bit per channel, providing true 24bpp color with CIE1931
++	  profile.
++
++	  https://github.com/hzeller/rpi-rgb-led-matrix
++
++if BR2_PACKAGE_RPI_RGB_LED_MATRIX
++
++config BR2_PACKAGE_RPI_RGB_LED_MATRIX_IMAGE_VIEWER
++	bool "Build led-image-viewer"
++	select BR2_PACKAGE_GRAPHICSMAGICK
++	help
++	  The image viewer reads all kinds of image formats,
++	  including animated gifs.
++
++config BR2_PACKAGE_RPI_RGB_LED_MATRIX_TEXT_SCROLLER
++	bool "Build text-scroller"
++	help
++	  The text scroller allows to show some scrolling text.
++
++config BR2_PACKAGE_RPI_RGB_LED_MATRIX_VIDEO_VIEWER
++	bool "Build video-viewer"
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_SWSCALE
++	help
++	  The video viewer allows to play common video formats
++	  on the RGB matrix (just the picture, no sound).
++
++endif
++
++comment "rpi-rgb-led-matrix needs a toolchain w/ C++, threads, dynamic library"
++	depends on BR2_aarch64 || BR2_arm
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
+new file mode 100644
+index 0000000000..3b1cb5fd76
+--- /dev/null
++++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  5efc0293bb180b958079910e968721ff2dac291c435d065ecec9ceba8589567d  rpi-rgb-led-matrix-63e3e7ffdbe88223cc80e1faa508bc4f3cf2bea4.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
+new file mode 100644
+index 0000000000..b220bbc3db
+--- /dev/null
++++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
+@@ -0,0 +1,78 @@
++################################################################################
++#
++# rpi-rgb-led-matrix
++#
++################################################################################
++
++RPI_RGB_LED_MATRIX_VERSION = 63e3e7ffdbe88223cc80e1faa508bc4f3cf2bea4
++RPI_RGB_LED_MATRIX_SITE = $(call github,hzeller,rpi-rgb-led-matrix,$(RPI_RGB_LED_MATRIX_VERSION))
++RPI_RGB_LED_MATRIX_LICENSE = GPL-2.0
++RPI_RGB_LED_MATRIX_LICENSE_FILES = COPYING
++RPI_RGB_LED_MATRIX_INSTALL_STAGING = YES
++
++define RPI_RGB_LED_MATRIX_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib all
++endef
++
++define RPI_RGB_LED_MATRIX_INSTALL_STAGING_CMDS
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/rpi-rgb-led-matrix/
++	$(INSTALL) -m 0644 $(@D)/include/*.h $(STAGING_DIR)/usr/include/rpi-rgb-led-matrix/
++	$(INSTALL) -D -m 0644 $(@D)/lib/librgbmatrix.a $(STAGING_DIR)/usr/lib/librgbmatrix.a
++	$(INSTALL) -D -m 0755 $(@D)/lib/librgbmatrix.so.1 $(STAGING_DIR)/usr/lib/librgbmatrix.so.1
++	ln -sf librgbmatrix.so.1 $(STAGING_DIR)/usr/lib/librgbmatrix.so
++endef
++
++define RPI_RGB_LED_MATRIX_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/lib/librgbmatrix.so.1 $(TARGET_DIR)/usr/lib/librgbmatrix.so.1
++	ln -sf librgbmatrix.so.1 $(TARGET_DIR)/usr/lib/librgbmatrix.so
++endef
++
++ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_IMAGE_VIEWER),y)
++RPI_RGB_LED_MATRIX_DEPENDENCIES += graphicsmagick
++
++define RPI_RGB_LED_MATRIX_BUILD_IMAGE_VIEWER_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		MAGICK_CXXFLAGS="-I$(STAGING_DIR)/usr/include/GraphicsMagick $(shell $(STAGING_DIR)/usr/bin/GraphicsMagick++-config --cxxflags)" \
++		MAGICK_LDFLAGS="-L$(STAGING_DIR)/usr/lib $(shell $(STAGING_DIR)/usr/bin/GraphicsMagick++-config --libs)" \
++		-C $(@D)/utils led-image-viewer
++endef
++RPI_RGB_LED_MATRIX_POST_BUILD_HOOKS += RPI_RGB_LED_MATRIX_BUILD_IMAGE_VIEWER_CMDS
++
++define RPI_RGB_LED_MATRIX_INSTALL_IMAGE_VIEWER_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/utils/led-image-viewer $(TARGET_DIR)/usr/bin/led-image-viewer
++endef
++RPI_RGB_LED_MATRIX_POST_INSTALL_TARGET_HOOKS += RPI_RGB_LED_MATRIX_INSTALL_IMAGE_VIEWER_CMDS
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_TEXT_SCROLLER),y)
++define RPI_RGB_LED_MATRIX_BUILD_TEXT_SCROLLER_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/utils text-scroller
++endef
++RPI_RGB_LED_MATRIX_POST_BUILD_HOOKS += RPI_RGB_LED_MATRIX_BUILD_TEXT_SCROLLER_CMDS
++
++define RPI_RGB_LED_MATRIX_INSTALL_TEXT_SCROLLER_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/utils/text-scroller $(TARGET_DIR)/usr/bin/text-scroller
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/rpi-rgb-led-matrix/fonts/
++	$(INSTALL) -m 0644 $(@D)/fonts/*.bdf $(TARGET_DIR)/usr/share/rpi-rgb-led-matrix/fonts/
++endef
++RPI_RGB_LED_MATRIX_POST_INSTALL_TARGET_HOOKS += RPI_RGB_LED_MATRIX_INSTALL_TEXT_SCROLLER_CMDS
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_VIDEO_VIEWER),y)
++RPI_RGB_LED_MATRIX_DEPENDENCIES += ffmpeg
++
++define RPI_RGB_LED_MATRIX_BUILD_VIDEO_VIEWER_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		AV_CXXFLAGS="$(shell $(HOST_DIR)/bin/pkg-config --cflags libavcodec libavformat libswscale libavutil)" \
++		AV_LDFLAGS="$(shell $(HOST_DIR)/bin/pkg-config --libs libavcodec libavformat libswscale libavutil)" \
++		-C $(@D)/utils video-viewer
++endef
++RPI_RGB_LED_MATRIX_POST_BUILD_HOOKS += RPI_RGB_LED_MATRIX_BUILD_VIDEO_VIEWER_CMDS
++
++define RPI_RGB_LED_MATRIX_INSTALL_VIDEO_VIEWER_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/utils/video-viewer $(TARGET_DIR)/usr/bin/video-viewer
++endef
++RPI_RGB_LED_MATRIX_POST_INSTALL_TARGET_HOOKS += RPI_RGB_LED_MATRIX_INSTALL_VIDEO_VIEWER_CMDS
++endif
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
