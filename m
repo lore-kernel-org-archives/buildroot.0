@@ -1,47 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53C63C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 11:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18885C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 13:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2C5D83DF0;
-	Sun,  5 Dec 2021 11:57:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67EDB4053C;
+	Sun,  5 Dec 2021 13:20:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u2V82pVIaoeq; Sun,  5 Dec 2021 11:57:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lpgNpojF9lLa; Sun,  5 Dec 2021 13:20:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BF2683E4E;
-	Sun,  5 Dec 2021 11:57:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD646404FE;
+	Sun,  5 Dec 2021 13:20:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ACAA01BF973
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:57:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D87051BF275
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 13:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C32C60A4E
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 11:57:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C82496070C
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 13:20:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SOMqRtTPndRG for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 11:57:00 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB54560A41
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 11:57:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3884F7F899; Sun,  5 Dec 2021 11:52:06 +0000 (UTC)
+ with ESMTP id nHxrbSiwgHGU for <buildroot@lists.busybox.net>;
+ Sun,  5 Dec 2021 13:20:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 75FD0606F8
+ for <buildroot@buildroot.org>; Sun,  5 Dec 2021 13:20:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id B59BE200002;
+ Sun,  5 Dec 2021 13:20:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1mtrRa-0002IJ-1M; Sun, 05 Dec 2021 14:20:42 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 5 Dec 2021 12:32:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8022e00b2dc822c3403eee28db7181b5899c22dc
-X-Git-Newrev: 086c96b4527425e0b4e1adf0531c83ea7f617c02
-X-Patchwork-Hint: ignore
-Message-Id: <20211205115206.3884F7F899@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pc_x86_64_bios_defconfig: fix
- image generation after grub2 rework
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20211025215520.3712974-1-fontaine.fabrice@gmail.com>
+ <50b4a2e3-fb9f-aaec-534c-3a18cfee50bc@mind.be>
+Date: Sun, 05 Dec 2021 14:20:42 +0100
+In-Reply-To: <50b4a2e3-fb9f-aaec-534c-3a18cfee50bc@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 17 Nov 2021 21:55:30 +0100")
+Message-ID: <87wnkj89xx.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/p7zip: add 7za support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,91 +59,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8865579520914708551=="
+Cc: =?utf-8?Q?Andr=C3=A9?= Zwing <nerv@dawncrow.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8865579520914708551==
-Content-Type: text/plain
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=086c96b4527425e0b4e1adf0531c83ea7f617c02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > On 25/10/2021 23:55, Fabrice Fontaine wrote:
+ >> Add 7za stand-alone executable as 7zr is a "light-version" of 7za that
+ >> only handles 7z archives and cannot handle encrypted archives.
+ >> 
+ >> Fixes:
+ >> - https://bugs.buildroot.org/show_bug.cgi?id=14266
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> Changes v1 -> v2 (after review of Arnout Vandecappelle):
+ >> - Add a dedicated option
+ >> 
+ >> package/p7zip/Config.in | 22 ++++++++++++++++++++++
+ >> package/p7zip/p7zip.mk  | 11 +++++++++--
+ >> 2 files changed, 31 insertions(+), 2 deletions(-)
+ >> 
+ >> diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
+ >> index badfb9b9e8..3b30fd71cc 100644
+ >> --- a/package/p7zip/Config.in
+ >> +++ b/package/p7zip/Config.in
+ >> @@ -12,6 +12,28 @@ config BR2_PACKAGE_P7ZIP
+ >> http://sourceforge.net/projects/p7zip
+ >> +if BR2_PACKAGE_P7ZIP
+ >> +
+ >> +choice
+ >> +	prompt "p7zip binary"
+ >> +	default BR2_PACKAGE_P7ZIP_7ZR
 
-Commit 82d1e8c628cc (boot/grub2: use none platform when building for
-host) changed host-grub2 to only install the tools, not the actual
-bootloader or its modules, as they are of no use on the host.
+ >  Unfortunately, this means 7za will never be built in the
+ > autobuilders, because they don't randomize choices. Oh well, tough
+ > luck.
 
-It so happened that, when not instructed to built for a specific
-platform, the grub2 buildsystem would default to build the legacy bios
-platform (at least when the build happens on an x86 or x86_64 host).
+ >  Applied to master, thanks.
 
-However, because the host is more often than not an x86 or x86_64, when
-the target was also an x68 or x86_64, the modules built for the host
-could be re-used for the target, and this is what was done for our
-pc_x86_64_bios_defconfig.
+Next, not master.
 
-But now that we explicitly tell the grub2 buildsystem to not build any
-platform when we build host-grub2, we no longer have access to the grub2
-modules from the host directory, and the build fails when assembling the
-final image.
 
-We fix that in two ways:
+ >> +
+ >> +config BR2_PACKAGE_P7ZIP_7ZA
+ >> +	bool "7za"
+ >> +	help
+ >> +	  Stand-alone executable that handles fewer archive formats
+ >> +	  than 7z
 
-First, we ensure that individual modules from the target grub2 get installed
-in target/; we can only do that if the target grub2 tools are also
-installed, so we enable that in the configuration.
+I guess this text is taken from the man page:
 
-Second, we fix the post-build script to look in target/ rather than in
-host/.
+https://linux.die.net/man/1/7za
 
-All that, just for the 512-byte boot.img bootstrap, which pulls in all
-the other modules (4.3MiB), the tools (8.8MiB)... But we are not going
-to cherry-pick individual modules; this is error prone and
-unmaintainable...
+But it doesn't really make much sense if we don't provide the full
+7z. As a user it isn't really clear if I want "..that handles fewer
+archive formats" or "a light-version of 7za".
 
-Reported-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Köry Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/pc/post-build.sh           | 2 +-
- configs/pc_x86_64_bios_defconfig | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Perhaps the z7a help text should be something like:
 
-diff --git a/board/pc/post-build.sh b/board/pc/post-build.sh
-index db23795e27..c76dee2676 100755
---- a/board/pc/post-build.sh
-+++ b/board/pc/post-build.sh
-@@ -11,5 +11,5 @@ else
-     cp -f "$BOARD_DIR/grub-bios.cfg" "$TARGET_DIR/boot/grub/grub.cfg"
- 
-     # Copy grub 1st stage to binaries, required for genimage
--    cp -f "$HOST_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
-+    cp -f "$TARGET_DIR/lib/grub/i386-pc/boot.img" "$BINARIES_DIR"
- fi
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 3290a1dda0..df5988d75e 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -13,6 +13,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- 
- # Bootloader
- BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_INSTALL_TOOLS=y
- 
- # Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
+Full 7za archiver. The program supports 7z, ZIP, CAB, ARJ, GZIP, BZIP2,
+TAR, CPIO, RPM and DEB formats
 
---===============8865579520914708551==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+(also from the man page).
 
+And for 7zr:
+
+Lightweight 7zr archiver. The program only handles 7z archives and
+cannot handle encrypted archives
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8865579520914708551==--
