@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F2FBC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 21:38:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18EE9C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 21:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1322A6072D;
-	Sun,  5 Dec 2021 21:38:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 937444032B;
+	Sun,  5 Dec 2021 21:38:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQBMYe1XGLk7; Sun,  5 Dec 2021 21:38:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nhogyog8etOp; Sun,  5 Dec 2021 21:38:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72DA860704;
-	Sun,  5 Dec 2021 21:38:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F04321BF473
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 21:38:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 087254031F;
+	Sun,  5 Dec 2021 21:38:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F3B21BF96B
+ for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 21:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED0FE80D99
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3B934031F
  for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 21:38:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6nVJddV4kFJD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WtjXuG-xJOnd for <buildroot@lists.busybox.net>;
  Sun,  5 Dec 2021 21:38:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56CF680D8E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5052C40314
  for <buildroot@buildroot.org>; Sun,  5 Dec 2021 21:38:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D9CA080404; Sun,  5 Dec 2021 21:33:39 +0000 (UTC)
+ id CFF0C81064; Sun,  5 Dec 2021 21:33:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 5 Dec 2021 22:37:54 +0100
+Date: Sun, 5 Dec 2021 22:36:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c14be2253f62fe471f678bcfc728313116e77816
-X-Git-Newrev: a7bc745c5f19d8b2e51b28e96b84aee14ec34ce1
+X-Git-Oldrev: e6e12337f1874a5a53b42badf3d7fdd258d86a38
+X-Git-Newrev: c14be2253f62fe471f678bcfc728313116e77816
 X-Patchwork-Hint: ignore
-Message-Id: <20211205213339.D9CA080404@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Kickoff 2022.02 cycle
+Message-Id: <20211205213339.CFF0C81064@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2021.11
+ announcement link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,27 +59,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7bc745c5f19d8b2e51b28e96b84aee14ec34ce1
+commit: https://git.buildroot.net/buildroot/commit/?id=c14be2253f62fe471f678bcfc728313116e77816
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 74ef7dc598..c456cadafb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2021.11
-+export BR2_VERSION := 2022.02-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1638734000
- 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 783a2dddd0..370ded63eb 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2021.11 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.11">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-December/629911.html">announcement</a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2021.11.tar.xz">2021.11 release</a>.</p>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
