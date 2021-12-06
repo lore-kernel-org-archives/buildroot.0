@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7C38C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 22:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9113AC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 22:40:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 515AA60683;
-	Mon,  6 Dec 2021 22:28:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tCf4yt89DmA7; Mon,  6 Dec 2021 22:28:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADB446060C;
-	Mon,  6 Dec 2021 22:28:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B9501BF232
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:28:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7956684BE3
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:28:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44E1184C03;
+	Mon,  6 Dec 2021 22:40:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CSCPrkjr3cow for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 22:28:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 102CE84BE2
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 22:28:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3AF668175F; Mon,  6 Dec 2021 22:23:08 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7G305D61WMZK; Mon,  6 Dec 2021 22:40:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C027984C00;
+	Mon,  6 Dec 2021 22:40:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BD8D1BF232
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:40:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09EA6404CF
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:40:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DbIkYmva81Yp for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 22:40:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 929E6404C5
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 22:40:30 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9FE94E0005;
+ Mon,  6 Dec 2021 22:40:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1muMeo-0000jH-Uk; Mon, 06 Dec 2021 23:40:26 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 Dec 2021 23:09:56 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: ad6d3676790b1a220881082a95e90e18a3bfecc8
-X-Git-Newrev: fa0df4790f8d394e3a06391415c064f3757207d8
-X-Patchwork-Hint: ignore
-Message-Id: <20211206222308.3AF668175F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/pcre: fix broken
- URL
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211120111727.2884761-1-fontaine.fabrice@gmail.com>
+Date: Mon, 06 Dec 2021 23:40:26 +0100
+In-Reply-To: <20211120111727.2884761-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 20 Nov 2021 12:17:27 +0100")
+Message-ID: <87ilw173xh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cycler: set license to
+ BSD-3-Clause
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,53 +60,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5397951132087583313=="
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5397951132087583313==
-Content-Type: text/plain
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa0df4790f8d394e3a06391415c064f3757207d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+ > License is BSD-3-Clause since the addition of the package in commit
+ > e96c1b244e4283f5c8596728423c4d3b8a6487cb and
+ > https://github.com/matplotlib/cycler/commit/a1c8a50ce79d37517d58552d8f0ee8f41f4ba9be
 
-As stated on www.pcre.org:
-"Note that the former ftp.pcre.org FTP site is no longer available."
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Update _SITE URL to Sourceforge.
+Committed to 2021.02.x and 2021.08.x, thanks.
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 236385c50f58190f0dafb342d1d6c5115068683e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pcre/pcre.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index c8498b7acf..219ac59786 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PCRE_VERSION = 8.44
--PCRE_SITE = https://ftp.pcre.org/pub/pcre
-+PCRE_SITE = http://downloads.sourceforge.net/project/pcre/pcre/$(PCRE_VERSION)
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3-Clause
- PCRE_LICENSE_FILES = LICENCE
-
---===============5397951132087583313==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5397951132087583313==--
