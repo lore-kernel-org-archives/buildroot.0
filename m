@@ -1,57 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57155C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 21:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52AD3C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 21:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EC9884BCC;
-	Mon,  6 Dec 2021 21:45:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D904360DCA;
+	Mon,  6 Dec 2021 21:57:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KT1RS_MhSGaj; Mon,  6 Dec 2021 21:45:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hbSGKkH76rMm; Mon,  6 Dec 2021 21:57:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B70384BCA;
-	Mon,  6 Dec 2021 21:45:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A1F56079F;
+	Mon,  6 Dec 2021 21:57:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8BD881BF334
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:45:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03F451BF334
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:57:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A67484BCA
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:45:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E80B584BD0
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:57:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sQpqQ2iAY-6c for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 21:45:34 +0000 (UTC)
+ with ESMTP id 1lATu-j9r-ht for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 21:57:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 57FD984BA9
- for <buildroot@busybox.net>; Mon,  6 Dec 2021 21:45:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0787084BCE
+ for <buildroot@busybox.net>; Mon,  6 Dec 2021 21:57:35 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4835:cc5:af50:efe7])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B6F7CB00BDA;
- Mon,  6 Dec 2021 22:45:27 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1E7E9B01728;
+ Mon,  6 Dec 2021 22:57:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638827131;
- bh=ypFQ7anRT7l6V6lr7Cz/57ESZfsQ5D9mokuMj1yS+RU=;
+ s=smtp-20201208; t=1638827854;
+ bh=bTAROIEHpg7eFMSdTBPSd3YDK1bjEVWkyMUK+w2jUIE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YEjCtHKDYXy6UG+6YJnZv/2XIMxY+rbpBgxLyicbXJq9s1sKQI89uS6OArCv5tN2e
- +3gB4QwOVvh2lGufElYe9VM4x1QUUxnQLfDAY5aAgz0FgcNV3VHvbC29qltvOepSax
- +8qHeVECG+sGnrbSlCg2QCvFMaIsvYaYYjE6IJorNI096BK3r8SHWdqZ5IpTJLbDsD
- Yc+ysZUIVfuF7AnsUxPz0TY8qSVhyrq45duv9kt3s7abPlO1JGhRcvUL9FlYz1owVh
- KhPxMPt693D1TXmN6BJHXjhWt5LfCyw5eX/j+0NmNjBKlPKY+frnAcH/QV0Ox3dLQt
- Eg8lBgaoARkhA==
+ b=cv6JXlkKUfJbdn5PVQpsXQIqjGLhh1sNvKbKdYAWS3jmGlKIZVTab9mTkkma1DhXs
+ wEjxDOkiQsk91Xg4tywwvBZvr4FX/d1ObmakdSq72Z//Z/zKS3lbPk+FXdIpTcJyHC
+ Xvt2jYFMqpKSzmS73UPafrQzuFWpu/XJoiiVaQNem54zyxcTqa5N7z46KXa/7FVYq+
+ OzjxlqmBoGn/Fk3POl/NABJ5bD57O6bWprosKFfbK/oeju5sLy4OYA8Y6ccRMrPpi4
+ 3MUQFcRl+ytu9m0LVtjESXsyrS1dT0u5zZTDTWyXKJCM9Rgpfz+o+gpHM1Px3XyfZR
+ mOfU3gNvlI1ew==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 06 Dec 2021 22:45:27 +0100
-Date: Mon, 6 Dec 2021 22:45:27 +0100
+ Mon, 06 Dec 2021 22:57:30 +0100
+Date: Mon, 6 Dec 2021 22:57:30 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: guillaume.bressaix@gmail.com
-Message-ID: <20211206214527.GD2603@scaer>
+Message-ID: <20211206215730.GE2603@scaer>
 References: <20211206193109.21218-1-guillaume.bressaix@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -125,9 +127,43 @@ On 2021-12-06 20:31 +0100, guillaume.bressaix@gmail.com spake thusly:
 > +# then the final installation paths are properly defined
 > +PYTHON_PYBIND_DEPENDENCIES = host-cmake
 
-We do not hard-code a dependency to host-cmake, in case the system cmake
-is sufficient. Instead, we use $(BR2_CMAKE_HOST_DEPENDENCY) which is set
-appropriately.
+I am sorry, but I fail to see how this actually fixes things.
+
+As I explained in my previous review, headers are supposed to be in
+$(STAGING_DIR)/usr/include/pybind11/. That's at least where they are in
+Debian-based distributions;
+
+    $ apt-file search 'pybind11/pybind11.h'
+    pybind11-dev: /usr/include/pybind11/pybind11.h
+
+However, with the way pybind is currently packaged, the ehaders end up
+in:
+
+    $ sort output/build/python-pybind-2.8.1/.files-list.txt
+    python-pybind,./usr/bin/pybind11-config
+    [...]
+    python-pybind,./usr/lib/python3.9/site-packages/pybind11/include/pybind11/pybind11.h
+    [...]
+
+So, those headers will most probably not be found by the compiler.
+
+Also, since pybind is supposed to be a headers'-only library, there is
+nothing supposed to go in target, so it should be;
+
+    PYTHON_PYBIND_INSTALL_TARGET = NO
+
+Furthermore, /usr/bin/pybind11-config is a python script which hardcodes
+its shabang to #!/usr/bin/python, and this is incorrect:
+
+  1. /usr/bin/python might be python2 or python3, we can't know
+  2. anyway, it would not use our host python, so it would miss the
+    proper modules search paths.
+
+So, if another package want to call that /usr/bin/pybind11-config to
+find pybind, they're gonna have incorrect results, if at all...
+
+So I think we really, really need a package (like scipy) that actually
+makes use of pybind, so we can see how it works, and to fix it...
 
 Regards,
 Yann E. MORIN.
