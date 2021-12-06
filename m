@@ -1,66 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52AD3C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 21:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20170C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 22:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D904360DCA;
-	Mon,  6 Dec 2021 21:57:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFBE981AF3;
+	Mon,  6 Dec 2021 22:05:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hbSGKkH76rMm; Mon,  6 Dec 2021 21:57:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A1F56079F;
-	Mon,  6 Dec 2021 21:57:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03F451BF334
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:57:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E80B584BD0
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 21:57:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1lATu-j9r-ht for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 21:57:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0787084BCE
- for <buildroot@busybox.net>; Mon,  6 Dec 2021 21:57:35 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4835:cc5:af50:efe7])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1E7E9B01728;
- Mon,  6 Dec 2021 22:57:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1638827854;
- bh=bTAROIEHpg7eFMSdTBPSd3YDK1bjEVWkyMUK+w2jUIE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cv6JXlkKUfJbdn5PVQpsXQIqjGLhh1sNvKbKdYAWS3jmGlKIZVTab9mTkkma1DhXs
- wEjxDOkiQsk91Xg4tywwvBZvr4FX/d1ObmakdSq72Z//Z/zKS3lbPk+FXdIpTcJyHC
- Xvt2jYFMqpKSzmS73UPafrQzuFWpu/XJoiiVaQNem54zyxcTqa5N7z46KXa/7FVYq+
- OzjxlqmBoGn/Fk3POl/NABJ5bD57O6bWprosKFfbK/oeju5sLy4OYA8Y6ccRMrPpi4
- 3MUQFcRl+ytu9m0LVtjESXsyrS1dT0u5zZTDTWyXKJCM9Rgpfz+o+gpHM1Px3XyfZR
- mOfU3gNvlI1ew==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 06 Dec 2021 22:57:30 +0100
-Date: Mon, 6 Dec 2021 22:57:30 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: guillaume.bressaix@gmail.com
-Message-ID: <20211206215730.GE2603@scaer>
-References: <20211206193109.21218-1-guillaume.bressaix@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cVTSz-GHRU-k; Mon,  6 Dec 2021 22:05:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B5B781A6F;
+	Mon,  6 Dec 2021 22:05:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E7071BF232
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:05:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CF42404BD
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 22:05:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 43wEAqMIaqLB for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 22:05:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 035AA404B1
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 22:05:09 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 9C80EFF804;
+ Mon,  6 Dec 2021 22:05:06 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1muM6b-0001o0-6q; Mon, 06 Dec 2021 23:05:05 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211118210049.1598576-1-fontaine.fabrice@gmail.com>
+Date: Mon, 06 Dec 2021 23:05:05 +0100
+In-Reply-To: <20211118210049.1598576-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 18 Nov 2021 22:00:48 +0100")
+Message-ID: <87zgpd75ke.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211206193109.21218-1-guillaume.bressaix@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/python-pybind: fix upgrade
- to version 2.6.1
+Subject: Re: [Buildroot] [PATCH 1/2] package/libhtp: bump to version 0.5.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,114 +59,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Guillaume, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2021-12-06 20:31 +0100, guillaume.bressaix@gmail.com spake thusly:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-> 
-> The python 'setup.py' script needs header files
-> in $(@D)/pybind11 to work since v2.6.1, and these
-> files are generated by an internal minimalist cmake build.
-> 
-> Fixes
->    http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
->    http://autobuild.buildroot.net/results/d0287b7f64f206b0f074908c5780a3632e0cb799
->    http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce
->    http://autobuild.buildroot.net/results/d2f0a0ad8f6c7178517df109e7d885dac9134c3a
->    http://autobuild.buildroot.net/results/b57e9a3279260dae4a590f9421238fcabb2f7cab
->    http://autobuild.buildroot.net/results/515e6f2fc6b5780260d98d6bb52b541ce4bf1afe
->    http://autobuild.buildroot.net/results/d89c4ecc81222d4f80c951da2232d2e393fa1c69
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> 
-> ---
-> This remains a python-package.
-> 
-> 'python setup.py' actually hardcodes a system call to cmake now,
-> which seems dirty at first. But if we have a cmake env when they
-> do that, the install variables are passed and installation
-> is smooth. They probably introduced this call to make setup.py
-> self sufficient, as most people install this package from 'pip'.
-> 
-> ---
->  package/python-pybind/python-pybind.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-> index a6a1bdb976..bfd7f6f59a 100644
-> --- a/package/python-pybind/python-pybind.mk
-> +++ b/package/python-pybind/python-pybind.mk
-> @@ -9,5 +9,12 @@ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
->  PYTHON_PYBIND_LICENSE = BSD-3-Clause
->  PYTHON_PYBIND_LICENSE_FILES = LICENSE
->  PYTHON_PYBIND_SETUP_TYPE = setuptools
-> +PYTHON_PYBIND_INSTALL_STAGING = YES
-> +
-> +# every single 'python setup.py' call actually calls cmake
-> +# internally, to populate $(@D)/pybind11 with build requirements.
-> +# If we have a host-cmake env at that moment, 
-> +# then the final installation paths are properly defined
-> +PYTHON_PYBIND_DEPENDENCIES = host-cmake
+ > https://github.com/OISF/libhtp/releases/tag/0.5.39
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I am sorry, but I fail to see how this actually fixes things.
-
-As I explained in my previous review, headers are supposed to be in
-$(STAGING_DIR)/usr/include/pybind11/. That's at least where they are in
-Debian-based distributions;
-
-    $ apt-file search 'pybind11/pybind11.h'
-    pybind11-dev: /usr/include/pybind11/pybind11.h
-
-However, with the way pybind is currently packaged, the ehaders end up
-in:
-
-    $ sort output/build/python-pybind-2.8.1/.files-list.txt
-    python-pybind,./usr/bin/pybind11-config
-    [...]
-    python-pybind,./usr/lib/python3.9/site-packages/pybind11/include/pybind11/pybind11.h
-    [...]
-
-So, those headers will most probably not be found by the compiler.
-
-Also, since pybind is supposed to be a headers'-only library, there is
-nothing supposed to go in target, so it should be;
-
-    PYTHON_PYBIND_INSTALL_TARGET = NO
-
-Furthermore, /usr/bin/pybind11-config is a python script which hardcodes
-its shabang to #!/usr/bin/python, and this is incorrect:
-
-  1. /usr/bin/python might be python2 or python3, we can't know
-  2. anyway, it would not use our host python, so it would miss the
-    proper modules search paths.
-
-So, if another package want to call that /usr/bin/pybind11-config to
-find pybind, they're gonna have incorrect results, if at all...
-
-So I think we really, really need a package (like scipy) that actually
-makes use of pybind, so we can see how it works, and to fix it...
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(python-package))
-> -- 
-> 2.20.1
-> 
+Committed to 2021.02.x and 2021.08.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
