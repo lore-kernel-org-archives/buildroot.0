@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BB9C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1ABFC433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 166FF41C6D;
-	Mon,  6 Dec 2021 18:47:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81B6E41C6D;
+	Mon,  6 Dec 2021 18:47:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9NnmBm7hECL4; Mon,  6 Dec 2021 18:47:33 +0000 (UTC)
+	with ESMTP id L7mJkMQIRT23; Mon,  6 Dec 2021 18:47:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77B1041C64;
-	Mon,  6 Dec 2021 18:47:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4B6761BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:14:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE24841C6A;
+	Mon,  6 Dec 2021 18:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B1A3A1BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:15:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D46441C70
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:12:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF46084B99
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:15:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ml-6Pv78qlo4 for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:12:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9u4BlWsONsmD for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 18:15:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 873EE41C18
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:12:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F4DC84B96
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:15:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1F37881468; Mon,  6 Dec 2021 18:07:42 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 999ED81499; Mon,  6 Dec 2021 18:10:36 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 4 Dec 2021 21:55:12 +0100
+Date: Mon, 6 Dec 2021 19:13:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b017b8d3499fa1c86f5d23b084731a7ac104444d
-X-Git-Newrev: ebc0d88434174b58f32183d7f74dbd9149170eb7
+X-Git-Oldrev: 46ccda3a2f8336b1568672cb9f0c19c6a86607e7
+X-Git-Newrev: e72a25c33e2f1607499a43e6ccdb2f184c224871
 X-Patchwork-Hint: ignore
-Message-Id: <20211206180742.1F37881468@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwup: bump to v1.9.0
+Message-Id: <20211206181036.999ED81499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: drop autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebc0d88434174b58f32183d7f74dbd9149170eb7
+commit: https://git.buildroot.net/buildroot/commit/?id=e72a25c33e2f1607499a43e6ccdb2f184c224871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update download site to point to new location.
+LIGHTTPD_AUTORECONF=YES was added on master, but the package was changed to
+build with meson on next, so this doesn't do anything any more.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fwup/fwup.hash | 2 +-
- package/fwup/fwup.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lighttpd/lighttpd.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index 87263192e4..2e5b2b1f6c 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9890f0328796f4315e6c1188df5c103855c530fbc14fbc8c12f4b24066c975f1  fwup-1.8.0.tar.gz
-+sha256  18ae6753145cef2fd5f5fc83e29c2d883e570668d8aa064ee6c94d4c5e44d73d  fwup-1.9.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 77eaa528f3..62016d94e3 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FWUP_VERSION = 1.8.0
--FWUP_SITE = $(call github,fhunleth,fwup,v$(FWUP_VERSION))
-+FWUP_VERSION = 1.9.0
-+FWUP_SITE = $(call github,fwup-home,fwup,v$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
- FWUP_DEPENDENCIES = host-pkgconf libconfuse libarchive
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index e7a33e1a1d..7ca71e356a 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -12,8 +12,6 @@ LIGHTTPD_LICENSE = BSD-3-Clause
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
+-# Issue in configure script provided in tarball
+-LIGHTTPD_AUTORECONF = YES
+ LIGHTTPD_CONF_OPTS = \
+ 	-Dwith_brotli=false \
+ 	-Dwith_dbi=false \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
