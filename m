@@ -4,59 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C45A6C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  5 Dec 2021 22:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63F2C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 07:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F6FC400AF;
-	Sun,  5 Dec 2021 22:07:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E102400EF;
+	Mon,  6 Dec 2021 07:45:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Ji6fxMYpvdf; Sun,  5 Dec 2021 22:07:17 +0000 (UTC)
+	with ESMTP id NTiCh3OFgfhD; Mon,  6 Dec 2021 07:45:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A08340428;
-	Sun,  5 Dec 2021 22:07:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E7111BF3AD
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 22:07:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 023CD4016A;
+	Mon,  6 Dec 2021 07:45:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BD271BF427
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 07:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D71D6072D
- for <buildroot@lists.busybox.net>; Sun,  5 Dec 2021 22:07:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 485A082CCA
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 07:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4QLQHxa5T6od for <buildroot@lists.busybox.net>;
- Sun,  5 Dec 2021 22:07:10 +0000 (UTC)
-X-Greylist: delayed 00:12:41 by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7FEA4605C4
- for <buildroot@buildroot.org>; Sun,  5 Dec 2021 22:07:09 +0000 (UTC)
-Received: from localhost ([31.220.119.62]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MpDRp-1mDSaF4AVr-00qmaS; Sun, 05 Dec 2021 22:54:25 +0100
-Date: Sun, 5 Dec 2021 22:54:24 +0100
-From: Andreas Klinger <ak@it-klinger.de>
-To: buildroot@buildroot.org
-Message-ID: <20211205215423.GA13259@arbad>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eAeUv8IzJvNw for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 07:45:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 360E482CB7
+ for <buildroot@busybox.net>; Mon,  6 Dec 2021 07:45:35 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id r25so38958046edq.7
+ for <buildroot@busybox.net>; Sun, 05 Dec 2021 23:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=5WSdKBwoSV8oHggO7vWeG8jfqJsN3QWNqpftGNKOhA8=;
+ b=eWgWXbkUtTEOdcvvs9c5CadY2G9OFOJo93LxLIUB0NzD6ya0ou123IzmMHGWAL9+uF
+ KnrtJR3Ow1GAZQtPzN8NzVUTUzXov6ZR0xArOCO9rHSCSOijnwTFoeoHtWFESTPtS838
+ cVj9HbTAdurKuFo1wQHq4lYfMMSWJnUXO1ga1WDbMuKETlUk/fg8Vysr5XUvyUPUPQ/k
+ R7V2WxZyC3El2m1jjRAevchS+KyLHUrq6qYVNL6HM+WHxaa1B+HOnUXrWw7jLtzFW2iC
+ TKTJntb2IVmxcNf93TSnn2HNvea52aY+PX4Jlvq4ScOENqkGYcPUF87xycHWNrGXJ0tg
+ I2VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=5WSdKBwoSV8oHggO7vWeG8jfqJsN3QWNqpftGNKOhA8=;
+ b=w73QnE0/+5QIyIW/cZC+3bCXPJcaV5o9EICeIggK7Mlh/LohtaTb9C4nSSiPuC42Mh
+ E7j5UpEXwlB1UKHrqUTS94u83cajm4Ug7Tkrtxzqgxg+AWfY9bWMgxyeGzT5fv9dDCVm
+ lRgg1077uSbiQ5barSCukNgT6THXO+hfc2BpFoYWDULGwU+DGngxWFFj7hwOFZXbo536
+ VGSc6NjoD9iUfHrjqcYnr90P6Or7TSiKePIJOL7TMcI08v32bssD4zd2x9CdKmyOuU8I
+ 123CC3YTtROhIcTGrv9eO9d2dbxhWdV6rHjy1mgJZOshvm24jWJHL7t6h96z/7tkftwr
+ zobw==
+X-Gm-Message-State: AOAM532MhNRjNK7KOXAS+DBQK9Q1IEJL1nPOyaB3shNvCABAQ9ckhaaP
+ FEYxtlr/dNl5qi3qXeCaxDygUg==
+X-Google-Smtp-Source: ABdhPJxCTpjaP06LM7Zp9HhZ51dxogJFGdYdXDaYr6Z1K5B5xSARKRJLEG/+DSq2kmMCTGmODLIXwQ==
+X-Received: by 2002:a05:6402:270c:: with SMTP id
+ y12mr51742607edd.258.1638776733849; 
+ Sun, 05 Dec 2021 23:45:33 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id gb42sm6350057ejc.49.2021.12.05.23.45.33
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 05 Dec 2021 23:45:33 -0800 (PST)
+Message-ID: <1e21be4a-2465-e5c9-f775-0430cd3b0cf1@mind.be>
+Date: Mon, 6 Dec 2021 08:45:32 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Provags-ID: V03:K1:rd2QfT+xPzozWbiLhYkXeHpuUlnJq87OkIu0AaNjSBOvvm1Pw5f
- H/BU3NRyYX8/ZX9XeBuI7LaKVMjOeFPmMgmZ6dJwKqLvm58aJ6+Kb/YEPW94/w+yJn63uDx
- rshO68HCXe9Z1LiMfaMnMCpPar8l6hjtO5t2hMAcTek3P1X4Q0mNB1qe7h7QSqyN44appLR
- 43FfZ0Wlm9ZPYfMjmYSPA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tJTd05UO6nc=:NtjwsgT2d/htc90oYAhuFA
- OHzR6M/WtiJ1ymAy+kqXopdXBSJ8qPAhMosKQhyLs8E/GjHCJBkmjFVK/T1E433Q9EOWCmqiA
- 8TE/pJiGR2FFhB86d5tQlBKSlo8YEiuqDgLqAkyBA/5wtqCwqoodMMQxEgyaiObw0aQGlAuXx
- W2UQTXIQgBdIMrY6UKMF4Gs6gOrXCUAvB6PtJHCt1g/stH8rGdry9tIwPI9WcpurHUAJ2IGGx
- wv3UWIw19HEy3Upf1AK6RjOfN3UIRggIQLSJuD99TS94QxorK62w/sd4dFGFAIuU9gUqemMht
- f7KIhS6rgPuyFSxK95BfFh8DV4mkqPJYpj8Nbg+pJyUdcDYUZMlE+v3iZXkyqpAdduEx+pDC8
- CkxYsy3lnrTRfvgKBXx48zvUKtVbC/2qulOOJcOdukhpTC2UXhbdyiT5/biaqYfqnLW3hqTfl
- 2nu8yBWK/pympkNwQtA43lshmJH3dK8x74ECU3qtRliZUF+zQvPNL/9aYq7MgXOMxmUZ2Nmiq
- +eGwKsb0xVXs0zEMreY9dcfoe6o5ru0Xsk3FHvy8F/XNnfz3nrBNXgARsKrEPgYOaTB96JvBS
- 8EIWGzvPkSMbVR7lhCWlsd5LW1cUliLPB3Ho+57ggEs3p/nI072DzSCzcQZOr3pig9ceknx17
- BZ5zqffq9m1KDV6eirBWO2Oc2upazGPLU3AFvk8naaRzLBXAio64Bt8OorKs400dbDFI=
-Subject: [Buildroot] [PATCH 1/1] package/ply: bump to version 2.2.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: guillaume.bressaix@gmail.com, buildroot@busybox.net
+References: <20211205204720.2831-1-guillaume.bressaix@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211205204720.2831-1-guillaume.bressaix@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-pybind: fix upgrade to
+ version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,117 +95,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Klinger <ak@it-klinger.de>
-Content-Type: text/plain; charset="us-ascii"
+Cc: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove patches which are now included in version 2.2.0 and no longer
-needed.
+  Hi Guillaume,
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
----
- ...ure.ac-fix-error-with-version-string.patch | 29 -------------------
- ...02-printxf.h-add-stdarg.h-in-include.patch | 27 -----------------
- package/ply/ply.hash                          |  2 +-
- package/ply/ply.mk                            |  2 +-
- 4 files changed, 2 insertions(+), 58 deletions(-)
- delete mode 100644 package/ply/0001-configure.ac-fix-error-with-version-string.patch
- delete mode 100644 package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
+  This is still looking fairly weird to me...
 
-diff --git a/package/ply/0001-configure.ac-fix-error-with-version-string.patch b/package/ply/0001-configure.ac-fix-error-with-version-string.patch
-deleted file mode 100644
-index e80599c649..0000000000
---- a/package/ply/0001-configure.ac-fix-error-with-version-string.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 684bae6043fa2242a5c6551c3f260c9db0cf7dc8 Mon Sep 17 00:00:00 2001
--From: Andreas Klinger <ak@it-klinger.de>
--Date: Mon, 4 Jan 2021 08:40:50 +0100
--Subject: [PATCH] configure.ac: fix error with version string
--
--When autoreconfiguring there's an error: "configure.ac:6: error: AC_INIT
--should be called with package and version arguments".
--
--Put version string in square brackets to satisfy autoconfigure.
--
--Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 65387d6..7a0054e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1,5 +1,5 @@
-- AC_PREREQ(2.61)
---AC_INIT(ply, m4_esyscmd_s(git describe --always --dirty),
--+AC_INIT(ply, [2.1.1],
-- 	     https://github.com/wkz/ply/issues)
-- 
-- AC_GNU_SOURCE
---- 
--2.20.1
--
-diff --git a/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch b/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
-deleted file mode 100644
-index f56e9a8e72..0000000000
---- a/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 3fb3cb779c535ec28cbba80573bbea42435108c0 Mon Sep 17 00:00:00 2001
--From: Andreas Klinger <ak@it-klinger.de>
--Date: Mon, 4 Jan 2021 20:48:41 +0100
--Subject: [PATCH] printxf.h: add stdarg.h in include
--
--Include of <stdarg.h> is needed for va_list.
--
--Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-----
-- include/ply/printxf.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/include/ply/printxf.h b/include/ply/printxf.h
--index a59f0d2..e985936 100644
----- a/include/ply/printxf.h
--+++ b/include/ply/printxf.h
--@@ -8,6 +8,7 @@
-- #define _PRINTXF_H
-- 
-- #include <stdio.h>
--+#include <stdarg.h>
-- 
-- struct printxf;
-- 
---- 
--2.20.1
--
-diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-index 0ee2709b30..df01ae08e0 100644
---- a/package/ply/ply.hash
-+++ b/package/ply/ply.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  cecf0913c65027750ac3272e936110c9f843435938f9ca2edbc34e99ba6c00e2  ply-2.1.1.tar.gz
-+sha256  8cd92fc8784873fb0507bc11f3f62a31d0345c64914ddaadb958d8b2d6de0100  ply-2.2.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index b72b29f315..b3c56bd9a5 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PLY_VERSION = 2.1.1
-+PLY_VERSION = 2.2.0
- PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
- PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
--- 
-2.20.1
+On 05/12/2021 21:47, guillaume.bressaix@gmail.com wrote:
+> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+> 
+> The python 'setup.py' script needs header files
+> in $(@D)/pybind11 to work since v2.6.1, and these files
+> are created by an internal minimalist cmake build.
+> 
+> fixes http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
+
+  Nitpick: to make it appear with the fixes tag in patchwork or in the summary 
+that Peter makes, you have to format it like this:
+
+Fixes:
+     http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
+     http://...
+
+> fixes http://autobuild.buildroot.net/results/d0287b7f64f206b0f074908c5780a3632e0cb799
+> fixes http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce
+> fixes http://autobuild.buildroot.net/results/d2f0a0ad8f6c7178517df109e7d885dac9134c3a
+> fixes http://autobuild.buildroot.net/results/b57e9a3279260dae4a590f9421238fcabb2f7cab
+> fixes http://autobuild.buildroot.net/results/515e6f2fc6b5780260d98d6bb52b541ce4bf1afe
+> fixes http://autobuild.buildroot.net/results/d89c4ecc81222d4f80c951da2232d2e393fa1c69
+> 
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> 
+> ---
+> This remains a python-package.
+> 
+> 'python setup.py' actually hardcodes a system call to cmake,
+> which seems dirty at first.
+> Fortunately, if we have CMAKE ENV, all BR variables are retrieved.
+
+  I don't see CMAKE_ENV anywhere in Buildroot, or in this patch.
+
+  Also, I don't think there's any way to tell CMake about "all BR variables" 
+other than passing a toolchainfile (with -DCMAKE_TOOLCHAIN_FILE=...). Are you 
+sure that it's really building correctly for the target?
+
+
+  Regards,
+  Arnout
+
+
+> I think they made this cmake call to make setup.py self sufficient.
+> 
+> ---
+>   package/python-pybind/python-pybind.mk | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+> index a6a1bdb976..080586a877 100644
+> --- a/package/python-pybind/python-pybind.mk
+> +++ b/package/python-pybind/python-pybind.mk
+> @@ -9,5 +9,11 @@ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+>   PYTHON_PYBIND_LICENSE = BSD-3-Clause
+>   PYTHON_PYBIND_LICENSE_FILES = LICENSE
+>   PYTHON_PYBIND_SETUP_TYPE = setuptools
+> +PYTHON_PYBIND_INSTALL_STAGING = YES
+> +
+> +# every single 'python setup.py' call actually calls cmake
+> +# to populate $(@D)/pybind11 with .h and build requirements.
+> +# If we have a HOST_CMAKE_ENV, then installation paths are properly defined
+> +PYTHON_PYBIND_DEPENDENCIES = host-cmake
+>   
+>   $(eval $(python-package))
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
