@@ -1,81 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A94ABC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 12:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E467C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 12:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F16083224;
-	Mon,  6 Dec 2021 12:04:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD1CD405C1;
+	Mon,  6 Dec 2021 12:04:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gW4p08USxn7x; Mon,  6 Dec 2021 12:04:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C664b8bTEPqW; Mon,  6 Dec 2021 12:04:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BADFA8316F;
-	Mon,  6 Dec 2021 12:04:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19F311BF3C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4626E40432;
+	Mon,  6 Dec 2021 12:04:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9339F1BF3C0
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 12:03:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0708A400D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 833DE60C0A
  for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 12:03:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PWfcM6_s6q2M for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d61oLJkmFMkf for <buildroot@lists.busybox.net>;
  Mon,  6 Dec 2021 12:03:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 17FDF4014B
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 12:03:39 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id z8so9910213ilu.7
- for <buildroot@buildroot.org>; Mon, 06 Dec 2021 04:03:39 -0800 (PST)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B2BEF60A91
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 12:03:40 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id s11so9924728ilv.3
+ for <buildroot@buildroot.org>; Mon, 06 Dec 2021 04:03:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=WhljE0vUmEYWsfcgtP32QZlvPmwFmySuwTJvtqNKOPY=;
- b=AcOOtArvv3JThBCJbPkR+VZgK0Ag6lTiCh+Gk+dyGUXEBiMwJNivzF2RdL3WTFrCOP
- +Lpye3y0jbc2X6yz/SSwZXHYKeb6wmCTmEEs94ljAqqcz/ju/5X8QHtkNOdEDg31g+fT
- URsH9b1D2/32SdKYYQMfeWZY8eMUsTs154ZMm/18CsQ+8MW0nL/oyvg/lfma/wxkcoAr
- oZfjF5US7MfQe9mit1rQnF+c1rO7+SA+KY6bk5vsQbtjrwYWy2l/AE5hrYVTHKpHXuKh
- lrDz2HfTj7emvpXrXUyLfTdiKgDJg1f+qBXQ7XfsEO5GU9Vg85EAvSoGj3dbhxBUOvWO
- QLVA==
+ bh=dlqKXgl6HaMiinhTJXatrY4SuZUsehjC0zTBciLWVQY=;
+ b=fo74X3PGAeqls+/K+KvolvZmSy1aJmJuCgtetpsIG/+Ll746PRrtHbZFbuC2yRtB0h
+ rlTjszEcTrI+a65MV7tjy9N797RVFc/pGc0eai3FZs2mm0Uki69/15kIuDiQlEtjwUMr
+ jZdcTUuXJYExlyt3yn4STKcNpXgXoh01JUTKgApX/MAT3lvyoO8Sqq01g32ip603/UEZ
+ hwlZHG4vfhMmbtFNFqE6tmMjXaJFC/75vEhLyNPlNgqfSzH9MyKDxilHZSeqCtPdQho2
+ hyT4kc0G1/KsDWQfn/wZKXvpOIWEHNAfhpLmmkjbE1NzXDQuRo+ftY7KqEWiuouMDPIe
+ eYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=WhljE0vUmEYWsfcgtP32QZlvPmwFmySuwTJvtqNKOPY=;
- b=Xaa7ZcjuyZRDyiMI99/LIaMIOasAFfppwANZuDg3CN6vhpUTcBeSPqo0Pyt4erQA19
- ZdRPlR4NLVauc3SomEsrYYsb/K3K8BmSnM88yd0VMqCRI3exS+GpGxlReA8ktNJj32Qe
- PfpXbwvT3m+hw09Wkg5qDlUgA5szajYlAZj9JnJEQyv2I3kCguq8otnj5h3hvazsOd2w
- OmWJweB/Ia4kpZZUnyCPP7P+q1R8h687pQIKyunq3p2CJlu1fdXiudNTeszAietO6Xqr
- 398+atdDnPgWUrLJcEJ3QVoKPml+Jm2/Q4AwB0Ju9Xf8D6OETsQMVofrafOijZBLiZYd
- pxKw==
-X-Gm-Message-State: AOAM530sVRUENagWlg/Hq5w9MhZwJxRRUlQbldwrboJh5dCv7zvSRe9N
- RvlEvATuRZQIbvJs/TbpADvJZNME2Gk=
-X-Google-Smtp-Source: ABdhPJyhWW60ha/4RksWjVXPw251W2NH7U3qAHo+TMxXxFa0WX4e/nO3jVxGM4nQyezVZRxqgmKu/Q==
-X-Received: by 2002:a92:ca0f:: with SMTP id j15mr34298420ils.229.1638792219079; 
+ bh=dlqKXgl6HaMiinhTJXatrY4SuZUsehjC0zTBciLWVQY=;
+ b=HqdNBorWz9uQKAuCYs++3DvXHOZM2WXNCwVvOOIZTGMcZf7GYM2pEEzjccs5YP0ui7
+ m94DBbGaUbKiyybpPxGjRr+UMhDlpNeD0VGh+lIioBUQ6X0OZC09UZ2C/yPjPVwWqnSW
+ RnhN+6WgYsteckXh2FtHBTe8bZYxcuYl3xMY8E9UJiWVS38wPcwTqt1gqpmMVAIoeWXS
+ an9WKlTfxWYsT7TFDZLurE+P8wHoE3YjWtxvJvAFTyDoKp82mXrEVCnliwAHUwzcD6Lp
+ ixut5NIwIeq+FZphtNqoLLX70W1g9zgOzzX+PasYzfc0J4OaZ0y47oGHCIiVjJ3Ix2LW
+ WEHg==
+X-Gm-Message-State: AOAM533mkW/8muuMCt9Jwp073DxDvIE5LQiVPZGi4ynaHvc0oMNFHgXD
+ HBnzPyXYobDiFYjHTzCKBgJDd+HNpxY=
+X-Google-Smtp-Source: ABdhPJyg377OyWT1QLncPeyhY66FjVbfGf9QSbKW9zpdNKfPblZccw9RFTVXHQgi3u3BCZuteGGv4w==
+X-Received: by 2002:a05:6e02:2163:: with SMTP id
+ s3mr28964789ilv.70.1638792219675; 
  Mon, 06 Dec 2021 04:03:39 -0800 (PST)
 Received: from james-x399.localdomain (71-218-107-26.hlrn.qwest.net.
  [71.218.107.26])
- by smtp.gmail.com with ESMTPSA id u4sm7153406ilv.66.2021.12.06.04.03.38
+ by smtp.gmail.com with ESMTPSA id u4sm7153406ilv.66.2021.12.06.04.03.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Dec 2021 04:03:38 -0800 (PST)
+ Mon, 06 Dec 2021 04:03:39 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Dec 2021 05:03:22 -0700
-Message-Id: <20211206120325.3120351-3-james.hilliard1@gmail.com>
+Date: Mon,  6 Dec 2021 05:03:23 -0700
+Message-Id: <20211206120325.3120351-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211206120325.3120351-1-james.hilliard1@gmail.com>
 References: <20211206120325.3120351-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/6] package/python-pyparsing: enable host build
+Subject: [Buildroot] [PATCH 4/6] package/python-packaging: enable host build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,22 +97,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This will be required by host-python-packaging.
+This will be required by host-python-pypa-build.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyparsing/python-pyparsing.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-packaging/python-packaging.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 0dacf2371d..5741458d65 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -10,5 +10,7 @@ PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/c1/47/dfc9c342c9
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = setuptools
-+HOST_PYTHON_PYPARSING_NEEDS_HOST_PYTHON = python3
+diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
+index 6b54d2416d..e2fb9b120b 100644
+--- a/package/python-packaging/python-packaging.mk
++++ b/package/python-packaging/python-packaging.mk
+@@ -10,5 +10,8 @@ PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/df/86/aef78bab3a
+ PYTHON_PACKAGING_SETUP_TYPE = setuptools
+ PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
+ PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
++HOST_PYTHON_PACKAGING_NEEDS_HOST_PYTHON = python3
++HOST_PYTHON_PACKAGING_DEPENDENCIES = host-python-pyparsing
  
  $(eval $(python-package))
 +$(eval $(host-python-package))
