@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18DEAC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 18:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D904C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  6 Dec 2021 19:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF38740124;
-	Mon,  6 Dec 2021 18:58:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47B1F40449;
+	Mon,  6 Dec 2021 19:02:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ya0CfY7-9pdr; Mon,  6 Dec 2021 18:58:09 +0000 (UTC)
+	with ESMTP id 6g6hVoh4jkH0; Mon,  6 Dec 2021 19:02:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2233401B2;
-	Mon,  6 Dec 2021 18:58:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 988F21BF3F2
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:58:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7DE08401B2;
+	Mon,  6 Dec 2021 19:02:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A0B61BF3F2
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 19:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 887A582B3E
- for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 18:58:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E7E5360D64
+ for <buildroot@lists.busybox.net>; Mon,  6 Dec 2021 19:02:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q1rkMQzIQYPC for <buildroot@lists.busybox.net>;
- Mon,  6 Dec 2021 18:58:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id elFNaaIED7fk for <buildroot@lists.busybox.net>;
+ Mon,  6 Dec 2021 19:02:20 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 613DC84B7D
- for <buildroot@buildroot.org>; Mon,  6 Dec 2021 18:58:05 +0000 (UTC)
-Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout01.t-online.de (Postfix) with SMTP id 8D6863C70;
- Mon,  6 Dec 2021 19:58:02 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.179.59]) by fwd70.t-online.de
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2CB876079C
+ for <buildroot@buildroot.org>; Mon,  6 Dec 2021 19:02:20 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout07.t-online.de (Postfix) with SMTP id E5E763427;
+ Mon,  6 Dec 2021 20:02:17 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.179.59]) by fwd84.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1muJBY-1UEo7t0; Mon, 6 Dec 2021 19:58:01 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35406)
+ esmtp id 1muJFh-396TR30; Mon, 6 Dec 2021 20:02:17 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35408)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1muJBY-000245-JO;
- Mon, 06 Dec 2021 19:58:00 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1muJFg-0002ms-WE;
+ Mon, 06 Dec 2021 20:02:17 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Mon,  6 Dec 2021 19:58:00 +0100
-Message-Id: <20211206185800.797075-1-bernd.kuhls@t-online.de>
+Date: Mon,  6 Dec 2021 20:02:16 +0100
+Message-Id: <20211206190216.798637-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1638817081-00001432-D6FD72B9/0/0 CLEAN NORMAL
-X-TOI-MSGID: 240df330-67fe-4f22-b2e0-eccf58fcad89
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.1
+X-TOI-EXPURGATEID: 150726::1638817337-00001473-4B715283/0/0 CLEAN NORMAL
+X-TOI-MSGID: ffef2975-6a15-4527-9931-64eb85b325f4
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,63 +61,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-December/000656.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 39797f61b7..6469716806 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.3.0
-+MESA3D_HEADERS_VERSION = 21.3.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 6ada5aebc4..f12918dbfe 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-November/000654.html
--sha256  a2753c09deef0ba14d35ae8a2ceff3fe5cd13698928c7bb62c2ec8736eb09ce1  mesa-21.3.0.tar.xz
--sha512  b27c0ccf2fc9b96bbece715612cec4f4e267ab25dc5386c3debd2346c385afa0146317c67a3d2eec198dbf5338fb182b458c5fe5567216b265153c0b7b560de1  mesa-21.3.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000656.html
-+sha256  2b0dc2540cb192525741d00f706dbc4586349185dafc65729c7fda0800cc474d  mesa-21.3.1.tar.xz
-+sha512  43f019d4810bafd177b1a41207ae20a77982e4e6df3ab2b7a700273748cbc766694bd44594c898c4bd7848a94200fd28237a67d290c4e06595e6eab71cb716e8  mesa-21.3.1.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c4e8cf0608..0859265afb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 49b102cf8d..db06af53b7 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  903f05c6b6e8dfc2ed7df19ec9b63733a5e38caeca1269cc9bb99d46659d8907  tvheadend-637844055c186e981495da711e4887806f656c98.tar.gz
++sha256  11eeca461e74fbe8306916933cab96d35a99fa89d81e26126e194875c41b6fad  tvheadend-b8710206eb073c72b142bce95846b77a0ffa34a6.tar.gz
+ sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index a50f74a074..27443307da 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.3.0
-+MESA3D_VERSION = 21.3.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-TVHEADEND_VERSION = 637844055c186e981495da711e4887806f656c98
++TVHEADEND_VERSION = b8710206eb073c72b142bce95846b77a0ffa34a6
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
