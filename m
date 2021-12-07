@@ -1,80 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C883C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 14:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F277BC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 14:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60AC960E8A;
-	Tue,  7 Dec 2021 14:34:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD64400F3;
+	Tue,  7 Dec 2021 14:50:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uRrZY-24D7wC; Tue,  7 Dec 2021 14:34:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y9JiO8J74KX1; Tue,  7 Dec 2021 14:50:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4AED60E82;
-	Tue,  7 Dec 2021 14:34:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4702940142;
+	Tue,  7 Dec 2021 14:50:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 576F41BF304
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:34:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D0C441BF304
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5050E4056D
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:34:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF09640142
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:50:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sgzVV-523sEg for <buildroot@lists.busybox.net>;
- Tue,  7 Dec 2021 14:34:48 +0000 (UTC)
+ with ESMTP id twb83_eyMOv0 for <buildroot@lists.busybox.net>;
+ Tue,  7 Dec 2021 14:50:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A576E4057A
- for <buildroot@buildroot.org>; Tue,  7 Dec 2021 14:34:48 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id 14so17315173ioe.2
- for <buildroot@buildroot.org>; Tue, 07 Dec 2021 06:34:48 -0800 (PST)
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
+ [IPv6:2607:f8b0:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 772B9400F3
+ for <buildroot@buildroot.org>; Tue,  7 Dec 2021 14:50:45 +0000 (UTC)
+Received: by mail-ot1-x332.google.com with SMTP id
+ i5-20020a05683033e500b0057a369ac614so18326508otu.10
+ for <buildroot@buildroot.org>; Tue, 07 Dec 2021 06:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=VHasB59jflQQ3qXAje+vXpKGp/XHz5D+sytJMLwsilA=;
- b=nxYayVLJa+AobhEsJq9RSG4+N99ENkuo2pJ8lumnWNMnx/fQ/lY/XhBhD9DmWsqpil
- JnDrs0U7F1SJjU9mg23ZD0JChDr3N1wgPjX6Hr0w4UuHtVqxt9b0NCuK8yMZmJ4Xm5Yc
- IV9moU1+s390sT2xkp67srLaEvmfUEgwkrNu7iLT8lOcmUgwLM8Ce52+JqOdfES+cz0J
- SXFONQ3v7u4aDoARdgfeyttRR/bIGXPh4ix2c/OqWbcbJJ3yXeloFEMGAo5bAD+W3HvZ
- tGWw+a5oEA0t10dw/jUYARVbEs5FuMwD3KaOqwl1VjXJC6hR7Ff62r3W3t7qBHBacBG5
- jp4Q==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=wq9FpWr6uAh04eLFfYInGqy5DQ6KTPXZaijb+osIARM=;
+ b=B0TLa+Oqh2B0FrLv2V1Bcp1A5dvKnWGMlL39yUBbDTioJRg4iWEW//xHpwePlsdTAa
+ 3h7tu2JDxXQEhJgd8zmFohAa6KlOVH5ETiF7SUupdBUBsWzeOr7GSyMPGE9oFCYqrIkF
+ 71l+ST5zYfo7P7VaI+8FPDvXLe7YkVp+Zop4N3hwZqbwNZwCmsi2YeSZioT6q/DSiyXb
+ rCjA1vtM7xv15amuaI0BWrmY3MYovwMIc0iae4BM4Ylb6Wzs05Gh0eOFN6fnLG6yTBVh
+ hCctsvVSg79fGwg7tIBDzrn0Eo/Z/4yudouDn1EZtWkh8YWU4E4oD8HzEb1aV2PrMLjR
+ URxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=VHasB59jflQQ3qXAje+vXpKGp/XHz5D+sytJMLwsilA=;
- b=PauKgkn2wUA+x0/0yuRiD08pkZor7AQ1d7Qx890IbDZbqXvYpuZ86G416KJldy6mZo
- R5o+DFg1ZiDUcwdHN4bB+eywRNoiF6SWqLIFES59Oe+wVAYs9X9OxyVeB+KAb/LuSUFN
- e6LY20mJ9YhncP17hpQr8wu9v+o0q6VtIPou48NyZH76t0CaEA/2Jx++5y76cB2QtSg6
- xJj5jN7WqTM7kryeSNn5rLJsYyQ14XU6+6+pDSqBJ3ZVjgvtcF3dU6lr+X+Y0TQflCAH
- Of7gkp8oxDugvBqiBc8G2X97LnnDX0PUDAGfvpJ/EeyVA1u1rLM8jVy2IjUR3P9yraHw
- Eutw==
-X-Gm-Message-State: AOAM533VeVg3IUYzApzQXnNJPvjBXeMcC9NrSYQKQHdXQNaaK0lTfwHe
- ComT+iUjOpzZGyVWXFZhNCEWcVhQi8o=
-X-Google-Smtp-Source: ABdhPJyfSFt/FEYDd8kWz/LVoKdQPBmiUA/lstTR0eDgNn3PG4Iu+JT6FTg3R7aDE7o1ilIgRUl7iA==
-X-Received: by 2002:a5d:8896:: with SMTP id d22mr41589814ioo.141.1638887687562; 
- Tue, 07 Dec 2021 06:34:47 -0800 (PST)
-Received: from james-x399.localdomain (71-218-107-26.hlrn.qwest.net.
- [71.218.107.26])
- by smtp.gmail.com with ESMTPSA id h11sm9628270ili.30.2021.12.07.06.34.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Dec 2021 06:34:46 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  7 Dec 2021 07:34:29 -0700
-Message-Id: <20211207143429.2821436-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=wq9FpWr6uAh04eLFfYInGqy5DQ6KTPXZaijb+osIARM=;
+ b=PFVr98VfFETh6NUjSt3mh3ciBpoLbrADlf7L5ncGUblcb/kKPHCehGr/Thbe85duig
+ 7dQte/rkJAKU/SupNr19b6ZEFBfi+VRW2+Aap1rS8JWuoQgerTMZQpD12devemwrUBG/
+ kT8XS9BhPDbVyEj/ipJxNL6K0YHH9yVw51EKPSqeh+FBehrb0IEH60WH6461NbsYAQ5Q
+ 0YrPmdIxTUeMk/YufJIZbbBp5w+UvfCq1MsD/OK5MD6wYuQpNc9rFDsc8vh3WrAnRbZS
+ Dl7EKTKfaqt49tJtLI9mWBsOli0fjULSqFF1/Ne3zsm3OoG0PL6+CvqyiU9pLKzYOxoZ
+ 1ZYA==
+X-Gm-Message-State: AOAM531Hut1YO/4kvE/I/03PAf95FSDfjnuX9EGRvPZxtuvfcwh+h6aP
+ tbFOrnku37+pipmKQoVGEcjy5VErQuMRskxUrCY34GjVqeI=
+X-Google-Smtp-Source: ABdhPJwos2MbO6bIYD526viIFvSBZBNyoFPQH4b1lUtO7KTRy0RZprzGZmdpZFNK5vmsj3Uen3n+rQqPimsDRaY8uzI=
+X-Received: by 2002:a9d:6c54:: with SMTP id g20mr36131793otq.30.1638888644408; 
+ Tue, 07 Dec 2021 06:50:44 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: select videorate when
- building with media-stream support
+References: <20211124212101.3037723-1-aperez@igalia.com>
+In-Reply-To: <20211124212101.3037723-1-aperez@igalia.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 7 Dec 2021 07:50:33 -0700
+Message-ID: <CADvTj4o7qGJyApdFrrPyjWNvWyO4Tidf9SeSmyryc6KvyBY6fA@mail.gmail.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/cog: bump to verion 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,36 +79,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-ERROR GST_PIPELINE gst/parse/grammar.y:857:priv_gst_parse_yyparse: no element "videorate"
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/wpewebkit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 8357051e93..36523bdb41 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -109,6 +109,7 @@ if BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 
- config BR2_PACKAGE_WPEWEBKIT_MEDIA_STREAM
- 	bool "media-stream support"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
- 	help
- 	  This option enables media-stream support.
- 
--- 
-2.25.1
-
+On Wed, Nov 24, 2021 at 2:21 PM Adrian Perez de Castro
+<aperez@igalia.com> wrote:
+>
+> This new release includes a number of improvements. Release notes:
+>
+>   https://wpewebkit.org/release/cog-0.12.0.html
+>
+> Small tweaks were needed due to the "fdo" platform backend being renamed
+> as "wl"; the symbol is kept as BR2_PACKAGE_COG_PLATFORM_FDO to avoid
+> breaking existing configurations. Also the new version supports building
+> with libsoup3, which is not yet packaged in Buildroot, so -DUSE_SOUP2=ON
+> is always passed to CMake.
+>
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Tested-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/cog/Config.in | 4 ++--
+>  package/cog/cog.hash  | 8 ++++----
+>  package/cog/cog.mk    | 9 +++++----
+>  3 files changed, 11 insertions(+), 10 deletions(-)
+>
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index 5f00c5a2dd..d4238750f9 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -28,12 +28,12 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>           must be always specified in the command line.
+>
+>  config BR2_PACKAGE_COG_PLATFORM_FDO
+> -       bool "FreeDesktop.org backend"
+> +       bool "Wayland backend"
+>         default y
+>         select BR2_PACKAGE_LIBXKBCOMMON
+>         select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>         help
+> -         Enable the FreeDesktop.org backend. Cog will interface with
+> +         Enable the Wayland backend. Cog will interface with
+>           a compositor over the Wayland protocol.
+>
+>  config BR2_PACKAGE_COG_PLATFORM_DRM
+> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+> index 3abc5f2c83..6a9af1845d 100644
+> --- a/package/cog/cog.hash
+> +++ b/package/cog/cog.hash
+> @@ -1,7 +1,7 @@
+> -# From https://wpewebkit.org/releases/cog-0.10.1.tar.xz.sums
+> -md5  b997da3c143bc34ec5e953eb7e7ccefc  cog-0.10.1.tar.xz
+> -sha1  f25312141de918f41add3e3c9984faa985cda0a9  cog-0.10.1.tar.xz
+> -sha256  aecf546d7b0645119d79559c5574cb5eb68364fc8409dfbd47a4920bd1f221bc  cog-0.10.1.tar.xz
+> +# From https://wpewebkit.org/releases/cog-0.12.0.tar.xz.sums
+> +md5  30d6f68914af0ba5c32ac14df504215a  cog-0.12.0.tar.xz
+> +sha1  de367b33fb45a1bca9e443ca5c1d6cae3833d759  cog-0.12.0.tar.xz
+> +sha256  aad413a8aaf15d400d70f9c909a28b92b138f7b0c0d825978de8788d0d75208a  cog-0.12.0.tar.xz
+>
+>  # Hashes for license files:
+>  sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index 07b8e245ef..606374d9c3 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -COG_VERSION = 0.10.1
+> +COG_VERSION = 0.12.0
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> @@ -16,13 +16,14 @@ COG_CONF_OPTS = \
+>         -DCOG_PLATFORM_HEADLESS=ON \
+>         -DCOG_WESTON_DIRECT_DISPLAY=OFF \
+>         -DINSTALL_MAN_PAGES=OFF \
+> -       -DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+> +       -DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
+> +       -DUSE_SOUP2=ON
+>
+>  ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+> -COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
+> +COG_CONF_OPTS += -DCOG_PLATFORM_WL=ON
+>  COG_DEPENDENCIES += libxkbcommon wayland-protocols
+>  else
+> -COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
+> +COG_CONF_OPTS += -DCOG_PLATFORM_WL=OFF
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> --
+> 2.34.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
