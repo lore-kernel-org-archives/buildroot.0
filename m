@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ECDBC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 21:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD511C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 21:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9F3360EC9;
-	Tue,  7 Dec 2021 21:44:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7550B41D62;
+	Tue,  7 Dec 2021 21:47:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8XWgi7Ircyk; Tue,  7 Dec 2021 21:44:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dJ1JIHVsP_bE; Tue,  7 Dec 2021 21:47:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB37860EDC;
-	Tue,  7 Dec 2021 21:44:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBCE741D5F;
+	Tue,  7 Dec 2021 21:47:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D2F01BF470
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 21:44:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02D1F1BF470
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 21:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B18D401B6
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 21:44:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E44CC401B6
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 21:47:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id irq8mnFQkD9i for <buildroot@lists.busybox.net>;
- Tue,  7 Dec 2021 21:44:44 +0000 (UTC)
+ with ESMTP id X2CgsV_Zk9Ca for <buildroot@lists.busybox.net>;
+ Tue,  7 Dec 2021 21:46:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D08B640186
- for <buildroot@buildroot.org>; Tue,  7 Dec 2021 21:44:43 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id i12so392282wmq.4
- for <buildroot@buildroot.org>; Tue, 07 Dec 2021 13:44:43 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9876940186
+ for <buildroot@buildroot.org>; Tue,  7 Dec 2021 21:46:59 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ i8-20020a7bc948000000b0030db7b70b6bso2808910wml.1
+ for <buildroot@buildroot.org>; Tue, 07 Dec 2021 13:46:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=e0byNQfWifZpMY8uatS3Ena1bmKpG+P1aSuWni5YluQ=;
- b=aq3Lc/bhYa9hb9oOtLAim4Zyn34DTJtdkCOk/JNqLEYPoO7rt2u7sfO1WT0/I/ZD/6
- dekxdyvvH7MbM7YnJQZrWHt2j2tbxyS+wOSwq2WwSp0GtfHkOJQSSqxEXYdyPQ7dZAhD
- 9VMXzXQ3MbOICypYUgCZIdXM+oV1djMrNk8wL0ak+G+4R2Y2Y5SVFdkhFVc7PNDjqYLo
- VcgYuXghXGA/oHNSAAjwU2E/DV0NHziiAIh5GYztemlsyTpTo+lEefFPMqhcb0mOrn5O
- 07WX8tb9gFK7OkSokfupEMGjruyI/7oThvnKrB7M0hQXNVwRrOf1LNp8yzKa4lrN82Ci
- zwjA==
+ bh=2CLSPwBUJdtIj4i2qI5sPqzJf32r+RIVdPQKNBYhVf0=;
+ b=WnUmx271oJ4BX9aK2+V0tANPVK/dmKbCSsFs4JBM7qQzlnQSM6A4r8iS0+uujvAYWt
+ 3R2qhMZxpdsp5y5vY8hduhK3FxZVSPPh3zbvz9yOBFTNkYRViLbNy0L+9JZN3d3BfsPH
+ jua9SFkLGNKiR2bUFL3Uk7vHB8Oo1Ncf1Q+xjuienlHao4kyD88GwqcJyf39wRVoQFSO
+ adrVrvjzryi0P6jLPKLjSsMvANf+pC5y03JXI0P910TMS7NcAlTVSaG8eDu/HaL0GWLp
+ UblmTDWMBRHn+9ZpnuAhJ0AG7zOyujhiLULl2qdN8f9GtXoyhovMrCABp91QodbiHckR
+ Qi6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=e0byNQfWifZpMY8uatS3Ena1bmKpG+P1aSuWni5YluQ=;
- b=632GZntGTP6upuFlQrW8Klx/FgMySX3HAmiV+HLg1k1o1zbqOyIXSvUf0OGJgZmYST
- 0yfuvyPjjxK4AyrEv9MFQNmxI/FUXb8Q00782liFmWCkLe8MS5gtp5KjzxhYVzFl8XL2
- 9kcNCEbQzxb1j4Lax/wq3qWzYaozx8Iq1cTovXpkAiUzBkEjUuAQyISPzq1/9tkGYwju
- P/QRL5uYRkwZykpK58zd0kjDWVtffOzt96aWHzz6cizX+KQopGxELevmBVcogJJXZ8WX
- xPzJU3A6CJ+N7D5eekHBg4VKtbsaJiSjATNCMqHqV4UtkBapJTZleDPpVVCS5jWFoUZZ
- 8vUw==
-X-Gm-Message-State: AOAM531x5h9UjInL7AKbImqAWrpnUn4kCfnqCjW8R34T9llN9iBdDmps
- LT5JSiOHzVssAE31MDFlURoVxvV1/4RmZg==
-X-Google-Smtp-Source: ABdhPJyFXdXkllb3Z3GeqL/x9rnydJIPV/JCyAczeTuILUu1An6noHKcjIJx0R6u0uRmaYHxUBz7Ag==
-X-Received: by 2002:a05:600c:5125:: with SMTP id
- o37mr10288975wms.81.1638913481445; 
- Tue, 07 Dec 2021 13:44:41 -0800 (PST)
+ bh=2CLSPwBUJdtIj4i2qI5sPqzJf32r+RIVdPQKNBYhVf0=;
+ b=gl8USMlFPkdxW4B56imTAq2KBrqRKAUWyME/E7yrgTnFsyZnf8W0w+86YgWk1p8nYv
+ qONk30syUGarxLpdzMwNNmixiB6D4N0lRA2Pi/O0yv4YR9ZcTROyWDXgXMtGuDRJAENz
+ Y7iAyL62MfrKXqRQiU/YfPfWOUq2q5zHP1HISvqniUwfrYEiaZMGrIFGCDXzzezAcPLp
+ KbLnrToe/LpjTgYf0Zhv1DGotwJ6mxx2qIAO+OeZ3JyTbRAMSoBP36IOr5S4md5dvGYd
+ +jGyp7F8JBFgDUsmKSJVZyKhOsBzAYhfxAtb8gj+2D6Xljy3lm1YRCGi0D+SnMR1OMOm
+ sAlA==
+X-Gm-Message-State: AOAM531C9FIFEvfsFzI4MZZTw0ruhD62tm6Md7zNOppA/hu6fLU4oT03
+ yhulMSnzPj+nGPaAIHYXq/TxGukGnmsGJg==
+X-Google-Smtp-Source: ABdhPJz2NCunu8gs9gVV8ts28Z8hH/fh5GcWf1jyDmuup6vfp845BKcp/26g40IR+2SFZqXVnrErYg==
+X-Received: by 2002:a1c:9dc7:: with SMTP id
+ g190mr10379246wme.130.1638913617570; 
+ Tue, 07 Dec 2021 13:46:57 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-370-97.w2-10.abo.wanadoo.fr. [2.10.20.97])
- by smtp.gmail.com with ESMTPSA id l8sm4650376wmc.40.2021.12.07.13.44.40
+ by smtp.gmail.com with ESMTPSA id b14sm1162169wrd.24.2021.12.07.13.46.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Dec 2021 13:44:40 -0800 (PST)
+ Tue, 07 Dec 2021 13:46:57 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  7 Dec 2021 22:44:41 +0100
-Message-Id: <20211207214441.3308191-1-fontaine.fabrice@gmail.com>
+Date: Tue,  7 Dec 2021 22:46:58 +0100
+Message-Id: <20211207214658.3314109-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: bump to version 1.0.50
+Subject: [Buildroot] [PATCH 1/1] package/lsof: bump to version 4.94.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,271 +86,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patches (already in version)
-- Update hash of COPYING (year updated with
-  https://github.com/jedisct1/pure-ftpd/commit/a81471dceb9caa3f8c1c4b0b35a1291108a0dead
-  https://github.com/jedisct1/pure-ftpd/commit/16809bdf93a48b2c89019886065f4bb191619ce6
-  and alt_arc4random.c removed with
-  https://github.com/jedisct1/pure-ftpd/commit/43591eb6f6488ed9ede0da01dc118dbd8565a89b)
-- Update indentation in hash file (two spaces)
+Update indentation in hash file (two spaces)
 
-https://github.com/jedisct1/pure-ftpd/releases/tag/1.0.50
+https://github.com/lsof-org/lsof/releases/tag/4.94.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-to-store-every-file-name-to-display.patch | 70 -------------------
- ...002-pure_strcmp-len-s2-can-be-len-s1.patch | 30 --------
- ...ays-set-the-tail-of-the-list-to-NULL.patch | 35 ----------
- ...ad-file-size-when-quotas-are-enabled.patch | 33 ---------
- package/pure-ftpd/pure-ftpd.hash              |  4 +-
- package/pure-ftpd/pure-ftpd.mk                | 14 +---
- 6 files changed, 3 insertions(+), 183 deletions(-)
- delete mode 100644 package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
- delete mode 100644 package/pure-ftpd/0002-pure_strcmp-len-s2-can-be-len-s1.patch
- delete mode 100644 package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
- delete mode 100644 package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+ package/lsof/lsof.hash | 4 ++--
+ package/lsof/lsof.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-deleted file mode 100644
-index 2f791d1d6e..0000000000
---- a/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From aea56f4bcb9948d456f3fae4d044fd3fa2e19706 Mon Sep 17 00:00:00 2001
--From: Frank Denis <github@pureftpd.org>
--Date: Mon, 30 Dec 2019 17:40:04 +0100
--Subject: [PATCH] listdir(): reuse a single buffer to store every file name to
-- display
--
--Allocating a new buffer for each entry is useless.
--
--And as these buffers are allocated on the stack, on systems with a
--small stack size, with many entries, the limit can easily be reached,
--causing a stack exhaustion and aborting the user session.
--
--Reported by Antonio Morales from the GitHub Security Lab team, thanks!
--[Retrieved from:
--https://github.com/jedisct1/pure-ftpd/commit/aea56f4bcb9948d456f3fae4d044fd3fa2e19706]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/ls.c | 15 ++++++++-------
-- 1 file changed, 8 insertions(+), 7 deletions(-)
--
--diff --git a/src/ls.c b/src/ls.c
--index cf804c7..f8a588f 100644
----- a/src/ls.c
--+++ b/src/ls.c
--@@ -661,6 +661,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
--     char *names;
--     PureFileInfo *s;
--     PureFileInfo *r;
--+    char *alloca_subdir;
--+    size_t sizeof_subdir;
--     int d;
-- 
--     if (depth >= max_ls_depth || matches >= max_ls_files) {
--@@ -690,14 +692,12 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
--     }
--     outputfiles(f, tls_fd);
--     r = dir;
--+    sizeof_subdir = PATH_MAX + 1U;
--+    if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
--+        goto toomany;
--+    }
--     while (opt_R && r != s) {
--         if (r->name_offset != (size_t) -1 && !chdir(FI_NAME(r))) {
---            char *alloca_subdir;
---            const size_t sizeof_subdir = PATH_MAX + 1U;
---
---            if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
---                goto toomany;
---            }
--             if (SNCHECK(snprintf(alloca_subdir, sizeof_subdir, "%s/%s",
--                                  name, FI_NAME(r)), sizeof_subdir)) {
--                 goto nolist;
--@@ -706,8 +706,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
--             wrstr(f, tls_fd, alloca_subdir);
--             wrstr(f, tls_fd, ":\r\n\r\n");
--             listdir(depth + 1U, f, tls_fd, alloca_subdir);
--+
--             nolist:
---            ALLOCA_FREE(alloca_subdir);
--             if (matches >= max_ls_files) {
--                 goto toomany;
--             }
--@@ -720,6 +720,7 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
--         r++;
--     }
--     toomany:
--+    ALLOCA_FREE(alloca_subdir);
--     free(names);
--     free(dir);
--     names = NULL;
-diff --git a/package/pure-ftpd/0002-pure_strcmp-len-s2-can-be-len-s1.patch b/package/pure-ftpd/0002-pure_strcmp-len-s2-can-be-len-s1.patch
-deleted file mode 100644
-index 3de3cbd2c8..0000000000
---- a/package/pure-ftpd/0002-pure_strcmp-len-s2-can-be-len-s1.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 36c6d268cb190282a2c17106acfd31863121b58e Mon Sep 17 00:00:00 2001
--From: Frank Denis <github@pureftpd.org>
--Date: Mon, 24 Feb 2020 15:19:43 +0100
--Subject: [PATCH] pure_strcmp(): len(s2) can be > len(s1)
--
--Reported by Antonio Morales from GitHub Security Labs, thanks!
--[Retrieved from:
--https://github.com/jedisct1/pure-ftpd/commit/36c6d268cb190282a2c17106acfd31863121b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/utils.c | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/src/utils.c b/src/utils.c
--index f41492d..a7f0381 100644
----- a/src/utils.c
--+++ b/src/utils.c
--@@ -45,5 +45,11 @@ int pure_memcmp(const void * const b1_, const void * const b2_, size_t len)
-- 
-- int pure_strcmp(const char * const s1, const char * const s2)
-- {
---    return pure_memcmp(s1, s2, strlen(s1) + 1U);
--+    const size_t s1_len = strlen(s1);
--+    const size_t s2_len = strlen(s2);
--+
--+    if (s1_len != s2_len) {
--+        return -1;
--+    }
--+    return pure_memcmp(s1, s2, s1_len);
-- }
-diff --git a/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-deleted file mode 100644
-index 6c58eb74ae..0000000000
---- a/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa Mon Sep 17 00:00:00 2001
--From: Frank Denis <github@pureftpd.org>
--Date: Tue, 18 Feb 2020 18:36:58 +0100
--Subject: [PATCH] diraliases: always set the tail of the list to NULL
--
--Spotted and reported by Antonio Norales from GitHub Security Labs.
--Thanks!
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/jedisct1/pure-ftpd/commit/8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa]
-----
-- src/diraliases.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/diraliases.c b/src/diraliases.c
--index 4002a36..fb70273 100644
----- a/src/diraliases.c
--+++ b/src/diraliases.c
--@@ -93,7 +93,6 @@ int init_aliases(void)
--                 (tail->dir = strdup(dir)) == NULL) {
--                 die_mem();
--             }
---            tail->next = NULL;
--         } else {
--             DirAlias *curr;
-- 
--@@ -105,6 +104,7 @@ int init_aliases(void)
--             tail->next = curr;
--             tail = curr;
--         }
--+        tail->next = NULL;
--     }
--     fclose(fp);
--     aliases_up++;
-diff --git a/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch b/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
-deleted file mode 100644
-index b269e6cfe7..0000000000
---- a/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 37ad222868e52271905b94afea4fc780d83294b4 Mon Sep 17 00:00:00 2001
--From: Frank Denis <github@pureftpd.org>
--Date: Tue, 23 Nov 2021 18:53:34 +0100
--Subject: [PATCH] Initialize the max upload file size when quotas are enabled
--
--Due to an unwanted check, files causing the quota to be exceeded
--were deleted after the upload, but not during the upload.
--
--The bug was introduced in 2009 in version 1.0.23
--
--Spotted by @DroidTest, thanks!
--
--[Retrieved from:
--https://github.com/jedisct1/pure-ftpd/commit/37ad222868e52271905b94afea4fc780d83294b4]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/ftpd.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/src/ftpd.c b/src/ftpd.c
--index d856839..be2fd78 100644
----- a/src/ftpd.c
--+++ b/src/ftpd.c
--@@ -4247,8 +4247,7 @@ void dostor(char *name, const int append, const int autorename)
--     if (quota_update(&quota, 0LL, 0LL, &overflow) == 0 &&
--         (overflow > 0 || quota.files >= user_quota_files ||
--          quota.size > user_quota_size ||
---         (max_filesize >= (off_t) 0 &&
---          (max_filesize = user_quota_size - quota.size) < (off_t) 0))) {
--+         (max_filesize = user_quota_size - quota.size) < (off_t) 0)) {
--         overflow = 1;
--         (void) close(f);
--         goto afterquota;
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index 8fe73e4fb0..e8b779c313 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index c7432ffbe8..9e72023d30 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 8a727dfef810f275fba3eb6099760d4f8a0bdeae2c1197d0d5bfeb8c1b2f61b6  pure-ftpd-1.0.49.tar.bz2
--sha256 3a9e94382a69d04aa434d69b20ff2c01dbbfcb7191f05f69a7109c0ee1559c19  COPYING
-+sha256  6722c7fd09fe3c9ebbd572f3d097087ec7b32aacb3df8fa3400d4c07e4f377d7  pure-ftpd-1.0.50.tar.bz2
-+sha256  c1be5d56c28927b05131d7384bd522af4b11c3afea45725f5ca7983c11db61ac  COPYING
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 35a1aac917..f3cbef84b9 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	3df912bd966fc24dc73ddea3e36a61d79270b21b085936a4caabca56e5b486a2	lsof-4.93.2.tar.gz
+-sha256	32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1	dialects/linux/dproto.h
++sha256  c41709c2543ecf9de1e950795790a9786a2f225e51c3cc53d6a9a256f872472b  lsof_4.94.0.linux.tar.bz2
++sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 6aa829c2c0..ff09d64345 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PURE_FTPD_VERSION = 1.0.49
-+PURE_FTPD_VERSION = 1.0.50
- PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
- PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
-@@ -12,18 +12,6 @@ PURE_FTPD_LICENSE_FILES = COPYING
- PURE_FTPD_CPE_ID_VENDOR = pureftpd
- PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
--# 0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
--PURE_FTPD_IGNORE_CVES += CVE-2019-20176
--
--# 0002-pure_strcmp-len-s2-can-be-len-s1.patch
--PURE_FTPD_IGNORE_CVES += CVE-2020-9365
--
--# 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
--PURE_FTPD_IGNORE_CVES += CVE-2020-9274
--
--# 0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
--PURE_FTPD_IGNORE_CVES += CVE-2021-40524
--
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
- 	--with-puredb
+-LSOF_VERSION = 4.93.2
+-LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
++LSOF_VERSION = 4.94.0
++LSOF_SOURCE = lsof_$(LSOF_VERSION).linux.tar.bz2
++LSOF_SITE = https://github.com/lsof-org/lsof/releases/download/$(LSOF_VERSION)
+ LSOF_LICENSE = lsof license
+ # License is repeated in each file, this is a relatively small one.
+ # It is also defined in 00README, but that contains a lot of other cruft.
 -- 
 2.33.0
 
