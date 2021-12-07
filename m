@@ -1,45 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 025A5C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 08:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA137C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 08:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A47F607CE;
-	Tue,  7 Dec 2021 08:00:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83F1E40992;
+	Tue,  7 Dec 2021 08:04:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OwkVqmKd41i4; Tue,  7 Dec 2021 08:00:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dpRIKz7QYz9X; Tue,  7 Dec 2021 08:04:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8897560E50;
-	Tue,  7 Dec 2021 08:00:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAA7541C12;
+	Tue,  7 Dec 2021 08:04:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E04CF1BF355
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 08:00:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B3D21BF352
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 08:04:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD7F3830E2
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 08:00:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 783928302F
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 08:04:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tA3Dtf7jFYOv for <buildroot@lists.busybox.net>;
- Tue,  7 Dec 2021 08:00:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AD01282B3E
- for <buildroot@buildroot.org>; Tue,  7 Dec 2021 08:00:12 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 98EFD100017
- for <buildroot@buildroot.org>; Tue,  7 Dec 2021 08:00:09 +0000 (UTC)
+ with ESMTP id c1xztJe7tZev for <buildroot@lists.busybox.net>;
+ Tue,  7 Dec 2021 08:04:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13ECE82B3E
+ for <buildroot@busybox.net>; Tue,  7 Dec 2021 08:04:28 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id g14so52990669edb.8
+ for <buildroot@busybox.net>; Tue, 07 Dec 2021 00:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ALVMMSi/zBeqEvcbTdhvRO4cW++dP57mPir+AeV5hqw=;
+ b=gHSmKE7rklm061DISE5YD4qDDWYc2EoqmBG+4vcILWZaelRHXm0x3KcMhaQ2mpI6UX
+ HV2nFjAnlFOFdr3Nkq7pqBjDXn+CrEE+O0/UxwUbmkqWA0/dV0qvWjA2bI0WYwPE4Vxo
+ uaweibYOO494/t/6cR9yfD2zL54ddSxQpdvLGBFRtylywjnkPaqJkHqcrXOwjY+/mwiy
+ T7CTFb0oy2C5Cfn3oBqjq838dQ/WgOWwoxbT/+U+PeUzdPS8KmCtKs0PTtlfNRsxLssG
+ i+l/Z9LHByXALvc+jLHphawEuXapUe4VOI5tYjYpjYNQ/OKt9uQXvjNOjTQtaf4rr8o2
+ 8unw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=ALVMMSi/zBeqEvcbTdhvRO4cW++dP57mPir+AeV5hqw=;
+ b=59zW03Ycq6UYBitFb6ENR7YMpD0PjPrp1LXpr7Ukb5B8pcstojtPDKwxzie4ZgeglN
+ bTNOQkOvu2jtjyO4zfuTMnUzxj7R7HttJc9qhi/u8v8gJK2WRSeK5P28GWN102h4WpoO
+ e3Lgxo3VUmgGuPi7/+4euod2QoiVkoU8bX2Z1hJGDmYDdeDY+iO9tXBVb1+0WPCzr96t
+ GD9pGkr8j3AX+eaJYPS6NG/jsM39R0Uv27EAafxIUU/wzM70d96Sin7UKGWVmmVXmNqk
+ ku/6cvZyh2v7tkZa+LlCQtq8Hv0+yL9TGkIPEcTNCK4XrdXBXz482gvsDEP4psyFDXot
+ rZBQ==
+X-Gm-Message-State: AOAM530q4QfDZguE7raODLrB8LdlYbnezqQod5qUYF2RU9bWPNrPfB/J
+ 9yRV/mSzrEYZDZgbxuegCqd0Sg==
+X-Google-Smtp-Source: ABdhPJwWKlNe1OcVMUtkljyl/id5Qjq8SBe/J/S4se7kCaG2I6j/0YE5OJHuHUufo+J8HAOLMbFprQ==
+X-Received: by 2002:a17:906:2b16:: with SMTP id
+ a22mr49745415ejg.447.1638864266348; 
+ Tue, 07 Dec 2021 00:04:26 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id e12sm8107997ejs.86.2021.12.07.00.04.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 07 Dec 2021 00:04:26 -0800 (PST)
+Message-ID: <7d360d46-e4e5-bbf4-80a9-d5e1ff6a3ea1@mind.be>
+Date: Tue, 7 Dec 2021 09:04:25 +0100
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 07 Dec 2021 08:00:09 -0000
-Message-Id: <20211207080015.DD7F3830E2@smtp1.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-12-06
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, guillaume.bressaix@gmail.com
+References: <20211206193109.21218-1-guillaume.bressaix@gmail.com>
+ <20211206215730.GE2603@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211206215730.GE2603@scaer>
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/python-pybind: fix upgrade
+ to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,123 +96,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@busybox.net
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-Autobuild statistics for 2021-12-06
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 45  |  5  |  0  | 50  |
-  2021.08.x  | 38  |  1  |  0  | 39  |
-  2021.11.x  |  1  |  1  |  0  |  2  |
-    master   | 97  | 18  |  0  | 115 |
-
-Classification of failures by reason for master
------------------------------------------------
-
-              host-erlang-22.2 | 8 
-libdbi-88b8477d57153b9f736d... | 2 
-                  zeromq-4.3.4 | 2 
-               apcupsd-3.14.14 | 1 
-               capnproto-0.8.0 | 1 
-                   expat-2.4.1 | 1 
-                     frr-7.5.1 | 1 
-                log4cxx-0.12.0 | 1 
-               pipewire-0.3.39 | 1 
 
 
-Detail of failures for master
------------------------------
+On 06/12/2021 22:57, Yann E. MORIN wrote:
+> Guillaume, All,
+> 
+> On 2021-12-06 20:31 +0100, guillaume.bressaix@gmail.com spake thusly:
+>> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+>>
+>> The python 'setup.py' script needs header files
+>> in $(@D)/pybind11 to work since v2.6.1, and these
+>> files are generated by an internal minimalist cmake build.
+>>
+>> Fixes
+>>     http://autobuild.buildroot.net/results/b89f1de64b308dffa73675f1f31ccb0b7be5a10d
+>>     http://autobuild.buildroot.net/results/d0287b7f64f206b0f074908c5780a3632e0cb799
+>>     http://autobuild.buildroot.net/results/27efb545a5a719a5581c8f746d3a3555ff4216ce
+>>     http://autobuild.buildroot.net/results/d2f0a0ad8f6c7178517df109e7d885dac9134c3a
+>>     http://autobuild.buildroot.net/results/b57e9a3279260dae4a590f9421238fcabb2f7cab
+>>     http://autobuild.buildroot.net/results/515e6f2fc6b5780260d98d6bb52b541ce4bf1afe
+>>     http://autobuild.buildroot.net/results/d89c4ecc81222d4f80c951da2232d2e393fa1c69
+>>
+>> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+>>
+>> ---
+>> This remains a python-package.
+>>
+>> 'python setup.py' actually hardcodes a system call to cmake now,
+>> which seems dirty at first. But if we have a cmake env when they
+>> do that, the install variables are passed and installation
+>> is smooth. They probably introduced this call to make setup.py
+>> self sufficient, as most people install this package from 'pip'.
+>>
+>> ---
+>>   package/python-pybind/python-pybind.mk | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+>> index a6a1bdb976..bfd7f6f59a 100644
+>> --- a/package/python-pybind/python-pybind.mk
+>> +++ b/package/python-pybind/python-pybind.mk
+>> @@ -9,5 +9,12 @@ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+>>   PYTHON_PYBIND_LICENSE = BSD-3-Clause
+>>   PYTHON_PYBIND_LICENSE_FILES = LICENSE
+>>   PYTHON_PYBIND_SETUP_TYPE = setuptools
+>> +PYTHON_PYBIND_INSTALL_STAGING = YES
+>> +
+>> +# every single 'python setup.py' call actually calls cmake
+>> +# internally, to populate $(@D)/pybind11 with build requirements.
+>> +# If we have a host-cmake env at that moment,
+>> +# then the final installation paths are properly defined
+>> +PYTHON_PYBIND_DEPENDENCIES = host-cmake
+> 
+> I am sorry, but I fail to see how this actually fixes things.
+> 
+> As I explained in my previous review, headers are supposed to be in
+> $(STAGING_DIR)/usr/include/pybind11/. That's at least where they are in
+> Debian-based distributions;
+> 
+>      $ apt-file search 'pybind11/pybind11.h'
+>      pybind11-dev: /usr/include/pybind11/pybind11.h
+> 
+> However, with the way pybind is currently packaged, the ehaders end up
+> in:
+> 
+>      $ sort output/build/python-pybind-2.8.1/.files-list.txt
+>      python-pybind,./usr/bin/pybind11-config
+>      [...]
+>      python-pybind,./usr/lib/python3.9/site-packages/pybind11/include/pybind11/pybind11.h
+>      [...]
+> 
+> So, those headers will most probably not be found by the compiler.
+> 
+> Also, since pybind is supposed to be a headers'-only library, there is
+> nothing supposed to go in target, so it should be;
+> 
+>      PYTHON_PYBIND_INSTALL_TARGET = NO
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/65945343167937a563445281c7531051241a686a |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/8404da533eff3064d63fb0988030089a58753156 |     
-  mips64el   |          expat-2.4.1           | NOK | http://autobuild.buildroot.net/results/c80847eb0a51f58b463b1b2506036c3f4efe094d |     
-   x86_64    |           frr-7.5.1            | NOK | http://autobuild.buildroot.net/results/bd779ee960ba2181bc60313569c77c1e60b4e726 |     
-   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/08971fa706c4b6b847599a2f3f6890661e168de4 |     
-  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/dea1ad23ec9cd48a99bff64cb220ed0829f1abc7 |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/58d0fa6af54eb273ea4b2af2d7a6ada6bb29605b |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/ee40feca90c4ee74488518c4783b529c126a392e |     
-   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/7c07ab40607a9a34195d29cad30195013d850377 |     
-   mipsel    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/9c8d269181e428061a4ee8f655213b81434a1850 |     
-  powerpc    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/e0b575ab885dea460115befc1ad63fffb7b452b6 |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/8e4e347494ee09c81b371300a7a6dab785104be8 |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/a9d7c11e76de0c5b04a76674b38a5fe0843ccc8a |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/00ed7548490112927e84472418ea4e6f96dc60e0 |     
-    arm      |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/d1f7fc5421d498e1d92645da847efb674088dcf0 |     
-  powerpc    |        pipewire-0.3.39         | NOK | http://autobuild.buildroot.net/results/f17a294504e24b67234b25b9ad04fb07249e1fa7 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/6b17f8042d02d8d36e602b7e36cf52db27cb9d3d |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/809f5caea18e51cbb988a7ce18820eb13aa70e7c |     
+  Note that this is only relevant to make sure that pybind11-config doesn't 
+appear on target. The headers themselves are removed automatically by Buildroot.
+
+> 
+> Furthermore, /usr/bin/pybind11-config is a python script which hardcodes
+> its shabang to #!/usr/bin/python, and this is incorrect:
+> 
+>    1. /usr/bin/python might be python2 or python3, we can't know
+>    2. anyway, it would not use our host python, so it would miss the
+>      proper modules search paths.
+
+  Yeah, this is something that needs to be fixed - in particular, there may not 
+be a /usr/bin/python at all.
+
+  However, I think that is kind of orthogonal to this patch. This patch fixes a 
+build failure of pybind itself. Your proposed change would be to fix the build 
+of a dependency of pybind.
 
 
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
+> So, if another package want to call that /usr/bin/pybind11-config to
+> find pybind, they're gonna have incorrect results, if at all...
+> 
+> So I think we really, really need a package (like scipy) that actually
+> makes use of pybind, so we can see how it works, and to fix it...
 
-              netopeer2-1.1.53 | 2 
-                  zeromq-4.3.4 | 2 
-                 mesa3d-20.3.5 | 1 
+  Note that there are already two [1][2] submissions of scipy in patchwork, so 
+feel free to review those.
 
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |         mesa3d-20.3.5          | NOK | http://autobuild.buildroot.net/results/9e2aa3ff6601a1b7d4d560c05403968d523d9dde |     
-  riscv32    |        netopeer2-1.1.53        | NOK | http://autobuild.buildroot.net/results/c8fe5728aa6e0e1fe7d659b243aa7167593f3658 |     
-  riscv32    |        netopeer2-1.1.53        | NOK | http://autobuild.buildroot.net/results/1d11e7879c10c37376d31db4bd3b54d52ab9fa94 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ff6b76fdb68e87693fa99f3cab1c039bc324caca |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/56a653f57a09a199a207911573096116a7f2d5c1 |     
+  Note also that scipy depends on host-pybind, not pybind itself. I'm not sure 
+how *that* is supposed to work - although, being header-only, it probably 
+doesn't really matter if you link with the host or the target version of the 
+library, and the host-installed pybind11-config makes sure that you pick up the 
+host headers (which are normally not in include path). So conceptually wrong but 
+works in practice.
 
 
-Classification of failures by reason for 2021.08.x
---------------------------------------------------
+  In conclusion: I think this patch is going in the right direction (modulo 
+BR2_CMAKE_HOST_DEPENDENCY). It's still "conceptually wrong but works" because it 
+doesn't set the toolchain file and other cmake options, but that happens to work 
+because it's header-only so it doesn't actually need any of the cmake options. 
+So it's not entirely the correct thing to do, but it does guarantee to fix 
+things. I'm not sure if that means we should merge it or not...
 
-                  zeromq-4.3.4 | 1 
-
-
-Detail of failures for 2021.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/5bbca68bc5d1358c6b6f62c052a976037b8a4999 |     
+  The proper fix, I think, would require patching setup.py so we can pass in 
+additional cmake options to it.
 
 
-Classification of failures by reason for 2021.11.x
---------------------------------------------------
+  Regards,
+  Arnout
 
-               linux-pam-1.5.1 | 1 
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=168992
+[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=186146
 
-
-Detail of failures for 2021.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |        linux-pam-1.5.1         | NOK | http://autobuild.buildroot.net/results/6bac4460aead07045d20b1217d6ffd99df0451cc | ORPH
-
-
-Gitlab CI results for 2021-12-06
-================================
-
-Detail of runtime-test failures for 2021.11
--------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-   TestIso9660Grub2Hybrid | https://gitlab.com/buildroot.org/buildroot/-/jobs/1851489294  | ORPH 
-
-
-
--- 
-http://autobuild.buildroot.net
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>   $(eval $(python-package))
+>> -- 
+>> 2.20.1
+>>
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
