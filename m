@@ -1,73 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F277BC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 14:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE5C3C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  7 Dec 2021 14:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD64400F3;
-	Tue,  7 Dec 2021 14:50:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A1960E8A;
+	Tue,  7 Dec 2021 14:51:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y9JiO8J74KX1; Tue,  7 Dec 2021 14:50:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pe12xs22HugZ; Tue,  7 Dec 2021 14:51:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4702940142;
-	Tue,  7 Dec 2021 14:50:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D0C441BF304
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:50:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EBD260E6A;
+	Tue,  7 Dec 2021 14:51:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A12851BF304
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF09640142
- for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:50:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F82760E6A
+ for <buildroot@lists.busybox.net>; Tue,  7 Dec 2021 14:51:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id twb83_eyMOv0 for <buildroot@lists.busybox.net>;
- Tue,  7 Dec 2021 14:50:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a1l-ZyioFxoz for <buildroot@lists.busybox.net>;
+ Tue,  7 Dec 2021 14:51:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
- [IPv6:2607:f8b0:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 772B9400F3
- for <buildroot@buildroot.org>; Tue,  7 Dec 2021 14:50:45 +0000 (UTC)
-Received: by mail-ot1-x332.google.com with SMTP id
- i5-20020a05683033e500b0057a369ac614so18326508otu.10
- for <buildroot@buildroot.org>; Tue, 07 Dec 2021 06:50:45 -0800 (PST)
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
+ [IPv6:2607:f8b0:4864:20::231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D3EF607D3
+ for <buildroot@buildroot.org>; Tue,  7 Dec 2021 14:51:32 +0000 (UTC)
+Received: by mail-oi1-x231.google.com with SMTP id u74so28084117oie.8
+ for <buildroot@buildroot.org>; Tue, 07 Dec 2021 06:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=wq9FpWr6uAh04eLFfYInGqy5DQ6KTPXZaijb+osIARM=;
- b=B0TLa+Oqh2B0FrLv2V1Bcp1A5dvKnWGMlL39yUBbDTioJRg4iWEW//xHpwePlsdTAa
- 3h7tu2JDxXQEhJgd8zmFohAa6KlOVH5ETiF7SUupdBUBsWzeOr7GSyMPGE9oFCYqrIkF
- 71l+ST5zYfo7P7VaI+8FPDvXLe7YkVp+Zop4N3hwZqbwNZwCmsi2YeSZioT6q/DSiyXb
- rCjA1vtM7xv15amuaI0BWrmY3MYovwMIc0iae4BM4Ylb6Wzs05Gh0eOFN6fnLG6yTBVh
- hCctsvVSg79fGwg7tIBDzrn0Eo/Z/4yudouDn1EZtWkh8YWU4E4oD8HzEb1aV2PrMLjR
- URxg==
+ :cc; bh=oyrpME4O1HYxL2XGg6/BCRaM/3F6+TQ2B6powh6dCgw=;
+ b=EE3SCLvVL6KqH58fbYrQB7Se0pKVZVfBLzZQWFBZjxndkwwhtm3IIHxnhPpEzv5OS1
+ kvvnaMUa7RYjreZuhu+nx3Wok3luPsQRCqDf52jeYfADPgfNg8jVJgITw9eX72ZhkTP9
+ LpOp6NmZrQK/AU3p45xqvu/YrHnWxsdl9cp23ZZqUd3lJ48PRCk5BbrJG5m4isPDglq+
+ 47MnGacc/qSYM5vdUTDrtaz4DPw8nRpmkswrB+yAKeBPtfm2u8TsoZlan//5PZP/Ed2D
+ 2IRr44FOmv8r96y/HptlY8LFrlM2xZS14M7Fsntdn3XgC5q5xPryycBN9VFCRK2O0HLK
+ 74Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=wq9FpWr6uAh04eLFfYInGqy5DQ6KTPXZaijb+osIARM=;
- b=PFVr98VfFETh6NUjSt3mh3ciBpoLbrADlf7L5ncGUblcb/kKPHCehGr/Thbe85duig
- 7dQte/rkJAKU/SupNr19b6ZEFBfi+VRW2+Aap1rS8JWuoQgerTMZQpD12devemwrUBG/
- kT8XS9BhPDbVyEj/ipJxNL6K0YHH9yVw51EKPSqeh+FBehrb0IEH60WH6461NbsYAQ5Q
- 0YrPmdIxTUeMk/YufJIZbbBp5w+UvfCq1MsD/OK5MD6wYuQpNc9rFDsc8vh3WrAnRbZS
- Dl7EKTKfaqt49tJtLI9mWBsOli0fjULSqFF1/Ne3zsm3OoG0PL6+CvqyiU9pLKzYOxoZ
- 1ZYA==
-X-Gm-Message-State: AOAM531Hut1YO/4kvE/I/03PAf95FSDfjnuX9EGRvPZxtuvfcwh+h6aP
- tbFOrnku37+pipmKQoVGEcjy5VErQuMRskxUrCY34GjVqeI=
-X-Google-Smtp-Source: ABdhPJwos2MbO6bIYD526viIFvSBZBNyoFPQH4b1lUtO7KTRy0RZprzGZmdpZFNK5vmsj3Uen3n+rQqPimsDRaY8uzI=
-X-Received: by 2002:a9d:6c54:: with SMTP id g20mr36131793otq.30.1638888644408; 
- Tue, 07 Dec 2021 06:50:44 -0800 (PST)
+ bh=oyrpME4O1HYxL2XGg6/BCRaM/3F6+TQ2B6powh6dCgw=;
+ b=OiINY48ToYb4dyWwaZSBwoNrHJ4HGXpcbvqdyX5Mv0CP0VjP/WVWoHVzVB5IQu4gOJ
+ mnZnogWgyF/usP1xtA3iQQgzfQGx6KPgz3tHYSRfZzxLQa/syWK3KBLVcyozF5YbcXPb
+ /e0SxiZtOoO49SMyYyXLaj5y+wOBdeTeBuWmBCOipsCzgBni31lKeoLhNQTUb9DXQYfl
+ rbMjgTU+Y+fMg6wZdt7rTPnjo4VK7LF+cP2T3ijYlWNvtEwtV5cF6ekBKRBCdnIRjnt/
+ jsF3mz6p22FcJgUlcP4X9KRnJlEUNSi8UGSATofIGMDJIe6W6JZf9A90y5KgFa8xW036
+ Q6lg==
+X-Gm-Message-State: AOAM5307iwDFDf0QQ+I7ICoPA/uWwFU0aagC9HHx+O652EMwoh+WXNoe
+ xk+p+ioYdTVfQrFyb5CMgjEZXbKzArZTod1tfI7Di4iPfXk=
+X-Google-Smtp-Source: ABdhPJzJzoGaQ+auZzMlDGXjw8MtAFY3zTC8/jeEU7xOmHFPYB40haYiypAlWMMN5jf6oCNNBxMBGt+sm1lLrdF9Ah8=
+X-Received: by 2002:a54:4614:: with SMTP id p20mr5692308oip.39.1638888691436; 
+ Tue, 07 Dec 2021 06:51:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20211124212101.3037723-1-aperez@igalia.com>
-In-Reply-To: <20211124212101.3037723-1-aperez@igalia.com>
+References: <20211124205607.3021277-1-aperez@igalia.com>
+In-Reply-To: <20211124205607.3021277-1-aperez@igalia.com>
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 7 Dec 2021 07:50:33 -0700
-Message-ID: <CADvTj4o7qGJyApdFrrPyjWNvWyO4Tidf9SeSmyryc6KvyBY6fA@mail.gmail.com>
+Date: Tue, 7 Dec 2021 07:51:20 -0700
+Message-ID: <CADvTj4qLWVRVjnrUiz4cgtkHTbmmeKU52NEFFkx4VvtwsV3k2g@mail.gmail.com>
 To: Adrian Perez de Castro <aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/cog: bump to verion 0.12.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: bump version to
+ 2.34.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,93 +85,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Nov 24, 2021 at 2:21 PM Adrian Perez de Castro
+On Wed, Nov 24, 2021 at 1:56 PM Adrian Perez de Castro
 <aperez@igalia.com> wrote:
 >
-> This new release includes a number of improvements. Release notes:
+> Update to the the next minor release, which fixes an scrolling issue and
+> incorporated a patch that can now be removed from Buildroot. Release
+> notes:
 >
->   https://wpewebkit.org/release/cog-0.12.0.html
->
-> Small tweaks were needed due to the "fdo" platform backend being renamed
-> as "wl"; the symbol is kept as BR2_PACKAGE_COG_PLATFORM_FDO to avoid
-> breaking existing configurations. Also the new version supports building
-> with libsoup3, which is not yet packaged in Buildroot, so -DUSE_SOUP2=ON
-> is always passed to CMake.
+>   https://wpewebkit.org/release/wpewebkit-2.34.2.html
 >
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Tested-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/cog/Config.in | 4 ++--
->  package/cog/cog.hash  | 8 ++++----
->  package/cog/cog.mk    | 9 +++++----
->  3 files changed, 11 insertions(+), 10 deletions(-)
+>  ...e-build-issues-with-ENABLE_VIDEO-OFF.patch | 78 -------------------
+>  package/wpewebkit/wpewebkit.hash              |  8 +-
+>  package/wpewebkit/wpewebkit.mk                |  2 +-
+>  3 files changed, 5 insertions(+), 83 deletions(-)
+>  delete mode 100644 package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
 >
-> diff --git a/package/cog/Config.in b/package/cog/Config.in
-> index 5f00c5a2dd..d4238750f9 100644
-> --- a/package/cog/Config.in
-> +++ b/package/cog/Config.in
-> @@ -28,12 +28,12 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
->           must be always specified in the command line.
->
->  config BR2_PACKAGE_COG_PLATFORM_FDO
-> -       bool "FreeDesktop.org backend"
-> +       bool "Wayland backend"
->         default y
->         select BR2_PACKAGE_LIBXKBCOMMON
->         select BR2_PACKAGE_WAYLAND_PROTOCOLS
->         help
-> -         Enable the FreeDesktop.org backend. Cog will interface with
-> +         Enable the Wayland backend. Cog will interface with
->           a compositor over the Wayland protocol.
->
->  config BR2_PACKAGE_COG_PLATFORM_DRM
-> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-> index 3abc5f2c83..6a9af1845d 100644
-> --- a/package/cog/cog.hash
-> +++ b/package/cog/cog.hash
+> diff --git a/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch b/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
+> deleted file mode 100644
+> index 932ade101c..0000000000
+> --- a/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
+> +++ /dev/null
+> @@ -1,78 +0,0 @@
+> -From afc83d41293333f694630451f865a7a257a9b917 Mon Sep 17 00:00:00 2001
+> -From: Adrian Perez de Castro <aperez@igalia.com>
+> -Date: Mon, 25 Oct 2021 23:45:15 +0300
+> -Subject: [PATCH] [WPE][GTK] Multiple build issues with ENABLE_VIDEO=OFF
+> - https://bugs.webkit.org/show_bug.cgi?id=232264
+> -
+> -.:
+> -
+> -Reviewed by NOBODY (OOPS!).
+> -
+> -* Source/cmake/WebKitFeatures.cmake: Make ENABLE_MEDIA_SESSION depend on ENABLE_VIDEO.
+> -
+> -Source/WebCore:
+> -
+> -Reviewed by NOBODY (OOPS!).
+> -
+> -No new tests needed.
+> -
+> -* accessibility/AXObjectCache.cpp:
+> -(WebCore::isSimpleImage): Guard usage of HTMLMediaElement with ENABLE(VIDEO).
+> -* page/EventHandler.cpp:
+> -(WebCore::EventHandler::textRecognitionCandidateElement const): Ditto.
+> -* platform/graphics/BifurcatedGraphicsContext.cpp: Ditto.
+> -* platform/graphics/displaylists/DisplayListRecorder.h: Guard usage of MediaPlayer with
+> -ENABLE(VIDEO).
+> -* platform/graphics/displaylists/DisplayListRecorderImpl.cpp: Ditto.
+> -* platform/graphics/displaylists/DisplayListRecorderImpl.h: Ditto.
+> -
+> -Source/WebKit:
+> -
+> -* WebProcess/WebCoreSupport/ShareableBitmapUtilities.cpp:
+> -(WebKit::createShareableBitmap): Guard usage of RenderVideo with ENABLE(VIDEO).
+> -
+> -Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ----
+> -Upstream status: https://trac.webkit.org/changeset/284858/webkit
+> -
+> - Source/WebCore/accessibility/AXObjectCache.cpp                 | 2 ++
+> - Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp | 2 ++
+> - 2 files changed, 4 insertions(+)
+> -
+> -diff --git a/Source/WebCore/accessibility/AXObjectCache.cpp b/Source/WebCore/accessibility/AXObjectCache.cpp
+> -index f2451102040..930b969dcc2 100644
+> ---- a/Source/WebCore/accessibility/AXObjectCache.cpp
+> -+++ b/Source/WebCore/accessibility/AXObjectCache.cpp
+> -@@ -528,9 +528,11 @@ static bool isSimpleImage(const RenderObject& renderer)
+> -         || (is<HTMLImageElement>(node) && downcast<HTMLImageElement>(node)->hasAttributeWithoutSynchronization(usemapAttr)))
+> -         return false;
+> -
+> -+#if ENABLE(VIDEO)
+> -     // Exclude video and audio elements.
+> -     if (is<HTMLMediaElement>(node))
+> -         return false;
+> -+#endif // ENABLE(VIDEO)
+> -
+> -     return true;
+> - }
+> -diff --git a/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp b/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
+> -index c0ce72c5ffc..d7ead303f3c 100644
+> ---- a/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
+> -+++ b/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
+> -@@ -269,11 +269,13 @@ void BifurcatedGraphicsContext::drawPattern(NativeImage& nativeImage, const Floa
+> -     m_secondaryContext.drawPattern(nativeImage, imageSize, destRect, tileRect, patternTransform, phase, spacing, options);
+> - }
+> -
+> -+#if ENABLE(VIDEO)
+> - void BifurcatedGraphicsContext::paintFrameForMedia(MediaPlayer& player, const FloatRect& destination)
+> - {
+> -     m_primaryContext.paintFrameForMedia(player, destination);
+> -     m_secondaryContext.paintFrameForMedia(player, destination);
+> - }
+> -+#endif // ENABLE(VIDEO)
+> -
+> - void BifurcatedGraphicsContext::scale(const FloatSize& scale)
+> - {
+> ---
+> -2.33.1
+> -
+> diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+> index acb3ec4a3e..a71c1afc72 100644
+> --- a/package/wpewebkit/wpewebkit.hash
+> +++ b/package/wpewebkit/wpewebkit.hash
 > @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/cog-0.10.1.tar.xz.sums
-> -md5  b997da3c143bc34ec5e953eb7e7ccefc  cog-0.10.1.tar.xz
-> -sha1  f25312141de918f41add3e3c9984faa985cda0a9  cog-0.10.1.tar.xz
-> -sha256  aecf546d7b0645119d79559c5574cb5eb68364fc8409dfbd47a4920bd1f221bc  cog-0.10.1.tar.xz
-> +# From https://wpewebkit.org/releases/cog-0.12.0.tar.xz.sums
-> +md5  30d6f68914af0ba5c32ac14df504215a  cog-0.12.0.tar.xz
-> +sha1  de367b33fb45a1bca9e443ca5c1d6cae3833d759  cog-0.12.0.tar.xz
-> +sha256  aad413a8aaf15d400d70f9c909a28b92b138f7b0c0d825978de8788d0d75208a  cog-0.12.0.tar.xz
+> -# From https://wpewebkit.org/releases/wpewebkit-2.34.1.tar.xz.sums
+> -md5  915e583b0e7e82efa155cbce917d6319  wpewebkit-2.34.1.tar.xz
+> -sha1  452081b6df9d079f26d22bd0dca9e90f87943089  wpewebkit-2.34.1.tar.xz
+> -sha256  cb336986341be9c3a9b1ca2c18de0d29d90ae4e77b9967a6f6879597e7a969f7  wpewebkit-2.34.1.tar.xz
+> +# From https://wpewebkit.org/releases/wpewebkit-2.34.2.tar.xz.sums
+> +md5  b26f07bc809d9fd3e54e815c22312f15  wpewebkit-2.34.2.tar.xz
+> +sha1  4200ef87a4e1eb1921f0f40779742381598e1429  wpewebkit-2.34.2.tar.xz
+> +sha256  b1a3733c2d486c4da27f9636ccc39947da7d84258cd7a24a6fb0b842c9595c0b  wpewebkit-2.34.2.tar.xz
 >
 >  # Hashes for license files:
->  sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index 07b8e245ef..606374d9c3 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
+>  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index a1e8bff784..7d6b7692fd 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >
-> -COG_VERSION = 0.10.1
-> +COG_VERSION = 0.12.0
->  COG_SITE = https://wpewebkit.org/releases
->  COG_SOURCE = cog-$(COG_VERSION).tar.xz
->  COG_INSTALL_STAGING = YES
-> @@ -16,13 +16,14 @@ COG_CONF_OPTS = \
->         -DCOG_PLATFORM_HEADLESS=ON \
->         -DCOG_WESTON_DIRECT_DISPLAY=OFF \
->         -DINSTALL_MAN_PAGES=OFF \
-> -       -DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
-> +       -DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
-> +       -DUSE_SOUP2=ON
->
->  ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
-> -COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
-> +COG_CONF_OPTS += -DCOG_PLATFORM_WL=ON
->  COG_DEPENDENCIES += libxkbcommon wayland-protocols
->  else
-> -COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
-> +COG_CONF_OPTS += -DCOG_PLATFORM_WL=OFF
->  endif
->
->  ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> -WPEWEBKIT_VERSION = 2.34.1
+> +WPEWEBKIT_VERSION = 2.34.2
+>  WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+>  WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+>  WPEWEBKIT_INSTALL_STAGING = YES
 > --
 > 2.34.0
 >
