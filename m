@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66E50C433EF
-	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 08:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F11ACC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 08:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1048984C34;
-	Wed,  8 Dec 2021 08:40:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B274E84C31;
+	Wed,  8 Dec 2021 08:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VwL2QNIZH3Hz; Wed,  8 Dec 2021 08:40:09 +0000 (UTC)
+	with ESMTP id 9p0FKinJ-r1a; Wed,  8 Dec 2021 08:40:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EABA784BEE;
-	Wed,  8 Dec 2021 08:40:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A4C791BF365
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2560284C23;
+	Wed,  8 Dec 2021 08:40:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B261E1BF9C2
  for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A206784BEE
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1983403E8
  for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:39:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n90k9SHNmufp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kazEg1LYLiFZ for <buildroot@lists.busybox.net>;
  Wed,  8 Dec 2021 08:39:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCA4383F57
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2D7E403DA
  for <buildroot@buildroot.org>; Wed,  8 Dec 2021 08:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ACC8F81D55; Wed,  8 Dec 2021 08:34:48 +0000 (UTC)
+ id 8073C81839; Wed,  8 Dec 2021 08:34:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Dec 2021 09:36:07 +0100
+Date: Wed, 8 Dec 2021 09:34:55 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 4ca935621d6c576391f63f675b792e0f2e07dec5
-X-Git-Newrev: 30b21cd786c5f8bf81d212b2791752a47ecb0e67
+X-Git-Oldrev: c235cc50074ea939b5190f5a9709624864375b3b
+X-Git-Newrev: f8cb6e6bfede811fafccf74e6967b1d55130bbf3
 X-Patchwork-Hint: ignore
-Message-Id: <20211208083448.ACC8F81D55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/glorytun: replace
- BSD-2-clause by BSD-2-Clause
+Message-Id: <20211208083448.8073C81839@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/qdecoder: set
+ license to BSD-2-Clause
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,30 +59,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30b21cd786c5f8bf81d212b2791752a47ecb0e67
+commit: https://git.buildroot.net/buildroot/commit/?id=f8cb6e6bfede811fafccf74e6967b1d55130bbf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+
+Set license to BSD-2-Clause instead of BSD-2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a479fdd86b57ce9fd239c250c09229b78272cc43)
+(cherry picked from commit eaaa756bbe0cfaf572ff74372f418e0a8fe47912)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glorytun/glorytun.mk | 2 +-
+ package/qdecoder/qdecoder.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index d128ae835d..389c7a07e4 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -7,7 +7,7 @@
- GLORYTUN_VERSION = 0.3.4
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
--GLORYTUN_LICENSE = BSD-2-clause
-+GLORYTUN_LICENSE = BSD-2-Clause
- GLORYTUN_LICENSE_FILES = LICENSE
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index 12784fc451..8cb5d3bc97 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
+@@ -6,7 +6,7 @@
  
- $(eval $(autotools-package))
+ QDECODER_VERSION = 12.0.8
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+-QDECODER_LICENSE = BSD-2
++QDECODER_LICENSE = BSD-2-Clause
+ QDECODER_LICENSE_FILES = COPYING
+ QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
