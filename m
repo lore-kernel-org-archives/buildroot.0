@@ -4,44 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1241FC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 08:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F5EC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 08:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C602180C3B;
-	Wed,  8 Dec 2021 08:43:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ACB783F57;
+	Wed,  8 Dec 2021 08:45:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BtJ8cxmVMWG9; Wed,  8 Dec 2021 08:43:39 +0000 (UTC)
+	with ESMTP id 12O7kjUC74-8; Wed,  8 Dec 2021 08:45:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 379D280CDB;
-	Wed,  8 Dec 2021 08:43:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 055A51BF365
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:43:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F335780EF5;
+	Wed,  8 Dec 2021 08:45:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B0AFB1BF365
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E790140147
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:43:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A070341CB2
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 08:45:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GvxelmQJ528M for <buildroot@lists.busybox.net>;
- Wed,  8 Dec 2021 08:43:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 243BD400EB
- for <buildroot@buildroot.org>; Wed,  8 Dec 2021 08:43:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 045D781992; Wed,  8 Dec 2021 08:38:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cCJmAyOcI0QQ for <buildroot@lists.busybox.net>;
+ Wed,  8 Dec 2021 08:45:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7504841CB0
+ for <buildroot@buildroot.org>; Wed,  8 Dec 2021 08:45:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 99C0560012;
+ Wed,  8 Dec 2021 08:45:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1musa5-0006O9-Mj; Wed, 08 Dec 2021 09:45:41 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Dec 2021 09:41:12 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 87b632fd14929dfb83ff40d6c132b0bc2c35ca19
-X-Git-Newrev: 266e82f0e21f2f163223c06e93bfb8ae7006a33a
-X-Patchwork-Hint: ignore
-Message-Id: <20211208083831.045D781992@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/smack: fix
- SMAKE_LINUX_CONFIG_FIXUPS typo
+To: Luca Ceresoli <luca@lucaceresoli.net>
+References: <20211118093813.474-1-luca@lucaceresoli.net>
+Date: Wed, 08 Dec 2021 09:45:41 +0100
+In-Reply-To: <20211118093813.474-1-luca@lucaceresoli.net> (Luca Ceresoli's
+ message of "Thu, 18 Nov 2021 10:38:13 +0100")
+Message-ID: <87k0gf5vt6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] configs/zynqmp_zcu106_defconfig: fix
+ arm-trusted-firmware build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,38 +60,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=266e82f0e21f2f163223c06e93bfb8ae7006a33a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Fix typo added by commit 2bac81f0cb776aca8e575459d07158a8d958737d
+ > This defconfig uses arm-trusted-firmware version 1.5 which fails since
+ > commit eacf7a1d0b952d8df8829b6bad9b08cd94e8bf0f ("package/gcc: switch to
+ > gcc 10.x as the default").
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 41e2132fbe8a8fc237ca4a2cd2eff9bd9ced09a6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/smack/smack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Backport a patch from v2.2 to fix the build.
 
-diff --git a/package/smack/smack.mk b/package/smack/smack.mk
-index b7b656e644..fec3ef98c9 100644
---- a/package/smack/smack.mk
-+++ b/package/smack/smack.mk
-@@ -14,7 +14,7 @@ SMACK_DEPENDENCIES = host-pkgconf
- # Sources from GitHub, no configure script included.
- SMACK_AUTORECONF = YES
- 
--define SMAKE_LINUX_CONFIG_FIXUPS
-+define SMACK_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+ > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/1768915296
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Committed to 2021.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
