@@ -1,60 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2992DC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 14:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA87C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 15:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EE85828DE;
-	Wed,  8 Dec 2021 14:41:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F192440019;
+	Wed,  8 Dec 2021 15:46:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6mLBVafjDML9; Wed,  8 Dec 2021 14:40:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5IoUdAEP2_U0; Wed,  8 Dec 2021 15:46:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00C9C82893;
-	Wed,  8 Dec 2021 14:40:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 461731BF2F8
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 14:40:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E83DD403B6;
+	Wed,  8 Dec 2021 15:46:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 710201BF32B
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 15:46:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35AEC82893
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 14:40:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D960403FB
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 15:46:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1WwDjOhkVHsH for <buildroot@lists.busybox.net>;
- Wed,  8 Dec 2021 14:40:56 +0000 (UTC)
-X-Greylist: delayed 00:06:20 by SQLgrey-1.8.0
-Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de
- [134.119.228.98])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D14108284B
- for <buildroot@busybox.net>; Wed,  8 Dec 2021 14:40:55 +0000 (UTC)
-Received: from [91.21.118.156] (helo=exchange.go-sys.de)
- by smtprelay08.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>) id 1muy1b-0002oC-LQ
- for buildroot@busybox.net; Wed, 08 Dec 2021 15:34:27 +0100
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2375.17; Wed, 8
- Dec 2021 15:34:31 +0100
-Received: from go-sys.de (192.168.1.112) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2375.17 via Frontend Transport;
- Wed, 8 Dec 2021 15:34:31 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Wed, 8 Dec 2021 15:34:26 +0100
-Message-ID: <20211208143426.2995-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hQprXkr-iAqy for <buildroot@lists.busybox.net>;
+ Wed,  8 Dec 2021 15:46:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 05149403EA
+ for <buildroot@buildroot.org>; Wed,  8 Dec 2021 15:46:47 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id y13so9667090edd.13
+ for <buildroot@buildroot.org>; Wed, 08 Dec 2021 07:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=35c8GkQTKXfj5x8624AJtAtPQ+DCqT3O829WuhfQI60=;
+ b=n7cGxMf73YjROZc1+7cv1HMLCmv4O2tEL0pA579NjEA9cM+CGNy9i7MqbGR140c/Iw
+ /M8uIdS1u1GiY3f6mgAN5LSU47tejDLyt2RXd18E804qWZ4SeQhliZLvNT0xMlJkoxf1
+ sjuWPbOJxFrxI+YK/JRyS7or2xEDoeVUFzgjU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=35c8GkQTKXfj5x8624AJtAtPQ+DCqT3O829WuhfQI60=;
+ b=cgckHGF5ONRJdbjzC6L1sIM/OSiIQrB4doIKO0ggzf0nLc4vYAIvyw65aoKkZ7DAeR
+ lIlLjMVm8WzU7OzQxlRzyb8PzdR2P02w+5IDS7gefMIoufkhAr4pW/07NDh+6mvBk8XZ
+ NwEG9RK+mUkERSke6WKuWM+sMeE0uDkmlOIryZCsu0smu+twk2Dwalj9F7HjeUx5uEEV
+ iTrYSc0FrYomsmBzrZoUrzIARf0DPy9DFjhNmoLJ+BlNvjDZgGYDUPyCXisDmhk/nAKT
+ Fv4F7YOd4k6nayB9a6tdihZQ8cpeXJHG3vf3qpTmKPAMGphM9IcBeE97TlYn05ZegL00
+ SAyQ==
+X-Gm-Message-State: AOAM532wwPvRsS13+YYg8lH+LxC/pHTmBYpdStl/Qy9Vp+jwaf9Gluf/
+ Cppdbw6QEBV1fl8uxHD3MDN3rQdHYZFO1A==
+X-Google-Smtp-Source: ABdhPJwwpBQZyJK56fxatLsMA/bD+3oeKqnZN9TNDSF/TLTu+kwTTrpB/R/aWsE9oW5OZx9PpXpE9w==
+X-Received: by 2002:a17:907:7b98:: with SMTP id
+ ne24mr8909483ejc.14.1638978405368; 
+ Wed, 08 Dec 2021 07:46:45 -0800 (PST)
+Received: from localhost.localdomain (host185036130019.static.fidoka.tech.
+ [185.36.130.19])
+ by smtp.gmail.com with ESMTPSA id gs17sm1673977ejc.28.2021.12.08.07.46.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 08 Dec 2021 07:46:44 -0800 (PST)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Wed,  8 Dec 2021 16:46:40 +0100
+Message-Id: <20211208154641.58478-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: bump version to 2.0.18
+Subject: [Buildroot] [PATCH 1/2] linux: bump CIP kernel to version
+ 5.10.83-cip1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +85,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This patch bumps Linux CIP to version 5.10.83-cip1.
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 6dee461258..9fa95270c3 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.16.tar.gz.sig
--sha256  65be9ff6004034b5b2ce9927b5a4db1814930f169c4b2dae0a1e4697075f287b  SDL2-2.0.16.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.18.tar.gz.sig
-+sha256  94d40cd73dbfa10bb6eadfbc28f355992bb2d6ef6761ad9d4074eff95ee5711c  SDL2-2.0.18.tar.gz
- # Locally calculated
- sha256  52d41d0c82507721ca1fd92c20dc2bf9ca531b3a288ef845a8275c550f118804  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 1708180626..54eec85f5e 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ linux/Config.in  | 6 +++---
+ linux/linux.hash | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index db0c58129f..e21d1681f7 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.15)"
  
--SDL2_VERSION = 2.0.16
-+SDL2_VERSION = 2.0.18
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (4.19.198-cip54)"
++	bool "Latest CIP SLTS version (5.10.83-cip1)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -44,7 +44,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	  implementation of software building blocks that meet
+ 	  these requirements.
+ 
+-	  The CIP community plans to maintain 4.19 for security and
++	  The CIP community plans to maintain 5.10 for security and
+ 	  bug fixes for more than 10 years.
+ 
+ 	  https://www.cip-project.org
+@@ -126,7 +126,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "5.10.83-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9062b72a0e..6d3b31c5a4 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -9,7 +9,7 @@ sha256  b55d77774ed631f57f736bcdab021f68167455c9daede7e9e4161b4d564d8b53  linux-
+ sha256  9784204f95cfc7de1c933088e6f9364e99a29988ae4e6b9353677637eb171aa0  linux-4.14.256.tar.xz
+ sha256  8f4ecd71fbcdd733c2849e2e5afe59d351c463c9a699bdbf428d88fa911009db  linux-4.19.219.tar.xz
+ # Locally computed
+-sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
++sha256  5738dcf020ff75fb6e43d6d1a8b572d2f1fe58c08b31f822eb42fb91d6bdc98f  linux-cip-5.10.83-cip1.tar.gz
+ sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
+ 
+ # Licenses hashes
 -- 
-2.20.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
