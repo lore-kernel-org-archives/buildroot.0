@@ -1,87 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FFA4C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 10:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE6FC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  8 Dec 2021 10:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0518A40202;
-	Wed,  8 Dec 2021 10:30:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01B8241DC0;
+	Wed,  8 Dec 2021 10:37:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HvaQ7d3QwoVk; Wed,  8 Dec 2021 10:30:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7GY7_q2lXPD6; Wed,  8 Dec 2021 10:37:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E9FB40207;
-	Wed,  8 Dec 2021 10:30:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C7D311BF362
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 10:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4874C41DBE;
+	Wed,  8 Dec 2021 10:37:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED1CE1BF362
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 10:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3F1D60F41
- for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 10:30:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB44484C3E
+ for <buildroot@lists.busybox.net>; Wed,  8 Dec 2021 10:37:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6cMUApbefGyK for <buildroot@lists.busybox.net>;
- Wed,  8 Dec 2021 10:30:47 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=unikie-com.20210112.gappssmtp.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PCGscmcLsbCE for <buildroot@lists.busybox.net>;
+ Wed,  8 Dec 2021 10:37:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4D5E160F40
- for <buildroot@buildroot.org>; Wed,  8 Dec 2021 10:30:47 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id v1so6853057edx.2
- for <buildroot@buildroot.org>; Wed, 08 Dec 2021 02:30:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=AtYqqSL3Ai3lrITMgnwsUkA1xfsysIDqOhGznFJsQLg=;
- b=e7StLq7BMTqG5+dH3TDIv7W7K/XlWu3N+RO9pPlMkHeCdrSF0kqIRazhO4EuSJ0No0
- eTuG85+9R9zNyYjda2Bq4nQpS1/9Mz3jx540vX/j52L1GEQCPKNEYMHE+Xn8psB06fTx
- UH+QFewjoSjyiv2WybZevEZV6rgh6kB5FmN97vlbZLC1EnVz+xOQTzrgBsSnGnT/0HJB
- noWUH/mfol9muVH8ab7+U9DB2Qln2U7x83TBGbMDkFgHbX7GoF+igMf/J0KvQS4i/6Mh
- rJrxjy6p+L9eMEwyCBKaLwR+KIKmPLVPWAeYwJER5NHJy/On/gv4axw4dzbKORYedgv6
- jOAQ==
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C3B1F84C3D
+ for <buildroot@buildroot.org>; Wed,  8 Dec 2021 10:37:15 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id c32so4744004lfv.4
+ for <buildroot@buildroot.org>; Wed, 08 Dec 2021 02:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=C27aPpZdHq57WMEEI8RJ8MMd/G7pt121lia4lBq6O54=;
+ b=dxFyvtPTkyiI7wQd+iJOizJunHisgNUt+gGIA2rqBNaPCIAp9mb9tQNMhQZmYgaOJk
+ XgMOHT7K9fVgfQ9l4uIJWteiCDcrnZHkuw/65ytut4daGrCyGM/R1s45f4vqYpvaPUNb
+ 7I9hhOBw5xkCquPLg+qUWWHnsy5f5bAMjetVU8aql1KRd0gv79+mkqorqAjwsj5zIEiN
+ Z2vzF72Y1Ykr4LTfx6tViWTT8zcbppYEovSkTs96uzWBKtUd3GoeITO8Ix55UOWrHIke
+ jA9U/3S9Z0OrBjG8Ne6ROowrcRbRsazqQxhjPdWYkwydev6JSEJm0WVCuGgwRxH8HJqL
+ 25lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=AtYqqSL3Ai3lrITMgnwsUkA1xfsysIDqOhGznFJsQLg=;
- b=TdWxElZoiY3PtvAFGS5oKfkfAaEE3MtHiJWAATF61uI11UmMQqR+/1o/2cvihjC6YK
- R8Zl/9tBh2Pa8oO5JgoXLoUdvd2+/isDPQErd8LhA+fPoyRF0c/6pi0kxLLIV/APIqs3
- k13bV1d3Uw4Vu6jX9qcOwtn63dYnBnSTfN56iIfd2RW+FCwVfbQLhK023hoJnWDEO/em
- YOnwS5dgnDD+2/IuAITsLVVswnbJQ7h5P3Q608y/lV/nwLYfz7zFY+yeMZhg8zgHZ9ei
- LQn/IZoKGGFFLUScgVJYvRCWJRqgHGXErrGxBzXP/h3+55py2/Kp/yXrgZa0amh2ohd8
- aUiA==
-X-Gm-Message-State: AOAM533Q6sX1fGqJQIzq12xOhm43CxA9sbs/vD9tG6Z2+lVjyQmJIN9w
- sOiaLIk9DPPmqmIxPgZd5+KbQ7doevvYSQ==
-X-Google-Smtp-Source: ABdhPJwvAtr/8bVx1FVFTPBO8rzmBGHieW/ha5eTKLtUStrRS5j9zGz+0Pph5F+AjDc7qWY6yggY9A==
-X-Received: by 2002:a17:906:cd03:: with SMTP id
- oz3mr6551649ejb.252.1638959445095; 
- Wed, 08 Dec 2021 02:30:45 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id m25sm1750857edj.80.2021.12.08.02.30.44
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 08 Dec 2021 02:30:44 -0800 (PST)
-Message-ID: <48949c5e-6a37-13c5-bad9-cb555d344cf8@mind.be>
-Date: Wed, 8 Dec 2021 11:30:43 +0100
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=C27aPpZdHq57WMEEI8RJ8MMd/G7pt121lia4lBq6O54=;
+ b=KxsuqQOf8tw+i2zAhCJuNXM4UTOtnkGILPX+tYnwm/fcVAbLfw/9c+kvreRq8FIfnL
+ 2RMPleQ+Iv94Wx2W2eGWqVSksOIRtcDR9AoSV/BbR/maJ2aSSKhblkhe4rPJ1wIFSgaM
+ KZFbx+jhwQdaE6o+AHcEHEgyLcQJK2R3zRmSIvojxmHr0pApyEy8ibL1AR2eIq6oyIVB
+ 33sjWuYwTKFxOJ370dTN8wv7CkUiPT97DX+q/mWu1ZAmGC2D8BWUE0V5oGMZnJR02myy
+ 95j/tfDeRlBv5qCZ3r4ZKJ/qYtnzWhTCX5k+6VVdc64y/fMSeS4s4TaZ164Rm3lNk9ME
+ SBOw==
+X-Gm-Message-State: AOAM531KGpYFlWtL+ohw9NrLdsoG4C3NojydTkRYAG7iDGKfUQ2S9bIx
+ fCVhszyq9KfYcvyGMa+zhQ1xM5JoWbvv/cZOf6S9VQ==
+X-Google-Smtp-Source: ABdhPJyWmlArL7UtbQSsBHw9ybuoMPOGv74FVD/w7MJLLESXu/b9Z9GA0E0sRq7gopew2D7nHusEZgcL0MGVKTXB40E=
+X-Received: by 2002:a05:6512:2603:: with SMTP id
+ bt3mr44447582lfb.202.1638959833454; 
+ Wed, 08 Dec 2021 02:37:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>,
- buildroot <buildroot@buildroot.org>
 References: <CAJPV9MqnSviULFaVRO6m00bF-bfysMQ_Z9qWQiwzx+E1u-iLqg@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CAJPV9MqnSviULFaVRO6m00bF-bfysMQ_Z9qWQiwzx+E1u-iLqg@mail.gmail.com>
+ <48949c5e-6a37-13c5-bad9-cb555d344cf8@mind.be>
+In-Reply-To: <48949c5e-6a37-13c5-bad9-cb555d344cf8@mind.be>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Wed, 8 Dec 2021 12:37:02 +0200
+Message-ID: <CAJPV9MpVMTdZ=m6+0Oa42VNwdkDhBo8OdLerB2tZG169rKFxmw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 Subject: Re: [Buildroot] Arm opcodes support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -94,30 +83,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============7579077523572498838=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNy8xMi8yMDIxIDEyOjI3LCBKb3PDqSBQZWtrYXJpbmVuIHdyb3RlOgo+IAo+ICAgICBI
-aSwKPiAKPiAgICAgSSBoaXQgdGhlIGZvbGxvd2luZyBpc3N1ZSBtYWtpbmcgYQo+IAo+IHBhY2th
-Z2UgZm9yIGF2b2NhZG8gZnJhbWV3b3JrLiBJIHdvbmRlcgo+IHdoYXQgb3RoZXIgcGFja2FnZXMg
-ZG8gd2hlbiB0aGlzIGlzIGhpdC4KPiAKPiAuLi9zcmMvYXJtL3N5c3YuUzogQXNzZW1ibGVyIG1l
-c3NhZ2VzOgo+IC4uL3NyYy9hcm0vc3lzdi5TOjEwNDogRXJyb3I6IHNlbGVjdGVkIHByb2Nlc3Nv
-ciBkb2VzIG5vdCBzdXBwb3J0IEFSTSBvcGNvZGVzCgogIFRoaXMgbWVhbnMgdGhhdCB0aGUgcGFj
-a2FnZSBkb2Vzbid0IHN1cHBvcnQgdGhlIHNwZWNpZmljIEFSTSBhcmNoaXRlY3R1cmUgeW91IAph
-cmUgYnVpbGRpbmcgZm9yLiBJZiB5b3UncmUgbHVja3ksIHRoZXJlJ3Mgc29tZSBraW5kIG9mIGNv
-bmZpZ3VyZSBvcHRpb24gdG8gCnNwZWNpZnkgdGhlIChzdWIpYXJjaGl0ZWN0dXJlIGFuZCB0aGUg
-cGFja2FnZSBiZWhhdmVzIGNvcnJlY3RseSB3aXRoIHRoYXQuIElmIAp5b3UncmUgbm90IGx1Y2t5
-LCB5b3UgbmVlZCB0byBwdXQgYXJjaGl0ZWN0dXJlIGV4Y2VwdGlvbnMgZm9yIHRoZSBwYWNrYWdl
-LgoKICBJdCdzIHZlcnkgYW5ub3lpbmcgYmVjYXVzZSB3ZSBvZiBjb3Vyc2UgdGVzdCBvbmx5IGEg
-dmVyeSBsaW1pdGVkIHN1YnNldCBvZiBhbGwgCnRoZSBwb3NzaWJsZSBzdWJhcmNoaXRlY3R1cmVz
-LCBzbyBhbnl0aGluZyB0aGF0IGZhbGxzIG91dCBvZiB0ZXN0LXBrZyByYW5nZSBpcyAKbGlrZWx5
-IHRvIGJlIHdyb25nLi4uCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IAo+ICAgICBUaGFua3MhCj4g
-Cj4gCj4gICAgIEpvc8OpIFBla2thcmluZW4uCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QKPiAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+--===============7579077523572498838==
+Content-Type: multipart/alternative; boundary="000000000000ad953805d2a01210"
+
+--000000000000ad953805d2a01210
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 8, 2021 at 12:30 PM Arnout Vandecappelle <arnout@mind.be> wrote=
+:
+
+>
+>
+> On 07/12/2021 12:27, Jos=C3=A9 Pekkarinen wrote:
+> >
+> >     Hi,
+> >
+> >     I hit the following issue making a
+> >
+> > package for avocado framework. I wonder
+> > what other packages do when this is hit.
+> >
+> > ../src/arm/sysv.S: Assembler messages:
+> > ../src/arm/sysv.S:104: Error: selected processor does not support ARM
+> opcodes
+>
+>   This means that the package doesn't support the specific ARM
+> architecture you
+> are building for. If you're lucky, there's some kind of configure option
+> to
+> specify the (sub)architecture and the package behaves correctly with that=
+.
+> If
+> you're not lucky, you need to put architecture exceptions for the package=
+.
+>
+>   It's very annoying because we of course test only a very limited subset
+> of all
+> the possible subarchitectures, so anything that falls out of test-pkg
+> range is
+> likely to be wrong...
+>
+
+Fortunately for my case it turns out the packages
+
+required dynamic libraries so this platform got out of the
+equation, but I was curious how to do so.
+
+Thanks!
+
+Jos=C3=A9.
+
+--000000000000ad953805d2a01210
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Dec 8, 2021 at 12:30 PM Arnou=
+t Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt=
+; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
+ 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
+<br>
+On 07/12/2021 12:27, Jos=C3=A9 Pekkarinen wrote:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Hi,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0I hit the following issue making a<br>
+&gt; <br>
+&gt; package for avocado framework. I wonder<br>
+&gt; what other packages do when this is hit.<br>
+&gt; <br>
+&gt; ../src/arm/sysv.S: Assembler messages:<br>
+&gt; ../src/arm/sysv.S:104: Error: selected processor does not support ARM =
+opcodes<br>
+<br>
+=C2=A0 This means that the package doesn&#39;t support the specific ARM arc=
+hitecture you <br>
+are building for. If you&#39;re lucky, there&#39;s some kind of configure o=
+ption to <br>
+specify the (sub)architecture and the package behaves correctly with that. =
+If <br>
+you&#39;re not lucky, you need to put architecture exceptions for the packa=
+ge.<br>
+<br>
+=C2=A0 It&#39;s very annoying because we of course test only a very limited=
+ subset of all <br>
+the possible subarchitectures, so anything that falls out of test-pkg range=
+ is <br>
+likely to be wrong...<br></blockquote><div><br></div></div><blockquote styl=
+e=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_quote">=
+<div>Fortunately for my case it turns out the packages</div></div></blockqu=
+ote>required dynamic libraries so this platform got out of the<div>equation=
+, but I was curious how to do so.</div><div><br></div><blockquote style=3D"=
+margin:0 0 0 40px;border:none;padding:0px"><div>Thanks!</div><div><br></div=
+></blockquote><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0p=
+x"><div>Jos=C3=A9.=C2=A0</div></blockquote></div>
+
+--000000000000ad953805d2a01210--
+
+--===============7579077523572498838==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7579077523572498838==--
