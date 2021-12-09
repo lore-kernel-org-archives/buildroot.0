@@ -1,78 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82232C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 21:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD09C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 21:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C15B860E2;
-	Thu,  9 Dec 2021 21:48:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D614C4EED5;
+	Thu,  9 Dec 2021 21:52:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lA0UZlSS49fg; Thu,  9 Dec 2021 21:48:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FxxA5Rmm3IKl; Thu,  9 Dec 2021 21:52:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89D38860A2;
-	Thu,  9 Dec 2021 21:47:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2FDE11BF868
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:47:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 364FA4EED3;
+	Thu,  9 Dec 2021 21:52:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 291BE1BF868
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:52:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22C3840179
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:47:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 184484EED2
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:52:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 10eWkSPw6dDz for <buildroot@lists.busybox.net>;
- Thu,  9 Dec 2021 21:47:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tR_N_6ij1nuO for <buildroot@lists.busybox.net>;
+ Thu,  9 Dec 2021 21:52:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 141F642515
- for <buildroot@buildroot.org>; Thu,  9 Dec 2021 21:47:56 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id x10so6679493edd.5
- for <buildroot@buildroot.org>; Thu, 09 Dec 2021 13:47:56 -0800 (PST)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6713B4EED0
+ for <buildroot@buildroot.org>; Thu,  9 Dec 2021 21:52:36 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id o20so24343674eds.10
+ for <buildroot@buildroot.org>; Thu, 09 Dec 2021 13:52:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cYzmAZDefEudaxAN7QTyuakqDKZ9mR196rShDwxlGfY=;
- b=FHqN5lQDz7koxg7AIZEdUNCypfkb9TDmVOqeMPsp5K4wk2Us74vu3/KAYLWHVqed6D
- y+cSnGxfaJNFwBbTQfAtnNNJu/4qFCrOm2xV7jZPsIEJJY0y3UNu0uuvECMmAmyG17vN
- FtW7X6f136N/tiBT/oXTfndDkHqU3vSASnFnQ=
+ bh=ZNbTp+RvBiKcxWk03FrJewLNPnewGVDRl3nFY/jNSRU=;
+ b=SF5cwRsJJpVksJOuiUFTAbnIzM+sPfW/mh6DtVY0Pxys0AsAb8bUZQnHCVu5B/py6N
+ GckKmgezcDTPuNg27dYTLzIuPpwF1MJc6HeN97ngGNH3yFp8BSvVPLh5gaqjKqO0MSrf
+ U/ovMG06ExfZVfzpmhGupKA5BqtjSYIAKWJ7s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=cYzmAZDefEudaxAN7QTyuakqDKZ9mR196rShDwxlGfY=;
- b=KimfN7K7svrPdRCeZdFoIKqpJuLFiaZ2RXPUxMYnfT8R7fraJiSwekoJo11lBihglf
- yejBTKGF8HozrwLnd9eAjrs+C5zyDAeFzhm+Y7O6dgnSU3++mtywwDW/dggYm678kZ8x
- TR5OATz4NFYANVnjOjgmJWd4z0hh8bZPr5umnLq7ZA5/NnG8cKffE9j7DfOxz+pFXr9k
- 8GRbSvIHO4++SyAGeJcqoL81AXGF4Z/Tdvw9vBs7FHnuYec+nfhHp68X7siWx63zFloH
- GqiRwedoaWKu+8CH1/hNMINnd3lIrV7G+56LPrRhfwKDGhQF45gHOEY4uyFAcuzEcYlo
- kCIw==
-X-Gm-Message-State: AOAM533W0t93jiMn/Vp4vWbwvbXd5pIRvkUrxTh9BjmmeAxLEVMpfFP6
- 08xmU2kdWlFuRX3xah6EfXEwDqZBjbc5jg==
-X-Google-Smtp-Source: ABdhPJybPKGd8mB5EdoLicU3R/6Td8/+umghWD4Je5/SEuRFECOyKrXLf5TkWcHstKze27l70pmQbA==
-X-Received: by 2002:a17:906:741:: with SMTP id
- z1mr19046737ejb.421.1639086475371; 
- Thu, 09 Dec 2021 13:47:55 -0800 (PST)
+ bh=ZNbTp+RvBiKcxWk03FrJewLNPnewGVDRl3nFY/jNSRU=;
+ b=PiHVNN/RLVtn4u6/uIjs44J+iMu5sRow+WfzsRZx1GwECHcEgx/ChIzpSklgclix0e
+ 5ZKEKQ/RCxSm61NOgXf3paYT9SErUg1+gEaaqyVCDZKQzlTmj3P1rbXs9tqdNENnWWCw
+ JJr2YPBBaxwlWpdzNLVZ69/Rbw9oFOI0OfXrfXV5C1Q7eUwRZ38F0/9i0HqGDsQsdmGB
+ YJMUJj9nKSs4IVo33NpnYTPer7Z3dJ7BaCeEcDqP+tM4vFuHgYwy/hsIspZk2UF56Jji
+ EM8C8Q+lcq/oGxulsaJmNUQabGxHQ5yE/tUe2ES2scQdBW4/RZr6Uf3LnDRhFkMIWr0o
+ eYjw==
+X-Gm-Message-State: AOAM532ai2uZFHFM/VLlF3qHinxujCy1GJ1QerC7lfYYq76VI7eQuL8s
+ C+X9qPr7k6KhDLNraklfa160ajyyosMc3g==
+X-Google-Smtp-Source: ABdhPJzKI+Uctxr1i+lExBBFcwobDS3rwrBCl7ig/4ibEEngpR6YId+cnNObDWKr6s1Y2x3h1Ib3mw==
+X-Received: by 2002:aa7:c78f:: with SMTP id n15mr32338921eds.344.1639086755086; 
+ Thu, 09 Dec 2021 13:52:35 -0800 (PST)
 Received: from localhost.localdomain (host185036130019.static.fidoka.tech.
  [185.36.130.19])
- by smtp.gmail.com with ESMTPSA id eg8sm431206edb.75.2021.12.09.13.47.54
+ by smtp.gmail.com with ESMTPSA id yd20sm487689ejb.47.2021.12.09.13.52.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Dec 2021 13:47:54 -0800 (PST)
+ Thu, 09 Dec 2021 13:52:34 -0800 (PST)
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Dec 2021 22:47:51 +0100
-Message-Id: <20211209214751.459313-1-angelo@amarulasolutions.com>
+Date: Thu,  9 Dec 2021 22:52:31 +0100
+Message-Id: <20211209215231.471017-1-angelo@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.10
+Subject: [Buildroot] [PATCH] package/grep: bump to version 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,32 +89,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/cups-filters/cups-filters.hash | 2 +-
- package/cups-filters/cups-filters.mk   | 2 +-
+ package/grep/grep.hash | 2 +-
+ package/grep/grep.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 3b65e702c5..aefb67f651 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 5bad0b931f8293082f8773b34d5c4fed66415d2bf268b0798889e5f593c0ba61  cups-filters-1.28.9.tar.gz
-+sha256 8cb40355287d65ea03e90dfa7e2d34f0d46752957c8a6d4e96ab6fe6c581e5d2  cups-filters-1.28.10.tar.gz
- sha256 38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index bc69b3832d..63b85f0b8b 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 9dfe2f2c23..4759e3a9b0 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+ # http://ftp.gnu.org/gnu/grep/grep-3.6.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  667e15e8afe189e93f9f21a7cd3a7b3f776202f417330b248c2ad4f997d9373e  grep-3.6.tar.xz
++sha256  5c10da312460aec721984d5d83246d24520ec438dd48d7ab5a05dbc0d6d6823c  grep-3.7.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 27d204d4ce..233f5fe633 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.28.9
-+CUPS_FILTERS_VERSION = 1.28.10
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+-GREP_VERSION = 3.6
++GREP_VERSION = 3.7
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
 -- 
 2.25.1
 
