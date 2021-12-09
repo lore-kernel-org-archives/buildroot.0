@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32D14C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 22:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A6EC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 22:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93F574EEF6;
-	Thu,  9 Dec 2021 22:01:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EB196F8FC;
+	Thu,  9 Dec 2021 22:05:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OX7NsvY2553T; Thu,  9 Dec 2021 22:01:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8rr8nd6ZdrHq; Thu,  9 Dec 2021 22:05:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DED654EEF4;
-	Thu,  9 Dec 2021 22:01:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6E56F1BF868
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 22:01:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61ED16F8ED;
+	Thu,  9 Dec 2021 22:05:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6063A1BF350
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 22:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D8EE85EFE
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 22:01:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 478B66F8ED
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 22:05:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UDDSOpdMdlOY for <buildroot@lists.busybox.net>;
- Thu,  9 Dec 2021 22:01:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 726C185EF5
- for <buildroot@buildroot.org>; Thu,  9 Dec 2021 22:01:28 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id w1so23912668edc.6
- for <buildroot@buildroot.org>; Thu, 09 Dec 2021 14:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aiiX1A/lAX+Mzf4Lg8kGsOcCpyscN33rjFPT+zJbpic=;
- b=nMFGXcPNPd4PI4TbnRr2qisFRVQnThC8dmiYHNeFe9vZaEeEObxs7qCNiF514udVKV
- KIQX33g6/sizuzZ1EBhV8wItUc3Wi7gCHDR1LAFQ8mRgKhZE76virmv6e58Os/eLYnDH
- rlPQXsfAV2/5gmm3FwF878KDb2bpok4UhKlxc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=aiiX1A/lAX+Mzf4Lg8kGsOcCpyscN33rjFPT+zJbpic=;
- b=fWk2xiorrhe7TkI1lXzyhiPjB37obh1p8LXnL0Wis0UPnHmKCfzSpw0eq+pg1ZTRY/
- 2qzgMHx9OcBfv+LuA+V+dJ+k4Bq+xQD+jcWmcooYJNQWdpjvurwBeo0gntv+gntKTckp
- Ua5KC0dGbG13rxo3eS27fghj/6USha58Wdowg1W7EfDsVX8Hth2F0/V/hJQJ1LRsU7Ih
- F1k6jVfhfuJ14+uL2L5hdHAHm3ZS0P0PU90RZWX2kpitNBv6O84VwmmWDWSSYKjVrcjd
- xO+Uf3gU0HcVk/2LDcclk/Tzf/6Vtwkaa5I7Wrhm7cd2nd84ez7n7MvSZRTCWJ/l4+jN
- /Rwg==
-X-Gm-Message-State: AOAM533Gx7BzVXjvEscCekUsjUQzsmyGrjmFQoakXRzfUFvQmkD6WwVt
- rsrK0MS1h3glHTUrRtWabRTsdAnHmuSZZA==
-X-Google-Smtp-Source: ABdhPJz1VwFBXBV6wngWkuXTYnY6UruyY0CE/hjraJUsWz/+InOKulKzAVNWVZw5cR0s8zEE4EgwVQ==
-X-Received: by 2002:a17:907:6e9e:: with SMTP id
- sh30mr18587677ejc.156.1639087286667; 
- Thu, 09 Dec 2021 14:01:26 -0800 (PST)
-Received: from localhost.localdomain (host185036130019.static.fidoka.tech.
- [185.36.130.19])
- by smtp.gmail.com with ESMTPSA id kx3sm493974ejc.112.2021.12.09.14.01.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Dec 2021 14:01:26 -0800 (PST)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  9 Dec 2021 23:01:23 +0100
-Message-Id: <20211209220123.482608-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eLyVh-0AALgo for <buildroot@lists.busybox.net>;
+ Thu,  9 Dec 2021 22:05:37 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 054AF6F8C4
+ for <buildroot@buildroot.org>; Thu,  9 Dec 2021 22:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1639087534;
+ bh=CNSuKsXre4/NGV27wY0S2wVc3lOiQskEqNPZhg8nOls=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=kWu/Oifs4p8UGUehG6ZmrjftkLhgtJxYeMdCgeXiur00rt4nmafTw34rL6xIr6X8i
+ G9itpx8KFJmyBnItopQKybtGDp0OuoVheTJKWYcjcZTB2sbQxOGNVebpw2CTqeHv8U
+ AzLm/UEg6F7P1gqlYIsQweoQBLgX0MuUlIf0ZQcE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.29]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAfUo-1monh80WRU-00B62G; Thu, 09
+ Dec 2021 23:05:34 +0100
+Date: Thu, 9 Dec 2021 23:05:33 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Message-ID: <20211209230533.013e9e83@gmx.net>
+In-Reply-To: <20211209215231.471017-1-angelo@amarulasolutions.com>
+References: <20211209215231.471017-1-angelo@amarulasolutions.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 8.4.0
+X-Provags-ID: V03:K1:s1nK4Jg36t/nSSLIWzEpwrwxpkw+uNacd1u71jgKa8wrbNI2bKP
+ ReOdr8ULxi/sXOSwphbKmql3mJyR1q/EoekBycPU9YJ/HhD8qvP8xkL4/LMDRqtUdbACd4u
+ q18rI15hW+rzcBqN0Uudxqsp9hL6vNNDPm/9NHwT+VOtXMqy195yqyB9LAxOu4ymN79sHAK
+ jEmVe5x5O+UZg0Niz6r4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2rN3Wp6Ih6o=:n3ojZz3KIrFLfgSTscHRTP
+ cz20BYxPqrLQwQgU/DNkAxyV91FYDaC0CCkagfl9VgLW9vPgh++cH1Hg5ETxBpRGDn8j2Tmew
+ /PcBkR5/WVuFhYQihxTew9e5hxI++iGbG/12m7U+eIL1GY2xasIbunsgQk8A1jza35A+lHi5V
+ sKn9embx72id2P9yJLj/b7QFJnRLRei3ZB4F644hRfNAcDNLmWfEMpjVYLP0L3jjS2fD0r3Ga
+ 0ZobHIbwf9D4oxs2cbYFCPaYHXNmrWsB1zsZN2V0VRlUgspYvHifh/NkQVTV5e/qkMV5EiUEo
+ /j/HcbcWmQ7+IAfcQIf8fzv7DGs7TWmkaCPqAFthw1nfxo/1PXpZXGD+RNkSkRHotmhdO55N+
+ KDNNH2swuHA3rduhcN8bTIHdDKmRcsiMq/CKLj27KjOnjmyybkCNUGid3eJIrLWEEkiFqjF12
+ Fnn0Wifkj+HJrkk0rC+t3Dh+oUwfubrY2naecQVa5gu8oEpsE47Gwm59ChRxe+bvUC10VOntg
+ SvdTnGX5UJJEgiUrZDsWgKdBsTUz+PANS/puzHNFMabI+n6k17XIhYSWkEZerbn7+gdwDsAp2
+ 2thZ4Bxbln1cAfGQSMn5bnX7KW6fsDkex26AkGiTg/Fe169+9mtlNf8RPBH3gdbeQH1U6HZYk
+ CMxQ98M0OsGNv9b1opoJ2z3qPNrb4R+1fhivgWwq22kzCY1KMOxVVubQhbRV7uUOD5ren8TaY
+ +6eDXdM/SNJy3DM2ymXDbP3x5DdGdr/MkGSiaG2Uurq/jGrbDn7v6sDV6SmhlnmotL76rAu40
+ MjagDKRJEBThsaV8ckq5KvWbMUoKlDlVdGXT913BlFij3u9CGeggu0dZCRHii54kRT8mQgiat
+ cYAY8GacCNpqRx97JV81pOv4hnKqndXkIxLOIfwlEprExZSLFYwwYmjm/BRyyPhJTClwliRyS
+ EYaVvFgaHVeoRikgKEJjp5F3sgUdWF0cPhuOYWlIpG23KUw98sDXpGEHTqAqioBO05upWAdtE
+ BWtzntUWxYgoIsD8CTCz7z7+8bw/okrvGKCDg9215mVSsbleCUrjkqgA2vZVQXdEIyTbTJQvJ
+ kGYkSsDJbEKZIQ=
+Subject: Re: [Buildroot] [PATCH] package/grep: bump to version 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,48 +83,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Angelo,
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 3b5bdf2535..d14cb5cff6 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  a7fc550b80819eab11e01cc097913700  Pillow-8.3.2.tar.gz
--sha256  dde3f3ed8d00c72631bc19cbfff8ad3b6215062a5eed402381ad365f82f0c18c  Pillow-8.3.2.tar.gz
-+md5  7a1eb5a250c7ccbd549a89e16404f09f  Pillow-8.4.0.tar.gz
-+sha256  b8e2f83c56e141920c39464b852de3719dfbfb6e3c99a2d8da0edf4fb33176ed  Pillow-8.4.0.tar.gz
- 
- # Locally computed sha256 checksums
- sha256  5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 168c9d632c..5ed57c55cb 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 8.3.2
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/90/d4/a7c9b6c5d176654aa3dbccbfd0be4fd3a263355dc24122a5f1937bdc2689
-+PYTHON_PILLOW_VERSION = 8.4.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/7d/2a/2fc11b54e2742db06297f7fa7f420a0e3069fdcf0e4b57dfec33f0b08622
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
--- 
-2.25.1
+On Thu,  9 Dec 2021 22:52:31 +0100, Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  package/grep/grep.hash | 2 +-
+>  package/grep/grep.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+> index 9dfe2f2c23..4759e3a9b0 100644
+> --- a/package/grep/grep.hash
+> +++ b/package/grep/grep.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking signature
+>  # http://ftp.gnu.org/gnu/grep/grep-3.6.tar.xz.sig
+
+Missed to fix the comment...., did you check the signature?
+
+Regards,
+Peter
+
+
+>  # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+> -sha256  667e15e8afe189e93f9f21a7cd3a7b3f776202f417330b248c2ad4f997d9373e  grep-3.6.tar.xz
+> +sha256  5c10da312460aec721984d5d83246d24520ec438dd48d7ab5a05dbc0d6d6823c  grep-3.7.tar.xz
+>  sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+> diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+> index 27d204d4ce..233f5fe633 100644
+> --- a/package/grep/grep.mk
+> +++ b/package/grep/grep.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -GREP_VERSION = 3.6
+> +GREP_VERSION = 3.7
+>  GREP_SITE = $(BR2_GNU_MIRROR)/grep
+>  GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+>  GREP_LICENSE = GPL-3.0+
 
 _______________________________________________
 buildroot mailing list
