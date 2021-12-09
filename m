@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F433C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 21:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4FFAC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  9 Dec 2021 21:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A0FC6F4E8;
-	Thu,  9 Dec 2021 21:32:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2004885B81;
+	Thu,  9 Dec 2021 21:40:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KpJrv9Y7CbdR; Thu,  9 Dec 2021 21:32:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7199D6F4EC;
-	Thu,  9 Dec 2021 21:32:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6904F1BF868
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:32:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D78F860E4
- for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:32:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SInlB-0pzxQT for <buildroot@lists.busybox.net>;
- Thu,  9 Dec 2021 21:32:22 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zYHv1XNiN7pq; Thu,  9 Dec 2021 21:40:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C33E85B83;
+	Thu,  9 Dec 2021 21:40:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 80DC51BF868
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:40:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7DF1C4ECFE
+ for <buildroot@lists.busybox.net>; Thu,  9 Dec 2021 21:40:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qEoYsveZauM1 for <buildroot@lists.busybox.net>;
+ Thu,  9 Dec 2021 21:40:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B23A9860E5
- for <buildroot@buildroot.org>; Thu,  9 Dec 2021 21:32:22 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id d24so12084073wra.0
- for <buildroot@buildroot.org>; Thu, 09 Dec 2021 13:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A42784ECFB
+ for <buildroot@buildroot.org>; Thu,  9 Dec 2021 21:40:51 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id t5so23565130edd.0
+ for <buildroot@buildroot.org>; Thu, 09 Dec 2021 13:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Jj4PBRS4IwxSWF1utf9yGQYEshqQB8rJfRrpmycNwpE=;
- b=FhkDJSpWTDPQ76E3KR247SKlraZR3l1vUdZRA0pckuE36UUlIDxtzzHPUg+H3CC/SX
- R0lWnrbjFkNt2kFAb9HjZRSADgHcJ3rlYSoVbjO7UGoHkfN54nqB9c1RKI6E7F2HxOoO
- m7lHmQGTyayGAlNjIxZz+DZ6l7FwF3+azkelSaytq3bLLJ8yqgDHkZSP9ZDX1F1Pdbzj
- 8BAqBeZ08KhsTzhOQNfL2Orso/R2mrzBN2edd6GyltD6nxn4M9heqVD+LtWRx9tBrgIV
- UKaTNq0bZgxVi4eOomnVQo5AkGTthJXLXjdnpSqvwlhWAAnJhjxrsZW12J+Pfb+K1Bv4
- nHbw==
+ bh=sbrKSK/MqUQREYRN5YhR/bd5dWuQSYB3YxbcZdihYWY=;
+ b=E6aBXNd/wAw63RtraLlihYMTfAUm2lCXkELODiGDlmu1BjtinwQoBT4o55B2EiwMPi
+ i8AA6lIzcRC0wJbP0ZxI/caf79IwrGgSDe8sFSZP3+xne1cPJsUBxTsl5NOISJK/ikLA
+ SgIn6owDznVZotbuYBlrRBlizUbgO1ShqlEZY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Jj4PBRS4IwxSWF1utf9yGQYEshqQB8rJfRrpmycNwpE=;
- b=nZv/SlOGW4eUjFyn2brRvkIx913rp9gmyPnrMI1f6uJwoMdEreuiahWMY356qZA+Wv
- O7XpnA2ThgbePK/Urzg7/OWIvtvhOkxgatMXb1OC/mAsrhUDHSCFCEGv8cNP2DZZ1xi2
- 5DMMotv7u8sFEWGcK+zo6K9kFfX8A701nX6FmS4Xf+HmizOQQvbyDMw98SLhHxRU1Sr8
- 7kVGEMw8oYXBKbnJfU4WyH1WBqShJsNu9VbEHseTlNcEFN3BGvlFxOYVJ/xzy2NNDg2g
- EqSkTEMYyS2dnE6/D5Ug+/OOEMscMPM/bl6gr2leelYk7r5191+tFSBrzzqU/fJijv5A
- oTjg==
-X-Gm-Message-State: AOAM531Mjar8sg3mIH2yMSFwsc+u21G2jvHBCU/mGFRhkojJPNteAGlt
- UFPOizR3fzWhnxWQQELzp0dERd6cxITlEg==
-X-Google-Smtp-Source: ABdhPJySM0p7HpcuCqtgc6qxCYwR/O6G/Xf2ZeqFq/KBUp4ZzMbNPUU1wh1gX6DfzSYFSoZgEVLvAQ==
-X-Received: by 2002:adf:8bd2:: with SMTP id w18mr9097255wra.557.1639085540714; 
- Thu, 09 Dec 2021 13:32:20 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id w17sm912905wmc.14.2021.12.09.13.32.20
+ bh=sbrKSK/MqUQREYRN5YhR/bd5dWuQSYB3YxbcZdihYWY=;
+ b=EYDilyrZOWEVuCubh9kGBCE5u5SahqhjtJF1vTSq+4uFVb5fL0fGXrJkN1N0uVd326
+ ePrjJpoKwpJfMPWIjHXBeBws61L6uw7FOAHXTbGlyxCOGZyatqVqlsgw02wvX7h5lCm9
+ am6HZ0KiMTRZYjEmC66W8hetEF1x4g34UfU1cn5Lswvl9uWyjD2tuAU5PJh79sYpIhFu
+ Jlj6+tI+trRi7WaUofmwsPbThLPsFdzWuXD0DiXGrydJSWuoI8JsQWQxvkULeKTJR+Es
+ wXOv2WLZYkzM8uNIn066nU6fpDBSa8h9TsZJIWtNd/Qx7HaXvi4fznSOHPHKLpL+4Tca
+ s1QA==
+X-Gm-Message-State: AOAM530WS3oslM9jX4G1VOO+4gdAYEH57qHD6rL2lE39XJ9O5i39mEtu
+ efwz79+z3tvz+mEAFvM+jdSs2M4mSy0ULg==
+X-Google-Smtp-Source: ABdhPJym70iJ6LKuFCKh2MQB3z9awnlOErvgrtcMG6pAD2bfGm7mHgVchrHrkotC/K7XQni9cdXuqA==
+X-Received: by 2002:a17:907:7b98:: with SMTP id
+ ne24mr20070245ejc.14.1639086049865; 
+ Thu, 09 Dec 2021 13:40:49 -0800 (PST)
+Received: from localhost.localdomain (host185036130019.static.fidoka.tech.
+ [185.36.130.19])
+ by smtp.gmail.com with ESMTPSA id p26sm418374edt.94.2021.12.09.13.40.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Dec 2021 13:32:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Thu, 09 Dec 2021 13:40:49 -0800 (PST)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu,  9 Dec 2021 22:32:06 +0100
-Message-Id: <20211209213206.3918378-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Thu,  9 Dec 2021 22:40:46 +0100
+Message-Id: <20211209214046.428061-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rpi-rgb-led-matrix: needs -fPIC
+Subject: [Buildroot] [PATCH] package/cups: bump to version 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,73 +84,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since the addition of the package
-in commit e821078031e14df69e5142f23e9cb7b5a1ea0e77:
+Updating attached patch and configure parameters to the latest
+cups version.
 
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: led-matrix.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `_ZTVN10rgb_matrix11FrameCanvasE' which may bind externally can not be used when making a shared object; recompile with -fPIC
-
-Fixes:
- - http://autobuild.buildroot.org/results/be291d6b0efdc1914babfb4a9be5eb863058eaf5
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ ...move-man-from-BUILDDIRS-in-configure.patch | 21 +++++++++++--------
+ package/cups/cups.hash                        |  2 +-
+ package/cups/cups.mk                          |  6 +++---
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-index b220bbc3db..85c1d1a320 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-@@ -10,8 +10,12 @@ RPI_RGB_LED_MATRIX_LICENSE = GPL-2.0
- RPI_RGB_LED_MATRIX_LICENSE_FILES = COPYING
- RPI_RGB_LED_MATRIX_INSTALL_STAGING = YES
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+index 7fcf7133c8..6b81a93de2 100644
+--- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -8,23 +8,26 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ [Michael: updated for 2.3.3]
+ Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
++[Angelo: updated for 2.4.0]
++Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ ---
+  config-scripts/cups-common.m4 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
-+RPI_RGB_LED_MATRIX_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CXXFLAGS="$(TARGET_CXXFLAGS) -fPIC"
+ diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
+-index a460a73..d427acb 100644
++index 3a162b6d5..fb629fdfd 100644
+ --- a/config-scripts/cups-common.m4
+ +++ b/config-scripts/cups-common.m4
+-@@ -434,7 +434,7 @@ LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
++@@ -462,7 +462,7 @@ LIBHEADERS="\$(COREHEADERS) \$(DRIVERHEADERS)"
++ LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
+  
+- case "$COMPONENTS" in
+- 	all)
+--		BUILDDIRS="tools filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale man doc examples templates"
+-+		BUILDDIRS="tools filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale doc examples templates"
+- 		;;
+- 
+- 	core)
++ AS_CASE(["$COMPONENTS"], [all], [
++-    BUILDDIRS="tools filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale man doc examples templates"
+++    BUILDDIRS="tools filter backend berkeley cgi-bin monitor notifier ppdc scheduler systemv conf data desktop locale doc examples templates"
++ ], [core], [
++     BUILDDIRS="tools examples locale"
++ ], [corelite], [
 +
- define RPI_RGB_LED_MATRIX_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib all
-+	$(MAKE) $(RPI_RGB_LED_MATRIX_MAKE_OPTS) -C $(@D)/lib all
- endef
+ -- 
+ 2.17.1
  
- define RPI_RGB_LED_MATRIX_INSTALL_STAGING_CMDS
-@@ -31,7 +35,7 @@ ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_IMAGE_VIEWER),y)
- RPI_RGB_LED_MATRIX_DEPENDENCIES += graphicsmagick
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 22e081255c..01939f804e 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  deb3575bbe79c0ae963402787f265bfcf8d804a71fc2c94318a74efec86f96df  cups-2.3.3op2-source.tar.gz
++sha256  9abecec128ca6847c5bb2d3e3d30c87b782c0697b9acf284d16fa38f80a3a6de  cups-2.4.0-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  1f8e5879fb8b15e3ee5111809fd3ca22c606d0897d6b5e74329e480c348e034d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 80aecdba5e..e406d3bc64 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define RPI_RGB_LED_MATRIX_BUILD_IMAGE_VIEWER_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) $(RPI_RGB_LED_MATRIX_MAKE_OPTS) \
- 		MAGICK_CXXFLAGS="-I$(STAGING_DIR)/usr/include/GraphicsMagick $(shell $(STAGING_DIR)/usr/bin/GraphicsMagick++-config --cxxflags)" \
- 		MAGICK_LDFLAGS="-L$(STAGING_DIR)/usr/lib $(shell $(STAGING_DIR)/usr/bin/GraphicsMagick++-config --libs)" \
- 		-C $(@D)/utils led-image-viewer
-@@ -46,7 +50,7 @@ endif
+-CUPS_VERSION = 2.3.3op2
++CUPS_VERSION = 2.4.0
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+@@ -50,10 +50,10 @@ CUPS_CONF_OPTS += --disable-dbus
+ endif
  
- ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_TEXT_SCROLLER),y)
- define RPI_RGB_LED_MATRIX_BUILD_TEXT_SCROLLER_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/utils text-scroller
-+	$(MAKE) $(RPI_RGB_LED_MATRIX_MAKE_OPTS) -C $(@D)/utils text-scroller
- endef
- RPI_RGB_LED_MATRIX_POST_BUILD_HOOKS += RPI_RGB_LED_MATRIX_BUILD_TEXT_SCROLLER_CMDS
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-CUPS_CONF_OPTS += --enable-gnutls
++CUPS_CONF_OPTS += --with-tls=yes
+ CUPS_DEPENDENCIES += gnutls
+ else
+-CUPS_CONF_OPTS += --disable-gnutls
++CUPS_CONF_OPTS += --with-tls=no
+ endif
  
-@@ -62,7 +66,7 @@ ifeq ($(BR2_PACKAGE_RPI_RGB_LED_MATRIX_VIDEO_VIEWER),y)
- RPI_RGB_LED_MATRIX_DEPENDENCIES += ffmpeg
- 
- define RPI_RGB_LED_MATRIX_BUILD_VIDEO_VIEWER_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) $(RPI_RGB_LED_MATRIX_MAKE_OPTS) \
- 		AV_CXXFLAGS="$(shell $(HOST_DIR)/bin/pkg-config --cflags libavcodec libavformat libswscale libavutil)" \
- 		AV_LDFLAGS="$(shell $(HOST_DIR)/bin/pkg-config --libs libavcodec libavformat libswscale libavutil)" \
- 		-C $(@D)/utils video-viewer
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
