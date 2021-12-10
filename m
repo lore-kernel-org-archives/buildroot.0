@@ -1,79 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2517EC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 18:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F40E7C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 18:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0DF942696;
-	Fri, 10 Dec 2021 18:14:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9171541297;
+	Fri, 10 Dec 2021 18:15:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QexIdmfyAdus; Fri, 10 Dec 2021 18:14:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0h3-TN-abD4i; Fri, 10 Dec 2021 18:15:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 053064267A;
-	Fri, 10 Dec 2021 18:14:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6D6041294;
+	Fri, 10 Dec 2021 18:15:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E81F91BF2B7
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:14:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 22DFE1BF2B7
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D35E18521C
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:14:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F804852AD
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:15:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7BARlAzY8Ayc for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 18:14:11 +0000 (UTC)
+ with ESMTP id vyeC60kJ7jFy for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 18:15:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DC98685215
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 18:14:10 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id a18so16320004wrn.6
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 10:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=bNVhsR6rIgMUa1wyuPa1cv+XdlX3e2HOIaklc2wHx/U=;
- b=X/MrvOGVa4kryN2faXR4TR4ANxWP2sS7DFYFCc2DFxX46V/Qle+IurytHlw8LRZBM3
- n1xijC9IuodmFxGEb1iviUAtP+6UOEaUSlgyPQW6vgVR2Ml4ArX2ofZet8YE6wxPq6ud
- lsGn4ZKrSyxAOC0ZtQ8RYfNXDMp2T8bYQcpgnOHGlZOCw2JOxp1HQW7oEsqi0HLjp10q
- uH+iQl8AO4RMRi3XVitJZQyYc6s+gHf6iJaAvNjZse9h1Mf9e3LD1NR0M6pz/VUmrFai
- onCz3GbZKA25Xxh/PPhVxQCU9V7z71YmeFPzoCzXB9ItscHoG/5zglCo/XwoG+wN6mXw
- 9RXg==
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 29CE0852A9
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 18:15:27 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so31926120edd.9
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 10:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=7W1REqtH/JgDNUcpRAhGxzY4Ct9UO03V0dyxppl+8gY=;
+ b=YAFyWYcBlkMB3cfmZvrAA4He3EkJPKGkYfOgLG30MrD1oeDfrQq1yJUt+lmSPyAhXG
+ z84Iu+Htk8NzC6Au2BFH7CrnQBZg0w3UhqpNY7dTC4xUfjaGIxozkTZ70xbOGOYBPKjz
+ /5KIUIRgFS4OYhY1hE+rQEx7Vf0k80F7dtdHGdgVzUzDkTMqT4SZarTQx0WcE3it7ptA
+ Lu6PrA13h8kh6UtHKSTVsdMKMddnMwcJkgrN0UDmNT6mM9O4wrCFkjCTbb7QsP4T1uBy
+ wj5G5pkJAILHsEY4GWuQ9c547pu340CZHjbw1tbGQ/TB6g+C9HH2R98+B4wsVWwWHjeJ
+ CAuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=bNVhsR6rIgMUa1wyuPa1cv+XdlX3e2HOIaklc2wHx/U=;
- b=6czROsRQX1PFV4Dl4I1EDCECk82/rxAtZBNh7cDZySGT3YctbArasvY5It3Sl5blUy
- K+oCjJ6RdBAoF6vPH6edYXTKc4pUB6lWHKTVRMmENRR49DpfCb6OUjc7DSMzi6e89d/e
- SaXQkmo2gxa/NhOFxS2v9HeIy+jX/KEIRvXiPvfs56RocchOaCdnnUVuxYbnBD4WiMuK
- 449ghgkiI2OQyl2vUwZMnIOyVgQ+GaHQaislFg9bLUPTWn5xDddGws0dTMtmv7mGJP/6
- 7Gf3vH2kbz1PTFVnR3r/7q9G+scZrKd+T2/Ot76FvlozuUNBTspMhxdPOEz2cwGhiUfP
- 1KEQ==
-X-Gm-Message-State: AOAM531KWyRSL7axORXUqxK6u3OFsBCpftPxaJpdonHpUANFszk9mdxt
- TMNk6OOpuePTlhCHFrGKPY8r+NTh8mxXWA==
-X-Google-Smtp-Source: ABdhPJxqwMDHDZF3dAX0bsfNwjPdGt6q+ENI++h40bLBq/FvA9V4eibAAAthC29JiHMk/rXp365s6A==
-X-Received: by 2002:adf:b64a:: with SMTP id i10mr719840wre.668.1639160048800; 
- Fri, 10 Dec 2021 10:14:08 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id n184sm12465604wme.2.2021.12.10.10.14.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Dec 2021 10:14:08 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 19:13:53 +0100
-Message-Id: <20211210181353.4012562-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ bh=7W1REqtH/JgDNUcpRAhGxzY4Ct9UO03V0dyxppl+8gY=;
+ b=BppFoYMR2b5tAVzMKfRzMmLR/6D1yPodntYGfpTqOrkT+sNJIu35WbL4FdVmr+Wae7
+ 77ZVtebWSErlYdP6iPq+DNGrvaP3L2hH1jXQTxW9q/gAWRyKfWQMWDxCJzw3NWl+H0HS
+ foYR236qCZvo8tIZhgF2XWilPl0fsaJmhpcG+kGy62/MXf4bWaFNq6PyHBW1nehdix9L
+ 8Oswg1N86RhYLSKlGRIKEWf7temKPJ7lH2vY9tQdq7qofaCBpU1BnKMyjhZJlaQNBql1
+ 0HE0Po8EjMtGJfLAnD2n6BxsOeTH1rB8FmD7pd9/80Tsa0251CPeap+gSMhtzRa2JnW9
+ a2cw==
+X-Gm-Message-State: AOAM531SibNNw58kwv6Edys7/QwArlryASBtw/5fhkDqoWV7DHU2RRXr
+ EsmGdHBK7iz2FAdDbK+5QsulDeMLjbnOgA==
+X-Google-Smtp-Source: ABdhPJxRaJICkiNMDyRjQVdcpyXJBP2N7lwOXl0iyyml7nyosXX2iTu2YAQ98998Eav+x7pTegzkMA==
+X-Received: by 2002:aa7:c415:: with SMTP id j21mr39945791edq.289.1639160125332; 
+ Fri, 10 Dec 2021 10:15:25 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id m6sm1783306edc.36.2021.12.10.10.15.24
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 10 Dec 2021 10:15:24 -0800 (PST)
+Message-ID: <c2931bcc-68eb-e00e-5fc1-a67357c853b1@mind.be>
+Date: Fri, 10 Dec 2021 19:15:23 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/runc: security bump to version 1.0.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ =?UTF-8?Q?Jos=c3=a9_Pekkarinen?= <jose.pekkarinen@unikie.com>,
+ buildroot@buildroot.org
+References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
+ <20211210141209.1812043-2-jose.pekkarinen@unikie.com>
+ <179763b9-2a53-2ed4-49cf-9ba0fc903831@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <179763b9-2a53-2ed4-49cf-9ba0fc903831@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH 2/7] package/minijail: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,67 +96,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-43784: runc is a CLI tool for spawning and running
-containers on Linux according to the OCI specification. In runc, netlink
-is used internally as a serialization system for specifying the relevant
-container configuration to the `C` portion of the code (responsible for
-the based namespace setup of containers). In all versions of runc prior
-to 1.0.3, the encoder did not handle the possibility of an integer
-overflow in the 16-bit length field for the byte array attribute type,
-meaning that a large enough malicious byte array attribute could result
-in the length overflowing and the attribute contents being parsed as
-netlink messages for container configuration. This vulnerability
-requires the attacker to have some control over the configuration of the
-container and would allow the attacker to bypass the namespace
-restrictions of the container by simply adding their own netlink payload
-which disables all namespaces. The main users impacted are those who
-allow untrusted images with untrusted configurations to run on their
-machines (such as with shared cloud infrastructure). runc version 1.0.3
-contains a fix for this bug. As a workaround, one may try disallowing
-untrusted namespace paths from your container. It should be noted that
-untrusted namespace paths would allow the attacker to disable namespace
-protections entirely even in the absence of this bug.
-
-https://github.com/opencontainers/runc/releases/tag/v1.0.3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 365beac21d..4ef04132bf 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6c3cca4bbeb5d9b2f5e3c0c401c9d27bc8a5d2a0db8a2f6a06efd03ad3c38a33  runc-1.0.2.tar.gz
-+sha256  0eaf2f6606d72f166a5e7138a8a8d4d8f85d84e43448c08c66a1c93ead17a574  runc-1.0.3.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index e77ef8111e..c4e45a00a9 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 1.0.2
-+RUNC_VERSION = 1.0.3
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxMC8xMi8yMDIxIDE1OjQ4LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPiBIaSBKb3PDqSwK
+PiAKPiBPbiAxMC8xMi8yMSAxNToxMiwgSm9zw6kgUGVra2FyaW5lbiB3cm90ZToKPj4gVGhpcyBw
+YXRjaCBhZGRzIGEgbmV3IHBhY2thZ2UgZm9yIG1pbmlqYWlsLgo+IAo+IFJld29yZCAiVGhpcyBw
+YXRjaCBhZGQgcGFja2FnZSBtaW5pamFpbCIKCiAgQWN0dWFsbHksIG5vLiBGb3Igc29tZXRoaW5n
+IHRoaXMgc2ltcGxlLCBpdCdzIGJldHRlciB0byBsZWF2ZSB0aGUgYm9keSBlbXB0eSAKKGkuZS4g
+anVzdCB0aGUgU29CKSwgYmVjYXVzZSB0aGUgc3ViamVjdCBzYXlzIGl0IGFsbCBhbHJlYWR5LgoK
+ICBSZWdhcmRzLAogIEFybm91dApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
