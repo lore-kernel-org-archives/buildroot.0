@@ -4,77 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B5ECC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 18:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1FAC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 18:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DECED614B9;
-	Fri, 10 Dec 2021 18:18:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC69E614D0;
+	Fri, 10 Dec 2021 18:24:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id azi0ZSzOFfdn; Fri, 10 Dec 2021 18:18:52 +0000 (UTC)
+	with ESMTP id xpq5Q5x97ADW; Fri, 10 Dec 2021 18:24:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 502D6614BD;
-	Fri, 10 Dec 2021 18:18:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E9F081BF2B7
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:18:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A744614CC;
+	Fri, 10 Dec 2021 18:24:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1641A1BF2B7
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9439426A6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:18:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 031BA4129A
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 18:24:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R3dVAcgkyC0s for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 18:18:49 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oL53BIH3Yhmk for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 18:24:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15D82426A3
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 18:18:48 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id u17so16361031wrt.3
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 10:18:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=VOSdVY+8MfITbZfOM5JmgdNXlrDDu1yOGcDXPZgt8DA=;
- b=ncpYkw7GGYL0jjKVLgda/7NIhr6k7IGJNWaLRMkdnFWbLwrvJsdSu3as+dMaQEfJSx
- fMGmHK8ot/tc1kTr6UuVYkrTztQjS6QFUrxWahojzNR7woznsoRQCW97IGUVx10n2vvt
- cMRC7qsqqgU5C+Tv4HyBHzkESAWNMz3Hbr7idUdY0fJdmED5AoQ6hy/vrG2hLUpViz6L
- /AEJThq08sAQ/YorrtSt2GTFsq7w9/tktQYDsilrx1b6d0bneDMdf2J0o/Dy1XLyZwBT
- Cecsa9YkXeeSmNnrfwoxyDimNUhimQt+6lZJDIMjhtMEuDIf9ie98ygNQ2SuFxF9bWUM
- YvqQ==
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFB17412B1
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 18:24:22 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id y13so32153859edd.13
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 10:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=e9z5ai2kph7V8a5CEBXwhRTX3V5TX6OeKLU5xxlr3LE=;
+ b=Bh4eyTDquwnNwoirYjbpk2ijIehbGRjhRBq8XZJuPUk7wEy84yFRWkQgi0bpqoYS7C
+ JIbhP7t5IQCV8IrAB1Be4H20XIiASfYKPZgd7iCPuomJDNQslgA/Hvh6H+z0raF4xvCu
+ o/Un0wE3x4qBP6jNjstqF5hS90CpFEsoMT4DafdKayD6Tgv6KZkjdbi35LKaU3DCbEO0
+ r0RhT07eZQXTcs5VK8eA+l+fzgGo5Usj6C4X6xQfnL9Yt4aaITqZftY0wQOFcjVeKGGp
+ X+wbe5uGYL0aWtmZCRfw/Cqf4adQVot4GHb0y1MiSYXI5wXf/FgHSPOiV5d8wJ26YLDw
+ nOlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=VOSdVY+8MfITbZfOM5JmgdNXlrDDu1yOGcDXPZgt8DA=;
- b=VR8JA/bZMlOHNX3TPX6V8hR/jg91j0JFxzb6l+A8f+9GYJj9/zcp0SvVAD+Wd54RdX
- 7WUhP1qgz7qvBMcxievHgzEHMCknAtPjCM3xQsqOgUKJvaxNytwwnATPFBGU1zPSec4L
- g0Eu2tjEC4gKCBKit1wDc/38nN2UON+qi73UDszx3l8csx5DfuQByvqOUbwKBde3le+l
- OqBfMjGA6hOXqoYA+ZyGoEPbzDhrUX4ouoHxOa6c4KYvSHpOWiao5iYi3ex6LkqSn7s2
- TMmr4EzUPayzLuaz7engLonw49e4YuSR3EUsM+tA4krROGAJkgkZeIfD4Ll6I1l6qSD6
- BhoA==
-X-Gm-Message-State: AOAM53273lUCHvJJR5X+TrhsI5uJKhvH8adjIgAbpeZRQvn04oCJBPmC
- MAm652N0abARLLJ639CmNbW/+sGZAWv1fA==
-X-Google-Smtp-Source: ABdhPJztyIuu50Ov8fiNHg9feEvhKudD7FmLeJOAX6q/pLdOEttwpfqA9fEa7SBFavmvFhnVm9E5bg==
-X-Received: by 2002:a5d:50c6:: with SMTP id f6mr15088955wrt.131.1639160326989; 
- Fri, 10 Dec 2021 10:18:46 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id a10sm12448250wmq.27.2021.12.10.10.18.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Dec 2021 10:18:46 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 19:18:38 +0100
-Message-Id: <20211210181838.4013689-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ bh=e9z5ai2kph7V8a5CEBXwhRTX3V5TX6OeKLU5xxlr3LE=;
+ b=5lbYH3wJpowe6Z+xqabsF8Rbq3IC5zUZX1CeP0IYx+p0913Zepdc/4gMHpvJ543ho9
+ 7QkgWn2H4TrTDfzy1xp84GLFnqyE3oP6+CPx7DvJYFWTn8Q69rGK20gfgbiXNwRdaRBJ
+ C5xnJfoucBJvPKdluKjDD/xH5ZAqAgFKoEGdi4gHXBpIxIsint1vE1qNjOvjcTnOIBZE
+ 62BjuEsySPkTf7gTDoO1BxRdQ9+0jsaMPQEeznH7VN0z8zzZxdcmWajQO1d2Qe5vbW21
+ Tma4cMzhWO7eNXPIE4ymPqtB1EXu2N9n51jjEKvbcWIvpF4FikFpH/Ei88m7olgNU884
+ gueA==
+X-Gm-Message-State: AOAM530XtCfdzM3mFV1Hu9jJFpuse7fFU/Ph8YLbItA4ASMC3/JGpfMN
+ h2LO8mbWwlx3ZSgX2Jjp6XJNYw==
+X-Google-Smtp-Source: ABdhPJwENnGAKgcTahGd5K12xQ1d33vAF+LJecNvXmFn9WJgAfubgy2o9shNag4HcvxPwVlEocVozA==
+X-Received: by 2002:a05:6402:1ca2:: with SMTP id
+ cz2mr39571073edb.302.1639160660472; 
+ Fri, 10 Dec 2021 10:24:20 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id f17sm1933566edq.39.2021.12.10.10.24.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 10 Dec 2021 10:24:20 -0800 (PST)
+Message-ID: <5be296cc-0cc1-77c1-01dd-8cffc8ecbefd@mind.be>
+Date: Fri, 10 Dec 2021 19:24:19 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 8.2.3775
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Andrey Nechypurenko <andreynech@gmail.com>, buildroot@buildroot.org
+References: <CAOiXNkBa2iycZvTW3pmSzHq6EmWTGoQfD_iHQ5mWyDyVRBYHeg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CAOiXNkBa2iycZvTW3pmSzHq6EmWTGoQfD_iHQ5mWyDyVRBYHeg@mail.gmail.com>
+Subject: Re: [Buildroot] -E flag in apply-patches.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,46 +93,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-4069: vim is vulnerable to Use After Free
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 6ab309fd9a..9fb162d798 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  16ff13ea2a11da96080510fdfccf5f3a05f82e2c7027494bd8c98704bbf14428  vim-8.2.3690.tar.gz
-+sha256  acddd083c44a3a62194b73bb2fd1327af2adf256b5978c64f97d2656dda24d07  vim-8.2.3775.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 1fd090b4fc..e0079d3468 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = 8.2.3690
-+VIM_VERSION = 8.2.3775
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
--- 
-2.33.0
+On 10/12/2021 11:40, Andrey Nechypurenko wrote:
+> Dear Buildrooters,
+> 
+> There is a -E flag passed to patch in
+> support/scripts/apply-patches.sh. It prevents patch from creating
+> empty files.
+> 
+> I have got a kernel driver from a touch-screen vendor which contains
+> empty file. So my attempt to integrate it into Buildroot as a series
+> of patches failed because an empty file is missing after applying the
+> patch (because of the -E flag). As a result, the kernel could not be
+> compiled.
+> 
+> I am wondering if there are any particular reasons to have the -E flag
+> and if it would make sense to remove it from the script?
 
+  I think that's purely historical, from back in the days when many patches were 
+downloaded externally and some of them could be really odd.
+
+  I expect that none of the patches that we have now still need this. However, 
+you should probably check:
+
+  - all patches in the buildroot tree;
+  - all patches downloaded from somewhere (git grep 'patch\|diff' -- \*.hash)
+
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
