@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2282AC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E32C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:07:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF52E6149F;
-	Fri, 10 Dec 2021 22:07:18 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RTHp3Y3_Ecy8; Fri, 10 Dec 2021 22:07:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC49613D7;
-	Fri, 10 Dec 2021 22:07:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 492D41BF3D6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 389F4855F2
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF4748560E;
+	Fri, 10 Dec 2021 22:07:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O6TQHOBPvtrp for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yCVFJ24CP1kK; Fri, 10 Dec 2021 22:07:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FE388560C;
+	Fri, 10 Dec 2021 22:07:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BD181C1162
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7341C418CC
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6C-HCsAy-K53 for <buildroot@lists.busybox.net>;
  Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94A72855F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1723418CA
  for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 90A9E825DF; Fri, 10 Dec 2021 22:01:23 +0000 (UTC)
+ id ADD10825E2; Fri, 10 Dec 2021 22:01:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 23:03:08 +0100
+Date: Fri, 10 Dec 2021 23:05:22 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 266e82f0e21f2f163223c06e93bfb8ae7006a33a
-X-Git-Newrev: 937c03ba111e26fdac0c516c4be812996e019ace
+X-Git-Oldrev: e8a130a885291e732ba53dfc380ba2595721349d
+X-Git-Newrev: 7e41ae43fd945a7bc5fd703c34b2d39110f0f378
 X-Patchwork-Hint: ignore
-Message-Id: <20211210220123.90A9E825DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/uboot: kconfig needs
- the toolchain
+Message-Id: <20211210220123.ADD10825E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] linux: fix typo in
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH in the help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,49 +54,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6593345929008183610=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=937c03ba111e26fdac0c516c4be812996e019ace
+--===============6593345929008183610==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7e41ae43fd945a7bc5fd703c34b2d39110f0f378
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Starting with uboot 2021.10, with upstream commit 473fc279c89 (kconfig /
-kbuild: Re-sync with Linux 4.20), the kconfig in uboot now needs the
-compiler to detect its features.
+"Path to to out-of-tree..." -> "Path to the out-of-tree..."
 
-Like was done for linux in 3fc990a7983 (linux: kconfig needs the
-toolchain) and barebox in 1c1a629d814 (boot/barebox: kconfig needs the
-toolchain), add the toolchain to the kconfig dependencies of uboot.
-
-Reported-by: Davian on IRC
-Reported-by: Xogium on IRC
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c224e7e5c673b8a9c7eb7f3def1a2df2e959df4d)
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8f3e2a6678e173782748e3981a4bcfb06fb7f980)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6f59018867..ec2114c584 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -502,7 +502,11 @@ UBOOT_DEPENDENCIES += \
- $(eval $(generic-package))
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
-+# Starting with 2021.10, the kconfig in uboot calls the cross-compiler
-+# to check its capabilities. So we need the toolchain before we can
-+# call the configurators.
- UBOOT_KCONFIG_DEPENDENCIES += \
-+	toolchain \
- 	$(BR2_MAKE_HOST_DEPENDENCY) \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
+diff --git a/linux/Config.in b/linux/Config.in
+index 1e8e3e6aed..0434338327 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -411,7 +411,7 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	string "Out-of-tree Device Tree Source file paths"
+ 	help
+-	  Path to to out-of-tree device tree source files.
++	  Path to the out-of-tree device tree source files.
+ 	  You can provide a list of dts paths to copy and
+ 	  build, separated by spaces.
+ 
+
+--===============6593345929008183610==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6593345929008183610==--
