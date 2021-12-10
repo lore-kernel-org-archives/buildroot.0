@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16421C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 19:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAAC7C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 19:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE813412D2;
-	Fri, 10 Dec 2021 19:13:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EBD56067C;
+	Fri, 10 Dec 2021 19:13:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7w6e5Ier0vsF; Fri, 10 Dec 2021 19:13:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7whoCkf_UxaO; Fri, 10 Dec 2021 19:13:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC8E3412D3;
-	Fri, 10 Dec 2021 19:13:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 812E1611AA;
+	Fri, 10 Dec 2021 19:13:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD1C01BF3D4
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 19:12:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDC251BF3D4
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 19:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB6F5426E6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 19:12:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10BB4426E7
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 19:12:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QrKJFK2g5rGC for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 19:12:20 +0000 (UTC)
+ with ESMTP id Fh1RoN0sUTZk for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 19:12:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CA15426E7
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 19:12:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E37B6426E5
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 19:12:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5A8578255D; Fri, 10 Dec 2021 19:07:13 +0000 (UTC)
+ id 2DCC08251C; Fri, 10 Dec 2021 19:07:13 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 20:01:40 +0100
+Date: Fri, 10 Dec 2021 19:33:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5a74af215b9213fb7efea78c8d23e73fd500589
-X-Git-Newrev: c06bed7296faaf856895dad4b6b20d0fb66fae39
+X-Git-Oldrev: 075b01f2f7b5a9241b4bfe76db8f14af0284060c
+X-Git-Newrev: 55a7666834e50cb756d7db2fb2ce7a535af61a77
 X-Patchwork-Hint: ignore
-Message-Id: <20211210190713.5A8578255D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpi-firmware: update vcdbg runtime
- dependencies
+Message-Id: <20211210190713.2DCC08251C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5*: change project URLs to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,67 +58,301 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c06bed7296faaf856895dad4b6b20d0fb66fae39
+commit: https://git.buildroot.net/buildroot/commit/?id=55a7666834e50cb756d7db2fb2ce7a535af61a77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We used to select the rpi-userland to make the vcdbg tool work but it
-conflicts with the use of mesa. It implies we can not install vcdbg with
-mesa libraries but it is false. We could use the prebuilt libraries from
-the rpi-firmware sources to run vcdbg.
-
-This patch removes the select dependency of rpi-userland package and
-installs the prebuilt libraries needed by vcdbg only if rpi-userland
-is not selected.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Reviewed-by: Bryce Schober <bryce.schober@gmail.com>
-Tested-by: Bryce Schober <bryce.schober@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rpi-firmware/Config.in       |  1 -
- package/rpi-firmware/rpi-firmware.mk | 11 +++++++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/qt5/qt53d/Config.in               | 2 +-
+ package/qt5/qt5base/Config.in             | 2 +-
+ package/qt5/qt5connectivity/Config.in     | 4 ++--
+ package/qt5/qt5declarative/Config.in      | 4 ++--
+ package/qt5/qt5enginio/Config.in          | 2 +-
+ package/qt5/qt5graphicaleffects/Config.in | 2 +-
+ package/qt5/qt5imageformats/Config.in     | 2 +-
+ package/qt5/qt5location/Config.in         | 2 +-
+ package/qt5/qt5multimedia/Config.in       | 2 +-
+ package/qt5/qt5quickcontrols/Config.in    | 2 +-
+ package/qt5/qt5script/Config.in           | 2 +-
+ package/qt5/qt5sensors/Config.in          | 2 +-
+ package/qt5/qt5serialbus/Config.in        | 2 +-
+ package/qt5/qt5serialport/Config.in       | 2 +-
+ package/qt5/qt5svg/Config.in              | 2 +-
+ package/qt5/qt5tools/Config.in            | 2 +-
+ package/qt5/qt5wayland/Config.in          | 2 +-
+ package/qt5/qt5webchannel/Config.in       | 2 +-
+ package/qt5/qt5webengine/Config.in        | 2 +-
+ package/qt5/qt5webkit/Config.in           | 2 +-
+ package/qt5/qt5websockets/Config.in       | 2 +-
+ package/qt5/qt5x11extras/Config.in        | 2 +-
+ package/qt5/qt5xmlpatterns/Config.in      | 2 +-
+ 23 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index f9fc0b0e5e..8070dc3019 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -98,7 +98,6 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
- 	depends on BR2_arm # prebuilt arm binary, rpi-userland
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
--	select BR2_PACKAGE_RPI_USERLAND
- 	help
- 	  Install vcdbg, to help debug communication with the GPU.
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+index 5126078d09..9187bee82b 100644
+--- a/package/qt5/qt53d/Config.in
++++ b/package/qt5/qt53d/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_QT53D
+ 	  Enable the assimp package to gain the assimp sceneparser
+ 	  plugin.
  
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 5e8b0379ba..f773f83999 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -57,12 +57,23 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- endef
- endif
+-	  http://doc.qt.io/qt-5/qt3d-index.html
++	  https://doc.qt.io/qt-5/qt3d-index.html
  
-+# Install prebuilt libraries if RPI_USERLAND not enabled
-+ifneq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+define RPI_FIRMWARE_INSTALL_TARGET_LIB
-+	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libvcos.so \
-+		$(TARGET_DIR)/usr/lib/libvcos.so
-+	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libdebug_sym.so \
-+		$(TARGET_DIR)/usr/lib/libdebug_sym.so
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
- define RPI_FIRMWARE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
- 		$(TARGET_DIR)/usr/sbin/vcdbg
- 	$(INSTALL) -D -m 0644 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/lib/libelftoolchain.so \
- 		$(TARGET_DIR)/usr/lib/libelftoolchain.so
-+	$(RPI_FIRMWARE_INSTALL_TARGET_LIB)
- endef
- endif # INSTALL_VCDBG
+ comment "qt53d module needs an OpenGL-capable backend"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index a328190a98..601438d2fe 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_QT5BASE
+ 	  contains the base Qt libraries: QtCore, QtNetwork, QtGui,
+ 	  QtWidgets, etc.
  
+-	  http://qt.io
++	  https://qt.io
+ 
+ if BR2_PACKAGE_QT5BASE
+ 
+diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
+index 51e8978f1f..244d01676d 100644
+--- a/package/qt5/qt5connectivity/Config.in
++++ b/package/qt5/qt5connectivity/Config.in
+@@ -10,8 +10,8 @@ config BR2_PACKAGE_QT5CONNECTIVITY
+ 	  Qt Connectivity module provides support for Bluetooth/NFC
+ 	  peripherials.
+ 
+-	  http://doc.qt.io/qt-5/qtbluetooth-index.html
+-	  http://doc.qt.io/qt-5/qtnfc-index.html
++	  https://doc.qt.io/qt-5/qtbluetooth-index.html
++	  https://doc.qt.io/qt-5/qtnfc-index.html
+ 
+ comment "qt5connectivity needs neard and/or bluez5_utils"
+ 	depends on !BR2_PACKAGE_NEARD && !BR2_PACKAGE_BLUEZ5_UTILS
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index 5ec83daa27..477e1970a1 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -8,8 +8,8 @@ config BR2_PACKAGE_QT5DECLARATIVE
+ 	  Qt Declarative module provides the Qt QML and Qt Quick
+ 	  modules for developing UIs with the QML language
+ 
+-	  http://doc.qt.io/qt-5/qtqml-index.html
+-	  http://doc.qt.io/qt-5/qtquick-index.html
++	  https://doc.qt.io/qt-5/qtqml-index.html
++	  https://doc.qt.io/qt-5/qtquick-index.html
+ 
+ if BR2_PACKAGE_QT5DECLARATIVE
+ 
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index d445d91dea..b738f0db7c 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_QT5ENGINIO
+ 	  This package has been tagged as deprecated since version
+ 	  5.6 and not recommended for new design.
+ 
+-	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
++	  https://doc.qt.io/archives/qt-5.5/enginio-index.html
+diff --git a/package/qt5/qt5graphicaleffects/Config.in b/package/qt5/qt5graphicaleffects/Config.in
+index 69b7fca413..01946d8b7a 100644
+--- a/package/qt5/qt5graphicaleffects/Config.in
++++ b/package/qt5/qt5graphicaleffects/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
+ 	  for adding visually impressive and configurable effects to
+ 	  user interfaces.
+ 
+-	  http://doc.qt.io/qt-5/qtgraphicaleffects-index.html
++	  https://doc.qt.io/qt-5/qtgraphicaleffects-index.html
+ 
+ comment "qt5graphicaleffects needs an OpenGL-capable backend"
+ 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+diff --git a/package/qt5/qt5imageformats/Config.in b/package/qt5/qt5imageformats/Config.in
+index 991f22f514..2504d23a59 100644
+--- a/package/qt5/qt5imageformats/Config.in
++++ b/package/qt5/qt5imageformats/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5IMAGEFORMATS
+ 	  The Qt Image Formats module provides plugins for
+ 	  additional image formats: TIFF, MNG, TGA, WBMP
+ 
+-	  http://doc.qt.io/qt-5/qtimageformats-index.html
++	  https://doc.qt.io/qt-5/qtimageformats-index.html
+diff --git a/package/qt5/qt5location/Config.in b/package/qt5/qt5location/Config.in
+index c68deb1006..3d91adaf1f 100644
+--- a/package/qt5/qt5location/Config.in
++++ b/package/qt5/qt5location/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5LOCATION
+ 	  solutions using the data available from some of the
+ 	  popular location services.
+ 
+-	  http://doc.qt.io/qt-5/qtlocation-index.html
++	  https://doc.qt.io/qt-5/qtlocation-index.html
+diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
+index dd46575d93..46608555b8 100644
+--- a/package/qt5/qt5multimedia/Config.in
++++ b/package/qt5/qt5multimedia/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5MULTIMEDIA
+ 	  multimedia capabilities such as media playback and the use
+ 	  of camera and radio devices.
+ 
+-	  http://doc.qt.io/qt-5/multimediaoverview.html
++	  https://doc.qt.io/qt-5/multimediaoverview.html
+diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
+index 56fcaf7053..ae090eb6e1 100644
+--- a/package/qt5/qt5quickcontrols/Config.in
++++ b/package/qt5/qt5quickcontrols/Config.in
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+ 	  The Qt Quick Controls module provides a set of controls
+ 	  that can be used to build complete interfaces in Qt Quick.
+ 
+-	  http://doc.qt.io/qt-5/qtquickcontrols-index.html
++	  https://doc.qt.io/qt-5/qtquickcontrols-index.html
+diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
+index 1926813e9f..6e08a3dfe8 100644
+--- a/package/qt5/qt5script/Config.in
++++ b/package/qt5/qt5script/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5SCRIPT
+ 	  5.5.0 and should be replaced by Qt QML module in new
+ 	  design.
+ 
+-	  http://doc.qt.io/qt-5/qtscript-index.html
++	  https://doc.qt.io/qt-5/qtscript-index.html
+diff --git a/package/qt5/qt5sensors/Config.in b/package/qt5/qt5sensors/Config.in
+index 5e8ee65324..31a42e64aa 100644
+--- a/package/qt5/qt5sensors/Config.in
++++ b/package/qt5/qt5sensors/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_QT5SENSORS
+ 	  The Qt Sensors API provides access to sensor hardware
+ 	  via QML and C++ interfaces.
+ 
+-	  http://doc.qt.io/qt-5/qtsensors-index.html
++	  https://doc.qt.io/qt-5/qtsensors-index.html
+diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
+index bcfec29b49..466ab7dc9c 100644
+--- a/package/qt5/qt5serialbus/Config.in
++++ b/package/qt5/qt5serialbus/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_QT5SERIALBUS
+ 	  This module was in tech preview in Qt 5.6, and promoted
+ 	  to a core module in Qt 5.8.0.
+ 
+-	  http://doc.qt.io/qt-5/qtserialbus-index.html
++	  https://doc.qt.io/qt-5/qtserialbus-index.html
+ 
+ comment "qt5serialbus needs headers >= 3.6"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+diff --git a/package/qt5/qt5serialport/Config.in b/package/qt5/qt5serialport/Config.in
+index 16c2eaa619..90cff86456 100644
+--- a/package/qt5/qt5serialport/Config.in
++++ b/package/qt5/qt5serialport/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5SERIALPORT
+ 	  includes configuring, I/O operations, getting and setting
+ 	  the control signals of the RS-232 pinouts.
+ 
+-	  http://doc.qt.io/qt-5/qtserialport-index.html
++	  https://doc.qt.io/qt-5/qtserialport-index.html
+diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
+index e9284913a0..02a5089b19 100644
+--- a/package/qt5/qt5svg/Config.in
++++ b/package/qt5/qt5svg/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_QT5SVG
+ 	  Qt SVG provides classes for rendering and displaying SVG
+ 	  drawings in widgets and on other paint devices.
+ 
+-	  http://doc.qt.io/qt-5/qtsvg-index.html
++	  https://doc.qt.io/qt-5/qtsvg-index.html
+diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+index 60106c1ee3..428413d5e2 100644
+--- a/package/qt5/qt5tools/Config.in
++++ b/package/qt5/qt5tools/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_QT5TOOLS
+ 	  Qt Tools provides tools facilitate the development
+ 	  and design of applications.
+ 
+-	  http://doc.qt.io/qt-5/qtmodules.html#qt-tools
++	  https://doc.qt.io/qt-5/qtmodules.html#qt-tools
+ 
+ if BR2_PACKAGE_QT5TOOLS
+ 
+diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
+index 0d5a108912..fe698fe876 100644
+--- a/package/qt5/qt5wayland/Config.in
++++ b/package/qt5/qt5wayland/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_QT5WAYLAND
+ 
+ 	  This package corresponds to the qt5wayland module.
+ 
+-	  http://qt.io
++	  https://qt.io
+ 
+ if BR2_PACKAGE_QT5WAYLAND
+ 
+diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
+index 436e3abb2b..1cd295b146 100644
+--- a/package/qt5/qt5webchannel/Config.in
++++ b/package/qt5/qt5webchannel/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5WEBCHANNEL
+ 	  a server (QML/C++ application) and a client
+ 	  (HTML/JavaScript or QML application).
+ 
+-	  http://doc.qt.io/qt-5/qtwebchannel-index.html
++	  https://doc.qt.io/qt-5/qtwebchannel-index.html
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 4e923c7f31..5d537cdf84 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -74,7 +74,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	  be made fully editable by the user through the use of the
+ 	  contenteditable attribute on HTML elements.
+ 
+-	  http://doc.qt.io/qt-5/qtwebengine-index.html
++	  https://doc.qt.io/qt-5/qtwebengine-index.html
+ 
+ if BR2_PACKAGE_QT5WEBENGINE
+ 
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 4abb04844c..82e38dff52 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -29,7 +29,7 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	  without GPU since the successor (QtWebEngine) requires
+ 	  OpenGL support.
+ 
+-	  http://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
++	  https://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
+ 
+ comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.9, host gcc >= 4.9"
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+diff --git a/package/qt5/qt5websockets/Config.in b/package/qt5/qt5websockets/Config.in
+index 678fb6fa04..e7bd71b21d 100644
+--- a/package/qt5/qt5websockets/Config.in
++++ b/package/qt5/qt5websockets/Config.in
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_QT5WEBSOCKETS
+ 	  process WebSocket requests, or a client that can
+ 	  consume data received from the server, or both.
+ 
+-	  http://doc.qt.io/qt-5/qtwebsockets-index.html
++	  https://doc.qt.io/qt-5/qtwebsockets-index.html
+diff --git a/package/qt5/qt5x11extras/Config.in b/package/qt5/qt5x11extras/Config.in
+index ff4cc11531..240443a30a 100644
+--- a/package/qt5/qt5x11extras/Config.in
++++ b/package/qt5/qt5x11extras/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_QT5X11EXTRAS
+ 	  Qt X11 Extras enables the Qt programmer to write
+ 	  applications for the Linux/X11 platform.
+ 
+-	  http://doc.qt.io/qt-5/qtx11extras-index.html
++	  https://doc.qt.io/qt-5/qtx11extras-index.html
+diff --git a/package/qt5/qt5xmlpatterns/Config.in b/package/qt5/qt5xmlpatterns/Config.in
+index 2f3eb24f23..4fcf7e92e3 100644
+--- a/package/qt5/qt5xmlpatterns/Config.in
++++ b/package/qt5/qt5xmlpatterns/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_QT5XMLPATTERNS
+ 	  The Qt XML Patterns module provides support for XPath,
+ 	  XQuery, XSLT, and XML Schema validation.
+ 
+-	  http://doc.qt.io/qt-5/qtxmlpatterns-index.html
++	  https://doc.qt.io/qt-5/qtxmlpatterns-index.html
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
