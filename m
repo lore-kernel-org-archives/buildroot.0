@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 234F8C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D6FC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4DEB4283D;
-	Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C71C84284D;
+	Fri, 10 Dec 2021 22:06:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZyIxYz04sySj; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
+	with ESMTP id oeeEZ81UXMzl; Fri, 10 Dec 2021 22:06:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0E24283E;
-	Fri, 10 Dec 2021 22:06:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CA6321BF3D6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C1E942849;
+	Fri, 10 Dec 2021 22:06:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D914B1C1162
  for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C776D855F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id C774D613D7
  for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SETrPqs2IdTl for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id plYTA5UIjvBS for <buildroot@lists.busybox.net>;
  Fri, 10 Dec 2021 22:06:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7EDC1855EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8485B6134C
  for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 75EEB825AC; Fri, 10 Dec 2021 22:01:18 +0000 (UTC)
+ id 7FF47825B5; Fri, 10 Dec 2021 22:01:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 23:02:58 +0100
+Date: Fri, 10 Dec 2021 23:04:26 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 5fa69e10ace5692f9eca1d469c1c43467417dcfd
-X-Git-Newrev: c6ac525de67a2372af1890440067a0288d4fa980
+X-Git-Oldrev: c6ac525de67a2372af1890440067a0288d4fa980
+X-Git-Newrev: cbffaa5bbbe1282afa532ce60f632e56c4b7efaf
 X-Patchwork-Hint: ignore
-Message-Id: <20211210220118.75EEB825AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] boot/uboot: kconfig needs
- the toolchain
+Message-Id: <20211210220118.7FF47825B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/nfs-utils: set
+ CONFIG_NFSD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6ac525de67a2372af1890440067a0288d4fa980
+commit: https://git.buildroot.net/buildroot/commit/?id=cbffaa5bbbe1282afa532ce60f632e56c4b7efaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Starting with uboot 2021.10, with upstream commit 473fc279c89 (kconfig /
-kbuild: Re-sync with Linux 4.20), the kconfig in uboot now needs the
-compiler to detect its features.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=14346
 
-Like was done for linux in 3fc990a7983 (linux: kconfig needs the
-toolchain) and barebox in 1c1a629d814 (boot/barebox: kconfig needs the
-toolchain), add the toolchain to the kconfig dependencies of uboot.
-
-Reported-by: Davian on IRC
-Reported-by: Xogium on IRC
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c224e7e5c673b8a9c7eb7f3def1a2df2e959df4d)
+(cherry picked from commit 8d44cbc83466b7cd08ed25c23b4f3109a81c46d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 4 ++++
+ package/nfs-utils/nfs-utils.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6b6d67990a..0bc036f3cb 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -500,7 +500,11 @@ UBOOT_DEPENDENCIES += \
- $(eval $(generic-package))
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
-+# Starting with 2021.10, the kconfig in uboot calls the cross-compiler
-+# to check its capabilities. So we need the toolchain before we can
-+# call the configurators.
- UBOOT_KCONFIG_DEPENDENCIES += \
-+	toolchain \
- 	$(BR2_MAKE_HOST_DEPENDENCY) \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 763dd57ace..07b44b5a93 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -90,6 +90,10 @@ NFS_UTILS_CONF_OPTS += --without-systemd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_RPC_NFSD),y)
++define NFS_UTILS_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD)
++endef
++
+ define NFS_UTILS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+ 		$(TARGET_DIR)/etc/init.d/S60nfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
