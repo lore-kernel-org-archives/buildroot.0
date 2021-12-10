@@ -1,66 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E98B3C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 20:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B6EC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 21:16:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95DA94267C;
-	Fri, 10 Dec 2021 20:43:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1655361B01;
+	Fri, 10 Dec 2021 21:16:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKrca9uJXPyS; Fri, 10 Dec 2021 20:43:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c4qxpSnaioEF; Fri, 10 Dec 2021 21:16:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D96B2425DE;
-	Fri, 10 Dec 2021 20:43:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBAED61AFF;
+	Fri, 10 Dec 2021 21:16:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BC0611BF28E
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:43:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E452A1BF487
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 21:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A809641324
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:43:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D13B141344
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 21:16:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qx-7RPv4qW2D for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 20:43:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8EEF840129
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 20:43:05 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ad31:90cb:f019:b3ee])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 227D0B004EE;
- Fri, 10 Dec 2021 21:43:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639168983;
- bh=ZiiVa59HN+hVxJbygN6I7OUTdf6xeggHkSrOpi1yZ5w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ityTFIhbgPOatIhif93v2PT4Bmk/owlkVGwWwYxDNW8+h9X74Rrnh64u7rGh3GAsy
- GGngkXc1r9IXsyDiQ9V4fBIXbj5V5YHLYKF31ZxFizuzsOHGi7hlYfYahD13Ks41MO
- 8nt6Du7QoAsp0U2eArkt2iJ1NveDcaurUH8ZCjmd/svXzTYXOPlLSCHE6QFqFVdiYI
- GWSSoUryULJz2mC2FR6TikJKzIyaQda/HXcGqwGZCOp9BaSFagV97nUA2MbVok4Mzn
- 4MBOx/gNZPNwPf0eg42MufQsy1f06pfEBDrJs8+lTEcN5TNY7W1lkkYqGd3ivd2gkg
- McBCS33CtmtiA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 10 Dec 2021 21:43:00 +0100
-Date: Fri, 10 Dec 2021 21:43:00 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211210204300.GN2603@scaer>
-References: <20211210181838.4013689-1-fontaine.fabrice@gmail.com>
+ with ESMTP id msTGzJPx-UxC for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 21:16:14 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A606D41343
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 21:16:14 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id a18so17082972wrn.6
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 13:16:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Mr8jcgrbpQ6rDVUaoGAicIdNCwLxolKQvRPeuHlcuzw=;
+ b=GUHpMlOyyoAWCFzonJqhkUnWGBTjeAksewz+rDjGXV2x8kMbCOTGJHDqMX4rYLAucQ
+ 9u5BW+D/7g2VPp/IvtZiSdx0T0/typwmY2r3RaeWPASxkbiTFjoH9M4LQuhX7HLri7hb
+ mAcgfa/tVr6A581jaR75MMhTRit1pPVfccyUilbZClkB8hF6bsOAuhoEFfAog55DpbL+
+ BoGZg+gYUgfIRBJ6FXbN9albutvoLK7SPZOGhmOMHbfaNAW9K82p1t7lKIJMbjYbJhd5
+ 1SJSv0Mb+8hnG0/dgiekUBd/84eEiAPAi0f2Q7LXoZJMv+a1PD5muDiiSgu48+Ib+F6T
+ S2KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Mr8jcgrbpQ6rDVUaoGAicIdNCwLxolKQvRPeuHlcuzw=;
+ b=D7TnOO0GEU3INJy7btwEtpA64oDfb8Y8HaXIyNXsmKhaTnyW52gC+GzjYtmx4n84ir
+ W8cra1E0aO0GqaX0UIgDuD9MQ4vp5zRSiKWwvjupxaTeiQeV++7aINsxm2vOP+gEkDkO
+ ln25j2bi82hDS8sRWPSeKE0ejSKzgV1mZKEDM9AOcFxbMj3uZ0OHBYk/WwdZsau9Rz5a
+ ZOW8LyiIs1u/UKoJSQIUIb1i7nkkYjuERrPJxzAnnphj+8CLcyUih50ppyQTGePkFBin
+ GRy/6uuKIJTW345yCYjZn732BRwlD8qJiax0Jle70JgrEqSz4KnhvEFNSJzYyC7vk3QT
+ Fqpw==
+X-Gm-Message-State: AOAM531QXxX+VeEe1HXf7wm4WqoGN+lWsT6xg/aDHwiN4nsaPGD7U2Mg
+ 236DyScqxckDdzvL4eL8o5FGmvFhPLBhqA==
+X-Google-Smtp-Source: ABdhPJySsoUWCRzzS5NKawqgY3SP0kT/593NT22++7ukTG4MwrB3BUxSahh9vc7AVPe7grlXahGSsw==
+X-Received: by 2002:a5d:668f:: with SMTP id l15mr16749053wru.182.1639170972587; 
+ Fri, 10 Dec 2021 13:16:12 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id f15sm4803225wmg.30.2021.12.10.13.16.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Dec 2021 13:16:12 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Dec 2021 22:15:58 +0100
+Message-Id: <20211210211558.4015391-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211210181838.4013689-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 8.2.3775
+Subject: [Buildroot] [PATCH 1/1] package/containerd: security bump to
+ version 1.5.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,67 +86,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+The eighth patch release for containerd 1.5 contains a mitigation for
+CVE-2021-41190 as well as several fixes and updates.
 
-On 2021-12-10 19:18 +0100, Fabrice Fontaine spake thusly:
-> Fix CVE-2021-4069: vim is vulnerable to Use After Free
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/containerd/containerd/releases/tag/v1.5.8
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/vim/vim.hash | 2 +-
->  package/vim/vim.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-> index 6ab309fd9a..9fb162d798 100644
-> --- a/package/vim/vim.hash
-> +++ b/package/vim/vim.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  16ff13ea2a11da96080510fdfccf5f3a05f82e2c7027494bd8c98704bbf14428  vim-8.2.3690.tar.gz
-> +sha256  acddd083c44a3a62194b73bb2fd1327af2adf256b5978c64f97d2656dda24d07  vim-8.2.3775.tar.gz
->  sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
->  sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
-> diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-> index 1fd090b4fc..e0079d3468 100644
-> --- a/package/vim/vim.mk
-> +++ b/package/vim/vim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -VIM_VERSION = 8.2.3690
-> +VIM_VERSION = 8.2.3775
->  VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
->  VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
->  VIM_SUBDIR = src
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 594c56a819..f1a6709554 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  09be0cedea77568029aa0c7be9a323b89fa6886b402b5d223780a05b8c7cd45a  containerd-1.5.7.tar.gz
++sha256  a41ab8d39393c9456941b477c33bb1b221a29b635f1c9a99523aab2f5e74f790  containerd-1.5.8.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index fdbd2bf3e6..cd975db274 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONTAINERD_VERSION = 1.5.7
++CONTAINERD_VERSION = 1.5.8
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
