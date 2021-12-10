@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E32C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCADCC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF4748560E;
-	Fri, 10 Dec 2021 22:07:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C9666141C;
+	Fri, 10 Dec 2021 22:07:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yCVFJ24CP1kK; Fri, 10 Dec 2021 22:07:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YtxQWMQAiUCH; Fri, 10 Dec 2021 22:07:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FE388560C;
-	Fri, 10 Dec 2021 22:07:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC956141B;
+	Fri, 10 Dec 2021 22:07:41 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BD181C1162
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F4DE1BF3D6
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7341C418CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 876CB418CA
  for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6C-HCsAy-K53 for <buildroot@lists.busybox.net>;
+ with ESMTP id PWP2zZScCyTN for <buildroot@lists.busybox.net>;
  Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1723418CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E25B40403
  for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id ADD10825E2; Fri, 10 Dec 2021 22:01:23 +0000 (UTC)
+ id 9A3F5825E1; Fri, 10 Dec 2021 22:01:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Dec 2021 23:05:22 +0100
+Date: Fri, 10 Dec 2021 23:04:18 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: e8a130a885291e732ba53dfc380ba2595721349d
-X-Git-Newrev: 7e41ae43fd945a7bc5fd703c34b2d39110f0f378
+X-Git-Oldrev: 937c03ba111e26fdac0c516c4be812996e019ace
+X-Git-Newrev: 2d360d3f00d2cb317585628a5b5e096374fa75e0
 X-Patchwork-Hint: ignore
-Message-Id: <20211210220123.ADD10825E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] linux: fix typo in
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH in the help text
+Message-Id: <20211210220123.9A3F5825E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/nfs-utils: set
+ CONFIG_NFSD
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,49 +54,43 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6593345929008183610=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6593345929008183610==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7e41ae43fd945a7bc5fd703c34b2d39110f0f378
+commit: https://git.buildroot.net/buildroot/commit/?id=2d360d3f00d2cb317585628a5b5e096374fa75e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-"Path to to out-of-tree..." -> "Path to the out-of-tree..."
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=14346
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8f3e2a6678e173782748e3981a4bcfb06fb7f980)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8d44cbc83466b7cd08ed25c23b4f3109a81c46d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nfs-utils/nfs-utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1e8e3e6aed..0434338327 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -411,7 +411,7 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Out-of-tree Device Tree Source file paths"
- 	help
--	  Path to to out-of-tree device tree source files.
-+	  Path to the out-of-tree device tree source files.
- 	  You can provide a list of dts paths to copy and
- 	  build, separated by spaces.
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index df581b381f..ed0a23e151 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -69,6 +69,10 @@ NFS_UTILS_CONF_OPTS += --without-systemd
+ endif
  
-
---===============6593345929008183610==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_RPC_NFSD),y)
++define NFS_UTILS_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD)
++endef
++
+ define NFS_UTILS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+ 		$(TARGET_DIR)/etc/init.d/S60nfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6593345929008183610==--
