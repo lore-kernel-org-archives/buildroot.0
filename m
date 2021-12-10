@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10B2AC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D24BC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9C49612C6;
-	Fri, 10 Dec 2021 22:05:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B598A61345;
+	Fri, 10 Dec 2021 22:06:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rQoh_oz2K0Fz; Fri, 10 Dec 2021 22:05:14 +0000 (UTC)
+	with ESMTP id zrGvYyQ0JVNQ; Fri, 10 Dec 2021 22:06:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24A84612A2;
-	Fri, 10 Dec 2021 22:05:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BAA31BF3D6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:05:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2490361331;
+	Fri, 10 Dec 2021 22:06:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F2B2D1BF3D6
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19537418C9
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:05:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E070D4283B
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NMIIuQPbYGBQ for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 22:05:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dZJLL6cQ_kLg for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE2CB418C5
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:05:10 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 217F84283A
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:02 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id E5B84240005;
- Fri, 10 Dec 2021 22:05:07 +0000 (UTC)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 3FCF2200003;
+ Fri, 10 Dec 2021 22:06:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mvo0p-0000Yl-Af; Fri, 10 Dec 2021 23:05:07 +0100
+ id 1mvo1g-0000ce-J3; Fri, 10 Dec 2021 23:06:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Titouan Christophe <titouanchristophe@gmail.com>
-References: <20211122091333.79971-1-titouanchristophe@gmail.com>
- <87y25gnl98.fsf@dell.be.48ers.dk>
-Date: Fri, 10 Dec 2021 23:05:07 +0100
-In-Reply-To: <87y25gnl98.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 22 Nov 2021 18:38:43 +0100")
-Message-ID: <87a6h83ylo.fsf@dell.be.48ers.dk>
+To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
+References: <20211122151813.12079-1-sebastien.szymanski@armadeus.com>
+Date: Fri, 10 Dec 2021 23:06:00 +0100
+In-Reply-To: <20211122151813.12079-1-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Mon, 22 Nov 2021
+ 16:18:13 +0100")
+Message-ID: <875yrw3yk7.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v2.0.14
+Subject: Re: [Buildroot] [PATCH 1/1] linux: fix typo in
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH in the help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,22 +61,16 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
- >> This is a small bugfix release, read the announcement on
- >> https://mosquitto.org/blog/2021/11/version-2-0-14-released/
-
- >> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-
-Committed to 2021.02.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlPDqWJhc3RpZW4iID09IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5
+bWFuc2tpQGFybWFkZXVzLmNvbT4gd3JpdGVzOgoKID4gIlBhdGggdG8gdG8gb3V0LW9mLXRyZWUu
+Li4iIC0+ICJQYXRoIHRvIHRoZSBvdXQtb2YtdHJlZS4uLiIKID4gU2lnbmVkLW9mZi1ieTogU8Op
+YmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoKQ29t
+bWl0dGVkIHRvIDIwMjEuMDIueCBhbmQgMjAyMS4wOC54LCB0aGFua3MuCgotLSAKQnllLCBQZXRl
+ciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
