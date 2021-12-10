@@ -1,64 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA2EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 20:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E98B3C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 20:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E2CB85530;
-	Fri, 10 Dec 2021 20:42:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95DA94267C;
+	Fri, 10 Dec 2021 20:43:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L9kPJbZhj5pE; Fri, 10 Dec 2021 20:42:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YKrca9uJXPyS; Fri, 10 Dec 2021 20:43:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D233A8552C;
-	Fri, 10 Dec 2021 20:42:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 134ED1BF28E
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:42:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D96B2425DE;
+	Fri, 10 Dec 2021 20:43:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC0611BF28E
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0232A8552C
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:42:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A809641324
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 20:43:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fNTeV4_QsOxD for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 20:42:48 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qx-7RPv4qW2D for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 20:43:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0F1128552B
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 20:42:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8EEF840129
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 20:43:05 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ad31:90cb:f019:b3ee])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2073FB0053B;
- Fri, 10 Dec 2021 21:42:43 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 227D0B004EE;
+ Fri, 10 Dec 2021 21:43:01 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639168965;
- bh=R7EAz1//k7MwjZhHmUeWC+5UPR+YpQ99PBdxICLRX7s=;
+ s=smtp-20201208; t=1639168983;
+ bh=ZiiVa59HN+hVxJbygN6I7OUTdf6xeggHkSrOpi1yZ5w=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XKzlfznpQNvtWdYpdb7+Zi0KAKPL95MDcpDRVOYZ1XmXssxoOvqSGYKHO8gq2AWL0
- ScAQUnilSqnWW2L43kAFWBwz4U4OTYSm7B87oFiqxanpClEifEw25NYzCaZewSHeom
- xITPZ14tTjTCpe3TQOSP5rfFyLrxPdgyGw+n6fsA+zkbN1IObs5P29ubstXQg0p/W7
- 2DG4BtnW77BTgBynwaqYx5+RX10r44Rst+fAXRHwJy7tsd32e9PFx/HBXef377pAW0
- Gp8FrNy9lq0Blb52zdxartHxw5rA+AZqOTTdwH2WFFLmbPKSVeCu71qqQ/IkoKcptE
- u4i5oRWYzTqmw==
+ b=ityTFIhbgPOatIhif93v2PT4Bmk/owlkVGwWwYxDNW8+h9X74Rrnh64u7rGh3GAsy
+ GGngkXc1r9IXsyDiQ9V4fBIXbj5V5YHLYKF31ZxFizuzsOHGi7hlYfYahD13Ks41MO
+ 8nt6Du7QoAsp0U2eArkt2iJ1NveDcaurUH8ZCjmd/svXzTYXOPlLSCHE6QFqFVdiYI
+ GWSSoUryULJz2mC2FR6TikJKzIyaQda/HXcGqwGZCOp9BaSFagV97nUA2MbVok4Mzn
+ 4MBOx/gNZPNwPf0eg42MufQsy1f06pfEBDrJs8+lTEcN5TNY7W1lkkYqGd3ivd2gkg
+ McBCS33CtmtiA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 10 Dec 2021 21:42:42 +0100
-Date: Fri, 10 Dec 2021 21:42:42 +0100
+ Fri, 10 Dec 2021 21:43:00 +0100
+Date: Fri, 10 Dec 2021 21:43:00 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211210204242.GM2603@scaer>
-References: <20211210181353.4012562-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211210204300.GN2603@scaer>
+References: <20211210181838.4013689-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211210181353.4012562-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211210181838.4013689-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/runc: security bump to version
- 1.0.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/vim: security bump to version
+ 8.2.3775
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,64 +80,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2021-12-10 19:13 +0100, Fabrice Fontaine spake thusly:
-> Fix CVE-2021-43784: runc is a CLI tool for spawning and running
-> containers on Linux according to the OCI specification. In runc, netlink
-> is used internally as a serialization system for specifying the relevant
-> container configuration to the `C` portion of the code (responsible for
-> the based namespace setup of containers). In all versions of runc prior
-> to 1.0.3, the encoder did not handle the possibility of an integer
-> overflow in the 16-bit length field for the byte array attribute type,
-> meaning that a large enough malicious byte array attribute could result
-> in the length overflowing and the attribute contents being parsed as
-> netlink messages for container configuration. This vulnerability
-> requires the attacker to have some control over the configuration of the
-> container and would allow the attacker to bypass the namespace
-> restrictions of the container by simply adding their own netlink payload
-> which disables all namespaces. The main users impacted are those who
-> allow untrusted images with untrusted configurations to run on their
-> machines (such as with shared cloud infrastructure). runc version 1.0.3
-> contains a fix for this bug. As a workaround, one may try disallowing
-> untrusted namespace paths from your container. It should be noted that
-> untrusted namespace paths would allow the attacker to disable namespace
-> protections entirely even in the absence of this bug.
-
-I personally do not see the point in having the full CVE details exposed
-in the commit log. I kept it, though.
+On 2021-12-10 19:18 +0100, Fabrice Fontaine spake thusly:
+> Fix CVE-2021-4069: vim is vulnerable to Use After Free
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/runc/runc.hash | 2 +-
->  package/runc/runc.mk   | 2 +-
+>  package/vim/vim.hash | 2 +-
+>  package/vim/vim.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-> index 365beac21d..4ef04132bf 100644
-> --- a/package/runc/runc.hash
-> +++ b/package/runc/runc.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+> index 6ab309fd9a..9fb162d798 100644
+> --- a/package/vim/vim.hash
+> +++ b/package/vim/vim.hash
+> @@ -1,4 +1,4 @@
 >  # Locally computed
-> -sha256  6c3cca4bbeb5d9b2f5e3c0c401c9d27bc8a5d2a0db8a2f6a06efd03ad3c38a33  runc-1.0.2.tar.gz
-> +sha256  0eaf2f6606d72f166a5e7138a8a8d4d8f85d84e43448c08c66a1c93ead17a574  runc-1.0.3.tar.gz
->  sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> index e77ef8111e..c4e45a00a9 100644
-> --- a/package/runc/runc.mk
-> +++ b/package/runc/runc.mk
+> -sha256  16ff13ea2a11da96080510fdfccf5f3a05f82e2c7027494bd8c98704bbf14428  vim-8.2.3690.tar.gz
+> +sha256  acddd083c44a3a62194b73bb2fd1327af2adf256b5978c64f97d2656dda24d07  vim-8.2.3775.tar.gz
+>  sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+>  sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
+> diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+> index 1fd090b4fc..e0079d3468 100644
+> --- a/package/vim/vim.mk
+> +++ b/package/vim/vim.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -RUNC_VERSION = 1.0.2
-> +RUNC_VERSION = 1.0.3
->  RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
->  RUNC_LICENSE = Apache-2.0
->  RUNC_LICENSE_FILES = LICENSE
+> -VIM_VERSION = 8.2.3690
+> +VIM_VERSION = 8.2.3775
+>  VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+>  VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+>  VIM_SUBDIR = src
 > -- 
 > 2.33.0
 > 
