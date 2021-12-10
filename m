@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D24BC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 234F8C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B598A61345;
-	Fri, 10 Dec 2021 22:06:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zrGvYyQ0JVNQ; Fri, 10 Dec 2021 22:06:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2490361331;
-	Fri, 10 Dec 2021 22:06:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F2B2D1BF3D6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E070D4283B
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4DEB4283D;
+	Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZJLL6cQ_kLg for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 22:06:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 217F84283A
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:02 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 3FCF2200003;
- Fri, 10 Dec 2021 22:06:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mvo1g-0000ce-J3; Fri, 10 Dec 2021 23:06:00 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZyIxYz04sySj; Fri, 10 Dec 2021 22:06:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0E24283E;
+	Fri, 10 Dec 2021 22:06:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CA6321BF3D6
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C776D855F0
+ for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:06:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SETrPqs2IdTl for <buildroot@lists.busybox.net>;
+ Fri, 10 Dec 2021 22:06:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EDC1855EF
+ for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:06:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 75EEB825AC; Fri, 10 Dec 2021 22:01:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-References: <20211122151813.12079-1-sebastien.szymanski@armadeus.com>
-Date: Fri, 10 Dec 2021 23:06:00 +0100
-In-Reply-To: <20211122151813.12079-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Mon, 22 Nov 2021
- 16:18:13 +0100")
-Message-ID: <875yrw3yk7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] linux: fix typo in
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH in the help text
+To: buildroot@buildroot.org
+Date: Fri, 10 Dec 2021 23:02:58 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 5fa69e10ace5692f9eca1d469c1c43467417dcfd
+X-Git-Newrev: c6ac525de67a2372af1890440067a0288d4fa980
+X-Patchwork-Hint: ignore
+Message-Id: <20211210220118.75EEB825AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] boot/uboot: kconfig needs
+ the toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,17 +53,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlPDqWJhc3RpZW4iID09IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5
-bWFuc2tpQGFybWFkZXVzLmNvbT4gd3JpdGVzOgoKID4gIlBhdGggdG8gdG8gb3V0LW9mLXRyZWUu
-Li4iIC0+ICJQYXRoIHRvIHRoZSBvdXQtb2YtdHJlZS4uLiIKID4gU2lnbmVkLW9mZi1ieTogU8Op
-YmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoKQ29t
-bWl0dGVkIHRvIDIwMjEuMDIueCBhbmQgMjAyMS4wOC54LCB0aGFua3MuCgotLSAKQnllLCBQZXRl
-ciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=c6ac525de67a2372af1890440067a0288d4fa980
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+
+Starting with uboot 2021.10, with upstream commit 473fc279c89 (kconfig /
+kbuild: Re-sync with Linux 4.20), the kconfig in uboot now needs the
+compiler to detect its features.
+
+Like was done for linux in 3fc990a7983 (linux: kconfig needs the
+toolchain) and barebox in 1c1a629d814 (boot/barebox: kconfig needs the
+toolchain), add the toolchain to the kconfig dependencies of uboot.
+
+Reported-by: Davian on IRC
+Reported-by: Xogium on IRC
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c224e7e5c673b8a9c7eb7f3def1a2df2e959df4d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 6b6d67990a..0bc036f3cb 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -500,7 +500,11 @@ UBOOT_DEPENDENCIES += \
+ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
++# Starting with 2021.10, the kconfig in uboot calls the cross-compiler
++# to check its capabilities. So we need the toolchain before we can
++# call the configurators.
+ UBOOT_KCONFIG_DEPENDENCIES += \
++	toolchain \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
