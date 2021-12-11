@@ -1,68 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 053E7C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 09:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF5A0C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 09:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67A3B40198;
-	Sat, 11 Dec 2021 09:17:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45B8C41FB1;
+	Sat, 11 Dec 2021 09:52:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TLBjAz6gR2pZ; Sat, 11 Dec 2021 09:17:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F967401DC;
-	Sat, 11 Dec 2021 09:17:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32FB71BF363
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 09:17:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D31742A26
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 09:17:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XWZlN1rrjDu1 for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 09:17:08 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02FF242A25
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 09:17:07 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ad31:90cb:f019:b3ee])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id AD6E7B00576;
- Sat, 11 Dec 2021 10:17:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639214225;
- bh=t68157cGRlWK1CyNLRK1puxDnM2d03GBiexVprBld24=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dTqqTXbWV9r0DFXq1ji/19IRI7EsaI3gSZITPqkzQFtpdKkohGNm3mLzQT56vE2Ml
- 8i3hvkbW5luhcdti8KxPAIGAUMAehSagdyYagm5pgVatPaK8JDKVG2qmw6Mof/oI5b
- 9jRIZ4M71t6OFTr69usI5rEXV7i0KMi4KguV3ueB+1IFKwVXIpXa7Y9pZVIxsB19NP
- 6CtwIgB3DfizJ0qOwWjqbavt2ybGGDmdU/kBQnfgSJMNNK3iIKnqu2nVdQZUqTESTz
- iDDIhv6URTWIu8g4u5f9X0J/zJKADsqTphXrsgkTyWFcOwgC3JqR07N+XXHiJPcDLe
- MCAr/hWaaKXQg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 11 Dec 2021 10:17:01 +0100
-Date: Sat, 11 Dec 2021 10:17:01 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20211211091701.GO2603@scaer>
-References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
- <20211210141209.1812043-5-jose.pekkarinen@unikie.com>
- <20211210201130.GL2603@scaer>
- <8186e105-a959-e35a-4506-1553b8d6c06e@mind.be>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0VNHQ030XPDC; Sat, 11 Dec 2021 09:52:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8206641FB3;
+	Sat, 11 Dec 2021 09:52:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F0241BF363
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 09:52:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B80B42363
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 09:52:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QvTSfj3FZq4U for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 09:52:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0BD7B400C6
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 09:51:59 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id t5so36737245edd.0
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 01:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=9vTn+b0/RmW/o/ZUqdR+LMyp09mkcIVRjwsGPbehtHM=;
+ b=GngPSf+e0PiJ8Cc6wOE/08uFkgKO5/a6sMPmi0pwkTdkMdyybRuFxZBVEYtzjAunSW
+ Pb1LYtQGGVeDSXybe+paKbxsndAfM4oawOCMfGBKgKWilSCEkKXG7o21s4QwY+R8k+Wu
+ LXLxRBOyyVL8AxN+gmswKF70vi1qnAUSC9+r0r67exMxFMeKSufsVnsQOyUlNISXs7Bj
+ JDq0Dmh4tlRBoH4zNU1GT2sYc+M19whOp4yxblZEjuMRBcCNBv6R+OnEcy7xVUzxAst8
+ c1/Z2WwenphNwdcdo1DK3G0bybf/utJQIn2G7sdQIFqt46VimduQjwZwXTOR8Zti+t9J
+ PHnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=9vTn+b0/RmW/o/ZUqdR+LMyp09mkcIVRjwsGPbehtHM=;
+ b=xQG/82qHMRpDIwKn/Rt421XxFGgqr3kltw2I9L6s1hD22WCzHNvnaxh3Su6gMuiNLP
+ Ff5tlYOYvFGUxd61BIAQtRMAL16+2mPZXHAT+vrIl+rSIkT3mhzIYrOPyEnioW32JrAy
+ eUBPAB7mqgoGOFhA04nkOhJMFovycaFZYjoItQPXH2pCPNkblODDVvdCgeU3yWtsy3BZ
+ rrjrbhy+KKsR1mwaApzDDJQ4HEfu12pzHygygfY8A+wZriJKeM88zdL49tlxXU+Olsk0
+ j9ZkxwkWysQ2aJSn63TsC6xroDcRAP9Jej8VI5f/CL6HorYXq98ZH4KHTWrwAsnJv/a2
+ WhnA==
+X-Gm-Message-State: AOAM5322ZGB1xGgcuYrcBKv0TsRtkc9PBvtFUVkcL2mnhbTWL0oloucI
+ iin8IsbM4ZB4roSi7piDt1ivh2XBlaqceIhFuVU=
+X-Google-Smtp-Source: ABdhPJwV9ZkMN8VNnxP432DeJnxt2/FGmiTR/qobNxx0mjMEDFHo6fnvbEQlmZmmGG40VlxiRsocVw==
+X-Received: by 2002:a17:906:48cd:: with SMTP id
+ d13mr29635794ejt.35.1639216317849; 
+ Sat, 11 Dec 2021 01:51:57 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id h7sm3102745ede.40.2021.12.11.01.51.56
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Dec 2021 01:51:57 -0800 (PST)
+Message-ID: <4122452e-38c1-7044-398f-81c965bce9f9@mind.be>
+Date: Sat, 11 Dec 2021 10:51:55 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <8186e105-a959-e35a-4506-1553b8d6c06e@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 5/7] package/aexpect: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-GB
+To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
+References: <20211116104534.18868-1-kory.maincent@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211116104534.18868-1-kory.maincent@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v3] package/psplash: add support for missing
+ configure options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,53 +95,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: phil.eichinger@gmail.com, thomas.petazzoni@bootlin.com
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QXJub3V0LCBKb3PDqSwgQWxsLAoKT24gMjAyMS0xMi0xMSAwOTo0MyArMDEwMCwgQXJub3V0IFZh
-bmRlY2FwcGVsbGUgc3Bha2UgdGh1c2x5Ogo+IE9uIDEwLzEyLzIwMjEgMjE6MTEsIFlhbm4gRS4g
-TU9SSU4gd3JvdGU6Cj4gPkpvc8OpLCBBbGwsCj4gPgo+ID5PbiAyMDIxLTEyLTEwIDE2OjEyICsw
-MjAwLCBKb3PDqSBQZWtrYXJpbmVuIHNwYWtlIHRodXNseToKPiA+PkFkZCBwYWNrYWdlIHRvIGF2
-b2NhZG8gZnJhbWV3b3JrJ3MgYWV4cGVjdC4KPiA+Pgo+ID4+U2lnbmVkLW9mZi1ieTogSm9zw6kg
-UGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVuaWtpZS5jb20+Cj4gPlstLVNOSVAtLV0KPiA+
-PmRpZmYgLS1naXQgYS9wYWNrYWdlL2FleHBlY3QvQ29uZmlnLmluIGIvcGFja2FnZS9hZXhwZWN0
-L0NvbmZpZy5pbgo+ID4+bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+PmluZGV4IDAwMDAwMDAwMDAu
-LmVmYTJiZThiOTEKPiA+Pi0tLSAvZGV2L251bGwKPiA+PisrKyBiL3BhY2thZ2UvYWV4cGVjdC9D
-b25maWcuaW4KPiA+PkBAIC0wLDAgKzEsMTIgQEAKPiA+Pitjb25maWcgQlIyX1BBQ0tBR0VfQUVY
-UEVDVAo+ID4+Kwlib29sICJhZXhwZWN0Igo+ID4+KwlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJ
-QlMgIyBkbG9wZW4oKQo+ID4+KwlzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OCj4gPgo+ID5EbyBu
-b3Qgc2VsZWN0IHB5dGhvbiwgZGVwZW5kIG9uIGl0Lgo+IAo+ICBXaHkgbm90PyBDdXJyZW50bHkg
-d2UgaGF2ZSB0aGUgZm9sbG93aW5nIHBhY2thZ2VzIHRoYXQgc2VsZWN0IHB5dGhvbigzKToKPiBj
-aWZzLXV0aWxzLCBkb2NrZXItY29tcG9zZSwgZHN0YXQsIGdsc2xzYW5kYm94LXBsYXllciwgZ3Bz
-ZCwgamFjazIsCj4gbGlic2lncm9rZGVjb2RlLCBtaWRvcmksIG9wa2ctdXRpbHMsIHJhbmdlci4K
-Ck5vbmUgc2VsZWN0cyBweXRob24gKGFrYSBweXRob24yLCB3aGljaCBpcyB3aGF0IEkgaW1wbGll
-ZCB3aGVuIHdyaXRpbmcKJ3B5dGhvbicpOgoKICAgICQgZ2l0IGdyZXAgLUUgJ3NlbGVjdCBCUjJf
-UEFDS0FHRV9QWVRIT05cPicKICAgIFtub25lLCBuYXVnaHQsIG5peCwgemlsY2hdCgpZZXMsIHRo
-ZXkgZG8gaG93ZXZlciBzZWxlY3QgcHl0aG9uMy4KCkFuZCBzaW5jZSB3ZSBkbyB3YW50IHRvIGdl
-dCByaWQgb2YgcHl0aG9uIChha2EgcHl0aG9uMiksIGl0IHdvdWxkIGJlCnZlcnkgZGlzYXBvaW50
-aW5nIHRvIGludHJvZHVjZSBhIG5ldyBwYWNrYWdlIHRoYXQgaXMgcHl0aG9uMi1vbmx5LCBvcgp0
-aGF0IGluY29uc2lkZXJhdGVseSBzZWxlY3RzIGl0LgoKPiAgQWN0dWFsbHksIHJhbmdlciBpcyBh
-IGdyZWF0IGV4YW1wbGU6IGl0J3MgYWxzbyBhIHRvb2wgdGhhdCBpcyBqdXN0IGEgdG9vbAo+IGFu
-ZCBqdXN0IGhhcHBlbnMgdG8gYmUgaW1wbGVtZW50ZWQgaW4gcHl0aG9uLiBTbyBzZWxlY3QgaXMg
-YXBwcm9wcmlhdGUsIGxpa2UKPiB3ZSBkbyBmb3IgYW55IHRvb2wgdGhhdCBoYXBwZW5zIHRvIGJl
-IGltcGxlbWVudGVkIGluIEdvLCBSdXN0LCAuLi4KPiAKPiAgSG93ZXZlciwgbm90ZSB0aGF0IHlv
-dSBuZWVkIGVpdGhlcgo+IAo+IAlzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OMyBpZiAhQlIyX1BB
-Q0tBR0VfUFlUSE9OCj4gb3IKPiAJZGVwZW5kcyBvbiAhQlIyX1BBQ0tBR0VfUFlUSE9OCj4gCXNl
-bGVjdCBCUjJfUEFDS0FHRV9QWVRIT04zCgpZZXMsIHRoaXMgaXMgd2hhdCBzaG91bGQgYmUgZG9u
-ZS4KCkJ1dCBkZWZpbml0ZWx5IGRvIG5vdCBzZWxlY3QgcHl0aG9uIChha2EgcHl0aG9uMikuCgpS
-ZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
-LS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlh
-bm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVy
-aWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVy
-IHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkg
-NDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJl
-IGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhU
-TUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0n
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 16/11/2021 11:45, Kory Maincent wrote:
+> Add support to three configure options:
+> --enable-startup-msg: Enable text banner output on startup
+> --enable-progress-bar: Enable progress bar
+> --enable-img-fullscreen: Enable the logo image in fullscreen mode
+> 
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+> 
+> Change since v1:
+> Remove the crap .config.in.swp
+> 
+> Change since v2:
+> Use both side of enable/disable configure option condition.
+> Use positive options in Kconfig.
+> 
+> 
+>   package/psplash/Config.in  | 17 +++++++++++++++++
+>   package/psplash/psplash.mk | 18 ++++++++++++++++++
+>   2 files changed, 35 insertions(+)
+> 
+> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+> index da99b264e0..edd30dcb4d 100644
+> --- a/package/psplash/Config.in
+> +++ b/package/psplash/Config.in
+> @@ -35,6 +35,23 @@ config BR2_PACKAGE_PSPLASH_IMAGE
+>   	  Use a personalized png image as boot splash.
+>   	  Let it empty if you want to keep the psplash default image.
+>   
+> +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
+> +	bool "use fullscreen mode"
+> +	help
+> +	  Enable the psplash image in fullscreen mode.
+> +
+> +config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+> +	bool "enable startup message"
+> +	default y
+> +	help
+> +	  Enable text banner output on startup.
+> +
+> +config BR2_PACKAGE_PSPLASH_PROGRESS_BAR
+> +	bool "enable progress bar"
+> +	default y
+> +	help
+> +	  Enable the management of the progress bar.
+> +
+>   endif
+>   
+>   comment "psplash needs a toolchain w/ wchar"
+> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+> index 5e61f2392f..e5b212381a 100644
+> --- a/package/psplash/psplash.mk
+> +++ b/package/psplash/psplash.mk
+> @@ -18,6 +18,24 @@ else
+>   PSPLASH_CONF_OPTS += --without-systemd
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
+> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
+> +else
+> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
+
+  Have you actually tested this?
+
+  I haven't, but I see this in configure.ac:
+
+AC_ARG_ENABLE([img-fullscreen],
+     AS_HELP_STRING([--enable-img-fullscreen], [Enable the logo image in 
+fullscreen mode)]),
+     [img_fullscreen=true],
+     [img_fullscreen=false])
+AS_IF([test x$img_fullscreen = xtrue], [
+     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_IMG_FULLSCREEN=1"
+])
+
+i.a. AC_ARG_ENABLE is used incorrectly. That means that both 
+--enable-img-fullscreen and --disable-image-fullscreen will enable the option 
+(because the action-if-present is img_fullscreen=true), while if nothing is set 
+it will be disbled.
+
+  Same for the other two options, but there the logic is inverted (i.e. it's 
+disabled if present and enabled if not).
+
+  I don't know if psplash is still an active project; if so, I would propose to 
+fix this in configure.ac and send the patch upstream. The fix is simple:
+
+
+AC_ARG_ENABLE([img-fullscreen],
+     AS_HELP_STRING([--enable-img-fullscreen], [Enable the logo image in 
+fullscreen mode)]))
+AS_IF([test "x$enable_img_fullscreen" != "xno"], [
+     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_IMG_FULLSCREEN=1"
+])
+
+
+  and for enable-startup-msg:
+
+AC_ARG_ENABLE([startup-msg],
+     AS_HELP_STRING([--disable-startup-msg], [Disable text banner output on 
+startup]),
+     [],[enable_startup_msg=yes])
+AS_IF([test "x$enable_startup_msg" = "xno"], [
+     EXTRA_GCC_FLAGS="$EXTRA_GCC_FLAGS -DPSPLASH_DISABLE_STARTUP_MSG"
+])
+
+(note: you have to use "no" because that is the value that is set when 
+--disable-foo is given. You shouldn't use anything else because --enable-foo=no 
+or --enable-foo=yes are also allowed).
+
+
+  Regards,
+  Arnout
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PSPLASH_STARTUP_MSG),y)
+> +PSPLASH_CONF_OPTS += --enable-startup-msg
+> +else
+> +PSPLASH_CONF_OPTS += --disable-startup-msg
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PSPLASH_PROGRESS_BAR),y)
+> +PSPLASH_CONF_OPTS += --enable-progress-bar
+> +else
+> +PSPLASH_CONF_OPTS += --disable-progress-bar
+> +endif
+> +
+>   PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+>   
+>   ifneq ($(PSPLASH_IMAGE),)
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
