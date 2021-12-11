@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7EC8C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AD7C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76A6C42497;
-	Sat, 11 Dec 2021 23:06:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GA-jtdU3oFbs; Sat, 11 Dec 2021 23:06:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B012840188;
-	Sat, 11 Dec 2021 23:06:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CADDE1BF297
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA47E84BA3
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80AA784C75;
+	Sat, 11 Dec 2021 23:06:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cx6ndeYrB2L6 for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 23:06:16 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7gnaXtCttRap; Sat, 11 Dec 2021 23:06:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD8684C68;
+	Sat, 11 Dec 2021 23:06:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E0E621BF95C
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFB1660C0E
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TB9t6-Ej4_F8 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E817A84B9F
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A3E460BFE
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8003C82A4F; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
+ id A8E6282A50; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 23:34:45 +0100
+Date: Sat, 11 Dec 2021 23:40:35 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: fa40fb99e89feb570b296a4d554b209ee839283c
-X-Git-Newrev: f1968c6cbf48671b27d924df1600fff1e7661e15
+X-Git-Oldrev: fd952fa2c63122fc77468497864c10c1a8dd3ce6
+X-Git-Newrev: 69fa2d879c0f08c25e5c94cdf1801ddc3b98a181
 X-Patchwork-Hint: ignore
-Message-Id: <20211211230107.8003C82A4F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10, 14, 15}.x series
+Message-Id: <20211211230107.A8E6282A50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pure-ftpd: fix
+ CVE-2021-40524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,77 +59,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1968c6cbf48671b27d924df1600fff1e7661e15
+commit: https://git.buildroot.net/buildroot/commit/?id=69fa2d879c0f08c25e5c94cdf1801ddc3b98a181
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
+In Pure-FTPd 1.0.49, an incorrect max_filesize quota mechanism in the
+server allows attackers to upload files of unbounded size, which may
+lead to denial of service or a server hang. This occurs because a
+certain greater-than-zero test does not anticipate an initial -1 value.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ad2b4b8cc796767ec610cebc06ff009bb66bd4c0)
-[Peter: drop 5.14.x / 5.15.x bump]
+(cherry picked from commit 4fd5d8df2a1c468d78ca517e0b304edeebe21ff3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ ...-upload-file-size-when-quotas-are-enabled.patch | 33 ++++++++++++++++++++++
+ package/pure-ftpd/pure-ftpd.mk                     |  3 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0434338327..3eae93f8bf 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch b/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+new file mode 100644
+index 0000000000..b269e6cfe7
+--- /dev/null
++++ b/package/pure-ftpd/0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
+@@ -0,0 +1,33 @@
++From 37ad222868e52271905b94afea4fc780d83294b4 Mon Sep 17 00:00:00 2001
++From: Frank Denis <github@pureftpd.org>
++Date: Tue, 23 Nov 2021 18:53:34 +0100
++Subject: [PATCH] Initialize the max upload file size when quotas are enabled
++
++Due to an unwanted check, files causing the quota to be exceeded
++were deleted after the upload, but not during the upload.
++
++The bug was introduced in 2009 in version 1.0.23
++
++Spotted by @DroidTest, thanks!
++
++[Retrieved from:
++https://github.com/jedisct1/pure-ftpd/commit/37ad222868e52271905b94afea4fc780d83294b4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/ftpd.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/ftpd.c b/src/ftpd.c
++index d856839..be2fd78 100644
++--- a/src/ftpd.c
+++++ b/src/ftpd.c
++@@ -4247,8 +4247,7 @@ void dostor(char *name, const int append, const int autorename)
++     if (quota_update(&quota, 0LL, 0LL, &overflow) == 0 &&
++         (overflow > 0 || quota.files >= user_quota_files ||
++          quota.size > user_quota_size ||
++-         (max_filesize >= (off_t) 0 &&
++-          (max_filesize = user_quota_size - quota.size) < (off_t) 0))) {
+++         (max_filesize = user_quota_size - quota.size) < (off_t) 0)) {
++         overflow = 1;
++         (void) close(f);
++         goto afterquota;
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 7e3d18b433..35a1aac917 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -21,6 +21,9 @@ PURE_FTPD_IGNORE_CVES += CVE-2020-9365
+ # 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
+ PURE_FTPD_IGNORE_CVES += CVE-2020-9274
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.10.77" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10.81" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.198-cip54" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.198-cip54-rt21" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 83037f05e0..db2a31be60 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  d3b64edfc1dd7212e62ed733aeeb73d64ffd6d9658d322d44cddf1b41d5b8fc3  linux-5.10.77.tar.xz
--sha256  9f3fbbbcb3c8a53e1cbed9ae6b06991ba618c1deeaef0a125ba9e82d8414864a  linux-5.4.157.tar.xz
-+sha256  a2e1686132c4598c0adfdf52acbf1ab4bb327b2398badef346a0eff849da5adb  linux-5.10.81.tar.xz
-+sha256  3149c6b52a3079218a60bd369a80d18275b574d84908ffee32a0a8f9ddf939a7  linux-5.4.161.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  70a7f59ab5755d746dd35d5bc09fe122348f15986d21283fb7a81105c7de6b51  linux-4.4.291.tar.xz
--sha256  a5c2d0fdd5b34aca1fb2d7bdce48a6a5a0fa85ad926e6d6d74df17fe30397fa6  linux-4.9.289.tar.xz
--sha256  dfd95c1bc3af5b0e57e53608f8356037510b19cb55cac520e43c3d499ea60d46  linux-4.14.254.tar.xz
--sha256  9e2064f9cb942999a76737d510f08a85bcd8164e9762ce0f7dbfeac58bc2f2b3  linux-4.19.215.tar.xz
-+sha256  2729aa644e174418764eaf60f9f1ee1bd6505290a327c2f24385b4a02cfab96c  linux-4.4.292.tar.xz
-+sha256  cdde5aa24633fcac929b15f2c2fe0c43053dc7439ab3d9c7223d82fdd8ea40db  linux-4.9.290.tar.xz
-+sha256  f00b8001424e3f185990f6ee24a7a393b7f0996f739cd4ee6a79532b23e6b2d7  linux-4.14.255.tar.xz
-+sha256  8551110cc7184b1402a21b42e498088c5b0bb824a658c5fab173c12d9904a004  linux-4.19.217.tar.xz
- # Locally computed
- sha256  e6fc0a999a180ad272b08ff71cbc67f2d3fdc6773d4a8069aefb8781b8e07821  linux-cip-4.19.198-cip54.tar.gz
- sha256  449668d678e458ddaf30f944b7ca7f5ce6ea6664f57d43ea4eb90b176e03b9cb  linux-cip-4.19.198-cip54-rt21.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 569c3ee261..a385665632 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -346,12 +346,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.291"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.289"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.254"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.215"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.157"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.77"	if BR2_KERNEL_HEADERS_5_10
-+	default "4.4.292"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.290"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.255"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.217"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.161"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.81"	if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++# 0004-Initialize-the-max-upload-file-size-when-quotas-are-enabled.patch
++PURE_FTPD_IGNORE_CVES += CVE-2021-40524
++
+ PURE_FTPD_CONF_OPTS = \
+ 	--with-altlog \
+ 	--with-puredb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
