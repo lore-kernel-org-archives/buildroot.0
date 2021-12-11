@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0406FC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC1D0C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98E2860C14;
-	Sat, 11 Dec 2021 23:07:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81D22422EA;
+	Sat, 11 Dec 2021 23:07:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 72WFRX7BtqvF; Sat, 11 Dec 2021 23:07:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 19_j7H9pnlPz; Sat, 11 Dec 2021 23:07:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D79DD60BFE;
-	Sat, 11 Dec 2021 23:07:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FCBA1BF297
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC4D340199;
+	Sat, 11 Dec 2021 23:07:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D528E1BF297
  for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E24E60BFE
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD67C84B9F
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rAMojrdtNmbs for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e0iizjKWDmwt for <buildroot@lists.busybox.net>;
  Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 243FB60C0C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10CB384BA0
  for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C3A6482A9C; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
+ id 9EF4582A4F; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 23:58:55 +0100
+Date: Sat, 11 Dec 2021 23:39:12 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 80d10e40e17e8ab9b0c937457fc57ed799397b88
-X-Git-Newrev: f4ffe6a7216316f2f714999543d3ea6e3f85713d
+X-Git-Oldrev: 32c24c1f702a68ed83ac11b708bdc2e384d91026
+X-Git-Newrev: fd952fa2c63122fc77468497864c10c1a8dd3ce6
 X-Patchwork-Hint: ignore
-Message-Id: <20211211230107.C3A6482A9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] .gitlab-ci.yml: use the
- Docker image from gitlab registry
+Message-Id: <20211211230107.9EF4582A4F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libmodsecurity:
+ security bump to version 3.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4ffe6a7216316f2f714999543d3ea6e3f85713d
+commit: https://git.buildroot.net/buildroot/commit/?id=fd952fa2c63122fc77468497864c10c1a8dd3ce6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-From [1]:
-"In November 2020, Docker introduced rate limits on pull requests from
-Docker Hub [2]. If your GitLab CI/CD configuration uses an image from
-Docker Hub, each time a job runs, it may count as a pull request."
+Support configurable limit on depth of JSON parsing (possible DoS issue)
 
-Since then, some jobs in our gitlab-ci fail when this rate limits is
-reached [3].
+https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.6
 
-To avoid this rate limit, move our Docker image from dockerhub to the
-registry provided by gitlab. Keeping the image from dockerhub would be
-possible by using dependency proxy [4] but the gitlab registry is good
-enough.
-
-Tested on gitlab:
-https://gitlab.com/kubu93/buildroot/-/jobs/1694863584
-
-[1] https://docs.gitlab.com/ee/user/packages/container_registry/index.html
-[2] https://docs.docker.com/docker-hub/download-rate-limit/
-[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/1687590417
-[4] https://docs.gitlab.com/ee/user/packages/dependency_proxy
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b3b4e270d15cf846cfef80421932b5f5892f2374)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d317b76458163f718db9fc274e7a7839e4a39b43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libmodsecurity/libmodsecurity.hash | 4 ++--
+ package/libmodsecurity/libmodsecurity.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 61194d4a54..af86c58f92 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -1,7 +1,7 @@
- # Configuration for Gitlab-CI.
- # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+index dff39569c1..341dbc3765 100644
+--- a/package/libmodsecurity/libmodsecurity.hash
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.5/modsecurity-v3.0.5.tar.gz.sha256
+-sha256  751bf95a7a8d39c440d0c26ec1f73961550ca2eb2ac9e2e7a56dce2dd7b959e9  modsecurity-v3.0.5.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.6/modsecurity-v3.0.6.tar.gz.sha256
++sha256  06315d9a32fc830997178f30a69e933c9c2364b263a2f036959bebc4dde59a08  modsecurity-v3.0.6.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index be46eb6e02..8fa3d59845 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--image: buildroot/base:20211120.1925
-+image: $CI_REGISTRY/buildroot.org/buildroot/base:20211120.1925
- 
- stages:
-   - generate-gitlab-ci
+-LIBMODSECURITY_VERSION = 3.0.5
++LIBMODSECURITY_VERSION = 3.0.6
+ LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
+ LIBMODSECURITY_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
