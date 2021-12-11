@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DF3CC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:11:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9576C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4313C4048D;
-	Sat, 11 Dec 2021 23:11:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7302740571;
+	Sat, 11 Dec 2021 23:11:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3psYpmGyYFa; Sat, 11 Dec 2021 23:11:12 +0000 (UTC)
+	with ESMTP id ePAvG7YoyI0s; Sat, 11 Dec 2021 23:11:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9162C40468;
-	Sat, 11 Dec 2021 23:11:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A5E0D1BF297
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:07:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A684A4053B;
+	Sat, 11 Dec 2021 23:11:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9285B1BF297
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9375F40236
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:07:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E46D4006C
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:07:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qaFoXHSOBu-u for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 23:07:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id McAMo-1rfpi0 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 23:07:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9480E400FD
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:07:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C267540199
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:07:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 2EEB982AE2; Sat, 11 Dec 2021 23:02:39 +0000 (UTC)
+ id 5CF4082AE5; Sat, 11 Dec 2021 23:02:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 00:07:00 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 010868e1ca8bed16a3c3180922f2324c9477bdba
-X-Git-Newrev: 5997470110ca314ce060ad9b69bba2ab5e187ba1
+Date: Sun, 12 Dec 2021 00:06:50 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: b3f998b38ac37f393c24f1beee14e224bbfc7fb4
+X-Git-Newrev: c795b817a9c785d29c7abc4de939d203b20c92d9
 X-Patchwork-Hint: ignore
-Message-Id: <20211211230239.2EEB982AE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark: fix
+Message-Id: <20211211230244.5CF4082AE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/wireshark: fix
  build failure with -latomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5997470110ca314ce060ad9b69bba2ab5e187ba1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c795b817a9c785d29c7abc4de939d203b20c92d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Fix the following build failure raised since bump to version 3.4.10 in
 commit 0ce776942d34d5d3bea6c11913cac38ea3e52f8b:
