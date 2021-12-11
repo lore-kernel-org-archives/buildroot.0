@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 263AAC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B7D8C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:10:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E122240455;
-	Sat, 11 Dec 2021 23:10:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BDDA4045F;
+	Sat, 11 Dec 2021 23:10:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w-EJWUi9Q4gS; Sat, 11 Dec 2021 23:10:25 +0000 (UTC)
+	with ESMTP id Yw5LTxqMDgPz; Sat, 11 Dec 2021 23:10:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4532D4043E;
-	Sat, 11 Dec 2021 23:10:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 428AB40473;
+	Sat, 11 Dec 2021 23:10:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1110C1BF297
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 132DF1BF297
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3002440236
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D52D40291
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ypuHML2T-nKm for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 23:06:28 +0000 (UTC)
+ with ESMTP id rqNdOE2XFv1t for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 23:06:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95423402A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id C384F404B7
  for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 307E182ABC; Sat, 11 Dec 2021 23:01:19 +0000 (UTC)
+ id 6A52B82AE1; Sat, 11 Dec 2021 23:01:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 23:39:03 +0100
+Date: Sun, 12 Dec 2021 00:03:22 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: a928e088d04b785701c03951b28853b22f4bf14e
-X-Git-Newrev: b6b41ac615a3e0f32df03df8ce5308eb75068504
+X-Git-Oldrev: 86fae021284148c41fe4d3abadef3693395d0e1b
+X-Git-Newrev: 8d83d809d0778aad6a5b57f3c71ab1f0f7de835e
 X-Patchwork-Hint: ignore
-Message-Id: <20211211230119.307E182ABC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/libmodsecurity:
- security bump to version 3.0.6
+Message-Id: <20211211230119.6A52B82AE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libglib2: update
+ fourth patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6b41ac615a3e0f32df03df8ce5308eb75068504
+commit: https://git.buildroot.net/buildroot/commit/?id=8d83d809d0778aad6a5b57f3c71ab1f0f7de835e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Support configurable limit on depth of JSON parsing (possible DoS issue)
+Update fourth patch to add girdir in gio-2.0.pc. This will fix the
+following build failure with libnice raised since commit
+aade2fd293fc8a13bc5665fa70a4002ddac9aae6:
 
-https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.6
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler nice/Nice-0.1.gir --output nice/Nice-0.1.typelib --includedir=/usr/share/gir-1.0
+Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d317b76458163f718db9fc274e7a7839e4a39b43)
+(cherry picked from commit 2c916b400bc608512db790d97df010ca666b6dd2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodsecurity/libmodsecurity.hash | 4 ++--
- package/libmodsecurity/libmodsecurity.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch} | 23 ++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
-index dff39569c1..341dbc3765 100644
---- a/package/libmodsecurity/libmodsecurity.hash
-+++ b/package/libmodsecurity/libmodsecurity.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.5/modsecurity-v3.0.5.tar.gz.sha256
--sha256  751bf95a7a8d39c440d0c26ec1f73961550ca2eb2ac9e2e7a56dce2dd7b959e9  modsecurity-v3.0.5.tar.gz
-+# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.6/modsecurity-v3.0.6.tar.gz.sha256
-+sha256  06315d9a32fc830997178f30a69e933c9c2364b263a2f036959bebc4dde59a08  modsecurity-v3.0.6.tar.gz
- # Localy calculated
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index be46eb6e02..8fa3d59845 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+similarity index 53%
+rename from package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
+rename to package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+index 7eeecbe336..a29587bd31 100644
+--- a/package/libglib2/0004-glib-meson.build-add-girdir-to-glib.2.0.pc.patch
++++ b/package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
+@@ -1,21 +1,36 @@
+-From 04bdfff007c91fc620ed0b7cd02fd2e1e83bdefc Mon Sep 17 00:00:00 2001
++From ff3db531608eb0f9de8a88c1bc34fe0f1d93121c Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Fri, 12 Nov 2021 18:01:05 +0100
+-Subject: [PATCH] glib/meson.build: add girdir to glib.2.0.pc
++Subject: [PATCH] meson.build: add girdir to gio-2.0.pc and glib-2.0.pc
  
--LIBMODSECURITY_VERSION = 3.0.5
-+LIBMODSECURITY_VERSION = 3.0.6
- LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
- LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
- LIBMODSECURITY_INSTALL_STAGING = YES
+-Add girdir to glib-2.0.pc to fix the following build failure with atk:
++Add girdir to gio-2.0.pc and glib-2.0.pc to fix the following build
++failure with atk or libnice:
+ 
+ /home/giuliobenetti/autobuild/run/instance-1/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler atk/Atk-1.0.gir --output atk/Atk-1.0.typelib --includedir=/usr/share/gir-1.0
+ Could not find GIR file 'GObject-2.0.gir'; check XDG_DATA_DIRS or use --includedir
+ 
+ Fixes:
+  - http://autobuild.buildroot.org/results/2716929db638977e6bf665352a08bd580e1dd0ae
++ - http://autobuild.buildroot.org/results/3088ef32b03e0bb984291b1227b187f1ff816eb7
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
++ gio/meson.build  | 1 +
+  glib/meson.build | 1 +
+- 1 file changed, 1 insertion(+)
++ 2 files changed, 2 insertions(+)
+ 
++diff --git a/gio/meson.build b/gio/meson.build
++index 29473d26b..112d4ada9 100644
++--- a/gio/meson.build
+++++ b/gio/meson.build
++@@ -831,6 +831,7 @@ pkg.generate(libgio,
++   variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
++                'schemasdir=' + join_paths('${datadir}', schemas_subdir),
++                'bindir=' + join_paths('${prefix}', get_option('bindir')),
+++               'girdir=' + join_paths('${libdir}', '../share/gir-1.0'),
++                'giomoduledir=' + pkgconfig_giomodulesdir,
++                'gio=' + join_paths('${bindir}', 'gio'),
++                'gio_querymodules=' + join_paths('${bindir}', 'gio-querymodules'),
+ diff --git a/glib/meson.build b/glib/meson.build
+ index f78f32969..6c5486699 100644
+ --- a/glib/meson.build
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
