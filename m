@@ -1,46 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2288C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8911C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5389F404AB;
-	Sat, 11 Dec 2021 20:55:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A460842747;
+	Sat, 11 Dec 2021 20:56:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u6sk1Fece9Lp; Sat, 11 Dec 2021 20:55:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YIgdpSyeMSTJ; Sat, 11 Dec 2021 20:56:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D1344038E;
-	Sat, 11 Dec 2021 20:55:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A9981BF576
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:53:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 116FA42733;
+	Sat, 11 Dec 2021 20:56:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B80CD1BF576
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1AE8824EF
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:53:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B52C84272C
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:55:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CElH3feQupC3 for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 20:53:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2767D84F36
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:53:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id EB35D82965; Sat, 11 Dec 2021 20:48:14 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id beAAVgAjywP3 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 20:55:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B7FBC42706
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:55:24 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ i8-20020a7bc948000000b0030db7b70b6bso11467223wml.1
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 12:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0gN+535e2GLG4pyJRec2HJpKr0k6zv2GnCNn+1y1nNo=;
+ b=YwNypW71J1qw2Vo6BcEmHaOoiDdfBO1lbafbrQrCXYJ/41WOqPGNj4kHv6WrAYaq0p
+ +VjomeI1ngLmcsuWlYtqMGWkgmuvElG7KX6Bb4yPESDks1fSXyPAzOB79800f21h/dcv
+ Bs1zct9teYelwMp2O1ykLXaDqUfiwNCD1idkD44mpwg29lHpZ/xCsD2p4lJYeBcL0VJA
+ l+AK/bADis2KaVdEOKfQQNMUMV7iVV5aCmYRxuwrZQPvpQktoW1KL3whyaakp48Cj6a6
+ HYWeNjgp2/BxNcTt7BMkkSZCz2LG6yVXulBWH1xl+0Tc+W4eAnvNsmQ5tEOl6U6PSFqv
+ y5uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=0gN+535e2GLG4pyJRec2HJpKr0k6zv2GnCNn+1y1nNo=;
+ b=JKl3SKrGGyRRjKKyiu93wRNZTJTq2ReTOOb0J3L5gyXHYsZM/0+c0r0uN539E6Ol+V
+ HizGVqO1DXk7kh/X9RHJZk1mgLHnl4a4KEn4IqKXdvJO8xMR76Yf0OI7e+yb+OOfwi3b
+ IRNMTn/uJlhiwdFSh4i3Gk4kaTX7OZtdeXQvilwCr/U1o7KJuq7Bw541HI7xOOufQzBR
+ MYjlGunQekdWORu7S+yIz37Tr3qDN+zg/pdSAm8z3kfLU17hmd3D+g5s7svmWYdtZdKA
+ oSc7HwucEsKDyeSqv/JFMmK4HSCUaiN1AxGhLL0HuVOMJeE71NJESt2iOf3pvDz2yVFy
+ 4k3A==
+X-Gm-Message-State: AOAM530DyjzCF9S+xTHZLmuJPA41mN1vOtMTbtVK/mNml+EGZuqMo40v
+ DtDDZt0mwIxEzNywKULB7xzaDiBFGFosEQ==
+X-Google-Smtp-Source: ABdhPJxavd+C+quUM1Ho2qs5NVzuws/EH6n9m53UjrSUS4+0q1PjbBwYUBpunlTGepS4He1gk6ouiQ==
+X-Received: by 2002:a05:600c:a0a:: with SMTP id
+ z10mr2948537wmp.126.1639256122600; 
+ Sat, 11 Dec 2021 12:55:22 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id w2sm5747805wrn.67.2021.12.11.12.55.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 11 Dec 2021 12:55:22 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 21:00:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 806ec9f131c12da27cbf64185a780e819750b1f4
-X-Git-Newrev: 3d565a831d7316ffbd182694b25674ab0101718b
-X-Patchwork-Hint: ignore
-Message-Id: <20211211204814.EB35D82965@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: drop first patch
+Date: Sat, 11 Dec 2021 21:55:06 +0100
+Message-Id: <20211211205506.215848-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.40.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,82 +85,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1802054491325576068=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1802054491325576068==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3d565a831d7316ffbd182694b25674ab0101718b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-First patch is not needed since bump to version 0.99.1 in commit
-2c8e5dd69f4f281b2b497ae7ec9ec95c47e7c80c and
-https://github.com/Cisco-Talos/clamav/commit/689005317680854627b79c76ffa6e42a8160b0e1
+https://github.com/PurpleI2P/i2pd/releases/tag/2.40.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...roto.c-fix-build-error-due-to-missing-soc.patch | 34 ----------------------
- ...use-backtrace-if-using-uClibc-without-ba.patch} |  0
- 2 files changed, 34 deletions(-)
+ package/i2pd/i2pd.hash | 4 ++--
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
-deleted file mode 100644
-index daac677eaa..0000000000
---- a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 52fda6e6689e22866a39ec4273713fb6035c38b2 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Mon, 7 May 2018 23:14:46 +0200
--Subject: [PATCH] clamdscan/proto.c: fix build error due to missing sockaddr_un
-- definition
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--proto.c: In function ‘dconnect’:
--proto.c:86:67: error: invalid application of ‘sizeof’ to incomplete type ‘struct sockaddr_un’
--             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Upstream-status: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
-----
-- clamdscan/proto.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/clamdscan/proto.c b/clamdscan/proto.c
--index 0205f6da0..d3396732f 100644
----- a/clamdscan/proto.c
--+++ b/clamdscan/proto.c
--@@ -42,6 +42,7 @@
-- #include <sys/stat.h>
-- #include <fcntl.h>
-- #include <sys/types.h>
--+#include <sys/un.h>
-- #ifdef HAVE_SYS_SELECT_H
-- #include <sys/select.h>
-- #endif
---- 
--2.14.3
--
-diff --git a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch b/package/clamav/0001-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-similarity index 100%
-rename from package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-rename to package/clamav/0001-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-
---===============1802054491325576068==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 4eceddba0a..99c474a2e5 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/PurpleI2P/i2pd/releases/download/2.39.0/SHA512SUMS
+-sha512  6b38e6e2e763e94ffe9d11eb2f9a0e9554560bb4fec95891240adf5bc0a9639f879dac4ff3712a9f8e00895b7bbeabc854887e61fe9f9755c33f96899e20aa76  i2pd-2.39.0.tar.gz
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.40.0/SHA512SUMS
++sha512  58d10417f3fd2c2fb427fb88b30ccd3e03053c84aa7ac6d3e346c388f2376d1768846bec5ee8d5134dd62d5712b20f890af11083634f94095b1117f6494c25fd  i2pd-2.40.0.tar.gz
+ # Locally computed:
+ sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 348311277d..8eea09493f 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-I2PD_VERSION = 2.39.0
++I2PD_VERSION = 2.40.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
+-- 
+2.33.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1802054491325576068==--
