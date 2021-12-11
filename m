@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8FB8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 08:01:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC895C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 08:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43BD142A2A;
-	Sat, 11 Dec 2021 08:01:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DEC48592D;
+	Sat, 11 Dec 2021 08:01:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id olOP70TQiTv4; Sat, 11 Dec 2021 08:01:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pc71X9eY0BUn; Sat, 11 Dec 2021 08:01:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74051429BF;
-	Sat, 11 Dec 2021 08:01:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 956A41BF592
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 08:01:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C398C8592A;
+	Sat, 11 Dec 2021 08:01:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8368C1BF592
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 08:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A7124234F
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 08:01:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 720278592A
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 08:01:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Poe4xDjdHOp for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 08:01:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gxENrWyLqOmi for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 08:01:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67F464018B
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 08:01:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9ED6685215
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 08:01:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6C0A782673; Sat, 11 Dec 2021 07:56:05 +0000 (UTC)
+ id A538A8267E; Sat, 11 Dec 2021 07:56:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 08:46:27 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 7e41ae43fd945a7bc5fd703c34b2d39110f0f378
-X-Git-Newrev: 36770de4e73a989fb899fcd68e013dc74f98b36b
+Date: Sat, 11 Dec 2021 08:45:34 +0100
+X-Git-Refname: refs/heads/2021.08.x
+X-Git-Oldrev: 0e4c8db58e1dad6812bb53e2ee335de297caa397
+X-Git-Newrev: c618303de024d89fef8c8a1177674e0766e4e0c5
 X-Patchwork-Hint: ignore
-Message-Id: <20211211075605.6C0A782673@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gdb: fix NLS build
+Message-Id: <20211211075609.A538A8267E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/gdb: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,8 +58,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36770de4e73a989fb899fcd68e013dc74f98b36b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c618303de024d89fef8c8a1177674e0766e4e0c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
 Fix the following build failure raised since version 10.1 and
 https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=9a665d62266e75f0519f3a663784c458885b5c63:
@@ -126,10 +126,10 @@ index 0000000000..3d7534a48a
 +2.33.0
 +
 diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index e69dabd757..39d3c59937 100644
+index 4ead75289e..e6893165a7 100644
 --- a/package/gdb/gdb.mk
 +++ b/package/gdb/gdb.mk
-@@ -166,6 +166,7 @@ endif
+@@ -157,6 +157,7 @@ endif
  
  ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
  GDB_CONF_OPTS += --enable-gdbserver
