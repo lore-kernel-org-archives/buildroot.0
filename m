@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CA53C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779AEC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D95ED60D87;
-	Sat, 11 Dec 2021 20:55:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D8F34021E;
+	Sat, 11 Dec 2021 20:55:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pvutvOTxUxJi; Sat, 11 Dec 2021 20:55:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z0vw7Umy_XvR; Sat, 11 Dec 2021 20:55:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3686560D74;
-	Sat, 11 Dec 2021 20:55:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DBE640173;
+	Sat, 11 Dec 2021 20:55:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 283891BF576
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:53:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB39E1BF576
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51E87809F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 788E780AB3
  for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:53:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yKnGK0uG4Twc for <buildroot@lists.busybox.net>;
+ with ESMTP id at_EjAGbr6Zb for <buildroot@lists.busybox.net>;
  Sat, 11 Dec 2021 20:53:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 135B684F35
+ by smtp1.osuosl.org (Postfix) with ESMTP id 677B484F38
  for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:53:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D3DA682965; Sat, 11 Dec 2021 20:48:14 +0000 (UTC)
+ id 375C982965; Sat, 11 Dec 2021 20:48:15 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 21:00:31 +0100
+Date: Sat, 11 Dec 2021 21:46:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29bb478a49712dfa8ec25262cac77b7c8ff1e51f
-X-Git-Newrev: 32cdb03640d05f7cf1e0984ed40c70defde38185
+X-Git-Oldrev: 50c4fd9363c1e7ee864e3892e7c066ce4b38fdd4
+X-Git-Newrev: ac0ddf8bdfc3c9ab0c5fc89ca200a81c3906c75d
 X-Patchwork-Hint: ignore
-Message-Id: <20211211204814.D3DA682965@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/inadyn: update inadyn.conf example
+Message-Id: <20211211204815.375C982965@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grpc: bump version to 1.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +58,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32cdb03640d05f7cf1e0984ed40c70defde38185
+commit: https://git.buildroot.net/buildroot/commit/?id=ac0ddf8bdfc3c9ab0c5fc89ca200a81c3906c75d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Comment out iface setting, usually not what you want
- - Update DynDNS example, show use of multiple hostnames
- - Add FreeDNS sample config, free and stable service
- - Add link to syntax and examples
+* update patch 0001 to match changed target code
+* BSD-3c and MPL-2.0 licenses were added to LICENSE
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/inadyn/inadyn.conf | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+ ...ly-detect-the-availability-of-pthread_setname_.patch | 17 ++++++++++++++++-
+ package/grpc/grpc.hash                                  |  4 ++--
+ package/grpc/grpc.mk                                    |  2 +-
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
-index 1b29027606..3328ee2218 100644
---- a/package/inadyn/inadyn.conf
-+++ b/package/inadyn/inadyn.conf
-@@ -1,11 +1,26 @@
--# Basic configuration file for inadyn
-+# Example /etc/inadyn.conf
- #
--# /etc/inadyn.conf
--iface    = eth0
-+# Remember to change this file to match your provider and credentials
-+# Username and password can be included from another file.  For more
-+# info, see https://man.troglobit.com/man5/inadyn.conf.5.html
-+
-+# Use IP address of interface instead of external checkip server.
-+# Useful when you want to register internal IP addresses
-+#iface    = eth0
-+
-+# IP address change check interval
- period   = 300
+diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+index 32493ac1a0..92dc5a6c45 100644
+--- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -11,6 +11,14 @@ non-POSIX function in all cases.
  
--provider default@dyndns.org {
-+# Remove of change to match your Dyn account
-+provider dyndns.org {
- 	username    = test
- 	password    = test
--	hostname    = test
-+	hostname    = { "my.example.com", "other.example.org" }
-+}
+ Upstream: https://github.com/grpc/grpc/pull/17610
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +
-+# Remove or change to match your FreeDNS account
-+provider freedns {
-+     username   = lower-case-username
-+     password   = case-sensitive-pwd
-+     hostname   = some.example.com
- }
++[buildroot@heine.tech:
++  1.42.0 added new logic to handle older glibc without pthread_setname_np()
++  but is still not sufficient for all cases. So alter the patch to wrap all
++  this with our cmake based workaround.
++  See: https://github.com/grpc/grpc/pull/27540
++]
++Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ ---
+  CMakeLists.txt                            | 6 ++++++
+  include/grpc/impl/codegen/port_platform.h | 2 ++
+@@ -37,15 +45,22 @@ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codeg
+ index 4f213ff..55ecd9d 100644
+ --- a/include/grpc/impl/codegen/port_platform.h
+ +++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -168,7 +168,9 @@
++@@ -186,6 +186,7 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+ +#if defined(HAVE_PTHREAD_SETNAME_NP)
++ #ifdef __GLIBC_PREREQ
++ #if __GLIBC_PREREQ(2, 12)
++ #define GPR_LINUX_PTHREAD_NAME 1
++@@ -194,6 +195,7 @@
++ // musl libc & others
+  #define GPR_LINUX_PTHREAD_NAME 1
++ #endif
+ +#endif /* HAVE_PTHREAD_SETNAME_NP */
+  #include <linux/version.h>
+  #else /* musl libc */
+  #define GPR_MUSL_LIBC_COMPAT 1
++
+ -- 
+ 2.26.63
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 26d0d315d8..0e81410358 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e5fb30aae1fa1cffa4ce00aa0bbfab908c0b899fcf0bbc30e268367d660d8656  grpc-1.41.0.tar.gz
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
++sha256  b2f2620c762427bfeeef96a68c1924319f384e877bc0e084487601e4cc6e434c  grpc-1.42.0.tar.gz
++sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 110e5e640a..025ab40777 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.41.0
++GRPC_VERSION = 1.42.0
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
+ GRPC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
