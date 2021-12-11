@@ -1,76 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D7A2C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 18:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6353C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 18:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E74EB8515E;
-	Sat, 11 Dec 2021 18:34:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3674A6149F;
+	Sat, 11 Dec 2021 18:55:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QldvyPS54tsn; Sat, 11 Dec 2021 18:34:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ScYJCAmhG1-1; Sat, 11 Dec 2021 18:55:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 389BF85158;
-	Sat, 11 Dec 2021 18:34:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC1321BF3D4
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 18:34:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 747CE60D6A;
+	Sat, 11 Dec 2021 18:55:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 36B651BF3D4
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 18:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A961685152
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 18:34:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A909429FE
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 18:55:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zdP8bJlXaPOd for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 18:34:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5E9FB8514E
- for <buildroot@busybox.net>; Sat, 11 Dec 2021 18:34:18 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id q3so20231170wru.5
- for <buildroot@busybox.net>; Sat, 11 Dec 2021 10:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Xh9W/mi2S8ey3hW8QHGMGDVqsxv+T+rUqh3Q3FZdsms=;
- b=OsOFmAa+1bpOuguvMGgx+7IydelXDCvZ3hf9oOWLKnaBdsXcjAkB2XYy2GSmJ0lk3J
- z+xOz2rOWzk9/yEK+ZbQMoSzoSiEDNAOnFSQSbaxUNI59lTf3cBZquMeRwkXHZAAt/Uh
- rgm61z2/N3fFpU6gh9ltZkCjmCxnbIUrK4zh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Xh9W/mi2S8ey3hW8QHGMGDVqsxv+T+rUqh3Q3FZdsms=;
- b=55U4JeulNJQXoHf8csZXaTE780Ic64m31ghNU0wIiO0mUPA6ImLcI/Xtf8moOW5QUS
- X926x1y1krbyfk0n8+6gnlT+5Ih5MpWjyfWocBt8djUYcP7ByxvqIhxn5zIgsLlBBHbY
- Lyfx5UheahEsUQSG6d/hV3OA5YmTjx9Q9Z0GSQxqjpsICUIXTcG8ChX/kdH2UpAcrQjR
- +9f2/NTiSZr5D7/pQ2IpdD6gADe6GvRSw0V8g0MNRa+ovjzrYNw2yd5echcG+esUw8cI
- HH5NjLyixQPKOwEpvsutgluUAfeRkg5PR4QDe3hLaydWVyoXW5OOCvNtPgh+ulvgyH/Q
- MRoQ==
-X-Gm-Message-State: AOAM533AGtujk6LNB1Ar+QZmNeLnc0Nv2bl/ZiHYjjf+zR2gskxi71Rp
- rw1z07SYIvKjM25bGwAx+Q264ULieobZ0g==
-X-Google-Smtp-Source: ABdhPJxknQspt7N3JCIhuLX/1XgM5euBZBS6HztpT8V+a1se+q9TtnWibPThK10Qb45+6jvcE1hAnA==
-X-Received: by 2002:a5d:4563:: with SMTP id a3mr22158091wrc.130.1639247656020; 
- Sat, 11 Dec 2021 10:34:16 -0800 (PST)
-Received: from localhost.localdomain ([2.196.208.11])
- by smtp.gmail.com with ESMTPSA id w22sm2095129wmi.27.2021.12.11.10.34.14
- for <buildroot@busybox.net>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Dec 2021 10:34:15 -0800 (PST)
-From: Michael Trimarchi <michael@amarulasolutions.com>
-To: buildroot@busybox.net
-Date: Sat, 11 Dec 2021 19:34:12 +0100
-Message-Id: <20211211183412.658131-1-michael@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hGgvR6JxKKvR for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 18:55:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 661D8429FD
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 18:55:27 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout04.t-online.de (Postfix) with SMTP id 7F2DF3696
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 19:55:24 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.123]) by fwd80.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mw7Wk-0wmcDZ0; Sat, 11 Dec 2021 19:55:22 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48800)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mw7Wj-0004uG-Jc
+ for buildroot@buildroot.org; Sat, 11 Dec 2021 19:55:21 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Sat, 11 Dec 2021 19:55:20 +0100
+Message-Id: <20211211185521.2621478-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211211185521.2621478-1-bernd.kuhls@t-online.de>
+References: <20211211185521.2621478-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] boot/uboot: Add ddr3 IMX firmware files to
- uboot package dir
+X-TOI-EXPURGATEID: 150726::1639248922-000010D9-69365117/0/0 CLEAN NORMAL
+X-TOI-MSGID: 07cfb780-16cd-4fa7-af5d-50dfa26c84ae
+Subject: [Buildroot] [PATCH 2/3] package/kodi-pvr-mediaportal-tvserver: bump
+ version to 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,79 +69,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The mainline U-Boot can create an i.MX specific firmware image (e.g. flash.bin).
-For this the i.MX firmware files must be in the toplevel directory.
+Release notes:
+https://github.com/kodi-pvr/pvr.mediaportal.tvserver/releases/tag/19.0.1-Matrix
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- boot/uboot/uboot.mk                           |  3 ++-
- package/freescale-imx/firmware-imx/Config.in  |  5 +++++
- .../firmware-imx/firmware-imx.mk              | 20 +++++++++++++++++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ .../kodi-pvr-mediaportal-tvserver.hash                          | 2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk                            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 9661f901ea..c89216fac4 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -187,7 +187,8 @@ UBOOT_DEPENDENCIES += firmware-imx
- UBOOT_IMX_FW_FILES = \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW),signed_hdmi_imx8m.bin) \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),lpddr4*.bin) \
--	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin)
-+	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin) \
-+	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR3),ddr3*.bin)
- 
- define UBOOT_COPY_IMX_FW_FILES
- 	$(foreach fw,$(UBOOT_IMX_FW_FILES),\
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 0bd8000b50..df266fb28e 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -71,6 +71,11 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
- 	help
- 	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
- 
-+config BR2_PACKAGE_FIRMWARE_IMX_DDR3
-+	bool "DDR3"
-+	help
-+	  Use DDR3 binaries (i.e.: ddr3_*_201810.bin).
-+
- endchoice # DDR training FW
- 
- config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 60c97fd2b8..3acd053d0f 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -82,6 +82,26 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR3),y)
-+FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
-+
-+define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
-+	# Create padded versions of ddr3_* and generate ddr3_fw.bin.
-+	# ddr3_fw.bin is needed when generating imx8-boot-sd.bin
-+	# which is done in post-image script.
-+	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-+		ddr3_imem_1d_201810,ddr3_dmem_1d_201810,ddr3_1d_201810_fw)
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_201810_fw.bin > \
-+		$(BINARIES_DIR)/ddr3_201810_fw.bin
-+	ln -sf $(BINARIES_DIR)/ddr3_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+
-+	# U-Boot supports creation of the combined flash.bin image. To make
-+	# sure that U-Boot can access all available files copy them to
-+	# the binary dir.
-+	cp $(FIRMWARE_IMX_DDRFW_DIR)/ddr3*.bin $(BINARIES_DIR)/
-+endef
-+endif
-+
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 51b3269afc..72c28d4aef 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  05cc8722b7f35c230726941ae7e3082bbc13ed4d061775696fb8bad4abb7b847  kodi-pvr-mediaportal-tvserver-19.0.0-Matrix.tar.gz
++sha256  e7947b0428fc394220138bedf1b56fce0ed7f5218d2f3e773d5fec62edbdc95e  kodi-pvr-mediaportal-tvserver-19.0.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index c526a69fed..9ddfae91e6 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+@@ -4,7 +4,7 @@
  #
- # HDMI firmware
- #
+ ################################################################################
+ 
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 19.0.0-Matrix
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 19.0.1-Matrix
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
