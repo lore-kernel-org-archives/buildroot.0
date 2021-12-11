@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13C7EC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 17:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C4F6C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 17:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B896D40017;
-	Sat, 11 Dec 2021 17:32:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6EA6141F;
+	Sat, 11 Dec 2021 17:32:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dbZPuofgru-u; Sat, 11 Dec 2021 17:32:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id resGrpAXwAcJ; Sat, 11 Dec 2021 17:32:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4785403AA;
-	Sat, 11 Dec 2021 17:32:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 228B21BF95C
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 17:31:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 814976142E;
+	Sat, 11 Dec 2021 17:32:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE6F31BF3A0
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 17:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1181742A05
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 17:31:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEB3885588
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 17:31:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5h3d8wFCXwYH for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 17:31:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ioD5VK0Q51nU for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 17:31:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F88342A02
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 17:31:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AB1585586
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 17:31:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 599AC827D4; Sat, 11 Dec 2021 17:26:35 +0000 (UTC)
+ id 38658827FC; Sat, 11 Dec 2021 17:26:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 18:27:36 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: c618303de024d89fef8c8a1177674e0766e4e0c5
-X-Git-Newrev: 27b09e3cc47e306e05ddfca5e9db7edc7bf51065
+Date: Sat, 11 Dec 2021 18:28:53 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 36770de4e73a989fb899fcd68e013dc74f98b36b
+X-Git-Newrev: fa40fb99e89feb570b296a4d554b209ee839283c
 X-Patchwork-Hint: ignore
-Message-Id: <20211211172635.599AC827D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/libgee: fix
+Message-Id: <20211211172640.38658827FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgee: fix
  introspection build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27b09e3cc47e306e05ddfca5e9db7edc7bf51065
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa40fb99e89feb570b296a4d554b209ee839283c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Fix the following build failure raised since the addition of
 introspection in commit 3915e17e7734ee3abe088d4ce1893eecd7cc4663:
@@ -128,7 +128,7 @@ index 0000000000..0906275ae3
 +2.33.0
 +
 diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 48bc9c9e41..0a05a63635 100644
+index 4b2581e171..1dc8cb569d 100644
 --- a/package/libgee/libgee.mk
 +++ b/package/libgee/libgee.mk
 @@ -12,6 +12,8 @@ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
