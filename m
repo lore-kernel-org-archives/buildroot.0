@@ -1,85 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414D7C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 21:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 970DDC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 21:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1DCC61161;
-	Sat, 11 Dec 2021 21:10:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5088640416;
+	Sat, 11 Dec 2021 21:12:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u6p9CLoxL0zc; Sat, 11 Dec 2021 21:10:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SwfBy93JYsBN; Sat, 11 Dec 2021 21:12:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D7DA6112B;
-	Sat, 11 Dec 2021 21:10:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EF771BF3A0
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 21:10:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 997B8403DD;
+	Sat, 11 Dec 2021 21:12:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 987061BF3A0
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 21:12:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6864D6111B
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 21:10:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8452D40173
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 21:12:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id igND32jZUchU for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 21:10:24 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qh6gfURGBXRG for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 21:12:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 40AFC61114
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 21:10:24 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id v1so40766674edx.2
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 13:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=WQlAdeSjztVKOqsG9v3AQ8dAGTYt7n+8Uwc+B09K5mE=;
- b=IVqL+cdvGo2vZ1bGkQLLkuPKXc6lmyYbNVxhCKEOksfqv/Lz/d1v3wuzVNIil0LNCR
- b89YQvKT7dUfnLcYP6DpYn32iGp7Zpm75/IVyyUfOuWoS4+5HG8KcDpqbqSuPHSC7+GH
- ecxh8oyvjS+HKPN23uGAnhLJ79HNQlhPwLTGOgyso4X4cAyaFa0sSxl5ApxcDm6Gev3f
- ok6Bnsi5vxBkpD97gL/jAUDmry40zab8g4B5lNmbHhyA23beT6jQdX1zOMLJsJKuXZ9a
- +wzwIQVj8wCCbwIhPqEdj/zcBKfkZAis8X2wz7urqjE3D0WrqdZHXA0IeinpsC/+1eEg
- CqwA==
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC749400C8
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 21:12:52 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id d24so20821781wra.0
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 13:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Iq31Qxh/YwXIy1udUv/yPKvCzvhN1k85ToMfA//Nyc4=;
+ b=pN+mQRxeIhwIp8J3csk/pQnQXTrk5o7QX5Vds4JJHIG39SwnBzpDzNRwN4nKUAkF4j
+ 8rvt/nOkcEAwC235PImuoNt8M1nd7L/3TPpkK+v8a+pee0HPm2pbOVEwgbTZO7H2VtAf
+ AW4YHTaxPTFTBt9I5CKnUbmLOysFBTAhZOwaOS6nCXj6PWNqnDwGtVmyOzu+XT6nO1NR
+ kTY1xQVmyNn5VA6MzqtBaHb0/F30QOQ0fEmdV+fwaVcMZ3VR0oq1ntIGyX8fwjodZkMy
+ znIfiUmke3hmlDB8lOeIKIDGNi/SovTMzKfSaNj5ii4lhbUATSUoNYVkxCQXqLX8skzr
+ n9vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WQlAdeSjztVKOqsG9v3AQ8dAGTYt7n+8Uwc+B09K5mE=;
- b=TOlDkgkudu/WLhCoTzpx3nxz3j3C5n20U5InqP/lEbRyNRhvD1/tvbUCwg2VabiFkL
- YqbdzKheZjP/JStBCw7h5C2dZISfVm55th6hkMM9Bn4l2YD3Lxbj7b/vmZGuWLYgJnNp
- XAV6OtBNgkH+lB/OrE5J3AkbJPlW06X3cUQs7YhyZq+6x+L9q91Egyne1iYkgKpDFyNB
- jTpFkG3khuunoQqNbso5+KNDzElL1OwAejJG/nwXHNDwMlOD/0XH5cJm1wgmglDQKloj
- +89uqOO4osv0Pf71R9cANLiruNzQgi889VHfz38rkZOeaHL6gA60WXwXhoE4aTrsih5U
- pCwg==
-X-Gm-Message-State: AOAM5318wBzY7If40py2XoUxrTiU5GElRuPKKB9my/nwaRlv3iy/awb3
- 9i8M2qdwrKqQJuwee+fyoTyf8ZPUN06owUvMXpM=
-X-Google-Smtp-Source: ABdhPJxrlWR0htiZMiTniE2KtHEjRp/c8oWC/QLLbFZfHcrVqctY4+yNFqaIVOzjkqjgdQ/WPKkj5Q==
-X-Received: by 2002:a17:906:c147:: with SMTP id
- dp7mr33496882ejc.173.1639257022460; 
- Sat, 11 Dec 2021 13:10:22 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id q7sm3681746edr.9.2021.12.11.13.10.21
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Dec 2021 13:10:22 -0800 (PST)
-Message-ID: <fb590506-04a3-fa04-755c-b15d37789167@mind.be>
-Date: Sat, 11 Dec 2021 22:10:21 +0100
+ bh=Iq31Qxh/YwXIy1udUv/yPKvCzvhN1k85ToMfA//Nyc4=;
+ b=bkz7dQapasNzeOXA5LOd9VUWVMrthB3NGHcykAS9fQQAeuQhExydpA3Gsf49sujDOB
+ RFKKI+hHlAuK39NOjSEGpsqbs8yevaQdL7k4ZBXnpWfj0/Hsff8Fr/ydcsKIBOcg7/qb
+ SSnA/zGUhSwdI55S+sPO/QLG5TbF9YVMTwWXfGyT+KbftxPdwuS2e7V4dRhpmmu9OM2R
+ CY0aTXQ9Wvb7vao5kwCzj1ZMV3nPQJJN8TMVzfSCj1yDM0gu38SxF6S7raMLhMLqW+rX
+ 99H6VnMPl+z5IThGQbjDXjGripZJ6Uo1fcu6AC6t7Oo7jsSwAtntL3r0QyAXqQBKEuvm
+ l2qg==
+X-Gm-Message-State: AOAM533birYToiTi+2LlYnxPOLQC2ykxYfGUpnxTOq8ZzLDEk5kAYg+b
+ DWFeOs5cOsYD5vBr6Bj37f0dSVpWvttGoA==
+X-Google-Smtp-Source: ABdhPJy/YsBYG6Dy6TKxCbtFa8HFd99RNf+KP7/Y9RQKoMjlv0r8oo2Amlhfb7mpSYMOhD8ZP7Y5dw==
+X-Received: by 2002:adf:ef05:: with SMTP id e5mr6873714wro.688.1639257170560; 
+ Sat, 11 Dec 2021 13:12:50 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id k7sm2986899wrg.105.2021.12.11.13.12.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 11 Dec 2021 13:12:50 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 11 Dec 2021 22:12:34 +0100
+Message-Id: <20211211211234.233209-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-GB
-To: Andreas Klinger <ak@it-klinger.de>, buildroot@buildroot.org
-References: <20211205215423.GA13259@arbad>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211205215423.GA13259@arbad>
-Subject: Re: [Buildroot] [PATCH 1/1] package/ply: bump to version 2.2.0
+Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,124 +85,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following musl build failure raised since bump of pppd to
+version 2.4.9 in commit 075b01f2f7b5a9241b4bfe76db8f14af0284060c:
 
+In file included from pppoe.h:133,
+                 from debug.c:19:
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
+  116 | struct ethhdr {
+      |        ^~~~~~
+In file included from pppoe.h:121,
+                 from debug.c:19:
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
+  163 | struct ethhdr {
+      |        ^~~~~~
 
-On 05/12/2021 22:54, Andreas Klinger wrote:
-> Remove patches which are now included in version 2.2.0 and no longer
-> needed.
-> 
-> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
 
-  Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...src-pppoe.h-fix-build-with-musl-libc.patch | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
 
-  Regards,
-  Arnout
+diff --git a/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000000..29ba72be4f
+--- /dev/null
++++ b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+@@ -0,0 +1,60 @@
++From bbf5b2759cff0c65b47fd6dbe5fe7341f205ad03 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 11 Dec 2021 22:03:16 +0100
++Subject: [PATCH] src/pppoe.h: fix build with musl libc
++
++musl libc defines its own struct ethhdr that conflicts with the kernel
++define one. The kernel headers provide a way to suppress its struct
++ethhdr. For that to work the libc headers must precede the kernel. Move
++the kernel linux/if_ether.h include below libc netinet/if_ether.h. That
++fixes the following build failure:
++
++In file included from pppoe.h:133,
++                 from debug.c:19:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
++  116 | struct ethhdr {
++      |        ^~~~~~
++In file included from pppoe.h:121,
++                 from debug.c:19:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
++  163 | struct ethhdr {
++      |        ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/dfskoll/rp-pppoe/pull/4]
++---
++ src/pppoe.h | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/pppoe.h b/src/pppoe.h
++index 4780092..2b08111 100644
++--- a/src/pppoe.h
+++++ b/src/pppoe.h
++@@ -117,10 +117,6 @@ typedef unsigned long UINT32_t;
++ #error Could not find a 32-bit integer type
++ #endif
++ 
++-#ifdef HAVE_LINUX_IF_ETHER_H
++-#include <linux/if_ether.h>
++-#endif
++-
++ #include <netinet/in.h>
++ 
++ #ifdef HAVE_NETINET_IF_ETHER_H
++@@ -134,6 +130,10 @@ typedef unsigned long UINT32_t;
++ #endif
++ #endif
++ 
+++#ifdef HAVE_LINUX_IF_ETHER_H
+++#include <linux/if_ether.h>
+++#endif
+++
++ 
++ 
++ /* Ethernet frame types according to RFC 2516 */
++-- 
++2.33.0
++
+-- 
+2.33.0
 
-> ---
->   ...ure.ac-fix-error-with-version-string.patch | 29 -------------------
->   ...02-printxf.h-add-stdarg.h-in-include.patch | 27 -----------------
->   package/ply/ply.hash                          |  2 +-
->   package/ply/ply.mk                            |  2 +-
->   4 files changed, 2 insertions(+), 58 deletions(-)
->   delete mode 100644 package/ply/0001-configure.ac-fix-error-with-version-string.patch
->   delete mode 100644 package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
-> 
-> diff --git a/package/ply/0001-configure.ac-fix-error-with-version-string.patch b/package/ply/0001-configure.ac-fix-error-with-version-string.patch
-> deleted file mode 100644
-> index e80599c649..0000000000
-> --- a/package/ply/0001-configure.ac-fix-error-with-version-string.patch
-> +++ /dev/null
-> @@ -1,29 +0,0 @@
-> -From 684bae6043fa2242a5c6551c3f260c9db0cf7dc8 Mon Sep 17 00:00:00 2001
-> -From: Andreas Klinger <ak@it-klinger.de>
-> -Date: Mon, 4 Jan 2021 08:40:50 +0100
-> -Subject: [PATCH] configure.ac: fix error with version string
-> -
-> -When autoreconfiguring there's an error: "configure.ac:6: error: AC_INIT
-> -should be called with package and version arguments".
-> -
-> -Put version string in square brackets to satisfy autoconfigure.
-> -
-> -Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-> ----
-> - configure.ac | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 65387d6..7a0054e 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -1,5 +1,5 @@
-> - AC_PREREQ(2.61)
-> --AC_INIT(ply, m4_esyscmd_s(git describe --always --dirty),
-> -+AC_INIT(ply, [2.1.1],
-> - 	     https://github.com/wkz/ply/issues)
-> -
-> - AC_GNU_SOURCE
-> ---
-> -2.20.1
-> -
-> diff --git a/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch b/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
-> deleted file mode 100644
-> index f56e9a8e72..0000000000
-> --- a/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -From 3fb3cb779c535ec28cbba80573bbea42435108c0 Mon Sep 17 00:00:00 2001
-> -From: Andreas Klinger <ak@it-klinger.de>
-> -Date: Mon, 4 Jan 2021 20:48:41 +0100
-> -Subject: [PATCH] printxf.h: add stdarg.h in include
-> -
-> -Include of <stdarg.h> is needed for va_list.
-> -
-> -Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-> ----
-> - include/ply/printxf.h | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/include/ply/printxf.h b/include/ply/printxf.h
-> -index a59f0d2..e985936 100644
-> ---- a/include/ply/printxf.h
-> -+++ b/include/ply/printxf.h
-> -@@ -8,6 +8,7 @@
-> - #define _PRINTXF_H
-> -
-> - #include <stdio.h>
-> -+#include <stdarg.h>
-> -
-> - struct printxf;
-> -
-> ---
-> -2.20.1
-> -
-> diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-> index 0ee2709b30..df01ae08e0 100644
-> --- a/package/ply/ply.hash
-> +++ b/package/ply/ply.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  cecf0913c65027750ac3272e936110c9f843435938f9ca2edbc34e99ba6c00e2  ply-2.1.1.tar.gz
-> +sha256  8cd92fc8784873fb0507bc11f3f62a31d0345c64914ddaadb958d8b2d6de0100  ply-2.2.0.tar.gz
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-> index b72b29f315..b3c56bd9a5 100644
-> --- a/package/ply/ply.mk
-> +++ b/package/ply/ply.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -PLY_VERSION = 2.1.1
-> +PLY_VERSION = 2.2.0
->   PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
->   PLY_AUTORECONF = YES
->   PLY_LICENSE = GPL-2.0
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
