@@ -1,91 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81305C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E53C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F108260684;
-	Sat, 11 Dec 2021 20:13:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 543AC423CC;
+	Sat, 11 Dec 2021 20:41:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nw8aaSGIA2jw; Sat, 11 Dec 2021 20:13:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x7KnbfXIRE2C; Sat, 11 Dec 2021 20:41:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3676A60687;
-	Sat, 11 Dec 2021 20:13:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 66A8C1BF576
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:13:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8301A4246C;
+	Sat, 11 Dec 2021 20:41:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EC4A1BF576
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F18F84B46
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:13:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D7AD4246C
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:41:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JNt5octFeRkF for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 20:13:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mib6QWILhOjp for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 20:41:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2444884B29
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:13:41 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id t5so39751322edd.0
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 12:13:41 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 17C75423CC
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:41:40 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id e3so40909414edu.4
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 12:41:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=PecKyKA3oopVn7Og7wda0r8yRnZGlkCVbu8cNrW9C1M=;
- b=UX8MxlVqweYbuIflaVlRnJmUqlTv/l0q+NgkIjjvjceekPyQMd+2zlcqg68u9/Wlxi
- umKko1cQR/JfnKWr24KsatcNLlZKuv81oX09YW30rdlZvVZ63+4NcL2OUANMQA2W04yL
- F2QJ5yhAAdKy7P0s9fjrBzbx7frFNsv5Fk9cIq8D9H2LTdkTCDjjv0VIpZ0CPcDdFBpL
- rP0FUDAfe/cXZSY61Bd0ddSdIN7fJijJpNM2Ex0jq5QVQJzIa3dI3wT7XeOt8ioZuxl2
- T4lokXHFQGW8Kl0vVlfcRhokq/dmfDReIx/iWu97TtTxG8mLJ89/bKwRvAfmNfIu49+A
- 2+dQ==
+ bh=QYp1Z6Z+J2dYxi0QJkCvqo3tct5e6NniC3khbiN2+Co=;
+ b=EerJvqofdrlsWZbV0GynsFm8l3anB0D3kvM7EpSxm4fVJvuDkR9V/LobDcMzUggQS3
+ YHpIamhDexuRWmiygqkYH/0+mBUFocKds30FGIgk1aNdXgdq4JHjyQ/pamWNmdLdC9sd
+ Ebq4xHpn9NF6oOGMH53xWVeG7LroH1lqhKbEfC4rSrj5cd5mlLKQwv9oFa/PhGZRPwUP
+ kSiCSK1OohPZRIXQWAfj2wwEM+Ek2QTQZIe26n899DqjrYykZjJCHisbrq7WuVFm17yU
+ Y5SWDaELkBeqFZMEcoCrS7NqMZpWsySADa3u3Te7Ic0nMAk+WGfJlIs+SE2EkVgmtUAG
+ N1Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=PecKyKA3oopVn7Og7wda0r8yRnZGlkCVbu8cNrW9C1M=;
- b=cm0rlZ1qSntu4n1uiYc0T1EKLa/BP8K1cZSn7vGfyMOrltXbSc7LDyBzMI3dehaOTK
- X63EqJykIvMYw50P8zXKGhRdPOHWNFRgmSgdSc3ZIIjoPiXwgWQ1lglYXd8ypoQv2qeK
- Ls5L9eI6FIbiAkm6MTYSMEUPWj2/9FmUVD340ijra72291IyyPC9ci4hiuoY0VHg9Oxw
- bjJLY1OjgJcszLGzaKtPW6EGjPkcdhdYo/5vx1J5c6Lc3mkIQV+Z2qQEhzJUE4G2GtK/
- ijiSWiKkSb7+sJwjpUHmjQmPSTUaiMgl9SUgda14R4V/nRTReDqqc8fO4du1lMpz2Y27
- whLQ==
-X-Gm-Message-State: AOAM530KIAIPflXCUYBEqSBgwNsyjguPPeHlNsVf81eZSRKtPnn8Ke5N
- +cHiegzF7Rozqz5LtSOxUcDUYo4phqzFI/0mQ74=
-X-Google-Smtp-Source: ABdhPJxBuq0DRdikKVLJ02/RYbBuuqyWtDsIiUMBTtP2924MBXybgds9MYYLQTnxjgA7RImirPOYOQ==
-X-Received: by 2002:a17:906:11ce:: with SMTP id
- o14mr33139262eja.457.1639253620097; 
- Sat, 11 Dec 2021 12:13:40 -0800 (PST)
+ bh=QYp1Z6Z+J2dYxi0QJkCvqo3tct5e6NniC3khbiN2+Co=;
+ b=2n/eYiSR+pHfq4i4Qugi6KMwUU0yz5L7cYr4qQPG7f2sA3fvgIY1IpU7MZNEeYYp2F
+ IT3E2xdBoiBQLhAxVSK4GzPhph+PSJJDr+8ZI6EwqjoMHAZLhpvmgYruxfTs7nebJ8rP
+ 7eK1EHP28gpXDkbASqmVlFU2GmtF88N5xrmC1crqebRGW9c/+Xr7vw0FCUl/FAC+qQ4x
+ D9Xiyd5u+45K22gvl0tTiWtphqcO8kTk1Fb8OVMLn2oZ+5SSOgNVrA12waKB1z+ONebD
+ qyv+KNdgWi+c2RpR5dBrjFD20eD/jDLS5fHjzxB6mLl9jD18luHB7tCfMdAhL6ktMhEk
+ TgtA==
+X-Gm-Message-State: AOAM530hj4tJpF2QNvI1+aPGMEswNt99Pe/rKVuSd0Z3ccBLMZaOv6Nh
+ dPc+6JppXzjPSCJK4AnHpjZ9tg==
+X-Google-Smtp-Source: ABdhPJxSlDUiWErspTpis5kd4/Fc3UXXY/ZOOKj7Rz4e1zAvhhpPtApXGOkdzl6J25TL6yTmzQRGFw==
+X-Received: by 2002:a50:eacb:: with SMTP id u11mr48961736edp.290.1639255299190; 
+ Sat, 11 Dec 2021 12:41:39 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id j4sm3607497edk.64.2021.12.11.12.13.39
+ by smtp.gmail.com with ESMTPSA id e7sm3824326edk.3.2021.12.11.12.41.38
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Dec 2021 12:13:39 -0800 (PST)
-Message-ID: <101000b7-5b80-1f83-53c0-0e8a7b0f733a@mind.be>
-Date: Sat, 11 Dec 2021 21:13:38 +0100
+ Sat, 11 Dec 2021 12:41:38 -0800 (PST)
+Message-ID: <730758a8-dac8-1fc4-cf6b-5b9cfc841479@mind.be>
+Date: Sat, 11 Dec 2021 21:41:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
  buildroot@buildroot.org
-References: <20211124192006.646757-1-giulio.benetti@benettiengineering.com>
- <20211124192006.646757-2-giulio.benetti@benettiengineering.com>
+References: <20211121215713.4167839-1-ricardo.martincoski@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211124192006.646757-2-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH 1/1] configs/olimex_a64_olinuxino: bump to
- Linux kernel 5.15.4, u-boot 2021.10 and ATF v2.5
+In-Reply-To: <20211121215713.4167839-1-ricardo.martincoski@gmail.com>
+Subject: Re: [Buildroot] [PATCH] utils/getdeveloperlib.py: fix developer
+ being reported for unrelated path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,118 +93,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: James Knight <james.d.knight@live.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Giulio,
 
-  I have a few minor comments on this patch. I would normally just change them 
-while committing, but since I know you're very reactive and you would test those 
-changes better than I would, I'll leave it to you!
 
-On 24/11/2021 20:20, Giulio Benetti wrote:
-> Bump to Linux kernel 5.15.4, u-boot 2021.10 and ATF v2.5
-> Note:
-
-  (nitpick) these two lines are not useful, just make the points. Also we like 
-to have proper sentences, starting with a capital.
-
-> 1) now u-boot needs SCP environment variable specified that can point to
-> the or1k coprocessor firmware while if coprocessor is not used it must
-> be passed /dev/null as we do in this case.
-> 2) we now use the u-boot-sunxi-with-spl.bin instead of u-boot.itb since
-> it's not produced by u-boot anymore.
-> 3) u-boot 2021.10 requires python 3 and openssl so let's enable them.
-> 4) remove local patches for uboot and linux.
-> 5) remove global patches path from defconfig.
+On 21/11/2021 22:57, Ricardo Martincoski wrote:
+> Currently, by following the instructions in the manual and querying for
+> developers for a patch that changes path
+> package/foobar
+> the script reports both developers that have these entries in the
+> DEVELOPERS file:
+> F:	package/foo/
+> F:	package/foobar/
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   board/olimex/a64-olinuxino/genimage.cfg       | 10 +---
->   ...ve-redundant-YYLOC-global-declaratio.patch | 52 -------------------
->   ...e-redundant-YYLOC-global-declaration.patch | 28 ----------
->   configs/olimex_a64_olinuxino_defconfig        | 25 ++++-----
->   4 files changed, 13 insertions(+), 102 deletions(-)
->   delete mode 100644 board/olimex/a64-olinuxino/patches/linux/0001-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
->   delete mode 100644 board/olimex/a64-olinuxino/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch
+> Starting from commit "afc112b0e4 utils/getdeveloperlib.py: fix issue
+> with hasfile()" get-developers script uses os.path.abspath() and
+> os.path.relpath().
+> The catch is that those functions return the absolute path and the
+> relative path without the trailing slash.
 > 
-> diff --git a/board/olimex/a64-olinuxino/genimage.cfg b/board/olimex/a64-olinuxino/genimage.cfg
-> index 44fcb3cb59..9606d26c02 100644
-> --- a/board/olimex/a64-olinuxino/genimage.cfg
-> +++ b/board/olimex/a64-olinuxino/genimage.cfg
-> @@ -16,15 +16,9 @@ image sdcard.img {
->   
->   	partition spl {
+> When the paths associated to a developer are then compared to the paths
+> a patch touches, using the string.startswith(), any substring returns
+> True, leading to developers for package/foo/ being wrongly reported
+> for package/foobar/ .
+> 
+> Fix this by re-adding the trailing slash after using relpath().
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: James Knight <james.d.knight@live.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-  Since the partition now contains U-Boot (including SPL), I think it's better 
-to call it "u-boot". (Also nitpick)
-
->   		in-partition-table = "no"
-> -		image = "sunxi-spl.bin"
-> +		image = "u-boot-sunxi-with-spl.bin"
->   		offset = 8K
-> -	}
-> -
-> -	partition u-boot {
-> -		in-partition-table = "no"
-> -		image = "u-boot.itb"
-> -		offset = 40K
-> -		size = 1M # 1MB - 40K
-> +		size = 1032K # 1MB - 8KB + 16KB(GPT)
->   	}
->   
->   	partition boot {
-
-[snip]
->   # Bootloader
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="a64-olinuxino"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
->   BR2_TARGET_UBOOT_SPL=y
-> -BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-
-  And here's the big comment: this is not actually the SPL image, it's in fact 
-the full U-Boot image. I think that what you end up with with this is that in 
-addition to this file, there's another file (u-boot.bin?) that gets installed 
-into images but that is in fact useless.
-
-  Therefore, I think you should instead set BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME 
-to u-boot-sunxi-with-spl.bin and remove BR2_TARGET_UBOOT_SPL.
-
-  Does that work?
-
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-
-> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
->   BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->   BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
->   BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot.cmd"
-> @@ -36,7 +33,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/olimex/a64-olinuxino/boot
->   # Kernel
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.4"
->   BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-olinuxino"
+> ---
+> NOTICE: this change makes 'get-developers -c' to return more results.
+> This is expected, since i.e:
+> fmt has a developer
+> fmtools has none
+> jo has a developer
+> joe has none
+> openjdk has a developer
+> openjdk-bin has none
+> opentyrian has a developer
+> opentyrian-data has none
+> board/raspberrypi has a few developers
+> board/raspberrypi0 has none
+> 
+> Examples of wrong results *before* this patch:
+> 
+> $ ./utils/get-developers -p stress-ng
+> Romain Naour <romain.naour@gmail.com>
+> $ ./utils/get-developers -p stress
+> Arnout Vandecappelle <arnout@mind.be>
+> $ ./utils/get-developers outgoing/*-stress-ng-*.patch
+> git send-email --to buildroot@buildroot.org --cc "Romain Naour
+> <romain.naour@gmail.com>" --cc "Arnout Vandecappelle <arnout@mind.be>"
+> 
+> $ ./utils/get-developers -p atop
+> Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+> $ ./utils/get-developers -p at
+> Giulio Benetti <giulio.benetti@benettiengineering.com>
+> $ ./utils/get-developers outgoing/*-atop-*.patch
+> git send-email --to buildroot@buildroot.org --cc "Ricardo Martincoski
+> <ricardo.martincoski@datacom.com.br>" --cc "Giulio Benetti
+> <giulio.benetti@benettiengineering.com>"
+> ---
+>   utils/getdeveloperlib.py | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+> index f2b36862e3..c05e1f888b 100644
+> --- a/utils/getdeveloperlib.py
+> +++ b/utils/getdeveloperlib.py
+> @@ -247,18 +247,20 @@ def parse_developers():
+>               elif line.startswith("F:"):
+>                   fname = line[2:].strip()
+>                   dev_files = glob.glob(os.path.join(brpath, fname))
+>                   if len(dev_files) == 0:
+>                       print("WARNING: '%s' doesn't match any file" % fname,
+>                             file=sys.stderr)
+>                   for f in dev_files:
+>                       dev_file = os.path.relpath(f, brpath)
+>                       dev_file = dev_file.replace(os.sep, '/')  # force unix sep
+> +                    if f[-1] == '/':  # relpath removes the trailing /
+> +                        dev_file = dev_file + '/'
+>                       files.append(dev_file)
+>               elif line == "":
+>                   if not name:
+>                       continue
+>                   developers.append(Developer(name, files))
+>                   files = []
+>                   name = None
+>               else:
+>                   print("Syntax error in DEVELOPERS file, line %d: '%s'" % (linen, line),
 > 
 _______________________________________________
 buildroot mailing list
