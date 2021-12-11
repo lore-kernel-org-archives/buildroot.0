@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFDA3C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 22:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27756C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 22:41:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76AA360C2E;
-	Sat, 11 Dec 2021 22:39:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B69D260D59;
+	Sat, 11 Dec 2021 22:41:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RDQCrJYs4geq; Sat, 11 Dec 2021 22:39:33 +0000 (UTC)
+	with ESMTP id 6N1mNaxESeiT; Sat, 11 Dec 2021 22:41:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E560460C2F;
-	Sat, 11 Dec 2021 22:39:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 077291BF328
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 22:39:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2429A60D52;
+	Sat, 11 Dec 2021 22:41:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 974DD1BF328
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 22:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EACA984BCE
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 22:39:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92D5B60D51
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 22:41:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g63gFMaEc--9 for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 22:39:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kfcMRmSHjBZ7 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 22:41:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFD8B84BCB
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 22:39:29 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E84160D4F
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 22:41:48 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id A6C87FF802;
- Sat, 11 Dec 2021 22:39:25 +0000 (UTC)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1BCC2200003;
+ Sat, 11 Dec 2021 22:41:43 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1mwB1Y-0005v3-Mk; Sat, 11 Dec 2021 23:39:24 +0100
+ id 1mwB3n-00065l-De; Sat, 11 Dec 2021 23:41:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211125071023.4163954-1-fontaine.fabrice@gmail.com>
-Date: Sat, 11 Dec 2021 23:39:24 +0100
-In-Reply-To: <20211125071023.4163954-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 25 Nov 2021 08:10:23 +0100")
-Message-ID: <87bl1m3gwz.fsf@dell.be.48ers.dk>
+References: <20211123223621.3804258-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Dec 2021 23:41:43 +0100
+In-Reply-To: <20211123223621.3804258-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 23 Nov 2021 23:36:21 +0100")
+Message-ID: <877dca3gt4.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: security bump
- to version 3.0.6
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/pure-ftpd: fix CVE-2021-40524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,7 +59,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank Vanbever <frank.vanbever@essensium.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,10 +67,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Support configurable limit on depth of JSON parsing (possible DoS issue)
- > https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.6
+ > In Pure-FTPd 1.0.49, an incorrect max_filesize quota mechanism in the
+ > server allows attackers to upload files of unbounded size, which may
+ > lead to denial of service or a server hang. This occurs because a
+ > certain greater-than-zero test does not anticipate an initial -1 value.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - Add PURE_FTPD_IGNORE_CVES entry
 
 Committed to 2021.02.x and 2021.08.x, thanks.
 
