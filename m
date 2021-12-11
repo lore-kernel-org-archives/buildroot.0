@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A176C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0406FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E56BF4047F;
-	Sat, 11 Dec 2021 23:07:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98E2860C14;
+	Sat, 11 Dec 2021 23:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nSnmW3CzHWGh; Sat, 11 Dec 2021 23:07:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 72WFRX7BtqvF; Sat, 11 Dec 2021 23:07:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDF74404B7;
-	Sat, 11 Dec 2021 23:07:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 01EF91BF969
+	by smtp3.osuosl.org (Postfix) with ESMTP id D79DD60BFE;
+	Sat, 11 Dec 2021 23:07:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FCBA1BF297
  for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBFAE422EA
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E24E60BFE
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:06:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HgvHyVwZaAbo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rAMojrdtNmbs for <buildroot@lists.busybox.net>;
  Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1A7640188
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 243FB60C0C
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:06:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 89EE882A50; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
+ id C3A6482A9C; Sat, 11 Dec 2021 23:01:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Dec 2021 23:36:11 +0100
+Date: Sat, 11 Dec 2021 23:58:55 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: f1968c6cbf48671b27d924df1600fff1e7661e15
-X-Git-Newrev: 66f9159e112463784a1e5ee7f8a60d9c70ca2235
+X-Git-Oldrev: 80d10e40e17e8ab9b0c937457fc57ed799397b88
+X-Git-Newrev: f4ffe6a7216316f2f714999543d3ea6e3f85713d
 X-Patchwork-Hint: ignore
-Message-Id: <20211211230107.89EE882A50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gmp: fix
- CVE-2021-43618
+Message-Id: <20211211230107.C3A6482A9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] .gitlab-ci.yml: use the
+ Docker image from gitlab registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,69 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66f9159e112463784a1e5ee7f8a60d9c70ca2235
+commit: https://git.buildroot.net/buildroot/commit/?id=f4ffe6a7216316f2f714999543d3ea6e3f85713d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-GNU Multiple Precision Arithmetic Library (GMP) through 6.2.1 has an
-mpz/inp_raw.c integer overflow and resultant buffer overflow via crafted
-input, leading to a segmentation fault on 32-bit platforms.
+From [1]:
+"In November 2020, Docker introduced rate limits on pull requests from
+Docker Hub [2]. If your GitLab CI/CD configuration uses an image from
+Docker Hub, each time a job runs, it may count as a pull request."
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9d0536d82d722f46c235ab99e916c4ab67f46292)
+Since then, some jobs in our gitlab-ci fail when this rate limits is
+reached [3].
+
+To avoid this rate limit, move our Docker image from dockerhub to the
+registry provided by gitlab. Keeping the image from dockerhub would be
+possible by using dependency proxy [4] but the gitlab registry is good
+enough.
+
+Tested on gitlab:
+https://gitlab.com/kubu93/buildroot/-/jobs/1694863584
+
+[1] https://docs.gitlab.com/ee/user/packages/container_registry/index.html
+[2] https://docs.docker.com/docker-hub/download-rate-limit/
+[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/1687590417
+[4] https://docs.gitlab.com/ee/user/packages/dependency_proxy
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b3b4e270d15cf846cfef80421932b5f5892f2374)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-mpz-inp_raw.c-Avoid-bit-size-overflows.patch | 27 ++++++++++++++++++++++
- package/gmp/gmp.mk                                 |  3 +++
- 2 files changed, 30 insertions(+)
+ .gitlab-ci.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch b/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
-new file mode 100644
-index 0000000000..0003f342c3
---- /dev/null
-+++ b/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
-@@ -0,0 +1,27 @@
-+# HG changeset patch
-+# User Marco Bodrato <bodrato@mail.dm.unipi.it>
-+# Date 1634836009 -7200
-+# Node ID 561a9c25298e17bb01896801ff353546c6923dbd
-+# Parent  e1fd9db13b475209a864577237ea4b9105b3e96e
-+mpz/inp_raw.c: Avoid bit size overflows
-+
-+[Retrieved from: https://gmplib.org/repo/gmp-6.2/rev/561a9c25298e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -r e1fd9db13b47 -r 561a9c25298e mpz/inp_raw.c
-+--- a/mpz/inp_raw.c	Tue Dec 22 23:49:51 2020 +0100
-++++ b/mpz/inp_raw.c	Thu Oct 21 19:06:49 2021 +0200
-+@@ -88,8 +88,11 @@
-+ 
-+   abs_csize = ABS (csize);
-+ 
-++  if (UNLIKELY (abs_csize > ~(mp_bitcnt_t) 0 / 8))
-++    return 0; /* Bit size overflows */
-++
-+   /* round up to a multiple of limbs */
-+-  abs_xsize = BITS_TO_LIMBS (abs_csize*8);
-++  abs_xsize = BITS_TO_LIMBS ((mp_bitcnt_t) abs_csize * 8);
-+ 
-+   if (abs_xsize != 0)
-+     {
-+
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 5e16ef1916..9b402767fd 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -14,6 +14,9 @@ GMP_CPE_ID_VENDOR = gmplib
- GMP_DEPENDENCIES = host-m4
- HOST_GMP_DEPENDENCIES = host-m4
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 61194d4a54..af86c58f92 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,7 +1,7 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
  
-+# 0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
-+GMP_IGNORE_CVES += CVE-2021-43618
-+
- # GMP doesn't support assembly for coldfire or mips r6 ISA yet
- # Disable for ARM v7m since it has different asm constraints
- ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CPU_ARMV7M),y)
+-image: buildroot/base:20211120.1925
++image: $CI_REGISTRY/buildroot.org/buildroot/base:20211120.1925
+ 
+ stages:
+   - generate-gitlab-ci
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
