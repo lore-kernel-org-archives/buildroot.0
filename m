@@ -4,49 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 745DEC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 10 Dec 2021 22:11:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F4EC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 02:52:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2336461501;
-	Fri, 10 Dec 2021 22:11:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DC3561C6D;
+	Sat, 11 Dec 2021 02:52:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Orh00CwhWzi; Fri, 10 Dec 2021 22:11:04 +0000 (UTC)
+	with ESMTP id oLGUE-HbDftB; Sat, 11 Dec 2021 02:52:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7617C614FC;
-	Fri, 10 Dec 2021 22:11:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2553E61C73;
+	Sat, 11 Dec 2021 02:52:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D8731BF3D6
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:11:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E5A6D1BF3A8
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 02:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B08F418D2
- for <buildroot@lists.busybox.net>; Fri, 10 Dec 2021 22:11:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA64A4222D
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 02:52:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qDmKg6arTf37 for <buildroot@lists.busybox.net>;
- Fri, 10 Dec 2021 22:11:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CCD6C418C9
- for <buildroot@buildroot.org>; Fri, 10 Dec 2021 22:10:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id D9E491C000E;
- Fri, 10 Dec 2021 22:10:56 +0000 (UTC)
-Date: Fri, 10 Dec 2021 23:10:55 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Andrey Nechypurenko <andreynech@gmail.com>
-Message-ID: <20211210231055.550d5641@windsurf>
-In-Reply-To: <CAOiXNkBvvsC2g5GR0r6fMHQRVpUGHpZHeQNQvJYOODcp5XVorg@mail.gmail.com>
-References: <CAOiXNkDn5AZBuQLnnR1tK-aW19OKmSXpv2yuDj3wxe2CTEiDiw@mail.gmail.com>
- <20211209151054.3799fb4e@windsurf>
- <CAOiXNkBvvsC2g5GR0r6fMHQRVpUGHpZHeQNQvJYOODcp5XVorg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+ with ESMTP id DanCXBXhUxR8 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 02:52:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from sender3-of-o50.zoho.com (sender3-of-o50.zoho.com
+ [136.143.184.50])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 46C1F4224A
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 02:52:02 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1639191119; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=CA8WYPAEDcCmNEREH1uOj6tm2VVEIHkMf2rtBR3caJtjY7FDsmXPfBcreIgLJ/IxbONxJzrx4cjFyuZV8lNlQbuFsX4+pSIsZLM2Da/fG1bFr0wJH4TGYjREXAVZv37qAl/wokvLpoSsMlx6Ve96D4RyNC/iDbH/sBtwwSsPLv0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1639191119;
+ h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+ bh=NTVbmwRO2t2zBfLHSuzFs8t3tMBXe8oz9wccAgBXB2Q=; 
+ b=mhwx7FGnK0FAYyKWnZAh29QbXjrCCU7pn4WzdvdIGnCxRNUrF6BUUWX5nazxcZ9J0sG3MsMO0xxX6pVDG5JukP/zhPYiuCgOekvBDUsnzRk3yIgPDJn+tMai5LZQXlrnSMZ8gYP2OI7jgRHGXIu07vKIQKXRdAriGw3tPcrot3k=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ spf=pass  smtp.mailfrom=admin@khoahoang.com;
+ dmarc=pass header.from=<admin@khoahoang.com>
+Received: from maximus-ryzen.home.arpa (104-136-063-107.res.spectrum.com
+ [104.136.63.107]) by mx.zohomail.com
+ with SMTPS id 1639191118304635.1420528940755;
+ Fri, 10 Dec 2021 18:51:58 -0800 (PST)
+From: Khoa Hoang <admin@khoahoang.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Dec 2021 18:50:34 -0800
+Message-Id: <20211211025034.800367-1-admin@khoahoang.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Building packages for Cortex M4
+X-ZohoMailClient: External
+Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: fix install rule for
+ alsactl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +67,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>,
- buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Khoa Hoang <admin@khoahoang.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Andrey,
+The copy command for /usr/share/alsa missing an asterisk cause it to copy to
+/usr/share/alsa/alsa instead of /usr/share/alsa where it should be.
 
-On Thu, 9 Dec 2021 18:02:27 +0100
-Andrey Nechypurenko <andreynech@gmail.com> wrote:
+Signed-off-by: Khoa Hoang <admin@khoahoang.com>
+---
+ package/alsa-utils/alsa-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> In the meantime, I came up with the following solution and wondered what
-> would you say about it. First, I made host package which downloads and
-> installs M4 toolchain from ARM site (inspired by
-> https://gist.github.com/titouanc/ea0685d9cd8592deb1c49d48e33b3eee )
-> 
-> Config.in.host:
-> 
-> ################################################################################
-> #
-> # gcc-arm-none-eabi
-> #
-> ################################################################################
-
-We already have a package for an ARM toolchain, in
-package/arm-gnu-a-toolchain/. However, we have found that this
-toolchain is targeted at Cortex-A, and while in theory it should work
-for Cortex-M as well, the Cortex-M examples from ST (at least) expect
-some libraries that are not in the Cortex-A toolchain provided by ARM,
-but only the Cortex-M.
-
-This is why in
-https://github.com/bootlin/buildroot/commit/8635d412292eec7bb90bfabcba25a8c238aa2f93
-we switch to the Cortex-M/Cortex-R toolchain for this package. But this
-isn't directly suitable for upstream. More work is needed here.
-
-> Except for a couple of small errors in the CMakeLists.txt which need yet to be
-> fixed, it looks like this solution would work for me.
-> 
-> What do you think about it?
-
-Yes, that looks, except for the toolchain package, where we probably
-want to re-use what already exists :)
-
-Thomas
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 427280c1e6..2603e52f18 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -77,7 +77,7 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
+ 	fi
+ 	if [ -x "$(TARGET_DIR)/usr/sbin/alsactl" ]; then \
+ 		mkdir -p $(TARGET_DIR)/usr/share/; \
+-		cp -rdpf $(STAGING_DIR)/usr/share/alsa/ $(TARGET_DIR)/usr/share/alsa/; \
++		cp -rdpf $(STAGING_DIR)/usr/share/alsa/* $(TARGET_DIR)/usr/share/alsa/; \
+ 	fi
+ endef
+ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
