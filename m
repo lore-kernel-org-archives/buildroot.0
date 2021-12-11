@@ -4,85 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 585C3C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8ED1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 20:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FF4642606;
-	Sat, 11 Dec 2021 20:47:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 949C7426E3;
+	Sat, 11 Dec 2021 20:50:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id unV4GIWoxDhv; Sat, 11 Dec 2021 20:47:09 +0000 (UTC)
+	with ESMTP id mgZFYkiCwQLT; Sat, 11 Dec 2021 20:50:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 384DF42601;
-	Sat, 11 Dec 2021 20:47:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 44FAF1BF576
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:47:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C720B426DF;
+	Sat, 11 Dec 2021 20:50:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CAC3A1BF576
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32F2760D75
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:47:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA5DE84ED2
+ for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 20:50:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yNiF-ZvGBPIs for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 20:47:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 93fypyllDib3 for <buildroot@lists.busybox.net>;
+ Sat, 11 Dec 2021 20:50:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F21E60D4B
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:47:05 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id r11so39642006edd.9
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 12:47:05 -0800 (PST)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F200084ECB
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 20:50:51 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id r11so39657935edd.9
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 12:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=wU7Oe+pkHwIWTzFh5APw+zcQ8jQUDlbM5HXu/U8VZEQ=;
- b=R7MHvIekDP7aD+y2SDlXso08pEgs5YD1APWX0CQSfQ8Zm/tHvwJjPdzP6UTJym+Lrk
- lyoA1Rin5bppcOe714KQkoYHTtavi+D9piJ9iLEoQ2CAh8KvGyedgnJS54rHp0HJfFqJ
- Y6fmwS7prBmTCo1tcOUBrbFx2I38o6uu0Zah/gm7jdNMfprDhI1aiQkBr3UVKyLP+Fz/
- OJSvcLLLeteW5J1C467zZRd7ycI1DDX7aT1Q7fPZr8U6+MEtLKs7VSU0/svyfasqO9Y5
- wIZM4+89dtkNR23BQs4dXcyeWeAo4g5227rDCvqMcEqdgBuu5T129pLLUrgDYTvzRAcU
- ywEg==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=3pcGWL58FFEfAmgeWT7kl2hebwFYsGpkiJgDEqureMk=;
+ b=V5UwvckgM4M/A5k51krOhw7aPcIfKSYkoAEy2z+4vKOF8SxNkBdBVw1flQCmUyoc6T
+ NvepoukjTn4Duia2rY904l+T06vXeaeZcP37jltj4BhZYavNoXXYfuJZtxXGsb+3YD48
+ SrbAdbav4T0AMm485Ax4RzJUoCW+lcWcl2YoeSH/9WL6gTSSmTwFL6W3fwaVAQNCAyCg
+ 75o4FQc9g7A98oFBj/cOfqQ2blT+2K6Ja77kFj3uE3y7UHRsZaGidpWCRDvFqGfAs68A
+ CZFngrLbDdko7wes5pPIr5GGC2fMLMRZJc0FuW5ZyMltmZDoyVpwQhOmzFj8+UA4AILV
+ hLCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=wU7Oe+pkHwIWTzFh5APw+zcQ8jQUDlbM5HXu/U8VZEQ=;
- b=Kx6N2zG2mduwuTqlxECodCX4+ZCqgd6aXxJXHEdzMVq1keB2sGHfvJq1TU3DACgE2I
- n7PO6zYn2Jcig7LTgqbpuW+u/IW9eAbvBr6k26YFs/9sYMVyNDkSwSjLXY859B/vCYSC
- ceBgGotL5OgZfA80p/5VNGfLc2PG78Q5QuKspErZxSXaDKQUuZ6eT1JlIYOC+XjLprFL
- xq7G0kccbMWhafjTuffRgLV92pykJpSvRTNfYRdqsJkPuilqarD9lAsmmdMla7gFu0vo
- caaLVvErIvRrVNzAeTyXwWmV2Wc+Cyr5R5wGBdHqeH9rc9XD+OfYu6mkQPi7O4s/LUGz
- JGQw==
-X-Gm-Message-State: AOAM5327CDNyFviztZ880IUnEIbYppVlwVkOGXIAqspdltd8x7dr4tC7
- mQZNRnohgIuRU8EZp6UKJDQckRsSFlMkYDgxZsM=
-X-Google-Smtp-Source: ABdhPJxMhRp752JCfuMrngcbAv9mi2CFh5DQRaCpw+0MPPm7FkXquTPJBSGELdRbx8opt7MAqzorXg==
-X-Received: by 2002:a17:907:1c15:: with SMTP id
- nc21mr32962726ejc.510.1639255624280; 
- Sat, 11 Dec 2021 12:47:04 -0800 (PST)
+ bh=3pcGWL58FFEfAmgeWT7kl2hebwFYsGpkiJgDEqureMk=;
+ b=XQUHLoIv+I7VC9JDlawRd/zoMPa+x9spdPawcRQbEuZ6O5QndSee3zbJPY1wd/BQmb
+ G4rfn2hzFyCEB+nxAl5tZrkAqETcIsB7cS2+CZ0lqoiRDcdNL7o+bLVcppJ5F1PdH2le
+ MKBtbjGrt4m+89Jo0QQD3nE/vG2JALOE185fuQvpDkBKA5X0zmMVZrVHYOTkjvN47TjT
+ Sxr8ckALnTPSl64idmehzLzNRcUSe8jiiYOAu9dPAD99mYdCwB7sPqRtjjmSKS0xbagG
+ iLtbZGk9+29HWjIKhSkIJg8dP0lsx/WO6lFn2nTgmr0Y71ILpAvJ88YSs0wAiNsETLfC
+ WRMw==
+X-Gm-Message-State: AOAM532+jiVAcpmsnHsw9kog+3uyoPpMw+iS6Y63wIxn5a/7ZA87Docl
+ BUFTYXkhZrdWORtuFSWZwfF5zw==
+X-Google-Smtp-Source: ABdhPJz6BLzC89uGBaufzQA8AeXJERaCo0gK4FwJ5Gmq25PexCdiX46yJ/r6glX+WozECtXUFlVWxA==
+X-Received: by 2002:a17:907:c0c:: with SMTP id
+ ga12mr34300362ejc.417.1639255850043; 
+ Sat, 11 Dec 2021 12:50:50 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id dm6sm3606339ejc.89.2021.12.11.12.47.03
+ by smtp.gmail.com with ESMTPSA id q21sm3615004edt.45.2021.12.11.12.50.49
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 11 Dec 2021 12:47:03 -0800 (PST)
-Message-ID: <fc2e4442-6c22-6b40-e259-3e93c7717973@mind.be>
-Date: Sat, 11 Dec 2021 21:47:02 +0100
+ Sat, 11 Dec 2021 12:50:49 -0800 (PST)
+Message-ID: <fd726696-4b37-4ea8-8957-ad7e175981d4@mind.be>
+Date: Sat, 11 Dec 2021 21:50:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20211124205607.3021277-1-aperez@igalia.com>
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org,
+ Peter Korsgaard <peter@korsgaard.com>
+References: <20211124205919.25777-1-buildroot@heine.tech>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211124205607.3021277-1-aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: bump version to
- 2.34.2
+In-Reply-To: <20211124205919.25777-1-buildroot@heine.tech>
+Subject: Re: [Buildroot] [PATCH] package/grpc: bump version to 1.42.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,6 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,140 +103,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/11/2021 21:56, Adrian Perez de Castro wrote:
-> Update to the the next minor release, which fixes an scrolling issue and
-> incorporated a patch that can now be removed from Buildroot. Release
-> notes:
+On 24/11/2021 21:59, Michael Nosthoff via buildroot wrote:
+> * update patch 0001 to match changed target code
 > 
->    https://wpewebkit.org/release/wpewebkit-2.34.2.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+[snip]
+> diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+> index 26d0d315d8..978d5e4fe3 100644
+> --- a/package/grpc/grpc.hash
+> +++ b/package/grpc/grpc.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  e5fb30aae1fa1cffa4ce00aa0bbfab908c0b899fcf0bbc30e268367d660d8656  grpc-1.41.0.tar.gz
+> +sha256  b2f2620c762427bfeeef96a68c1924319f384e877bc0e084487601e4cc6e434c  grpc-1.42.0.tar.gz
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
 
-  Applied to master, thanks.
+  The hash of the license file has changed: the BSD-3-Clause and MPL-2.0 
+licenses were added to it. Indeed, it turns out that some third-party code is 
+BSD licensed and that the certificate store is MPL-licensed. So I created a 
+separate commit that adds those to LICENSE [Peter: for stable]. And of course I 
+updated the license hash in this patch and applied to master, thanks!
+
+  I think that this is the first time that I see the license hash doing what it 
+was meant to do: detecting that we need to update the license information.
 
   Regards,
   Arnout
 
-> ---
->   ...e-build-issues-with-ENABLE_VIDEO-OFF.patch | 78 -------------------
->   package/wpewebkit/wpewebkit.hash              |  8 +-
->   package/wpewebkit/wpewebkit.mk                |  2 +-
->   3 files changed, 5 insertions(+), 83 deletions(-)
->   delete mode 100644 package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
-> 
-> diff --git a/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch b/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
-> deleted file mode 100644
-> index 932ade101c..0000000000
-> --- a/package/wpewebkit/0001-WPE-GTK-Multiple-build-issues-with-ENABLE_VIDEO-OFF.patch
-> +++ /dev/null
-> @@ -1,78 +0,0 @@
-> -From afc83d41293333f694630451f865a7a257a9b917 Mon Sep 17 00:00:00 2001
-> -From: Adrian Perez de Castro <aperez@igalia.com>
-> -Date: Mon, 25 Oct 2021 23:45:15 +0300
-> -Subject: [PATCH] [WPE][GTK] Multiple build issues with ENABLE_VIDEO=OFF
-> - https://bugs.webkit.org/show_bug.cgi?id=232264
-> -
-> -.:
-> -
-> -Reviewed by NOBODY (OOPS!).
-> -
-> -* Source/cmake/WebKitFeatures.cmake: Make ENABLE_MEDIA_SESSION depend on ENABLE_VIDEO.
-> -
-> -Source/WebCore:
-> -
-> -Reviewed by NOBODY (OOPS!).
-> -
-> -No new tests needed.
-> -
-> -* accessibility/AXObjectCache.cpp:
-> -(WebCore::isSimpleImage): Guard usage of HTMLMediaElement with ENABLE(VIDEO).
-> -* page/EventHandler.cpp:
-> -(WebCore::EventHandler::textRecognitionCandidateElement const): Ditto.
-> -* platform/graphics/BifurcatedGraphicsContext.cpp: Ditto.
-> -* platform/graphics/displaylists/DisplayListRecorder.h: Guard usage of MediaPlayer with
-> -ENABLE(VIDEO).
-> -* platform/graphics/displaylists/DisplayListRecorderImpl.cpp: Ditto.
-> -* platform/graphics/displaylists/DisplayListRecorderImpl.h: Ditto.
-> -
-> -Source/WebKit:
-> -
-> -* WebProcess/WebCoreSupport/ShareableBitmapUtilities.cpp:
-> -(WebKit::createShareableBitmap): Guard usage of RenderVideo with ENABLE(VIDEO).
-> -
-> -Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ----
-> -Upstream status: https://trac.webkit.org/changeset/284858/webkit
-> -
-> - Source/WebCore/accessibility/AXObjectCache.cpp                 | 2 ++
-> - Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp | 2 ++
-> - 2 files changed, 4 insertions(+)
-> -
-> -diff --git a/Source/WebCore/accessibility/AXObjectCache.cpp b/Source/WebCore/accessibility/AXObjectCache.cpp
-> -index f2451102040..930b969dcc2 100644
-> ---- a/Source/WebCore/accessibility/AXObjectCache.cpp
-> -+++ b/Source/WebCore/accessibility/AXObjectCache.cpp
-> -@@ -528,9 +528,11 @@ static bool isSimpleImage(const RenderObject& renderer)
-> -         || (is<HTMLImageElement>(node) && downcast<HTMLImageElement>(node)->hasAttributeWithoutSynchronization(usemapAttr)))
-> -         return false;
-> -
-> -+#if ENABLE(VIDEO)
-> -     // Exclude video and audio elements.
-> -     if (is<HTMLMediaElement>(node))
-> -         return false;
-> -+#endif // ENABLE(VIDEO)
-> -
-> -     return true;
-> - }
-> -diff --git a/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp b/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
-> -index c0ce72c5ffc..d7ead303f3c 100644
-> ---- a/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
-> -+++ b/Source/WebCore/platform/graphics/BifurcatedGraphicsContext.cpp
-> -@@ -269,11 +269,13 @@ void BifurcatedGraphicsContext::drawPattern(NativeImage& nativeImage, const Floa
-> -     m_secondaryContext.drawPattern(nativeImage, imageSize, destRect, tileRect, patternTransform, phase, spacing, options);
-> - }
-> -
-> -+#if ENABLE(VIDEO)
-> - void BifurcatedGraphicsContext::paintFrameForMedia(MediaPlayer& player, const FloatRect& destination)
-> - {
-> -     m_primaryContext.paintFrameForMedia(player, destination);
-> -     m_secondaryContext.paintFrameForMedia(player, destination);
-> - }
-> -+#endif // ENABLE(VIDEO)
-> -
-> - void BifurcatedGraphicsContext::scale(const FloatSize& scale)
-> - {
-> ---
-> -2.33.1
-> -
-> diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-> index acb3ec4a3e..a71c1afc72 100644
-> --- a/package/wpewebkit/wpewebkit.hash
-> +++ b/package/wpewebkit/wpewebkit.hash
-> @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpewebkit-2.34.1.tar.xz.sums
-> -md5  915e583b0e7e82efa155cbce917d6319  wpewebkit-2.34.1.tar.xz
-> -sha1  452081b6df9d079f26d22bd0dca9e90f87943089  wpewebkit-2.34.1.tar.xz
-> -sha256  cb336986341be9c3a9b1ca2c18de0d29d90ae4e77b9967a6f6879597e7a969f7  wpewebkit-2.34.1.tar.xz
-> +# From https://wpewebkit.org/releases/wpewebkit-2.34.2.tar.xz.sums
-> +md5  b26f07bc809d9fd3e54e815c22312f15  wpewebkit-2.34.2.tar.xz
-> +sha1  4200ef87a4e1eb1921f0f40779742381598e1429  wpewebkit-2.34.2.tar.xz
-> +sha256  b1a3733c2d486c4da27f9636ccc39947da7d84258cd7a24a6fb0b842c9595c0b  wpewebkit-2.34.2.tar.xz
->   
->   # Hashes for license files:
->   sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index a1e8bff784..7d6b7692fd 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
+
+> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+> index 1bb4bd2b98..df23a4a3ff 100644
+> --- a/package/grpc/grpc.mk
+> +++ b/package/grpc/grpc.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -WPEWEBKIT_VERSION = 2.34.1
-> +WPEWEBKIT_VERSION = 2.34.2
->   WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
->   WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
->   WPEWEBKIT_INSTALL_STAGING = YES
+> -GRPC_VERSION = 1.41.0
+> +GRPC_VERSION = 1.42.0
+>   GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+>   GRPC_LICENSE = Apache-2.0
+>   GRPC_LICENSE_FILES = LICENSE
 > 
 _______________________________________________
 buildroot mailing list
