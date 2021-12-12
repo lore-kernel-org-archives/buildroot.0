@@ -4,49 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB05BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5134C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 954A040174;
-	Sun, 12 Dec 2021 22:22:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9207D401A3;
+	Sun, 12 Dec 2021 22:22:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5GsTLEBsQKDS; Sun, 12 Dec 2021 22:22:43 +0000 (UTC)
+	with ESMTP id NIZ6hAwfjEdt; Sun, 12 Dec 2021 22:22:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F065F40150;
-	Sun, 12 Dec 2021 22:22:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AA3161BF337
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:22:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F82E40223;
+	Sun, 12 Dec 2021 22:22:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EEE61BF337
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:22:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A59304063A
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:22:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F170A60ECB
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:22:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zr33vGtMUS-N for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 22:22:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9251E40010
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:22:39 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 801E5240005;
- Sun, 12 Dec 2021 22:22:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1mwXEq-00036z-Tx; Sun, 12 Dec 2021 23:22:36 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211204224950.2023162-1-fontaine.fabrice@gmail.com>
-Date: Sun, 12 Dec 2021 23:22:36 +0100
-In-Reply-To: <20211204224950.2023162-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 Dec 2021 23:49:50 +0100")
-Message-ID: <87lf0ptqdv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/exfat: add EXFAT_CPE_ID_VENDOR
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HZ5By3zliEwH for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 22:22:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36F4C60E83
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:22:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 87A8083661; Sun, 12 Dec 2021 22:17:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 12 Dec 2021 23:22:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e39d5fb074807ee2e1725549d555153262626e41
+X-Git-Newrev: a1c0f17a5386e0eee9199c3ef5b63459fb459dfb
+X-Patchwork-Hint: ignore
+Message-Id: <20211212221735.87A8083661@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iperf: update sha256 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,25 +52,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a1c0f17a5386e0eee9199c3ef5b63459fb459dfb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > cpe:2.3:a:exfat_project:exfat is a valid CPE identifier for this
- > package:
+Commit ca39eb212e32ca209cb3d6011847f9c94641fa73 forgot to update sha256
+hash
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aexfat_project%3Aexfat
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/iperf/iperf.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x and 2021.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index bd5643af95..924d10b3e0 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -2,5 +2,5 @@
+ sha1  b9d0868a6cdd970c1835d3d1a264dd54907f2c5c  iperf-2.1.5.tar.gz
+ 
+ # Locally computed:
+-sha256  062b392e87b8e227aca74fef0a99b04fe0382d4518957041b508a56885b4d4f9  iperf-2.1.4.tar.gz
++sha256  56ec1312d24bd2c78790e67c96c0a991c82e71bc4c0b0d37171bd89c9fd6ef3e  iperf-2.1.5.tar.gz
+ sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
