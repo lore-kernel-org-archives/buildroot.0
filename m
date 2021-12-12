@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1189AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EE2BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD01B60F07;
-	Sun, 12 Dec 2021 22:26:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E54BB60F09;
+	Sun, 12 Dec 2021 22:26:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8oWOXQKq_iAo; Sun, 12 Dec 2021 22:26:38 +0000 (UTC)
+	with ESMTP id 5FiRr8IjFRSW; Sun, 12 Dec 2021 22:26:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3105360EDE;
-	Sun, 12 Dec 2021 22:26:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC1A41BF337
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DA1260EE4;
+	Sun, 12 Dec 2021 22:26:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AF8D1BF337
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E4F760EDD
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD50C402B5
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eDP-VsLkzkHC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 69j7Ht0k4XbT for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAEFA60EE9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 756C4402B8
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0D650836B8; Sun, 12 Dec 2021 22:18:09 +0000 (UTC)
+ id CC0A4836B8; Sun, 12 Dec 2021 22:18:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:22:58 +0100
+Date: Sun, 12 Dec 2021 23:21:04 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 1e5fe58c248e0e00477b87ad38993aedd8c0de65
-X-Git-Newrev: b9f2cc3dda161312a9365f84ca1d02762b51770d
+X-Git-Oldrev: 87d7818be9e2eed9720281659d3abd6b106915c8
+X-Git-Newrev: 2733e755099d6c1c2b430e5ecaa32aa711ceb69c
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221809.0D650836B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/apr: add CPE
- variables
+Message-Id: <20211212221808.CC0A4836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgee: add
+ LIBGEE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,35 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9f2cc3dda161312a9365f84ca1d02762b51770d
+commit: https://git.buildroot.net/buildroot/commit/?id=2733e755099d6c1c2b430e5ecaa32aa711ceb69c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:apache:portable_runtime is a valid CPE identifier for this
-package:
+cpe:2.3:a:gnome:libgee is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapache%3Aportable_runtime
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Alibgee
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8022e00b2dc822c3403eee28db7181b5899c22dc)
+(cherry picked from commit d2089a4aadc7f1bc689ac452f52209205c71a5d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr/apr.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgee/libgee.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 466222586c..c45829aacc 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -9,6 +9,8 @@ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
- APR_LICENSE_FILES = LICENSE
-+APR_CPE_ID_VENDOR = apache
-+APR_CPE_ID_PRODUCT = portable_runtime
- APR_INSTALL_STAGING = YES
- # We have a patch touching configure.in and Makefile.in,
- # so we need to autoreconf:
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 1dc8cb569d..bd6ca4bde5 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -12,6 +12,7 @@ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+ LIBGEE_INSTALL_STAGING = YES
+ LIBGEE_LICENSE = LGPL-2.1+
+ LIBGEE_LICENSE_FILES = COPYING
++LIBGEE_CPE_ID_VENDOR = gnome
+ # We're patching gee/Makefile.am
+ LIBGEE_AUTORECONF = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
