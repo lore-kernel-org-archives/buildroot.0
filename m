@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B215C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B3D8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:24:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBC1D60ECB;
-	Sun, 12 Dec 2021 22:24:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3F8160F34;
+	Sun, 12 Dec 2021 22:24:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ExLtwbbvu9cv; Sun, 12 Dec 2021 22:24:46 +0000 (UTC)
+	with ESMTP id whWfewiuNl6s; Sun, 12 Dec 2021 22:24:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F172C60F07;
-	Sun, 12 Dec 2021 22:24:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0C9051BF337
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34E6860F2E;
+	Sun, 12 Dec 2021 22:24:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EAD11BF337
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07EED402AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0060E60ECB
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QLK98bqZXsgS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G-mkvqeb0rq0 for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41B95402B1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36A2860ED8
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A1CA3836B8; Sun, 12 Dec 2021 22:18:08 +0000 (UTC)
+ id 8D2F7836B8; Sun, 12 Dec 2021 22:18:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:19:25 +0100
+Date: Sun, 12 Dec 2021 23:18:39 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 74426950e5db080553c12fb5cf37a35719436f78
-X-Git-Newrev: 1bee81455b1e1cddcc12638fb82d3c248218a4a1
+X-Git-Oldrev: 2b92adc6d6a3358b4569f1ee198b19b15a6957bb
+X-Git-Newrev: d68fbd731478aa9bb707435eaa50a840e8bb3b96
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221808.A1CA3836B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/unixodbc: add
- UNIXODBC_CPE_ID_VENDOR
+Message-Id: <20211212221808.8D2F7836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x]
+ package/util-linux/util-linux-libs: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bee81455b1e1cddcc12638fb82d3c248218a4a1
+commit: https://git.buildroot.net/buildroot/commit/?id=d68fbd731478aa9bb707435eaa50a840e8bb3b96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:unixodbc:unixodbc is a valid CPE identifier for this package:
+cpe:2.3:a:kernel:util-linux is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aunixodbc%3Aunixodbc
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akernel%3Autil-linux
+
+Inherit the values from util-linux; they really are, and have to be,
+the same.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: inherit values from util-linux]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 764176324e4805d5e5b90e210199e216d65d82ef)
+(cherry picked from commit bfe518b0688efa6655010cb9366de5aa8c22add0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unixodbc/unixodbc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/util-linux/util-linux-libs/util-linux-libs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
-index cdc4e69a7e..b447cf5ff0 100644
---- a/package/unixodbc/unixodbc.mk
-+++ b/package/unixodbc/unixodbc.mk
-@@ -10,6 +10,7 @@ UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
- UNIXODBC_INSTALL_STAGING = YES
- UNIXODBC_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
- UNIXODBC_LICENSE_FILES = COPYING exe/COPYING
-+UNIXODBC_CPE_ID_VENDOR = unixodbc
+diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
+index 3a3a655e62..20566345c6 100644
+--- a/package/util-linux/util-linux-libs/util-linux-libs.mk
++++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
+@@ -10,6 +10,8 @@ UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
+ UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
+ UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
+ UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
++UTIL_LINUX_LIBS_CPE_ID_VENDOR = $(UTIL_LINUX_CPE_ID_VENDOR)
++UTIL_LINUX_LIBS_CPE_ID_PRODUCT = $(UTIL_LINUX_CPE_ID_PRODUCT)
  
- UNIXODBC_CONF_OPTS = --enable-drivers --enable-driver-conf
- 
+ # README.licensing claims that some files are GPL-2.0 only, but this is not
+ # true. Some files are GPL-3.0+ but only in tests and optionally in hwclock
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
