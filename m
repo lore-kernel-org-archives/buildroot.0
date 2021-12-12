@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09CC0C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55BA6C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF78F429AA;
-	Sun, 12 Dec 2021 12:25:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11FD2429FB;
+	Sun, 12 Dec 2021 12:25:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LNZeWfF33fU4; Sun, 12 Dec 2021 12:25:14 +0000 (UTC)
+	with ESMTP id 7363ESqiuwZg; Sun, 12 Dec 2021 12:25:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 109DA429AB;
-	Sun, 12 Dec 2021 12:25:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08B551BF373
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59F31429F8;
+	Sun, 12 Dec 2021 12:25:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B888F1BF373
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7A15429A0
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8709640264
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OZisdUsAeoUd for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 12:22:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qV8OSxzCyxRj for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A272C4216D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CE9740283
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id DFAB282B70; Sun, 12 Dec 2021 12:17:14 +0000 (UTC)
+ id A79A482B66; Sun, 12 Dec 2021 12:17:14 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 13:21:42 +0100
+Date: Sun, 12 Dec 2021 13:21:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 79791023ee4e257b0cedccae4fab940530759243
-X-Git-Newrev: ee1a2826dcf7ff75f90b0bf9f7aa53d19ce19cf6
+X-Git-Oldrev: 8edd281c39202db33c8e3039e0500df55fcf34be
+X-Git-Newrev: a21c61ad0a5313c6edf21f20c5d542e9e7f6f7f3
 X-Patchwork-Hint: ignore
-Message-Id: <20211212121714.DFAB282B70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tinycbor: bump to version 0.6.0
+Message-Id: <20211212121714.A79A482B66@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2021.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee1a2826dcf7ff75f90b0bf9f7aa53d19ce19cf6
+commit: https://git.buildroot.net/buildroot/commit/?id=a21c61ad0a5313c6edf21f20c5d542e9e7f6f7f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/intel/tinycbor/releases/tag/v0.6.0
-https://github.com/intel/tinycbor/compare/v0.5.4...v0.6.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tinycbor/tinycbor.hash | 2 +-
- package/tinycbor/tinycbor.mk   | 2 +-
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index 29f0cfabf0..0e616d1e9f 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 1f8a02994e..e81deb82a6 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  e63668a71fd6d7abf1727dc31682ec7f107599a3c024a445c3e5da6af9328983  tinycbor-0.5.4.tar.gz
-+sha256  512e2c9fce74f60ef9ed3af59161e905f9e19f30a52e433fc55f39f4c70d27e4  tinycbor-0.6.0.tar.gz
- sha256  3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e  LICENSE
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 476da67363..bf6e8e4c1e 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
+ # Locally calculated
+-sha256  b45a32ded72c9fb6d2ab508adeae0306e4e2bb348db152f3d1b3708375829e1f  libostree-2021.5.tar.xz
++sha256  e80631cb1363d4734fe9d0c91f69a68be3848166d6e0481db19ce44a9cb4f531  libostree-2021.6.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 4f79885d20..a6b09f95e5 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINYCBOR_VERSION = 0.5.4
-+TINYCBOR_VERSION = 0.6.0
- TINYCBOR_SITE = $(call github,intel,tinycbor,v$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
+-LIBOSTREE_VERSION = 2021.5
++LIBOSTREE_VERSION = 2021.6
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
