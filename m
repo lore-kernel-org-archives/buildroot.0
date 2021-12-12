@@ -4,43 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A71D7C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 08:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9F1EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 08:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CE59429A2;
-	Sun, 12 Dec 2021 08:08:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A1BB42079;
+	Sun, 12 Dec 2021 08:49:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e4zrltXwrH85; Sun, 12 Dec 2021 08:08:54 +0000 (UTC)
+	with ESMTP id XhsOBWaodOcQ; Sun, 12 Dec 2021 08:49:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C5B642971;
-	Sun, 12 Dec 2021 08:08:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D8AB1BF32D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:08:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A2014206E;
+	Sun, 12 Dec 2021 08:49:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AF8251BF303
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 919F285302
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:08:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97CF560C0D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:49:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2voCyvSWiDOb for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 08:08:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q-vgM12zHwQh for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 08:49:05 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 367E785069
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 08:08:49 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 4A78020007
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 08:08:47 +0000 (UTC)
-MIME-Version: 1.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FC2D60BFE
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 08:49:04 +0000 (UTC)
+Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
+ by mailout07.t-online.de (Postfix) with SMTP id 207B83D57
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 09:49:01 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.180.123]) by fwd87.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1mwKXS-30mbgX0; Sun, 12 Dec 2021 09:48:58 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49402)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mwKXR-0000VK-Mo
+ for buildroot@buildroot.org; Sun, 12 Dec 2021 09:48:57 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Dec 2021 08:08:47 -0000
-Message-Id: <20211212080851.919F285302@smtp1.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-12-11
+Date: Sun, 12 Dec 2021 09:48:57 +0100
+Message-Id: <20211212084857.127023-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211212084857.127023-1-bernd.kuhls@t-online.de>
+References: <20211212084857.127023-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1639298938-00001457-A9363239/0/0 CLEAN NORMAL
+X-TOI-MSGID: 29bcb041-26fc-4dc8-a641-047ee3a5a3f4
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xlib_libX11: bump version to
+ 1.7.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,114 +69,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Upstream switched from bz2 to xz tarball.
 
-Autobuild statistics for 2021-12-11
-===================================
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-December/003120.html
+https://lists.x.org/archives/xorg-announce/2021-December/003121.html
 
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 39  |  4  |  0  | 43  |
-  2021.08.x  | 43  |  3  |  0  | 46  |
-  2021.11.x  | 21  |  2  |  0  | 23  |
-    master   | 87  | 20  |  0  | 107 |
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Classification of failures by reason for master
------------------------------------------------
-
-                 wavemon-0.9.4 | 5 
-                     frr-7.5.1 | 4 
-                  assimp-5.1.0 | 2 
-              host-erlang-22.2 | 2 
-libdbi-88b8477d57153b9f736d... | 2 
-make: *** wait: No child pr... | 1 
-                 mesa3d-21.3.0 | 1 
-                mono-6.12.0.90 | 1 
-                 rp-pppoe-3.15 | 1 
-                       unknown | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          assimp-5.1.0          | NOK | http://autobuild.buildroot.net/results/84b4cdcccd1a7ad527d720ab79ee2ee5fd6d624f |     
-   xtensa    |          assimp-5.1.0          | NOK | http://autobuild.buildroot.net/results/f9096729509de2109f0fed4743c13d01b4a6ee45 |     
-    m68k     |           frr-7.5.1            | NOK | http://autobuild.buildroot.net/results/cf044b750f5b3b822d93e2340deb920075164bb1 |     
-    arm      |           frr-7.5.1            | NOK | http://autobuild.buildroot.net/results/cba5bb1026293350da08a132ca81f49c914b0e17 |     
-  powerpc    |           frr-7.5.1            | NOK | http://autobuild.buildroot.net/results/1c172ffdd021fdc354724dd285fdf02f18063005 |     
-    i686     |           frr-7.5.1            | NOK | http://autobuild.buildroot.net/results/cb4fb65daacea8ef06ee42f24c31ec6731579eae |     
-  riscv64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/16cf3ec3a9e7c9fc3795e4b3cd3ac23c7db6df8c |     
-  riscv64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/1b9d009f13d8b74cbb1ae3c91b31c1a11a295d3d |     
-    arm      | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/8c45eaf87ec2f9d240ada7b07a2238bcbbe39867 |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/968901c2adcf0c445096cb43145fe4a5d94c71dd |     
-  riscv32    | make: *** wait: No child pr... | NOK | http://autobuild.buildroot.net/results/658c7bb372c6833b7b6dfc26ae6a5c92b0db861e |     
-    arm      |         mesa3d-21.3.0          | NOK | http://autobuild.buildroot.net/results/6f9e7c864808dc0fafbca7c8984651fe92edbaf2 |     
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/2d894e2b527883cf00499ca85d98cf317f9c18ee |     
-  riscv64    |         rp-pppoe-3.15          | NOK | http://autobuild.buildroot.net/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3 | ORPH
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/a78320e4ea9818c4121e0044803e9888e1da884c |     
-powerpc64le  |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/3d1828cfb149848126fe0bad6980f5870ab6f74b |     
-    arc      |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/36b245590324be397b1a613bbc6c4799470fa51f |     
-   x86_64    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/03b196d2c68fb08b2438ab83b48eac4347da8f0f |     
-  mips64el   |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/f68fc93e3bed19e88db75bfc84ed5d9786361fe2 |     
-    arc      |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/594b5f5b28cb3f36aa4af594e69aa3bd50f29050 |     
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-monkey-f54856ce250c4e257354... | 2 
-        host-sentry-cli-1.57.0 | 1 
-               libtheora-1.1.1 | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/2c0e687fe39e7beb0fefea753a38fe906dc580b6 |     
-    or1k     |        libtheora-1.1.1         | NOK | http://autobuild.buildroot.net/results/113471c720a489680675b1de24030f8d4c5cbee9 | ORPH
-   xtensa    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/8fdbf8268b2e8c6829ee4ec45346efff48bd4a22 |     
-  aarch64    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/cedee4d9f534e3b7ee294556639ec8d146908138 |     
-
-
-Classification of failures by reason for 2021.08.x
---------------------------------------------------
-
-                  ndisc6-1.0.4 | 1 
-                 openal-1.21.1 | 1 
-                  xvisor-0.3.0 | 1 
-
-
-Detail of failures for 2021.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/347c5e8aff3ddd35cfc0ab52f18e7c571d4e99aa | ORPH
-    or1k     |         openal-1.21.1          | NOK | http://autobuild.buildroot.net/results/a561053f6de73e30672c870c6e6eff0a137df350 |     
-   x86_64    |          xvisor-0.3.0          | NOK | http://autobuild.buildroot.net/results/3bad5536b226e1f023a29a0239bd913ae9e0ac21 |     
-
-
-Classification of failures by reason for 2021.11.x
---------------------------------------------------
-
-              host-erlang-22.2 | 2 
-
-
-Detail of failures for 2021.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/9cddde68515af5046d761afc38d135c8516b2966 |     
-    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/f74670fa99d22ab32173eee88468c99deca6ac85 |     
-
-
-
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 7aeef33446..126be07f03 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
+-sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
+-sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-December/003121.html
++sha256  2ffd417266fb875028fdc0ef349694f63dbcd76d0b0cfacfb52e6151f4b60989  libX11-1.7.3.1.tar.xz
++sha512  a2620076db4bf35ab94706c8ab714e9c3fecbdd533cf99cdffeabaf49a1a1d30a233eb2dc76da51b01d50c43f11780aa3b2936668d982a33fa7d5008be44e25b  libX11-1.7.3.1.tar.xz
+ 
+ # Locally computed
+ sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index aa3ebf1593..a8dc7f3668 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.7.2
+-XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
++XLIB_LIBX11_VERSION = 1.7.3.1
++XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
+ XLIB_LIBX11_LICENSE_FILES = COPYING
 -- 
-http://autobuild.buildroot.net
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
