@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A15BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21ECBC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E553C60E92;
-	Sun, 12 Dec 2021 15:56:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3FDA60E9D;
+	Sun, 12 Dec 2021 15:57:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dFTsCB4AU3kB; Sun, 12 Dec 2021 15:56:46 +0000 (UTC)
+	with ESMTP id m5IzaQDLHz4y; Sun, 12 Dec 2021 15:57:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 527E060E8B;
-	Sun, 12 Dec 2021 15:56:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A881C1BF3EC
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:56:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4660C61CC9;
+	Sun, 12 Dec 2021 15:57:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BAFE01BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9790C859F3
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:56:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B85144299D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:57:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c-gRAmTgF_LQ for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 15:56:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B908D859F2
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:56:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fmm8GnKrqFFk for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 15:57:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF72A4298D
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:57:02 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ccde:e15f:6f40:89e5])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 317472003CA;
- Sun, 12 Dec 2021 16:56:35 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 48E412003A4;
+ Sun, 12 Dec 2021 16:56:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639324601;
- bh=fLz97dDJ3QIj1gCw72jQYiFLmYxFoc2haD8xnj7tjrs=;
+ s=smtp-20201208; t=1639324621;
+ bh=zLF5cz9J9/mdMzbApKGxDBBy+KOvv7tZ1d6QFtXV96g=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MR34OfffYN2IH4XeuC+4azqKyy3spp1YADvyeP3f3jHUyFbWklFKJ+f+YV8JQqMYk
- gX98SXk4PNMYXchWhBognDTMjiYXEgoJpESi2PbhgJhvbpwFFtJqSo7ZJAIxd0+S4N
- wwPG2q9ii4Yw646/3+XLOVNgGMg5v9Y0lBCjKEOxr5Pv8MH7jrmiO3VUysXAU6HTmB
- GyrYFJy8pah5eHI2ttA1JPXT25gUz76qFlGDAaQjUWKLQAPBOTrHYOpI8m5vCN4wAm
- VtfvDS55nPThnZrOYKOdFupt/HiaHzTEYg6CaHOO2YGBbpCbwjdHcPPw1K1uem2qbZ
- eqDZbIxmzIBGw==
+ b=pPmpQiBpypGuc7+VbSPweQnxcpCz+TGFu6tsRqVFY/XLHa8fy8be4CrTW4fPpA8YV
+ b88mXyvQMK5hKlH7d65Mk1G7iOLSyicoaGf2fxR0JSI769LuQl+rjWDB80GZhxC563
+ TB+a/pbTnnK/clFCcrWSLyON8WjhDrxrBU/73Q5j8LAnptxFGnKv/dkV5fqp4lo5zZ
+ SGjKKsfLoKwt4cBCHABGsbyEQbaQDuVLhcH5jVb0woC1SEfFUfZkYNFwwRbrzuTm1t
+ bIGDpXRCz/hs4qCVTKGihrzPvVtWnBrPIDdkeaLeYRPbaVppAXT8uKWOjSq9mguMh5
+ nd77VhEsGNhPw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 Dec 2021 16:56:34 +0100
-Date: Sun, 12 Dec 2021 16:56:34 +0100
+ Sun, 12 Dec 2021 16:56:54 +0100
+Date: Sun, 12 Dec 2021 16:56:54 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20211212155634.GU2603@scaer>
-References: <20211211213904.562446-1-fontaine.fabrice@gmail.com>
- <54843277-cacb-beda-f25a-02a8510f9a11@mind.be>
+Message-ID: <20211212155654.GV2603@scaer>
+References: <20211211223518.2634490-1-bernd.kuhls@t-online.de>
+ <013b7045-1592-2e75-2608-eeb2aa08fb15@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <54843277-cacb-beda-f25a-02a8510f9a11@mind.be>
+In-Reply-To: <013b7045-1592-2e75-2608-eeb2aa08fb15@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/chrony: bump to version 4.1
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,22 +72,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Bernd, All,
 
 On 2021-12-12 16:11 +0100, Arnout Vandecappelle spake thusly:
-> On 11/12/2021 22:39, Fabrice Fontaine wrote:
-> >Drop patch (already in version)
-> >
-> >https://git.tuxfamily.org/chrony/chrony.git/tree/NEWS?id=4.1
-> >
-> >Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
+> On 11/12/2021 23:35, Bernd Kuhls wrote:
+> >Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 >  Applied to master, thanks.
 
 Arnout and I stepped on each other's toe when applying, and Arnout ran
