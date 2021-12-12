@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3E4DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC01C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C3086070B;
-	Sun, 12 Dec 2021 22:28:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEA686070B;
+	Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7mU6SLU91nka; Sun, 12 Dec 2021 22:28:47 +0000 (UTC)
+	with ESMTP id 0HaI9VcEVD19; Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCCC8606F6;
-	Sun, 12 Dec 2021 22:28:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27D751BF337
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03DF660ED8;
+	Sun, 12 Dec 2021 22:28:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BAF51BF973
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECA2D6071E
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC2CF4030B
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RbuYZiGegN9W for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DRAAtGoHGYwq for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 429DE6077D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14E6E40308
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A74108374D; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
+ id 5B7918374E; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:20:17 +0100
+Date: Sun, 12 Dec 2021 23:13:25 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 11e3477fe5bea84140787e860bea0a22bf1ad794
-X-Git-Newrev: 1065ac009c2a749a6322f967c9b0d59b6758453a
+X-Git-Oldrev: c63dcc457969c1dce18a0fd06ac358fae1883703
+X-Git-Newrev: 7954aa6e60ec2bda715ecfb1b656360f0581d2e3
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221828.A74108374D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/speex: add
- SPEEX_CPE_ID_VENDOR
+Message-Id: <20211212221828.5B7918374E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] core/pkg-generic: also
+ list files installed in images/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1065ac009c2a749a6322f967c9b0d59b6758453a
+commit: https://git.buildroot.net/buildroot/commit/?id=7954aa6e60ec2bda715ecfb1b656360f0581d2e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-cpe:2.3:a:xiph:speex is a valid CPE identifier for this package:
+Some packages install nothing in target nor staging, but install images
+(like the kernel vmlinux, or a bootloader boot blob...)
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axiph%3Aspeex
+If we want to appropriately account for the files installed by each
+package, we also need to take images/ into account.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c84cd8b1d1fec2b56d44c747bddc70a240433694)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5d00fecb7dd922ae2c003b46683173756372fd14)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/speex/speex.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index 522f8cc09c..674be78ff8 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -8,6 +8,7 @@ SPEEX_VERSION = 1.2.0
- SPEEX_SITE = https://downloads.xiph.org/releases/speex
- SPEEX_LICENSE = BSD-3-Clause
- SPEEX_LICENSE_FILES = COPYING
-+SPEEX_CPE_ID_VENDOR = xiph
- SPEEX_INSTALL_STAGING = YES
- SPEEX_DEPENDENCIES = host-pkgconf libogg
- SPEEX_CONF_OPTS = \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 97ee204b80..9f408a47ea 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -252,6 +252,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+ 	@$(call pkg_size_before,$(TARGET_DIR))
+ 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
++	@$(call pkg_size_before,$(BINARIES_DIR),-images)
+ 	@$(call pkg_size_before,$(HOST_DIR),-host)
+ 	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
+ 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+@@ -378,6 +379,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ $(BUILD_DIR)/%/.stamp_installed:
+ 	@$(call pkg_size_after,$(TARGET_DIR))
+ 	@$(call pkg_size_after,$(STAGING_DIR),-staging)
++	@$(call pkg_size_after,$(BINARIES_DIR),-images)
+ 	@$(call pkg_size_after,$(HOST_DIR),-host)
+ 	@$(call check_bin_arch)
+ 	$(Q)touch $@
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
