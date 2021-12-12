@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE77FC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1319AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A245384EAC;
-	Sun, 12 Dec 2021 22:29:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC4AF409B8;
+	Sun, 12 Dec 2021 22:29:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Trji2FcfltTj; Sun, 12 Dec 2021 22:29:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kay_15FTMIgg; Sun, 12 Dec 2021 22:29:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1258784E9F;
-	Sun, 12 Dec 2021 22:29:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B0831BF337
+	by smtp4.osuosl.org (Postfix) with ESMTP id 001B8409B4;
+	Sun, 12 Dec 2021 22:29:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26A7D1BF973
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42F9D8239A
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3ECD64030B
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uCi2R0AextDp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cXbTrzIN8WY1 for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9187B823EB
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F289040302
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E71E98374D; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
+ id 471F98375C; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:22:31 +0100
+Date: Sun, 12 Dec 2021 23:11:57 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 885057d920e496664dd140aa8214bfbe92fcaf00
-X-Git-Newrev: fd2b9e0c7504eb9e02f3749ca7d6915adb5a00b9
+X-Git-Oldrev: 745a763e433467991bbacc6da07517c292e46442
+X-Git-Newrev: be8b42242bfb1a702287cba36ab9f98ca7f2865e
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221828.E71E98374D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/exfat: add
- EXFAT_CPE_ID_VENDOR
+Message-Id: <20211212221828.471F98375C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/kodi-*: run
+ pkg-config at build time, not at parse time
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd2b9e0c7504eb9e02f3749ca7d6915adb5a00b9
+commit: https://git.buildroot.net/buildroot/commit/?id=be8b42242bfb1a702287cba36ab9f98ca7f2865e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-cpe:2.3:a:exfat_project:exfat is a valid CPE identifier for this
-package:
+When calling 'printvars' on a just-configured tree, the output contains
+many spurious warnings about pkg-config being not found:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aexfat_project%3Aexfat
+    make[1]: [...]/host/bin/pkg-config: Command not found
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7bd6ed208c234d0a0a065ce13e0fe9a5f438e9ba)
+This is partly because a few packages call pkg-config at the time the
+Makefile is parsed (really, right when make evaluates the recipe before
+executing it).
+
+It is customary, instead, to defer the call to pkg-config to the actual
+shell running the recipe's commands, like all our other packages do.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 22fb4c469bcb5b61beadfc78c27e403656eae979)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exfat/exfat.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk      | 4 ++--
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk          | 4 ++--
+ .../kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk    | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index e23495152e..282a30aa5e 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
-@@ -10,6 +10,7 @@ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
- EXFAT_DEPENDENCIES = libfuse host-pkgconf
- EXFAT_LICENSE = GPL-2.0+
- EXFAT_LICENSE_FILES = COPYING
-+EXFAT_CPE_ID_VENDOR = exfat_project
- EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+index 9e768fce85..16a1dca261 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+@@ -11,7 +11,7 @@ KODI_SCREENSAVER_ASTERWAVE_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = glm kodi
  
- EXFAT_CONF_OPTS += --exec-prefix=/
+ KODI_SCREENSAVER_ASTERWAVE_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`"
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index 628f254a42..6e04aa064e 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+@@ -11,7 +11,7 @@ KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = glm kodi
+ 
+ KODI_SCREENSAVER_CPBLOBS_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`"
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index a89ea72d5d..2c091c8adc 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -11,7 +11,7 @@ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
+ 
+ KODI_SCREENSAVER_MATRIXTRAILS_CONF_OPTS += \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`"
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
