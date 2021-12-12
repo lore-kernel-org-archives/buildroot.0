@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F013CC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 506B1C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87DB4409A2;
-	Sun, 12 Dec 2021 17:20:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9E46409EF;
+	Sun, 12 Dec 2021 17:21:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vGnu5-M9wBMo; Sun, 12 Dec 2021 17:20:20 +0000 (UTC)
+	with ESMTP id ZSV9xix-LYRU; Sun, 12 Dec 2021 17:21:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE5664099D;
-	Sun, 12 Dec 2021 17:20:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 206B2409E8;
+	Sun, 12 Dec 2021 17:21:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB7971BF31D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:20:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 015571BF31D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A727740616
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:20:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2AB740633
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 29_iN7aHFUhK for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 17:20:16 +0000 (UTC)
+ with ESMTP id nE4eS9T7BAIj for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 17:21:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AFC240194
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:20:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3CD8C83598; Sun, 12 Dec 2021 17:15:05 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1CF140194
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:21:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 879DD835C1; Sun, 12 Dec 2021 17:16:08 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 18:20:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 37cee265c6713763f159543895641a7f7b4f804e
-X-Git-Newrev: e39d5fb074807ee2e1725549d555153262626e41
+Date: Sun, 12 Dec 2021 18:17:33 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 7bc5438ff356a8ec0fc271eee8cb1c6bfa8b0848
+X-Git-Newrev: 8466fdb4e4eb110f25ffe68ef83238d8ee6a4c69
 X-Patchwork-Hint: ignore
-Message-Id: <20211212171505.3CD8C83598@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.7.3.1
+Message-Id: <20211212171608.879DD835C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/icu: bump version
+ to 69-1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,51 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e39d5fb074807ee2e1725549d555153262626e41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=8466fdb4e4eb110f25ffe68ef83238d8ee6a4c69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Upstream switched from bz2 to xz tarball.
-
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-December/003120.html
-https://lists.x.org/archives/xorg-announce/2021-December/003121.html
+Release notes: http://site.icu-project.org/download/69
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d6fefd4f21b0d000caf3221846907ea2754bf3b0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/icu/icu.hash | 2 +-
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 7aeef33446..126be07f03 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
--sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
--sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-December/003121.html
-+sha256  2ffd417266fb875028fdc0ef349694f63dbcd76d0b0cfacfb52e6151f4b60989  libX11-1.7.3.1.tar.xz
-+sha512  a2620076db4bf35ab94706c8ab714e9c3fecbdd533cf99cdffeabaf49a1a1d30a233eb2dc76da51b01d50c43f11780aa3b2936668d982a33fa7d5008be44e25b  libX11-1.7.3.1.tar.xz
- 
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 80cdd7df0c..5ed7cc4217 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index aa3ebf1593..a8dc7f3668 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XLIB_LIBX11_VERSION = 1.7.2
--XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
-+XLIB_LIBX11_VERSION = 1.7.3.1
-+XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
- XLIB_LIBX11_LICENSE_FILES = COPYING
+-sha256  a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d  icu4c-68_1-src.tgz
++sha256  4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745  icu4c-69_1-src.tgz
+ sha256  7915b19db903070778581ae05d8bf4ea241b34a05deb51ca4f5cbb15ea1cbba3  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 4d67831c76..0a17c61462 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 68-1
++ICU_VERSION = 69-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
