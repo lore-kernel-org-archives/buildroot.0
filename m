@@ -1,47 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A682C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5EAAC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 141C260ED8;
-	Sun, 12 Dec 2021 22:31:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6A2741DCF;
+	Sun, 12 Dec 2021 22:35:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f1HqsVednTDH; Sun, 12 Dec 2021 22:31:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L1qbLDg71h2Q; Sun, 12 Dec 2021 22:35:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73CE1607DD;
-	Sun, 12 Dec 2021 22:31:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F5351BF337
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10C3841DC7;
+	Sun, 12 Dec 2021 22:35:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E121C1BF337
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2571760673
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0BED850B2
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:34:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pdX-MYki3r8x for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7731460791
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DC1E98374D; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Edxhg8DKUOQ for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 22:34:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5537D850AD
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:34:56 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.138.59])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id wXQjmvmjCAiELwXQkms70j; Sun, 12 Dec 2021 23:34:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1639348494; bh=ujdyjTHSUKcIcUaqFmNXbXcrrhpmkCCcevvPyNwIq+w=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=A4OnX1jYBMq5xU+TOWUqYtR+iyH/tiUqWA4cfT7iKnCTYcc1/lESgTG/+tegrYIt6
+ MaSFqYeBj/tdyS4HMvBSydcVB/cr7In0fZKFmSyVEdgwEpzV0zJIJZF3GtWGYOmafr
+ Hu1e/DW/7YA2146gd79iGkzodnZIwz1w9e7/rRwdJjs5LMLlm6qXgx4zqKlEtpaLbE
+ GrJ5iZdbl12hWWihjkGVUuTZSCFDmJOZ19cqdbHopIy0MWQTFO+NYPGOyrCsYJQC4g
+ l1ImzJouVlnmtcILaD3cRAWXBPQhCAT9VCBc1qKq767rUCgDBvqvBx8MX88tgu9k2u
+ ZT0L1/oklEBiQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:21:53 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 2bfa334e0e373f0ca95a7d45dd724d408f1c5595
-X-Git-Newrev: 885057d920e496664dd140aa8214bfbe92fcaf00
-X-Patchwork-Hint: ignore
-Message-Id: <20211212221828.DC1E98374D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/hiawatha: add
- HIAWATHA_CPE_ID_VENDOR
+Date: Sun, 12 Dec 2021 23:34:52 +0100
+Message-Id: <20211212223452.317122-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4wfPKDXkiFG/nWK9ZI9BOcD8gHkVvS8zaLA7owxPfPC0Z0ryi4Qu64+LeKOLAuKFRKVZM0r5fT18kbWjwWsmCbd0kXDYQnQ/moo11wFaXraDwVm8rIU1rn
+ L0ha9i5wl8IeNV9hiJ0sF3CtS/v+Jke1W/ScHya+GI8moYmq9NxyThdwql93ObqSfLGA4NS71r+ZgoVMLc+9rtg0FfBm7sMjYsak9PhrazGTn+qJVW6OttOF
+ RYjTt3iEARs0F81DXFCyBVVg8sicrKGY2+TRBUEygAw=
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,40 +66,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=885057d920e496664dd140aa8214bfbe92fcaf00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
-
-cpe:2.3:a:hiawatha-webserver:hiawatha is a valid CPE identifier for this
-package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahiawatha-webserver%3Ahiawatha
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f4a57a86e60cb5b705a9a8885da6edea874b8a24)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/hiawatha/hiawatha.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 126cb71105..a917adc9a4 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -9,6 +9,7 @@ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPL-2.0
- HIAWATHA_LICENSE_FILES = LICENSE
-+HIAWATHA_CPE_ID_VENDOR = hiawatha-webserver
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index d5a376830a..1615933a6e 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4056b1541dd8bbd8ec29207fe30e568805c0705515632d7fec53a94399bc7945  harfbuzz-3.1.2.tar.xz
++sha256  0ada50a1c199bb6f70843ab893c55867743a443b84d087d54df08ad883ebc2cd  harfbuzz-3.2.0.tar.xz
+ sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 97b28ce236..67eab359c6 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HIAWATHA_CONF_OPTS = \
- 	-DENABLE_TOOLKIT=OFF \
+-HARFBUZZ_VERSION = 3.1.2
++HARFBUZZ_VERSION = 3.2.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
