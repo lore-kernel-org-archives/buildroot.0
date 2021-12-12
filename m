@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A04FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54381C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF84542834;
-	Sun, 12 Dec 2021 22:54:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0982660A8B;
+	Sun, 12 Dec 2021 22:54:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ctRwoDAfEoDl; Sun, 12 Dec 2021 22:54:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mr0OJVrIMC3C; Sun, 12 Dec 2021 22:54:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452C242831;
-	Sun, 12 Dec 2021 22:54:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B07D61BF337
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:54:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65E10608DD;
+	Sun, 12 Dec 2021 22:54:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4528B1BF337
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A035B858E9
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:54:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FD4540645
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:54:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QmWGHjt4ZeNY for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 22:54:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NzSXkjxceHwC for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 22:54:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46A40858EA
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:54:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 602C040010
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:54:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8953E83787; Sun, 12 Dec 2021 22:49:25 +0000 (UTC)
+ id A90B08379A; Sun, 12 Dec 2021 22:49:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:53:05 +0100
-X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: e9dff4201d48eaa61281bda99ab4621b34b22093
-X-Git-Newrev: f66ba8fa8f02e0c49201e45c53e08f79dd8c1b75
+Date: Sun, 12 Dec 2021 23:52:59 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: b9f2cc3dda161312a9365f84ca1d02762b51770d
+X-Git-Newrev: 928bfe6045a2fad38bb29d4549fb2401c91fce2b
 X-Patchwork-Hint: ignore
-Message-Id: <20211212224925.8953E83787@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/mkpasswd: define
+Message-Id: <20211212224930.A90B08379A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mkpasswd: define
  _DEFAULT_SOURCE to suppress compiler warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f66ba8fa8f02e0c49201e45c53e08f79dd8c1b75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=928bfe6045a2fad38bb29d4549fb2401c91fce2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 We define _DEFAULT_SOURCE in mkpasswd.c to suppress a compiler warning.
 
