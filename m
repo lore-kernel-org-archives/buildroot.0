@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB70EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4EAC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73F5B4063F;
-	Sun, 12 Dec 2021 17:37:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WCHfDcP2w838; Sun, 12 Dec 2021 17:37:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 784F14063A;
-	Sun, 12 Dec 2021 17:37:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16A1E1BF973
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD473421BB
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1050B41C67;
+	Sun, 12 Dec 2021 17:38:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7x5VVGtuknRV for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ArBw6t-FCtBQ; Sun, 12 Dec 2021 17:37:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C0B741C08;
+	Sun, 12 Dec 2021 17:37:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EDE3F1BF31D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92CF560EB5
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:29 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2AmHOWpdoHEM for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 17:35:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1CB8421B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6C7C60ED1
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 835F6835F5; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
+ id 974AC835F5; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 18:32:11 +0100
+Date: Sun, 12 Dec 2021 18:34:04 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 2ecd44f615ed1393ea090f5075de51afe3500ce3
-X-Git-Newrev: d0f503d5107f0af5e6d74842ac4d418593cef5a1
+X-Git-Oldrev: 12f767975f589cd89f25920a1153bb3501e106e0
+X-Git-Newrev: 64dcd86ccf818b11e39866dd81efaf561e575251
 X-Patchwork-Hint: ignore
-Message-Id: <20211212173017.835F6835F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mxml: add CPE
- variables
+Message-Id: <20211212173017.974AC835F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] Revert
+ "package/coreutils: ignore CVE-2013-0221, CVE-2013-0222, CVE-2013-0223"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,35 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0f503d5107f0af5e6d74842ac4d418593cef5a1
+commit: https://git.buildroot.net/buildroot/commit/?id=64dcd86ccf818b11e39866dd81efaf561e575251
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:mini-xml_project:mini-xml is a valid CPE identifier for this
-package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amini-xml_project%3Amini-xml
+This reverts commit 8ae9156d8b730689484927fba2ec2fa6c1dc0433 as those
+CVEs are not tagged as affecting gnu:coreutils in NVD NIST database but
+opensuse:opensuse and redhat:entreprise_linux:
+- https://nvd.nist.gov/vuln/detail/CVE-2013-0221
+- https://nvd.nist.gov/vuln/detail/CVE-2013-0222
+- https://nvd.nist.gov/vuln/detail/CVE-2013-0223
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2d2888c7c0e5afa30789325700d1c2ab51c5c6ab)
+(cherry picked from commit 7d569f51914c22457e35bba6f7658c4b3d8af086)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mxml/mxml.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/coreutils/coreutils.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
-index 85930ab388..af48b86c6c 100644
---- a/package/mxml/mxml.mk
-+++ b/package/mxml/mxml.mk
-@@ -8,6 +8,8 @@ MXML_VERSION = 3.2
- MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
- MXML_LICENSE = Apache-2.0 with exceptions
- MXML_LICENSE_FILES = LICENSE NOTICE
-+MXML_CPE_ID_VENDOR = mini-xml_project
-+MXML_CPE_ID_PRODUCT = mini-xml
- MXML_INSTALL_STAGING = YES
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 3ec3c847c2..57b77b8c6a 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -10,10 +10,6 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
+ COREUTILS_LICENSE_FILES = COPYING
+ COREUTILS_CPE_ID_VENDOR = gnu
+-# Only when including SUSE coreutils-i18n.patch
+-COREUTILS_IGNORE_CVES = CVE-2013-0221
+-COREUTILS_IGNORE_CVES += CVE-2013-0222
+-COREUTILS_IGNORE_CVES += CVE-2013-0223
+ # We're patching m4/pthread-cond.m4
+ COREUTILS_AUTORECONF = YES
  
- MXML_INSTALL_STAGING_OPTS = DSTROOT=$(STAGING_DIR) install
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
