@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1C37C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E61CFC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:28:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9E2060EE4;
-	Sun, 12 Dec 2021 22:28:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DEA040687;
+	Sun, 12 Dec 2021 22:28:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7px98ke-wohj; Sun, 12 Dec 2021 22:28:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fZhK2tib1JQJ; Sun, 12 Dec 2021 22:28:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02F6960ECB;
-	Sun, 12 Dec 2021 22:28:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 253621BF973
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0196B40631;
+	Sun, 12 Dec 2021 22:28:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 475791BF337
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C14F7606EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFE5C4063A
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8JuGNIkKX9Rd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oNeETQVcMif1 for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16A816071E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C01840645
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7B8DA83654; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
+ id 712AC8375C; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:18:46 +0100
+Date: Sun, 12 Dec 2021 23:15:37 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: b8e05059ca5356c5e649c107c61e57a720a688ae
-X-Git-Newrev: 9627432a0735b645e1b7649c5b95c09ee13a95b1
+X-Git-Oldrev: 8fef27a5207eb32c0d37c3187793659658028e7b
+X-Git-Newrev: b8e05059ca5356c5e649c107c61e57a720a688ae
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221828.7B8DA83654@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x]
- package/util-linux/util-linux-libs: add CPE variables
+Message-Id: <20211212221828.712AC8375C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] core/show-info: 'name'
+ only applies to packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9627432a0735b645e1b7649c5b95c09ee13a95b1
+commit: https://git.buildroot.net/buildroot/commit/?id=b8e05059ca5356c5e649c107c61e57a720a688ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-cpe:2.3:a:kernel:util-linux is a valid CPE identifier for this package:
+Commit 0cfa1659487f (package/pkg-utils.mk: introduce "name" field in
+show-info output) did what it said, but did so in the generic show-info
+part, thus it was also added to filesystems (rootfs), the other kind of
+entity that show-info reports on.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akernel%3Autil-linux
+Only packages have a "name"; filesystems do not. Instead, they already
+have an 'image_name'.
 
-Inherit the values from util-linux; they really are, and have to be,
-the same.
+Move the 'name' field to the package-related part of show-info.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: inherit values from util-linux]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bfe518b0688efa6655010cb9366de5aa8c22add0)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 471ecea5eeb053d7bd956c8ff7605bd015b24b51)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux-libs/util-linux-libs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-index 3a3a655e62..20566345c6 100644
---- a/package/util-linux/util-linux-libs/util-linux-libs.mk
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -10,6 +10,8 @@ UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
- UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
- UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
- UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
-+UTIL_LINUX_LIBS_CPE_ID_VENDOR = $(UTIL_LINUX_CPE_ID_VENDOR)
-+UTIL_LINUX_LIBS_CPE_ID_PRODUCT = $(UTIL_LINUX_CPE_ID_PRODUCT)
- 
- # README.licensing claims that some files are GPL-2.0 only, but this is not
- # true. Some files are GPL-3.0+ but only in tests and optionally in hwclock
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index b2f0b8cebf..973eabe437 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -96,7 +96,6 @@ endef
+ # $(1): upper-case package or filesystem name
+ define json-info
+ 	"$($(1)_NAME)": {
+-		"name": "$($(1)_RAWNAME)",
+ 		"type": "$($(1)_TYPE)",
+ 		$(if $(filter rootfs,$($(1)_TYPE)), \
+ 			$(call _json-info-fs,$(1)), \
+@@ -108,6 +107,7 @@ endef
+ # _json-info-pkg, _json-info-pkg-details, _json-info-fs: private helpers
+ # for json-info, above
+ define _json-info-pkg
++	"name": "$($(1)_RAWNAME)",
+ 	$(if $($(1)_IS_VIRTUAL), \
+ 		"virtual": true$(comma),
+ 		"virtual": false$(comma)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
