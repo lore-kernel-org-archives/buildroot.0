@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969D8C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94FC9C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5751660EAF;
-	Sun, 12 Dec 2021 17:40:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46A7D423CC;
+	Sun, 12 Dec 2021 17:40:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OPsENzU1M_fT; Sun, 12 Dec 2021 17:40:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QqZMmMcX6dGc; Sun, 12 Dec 2021 17:40:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6E0B60EA5;
-	Sun, 12 Dec 2021 17:40:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F9361BF31D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5F05423C1;
+	Sun, 12 Dec 2021 17:40:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 720B91BF31D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B59D60EAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B7D14221E
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OPkf_Ch-Gtxn for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A6CobRvjxsrM for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 17:35:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7153760EAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1CE43421B6
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:35:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5267383657; Sun, 12 Dec 2021 17:30:24 +0000 (UTC)
+ id E2A6583657; Sun, 12 Dec 2021 17:30:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 18:30:40 +0100
+Date: Sun, 12 Dec 2021 18:26:45 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 816abf861c08b0ba884bcfbfab82d348f7fbe348
-X-Git-Newrev: bf3f02468a898896bb51f8bc27592649def9084b
+X-Git-Oldrev: fd4cd6b325b7af1911136a4f8c094796637d3925
+X-Git-Newrev: 4d545c7f94a4ee6d942e998b4872bab5e928cc08
 X-Patchwork-Hint: ignore
-Message-Id: <20211212173024.5267383657@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/libnspr: add CPE
+Message-Id: <20211212173023.E2A6583657@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libnss: add CPE
  variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,35 +59,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf3f02468a898896bb51f8bc27592649def9084b
+commit: https://git.buildroot.net/buildroot/commit/?id=4d545c7f94a4ee6d942e998b4872bab5e928cc08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-cpe:2.3:a:mozilla:netscape_portable_runtime is a valid CPE identifier
-for this package:
+cpe:2.3:a:mozilla:nss is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amozilla%3Anetscape_portable_runtime
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amozilla%3Anss
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fffd2aade69a2f1db97c34d63fb05b6c8f9a31dc)
+(cherry picked from commit 47f3f8a1c8311d32822fccab8c271001db65cf52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/libnspr.mk | 2 ++
+ package/libnss/libnss.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 58a3338c60..8f16a8076f 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONFIG_SCRIPTS = nspr-config
- LIBNSPR_LICENSE = MPL-2.0
- LIBNSPR_LICENSE_FILES = nspr/LICENSE
-+LIBNSPR_CPE_ID_VENDOR = mozilla
-+LIBNSPR_CPE_ID_PRODUCT = netscape_portable_runtime
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 1a6f8bc412..4f9e9ebc1b 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -12,6 +12,8 @@ LIBNSS_INSTALL_STAGING = YES
+ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
+ LIBNSS_LICENSE = MPL-2.0
+ LIBNSS_LICENSE_FILES = nss/COPYING
++LIBNSS_CPE_ID_VENDOR = mozilla
++LIBNSS_CPE_ID_PRODUCT = nss
  
- # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
- LIBNSPR_CONF_ENV = \
+ LIBNSS_CFLAGS = $(TARGET_CFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
