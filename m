@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3E34C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15027C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5CCB61CD8;
-	Sun, 12 Dec 2021 14:35:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAC7D85A38;
+	Sun, 12 Dec 2021 14:35:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0YGWPDIxoWz4; Sun, 12 Dec 2021 14:35:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bc9g5wia6oX4; Sun, 12 Dec 2021 14:35:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D25A261CBE;
-	Sun, 12 Dec 2021 14:35:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A581B1BF33B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E04B85A35;
+	Sun, 12 Dec 2021 14:35:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E16E41BF33B
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:35:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90AD240582
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD8FF429F8
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:35:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I323Tbu6KfoR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id boTz8xVXowZn for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 14:35:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB874014E
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAB8E429EA
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 14:35:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B007383238; Sun, 12 Dec 2021 14:29:51 +0000 (UTC)
+ id D26BE82AE4; Sun, 12 Dec 2021 14:29:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 11:49:49 +0100
+Date: Sun, 12 Dec 2021 15:17:22 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: 5e628e4ea1a9656a07fc440bef0dd15d2a3e00d7
-X-Git-Newrev: 531fbbd64593f4fcf67199c6cfa6214b61974de9
+X-Git-Oldrev: c519f86610df095ecffe5cb244a1fd2284a78396
+X-Git-Newrev: 1de800293b08f1aaad1ba06f092c714c12cae695
 X-Patchwork-Hint: ignore
-Message-Id: <20211212142951.B007383238@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] package/samba4: drop
- third patch
+Message-Id: <20211212142951.D26BE82AE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/icu: backport
+ upstream security fix for CVE-2021-30535
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +59,155 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=531fbbd64593f4fcf67199c6cfa6214b61974de9
+commit: https://git.buildroot.net/buildroot/commit/?id=1de800293b08f1aaad1ba06f092c714c12cae695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Drop third patch as it is not needed when using compile_et from heimdal
-instead of compile_et from e2fprogs as spotted by upstream in:
-https://bugzilla.samba.org/show_bug.cgi?id=13856#c20
+Fixes CVE-2021-30535: Double free in ICU in Google Chrome prior to
+91.0.4472.77 allowed a remote attacker to potentially exploit heap
+corruption via a crafted HTML page.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://nvd.nist.gov/vuln/detail/CVE-2021-30535
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5847208213952c5d2e1ce44d2db19ead9706d5d7)
+(cherry picked from commit f4483f1aabccd49c917fc464372b09ba053c0d16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/0003-Fix-unistd.h-include.patch     | 38 ----------------------
- ...e_test.c-include-stdint.h-before-cmoka.h.patch} |  0
- ...uild.patch => 0004-dcesrv_core-fix-build.patch} |  0
- 3 files changed, 38 deletions(-)
+ .../0005-ICU-21587-Fix-memory-bug-w-baseName.patch | 112 +++++++++++++++++++++
+ package/icu/icu.mk                                 |   3 +
+ 2 files changed, 115 insertions(+)
 
-diff --git a/package/samba4/0003-Fix-unistd.h-include.patch b/package/samba4/0003-Fix-unistd.h-include.patch
-deleted file mode 100644
-index f01b899a18..0000000000
---- a/package/samba4/0003-Fix-unistd.h-include.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 85c33f89df8607ace0707e1360ff0f79f3e8f5f3 Mon Sep 17 00:00:00 2001
--From: Andy Walsh <andy.walsh44+github@gmail.com>
--Date: Wed, 6 Nov 2019 19:28:30 +0100
--Subject: [PATCH] Fix unistd.h include
--
--Fixes build error
--
--source4/heimdal/lib/asn1/asn1_err.c:47:23: error: 'link' redeclared as different kind of symbol
-- static struct et_list link = { 0, 0 };
--
--Downloaded from
--https://github.com/Andy2244/openwrt-extra/blob/samba-4.10/samba4/patches/006-samba-4-10-musl_rm_unistd_incl.patch
--
--Upstream bug report: https://bugzilla.samba.org/show_bug.cgi?id=13856
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- lib/replace/replace.h | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/lib/replace/replace.h b/lib/replace/replace.h
--index 1658465866e..e6768c4ae51 100644
----- a/lib/replace/replace.h
--+++ b/lib/replace/replace.h
--@@ -168,10 +168,6 @@
-- #include <bsd/unistd.h>
-- #endif
-- 
---#ifdef HAVE_UNISTD_H
---#include <unistd.h>
---#endif
---
-- #ifdef HAVE_STRING_H
-- #include <string.h>
-- #endif
---- 
--2.20.1
--
-diff --git a/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-similarity index 100%
-rename from package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-rename to package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-diff --git a/package/samba4/0005-dcesrv_core-fix-build.patch b/package/samba4/0004-dcesrv_core-fix-build.patch
-similarity index 100%
-rename from package/samba4/0005-dcesrv_core-fix-build.patch
-rename to package/samba4/0004-dcesrv_core-fix-build.patch
+diff --git a/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch b/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch
+new file mode 100644
+index 0000000000..15af976e49
+--- /dev/null
++++ b/package/icu/0005-ICU-21587-Fix-memory-bug-w-baseName.patch
+@@ -0,0 +1,112 @@
++From 2dc5bea9061b4fb05cd03e21b775dd944a0eb81d Mon Sep 17 00:00:00 2001
++From: Frank Tang <ftang@chromium.org>
++Date: Tue, 13 Apr 2021 15:16:50 -0700
++Subject: [PATCH] ICU-21587 Fix memory bug w/ baseName
++
++Edge cases not fixed in assign and move assign operator
++while the locale is long and call setKeywordValue with incorrect
++keyword/values.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Peter: Fixes CVE-2021-30535, adjust paths for tarball]
++---
++ source/common/locid.cpp          | 11 +++++++++--
++ source/test/intltest/loctest.cpp | 26 ++++++++++++++++++++++++++
++ source/test/intltest/loctest.h   |  2 ++
++ 3 files changed, 37 insertions(+), 2 deletions(-)
++
++diff --git a/source/common/locid.cpp b/source/common/locid.cpp
++index 02cd82a7b8..3c6e5b0669 100644
++--- a/source/common/locid.cpp
+++++ b/source/common/locid.cpp
++@@ -469,14 +469,18 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
++     if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
++     if (fullName != fullNameBuffer) uprv_free(fullName);
++ 
++-    if (other.fullName == other.fullNameBuffer) {
+++    if (other.fullName == other.fullNameBuffer || other.baseName == other.fullNameBuffer) {
++         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+++    }
+++    if (other.fullName == other.fullNameBuffer) {
++         fullName = fullNameBuffer;
++     } else {
++         fullName = other.fullName;
++     }
++ 
++-    if (other.baseName == other.fullName) {
+++    if (other.baseName == other.fullNameBuffer) {
+++        baseName = fullNameBuffer;
+++    } else if (other.baseName == other.fullName) {
++         baseName = fullName;
++     } else {
++         baseName = other.baseName;
++@@ -2681,6 +2685,9 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
++         if (fullName != fullNameBuffer) {
++             // if full Name is already on the heap, need to free it.
++             uprv_free(fullName);
+++            if (baseName == fullName) {
+++                baseName = newFullName; // baseName should not point to freed memory.
+++            }
++         }
++         fullName = newFullName;
++         status = U_ZERO_ERROR;
++diff --git a/source/test/intltest/loctest.cpp b/source/test/intltest/loctest.cpp
++index ce41a4c00e..5503b008b0 100644
++--- a/source/test/intltest/loctest.cpp
+++++ b/source/test/intltest/loctest.cpp
++@@ -284,6 +284,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
++     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
++     TESTCASE_AUTO(TestCanonicalize);
++     TESTCASE_AUTO(TestLeak21419);
+++    TESTCASE_AUTO(TestLongLocaleSetKeywordAssign);
+++    TESTCASE_AUTO(TestLongLocaleSetKeywordMoveAssign);
++     TESTCASE_AUTO_END;
++ }
++ 
++@@ -6520,6 +6522,30 @@ void LocaleTest::TestSetUnicodeKeywordValueInLongLocale() {
++     }
++ }
++ 
+++void LocaleTest::TestLongLocaleSetKeywordAssign() {
+++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordAssign");
+++    // A long base name, with an illegal keyword and copy constructor
+++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
+++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
+++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17_AAAAAA18");
+++    Locale l2;
+++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
+++    status.reset();
+++    l2 = l; // copy operator on such bogus locale.
+++}
+++
+++void LocaleTest::TestLongLocaleSetKeywordMoveAssign() {
+++    IcuTestErrorCode status(*this, "TestLongLocaleSetKeywordMoveAssign");
+++    // A long base name, with an illegal keyword and copy constructor
+++    icu::Locale l("de_AAAAAAA1_AAAAAAA2_AAAAAAA3_AAAAAAA4_AAAAAAA5_AAAAAAA6_"
+++                  "AAAAAAA7_AAAAAAA8_AAAAAAA9_AAAAAA10_AAAAAA11_AAAAAA12_"
+++                  "AAAAAA13_AAAAAA14_AAAAAA15_AAAAAA16_AAAAAA17");
+++    Locale l2;
+++    l.setUnicodeKeywordValue("co", "12", status); // Cause an error
+++    status.reset();
+++    Locale l3 = std::move(l); // move assign
+++}
+++
++ void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
++     IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueNullInLongLocale");
++     const char *exts[] = {"cf", "cu", "em", "kk", "kr", "ks", "kv", "lb", "lw",
++diff --git a/source/test/intltest/loctest.h b/source/test/intltest/loctest.h
++index 05be4037bd..12a93bde53 100644
++--- a/source/test/intltest/loctest.h
+++++ b/source/test/intltest/loctest.h
++@@ -156,6 +156,8 @@ class LocaleTest: public IntlTest {
++     void TestSetUnicodeKeywordValueInLongLocale();
++     void TestSetUnicodeKeywordValueNullInLongLocale();
++     void TestLeak21419();
+++    void TestLongLocaleSetKeywordAssign();
+++    void TestLongLocaleSetKeywordMoveAssign();
++ 
++ private:
++     void _checklocs(const char* label,
++-- 
++2.20.1
++
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 0a17c61462..2c04c3c775 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -17,6 +17,9 @@ ICU_CPE_ID_VENDOR = icu-project
+ ICU_CPE_ID_PRODUCT = international_components_for_unicode
+ ICU_CPE_ID_VERSION = $(subst -,.,$(ICU_VERSION))
+ 
++# 0005-ICU-21587-Fix-memory-bug-w-baseName.patch
++ICU_IGNORE_CVES += CVE-2021-30535
++
+ ICU_DEPENDENCIES = host-icu
+ ICU_INSTALL_STAGING = YES
+ ICU_CONFIG_SCRIPTS = icu-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
