@@ -4,43 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12965C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0C01C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C76284232B;
-	Sun, 12 Dec 2021 15:14:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 568CD4232B;
+	Sun, 12 Dec 2021 15:14:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AhGCBIq4F2Z6; Sun, 12 Dec 2021 15:14:37 +0000 (UTC)
+	with ESMTP id LV6y2AHcVcxd; Sun, 12 Dec 2021 15:14:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E51E84232F;
-	Sun, 12 Dec 2021 15:14:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8892C1BF3EC
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:14:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6984237B;
+	Sun, 12 Dec 2021 15:14:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 58B801BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 778566070C
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:14:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44F3B4014E
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:14:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RRdlGGSP8ZVr for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 15:14:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D738606EB
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:14:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9D3B383486; Sun, 12 Dec 2021 15:09:23 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 16:12:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1e60b6f1da53c8192d79c9f8c7c029bb3fee63ea
-X-Git-Newrev: d33ad03e75b89feb97a7edeba3156fa2ac417b06
-X-Patchwork-Hint: ignore
-Message-Id: <20211212150923.9D3B383486@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.15.3
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LkZndK0ZKcdw for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 15:14:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B36D940131
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:14:54 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ccde:e15f:6f40:89e5])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id EA9972003BE;
+ Sun, 12 Dec 2021 16:14:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1639322092;
+ bh=O4KPE+hz3aY4n3d0KnRmz1VKR6V7GCqGVvH4iOh8ugs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=VlnOm+EExQB1K3m2Bh7tVF1jfG1dWvCrSt7q1bjlYzMzYOqLV+e3fj2T2qNkAm5OV
+ bGtOhethqOlOkZF/tm6U4rBZoZPDuU62yYHZzxEx96N82PUT5PopNEWpAtrtQqNUxw
+ wL3YNdvAJmVL2wtMLr/6Blg6hh9ABiOq9R+1uSxIQvWDFul961zMWrlmSidUTj2hJG
+ dOVXsdEfD2WmeooE8waSaoy4awPS4F+jLTU00BFa1UTVVPQRFA86ptqObSysx+v0FB
+ k0/wsqxehE5CZop1GyP0QsL2JGmKOahAh3hxocIjsyn+PHAUSd6MYGF7JM3ES3bVg/
+ j9k51IeSfS85g==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 12 Dec 2021 16:14:47 +0100
+Date: Sun, 12 Dec 2021 16:14:47 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20211212151447.GS2603@scaer>
+References: <20211212094107.571780-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20211212094107.571780-1-bernd.kuhls@t-online.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.15.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,211 +71,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6673362560068764680=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6673362560068764680==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d33ad03e75b89feb97a7edeba3156fa2ac417b06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Rebased patch 0002 due to upstream commit:
-https://gitlab.com/samba-team/samba/-/commit/d62917d3d7eeb9c5782d7230a4012b5a9235154f
-
-Removed patch 0004-dcesrv_core-fix-build.patch, applied upstream:
-https://gitlab.com/samba-team/samba/-/commit/4d5fb7d279ef899307a560da2bed037cda609f10
-
-Added patch to fix build error and added new answer to samba4-cache.txt.
-
-Release notes:
-https://www.samba.org/samba/history/samba-4.15.0.html
-https://www.samba.org/samba/history/samba-4.15.1.html
-https://www.samba.org/samba/history/samba-4.15.2.html
-https://www.samba.org/samba/history/samba-4.15.3.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...pre-built-heimdal-build-tools-in-case-of-.patch |  4 +-
- package/samba4/0004-dcesrv_core-fix-build.patch    | 56 ----------------------
- .../0004-lib-util-Add-signal.h-include.patch       | 37 ++++++++++++++
- package/samba4/samba4-cache.txt                    |  1 +
- package/samba4/samba4.hash                         |  4 +-
- package/samba4/samba4.mk                           |  2 +-
- 6 files changed, 44 insertions(+), 60 deletions(-)
-
-diff --git a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-index b8636958ee..484e6722ea 100644
---- a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-+++ b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-@@ -75,13 +75,15 @@ index 0ff6dad2f55..f77c177442f 100644
-  check_system_heimdal_lib("com_err", "com_right_r com_err", "com_err.h")
-  
-  if check_system_heimdal_lib("roken", "rk_socket_set_reuseaddr", "roken.h"):
--@@ -96,7 +96,4 @@
-+@@ -96,9 +88,6 @@
-  #if conf.CHECK_BUNDLED_SYSTEM('tommath', checkfunctions='mp_init', headers='tommath.h'):
-  #    conf.define('USING_SYSTEM_TOMMATH', 1)
-  
- -check_system_heimdal_binary("compile_et")
- -check_system_heimdal_binary("asn1_compile")
- -
-+ conf.env.KRB5_VENDOR = 'heimdal'
-  conf.define('USING_SYSTEM_KRB5', 1)
-+ conf.define('USING_SYSTEM_HEIMDAL', 1)
- -- 
- 2.20.1
-diff --git a/package/samba4/0004-dcesrv_core-fix-build.patch b/package/samba4/0004-dcesrv_core-fix-build.patch
-deleted file mode 100644
-index 75835acdd1..0000000000
---- a/package/samba4/0004-dcesrv_core-fix-build.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 44bccdf7d158ae93ba9a5515038aac2a5ac4fd85 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 27 Mar 2021 17:17:34 +0100
--Subject: [PATCH] dcesrv_core: fix build
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Move include of system/network.h to avoid a build error:
--
--In file included from ../../lib/replace/system/network.h:35,
--                 from ../../librpc/rpc/dcesrv_core.c:2658:
--usr/include/unistd.h: At top level:
--usr/include/unistd.h:675:16: error: conflicting types for ‘geteuid’
--  675 | extern __uid_t geteuid (void) __THROW;
--
--Patch sent upstream:
--https://gitlab.com/samba-team/samba/-/merge_requests/1871
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- librpc/rpc/dcesrv_core.c | 11 +----------
-- 1 file changed, 1 insertion(+), 10 deletions(-)
--
--diff --git a/librpc/rpc/dcesrv_core.c b/librpc/rpc/dcesrv_core.c
--index 70e0245532e..e761329d157 100644
----- a/librpc/rpc/dcesrv_core.c
--+++ b/librpc/rpc/dcesrv_core.c
--@@ -32,6 +32,7 @@
-- #include "lib/tsocket/tsocket.h"
-- #include "librpc/gen_ndr/ndr_dcerpc.h"
-- #include "lib/util/tevent_ntstatus.h"
--+#include "system/network.h"
-- 
-- 
-- #undef DBGC_CLASS
--@@ -2633,16 +2634,6 @@ _PUBLIC_ void dcesrv_cleanup_broken_connections(struct dcesrv_context *dce_ctx)
-- 	}
-- }
-- 
---/* We need this include to be able to compile on some plateforms
--- * (ie. freebsd 7.2) as it seems that <sys/uio.h> is not included
--- * correctly.
--- * It has to be that deep because otherwise we have a conflict on
--- * const struct dcesrv_interface declaration.
--- * This is mostly due to socket_wrapper defining #define bind swrap_bind
--- * which conflict with the bind used before.
--- */
---#include "system/network.h"
---
-- struct dcesrv_sock_reply_state {
-- 	struct dcesrv_connection *dce_conn;
-- 	struct dcesrv_call_state *call;
---- 
--2.29.2
--
-diff --git a/package/samba4/0004-lib-util-Add-signal.h-include.patch b/package/samba4/0004-lib-util-Add-signal.h-include.patch
-new file mode 100644
-index 0000000000..838a8fa6d7
---- /dev/null
-+++ b/package/samba4/0004-lib-util-Add-signal.h-include.patch
-@@ -0,0 +1,37 @@
-+From d1732a79dbf30c41802245909d0250ebe2b9d92e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 12 Dec 2021 10:27:42 +0100
-+Subject: [PATCH] lib/util: Add signal.h include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes build error with samba-4.15.3 and uClibc:
-+
-+../../source3/printing/samba-bgqd.c: In function ‘main’:
-+../../source3/printing/samba-bgqd.c:340:21: error: ‘SIGPIPE’ undeclared (first use in this function); did you mean ‘EPIPE’?
-+../../source3/printing/samba-bgqd.c:384:14: error: ‘SIGTERM’ undeclared (first use in this function)
-+
-+Patch sent upstream:
-+https://gitlab.com/samba-team/samba/-/merge_requests/2296
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ lib/util/signal.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/util/signal.h b/lib/util/signal.h
-+index 0663af6ab94..f662ee110d6 100644
-+--- a/lib/util/signal.h
-++++ b/lib/util/signal.h
-+@@ -21,6 +21,7 @@
-+ #ifndef _SAMBA_UTIL_SIGNAL_H_
-+ #define _SAMBA_UTIL_SIGNAL_H_
-+ 
-++#include <signal.h>
-+ #include <stdbool.h>
-+ 
-+ /**
-+-- 
-+2.30.2
-+
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index 75d0343dc9..ba849b7c6e 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -43,3 +43,4 @@ Checking for a 64-bit host to support lmdb: NO
- Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
- Checking value of GNUTLS_MAC_AES_CMAC_128: 203
- Checking whether fcntl supports flags to send direct I/O availability signals: OK
-+Checking for gnutls fips mode support: NO
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 033d932732..4749f6f597 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.14.10.tar.asc
--sha256  107ee862f58062682cec362ec68a24251292805f89aa4c97e7ab80237f91c7af  samba-4.14.10.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.15.3.tar.asc
-+sha256  519399404391550345846768ea4dd0fe7fcb04e20c2b891b5eeb02e5554137db  samba-4.15.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index eb1f3b830e..8fa8b53399 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.14.10
-+SAMBA4_VERSION = 4.15.3
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
-
---===============6673362560068764680==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6673362560068764680==--
+QmVybmQsIEFsbCwKCk9uIDIwMjEtMTItMTIgMTA6NDEgKzAxMDAsIEJlcm5kIEt1aGxzIHNwYWtl
+IHRodXNseToKPiBSZWJhc2VkIHBhdGNoIDAwMDIgZHVlIHRvIHVwc3RyZWFtIGNvbW1pdDoKPiBo
+dHRwczovL2dpdGxhYi5jb20vc2FtYmEtdGVhbS9zYW1iYS8tL2NvbW1pdC9kNjI5MTdkM2Q3ZWVi
+OWM1NzgyZDcyMzBhNDAxMmI1YTkyMzUxNTRmCj4gCj4gUmVtb3ZlZCBwYXRjaCAwMDA0LWRjZXNy
+dl9jb3JlLWZpeC1idWlsZC5wYXRjaCwgYXBwbGllZCB1cHN0cmVhbToKPiBodHRwczovL2dpdGxh
+Yi5jb20vc2FtYmEtdGVhbS9zYW1iYS8tL2NvbW1pdC80ZDVmYjdkMjc5ZWY4OTkzMDdhNTYwZGEy
+YmVkMDM3Y2RhNjA5ZjEwCj4gCj4gQWRkZWQgcGF0Y2ggdG8gZml4IGJ1aWxkIGVycm9yIGFuZCBh
+ZGRlZCBuZXcgYW5zd2VyIHRvIHNhbWJhNC1jYWNoZS50eHQuCj4gCj4gUmVsZWFzZSBub3RlczoK
+PiBodHRwczovL3d3dy5zYW1iYS5vcmcvc2FtYmEvaGlzdG9yeS9zYW1iYS00LjE1LjAuaHRtbAo+
+IGh0dHBzOi8vd3d3LnNhbWJhLm9yZy9zYW1iYS9oaXN0b3J5L3NhbWJhLTQuMTUuMS5odG1sCj4g
+aHR0cHM6Ly93d3cuc2FtYmEub3JnL3NhbWJhL2hpc3Rvcnkvc2FtYmEtNC4xNS4yLmh0bWwKPiBo
+dHRwczovL3d3dy5zYW1iYS5vcmcvc2FtYmEvaGlzdG9yeS9zYW1iYS00LjE1LjMuaHRtbAo+IAo+
+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZC5rdWhsc0B0LW9ubGluZS5kZT4KCkFw
+cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0K
+PiAgLi4udWlsdC1oZWltZGFsLWJ1aWxkLXRvb2xzLWluLWNhc2Utb2YtLnBhdGNoIHwgIDQgKy0K
+PiAgLi4uL3NhbWJhNC8wMDA0LWRjZXNydl9jb3JlLWZpeC1idWlsZC5wYXRjaCAgIHwgNTYgLS0t
+LS0tLS0tLS0tLS0tLS0tLQo+ICAuLi4vMDAwNC1saWItdXRpbC1BZGQtc2lnbmFsLmgtaW5jbHVk
+ZS5wYXRjaCAgfCAzNyArKysrKysrKysrKysKPiAgcGFja2FnZS9zYW1iYTQvc2FtYmE0LWNhY2hl
+LnR4dCAgICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL3NhbWJhNC9zYW1iYTQuaGFzaCAg
+ICAgICAgICAgICAgICAgICAgfCAgNCArLQo+ICBwYWNrYWdlL3NhbWJhNC9zYW1iYTQubWsgICAg
+ICAgICAgICAgICAgICAgICAgfCAgMiArLQo+ICA2IGZpbGVzIGNoYW5nZWQsIDQ0IGluc2VydGlv
+bnMoKyksIDYwIGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zYW1i
+YTQvMDAwNC1kY2VzcnZfY29yZS1maXgtYnVpbGQucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2Uvc2FtYmE0LzAwMDQtbGliLXV0aWwtQWRkLXNpZ25hbC5oLWluY2x1ZGUucGF0Y2gK
+PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1iYTQvMDAwMi1idWlsZC1maW5kLXByZS1idWls
+dC1oZWltZGFsLWJ1aWxkLXRvb2xzLWluLWNhc2Utb2YtLnBhdGNoIGIvcGFja2FnZS9zYW1iYTQv
+MDAwMi1idWlsZC1maW5kLXByZS1idWlsdC1oZWltZGFsLWJ1aWxkLXRvb2xzLWluLWNhc2Utb2Yt
+LnBhdGNoCj4gaW5kZXggYjg2MzY5NThlZS4uNDg0ZTY3MjJlYSAxMDA2NDQKPiAtLS0gYS9wYWNr
+YWdlL3NhbWJhNC8wMDAyLWJ1aWxkLWZpbmQtcHJlLWJ1aWx0LWhlaW1kYWwtYnVpbGQtdG9vbHMt
+aW4tY2FzZS1vZi0ucGF0Y2gKPiArKysgYi9wYWNrYWdlL3NhbWJhNC8wMDAyLWJ1aWxkLWZpbmQt
+cHJlLWJ1aWx0LWhlaW1kYWwtYnVpbGQtdG9vbHMtaW4tY2FzZS1vZi0ucGF0Y2gKPiBAQCAtNzUs
+MTMgKzc1LDE1IEBAIGluZGV4IDBmZjZkYWQyZjU1Li5mNzdjMTc3NDQyZiAxMDA2NDQKPiAgIGNo
+ZWNrX3N5c3RlbV9oZWltZGFsX2xpYigiY29tX2VyciIsICJjb21fcmlnaHRfciBjb21fZXJyIiwg
+ImNvbV9lcnIuaCIpCj4gICAKPiAgIGlmIGNoZWNrX3N5c3RlbV9oZWltZGFsX2xpYigicm9rZW4i
+LCAicmtfc29ja2V0X3NldF9yZXVzZWFkZHIiLCAicm9rZW4uaCIpOgo+IC1AQCAtOTYsNyArOTYs
+NCBAQAo+ICtAQCAtOTYsOSArODgsNiBAQAo+ICAgI2lmIGNvbmYuQ0hFQ0tfQlVORExFRF9TWVNU
+RU0oJ3RvbW1hdGgnLCBjaGVja2Z1bmN0aW9ucz0nbXBfaW5pdCcsIGhlYWRlcnM9J3RvbW1hdGgu
+aCcpOgo+ICAgIyAgICBjb25mLmRlZmluZSgnVVNJTkdfU1lTVEVNX1RPTU1BVEgnLCAxKQo+ICAg
+Cj4gIC1jaGVja19zeXN0ZW1faGVpbWRhbF9iaW5hcnkoImNvbXBpbGVfZXQiKQo+ICAtY2hlY2tf
+c3lzdGVtX2hlaW1kYWxfYmluYXJ5KCJhc24xX2NvbXBpbGUiKQo+ICAtCj4gKyBjb25mLmVudi5L
+UkI1X1ZFTkRPUiA9ICdoZWltZGFsJwo+ICAgY29uZi5kZWZpbmUoJ1VTSU5HX1NZU1RFTV9LUkI1
+JywgMSkKPiArIGNvbmYuZGVmaW5lKCdVU0lOR19TWVNURU1fSEVJTURBTCcsIDEpCj4gIC0tIAo+
+ICAyLjIwLjEKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1iYTQvMDAwNC1kY2VzcnZfY29yZS1m
+aXgtYnVpbGQucGF0Y2ggYi9wYWNrYWdlL3NhbWJhNC8wMDA0LWRjZXNydl9jb3JlLWZpeC1idWls
+ZC5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDc1ODM1YWNkZDEuLjAw
+MDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL3NhbWJhNC8wMDA0LWRjZXNydl9jb3JlLWZpeC1idWls
+ZC5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSw1NiArMCwwIEBACj4gLUZyb20gNDRiY2Nk
+ZjdkMTU4YWU5M2JhOWE1NTE1MDM4YWFjMmE1YWM0ZmQ4NSBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
+MDEKPiAtRnJvbTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgo+IC1EYXRl
+OiBTYXQsIDI3IE1hciAyMDIxIDE3OjE3OjM0ICswMTAwCj4gLVN1YmplY3Q6IFtQQVRDSF0gZGNl
+c3J2X2NvcmU6IGZpeCBidWlsZAo+IC1NSU1FLVZlcnNpb246IDEuMAo+IC1Db250ZW50LVR5cGU6
+IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiAtQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzog
+OGJpdAo+IC0KPiAtTW92ZSBpbmNsdWRlIG9mIHN5c3RlbS9uZXR3b3JrLmggdG8gYXZvaWQgYSBi
+dWlsZCBlcnJvcjoKPiAtCj4gLUluIGZpbGUgaW5jbHVkZWQgZnJvbSAuLi8uLi9saWIvcmVwbGFj
+ZS9zeXN0ZW0vbmV0d29yay5oOjM1LAo+IC0gICAgICAgICAgICAgICAgIGZyb20gLi4vLi4vbGli
+cnBjL3JwYy9kY2VzcnZfY29yZS5jOjI2NTg6Cj4gLXVzci9pbmNsdWRlL3VuaXN0ZC5oOiBBdCB0
+b3AgbGV2ZWw6Cj4gLXVzci9pbmNsdWRlL3VuaXN0ZC5oOjY3NToxNjogZXJyb3I6IGNvbmZsaWN0
+aW5nIHR5cGVzIGZvciDigJhnZXRldWlk4oCZCj4gLSAgNjc1IHwgZXh0ZXJuIF9fdWlkX3QgZ2V0
+ZXVpZCAodm9pZCkgX19USFJPVzsKPiAtCj4gLVBhdGNoIHNlbnQgdXBzdHJlYW06Cj4gLWh0dHBz
+Oi8vZ2l0bGFiLmNvbS9zYW1iYS10ZWFtL3NhbWJhLy0vbWVyZ2VfcmVxdWVzdHMvMTg3MQo+IC0K
+PiAtU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgo+
+IC0tLS0KPiAtIGxpYnJwYy9ycGMvZGNlc3J2X2NvcmUuYyB8IDExICstLS0tLS0tLS0tCj4gLSAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEwIGRlbGV0aW9ucygtKQo+IC0KPiAtZGlm
+ZiAtLWdpdCBhL2xpYnJwYy9ycGMvZGNlc3J2X2NvcmUuYyBiL2xpYnJwYy9ycGMvZGNlc3J2X2Nv
+cmUuYwo+IC1pbmRleCA3MGUwMjQ1NTMyZS4uZTc2MTMyOWQxNTcgMTAwNjQ0Cj4gLS0tLSBhL2xp
+YnJwYy9ycGMvZGNlc3J2X2NvcmUuYwo+IC0rKysgYi9saWJycGMvcnBjL2RjZXNydl9jb3JlLmMK
+PiAtQEAgLTMyLDYgKzMyLDcgQEAKPiAtICNpbmNsdWRlICJsaWIvdHNvY2tldC90c29ja2V0Lmgi
+Cj4gLSAjaW5jbHVkZSAibGlicnBjL2dlbl9uZHIvbmRyX2RjZXJwYy5oIgo+IC0gI2luY2x1ZGUg
+ImxpYi91dGlsL3RldmVudF9udHN0YXR1cy5oIgo+IC0rI2luY2x1ZGUgInN5c3RlbS9uZXR3b3Jr
+LmgiCj4gLSAKPiAtIAo+IC0gI3VuZGVmIERCR0NfQ0xBU1MKPiAtQEAgLTI2MzMsMTYgKzI2MzQs
+NiBAQCBfUFVCTElDXyB2b2lkIGRjZXNydl9jbGVhbnVwX2Jyb2tlbl9jb25uZWN0aW9ucyhzdHJ1
+Y3QgZGNlc3J2X2NvbnRleHQgKmRjZV9jdHgpCj4gLSAJfQo+IC0gfQo+IC0gCj4gLS0vKiBXZSBu
+ZWVkIHRoaXMgaW5jbHVkZSB0byBiZSBhYmxlIHRvIGNvbXBpbGUgb24gc29tZSBwbGF0ZWZvcm1z
+Cj4gLS0gKiAoaWUuIGZyZWVic2QgNy4yKSBhcyBpdCBzZWVtcyB0aGF0IDxzeXMvdWlvLmg+IGlz
+IG5vdCBpbmNsdWRlZAo+IC0tICogY29ycmVjdGx5Lgo+IC0tICogSXQgaGFzIHRvIGJlIHRoYXQg
+ZGVlcCBiZWNhdXNlIG90aGVyd2lzZSB3ZSBoYXZlIGEgY29uZmxpY3Qgb24KPiAtLSAqIGNvbnN0
+IHN0cnVjdCBkY2VzcnZfaW50ZXJmYWNlIGRlY2xhcmF0aW9uLgo+IC0tICogVGhpcyBpcyBtb3N0
+bHkgZHVlIHRvIHNvY2tldF93cmFwcGVyIGRlZmluaW5nICNkZWZpbmUgYmluZCBzd3JhcF9iaW5k
+Cj4gLS0gKiB3aGljaCBjb25mbGljdCB3aXRoIHRoZSBiaW5kIHVzZWQgYmVmb3JlLgo+IC0tICov
+Cj4gLS0jaW5jbHVkZSAic3lzdGVtL25ldHdvcmsuaCIKPiAtLQo+IC0gc3RydWN0IGRjZXNydl9z
+b2NrX3JlcGx5X3N0YXRlIHsKPiAtIAlzdHJ1Y3QgZGNlc3J2X2Nvbm5lY3Rpb24gKmRjZV9jb25u
+Owo+IC0gCXN0cnVjdCBkY2VzcnZfY2FsbF9zdGF0ZSAqY2FsbDsKPiAtLS0gCj4gLTIuMjkuMgo+
+IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1iYTQvMDAwNC1saWItdXRpbC1BZGQtc2lnbmFs
+LmgtaW5jbHVkZS5wYXRjaCBiL3BhY2thZ2Uvc2FtYmE0LzAwMDQtbGliLXV0aWwtQWRkLXNpZ25h
+bC5oLWluY2x1ZGUucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAw
+MDAuLjgzOGE4ZmE2ZDcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9zYW1iYTQvMDAw
+NC1saWItdXRpbC1BZGQtc2lnbmFsLmgtaW5jbHVkZS5wYXRjaAo+IEBAIC0wLDAgKzEsMzcgQEAK
+PiArRnJvbSBkMTczMmE3OWRiZjMwYzQxODAyMjQ1OTA5ZDAyNTBlYmUyYjlkOTJlIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBCZXJuZCBLdWhscyA8YmVybmQua3VobHNAdC1vbmxp
+bmUuZGU+Cj4gK0RhdGU6IFN1biwgMTIgRGVjIDIwMjEgMTA6Mjc6NDIgKzAxMDAKPiArU3ViamVj
+dDogW1BBVENIXSBsaWIvdXRpbDogQWRkIHNpZ25hbC5oIGluY2x1ZGUKPiArTUlNRS1WZXJzaW9u
+OiAxLjAKPiArQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRl
+bnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK0ZpeGVzIGJ1aWxkIGVycm9yIHdpdGgg
+c2FtYmEtNC4xNS4zIGFuZCB1Q2xpYmM6Cj4gKwo+ICsuLi8uLi9zb3VyY2UzL3ByaW50aW5nL3Nh
+bWJhLWJncWQuYzogSW4gZnVuY3Rpb24g4oCYbWFpbuKAmToKPiArLi4vLi4vc291cmNlMy9wcmlu
+dGluZy9zYW1iYS1iZ3FkLmM6MzQwOjIxOiBlcnJvcjog4oCYU0lHUElQReKAmSB1bmRlY2xhcmVk
+IChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbik7IGRpZCB5b3UgbWVhbiDigJhFUElQReKAmT8K
+PiArLi4vLi4vc291cmNlMy9wcmludGluZy9zYW1iYS1iZ3FkLmM6Mzg0OjE0OiBlcnJvcjog4oCY
+U0lHVEVSTeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiArCj4g
+K1BhdGNoIHNlbnQgdXBzdHJlYW06Cj4gK2h0dHBzOi8vZ2l0bGFiLmNvbS9zYW1iYS10ZWFtL3Nh
+bWJhLy0vbWVyZ2VfcmVxdWVzdHMvMjI5Ngo+ICsKPiArU2lnbmVkLW9mZi1ieTogQmVybmQgS3Vo
+bHMgPGJlcm5kLmt1aGxzQHQtb25saW5lLmRlPgo+ICstLS0KPiArIGxpYi91dGlsL3NpZ25hbC5o
+IHwgMSArCj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiArCj4gK2RpZmYgLS1n
+aXQgYS9saWIvdXRpbC9zaWduYWwuaCBiL2xpYi91dGlsL3NpZ25hbC5oCj4gK2luZGV4IDA2NjNh
+ZjZhYjk0Li5mNjYyZWUxMTBkNiAxMDA2NDQKPiArLS0tIGEvbGliL3V0aWwvc2lnbmFsLmgKPiAr
+KysrIGIvbGliL3V0aWwvc2lnbmFsLmgKPiArQEAgLTIxLDYgKzIxLDcgQEAKPiArICNpZm5kZWYg
+X1NBTUJBX1VUSUxfU0lHTkFMX0hfCj4gKyAjZGVmaW5lIF9TQU1CQV9VVElMX1NJR05BTF9IXwo+
+ICsgCj4gKysjaW5jbHVkZSA8c2lnbmFsLmg+Cj4gKyAjaW5jbHVkZSA8c3RkYm9vbC5oPgo+ICsg
+Cj4gKyAvKioKPiArLS0gCj4gKzIuMzAuMgo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1i
+YTQvc2FtYmE0LWNhY2hlLnR4dCBiL3BhY2thZ2Uvc2FtYmE0L3NhbWJhNC1jYWNoZS50eHQKPiBp
+bmRleCA3NWQwMzQzZGM5Li5iYTg0OWI3YzZlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvc2FtYmE0
+L3NhbWJhNC1jYWNoZS50eHQKPiArKysgYi9wYWNrYWdlL3NhbWJhNC9zYW1iYTQtY2FjaGUudHh0
+Cj4gQEAgLTQzLDMgKzQzLDQgQEAgQ2hlY2tpbmcgZm9yIGEgNjQtYml0IGhvc3QgdG8gc3VwcG9y
+dCBsbWRiOiBOTwo+ICBDaGVja2luZyB2YWx1ZSBvZiBHTlVUTFNfQ0lQSEVSX0FFU18xMjhfQ0ZC
+ODogMjkKPiAgQ2hlY2tpbmcgdmFsdWUgb2YgR05VVExTX01BQ19BRVNfQ01BQ18xMjg6IDIwMwo+
+ICBDaGVja2luZyB3aGV0aGVyIGZjbnRsIHN1cHBvcnRzIGZsYWdzIHRvIHNlbmQgZGlyZWN0IEkv
+TyBhdmFpbGFiaWxpdHkgc2lnbmFsczogT0sKPiArQ2hlY2tpbmcgZm9yIGdudXRscyBmaXBzIG1v
+ZGUgc3VwcG9ydDogTk8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zYW1iYTQvc2FtYmE0Lmhhc2gg
+Yi9wYWNrYWdlL3NhbWJhNC9zYW1iYTQuaGFzaAo+IGluZGV4IDAzM2Q5MzI3MzIuLjQ3NDlmNmY1
+OTcgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zYW1iYTQvc2FtYmE0Lmhhc2gKPiArKysgYi9wYWNr
+YWdlL3NhbWJhNC9zYW1iYTQuaGFzaAo+IEBAIC0xLDQgKzEsNCBAQAo+ICAjIExvY2FsbHkgY2Fs
+Y3VsYXRlZCBhZnRlciBjaGVja2luZyBwZ3Agc2lnbmF0dXJlCj4gLSMgaHR0cHM6Ly9kb3dubG9h
+ZC5zYW1iYS5vcmcvcHViL3NhbWJhL3N0YWJsZS9zYW1iYS00LjE0LjEwLnRhci5hc2MKPiAtc2hh
+MjU2ICAxMDdlZTg2MmY1ODA2MjY4MmNlYzM2MmVjNjhhMjQyNTEyOTI4MDVmODlhYTRjOTdlN2Fi
+ODAyMzdmOTFjN2FmICBzYW1iYS00LjE0LjEwLnRhci5nego+ICsjIGh0dHBzOi8vZG93bmxvYWQu
+c2FtYmEub3JnL3B1Yi9zYW1iYS9zdGFibGUvc2FtYmEtNC4xNS4zLnRhci5hc2MKPiArc2hhMjU2
+ICA1MTkzOTk0MDQzOTE1NTAzNDU4NDY3NjhlYTRkZDBmZTdmY2IwNGUyMGMyYjg5MWI1ZWViMDJl
+NTU1NDEzN2RiICBzYW1iYS00LjE1LjMudGFyLmd6Cj4gIHNoYTI1NiAgOGNlYjRiOWVlNWFkZWRk
+ZTQ3YjMxZTk3NWMxZDkwYzczYWQyN2I2YjE2NWExZGNkODBjN2M1NDVlYjY1YjkwMyAgQ09QWUlO
+Rwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3NhbWJhNC9zYW1iYTQubWsgYi9wYWNrYWdlL3NhbWJh
+NC9zYW1iYTQubWsKPiBpbmRleCBlYjFmM2I4MzBlLi44ZmE4YjUzMzk5IDEwMDY0NAo+IC0tLSBh
+L3BhY2thZ2Uvc2FtYmE0L3NhbWJhNC5tawo+ICsrKyBiL3BhY2thZ2Uvc2FtYmE0L3NhbWJhNC5t
+awo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+
+IC1TQU1CQTRfVkVSU0lPTiA9IDQuMTQuMTAKPiArU0FNQkE0X1ZFUlNJT04gPSA0LjE1LjMKPiAg
+U0FNQkE0X1NJVEUgPSBodHRwczovL2Rvd25sb2FkLnNhbWJhLm9yZy9wdWIvc2FtYmEvc3RhYmxl
+Cj4gIFNBTUJBNF9TT1VSQ0UgPSBzYW1iYS0kKFNBTUJBNF9WRVJTSU9OKS50YXIuZ3oKPiAgU0FN
+QkE0X0lOU1RBTExfU1RBR0lORyA9IFlFUwo+IC0tIAo+IDIuMzAuMgo+IAo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcg
+bGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0t
+LS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklC
+Qk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAg
+RGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMg
+NTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxl
+LyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8g
+fCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0t
+LS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
