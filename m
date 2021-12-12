@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C5E5C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC5CC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:23:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBEE140246;
-	Sun, 12 Dec 2021 22:23:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0ACA140333;
+	Sun, 12 Dec 2021 22:23:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D2ZUxALjeEj7; Sun, 12 Dec 2021 22:23:32 +0000 (UTC)
+	with ESMTP id CpubxsbjXGms; Sun, 12 Dec 2021 22:23:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28F4C40271;
-	Sun, 12 Dec 2021 22:23:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C0B111BF337
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E9EA4030B;
+	Sun, 12 Dec 2021 22:23:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D52C11BF973
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B022C402C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3EA660F03
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UUfwLGpgA_sJ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CclwE6XbiXPd for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 026E2402A7
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16FEA60E83
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5414B836D2; Sun, 12 Dec 2021 22:18:08 +0000 (UTC)
+ id 6D467836B9; Sun, 12 Dec 2021 22:18:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:08:27 +0100
+Date: Sun, 12 Dec 2021 23:13:36 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 2436f0d75c14b7d8a2490a715f140472e152626a
-X-Git-Newrev: abf7c453d828f4bd187ad09347d422db715c8a65
+X-Git-Oldrev: 138328309dec336250bc5e7cf3403462d5a68ecd
+X-Git-Newrev: cd815834d79069797beae74e934f6f450750c835
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221808.5414B836D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] core/show-info: report
- build_dir relative to CONFIG_DIR
+Message-Id: <20211212221808.6D467836B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] core/pkg-generic: also
+ list files installed in images/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abf7c453d828f4bd187ad09347d422db715c8a65
+commit: https://git.buildroot.net/buildroot/commit/?id=cd815834d79069797beae74e934f6f450750c835
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Currently, the build_dir field is reported relative to $(BASE_DIR), to
-avoid leaking local paths.
+Some packages install nothing in target nor staging, but install images
+(like the kernel vmlinux, or a bootloader boot blob...)
 
-However, BASE_DIR is not a directory that is very convenient: for
-in-tree builds, it is $(CONFIG_DIR)/output/, while for out-of-tree
-builds, it is $(CONFIG_DIR). This difference is purely an idiosyncracy
-of how out-of-tree builds have been implemented in Buildroot, and is
-not under the control of the user.
+If we want to appropriately account for the files installed by each
+package, we also need to take images/ into account.
 
-What the user is in control of, however, is where the .config file is
-located. This, really, is the directory we should base relative paths
-on.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 76c4df324d3eb2af9dde3ffdbb79ee54ffbaa73e)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5d00fecb7dd922ae2c003b46683173756372fd14)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d0fcdd4e1d..5f9a5739e4 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -113,7 +113,7 @@ define _json-info-pkg
- 		"virtual": false$(comma)
- 		$(call _json-info-pkg-details,$(1)) \
- 	)
--	"build_dir": "$(patsubst $(BASE_DIR)/%,%,$($(1)_BUILDDIR))",
-+	"build_dir": "$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))",
- 	$(if $(filter target,$($(1)_TYPE)), \
- 		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
- 		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 45589bcbb4..b8479af26b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -234,6 +234,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+ 	@$(call pkg_size_before,$(TARGET_DIR))
+ 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
++	@$(call pkg_size_before,$(BINARIES_DIR),-images)
+ 	@$(call pkg_size_before,$(HOST_DIR),-host)
+ 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+@@ -358,6 +359,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ $(BUILD_DIR)/%/.stamp_installed:
+ 	@$(call pkg_size_after,$(TARGET_DIR))
+ 	@$(call pkg_size_after,$(STAGING_DIR),-staging)
++	@$(call pkg_size_after,$(BINARIES_DIR),-images)
+ 	@$(call pkg_size_after,$(HOST_DIR),-host)
+ 	@$(call check_bin_arch)
+ 	$(Q)touch $@
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
