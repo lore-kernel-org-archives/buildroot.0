@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D146BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D78F8C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C21B42360;
-	Sun, 12 Dec 2021 12:24:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CEB9429D2;
+	Sun, 12 Dec 2021 12:24:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rsITTqbiExm9; Sun, 12 Dec 2021 12:24:12 +0000 (UTC)
+	with ESMTP id DkTJKAQQphQ0; Sun, 12 Dec 2021 12:24:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6A344235D;
-	Sun, 12 Dec 2021 12:24:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E6481BF373
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8BC0429C2;
+	Sun, 12 Dec 2021 12:24:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E4A681BF373
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A36DB4052F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73B3042059
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QWEJ_TsBWQac for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G_Ti3_MJ__H1 for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BA3C40530
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5CED4299F
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D700782B66; Sun, 12 Dec 2021 12:17:14 +0000 (UTC)
+ id F17B782B66; Sun, 12 Dec 2021 12:17:14 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 13:21:41 +0100
+Date: Sun, 12 Dec 2021 13:21:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0987512a28a862e84d977b336cac02fbdc99fadc
-X-Git-Newrev: 79791023ee4e257b0cedccae4fab940530759243
+X-Git-Oldrev: e39d60a982fa6dd5e1e0733a527dfc25d82aa4ad
+X-Git-Newrev: 671eb03b3b3375f6a8d88e1e51c7b87d173def64
 X-Patchwork-Hint: ignore
-Message-Id: <20211212121714.D700782B66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lsof: bump to version 4.94.0
+Message-Id: <20211212121714.F17B782B66@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stella: zlib is optional,
+ not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +59,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79791023ee4e257b0cedccae4fab940530759243
+commit: https://git.buildroot.net/buildroot/commit/?id=671eb03b3b3375f6a8d88e1e51c7b87d173def64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
-
-https://github.com/lsof-org/lsof/releases/tag/4.94.0
+zlib is optional, not mandatory since version 6.1 and
+https://github.com/stella-emu/stella/commit/00e464afc3a2581e2716b3eec9c516a36f895236
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lsof/lsof.hash | 4 ++--
- package/lsof/lsof.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/stella/Config.in | 1 -
+ package/stella/stella.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-index c7432ffbe8..9e72023d30 100644
---- a/package/lsof/lsof.hash
-+++ b/package/lsof/lsof.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	3df912bd966fc24dc73ddea3e36a61d79270b21b085936a4caabca56e5b486a2	lsof-4.93.2.tar.gz
--sha256	32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1	dialects/linux/dproto.h
-+sha256  c41709c2543ecf9de1e950795790a9786a2f225e51c3cc53d6a9a256f872472b  lsof_4.94.0.linux.tar.bz2
-+sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 6aa829c2c0..ff09d64345 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/stella/Config.in b/package/stella/Config.in
+index c74c7a704d..7722f8a540 100644
+--- a/package/stella/Config.in
++++ b/package/stella/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_STELLA
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_SDL2
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Stella is a multi-platform Atari 2600 VCS emulator.
  
--LSOF_VERSION = 4.93.2
--LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
-+LSOF_VERSION = 4.94.0
-+LSOF_SOURCE = lsof_$(LSOF_VERSION).linux.tar.bz2
-+LSOF_SITE = https://github.com/lsof-org/lsof/releases/download/$(LSOF_VERSION)
- LSOF_LICENSE = lsof license
- # License is repeated in each file, this is a relatively small one.
- # It is also defined in 00README, but that contains a lot of other cruft.
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index e7b0082e7e..9e21606155 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -10,7 +10,7 @@ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VE
+ STELLA_LICENSE = GPL-2.0+
+ STELLA_LICENSE_FILES = Copyright.txt License.txt
+ 
+-STELLA_DEPENDENCIES = sdl2 zlib
++STELLA_DEPENDENCIES = sdl2
+ 
+ STELLA_CONF_OPTS = \
+ 	--host=$(GNU_TARGET_NAME) \
+@@ -24,6 +24,13 @@ else
+ STELLA_CONF_OPTS += --disable-png
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++STELLA_CONF_OPTS += --enable-zip
++STELLA_DEPENDENCIES += zlib
++else
++STELLA_CONF_OPTS += --disable-zip
++endif
++
+ # The configure script is not autoconf based, so we use the
+ # generic-package infrastructure
+ define STELLA_CONFIGURE_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
