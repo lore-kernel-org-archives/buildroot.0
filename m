@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF424C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:21:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B11C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 961674014E;
-	Sun, 12 Dec 2021 14:21:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W1XIF07z3Rm9; Sun, 12 Dec 2021 14:21:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9111240227;
-	Sun, 12 Dec 2021 14:21:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 07F701BF33B
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA2F460A8B
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39F4E60A94;
+	Sun, 12 Dec 2021 14:21:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p4PaXIAluGQf for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 54_yjZtnDg_R; Sun, 12 Dec 2021 14:21:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8792A60A8D;
+	Sun, 12 Dec 2021 14:21:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B62D1BF973
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA87885A25
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mhjhUYGUVVqv for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 14:20:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E196B60A8F
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8BBD85A26
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 14:20:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1A84E82DFB; Sun, 12 Dec 2021 14:15:22 +0000 (UTC)
+ id EF9DB82DFD; Sun, 12 Dec 2021 14:15:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 13:29:12 +0100
+Date: Sun, 12 Dec 2021 11:50:30 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 76b62c102bfc209de0e0a1fbd573ce13562661b5
-X-Git-Newrev: b8dac8c6cb1f53d63c4f4eb61dc8d99ea1ae2ddd
+X-Git-Oldrev: 8e52d096dd310840c0d4cc72fbf98aedd51b3c80
+X-Git-Newrev: 8348f36e943f860a4378b8e2a30bc8a772aa2ace
 X-Patchwork-Hint: ignore
-Message-Id: <20211212141522.1A84E82DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libnss: bump
- version to 3.63
+Message-Id: <20211212141521.EF9DB82DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: drop
+ third patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8dac8c6cb1f53d63c4f4eb61dc8d99ea1ae2ddd
+commit: https://git.buildroot.net/buildroot/commit/?id=8348f36e943f860a4378b8e2a30bc8a772aa2ace
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Note: NSS 3.63 requires NSPR 4.30.
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.63_release_notes
+Drop third patch as it is not needed when using compile_et from heimdal
+instead of compile_et from e2fprogs as spotted by upstream in:
+https://bugzilla.samba.org/show_bug.cgi?id=13856#c20
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a0f020f7ae478826c137f90ac43ab415cc7c6425)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5847208213952c5d2e1ce44d2db19ead9706d5d7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/samba4/0003-Fix-unistd.h-include.patch     | 38 ----------------------
+ ...e_test.c-include-stdint.h-before-cmoka.h.patch} |  0
+ ...uild.patch => 0004-dcesrv_core-fix-build.patch} |  0
+ 3 files changed, 38 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 85c694bc66..b3e7a2935d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_62_RTM/src/SHA256SUMS
--sha256  86d6df7cece25b8d4efa53e4c19af903c484eb79871163f37b5232bb406a5478  nss-3.62.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_63_RTM/src/SHA256SUMS
-+sha256  182d2fef629102ae9423aabf2c192242b565cf5098e82c5a26cf70c5e4ea2221  nss-3.63.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 07991ae786..9296bdcc18 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.62
-+LIBNSS_VERSION = 3.63
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/package/samba4/0003-Fix-unistd.h-include.patch b/package/samba4/0003-Fix-unistd.h-include.patch
+deleted file mode 100644
+index f01b899a18..0000000000
+--- a/package/samba4/0003-Fix-unistd.h-include.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 85c33f89df8607ace0707e1360ff0f79f3e8f5f3 Mon Sep 17 00:00:00 2001
+-From: Andy Walsh <andy.walsh44+github@gmail.com>
+-Date: Wed, 6 Nov 2019 19:28:30 +0100
+-Subject: [PATCH] Fix unistd.h include
+-
+-Fixes build error
+-
+-source4/heimdal/lib/asn1/asn1_err.c:47:23: error: 'link' redeclared as different kind of symbol
+- static struct et_list link = { 0, 0 };
+-
+-Downloaded from
+-https://github.com/Andy2244/openwrt-extra/blob/samba-4.10/samba4/patches/006-samba-4-10-musl_rm_unistd_incl.patch
+-
+-Upstream bug report: https://bugzilla.samba.org/show_bug.cgi?id=13856
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- lib/replace/replace.h | 4 ----
+- 1 file changed, 4 deletions(-)
+-
+-diff --git a/lib/replace/replace.h b/lib/replace/replace.h
+-index 1658465866e..e6768c4ae51 100644
+---- a/lib/replace/replace.h
+-+++ b/lib/replace/replace.h
+-@@ -168,10 +168,6 @@
+- #include <bsd/unistd.h>
+- #endif
+- 
+--#ifdef HAVE_UNISTD_H
+--#include <unistd.h>
+--#endif
+--
+- #ifdef HAVE_STRING_H
+- #include <string.h>
+- #endif
+--- 
+-2.20.1
+-
+diff --git a/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+similarity index 100%
+rename from package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+rename to package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+diff --git a/package/samba4/0005-dcesrv_core-fix-build.patch b/package/samba4/0004-dcesrv_core-fix-build.patch
+similarity index 100%
+rename from package/samba4/0005-dcesrv_core-fix-build.patch
+rename to package/samba4/0004-dcesrv_core-fix-build.patch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
