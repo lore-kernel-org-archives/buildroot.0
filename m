@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC01C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 145F9C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEA686070B;
-	Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4B0484E4B;
+	Sun, 12 Dec 2021 22:29:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0HaI9VcEVD19; Sun, 12 Dec 2021 22:29:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id daLm-e4mPK0X; Sun, 12 Dec 2021 22:29:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03DF660ED8;
-	Sun, 12 Dec 2021 22:28:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2BAF51BF973
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E50D84E43;
+	Sun, 12 Dec 2021 22:29:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 354DB1BF97A
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC2CF4030B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 29C0782CF9
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DRAAtGoHGYwq for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JRmguFR2d1Xt for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14E6E40308
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6754F8239A
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5B7918374E; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
+ id BCC408374E; Sun, 12 Dec 2021 22:18:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:13:25 +0100
+Date: Sun, 12 Dec 2021 23:21:17 +0100
 X-Git-Refname: refs/heads/2021.08.x
-X-Git-Oldrev: c63dcc457969c1dce18a0fd06ac358fae1883703
-X-Git-Newrev: 7954aa6e60ec2bda715ecfb1b656360f0581d2e3
+X-Git-Oldrev: b3e3e977d7d3c7568e1c934fac395c9b7fe5ae99
+X-Git-Newrev: a6ed09e82babb30a7da9320f0e66b5596c9df036
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221828.5B7918374E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.08.x] core/pkg-generic: also
- list files installed in images/
+Message-Id: <20211212221828.BCC408374E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.08.x] package/libgee: add
+ LIBGEE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7954aa6e60ec2bda715ecfb1b656360f0581d2e3
+commit: https://git.buildroot.net/buildroot/commit/?id=a6ed09e82babb30a7da9320f0e66b5596c9df036
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.08.x
 
-Some packages install nothing in target nor staging, but install images
-(like the kernel vmlinux, or a bootloader boot blob...)
+cpe:2.3:a:gnome:libgee is a valid CPE identifier for this package:
 
-If we want to appropriately account for the files installed by each
-package, we also need to take images/ into account.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Alibgee
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5d00fecb7dd922ae2c003b46683173756372fd14)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d2089a4aadc7f1bc689ac452f52209205c71a5d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgee/libgee.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 97ee204b80..9f408a47ea 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -252,6 +252,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
- 	@$(call pkg_size_before,$(TARGET_DIR))
- 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
-+	@$(call pkg_size_before,$(BINARIES_DIR),-images)
- 	@$(call pkg_size_before,$(HOST_DIR),-host)
- 	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
- 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
-@@ -378,6 +379,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- $(BUILD_DIR)/%/.stamp_installed:
- 	@$(call pkg_size_after,$(TARGET_DIR))
- 	@$(call pkg_size_after,$(STAGING_DIR),-staging)
-+	@$(call pkg_size_after,$(BINARIES_DIR),-images)
- 	@$(call pkg_size_after,$(HOST_DIR),-host)
- 	@$(call check_bin_arch)
- 	$(Q)touch $@
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 0a05a63635..64beef30df 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -12,6 +12,7 @@ LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
+ LIBGEE_INSTALL_STAGING = YES
+ LIBGEE_LICENSE = LGPL-2.1+
+ LIBGEE_LICENSE_FILES = COPYING
++LIBGEE_CPE_ID_VENDOR = gnome
+ # We're patching gee/Makefile.am
+ LIBGEE_AUTORECONF = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
