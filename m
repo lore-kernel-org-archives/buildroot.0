@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 988FDC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1189AC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 22:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B50340953;
-	Sun, 12 Dec 2021 22:26:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD01B60F07;
+	Sun, 12 Dec 2021 22:26:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b5E95FLjyM-j; Sun, 12 Dec 2021 22:26:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8oWOXQKq_iAo; Sun, 12 Dec 2021 22:26:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72EEE40943;
-	Sun, 12 Dec 2021 22:26:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C2CEA1BF973
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3105360EDE;
+	Sun, 12 Dec 2021 22:26:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC1A41BF337
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A83EB402B1
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E4F760EDD
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 22:23:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IuoM5InctHed for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 22:23:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eDP-VsLkzkHC for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 923C8402BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAEFA60EE9
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 22:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 02517836B8; Sun, 12 Dec 2021 22:18:09 +0000 (UTC)
+ id 0D650836B8; Sun, 12 Dec 2021 22:18:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 23:22:25 +0100
+Date: Sun, 12 Dec 2021 23:22:58 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 0742b8ab020fd6705da91a09c8d144684abde614
-X-Git-Newrev: 1e5fe58c248e0e00477b87ad38993aedd8c0de65
+X-Git-Oldrev: 1e5fe58c248e0e00477b87ad38993aedd8c0de65
+X-Git-Newrev: b9f2cc3dda161312a9365f84ca1d02762b51770d
 X-Patchwork-Hint: ignore
-Message-Id: <20211212221809.02517836B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/exfat: add
- EXFAT_CPE_ID_VENDOR
+Message-Id: <20211212221809.0D650836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/apr: add CPE
+ variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e5fe58c248e0e00477b87ad38993aedd8c0de65
+commit: https://git.buildroot.net/buildroot/commit/?id=b9f2cc3dda161312a9365f84ca1d02762b51770d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:exfat_project:exfat is a valid CPE identifier for this
+cpe:2.3:a:apache:portable_runtime is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aexfat_project%3Aexfat
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapache%3Aportable_runtime
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7bd6ed208c234d0a0a065ce13e0fe9a5f438e9ba)
+(cherry picked from commit 8022e00b2dc822c3403eee28db7181b5899c22dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exfat/exfat.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/apr/apr.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index e23495152e..282a30aa5e 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
-@@ -10,6 +10,7 @@ EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
- EXFAT_DEPENDENCIES = libfuse host-pkgconf
- EXFAT_LICENSE = GPL-2.0+
- EXFAT_LICENSE_FILES = COPYING
-+EXFAT_CPE_ID_VENDOR = exfat_project
- EXFAT_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
- EXFAT_CONF_OPTS += --exec-prefix=/
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 466222586c..c45829aacc 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -9,6 +9,8 @@ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = http://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
+ APR_LICENSE_FILES = LICENSE
++APR_CPE_ID_VENDOR = apache
++APR_CPE_ID_PRODUCT = portable_runtime
+ APR_INSTALL_STAGING = YES
+ # We have a patch touching configure.in and Makefile.in,
+ # so we need to autoreconf:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
