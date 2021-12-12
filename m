@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4EAC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB02C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1050B41C67;
-	Sun, 12 Dec 2021 17:38:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4383360EB5;
+	Sun, 12 Dec 2021 17:38:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ArBw6t-FCtBQ; Sun, 12 Dec 2021 17:37:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V308unckO6Lc; Sun, 12 Dec 2021 17:38:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C0B741C08;
-	Sun, 12 Dec 2021 17:37:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B67F60EAF;
+	Sun, 12 Dec 2021 17:38:10 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EDE3F1BF31D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E6951BF31D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92CF560EB5
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABA1860ED1
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2AmHOWpdoHEM for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 17:35:29 +0000 (UTC)
+ with ESMTP id IUd6REU4brRY for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6C7C60ED1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98E1B60EC6
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 974AC835F5; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
+ id 6B22E835F5; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 18:34:04 +0100
+Date: Sun, 12 Dec 2021 18:31:34 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 12f767975f589cd89f25920a1153bb3501e106e0
-X-Git-Newrev: 64dcd86ccf818b11e39866dd81efaf561e575251
+X-Git-Oldrev: 28bcbbbc21bd651936c8ccf344a78abc445b99ff
+X-Git-Newrev: 457f0f20b2d353b5048232ebb44e9e806cc78de7
 X-Patchwork-Hint: ignore
-Message-Id: <20211212173017.974AC835F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] Revert
- "package/coreutils: ignore CVE-2013-0221, CVE-2013-0222, CVE-2013-0223"
+Message-Id: <20211212173017.6B22E835F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libnspr: add CPE
+ variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,39 +59,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64dcd86ccf818b11e39866dd81efaf561e575251
+commit: https://git.buildroot.net/buildroot/commit/?id=457f0f20b2d353b5048232ebb44e9e806cc78de7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This reverts commit 8ae9156d8b730689484927fba2ec2fa6c1dc0433 as those
-CVEs are not tagged as affecting gnu:coreutils in NVD NIST database but
-opensuse:opensuse and redhat:entreprise_linux:
-- https://nvd.nist.gov/vuln/detail/CVE-2013-0221
-- https://nvd.nist.gov/vuln/detail/CVE-2013-0222
-- https://nvd.nist.gov/vuln/detail/CVE-2013-0223
+cpe:2.3:a:mozilla:netscape_portable_runtime is a valid CPE identifier
+for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amozilla%3Anetscape_portable_runtime
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7d569f51914c22457e35bba6f7658c4b3d8af086)
+(cherry picked from commit fffd2aade69a2f1db97c34d63fb05b6c8f9a31dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/libnspr/libnspr.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 3ec3c847c2..57b77b8c6a 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -10,10 +10,6 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPL-3.0+
- COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_CPE_ID_VENDOR = gnu
--# Only when including SUSE coreutils-i18n.patch
--COREUTILS_IGNORE_CVES = CVE-2013-0221
--COREUTILS_IGNORE_CVES += CVE-2013-0222
--COREUTILS_IGNORE_CVES += CVE-2013-0223
- # We're patching m4/pthread-cond.m4
- COREUTILS_AUTORECONF = YES
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 58a3338c60..8f16a8076f 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
+ LIBNSPR_LICENSE = MPL-2.0
+ LIBNSPR_LICENSE_FILES = nspr/LICENSE
++LIBNSPR_CPE_ID_VENDOR = mozilla
++LIBNSPR_CPE_ID_PRODUCT = netscape_portable_runtime
  
+ # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+ LIBNSPR_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
