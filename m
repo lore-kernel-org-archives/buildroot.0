@@ -1,68 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63E8EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 11 Dec 2021 23:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E5EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 07:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1791560C30;
-	Sat, 11 Dec 2021 23:51:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC11785924;
+	Sun, 12 Dec 2021 07:24:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6rKnJmxCZDk9; Sat, 11 Dec 2021 23:51:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HFJwi2L6yui3; Sun, 12 Dec 2021 07:24:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6982660C2E;
-	Sat, 11 Dec 2021 23:51:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54B0B1BF426
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:51:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54A6E84F41;
+	Sun, 12 Dec 2021 07:24:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 055651BF3BE
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 07:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43569429C3
- for <buildroot@lists.busybox.net>; Sat, 11 Dec 2021 23:51:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E289284F41
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 07:24:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qvV9BLsVnU4G for <buildroot@lists.busybox.net>;
- Sat, 11 Dec 2021 23:51:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFA33429C2
- for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:51:41 +0000 (UTC)
-Received: from [192.168.50.18] ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id wC9TmlQcVrmmOwC9Tm85Zz; Sun, 12 Dec 2021 00:51:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1639266700; bh=HojW3BS+acLuaByE9Dk2sHgD1J6tGZT56/UG/hf6gHE=;
- h=Subject:From:To:Date:MIME-Version:Content-Type;
- b=jA7X53s+E9vWYaMrFSVEgDR47exV3X+GPmtKLdbppc+B7gjn1mu4I5WU5hGzMFJ3L
- UYyC4sS+djOO74YzJDkck+yRtPe/KGUtylaV8mlXWqZ7UGojYYNdi9sfdLmourRBHE
- 1XKEiUSen2gMguThdLt5QFD3gJogSOzIWw8Yfj9A/xL/EpdVn6bQNttMsSQMRh3ZSV
- Z7NRFvOLOOwMK37WHoJdAlO8sNdvcle/3FuDHlc148qqOmbCb9gPkKbfXURJIAV/Fg
- YWErPdqfxUw74kGixTGnkjhDLIi/w1nXYykuZEekI6CkuXWn98tlFC0aU24PtUoq/c
- tfa5/XFA4HWIg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20211124192006.646757-1-giulio.benetti@benettiengineering.com>
- <20211124192006.646757-2-giulio.benetti@benettiengineering.com>
- <101000b7-5b80-1f83-53c0-0e8a7b0f733a@mind.be>
- <bd276398-ad43-ae87-1502-65b5b2315d91@benettiengineering.com>
-Message-ID: <1be3063a-3f36-7579-d423-106395d599fc@benettiengineering.com>
-Date: Sun, 12 Dec 2021 00:51:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HQRSxNHBmZwA for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 07:24:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com
+ [IPv6:2607:f8b0:4864:20::936])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 40A3084F3F
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 07:24:50 +0000 (UTC)
+Received: by mail-ua1-x936.google.com with SMTP id t13so23939975uad.9
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Y+HdhqlIiDZkiTzFkb7HKyrFy3HtSr8S44oeaRmlBSc=;
+ b=GN18trY6iImYfkwQKpxheXrLK+ocOw1V+B6UUS2GXU121IBTAXygqVmRuTB6ewS9UN
+ 2hn/t2siEowF6jCvbABbaICTqx0A3SlHzseETX76e1f7mB8QuVSe5RhtR8AgDJ3kNxKQ
+ Ny5shTss6Zvz7S4q01NNXhQgOl7KNmV8w4RHAPlaKDKrohfMK7Vn4b1Mv1JLIlYjyPlZ
+ f5K4dhDdLXBRUMFSAaem82k/THDcZaewtE/JmTbrf1pEz/P+oKy6xgmQy/rRZK2RHZ0x
+ 1JodAOX2G65n3C2x3kjTvPfk7sm6J31frfepHdJU4lGfZxPl5ISn9698lEKAvcD5YeOo
+ 10TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Y+HdhqlIiDZkiTzFkb7HKyrFy3HtSr8S44oeaRmlBSc=;
+ b=EQ9joXrEi0jWe6eLBF7YbpeuQ3LDPk4eqwUKENGRCXazCIg+EPEOJDiV7cJp6wOIQ8
+ NeR1Nx8iV/72xasbR5AnwZtfINkkYm5LdQiBhMKxrjTHaXjXwEVX/TxSw9XabR8P2HqO
+ 2omK4b79ZNYDtUlIlZRanPjqboHjo239ivsy6wkLZU7UX6G8e3EA8nCwhFJAXkSU5OZc
+ hlg9wCXyhcECHcxe3BzcTrgTNc4RapzjNvk13OjodEXlWjv77mmDOp5LsNME7emd3gI2
+ uX8HnTvQ6ykZOQL086oIvuLy9nAwMlSY0j656aZK5KBQ7TykCtF9Tushb2ZQg6AJeGbk
+ a0EA==
+X-Gm-Message-State: AOAM531R138Zg9LslTJE9baShNpY/mZHkX3SAxP5hATQnuCwDbIesEU7
+ b1ASxWQfcz1V1WWaK0ZfU30xpDIP5LWOQA==
+X-Google-Smtp-Source: ABdhPJzWVjMgzK8iLOuHs0ETru1Yo/mPkg3f4eFUgJmiOZj7RrLwx3lAL7SJg8XBx+AUU4s52YO7cw==
+X-Received: by 2002:ab0:2498:: with SMTP id i24mr36801564uan.18.1639293888624; 
+ Sat, 11 Dec 2021 23:24:48 -0800 (PST)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com.
+ [209.85.222.54])
+ by smtp.gmail.com with ESMTPSA id a4sm3193684vkm.46.2021.12.11.23.24.47
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Dec 2021 23:24:48 -0800 (PST)
+Received: by mail-ua1-f54.google.com with SMTP id t13so23939939uad.9
+ for <buildroot@buildroot.org>; Sat, 11 Dec 2021 23:24:47 -0800 (PST)
+X-Received: by 2002:ab0:2041:: with SMTP id g1mr36028769ual.131.1639293887679; 
+ Sat, 11 Dec 2021 23:24:47 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <bd276398-ad43-ae87-1502-65b5b2315d91@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfOpsClWRm7vivY5jN5q9ScyayscSFkCHPeNw4PUl1jDfWqfbsplKsnx2lDJZCqB2/z6bimqJaN0vB53vy19JJCDI7SvzEb5j1l689z0w2bV2enLRtE47
- PmIAfXtVLQEt30gnYeS0FXjS/FgOwkQekdeDni1GP+2TRPEPHgERAr92azD7Adra2tK1Hf+4xwyajPCtEzzT6mqAyh2dGCuyD53lBCa816YgnvZ6eFegbjZw
- 1SbZ8OLo0PWuTcLSFSvX98mkd76e+pHzut3lYrfBF7Q=
-Subject: Re: [Buildroot] [PATCH 1/1] configs/olimex_a64_olinuxino: bump to
- Linux kernel 5.15.4, u-boot 2021.10 and ATF v2.5
+References: <20211210181353.4012562-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211210181353.4012562-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 Dec 2021 23:24:36 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2qF042yATGC_Hy_gaBemv51mOc+ZfXoFkmHtXiZ85N1ig@mail.gmail.com>
+Message-ID: <CA+h8R2qF042yATGC_Hy_gaBemv51mOc+ZfXoFkmHtXiZ85N1ig@mail.gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/runc: security bump to version
+ 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,129 +89,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/12/21 00:49, Giulio Benetti wrote:
-> Hi Arnout,
-> 
-> On 11/12/21 21:13, Arnout Vandecappelle wrote:
->>     Hi Giulio,
->>
->>     I have a few minor comments on this patch. I would normally just change them
->> while committing, but since I know you're very reactive and you would test those
->> changes better than I would, I'll leave it to you!
-> 
-> Sure, it's a pleasure :-)
-> 
->> On 24/11/2021 20:20, Giulio Benetti wrote:
->>> Bump to Linux kernel 5.15.4, u-boot 2021.10 and ATF v2.5
->>> Note:
->>
->>     (nitpick) these two lines are not useful, just make the points. Also we like
->> to have proper sentences, starting with a capital.
-> 
-> +1, now I see especially here it doesn't make sense to repeat the summary.
-> 
->>> 1) now u-boot needs SCP environment variable specified that can point to
->>> the or1k coprocessor firmware while if coprocessor is not used it must
->>> be passed /dev/null as we do in this case.
->>> 2) we now use the u-boot-sunxi-with-spl.bin instead of u-boot.itb since
->>> it's not produced by u-boot anymore.
->>> 3) u-boot 2021.10 requires python 3 and openssl so let's enable them.
->>> 4) remove local patches for uboot and linux.
->>> 5) remove global patches path from defconfig.
->>>
->>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> ---
->>>     board/olimex/a64-olinuxino/genimage.cfg       | 10 +---
->>>     ...ve-redundant-YYLOC-global-declaratio.patch | 52 -------------------
->>>     ...e-redundant-YYLOC-global-declaration.patch | 28 ----------
->>>     configs/olimex_a64_olinuxino_defconfig        | 25 ++++-----
->>>     4 files changed, 13 insertions(+), 102 deletions(-)
->>>     delete mode 100644 board/olimex/a64-olinuxino/patches/linux/0001-scripts-dtc-Remove-redundant-YYLOC-global-declaratio.patch
->>>     delete mode 100644 board/olimex/a64-olinuxino/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch
->>>
->>> diff --git a/board/olimex/a64-olinuxino/genimage.cfg b/board/olimex/a64-olinuxino/genimage.cfg
->>> index 44fcb3cb59..9606d26c02 100644
->>> --- a/board/olimex/a64-olinuxino/genimage.cfg
->>> +++ b/board/olimex/a64-olinuxino/genimage.cfg
->>> @@ -16,15 +16,9 @@ image sdcard.img {
->>>     
->>>     	partition spl {
->>
->>     Since the partition now contains U-Boot (including SPL), I think it's better
->> to call it "u-boot". (Also nitpick)
-> 
-> +1
-> 
->>>     		in-partition-table = "no"
->>> -		image = "sunxi-spl.bin"
->>> +		image = "u-boot-sunxi-with-spl.bin"
->>>     		offset = 8K
->>> -	}
->>> -
->>> -	partition u-boot {
->>> -		in-partition-table = "no"
->>> -		image = "u-boot.itb"
->>> -		offset = 40K
->>> -		size = 1M # 1MB - 40K
->>> +		size = 1032K # 1MB - 8KB + 16KB(GPT)
->>>     	}
->>>     
->>>     	partition boot {
->>
->> [snip]
->>>     # Bootloader
->>>     BR2_TARGET_UBOOT=y
->>>     BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>>     BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->>> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
->>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
->>>     BR2_TARGET_UBOOT_BOARD_DEFCONFIG="a64-olinuxino"
->>>     BR2_TARGET_UBOOT_NEEDS_DTC=y
->>> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->>>     BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->>> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->>>     BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->>> -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
->>> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
->>>     BR2_TARGET_UBOOT_SPL=y
->>> -BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
->>> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
->>
->>     And here's the big comment: this is not actually the SPL image, it's in fact
->> the full U-Boot image. I think that what you end up with with this is that in
->> addition to this file, there's another file (u-boot.bin?) that gets installed
->> into images but that is in fact useless.
-> 
-> +1
-> 
->>     Therefore, I think you should instead set BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
->> to u-boot-sunxi-with-spl.bin and remove BR2_TARGET_UBOOT_SPL.
->>
->>     Does that work?
-> 
-> Yes it works, just tested on target right now and sent the v2 patch[1] :-)
-> 
-> Thanks for reviewing! Ah, I've bumped Linux to 5.15.7, before it was
-> 5.15.6 and I've realized only now I didn't put it on V1->V2.
+Hi all,
 
-s/5.15.6/5.15.4
-I run too much
+On Fri, Dec 10, 2021 at 10:14 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>  # Locally computed
+> -sha256  6c3cca4bbeb5d9b2f5e3c0c401c9d27bc8a5d2a0db8a2f6a06efd03ad3c38a33  runc-1.0.2.tar.gz
+> +sha256  0eaf2f6606d72f166a5e7138a8a8d4d8f85d84e43448c08c66a1c93ead17a574  runc-1.0.3.tar.gz
 
-> [1]:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20211211234447.538121-1-giulio.benetti@benettiengineering.com/
-> 
-> Kind regards
-> 
+Reviewed-by: Christian Stewart <christian@paral.in>
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+Regards,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
