@@ -4,44 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F934C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CFD5C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 12:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B782440541;
-	Sun, 12 Dec 2021 12:26:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0DBE4049E;
+	Sun, 12 Dec 2021 12:38:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ShbZeQIs5vz; Sun, 12 Dec 2021 12:26:04 +0000 (UTC)
+	with ESMTP id gEkCmBQbr-O3; Sun, 12 Dec 2021 12:38:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 202574063E;
-	Sun, 12 Dec 2021 12:26:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6EB2F1BF373
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F36C40530;
+	Sun, 12 Dec 2021 12:37:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 65F981BF373
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFBE741E40
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:22:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 550EE85986
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 12:37:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9d5GvIxRYtxX for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65F3C42050
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 12:22:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B204D82B70; Sun, 12 Dec 2021 12:17:14 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=libero.it
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DNLByFuT8dLd for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 12:37:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from libero.it (smtp-34.italiaonline.it [213.209.10.34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D2B585920
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 12:37:57 +0000 (UTC)
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it ([82.50.51.121])
+ by smtp-34.iol.local with ESMTPA
+ id wO70mmmvtUpmcwO71mGvHj; Sun, 12 Dec 2021 13:37:55 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+ t=1639312675; bh=1RSVE0cv08Z2UWF6/KlCdZqwCwNqC9EM4GYpzcmBGFE=;
+ h=From;
+ b=zQsasLL/Ug9pSxCtVmu+oFW5qcS/mJty8eqTdbyWTFCEXMhCKHindUHhllOTQ+65E
+ dVgOeAlgix/0tKTSvU2S7SALe9lp9mSw3qP94VGf9YcfmYzcDiS5cFzaLevkvVvq2z
+ oM7gWVigsW/LaFHDFPJD7TbyDQo1XGamq2VwpsDz7DTT3H/BTD/yPi7s0YENCnnrR/
+ HXak+Dq2jz/mr+d4cCFbY87JEm0wWuurbaHSLxWdCw2WCPPJbZw8A2k0rOQ6TMQjHV
+ 6cQBBUH53A78V8lOZPCsOtgZEXGGLxxNzMZ673Njm4eTmUnmNT055CjfJM/XHNbxNc
+ bpyxnXf6DC3DA==
+X-CNFS-Analysis: v=2.4 cv=VsDmv86n c=1 sm=1 tr=0 ts=61b5ed23 cx=a_exe
+ a=xtCFBUu/Ze6RtP+zVSd77w==:117 a=xtCFBUu/Ze6RtP+zVSd77w==:17
+ a=e2X5L8jO6AHGwzUiFLIA:9
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 13:21:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a21c61ad0a5313c6edf21f20c5d542e9e7f6f7f3
-X-Git-Newrev: 4efeea55ea6a07b795a2f002a3d4b51b5ef9c366
-X-Patchwork-Hint: ignore
-Message-Id: <20211212121714.B204D82B70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libyang: needs __sync_*_4
- intrinsics
+Date: Sun, 12 Dec 2021 13:37:49 +0100
+Message-Id: <20211212123753.11848-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfIYBQeKBx+I9Uv1nhIe3VScveqbDtkPtAv2LwR5psLEkAWbDwK/YyTma+5tfPlsi4t15yLE8YKmHZS07lBouor99E73Ky4cIqbe2V7s9BgSGawveqSUV
+ 7wjQpDsNNh+Qh4gOQrzebwQc/K04Xc5PrURU7Fft1u7MuvQVqLLGcUQ/94Dy5sKKQBCui42e1ZGY0Lcb9ZqcGju3sepeYNLX0N+8HJ6ELHwqb9Xr6HlORFRs
+ gdZp6tqJyGxZ2GMXwkmw7G5qfS8O9SAdFPrUEUnV6R7A0juQxqZ5JqpAIQ7+CAFnW9BX76QJsFt/iUaePvoSYLDUIvbd66HttRMUd9aHwsV7Qid2WFdsiGeK
+ wmdV9MmwJEiK+ivU0xaIsi1dWhTi4Q==
+Subject: [Buildroot] [RESEND PATCH v2,
+ 0/4] configs/stm32f429_disco: fix kernel bootup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,118 +70,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Dario Binacchi via buildroot <buildroot@buildroot.org>
+Reply-To: Dario Binacchi <dariobin@libero.it>
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ Lee Jones <lee.jones@linaro.org>, Dario Binacchi <dariobin@libero.it>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4efeea55ea6a07b795a2f002a3d4b51b5ef9c366
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Inspired by Arnout Vandecappelle's review of the kernel bootup fix patch
+for the stm32f429-disco board I created this series which required the
+afboot bootloader update and the kernel bootup fix for the
+stm32f469_disco_xip_defconfig configuration. I therefore renamed the
+configurations of the stm32f429 and stm32f469 boards to make them more
+explicit.
 
-libyang needs __sync_*_4 intrinsics since bump to version 2.0.112 in
-commit 2a3edc5e00b38f4f927894d0911990c9060e4415 and
-https://github.com/CESNET/libyang/commit/080064b7906aecd7454e58e1c34c1c2198809e4e:
+Dario Binacchi (4):
+  configs/stm32f469_xip_disco: fix kernel bootup
+  boot/afboot-stm32: upgrade version
+  configs/stm32f429_disco: fix kernel bootup
+  configs/stm32f4{2|6}9_*_defconfig: rename configurations
 
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ../../libyang.so.2.13.7: undefined reference to `__sync_fetch_and_sub_4'
+ .../stm32f429-disco/flash.sh                  |   2 +-
+ .../stm32f429-disco/linux.config              | 120 ++++++++++++++++++
+ ...sco-don-t-force-init-in-chosen-boota.patch |  32 -----
+ .../stm32f469-disco/{flash.sh => flash_sd.sh} |   0
+ .../stm32f469-disco/flash_xip.sh              |   2 +-
+ .../{linux.fragment => linux-sd.fragment}     |   0
+ .../stm32f469-disco/linux-xip.config          |   8 +-
+ ...32f469-i-Update-kernel-start-address.patch |  56 --------
+ ...fault-dram-address-without-remapping.patch |  38 ------
+ .../stm32f469-disco/readme.txt                |   4 +-
+ .../stm32f469-disco/readme_xip.txt            |   2 +-
+ boot/afboot-stm32/Config.in                   |  32 +++++
+ boot/afboot-stm32/afboot-stm32.hash           |   2 +-
+ boot/afboot-stm32/afboot-stm32.mk             |  18 ++-
+ ...efconfig => stm32f429_disco_xip_defconfig} |  11 +-
+ ...defconfig => stm32f469_disco_sd_defconfig} |   2 +-
+ configs/stm32f469_disco_xip_defconfig         |   4 +-
+ 17 files changed, 187 insertions(+), 146 deletions(-)
+ create mode 100644 board/stmicroelectronics/stm32f429-disco/linux.config
+ delete mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+ rename board/stmicroelectronics/stm32f469-disco/{flash.sh => flash_sd.sh} (100%)
+ mode change 100644 => 100755 board/stmicroelectronics/stm32f469-disco/flash_xip.sh
+ rename board/stmicroelectronics/stm32f469-disco/{linux.fragment => linux-sd.fragment} (100%)
+ delete mode 100644 board/stmicroelectronics/stm32f469-disco/patches/afboot-stm32/0001-stm32f469-i-Update-kernel-start-address.patch
+ delete mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-Use-default-dram-address-without-remapping.patch
+ rename configs/{stm32f429_disco_defconfig => stm32f429_disco_xip_defconfig} (63%)
+ rename configs/{stm32f469_disco_defconfig => stm32f469_disco_sd_defconfig} (97%)
 
-Fixes:
- - http://autobuild.buildroot.org/results/c1f090bde4891ac1cc84e59c51ff9561869d42b9
+-- 
+2.17.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/frr/Config.in         | 2 +-
- package/libnetconf2/Config.in | 2 ++
- package/libyang/Config.in     | 2 ++
- package/netopeer2/Config.in   | 2 ++
- package/sysrepo/Config.in     | 2 ++
- 5 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/frr/Config.in b/package/frr/Config.in
-index 911913292f..877b75b107 100644
---- a/package/frr/Config.in
-+++ b/package/frr/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_FRR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # libyang
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libyang
- 	select BR2_PACKAGE_BASH
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	select BR2_PACKAGE_C_ARES
-diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-index 0a735b5ed6..7865f9e487 100644
---- a/package/libnetconf2/Config.in
-+++ b/package/libnetconf2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBNETCONF2
- 	bool "libnetconf2"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libyang
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-@@ -12,4 +13,5 @@ config BR2_PACKAGE_LIBNETCONF2
- 
- comment "libnetconf2 needs a toolchain w/ threads, dynamic libraray"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libyang/Config.in b/package/libyang/Config.in
-index 54df061b58..d08f8fd42f 100644
---- a/package/libyang/Config.in
-+++ b/package/libyang/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBYANG
- 	bool "libyang"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrinsics
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PCRE2
-@@ -10,4 +11,5 @@ config BR2_PACKAGE_LIBYANG
- 	  https://github.com/CESNET/libyang
- 
- comment "libyang needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
-index 763b1f234b..db31a786a1 100644
---- a/package/netopeer2/Config.in
-+++ b/package/netopeer2/Config.in
-@@ -1,11 +1,13 @@
- comment "netopeer2 needs a toolchain w/ gcc >= 4.8, C++, threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_PACKAGE_NETOPEER2
- 	bool "netopeer2"
- 	depends on BR2_USE_MMU # libnetconf2, libssh, sysrepo
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libyang
- 	depends on !BR2_STATIC_LIBS # libnetconf2, libssh, libyang, sysrepo
- 	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index 52df1bc4c3..b1535bed9f 100644
---- a/package/sysrepo/Config.in
-+++ b/package/sysrepo/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SYSREPO
- 	bool "sysrepo"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libyang
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -24,5 +25,6 @@ endif
- 
- comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
