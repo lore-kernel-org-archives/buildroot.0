@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6575C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05063C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FBA042996;
-	Sun, 12 Dec 2021 14:22:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B15CC42983;
+	Sun, 12 Dec 2021 14:22:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nRxckV_jRyRI; Sun, 12 Dec 2021 14:22:02 +0000 (UTC)
+	with ESMTP id vMS7yoTHzT-e; Sun, 12 Dec 2021 14:22:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF64D42983;
-	Sun, 12 Dec 2021 14:22:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 48C701BF33B
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB97E42A1C;
+	Sun, 12 Dec 2021 14:22:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 82EA91BF33B
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 325A44298D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D982960A8F
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:20:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rbM_O1UkItWx for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gSUmln0K99p5 for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 14:20:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0839C42986
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1977160A94
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 14:20:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 25F3482DFB; Sun, 12 Dec 2021 14:15:22 +0000 (UTC)
+ id 389EF82DFB; Sun, 12 Dec 2021 14:15:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 13:29:39 +0100
+Date: Sun, 12 Dec 2021 14:25:57 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b8dac8c6cb1f53d63c4f4eb61dc8d99ea1ae2ddd
-X-Git-Newrev: f613d041518004d9c31a553f60acc18062599502
+X-Git-Oldrev: 5336bd122a02a60ddff22c40a1de90fc3bf7ac6d
+X-Git-Newrev: 537bbfe54b3c889439eb0d003ee2d8bd34c985d7
 X-Patchwork-Hint: ignore
-Message-Id: <20211212141522.25F3482DFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libnss: bump
- version to 3.64
+Message-Id: <20211212141522.389EF82DFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libnspr: bump to
+ version 4.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f613d041518004d9c31a553f60acc18062599502
+commit: https://git.buildroot.net/buildroot/commit/?id=537bbfe54b3c889439eb0d003ee2d8bd34c985d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.64_release_notes
+Bump to version 4.32
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 59fedf02df8e2f5684ef23a5083a3af0fe2a7350)
+(cherry picked from commit 811305e38f14ba615eb90e6c04fc82622eebc148)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b3e7a2935d..92e9936d0d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 8ca0f573b9..13d3958735 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_63_RTM/src/SHA256SUMS
--sha256  182d2fef629102ae9423aabf2c192242b565cf5098e82c5a26cf70c5e4ea2221  nss-3.63.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_64_RTM/src/SHA256SUMS
-+sha256  d3175427172e9c3a6f1ebc74452cb791590f28191c6a1a443dbc0d87c9df1126  nss-3.64.tar.gz
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
+-sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/SHA256SUMS
++sha256  bb6bf4f534b9559cf123dcdc6f9cd8167de950314a90a88b2a329c16836e7f6c  nspr-4.32.tar.gz
  # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 9296bdcc18..88cc13accf 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 67fb738b57..58a3338c60 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.63
-+LIBNSS_VERSION = 3.64
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBNSPR_VERSION = 4.30
++LIBNSPR_VERSION = 4.32
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
