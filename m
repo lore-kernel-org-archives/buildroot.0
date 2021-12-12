@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 502FDC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0DA2C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0047A85A35;
-	Sun, 12 Dec 2021 14:52:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E95561CE7;
+	Sun, 12 Dec 2021 14:52:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UMqualeMbiCR; Sun, 12 Dec 2021 14:52:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gyceSHaY7bQq; Sun, 12 Dec 2021 14:52:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43DFB85A30;
-	Sun, 12 Dec 2021 14:52:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB0831BF33B
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:52:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 997D561CD9;
+	Sun, 12 Dec 2021 14:52:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FF751BF33B
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D824D85A30
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:52:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EAAF61CD9
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:52:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S5jCNuzYVaTK for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 14:52:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4kTWxsg9s_7d for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 14:52:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0527F85A25
- for <buildroot@busybox.net>; Sun, 12 Dec 2021 14:52:22 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id o20so44846686eds.10
- for <buildroot@busybox.net>; Sun, 12 Dec 2021 06:52:22 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 08E3860E7E
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 14:52:43 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id l25so44835002eda.11
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 06:52:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=ixFX5pyLsswYbuXAOKp8To0ghNSjv/JXusIq0wbZ83g=;
- b=PqaJj+lkQ5dqtZlRBxM9U3U9ORWrE7K+pXotdrUSHHjwMhsSNWitWow95SYb7V322K
- LEG+lzqznLFTpaN18pqHwlqHP5yWQKLPH2KeDDKjMH7q2yNh0g7+y9wjHRzN3qsYnp/X
- AThT84vQgqmzAtiZkJRWSad+Hw2YRmzDY73cKpntkLKazHuvCiSq8uFctOnPYpTeiYk3
- ntz1INNo9bNv9WhwH8yBCTX8tla4kav1BlJpPZxACoI8gBSitDfDleTn9QpkJvRMzwrz
- WhSd4WgwqPFQjc3msM6OEgXhst5Cahskq4CtoSY/bZq1rES6x4+GPhS48r1K3MB5LthD
- dFRA==
+ bh=zM2gxu690Gh2a/1tND17WqpHfFlGISc08og6zE719y8=;
+ b=ZjCtw2PgLMH9Z/9kdPo0hvBgQT5uIowgw3EQE07Cy7VWPg3yZQFlPxSSabZHX6fN+w
+ COrDNvKWSY7vL+JPBm8+FsXMSeq1INlt8uqTLnVyDZnQAg/i27tB19rXqaPYUG2Sw6t3
+ wDFi/79k9gBIgX5bIWclbq42xpeD+KRx0rW04UgRqRcYyp8mZidg9xNdIU4WAXzZ2XU8
+ 3SdOf5R9MhMP+x4YtlbwftAXcx2Lol+vw5ccKKY4ihDWUzqcQCfZOxNDVliimhknpAj8
+ PQPHtG/M0EYS54ZISKKtU92wVi5akL+CqezASupbWLQM8MzjOqKdDKCR1ayEw0dj69HM
+ TWtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ixFX5pyLsswYbuXAOKp8To0ghNSjv/JXusIq0wbZ83g=;
- b=7XnBWm4I9Hzd6RFy6KCcp6AtriGEWFgGjh7QjsDhjW0gnco5H2GAkvFpSrNLkFsgTK
- NPpjuScvlunzw4psif8KirHQyeUMmKW1w7FqN4Jul4VbA3uc9DlcDs97hrF9ua4wFTga
- urFTnHaFv/PACtWuDjdRv5r1P/4UwV+5r1Mo/lscn0wn++V43B3idIyUU+b5i/bUh9pe
- GfmRd58uhjY/OmfK2hPD0Z/ZHFUI24LCQAGpGww1xESy168nYe1DxapihiDbUQCIOdjO
- Y/LonbLTnUiRrgXFqnSlY7CcXqEVOPhiKrfxdn9+IV939+VdnzLLfgA1TmAVgTS8TpRm
- jvfw==
-X-Gm-Message-State: AOAM530ac5qDNsV3PnYXiKr9TZHrvJO/wedDzKn8JrYOUnEDVOsswmUz
- NHLH32M/aS1amZXecRxsbu/RjN3AXHUsbQ==
-X-Google-Smtp-Source: ABdhPJw/iDvla2wBeyaejW9R+GqVLn6d3M8qGpUaqTnQntAuaIXVIHMR4HQH3bb6cypu4lzj5BRtcA==
-X-Received: by 2002:a05:6402:1cb2:: with SMTP id
- cz18mr56697899edb.99.1639320741251; 
- Sun, 12 Dec 2021 06:52:21 -0800 (PST)
+ bh=zM2gxu690Gh2a/1tND17WqpHfFlGISc08og6zE719y8=;
+ b=A7UkdRAbTALsfNM4mhnfLPzO3MtpUTitquF3NiKqcs4YLsbIzuvlaVlBwPzdACfLZ6
+ LkVcqVNLVQdx8ZN0hPZVlgLmANwwpxn0cgbWTepfSJrpLPKj5L3vPNVOycfyOpoafC8j
+ MAn6jS5gU0AgKp8B5XXL3AyGTerDgGWo/vt8HcMB3Ec1JBDgT58P6GQ8LmwAPWOXfGFy
+ oezbhJnZUoFbftFvNWqsctOW/Bc0WQ9qvg05lSUQl2HHTjNBVn1NsIWS5ht0yitR3Jgk
+ blFTtCAvp9dyKzlhzHVJkRaG6p6LwkJ5kbS6RHwr/OYvyN+va0msGJt5GigDNO7sMLaZ
+ 5GoQ==
+X-Gm-Message-State: AOAM530HwzQ5CJNZxFUn3Bu4bOkLUOarUiOZ3I4Z46OHlqV8vBC/8/X3
+ 7G0I0A+Fctukk9jD8Ff/OjuYKX2KCuTFnw==
+X-Google-Smtp-Source: ABdhPJzhBiSa4/H1vp5J48K5LtamwVCdkbefe9onMesORP05ALkshlfyqyDclpAMGknCwg/8Far7Iw==
+X-Received: by 2002:a05:6402:26c8:: with SMTP id
+ x8mr56357388edd.156.1639320762290; 
+ Sun, 12 Dec 2021 06:52:42 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id lk22sm4631361ejb.83.2021.12.12.06.52.20
+ by smtp.gmail.com with ESMTPSA id e19sm4787140edu.47.2021.12.12.06.52.41
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 12 Dec 2021 06:52:20 -0800 (PST)
-Message-ID: <bb4d341f-d1b6-af74-f033-b1537d3c9d00@mind.be>
-Date: Sun, 12 Dec 2021 15:52:20 +0100
+ Sun, 12 Dec 2021 06:52:42 -0800 (PST)
+Message-ID: <d0f8d94b-f293-535b-f9f9-0bf2a9c9a1f5@mind.be>
+Date: Sun, 12 Dec 2021 15:52:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Content-Language: en-GB
-To: Michael Trimarchi <michael@amarulasolutions.com>, buildroot@busybox.net
-References: <20211211183412.658131-1-michael@amarulasolutions.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211211211234.233209-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211211183412.658131-1-michael@amarulasolutions.com>
-Subject: Re: [Buildroot] [PATCH] boot/uboot: Add ddr3 IMX firmware files to
- uboot package dir
+In-Reply-To: <20211211211234.233209-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/rp-pppoe: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,11 +98,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/12/2021 19:34, Michael Trimarchi wrote:
-> The mainline U-Boot can create an i.MX specific firmware image (e.g. flash.bin).
-> For this the i.MX firmware files must be in the toplevel directory.
+On 11/12/2021 22:12, Fabrice Fontaine wrote:
+> Fix the following musl build failure raised since bump of pppd to
+> version 2.4.9 in commit 075b01f2f7b5a9241b4bfe76db8f14af0284060c:
 > 
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> In file included from pppoe.h:133,
+>                   from debug.c:19:
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
+>    116 | struct ethhdr {
+>        |        ^~~~~~
+> In file included from pppoe.h:121,
+>                   from debug.c:19:
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
+>    163 | struct ethhdr {
+>        |        ^~~~~~
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -111,72 +124,76 @@ On 11/12/2021 19:34, Michael Trimarchi wrote:
   Arnout
 
 > ---
->   boot/uboot/uboot.mk                           |  3 ++-
->   package/freescale-imx/firmware-imx/Config.in  |  5 +++++
->   .../firmware-imx/firmware-imx.mk              | 20 +++++++++++++++++++
->   3 files changed, 27 insertions(+), 1 deletion(-)
+>   ...src-pppoe.h-fix-build-with-musl-libc.patch | 60 +++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+>   create mode 100644 package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 9661f901ea..c89216fac4 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -187,7 +187,8 @@ UBOOT_DEPENDENCIES += firmware-imx
->   UBOOT_IMX_FW_FILES = \
->   	$(if $(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW),signed_hdmi_imx8m.bin) \
->   	$(if $(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),lpddr4*.bin) \
-> -	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin)
-> +	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin) \
-> +	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR3),ddr3*.bin)
->   
->   define UBOOT_COPY_IMX_FW_FILES
->   	$(foreach fw,$(UBOOT_IMX_FW_FILES),\
-> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-> index 0bd8000b50..df266fb28e 100644
-> --- a/package/freescale-imx/firmware-imx/Config.in
-> +++ b/package/freescale-imx/firmware-imx/Config.in
-> @@ -71,6 +71,11 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
->   	help
->   	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
->   
-> +config BR2_PACKAGE_FIRMWARE_IMX_DDR3
-> +	bool "DDR3"
-> +	help
-> +	  Use DDR3 binaries (i.e.: ddr3_*_201810.bin).
+> diff --git a/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+> new file mode 100644
+> index 0000000000..29ba72be4f
+> --- /dev/null
+> +++ b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+> @@ -0,0 +1,60 @@
+> +From bbf5b2759cff0c65b47fd6dbe5fe7341f205ad03 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sat, 11 Dec 2021 22:03:16 +0100
+> +Subject: [PATCH] src/pppoe.h: fix build with musl libc
 > +
->   endchoice # DDR training FW
->   
->   config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index 60c97fd2b8..3acd053d0f 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -82,6 +82,26 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
->   endef
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR3),y)
-> +FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+> +musl libc defines its own struct ethhdr that conflicts with the kernel
+> +define one. The kernel headers provide a way to suppress its struct
+> +ethhdr. For that to work the libc headers must precede the kernel. Move
+> +the kernel linux/if_ether.h include below libc netinet/if_ether.h. That
+> +fixes the following build failure:
 > +
-> +define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
-> +	# Create padded versions of ddr3_* and generate ddr3_fw.bin.
-> +	# ddr3_fw.bin is needed when generating imx8-boot-sd.bin
-> +	# which is done in post-image script.
-> +	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-> +		ddr3_imem_1d_201810,ddr3_dmem_1d_201810,ddr3_1d_201810_fw)
-> +	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_201810_fw.bin > \
-> +		$(BINARIES_DIR)/ddr3_201810_fw.bin
-> +	ln -sf $(BINARIES_DIR)/ddr3_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+> +In file included from pppoe.h:133,
+> +                 from debug.c:19:
+> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
+> +  116 | struct ethhdr {
+> +      |        ^~~~~~
+> +In file included from pppoe.h:121,
+> +                 from debug.c:19:
+> +/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
+> +  163 | struct ethhdr {
+> +      |        ^~~~~~
 > +
-> +	# U-Boot supports creation of the combined flash.bin image. To make
-> +	# sure that U-Boot can access all available files copy them to
-> +	# the binary dir.
-> +	cp $(FIRMWARE_IMX_DDRFW_DIR)/ddr3*.bin $(BINARIES_DIR)/
-> +endef
-> +endif
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
 > +
->   #
->   # HDMI firmware
->   #
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/dfskoll/rp-pppoe/pull/4]
+> +---
+> + src/pppoe.h | 8 ++++----
+> + 1 file changed, 4 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/pppoe.h b/src/pppoe.h
+> +index 4780092..2b08111 100644
+> +--- a/src/pppoe.h
+> ++++ b/src/pppoe.h
+> +@@ -117,10 +117,6 @@ typedef unsigned long UINT32_t;
+> + #error Could not find a 32-bit integer type
+> + #endif
+> +
+> +-#ifdef HAVE_LINUX_IF_ETHER_H
+> +-#include <linux/if_ether.h>
+> +-#endif
+> +-
+> + #include <netinet/in.h>
+> +
+> + #ifdef HAVE_NETINET_IF_ETHER_H
+> +@@ -134,6 +130,10 @@ typedef unsigned long UINT32_t;
+> + #endif
+> + #endif
+> +
+> ++#ifdef HAVE_LINUX_IF_ETHER_H
+> ++#include <linux/if_ether.h>
+> ++#endif
+> ++
+> +
+> +
+> + /* Ethernet frame types according to RFC 2516 */
+> +--
+> +2.33.0
+> +
 > 
 _______________________________________________
 buildroot mailing list
