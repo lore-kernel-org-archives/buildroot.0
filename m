@@ -1,56 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FB02C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 08:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6306C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 09:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9620640414;
-	Sun, 12 Dec 2021 08:49:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BE9C60E21;
+	Sun, 12 Dec 2021 09:01:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lip1X4x0wREI; Sun, 12 Dec 2021 08:49:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VCIvg6RF-zDS; Sun, 12 Dec 2021 09:01:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A47324039D;
-	Sun, 12 Dec 2021 08:49:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA0B91BF303
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:49:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B659760D9D;
+	Sun, 12 Dec 2021 09:01:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B023D1BF303
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 09:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8E3B4206E
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 08:49:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D46B60D9D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 09:01:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G6lvK6V6EktB for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 08:49:10 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D28024206A
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 08:49:09 +0000 (UTC)
-Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
- by mailout03.t-online.de (Postfix) with SMTP id 717CB2261
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 09:49:02 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.180.123]) by fwd80.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mwKXS-1fpKvB0; Sun, 12 Dec 2021 09:48:58 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49402)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mwKXR-0000VK-Kw
- for buildroot@buildroot.org; Sun, 12 Dec 2021 09:48:57 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dpTnaLjJK5zq for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 09:01:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com
+ [209.85.216.43])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A058C60D89
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 09:01:11 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id
+ nh10-20020a17090b364a00b001a69adad5ebso10954777pjb.2
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 01:01:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=LOrL7nlBjIYMoyXZ0JEmspY4aPEGdIAvQkH3c+BZTSs=;
+ b=bip8WQurBTdjToAt8013P3HFlFIqakUuEoVnr4CEEk7N8JG96zFNITre35m/UEOxiv
+ uFoJ8EsMyo8Iaj7o2e3P5wse8+pYtkQs/zmHvOLA4eVMMkUG1/1r7f6OWsf6ELFklO0w
+ 7KH6qczj8Y2GPqMAZmoT3xVQ4r6UlvlKSzVMseLagmo6KhQsmJr7ny3k3H3OhKndRfWT
+ 8mFQgQAntKZxbLXlRRA1RMiYSfPf+uMfXcCeDYzhfptm3TmMeugBeDsY3xuQZ3ueOecs
+ pBr+wNbYFqGwGcLkBWGEMC62cihKqvhd/nqj7eriIp1s4pYZgWncQ0Jv/oIUrr50+o/w
+ 8WWw==
+X-Gm-Message-State: AOAM532Hz6trqZK9d82vg5cPu11SgPQtDPvTZ1fvUTJA/FNXzSwzbbhe
+ tsM9l0NuYko60N5G1X8brt07MvYDP3NX0A==
+X-Google-Smtp-Source: ABdhPJymlaKFC2Cw4Vv4KdpANOMOoiHaqyHj1xluAlC2rRl3SYTdsVvHAc7GCIXy0QdDPfOqETFdYg==
+X-Received: by 2002:a17:902:e852:b0:142:19fe:982a with SMTP id
+ t18-20020a170902e85200b0014219fe982amr89358303plg.13.1639299670794; 
+ Sun, 12 Dec 2021 01:01:10 -0800 (PST)
+Received: from localhost.localdomain (ip68-111-8-11.sb.sd.cox.net.
+ [68.111.8.11])
+ by smtp.gmail.com with ESMTPSA id p12sm4545985pfo.125.2021.12.12.01.01.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Dec 2021 01:01:10 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 09:48:56 +0100
-Message-Id: <20211212084857.127023-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Sun, 12 Dec 2021 01:01:07 -0800
+Message-Id: <20211212090107.2975294-1-christian@paral.in>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1639298938-000010D9-B6DBDC33/0/0 CLEAN NORMAL
-X-TOI-MSGID: a937aa2a-7cac-4040-a6c6-693107447e7f
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xapp_xauth: bump version to
- 1.1.1
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to 1.17.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,53 +74,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed md5 and sha1 license hashes.
+go1.17.4 (released 2021-12-02) includes fixes to the compiler, linker, runtime,
+and the go/types, net/http, and time packages.
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-November/003118.html
+go1.17.5 (released 2021-12-09) includes security fixes to the syscall and
+net/http packages:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ - CVE-2021-44716
+ - CVE-2021-44717
+
+https://go.dev/doc/devel/release#go1.17
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/x11r7/xapp_xauth/xapp_xauth.hash | 9 ++++-----
- package/x11r7/xapp_xauth/xapp_xauth.mk   | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_xauth/xapp_xauth.hash b/package/x11r7/xapp_xauth/xapp_xauth.hash
-index 0251c083a7..22ea4cadfd 100644
---- a/package/x11r7/xapp_xauth/xapp_xauth.hash
-+++ b/package/x11r7/xapp_xauth/xapp_xauth.hash
-@@ -1,7 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2019-July/003005.html
--md5 e50587c1bb832aafd1a19d91a0890a0b  xauth-1.1.tar.bz2
--sha1 16180e36d75a23cb182cb91e78f24273f1a63967  xauth-1.1.tar.bz2
--sha256 6d1dd1b79dd185107c5b0fdd22d1d791ad749ad6e288d0cdf80964c4ffa7530c  xauth-1.1.tar.bz2
--sha512 b6ecd59a853a491ef45bf8cfbff63bed36645f81cb79ae9d18458b57f7502bccf92f0d979d3337578518646f680ad379e67b1dac15a927cbb11372733e7a3a0c  xauth-1.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-November/003118.html
-+sha256  164ea0a29137b284a47b886ef2affcb0a74733bf3aad04f9b106b1a6c82ebd92  xauth-1.1.1.tar.bz2
-+sha512  998c3158378fff50d368959c29335173b8d98e02591cb3d7b2f9534b5a44b19deb4cb7da9bf291ca5a37f69f833d72839b2c6611723306d10c1b4968ae4d4120  xauth-1.1.1.tar.bz2
-+
- # Locally computed
- sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5  COPYING
-diff --git a/package/x11r7/xapp_xauth/xapp_xauth.mk b/package/x11r7/xapp_xauth/xapp_xauth.mk
-index cd900f0055..64b064d3bd 100644
---- a/package/x11r7/xapp_xauth/xapp_xauth.mk
-+++ b/package/x11r7/xapp_xauth/xapp_xauth.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9031c33d8a..39f8226aae 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  705c64251e5b25d5d55ede1039c6aa22bea40a7a931d14c370339853643c3df0  go1.17.3.src.tar.gz
++sha256  3defb9a09bed042403195e872dcbc8c6fae1485963332279668ec52e80a95a2d  go1.17.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 59177e54db..0d9ceab2bb 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XAUTH_VERSION = 1.1
-+XAPP_XAUTH_VERSION = 1.1.1
- XAPP_XAUTH_SOURCE = xauth-$(XAPP_XAUTH_VERSION).tar.bz2
- XAPP_XAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XAUTH_LICENSE = MIT
+-GO_VERSION = 1.17.3
++GO_VERSION = 1.17.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
