@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB02C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C611C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 17:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4383360EB5;
-	Sun, 12 Dec 2021 17:38:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45EC58538B;
+	Sun, 12 Dec 2021 17:38:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V308unckO6Lc; Sun, 12 Dec 2021 17:38:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BVcQF8Jz-hE6; Sun, 12 Dec 2021 17:38:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B67F60EAF;
-	Sun, 12 Dec 2021 17:38:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9994A84F4D;
+	Sun, 12 Dec 2021 17:38:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E6951BF31D
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E0231BF31D
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABA1860ED1
+ by smtp3.osuosl.org (Postfix) with ESMTP id C06D860EC6
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 17:35:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IUd6REU4brRY for <buildroot@lists.busybox.net>;
+ with ESMTP id 08uU1slRY7bo for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98E1B60EC6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4885560EAA
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 17:35:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6B22E835F5; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
+ id 19D38835F9; Sun, 12 Dec 2021 17:30:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 18:31:34 +0100
+Date: Sun, 12 Dec 2021 18:27:38 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 28bcbbbc21bd651936c8ccf344a78abc445b99ff
-X-Git-Newrev: 457f0f20b2d353b5048232ebb44e9e806cc78de7
+X-Git-Oldrev: 636fa58b72f158ec111f5544f15d74669e6d37e6
+X-Git-Newrev: 9dae6718f29d67f579ab4fa2a099dd11fea1bc6a
 X-Patchwork-Hint: ignore
-Message-Id: <20211212173017.6B22E835F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libnspr: add CPE
- variables
+Message-Id: <20211212173017.19D38835F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/lynx: add
+ LYNX_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,35 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=457f0f20b2d353b5048232ebb44e9e806cc78de7
+commit: https://git.buildroot.net/buildroot/commit/?id=9dae6718f29d67f579ab4fa2a099dd11fea1bc6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:mozilla:netscape_portable_runtime is a valid CPE identifier
-for this package:
+cpe:2.3:a:lynx_project:lynx is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amozilla%3Anetscape_portable_runtime
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alynx_project%3Alynx
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fffd2aade69a2f1db97c34d63fb05b6c8f9a31dc)
+(cherry picked from commit e259d0d8b2b1ddb379d2d5caf983c65fad22ed43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/libnspr.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lynx/lynx.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 58a3338c60..8f16a8076f 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONFIG_SCRIPTS = nspr-config
- LIBNSPR_LICENSE = MPL-2.0
- LIBNSPR_LICENSE_FILES = nspr/LICENSE
-+LIBNSPR_CPE_ID_VENDOR = mozilla
-+LIBNSPR_CPE_ID_PRODUCT = netscape_portable_runtime
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 44d52d90a5..3f62f4f5b7 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -13,6 +13,7 @@ LYNX_PATCH = \
+ LYNX_IGNORE_CVES += CVE-2021-38165
+ LYNX_LICENSE = GPL-2.0
+ LYNX_LICENSE_FILES = COPYING
++LYNX_CPE_ID_VENDOR = lynx_project
  
- # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
- LIBNSPR_CONF_ENV = \
+ LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
