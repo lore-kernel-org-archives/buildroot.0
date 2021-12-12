@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABF3AC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3931EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 14:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7061760E88;
-	Sun, 12 Dec 2021 14:54:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD9DC40131;
+	Sun, 12 Dec 2021 14:54:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yvE-_im3FAg3; Sun, 12 Dec 2021 14:54:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X8-SWehL-dGK; Sun, 12 Dec 2021 14:54:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1F5760E71;
-	Sun, 12 Dec 2021 14:54:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01E5541223;
+	Sun, 12 Dec 2021 14:54:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 421151BF973
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:53:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 252651BF33B
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:53:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA1BB61CE7
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD6C561CEE
  for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 14:53:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qwv5TVNRM98m for <buildroot@lists.busybox.net>;
+ with ESMTP id HqlfTkTXIsrv for <buildroot@lists.busybox.net>;
  Sun, 12 Dec 2021 14:53:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03BAC61CEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DFB261CF6
  for <buildroot@buildroot.org>; Sun, 12 Dec 2021 14:53:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1493A83465; Sun, 12 Dec 2021 14:48:23 +0000 (UTC)
+ id 3DF2D83465; Sun, 12 Dec 2021 14:48:23 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 12 Dec 2021 15:48:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7233ec2c32c9fbef2738f8de7d59da85cd44b99
-X-Git-Newrev: 36302ca4326fc7c94906bff26df8ac8dafb05131
+X-Git-Oldrev: f8901538cd0e507f8a5b462e3c3421415f3ceea7
+X-Git-Newrev: 474f35eb544b6ffe64fb5f2c1e086fcd2f1a431b
 X-Patchwork-Hint: ignore
-Message-Id: <20211212144823.1493A83465@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtasn1: bump to version 4.18.0
+Message-Id: <20211212144823.3DF2D83465@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rp-pppoe: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +58,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36302ca4326fc7c94906bff26df8ac8dafb05131
+commit: https://git.buildroot.net/buildroot/commit/?id=474f35eb544b6ffe64fb5f2c1e086fcd2f1a431b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.gnu.org/archive/html/info-gnu/2021-11/msg00002.html
+Fix the following musl build failure raised since bump of pppd to
+version 2.4.9 in commit 075b01f2f7b5a9241b4bfe76db8f14af0284060c:
+
+In file included from pppoe.h:133,
+                 from debug.c:19:
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
+  116 | struct ethhdr {
+      |        ^~~~~~
+In file included from pppoe.h:121,
+                 from debug.c:19:
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
+  163 | struct ethhdr {
+      |        ^~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libtasn1/libtasn1.hash | 4 ++--
- package/libtasn1/libtasn1.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...0002-src-pppoe.h-fix-build-with-musl-libc.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index fc3610b965..fa39dd2c73 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.17.0.tar.gz.sig
--sha256  ece7551cea7922b8e10d7ebc70bc2248d1fdd73351646a2d6a8d68a9421c45a5  libtasn1-4.17.0.tar.gz
-+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.18.0.tar.gz.sig
-+sha256  4365c154953563d64c67a024b607d1ee75c6db76e0d0f65709ea80a334cd1898  libtasn1-4.18.0.tar.gz
- # Locally calculated
- sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  doc/COPYING
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index d9d14fde83..5cc33d505e 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.17.0
-+LIBTASN1_VERSION = 4.18.0
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison host-pkgconf
- LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
+diff --git a/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000000..29ba72be4f
+--- /dev/null
++++ b/package/rp-pppoe/0002-src-pppoe.h-fix-build-with-musl-libc.patch
+@@ -0,0 +1,60 @@
++From bbf5b2759cff0c65b47fd6dbe5fe7341f205ad03 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 11 Dec 2021 22:03:16 +0100
++Subject: [PATCH] src/pppoe.h: fix build with musl libc
++
++musl libc defines its own struct ethhdr that conflicts with the kernel
++define one. The kernel headers provide a way to suppress its struct
++ethhdr. For that to work the libc headers must precede the kernel. Move
++the kernel linux/if_ether.h include below libc netinet/if_ether.h. That
++fixes the following build failure:
++
++In file included from pppoe.h:133,
++                 from debug.c:19:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
++  116 | struct ethhdr {
++      |        ^~~~~~
++In file included from pppoe.h:121,
++                 from debug.c:19:
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
++  163 | struct ethhdr {
++      |        ^~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/dfskoll/rp-pppoe/pull/4]
++---
++ src/pppoe.h | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/pppoe.h b/src/pppoe.h
++index 4780092..2b08111 100644
++--- a/src/pppoe.h
+++++ b/src/pppoe.h
++@@ -117,10 +117,6 @@ typedef unsigned long UINT32_t;
++ #error Could not find a 32-bit integer type
++ #endif
++ 
++-#ifdef HAVE_LINUX_IF_ETHER_H
++-#include <linux/if_ether.h>
++-#endif
++-
++ #include <netinet/in.h>
++ 
++ #ifdef HAVE_NETINET_IF_ETHER_H
++@@ -134,6 +130,10 @@ typedef unsigned long UINT32_t;
++ #endif
++ #endif
++ 
+++#ifdef HAVE_LINUX_IF_ETHER_H
+++#include <linux/if_ether.h>
+++#endif
+++
++ 
++ 
++ /* Ethernet frame types according to RFC 2516 */
++-- 
++2.33.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
