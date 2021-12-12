@@ -1,47 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28ADAC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E395C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 12 Dec 2021 15:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7C1B61CE7;
-	Sun, 12 Dec 2021 15:08:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1853340227;
+	Sun, 12 Dec 2021 15:08:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H5UbBd3eCI0r; Sun, 12 Dec 2021 15:08:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tVR9E0bYbjns; Sun, 12 Dec 2021 15:08:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2862060E88;
-	Sun, 12 Dec 2021 15:08:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EA27401B9;
+	Sun, 12 Dec 2021 15:08:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5F91BF973
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:07:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D08E91BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:08:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58A2A40961
- for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:07:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C03D241EFC
+ for <buildroot@lists.busybox.net>; Sun, 12 Dec 2021 15:08:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q7wvmv3GYABI for <buildroot@lists.busybox.net>;
- Sun, 12 Dec 2021 15:07:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A1B340439
- for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:07:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9E09F83473; Sun, 12 Dec 2021 15:02:45 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 12 Dec 2021 16:07:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 042656017682f788644c46c0f7de23a832410eac
-X-Git-Newrev: 1e60b6f1da53c8192d79c9f8c7c029bb3fee63ea
-X-Patchwork-Hint: ignore
-Message-Id: <20211212150245.9E09F83473@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/davinci-bootcount: add myself to
- DEVELOPERS
+ with ESMTP id goIRdI_gUbRG for <buildroot@lists.busybox.net>;
+ Sun, 12 Dec 2021 15:08:32 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7202941EF9
+ for <buildroot@buildroot.org>; Sun, 12 Dec 2021 15:08:32 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ccde:e15f:6f40:89e5])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 6ADCF20039C;
+ Sun, 12 Dec 2021 16:08:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1639321709;
+ bh=6QjrVybd24+RvYcgP6tJo2lM3zAzV/LzlnCXYpzvn6Q=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Jjp6Zo5llbivEawifeK2nyhJM09u1YFSSPQnb9LoQjUOesn+VuCB9fpB50JgEHuLi
+ 9n8J7l0/iAguca38T2kuB8tuJccDxWWev34MFXcA/16p7iDJSXjInquY8Wvw+3YhPr
+ 3uemrmxJGVI5j58NJ8Gm4AxFEDiGXejKOQUoxRG7mffZWvVZZUUqNGRhFp1OUOZsux
+ wAhiho5ssbRICLrIplkMET9n2Rqrus32V0zt5e2ncUlUF+Vr2a5wPoM9FTLlfS3ROd
+ 0N4FfKZ2+7VAQfGqNyqyFq0AlvxLFCNEtXySd9i18Z7iCteQrHbDoKNpkBAO4esLG3
+ PWjrg0ckZ6zTA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 12 Dec 2021 16:08:24 +0100
+Date: Sun, 12 Dec 2021 16:08:24 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dariobin@libero.it>
+Message-ID: <20211212150824.GQ2603@scaer>
+References: <20211212120753.6732-1-dariobin@libero.it>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20211212120753.6732-1-dariobin@libero.it>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/davinci-bootcount: add BR2_arm
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,37 +72,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e60b6f1da53c8192d79c9f8c7c029bb3fee63ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dario, All,
 
-Add myself to DEVELOPERS as maintainer of davinci-bootcount.
+On 2021-12-12 13:07 +0100, Dario Binacchi via buildroot spake thusly:
+> Like the other packages for AM335x platform.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
 
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3023526427..adfd1b76fe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -631,6 +631,9 @@ F:	package/lua-cjson/
- F:	package/luaexpat/
- F:	package/xinetd/
- 
-+N:	Dario Binacchi <dariobin@libero.it>
-+F:	package/davinci-bootcount/
-+
- N:	David Bachelart <david.bachelart@bbright.com>
- F:	package/ccrypt/
- F:	package/dos2unix/
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/davinci-bootcount/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/davinci-bootcount/Config.in b/package/davinci-bootcount/Config.in
+> index 58f83bb98c..e34adde570 100644
+> --- a/package/davinci-bootcount/Config.in
+> +++ b/package/davinci-bootcount/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_DAVINCI_BOOTCOUNT
+>  	bool "davinci-bootcount"
+> +	depends on BR2_arm # only relevant for TI am335x
+>  	help
+>  	  U-Boot implements a boot count scheme that can be used to
+>  	  detect multiple failed attempts to boot Linux. On Davinci
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
