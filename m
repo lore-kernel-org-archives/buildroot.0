@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9A17C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:15:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B68DEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D65C60B4E;
-	Mon, 13 Dec 2021 21:15:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AB0040292;
+	Mon, 13 Dec 2021 21:15:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5yrIrBG9j_9b; Mon, 13 Dec 2021 21:15:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zt_4WDfRfhHM; Mon, 13 Dec 2021 21:15:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3B4260B4A;
-	Mon, 13 Dec 2021 21:15:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C7FC91BF97C
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4C7A402A8;
+	Mon, 13 Dec 2021 21:15:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D69FD1BF995
  for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C56C860B4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C505140476
  for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zg_RAOjsuyWm for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jQGrQnkdbF_A for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F3FD60B4B
- for <buildroot@buildroot.org>; Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D20B240182
+ for <buildroot@buildroot.org>; Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 35DF683799; Mon, 13 Dec 2021 21:09:52 +0000 (UTC)
+ id F312D83825; Mon, 13 Dec 2021 21:09:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Dec 2021 22:09:27 +0100
+Date: Mon, 13 Dec 2021 22:09:26 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 83d27c0f1e7aff01f1ba707046d618ea777c8740
-X-Git-Newrev: 3c77943de2ed46e05158f88d2f345cb5805ca4ef
+X-Git-Oldrev: 24f45aa78be210cf922e2b6948534f88d96c6cde
+X-Git-Newrev: cc31f56295ef47c5f4a7d93612669ac2531f86c0
 X-Patchwork-Hint: ignore
-Message-Id: <20211213210952.35DF683799@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/bluez5_utils:
- make a single option for avrcp and a2dp
+Message-Id: <20211213210951.F312D83825@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/ell: bump version
+ to 0.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,90 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c77943de2ed46e05158f88d2f345cb5805ca4ef
+commit: https://git.buildroot.net/buildroot/commit/?id=cc31f56295ef47c5f4a7d93612669ac2531f86c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Build of avrcp without a2dp is broken since commit
-fb9fc969d91f69851b4c70dba512b607e52bda7b:
+Changelog:
+https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
 
-/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/9.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/audio/bluetoothd-avrcp.o: in function `avrcp_handle_set_volume':
-avrcp.c:(.text+0x9c4): undefined reference to `media_transport_update_device_volume'
+Needed for bluez5_utils bump to version 5.59.
 
-However, build of a2dp without avrcp is also broken:
-
-/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `.L50':
-media.c:(.text+0x508): undefined reference to `avrcp_unregister_player'
-/data/buildroot-autobuilder/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/10.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: profiles/audio/bluetoothd-media.o: in function `match_endpoint_by_path':
-media.c:(.text+0x824): undefined reference to `avrcp_register_player'
-
-Fixes:
- - http://autobuild.buildroot.org/results/d54cdfc03212fff772a863d1bc8afd3cfb605831
- - http://autobuild.buildroot.org/results/64d75af986a4d6e9c5a176efb6e22046f4d82350
-
-So make a single audio option for a2dp and avrcp
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aedf2c83d0830af879314db8422d49be345f057d)
+(cherry picked from commit b5bab43e138a3a0faa71cb7fdf64814d60c36c9b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bluez5_utils/Config.in       | 12 +++---------
- package/bluez5_utils/bluez5_utils.mk | 15 ++++-----------
- 2 files changed, 7 insertions(+), 20 deletions(-)
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index f2b63b0a1c..40973e13cd 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -58,17 +58,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
- 	  enabled this option has an effect.
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 5f1cc7ddcb..2ff8889506 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  653e2e139e23ed31e03c56c05f15321a9e818e2dca00a315c18d2c7b72f15d08  ell-0.39.tar.xz
++sha256  4e8dba6c53cf152dbd0fd1dc3d4c7b04abf79e20a948895f85943e586870505c  ell-0.41.tar.xz
  
--config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP
--	bool "build a2dp plugin"
-+config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO
-+	bool "build audio plugins (a2dp and avrcp)"
- 	default y
- 	help
--	  Build plugin for A2DP (audio) profiles.
--
--config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP
--	bool "build avrcp plugin"
--	default y
--	help
--	  Build plugin for AVRCP (audio) profiles.
-+	  Build plugins for audio profiles (for A2DP and AVRCP).
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index bd291c60db..ec31e68088 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 	bool "build health plugin"
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 7b7e31500f..3551b14a69 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -53,18 +53,11 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
- endif
- 
--# enable a2dp plugin
--ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP),y)
--BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp
-+# enable audio plugins (a2dp and avrcp)
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp --enable-avrcp
- else
--BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp
--endif
--
--#enable avrcp plugin
--ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP),y)
--BLUEZ5_UTILS_CONF_OPTS += --enable-avrcp
--else
--BLUEZ5_UTILS_CONF_OPTS += --disable-avrcp
-+BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp --disable-avrcp
- endif
- 
- # enable health plugin
+-ELL_VERSION = 0.39
++ELL_VERSION = 0.41
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
