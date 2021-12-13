@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32672C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 10:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581E2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 10:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB86860F9B;
-	Mon, 13 Dec 2021 10:00:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7BAE60607;
+	Mon, 13 Dec 2021 10:57:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hnryOTSIcwj0; Mon, 13 Dec 2021 10:00:11 +0000 (UTC)
+	with ESMTP id BayLoykygHZz; Mon, 13 Dec 2021 10:57:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14B1060E82;
-	Mon, 13 Dec 2021 10:00:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49A4960603;
+	Mon, 13 Dec 2021 10:57:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 223431BF408
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 10:00:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F04E1BF403
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 10:57:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F69640223
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 10:00:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78E2640A03
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 10:57:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xlLJSH5Lwd3v for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 10:00:08 +0000 (UTC)
+ with ESMTP id 6Y5xeShmn4if for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 10:57:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07A2340144
- for <buildroot@uclibc.org>; Mon, 13 Dec 2021 10:00:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1621401BB
+ for <buildroot@uclibc.org>; Mon, 13 Dec 2021 10:57:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3BFE0837A0; Mon, 13 Dec 2021 09:54:55 +0000 (UTC)
+ id E1BBC82A0C; Mon, 13 Dec 2021 10:51:51 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 13 Dec 2021 10:00:07 +0000
+Date: Mon, 13 Dec 2021 10:57:04 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.08
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: htenberge@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: jacmet@uclibc.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14451-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14351-163-ukLJ5b5aP2@https.bugs.busybox.net/>
+In-Reply-To: <bug-14351-163@https.bugs.busybox.net/>
+References: <bug-14351-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14451] New: nodejs won't build on Fedora 35
+Subject: [Buildroot] [Bug 14351] needs to mount sysfs before mount -a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,28 +74,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14451
+https://bugs.busybox.net/show_bug.cgi?id=14351
 
-            Bug ID: 14451
-           Summary: nodejs won't build on Fedora 35
-           Product: buildroot
-           Version: 2021.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: htenberge@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #8 from Peter Korsgaard <jacmet@uclibc.org> ---
+(In reply to stsp from comment #7)
+Ok, thanks - then it most likely came from:
 
-Although I'm using host-python, the nodejs build cycle uses at some point the
-system python instead of the host python.
+commit 27a46793b1a0c6c13c00b07d07bd5743e2c9c7b6
+Author: Adam Duskett <aduskett@gmail.com>
+Date:   Thu Oct 14 15:58:39 2021 -0700
 
-On Fedora 35 this is Python 3.10, causing problems. Switching to Python 3.9
-system-wide fixes the issue.
+    package/util-linux: bump to version 2.37.2
 
 -- 
 You are receiving this mail because:
