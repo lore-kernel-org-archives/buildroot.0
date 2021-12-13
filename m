@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A56EC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 20:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DDFCC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 20:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 984C340182;
-	Mon, 13 Dec 2021 20:21:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8B39403C4;
+	Mon, 13 Dec 2021 20:25:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zJx62AcaHfwc; Mon, 13 Dec 2021 20:21:27 +0000 (UTC)
+	with ESMTP id 3DKGxYn0dz6o; Mon, 13 Dec 2021 20:25:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC9B84038E;
-	Mon, 13 Dec 2021 20:21:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C3F41BF2C0
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 20:21:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE06F40361;
+	Mon, 13 Dec 2021 20:25:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C113C1BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 20:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8811980BBF
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 20:21:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC18860B3F
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 20:25:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VgeaSDpTMjHi for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 20:21:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qhK6osnDi4BG for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 20:25:49 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24A2580B9C
- for <buildroot@buildroot.org>; Mon, 13 Dec 2021 20:21:23 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF52960B3B
+ for <buildroot@buildroot.org>; Mon, 13 Dec 2021 20:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1639426877;
- bh=AoVEoMdwVJIpW/WGf879ORYsiV6Pf6yXLCibT4ToB30=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=QdDaNTbx7JzeVxKU1BmC1YeryB6aGwaj5E8mDcHuJpWh9hBWDGW8cMdHrEw4wM6NT
- 2msFoDdkh7DUYc2yBzgyIgw3MJwNqDuHM2ZrHchKgR65kftz3Hc9vAX0a5lVPYjAzz
- OhQXwK/IiZH8KdQ/vv3NBttLZKFLLzgRB/GBNO0w=
+ s=badeba3b8450; t=1639427146;
+ bh=x1WEbsutaO0u7XGnmrlKkfJyZ2sD6y7HNMGlpXfcFWM=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=kZiZhZuDnVCKh5ujRTiw8k2pOkj9NkziKRB8Jcj78QVEgpGjAk7OEdi0Q+PeoAcZG
+ 9EClm8O3GtMRHojvMNbRvXxIxVvxUzfmcc0jAHd4kRmexFVvQzQ12ne1v6Nk/PzNUr
+ JMGK3gdIl8NOwnPSH91k8c5kmPapHDTvbqOMGXp8=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.61]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0X8o-1mZipN0GdY-00wWbD; Mon, 13
- Dec 2021 21:21:17 +0100
+Received: from localhost.fritz.box ([62.216.209.61]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQj7-1mkSu72gdp-00GuVK
+ for <buildroot@buildroot.org>; Mon, 13 Dec 2021 21:25:46 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Dec 2021 21:21:15 +0100
-Message-Id: <20211213202115.21705-1-ps.report@gmx.net>
+Date: Mon, 13 Dec 2021 21:25:45 +0100
+Message-Id: <20211213202545.23647-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:CRSJte0Vxt4uWSZMzVn7vWVwJ6cLcFRbYta6MbIO4Q8eGco2BwW
- TVwA5Uv60pyZHuX7T7NEPpB8NMY51fGYZvD9qUHgOxIRtaswEyyqOgIl6BEjWJO/eF9LaCh
- hjPH3ZsX/56w9vFhdg3EdTd2tLZ+iI/QaUrNNp04m651IU8W2JgRp6dRMLra0i3dYyxJypC
- WkvDxHc6ROCHei4+ceeTw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ot2d5aQU5ks=:QSzHlQt/hJXxunoIVIAnoD
- tz+i82ijMGV8Beh3Izuyx/cOo+JtWwrygKzrsP0elRNl+O9LJVWb8dBaoTeqCBvj2fVJfdeSD
- KM7p3y972yFb3lgvfrEYfPEDp3SltlGB8s87cTKBzASVWLkhw6UWgBHger8BilA9Gp0ZJdEr+
- BTldS/LGmaT1AYwjlC1PPeh2KYwWKlySKqAXdjnupBO97yB9TzWcX+9rDjObQKoa2igaxxAiq
- UU2g1gdab4o0hlkPKqYT+hbtMWH5oCKo57reYEJjEXqMfbIjFwg0kwdXkKddO+pTQJozrcIwM
- FrkyxGNI5MagCjK0YLZtZff2XYmm9M6KtLJEIeN2eOYh1f/UHU38JKjNR0y0nzUwad6kSJ3KW
- LL/Kt9NRp3SVdaMC4PpuuGuzpe3TIE/zC8XWg+C61olA6F0VWI/hif/XxzxuACyjNgKIp3dSL
- xN8aYKf94CPpPnGVE0NCSJ9hx63C+NCGh0xhvF4v9GazKg5e+AYk/lKIb2SJ0MRi8X9KEDpuA
- Tw2p5mgkbTWRtFDopuXd002Qn3tyPoDtQxAsjw2eXkxDlp9/8DsDu9VOAu62Rt/scYxYfCyYA
- To/PJLYbcaTD1xtX1k+Ok5LZgjwXRYEzy0OMt0Fks5ThFfmnGp/mG8s7i+pnBqVrVI2a5r5a5
- E7W1nseMlxEj1uO+jHx4grVWpVosvSXxv9DgXqPbw180FZkJM7X5g0L20AmDmE/NdOaqAilZH
- GmxfRWr9U2XdS1t37NrLxfL7sByFqugYMddwFVdWfiNm3oM9v/9F5CetY/rEKcwnZY8uSKJHy
- ++IPUXfzrsv9I798TC7wZj3gYNTcKoyIG/bsr+EoFspnihtHR08eL5LmuHqqq6PBwqctPDEwb
- noeezMRDqxAGPhaoYD5t0uOVJDRRciHx9Vg9k4FH13HWla2GJzWdbKvt3WpUKlDyTMBrb3hhm
- b7uzvXc6iBzbh8eVMa+uVWWlAbNefdcEwiu9dx97B24DcxJ5ifjdapKt04+HsyXvs9rJ5Mjt7
- yA07LfVSo/W+ZJ1DfjVohRCOeeS8baEk21S/PY/1n9SvW1JuryoNr8WsOLPdw5e7gWbUnhtpK
- G5yOBukWNNqhW4=
-Subject: [Buildroot] [PATCH v1] package/iperf: bump version to 2.1.6
+X-Provags-ID: V03:K1:wZEo5pMYC9X69z9JJhUH2GT3a+hMB5svAC2xFzx8a7jXRCOepOm
+ ZURNezsw5GvtgkaWJ9sxAxddHlqwEeLm+qpBU55alcboV974xQcSkJhZIplSndqzZXDam3X
+ 7Q7To1MYh/bCVWM14hsSVC2mOOUzfVATD3RQyH2T9/QwqUPwbpuWwzsmOXTm6k3mMDWNCbW
+ IGwNdk0tyJH3TIRoDM0gw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WWqOxXwKnC4=:ZVrSxRjtgOUzHMAgw5gmeh
+ FgnYJO2WitJ3oi47IL/ygNZfbruOrfQCD8pSndCCw0fYDIrUgfxhP7peWj0jwuAJetKbq1e8l
+ xjcF07Xm5JUlDDABipu24XVC7O4IZbC/59K9RMICxVY88ubEpAnkSmJWEZ5sk0lwJ9DP2jRYy
+ stmmOo9QH9EFx3hYuNxpX59Cp+NyD7LzrJfqdSzYqxMKGcEyF69nL16y6mlrN5yZaVAo3PPi/
+ aTo9c0v3pXht/iExsqCZn0BkfvB5Pn4FKA0oWCj/+OdGYoC2wKBnDNcHOrRZqOcBhoXAVyJ2k
+ bgMeZWKJs0VfCaXADVzRYDlo6tXaA3TH4y7auppf0tDQuckxO7cSvKmEjWg1udyULJGJEdD5y
+ Ue+qYb4xKSmbIXHxV5W1MgRdzsyZyF74iHjPzNobg5kVUxhX+jZXu4XmRuHT8cu5iEqGr+oCl
+ BR/5DtUaLzH6Tc+j4vECGHdq3MrADMAeDWJ2kx6KSU/qOAazoVpT2XO++hATpWniEdXrtvYgb
+ pBaSE1zfi4He8iu+UIAHVlYovEPEhOkRWiXR8qgguo0pboAz39xAVZYeTaIe5Gx0OAoyBslK7
+ 0FEC0IGLsG/tgMdOLA08GgkoNc/fPHdbm7qIRyH7BRb42OfE8LbAKln4tkXrBWQIHy+cXrK9X
+ 9Os6TKH2v/Xr5ZUwkxFGAExx9To//YODp68vGDwaeKZOZhcEO1YqonR3ObjLL1rqgAtWurToP
+ dFWr6zl/qWYJVEuTfQGcxKE+aIU24xQ2Sx2Fi6h8J/4JfcPMwzJQgOJHjXC+TyLkIRHOo2qFa
+ YsgfptGrBN4gVlVQxg3GUB3vQymGo2OxwOqZd0dQs8SgUifmlJicgq94BBsHxMSmPnPgphF6S
+ 7EGNG8D42e1QuQrpMJ+D+oE251BWTMgcMDw2SIP2+598A+uM0Q1oxGvFpUHCmta/FVtTTQ9lk
+ IfJZu+SSynNMP79MnZBArMG6H1q0aX3Ot9rAU25GPOVsHu1N39/d8MXrh4YnB99X7nOK9yHGH
+ bU9Zg9/xcQJQIaSyVu/BobTgQKv9KStuWFgmGWraz1ssa4Nh+Cof+t2shds+OUhwwGTBuqJFe
+ vA752nUt//W5ZM=
+Subject: [Buildroot] [PATCH v1] package/hwdata: bump version to 0.354
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,51 +83,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog ([1]):
-
-  - fix tos (-S) regression
-  - fix --permit-key regression
-
-[1] https://sourceforge.net/projects/iperf2/files/readme.txt/download
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/iperf/iperf.hash | 4 ++--
- package/iperf/iperf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 924d10b3e0..2e1f433dc7 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1  b9d0868a6cdd970c1835d3d1a264dd54907f2c5c  iperf-2.1.5.tar.gz
-+sha1  41bd049625cbecda2bf5b6a6cc12a6c5baec549b  iperf-2.1.6.tar.gz
- 
- # Locally computed:
--sha256  56ec1312d24bd2c78790e67c96c0a991c82e71bc4c0b0d37171bd89c9fd6ef3e  iperf-2.1.5.tar.gz
-+sha256  4a43e44439b95622aebeee55754a17d1c94076032e90620dfc1ab9908cb9e080  iperf-2.1.6.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index a3d95535b3..f999ff4ac2 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 8479e94339..43cca03b06 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  14d120ae58f71da18d7731f44e65a818e4209d621b41fba6f0cd03278a002c1d  hwdata-0.353.tar.gz
++sha256  ed9a2c8b90371ccf4f0ff88972d87770c1c644e63ca44d2ac72c33200642cdde  hwdata-0.354.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 8341757a11..71b59b95ed 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF_VERSION = 2.1.5
-+IPERF_VERSION = 2.1.6
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
+-HWDATA_VERSION = 0.353
++HWDATA_VERSION = 0.354
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 -- 
 2.34.1
 
