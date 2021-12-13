@@ -1,76 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD8ACC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 17:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5C99C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 17:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28027401B8;
-	Mon, 13 Dec 2021 17:50:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E6E460595;
+	Mon, 13 Dec 2021 17:52:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TTRuYvbMINXX; Mon, 13 Dec 2021 17:50:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ACC9401B7;
-	Mon, 13 Dec 2021 17:49:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 377D61BF3C4
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 17:49:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 249CD60598
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 17:49:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wz7E1Ax4cMrh for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 17:49:57 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bXoZngQxe8on; Mon, 13 Dec 2021 17:52:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8070C60596;
+	Mon, 13 Dec 2021 17:52:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AB06E1BF3C4
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 17:52:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A042E400C5
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 17:52:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TaJHVVFm1ADO for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 17:52:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com
- [IPv6:2607:f8b0:4864:20::b32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F85160596
- for <buildroot@buildroot.org>; Mon, 13 Dec 2021 17:49:57 +0000 (UTC)
-Received: by mail-yb1-xb32.google.com with SMTP id v138so40259125ybb.8
- for <buildroot@buildroot.org>; Mon, 13 Dec 2021 09:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=j2v5Ovtr/UhuD3cqVTGg2psVCg8Z5sIizAQ6NoGkX48=;
- b=SNjMh/2hvxp0shYmF58abUs12fG8RY0Ic3iJJuZQe2ktowpB9kVxWqdGs7eZakuO44
- 3tqfpsiQEvFqy1UCFyyweExQnkhhNezdDBS7Ob6yLfbN6bJ9Ihddz5a+iaSBsE1J3yY6
- qroMlOys1p1nfV15+gIhq36dNBaCCwIHf7/6lKygfbgHl3DEsRf1pzs0oDHdyfj8Wkes
- GZt3Wf7gmlsTCadrJXaT8TjZ+kSROtdH5arFUBEHw4hkLox0EjcCFjDboeMH/vPAkx+c
- uJV02wQnf5yWyf7BqiI4m61Ht/uEJSk+SDYa69DLVeX3cArAv0XNmRUNMobzUWxmVNpe
- 8vGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=j2v5Ovtr/UhuD3cqVTGg2psVCg8Z5sIizAQ6NoGkX48=;
- b=mqfNpCBb8KmdArBJBNhY+kFQH873nq9kVnu1/4VFjuMgyFKVRYZ/Lgd/TeB0eW/uJc
- AZ8j1PC9bqiU2Pdz387J6VWGcGIq1M+gIXz7VuTchaUgUhQmgmbiJ8tcm2kOkLAcuJOM
- 9Zq7dEOTIudZfByn7X9NIF6UB+wxGgepnh8OSX6AoOESHSjtNz/L4uAtbgBs0XvnbNLV
- bpylchq2zCODaGmu/TUVByczjx22hMMovcvQENaSEMHqsoB0hXku4NKC+zG4nepQXxVO
- 3oFTyOE2Awdr2uBnU2VX2cbgwG2S4p1pbdZSCVZZsaMrfoh1sixfiowZZbvwO6Xy7oWq
- t8iw==
-X-Gm-Message-State: AOAM533xxZV7X7PCAuzkx/EYl/ii1g5VGaCgqQ58Z0doSc7HuyIn3kJ1
- SXFqjNUWvmDNOKmR4DXx8pMv4T2tk6Jhy6OcrUA=
-X-Google-Smtp-Source: ABdhPJyQGmfkwGTpJuo9OvQecQSqshLvgfXAekpA3daOdnbOw45mz8+iGuGI8KggaOwETtOmnfTD0xaIChJxzVmLdt0=
-X-Received: by 2002:a25:ac42:: with SMTP id r2mr31937ybd.126.1639417796012;
- Mon, 13 Dec 2021 09:49:56 -0800 (PST)
-MIME-Version: 1.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D01ED40001
+ for <buildroot@buildroot.org>; Mon, 13 Dec 2021 17:52:26 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b516:f6a7:f8a5:a82e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 3536D2003D0;
+ Mon, 13 Dec 2021 18:52:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1639417943;
+ bh=SWyKU0/tFwNDla0kZ7f0IhswUKgNxvQl75YT+u07PZc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=h09xFdm52auyaWk3zJFxroDecfLb+wdic7cUkfmsuirnDEdvcfgVMWQF2Z55AOvk9
+ LHMBjh76n2+9oREHYJL4Vmj3im3fHEurS0zarw+AQSN6TuAwVDdxaGbjiEl3qhJKDx
+ FXRJgbFyZsSs5ttihetuWYU7UBCTwRf6ws8pg2aM4Mnpk/fydwtJb9i3KZs2MW0Je+
+ GYUqXHw9I4xv33F2+ufZT2XQjBt1qYZPZ1rQ/ByQPqA4vKIDTx0rS9pMcDo1Oqy/ht
+ xtp0CerggC6ucMYMafryhEyFJqIRc/9mRW7l0xo+SkYI/bYmE+fvERfIaZUxHfn+6U
+ JRU0e8zeyaqUQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 13 Dec 2021 18:52:10 +0100
+Date: Mon, 13 Dec 2021 18:52:10 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Andrey Nechypurenko <andreynech@gmail.com>
+Message-ID: <20211213175210.GE2603@scaer>
 References: <CAOiXNkDn5AZBuQLnnR1tK-aW19OKmSXpv2yuDj3wxe2CTEiDiw@mail.gmail.com>
  <20211209151054.3799fb4e@windsurf>
  <CAOiXNkBvvsC2g5GR0r6fMHQRVpUGHpZHeQNQvJYOODcp5XVorg@mail.gmail.com>
- <20211210231055.550d5641@windsurf>
-In-Reply-To: <20211210231055.550d5641@windsurf>
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Mon, 13 Dec 2021 18:49:44 +0100
-Message-ID: <CAOiXNkD7yfbti2veuH=8KQGeXam+K4e7YmBSBHL67oqabHSoQw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ <75921499-5a1e-4b26-84a8-481e409091f2@mind.be>
+ <CAOiXNkBXdhBhPRbQ9RYXwq9DkB1ccG-sjy=1j4P9wF9Gq3gtAw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAOiXNkBXdhBhPRbQ9RYXwq9DkB1ccG-sjy=1j4P9wF9Gq3gtAw@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 Subject: Re: [Buildroot] Building packages for Cortex M4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,48 +75,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
- buildroot@buildroot.org
+Cc: =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Andrey, All,
 
->> In the meantime, I came up with the following solution and wondered what
->> would you say about it. First, I made host package which downloads and
->> installs M4 toolchain from ARM site (inspired by
->> https://gist.github.com/titouanc/ea0685d9cd8592deb1c49d48e33b3eee )
->>
->> Config.in.host:
->>
->> ################################################################################
->> #
->> # gcc-arm-none-eabi
->> #
->> ################################################################################
->
-> We already have a package for an ARM toolchain, in
-> package/arm-gnu-a-toolchain/. However, we have found that this
-> toolchain is targeted at Cortex-A, and while in theory it should work
-> for Cortex-M as well, the Cortex-M examples from ST (at least) expect
-> some libraries that are not in the Cortex-A toolchain provided by ARM,
-> but only the Cortex-M.
->
-> This is why in
-> https://github.com/bootlin/buildroot/commit/8635d412292eec7bb90bfabcba25a8c238aa2f93
-> we switch to the Cortex-M/Cortex-R toolchain for this package. But this
-> isn't directly suitable for upstream. More work is needed here.
+On 2021-12-13 18:36 +0100, Andrey Nechypurenko spake thusly:
+> On Sat, 11 Dec 2021 at 09:35, Arnout Vandecappelle <arnout@mind.be> wrote:
+> > On 09/12/2021 18:02, Andrey Nechypurenko wrote:
+[--SNIP--]
+> > > comcu.mk:
+> > >
+> > > ################################################################################
+> > > #
+> > > ## comcu
+> > > #
+> > > #################################################################################
+> > >
+> > > COMCU_SITE = $(TOPDIR)/../src/comcu
+> > > COMCU_SITE_METHOD = local
+> > >
+> > > COMCU_CONF_OPTS = \
+> > >      -DTOOLCHAIN_DIR=$(HOST_DIR)/share/gcc-arm-none-eabi \
+> > >      -DCMAKE_TOOLCHAIN_FILE=cmake/TOOLCHAIN_arm_none_eabi_cortex_m4.cmake \
+> > >      -DUSE_HAL_DRIVER=ON \
+> > >      -DUSE_LL_DRIVER=OFF \
+> > >      -DUSE_OPENAMP=ON \
+> > >      -DUSE_STM32_USB_FS_LIB=OFF \
+> > >      -DUSE_FREERTOS=OFF \
+> > >      -DUSE_SEMIHOSTING=OFF \
+> > >      -DUSE_STTERM=OFF \
+> > >      -DUSE_DBGUART=OFF \
+> > >      -DUSE_GDB=OFF \
+> > >      -DUSE_OVERCLOCKING=OFF \
+> > >      -DUSE_TINY_PRINTF=OFF \
+> > >      -DSRC=Src \
+> > >      -DGITHUB_DRIVERS=OFF
+> > >
+> > > $(eval $(cmake-package))
+> >
+> >   I wonder if we really want to use cmake-package here... The cmake-package
+> > infrastructure is geared towards building for the target, not for some other
+> > CPU. The fact that you need to override the toolchain file is indicative of this
+> > problem.
+> 
+> Could you please elaborate on it a little bit? My understanding is that
+> independent of what build-system (cmake or whatever else) is used, somehow
+> you need to say that other toolchain should be used to compile particular
+> package. CMake's way of doing it is to use the toolchain file. Somehow I can
+> not see any big disadvantages with it. Similarly I can not see any big
+> advantages of using other build-systems. They will need to do the same but
+> with different syntax.
+> 
+> The only reason why I used cmake here is because this is what provided by ST
+> as an example. The CMake file is not trivial with all these
+> CMSIS/HAL/BSP/Cube/... things. Since I do not see any big advantages from
+> using other build system, I can not find enough motivation to spend time on
+> converting cmake staff to something different. That is why I would
+> appreciate if you can provide more details on why cmake could be a bad idea
+> in this case.
 
-Do you think that having two different toolchain packages for Cortex-A and
-M/R would make sense? Sooner or later someone will probably ask for Cortex-A
-also. If yes, I would be glad if you will find my package for Cortex-M/R
-good enough to integrate in Buildroot :-) .
+What Arnout was wondering about, is not about using cmake or not; it was
+about using the cmake-package infrastructure in Buildroot or not.
 
+I.e., what he was basically suggesting between the lines, was to make
+that a generic package, something along the lines of:
 
-Thank you,
-Andrey.
+    COMCU_DEPENDENCIES = host-cmake
+
+    define COMCU_CONFIGURE_CMDS
+        $(BR2_CMAKE) $(@D) \
+            -DTOOLCHAIN_DIR=$(HOST_DIR)/share/gcc-arm-none-eabi \
+            -DCMAKE_TOOLCHAIN_FILE=cmake/TOOLCHAIN_arm_none_eabi_cortex_m4.cmake \
+            [etc...]
+    endef
+
+    define COMCU_BUILD_CMDS
+        $(MAKE) -C $(@D)
+    endef
+
+    define COMCU_INSTALL_TARGET_CMDS
+        $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install/fast
+    endef
+
+    $(eval $(generic-package))
+
+And I do agree with him, in that our cmake infra is made only for
+building stuff that runs on the architecture that is defined in
+Buildroot's configuration, not to build firmwares that run in add-on
+CPUs...
+
+However, I can also see that the way you did it also makes the package
+drastically simpler that repeating a good part of the cmake-package
+infra, so I am a bit torn...
+
+ would still think that it would be better to do a generic-package,
+because the cmake-pakcage infra can very well get additional "features"
+that would render it unusable for using with another toolchain file.
+And I would like to avoid introducing a precedent...
+
+So I'm back with Arnout: make that a generic-package.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
