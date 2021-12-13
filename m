@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1479C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:16:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D61AEC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:16:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7069C402DC;
-	Mon, 13 Dec 2021 21:16:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96A7E402DD;
+	Mon, 13 Dec 2021 21:16:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DOiV4Cpfo7Rh; Mon, 13 Dec 2021 21:16:34 +0000 (UTC)
+	with ESMTP id rCQULwAU5Qeh; Mon, 13 Dec 2021 21:16:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B804E402D2;
-	Mon, 13 Dec 2021 21:16:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1BCAD1BF995
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2DED402D3;
+	Mon, 13 Dec 2021 21:16:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9092E1BF2B0
  for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3530081322
- for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C96760B49
+ for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dBk-Yo3vh6Sk for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gDLPGQu7xWKY for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95A5781367
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80B7160B4E
  for <buildroot@buildroot.org>; Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BA4A883827; Mon, 13 Dec 2021 21:09:51 +0000 (UTC)
+ id A215B83799; Mon, 13 Dec 2021 21:09:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 Date: Mon, 13 Dec 2021 20:28:27 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 4b5947b05be94f340dbb6faf784b9837b51b8eb8
-X-Git-Newrev: 84c6f9c516bf6220e253eb73dc6151128f640ad6
+X-Git-Oldrev: 928bfe6045a2fad38bb29d4549fb2401c91fce2b
+X-Git-Newrev: 027a12de4d824da4c972e67d3b1270d674886353
 X-Patchwork-Hint: ignore
-Message-Id: <20211213210951.BA4A883827@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/bluez5_utils:
- bump to version 5.56
+Message-Id: <20211213210951.A215B83799@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/ell: bump version
+ to 0.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +59,138 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84c6f9c516bf6220e253eb73dc6151128f640ad6
+commit: https://git.buildroot.net/buildroot/commit/?id=027a12de4d824da4c972e67d3b1270d674886353
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-http://www.bluez.org/release-of-bluez-5-56/
+- remove 0001-build-Add-rawmemchr-to-missing.h.patch
+  (upstream [1])
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 41f352b3b2dbe43c841763a62d99d57e769a48eb)
+- remove 0002-ell-add-missing-include-in-dhcp-server.patch
+  (upstream [2])
+
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81
+[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=6dfff19d4716ba216de1a3298ed0f667d7782810
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 24575ad614fecc50bfa2c3d586104f7134a46770)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-build-Add-rawmemchr-to-missing.h.patch    | 47 ----------------------
+ ...02-ell-add-missing-include-in-dhcp-server.patch | 26 ------------
+ package/ell/ell.hash                               |  2 +-
+ package/ell/ell.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 75 deletions(-)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index a2e22148ae..096745def8 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch b/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
+deleted file mode 100644
+index 3e00023001..0000000000
+--- a/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 3916c1cc32be205e185a8a56de5cde1b9ec60e81 Mon Sep 17 00:00:00 2001
+-From: Denis Kenzior <denkenz@gmail.com>
+-Date: Mon, 30 Nov 2020 13:00:11 -0600
+-Subject: [PATCH] build: Add rawmemchr to missing.h
+-
+-For those systems (i.e. musl) that do not support this
+-
+-[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac  |  1 +
+- ell/missing.h | 10 ++++++++++
+- 2 files changed, 11 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1e5ead9..f34add1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -98,6 +98,7 @@ AC_ARG_ENABLE(ubsan, AC_HELP_STRING([--enable-ubsan],
+- ])
+- 
+- AC_CHECK_FUNCS(explicit_bzero)
+-+AC_CHECK_FUNCS(rawmemchr)
+- 
+- AC_CHECK_FUNC(signalfd, dummy=yes,
+- 			AC_MSG_ERROR(signalfd support is required))
+-diff --git a/ell/missing.h b/ell/missing.h
+-index 6b9b0fd..2a3e647 100644
+---- a/ell/missing.h
+-+++ b/ell/missing.h
+-@@ -67,3 +67,13 @@ static inline void explicit_bzero(void *s, size_t n)
+- #ifndef SO_BINDTOIFINDEX
+- #define SO_BINDTOIFINDEX 62
+- #endif
+-+
+-+#ifndef HAVE_RAWMEMCHR
+-+static inline void *rawmemchr(const void *s, int c)
+-+{
+-+_Pragma("GCC diagnostic push")
+-+_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+-+	return memchr(s, c, (size_t) -1);
+-+_Pragma("GCC diagnostic pop")
+-+}
+-+#endif
+--- 
+-2.29.2
+-
+diff --git a/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch b/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
+deleted file mode 100644
+index a2ac7b0965..0000000000
+--- a/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 6dfff19d4716ba216de1a3298ed0f667d7782810 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=C3=89rico=20Nogueira?= <ericonr@disroot.org>
+-Date: Mon, 30 Nov 2020 18:40:33 -0300
+-Subject: [PATCH] ell: add missing include in dhcp-server.
+-
+-[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=6dfff19d4716ba216de1a3298ed0f667d7782810]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- ell/dhcp-server.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/ell/dhcp-server.c b/ell/dhcp-server.c
+-index c983ed4..144e83e 100644
+---- a/ell/dhcp-server.c
+-+++ b/ell/dhcp-server.c
+-@@ -24,6 +24,7 @@
+- #include <config.h>
+- #endif
+- 
+-+#include <linux/types.h>
+- #include <net/ethernet.h>
+- #include <sys/socket.h>
+- #include <arpa/inet.h>
+--- 
+-2.29.2
+-
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index efd39b31db..cbefd79bb8 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  c2b3848568c75bcf5a0e7d1f2efce4fdb2733d28226ed21c6a6542f0be05d784  ell-0.35-br1.tar.gz
++sha256  7767306f20db41c28b3138b5323bca05fef92238b6b61f81f66c2af684a13886  ell-0.38-br1.tar.gz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 8aec067bc0..18f1cf2aac 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.55
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.56
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index d0f3b80598..9bd8022e3d 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  8863717113c4897e2ad3271fc808ea245319e6fd95eed2e934fae8e0894e9b88  bluez-5.55.tar.xz
-+sha256  59c4dba9fc8aae2a6a5f8f12f19bc1b0c2dc27355c7ca3123eed3fe6bd7d0b9d  bluez-5.56.tar.xz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 2fd3016b50..7b3207d952 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.55
-+BLUEZ5_UTILS_VERSION = 5.56
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+-ELL_VERSION = 0.35
++ELL_VERSION = 0.38
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
