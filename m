@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E907EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53020C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Dec 2021 21:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8849C8134D;
-	Mon, 13 Dec 2021 21:17:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF51640182;
+	Mon, 13 Dec 2021 21:17:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FJJIjmtsZHbo; Mon, 13 Dec 2021 21:17:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7Ib1sSxE71A6; Mon, 13 Dec 2021 21:17:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E894D8133D;
-	Mon, 13 Dec 2021 21:17:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10BAE1BF2B0
+	by smtp2.osuosl.org (Postfix) with ESMTP id D70B44047C;
+	Mon, 13 Dec 2021 21:17:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D1B91BF2B0
  for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9C4F40159
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B81E8134C
  for <buildroot@lists.busybox.net>; Mon, 13 Dec 2021 21:15:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bpAGD_CP7TwK for <buildroot@lists.busybox.net>;
- Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XuWwpTlFfCeN for <buildroot@lists.busybox.net>;
+ Mon, 13 Dec 2021 21:15:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0F70402A8
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE3FD8136C
  for <buildroot@buildroot.org>; Mon, 13 Dec 2021 21:15:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C574A83799; Mon, 13 Dec 2021 21:09:51 +0000 (UTC)
+ id 1E8A183825; Mon, 13 Dec 2021 21:09:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Dec 2021 20:28:27 +0100
+Date: Mon, 13 Dec 2021 22:09:27 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 84c6f9c516bf6220e253eb73dc6151128f640ad6
-X-Git-Newrev: f18936a78b277c09884d079b8951ae7f9191dd48
+X-Git-Oldrev: 573978d29ddb73533e20e1de4af92d76896e38fe
+X-Git-Newrev: 075b9ebfa56f794d8eb1e02b35f2adcd3ea15d2e
 X-Patchwork-Hint: ignore
-Message-Id: <20211213210951.C574A83799@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/ell: bump version
- to 0.39
+Message-Id: <20211213210952.1E8A183825@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bluez5_utils:
+ expose more disable options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +59,172 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f18936a78b277c09884d079b8951ae7f9191dd48
+commit: https://git.buildroot.net/buildroot/commit/?id=075b9ebfa56f794d8eb1e02b35f2adcd3ea15d2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changelog:
-https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
+BlueZ builds a lot of Classic BT profiles by default but allows
+to disable them. This is especially handy when only BLE is needed
+and enabled in the kernel.
 
-Needed for bluez5_utils bump to 5.58:
-http://www.bluez.org/release-of-bluez-5-58-and-5-57/
+Otherwise this yields warnings like this on bootup:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ profiles/network/bnep.c:bnep_init() kernel lacks bnep-protocol support
+ src/plugin.c:plugin_init() System does not support network plugin
+
+Also it allows to disable btmon which should not be needed on
+production systems and is ~800KB in size.
+
+Expose those options but default to 'y' to no break existing
+configurations.
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9988ca9eadb90cbf10d150b420f4d1f5eb38482c)
+(cherry picked from commit fb9fc969d91f69851b4c70dba512b607e52bda7b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bluez5_utils/Config.in       | 36 +++++++++++++++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.mk | 41 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index cbefd79bb8..a795b1aa0d 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  7767306f20db41c28b3138b5323bca05fef92238b6b61f81f66c2af684a13886  ell-0.38-br1.tar.gz
-+sha256  deacff70541b2b0aa61758d7e4eafbabd8c603eeea0207a8a2f5f42118c2f49d  ell-0.39-br1.tar.gz
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 2c8625a66d..9f20bf83ac 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -37,6 +37,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	help
+ 	  Build the command line client "bluetoothctl".
  
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 18f1cf2aac..c83063feda 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_PACKAGE_BLUEZ5_UTILS_MONITOR
++	bool "build monitor utility"
++	default y
++	help
++	  Build monitor utility btmon.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+ 	bool "install deprecated tools"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+@@ -52,11 +58,35 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	  "Nokia OBEX PC Suite tool". So, only if OBEX support is
+ 	  enabled this option has an effect.
  
--ELL_VERSION = 0.38
-+ELL_VERSION = 0.39
- ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
- ELL_SITE_METHOD = git
- ELL_LICENSE = LGPL-2.1+
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP
++	bool "build a2dp plugin"
++	default y
++	help
++	  Build plugin for A2DP (audio) profiles.
++
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP
++	bool "build avrcp plugin"
++	default y
++	help
++	  Build plugin for AVRCP (audio) profiles.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+ 	bool "build health plugin"
+ 	help
+ 	  Build plugin for health profiles.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID
++	bool "build hid plugin"
++	default y
++	help
++	  Build plugin for HID (input) profiles.
++
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG
++	bool "build hog plugin"
++	default y
++	help
++	  Build plugin for HoG (input) profiles.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
+ 	bool "build mesh plugin"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+@@ -76,6 +106,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
+ 	help
+ 	  Build MIDI support via ALSA sequencer.
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NETWORK
++	bool "build network plugin"
++	default y
++	help
++	  Build plugin for PANU, NAP, GN profiles.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC
+ 	bool "build nfc plugin"
+ 	help
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 3bd3f5490d..7b7e31500f 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -40,6 +40,12 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-client
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_MONITOR),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-monitor
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-monitor
++endif
++
+ # experimental plugins
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-experimental
+@@ -47,6 +53,20 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable a2dp plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_A2DP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-a2dp
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-a2dp
++endif
++
++#enable avrcp plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AVRCP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-avrcp
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-avrcp
++endif
++
+ # enable health plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-health
+@@ -54,6 +74,20 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-health
+ endif
+ 
++# enable hid plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-hid
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-hid
++endif
++
++# enable hog plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-hog
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-hog
++endif
++
+ # enable mesh profile
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-external-ell --enable-mesh
+@@ -70,6 +104,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-midi
+ endif
+ 
++# enable network plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NETWORK),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-network
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-network
++endif
++
+ # enable nfc plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_NFC),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
