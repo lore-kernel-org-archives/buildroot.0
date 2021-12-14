@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FCA1C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72CA0C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E68C240602;
-	Tue, 14 Dec 2021 20:10:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F24E8141F;
+	Tue, 14 Dec 2021 20:11:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0x8vMvr86YuO; Tue, 14 Dec 2021 20:10:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aBffr-2IqCvN; Tue, 14 Dec 2021 20:11:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEBE5405EA;
-	Tue, 14 Dec 2021 20:10:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B1DC21BF9B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97A9B813AA;
+	Tue, 14 Dec 2021 20:11:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5F911BF9B9
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A17B84095F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2B5E81842
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v4FO8AzR96RX for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:10:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IhxsJFDTiSqp for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7172408F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00E168133C
  for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id E002081EB3; Tue, 14 Dec 2021 20:05:19 +0000 (UTC)
+ id F0DE58182C; Tue, 14 Dec 2021 20:05:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 20:56:01 +0100
+Date: Tue, 14 Dec 2021 20:56:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0f1c1fbb9be684917f51bbe7888cd44e375a96e
-X-Git-Newrev: f9ae2246045b141537af24769ed491ee3f281608
+X-Git-Oldrev: 1984222c84f53f530dce230d14f30015d971ab3f
+X-Git-Newrev: 5d61c35ac8c6dc5d4f94bcf68ef37c54d855ed0d
 X-Patchwork-Hint: ignore
-Message-Id: <20211214200519.E002081EB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add Andreas Ziegler to
- package/mpd
+Message-Id: <20211214200519.F0DE58182C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unbound: bump version to 1.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9ae2246045b141537af24769ed491ee3f281608
+commit: https://git.buildroot.net/buildroot/commit/?id=5d61c35ac8c6dc5d4f94bcf68ef37c54d855ed0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-to monitor issues and changes.
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Kyle Harding <kyle@balena.io>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7abac2421d..d64c1b063a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -133,6 +133,9 @@ F:	package/wine/
- N:	Andreas Klinger <ak@it-klinger.de>
- F:	package/ply/
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 3c872aedf5..ca6fe174e0 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.2.tar.gz.sha256
+-sha256  0a13b547f3b92a026b5ebd0423f54c991e5718037fd9f72445817f6a040e1a83  unbound-1.13.2.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.14.0.tar.gz.sha256
++sha256  6ef91cbf02d5299eab39328c0857393de7b4885a2fe7233ddfe3c124ff5a89c8  unbound-1.14.0.tar.gz
  
-+N:	Andreas Ziegler <br015@umbiko.net>
-+F:	package/mpd/
-+
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
- F:	package/python-backports-shutil-get-terminal-size/
- F:	package/python-decorator/
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 37456db416..61fdc5389b 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNBOUND_VERSION = 1.13.2
++UNBOUND_VERSION = 1.14.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
