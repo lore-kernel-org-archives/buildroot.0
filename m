@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDC2C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC65C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECDDC8141F;
-	Tue, 14 Dec 2021 20:05:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 005F8409A8;
+	Tue, 14 Dec 2021 20:05:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LBARbSAwnMPR; Tue, 14 Dec 2021 20:05:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0UjgUS1yudCQ; Tue, 14 Dec 2021 20:05:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BDAE81839;
-	Tue, 14 Dec 2021 20:05:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1CB121BF30E
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6675440928;
+	Tue, 14 Dec 2021 20:05:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 681BA1BF30E
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AFF881846
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55A15405EA
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VLiDHZhSK3Py for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:05:21 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V_aCBvr79nMy for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:05:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A84128186A
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:05:21 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id t5so66793266edd.0
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:05:21 -0800 (PST)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0550340114
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:05:35 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id b7so7766145edd.6
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:05:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=F9aHKyTRbZRL9FdxbqRxNygk/OcART0RVfG7plF5ToA=;
- b=GhddhEVZEUDPd/z+AYKKodTY3mrsCRGCwN9z6D9bvgysejOujn74UHcnR6Xnc+DhAM
- /9RnlELQCFhhHICoNux9C68kNnIiCYG7QE4+C9y9KC18CqmVFD+G8q/N1nme3UvYYWdy
- KSGsyP3dxbktVTim72svCNzvwFPrdXp4BFCax4VRRvtoPZP9aPcj8kkii2Aew/SJTVW+
- ZumlDwjvlQDA8UQQefyycFPIFQmcYsGoEiikj3ayRPW7anmQplwzytE+A3JO3JRwUhzQ
- r0oQt41CNvwH0U32bmlr4pwO2Vh0W2LiqBh/Ox/TNKo1A1hTVtSOGQTlaQnPP3uifFJW
- AxEA==
+ bh=P0srrNawMT4LMDHTcgoGH/R/OXlTPJvwKX87xX1FshY=;
+ b=TmcSn5ZnDr2ZtaiQMoN3ouJRK7mXeut1FYA28dBhIVqMJeBMp0RVf+3CfWpEy0i+Wk
+ n48JvXH21HF5cpGRuKCr44AjbL+DIBP4mLjnIEZoh3Vod557QNrqM611DRE+MWcgriGX
+ wOGtGZUft875Yid4sLuHpjcHedAJpm2ZdQEzTd5NRnbs0L4d2roe+EgPElZN9LG0OJ4w
+ 2hD2E2gb9fCNgGggbfuRwPeZElhK8cw7JwRH53Jrt7cvRi3hFbcokjZB3UM1j8L6rhxb
+ mCA9g1ybZs3iURZ+aJgu61U1PEc8DSG18As0G06TgqZHH9y/Q/ENA8pxzPLBD3nl35qG
+ RRPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=F9aHKyTRbZRL9FdxbqRxNygk/OcART0RVfG7plF5ToA=;
- b=6iT9oOx8Q2jyUiu4o20Y6qchwJUbFFjLj9zzAMcZO0S9Dvt5CSCULYbXm4w6n698B9
- qOI96ungdL40RjGKlwsyDfwYLC0wDej+bywJ4mzA1ZB3qJEDU4hb0WQUaYicFUQOXEsT
- tom+DSzl4BfHUnuOYWmxRQdiUfUWpU/yj7srGZNcexB4xKoPO+dLtGPM0tviG8UGlpXU
- uXrLott+DUBYM1x/Dvik0J+Yf+ps6exqLbozCCpLKknWQdbpa8X0RPlU+TAApBoDKuka
- myNg+/4ljRzsHOWhC/N4LxEREI6lejmNFZqy+mgbAeJTajjJnH4/k9ebl5/cG380w7sK
- oQZA==
-X-Gm-Message-State: AOAM530CSMUmG51zePQm4WmjkHDHOjL78iq70O5m8cveM1S6fQhyfLU3
- SeITyMhiHb6lCKecjscYVGqMs6xVl+8Ncw==
-X-Google-Smtp-Source: ABdhPJw2yzsrrLK+1vFT/z50dz+j7xPcHxkK/jrSZsDxeHHkx7QgzLAAk11M2aa3SBTsB+BUXMrR+Q==
-X-Received: by 2002:a17:906:c147:: with SMTP id
- dp7mr7953199ejc.173.1639512319883; 
- Tue, 14 Dec 2021 12:05:19 -0800 (PST)
+ bh=P0srrNawMT4LMDHTcgoGH/R/OXlTPJvwKX87xX1FshY=;
+ b=pzgKxZe0j+tihZ79UCuy6lFPro+Qu8oADhT5CbU+m+FP7rrnM4eLgpXOHq1OIjApVA
+ W3Ue7B3sIkAYi4nQOmjzbHqJ2IHINNMEKP6Uez2h/RYB9z51iHFYb8hP8SKia2dtcK0A
+ CWxvb++hKvpyVmlXdPYHNUpSAaykcerxS3E5RIkZgVWtkyL/K+jfHn4ZsqvQBUXLQSOv
+ VX9cb05/8uUXTVldPXZVcakwEGha4j0fO+uflVmiXPUxW5Co/YUt1uOs+5gXw0aZSnga
+ 4VJTECW2Yxdi91HsVq9jLEcz73EHmTSQgReIjXZAG322uDeYtFEv6iZXftF04s6n0o7p
+ ZBFA==
+X-Gm-Message-State: AOAM532nsKg6RwJPcOEc5N8q904xIE/caikBQvWhypBTczlpW3f29j4/
+ aBrGc6dqWJxmm0xZ/eKlAhhbEQ==
+X-Google-Smtp-Source: ABdhPJyHtXNGZ4sahjF2MaDWYTZ/ZOIeExmWqObq/760ujJwvm/Sruze/7MR9AqIAC69BUyVFO8PvQ==
+X-Received: by 2002:aa7:d052:: with SMTP id n18mr11036430edo.104.1639512334289; 
+ Tue, 14 Dec 2021 12:05:34 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id e12sm231807ejs.86.2021.12.14.12.05.19
+ by smtp.gmail.com with ESMTPSA id z6sm320203edc.76.2021.12.14.12.05.33
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Dec 2021 12:05:19 -0800 (PST)
-Message-ID: <427af800-4dd9-5ddd-d735-01e185cfbee1@mind.be>
-Date: Tue, 14 Dec 2021 21:05:17 +0100
+ Tue, 14 Dec 2021 12:05:33 -0800 (PST)
+Message-ID: <3e1c568f-7d86-bb36-1189-db15dc15426a@mind.be>
+Date: Tue, 14 Dec 2021 21:05:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20211212223452.317122-1-giulio.benetti@benettiengineering.com>
+To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+References: <20211213063402.792467-1-br015@umbiko.net>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211212223452.317122-1-giulio.benetti@benettiengineering.com>
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 3.2.0
+In-Reply-To: <20211213063402.792467-1-br015@umbiko.net>
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: add Andreas Ziegler to
+ package/mpd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,8 +100,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/12/2021 23:34, Giulio Benetti wrote:
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+On 13/12/2021 07:34, Andreas Ziegler wrote:
+>   to monitor issues and changes.
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
   Applied to master, thanks.
 
@@ -108,32 +111,23 @@ On 12/12/2021 23:34, Giulio Benetti wrote:
   Arnout
 
 > ---
->   package/harfbuzz/harfbuzz.hash | 2 +-
->   package/harfbuzz/harfbuzz.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   DEVELOPERS | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-> index d5a376830a..1615933a6e 100644
-> --- a/package/harfbuzz/harfbuzz.hash
-> +++ b/package/harfbuzz/harfbuzz.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  4056b1541dd8bbd8ec29207fe30e568805c0705515632d7fec53a94399bc7945  harfbuzz-3.1.2.tar.xz
-> +sha256  0ada50a1c199bb6f70843ab893c55867743a443b84d087d54df08ad883ebc2cd  harfbuzz-3.2.0.tar.xz
->   sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-> index 97b28ce236..67eab359c6 100644
-> --- a/package/harfbuzz/harfbuzz.mk
-> +++ b/package/harfbuzz/harfbuzz.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 3023526427..4b4e59cff5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -133,6 +133,9 @@ F:	package/wine/
+>   N:	Andreas Klinger <ak@it-klinger.de>
+>   F:	package/ply/
 >   
-> -HARFBUZZ_VERSION = 3.1.2
-> +HARFBUZZ_VERSION = 3.2.0
->   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
->   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
->   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+> +N:	Andreas Ziegler <br015@umbiko.net>
+> +F:	package/mpd/
+> +
+>   N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+>   F:	package/python-backports-shutil-get-terminal-size/
+>   F:	package/python-decorator/
 > 
 _______________________________________________
 buildroot mailing list
