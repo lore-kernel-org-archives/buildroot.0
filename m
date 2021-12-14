@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D39BC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BBC0C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09688409A8;
-	Tue, 14 Dec 2021 20:11:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31123408F1;
+	Tue, 14 Dec 2021 20:11:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QAmO-UvcaJXO; Tue, 14 Dec 2021 20:11:15 +0000 (UTC)
+	with ESMTP id xd1ZAKf_py_8; Tue, 14 Dec 2021 20:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86935409B0;
-	Tue, 14 Dec 2021 20:11:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16EE51BF30E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73CE9409DA;
+	Tue, 14 Dec 2021 20:11:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 18E2E1BF9B4
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCD5C408F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id B81948133C
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hS24ZLlpJ8cd for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KzPL4SL9Stsk for <buildroot@lists.busybox.net>;
  Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22A6A408F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19910813F4
  for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1D74F81EAD; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
+ id 15C1F8182C; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 20:56:17 +0100
+Date: Tue, 14 Dec 2021 20:56:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5e5bf056233b3046112396be8a33bc59fb2f62d9
-X-Git-Newrev: 6f772ce7859c6fb7bd5c01ffd5338a487a5c8496
+X-Git-Oldrev: 303f3e95d31440b401f95ca469ca8b110936f2be
+X-Git-Newrev: 5e5bf056233b3046112396be8a33bc59fb2f62d9
 X-Patchwork-Hint: ignore
-Message-Id: <20211214200520.1D74F81EAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.354
+Message-Id: <20211214200520.15C1F8182C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iperf: bump version to 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,39 +58,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f772ce7859c6fb7bd5c01ffd5338a487a5c8496
+commit: https://git.buildroot.net/buildroot/commit/?id=5e5bf056233b3046112396be8a33bc59fb2f62d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog ([1]):
+
+  - fix tos (-S) regression
+  - fix --permit-key regression
+
+[1] https://sourceforge.net/projects/iperf2/files/readme.txt/download
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iperf/iperf.hash | 4 ++--
+ package/iperf/iperf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 8479e94339..43cca03b06 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  14d120ae58f71da18d7731f44e65a818e4209d621b41fba6f0cd03278a002c1d  hwdata-0.353.tar.gz
-+sha256  ed9a2c8b90371ccf4f0ff88972d87770c1c644e63ca44d2ac72c33200642cdde  hwdata-0.354.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 8341757a11..71b59b95ed 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 924d10b3e0..2e1f433dc7 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1  b9d0868a6cdd970c1835d3d1a264dd54907f2c5c  iperf-2.1.5.tar.gz
++sha1  41bd049625cbecda2bf5b6a6cc12a6c5baec549b  iperf-2.1.6.tar.gz
+ 
+ # Locally computed:
+-sha256  56ec1312d24bd2c78790e67c96c0a991c82e71bc4c0b0d37171bd89c9fd6ef3e  iperf-2.1.5.tar.gz
++sha256  4a43e44439b95622aebeee55754a17d1c94076032e90620dfc1ab9908cb9e080  iperf-2.1.6.tar.gz
+ sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index a3d95535b3..f999ff4ac2 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.353
-+HWDATA_VERSION = 0.354
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-IPERF_VERSION = 2.1.5
++IPERF_VERSION = 2.1.6
+ IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
+ IPERF_LICENSE = MIT-like
+ IPERF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
