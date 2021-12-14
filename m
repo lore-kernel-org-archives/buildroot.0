@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 610B0C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6212DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FDBC409B0;
-	Tue, 14 Dec 2021 20:12:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B644409C6;
+	Tue, 14 Dec 2021 20:13:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zTWEiB1ontSj; Tue, 14 Dec 2021 20:12:52 +0000 (UTC)
+	with ESMTP id iY-njPvKnn3p; Tue, 14 Dec 2021 20:13:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A41C40987;
-	Tue, 14 Dec 2021 20:12:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21ED41BF30E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 643DF409B0;
+	Tue, 14 Dec 2021 20:13:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A9241BF30E
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 606B88133C
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D536B60C2D
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PGmE95CW74T1 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qhzmFLihyi0k for <buildroot@lists.busybox.net>;
  Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 317DC815CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F5F160D53
  for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3BCC381EB3; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
+ id 2C5A78182C; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 20:56:27 +0100
+Date: Tue, 14 Dec 2021 20:56:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a002466459a17f44f565209a9cfd8512676ca47
-X-Git-Newrev: 1c12b00924818d402513808e17ee92e843932834
+X-Git-Oldrev: ad0515252a25e94b85184102a66e93a17ad3c65e
+X-Git-Newrev: 54f234c384d23bae73d467a291c625d8a6e324cc
 X-Patchwork-Hint: ignore
-Message-Id: <20211214200520.3BCC381EB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/moarvm: enable on sparc and sparc64
+Message-Id: <20211214200520.2C5A78182C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +58,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c12b00924818d402513808e17ee92e843932834
+commit: https://git.buildroot.net/buildroot/commit/?id=54f234c384d23bae73d467a291c625d8a6e324cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-sparc and sparc64 are supported since version 2020.09 and
-https://github.com/MoarVM/MoarVM/commit/87ad486f30ecdf28b4abbcf40139467f626f8548
-https://github.com/MoarVM/MoarVM/commit/34e0fb55e33482fe09083627eb54003bde07d8a7
+For details see [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/moarvm/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
-index acef8f5d61..ec38047b2d 100644
---- a/package/moarvm/Config.in
-+++ b/package/moarvm/Config.in
-@@ -4,8 +4,6 @@ config BR2_PACKAGE_MOARVM
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # libatomic_ops
--	# needs AO_fetch_compare_and_swap, not implemented for sparcv8/sparcv9
--	depends on !BR2_sparc64 && !BR2_sparc
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LIBTOMMATH
-@@ -26,5 +24,4 @@ comment "moarvm needs a toolchain w/ NPTL, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
--	depends on !BR2_sparc64 && !BR2_sparc
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 31bf7bcf69..f18a727810 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-October/042003.html
+-sha256  0fc39f0af3ee1a77c60c34bc45391a4d0879169f7c0f7bbbeb5eef590b98b883  libinput-1.19.2.tar.xz
+-sha512  fc5244dc90ceb710f7b5bb76a3cafc7dd5a8d5fa05c51122412615bfc3a99435d6a1017b79c3ce73561139fc2f5959acaf16cb9500796ea2f3eb6cb95d1a1acb  libinput-1.19.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-December/042068.html
++sha256  3cae78ccde19d7d0f387e58bc734d4d17ab5f6426f54a9e8b728c90b17baa068  libinput-1.19.3.tar.xz
++sha512  f4b776d0da78c687ba21b430a04941ac6b43f68970c82ec9f7360358fdea5ed6a873948ce66a25bcdd64d4b95fa4bf705cc24dbc25c7c0f5fd2d0efbd763f298  libinput-1.19.3.tar.xz
+ 
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 055c4fc7a0..2f9c639c22 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.19.2
++LIBINPUT_VERSION = 1.19.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
