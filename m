@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC65C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:05:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A12C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 005F8409A8;
-	Tue, 14 Dec 2021 20:05:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BDD614060C;
+	Tue, 14 Dec 2021 20:06:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0UjgUS1yudCQ; Tue, 14 Dec 2021 20:05:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6675440928;
-	Tue, 14 Dec 2021 20:05:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 681BA1BF30E
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55A15405EA
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V_aCBvr79nMy for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:05:36 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id weoEweiXEVh2; Tue, 14 Dec 2021 20:06:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D953E405F4;
+	Tue, 14 Dec 2021 20:06:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 317A21BF30E
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 208FF60BF3
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:05:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cwt9LAUnsDws for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:05:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0550340114
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:05:35 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id b7so7766145edd.6
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:05:35 -0800 (PST)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B2E460648
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:05:51 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id v1so67398418edx.2
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:05:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=P0srrNawMT4LMDHTcgoGH/R/OXlTPJvwKX87xX1FshY=;
- b=TmcSn5ZnDr2ZtaiQMoN3ouJRK7mXeut1FYA28dBhIVqMJeBMp0RVf+3CfWpEy0i+Wk
- n48JvXH21HF5cpGRuKCr44AjbL+DIBP4mLjnIEZoh3Vod557QNrqM611DRE+MWcgriGX
- wOGtGZUft875Yid4sLuHpjcHedAJpm2ZdQEzTd5NRnbs0L4d2roe+EgPElZN9LG0OJ4w
- 2hD2E2gb9fCNgGggbfuRwPeZElhK8cw7JwRH53Jrt7cvRi3hFbcokjZB3UM1j8L6rhxb
- mCA9g1ybZs3iURZ+aJgu61U1PEc8DSG18As0G06TgqZHH9y/Q/ENA8pxzPLBD3nl35qG
- RRPw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=50+tb1nEgNrCMTw2bbeyGlUwhtVQFZZdH/3ihs+S778=;
+ b=YkHQ051EXLqiU5UdzLILaMbKR5Ehf7ZYpHkrhGEMk0Pc8LyXR6kN6KvkcJw6X8Nmw0
+ w36oDLJ/K934ngoRLEv0gk1t4xoeYHVzuFIWDLmYQvRINWaSJjsdcrfWUkrt3O/Me4XN
+ CqvGmngYgY3JYmoZeqFPbzthbjbKwrSkNn7eLyyzK/t4boaGxAr2z6WAM2ekj6hE5BhM
+ eYBkW6q87GM7c1c/xdH1InC+RkzBosxpRsAz+yY1wrmQhr9kc/jxhMv1Ecc5QJguuQOm
+ IhdoxmQC2Na7WczVaZzX51wzFK/3Ectjm5uxYSUQFfgOmPEowo6JHyUnjQ3RkjIN93sQ
+ 2hNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=P0srrNawMT4LMDHTcgoGH/R/OXlTPJvwKX87xX1FshY=;
- b=pzgKxZe0j+tihZ79UCuy6lFPro+Qu8oADhT5CbU+m+FP7rrnM4eLgpXOHq1OIjApVA
- W3Ue7B3sIkAYi4nQOmjzbHqJ2IHINNMEKP6Uez2h/RYB9z51iHFYb8hP8SKia2dtcK0A
- CWxvb++hKvpyVmlXdPYHNUpSAaykcerxS3E5RIkZgVWtkyL/K+jfHn4ZsqvQBUXLQSOv
- VX9cb05/8uUXTVldPXZVcakwEGha4j0fO+uflVmiXPUxW5Co/YUt1uOs+5gXw0aZSnga
- 4VJTECW2Yxdi91HsVq9jLEcz73EHmTSQgReIjXZAG322uDeYtFEv6iZXftF04s6n0o7p
- ZBFA==
-X-Gm-Message-State: AOAM532nsKg6RwJPcOEc5N8q904xIE/caikBQvWhypBTczlpW3f29j4/
- aBrGc6dqWJxmm0xZ/eKlAhhbEQ==
-X-Google-Smtp-Source: ABdhPJyHtXNGZ4sahjF2MaDWYTZ/ZOIeExmWqObq/760ujJwvm/Sruze/7MR9AqIAC69BUyVFO8PvQ==
-X-Received: by 2002:aa7:d052:: with SMTP id n18mr11036430edo.104.1639512334289; 
- Tue, 14 Dec 2021 12:05:34 -0800 (PST)
+ bh=50+tb1nEgNrCMTw2bbeyGlUwhtVQFZZdH/3ihs+S778=;
+ b=ZAnhhKSIVa1tW8lmoR9MjIUsKaOonio6u++0Um9SF7lUXu4Nnfb6UlJ75YfQTicf9T
+ O6/2ck4UiGkXsotpqH9hCjPhGeCQZ47+MwWECfJF5JiLdpGtcQ8THTcJ+92RNc39b3/V
+ PstCkv3HABFpDdYQ1o3GhwAwtDSuTEEU40jbbZsrcn3WIr+uEz2SxkibT60d+fFmjvDp
+ hYcfOEPZ7HJP3IREID3LmsYEaU4HUXFbfI9m3xbWkpBAcSZ+5GrqyHaXV1tv7POW/3Ox
+ KS4NNl2QS5glD9p2u+SakE3/VPLzR3ICuU53uAYz5rTXe+WixrCHA1swH/C8ocgdGyeN
+ uzTA==
+X-Gm-Message-State: AOAM533yrjHLN01VGgUMPefNzO3653+XT0WcHqW7bnH8dTU4c95qcpb5
+ PfrBnu/cRBcq+nVXALtzVRtpfw==
+X-Google-Smtp-Source: ABdhPJxlYsAlUstoSl4LZXq0Ppp9JTEr8SBQIWjKubyIPWiIo4M9CPgJIMuqPIC1QbVI6nMiYVCGGQ==
+X-Received: by 2002:a17:906:9258:: with SMTP id
+ c24mr2366505ejx.473.1639512349564; 
+ Tue, 14 Dec 2021 12:05:49 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id z6sm320203edc.76.2021.12.14.12.05.33
+ by smtp.gmail.com with ESMTPSA id ga37sm236776ejc.65.2021.12.14.12.05.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Dec 2021 12:05:33 -0800 (PST)
-Message-ID: <3e1c568f-7d86-bb36-1189-db15dc15426a@mind.be>
-Date: Tue, 14 Dec 2021 21:05:33 +0100
+ Tue, 14 Dec 2021 12:05:48 -0800 (PST)
+Message-ID: <ddbc8c35-fe6e-8b4e-2488-3a6ec9416ccd@mind.be>
+Date: Tue, 14 Dec 2021 21:05:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
-References: <20211213063402.792467-1-br015@umbiko.net>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, buildroot@buildroot.org
+References: <20211213105255.650164-1-maxime.chevallier@bootlin.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211213063402.792467-1-br015@umbiko.net>
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: add Andreas Ziegler to
- package/mpd
+In-Reply-To: <20211213105255.650164-1-maxime.chevallier@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] configs/beaglebone: add DT for the
+ Beaglebone Black Wireless
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,6 +95,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Lothar Felten <lothar.felten@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,10 +104,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/12/2021 07:34, Andreas Ziegler wrote:
->   to monitor issues and changes.
+On 13/12/2021 11:52, Maxime Chevallier wrote:
+> The Beaglebone Black Wireless needs a specific DT, which u-boot tries to
+> load based on the board name. Make sure we ship the DT so that we can
+> boot on that platform.
 > 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
   Applied to master, thanks.
 
@@ -111,23 +117,49 @@ On 13/12/2021 07:34, Andreas Ziegler wrote:
   Arnout
 
 > ---
->   DEVELOPERS | 3 +++
->   1 file changed, 3 insertions(+)
+>   board/beaglebone/genimage.cfg    | 1 +
+>   configs/beaglebone_defconfig     | 2 +-
+>   configs/beaglebone_qt5_defconfig | 2 +-
+>   3 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3023526427..4b4e59cff5 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -133,6 +133,9 @@ F:	package/wine/
->   N:	Andreas Klinger <ak@it-klinger.de>
->   F:	package/ply/
+> diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+> index 1fa6c5f381..42ca2cf107 100644
+> --- a/board/beaglebone/genimage.cfg
+> +++ b/board/beaglebone/genimage.cfg
+> @@ -10,6 +10,7 @@ image boot.vfat {
+>   			"am335x-bone.dtb",
+>   			"am335x-boneblack.dtb",
+>   			"am335x-bonegreen.dtb",
+> +			"am335x-boneblack-wireless.dtb",
+>   		}
+>   	}
 >   
-> +N:	Andreas Ziegler <br015@umbiko.net>
-> +F:	package/mpd/
-> +
->   N:	Andrey Smirnov <andrew.smirnov@gmail.com>
->   F:	package/python-backports-shutil-get-terminal-size/
->   F:	package/python-decorator/
+> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+> index 763696d1dd..06154d98b7 100644
+> --- a/configs/beaglebone_defconfig
+> +++ b/configs/beaglebone_defconfig
+> @@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
+>   BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
+>   BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>   
+>   # Filesystem
+> diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+> index 5f084b77df..11a91677ce 100644
+> --- a/configs/beaglebone_qt5_defconfig
+> +++ b/configs/beaglebone_qt5_defconfig
+> @@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
+>   BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+>   BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
+>   BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>   BR2_PACKAGE_FBV=y
+>   BR2_PACKAGE_QT5=y
 > 
 _______________________________________________
 buildroot mailing list
