@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF1E6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6130CC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86E514060C;
-	Tue, 14 Dec 2021 20:12:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19E9B60BF6;
+	Tue, 14 Dec 2021 20:12:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZqjvyAOwCf90; Tue, 14 Dec 2021 20:12:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z4sKeMCDwm6Y; Tue, 14 Dec 2021 20:12:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA2D4405ED;
-	Tue, 14 Dec 2021 20:12:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B70A1BF30E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78F9860BF3;
+	Tue, 14 Dec 2021 20:12:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B4471BF9B4
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3689940114
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05B8C408F9
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fe9uoMHiy4a7 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f3INmqfNZSOb for <buildroot@lists.busybox.net>;
  Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57B0F405ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5033540948
  for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 53D0F81EB3; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
+ id 4C34281EAD; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 20:56:34 +0100
+Date: Tue, 14 Dec 2021 20:56:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86f91e14b5c158d4533909656c8174b6f28760af
-X-Git-Newrev: 250e96580391e130951152ae1bf9abc485d637bb
+X-Git-Oldrev: 0c3ff03090dcbfce32823c046899305eb816d6d0
+X-Git-Newrev: 86f91e14b5c158d4533909656c8174b6f28760af
 X-Patchwork-Hint: ignore
-Message-Id: <20211214200520.53D0F81EB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvirt: fix dependencies in
- Config.in
+Message-Id: <20211214200520.4C34281EAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvirt: fix libvirtd option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,51 +58,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=250e96580391e130951152ae1bf9abc485d637bb
+commit: https://git.buildroot.net/buildroot/commit/?id=86f91e14b5c158d4533909656c8174b6f28760af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop spurious "depends on WCHAR" added with commit
-ccfc90e1010e42e6529afae3a5ea8bf7226dabc1 and adds missing wchar comment
+Replace libvirtd by driver_libvirtd to avoid the following build failure
+raised since the addition of the package in commit
+ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
 
-While at it, drop BR2_USE_MMU from comment as it is already added by
-BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS and fix indentation before
-(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64))
+../output-1/build/libvirt-7.7.0/meson.build:1:0: ERROR: Unknown options: "libvirtd"
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3a20db6cb39c0d91213adbe82934274659df43e7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libvirt/Config.in | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/libvirt/libvirt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index 5693ecb4cc..e75f1cf15f 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -5,12 +5,12 @@ config BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
+index 3118de4d58..9a4788c905 100644
+--- a/package/libvirt/libvirt.mk
++++ b/package/libvirt/libvirt.mk
+@@ -194,7 +194,7 @@ endif
  
--comment "libvirt needs udev /dev management, a toolchain w/ threads, dynamic library, kernel headers >= 3.12 (4.11 for AArch64)"
-+comment "libvirt needs udev /dev management, a toolchain w/ threads, dynamic library, wchar, kernel headers >= 3.12 (4.11 for AArch64)"
- 	depends on BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
--	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || !BR2_USE_MMU || \
--		!BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		!(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 && \
--		  (BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64))
-+			(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64))
+ ifeq ($(BR2_PACKAGE_LIBVIRT_DAEMON),y)
+ # Network is used by daemon, only
+-LIBVIRT_CONF_OPTS += -Dlibvirtd=enabled -Ddriver_network=enabled
++LIBVIRT_CONF_OPTS += -Ddriver_libvirtd=enabled -Ddriver_network=enabled
  
- config BR2_PACKAGE_LIBVIRT
- 	bool "libvirt"
-@@ -19,7 +19,6 @@ config BR2_PACKAGE_LIBVIRT
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GNUTLS
+ ifeq ($(BR2_PACKAGE_LIBSSH),y)
+ LIBVIRT_CONF_OPTS += -Dlibssh=enabled
+@@ -240,7 +240,7 @@ endif
+ 
+ else # BR2_PACKAGE_LIBVIRT_DAEMON
+ 
+-LIBVIRT_CONF_OPTS += -Dlibvirtd=disabled -Ddriver_network=disabled
++LIBVIRT_CONF_OPTS += -Ddriver_libvirtd=disabled -Ddriver_network=disabled
+ 
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
