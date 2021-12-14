@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC97EC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3826C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A999B81453;
-	Tue, 14 Dec 2021 20:09:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95DCA409AA;
+	Tue, 14 Dec 2021 20:09:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GFrfxsBWGfWA; Tue, 14 Dec 2021 20:09:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s_kc7T35IH8S; Tue, 14 Dec 2021 20:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C2DF813F4;
-	Tue, 14 Dec 2021 20:09:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E88511BF30E
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F25F740948;
+	Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 244E31BF30E
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E51F4813F4
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1377E605A5
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2epcm5kFkEh1 for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:09:38 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c9HU75si96Pb for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:09:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01AA4813AA
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:09:37 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id t5so66830974edd.0
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:09:37 -0800 (PST)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3123160596
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:09:53 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id g14so66174267edb.8
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=KPaShlXSVp2TRcibbr1rLbehRO5cb4Ha+0w8iFskq0A=;
- b=gwIBA4ha2j1o4N/EqNrxpvgEeN44Nj/cjtSlFQ4VshH5wIEt7TQAQW/BSwQLRct/82
- dBmOrlZ6Ni3vAWL77fCA4UCCU7yobk3h4SOU2CPEZ/Tf0AMhO56L6aAh0S08zVHEdpQ4
- ycmISKydtiZJzOI5D88EQnvcF1yoPDClkGzr7C8Gild0oPnfAMT8SV2Wdf2hp2URRtIm
- TwGzA8QFsBBX/7/rfmtNjc3/F1Zc8HIGlWfi64k9Jc8F8/KRiOCJ2bM3m3ez8OVrJ54n
- Nx2D65ymokXWVg4alovVdA4IDYdqVtxSJ+VGY/AxZgUn5VZ0QgUJctTvgL9NCUK2Ip4I
- StaA==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=b5j5uuLYbXtppwBDk8tiyH29bz93xKfLmlQodWnv6Vk=;
+ b=gP4iAbNimeRixZS75WGnk63l862fGY1KpfCp2wv4yurBPoDCWTgGDWqmnKN+D7OwbP
+ bJKTdQ8GBnfde08kPoge3d9Ao/SVE7Czo9C2sRHU2vTYwCY/CnSk0kMnACPvaTVNtZiF
+ h++GPaPVqTf5Gq2kmj6lv1RWBm6o9NGhwkboegJyOG+Ds23jlGt3cEOuQnndBJHzu4/M
+ 6XCHHbliSCz/1SQnThxtQxpxE17DSmo+A+Y3xyh5lFmlP5SnqwwP3AfoucedlZvrbKyD
+ aKomNVMYKWFNsNPMHdCFHqExyJceMjk1I46W2jeWb7WKmoFIfo41VHnZNePkOCZ2578x
+ gMQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=KPaShlXSVp2TRcibbr1rLbehRO5cb4Ha+0w8iFskq0A=;
- b=ry1jUiA69Q8FccPhilPL/DW/GHNLJ2mvsLj2wTqcBJoV7wXyJSoO9aNF94F9u3A7Fg
- FeyAQ+AHhAjZ/2YsCYJ8zOCaDew/eCgISxgXorjIVBHmpnIIFbuUnq7uI/bT6gB+V38q
- POZNlTk8R74jXjN0xWi3KSFmnckPC/LYuqOa4G69OLkD20yx81uyr+9yGQreCGqiIvk0
- 2jLDbjXiwvsqB4O5CJ0aO4ZyoPZcsJEP0vSrUuueoDHiwdYiXITmeZYij1FJ1RPCWT0N
- psivt8Os48AFWifxdhGVpTs6eIiNkX3ZWd7wb1TVgOyZ3ATGKs1NjvpwwbywPVKPiPc/
- XvEA==
-X-Gm-Message-State: AOAM532/PEXt6MQhC4lHNBJSppW+bFUNUp7qzWK/1uTVTwj+y4E0KGSi
- DWmZvZN0SM4zPVM2EEDjSo514A==
-X-Google-Smtp-Source: ABdhPJyHeJIAtk703vtccXBplkFDKCFr4M5wtoANlDEPQe1AnCUNfkU2Jrbor+JQLwpqggxlj9i35A==
-X-Received: by 2002:a05:6402:40c7:: with SMTP id
- z7mr10739267edb.255.1639512576294; 
- Tue, 14 Dec 2021 12:09:36 -0800 (PST)
+ bh=b5j5uuLYbXtppwBDk8tiyH29bz93xKfLmlQodWnv6Vk=;
+ b=CQWeMOI5aW2mrwscuQxz5NQOvFtrGepB0nF5q8S2n5FKt8CbvKznsdsQI39XdJVJkx
+ hQb46Btv7B6yRGxOg79QcMWw6WVNPMyBBslynhx8Tfz9DlZPDEZYNzgPghsv3YCTeDHA
+ pgm/5ixyiAz7fhCNtMS9mekOv8GSgKoLpyuPExtBy2q7Sax5wy3P0D0f0mxMgzh3t4tt
+ fJ+X85Z0myir/kUGoUoX14N5L0Kqfa94Tb42G9D0L/DUVGwSCbujUZu0N8tYNG6DjSQv
+ z/YO/Jn2dTMORcJLxDc8lJ1Qm0DEj06JQXbgbha/9bb9obqAyEBX0Ldsli87Y6w8y3M1
+ TrIA==
+X-Gm-Message-State: AOAM532HYELLL5ieGbnClkQ/RjgmNc87IL0Uz0ayCBIP0iHvVUgQdQB0
+ PPnpkwBmMDBCWSAe7yPU1a6ID3gBA9GW8A==
+X-Google-Smtp-Source: ABdhPJwjag7VPFowOnCboe7yahFZ5N096b1qeUjwjYCSqw1gdFFK6JIEhrUUgYgLOBrGHSMoiiDLiQ==
+X-Received: by 2002:a17:907:961d:: with SMTP id
+ gb29mr7917467ejc.102.1639512591325; 
+ Tue, 14 Dec 2021 12:09:51 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id hx14sm235940ejc.92.2021.12.14.12.09.35
+ by smtp.gmail.com with ESMTPSA id z6sm323397edc.76.2021.12.14.12.09.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Dec 2021 12:09:35 -0800 (PST)
-Message-ID: <32fc261c-89e0-5764-98c5-f88f0201a519@mind.be>
-Date: Tue, 14 Dec 2021 21:09:35 +0100
+ Tue, 14 Dec 2021 12:09:51 -0800 (PST)
+Message-ID: <421dbc0e-bbe3-dbbb-a7f9-8481ba1bfecb@mind.be>
+Date: Tue, 14 Dec 2021 21:09:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211213221035.1779283-1-fontaine.fabrice@gmail.com>
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
+References: <20211214121123.6867-1-buildroot@heine.tech>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211213221035.1779283-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/libvirt: fix libvirtd option
+In-Reply-To: <20211214121123.6867-1-buildroot@heine.tech>
+Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to
+ version 3.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,7 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jared Bents <jared.bents@rockwellcollins.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -100,49 +101,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/12/2021 23:10, Fabrice Fontaine wrote:
-> Replace libvirtd by driver_libvirtd to avoid the following build failure
-> raised since the addition of the package in commit
-> ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
+On 14/12/2021 13:11, Michael Nosthoff via buildroot wrote:
+> This release fixes two bugs introduced in release 3.10.0 and fixes the
+> conversion of std::filesystem::path. All changes are backward-compatible.
 > 
-> ../output-1/build/libvirt-7.7.0/meson.build:1:0: ERROR: Unknown options: "libvirtd"
+> https://github.com/nlohmann/json/releases/tag/v3.10.4
 > 
-> Fixes:
->   - http://autobuild.buildroot.org/results/3a20db6cb39c0d91213adbe82934274659df43e7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-  Both applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/libvirt/libvirt.mk | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+>   package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libvirt/libvirt.mk b/package/libvirt/libvirt.mk
-> index 3118de4d58..9a4788c905 100644
-> --- a/package/libvirt/libvirt.mk
-> +++ b/package/libvirt/libvirt.mk
-> @@ -194,7 +194,7 @@ endif
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> index 1a98971dbc..eb14d2fd6d 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  e0d7c1b120cac47fa7f14a41d10a5d390f67d423d8e97b9d6834887285d6873c  json-3.10.3.tar.gz
+> +sha256  1155fd1a83049767360e9a120c43c578145db3204d2b309eba49fbbedd0f4ed3  json-3.10.4.tar.gz
+>   sha256  c983d69523377819db3c377b390d5644f5ec53bec9b7c4a0f1ed893bb743d045  LICENSE.MIT
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> index 53cf17d2c6..428473db5a 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   ifeq ($(BR2_PACKAGE_LIBVIRT_DAEMON),y)
->   # Network is used by daemon, only
-> -LIBVIRT_CONF_OPTS += -Dlibvirtd=enabled -Ddriver_network=enabled
-> +LIBVIRT_CONF_OPTS += -Ddriver_libvirtd=enabled -Ddriver_network=enabled
->   
->   ifeq ($(BR2_PACKAGE_LIBSSH),y)
->   LIBVIRT_CONF_OPTS += -Dlibssh=enabled
-> @@ -240,7 +240,7 @@ endif
->   
->   else # BR2_PACKAGE_LIBVIRT_DAEMON
->   
-> -LIBVIRT_CONF_OPTS += -Dlibvirtd=disabled -Ddriver_network=disabled
-> +LIBVIRT_CONF_OPTS += -Ddriver_libvirtd=disabled -Ddriver_network=disabled
->   
->   endif
->   
+> -JSON_FOR_MODERN_CPP_VERSION = 3.10.3
+> +JSON_FOR_MODERN_CPP_VERSION = 3.10.4
+>   JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+>   JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+>   JSON_FOR_MODERN_CPP_LICENSE = MIT
 > 
 _______________________________________________
 buildroot mailing list
