@@ -1,78 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A03C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 22:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF881C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 22:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8A3E409B2;
-	Tue, 14 Dec 2021 22:20:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 522F181314;
+	Tue, 14 Dec 2021 22:26:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e1g8GhLvHuXv; Tue, 14 Dec 2021 22:20:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uerU3LCeEflt; Tue, 14 Dec 2021 22:26:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8C26408AD;
-	Tue, 14 Dec 2021 22:20:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 90ADC1BF681
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:20:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD81A812D5;
+	Tue, 14 Dec 2021 22:26:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F36D1BF681
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:26:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8068B408AD
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:20:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E803812D4
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:26:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mYWmvgjOe888 for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 22:20:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A4A0D408AB
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 22:20:19 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id s1so718222wrg.1
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 14:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1AgP8qvJNQp23EtGmkUDxuwLkzTzdmkZeDTzX63R4Sw=;
- b=kdrA8dn4Gm7rAsIy2KsTgDRAq8O1ukleCXRVj+gaYm0gRq5i3ruIWCTbmR26a+/YCj
- rHtO1A0t+QiKYWeobUPxkXJgLPwc0OtVxSV/Y2zMesZDXo4J8eV5Qn0yCJx7XXWfrRgA
- XfZHxyAyUqkgxASB8a07duXNDLw5K2YlHCMX7kKd1pwx7x/1AuaC0QQnz8hWoIfMJOil
- KaKj4VvdABsnhrehgcsy8B/U+af7QEVUbSok7R05YNq39Z2368ybGtLFv53YRMhoyNFF
- ooo2zRJO9JreTyw2VMFKeD6hmfPC1yx44KmK2XHcnaMjgpU5NIsZ0XTHDhx/emkWH5Mj
- zNJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1AgP8qvJNQp23EtGmkUDxuwLkzTzdmkZeDTzX63R4Sw=;
- b=0d3+B/Y5c5NFcyg0Q6qOxvnlRbr3JDAO9nO1rxwFzk7VzDmfA2X71wtVTOpqBkODkZ
- 92b81njNPX7bLVIHvPjPZMSo1u/6RjWS7rydGoe/V1/IIndAlsMOAgqTmSGWrgbnJhJV
- S7kUYxTTVBCpRNtdSutEWbXkieTksQr574/1JdWCjoorJO+rxQ1LeFN8KRUaVMmVlgRS
- AVTQvt3XJwnSvpTmG9Nb+UE+NxBrX5WbqNZtMhlVvkdUXDCWIBoDAmC7JGtcmHFl5cHU
- KG935/30k2T5QO9VY/0pguQCO3/fLOb6tOOIxucE43bQwR/PZL+h6LYp0NKWICd0tQLQ
- KQxA==
-X-Gm-Message-State: AOAM530nI/BGQax3DihbeDMj6gJ8kEtgv3+buT/fHsF7uw3aRq8X3u8V
- OZuvIc98T6xzugYlBugypjfhCxZfTve4zA==
-X-Google-Smtp-Source: ABdhPJxKuuKzu6ZzIL58Qh4anBNA4q3LJYSsr0u6yyGSV8XR6CMmIyVgP+wI0nkRNaGGef0om1YEHA==
-X-Received: by 2002:adf:d091:: with SMTP id y17mr1807012wrh.418.1639520417762; 
- Tue, 14 Dec 2021 14:20:17 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id a204sm467449wmd.39.2021.12.14.14.20.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Dec 2021 14:20:17 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gJP0t41M9Bwi for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 22:26:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72DDF812D0
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 22:26:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 35BCE81E43; Tue, 14 Dec 2021 22:21:17 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 23:20:00 +0100
-Message-Id: <20211214222000.2939765-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rpi-rgb-led-matrix: fix build with
- gcc 4.8
+Date: Tue, 14 Dec 2021 23:01:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5af47e96c42e677541a573e8896cb96ab2603733
+X-Git-Newrev: ae48261ff493674a5d71d5a203e60cb38e409889
+X-Patchwork-Hint: ignore
+Message-Id: <20211214222117.35BCE81E43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2021.08.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,46 +52,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc 4.8 raised since the addition
-of the package in commit e821078031e14df69e5142f23e9cb7b5a1ea0e77:
+commit: https://git.buildroot.net/buildroot/commit/?id=ae48261ff493674a5d71d5a203e60cb38e409889
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In file included from framebuffer.cc:20:0:
-framebuffer-internal.h:83:10: error: 'constexpr' does not name a type
-   static constexpr int kBitPlanes = 11;
-          ^
-framebuffer-internal.h:83:10: note: C++11 'constexpr' only available with -std=c++11 or -std=gnu++11
-
-Fixes:
- - http://autobuild.buildroot.org/results/c035da0d183f21343f19f7dee982e8e73ee781e4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a5f7844cbe67e6dc8dc1aa4405fee1420d75ea5f)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ CHANGES | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-index 85c1d1a320..e436755121 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-@@ -12,7 +12,7 @@ RPI_RGB_LED_MATRIX_INSTALL_STAGING = YES
+diff --git a/CHANGES b/CHANGES
+index 698d5d72a6..6ccae45845 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -124,6 +124,31 @@
+ 	        with mkfs.ext4: No such file or directory while trying
+ 	        to determine filesystem size
  
- RPI_RGB_LED_MATRIX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CXXFLAGS="$(TARGET_CXXFLAGS) -fPIC"
-+	CXXFLAGS="$(TARGET_CXXFLAGS) -fPIC -std=c++11"
++2021.08.3, released December 13th, 2021
++
++	Important / security related fixes.
++
++	Defconfigs: Various fixes for building with gcc >= 10 host or
++	target compilers.
++
++	Updated/fixed packages: alsa-lib, apparmor, apr, asterisk,
++	binutils, bluez5_utils, coreutils, e2fsprogs, exfat,
++	freeswitch, gdb, glmark2, glog, glorytun, gmp,
++	gpu-amd-bin-mx51, gst1-interpipe, gstreamer1, guile, gupnp,
++	hackrf, heimdal, hiawatha, hplip, icu, imx-vpuwrap, isl,
++	janus-gateway, libatomic_ops, libbson, libdnet, libffi,
++	libgdiplus, libgee, libglib2, libhtp, libmodsecurity, libnspr,
++	libnss, libosmium, libunwind, linux, lynx, meson, micropython,
++	mkpasswd, mksh, mosquitto, motion, mupdf, mxml, netdata,
++	nfs-utils, opencv4, oracle-mysql, pcre, php, postgresql,
++	pure-ftpd, python-cycler, qdecoder, rcw-smarc-sal28, samba4,
++	smack, speex, stress-ng, suricata, syslinux, uboot, unixodbc,
++	unrar, vim, websocketpp, wireshark
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14346: BR2_PACKAGE_NFS_UTILS_RPC_NFSD does not patch CONFIG_NFSD..
++
+ 2021.08.2, released November 10th, 2021
  
- define RPI_RGB_LED_MATRIX_BUILD_CMDS
- 	$(MAKE) $(RPI_RGB_LED_MATRIX_MAKE_OPTS) -C $(@D)/lib all
--- 
-2.33.0
-
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
