@@ -1,77 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DED5C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 21:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57715C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 21:29:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BCFC80C21;
-	Tue, 14 Dec 2021 21:11:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCAC260D5F;
+	Tue, 14 Dec 2021 21:29:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aOjbVgqxc6DA; Tue, 14 Dec 2021 21:11:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w1iRThKQe2kO; Tue, 14 Dec 2021 21:29:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 766A680C1B;
-	Tue, 14 Dec 2021 21:11:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4EEB11BF3C8
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 21:11:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EA6A60D60;
+	Tue, 14 Dec 2021 21:29:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E1CEF1BF3C8
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 21:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B9CB80C1B
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 21:11:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCBF8405EA
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 21:29:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8L35mRFq8xlt for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 21:11:43 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WztKR4NLerFv for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 21:29:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 869BE80BE8
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 21:11:43 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id j9so2506582wrc.0
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 13:11:43 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C61E4401DF
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 21:29:05 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id d9so34722693wrw.4
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 13:29:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Y3pd2yWG/7O/vqLF9PpaeZGQ0HPRqz0Wzo6StOVqKQE=;
- b=J+Z+i1GU/2icFsq8SEoWlu08fU+dGz7lSA/17t2ln3zvd3OaibeTpATvgAHGXiWG/y
- ayYrd46Dln7t5iBFHdES+BgEK/g/48v/8RUdEKO5UmHberyPrqmm4F8eWnWr4eqlnIpd
- Rsq6seKIeGlM6XD0xwbn2ZPA5MKjl72XltUOk0X5XLRX8cbqx5T93SVMs38rHsshOmJF
- 25CCX4rZbvQ7OxPNBPSytvoLcHcabLlmcW/6RlJh/yO064FNHfLSBS4Mez9ootCP42Ou
- vnjw5SKBxwmX7T5OWidxV9D5iFeShpJhmpkbu8k4k5ijZwhFceusXjnHfebQI95Jj3xX
- Ct7Q==
+ bh=Pz8lP9UPqjcWYCpEgTW/WuiyQ2/HFPnjWLCnx+hwET8=;
+ b=p6BpKIRMWtl1tRBBdImmOgxLQFhd5juUdpmjv9KjshwfJq77NAZIzBRC6u4YnNjmyP
+ F+lw/R+svtCnfqtQKECzFlNxgVSqwakx6QHE+4ZXOU2SCcZYTHQP7fLBNMF/s0GRvem+
+ sngweoWkRcf7z4b6b2BnKLG66MZq8EPCY05yIiG3u5pOpPXUAVbM8U4IoaAspKPL//Lf
+ mmQod/URAINarENP8NTf7qmUgmH/gO5KCy2R6If6EgnRyuT6Lqys4cYZYHLewRiMNmva
+ p4h7nzoSM9TaJxtZ3W5bCAdKAjSzgcPL0glCADlOeDRD+6IIYUVVP+nfEabB497+/78W
+ PcRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Y3pd2yWG/7O/vqLF9PpaeZGQ0HPRqz0Wzo6StOVqKQE=;
- b=uLFBZMqRlPTi7Jx134ZCVS33IsrCPffUEGmEf3oG+z0oQ3QDsBrdZU51z96BNMBh3E
- P1pFgqaNiI8tHvHHTpio2DJYQzVS+FweWhZCVR+QsWs4qYAQ7AYvJnePrSc7dDvOz2ED
- k32ym6oL61wLkHmHQmMWiNPDTD3H1tpv146uLgn+gcUWEKVvpNnBFvml0yYymraabqvt
- EYH+h5+FVj2hHlEbcJY4zJzN0apnH9kEY2fe2ZSs02AHJv5PhiPc96jlWDhcmusv0E1c
- IopXA9no2gN/nMBGnJV1YisfMXDn9Lg2CSq7efw5bT42K2Ym9UeY2g623B+PcMd3pNmI
- hKbQ==
-X-Gm-Message-State: AOAM531cT8qpdiQezeAE2ksvvYg5sdGQJc0Zg1VUBjAfMHFeICJNSHBV
- nOY0ZJL+HBMD9isDGC/IWQB4qHk99Regsg==
-X-Google-Smtp-Source: ABdhPJz/LJtFzTf7BvCkSlEXNVC2bnwUCc2bHxajclmfDJxYAjtQ+RMuPigYJC/1z217/2r8xws2UA==
-X-Received: by 2002:adf:8282:: with SMTP id 2mr1512742wrc.519.1639516301477;
- Tue, 14 Dec 2021 13:11:41 -0800 (PST)
+ bh=Pz8lP9UPqjcWYCpEgTW/WuiyQ2/HFPnjWLCnx+hwET8=;
+ b=2XtEI1MopTTxrjPDBHzRn/wF/Mhlk45UrGvVdrjn09/LOKNQ3qd1LS5gR6hL9EGL6u
+ aaPYw7vJyx8EihvjFzyVkwu69/Ze9OEU82oXKcNcbpcPSa66Ii0uWkdCkvBIto098L2B
+ NB0R2KCy8b2go2zEguceztbT2o4IYOW1C7/CzPUfeKCWG5El5ArlMHXAgLjm/eiIZtTJ
+ jYMXPudYwIBQzJpw8zcoF5lp1CJzGzL6upXIVd5pM3vPxmiIe2/Avbu8bbi7eQ24BT5f
+ bOhbnNUH5yh1yOzG5+AGJk7pVk5jvXqlC9PH0MKhVoQ1p1lBkPBpS7ubafWjxvwWwbA8
+ 71/Q==
+X-Gm-Message-State: AOAM533t+ywHWxgrWuhG+Hm3wcoS13YT3N3/hhUm2JZBXpXyrEMM9IcU
+ 7ORXTA2jj6tN/OXPtSGBMQ73RzXzvnBCcA==
+X-Google-Smtp-Source: ABdhPJy/Vj/5tXLIefupSG2arwTLyoVf/7Qi3CByBeucjxL76nMINJ4//z1ff/PrJESj2gu9EdJ4YQ==
+X-Received: by 2002:adf:8165:: with SMTP id 92mr1615064wrm.199.1639517343812; 
+ Tue, 14 Dec 2021 13:29:03 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id w17sm27042wmc.14.2021.12.14.13.11.40
+ by smtp.gmail.com with ESMTPSA id d6sm53121wrn.53.2021.12.14.13.29.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Dec 2021 13:11:40 -0800 (PST)
+ Tue, 14 Dec 2021 13:29:03 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 22:10:51 +0100
-Message-Id: <20211214211051.2220248-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Dec 2021 22:28:12 +0100
+Message-Id: <20211214212813.2251144-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/frr: add libcap support
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: don't override TARGET_LDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,41 +85,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>,
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+TARGET_LDFLAGS is overriden since the addition of the package in commit
+8d66bc940d6e4707f9773aeb052e94d45fa439ad
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/frr/frr.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/dav1d/dav1d.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index e707f50ca1..49b4a190f0 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -29,11 +29,17 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
- 	--enable-user=frr \
- 	--enable-group=frr \
- 	--enable-vty-group=frrvty \
--	--disable-capabilities \
- 	--enable-fpm
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 7a798bbd4f..d7224625c8 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -25,7 +25,7 @@ endif
  
- HOST_FRR_CONF_OPTS = --enable-clippy-only
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+FRR_DEPENDENCIES += libcap
-+FRR_CONF_OPTS += --enable-capabilities
-+else
-+FRR_CONF_OPTS += --disable-capabilities
-+endif
-+
+ # Uses __atomic_fetch_add_4
  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- FRR_CONF_ENV += LIBS=-latomic
+-DAV1D_LDFLAGS += -latomic
++DAV1D_LDFLAGS += $(TARGET_LDFLAGS) -latomic
  endif
+ 
+ $(eval $(meson-package))
 -- 
 2.33.0
 
