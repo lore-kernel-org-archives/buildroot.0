@@ -1,41 +1,41 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F495C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 11:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DDE7C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 11:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6B4404CF;
-	Tue, 14 Dec 2021 11:04:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6AE9402DC;
+	Tue, 14 Dec 2021 11:13:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U5s6Xjb7xdiO; Tue, 14 Dec 2021 11:04:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D_pHDI6DTNz3; Tue, 14 Dec 2021 11:13:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E88C4046D;
-	Tue, 14 Dec 2021 11:04:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F1FC403A5;
+	Tue, 14 Dec 2021 11:13:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1421BF37F
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:04:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 25B611BF37F
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3466240286
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:04:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EC484058C
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:13:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3yrhxC-E37AR for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 11:04:47 +0000 (UTC)
+ with ESMTP id ZgorlipcxMtn for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 11:13:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp5.ex10.biz (smtp5.ex10.biz [178.170.74.94])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C1F9840234
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 11:04:47 +0000 (UTC)
-Received: from [185.183.66.253] (port=2150 helo=UC681.Mediane.local)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CA5940081
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 11:13:53 +0000 (UTC)
+Received: from [185.183.66.253] (port=2078 helo=UC681.Mediane.local)
  by smtp5.ex10.biz with esmtpsa (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
  (envelope-from <florent.aumaitre@medianesysteme.com>)
- id 1mx5bu-0003nw-2c; Tue, 14 Dec 2021 12:04:43 +0100
+ id 1mx5ki-0005iG-2O; Tue, 14 Dec 2021 12:13:48 +0100
 X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1700_1799 0.000000, 
  BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
  BODY_SIZE_7000_LESS 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
@@ -63,10 +63,10 @@ X-SASI-RCODE: 200
 X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2021.12.14.95716
 From: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 12:04:02 +0100
-Message-Id: <20211214110402.5646-1-florent.aumaitre@medianesysteme.com>
+Date: Tue, 14 Dec 2021 12:13:30 +0100
+Message-Id: <20211214111330.8720-1-florent.aumaitre@medianesysteme.com>
 X-Mailer: git-send-email 2.17.1
-Subject: [Buildroot] [PATCH 2/2] package/python-pyqt5: Fix parallel build
+Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: Fix parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
