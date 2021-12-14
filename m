@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3826C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7B46C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95DCA409AA;
-	Tue, 14 Dec 2021 20:09:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93CD960BF6;
+	Tue, 14 Dec 2021 20:10:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s_kc7T35IH8S; Tue, 14 Dec 2021 20:09:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F25F740948;
-	Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 244E31BF30E
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1377E605A5
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:09:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c9HU75si96Pb for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:09:53 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kDcOU0NK2WT5; Tue, 14 Dec 2021 20:10:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB33860BF4;
+	Tue, 14 Dec 2021 20:10:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3742B1BF30E
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26B61813F4
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ka2yUXuRDWXZ for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:10:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3123160596
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:09:53 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id g14so66174267edb.8
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:09:52 -0800 (PST)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 369218133C
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:08 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so66836104edd.0
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 12:10:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=b5j5uuLYbXtppwBDk8tiyH29bz93xKfLmlQodWnv6Vk=;
- b=gP4iAbNimeRixZS75WGnk63l862fGY1KpfCp2wv4yurBPoDCWTgGDWqmnKN+D7OwbP
- bJKTdQ8GBnfde08kPoge3d9Ao/SVE7Czo9C2sRHU2vTYwCY/CnSk0kMnACPvaTVNtZiF
- h++GPaPVqTf5Gq2kmj6lv1RWBm6o9NGhwkboegJyOG+Ds23jlGt3cEOuQnndBJHzu4/M
- 6XCHHbliSCz/1SQnThxtQxpxE17DSmo+A+Y3xyh5lFmlP5SnqwwP3AfoucedlZvrbKyD
- aKomNVMYKWFNsNPMHdCFHqExyJceMjk1I46W2jeWb7WKmoFIfo41VHnZNePkOCZ2578x
- gMQg==
+ bh=HuKyUVvL5UfGKdnzz+BPmbVzCopt2KIoeOgibXXBtf0=;
+ b=TrK1nVs1AFWKtatPtyPVcgIyGQO1IZZ2oLuVKOfIriMj3jyjKwR1VSWCHWz+ihNmYR
+ jQWmYIXotZHkp9alwjcS0Wvw9NnEAr7SpIZtcd0OJbqd2NrTH2qqKb8g+Xg71uLWHl8o
+ /XHbL4wLPLhwBNYtT3H40UqwsJlr+kkLKbPurjysJoK0LU7Fiq278BAB8FUidGFO5CsX
+ JdPMUrP+YSk84+Tchy2WQ5it8o1NzGWKIg9iI4hZ5r76Bn8yJk0Spy/5sOLKwN13R5ud
+ GIJau1RON1hJ9pgliKu9SnIx/M2KXNL4vfDWr9X+H28bCsPnhCfcZLeeECtef9/GF3KQ
+ 77Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=b5j5uuLYbXtppwBDk8tiyH29bz93xKfLmlQodWnv6Vk=;
- b=CQWeMOI5aW2mrwscuQxz5NQOvFtrGepB0nF5q8S2n5FKt8CbvKznsdsQI39XdJVJkx
- hQb46Btv7B6yRGxOg79QcMWw6WVNPMyBBslynhx8Tfz9DlZPDEZYNzgPghsv3YCTeDHA
- pgm/5ixyiAz7fhCNtMS9mekOv8GSgKoLpyuPExtBy2q7Sax5wy3P0D0f0mxMgzh3t4tt
- fJ+X85Z0myir/kUGoUoX14N5L0Kqfa94Tb42G9D0L/DUVGwSCbujUZu0N8tYNG6DjSQv
- z/YO/Jn2dTMORcJLxDc8lJ1Qm0DEj06JQXbgbha/9bb9obqAyEBX0Ldsli87Y6w8y3M1
- TrIA==
-X-Gm-Message-State: AOAM532HYELLL5ieGbnClkQ/RjgmNc87IL0Uz0ayCBIP0iHvVUgQdQB0
- PPnpkwBmMDBCWSAe7yPU1a6ID3gBA9GW8A==
-X-Google-Smtp-Source: ABdhPJwjag7VPFowOnCboe7yahFZ5N096b1qeUjwjYCSqw1gdFFK6JIEhrUUgYgLOBrGHSMoiiDLiQ==
-X-Received: by 2002:a17:907:961d:: with SMTP id
- gb29mr7917467ejc.102.1639512591325; 
- Tue, 14 Dec 2021 12:09:51 -0800 (PST)
+ bh=HuKyUVvL5UfGKdnzz+BPmbVzCopt2KIoeOgibXXBtf0=;
+ b=8I9n6qj0wZbmlKb/CW7EKW9Uas40yl/ttydpJ590OaW/NV9xmI7uH+IGzjJUyHRhgD
+ EORBDjl7EewQ6zyb9erDUqX8voYfp223+6GzRggNlCmrsZQRSvJkckhCh7lahDbpGqLn
+ OQFcubo48ApZEmZphXXTjQBt4/xnrR/a4xPQZJEJeW1eaKzBAhwGLxnjL+ht9T8c6ufq
+ OTrSTLIViMV7g2/n3JCm6/B6y4lFnELUiBJjAIZ24w4P6vIXqf3rDMx5Cfb+sCesA7u/
+ MQ0x3TAJFFUFCfIO0Rbhta72kunlx8lxsW383wf13HX8Q2MZyXTQiNkoMjMJC/sWSzQh
+ rd8Q==
+X-Gm-Message-State: AOAM533I+WbWIrIAXtVyNcADu72s/PKnfJDur5j+oVV6c9FA8ltr6On0
+ EaJoO/cHTPSeuFbpVFgpRYP+qYj1QYEXVw==
+X-Google-Smtp-Source: ABdhPJwaT1VMIBos27IBEGwENjtSb4TuFNCaVpKuJ4E7VhVxdnFlruK/Ruu2/SFkm3iGFoAguZ7X/w==
+X-Received: by 2002:a17:907:2cd7:: with SMTP id
+ hg23mr8072253ejc.724.1639512606434; 
+ Tue, 14 Dec 2021 12:10:06 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id z6sm323397edc.76.2021.12.14.12.09.50
+ by smtp.gmail.com with ESMTPSA id d1sm231216ejo.176.2021.12.14.12.10.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 14 Dec 2021 12:09:51 -0800 (PST)
-Message-ID: <421dbc0e-bbe3-dbbb-a7f9-8481ba1bfecb@mind.be>
-Date: Tue, 14 Dec 2021 21:09:50 +0100
+ Tue, 14 Dec 2021 12:10:06 -0800 (PST)
+Message-ID: <c09a95c5-0383-ad61-35d5-4a25d1664ec1@mind.be>
+Date: Tue, 14 Dec 2021 21:10:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20211214121123.6867-1-buildroot@heine.tech>
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <YbiPBtumWqf2+41V@waldemar-brodkorb.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211214121123.6867-1-buildroot@heine.tech>
-Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to
- version 3.10.4
+In-Reply-To: <YbiPBtumWqf2+41V@waldemar-brodkorb.de>
+Subject: Re: [Buildroot] [PATCH] package/ruby: security update to 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,13 +100,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/12/2021 13:11, Michael Nosthoff via buildroot wrote:
-> This release fixes two bugs introduced in release 3.10.0 and fixes the
-> conversion of std::filesystem::path. All changes are backward-compatible.
-> 
-> https://github.com/nlohmann/json/releases/tag/v3.10.4
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+On 14/12/2021 13:33, Waldemar Brodkorb wrote:
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
   Applied to master, thanks.
 
@@ -115,32 +109,35 @@ On 14/12/2021 13:11, Michael Nosthoff via buildroot wrote:
   Arnout
 
 > ---
->   package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
->   package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/ruby/ruby.hash | 4 ++--
+>   package/ruby/ruby.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-> index 1a98971dbc..eb14d2fd6d 100644
-> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  e0d7c1b120cac47fa7f14a41d10a5d390f67d423d8e97b9d6834887285d6873c  json-3.10.3.tar.gz
-> +sha256  1155fd1a83049767360e9a120c43c578145db3204d2b309eba49fbbedd0f4ed3  json-3.10.4.tar.gz
->   sha256  c983d69523377819db3c377b390d5644f5ec53bec9b7c4a0f1ed893bb743d045  LICENSE.MIT
-> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-> index 53cf17d2c6..428473db5a 100644
-> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-> @@ -4,7 +4,7 @@
->   #
+> diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+> index e3510cc97e..1208461cd0 100644
+> --- a/package/ruby/ruby.hash
+> +++ b/package/ruby/ruby.hash
+> @@ -1,5 +1,5 @@
+> -# https://www.ruby-lang.org/en/news/2021/07/07/ruby-3-0-2-released/
+> -sha512  0f702e2d8ca1342a9d4284dbdd234a3588e057b92566353aa7c21835cf09a3932864b2acf459a976960a1704e9befa562155d36b98b7cda8bd99526e10a374c4  ruby-3.0.2.tar.xz
+> +# https://www.ruby-lang.org/en/news/2021/11/24/ruby-3-0-3-released/
+> +sha512  bb9ea426278d5a7ac46595296f03b82d43df8b7db41045cdf85611e05e26c703c53f700494cd7cf5d4c27fa953bdc5c144317d7720812db0a6e3b6f4bc4d2e00  ruby-3.0.3.tar.xz
+>   # License files, Locally calculated
+>   sha256  274f8d7983052448e7fd691c81043465c92ee6fb7bd8ab3f20a7997862f2778e  LEGAL
+>   sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+> diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+> index b02744f0e5..7966450fd1 100644
+> --- a/package/ruby/ruby.mk
+> +++ b/package/ruby/ruby.mk
+> @@ -5,7 +5,7 @@
 >   ################################################################################
 >   
-> -JSON_FOR_MODERN_CPP_VERSION = 3.10.3
-> +JSON_FOR_MODERN_CPP_VERSION = 3.10.4
->   JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
->   JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
->   JSON_FOR_MODERN_CPP_LICENSE = MIT
+>   RUBY_VERSION_MAJOR = 3.0
+> -RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+> +RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+>   RUBY_VERSION_EXT = 3.0.0
+>   RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+>   RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 > 
 _______________________________________________
 buildroot mailing list
