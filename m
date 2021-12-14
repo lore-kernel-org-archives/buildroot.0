@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E9FEC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 23:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA707C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 23:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D740640179;
-	Tue, 14 Dec 2021 23:00:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40C48818CA;
+	Tue, 14 Dec 2021 23:04:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6NYYQN-Mw_fo; Tue, 14 Dec 2021 23:00:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qfR0q4XimP6N; Tue, 14 Dec 2021 23:04:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7ECC401DD;
-	Tue, 14 Dec 2021 23:00:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FB80818C9;
+	Tue, 14 Dec 2021 23:04:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C37281BF681
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 23:00:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6412A1BF397
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 23:04:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2150409BA
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 23:00:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61802409DA
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 23:04:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UX0N_jV4UoIi for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 23:00:26 +0000 (UTC)
+ with ESMTP id hJiOgyFJ3CUZ for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 23:04:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD2D3409B2
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 23:00:25 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id u17so35022652wrt.3
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 15:00:25 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 55951409BB
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 23:04:29 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id s1so856580wrg.1
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 15:04:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YpXikl9I9i4ycdTT3ikk+RmkrQZmRz8syYNj2D7XLJM=;
- b=aZ+Q+yLknYjA8TNAwHD+NnPma+e3gV9fLMIS3B6giBMVx29MJxUY9SGgh8+JUEn85h
- Y9r1lb81kiRi8Tqg1INYdvAAvMwr3VtO71sGDsJpPc2L9VNa7Qnf1zA7tvTM7XAjIA6J
- zry2c8ZRuuH1Q7uTxoo/KSHYYjqURYbdoWWLz4EhggmZhRoatQAEvCSNWyeQAw6mpleg
- GccpOpYHh/Y9DXZDhWxfYRP7YNLnvM6STlTckRcO1dE8PXdXMPCpWrWZ9Q+LNm11BKft
- ANHtMxo3zdGUzdTuBCtDjhRbkrbBx4cFkFziBO+1pgLTQKzLFyjwq+lmKVOarknPaMeJ
- xW3Q==
+ bh=NM6JnZy1Wh53xgPbJFPUO5wzsWm+vwi0sXPWlY+PcWc=;
+ b=P6BzRreD9AK2inHs2D1/slnGlaPuB0CQJf4NCWeEODJiuF8OWvHkGxQ2UzfkGAggLH
+ SLUzXp6woBPmU2UB/ZZlfePfZS7p9v//XtsJQVrskRJeGn0+aQjTqohgScKnUytx8jAe
+ S/4uq6kbVsQB1PR4JTxiCAd3VhTiURJPuAWzCvuWNwcXtnFJF3IlH2q0Rm1iZJkOhpDu
+ 3ji2FgxIRvTXrgcOibHb6iNwpSVwHWU0J+qwUtX1IBIUAkwBCttqOf3mYtTGj+3Z5uyl
+ T+00Gi4SvhJE0SD50r2HxfMaAI4rBQ330Yal8+Q2ivD5fqQu5+6hPp0JE7OCP3H71abb
+ E9jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YpXikl9I9i4ycdTT3ikk+RmkrQZmRz8syYNj2D7XLJM=;
- b=fDOZ0j+6jn+NZP/x5lcO3Yiti1WgSFkRYAAtTRGIYv+jyiW848aTdmZBpU5EBQuXc6
- wtDOoK9EE41++h5ErnwxFa8FnQKlpUcfOzjxJP9Xs+ax3QA7XFjhgyzUoySl9ovDklfU
- 3zKUx/VuXaEyWl/16WWJDAYeXKG0IcR8fIfW6It8s5aTTojozUk2PfV8XPrW1JyluOF9
- 25BkK3jGm6qM5V0KH5JPDABPY4RCKI/cmwsAGqPCCQxjP+9y2geqlOfkqfccpktVD+va
- XjWO2jqLogYqcC+am0C8mEwHmqgG6BGobmKF9km9E3B1WSQro7M5O6rhyU9Rlhltv+Yn
- RknQ==
-X-Gm-Message-State: AOAM533EomE6jL3cqgqDWVUPVPsa11T2jrproirBNW2IPWg2pADjyK0H
- 4ADmQjo2MtlKYnC6ZMKDK7TiEWb+t/UBvA==
-X-Google-Smtp-Source: ABdhPJw1mT0n684KX8TcqUw+wNmVWTlTj5VynS+d/pLgxuxx22LwRf2LijPk0m46iptgYRVmnj+l1Q==
-X-Received: by 2002:adf:9d83:: with SMTP id p3mr1746864wre.711.1639522823772; 
- Tue, 14 Dec 2021 15:00:23 -0800 (PST)
+ bh=NM6JnZy1Wh53xgPbJFPUO5wzsWm+vwi0sXPWlY+PcWc=;
+ b=ZJkK5HAHuZRgP23b0z2RGur9yDq4Qj8TgCYG7daceLpg6bDYjWVkw5DY3lMFKmEvqP
+ CEhP5olSVy7sarFFwtECqV3ZD2NgaR3aRQeme7p2KZ4746yujxbG7XSag3/U8fdnL9oc
+ GUNr9B5pGNRYDU2fjwRe35dNSdxODk6GXJRdAHUHYxl45TB/Bx8RG15QP1+SEA5FY+0w
+ uN/X4Tw/OWpLJrcabr7zPEj5K2J7i4VHk4KhWmKPQKKirUlo+lUiHPb92hvG8aLc4wjX
+ BSZbov64lSDWyug99594Ui3Bd8oyq/kaSkM+JX6IpJHlSunCDxo7IS9Ft57hVPXePQ95
+ l2LA==
+X-Gm-Message-State: AOAM530SBOCXIIuMEOHOjG72C6Tb6N/aPdnufRArBOTm+VwNVmVsfZ6i
+ IBzgOY/DcYRVYeDYTfSVUFNvG0S+jo4SsQ==
+X-Google-Smtp-Source: ABdhPJy/LI5Q0NDUXPBVAj5TnblLRKPb0xsQENOPnGyGj3JwdLIay28V9iwiHeyVfjHlgN5GyF5WBw==
+X-Received: by 2002:adf:f00a:: with SMTP id j10mr1907945wro.339.1639523067384; 
+ Tue, 14 Dec 2021 15:04:27 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id bg12sm191786wmb.5.2021.12.14.15.00.22
+ by smtp.gmail.com with ESMTPSA id u14sm233421wrf.39.2021.12.14.15.04.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Dec 2021 15:00:23 -0800 (PST)
+ Tue, 14 Dec 2021 15:04:26 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 23:59:58 +0100
-Message-Id: <20211214225958.3253335-1-fontaine.fabrice@gmail.com>
+Date: Wed, 15 Dec 2021 00:04:08 +0100
+Message-Id: <20211214230408.3255076-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/guile: bump to version 3.0.7
+Subject: [Buildroot] [PATCH 1/1] package/leveldb: bump to version 1.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,70 +85,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Steve James <ste@junkomatic.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libtool is not a dependency since version 3.0.6 and
-https://git.savannah.gnu.org/cgit/guile.git/commit/?id=2e26538d6a51bdd6c2e68ad4539ab3750ef8670a
+- Refresh second and fourth patches
+- Update indentation in hash file (two spaces)
 
-https://git.savannah.gnu.org/cgit/guile.git/tree/NEWS?h=v3.0.7
+https://github.com/google/leveldb/releases/tag/1.23
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/guile/Config.in  | 1 -
- package/guile/guile.hash | 2 +-
- package/guile/guile.mk   | 5 ++---
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ package/leveldb/0002-CMake-install-libmemenv.a.patch   |  4 +++-
+ .../0004-cmake-Use-find_package-to-find-Snappy.patch   | 10 ++++++----
+ package/leveldb/leveldb.hash                           |  4 ++--
+ package/leveldb/leveldb.mk                             |  2 +-
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/package/guile/Config.in b/package/guile/Config.in
-index c26c296e47..b1182a4cee 100644
---- a/package/guile/Config.in
-+++ b/package/guile/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_GUILE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_BDWGC
--	select BR2_PACKAGE_LIBTOOL
- 	help
- 	  Guile is an interpreter and compiler for the Scheme
- 	  programming language, a clean and elegant dialect of Lisp.
-diff --git a/package/guile/guile.hash b/package/guile/guile.hash
-index a163f59fce..c2719fa7f2 100644
---- a/package/guile/guile.hash
-+++ b/package/guile/guile.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  6b7947dc2e3d115983846a268b8f5753c12fd5547e42fbf2b97d75a3b79f0d31  guile-3.0.4.tar.xz
-+sha256  f57d86c70620271bfceb7a9be0c81744a033f08adc7ceba832c9917ab3e691b7  guile-3.0.7.tar.xz
- # Locally computed
- sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index b62d06e704..c74325252f 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
+diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+index ab23a1881a..ea742b0c49 100644
+--- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
++++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+@@ -8,6 +8,8 @@ https://git.busybox.net/buildroot/commit/?id=8a10d9ce311c6cb0490d76921cae55618c2
+ https://git.busybox.net/buildroot/commit/?id=16f847340d07dce620e4c3fc0a099aa79898d86a
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Fabrice : updated for 1.23]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  CMakeLists.txt | 26 +++++++++++++++++++++++++-
+  1 file changed, 25 insertions(+), 1 deletion(-)
+@@ -48,9 +50,9 @@ index a65afbf..83b2425 100644
+    target_sources(leveldb
+      PRIVATE
+ @@ -418,7 +436,7 @@ endif(LEVELDB_BUILD_BENCHMARKS)
++ endif(LEVELDB_BUILD_BENCHMARKS)
+  
+  if(LEVELDB_INSTALL)
+-   include(GNUInstallDirs)
+ -  install(TARGETS leveldb
+ +  install(TARGETS leveldb memenv
+      EXPORT leveldbTargets
+diff --git a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+index 2626e88652..714e1b0827 100644
+--- a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
++++ b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+@@ -7,6 +7,8 @@ Upstream: https://github.com/google/leveldb/pull/686/commits/3e73a396a082efc76e0
+ [Thomas: this commit allows to fix the detection of the snappy library
+ in static link configurations]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Fabrice : updated for 1.23]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  CMakeLists.txt         | 12 ++++++++----
+  cmake/FindSnappy.cmake | 31 +++++++++++++++++++++++++++++++
+@@ -19,14 +21,14 @@ index 78fead6..2efccda 100644
+ +++ b/CMakeLists.txt
+ @@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
+  # Keep the version below in sync with the one in db.h
+- project(leveldb VERSION 1.22.0 LANGUAGES C CXX)
++ project(leveldb VERSION 1.23.0 LANGUAGES C CXX)
+  
+ +# Include local CMake modules.
+ +list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ +
+- # This project can use C11, but will gracefully decay down to C89.
+- set(CMAKE_C_STANDARD 11)
+- set(CMAKE_C_STANDARD_REQUIRED OFF)
++ # C standard can be overridden when this is used as a sub-project.
++ if(NOT CMAKE_C_STANDARD)
++   # This project can use C11, but will gracefully decay down to C89.
+ @@ -31,13 +34,14 @@ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
+  include(TestBigEndian)
+  test_big_endian(LEVELDB_IS_BIG_ENDIAN)
+diff --git a/package/leveldb/leveldb.hash b/package/leveldb/leveldb.hash
+index c4a8499dec..068cb09b0a 100644
+--- a/package/leveldb/leveldb.hash
++++ b/package/leveldb/leveldb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 55423cac9e3306f4a9502c738a001e4a339d1a38ffbee7572d4a07d5d63949b2  leveldb-1.22.tar.gz
+-sha256 ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  LICENSE
++sha256  9a37f8a6174f09bd622bc723b55881dc541cd50747cbd08831c2a82d620f6d76  leveldb-1.23.tar.gz
++sha256  ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  LICENSE
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+index 684b618679..a8f9dc3a1b 100644
+--- a/package/leveldb/leveldb.mk
++++ b/package/leveldb/leveldb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GUILE_VERSION = 3.0.4
-+GUILE_VERSION = 3.0.7
- GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
- GUILE_SITE = $(BR2_GNU_MIRROR)/guile
- GUILE_INSTALL_STAGING = YES
-@@ -15,8 +15,7 @@ GUILE_LICENSE = LGPL-3.0+
- GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
- GUILE_CPE_ID_VENDOR = gnu
- 
--# libtool dependency is needed because guile uses libltdl
--GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf libtool
-+GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf
- HOST_GUILE_DEPENDENCIES = host-libunistring host-libffi host-gmp host-bdwgc host-flex host-pkgconf host-gettext
- 
- # The HAVE_GC* CFLAGS specify that we will use internal callbacks
+-LEVELDB_VERSION = 1.22
++LEVELDB_VERSION = 1.23
+ LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
+ LEVELDB_LICENSE = BSD-3-Clause
+ LEVELDB_LICENSE_FILES = LICENSE
 -- 
 2.33.0
 
