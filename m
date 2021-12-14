@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E9A4C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 22:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53519C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 22:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24FEA8148F;
-	Tue, 14 Dec 2021 22:42:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB54540179;
+	Tue, 14 Dec 2021 22:44:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aSQM8qGDs6kw; Tue, 14 Dec 2021 22:42:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 85HOQFeniOpR; Tue, 14 Dec 2021 22:44:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4519A81300;
-	Tue, 14 Dec 2021 22:42:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E54971BF681
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:42:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7771401DD;
+	Tue, 14 Dec 2021 22:44:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 926801BF681
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:44:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D444E81300
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:42:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8113D605A5
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 22:44:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zpFQ4sBv0NEF for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 22:42:24 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3zzDj_zNku-H for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 22:44:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A1AFA812FC
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 22:42:24 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id j9so2818052wrc.0
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 14:42:24 -0800 (PST)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5A765605A2
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 22:44:34 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ o19-20020a1c7513000000b0033a93202467so14758324wmc.2
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 14:44:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2z+eQ1HKsFwbqzwhRsGM8RH+yf+Lne6AGC1uYlQBSLI=;
- b=qH90AKTKzJHkGN1FqBWKexHykWORnSwkVJJKiw3pBl3CYRxVBvnPxHd0QznaFdB9LS
- k3hipiJ+zUzi/1ZVtD3AasImMvfqnhUmBjV3jcq3YxVHWu8M2Jk+CDiiuvAKBSH24lw1
- qa1i1hJql1BDRqUZmU2HezkFg2YwXnAIJLKDNJ5hwrflZOtRlhO/r0E9oYI4EbCxVYQx
- fvOAJA272FOYn3PMfg7duwAcMv3D14cC6R0X8vIYNIsSakMuDRpgBQbs73IvrlDW+Y8s
- FmAgD35P9O9n0dpBkH0KJ1ySM+GHrco3OUD9DVGeCRdHT5/daiqGWP7KdFVaaqHsKAIG
- NvfA==
+ bh=KrTwgdP7xbB61Qlz6fY2velFFi4bp/d/65DsfBK8EWY=;
+ b=bZgg4MBeUE3Y6ZTUeuKpmKtlTIgUnuMIAhv9UnS6H7losFxR8HKDMWVyK6J9OPxwbQ
+ nRmRQOQUTE7NlfcQrRsr1jtWXRPKEhZswRUmuSz71hccKAaeFsU5t5L2oBUR0UxVuWsu
+ 4FLMHBnn+ITDEqZWh7614qdSPjqqelDaPhGtoVE3kA1bTMsxBuJpssTPWsumgtEad2TN
+ mhR5moFQc0YUfa1im3XHm6adiprahAlW/Y49n0HxRz2qClapTFVDfqDWzzEMJThpbuUc
+ Arbu4dKC/o2rvGEd0pnlrxvqzlgEuJ1iFcOZ9cRHS0aJBBbp/67VvisX6cboQdyLZSJU
+ WqCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2z+eQ1HKsFwbqzwhRsGM8RH+yf+Lne6AGC1uYlQBSLI=;
- b=oigzW/u4wSMDKJHdTMaEyvysNsETKMNlmrr8NRuwFTaYblZBRv2xanlFP9wtFPcaoM
- YUI21tHuAZnpg99Omxi+KlKRouFvJFWKcumYcX+SryGJy0cZ6uhCcc08y6DFBCLdTlyI
- 5VFMCjKlArZ6G9OM45Bd++ua2cuns8lnZ/DQiq6BzCTFL3r2QZRZbSUj7Veyi2DyE0yc
- c41FXbCTdDtLeiIkiz6aLvaT8C5KQ6bo5z2EarBCUuPfotEyAixxNuN5C7Jp9rS1TbJ1
- Pu7KWp06T3pg5ij6Omnrstnbkb+WdznHZIVhOdep7n/p2i4ifbhF3gGBp7UX0103GsIp
- UA7g==
-X-Gm-Message-State: AOAM5324FfqicEfm4RXbyi2ijtnoCdu35x7Bd9ed3wdQLqWb6G/W4cP0
- ofwpTQs77d/PgKXHMu8ZpSAK/5KYp2og5w==
-X-Google-Smtp-Source: ABdhPJyrRNa12nd5LPiHn90mcvyPlojPdBrU6l6pmPQsjO31dqtrY0+RfWW+TvmxJRX6TOC7RgXefQ==
-X-Received: by 2002:adf:a145:: with SMTP id r5mr1823400wrr.462.1639521742483; 
- Tue, 14 Dec 2021 14:42:22 -0800 (PST)
+ bh=KrTwgdP7xbB61Qlz6fY2velFFi4bp/d/65DsfBK8EWY=;
+ b=SdS+j2R9uOplz6yTApRh8/8FV4y+cGwmbF3Ig374WZ+vHJapam4+/3WK7DQbWfZ+IR
+ PU8gLceNchf5W6C6mg5Qub4A3SKO2bWWLVelnRmag9KVN0DsmXnfGcvLhHmCSCu7ZImm
+ JgYiZ0MkynfeLTsPLMdiMpR4/TaKybRVePEOD/cBYykeEphVhCN0l6geckn9DxHa9Xsm
+ /j61Gvzm/VozDzp6ydfAtW8YD+g3Nm04TeuHNbjLdAawEx5qzQq7gPN9MFF+aYXPL05Y
+ iPP4gMkGkrUZWtecOCIQg0zeg0MdGqGDLuASFFPrSFb0qj0IvLEUp4N+O0lYrulYGER4
+ aGLA==
+X-Gm-Message-State: AOAM533uej/HNUM4/jCA0cg/Cu4VtamBPR2hWhYKdv5QoFWYhtzL9XSH
+ 2BI4C/qiYz9g5P6d0Cl9zmONsuzDanX2yw==
+X-Google-Smtp-Source: ABdhPJwJJQ/ikzWn4bICYCbubLdT8VmRn2MC3w7Z+uKzRWmnoJKVdskRsnGHlwsJ/zmAE42YFNgG7A==
+X-Received: by 2002:a1c:1fc2:: with SMTP id f185mr1866517wmf.149.1639521872180; 
+ Tue, 14 Dec 2021 14:44:32 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id b13sm192788wrh.32.2021.12.14.14.42.21
+ by smtp.gmail.com with ESMTPSA id s8sm241197wra.9.2021.12.14.14.44.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Dec 2021 14:42:21 -0800 (PST)
+ Tue, 14 Dec 2021 14:44:31 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 23:41:55 +0100
-Message-Id: <20211214224155.3060134-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Dec 2021 23:44:13 +0100
+Message-Id: <20211214224413.3060321-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version 0.3.18
+Subject: [Buildroot] [PATCH v2, 1/1] package/openblas: bump to version 0.3.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,18 +98,25 @@ https://github.com/xianyi/OpenBLAS/blob/v0.3.18/Changelog.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-gfortran-detection.patch         | 30 ------------
+Changes v1 -> v2:
+ - Fix patch renumbering
+
  ...sider-Os-when-determining-LAPACK_NO.patch} |  0
+ .../0001-fix-gfortran-detection.patch         | 30 ------------
  ...port-for-passing-FFLAGS-on-the-make-.patch | 47 -------------------
  ...on-t-specify-optimization-level-bui.patch} |  0
  package/openblas/openblas.hash                |  2 +-
  package/openblas/openblas.mk                  |  4 +-
  6 files changed, 3 insertions(+), 80 deletions(-)
+ rename package/openblas/{0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch => 0001-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch} (100%)
  delete mode 100644 package/openblas/0001-fix-gfortran-detection.patch
- rename package/openblas/{0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch => 0002-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch} (100%)
  delete mode 100644 package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
- rename package/openblas/{0004-Makefile.system-don-t-specify-optimization-level-bui.patch => 0003-Makefile.system-don-t-specify-optimization-level-bui.patch} (100%)
+ rename package/openblas/{0004-Makefile.system-don-t-specify-optimization-level-bui.patch => 0002-Makefile.system-don-t-specify-optimization-level-bui.patch} (100%)
 
+diff --git a/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch b/package/openblas/0001-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+similarity index 100%
+rename from package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+rename to package/openblas/0001-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
 diff --git a/package/openblas/0001-fix-gfortran-detection.patch b/package/openblas/0001-fix-gfortran-detection.patch
 deleted file mode 100644
 index 1fecdac3e5..0000000000
@@ -143,10 +153,6 @@ index 1fecdac3e5..0000000000
 - 	    $data =~ /(\d+)\.(\d+).(\d+)/;
 - 	    $major = $1;
 - 	    $minor = $2;
-diff --git a/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch b/package/openblas/0002-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-similarity index 100%
-rename from package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-rename to package/openblas/0002-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
 diff --git a/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch b/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
 deleted file mode 100644
 index 72b387b93e..0000000000
@@ -200,10 +206,10 @@ index 72b387b93e..0000000000
 --- 
 -2.26.2
 -
-diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0003-Makefile.system-don-t-specify-optimization-level-bui.patch
+diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0002-Makefile.system-don-t-specify-optimization-level-bui.patch
 similarity index 100%
 rename from package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
-rename to package/openblas/0003-Makefile.system-don-t-specify-optimization-level-bui.patch
+rename to package/openblas/0002-Makefile.system-don-t-specify-optimization-level-bui.patch
 diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
 index c58def9d5d..a1e35f4fc4 100644
 --- a/package/openblas/openblas.hash
