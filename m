@@ -4,81 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB00CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 08:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F495C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 11:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E9E3408AC;
-	Tue, 14 Dec 2021 08:29:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6B4404CF;
+	Tue, 14 Dec 2021 11:04:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4b6IVFR6m9Ti; Tue, 14 Dec 2021 08:29:22 +0000 (UTC)
+	with ESMTP id U5s6Xjb7xdiO; Tue, 14 Dec 2021 11:04:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56496408A8;
-	Tue, 14 Dec 2021 08:29:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 943421BF2A6
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 08:29:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E88C4046D;
+	Tue, 14 Dec 2021 11:04:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F1421BF37F
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84014813A8
- for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 08:29:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3466240286
+ for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 11:04:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=foss.st.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Eai2JLEmOxri for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 08:29:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3yrhxC-E37AR for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 11:04:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
- [91.207.212.93])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7707D813A2
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 08:29:14 +0000 (UTC)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BE3AJUl018624;
- Tue, 14 Dec 2021 09:29:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=jl9QpDsVAcXOa57NDb2w2CnsTMDBWel1TYjqZP0Assg=;
- b=Yw3+N1Wzpaa3s4fuKbJKCoMT+/Qftz1seN+HKNZ8RHlTGZPQD/APzMdu1nouqR5dbRR/
- Qfb2ldebe3xdq33yi0u55fPYVI/OuP7VS+Y3UaUa/XtIC4XVZUOyek8C37LgqXyBYHLO
- ykJK2so4jiRCU0pEtwqSpdj0c+ywIc5edGuYkp0x+iHne+j0neTk0XNFX4e8Ti6AJypk
- rG5fncdLIkcW1p+zthosQXj5jIeJMnL6db9KJ80bXNJrQs6w1KwAUaqa+SNzipDG6/DU
- wUkzDY4VwaPZm1cmT12QYU2VY4Z2do11bhMDvxtCufRCqs6VIEdXixKibZpknUo0D0C+ 1w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
- by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxk4hhqd9-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 14 Dec 2021 09:29:12 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D206210002A;
- Tue, 14 Dec 2021 09:29:11 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C9CCD226844;
- Tue, 14 Dec 2021 09:29:11 +0100 (CET)
-Received: from lmecxl0909.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
- 2021 09:29:11 +0100
-To: Dario Binacchi <dariobin@libero.it>, <buildroot@buildroot.org>
-References: <20211212123753.11848-1-dariobin@libero.it>
- <20211212123753.11848-5-dariobin@libero.it>
-From: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-Message-ID: <f3a3b43a-8b19-6330-7a4e-a1c7229140dd@foss.st.com>
-Date: Tue, 14 Dec 2021 09:29:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211212123753.11848-5-dariobin@libero.it>
-Content-Language: en-GB
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_03,2021-12-13_01,2021-12-02_01
-Subject: Re: [Buildroot] [RESEND PATCH v2,
- 4/4] configs/stm32f4{2|6}9_*_defconfig: rename configurations
+Received: from smtp5.ex10.biz (smtp5.ex10.biz [178.170.74.94])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1F9840234
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 11:04:47 +0000 (UTC)
+Received: from [185.183.66.253] (port=2150 helo=UC681.Mediane.local)
+ by smtp5.ex10.biz with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <florent.aumaitre@medianesysteme.com>)
+ id 1mx5bu-0003nw-2c; Tue, 14 Dec 2021 12:04:43 +0100
+X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1700_1799 0.000000, 
+ BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
+ BODY_SIZE_7000_LESS 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
+ IN_TLD 0.100000, LEGITIMATE_SIGNS 0.000000, MULTIPLE_RCPTS 0.100000,
+ MULTIPLE_REAL_RCPTS 0.000000, NO_CTA_URI_FOUND 0.000000,
+ NO_FUR_HEADER 0.000000, NO_URI_HTTPS 0.000000, OUTBOUND 0.000000,
+ OUTBOUND_SOPHOS 0.000000, SENDER_NO_AUTH 0.000000, __ANY_URI 0.000000,
+ __BODY_NO_MAILTO 0.000000, __CC_NAME 0.000000,
+ __CC_NAME_DIFF_FROM_ACC 0.000000, __CC_REAL_NAMES 0.000000,
+ __COURIER_PHRASE 0.000000, __DQ_NEG_HEUR 0.000000, __DQ_NEG_IP 0.000000,
+ __FILESHARE_PHRASE 0.000000, __FRAUD_MONEY_CURRENCY 0.000000,
+ __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000, __FROM_DOMAIN_IN_ANY_CC1 0.000000,
+ __FROM_DOMAIN_IN_RCPT 0.000000, __FUR_RDNS_SOPHOS 0.000000,
+ __HAS_CC_HDR 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
+ __HAS_X_MAILER 0.000000, __LINES_OF_YELLING 0.000000,
+ __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000,
+ __MULTIPLE_RCPTS_CC_X2 0.000000, __NO_HTML_TAG_RAW 0.000000,
+ __OUTBOUND_SOPHOS_FUR 0.000000, __OUTBOUND_SOPHOS_FUR_IP 0.000000,
+ __OUTBOUND_SOPHOS_FUR_RDNS 0.000000, __SANE_MSGID 0.000000,
+ __SUBJ_ALPHA_END 0.000000, __SUBJ_STARTS_S_BRACKETS 0.000000,
+ __TO_MALFORMED_2 0.000000, __TO_NO_NAME 0.000000, __URI_MAILTO 0.000000,
+ __URI_NO_WWW 0.000000, __URI_NS 0.000000
+X-SASI-Probability: 8%
+X-SASI-RCODE: 200
+X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2021.12.14.95716
+From: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+To: buildroot@buildroot.org
+Date: Tue, 14 Dec 2021 12:04:02 +0100
+Message-Id: <20211214110402.5646-1-florent.aumaitre@medianesysteme.com>
+X-Mailer: git-send-email 2.17.1
+Subject: [Buildroot] [PATCH 2/2] package/python-pyqt5: Fix parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,101 +78,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+This patch fix build of python-pyqt5 package when parallel build is used
 
-On 12/12/21 1:37 PM, Dario Binacchi wrote:
-> The name of the configurations are now more explicit. As a result, the
-> readme files have also been changed.
-> 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> ---
->   .../stm32f469-disco/{flash.sh => flash_sd.sh}                 | 0
->   .../stm32f469-disco/{linux.fragment => linux-sd.fragment}     | 0
->   board/stmicroelectronics/stm32f469-disco/readme.txt           | 4 ++--
->   board/stmicroelectronics/stm32f469-disco/readme_xip.txt       | 2 +-
->   ...tm32f429_disco_defconfig => stm32f429_disco_xip_defconfig} | 0
->   ...stm32f469_disco_defconfig => stm32f469_disco_sd_defconfig} | 2 +-
->   6 files changed, 4 insertions(+), 4 deletions(-)
->   rename board/stmicroelectronics/stm32f469-disco/{flash.sh => flash_sd.sh} (100%)
->   rename board/stmicroelectronics/stm32f469-disco/{linux.fragment => linux-sd.fragment} (100%)
->   rename configs/{stm32f429_disco_defconfig => stm32f429_disco_xip_defconfig} (100%)
->   rename configs/{stm32f469_disco_defconfig => stm32f469_disco_sd_defconfig} (97%)
-> 
-> diff --git a/board/stmicroelectronics/stm32f469-disco/flash.sh b/board/stmicroelectronics/stm32f469-disco/flash_sd.sh
-> similarity index 100%
-> rename from board/stmicroelectronics/stm32f469-disco/flash.sh
-> rename to board/stmicroelectronics/stm32f469-disco/flash_sd.sh
-> diff --git a/board/stmicroelectronics/stm32f469-disco/linux.fragment b/board/stmicroelectronics/stm32f469-disco/linux-sd.fragment
-> similarity index 100%
-> rename from board/stmicroelectronics/stm32f469-disco/linux.fragment
-> rename to board/stmicroelectronics/stm32f469-disco/linux-sd.fragment
-> diff --git a/board/stmicroelectronics/stm32f469-disco/readme.txt b/board/stmicroelectronics/stm32f469-disco/readme.txt
-> index 4d178b40d6..99d26ccb66 100644
-> --- a/board/stmicroelectronics/stm32f469-disco/readme.txt
-> +++ b/board/stmicroelectronics/stm32f469-disco/readme.txt
-> @@ -7,13 +7,13 @@ configuration for the STM32F469 Discovery evaluation platform.
->   Building
->   --------
->   
-> -  make stm32f469_disco_defconfig
-> +  make stm32f469_disco_sd_defconfig
->     make
->   
->   Flashing
->   --------
->   
-> -  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
-> +  ./board/stmicroelectronics/stm32f469-disco/flash_sd.sh output/
->   
->   It will flash the U-boot bootloader.
->   
-> diff --git a/board/stmicroelectronics/stm32f469-disco/readme_xip.txt b/board/stmicroelectronics/stm32f469-disco/readme_xip.txt
-> index 632d221ba1..7c20c2d015 100644
-> --- a/board/stmicroelectronics/stm32f469-disco/readme_xip.txt
-> +++ b/board/stmicroelectronics/stm32f469-disco/readme_xip.txt
-> @@ -19,6 +19,6 @@ Building
->   Flashing
->   --------
->   
-> -  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
-> +  ./board/stmicroelectronics/stm32f469-disco/flash_xip.sh output/
->   
->   It will flash binary to internal flash memory.
-> diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_xip_defconfig
-> similarity index 100%
-> rename from configs/stm32f429_disco_defconfig
-> rename to configs/stm32f429_disco_xip_defconfig
-> diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_sd_defconfig
-> similarity index 97%
-> rename from configs/stm32f469_disco_defconfig
-> rename to configs/stm32f469_disco_sd_defconfig
-> index 438d32150c..5ad4068e5e 100644
-> --- a/configs/stm32f469_disco_defconfig
-> +++ b/configs/stm32f469_disco_sd_defconfig
-> @@ -8,7 +8,7 @@ BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.14.12"
->   BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config board/stmicroelectronics/stm32f469-disco/linux.fragment"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config board/stmicroelectronics/stm32f469-disco/linux-sd.fragment"
->   BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
->   BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> 
+Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+---
+ package/python-pyqt5/python-pyqt5.mk | 17 +++++++++++++++++
+ package/python-pyqt5/qt.conf.in      |  7 +++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/python-pyqt5/qt.conf.in
 
-
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index 8f28c90d15..e54352f7dd 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -152,6 +152,23 @@ define PYTHON_PYQT5_GENERATE_QTDETAIL
+ 	)
+ endef
+ 
++# The file "qt.conf" can be used to override the hard-coded paths that are
++# compiled into the Qt library. We need it to make "qmake" relocatable and
++# tweak the per-package install pathes
++define PYTHON_PYQT5_INSTALL_QT_CONF
++	rm -f $(HOST_DIR)/bin/qt.conf
++	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
++		$(PYTHON_PYQT5_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
++endef
++
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++define PYTHON_PYQT5_QT_CONF_FIXUP
++	$(PYTHON_PYQT5_INSTALL_QT_CONF)
++endef
++endif
++
++PYTHON_PYQT5_PRE_CONFIGURE_HOOKS += PYTHON_PYQT5_QT_CONF_FIXUP
++
+ PYTHON_PYQT5_CONF_OPTS = \
+ 	--bindir $(TARGET_DIR)/usr/bin \
+ 	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages \
+diff --git a/package/python-pyqt5/qt.conf.in b/package/python-pyqt5/qt.conf.in
+new file mode 100644
+index 0000000000..2215cbd4e1
+--- /dev/null
++++ b/package/python-pyqt5/qt.conf.in
+@@ -0,0 +1,7 @@
++[Paths]
++Prefix=/usr
++HostPrefix=@@HOST_DIR@@
++Sysroot=@@STAGING_DIR@@
++Headers=/usr/include/qt5
++Plugins=/usr/lib/qt/plugins
++Examples=/usr/lib/qt/examples
 -- 
-Best regards / Cordialement,
+2.17.1
 
-Christophe Priouzeau | Tel: +33 244027320
-STMicroelectronics
-ST online: www.st.com<http://www.st.com/>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
