@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BBC0C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77949C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 14 Dec 2021 20:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31123408F1;
-	Tue, 14 Dec 2021 20:11:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D1BB60BF6;
+	Tue, 14 Dec 2021 20:11:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xd1ZAKf_py_8; Tue, 14 Dec 2021 20:11:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ARIOscRIOlo8; Tue, 14 Dec 2021 20:11:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73CE9409DA;
-	Tue, 14 Dec 2021 20:11:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 18E2E1BF9B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81AC560BF3;
+	Tue, 14 Dec 2021 20:11:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A5E71BF9C6
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B81948133C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9EC2F60BF6
  for <buildroot@lists.busybox.net>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KzPL4SL9Stsk for <buildroot@lists.busybox.net>;
- Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rCMLnhKsyyzT for <buildroot@lists.busybox.net>;
+ Tue, 14 Dec 2021 20:10:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19910813F4
- for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEBF460C2E
+ for <buildroot@buildroot.org>; Tue, 14 Dec 2021 20:10:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 15C1F8182C; Tue, 14 Dec 2021 20:05:20 +0000 (UTC)
+ id E7BC181EBC; Tue, 14 Dec 2021 20:05:19 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 14 Dec 2021 20:56:14 +0100
+Date: Tue, 14 Dec 2021 20:56:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 303f3e95d31440b401f95ca469ca8b110936f2be
-X-Git-Newrev: 5e5bf056233b3046112396be8a33bc59fb2f62d9
+X-Git-Oldrev: f9ae2246045b141537af24769ed491ee3f281608
+X-Git-Newrev: 1984222c84f53f530dce230d14f30015d971ab3f
 X-Patchwork-Hint: ignore
-Message-Id: <20211214200520.15C1F8182C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf: bump version to 2.1.6
+Message-Id: <20211214200519.E7BC181EBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: add DT for the
+ Beaglebone Black Wireless
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +59,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e5bf056233b3046112396be8a33bc59fb2f62d9
+commit: https://git.buildroot.net/buildroot/commit/?id=1984222c84f53f530dce230d14f30015d971ab3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog ([1]):
+The Beaglebone Black Wireless needs a specific DT, which u-boot tries to
+load based on the board name. Make sure we ship the DT so that we can
+boot on that platform.
 
-  - fix tos (-S) regression
-  - fix --permit-key regression
-
-[1] https://sourceforge.net/projects/iperf2/files/readme.txt/download
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/iperf/iperf.hash | 4 ++--
- package/iperf/iperf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/beaglebone/genimage.cfg    | 1 +
+ configs/beaglebone_defconfig     | 2 +-
+ configs/beaglebone_qt5_defconfig | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 924d10b3e0..2e1f433dc7 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1  b9d0868a6cdd970c1835d3d1a264dd54907f2c5c  iperf-2.1.5.tar.gz
-+sha1  41bd049625cbecda2bf5b6a6cc12a6c5baec549b  iperf-2.1.6.tar.gz
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+index 1fa6c5f381..42ca2cf107 100644
+--- a/board/beaglebone/genimage.cfg
++++ b/board/beaglebone/genimage.cfg
+@@ -10,6 +10,7 @@ image boot.vfat {
+ 			"am335x-bone.dtb",
+ 			"am335x-boneblack.dtb",
+ 			"am335x-bonegreen.dtb",
++			"am335x-boneblack-wireless.dtb",
+ 		}
+ 	}
  
- # Locally computed:
--sha256  56ec1312d24bd2c78790e67c96c0a991c82e71bc4c0b0d37171bd89c9fd6ef3e  iperf-2.1.5.tar.gz
-+sha256  4a43e44439b95622aebeee55754a17d1c94076032e90620dfc1ab9908cb9e080  iperf-2.1.6.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index a3d95535b3..f999ff4ac2 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 763696d1dd..06154d98b7 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -23,7 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.30-ti-r3)/linux-5.10.30-ti-r3.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
--IPERF_VERSION = 2.1.5
-+IPERF_VERSION = 2.1.6
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
+ # Filesystem
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 5f084b77df..11a91677ce 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
