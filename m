@@ -1,79 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9614FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 20:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E06C8C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 21:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12C4A60BC8;
-	Wed, 15 Dec 2021 20:43:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A0EF82A5D;
+	Wed, 15 Dec 2021 21:22:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R6RHXqnrvGRZ; Wed, 15 Dec 2021 20:43:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L46ijPegE28e; Wed, 15 Dec 2021 21:22:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EB6F60F01;
-	Wed, 15 Dec 2021 20:43:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDA708289B;
+	Wed, 15 Dec 2021 21:22:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F2D11BF45A
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 20:43:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CCDC1BF39F
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 058D481C6F
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 20:43:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 213348136E
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:22:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmYijMHiglHu for <buildroot@lists.busybox.net>;
- Wed, 15 Dec 2021 20:43:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C31D681B58
- for <buildroot@busybox.net>; Wed, 15 Dec 2021 20:43:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1639600994;
- bh=+vp52O/vDTuYk9mJfKETGuld1UOrYMw5m70bnao4bIs=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=h/YrrQDJDgsq7auz6U2FcFoYdMpQJPKA+DOgLHOqtMUwOY4xMRQiR1KBuk77FKRo+
- 0zlfdQ0qTfDWn4Or7Hl/bXB5QI0x9kREg7X199f1B/hoD1rMRRK+icvEy04ljJp5Ty
- 4d+LDnThkI68vvO2vfGykAt5909X3qnrmzlAo2G4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.223]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mf0BG-1mHNU00teE-00gZwx; Wed, 15
- Dec 2021 21:43:14 +0100
-Date: Wed, 15 Dec 2021 21:43:12 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: guillaume.bressaix@gmail.com
-Message-ID: <20211215214312.413bff44@gmx.net>
-In-Reply-To: <20211212200741.18143-1-guillaume.bressaix@gmail.com>
+ with ESMTP id Q-_ReCjSjE-G for <buildroot@lists.busybox.net>;
+ Wed, 15 Dec 2021 21:22:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D3B438149B
+ for <buildroot@busybox.net>; Wed, 15 Dec 2021 21:21:59 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id 207so35276219ljf.10
+ for <buildroot@busybox.net>; Wed, 15 Dec 2021 13:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=iCi75XkszUoJqWtIEg9vqSLsY5j/btirP+Frmg7ssFU=;
+ b=kVp1oe5Yg5+VpddD0EYK1GsO3LOol684FhTQIcDslxW2lSOmnE/u2z1Khj7gXKEVsQ
+ 1+h1aj5HxNUzKj4XVjkNzu7/9N77q8xLdldeSS4w7u9mxI3jyp7VO6y2H8kAU0WSpa9m
+ fuohWVDFdCLVLQe/xR7vdtksScpimC0A5SU+XDIECg/oYCHbFJjn5qq8xnjHRzEP1jcY
+ 3DG1QIW5KXoylE8RlWfApkdb6dkDXGa/UkMIlBh/mDE9rGmZ125+wEnLH3iy9mAVY8Q3
+ 7fomdvjxnADtodElnt/5s4YHgzu/BPuyzlOU87xwyXXacrzn4wHSmImac/HP0QGlxEjo
+ Go0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=iCi75XkszUoJqWtIEg9vqSLsY5j/btirP+Frmg7ssFU=;
+ b=pRgmH4F5WCMeP1sqnVNl1ljJ8sgN8ot5eSE1AI8AAqOrhyiwxTWyGlq4JCCnvrjROh
+ 4dCjkq/f1+1lYg9hRcI+eqXCeQn9uHAAYKwhW8m5V+tRbkl4k7/u6ZB2Fss41Iufee5f
+ 4/VyrqDwckTnY7kBEd5XLcWylkYU/4zdXRGccvtoOq6LZLZweqxfOGXAuD70AChkh1iL
+ oVwio+t9p7Nj+yZwSfTZtD5dAiajVAP+tg+16+3wEHf36n0ddZ9rggK/St2iiC+Vnrni
+ R7NLTc84eiYjvTeujQK83x8mtJ15uYeFkT5RuE+9Ggsyn/P62NrYzvds1a5ZO3TIf2RE
+ LMiA==
+X-Gm-Message-State: AOAM533AEFHw2fJmlKGlbA+qQXdpQZ8HhXJa1obnOgMQ1bwXUesCem+s
+ TWt1xwBKvX9b9EI/8Ex0/NlvfOga5Hh8IFwu1WY=
+X-Google-Smtp-Source: ABdhPJzypfjTN68YkeSzknyBz0FiwqQK/qatvvFY34daeBpHcQMPprLcuCoHaY5BBJaCe8ibhvziJyCSTaEX4Mp0QF8=
+X-Received: by 2002:a2e:a376:: with SMTP id i22mr12184014ljn.201.1639603317278; 
+ Wed, 15 Dec 2021 13:21:57 -0800 (PST)
+MIME-Version: 1.0
 References: <20211025212541.12280-1-ps.report@gmx.net>
  <20211212200741.18143-1-guillaume.bressaix@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:DUr1driv+8VXnncaNk+BO2h7oadCo5O8Q9+XjNEu6V6dPVNIxro
- DjlGcG8ApLQPSLS/KRQah46idE5Cig0natFaq4SyWNRQvAb5ubOvhBNmeshU/UWQVYf6m4B
- XQyU3/dUSJKX4njrqdEtMY2kyIkeME39kGLCE25owa7p70g9nCqczjuNVt+4Ej+1whzvEv2
- mwL0xyb9rlEjQZGk9QvGg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Pean2XWmqNc=:YJaXPth5tSNVzNbWHondsm
- XriqdhO+11MR/bxomcRE4tNU/vWgW6rx/0nyhPMeZDerOyXEcc6nYyJgC3qXND/q19J+QaNim
- +Hr+N/0XTha/l6DRzhpYl/SkXTJgOinsD6MFStR0tzEBibFIHOojPXijbB0tsvnBtuhU/kCil
- mLeJG1gqpIaxv/u5d/ih6ICa2/xzhpEZdjS3Js0Jmg9fcMEbY4hESXXr7SuyjpwLPk8jR7x/I
- fY0aHm7mQm5qynOU7AVJYe/+mK/TqtINE/7axpDB5L9j+x1BYK6mdQ9D64zs358p7VSYFGE53
- AhdaRzoimSSF3KGCSiK/U9agduFuffMgqNeUF/ytgYxowLKPU6ciOcqW5BX79WeT/wyjnqVhT
- Ve3viqQGtf7iTivi6p0qHK4yeJbjDNTrBP6/usR8E0OiFl2PK22iO4K3zFhoQjDei6KnPE/7P
- 35hCF+TEBhSl8SKKgk+sNJFnqCWkwj1XYc4KTf2dUMfrrL1B4hvndDZuW5zCjmY7vuPJbb3Y8
- MUu/2S0Ol09iQrdym8f2UT9PNeDjEggJgRCwdQjynegcT/4m60ZcU9HrtRjmfsbK72AqTV8Cv
- 7uIqbhyZ7txY12EHrvYlcB1buhvfi+Y5oszGRgW1du5Qcw3IZ9aWpT7yeCf21PMWnJgnn3CFK
- Q4FENLEZAYTXpm3x5ukgXdRyacJJaw3ps1E5XB7Vp2Mhv89B42X9D+bAXW2TRQxtft7PHNpiQ
- S8EIs97LOW/xkCk5GZELWTbZHUHdwt6s4Irx3stvWjRn9fzPm/KfiqzrcBqljmUSd7TcAmFiE
- XVnmUdULpNlPfpnGUE/BhW7UvUAgwTLKjrpB+QAciiNdKhCWil5D3Gd65XkkiQy4d5e4eTu9X
- f6FasvUu5bILuzfH5sle5lmYZ9jQm4r4UcWdxnTbwVyJfeaf1ChthvybLFJ1zH4MY4tPUGWcx
- 5f7iM22H3nZJnVmj/AR0eGjTqMRfk/kcCU0zGoJkgpg/eN9ieXLBGSXRFZUf5ZeTQxRzQXdiN
- XSp4rxd2lhGgoeJuXU+CAT2sHqf4Zv9nREld5vRvBsYQ9O8fKCpq+KYDo/lKWjN/a4kIHvhbV
- /xAs+V95+reE4M=
+ <20211215214312.413bff44@gmx.net>
+In-Reply-To: <20211215214312.413bff44@gmx.net>
+From: Guillaume Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 15 Dec 2021 22:21:31 +0100
+Message-ID: <CAJe0E3fU6cf-PhrPO_f0JB0QFBA106Q86o8Yhk40ExOcsnN98Q@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
 Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -87,338 +81,1477 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2883495525962462107=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gR3VpbGxhdW1lLAoKdGhhbmtzIG9mIGludGVyZXN0LCB0ZXN0aW5nIGFuZCBpbXByb3Zl
-bWVudCBvZiB0aGUgbnRwc2VjIHBhdGNoLCBzb21lIGNvbW1lbnRzIGJlbG93Li4uCgpPbiBTdW4s
-IDEyIERlYyAyMDIxIDIxOjA3OjQxICswMTAwLCBndWlsbGF1bWUuYnJlc3NhaXhAZ21haWwuY29t
-IHdyb3RlOgoKPiBGcm9tOiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Cj4gCj4g
-LSBzZXQgJ0NDPWdjYycgdG8gYXZvaWQgY3Jvc3MtY29tcGlsZSBmYWlsdXJlIChzZWUgWzFdKToK
-PiAKPiAgIC9iaW4vc2g6IGxpbmUgMTogLi4uL2J1aWxkL250cHNlYy0xXzJfMC9idWlsZC9ob3N0
-L250cGQva2V5d29yZC1nZW46IGNhbm5vdCBleGVjdXRlIGJpbmFyeSBmaWxlOiBFeGVjIGZvcm1h
-dCBlcnJvcgo+IAo+ICAgV2FmOiBMZWF2aW5nIGRpcmVjdG9yeSBgLi4uL2J1aWxkL250cHNlYy0x
-XzJfMC9idWlsZC9ob3N0Jwo+ICAgQnVpbGQgZmFpbGVkCj4gICAgLT4gdGFzayBpbiAnbnRwX2tl
-eXdvcmQuaCcgZmFpbGVkIHdpdGggZXhpdCBzdGF0dXMgMTI2IChydW4gd2l0aCAtdiB0byBkaXNw
-bGF5IG1vcmUgaW5mb3JtYXRpb24pICAKPiAKPiAtIHNldCAnLXN0ZD1nbnU5OSInIHRvIGF2b2lk
-IGNvbXBpbGUgZmFpbHVyZSB3aXRoIG9sZCBjb21waWxlcnMKPiAKPiAtIGV4cGxpY2l0IHNldCBQ
-WVRIT05fQ09ORklHCj4gCj4gLSBhZGQgcGF0Y2ggMDAxLW50cHRpbWUtZml4LWpmbXQ1LW9mbXQ1
-LWpmbXQ2LW9mbXQ2LXJlbGF0ZWQtY29tcGlsZS0ucGF0Y2ggdG8KPiAgIGZpeCBudHB0aW1lIGpm
-bXQ1L29mbXQ1IGpmbXQ2L29mbXQ2IHJlbGF0ZWQgY29tcGlsZSBmYWlsdXJlCj4gCj4gLSBhZGQg
-U1lTViBpbml0IGZpbGUgKFM0OW50cCkKPiAKPiAtIGFkZCBleGFtcGxlIG50cGQuY29uZiAod2l0
-aCBsZWdhY3kgb3B0aW9uIGVuYWJsZWQgYW5kIHByb3ZpZGUgc2tlbGV0b24KPiAgIGZvciBOVFMg
-Y29uZmlndXJhdGlvbikKPiAKPiAtIGFkZCBjb25maWcgb3B0aW9uIGZvciBOVFMgc3VwcG9ydAo+
-IAo+IC0gZGVwZW5kIG9uIHB5dGhvbjMgKG9taXQgcHl0aG9uMiB0byByZWR1Y2UgdGVzdCBlZmZv
-cnQpCj4gCj4gLSBhZGQgbnRwIHVzZXIvZ3JvdXAgYW5kIHJ1biBudHBkIGFzIHJlc3RyaWN0ZWQg
-dXNlcgo+IAo+IC0gYWRkIGxpYmNhcCBkZXBlbmRlbmN5IChjb21waWxlIHRpbWUgb3B0aW9uYWwg
-YnV0IG5lZWRlZCBmb3IgZHJvcHJvb3QKPiAgIHN1cHBvcnQpCj4gCj4gLSBzdWJtaXQgbGF0ZXN0
-IG50cHNlYyB2ZXJzaW9uIDEuMi4xCgpJbnRlcmVzdGluZywgbm90IGxpc3RlZCBhcyByZWxlYXNl
-LCBidXQgdGFnZ2VkIGFuZCBkb3dubG9hZGFibGUuLi4KCj4gCj4gLSBsaWIgbnRwYyBpbXBvcnQg
-aW4gcHl0aG9uIGlzIGZpeGVkIGJ5IHNwZWNpZnlpbmcgdGhlIC0tbGliZGlyIGZsYWcuCj4gICAt
-PiByZW1vdmVkIHRoZSBzeW1saW5rIHRyaWNrICAKCkZpbmUuLi4sIHdpbGwgdGVzdCBpdC4uLgoK
-PiAKPiAtIGFkZCAtLXJlZmNsb2NrPWFsbCBmbGFncyB0byBjb25maWd1cmUsIHNlZSBub3RlcyBk
-b3duIGJlbG93Cj4gCj4gLSBhZGQgbGVhcCBzZWNvbmQgbWFuYWdlbWVudCBvcHRpb25zICYgbnRw
-dml6Cj4gCj4gLSBpbXByb3ZlZCBDb25maWcuaW46Cj4gICBsaWJic2QgaXMgcmVxdWlyZWQKCkFy
-ZSB5b3Ugc3VyZT8gV2l0aCB0aGUgb3JpZ2luYWwgcGF0Y2ggbnRwc2VjIGJ1aWxkcyBmaW5lIHdp
-dGhvdXQgbGliYnNkIGF2YWlsYWJsZS4uLgoKPiAgIG9wZW5zc2wgaXMgb25seSBuZWVkZWQgd2hl
-biBOVFMgZW5jcnlwdGlvbiBpcyBlbmFibGVkCgpBIGJ1aWxkIHdpdGhvdXQgTlRTIGFuZCB3aXRo
-b3V0IG9wZW5zc2wgZ2l2ZXM6CgoJQ2hlY2tpbmcgZm9yIE9wZW5TU0wvbGliY3J5cHRvICh2aWEg
-cGtnLWNvbmZpZykgICAgICAgICAgICAgICAgIDogbm90IGZvdW5kIAoJQ2hlY2tpbmcgZm9yIE9w
-ZW5TU0wncyBjcnlwdG8gbGlicmFyeSAgICAgICAgICAgICAgICAgICAgICAgICAgIDogbm90IGZv
-dW5kIAoJVGhlIGNvbmZpZ3VyYXRpb24gZmFpbGVkCgo+ICAgKGRlcGVuZCBvbiBweXRob24zIG9u
-bHkgdG8gc2ltcGx5IHRoaW5ncykKPiAgIGltcHJvdmVkIGNsYXNzaWMgbW9kZSBoZWxwIGRlc2Ny
-aXB0aW9uCj4gICBpbXByb3ZlZCBlYXJseS1kcm9wLXJvb3QgZmVhdHVyZSBkZXNjcmlwdGlvbgo+
-IAo+IC0gZWFybHkgZHJvcHJvb3Qgc2hvdWxkIGJlIGFuIG9wdGlvbjogYWRhcHQgbGliY2FwIGFj
-Y29yZGluZ2x5CgpUaGlzIHdpbGwgYnJlYWsgKHRoZSBoYXJkIGNvZGVkKSAnLXUgbnB0Om5wdCcg
-b3B0aW9uIGZyb20gcGFja2FnZS9udHBzZWMvUzQ5bnRwLAphbnkgcmVhc29uIHRvIGF2b2lkIHRo
-ZSBzZWN1cml0eSBmZWF0dXJlPwoKPiAKPiAtIGNvcnJlY3RlZCBDQz1nY2MgdG8gQ0M9JChIT1NU
-Q0MpIGluIG50cHNlYy5tawoKR29vZCBwb2ludC4uLgoKPiAKPiAtIHByb3ZpZGUgc2VydmljZSBz
-Y3JpcHQgZm9yIHN5c3RlbWQgaW5mcmEgYWxvbmcgc3lzdiBpbmZyYQoKQmV0dGVyIGRvbmUgYXMg
-YW4gZXh0cmEgcGF0Y2ggKGVhc2llciB0byByZXZpZXcpLi4uLgoKPiAKPiAtIEkgZG9uJ3QgdGhp
-bmsgd2UgbmVlZCB0aGUgcGF0Y2ggaWYgd2UgcmVzdHJpY3QgdG8gIUJSMl9UT09MQ0hBSU5fVUNM
-SUJDCj4gICBJTU8gaXQncyBiZXR0ZXIgdG8ga2VlcCB0aGUgcGF0Y2ggYW5kIGFsbG93IGFsbCB0
-b29sY2hhaW5zLgo+ICAgSSB1c3VhbGx5IGhhdmUgZ2xpYmMsIGJ1dCBJIGp1c3QgcmFuIGEgc2Fu
-aXR5IGNoZWNrIG9uIG15IHplZGJvYXJkIHdpdGggdWNsaWJjLAo+ICAgaXQgcGFzc2VkLgoKTm90
-IGltcG9ydGFudCBmb3IgdGhlIGNvbW1pdCBsb2cuLi4KCj4gCj4gLSB1c2VkIG9uIHp5bnFfemVk
-X2RlZmNvbmZpZyBhbmQgYmVhZ2xlYm9uZV9kZWZjb25maWcKPiAgIGRhZW1vbiBhdXRvbWF0aWNh
-bGx5IHN0YXJ0ZWQKPiAgIG50cHEgd29ya3MgZmluZQo+IAo+IFsxXSBodHRwczovL2dpdGxhYi5j
-b20vTlRQc2VjL250cHNlYy8tL2lzc3Vlcy82OTQKPiAKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBT
-ZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Cj4gU2lnbmVkLW9mZi1ieTogR3VpbGxhdW1lIFcu
-IEJyZXMgPGd1aWxsYXVtZS5icmVzc2FpeEBnbWFpbC5jb20+Cj4gCj4gLS0tCj4gbm90ZXMgb24g
-cmVmY2xvY2tzOiBodHRwczovL2RvY3MubnRwc2VjLm9yZy9sYXRlc3QvcmVmY2xvY2suaHRtbAo+
-ICAgIkZvciBzZWN1cml0eSByZWFzb25zLCB3ZSB3aWxsIG5vIGxvbmdlciBzdXBwb3J0IGFueSBy
-ZWZjbG9jawo+ICAgdGhhdCByZXF1aXJlcyBhIGNsb3NlZC1zb3VyY2UgZHJpdmVyIHRvIHJ1biIs
-IHNlZSB3ZWJwYWdlLgo+IAo+ICAgLS1yZWZjbG9jaz1hbGwgaXMgaGFyZGNvZGVkIGF0IHRoZSBt
-b21lbnQKPiAKPiAgIE9uZSBtdXN0IGNvbXBpbGUgbnRwc2VjIHdpdGggdGhlICdyZWZjbG9jaycg
-b3B0aW9uCj4gICBpZiB0aGV5IHdhbnQgdG8gZHJpdmUgb3IgaW50ZXJhY3Qgd2l0aCBoYXJkd2Fy
-ZS4KPiAKPiAgIEluIGFueSBjYXNlLCByZWZjbG9ja3MgYXJlIG5vdCBjcml0aWNhbCBmb3IgYm90
-aCBidWlsZHRpbWUgJiBydW50aW1lOgo+IAo+ICAgICAgWytdIC4vY29uZmlndXJlIGlzIHNtYXJ0
-IGVub3VnaCB0byBkaXNhYmxlIGEgcmVmY2xvY2sKPiAgICAgIGlmIHJlcXVpcmVtZW50cyBhcmUg
-bm90IG1ldC4gSW4gdGhlIHN1Ym1pdHRlZCBjb250ZXh0LAo+ICAgICAgdGhpcyBoYXBwZW5zIGZv
-ciByZWZjbG9jaz1ncHNkIHdpdGhvdXQgQlIyX1BBQ0tBR0VfR1BTRAo+ICAgICAgc2VsZWN0ZWQg
-YnkgdXNlcgo+IAo+ICAgICAgWytdIHNvbWUgcmVmY2xvY2tzIG5hdHVyYWxseSByZXF1aXJlIGEg
-c3BlY2lmaWMgaHcgc3VwcG9ydAo+ICAgICAgd2l0aCByZWxhdGVkIGtlcm5lbCBkcml2ZXIuCj4g
-ICAgICBUaGlzIGlzIG5vdCBidWlsZHRpbWUgY3JpdGljYWwgYmVjYXVzZSBidWlsZCBkb2VzIG5v
-dCBjYXJlCj4gICAgICBhYm91dCBodyBzdXBwb3J0Lgo+ICAgICAgVGhpcyBpcyBub3QgcnVudGlt
-ZSBjcml0aWNhbCBlaXRoZXIgYmVjYXVzZSBhbnkgbWlzc2luZwo+ICAgICAgaHcgc3VwcG9ydCBv
-ciB1bmZlYXNpYmxlIGhhcmR3YXJlIGFjY2VzcyBlbmRzIHVwIGFzIGEgbG9nZ2VkCj4gICAgICBl
-cnJvciBtZXNzYWdlLiBJdCBpcyB1cCB0byB0aGUgdXNlciB0byBjb3JyZWN0IGl0IGluIHRoZQo+
-ICAgICAgc3VibWl0dGVkIGNvbnRleHQ6IGV4YW1wbGU6ICdubWVhL2dwcycgcmVjZWl2ZXJzIHdp
-dGhvdXQga2VybmVsIHN1cHBvcnQKPiAgICAgIG9yIGhhcmR3YXJlIG5vdCBwbHVnZ2VkIGluLgoK
-V291bGQgcHJlZmVyIG9uZSBvcHRpb24gcGVyIHJlZmNsb2NrIHRvIHJlZHVjZSBkZXBlbmRlbmNp
-ZXMuLi4KCj4gCj4gbnRwZCAvIG50cHNlYyBzaG91bGQgYmUgbXV0dWFseSBleGNsdXNpdmUgaWYg
-d2UgaGFyY29kZSBTNDludHAgYXMgdGhlIHNlcnZpY2Ugc2NyaXB0Cj4gCj4gLS0tCj4gIERFVkVM
-T1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICBw
-YWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsK
-PiAgLi4uLWpmbXQ1LW9mbXQ1LWpmbXQ2LW9mbXQ2LXJlbGF0ZWQtY29tcGlsZS0ucGF0Y2ggfCA2
-MSArKysrKysrKysrKysrKysrCj4gIHBhY2thZ2UvbnRwc2VjL0NvbmZpZy5pbiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHwgNjggKysrKysrKysrKysrKysrKysKPiAgcGFja2FnZS9udHBzZWMv
-UzQ5bnRwICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA1OCArKysrKysrKysrKysrKysK
-PiAgcGFja2FnZS9udHBzZWMvbnRwZC5ldGMuY29uZiAgICAgICAgICAgICAgICAgICAgICAgfCAz
-MyArKysrKysrKysKPiAgcGFja2FnZS9udHBzZWMvbnRwZC5zZXJ2aWNlICAgICAgICAgICAgICAg
-ICAgICAgICAgfCAxNSArKysrCj4gIHBhY2thZ2UvbnRwc2VjL250cHNlYy5oYXNoICAgICAgICAg
-ICAgICAgICAgICAgICAgIHwgIDQgKwo+ICBwYWNrYWdlL250cHNlYy9udHBzZWMubWsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICB8IDg1ICsrKysrKysrKysrKysrKysrKysrKysKPiAgOSBmaWxl
-cyBjaGFuZ2VkLCAzMjYgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2Fn
-ZS9udHBzZWMvMDAwMS1udHB0aW1lLWZpeC1qZm10NS1vZm10NS1qZm10Ni1vZm10Ni1yZWxhdGVk
-LWNvbXBpbGUtLnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL250cHNlYy9Db25m
-aWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbnRwc2VjL1M0OW50cAo+ICBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9udHBzZWMvbnRwZC5ldGMuY29uZgo+ICBjcmVhdGUgbW9k
-ZSAxMDA2NDQgcGFja2FnZS9udHBzZWMvbnRwZC5zZXJ2aWNlCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL250cHNlYy9udHBzZWMuaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2Fn
-ZS9udHBzZWMvbnRwc2VjLm1rCj4gCj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9Q
-RVJTCj4gaW5kZXggMzAyMzUyNi4uMzJiNWU4NyAxMDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJTCj4g
-KysrIGIvREVWRUxPUEVSUwo+IEBAIC0yMTk2LDYgKzIxOTYsNyBAQCBGOglwYWNrYWdlL2l3ZC8K
-PiAgRjoJcGFja2FnZS9saWJldmRldi8KPiAgRjoJcGFja2FnZS9saWJ1ZXYvCj4gIEY6CXBhY2th
-Z2UvbG9nNGNwbHVzLwo+ICtGOglwYWNrYWdlL250cHNlYy8KPiAgRjoJcGFja2FnZS9wb3N0Z3Jl
-c3FsLwo+ICBGOglwYWNrYWdlL3B5dGhvbi1jb2xvcnplcm8vCj4gIEY6CXBhY2thZ2UvcHl0aG9u
-LWZsYXNrLXd0Zi8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0Nv
-bmZpZy5pbgo+IGluZGV4IDU3MjA4MzAuLjU0NGEwZmQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9D
-b25maWcuaW4KPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+IEBAIC0yMjcxLDYgKzIyNzEsNyBA
-QCBlbmRpZgo+ICAJc291cmNlICJwYWNrYWdlL25tYXAvQ29uZmlnLmluIgo+ICAJc291cmNlICJw
-YWNrYWdlL25vaXAvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL250cC9Db25maWcuaW4i
-Cj4gKwlzb3VyY2UgInBhY2thZ2UvbnRwc2VjL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2Fn
-ZS9udXR0Y3AvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL29kaGNwNmMvQ29uZmlnLmlu
-Igo+ICAJc291cmNlICJwYWNrYWdlL29kaGNwbG9jL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9udHBzZWMvMDAwMS1udHB0aW1lLWZpeC1qZm10NS1vZm10NS1qZm10Ni1vZm10Ni1y
-ZWxhdGVkLWNvbXBpbGUtLnBhdGNoIGIvcGFja2FnZS9udHBzZWMvMDAwMS1udHB0aW1lLWZpeC1q
-Zm10NS1vZm10NS1qZm10Ni1vZm10Ni1yZWxhdGVkLWNvbXBpbGUtLnBhdGNoCj4gbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi5jMjgzOGZlCj4gLS0tIC9kZXYvbnVsbAo+ICsr
-KyBiL3BhY2thZ2UvbnRwc2VjLzAwMDEtbnRwdGltZS1maXgtamZtdDUtb2ZtdDUtamZtdDYtb2Zt
-dDYtcmVsYXRlZC1jb21waWxlLS5wYXRjaAo+IEBAIC0wLDAgKzEsNjEgQEAKPiArRnJvbSA0MDE1
-YTExODNkMmY3OWRhZDZkZDY3NWNhNWUwZDMyOTgyNWYzZmEzIE1vbiBTZXAgMTcgMDA6MDA6MDAg
-MjAwMQo+ICtGcm9tOiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Cj4gK0RhdGU6
-IE1vbiwgNCBPY3QgMjAyMSAyMjoyNTo1OCArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIG50cHRp
-bWU6IGZpeCBqZm10NS9vZm10NSBqZm10Ni9vZm10NiByZWxhdGVkIGNvbXBpbGUgZmFpbHVyZQo+
-ICtNSU1FLVZlcnNpb246IDEuMAo+ICtDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9
-VVRGLTgKPiArQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+ICsKPiArVXNlIHNhbWUg
-ZGVmaW5lIGd1YXJkIGZvciBkZWZpbml0b24gYXMgZm9yIHVzYWdlICgnSEFWRV9TVFJVQ1RfTlRQ
-VElNRVZBTF9UQUknCj4gK2luc3RlYWQgb2YgJ05UUF9BUEkgJiYgTlRQX0FQSSA+IDMnKS4KPiAr
-Cj4gK0ZpeGVzOgo+ICsKPiArICAuLi8uLi9udHB0aW1lL250cHRpbWUuYzogSW4gZnVuY3Rpb24g
-4oCYbWFpbuKAmToKPiArICAuLi8uLi9udHB0aW1lL250cHRpbWUuYzozNDk6MTc6IGVycm9yOiDi
-gJhqZm10NeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbik7IGRpZCB5
-b3UgbWVhbiDigJhqZm10NuKAmT8KPiArICAgIDM0OSB8ICAgcHJpbnRmKGpzb24gPyBqZm10NSA6
-IG9mbXQ1LCAobG9uZyludHYudGFpKTsKPiArICAgICAgICB8ICAgICAgICAgICAgICAgICBefn5+
-fgo+ICsgICAgICAgIHwgICAgICAgICAgICAgICAgIGpmbXQ2Cj4gKyAgLi4vLi4vbnRwdGltZS9u
-dHB0aW1lLmM6MzQ5OjE3OiBub3RlOiBlYWNoIHVuZGVjbGFyZWQgaWRlbnRpZmllciBpcyByZXBv
-cnRlZCBvbmx5IG9uY2UgZm9yIGVhY2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbgo+ICsgIC4uLy4u
-L250cHRpbWUvbnRwdGltZS5jOjM0OToyNTogZXJyb3I6IOKAmG9mbXQ14oCZIHVuZGVjbGFyZWQg
-KGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuIOKAmG9mbXQ24oCZPwo+
-ICsgICAgMzQ5IHwgICBwcmludGYoanNvbiA/IGpmbXQ1IDogb2ZtdDUsIChsb25nKW50di50YWkp
-Owo+ICsgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn4KPiArICAgICAgICB8
-ICAgICAgICAgICAgICAgICAgICAgICAgIG9mbXQ2Cj4gKyAgLi4vLi4vbnRwdGltZS9udHB0aW1l
-LmM6MzIxOjE1OiB3YXJuaW5nOiB1bnVzZWQgdmFyaWFibGUg4oCYamZtdDbigJkgWy1XdW51c2Vk
-LXZhcmlhYmxlXQo+ICsgICAgMzIxIHwgICBjb25zdCBjaGFyICpqZm10NiA9ICIiOwo+ICsgICAg
-ICAgIHwgICAgICAgICAgICAgICBefn5+fgo+ICsgIC4uLy4uL250cHRpbWUvbnRwdGltZS5jOjMx
-MToxNTogd2FybmluZzogdW51c2VkIHZhcmlhYmxlIOKAmG9mbXQ24oCZIFstV3VudXNlZC12YXJp
-YWJsZV0KPiArICAgIDMxMSB8ICAgY29uc3QgY2hhciAqb2ZtdDYgPSAiXG4iOwo+ICsgICAgICAg
-IHwgICAgICAgICAgICAgICBefn5+fgo+ICsKPiArW1Vwc3RyZWFtOiBodHRwczovL2dpdGxhYi5j
-b20vTlRQc2VjL250cHNlYy8tL21lcmdlX3JlcXVlc3RzLzEyNDVdCj4gK1NpZ25lZC1vZmYtYnk6
-IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KPiArLS0tCj4gKyBudHB0aW1lL250
-cHRpbWUuYyB8IDQgKystLQo+ICsgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBk
-ZWxldGlvbnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS9udHB0aW1lL250cHRpbWUuYyBiL250cHRp
-bWUvbnRwdGltZS5jCj4gK2luZGV4IGZmODYxY2IuLjVkNTg1OTMgMTAwNjQ0Cj4gKy0tLSBhL250
-cHRpbWUvbnRwdGltZS5jCj4gKysrKyBiL250cHRpbWUvbnRwdGltZS5jCj4gK0BAIC0zMDUsNyAr
-MzA1LDcgQEAgbWFpbigKPiArIAkJY29uc3QgY2hhciAqb2ZtdDIgPSAiICB0aW1lICVzLCAoLiUw
-KmQpLFxuIjsKPiArIAkJY29uc3QgY2hhciAqb2ZtdDMgPSAiICBtYXhpbXVtIGVycm9yICVsdSB1
-cywgZXN0aW1hdGVkIGVycm9yICVsdSB1cyI7Cj4gKyAJCWNvbnN0IGNoYXIgKm9mbXQ0ID0gIiAg
-bnRwdGltZT0leC4leCB1bml4dGltZT0leC4lMCpkICVzIjsKPiArLSNpZiBkZWZpbmVkIE5UUF9B
-UEkgJiYgTlRQX0FQSSA+IDMKPiArKyNpZiBkZWZpbmVkKEhBVkVfU1RSVUNUX05UUFRJTUVWQUxf
-VEFJKQo+ICsgCQljb25zdCBjaGFyICpvZm10NSA9ICIsIFRBSSBvZmZzZXQgJWxkXG4iOwo+ICsg
-I2Vsc2UKPiArIAkJY29uc3QgY2hhciAqb2ZtdDYgPSAiXG4iOwo+ICtAQCAtMzE1LDcgKzMxNSw3
-IEBAIG1haW4oCj4gKyAJCWNvbnN0IGNoYXIgKmpmbXQyID0gIlwidGltZVwiOlwiJXNcIixcImZy
-YWN0aW9uYWwtdGltZVwiOlwiLiUwKmRcIiwiOwo+ICsgCQljb25zdCBjaGFyICpqZm10MyA9ICJc
-Im1heGltdW0tZXJyb3JcIjolbHUsXCJlc3RpbWF0ZWQtZXJyb3JcIjolbHUsIjsKPiArIAkJY29u
-c3QgY2hhciAqamZtdDQgPSAiXCJyYXctbnRwLXRpbWVcIjpcIiV4LiV4XCIsXCJyYXctdW5peC10
-aW1lXCI6XCIleC4lMCpkICVzXCIsIjsKPiArLSNpZiBkZWZpbmVkIE5UUF9BUEkgJiYgTlRQX0FQ
-SSA+IDMKPiArKyNpZiBkZWZpbmVkKEhBVkVfU1RSVUNUX05UUFRJTUVWQUxfVEFJKQo+ICsgCQlj
-b25zdCBjaGFyICpqZm10NSA9ICJcIlRBSS1vZmZzZXRcIjolZCwiOwo+ICsgI2Vsc2UKPiArIAkJ
-Y29uc3QgY2hhciAqamZtdDYgPSAiIjsKPiArLS0gCj4gKzIuMzMuMAo+ICsKPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9udHBzZWMvQ29uZmlnLmluIGIvcGFja2FnZS9udHBzZWMvQ29uZmlnLmluCj4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi45MDQ0YWE0Cj4gLS0tIC9kZXYv
-bnVsbAo+ICsrKyBiL3BhY2thZ2UvbnRwc2VjL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsNjggQEAK
-PiArY29tbWVudCAibnRwc2VjIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWQsIGR5
-bmFtaWMgbGlicmFyeSIKPiArCWRlcGVuZHMgb24gQlIyX1NUQVRJQ19MSUJTCj4gKwlkZXBlbmRz
-IG9uICFCUjJfVVNFX1dDSEFSCj4gKwlkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX0hBU19USFJF
-QURTICMgbGliYnNkCj4gKwo+ICtjb21tZW50ICJudHBzZWMgbmVlZHMgbGliYnNkIgo+ICsJZGVw
-ZW5kcyBvbiAhQlIyX1BBQ0tBR0VfTElCQlNEX0FSQ0hfU1VQUE9SVFMKPiArCWRlcGVuZHMgb24g
-IUJSMl9TVEFUSUNfTElCUyAjIGxpYmJzZAo+ICsKPiArY29tbWVudCAibnRwc2VjIG5lZWRzIHB5
-dGhvbjMiCj4gKwlkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9QWVRIT04zCj4gKwo+ICtjb25maWcg
-QlIyX1BBQ0tBR0VfTlRQU0VDCj4gKwlib29sICJudHBzZWMiCj4gKwlkZXBlbmRzIG9uICFCUjJf
-U1RBVElDX0xJQlMgIyBsaWJic2QKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCQlNEX0FS
-Q0hfU1VQUE9SVFMKPiArCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGxp
-YmJzZAo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9QWVRIT04zCj4gKwlzZWxlY3QgQlIyX1BB
-Q0tBR0VfTElCQ0FQCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCQlNECj4gKwlzZWxlY3QgQlIy
-X1BBQ0tBR0VfUFBTX1RPT0xTICMgcmVmY2xvY2socHBzKQo+ICsJaGVscAo+ICsJICBOVFBzZWMg
-aXMgYSBzZWN1cmUsIGhhcmRlbmVkLCBhbmQgaW1wcm92ZWQKPiArCSAgaW1wbGVtZW50YXRpb24g
-b2YgTmV0d29yayBUaW1lIFByb3RvY29sIGRlcml2ZWQKPiArCSAgZnJvbSBOVFAgQ2xhc3NpYywg
-RGF2ZSBNaWxsc+KAmXMgb3JpZ2luYWwuCj4gKwo+ICsJICBQcm92aWRlcyB0aGluZ3MgbGlrZSBu
-dHBkLCBudHBkYXRlLCBudHBxLCBldGMuLi4KPiArCj4gKwkgIGh0dHBzOi8vd3d3Lm50cHNlYy5v
-cmcvCj4gKwo+ICtpZiBCUjJfUEFDS0FHRV9OVFBTRUMKPiArCj4gK2NvbmZpZyBCUjJfUEFDS0FH
-RV9OVFBTRUNfQ0xBU1NJQ19NT0RFCj4gKwlib29sICJudHBzZWMtY2xhc3NpYyIKPiArCWhlbHAK
-PiArCSAgRW5hYmxlIHN0cmljdCBjb25maWd1cmF0aW9uIGFuZCBsb2ctZm9ybWF0IGNvbXBhdGli
-aWxpdHkKPiArCSAgd2l0aCBOVFAgQ2xhc3NpYy4KPiArCSAgVGhpcyBvcHRpb24gaXMgbm90IHJl
-Y29tbWVuZGVkIGFzIGl0IG1ha2VzIHRoZSBtb2R1bGUKPiArCSAgbGVzcyBlZmZpY2llbnQuCj4g
-Kwo+ICtjb25maWcgQlIyX1BBQ0tBR0VfTlRQU0VDX05UUwo+ICsJYm9vbCAibnRwc2VjLW50cyIK
-PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9PUEVOU1NMCj4gKwloZWxwCj4gKwkgIEVuYWJsZSBOZXR3
-b3JrIFRpbWUgU2VjdXJpdHkgKE5UUykgc3VwcG9ydC4KPiArCj4gK2NvbW1lbnQgIm50cHNlYy1u
-dHBsb2dncHNkIG5lZWRzIGdwc2QiCj4gKwlkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9HUFNECj4g
-Kwo+ICtjb25maWcgQlIyX1BBQ0tBR0VfTlRQU0VDX0xFQVBfU01FQVIKPiArCWJvb2wgIm50cHNl
-Yy1sZWFwLXNtZWFyIgo+ICsJaGVscAo+ICsJICBBY3RpdmF0ZXMgbGVhcCBzZWNvbmQgc21lYXJp
-bmcsCj4gKwkgIGh0dHBzOi8vZG9jcy5udHBzZWMub3JnL2xhdGVzdC9sZWFwc21lYXIuaHRtbAo+
-ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX05UUFNFQ19MRUFQX1RFU1RJTkcKPiArCWJvb2wgIm50
-cHNlYy1sZWFwLXRlc3RpbmciCj4gKwloZWxwCj4gKwkgIEVuYWJsZXMgbGVhcCBzZWNvbmRzIG9u
-IG90aGVyIHRoYW4gMXN0IGRheSBvZiBtb250aAo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX05U
-UFNFQ19FQVJMWV9EUk9QUk9PVAo+ICsJYm9vbCAibnRwc2VjLWVhcmx5LWRyb3Byb290Igo+ICsJ
-aGVscAo+ICsJICBEcm9wcyByb290IHByaXZpbGVnZXMgYXMgZWFybHkgYXMgcG9zc2libGUuCj4g
-KwkgIFRoaXMgcmVxdWlyZXMgdGhlIHJlZmNsb2NrIGRldmljZXMgdG8gYmUgb3duZWQKPiArCSAg
-Ynkgb3duZXIvZ3JvdXAgcnVubmluZyAnbnRwZCcKPiArCj4gK2VuZGlmCj4gZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvbnRwc2VjL1M0OW50cCBiL3BhY2thZ2UvbnRwc2VjL1M0OW50cAo+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMC4uZjNkYjUxNAo+IC0tLSAvZGV2L251bGwKPiAr
-KysgYi9wYWNrYWdlL250cHNlYy9TNDludHAKPiBAQCAtMCwwICsxLDU4IEBACj4gKyMhL2Jpbi9z
-aAo+ICsjCj4gKyMgU3RhcnRzIE5ldHdvcmsgVGltZSBQcm90b2NvbCBkYWVtb24KPiArIwo+ICsK
-PiArREFFTU9OPSJudHBkIgo+ICtQSURGSUxFPSIvdmFyL3J1bi8kREFFTU9OLnBpZCIKPiArCj4g
-K05UUERfQVJHUz0iLWcgLXUgbnRwOm50cCAtcyAvdmFyL3J1bi9udHAiCj4gKwo+ICsjIHNoZWxs
-Y2hlY2sgc291cmNlPS9kZXYvbnVsbAo+ICtbIC1yICIvZXRjL2RlZmF1bHQvJERBRU1PTiIgXSAm
-JiAuICIvZXRjL2RlZmF1bHQvJERBRU1PTiIKPiArCj4gK21rZGlyIC1wIC92YXIvcnVuL250cCAm
-JiBjaG93biBudHA6bnRwIC92YXIvcnVuL250cAo+ICsKPiArc3RhcnQoKSB7Cj4gKwlwcmludGYg
-J1N0YXJ0aW5nICVzOiAnICIkREFFTU9OIgo+ICsJIyBzaGVsbGNoZWNrIGRpc2FibGU9U0MyMDg2
-ICMgd2UgbmVlZCB0aGUgd29yZCBzcGxpdHRpbmcKPiArCXN0YXJ0LXN0b3AtZGFlbW9uIC1TIC1x
-IC1wICIkUElERklMRSIgLXggIi91c3Ivc2Jpbi8kREFFTU9OIiBcCj4gKwkJLS0gJE5UUERfQVJH
-UyAtcCAiJFBJREZJTEUiCj4gKwlzdGF0dXM9JD8KPiArCWlmIFsgIiRzdGF0dXMiIC1lcSAwIF07
-IHRoZW4KPiArCQllY2hvICJPSyIKPiArCWVsc2UKPiArCQllY2hvICJGQUlMIgo+ICsJZmkKPiAr
-CXJldHVybiAiJHN0YXR1cyIKPiArfQo+ICsKPiArc3RvcCgpIHsKPiArCXByaW50ZiAnU3RvcHBp
-bmcgJXM6ICcgIiREQUVNT04iCj4gKwlzdGFydC1zdG9wLWRhZW1vbiAtSyAtcSAtcCAiJFBJREZJ
-TEUiCj4gKwlzdGF0dXM9JD8KPiArCWlmIFsgIiRzdGF0dXMiIC1lcSAwIF07IHRoZW4KPiArCQly
-bSAtZiAiJFBJREZJTEUiCj4gKwkJZWNobyAiT0siCj4gKwllbHNlCj4gKwkJZWNobyAiRkFJTCIK
-PiArCWZpCj4gKwlyZXR1cm4gIiRzdGF0dXMiCj4gK30KPiArCj4gK3Jlc3RhcnQoKSB7Cj4gKwlz
-dG9wCj4gKwlzbGVlcCAxCj4gKwlzdGFydAo+ICt9Cj4gKwo+ICtjYXNlICIkMSIgaW4KPiArCXN0
-YXJ0fHN0b3B8cmVzdGFydCkKPiArCQkiJDEiOzsKPiArCXJlbG9hZCkKPiArCQkjIFJlc3RhcnQs
-IHNpbmNlIHRoZXJlIGlzIG5vIHRydWUgInJlbG9hZCIgZmVhdHVyZS4KPiArCQlyZXN0YXJ0OzsK
-PiArCSopCj4gKwkJZWNobyAiVXNhZ2U6ICQwIHtzdGFydHxzdG9wfHJlc3RhcnR8cmVsb2FkfSIK
-PiArCQlleGl0IDEKPiArZXNhYwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL250cHNlYy9udHBkLmV0
-Yy5jb25mIGIvcGFja2FnZS9udHBzZWMvbnRwZC5ldGMuY29uZgo+IG5ldyBmaWxlIG1vZGUgMTAw
-NjQ0Cj4gaW5kZXggMDAwMDAwMC4uZTBmNDVjMQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNr
-YWdlL250cHNlYy9udHBkLmV0Yy5jb25mCj4gQEAgLTAsMCArMSwzMyBAQAo+ICsjCj4gKyMgbGVn
-YWN5IE5UUCBjb25maWd1cmF0aW9uCj4gKyMKPiArcG9vbCAwLnBvb2wubnRwLm9yZyBpYnVyc3QK
-PiArcG9vbCAxLnBvb2wubnRwLm9yZyBpYnVyc3QKPiArcG9vbCAyLnBvb2wubnRwLm9yZyBpYnVy
-c3QKPiArcG9vbCAzLnBvb2wubnRwLm9yZyBpYnVyc3QKPiArCj4gKyMKPiArIyBOVFMgY29uZmln
-dXJhdGlvbgo+ICsjCj4gKyMgTm90ZXM6Cj4gKyMgIC0gdW5jb21tZW50IHRoZSBmb2xsb3dpbmcg
-bGluZXMgdG8gZW5hYmxlIE5UUyBzdXBwb3J0IChidXQKPiArIyAgICBtYWtlIHN1cmUgdGhlIGlu
-aXRpYWwgY2xvY2sgaXMgdXAtdG8tZGF0ZSAob3RoZXJ3aXNlIHRoZQo+ICsjICAgIE5UUyBjZXJ0
-aWZpY2F0ZSB2YWxpZGF0aW9uIHdpbGwgZmFpbCB3aXRoICdOVFNjOiBjZXJ0aWZpY2F0ZSBpbnZh
-bGlkOgo+ICsjICAgIDk9PmNlcnRpZmljYXRlIGlzIG5vdCB5ZXQgdmFsaWQnIGFzIG9uIGJvYXJk
-cyB3aXRob3V0IFJUQyBzdXBwb3J0KQo+ICsjICAgIGFuZC9vciBrZWVwIGF0IGxlYXN0IG9uZSBs
-aW5lIGZyb20gdGhlIGxlZ2FjeSBOVFAgbGluZXMKPiArIyAgLSBlbmFibGUgQlIyX1BBQ0tBR0Vf
-Q0FfQ0VSVElGSUNBVEVTIHRvIGdhaW4gYWNjZXNzIHRvIHRoZSBjZXJ0aWZpY2F0ZQo+ICsjICAg
-IGZpbGVzCj4gKyMKPiArIyBzZXJ2ZXIgdGltZS5jbG91ZGZsYXJlLmNvbSBudHMgICMgR2xvYmFs
-LCBhbnljYXN0Cj4gKyMgc2VydmVyIG50cy5udHAuc2U6NDQ0MyBudHMgICAgICAjIFN3ZWRlbgo+
-ICsjIHNlcnZlciBudHBtb24uZGNzMS5iaXogbnRzICAgICAgIyBTaW5nYXBvcmUKPiArIyBzZXJ2
-ZXIgbnRwMS5nbHlwbm9kLmNvbSBudHMgICAgICMgU2FuIEZyYW5jaXNjbwo+ICsjIHNlcnZlciBu
-dHAyLmdseXBub2QuY29tIG50cyAgICAgIyBMb25kb24KPiArIwo+ICsjIGNhIC91c3Ivc2hhcmUv
-Y2EtY2VydGlmaWNhdGVzL21vemlsbGEKPiArCj4gKyMgQWxsb3cgb25seSB0aW1lIHF1ZXJpZXMs
-IGF0IGEgbGltaXRlZCByYXRlLCBzZW5kaW5nIEtvRCB3aGVuIGluIGV4Y2Vzcy4KPiArIyBBbGxv
-dyBhbGwgbG9jYWwgcXVlcmllcyAoSVB2NCwgSVB2NikKPiArcmVzdHJpY3QgZGVmYXVsdCBub21v
-ZGlmeSBub3BlZXIgbm9xdWVyeSBsaW1pdGVkIGtvZAo+ICtyZXN0cmljdCAxMjcuMC4wLjEKPiAr
-cmVzdHJpY3QgWzo6MV0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9udHBzZWMvbnRwZC5zZXJ2aWNl
-IGIvcGFja2FnZS9udHBzZWMvbnRwZC5zZXJ2aWNlCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
-bmRleCAwMDAwMDAwLi5iN2RiNGEyCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvbnRw
-c2VjL250cGQuc2VydmljZQo+IEBAIC0wLDAgKzEsMTUgQEAKPiArW1VuaXRdCj4gK0Rlc2NyaXB0
-aW9uPU5ldHdvcmsgVGltZSBTZXJ2aWNlCj4gK0FmdGVyPW5ldHdvcmsudGFyZ2V0Cj4gKwo+ICtb
-U2VydmljZV0KPiArVHlwZT1mb3JraW5nCj4gK1BJREZpbGU9L3J1bi9udHBkLnBpZAo+ICsjIFR1
-cm4gb2ZmIEROU1NFQyB2YWxpZGF0aW9uIGZvciBob3N0bmFtZSBsb29rLXVwcywgc2luY2UgdGhv
-c2UgbmVlZCB0aGUKPiArIyBjb3JyZWN0IHRpbWUgdG8gd29yaywgYnV0IHdlIGxpa2VseSB3b24n
-dCBhY3F1aXJlIHRoYXQgd2l0aG91dCBOVFAuIExldCdzCj4gKyMgYnJlYWsgdGhpcyBjaGlja2Vu
-LWFuZC1lZ2cgY3ljbGUgaGVyZS4KPiArRW52aXJvbm1lbnQ9U1lTVEVNRF9OU1NfUkVTT0xWRV9W
-QUxJREFURT0wCj4gK0V4ZWNTdGFydD0vdXNyL3NiaW4vbnRwZCBATlRQRF9FWFRSQV9BUkdTQCAt
-ZyAtcCAvcnVuL250cGQucGlkCgpUaGUgQE5UUERfRVhUUkFfQVJHU0AgaGFuZGxpbmcgbmVlZHMg
-dGhlIHNlZCBjb21tYW5kIGluc3RlYWQgb2YgdGhlCnNpbXBsZSBpbnN0YWxsIG9uZSAoc2VlIHBh
-Y2thZ2UvbnRwL250cC5taykuLi4KCj4gKwo+ICtbSW5zdGFsbF0KPiArV2FudGVkQnk9bXVsdGkt
-dXNlci50YXJnZXQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9udHBzZWMvbnRwc2VjLmhhc2ggYi9w
-YWNrYWdlL250cHNlYy9udHBzZWMuaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
-MDAwMDAwMC4uNDlkYzRlNAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL250cHNlYy9u
-dHBzZWMuaGFzaAo+IEBAIC0wLDAgKzEsNCBAQAo+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICtz
-aGEyNTYgIDcxYzlmNGJkZTY5NTNiYmMwNDhiYmFmMjc4ZGE4MWM0NTFhNTZjYzA4ZDY3NzI1NDJi
-NGFkMzdjNjdkNzJlODkgIG50cHNlYy1OVFBzZWNfMV8yXzEudGFyLmJ6Mgo+ICtzaGEyNTYgIGI0
-ZGI0ZGUzMzE3YzNiMDU1NGVkOTFlYjY5Mjk2ODgwMGJkZmQ2YWQyYzE2ZmZiZWVlOGNlNDg5NWVk
-OTFkYTQgIExJQ0VOU0UuYWRvYwo+ICtzaGEyNTYgIGQzYjIxNDcwYWRhZGQ5YWJkOWM2ZDY3NTM3
-OGY4YzM3MWFjNWE0ZWE2ZGJlYzkxODU5ZTAyZmFkY2EzYzA4NTYgIGRvY3MvY29weXJpZ2h0LmFk
-b2MKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9udHBzZWMvbnRwc2VjLm1rIGIvcGFja2FnZS9udHBz
-ZWMvbnRwc2VjLm1rCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi41NWI0
-YmIwCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvbnRwc2VjL250cHNlYy5tawo+IEBA
-IC0wLDAgKzEsODUgQEAKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArIwo+ICsjIG50cHNl
-Ywo+ICsjCj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtOVFBTRUNfVkVSU0lPTl9N
-QUpPUiA9IDEKPiArTlRQU0VDX1ZFUlNJT05fTUlOT1IgPSAyCj4gK05UUFNFQ19WRVJTSU9OX1BP
-SU5UID0gMQo+ICtOVFBTRUNfVkVSU0lPTiA9ICQoTlRQU0VDX1ZFUlNJT05fTUFKT1IpXyQoTlRQ
-U0VDX1ZFUlNJT05fTUlOT1IpXyQoTlRQU0VDX1ZFUlNJT05fUE9JTlQpCj4gK05UUFNFQ19TT1VS
-Q0UgPSBudHBzZWMtTlRQc2VjXyQoTlRQU0VDX1ZFUlNJT04pLnRhci5iejIKPiArTlRQU0VDX1NJ
-VEUgPSBodHRwczovL2dpdGxhYi5jb20vTlRQc2VjL250cHNlYy8tL2FyY2hpdmUvTlRQc2VjXyQo
-TlRQU0VDX1ZFUlNJT04pCj4gK05UUFNFQ19MSUNFTlNFID0gQlNELTItQ2xhdXNlIE5UUCBCU0Qt
-My1DbGF1c2UgTUlUCj4gK05UUFNFQ19MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS5hZG9jIGRvY3Mv
-Y29weXJpZ2h0LmFkb2MKPiArCj4gK05UUFNFQ19DUEVfSURfVkVORE9SID0gbnRwc2VjCj4gK05U
-UFNFQ19DUEVfSURfVkVSU0lPTiA9ICQoTlRQU0VDX1ZFUlNJT05fTUFKT1IpLiQoTlRQU0VDX1ZF
-UlNJT05fTUlOT1IpCj4gK05UUFNFQ19DUEVfSURfVVBEQVRFID0gJChOVFBTRUNfVkVSU0lPTl9Q
-T0lOVCkKPiArCj4gK05UUFNFQ19ERVBFTkRFTkNJRVMgPSBcCj4gKwkkKGlmICQoQlIyX1BBQ0tB
-R0VfUFlUSE9OKSxweXRob24scHl0aG9uMykgXAo+ICsJbGliYnNkIFwKPiArCXBwcy10b29scwo+
-ICsKPiArTlRQU0VDX1BZVkVSID0gJChpZiAkKEJSMl9QQUNLQUdFX1BZVEhPTikscHl0aG9uJChQ
-WVRIT05fVkVSU0lPTl9NQUpPUikscHl0aG9uJChQWVRIT04zX1ZFUlNJT05fTUFKT1IpKQo+ICsK
-PiArTlRQU0VDX0NPTkZfT1BUUyA9IFwKPiArCUNDPSQoSE9TVENDKSBcCj4gKwlQWVRIT05fQ09O
-RklHPSIkKFNUQUdJTkdfRElSKS91c3IvYmluLyQoaWYgJChCUjJfUEFDS0FHRV9QWVRIT04pLHB5
-dGhvbixweXRob24zKS1jb25maWciIFwKPiArCS0tY3Jvc3MtY29tcGlsZXI9IiQoVEFSR0VUX0ND
-KSIgXAo+ICsJLS1jcm9zcy1jZmxhZ3M9IiQoVEFSR0VUX0NGTEFHUykgLXN0ZD1nbnU5OSIgXAo+
-ICsJLS1jcm9zcy1sZGZsYWdzPSIkKFRBUkdFVF9MREZMQUdTKSIgXAo+ICsJLS1ub3Rlc3RzIFwK
-PiArCS0tZGlzYWJsZS1tZG5zLXJlZ2lzdHJhdGlvbiBcCj4gKwktLWVuYWJsZS1weWxpYj1mZmkg
-XAo+ICsJLS1ub3B5YyBcCj4gKwktLW5vcHlvIFwKPiArCS0tbm9weWNhY2hlIFwKPiArCS0tZGlz
-YWJsZS1kb2MgXAo+ICsJLS1kaXNhYmxlLW1hbnBhZ2UgXAo+ICsJLS1yZWZjbG9jaz1hbGwgXAo+
-ICsJLS1saWJkaXI9L3Vzci9saWIvJChOVFBTRUNfUFlWRVIpL3NpdGUtcGFja2FnZXMvbnRwCj4g
-Kwo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX05UUFNFQ19DTEFTU0lDX01PREUpLHkpCj4gK05UUFNF
-Q19DT05GX09QVFMgKz0gLS1lbmFibGUtY2xhc3NpYy1tb2RlCj4gK2VuZGlmCj4gKwo+ICtpZmVx
-ICgkKEJSMl9QQUNLQUdFX05UUFNFQ19OVFMpLHkpCj4gK05UUFNFQ19ERVBFTkRFTkNJRVMgKz0g
-b3BlbnNzbAo+ICtlbHNlCj4gK05UUFNFQ19DT05GX09QVFMgKz0gLS1kaXNhYmxlLW50cwo+ICtl
-bmRpZgo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9OVFBTRUNfRUFSTFlfRFJPUFJPT1QpLHkp
-Cj4gK05UUFNFQ19ERVBFTkRFTkNJRVMgKz0gbGliY2FwCj4gK05UUFNFQ19DT05GX09QVFMgKz0g
-LS1lbmFibGUtZWFybHktZHJvcHJvb3QKPiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tB
-R0VfTlRQU0VDX0xFQVBfU01FQVIpLHkpCj4gK05UUFNFQ19DT05GX09QVFMgKz0gLS1lbmFibGUt
-bGVhcC1zbWVhcgo+ICtlbmRpZgo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9OVFBTRUNfTEVB
-UF9URVNUSU5HKSx5KQo+ICtOVFBTRUNfQ09ORl9PUFRTICs9IC0tZW5hYmxlLWxlYXAtdGVzdGlu
-Zwo+ICtlbmRpZgo+ICsKPiArZGVmaW5lIE5UUFNFQ19JTlNUQUxMX05UUFNFQ19DT05GCj4gKwkk
-KElOU1RBTEwpIC1tIDY0NCBwYWNrYWdlL250cHNlYy9udHBkLmV0Yy5jb25mICQoVEFSR0VUX0RJ
-UikvZXRjL250cC5jb25mCj4gK2VuZGVmCj4gK05UUFNFQ19QT1NUX0lOU1RBTExfVEFSR0VUX0hP
-T0tTICs9IE5UUFNFQ19JTlNUQUxMX05UUFNFQ19DT05GCj4gKwo+ICtkZWZpbmUgTlRQU0VDX0lO
-U1RBTExfSU5JVF9TWVNWCj4gKwkkKElOU1RBTEwpIC1EIC1tIDc1NSAkKE5UUFNFQ19QS0dESVIp
-L1M0OW50cCAkKFRBUkdFVF9ESVIpL2V0Yy9pbml0LmQvUzQ5bnRwCj4gK2VuZGVmCj4gKwo+ICtk
-ZWZpbmUgTlRQU0VDX0lOU1RBTExfSU5JVF9TWVNURU1ECj4gKwkkKElOU1RBTEwpIC1EIC1tIDY0
-NCAkKE5UUFNFQ19QS0dESVIpL250cGQuc2VydmljZSBcCj4gKwkJJChUQVJHRVRfRElSKS91c3Iv
-bGliL3N5c3RlbWQvc3lzdGVtL250cGQuc2VydmljZQo+ICtlbmRlZgo+ICsKPiArZGVmaW5lIE5U
-UFNFQ19VU0VSUwo+ICsJbnRwIC0xIG50cCAtMSAqIC0gLSAtIG50cGQgdXNlcgo+ICtlbmRlZgo+
-ICsKPiArJChldmFsICQod2FmLXBhY2thZ2UpKQoKV2lsbCBwcmVwYXJlIGFuIHVwZGF0ZSBvZiBt
-eSBvcmlnaW5hbCBwYXRjaCB3aXRoIHRoZSB2ZXJzaW9uIHVwZGF0ZSBhbmQgc29tZSBvZgp5b3Vy
-IGZpbmRpbmdzLi4uLCBmZWVsIGZyZWUgdG8gcHJvdmlkZSB5b3VyIGltcHJvdmVtZW50cyBhcyBh
-ZGQtb24gcGF0Y2hlcyA7LSkKClJlZ2FyZHMsClBldGVyCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+--===============2883495525962462107==
+Content-Type: multipart/alternative; boundary="0000000000004c8bad05d335e502"
+
+--0000000000004c8bad05d335e502
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Peter,
+
+> Will prepare an update of my original patch with the version update and
+some of
+> your findings..., feel free to provide your improvements as add-on
+patches ;-)
+sounds good, i'll wait for your v2 and will test it on my side
+
+> Better done as an extra patch (easier to review)....
+ok let's do that later
+
+>  libbsd is required
+>> Are you sure?
+>> With the original patch ntpsec builds fine without libbsd available...
+it's listed in the dependencies for this pkg in debian.
+Ran a quick grep in their sources, it's clearly in their CI basic
+requirements too, but I cant figure where they actually use it. They
+clearly pass -lbsd to the linker though.
+
+>Would prefer one option per refclock to reduce dependencies...
+I tried to do so at first, but am failing at correctly concatenating the
+refclocks in a comma separated string.
+Expected format is "refclocks=3Dgpsd,nmea,shm"
+Order does not matter. It is very important to only have valid refclocks in
+the submitted string otherwise configure fails. refclocks=3D",nmea,shm" and
+refclocks=3D"shm," would fail.
+
+>Would prefer one option per refclock to reduce dependencies...
+Actually there are no dependencies related to refclocks, it's up to the
+user to provide a correct kernel config for specific hardware though. Only
+"gpsd" will have unmet requirements at the moment and would get dropped out
+by configure (smart detection). If you can provide a proper interface to
+concatenate the string, that would be useful (I'm not a good at shell
+scripting). If we do so, I would recommend we stick to the list of actively
+maintained refclocks (URL in my reply to v1)
+
+
+Guillaume W. Bres
+Software engineer
+<guillaume.bressaix@gmail.com>
+
+
+Le mer. 15 d=C3=A9c. 2021 =C3=A0 21:43, Peter Seiderer <ps.report@gmx.net> =
+a =C3=A9crit :
+
+> Hello Guillaume,
+>
+> thanks of interest, testing and improvement of the ntpsec patch, some
+> comments below...
+>
+> On Sun, 12 Dec 2021 21:07:41 +0100, guillaume.bressaix@gmail.com wrote:
+>
+> > From: Peter Seiderer <ps.report@gmx.net>
+> >
+> > - set 'CC=3Dgcc' to avoid cross-compile failure (see [1]):
+> >
+> >   /bin/sh: line 1: .../build/ntpsec-1_2_0/build/host/ntpd/keyword-gen:
+> cannot execute binary file: Exec format error
+> >
+> >   Waf: Leaving directory `.../build/ntpsec-1_2_0/build/host'
+> >   Build failed
+> >    -> task in 'ntp_keyword.h' failed with exit status 126 (run with -v
+> to display more information)
+> >
+> > - set '-std=3Dgnu99"' to avoid compile failure with old compilers
+> >
+> > - explicit set PYTHON_CONFIG
+> >
+> > - add patch
+> 001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch to
+> >   fix ntptime jfmt5/ofmt5 jfmt6/ofmt6 related compile failure
+> >
+> > - add SYSV init file (S49ntp)
+> >
+> > - add example ntpd.conf (with legacy option enabled and provide skeleto=
+n
+> >   for NTS configuration)
+> >
+> > - add config option for NTS support
+> >
+> > - depend on python3 (omit python2 to reduce test effort)
+> >
+> > - add ntp user/group and run ntpd as restricted user
+> >
+> > - add libcap dependency (compile time optional but needed for droproot
+> >   support)
+> >
+> > - submit latest ntpsec version 1.2.1
+>
+> Interesting, not listed as release, but tagged and downloadable...
+>
+> >
+> > - lib ntpc import in python is fixed by specifying the --libdir flag.
+> >   -> removed the symlink trick
+>
+> Fine..., will test it...
+>
+> >
+> > - add --refclock=3Dall flags to configure, see notes down below
+> >
+> > - add leap second management options & ntpviz
+> >
+> > - improved Config.in:
+> >   libbsd is required
+>
+> Are you sure? With the original patch ntpsec builds fine without libbsd
+> available...
+>
+> >   openssl is only needed when NTS encryption is enabled
+>
+> A build without NTS and without openssl gives:
+>
+>         Checking for OpenSSL/libcrypto (via pkg-config)                 :
+> not found
+>         Checking for OpenSSL's crypto library                           :
+> not found
+>         The configuration failed
+>
+> >   (depend on python3 only to simply things)
+> >   improved classic mode help description
+> >   improved early-drop-root feature description
+> >
+> > - early droproot should be an option: adapt libcap accordingly
+>
+> This will break (the hard coded) '-u npt:npt' option from
+> package/ntpsec/S49ntp,
+> any reason to avoid the security feature?
+>
+> >
+> > - corrected CC=3Dgcc to CC=3D$(HOSTCC) in ntpsec.mk
+>
+> Good point...
+>
+> >
+> > - provide service script for systemd infra along sysv infra
+>
+> Better done as an extra patch (easier to review)....
+>
+> >
+> > - I don't think we need the patch if we restrict to !BR2_TOOLCHAIN_UCLI=
+BC
+> >   IMO it's better to keep the patch and allow all toolchains.
+> >   I usually have glibc, but I just ran a sanity check on my zedboard
+> with uclibc,
+> >   it passed.
+>
+> Not important for the commit log...
+>
+> >
+> > - used on zynq_zed_defconfig and beaglebone_defconfig
+> >   daemon automatically started
+> >   ntpq works fine
+> >
+> > [1] https://gitlab.com/NTPsec/ntpsec/-/issues/694
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> >
+> > ---
+> > notes on refclocks: https://docs.ntpsec.org/latest/refclock.html
+> >   "For security reasons, we will no longer support any refclock
+> >   that requires a closed-source driver to run", see webpage.
+> >
+> >   --refclock=3Dall is hardcoded at the moment
+> >
+> >   One must compile ntpsec with the 'refclock' option
+> >   if they want to drive or interact with hardware.
+> >
+> >   In any case, refclocks are not critical for both buildtime & runtime:
+> >
+> >      [+] ./configure is smart enough to disable a refclock
+> >      if requirements are not met. In the submitted context,
+> >      this happens for refclock=3Dgpsd without BR2_PACKAGE_GPSD
+> >      selected by user
+> >
+> >      [+] some refclocks naturally require a specific hw support
+> >      with related kernel driver.
+> >      This is not buildtime critical because build does not care
+> >      about hw support.
+> >      This is not runtime critical either because any missing
+> >      hw support or unfeasible hardware access ends up as a logged
+> >      error message. It is up to the user to correct it in the
+> >      submitted context: example: 'nmea/gps' receivers without kernel
+> support
+> >      or hardware not plugged in.
+>
+> Would prefer one option per refclock to reduce dependencies...
+>
+> >
+> > ntpd / ntpsec should be mutualy exclusive if we harcode S49ntp as the
+> service script
+> >
+> > ---
+> >  DEVELOPERS                                         |  1 +
+> >  package/Config.in                                  |  1 +
+> >  ...-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch | 61 ++++++++++++++=
+++
+> >  package/ntpsec/Config.in                           | 68
+> +++++++++++++++++
+> >  package/ntpsec/S49ntp                              | 58 ++++++++++++++=
++
+> >  package/ntpsec/ntpd.etc.conf                       | 33 +++++++++
+> >  package/ntpsec/ntpd.service                        | 15 ++++
+> >  package/ntpsec/ntpsec.hash                         |  4 +
+> >  package/ntpsec/ntpsec.mk                           | 85
+> ++++++++++++++++++++++
+> >  9 files changed, 326 insertions(+)
+> >  create mode 100644
+> package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.=
+patch
+> >  create mode 100644 package/ntpsec/Config.in
+> >  create mode 100644 package/ntpsec/S49ntp
+> >  create mode 100644 package/ntpsec/ntpd.etc.conf
+> >  create mode 100644 package/ntpsec/ntpd.service
+> >  create mode 100644 package/ntpsec/ntpsec.hash
+> >  create mode 100644 package/ntpsec/ntpsec.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 3023526..32b5e87 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -2196,6 +2196,7 @@ F:      package/iwd/
+> >  F:   package/libevdev/
+> >  F:   package/libuev/
+> >  F:   package/log4cplus/
+> > +F:   package/ntpsec/
+> >  F:   package/postgresql/
+> >  F:   package/python-colorzero/
+> >  F:   package/python-flask-wtf/
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 5720830..544a0fd 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -2271,6 +2271,7 @@ endif
+> >       source "package/nmap/Config.in"
+> >       source "package/noip/Config.in"
+> >       source "package/ntp/Config.in"
+> > +     source "package/ntpsec/Config.in"
+> >       source "package/nuttcp/Config.in"
+> >       source "package/odhcp6c/Config.in"
+> >       source "package/odhcploc/Config.in"
+> > diff --git
+> a/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile=
+-.patch
+> b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile=
+-.patch
+> > new file mode 100644
+> > index 0000000..c2838fe
+> > --- /dev/null
+> > +++
+> b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile=
+-.patch
+> > @@ -0,0 +1,61 @@
+> > +From 4015a1183d2f79dad6dd675ca5e0d329825f3fa3 Mon Sep 17 00:00:00 2001
+> > +From: Peter Seiderer <ps.report@gmx.net>
+> > +Date: Mon, 4 Oct 2021 22:25:58 +0200
+> > +Subject: [PATCH] ntptime: fix jfmt5/ofmt5 jfmt6/ofmt6 related compile
+> failure
+> > +MIME-Version: 1.0
+> > +Content-Type: text/plain; charset=3DUTF-8
+> > +Content-Transfer-Encoding: 8bit
+> > +
+> > +Use same define guard for definiton as for usage
+> ('HAVE_STRUCT_NTPTIMEVAL_TAI'
+> > +instead of 'NTP_API && NTP_API > 3').
+> > +
+> > +Fixes:
+> > +
+> > +  ../../ntptime/ntptime.c: In function =E2=80=98main=E2=80=99:
+> > +  ../../ntptime/ntptime.c:349:17: error: =E2=80=98jfmt5=E2=80=99 undec=
+lared (first use
+> in this function); did you mean =E2=80=98jfmt6=E2=80=99?
+> > +    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
+> > +        |                 ^~~~~
+> > +        |                 jfmt6
+> > +  ../../ntptime/ntptime.c:349:17: note: each undeclared identifier is
+> reported only once for each function it appears in
+> > +  ../../ntptime/ntptime.c:349:25: error: =E2=80=98ofmt5=E2=80=99 undec=
+lared (first use
+> in this function); did you mean =E2=80=98ofmt6=E2=80=99?
+> > +    349 |   printf(json ? jfmt5 : ofmt5, (long)ntv.tai);
+> > +        |                         ^~~~~
+> > +        |                         ofmt6
+> > +  ../../ntptime/ntptime.c:321:15: warning: unused variable =E2=80=98jf=
+mt6=E2=80=99
+> [-Wunused-variable]
+> > +    321 |   const char *jfmt6 =3D "";
+> > +        |               ^~~~~
+> > +  ../../ntptime/ntptime.c:311:15: warning: unused variable =E2=80=98of=
+mt6=E2=80=99
+> [-Wunused-variable]
+> > +    311 |   const char *ofmt6 =3D "\n";
+> > +        |               ^~~~~
+> > +
+> > +[Upstream: https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1245]
+> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > +---
+> > + ntptime/ntptime.c | 4 ++--
+> > + 1 file changed, 2 insertions(+), 2 deletions(-)
+> > +
+> > +diff --git a/ntptime/ntptime.c b/ntptime/ntptime.c
+> > +index ff861cb..5d58593 100644
+> > +--- a/ntptime/ntptime.c
+> > ++++ b/ntptime/ntptime.c
+> > +@@ -305,7 +305,7 @@ main(
+> > +             const char *ofmt2 =3D "  time %s, (.%0*d),\n";
+> > +             const char *ofmt3 =3D "  maximum error %lu us, estimated
+> error %lu us";
+> > +             const char *ofmt4 =3D "  ntptime=3D%x.%x unixtime=3D%x.%0=
+*d %s";
+> > +-#if defined NTP_API && NTP_API > 3
+> > ++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+> > +             const char *ofmt5 =3D ", TAI offset %ld\n";
+> > + #else
+> > +             const char *ofmt6 =3D "\n";
+> > +@@ -315,7 +315,7 @@ main(
+> > +             const char *jfmt2 =3D
+> "\"time\":\"%s\",\"fractional-time\":\".%0*d\",";
+> > +             const char *jfmt3 =3D
+> "\"maximum-error\":%lu,\"estimated-error\":%lu,";
+> > +             const char *jfmt4 =3D
+> "\"raw-ntp-time\":\"%x.%x\",\"raw-unix-time\":\"%x.%0*d %s\",";
+> > +-#if defined NTP_API && NTP_API > 3
+> > ++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)
+> > +             const char *jfmt5 =3D "\"TAI-offset\":%d,";
+> > + #else
+> > +             const char *jfmt6 =3D "";
+> > +--
+> > +2.33.0
+> > +
+> > diff --git a/package/ntpsec/Config.in b/package/ntpsec/Config.in
+> > new file mode 100644
+> > index 0000000..9044aa4
+> > --- /dev/null
+> > +++ b/package/ntpsec/Config.in
+> > @@ -0,0 +1,68 @@
+> > +comment "ntpsec needs a toolchain w/ wchar, thread, dynamic library"
+> > +     depends on BR2_STATIC_LIBS
+> > +     depends on !BR2_USE_WCHAR
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS # libbsd
+> > +
+> > +comment "ntpsec needs libbsd"
+> > +     depends on !BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> > +     depends on !BR2_STATIC_LIBS # libbsd
+> > +
+> > +comment "ntpsec needs python3"
+> > +     depends on !BR2_PACKAGE_PYTHON3
+> > +
+> > +config BR2_PACKAGE_NTPSEC
+> > +     bool "ntpsec"
+> > +     depends on !BR2_STATIC_LIBS # libbsd
+> > +     depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd
+> > +     depends on BR2_PACKAGE_PYTHON3
+> > +     select BR2_PACKAGE_LIBCAP
+> > +     select BR2_PACKAGE_LIBBSD
+> > +     select BR2_PACKAGE_PPS_TOOLS # refclock(pps)
+> > +     help
+> > +       NTPsec is a secure, hardened, and improved
+> > +       implementation of Network Time Protocol derived
+> > +       from NTP Classic, Dave Mills=E2=80=99s original.
+> > +
+> > +       Provides things like ntpd, ntpdate, ntpq, etc...
+> > +
+> > +       https://www.ntpsec.org/
+> > +
+> > +if BR2_PACKAGE_NTPSEC
+> > +
+> > +config BR2_PACKAGE_NTPSEC_CLASSIC_MODE
+> > +     bool "ntpsec-classic"
+> > +     help
+> > +       Enable strict configuration and log-format compatibility
+> > +       with NTP Classic.
+> > +       This option is not recommended as it makes the module
+> > +       less efficient.
+> > +
+> > +config BR2_PACKAGE_NTPSEC_NTS
+> > +     bool "ntpsec-nts"
+> > +     select BR2_PACKAGE_OPENSSL
+> > +     help
+> > +       Enable Network Time Security (NTS) support.
+> > +
+> > +comment "ntpsec-ntploggpsd needs gpsd"
+> > +     depends on !BR2_PACKAGE_GPSD
+> > +
+> > +config BR2_PACKAGE_NTPSEC_LEAP_SMEAR
+> > +     bool "ntpsec-leap-smear"
+> > +     help
+> > +       Activates leap second smearing,
+> > +       https://docs.ntpsec.org/latest/leapsmear.html
+> > +
+> > +config BR2_PACKAGE_NTPSEC_LEAP_TESTING
+> > +     bool "ntpsec-leap-testing"
+> > +     help
+> > +       Enables leap seconds on other than 1st day of month
+> > +
+> > +config BR2_PACKAGE_NTPSEC_EARLY_DROPROOT
+> > +     bool "ntpsec-early-droproot"
+> > +     help
+> > +       Drops root privileges as early as possible.
+> > +       This requires the refclock devices to be owned
+> > +       by owner/group running 'ntpd'
+> > +
+> > +endif
+> > diff --git a/package/ntpsec/S49ntp b/package/ntpsec/S49ntp
+> > new file mode 100644
+> > index 0000000..f3db514
+> > --- /dev/null
+> > +++ b/package/ntpsec/S49ntp
+> > @@ -0,0 +1,58 @@
+> > +#!/bin/sh
+> > +#
+> > +# Starts Network Time Protocol daemon
+> > +#
+> > +
+> > +DAEMON=3D"ntpd"
+> > +PIDFILE=3D"/var/run/$DAEMON.pid"
+> > +
+> > +NTPD_ARGS=3D"-g -u ntp:ntp -s /var/run/ntp"
+> > +
+> > +# shellcheck source=3D/dev/null
+> > +[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+> > +
+> > +mkdir -p /var/run/ntp && chown ntp:ntp /var/run/ntp
+> > +
+> > +start() {
+> > +     printf 'Starting %s: ' "$DAEMON"
+> > +     # shellcheck disable=3DSC2086 # we need the word splitting
+> > +     start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+> > +             -- $NTPD_ARGS -p "$PIDFILE"
+> > +     status=3D$?
+> > +     if [ "$status" -eq 0 ]; then
+> > +             echo "OK"
+> > +     else
+> > +             echo "FAIL"
+> > +     fi
+> > +     return "$status"
+> > +}
+> > +
+> > +stop() {
+> > +     printf 'Stopping %s: ' "$DAEMON"
+> > +     start-stop-daemon -K -q -p "$PIDFILE"
+> > +     status=3D$?
+> > +     if [ "$status" -eq 0 ]; then
+> > +             rm -f "$PIDFILE"
+> > +             echo "OK"
+> > +     else
+> > +             echo "FAIL"
+> > +     fi
+> > +     return "$status"
+> > +}
+> > +
+> > +restart() {
+> > +     stop
+> > +     sleep 1
+> > +     start
+> > +}
+> > +
+> > +case "$1" in
+> > +     start|stop|restart)
+> > +             "$1";;
+> > +     reload)
+> > +             # Restart, since there is no true "reload" feature.
+> > +             restart;;
+> > +     *)
+> > +             echo "Usage: $0 {start|stop|restart|reload}"
+> > +             exit 1
+> > +esac
+> > diff --git a/package/ntpsec/ntpd.etc.conf b/package/ntpsec/ntpd.etc.con=
+f
+> > new file mode 100644
+> > index 0000000..e0f45c1
+> > --- /dev/null
+> > +++ b/package/ntpsec/ntpd.etc.conf
+> > @@ -0,0 +1,33 @@
+> > +#
+> > +# legacy NTP configuration
+> > +#
+> > +pool 0.pool.ntp.org iburst
+> > +pool 1.pool.ntp.org iburst
+> > +pool 2.pool.ntp.org iburst
+> > +pool 3.pool.ntp.org iburst
+> > +
+> > +#
+> > +# NTS configuration
+> > +#
+> > +# Notes:
+> > +#  - uncomment the following lines to enable NTS support (but
+> > +#    make sure the initial clock is up-to-date (otherwise the
+> > +#    NTS certificate validation will fail with 'NTSc: certificate
+> invalid:
+> > +#    9=3D>certificate is not yet valid' as on boards without RTC suppo=
+rt)
+> > +#    and/or keep at least one line from the legacy NTP lines
+> > +#  - enable BR2_PACKAGE_CA_CERTIFICATES to gain access to the
+> certificate
+> > +#    files
+> > +#
+> > +# server time.cloudflare.com nts  # Global, anycast
+> > +# server nts.ntp.se:4443 nts      # Sweden
+> > +# server ntpmon.dcs1.biz nts      # Singapore
+> > +# server ntp1.glypnod.com nts     # San Francisco
+> > +# server ntp2.glypnod.com nts     # London
+> > +#
+> > +# ca /usr/share/ca-certificates/mozilla
+> > +
+> > +# Allow only time queries, at a limited rate, sending KoD when in
+> excess.
+> > +# Allow all local queries (IPv4, IPv6)
+> > +restrict default nomodify nopeer noquery limited kod
+> > +restrict 127.0.0.1
+> > +restrict [::1]
+> > diff --git a/package/ntpsec/ntpd.service b/package/ntpsec/ntpd.service
+> > new file mode 100644
+> > index 0000000..b7db4a2
+> > --- /dev/null
+> > +++ b/package/ntpsec/ntpd.service
+> > @@ -0,0 +1,15 @@
+> > +[Unit]
+> > +Description=3DNetwork Time Service
+> > +After=3Dnetwork.target
+> > +
+> > +[Service]
+> > +Type=3Dforking
+> > +PIDFile=3D/run/ntpd.pid
+> > +# Turn off DNSSEC validation for hostname look-ups, since those need t=
+he
+> > +# correct time to work, but we likely won't acquire that without NTP.
+> Let's
+> > +# break this chicken-and-egg cycle here.
+> > +Environment=3DSYSTEMD_NSS_RESOLVE_VALIDATE=3D0
+> > +ExecStart=3D/usr/sbin/ntpd @NTPD_EXTRA_ARGS@ -g -p /run/ntpd.pid
+>
+> The @NTPD_EXTRA_ARGS@ handling needs the sed command instead of the
+> simple install one (see package/ntp/ntp.mk)...
+>
+> > +
+> > +[Install]
+> > +WantedBy=3Dmulti-user.target
+> > diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+> > new file mode 100644
+> > index 0000000..49dc4e4
+> > --- /dev/null
+> > +++ b/package/ntpsec/ntpsec.hash
+> > @@ -0,0 +1,4 @@
+> > +# Locally calculated
+> > +sha256
+> 71c9f4bde6953bbc048bbaf278da81c451a56cc08d6772542b4ad37c67d72e89
+> ntpsec-NTPsec_1_2_1.tar.bz2
+> > +sha256
+> b4db4de3317c3b0554ed91eb692968800bdfd6ad2c16ffbeee8ce4895ed91da4
+> LICENSE.adoc
+> > +sha256
+> d3b21470adadd9abd9c6d675378f8c371ac5a4ea6dbec91859e02fadca3c0856
+> docs/copyright.adoc
+> > diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+> > new file mode 100644
+> > index 0000000..55b4bb0
+> > --- /dev/null
+> > +++ b/package/ntpsec/ntpsec.mk
+> > @@ -0,0 +1,85 @@
+> >
+> +########################################################################=
+########
+> > +#
+> > +# ntpsec
+> > +#
+> >
+> +########################################################################=
+########
+> > +
+> > +NTPSEC_VERSION_MAJOR =3D 1
+> > +NTPSEC_VERSION_MINOR =3D 2
+> > +NTPSEC_VERSION_POINT =3D 1
+> > +NTPSEC_VERSION =3D
+> $(NTPSEC_VERSION_MAJOR)_$(NTPSEC_VERSION_MINOR)_$(NTPSEC_VERSION_POINT)
+> > +NTPSEC_SOURCE =3D ntpsec-NTPsec_$(NTPSEC_VERSION).tar.bz2
+> > +NTPSEC_SITE =3D
+> https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(NTPSEC_VERSION)
+> > +NTPSEC_LICENSE =3D BSD-2-Clause NTP BSD-3-Clause MIT
+> > +NTPSEC_LICENSE_FILES =3D LICENSE.adoc docs/copyright.adoc
+> > +
+> > +NTPSEC_CPE_ID_VENDOR =3D ntpsec
+> > +NTPSEC_CPE_ID_VERSION =3D $(NTPSEC_VERSION_MAJOR).$(NTPSEC_VERSION_MIN=
+OR)
+> > +NTPSEC_CPE_ID_UPDATE =3D $(NTPSEC_VERSION_POINT)
+> > +
+> > +NTPSEC_DEPENDENCIES =3D \
+> > +     $(if $(BR2_PACKAGE_PYTHON),python,python3) \
+> > +     libbsd \
+> > +     pps-tools
+> > +
+> > +NTPSEC_PYVER =3D $(if
+> $(BR2_PACKAGE_PYTHON),python$(PYTHON_VERSION_MAJOR),python$(PYTHON3_VERSI=
+ON_MAJOR))
+> > +
+> > +NTPSEC_CONF_OPTS =3D \
+> > +     CC=3D$(HOSTCC) \
+> > +     PYTHON_CONFIG=3D"$(STAGING_DIR)/usr/bin/$(if
+> $(BR2_PACKAGE_PYTHON),python,python3)-config" \
+> > +     --cross-compiler=3D"$(TARGET_CC)" \
+> > +     --cross-cflags=3D"$(TARGET_CFLAGS) -std=3Dgnu99" \
+> > +     --cross-ldflags=3D"$(TARGET_LDFLAGS)" \
+> > +     --notests \
+> > +     --disable-mdns-registration \
+> > +     --enable-pylib=3Dffi \
+> > +     --nopyc \
+> > +     --nopyo \
+> > +     --nopycache \
+> > +     --disable-doc \
+> > +     --disable-manpage \
+> > +     --refclock=3Dall \
+> > +     --libdir=3D/usr/lib/$(NTPSEC_PYVER)/site-packages/ntp
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTPSEC_CLASSIC_MODE),y)
+> > +NTPSEC_CONF_OPTS +=3D --enable-classic-mode
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTPSEC_NTS),y)
+> > +NTPSEC_DEPENDENCIES +=3D openssl
+> > +else
+> > +NTPSEC_CONF_OPTS +=3D --disable-nts
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTPSEC_EARLY_DROPROOT),y)
+> > +NTPSEC_DEPENDENCIES +=3D libcap
+> > +NTPSEC_CONF_OPTS +=3D --enable-early-droproot
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTPSEC_LEAP_SMEAR),y)
+> > +NTPSEC_CONF_OPTS +=3D --enable-leap-smear
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTPSEC_LEAP_TESTING),y)
+> > +NTPSEC_CONF_OPTS +=3D --enable-leap-testing
+> > +endif
+> > +
+> > +define NTPSEC_INSTALL_NTPSEC_CONF
+> > +     $(INSTALL) -m 644 package/ntpsec/ntpd.etc.conf
+> $(TARGET_DIR)/etc/ntp.conf
+> > +endef
+> > +NTPSEC_POST_INSTALL_TARGET_HOOKS +=3D NTPSEC_INSTALL_NTPSEC_CONF
+> > +
+> > +define NTPSEC_INSTALL_INIT_SYSV
+> > +     $(INSTALL) -D -m 755 $(NTPSEC_PKGDIR)/S49ntp
+> $(TARGET_DIR)/etc/init.d/S49ntp
+> > +endef
+> > +
+> > +define NTPSEC_INSTALL_INIT_SYSTEMD
+> > +     $(INSTALL) -D -m 644 $(NTPSEC_PKGDIR)/ntpd.service \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
+> > +endef
+> > +
+> > +define NTPSEC_USERS
+> > +     ntp -1 ntp -1 * - - - ntpd user
+> > +endef
+> > +
+> > +$(eval $(waf-package))
+>
+> Will prepare an update of my original patch with the version update and
+> some of
+> your findings..., feel free to provide your improvements as add-on patche=
+s
+> ;-)
+>
+> Regards,
+> Peter
+>
+>
+
+--0000000000004c8bad05d335e502
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Peter,<br><br>&gt; Will prepare an update of my orig=
+inal patch with the version update and some of<br>&gt; your findings..., fe=
+el free to provide your improvements as add-on patches ;-)<br>sounds good, =
+i&#39;ll wait for your v2 and will test it on my side<br><br>&gt; Better do=
+ne as an extra patch (easier to review)....<span class=3D"gmail-im" style=
+=3D"color:rgb(80,0,80)"><br></span>ok let&#39;s do that later<br><span styl=
+e=3D"color:rgb(80,0,80)"><br></span><div><span style=3D"color:rgb(80,0,80)"=
+>&gt;=C2=A0 libbsd is required</span><br>&gt;&gt; Are you sure? <br>&gt;&gt=
+; With the original patch ntpsec builds fine without libbsd available...<br=
+>it&#39;s listed in the dependencies for this pkg in debian. <br>Ran a quic=
+k grep in their sources, it&#39;s clearly in their CI basic requirements to=
+o, but I cant=C2=A0figure where they actually use it. They clearly pass -lb=
+sd to the linker though.=C2=A0<br><br>&gt;Would prefer one option per refcl=
+ock to reduce dependencies...<br>I tried to do so at first, but am failing =
+at correctly concatenating the refclocks=C2=A0in a comma separated string.<=
+br>Expected format is &quot;refclocks=3Dgpsd,nmea,shm&quot;<br>Order does n=
+ot matter. It is very important to only have valid refclocks=C2=A0in the su=
+bmitted string otherwise configure fails. refclocks=3D&quot;,nmea,shm&quot;=
+ and refclocks=3D&quot;shm,&quot; would fail.</div><div><br>&gt;Would prefe=
+r one option per refclock to reduce dependencies...</div><div>Actually ther=
+e are no dependencies related to refclocks, it&#39;s up to the user to prov=
+ide a correct kernel config for specific hardware though. Only &quot;gpsd&q=
+uot; will have unmet requirements at the moment and would get dropped out b=
+y configure (smart detection). If you can provide a proper interface to con=
+catenate the string, that would be useful (I&#39;m not a good=C2=A0at=C2=A0=
+shell scripting). If we do so, I would recommend we stick to the list of ac=
+tively maintained refclocks=C2=A0(URL in my reply to v1)<br><br><br clear=
+=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"=
+gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div di=
+r=3D"ltr"><div><div><div><font face=3D"arial,helvetica,sans-serif">Guillaum=
+e W. Bres<br></font></div><font face=3D"arial,helvetica,sans-serif">Softwar=
+e engineer</font><br></div><font face=3D"arial,helvetica,sans-serif"></font=
+></div><font face=3D"arial,helvetica,sans-serif">&lt;<a href=3D"mailto:guil=
+laume.bressaix@gmail.com" target=3D"_blank">guillaume.bressaix@gmail.com</a=
+>&gt;<br></font></div></div></div></div></div></div><br></div></div><br><di=
+v class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. =
+15 d=C3=A9c. 2021 =C3=A0=C2=A021:43, Peter Seiderer &lt;<a href=3D"mailto:p=
+s.report@gmx.net">ps.report@gmx.net</a>&gt; a =C3=A9crit=C2=A0:<br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft:1px solid rgb(204,204,204);padding-left:1ex">Hello Guillaume,<br>
+<br>
+thanks of interest, testing and improvement of the ntpsec patch, some comme=
+nts below...<br>
+<br>
+On Sun, 12 Dec 2021 21:07:41 +0100, <a href=3D"mailto:guillaume.bressaix@gm=
+ail.com" target=3D"_blank">guillaume.bressaix@gmail.com</a> wrote:<br>
+<br>
+&gt; From: Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.net" target=
+=3D"_blank">ps.report@gmx.net</a>&gt;<br>
+&gt; <br>
+&gt; - set &#39;CC=3Dgcc&#39; to avoid cross-compile failure (see [1]):<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0/bin/sh: line 1: .../build/ntpsec-1_2_0/build/host/ntpd/ke=
+yword-gen: cannot execute binary file: Exec format error<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0Waf: Leaving directory `.../build/ntpsec-1_2_0/build/host&=
+#39;<br>
+&gt;=C2=A0 =C2=A0Build failed<br>
+&gt;=C2=A0 =C2=A0 -&gt; task in &#39;ntp_keyword.h&#39; failed with exit st=
+atus 126 (run with -v to display more information)=C2=A0 <br>
+&gt; <br>
+&gt; - set &#39;-std=3Dgnu99&quot;&#39; to avoid compile failure with old c=
+ompilers<br>
+&gt; <br>
+&gt; - explicit set PYTHON_CONFIG<br>
+&gt; <br>
+&gt; - add patch 001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.p=
+atch to<br>
+&gt;=C2=A0 =C2=A0fix ntptime jfmt5/ofmt5 jfmt6/ofmt6 related compile failur=
+e<br>
+&gt; <br>
+&gt; - add SYSV init file (S49ntp)<br>
+&gt; <br>
+&gt; - add example ntpd.conf (with legacy option enabled and provide skelet=
+on<br>
+&gt;=C2=A0 =C2=A0for NTS configuration)<br>
+&gt; <br>
+&gt; - add config option for NTS support<br>
+&gt; <br>
+&gt; - depend on python3 (omit python2 to reduce test effort)<br>
+&gt; <br>
+&gt; - add ntp user/group and run ntpd as restricted user<br>
+&gt; <br>
+&gt; - add libcap dependency (compile time optional but needed for droproot=
+<br>
+&gt;=C2=A0 =C2=A0support)<br>
+&gt; <br>
+&gt; - submit latest ntpsec version 1.2.1<br>
+<br>
+Interesting, not listed as release, but tagged and downloadable...<br>
+<br>
+&gt; <br>
+&gt; - lib ntpc import in python is fixed by specifying the --libdir flag.<=
+br>
+&gt;=C2=A0 =C2=A0-&gt; removed the symlink trick=C2=A0 <br>
+<br>
+Fine..., will test it...<br>
+<br>
+&gt; <br>
+&gt; - add --refclock=3Dall flags to configure, see notes down below<br>
+&gt; <br>
+&gt; - add leap second management options &amp; ntpviz<br>
+&gt; <br>
+&gt; - improved Config.in:<br>
+&gt;=C2=A0 =C2=A0libbsd is required<br>
+<br>
+Are you sure? With the original patch ntpsec builds fine without libbsd ava=
+ilable...<br>
+<br>
+&gt;=C2=A0 =C2=A0openssl is only needed when NTS encryption is enabled<br>
+<br>
+A build without NTS and without openssl gives:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Checking for OpenSSL/libcrypto (via pkg-config)=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0: not found <=
+br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Checking for OpenSSL&#39;s crypto library=C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0: not found <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 The configuration failed<br>
+<br>
+&gt;=C2=A0 =C2=A0(depend on python3 only to simply things)<br>
+&gt;=C2=A0 =C2=A0improved classic mode help description<br>
+&gt;=C2=A0 =C2=A0improved early-drop-root feature description<br>
+&gt; <br>
+&gt; - early droproot should be an option: adapt libcap accordingly<br>
+<br>
+This will break (the hard coded) &#39;-u npt:npt&#39; option from package/n=
+tpsec/S49ntp,<br>
+any reason to avoid the security feature?<br>
+<br>
+&gt; <br>
+&gt; - corrected CC=3Dgcc to CC=3D$(HOSTCC) in <a href=3D"http://ntpsec.mk"=
+ rel=3D"noreferrer" target=3D"_blank">ntpsec.mk</a><br>
+<br>
+Good point...<br>
+<br>
+&gt; <br>
+&gt; - provide service script for systemd infra along sysv infra<br>
+<br>
+Better done as an extra patch (easier to review)....<br>
+<br>
+&gt; <br>
+&gt; - I don&#39;t think we need the patch if we restrict to !BR2_TOOLCHAIN=
+_UCLIBC<br>
+&gt;=C2=A0 =C2=A0IMO it&#39;s better to keep the patch and allow all toolch=
+ains.<br>
+&gt;=C2=A0 =C2=A0I usually have glibc, but I just ran a sanity check on my =
+zedboard with uclibc,<br>
+&gt;=C2=A0 =C2=A0it passed.<br>
+<br>
+Not important for the commit log...<br>
+<br>
+&gt; <br>
+&gt; - used on zynq_zed_defconfig and beaglebone_defconfig<br>
+&gt;=C2=A0 =C2=A0daemon automatically started<br>
+&gt;=C2=A0 =C2=A0ntpq works fine<br>
+&gt; <br>
+&gt; [1] <a href=3D"https://gitlab.com/NTPsec/ntpsec/-/issues/694" rel=3D"n=
+oreferrer" target=3D"_blank">https://gitlab.com/NTPsec/ntpsec/-/issues/694<=
+/a><br>
+&gt; <br>
+&gt; Signed-off-by: Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.net"=
+ target=3D"_blank">ps.report@gmx.net</a>&gt;<br>
+&gt; Signed-off-by: Guillaume W. Bres &lt;<a href=3D"mailto:guillaume.bress=
+aix@gmail.com" target=3D"_blank">guillaume.bressaix@gmail.com</a>&gt;<br>
+&gt; <br>
+&gt; ---<br>
+&gt; notes on refclocks: <a href=3D"https://docs.ntpsec.org/latest/refclock=
+.html" rel=3D"noreferrer" target=3D"_blank">https://docs.ntpsec.org/latest/=
+refclock.html</a><br>
+&gt;=C2=A0 =C2=A0&quot;For security reasons, we will no longer support any =
+refclock<br>
+&gt;=C2=A0 =C2=A0that requires a closed-source driver to run&quot;, see web=
+page.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0--refclock=3Dall is hardcoded at the moment<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0One must compile ntpsec with the &#39;refclock&#39; option=
+<br>
+&gt;=C2=A0 =C2=A0if they want to drive or interact with hardware.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0In any case, refclocks are not critical for both buildtime=
+ &amp; runtime:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 [+] ./configure is smart enough to disable a refcl=
+ock<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 if requirements are not met. In the submitted cont=
+ext,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 this happens for refclock=3Dgpsd without BR2_PACKA=
+GE_GPSD<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 selected by user<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 [+] some refclocks naturally require a specific hw=
+ support<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 with related kernel driver.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 This is not buildtime critical because build does =
+not care<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 about hw support.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 This is not runtime critical either because any mi=
+ssing<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 hw support or unfeasible hardware access ends up a=
+s a logged<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 error message. It is up to the user to correct it =
+in the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 submitted context: example: &#39;nmea/gps&#39; rec=
+eivers without kernel support<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 or hardware not plugged in.<br>
+<br>
+Would prefer one option per refclock to reduce dependencies...<br>
+<br>
+&gt; <br>
+&gt; ntpd / ntpsec should be mutualy exclusive if we harcode S49ntp as the =
+service script<br>
+&gt; <br>
+&gt; ---<br>
+&gt;=C2=A0 DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 1 +<br>
+&gt;=C2=A0 ...-jfmt5-ofmt5-jfmt6-ofmt6-related-compile-.patch | 61 ++++++++=
+++++++++<br>
+&gt;=C2=A0 package/ntpsec/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 68 +++++++++++=
+++++++<br>
+&gt;=C2=A0 package/ntpsec/S49ntp=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 58 +++++++=
+++++++++<br>
+&gt;=C2=A0 package/ntpsec/ntpd.etc.conf=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 33 +++++++++<br>
+&gt;=C2=A0 package/ntpsec/ntpd.service=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 15 ++++<br>
+&gt;=C2=A0 package/ntpsec/ntpsec.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 4 +<br>
+&gt;=C2=A0 package/ntpsec/<a href=3D"http://ntpsec.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">ntpsec.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 85 ++++++++++++++++++=
+++++<br>
+&gt;=C2=A0 9 files changed, 326 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-j=
+fmt6-ofmt6-related-compile-.patch<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/Config.in<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/S49ntp<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/ntpd.etc.conf<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/ntpd.service<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/ntpsec.hash<br>
+&gt;=C2=A0 create mode 100644 package/ntpsec/<a href=3D"http://ntpsec.mk" r=
+el=3D"noreferrer" target=3D"_blank">ntpsec.mk</a><br>
+&gt; <br>
+&gt; diff --git a/DEVELOPERS b/DEVELOPERS<br>
+&gt; index 3023526..32b5e87 100644<br>
+&gt; --- a/DEVELOPERS<br>
+&gt; +++ b/DEVELOPERS<br>
+&gt; @@ -2196,6 +2196,7 @@ F:=C2=A0 =C2=A0 =C2=A0 package/iwd/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/libevdev/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/libuev/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/log4cplus/<br>
+&gt; +F:=C2=A0 =C2=A0package/ntpsec/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/postgresql/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/python-colorzero/<br>
+&gt;=C2=A0 F:=C2=A0 =C2=A0package/python-flask-wtf/<br>
+&gt; diff --git a/package/Config.in b/package/Config.in<br>
+&gt; index 5720830..544a0fd 100644<br>
+&gt; --- a/package/Config.in<br>
+&gt; +++ b/package/Config.in<br>
+&gt; @@ -2271,6 +2271,7 @@ endif<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/nmap/Config.in&quot;<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/noip/Config.in&quot;<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/ntp/Config.in&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0source &quot;package/ntpsec/Config.in&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/nuttcp/Config.in&quot;<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/odhcp6c/Config.in&quot;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/odhcploc/Config.in&quot=
+;<br>
+&gt; diff --git a/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-r=
+elated-compile-.patch b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-o=
+fmt6-related-compile-.patch<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..c2838fe<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/0001-ntptime-fix-jfmt5-ofmt5-jfmt6-ofmt6-related-=
+compile-.patch<br>
+&gt; @@ -0,0 +1,61 @@<br>
+&gt; +From 4015a1183d2f79dad6dd675ca5e0d329825f3fa3 Mon Sep 17 00:00:00 200=
+1<br>
+&gt; +From: Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.net" target=
+=3D"_blank">ps.report@gmx.net</a>&gt;<br>
+&gt; +Date: Mon, 4 Oct 2021 22:25:58 +0200<br>
+&gt; +Subject: [PATCH] ntptime: fix jfmt5/ofmt5 jfmt6/ofmt6 related compile=
+ failure<br>
+&gt; +MIME-Version: 1.0<br>
+&gt; +Content-Type: text/plain; charset=3DUTF-8<br>
+&gt; +Content-Transfer-Encoding: 8bit<br>
+&gt; +<br>
+&gt; +Use same define guard for definiton as for usage (&#39;HAVE_STRUCT_NT=
+PTIMEVAL_TAI&#39;<br>
+&gt; +instead of &#39;NTP_API &amp;&amp; NTP_API &gt; 3&#39;).<br>
+&gt; +<br>
+&gt; +Fixes:<br>
+&gt; +<br>
+&gt; +=C2=A0 ../../ntptime/ntptime.c: In function =E2=80=98main=E2=80=99:<b=
+r>
+&gt; +=C2=A0 ../../ntptime/ntptime.c:349:17: error: =E2=80=98jfmt5=E2=80=99=
+ undeclared (first use in this function); did you mean =E2=80=98jfmt6=E2=80=
+=99?<br>
+&gt; +=C2=A0 =C2=A0 349 |=C2=A0 =C2=A0printf(json ? jfmt5 : ofmt5, (long)nt=
+v.tai);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0^~~~~<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0jfmt6<br>
+&gt; +=C2=A0 ../../ntptime/ntptime.c:349:17: note: each undeclared identifi=
+er is reported only once for each function it appears in<br>
+&gt; +=C2=A0 ../../ntptime/ntptime.c:349:25: error: =E2=80=98ofmt5=E2=80=99=
+ undeclared (first use in this function); did you mean =E2=80=98ofmt6=E2=80=
+=99?<br>
+&gt; +=C2=A0 =C2=A0 349 |=C2=A0 =C2=A0printf(json ? jfmt5 : ofmt5, (long)nt=
+v.tai);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ofmt6<br>
+&gt; +=C2=A0 ../../ntptime/ntptime.c:321:15: warning: unused variable =E2=
+=80=98jfmt6=E2=80=99 [-Wunused-variable]<br>
+&gt; +=C2=A0 =C2=A0 321 |=C2=A0 =C2=A0const char *jfmt6 =3D &quot;&quot;;<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0^~~~~<br>
+&gt; +=C2=A0 ../../ntptime/ntptime.c:311:15: warning: unused variable =E2=
+=80=98ofmt6=E2=80=99 [-Wunused-variable]<br>
+&gt; +=C2=A0 =C2=A0 311 |=C2=A0 =C2=A0const char *ofmt6 =3D &quot;\n&quot;;=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0^~~~~<br>
+&gt; +<br>
+&gt; +[Upstream: <a href=3D"https://gitlab.com/NTPsec/ntpsec/-/merge_reques=
+ts/1245" rel=3D"noreferrer" target=3D"_blank">https://gitlab.com/NTPsec/ntp=
+sec/-/merge_requests/1245</a>]<br>
+&gt; +Signed-off-by: Peter Seiderer &lt;<a href=3D"mailto:ps.report@gmx.net=
+" target=3D"_blank">ps.report@gmx.net</a>&gt;<br>
+&gt; +---<br>
+&gt; + ntptime/ntptime.c | 4 ++--<br>
+&gt; + 1 file changed, 2 insertions(+), 2 deletions(-)<br>
+&gt; +<br>
+&gt; +diff --git a/ntptime/ntptime.c b/ntptime/ntptime.c<br>
+&gt; +index ff861cb..5d58593 100644<br>
+&gt; +--- a/ntptime/ntptime.c<br>
+&gt; ++++ b/ntptime/ntptime.c<br>
+&gt; +@@ -305,7 +305,7 @@ main(<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *ofmt2 =3D=
+ &quot;=C2=A0 time %s, (.%0*d),\n&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *ofmt3 =3D=
+ &quot;=C2=A0 maximum error %lu us, estimated error %lu us&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *ofmt4 =3D=
+ &quot;=C2=A0 ntptime=3D%x.%x unixtime=3D%x.%0*d %s&quot;;<br>
+&gt; +-#if defined NTP_API &amp;&amp; NTP_API &gt; 3<br>
+&gt; ++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *ofmt5 =3D=
+ &quot;, TAI offset %ld\n&quot;;<br>
+&gt; + #else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *ofmt6 =3D=
+ &quot;\n&quot;;<br>
+&gt; +@@ -315,7 +315,7 @@ main(<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *jfmt2 =3D=
+ &quot;\&quot;time\&quot;:\&quot;%s\&quot;,\&quot;fractional-time\&quot;:\&=
+quot;.%0*d\&quot;,&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *jfmt3 =3D=
+ &quot;\&quot;maximum-error\&quot;:%lu,\&quot;estimated-error\&quot;:%lu,&q=
+uot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *jfmt4 =3D=
+ &quot;\&quot;raw-ntp-time\&quot;:\&quot;%x.%x\&quot;,\&quot;raw-unix-time\=
+&quot;:\&quot;%x.%0*d %s\&quot;,&quot;;<br>
+&gt; +-#if defined NTP_API &amp;&amp; NTP_API &gt; 3<br>
+&gt; ++#if defined(HAVE_STRUCT_NTPTIMEVAL_TAI)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *jfmt5 =3D=
+ &quot;\&quot;TAI-offset\&quot;:%d,&quot;;<br>
+&gt; + #else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char *jfmt6 =3D=
+ &quot;&quot;;<br>
+&gt; +-- <br>
+&gt; +2.33.0<br>
+&gt; +<br>
+&gt; diff --git a/package/ntpsec/Config.in b/package/ntpsec/Config.in<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..9044aa4<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/Config.in<br>
+&gt; @@ -0,0 +1,68 @@<br>
+&gt; +comment &quot;ntpsec needs a toolchain w/ wchar, thread, dynamic libr=
+ary&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_STATIC_LIBS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_USE_WCHAR<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_TOOLCHAIN_HAS_THREADS # libbsd<br=
+>
+&gt; +<br>
+&gt; +comment &quot;ntpsec needs libbsd&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # libbsd<br>
+&gt; +<br>
+&gt; +comment &quot;ntpsec needs python3&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_PYTHON3<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # libbsd<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS # libbsd<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_PYTHON3<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBCAP<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBBSD<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_PPS_TOOLS # refclock(pps)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0NTPsec is a secure, hardened, and improved=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0implementation of Network Time Protocol de=
+rived<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0from NTP Classic, Dave Mills=E2=80=99s ori=
+ginal.<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Provides things like ntpd, ntpdate, ntpq, =
+etc...<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://www.ntpsec.org/" rel=3D=
+"noreferrer" target=3D"_blank">https://www.ntpsec.org/</a><br>
+&gt; +<br>
+&gt; +if BR2_PACKAGE_NTPSEC<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC_CLASSIC_MODE<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec-classic&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Enable strict configuration and log-format=
+ compatibility<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0with NTP Classic.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0This option is not recommended as it makes=
+ the module<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0less efficient.<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC_NTS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec-nts&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_OPENSSL<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Enable Network Time Security (NTS) support=
+.<br>
+&gt; +<br>
+&gt; +comment &quot;ntpsec-ntploggpsd needs gpsd&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_GPSD<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC_LEAP_SMEAR<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec-leap-smear&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Activates leap second smearing,<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://docs.ntpsec.org/latest/=
+leapsmear.html" rel=3D"noreferrer" target=3D"_blank">https://docs.ntpsec.or=
+g/latest/leapsmear.html</a><br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC_LEAP_TESTING<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec-leap-testing&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Enables leap seconds on other than 1st day=
+ of month<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_NTPSEC_EARLY_DROPROOT<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;ntpsec-early-droproot&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Drops root privileges as early as possible=
+.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0This requires the refclock devices to be o=
+wned<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0by owner/group running &#39;ntpd&#39;<br>
+&gt; +<br>
+&gt; +endif<br>
+&gt; diff --git a/package/ntpsec/S49ntp b/package/ntpsec/S49ntp<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..f3db514<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/S49ntp<br>
+&gt; @@ -0,0 +1,58 @@<br>
+&gt; +#!/bin/sh<br>
+&gt; +#<br>
+&gt; +# Starts Network Time Protocol daemon<br>
+&gt; +#<br>
+&gt; +<br>
+&gt; +DAEMON=3D&quot;ntpd&quot;<br>
+&gt; +PIDFILE=3D&quot;/var/run/$DAEMON.pid&quot;<br>
+&gt; +<br>
+&gt; +NTPD_ARGS=3D&quot;-g -u ntp:ntp -s /var/run/ntp&quot;<br>
+&gt; +<br>
+&gt; +# shellcheck source=3D/dev/null<br>
+&gt; +[ -r &quot;/etc/default/$DAEMON&quot; ] &amp;&amp; . &quot;/etc/defau=
+lt/$DAEMON&quot;<br>
+&gt; +<br>
+&gt; +mkdir -p /var/run/ntp &amp;&amp; chown ntp:ntp /var/run/ntp<br>
+&gt; +<br>
+&gt; +start() {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0printf &#39;Starting %s: &#39; &quot;$DAEMON&quot=
+;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# shellcheck disable=3DSC2086 # we need the word =
+splitting<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start-stop-daemon -S -q -p &quot;$PIDFILE&quot; -=
+x &quot;/usr/sbin/$DAEMON&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-- $NTPD_ARGS -p &quo=
+t;$PIDFILE&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0status=3D$?<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0if [ &quot;$status&quot; -eq 0 ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;OK&quot;<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;FAIL&quot;=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$status&quot;<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +stop() {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0printf &#39;Stopping %s: &#39; &quot;$DAEMON&quot=
+;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start-stop-daemon -K -q -p &quot;$PIDFILE&quot;<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0status=3D$?<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0if [ &quot;$status&quot; -eq 0 ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0rm -f &quot;$PIDFILE&=
+quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;OK&quot;<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0else<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;FAIL&quot;=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0return &quot;$status&quot;<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +restart() {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0stop<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0sleep 1<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +case &quot;$1&quot; in<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start|stop|restart)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;$1&quot;;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0reload)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# Restart, since ther=
+e is no true &quot;reload&quot; feature.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0restart;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0*)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0echo &quot;Usage: $0 =
+{start|stop|restart|reload}&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0exit 1<br>
+&gt; +esac<br>
+&gt; diff --git a/package/ntpsec/ntpd.etc.conf b/package/ntpsec/ntpd.etc.co=
+nf<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..e0f45c1<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/ntpd.etc.conf<br>
+&gt; @@ -0,0 +1,33 @@<br>
+&gt; +#<br>
+&gt; +# legacy NTP configuration<br>
+&gt; +#<br>
+&gt; +pool <a href=3D"http://0.pool.ntp.org" rel=3D"noreferrer" target=3D"_=
+blank">0.pool.ntp.org</a> iburst<br>
+&gt; +pool <a href=3D"http://1.pool.ntp.org" rel=3D"noreferrer" target=3D"_=
+blank">1.pool.ntp.org</a> iburst<br>
+&gt; +pool <a href=3D"http://2.pool.ntp.org" rel=3D"noreferrer" target=3D"_=
+blank">2.pool.ntp.org</a> iburst<br>
+&gt; +pool <a href=3D"http://3.pool.ntp.org" rel=3D"noreferrer" target=3D"_=
+blank">3.pool.ntp.org</a> iburst<br>
+&gt; +<br>
+&gt; +#<br>
+&gt; +# NTS configuration<br>
+&gt; +#<br>
+&gt; +# Notes:<br>
+&gt; +#=C2=A0 - uncomment the following lines to enable NTS support (but<br=
+>
+&gt; +#=C2=A0 =C2=A0 make sure the initial clock is up-to-date (otherwise t=
+he<br>
+&gt; +#=C2=A0 =C2=A0 NTS certificate validation will fail with &#39;NTSc: c=
+ertificate invalid:<br>
+&gt; +#=C2=A0 =C2=A0 9=3D&gt;certificate is not yet valid&#39; as on boards=
+ without RTC support)<br>
+&gt; +#=C2=A0 =C2=A0 and/or keep at least one line from the legacy NTP line=
+s<br>
+&gt; +#=C2=A0 - enable BR2_PACKAGE_CA_CERTIFICATES to gain access to the ce=
+rtificate<br>
+&gt; +#=C2=A0 =C2=A0 files<br>
+&gt; +#<br>
+&gt; +# server <a href=3D"http://time.cloudflare.com" rel=3D"noreferrer" ta=
+rget=3D"_blank">time.cloudflare.com</a> nts=C2=A0 # Global, anycast<br>
+&gt; +# server <a href=3D"http://nts.ntp.se:4443" rel=3D"noreferrer" target=
+=3D"_blank">nts.ntp.se:4443</a> nts=C2=A0 =C2=A0 =C2=A0 # Sweden<br>
+&gt; +# server <a href=3D"http://ntpmon.dcs1.biz" rel=3D"noreferrer" target=
+=3D"_blank">ntpmon.dcs1.biz</a> nts=C2=A0 =C2=A0 =C2=A0 # Singapore<br>
+&gt; +# server <a href=3D"http://ntp1.glypnod.com" rel=3D"noreferrer" targe=
+t=3D"_blank">ntp1.glypnod.com</a> nts=C2=A0 =C2=A0 =C2=A0# San Francisco<br=
+>
+&gt; +# server <a href=3D"http://ntp2.glypnod.com" rel=3D"noreferrer" targe=
+t=3D"_blank">ntp2.glypnod.com</a> nts=C2=A0 =C2=A0 =C2=A0# London<br>
+&gt; +#<br>
+&gt; +# ca /usr/share/ca-certificates/mozilla<br>
+&gt; +<br>
+&gt; +# Allow only time queries, at a limited rate, sending KoD when in exc=
+ess.<br>
+&gt; +# Allow all local queries (IPv4, IPv6)<br>
+&gt; +restrict default nomodify nopeer noquery limited kod<br>
+&gt; +restrict 127.0.0.1<br>
+&gt; +restrict [::1]<br>
+&gt; diff --git a/package/ntpsec/ntpd.service b/package/ntpsec/ntpd.service=
+<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..b7db4a2<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/ntpd.service<br>
+&gt; @@ -0,0 +1,15 @@<br>
+&gt; +[Unit]<br>
+&gt; +Description=3DNetwork Time Service<br>
+&gt; +After=3Dnetwork.target<br>
+&gt; +<br>
+&gt; +[Service]<br>
+&gt; +Type=3Dforking<br>
+&gt; +PIDFile=3D/run/ntpd.pid<br>
+&gt; +# Turn off DNSSEC validation for hostname look-ups, since those need =
+the<br>
+&gt; +# correct time to work, but we likely won&#39;t acquire that without =
+NTP. Let&#39;s<br>
+&gt; +# break this chicken-and-egg cycle here.<br>
+&gt; +Environment=3DSYSTEMD_NSS_RESOLVE_VALIDATE=3D0<br>
+&gt; +ExecStart=3D/usr/sbin/ntpd @NTPD_EXTRA_ARGS@ -g -p /run/ntpd.pid<br>
+<br>
+The @NTPD_EXTRA_ARGS@ handling needs the sed command instead of the<br>
+simple install one (see package/ntp/<a href=3D"http://ntp.mk" rel=3D"norefe=
+rrer" target=3D"_blank">ntp.mk</a>)...<br>
+<br>
+&gt; +<br>
+&gt; +[Install]<br>
+&gt; +WantedBy=3Dmulti-user.target<br>
+&gt; diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash<b=
+r>
+&gt; new file mode 100644<br>
+&gt; index 0000000..49dc4e4<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/ntpsec.hash<br>
+&gt; @@ -0,0 +1,4 @@<br>
+&gt; +# Locally calculated<br>
+&gt; +sha256=C2=A0 71c9f4bde6953bbc048bbaf278da81c451a56cc08d6772542b4ad37c=
+67d72e89=C2=A0 ntpsec-NTPsec_1_2_1.tar.bz2<br>
+&gt; +sha256=C2=A0 b4db4de3317c3b0554ed91eb692968800bdfd6ad2c16ffbeee8ce489=
+5ed91da4=C2=A0 LICENSE.adoc<br>
+&gt; +sha256=C2=A0 d3b21470adadd9abd9c6d675378f8c371ac5a4ea6dbec91859e02fad=
+ca3c0856=C2=A0 docs/copyright.adoc<br>
+&gt; diff --git a/package/ntpsec/<a href=3D"http://ntpsec.mk" rel=3D"norefe=
+rrer" target=3D"_blank">ntpsec.mk</a> b/package/ntpsec/<a href=3D"http://nt=
+psec.mk" rel=3D"noreferrer" target=3D"_blank">ntpsec.mk</a><br>
+&gt; new file mode 100644<br>
+&gt; index 0000000..55b4bb0<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/ntpsec/<a href=3D"http://ntpsec.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">ntpsec.mk</a><br>
+&gt; @@ -0,0 +1,85 @@<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +#<br>
+&gt; +# ntpsec<br>
+&gt; +#<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +<br>
+&gt; +NTPSEC_VERSION_MAJOR =3D 1<br>
+&gt; +NTPSEC_VERSION_MINOR =3D 2<br>
+&gt; +NTPSEC_VERSION_POINT =3D 1<br>
+&gt; +NTPSEC_VERSION =3D $(NTPSEC_VERSION_MAJOR)_$(NTPSEC_VERSION_MINOR)_$(=
+NTPSEC_VERSION_POINT)<br>
+&gt; +NTPSEC_SOURCE =3D ntpsec-NTPsec_$(NTPSEC_VERSION).tar.bz2<br>
+&gt; +NTPSEC_SITE =3D <a href=3D"https://gitlab.com/NTPsec/ntpsec/-/archive=
+/NTPsec_$(NTPSEC_VERSION)" rel=3D"noreferrer" target=3D"_blank">https://git=
+lab.com/NTPsec/ntpsec/-/archive/NTPsec_$(NTPSEC_VERSION)</a><br>
+&gt; +NTPSEC_LICENSE =3D BSD-2-Clause NTP BSD-3-Clause MIT<br>
+&gt; +NTPSEC_LICENSE_FILES =3D LICENSE.adoc docs/copyright.adoc<br>
+&gt; +<br>
+&gt; +NTPSEC_CPE_ID_VENDOR =3D ntpsec<br>
+&gt; +NTPSEC_CPE_ID_VERSION =3D $(NTPSEC_VERSION_MAJOR).$(NTPSEC_VERSION_MI=
+NOR)<br>
+&gt; +NTPSEC_CPE_ID_UPDATE =3D $(NTPSEC_VERSION_POINT)<br>
+&gt; +<br>
+&gt; +NTPSEC_DEPENDENCIES =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(if $(BR2_PACKAGE_PYTHON),python,python3) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0libbsd \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0pps-tools<br>
+&gt; +<br>
+&gt; +NTPSEC_PYVER =3D $(if $(BR2_PACKAGE_PYTHON),python$(PYTHON_VERSION_MA=
+JOR),python$(PYTHON3_VERSION_MAJOR))<br>
+&gt; +<br>
+&gt; +NTPSEC_CONF_OPTS =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0CC=3D$(HOSTCC) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0PYTHON_CONFIG=3D&quot;$(STAGING_DIR)/usr/bin/$(if=
+ $(BR2_PACKAGE_PYTHON),python,python3)-config&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--cross-compiler=3D&quot;$(TARGET_CC)&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--cross-cflags=3D&quot;$(TARGET_CFLAGS) -std=3Dgn=
+u99&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--cross-ldflags=3D&quot;$(TARGET_LDFLAGS)&quot; \=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--notests \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--disable-mdns-registration \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--enable-pylib=3Dffi \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--nopyc \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--nopyo \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--nopycache \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--disable-doc \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--disable-manpage \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--refclock=3Dall \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0--libdir=3D/usr/lib/$(NTPSEC_PYVER)/site-packages=
+/ntp<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_NTPSEC_CLASSIC_MODE),y)<br>
+&gt; +NTPSEC_CONF_OPTS +=3D --enable-classic-mode<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_NTPSEC_NTS),y)<br>
+&gt; +NTPSEC_DEPENDENCIES +=3D openssl<br>
+&gt; +else<br>
+&gt; +NTPSEC_CONF_OPTS +=3D --disable-nts<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_NTPSEC_EARLY_DROPROOT),y)<br>
+&gt; +NTPSEC_DEPENDENCIES +=3D libcap<br>
+&gt; +NTPSEC_CONF_OPTS +=3D --enable-early-droproot<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_NTPSEC_LEAP_SMEAR),y)<br>
+&gt; +NTPSEC_CONF_OPTS +=3D --enable-leap-smear<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_NTPSEC_LEAP_TESTING),y)<br>
+&gt; +NTPSEC_CONF_OPTS +=3D --enable-leap-testing<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +define NTPSEC_INSTALL_NTPSEC_CONF<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -m 644 package/ntpsec/ntpd.etc.conf $(=
+TARGET_DIR)/etc/ntp.conf<br>
+&gt; +endef<br>
+&gt; +NTPSEC_POST_INSTALL_TARGET_HOOKS +=3D NTPSEC_INSTALL_NTPSEC_CONF<br>
+&gt; +<br>
+&gt; +define NTPSEC_INSTALL_INIT_SYSV<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -D -m 755 $(NTPSEC_PKGDIR)/S49ntp $(TA=
+RGET_DIR)/etc/init.d/S49ntp<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +define NTPSEC_INSTALL_INIT_SYSTEMD<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -D -m 644 $(NTPSEC_PKGDIR)/ntpd.servic=
+e \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_DIR)/usr/lib=
+/systemd/system/ntpd.service<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +define NTPSEC_USERS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0ntp -1 ntp -1 * - - - ntpd user<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +$(eval $(waf-package))<br>
+<br>
+Will prepare an update of my original patch with the version update and som=
+e of<br>
+your findings..., feel free to provide your improvements as add-on patches =
+;-)<br>
+<br>
+Regards,<br>
+Peter<br>
+<br>
+</blockquote></div>
+
+--0000000000004c8bad05d335e502--
+
+--===============2883495525962462107==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2883495525962462107==--
