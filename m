@@ -1,78 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E6B6C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 18:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52A39C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 20:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9C4582835;
-	Wed, 15 Dec 2021 18:50:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF30060F16;
+	Wed, 15 Dec 2021 20:38:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8Dq6HflaPEnr; Wed, 15 Dec 2021 18:50:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v8VgMz9SX1ah; Wed, 15 Dec 2021 20:38:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14B12827FB;
-	Wed, 15 Dec 2021 18:50:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1232E60F01;
+	Wed, 15 Dec 2021 20:38:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 569F61BF30E
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:49:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D12A1BF45A
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 20:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44254827FB
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:49:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 385BC8297F
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 20:38:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fCUHdU4oBq4q for <buildroot@lists.busybox.net>;
- Wed, 15 Dec 2021 18:49:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E8EE1827F3
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 18:49:47 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id u17so39860976wrt.3
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 10:49:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=Wjm7MZGTUF+jRPavaUY0IXSerrH4G8wUb9+o1W7EMD4=;
- b=Ynr3qVRhaewPaWEy8iS099/mYsf31XqGSPY0LkNdiKhh7fo3yE/0n4oHyIs/YEN5WQ
- KDDxPh9uodpPnw15NPnXvfRCh/Yx2odyCevXxcB/2WZlvdt2Qt6Xn6zbwotdDak9XLF0
- mhoPOKXHgtP01S2xPLonr7DdkKYzR4hlSvw99D0dxicrCv7RKlxHKr/owMLRVBDWoLfL
- aZTUnD4osBCtRKvJNLE0eKFRLtwTscWFmOp7YhK2m9beMRp0ymD43+Cm/mc8yrgx6Lm6
- eE1CwwrLREQ/mTTFdGWN50prATmIlilGkZI7KgPMv9ARAHe0w/i+Z1puyM2fL6NSpVNX
- vuYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=Wjm7MZGTUF+jRPavaUY0IXSerrH4G8wUb9+o1W7EMD4=;
- b=NdZdG1OmkUWt5AOw+svy7mWBKyCafdA+88HqG8tYGkn6qNTwZNSUiOqcMn1XGhIKHT
- /xO9mhPvLuFvB70abpYEFFDWglbdzj0lrbuZJsCzcdmRHpu07kMmgnuvWpIYMuGODDNZ
- djavWXQybY648CE6tcnUbVQy5uKPDm1bo7ghOPzzeYX4yc40MDV4O7ehLXWY+HTqBkiv
- iYxBXdHjdafooz8+WpOfdYNUTnfGR7aY4C4l4nczm097B7Ywxfih1R2h/bATtsM3maXf
- In2QlDfr/dCD+Jl0FMBf/GEXKXtvZEtCrtslNXC3tffnGAvGvPVeKYqgxVXHC4EpY81N
- B2TA==
-X-Gm-Message-State: AOAM530K6cU4qzHlM/Y4CffRM+tpK7tBWAG3x4rHy15qzLxu7v21fHGy
- kg9ZOYtUAxcwkGMUCN3ePixVdjg0eLnqAw==
-X-Google-Smtp-Source: ABdhPJzqWKOCL4uvk+6WfyCHCPpVZoPEQGKo1NMJZcLmZSt1ZLlcP997cGA3EVA9WIJhQm9PR84G2Q==
-X-Received: by 2002:adf:fe81:: with SMTP id l1mr5799685wrr.522.1639594186224; 
- Wed, 15 Dec 2021 10:49:46 -0800 (PST)
-Received: from dell5510.arch.suse.de (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id e11sm3483187wrq.28.2021.12.15.10.49.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Dec 2021 10:49:45 -0800 (PST)
-From: Petr Vorel <petr.vorel@gmail.com>
+ with ESMTP id kpJlr03STn_H for <buildroot@lists.busybox.net>;
+ Wed, 15 Dec 2021 20:38:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B86E382965
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 20:38:31 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 79B5E240004;
+ Wed, 15 Dec 2021 20:38:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1mxb2g-0003mD-Jn; Wed, 15 Dec 2021 21:38:26 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Dec 2021 19:49:38 +0100
-Message-Id: <20211215184938.21026-2-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215184938.21026-1-petr.vorel@gmail.com>
-References: <20211215184938.21026-1-petr.vorel@gmail.com>
+Date: Wed, 15 Dec 2021 21:38:20 +0100
+Message-Id: <20211215203821.14470-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/iputils: don't build legacy tools
+Subject: [Buildroot] [PATCH] package/libopenssl: bump version to 1.1.1m
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,94 +56,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ninfod, rarpd, rdisc are legacy tools which are going to be removed from
-upstream in next release [1], following previous removals [2].
-Remove them now from Buildroot.
+Minor bugfix release:
 
-[1] https://github.com/iputils/iputils/pull/388
-[2] https://github.com/iputils/iputils/issues/363
+ Changes between 1.1.1l and 1.1.1m [14 Dec 2021]
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+  *) Avoid loading of a dynamic engine twice.
+     [Bernd Edlinger]
+
+  *) Fixed building on Debian with kfreebsd kernels
+     [Mattias Ellert]
+
+  *) Prioritise DANE TLSA issuer certs over peer certs
+     [Viktor Dukhovni]
+
+  *) Fixed random API for MacOS prior to 10.12
+     These MacOS versions don't support the CommonCrypto APIs
+     [Lenny Primak]
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iputils/Config.in  | 23 -----------------------
- package/iputils/iputils.mk | 10 ++++------
- 2 files changed, 4 insertions(+), 29 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index 1a8b555570..97870d1745 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -33,33 +33,10 @@ config BR2_PACKAGE_IPUTILS_RARPD
- 	help
- 	  Installs rarpd.
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 93c688d9dd..a055cbc270 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1l.tar.gz.sha256
+-sha256  0b7a3e5e59c34827fe0c3a74b7ec8baef302b98fa80088d7f9153aa16fa76bd1  openssl-1.1.1l.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1m.tar.gz.sha256
++sha256  f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96  openssl-1.1.1m.tar.gz
  
--config BR2_PACKAGE_IPUTILS_RDISC
--	bool "rdisc"
--	default y
--	help
--	  Installs rdisc.
--
--config BR2_PACKAGE_IPUTILS_RDISC_SERVER
--	bool "rdisc (server code)"
--	default y
--	depends on BR2_PACKAGE_IPUTILS_RDISC
--	help
--	  Builds rdisc with server code.
--
- config BR2_PACKAGE_IPUTILS_TRACEPATH
- 	bool "tracepath"
- 	default y
- 	help
- 	  Installs tracepath.
- 
--config BR2_PACKAGE_IPUTILS_NINFOD
--	bool "ninfod"
--	default y
--	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
--	help
--	  Installs ninfod.
--
--comment "ninfod needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
- endif
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 84059de330..6420720eff 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -21,19 +21,17 @@ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- # Selectively build binaries
- IPUTILS_CONF_OPTS += \
- 	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
--	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
--	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
--	-DENABLE_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
-+	-DBUILD_NINFOD=false \
-+	-DBUILD_RARPD=false \
-+	-DBUILD_RDISC=false \
- 	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
--	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false) \
- 	-DSKIP_TESTS=true
- 
- # Selectively select the appropriate SELinux refpolicy modules
- IPUTILS_SELINUX_MODULES = \
- 	$(if $(BR2_PACKAGE_IPUTILS_ARPING),netutils) \
- 	$(if $(BR2_PACKAGE_IPUTILS_PING),netutils) \
--	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils) \
--	$(if $(BR2_PACKAGE_IPUTILS_RDISC),rdisc)
-+	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils)
- 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index f139213315..bd8ef6141a 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
  #
- # arping
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1l
++LIBOPENSSL_VERSION = 1.1.1m
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-2.34.1
+2.20.1
 
 _______________________________________________
 buildroot mailing list
