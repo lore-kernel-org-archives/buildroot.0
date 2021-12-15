@@ -1,61 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF0FBC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 18:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F297C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 18:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B1F360EFA;
-	Wed, 15 Dec 2021 18:00:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 256E880F5C;
+	Wed, 15 Dec 2021 18:06:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zahMlHve2kg0; Wed, 15 Dec 2021 18:00:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF82F60EF3;
-	Wed, 15 Dec 2021 18:00:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 101781BF2CF
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:00:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5D15828EF
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:00:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=linatsea.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T9_CXGfWXGw7 for <buildroot@lists.busybox.net>;
- Wed, 15 Dec 2021 18:00:34 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E9E-BOMoi5Yt; Wed, 15 Dec 2021 18:06:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DDDC0813F2;
+	Wed, 15 Dec 2021 18:06:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AC7F1BF282
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:06:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75B4240A3B
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 18:06:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=linatsea.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oj8vpxJA1Mwc for <buildroot@lists.busybox.net>;
+ Wed, 15 Dec 2021 18:06:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA5248290B
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 18:00:33 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E6C5640A3A
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 18:06:26 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 0FF2ACA1E2
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 17:34:37 +0000 (UTC)
 Received: (Authenticated sender: thierry.bultel@linatsea.fr)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id C3692FF80A;
- Wed, 15 Dec 2021 18:00:31 +0000 (UTC)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E0389240004;
+ Wed, 15 Dec 2021 17:34:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
- t=1639591232;
+ t=1639589673;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
  bh=1Pk9Db3KaCEpGgpX5tQqgBDmqWHmKt/GaNXz/c/lsns=;
- b=BbwIlXzsZ71v1vvV7kvmgE1k1Ms9jG6V2cqw2B1VMy0VJUZaiobQ6S8kgVpR1Ce9mGMDDR
- 9cvYx4SIq+X2w/vTBfrst2evDWQ00Y/kBHRin4DK4oHnfD6ev1tnOp7ZFRiY6LApMiUx2P
- vPrASqfwDrKW3X3CbThXLkPf9b/On9iOAGV1ToWSF+TxK4IfcWMOlnRJwVF35eLwpMPTl8
- fDZxaTDfy3SJPUiNFwbmxPOuigODWDh/jkZUYyhiGTHvyY3gRhdYHFJntvUAmr0VogjVqW
- 8yqXAiBdWXpPyphsuAmzVqZGFuv50MRSWhnGibTWCqr/H51wtEQsqO63Wajf2w==
+ b=dpZ9m1qR7HeyBMFK89UiGXryplkaPH0qwFkOFD+/NSWa7js9UXP72PSRff592Tp7hiJ/mI
+ jgVxd9avgEd3TAEOQAbLG6wjseMxID9Ag1ESpCfA1IayBSFBn34E1t4rqdW2uvyS3QqWrQ
+ kOn58rEFbqHDXnNqYpoiDJzeFcq/+6fkM3GWDmAWQwSpvWoxXHuGE6+VXHKjHYr9dbGaCb
+ uwoUiGpQ1fOMei7yKY1BIC98qxnV1WbfiIX8X6OeSft2Hm7wQEATyRiQdPFH8d1qNPk4x2
+ 9fsj8UAV4p6sy0qa7jCx5E0PtG2PN/AhYsGdoAyz7eJsdRDbIgOlqoIBeEa5QQ==
 From: Thierry Bultel <thierry.bultel@linatsea.fr>
 To: buildroot@buildroot.org
-Date: Wed, 15 Dec 2021 19:00:21 +0100
-Message-Id: <20211215180021.274991-3-thierry.bultel@linatsea.fr>
+Date: Wed, 15 Dec 2021 18:34:11 +0100
+Message-Id: <20211215173411.274024-3-thierry.bultel@linatsea.fr>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
-References: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
+In-Reply-To: <20211215173411.274024-1-thierry.bultel@linatsea.fr>
+References: <20211215173411.274024-1-thierry.bultel@linatsea.fr>
 MIME-Version: 1.0
 Subject: [Buildroot] [PATCH 3/3] fs/dracut: new fs type
 X-BeenThere: buildroot@buildroot.org
