@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8E62C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 21:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FE18C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 21:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C75740A7A;
-	Wed, 15 Dec 2021 21:36:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4950760F75;
+	Wed, 15 Dec 2021 21:38:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y_lv_iOC8gOe; Wed, 15 Dec 2021 21:36:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EFn-ApBE9Fq8; Wed, 15 Dec 2021 21:38:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6990640A7D;
-	Wed, 15 Dec 2021 21:36:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3702B60F67;
+	Wed, 15 Dec 2021 21:38:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB7611BF2A7
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:36:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2652E1BF2A7
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D916960F4B
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:36:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08C2C60F67
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:38:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QjQlw78bvtP3 for <buildroot@lists.busybox.net>;
- Wed, 15 Dec 2021 21:36:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C995160F3F
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 21:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1639604191;
- bh=efdI4Mp3+UeGH+oysGz+ZPfoRUrdrKixn0MBhRR9oL8=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=bA3ixtPLGq6ViPeLIqHj5kPSbpJSDmEIfN+cASGAOJrG5oy+0FxaFSu2ZEgK6Wj4c
- QjDaIGjJ7w9djNn9cGEU+T/0fBcUsmNMZ8fDiygES1Mtl9vJ4G+EFWEjnikRbIAhhH
- DBsvNyQ2zL9D6O1lNW2Z+X5tMiT9HyvVam1y1yAU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.223]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MY68T-1n17VT3dzp-00YRFI; Wed, 15 Dec 2021 22:36:30 +0100
-From: Peter Seiderer <ps.report@gmx.net>
+ with ESMTP id w0zH91w_JWnk for <buildroot@lists.busybox.net>;
+ Wed, 15 Dec 2021 21:38:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A55CC60F7D
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 21:38:53 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id a9so40507328wrr.8
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 13:38:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=j927EenQBmuxK/Rc7yKCZLmgS2HgwEF11rN6dtQU3S4=;
+ b=K8X0WT2yt1gvHgUiSleln+XsG1Zo5WcJI0Ew4wzyRT4duuuUW631oTBimdi17/7RXe
+ BerQPGOtIadh7MgnP8q8nb/wAw68o3uYbg5jL+9SbF0QO3jFbHwLqsiG0sQSbUhHquCo
+ /C8ZFCTcsCMD/UtSMuNwRDgjZHnzhnWXDqJII8LK7lVICcahq6+3mvMaM0QQOleDibDl
+ 0imbT4LrNKQOs6Qq4FhVd2s5f676gfONkRVPm3pt2Gzi+c91Y3Ry0+MX6BjwADM7q/5J
+ SjjWw/CJzWyABD1wFP/JuMOKXwsZuI8BOWY39CaVXXO1bCG+hrpgkeGG88quL+fwSJb/
+ RR4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=j927EenQBmuxK/Rc7yKCZLmgS2HgwEF11rN6dtQU3S4=;
+ b=EX1sQy/+MakgmzmlEbo4NfPVL6mRTcCb+Kmlv5pZ/HCkRqTOCHj1p/sHoPxBPPO8FS
+ LILgX7aQ7/Aku2E6MttpPhlE7ohsxTFpJY8Uabk5JmnBf1kF7NLboZGCaPeLjgURl6ne
+ xaas3M4ToWbkzu2YKyCe6PH4rilqTPHylmVRGwaIKK4jBiEoZwfwDPKpdDYKslh73kCw
+ ZPcNMBL62l+6OoS3E0at2cu7t4HIDYCylO1mNYLmiwfGFcKFOZ/Zr7dXROS+Ly0LhrY1
+ 0UuYAghbjMdOmNtyXg2KCycJSU9eDrOqJwVcZlrdea+nD7ShWJDPwc2sG3frwCAHtcxV
+ IvjQ==
+X-Gm-Message-State: AOAM530rX2xeLjSfmwlQei1q5R2XwOSVfxJ9i5L0eR7mkaXE8AtWEA8q
+ tXd/vlNDd2y42oy2Gv+Z3vCWB5yvoj7qSQ==
+X-Google-Smtp-Source: ABdhPJxM02EH1xosHCe0F2nNPo/bQIjXX3iws+ERV4z0yQkTQZhHsTBtP7mhHRrOZ0rj3I0molMIdA==
+X-Received: by 2002:a5d:6d8a:: with SMTP id l10mr6293605wrs.490.1639604331471; 
+ Wed, 15 Dec 2021 13:38:51 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id g13sm4153711wrd.57.2021.12.15.13.38.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 Dec 2021 13:38:50 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Dec 2021 22:36:30 +0100
-Message-Id: <20211215213630.6737-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 15 Dec 2021 22:38:22 +0100
+Message-Id: <20211215213823.3982329-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:iq3UTVwKgnUIJHYcZPZianoqRamU/LOR7spQJPkBDUXGPOMI4aw
- f3mHiSHDIeLetRMxQ6sStBcA4IU+V6XwuB/9c2Z35Za1oGZLFQ+7w0oGMPILB00+e2dYRvd
- 2PYyLK4ydWN60+GxRB86EAHvLvV+Su6wysYEEsxLUy/PIcWNlrsAE15hQpZWDY7+Xsg7PIN
- tlXE5gCPxcEfDlXsfE0RQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1ylziAdT/O4=:QTdCaCupDXD4HAGNmdnI1m
- OslaHlvNMfyE/wtLaAYwUje1JZU5Q1kOb6IyQYxnyyIMprnaqcC83pY6HZug8t/UpepymZQ+K
- 0PAm3HjTBFGvXqFlLAf360hS4rvcllvjVXtontY6PHl1B1tNN6q0gHJtynXj/LP0yB0/AAxJC
- zMc19cp59qniRGm8HKoJXkpKVbNslNwbV3xY/e5YD4HO6NHImnfS9t0peXZe5+Dn22tnpiTeR
- 7gl5f2sZLcvAigvzLVvbvRLodGC8RSg4nVoUafjZVinPpKfwBH6K9eSSBlEaWfXR6gdFdgBlk
- SdXrtg/mI/C6V58VmOLxxB98DAaHTjMOR7EDQsERfG0Bu/7p65rOBLs33BRoGgxfRIjQqR1ZT
- Hdx7gMJfmf5AY4uyIawcrp5L2E80tWStwfMilqGg0/N+449Llu5t45vK82uyeSp+ZzG1ijh0/
- NgFr4YB0m00KSreRVljhOK2rFNOfFuLgQh8Xr6cWYyPSwdvdyq2TNoGz+FqWjCweUlqg11Noj
- u08aZ6Cpe7lHxhFbxHOEaTFxePkKmCJFJIGX8Pjjh217AUA6q1k/vMnUxKeOkRE6B6n3TRr51
- ZsqNrnnUR7rlHRroN41fx8TsFxWLwJkULJYMkqnVIb52cNqSugb5bFBHfvX3ambliFRgCCofu
- pf5Sxh8yxNhbrvndehe0LWIQI7iq4p73n7jAoQym3Dgjqo5ytSnhJKUykV116BpGfVCx0COUz
- PgJauNtwSL5fgjVL1T7qp6++ceW3qp4X1f1hDfQTsBx2k8RXBSDW3eSTFBKTA/T0kpWyvF05L
- Zmoi5Xvarpimu3H4ynN9WdtF6NNkVIfsgrfMSGaJUtRoPLDP9cx1yOCYKIvYhukeOdEjhRqsc
- QkjkkFyf6ffnHlUZYTTVEt6LViPfnT08NXLJA1Xh7lJSXc3vqpUOKQ0qsoENvP5D/1vipUFIW
- /4aaT77M529Zt4Yucrcq9yf96fcOCPu7bUSqLSEVI5JzRFIri7F1EcDpnXcufsksE1BJUoVda
- AQWWtHP2O0QfPpU5O28ZOcaGhclIaFZk/RUSXFIqQ/fOE7B5BTd93fLqz5fi3Ne1SzUjvL24o
- 25DKflwz9ZljgQ=
-Subject: [Buildroot] [PATCH v2] package/ntpsec: new package
+Subject: [Buildroot] [PATCH 1/2] package/xxhash: install in staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,229 +83,261 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- "Guillaume W . Bres" <guillaume.bressaix@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBzZXQgJ0NDPSIkKEhPU1RDQykiJyB0byBhdm9pZCBjcm9zcy1jb21waWxlIGZhaWx1cmUgKHNl
-ZSBbMV0pOgoKICAvYmluL3NoOiBsaW5lIDE6IC4uLi9idWlsZC9udHBzZWMtMV8yXzAvYnVpbGQv
-aG9zdC9udHBkL2tleXdvcmQtZ2VuOiBjYW5ub3QgZXhlY3V0ZSBiaW5hcnkgZmlsZTogRXhlYyBm
-b3JtYXQgZXJyb3IKCiAgV2FmOiBMZWF2aW5nIGRpcmVjdG9yeSBgLi4uL2J1aWxkL250cHNlYy0x
-XzJfMC9idWlsZC9ob3N0JwogIEJ1aWxkIGZhaWxlZAogICAtPiB0YXNrIGluICdudHBfa2V5d29y
-ZC5oJyBmYWlsZWQgd2l0aCBleGl0IHN0YXR1cyAxMjYgKHJ1biB3aXRoIC12IHRvIGRpc3BsYXkg
-bW9yZSBpbmZvcm1hdGlvbikKCi0gc2V0ICctc3RkPWdudTk5IicgdG8gYXZvaWQgY29tcGlsZSBm
-YWlsdXJlIHdpdGggb2xkIGNvbXBpbGVycwoKLSBleHBsaWNpdCBzZXQgUFlUSE9OX0NPTkZJRwoK
-LSBhZGQgcGF0Y2ggMDAxLW50cHRpbWUtZml4LWpmbXQ1LW9mbXQ1LWpmbXQ2LW9mbXQ2LXJlbGF0
-ZWQtY29tcGlsZS0ucGF0Y2ggdG8KICBmaXggbnRwdGltZSBqZm10NS9vZm10NSBqZm10Ni9vZm10
-NiByZWxhdGVkIGNvbXBpbGUgZmFpbHVyZQoKLSBhZGQgU1lTViBpbml0IGZpbGUgKFM0OW50cCkK
-Ci0gYWRkIGV4YW1wbGUgbnRwZC5jb25mICh3aXRoIGxlZ2FjeSBvcHRpb24gZW5hYmxlZCBhbmQg
-cHJvdmlkZSBza2VsZXRvbgogIGZvciBOVFMgY29uZmlndXJhdGlvbikKCi0gYWRkIGNvbmZpZyBv
-cHRpb24gZm9yIE5UUyBzdXBwb3J0CgotIGRlcGVuZCBvbiBweXRob24zIChvbWl0IHB5dGhvbjIg
-dG8gcmVkdWNlIHRlc3QgZWZmb3J0KQoKLSBhZGQgbnRwIHVzZXIvZ3JvdXAgYW5kIHJ1biBudHBk
-IGFzIHJlc3RyaWN0ZWQgdXNlcgoKLSBhZGQgbGliY2FwIGRlcGVuZGVuY3kgKGNvbXBpbGUgdGlt
-ZSBvcHRpb25hbCBidXQgbmVlZGVkIGZvciBkcm9wcm9vdAogIHN1cHBvcnQpCgpbMV0gaHR0cHM6
-Ly9naXRsYWIuY29tL05UUHNlYy9udHBzZWMvLS9pc3N1ZXMvNjk0CgpTaWduZWQtb2ZmLWJ5OiBQ
-ZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Ci0tLQpDaGFuZ2VzIHYxIC0+IHYyOgog
-IC0gdXBkYXRlIHZlcnNpb24gdG8gMS4yLjEsIG5vdGUgdmVyc2lvbiAxLjIuMSBpcyB0YWdnZWQg
-KFsyXSwgWzNdKSBhbmQKICAgIGRvd25sb2FkYWJsZSBidXQgbm90IGxpc3RlZCBhcyByZWxlYXNl
-IChbNF0pLCBmb3IgY2hhbmdlbG9nIHNlZSBbNV0sCiAgICAoc3VnZ2VzdGVkIGJ5IEd1aWxsYXVt
-ZSkKCiAgICBbMl0gaHR0cHM6Ly9naXRsYWIuY29tL05UUHNlYy9udHBzZWMvLS90YWdzCiAgICBb
-M10gaHR0cHM6Ly9naXRsYWIuY29tL05UUHNlYy9udHBzZWMvLS9jb21taXQvM2M0MWQzMWUxMWE2
-N2ZmMTdmMzAzYTQxMzNhZTBmODY3YmMzY2UyNgogICAgWzRdIGh0dHBzOi8vZ2l0bGFiLmNvbS9O
-VFBzZWMvbnRwc2VjLy0vcmVsZWFzZXMKICAgIFs1XSBodHRwczovL2dpdGxhYi5jb20vTlRQc2Vj
-L250cHNlYy8tL2Jsb2IvbWFzdGVyL05FV1MuYWRvYwoKICAtIGltcHJvdmUgcHl0aG9uMyBvbmx5
-IHVzYWdlIChvbWl0IHB5dGhvbjIvcHl0aG9uMyBzZWxlY3QgY29kZSkKICAtIHVzZSBDQz0iJChI
-T1NUQ0MpIiAoc3VnZ2VzdGVkIGJ5IEd1aWxsYXVtZSkKICAtIGRyb3AgbGluayB0byBsaWJudHBj
-LnNvLCB1c2UgLS1saWJkaXIgaW5zdGVhZCAoc3VnZ2VzdGVkIGJ5IEd1aWxsYXVtZSkKICAtIGRy
-b3AgY29tbWVudGVkIG91dCAnLS1lbmFibGUtbnRzJyBjb2RlCi0tLQogREVWRUxPUEVSUyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9Db25maWcuaW4g
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwogLi4uNS1vZm10NS1qZm10Ni1vZm10
-Ni1yZWxhdGVkLWNvbXBpbGUtLnBhdGNoIHwgNjEgKysrKysrKysrKysrKysrKysKIHBhY2thZ2Uv
-bnRwc2VjL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICB8IDMxICsrKysrKysrKwogcGFj
-a2FnZS9udHBzZWMvUzQ5bnRwICAgICAgICAgICAgICAgICAgICAgICAgIHwgNTggKysrKysrKysr
-KysrKysrKysKIHBhY2thZ2UvbnRwc2VjL250cGQuZXRjLmNvbmYgICAgICAgICAgICAgICAgICB8
-IDMzICsrKysrKysrKysKIHBhY2thZ2UvbnRwc2VjL250cHNlYy5oYXNoICAgICAgICAgICAgICAg
-ICAgICB8ICA0ICsrCiBwYWNrYWdlL250cHNlYy9udHBzZWMubWsgICAgICAgICAgICAgICAgICAg
-ICAgfCA2NSArKysrKysrKysrKysrKysrKysrCiA4IGZpbGVzIGNoYW5nZWQsIDI1NCBpbnNlcnRp
-b25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9udHBzZWMvMDAwMS1udHB0aW1lLWZp
-eC1qZm10NS1vZm10NS1qZm10Ni1vZm10Ni1yZWxhdGVkLWNvbXBpbGUtLnBhdGNoCiBjcmVhdGUg
-bW9kZSAxMDA2NDQgcGFja2FnZS9udHBzZWMvQ29uZmlnLmluCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9udHBzZWMvUzQ5bnRwCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9udHBzZWMv
-bnRwZC5ldGMuY29uZgogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbnRwc2VjL250cHNlYy5o
-YXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9udHBzZWMvbnRwc2VjLm1rCgpkaWZmIC0t
-Z2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggZDY0YzFiMDYzYS4uNWU2ZTFlMGQ1
-NyAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJTCkBAIC0yMjAyLDYgKzIy
-MDIsNyBAQCBGOglwYWNrYWdlL2l3ZC8KIEY6CXBhY2thZ2UvbGliZXZkZXYvCiBGOglwYWNrYWdl
-L2xpYnVldi8KIEY6CXBhY2thZ2UvbG9nNGNwbHVzLworRjoJcGFja2FnZS9udHBzZWMvCiBGOglw
-YWNrYWdlL3Bvc3RncmVzcWwvCiBGOglwYWNrYWdlL3B5dGhvbi1jb2xvcnplcm8vCiBGOglwYWNr
-YWdlL3B5dGhvbi1mbGFzay13dGYvCmRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCmluZGV4IGE3M2UxZmIzOGYuLmQ1MDIyNzQ3MTQgMTAwNjQ0Ci0tLSBh
-L3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvQ29uZmlnLmluCkBAIC0yMjczLDYgKzIy
-NzMsNyBAQCBlbmRpZgogCXNvdXJjZSAicGFja2FnZS9ubWFwL0NvbmZpZy5pbiIKIAlzb3VyY2Ug
-InBhY2thZ2Uvbm9pcC9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL250cC9Db25maWcuaW4i
-CisJc291cmNlICJwYWNrYWdlL250cHNlYy9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL251
-dHRjcC9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL29kaGNwNmMvQ29uZmlnLmluIgogCXNv
-dXJjZSAicGFja2FnZS9vZGhjcGxvYy9Db25maWcuaW4iCmRpZmYgLS1naXQgYS9wYWNrYWdlL250
-cHNlYy8wMDAxLW50cHRpbWUtZml4LWpmbXQ1LW9mbXQ1LWpmbXQ2LW9mbXQ2LXJlbGF0ZWQtY29t
-cGlsZS0ucGF0Y2ggYi9wYWNrYWdlL250cHNlYy8wMDAxLW50cHRpbWUtZml4LWpmbXQ1LW9mbXQ1
-LWpmbXQ2LW9mbXQ2LXJlbGF0ZWQtY29tcGlsZS0ucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggMDAwMDAwMDAwMC4uYzI4MzhmZThlMAotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uv
-bnRwc2VjLzAwMDEtbnRwdGltZS1maXgtamZtdDUtb2ZtdDUtamZtdDYtb2ZtdDYtcmVsYXRlZC1j
-b21waWxlLS5wYXRjaApAQCAtMCwwICsxLDYxIEBACitGcm9tIDQwMTVhMTE4M2QyZjc5ZGFkNmRk
-Njc1Y2E1ZTBkMzI5ODI1ZjNmYTMgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBQZXRl
-ciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+CitEYXRlOiBNb24sIDQgT2N0IDIwMjEgMjI6
-MjU6NTggKzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gbnRwdGltZTogZml4IGpmbXQ1L29mbXQ1IGpm
-bXQ2L29mbXQ2IHJlbGF0ZWQgY29tcGlsZSBmYWlsdXJlCitNSU1FLVZlcnNpb246IDEuMAorQ29u
-dGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVu
-Y29kaW5nOiA4Yml0CisKK1VzZSBzYW1lIGRlZmluZSBndWFyZCBmb3IgZGVmaW5pdG9uIGFzIGZv
-ciB1c2FnZSAoJ0hBVkVfU1RSVUNUX05UUFRJTUVWQUxfVEFJJworaW5zdGVhZCBvZiAnTlRQX0FQ
-SSAmJiBOVFBfQVBJID4gMycpLgorCitGaXhlczoKKworICAuLi8uLi9udHB0aW1lL250cHRpbWUu
-YzogSW4gZnVuY3Rpb24g4oCYbWFpbuKAmToKKyAgLi4vLi4vbnRwdGltZS9udHB0aW1lLmM6MzQ5
-OjE3OiBlcnJvcjog4oCYamZtdDXigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVu
-Y3Rpb24pOyBkaWQgeW91IG1lYW4g4oCYamZtdDbigJk/CisgICAgMzQ5IHwgICBwcmludGYoanNv
-biA/IGpmbXQ1IDogb2ZtdDUsIChsb25nKW50di50YWkpOworICAgICAgICB8ICAgICAgICAgICAg
-ICAgICBefn5+fgorICAgICAgICB8ICAgICAgICAgICAgICAgICBqZm10NgorICAuLi8uLi9udHB0
-aW1lL250cHRpbWUuYzozNDk6MTc6IG5vdGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlz
-IHJlcG9ydGVkIG9ubHkgb25jZSBmb3IgZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCisgIC4u
-Ly4uL250cHRpbWUvbnRwdGltZS5jOjM0OToyNTogZXJyb3I6IOKAmG9mbXQ14oCZIHVuZGVjbGFy
-ZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuIOKAmG9mbXQ24oCZ
-PworICAgIDM0OSB8ICAgcHJpbnRmKGpzb24gPyBqZm10NSA6IG9mbXQ1LCAobG9uZyludHYudGFp
-KTsKKyAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICBefn5+fgorICAgICAgICB8ICAg
-ICAgICAgICAgICAgICAgICAgICAgIG9mbXQ2CisgIC4uLy4uL250cHRpbWUvbnRwdGltZS5jOjMy
-MToxNTogd2FybmluZzogdW51c2VkIHZhcmlhYmxlIOKAmGpmbXQ24oCZIFstV3VudXNlZC12YXJp
-YWJsZV0KKyAgICAzMjEgfCAgIGNvbnN0IGNoYXIgKmpmbXQ2ID0gIiI7CisgICAgICAgIHwgICAg
-ICAgICAgICAgICBefn5+fgorICAuLi8uLi9udHB0aW1lL250cHRpbWUuYzozMTE6MTU6IHdhcm5p
-bmc6IHVudXNlZCB2YXJpYWJsZSDigJhvZm10NuKAmSBbLVd1bnVzZWQtdmFyaWFibGVdCisgICAg
-MzExIHwgICBjb25zdCBjaGFyICpvZm10NiA9ICJcbiI7CisgICAgICAgIHwgICAgICAgICAgICAg
-ICBefn5+fgorCitbVXBzdHJlYW06IGh0dHBzOi8vZ2l0bGFiLmNvbS9OVFBzZWMvbnRwc2VjLy0v
-bWVyZ2VfcmVxdWVzdHMvMTI0NV0KK1NpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5y
-ZXBvcnRAZ214Lm5ldD4KKy0tLQorIG50cHRpbWUvbnRwdGltZS5jIHwgNCArKy0tCisgMSBmaWxl
-IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBh
-L250cHRpbWUvbnRwdGltZS5jIGIvbnRwdGltZS9udHB0aW1lLmMKK2luZGV4IGZmODYxY2IuLjVk
-NTg1OTMgMTAwNjQ0CistLS0gYS9udHB0aW1lL250cHRpbWUuYworKysrIGIvbnRwdGltZS9udHB0
-aW1lLmMKK0BAIC0zMDUsNyArMzA1LDcgQEAgbWFpbigKKyAJCWNvbnN0IGNoYXIgKm9mbXQyID0g
-IiAgdGltZSAlcywgKC4lMCpkKSxcbiI7CisgCQljb25zdCBjaGFyICpvZm10MyA9ICIgIG1heGlt
-dW0gZXJyb3IgJWx1IHVzLCBlc3RpbWF0ZWQgZXJyb3IgJWx1IHVzIjsKKyAJCWNvbnN0IGNoYXIg
-Km9mbXQ0ID0gIiAgbnRwdGltZT0leC4leCB1bml4dGltZT0leC4lMCpkICVzIjsKKy0jaWYgZGVm
-aW5lZCBOVFBfQVBJICYmIE5UUF9BUEkgPiAzCisrI2lmIGRlZmluZWQoSEFWRV9TVFJVQ1RfTlRQ
-VElNRVZBTF9UQUkpCisgCQljb25zdCBjaGFyICpvZm10NSA9ICIsIFRBSSBvZmZzZXQgJWxkXG4i
-OworICNlbHNlCisgCQljb25zdCBjaGFyICpvZm10NiA9ICJcbiI7CitAQCAtMzE1LDcgKzMxNSw3
-IEBAIG1haW4oCisgCQljb25zdCBjaGFyICpqZm10MiA9ICJcInRpbWVcIjpcIiVzXCIsXCJmcmFj
-dGlvbmFsLXRpbWVcIjpcIi4lMCpkXCIsIjsKKyAJCWNvbnN0IGNoYXIgKmpmbXQzID0gIlwibWF4
-aW11bS1lcnJvclwiOiVsdSxcImVzdGltYXRlZC1lcnJvclwiOiVsdSwiOworIAkJY29uc3QgY2hh
-ciAqamZtdDQgPSAiXCJyYXctbnRwLXRpbWVcIjpcIiV4LiV4XCIsXCJyYXctdW5peC10aW1lXCI6
-XCIleC4lMCpkICVzXCIsIjsKKy0jaWYgZGVmaW5lZCBOVFBfQVBJICYmIE5UUF9BUEkgPiAzCisr
-I2lmIGRlZmluZWQoSEFWRV9TVFJVQ1RfTlRQVElNRVZBTF9UQUkpCisgCQljb25zdCBjaGFyICpq
-Zm10NSA9ICJcIlRBSS1vZmZzZXRcIjolZCwiOworICNlbHNlCisgCQljb25zdCBjaGFyICpqZm10
-NiA9ICIiOworLS0gCisyLjMzLjAKKwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9udHBzZWMvQ29uZmln
-LmluIGIvcGFja2FnZS9udHBzZWMvQ29uZmlnLmluCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IDAwMDAwMDAwMDAuLjcyNzU1MzNkMjYKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL250cHNl
-Yy9Db25maWcuaW4KQEAgLTAsMCArMSwzMSBAQAorY29uZmlnIEJSMl9QQUNLQUdFX05UUFNFQwor
-CWJvb2wgIm50cHNlYyIKKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1BZVEhPTjMKKwlzZWxlY3Qg
-QlIyX1BBQ0tBR0VfTElCQ0FQCisJc2VsZWN0IEJSMl9QQUNLQUdFX09QRU5TU0wKKwloZWxwCisJ
-ICBOVFBzZWMgcHJvamVjdCAtIGEgc2VjdXJlLCBoYXJkZW5lZCwgYW5kIGltcHJvdmVkCisJICBp
-bXBsZW1lbnRhdGlvbiBvZiBOZXR3b3JrIFRpbWUgUHJvdG9jb2wgZGVyaXZlZAorCSAgZnJvbSBO
-VFAgQ2xhc3NpYywgRGF2ZSBNaWxsc+KAmXMgb3JpZ2luYWwuCisKKwkgIFByb3ZpZGVzIHRoaW5n
-cyBsaWtlIG50cGQsIG50cGRhdGUsIG50cHEsIGV0Yy4uLgorCisJICBodHRwczovL3d3dy5udHBz
-ZWMub3JnLworCitpZiBCUjJfUEFDS0FHRV9OVFBTRUMKKworY29uZmlnIEJSMl9QQUNLQUdFX05U
-UFNFQ19DTEFTU0lDX01PREUKKwlib29sICJjbGFzc2ljLW1vZGUiCisJaGVscAorCSAgRW5hYmxl
-IHN0cmljdCBjb25maWd1cmF0aW9uIGFuZCBsb2ctZm9ybWF0IGNvbXBhdGliaWxpdHkKKwkgIHdp
-dGggTlRQIENsYXNzaWMuCisKK2NvbmZpZyBCUjJfUEFDS0FHRV9OVFBTRUNfTlRTCisJYm9vbCAi
-TlRTIHN1cHBvcnQiCisJaGVscAorCSAgRW5hYmxlIE5ldHdvcmsgVGltZSBTZWN1cml0eSAoTlRT
-KSBzdXBwb3J0LgorCitlbmRpZgorCitjb21tZW50ICJudHBzZWMgZGVwZW5zIG9uIFB5aHRvbjMi
-CisJZGVwZW5kcyBvbiAhQlIyX1BBQ0tBR0VfUFlUSE9OMwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9u
-dHBzZWMvUzQ5bnRwIGIvcGFja2FnZS9udHBzZWMvUzQ5bnRwCm5ldyBmaWxlIG1vZGUgMTAwNjQ0
-CmluZGV4IDAwMDAwMDAwMDAuLmYzZGI1MTQxOGUKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdl
-L250cHNlYy9TNDludHAKQEAgLTAsMCArMSw1OCBAQAorIyEvYmluL3NoCisjCisjIFN0YXJ0cyBO
-ZXR3b3JrIFRpbWUgUHJvdG9jb2wgZGFlbW9uCisjCisKK0RBRU1PTj0ibnRwZCIKK1BJREZJTEU9
-Ii92YXIvcnVuLyREQUVNT04ucGlkIgorCitOVFBEX0FSR1M9Ii1nIC11IG50cDpudHAgLXMgL3Zh
-ci9ydW4vbnRwIgorCisjIHNoZWxsY2hlY2sgc291cmNlPS9kZXYvbnVsbAorWyAtciAiL2V0Yy9k
-ZWZhdWx0LyREQUVNT04iIF0gJiYgLiAiL2V0Yy9kZWZhdWx0LyREQUVNT04iCisKK21rZGlyIC1w
-IC92YXIvcnVuL250cCAmJiBjaG93biBudHA6bnRwIC92YXIvcnVuL250cAorCitzdGFydCgpIHsK
-KwlwcmludGYgJ1N0YXJ0aW5nICVzOiAnICIkREFFTU9OIgorCSMgc2hlbGxjaGVjayBkaXNhYmxl
-PVNDMjA4NiAjIHdlIG5lZWQgdGhlIHdvcmQgc3BsaXR0aW5nCisJc3RhcnQtc3RvcC1kYWVtb24g
-LVMgLXEgLXAgIiRQSURGSUxFIiAteCAiL3Vzci9zYmluLyREQUVNT04iIFwKKwkJLS0gJE5UUERf
-QVJHUyAtcCAiJFBJREZJTEUiCisJc3RhdHVzPSQ/CisJaWYgWyAiJHN0YXR1cyIgLWVxIDAgXTsg
-dGhlbgorCQllY2hvICJPSyIKKwllbHNlCisJCWVjaG8gIkZBSUwiCisJZmkKKwlyZXR1cm4gIiRz
-dGF0dXMiCit9CisKK3N0b3AoKSB7CisJcHJpbnRmICdTdG9wcGluZyAlczogJyAiJERBRU1PTiIK
-KwlzdGFydC1zdG9wLWRhZW1vbiAtSyAtcSAtcCAiJFBJREZJTEUiCisJc3RhdHVzPSQ/CisJaWYg
-WyAiJHN0YXR1cyIgLWVxIDAgXTsgdGhlbgorCQlybSAtZiAiJFBJREZJTEUiCisJCWVjaG8gIk9L
-IgorCWVsc2UKKwkJZWNobyAiRkFJTCIKKwlmaQorCXJldHVybiAiJHN0YXR1cyIKK30KKworcmVz
-dGFydCgpIHsKKwlzdG9wCisJc2xlZXAgMQorCXN0YXJ0Cit9CisKK2Nhc2UgIiQxIiBpbgorCXN0
-YXJ0fHN0b3B8cmVzdGFydCkKKwkJIiQxIjs7CisJcmVsb2FkKQorCQkjIFJlc3RhcnQsIHNpbmNl
-IHRoZXJlIGlzIG5vIHRydWUgInJlbG9hZCIgZmVhdHVyZS4KKwkJcmVzdGFydDs7CisJKikKKwkJ
-ZWNobyAiVXNhZ2U6ICQwIHtzdGFydHxzdG9wfHJlc3RhcnR8cmVsb2FkfSIKKwkJZXhpdCAxCitl
-c2FjCmRpZmYgLS1naXQgYS9wYWNrYWdlL250cHNlYy9udHBkLmV0Yy5jb25mIGIvcGFja2FnZS9u
-dHBzZWMvbnRwZC5ldGMuY29uZgpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAw
-Li5lMGY0NWMxNDM4Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9udHBzZWMvbnRwZC5ldGMu
-Y29uZgpAQCAtMCwwICsxLDMzIEBACisjCisjIGxlZ2FjeSBOVFAgY29uZmlndXJhdGlvbgorIwor
-cG9vbCAwLnBvb2wubnRwLm9yZyBpYnVyc3QKK3Bvb2wgMS5wb29sLm50cC5vcmcgaWJ1cnN0Citw
-b29sIDIucG9vbC5udHAub3JnIGlidXJzdAorcG9vbCAzLnBvb2wubnRwLm9yZyBpYnVyc3QKKwor
-IworIyBOVFMgY29uZmlndXJhdGlvbgorIworIyBOb3RlczoKKyMgIC0gdW5jb21tZW50IHRoZSBm
-b2xsb3dpbmcgbGluZXMgdG8gZW5hYmxlIE5UUyBzdXBwb3J0IChidXQKKyMgICAgbWFrZSBzdXJl
-IHRoZSBpbml0aWFsIGNsb2NrIGlzIHVwLXRvLWRhdGUgKG90aGVyd2lzZSB0aGUKKyMgICAgTlRT
-IGNlcnRpZmljYXRlIHZhbGlkYXRpb24gd2lsbCBmYWlsIHdpdGggJ05UU2M6IGNlcnRpZmljYXRl
-IGludmFsaWQ6CisjICAgIDk9PmNlcnRpZmljYXRlIGlzIG5vdCB5ZXQgdmFsaWQnIGFzIG9uIGJv
-YXJkcyB3aXRob3V0IFJUQyBzdXBwb3J0KQorIyAgICBhbmQvb3Iga2VlcCBhdCBsZWFzdCBvbmUg
-bGluZSBmcm9tIHRoZSBsZWdhY3kgTlRQIGxpbmVzCisjICAtIGVuYWJsZSBCUjJfUEFDS0FHRV9D
-QV9DRVJUSUZJQ0FURVMgdG8gZ2FpbiBhY2Nlc3MgdG8gdGhlIGNlcnRpZmljYXRlCisjICAgIGZp
-bGVzCisjCisjIHNlcnZlciB0aW1lLmNsb3VkZmxhcmUuY29tIG50cyAgIyBHbG9iYWwsIGFueWNh
-c3QKKyMgc2VydmVyIG50cy5udHAuc2U6NDQ0MyBudHMgICAgICAjIFN3ZWRlbgorIyBzZXJ2ZXIg
-bnRwbW9uLmRjczEuYml6IG50cyAgICAgICMgU2luZ2Fwb3JlCisjIHNlcnZlciBudHAxLmdseXBu
-b2QuY29tIG50cyAgICAgIyBTYW4gRnJhbmNpc2NvCisjIHNlcnZlciBudHAyLmdseXBub2QuY29t
-IG50cyAgICAgIyBMb25kb24KKyMKKyMgY2EgL3Vzci9zaGFyZS9jYS1jZXJ0aWZpY2F0ZXMvbW96
-aWxsYQorCisjIEFsbG93IG9ubHkgdGltZSBxdWVyaWVzLCBhdCBhIGxpbWl0ZWQgcmF0ZSwgc2Vu
-ZGluZyBLb0Qgd2hlbiBpbiBleGNlc3MuCisjIEFsbG93IGFsbCBsb2NhbCBxdWVyaWVzIChJUHY0
-LCBJUHY2KQorcmVzdHJpY3QgZGVmYXVsdCBub21vZGlmeSBub3BlZXIgbm9xdWVyeSBsaW1pdGVk
-IGtvZAorcmVzdHJpY3QgMTI3LjAuMC4xCityZXN0cmljdCBbOjoxXQpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9udHBzZWMvbnRwc2VjLmhhc2ggYi9wYWNrYWdlL250cHNlYy9udHBzZWMuaGFzaApuZXcg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi40OWRjNGU0ZDUyCi0tLSAvZGV2L251
-bGwKKysrIGIvcGFja2FnZS9udHBzZWMvbnRwc2VjLmhhc2gKQEAgLTAsMCArMSw0IEBACisjIExv
-Y2FsbHkgY2FsY3VsYXRlZAorc2hhMjU2ICA3MWM5ZjRiZGU2OTUzYmJjMDQ4YmJhZjI3OGRhODFj
-NDUxYTU2Y2MwOGQ2NzcyNTQyYjRhZDM3YzY3ZDcyZTg5ICBudHBzZWMtTlRQc2VjXzFfMl8xLnRh
-ci5iejIKK3NoYTI1NiAgYjRkYjRkZTMzMTdjM2IwNTU0ZWQ5MWViNjkyOTY4ODAwYmRmZDZhZDJj
-MTZmZmJlZWU4Y2U0ODk1ZWQ5MWRhNCAgTElDRU5TRS5hZG9jCitzaGEyNTYgIGQzYjIxNDcwYWRh
-ZGQ5YWJkOWM2ZDY3NTM3OGY4YzM3MWFjNWE0ZWE2ZGJlYzkxODU5ZTAyZmFkY2EzYzA4NTYgIGRv
-Y3MvY29weXJpZ2h0LmFkb2MKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbnRwc2VjL250cHNlYy5tayBi
-L3BhY2thZ2UvbnRwc2VjL250cHNlYy5tawpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAw
-MDAwMDAwLi43MzllZjBlYWI0Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9udHBzZWMvbnRw
-c2VjLm1rCkBAIC0wLDAgKzEsNjUgQEAKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisjCisjIG50
-cHNlYworIworIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKKworTlRQU0VDX1ZFUlNJT05fTUFKT1Ig
-PSAxCitOVFBTRUNfVkVSU0lPTl9NSU5PUiA9IDIKK05UUFNFQ19WRVJTSU9OX1BPSU5UID0gMQor
-TlRQU0VDX1ZFUlNJT04gPSAkKE5UUFNFQ19WRVJTSU9OX01BSk9SKV8kKE5UUFNFQ19WRVJTSU9O
-X01JTk9SKV8kKE5UUFNFQ19WRVJTSU9OX1BPSU5UKQorTlRQU0VDX1NPVVJDRSA9IG50cHNlYy1O
-VFBzZWNfJChOVFBTRUNfVkVSU0lPTikudGFyLmJ6MgorTlRQU0VDX1NJVEUgPSBodHRwczovL2dp
-dGxhYi5jb20vTlRQc2VjL250cHNlYy8tL2FyY2hpdmUvTlRQc2VjXyQoTlRQU0VDX1ZFUlNJT04p
-CitOVFBTRUNfTElDRU5TRSA9IEJTRC0yLUNsYXVzZSBOVFAgQlNELTMtQ2xhdXNlIE1JVAorTlRQ
-U0VDX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLmFkb2MgZG9jcy9jb3B5cmlnaHQuYWRvYworCitO
-VFBTRUNfQ1BFX0lEX1ZFTkRPUiA9IG50cHNlYworTlRQU0VDX0NQRV9JRF9WRVJTSU9OID0gJChO
-VFBTRUNfVkVSU0lPTl9NQUpPUikuJChOVFBTRUNfVkVSU0lPTl9NSU5PUikKK05UUFNFQ19DUEVf
-SURfVVBEQVRFID0gJChOVFBTRUNfVkVSU0lPTl9QT0lOVCkKKworTlRQU0VDX0RFUEVOREVOQ0lF
-UyA9IFwKKwlob3N0LXBrZ2NvbmYgXAorCXB5dGhvbjMgXAorCWxpYmNhcCBcCisJb3BlbnNzbAor
-CitOVFBTRUNfQ09ORl9PUFRTID0gXAorCUNDPSIkKEhPU1RDQykiIFwKKwlQWVRIT05fQ09ORklH
-PSIkKFNUQUdJTkdfRElSKS91c3IvYmluL3B5dGhvbjMtY29uZmlnIiBcCisJLS1saWJkaXI9L3Vz
-ci9saWIvcHl0aG9uJChQWVRIT04zX1ZFUlNJT05fTUFKT1IpL3NpdGUtcGFja2FnZXMvbnRwIFwK
-KwktLWNyb3NzLWNvbXBpbGVyPSIkKFRBUkdFVF9DQykiIFwKKwktLWNyb3NzLWNmbGFncz0iJChU
-QVJHRVRfQ0ZMQUdTKSAtc3RkPWdudTk5IiBcCisJLS1jcm9zcy1sZGZsYWdzPSIkKFRBUkdFVF9M
-REZMQUdTKSIgXAorCS0tbm90ZXN0cyBcCisJLS1lbmFibGUtZWFybHktZHJvcHJvb3QgXAorCS0t
-ZGlzYWJsZS1tZG5zLXJlZ2lzdHJhdGlvbiBcCisJLS1lbmFibGUtcHlsaWI9ZmZpIFwKKwktLW5v
-cHljIFwKKwktLW5vcHlvIFwKKwktLW5vcHljYWNoZSBcCisJLS1kaXNhYmxlLWRvYyBcCisJLS1k
-aXNhYmxlLW1hbnBhZ2UKKworaWZlcSAoJChCUjJfUEFDS0FHRV9OVFBTRUNfQ0xBU1NJQ19NT0RF
-KSx5KQorTlRQU0VDX0NPTkZfT1BUUyArPSAtLWVuYWJsZS1jbGFzc2ljLW1vZGUKK2VuZGlmCisK
-KyMgbm8gJy0tZW5hYmxlLW50cycgb3B0aW9uIGF2YWlsYWJsZQoraWZlcSAoJChCUjJfUEFDS0FH
-RV9OVFBTRUNfTlRTKSwpCitOVFBTRUNfQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1udHMKK2VuZGlm
-CisKK2RlZmluZSBOVFBTRUNfSU5TVEFMTF9OVFBTRUNfQ09ORgorCSQoSU5TVEFMTCkgLW0gNjQ0
-IHBhY2thZ2UvbnRwc2VjL250cGQuZXRjLmNvbmYgJChUQVJHRVRfRElSKS9ldGMvbnRwLmNvbmYK
-K2VuZGVmCitOVFBTRUNfUE9TVF9JTlNUQUxMX1RBUkdFVF9IT09LUyArPSBOVFBTRUNfSU5TVEFM
-TF9OVFBTRUNfQ09ORgorCitkZWZpbmUgTlRQU0VDX0lOU1RBTExfSU5JVF9TWVNWCisJJChJTlNU
-QUxMKSAtRCAtbSA3NTUgcGFja2FnZS9udHBzZWMvUzQ5bnRwICQoVEFSR0VUX0RJUikvZXRjL2lu
-aXQuZC9TNDludHAKK2VuZGVmCisKK2RlZmluZSBOVFBTRUNfVVNFUlMKKwludHAgLTEgbnRwIC0x
-ICogLSAtIC0gbnRwZCB1c2VyCitlbmRlZgorCiskKGV2YWwgJCh3YWYtcGFja2FnZSkpCi0tIAoy
-LjM0LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Install xxhash in staging to allow lighttpd to use it
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-fixed-man-page-installation.patch    | 31 ++++++++
+ .../0002-fix-man-page-installation.patch      | 66 +++++++++++++++++
+ ...kefile-add-dedicated-install-targets.patch | 73 +++++++++++++++++++
+ package/xxhash/xxhash.mk                      | 27 ++++++-
+ 4 files changed, 195 insertions(+), 2 deletions(-)
+ create mode 100644 package/xxhash/0001-fixed-man-page-installation.patch
+ create mode 100644 package/xxhash/0002-fix-man-page-installation.patch
+ create mode 100644 package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
+
+diff --git a/package/xxhash/0001-fixed-man-page-installation.patch b/package/xxhash/0001-fixed-man-page-installation.patch
+new file mode 100644
+index 0000000000..a9f68db4b4
+--- /dev/null
++++ b/package/xxhash/0001-fixed-man-page-installation.patch
+@@ -0,0 +1,31 @@
++From e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6 Mon Sep 17 00:00:00 2001
++From: Yann Collet <cyan@fb.com>
++Date: Fri, 6 Aug 2021 15:29:32 -0700
++Subject: [PATCH] fixed man page installation
++
++[Retrieved from:
++https://github.com/Cyan4973/xxHash/commit/e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index b8552a9f..556a32a0 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -498,10 +498,10 @@ endif
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh64sum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh128sum
++ 	@echo Installing man pages
++-	$(Q)$(INSTALL_DATA) xxhsum.1 $(DESTDIR)$(MANDIR)/xxhsum.1
++-	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh32sum.1
++-	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh64sum.1
++-	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh128sum.1
+++	$(Q)$(INSTALL_DATA) $(MAN) $(DESTDIR)$(MANDIR)/xxhsum.1
+++	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh32sum.1
+++	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh64sum.1
+++	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh128sum.1
++ 	@echo xxhash installation completed
++ 
++ .PHONY: uninstall
+diff --git a/package/xxhash/0002-fix-man-page-installation.patch b/package/xxhash/0002-fix-man-page-installation.patch
+new file mode 100644
+index 0000000000..5d2a5a4efa
+--- /dev/null
++++ b/package/xxhash/0002-fix-man-page-installation.patch
+@@ -0,0 +1,66 @@
++From 836f4e735cf368542f14005e41d2f84ec29dfd60 Mon Sep 17 00:00:00 2001
++From: Yann Collet <yann.collet.73@gmail.com>
++Date: Sat, 4 Dec 2021 10:29:49 -0800
++Subject: [PATCH] fix man page installation
++
++for variant redirectors (`xxh32sum`, `xxh64sum` and `xxh128sum`).
++fix #647, reported by @jpalus.
++
++Also : slightly updated man page text, for clarity and accuracy.
++
++[Retrieved (and updated to keep only Makefile update) from:
++https://github.com/Cyan4973/xxHash/commit/836f4e735cf368542f14005e41d2f84ec29dfd60]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile        | 14 ++++++++------
++ cli/xxhsum.1    |  8 ++++----
++ cli/xxhsum.1.md |  8 +++++---
++ 3 files changed, 17 insertions(+), 13 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 2fbefbc6..63273e16 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -457,6 +457,7 @@ endif
++ 
++ INSTALL_PROGRAM ?= $(INSTALL)
++ INSTALL_DATA    ?= $(INSTALL) -m 644
+++INSTALL_DIR     ?= $(INSTALL) -d -m 755
++ 
++ 
++ # Escape special symbols by putting each character into its separate class
++@@ -496,7 +497,7 @@ libxxhash.pc: libxxhash.pc.in
++ .PHONY: install
++ install: lib libxxhash.pc xxhsum  ## install libraries, CLI, links and man page
++ 	@echo Installing libxxhash
++-	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(LIBDIR)
+++	$(Q)$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++ 	$(Q)$(INSTALL_DATA) libxxhash.a $(DESTDIR)$(LIBDIR)
++ 	$(Q)$(INSTALL_PROGRAM) $(LIBXXH) $(DESTDIR)$(LIBDIR)
++ 	$(Q)ln -sf $(LIBXXH) $(DESTDIR)$(LIBDIR)/libxxhash.$(SHARED_EXT_MAJOR)
++@@ -508,19 +509,20 @@ ifeq ($(DISPATCH),1)
++ 	$(Q)$(INSTALL_DATA) xxh_x86dispatch.h $(DESTDIR)$(INCLUDEDIR)
++ endif
++ 	@echo Installing pkgconfig
++-	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/
+++	$(Q)$(INSTALL_DIR) $(DESTDIR)$(PKGCONFIGDIR)/
++ 	$(Q)$(INSTALL_DATA) libxxhash.pc $(DESTDIR)$(PKGCONFIGDIR)/
++ 	@echo Installing xxhsum
++-	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(BINDIR)/ $(DESTDIR)$(MANDIR)/
+++	$(Q)$(INSTALL_DIR) $(DESTDIR)$(BINDIR)/
++ 	$(Q)$(INSTALL_PROGRAM) xxhsum $(DESTDIR)$(BINDIR)/xxhsum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh32sum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh64sum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh128sum
++ 	@echo Installing man pages
+++	$(Q)$(INSTALL_DIR) $(DESTDIR)$(MANDIR)/
++ 	$(Q)$(INSTALL_DATA) $(MAN) $(DESTDIR)$(MANDIR)/xxhsum.1
++-	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh32sum.1
++-	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh64sum.1
++-	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh128sum.1
+++	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh32sum.1
+++	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh64sum.1
+++	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh128sum.1
++ 	@echo xxhash installation completed
++ 
++ .PHONY: uninstall
+diff --git a/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch b/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
+new file mode 100644
+index 0000000000..0607c8ee82
+--- /dev/null
++++ b/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
+@@ -0,0 +1,73 @@
++From 0e7418bce83bb9c236d9cb4535a36a80cd0cc663 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Dec 2021 21:45:14 +0100
++Subject: [PATCH] Makefile: add dedicated install targets
++
++Add dedicated install targets to allow the user to install only xxhsum,
++the static library, the shared library, etc.
++
++This is especially useful on embedded systems where dynamic library is
++not always supported by toolchains
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/Cyan4973/xxHash/pull/665]
++---
++ Makefile | 18 +++++++++++++++---
++ 1 file changed, 15 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 8d4fcd2..5fe7297 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -505,11 +505,14 @@ libxxhash.pc: libxxhash.pc.in
++           $< > $@
++ 
++ 
++-.PHONY: install
++-install: lib libxxhash.pc xxhsum  ## install libraries, CLI, links and man page
++-	@echo Installing libxxhash
+++install_libxxhash.a: libxxhash.a
+++	@echo Installing libxxhash.a
++ 	$(Q)$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++ 	$(Q)$(INSTALL_DATA) libxxhash.a $(DESTDIR)$(LIBDIR)
+++
+++install_libxxhash: libxxhash
+++	@echo Installing libxxhash
+++	$(Q)$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++ 	$(Q)$(INSTALL_PROGRAM) $(LIBXXH) $(DESTDIR)$(LIBDIR)
++ 	$(Q)ln -sf $(LIBXXH) $(DESTDIR)$(LIBDIR)/libxxhash.$(SHARED_EXT_MAJOR)
++ 	$(Q)ln -sf $(LIBXXH) $(DESTDIR)$(LIBDIR)/libxxhash.$(SHARED_EXT)
++@@ -519,21 +522,30 @@ install: lib libxxhash.pc xxhsum  ## install libraries, CLI, links and man page
++ ifeq ($(DISPATCH),1)
++ 	$(Q)$(INSTALL_DATA) xxh_x86dispatch.h $(DESTDIR)$(INCLUDEDIR)
++ endif
+++
+++install_libxxhash.pc: libxxhash.pc
++ 	@echo Installing pkgconfig
++ 	$(Q)$(INSTALL_DIR) $(DESTDIR)$(PKGCONFIGDIR)/
++ 	$(Q)$(INSTALL_DATA) libxxhash.pc $(DESTDIR)$(PKGCONFIGDIR)/
+++
+++install_xxhsum: xxhsum
++ 	@echo Installing xxhsum
++ 	$(Q)$(INSTALL_DIR) $(DESTDIR)$(BINDIR)/
++ 	$(Q)$(INSTALL_PROGRAM) xxhsum $(DESTDIR)$(BINDIR)/xxhsum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh32sum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh64sum
++ 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh128sum
+++
+++install_man:
++ 	@echo Installing man pages
++ 	$(Q)$(INSTALL_DIR) $(DESTDIR)$(MANDIR)/
++ 	$(Q)$(INSTALL_DATA) $(MAN) $(DESTDIR)$(MANDIR)/xxhsum.1
++ 	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh32sum.1
++ 	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh64sum.1
++ 	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh128sum.1
+++
+++.PHONY: install
+++install: install_libxxhash.a install_libxxhash install_libxxhash.pc install_xxhsum install_man ## install libraries, CLI, links and man page
++ 	@echo xxhash installation completed
++ 
++ .PHONY: uninstall
++-- 
++2.33.0
++
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index c2ddbbd607..3e7f3244b3 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -8,13 +8,36 @@ XXHASH_VERSION = 0.8.0
+ XXHASH_SITE = $(call github,Cyan4973,xxHash,v$(XXHASH_VERSION))
+ XXHASH_LICENSE = BSD-2-Clause (library), GPL-2.0+ (xxhsum)
+ XXHASH_LICENSE_FILES = LICENSE
++XXHASH_INSTALL_STAGING = YES
++
++XXHASH_TARGETS = xxhsum
++XXHASH_INSTALL_TARGETS = install_xxhsum
++
++ifeq ($(BR2_STATIC_LIBS),y)
++XXHASH_TARGETS += libxxhash.a libxxhash.pc
++XXHASH_INSTALL_TARGETS += install_libxxhash.a install_libxxhash.pc
++else ifeq ($(BR2_SHARED_LIBS),y)
++XXHASH_TARGETS += libxxhash libxxhash.pc
++XXHASH_INSTALL_TARGETS += install_libxxhash install_libxxhash.pc
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++XXHASH_TARGETS += libxxhash.a libxxhash libxxhash.pc
++XXHASH_INSTALL_TARGETS += \
++	install_libxxhash.a install_libxxhash install_libxxhash.pc
++endif
+ 
+ define XXHASH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) xxhsum
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(XXHASH_TARGETS)
++endef
++
++define XXHASH_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		PREFIX=/usr DESTDIR=$(STAGING_DIR) $(XXHASH_INSTALL_TARGETS)
+ endef
+ 
+ define XXHASH_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/xxhsum $(TARGET_DIR)/usr/bin/xxhsum
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		PREFIX=/usr DESTDIR=$(TARGET_DIR) $(XXHASH_INSTALL_TARGETS)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
