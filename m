@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 834A9C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 21:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC55CC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 15 Dec 2021 21:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15D4E60F5C;
-	Wed, 15 Dec 2021 21:39:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4032403B4;
+	Wed, 15 Dec 2021 21:50:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4meSZCGdLl03; Wed, 15 Dec 2021 21:39:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49EB560F73;
-	Wed, 15 Dec 2021 21:39:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0FA01BF2A7
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:38:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D047C4026D
- for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:38:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ypAC5vlLTfDe for <buildroot@lists.busybox.net>;
- Wed, 15 Dec 2021 21:38:57 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w9B_7uNTmafs; Wed, 15 Dec 2021 21:50:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22795400BE;
+	Wed, 15 Dec 2021 21:50:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EBDB1BF39F
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:50:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AF17813F2
+ for <buildroot@lists.busybox.net>; Wed, 15 Dec 2021 21:50:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xS0Pmu7zQOFE for <buildroot@lists.busybox.net>;
+ Wed, 15 Dec 2021 21:50:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D99974154D
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 21:38:56 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id t18so40462783wrg.11
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 13:38:56 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 70EC6813C9
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 21:50:30 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ az34-20020a05600c602200b0033bf8662572so16936810wmb.0
+ for <buildroot@buildroot.org>; Wed, 15 Dec 2021 13:50:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=etu6L5yr9AmADJobJlLN4W+U+Scvz/j4WwBJ4+Kbpxo=;
- b=GnETYuJrL1PZ929o/zL4wYq0OC+F2JMdOlt3bbOut+M03H6B3RcbMbh5hka2wyTlbH
- uh4j5TDr72JuBrHTKaO/dON3igtj3v0IpdtT+87uiNz4aBqHdxv0OSXskFj26ApsHaVG
- 4njhegv9+aXoHd0VjxnFNydga1pg9dWEAfRRwOoowCNL1RLdGHASyujFb4idIFVqCOy2
- KTj2JMLtGuztgK+L8zbPvzRasyEFn8+Fcn4ZvSio4lSJE4U1M1RrHy+TXP8WHn9CI710
- 2261IhIVgpRyuRx9kJFGMFkwU0XP+nkpjTEy/x3cgZYo4bsED49GXmDeWT0Zj51RPeNi
- h9vQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=fnQ5DZXCyIDCHF7BWd1PH6EGMky9BCIDVdFYN/7lN5Q=;
+ b=T08Z+nggtWEhf5FanKZfegwlR6ahX1emRA0BSLZ3TEJ6NpOyeJ4du98E2aFJ2Ln/5p
+ la70E6Xi+S3cmY/fur5eBk5NhEOoJJ6/VBQzaLz3ZRqlG0VJkGzP3lalw8v8KxXQ0DWf
+ 8wqrOrSeUc2xOGS8zHtuzP1OAacd7L9YNWQFAPbPS5txUdb8kGA7GXoVIUPnskwXFg10
+ e1mptMPeZdqFkDPdDtkqwt0G3ProCmeQ4EfWftzQHMn1JJzgPx3oFHLDO76OeA0DOs6G
+ GaXtd3sgl8MZfv35CCeve/K2CUkflDoWA/p6RmSdvSIzRonn7HM5kOw4EJPC7zg3WAQ4
+ cPxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=etu6L5yr9AmADJobJlLN4W+U+Scvz/j4WwBJ4+Kbpxo=;
- b=I8MYPYiUr1N+CBNpMD7CcNHPnaa0YEOYElS5WhtfNfLbZCpjnJhxbSzn3txh+6HWJd
- BUcrUtYzuB/UujWSa+A3FOU6nvaHU3wF3QykKUwJnMk0rWpOkefhUViKWs7jGjn+a3sP
- 19kSPcyK02+IkYPuo6rbjj/xSLvtyCLTJ3z/sC1V4U68wKjJssU/JpDXoLbfgFwhmpcY
- LRaa1gDoLO2vH4/DVbCQP5CaW147zkuqTVi0wh/sTWI72dtaEGAfSCmfu8MNfg10MSDj
- hucweAHzW/x9Oy6tpi35PRLdOnvzcAqC3UYCia1/t3ZheILV6YzK3Z8EGBM1MRMQONZc
- 5Urg==
-X-Gm-Message-State: AOAM5320ynWlgV2jdB4o3fdJuq3NJid5xqBUtnXmHJ9PRqsmjvyCq9Dh
- yt4SXre1oldBDddBy4eSTs84BdCHCehwkQ==
-X-Google-Smtp-Source: ABdhPJyczHqOdmxDD/LTYqpuIg65TXluR//pgtXb8dfhXXv2+OhHu1JANAjjF5sJlGthFh2UT7Xc1A==
-X-Received: by 2002:a5d:4e46:: with SMTP id r6mr3874451wrt.161.1639604334802; 
- Wed, 15 Dec 2021 13:38:54 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=fnQ5DZXCyIDCHF7BWd1PH6EGMky9BCIDVdFYN/7lN5Q=;
+ b=3wsooQT1xhsq9M5xF/rchsDEyZg6I1wviXKVhtx3omSDmj8YnsXdvKUyS6TSvpsZYH
+ roQIUSl6bUnqISftRuW3qm+rVyLRYZsD6JUIHYzkoXx2NDGQvvkE9wtg8188vuqAxVq9
+ 5YcigSgkhQI+JO4OXrZ6bfkIsmbUUynIVVqCnaSG360Hz2MwZfRLBx9+1VKMC5sppdBq
+ PnS61XWehdbGHDOY83/hG/kpior421fnN0asza/0sO5VsZmSctVQhC59p6y6bg1B2Hjb
+ mH7X28z0/KqZKtjycnvyZXrmp0i0aXKE0nijsdR6VmuOkaHvkJlUon/1LtACtjLxMQLb
+ ooXA==
+X-Gm-Message-State: AOAM530OX6GR/T7YUW2fcwE1kJpUT98m/w5y4J0U+Ey3lCWTSnL3Nnw6
+ 138HpBWGPGFezPPEx5DNhMku/kuf5wWHmw==
+X-Google-Smtp-Source: ABdhPJzEMIcPsFdkm9Q/q9vDcOhyU/gAOSPHaZCQ+PfDLk2i/lSK/+wHoUCVMS+KBjlE6PoCuj+wDA==
+X-Received: by 2002:a05:600c:1d97:: with SMTP id
+ p23mr2059736wms.144.1639605028396; 
+ Wed, 15 Dec 2021 13:50:28 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id g13sm4153711wrd.57.2021.12.15.13.38.53
+ by smtp.gmail.com with ESMTPSA id g18sm3031941wrv.42.2021.12.15.13.50.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Dec 2021 13:38:54 -0800 (PST)
+ Wed, 15 Dec 2021 13:50:27 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Dec 2021 22:38:23 +0100
-Message-Id: <20211215213823.3982329-2-fontaine.fabrice@gmail.com>
+Date: Wed, 15 Dec 2021 22:50:07 +0100
+Message-Id: <20211215215007.3983784-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211215213823.3982329-1-fontaine.fabrice@gmail.com>
-References: <20211215213823.3982329-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/lighttpd: add xxhash mandatory
- dependency
+Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix
+ BR2_STATIC_SHARED_LIBS typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,65 +88,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add xxhash mandatory dependency to avoid the following build failure
-with the embedded xxhash (in version 0.8.1) and uclibc raised since
-bump to version 1.4.63 in commit
-2a002466459a17f44f565209a9cfd8512676ca47 and
-https://github.com/lighttpd/lighttpd1.4/commit/23b07fa3efde70b76afa5380b1602d0515aedd46:
-
-/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/10.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: src/lighttpd.p/algo_xxhash.c.o: in function `XXH32_canonicalFromHash':
-/home/buildroot/autobuild/instance-0/output-1/build/lighttpd-1.4.63/build/../src/algo_xxhash.h:2282: undefined reference to `static_assert'
-
-Fixes:
- - http://autobuild.buildroot.org/results/7b644dce244a1aa4a193a3196059a56b2c4c7591
+Fix typo BR2_STATIC_SHARED_LIBS -> BR2_SHARED_STATIC_LIBS added by
+commit db47bc99976c2d4ffb509620a76cfdd369b30559
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lighttpd/Config.in   | 1 +
- package/lighttpd/lighttpd.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/civetweb/civetweb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index e9a5aa34f0..9f593a9228 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIGHTTPD
- 	bool "lighttpd"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_XXHASH
- 	help
- 	  lighttpd a secure, fast, compliant and very flexible
- 	  web-server which has been optimized for high-performance
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 98e84e8de8..5d53767263 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -11,7 +11,7 @@ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSIO
- LIGHTTPD_LICENSE = BSD-3-Clause
- LIGHTTPD_LICENSE_FILES = COPYING
- LIGHTTPD_CPE_ID_VENDOR = lighttpd
--LIGHTTPD_DEPENDENCIES = host-pkgconf
-+LIGHTTPD_DEPENDENCIES = host-pkgconf xxhash
- LIGHTTPD_CONF_OPTS = \
- 	-Dwith_brotli=false \
- 	-Dwith_dbi=false \
-@@ -33,7 +33,7 @@ LIGHTTPD_CONF_OPTS = \
- 	-Dwith_sasl=false \
- 	-Dwith_wolfssl=false \
- 	-Dwith_xattr=false \
--	-Dwith_xxhash=false \
-+	-Dwith_xxhash=true \
- 	-Dwith_zstd=false \
- 	-Dbuild_extra_warnings=false \
- 	-Dbuild_static=false \
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 33c3bfdf33..22618fb443 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -54,12 +54,12 @@ ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
+ CIVETWEB_INSTALL_STAGING = YES
+ CIVETWEB_INSTALL_TARGETS += install-headers
+ 
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_STATIC_SHARED_LIBS),y)
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ CIVETWEB_BUILD_TARGETS += lib
+ CIVETWEB_INSTALL_TARGETS += install-lib
+ endif
+ 
+-ifeq ($(BR2_SHARED_LIBS)$(BR2_STATIC_SHARED_LIBS),y)
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ CIVETWEB_BUILD_TARGETS += slib
+ CIVETWEB_INSTALL_TARGETS += install-slib
+ endif
 -- 
 2.33.0
 
