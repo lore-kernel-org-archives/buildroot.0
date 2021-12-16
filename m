@@ -4,54 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 956A8C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 21:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D6EC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 21:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D6E5417EF;
-	Thu, 16 Dec 2021 21:28:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5043041802;
+	Thu, 16 Dec 2021 21:28:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g_qGpzHHBS9h; Thu, 16 Dec 2021 21:28:21 +0000 (UTC)
+	with ESMTP id yf6s12e1P9xs; Thu, 16 Dec 2021 21:28:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1C9141807;
-	Thu, 16 Dec 2021 21:28:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA4C1417EF;
+	Thu, 16 Dec 2021 21:28:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 62F811BF392
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3DA161BF392
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D18383FA9
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AD4783F38
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KSwrL82mF7g7 for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 21:28:17 +0000 (UTC)
+ with ESMTP id D4J9_7WzHs9O for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 21:28:40 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69B0783F8A
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 21:28:17 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout04.t-online.de (Postfix) with SMTP id 8CB2A51F2;
- Thu, 16 Dec 2021 22:27:25 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.188.64]) by fwd72.t-online.de
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 384AB83F34
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 21:28:40 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout05.t-online.de (Postfix) with SMTP id B178E1824;
+ Thu, 16 Dec 2021 22:28:11 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.188.64]) by fwd70.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mxyHd-10ZRz70; Thu, 16 Dec 2021 22:27:25 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42768)
+ esmtp id 1mxyIN-0aPKTp0; Thu, 16 Dec 2021 22:28:11 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42770)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mxyHd-0002pg-1K;
- Thu, 16 Dec 2021 22:27:25 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mxyIN-0002xo-5G;
+ Thu, 16 Dec 2021 22:28:11 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 22:27:23 +0100
-Message-Id: <20211216212724.787872-2-bernd.kuhls@t-online.de>
+Date: Thu, 16 Dec 2021 22:28:11 +0100
+Message-Id: <20211216212811.787978-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211216212724.787872-1-bernd.kuhls@t-online.de>
-References: <20211216212724.787872-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1639690045-0000B7AB-17EC4304/0/0 CLEAN NORMAL
-X-TOI-MSGID: 4af4cb6a-f22d-497f-ab1a-9c740c81df9d
-Subject: [Buildroot] [PATCH 2/3] package/pugixml: switch _SITE to https
+X-TOI-EXPURGATEID: 150726::1639690091-00004E7B-3E88F11F/0/0 CLEAN NORMAL
+X-TOI-MSGID: 416519a4-52a0-4f14-887a-12c6da9a30fd
+Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to 22.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,8 +61,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>,
- Theo Debrouwere <t.debrouwere@televic.com>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,22 +69,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pugixml/pugixml.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index ddda5a3ccc..bc018180ef 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 88f82a9596..60d45a315e 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  77473df5440915e7c487a0f1c3f6236a8c29610528c6f0833da9caae834a1741  intel-gmmlib-21.3.3.tar.gz
++sha256  337c63f5bbc2c7ea2ba85aecd40ae72dc65187ba07c4feea73e129d53f30677c  intel-gmmlib-22.0.0.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 2071d9f533..36e61dc4d2 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PUGIXML_VERSION = 1.11.4
--PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
-+PUGIXML_SITE = https://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
- PUGIXML_LICENSE = MIT
- PUGIXML_LICENSE_FILES = LICENSE.md
- PUGIXML_CPE_ID_VENDOR = pugixml_project
+-INTEL_GMMLIB_VERSION = 21.3.3
++INTEL_GMMLIB_VERSION = 22.0.0
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
