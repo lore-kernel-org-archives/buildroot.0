@@ -1,64 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E975DC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96FC3C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7771441744;
-	Thu, 16 Dec 2021 18:03:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 271674014B;
+	Thu, 16 Dec 2021 18:13:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ziu4eJYN8Ri1; Thu, 16 Dec 2021 18:03:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TAE1ebhNCUj7; Thu, 16 Dec 2021 18:13:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9ADE41739;
-	Thu, 16 Dec 2021 18:03:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A9CC1BF3BD
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:03:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52875401AD;
+	Thu, 16 Dec 2021 18:13:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A07B81BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:13:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E694F83EE5
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D856401AD
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:13:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y5wF8uW1VpLd for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24F6983EE3
- for <buildroot@uclibc.org>; Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B91CB82293; Thu, 16 Dec 2021 17:58:04 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLr0C6h00ny5 for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:13:13 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5F53B4014B
+ for <buildroot@uclibc.org>; Thu, 16 Dec 2021 18:13:13 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1mxvFf-0007Po-6g
+ for buildroot@uclibc.org; Thu, 16 Dec 2021 19:13:11 +0100
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Thu, 16 Dec 2021 18:03:24 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.08.2
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: major
-X-Bugzilla-Who: ps.report@gmx.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14461-163-2A0LFWPm3a@https.bugs.busybox.net/>
-In-Reply-To: <bug-14461-163@https.bugs.busybox.net/>
-References: <bug-14461-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14461] Qt5webenegine does not build due to
- fontconfig/freetype dependency problem
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 16 Dec 2021 19:12:53 +0100
+Message-ID: <pan$6da85$57c98f32$8301c983$a5945ee7@ID-313208.user.individual.net>
+References: <bug-14451-163@https.bugs.busybox.net/>
+ <bug-14451-163-aEqUC9bjBs@https.bugs.busybox.net/>
+ <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
+ <aafcded5-c0f4-4745-a226-da57d0e7a805__41403.4441857197$1639675757$gmane$org@mind.be>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: don't disable DRI3 for
+ some Gallium drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,19 +63,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14461
+Am Thu, 16 Dec 2021 18:28:56 +0100 schrieb Arnout Vandecappelle:
 
---- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Peter Seiderer from comment #3)
+>   Bernd, can you comment?
 
-And finally the corresponding patchwork link [5]...
+Hi Arnout,
 
-[5]
-https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report@gmx.net/
+no, because I do not use buildroot on rbpi hardware.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+But the topic was already discussed this summer, with no solution afaics:
+https://patchwork.ozlabs.org/project/buildroot/list/?
+series=248555&submitter=&state=*&q=&archive=&delegate=
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
