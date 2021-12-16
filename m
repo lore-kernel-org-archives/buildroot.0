@@ -1,88 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DF8BC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161AEC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2DBC83F2D;
-	Thu, 16 Dec 2021 19:44:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCC5B61027;
+	Thu, 16 Dec 2021 19:51:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T4IM_ZO830sk; Thu, 16 Dec 2021 19:44:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bxmfM3sKO5yg; Thu, 16 Dec 2021 19:51:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0972883E73;
-	Thu, 16 Dec 2021 19:44:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F23C961032;
+	Thu, 16 Dec 2021 19:51:17 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91C411BF3A9
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:44:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7748F1BF3A9
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80B6083E73
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:44:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73A3B83F34
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:51:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l5sEXBW3HirY for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 19:44:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7644783E23
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:44:14 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id z7so29086291edc.11
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 11:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/0VJOkqfQu/+W317605bC4hvyboCVBGX2+VQdyp30TE=;
- b=XavXibJrLDknuO47/4/ep+DUzMchGjiGOflzWVUIAzE9X5q2R14DLsDQaNYA+YhJFV
- 1SiTtcTVSDuJMNNU9Gvw/KYab1ucHmXCnHFy1pjpw+QNo32ubndZg1e0MY/qZEQcDlZU
- qTN62QGWAv+kKKkjYIyaBj8TnQEQKd996IkHpkqsyzVxpTpUCrqEXy6BJGXwu6ZXsRhK
- TEUeNW1LSrNCV7CHswFx6NV3UGnKa2Z7gLKOo9pIr87AB4XRNahgai3630oDVE5urf3d
- ziZUbHvLz0jGFJcIaMJQlw7M6HLx2WWbTVSdpoJUTOWeskEgE0aIuH6YFK/CTpB1wcVU
- pN6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=/0VJOkqfQu/+W317605bC4hvyboCVBGX2+VQdyp30TE=;
- b=6ZBgIlDc9767DexkzmeKyfL0Gar4U6jg9LUAWk/2CErqJJ6jnbdbpei6Kea8VjNZJo
- kwqFNIhqXdHJoMd3OffxFMYEr+A08bxioHvSZFKQbi739/drp8lKFMDksrLGsSPm/oHM
- HhlYxkt+z8i4vxlagAdhW+oCeHBz4+M80V6YTPzkrNb6YCcsDInXeIkQN/8rcEsxOlNB
- 9Xg2oNo79VjF1IvfF9N5J/W+fUpTmfhmntqfcVKj91GvDlqRPX6aQUZehAHftKhQKaVM
- QttsK5prv3UAW81RupOpe/+82q1zzLNmI8QKn0Il4sr46pY7MqYf9sJS7ysHzvazq4ye
- GqgA==
-X-Gm-Message-State: AOAM532qSPejiAy6z2bauiqXHfKRVPavpscltJVqIf4gD2IZc/PRBaY9
- NB88NPi3Qi9qUxt2ipZKqiM4YG24I5hUBg==
-X-Google-Smtp-Source: ABdhPJxCcvri52PwKoBbGZXHXP7NV3ClW9i7EtKOlrHodVcKmZQ7tEJrEdr+y0vpi5ahLHRQS75LDg==
-X-Received: by 2002:a17:907:1693:: with SMTP id
- hc19mr17160390ejc.396.1639683852570; 
- Thu, 16 Dec 2021 11:44:12 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id ji4sm2183113ejc.148.2021.12.16.11.44.11
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 11:44:12 -0800 (PST)
-Message-ID: <83b633e1-f9d1-ed89-8e6f-f85250591e6d@mind.be>
-Date: Thu, 16 Dec 2021 20:44:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-References: <20211215221153.6799-1-petr.vorel@gmail.com>
- <20211215221153.6799-2-petr.vorel@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211215221153.6799-2-petr.vorel@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/iputils: don't build legacy
- tools
+ with ESMTP id Tye4AkxRJTZc for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 19:51:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8A5583F19
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:51:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 390C18145F; Thu, 16 Dec 2021 19:45:55 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Thu, 16 Dec 2021 20:23:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b906b975a956bd2b6352b2eec6c3c697317bbbe
+X-Git-Newrev: 0966f68dcf2fe2c93f3687210408d56eed0109cb
+X-Patchwork-Hint: ignore
+Message-Id: <20211216194555.390C18145F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/bananapi_m2_ultra_defconfig: bump
+ to u-boot 2021.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,139 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0966f68dcf2fe2c93f3687210408d56eed0109cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+  /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition...
+  scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 
-On 15/12/2021 23:11, Petr Vorel wrote:
-> ninfod, rarpd, rdisc are legacy tools which are going to be removed from
-> upstream in next release [1], following previous removals [2].
-> Remove them now from Buildroot.
+Tested on bananapi m2 ultra
 
-  Since iputils will probably not be bumped again before the 2022.02 release, 
-and it probably also won't be bumped in the 2022.02.x branch, it makes sense to 
-keep them available for the time being. So I've marked this patch as Rejected.
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ configs/bananapi_m2_ultra_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-  Regards,
-  Arnout
-
-> 
-> [1] https://github.com/iputils/iputils/pull/388
-> [2] https://github.com/iputils/iputils/issues/363
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v1->v2:
-> * move options to Config.in.legacy (Fabrice)
-> 
->   Config.in.legacy           | 20 ++++++++++++++++++++
->   package/iputils/Config.in  | 23 -----------------------
->   package/iputils/iputils.mk | 10 ++++------
->   3 files changed, 24 insertions(+), 29 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 3f5ad9132e..38c8afd4a8 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -4395,6 +4395,26 @@ config BR2_TARGET_UBOOT_NETWORK
->   	help
->   	  U-Boot's custom network settings options have been removed.
->   
-> +config BR2_PACKAGE_IPUTILS_NINFOD
-> +	select BR2_LEGACY
-> +	bool "ninfod"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
-> +	help
-> +	  ninfod has been removed from upstream.
-> +
-> +config BR2_PACKAGE_IPUTILS_RDISC
-> +	bool "rdisc"
-> +	select BR2_LEGACY
-> +	help
-> +	  rdisc has been removed from upstream.
-> +
-> +config BR2_PACKAGE_IPUTILS_RDISC_SERVER
-> +	bool "rdisc (server code)"
-> +	select BR2_LEGACY
-> +	depends on BR2_PACKAGE_IPUTILS_RDISC
-> +	help
-> +	  rdisc has been removed from upstream.
-> +
->   config BR2_PACKAGE_IPUTILS_TFTPD
->   	bool "tftpd"
->   	select BR2_LEGACY
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> index 1a8b555570..97870d1745 100644
-> --- a/package/iputils/Config.in
-> +++ b/package/iputils/Config.in
-> @@ -33,33 +33,10 @@ config BR2_PACKAGE_IPUTILS_RARPD
->   	help
->   	  Installs rarpd.
->   
-> -config BR2_PACKAGE_IPUTILS_RDISC
-> -	bool "rdisc"
-> -	default y
-> -	help
-> -	  Installs rdisc.
-> -
-> -config BR2_PACKAGE_IPUTILS_RDISC_SERVER
-> -	bool "rdisc (server code)"
-> -	default y
-> -	depends on BR2_PACKAGE_IPUTILS_RDISC
-> -	help
-> -	  Builds rdisc with server code.
-> -
->   config BR2_PACKAGE_IPUTILS_TRACEPATH
->   	bool "tracepath"
->   	default y
->   	help
->   	  Installs tracepath.
->   
-> -config BR2_PACKAGE_IPUTILS_NINFOD
-> -	bool "ninfod"
-> -	default y
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
-> -	help
-> -	  Installs ninfod.
-> -
-> -comment "ninfod needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> -
->   endif
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 84059de330..6420720eff 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -21,19 +21,17 @@ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->   # Selectively build binaries
->   IPUTILS_CONF_OPTS += \
->   	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
-> -	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
-> -	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
-> -	-DENABLE_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
-> +	-DBUILD_NINFOD=false \
-> +	-DBUILD_RARPD=false \
-> +	-DBUILD_RDISC=false \
->   	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
-> -	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false) \
->   	-DSKIP_TESTS=true
->   
->   # Selectively select the appropriate SELinux refpolicy modules
->   IPUTILS_SELINUX_MODULES = \
->   	$(if $(BR2_PACKAGE_IPUTILS_ARPING),netutils) \
->   	$(if $(BR2_PACKAGE_IPUTILS_PING),netutils) \
-> -	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils) \
-> -	$(if $(BR2_PACKAGE_IPUTILS_RDISC),rdisc)
-> +	$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),netutils)
->   
->   #
->   # arping
-> 
+diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
+index 22f7974bcb..67ecec424c 100644
+--- a/configs/bananapi_m2_ultra_defconfig
++++ b/configs/bananapi_m2_ultra_defconfig
+@@ -16,15 +16,15 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m2_berry"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-ultra/boot.cmd"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-ultra/boot.cmd"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
