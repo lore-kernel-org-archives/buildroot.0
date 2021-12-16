@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E3DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B07DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:27:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FADA401AD;
-	Thu, 16 Dec 2021 18:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4B4B83155;
+	Thu, 16 Dec 2021 18:27:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sdOb91O24lEW; Thu, 16 Dec 2021 18:26:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PKIWBPtqzZs4; Thu, 16 Dec 2021 18:27:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7BD640B54;
-	Thu, 16 Dec 2021 18:26:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D76BD82F9E;
+	Thu, 16 Dec 2021 18:27:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CD1D1BF36F
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D6E91BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A15883F09
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26FDC83F0A
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H-k6K1mJCmcr for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
+ with ESMTP id Hy41g34Q_8BH for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:24:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37C7E83F0C
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EAA9783F08
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:24:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C487382297; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
+ id 81C0482297; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 19:08:55 +0100
+Date: Thu, 16 Dec 2021 19:08:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8de5996e5cad109baf8f79c0502f355e472e33b5
-X-Git-Newrev: 2a28d25d0c61dfd040362c8af0896e73b4eaa71d
+X-Git-Oldrev: 6deb6bdc7cee0664a71f3363f4ee2d2e9d2f031b
+X-Git-Newrev: 5fd174918915bc34995ac28fd9b8a0690b0beb1d
 X-Patchwork-Hint: ignore
-Message-Id: <20211216181916.C487382297@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.15
+Message-Id: <20211216181916.81C0482297@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/autofs: bump to version 5.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,115 +58,175 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a28d25d0c61dfd040362c8af0896e73b4eaa71d
+commit: https://git.buildroot.net/buildroot/commit/?id=5fd174918915bc34995ac28fd9b8a0690b0beb1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version) and so autoreconf
+Drop patch (already in version)
 
-https://github.com/jirka-h/haveged/releases/tag/v1.9.15
+https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/tree/CHANGELOG?h=release_5_1_8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...0001-Check-for-sys-auxv.h-before-using-it.patch | 60 ----------------------
- package/haveged/haveged.hash                       |  2 +-
- package/haveged/haveged.mk                         |  4 +-
- 3 files changed, 2 insertions(+), 64 deletions(-)
+ ...-5-1-7-use-default-stack-size-for-threads.patch | 124 ---------------------
+ package/autofs/autofs.hash                         |   2 +-
+ package/autofs/autofs.mk                           |   2 +-
+ 3 files changed, 2 insertions(+), 126 deletions(-)
 
-diff --git a/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch b/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
+diff --git a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
 deleted file mode 100644
-index 042135f127..0000000000
---- a/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
+index f63c399fdc..0000000000
+--- a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
 +++ /dev/null
-@@ -1,60 +0,0 @@
--From 676abde95bab10e1d26e91682772514010143343 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sun, 21 Mar 2021 17:00:08 +0100
--Subject: [PATCH] Check for sys/auxv.h before using it.
+@@ -1,124 +0,0 @@
+-From 91edcc55c681dac41d2213b498ec6450aee22d9f Mon Sep 17 00:00:00 2001
+-From: Ian Kent <raven@themaw.net>
+-Date: Mon, 26 Jul 2021 13:18:38 +0800
+-Subject: autofs-5.1.7 - use default stack size for threads
 -
--- fixes uclibc-ng compile (does not provide sys/auxv.h header file)
+-autofs uses PTHREAD_STACK_MIN to set the stack size for threads it
+-creates.
 -
--Fixes:
+-In two cases it is used to reduce the stack size for long running
+-service threads while it's used to allocate a larger stack for worker
+-threads that can have larger memory requirements.
 -
--  haveged.c:22:10: fatal error: sys/auxv.h: No such file or directory
--     22 | #include <sys/auxv.h>
--        |          ^~~~~~~~~~~~
+-In recent glibc releases PTHREAD_STACK_MIN is no longer a constant
+-which can lead to unexpectedly different stack sizes on different
+-architectures and the autofs assumption it's a constant causes a
+-compile failure.
 -
--[Upstream: https://github.com/jirka-h/haveged/pull/59]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-The need to alter the stack size was due to observed stack overflow
+-which was thought to be due the thread stack being too small for autofs
+-and glibc alloca(3) usage.
+-
+-Quite a bit of that alloca(3) usage has been eliminated from autofs now,
+-particularly those that might be allocating largish amounts of storage,
+-and there has been a lot of change in glibc too so using the thread
+-default stack should be ok.
+-
+-Signed-off-by: Ian Kent <raven@themaw.net>
+-
+-[Retrieved (and updated to drop CHANGELOG update) from:
+-https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/commit/?id=91edcc55c681dac41d2213b498ec6450aee22d9f]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- configure.ac  | 1 +
-- src/haveged.c | 4 ++++
-- 2 files changed, 5 insertions(+)
+- CHANGELOG          |  1 +
+- daemon/automount.c | 29 -----------------------------
+- daemon/state.c     |  6 +-----
+- lib/alarm.c        |  6 +-----
+- 4 files changed, 3 insertions(+), 39 deletions(-)
 -
--diff --git a/configure.ac b/configure.ac
--index c172a10..a0263f5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -125,6 +125,7 @@ AC_CHECK_HEADERS(stdio.h)
-- AC_CHECK_HEADERS(stdlib.h)
-- AC_CHECK_HEADERS(string.h)
-- AC_CHECK_HEADERS(sys/ioctl.h)
--+AC_CHECK_HEADERS(sys/auxv.h)
-- AC_CHECK_HEADERS(sys/mman.h)
-- AC_CHECK_HEADERS(sys/types.h)
-- AC_CHECK_HEADERS(sys/socket.h)
--diff --git a/src/haveged.c b/src/haveged.c
--index b9cb77b..dad3072 100644
----- a/src/haveged.c
--+++ b/src/haveged.c
--@@ -19,7 +19,9 @@
--  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
--  */
-- #include "config.h"
--+#if defined(HAVE_SYS_AUXV_H)
-- #include <sys/auxv.h>
--+#endif
-- #include <stdlib.h>
-- #include <stdio.h>
-- #include <getopt.h>
--@@ -135,8 +137,10 @@ int main(int argc, char **argv)
-- {
--    volatile char *path = strdup(argv[0]);
--    volatile char *arg0 = argv[0];
--+#if defined(HAVE_SYS_AUXV_H)
--    if (path[0] != '/')
--       path = (char*)getauxval(AT_EXECFN);
--+#endif
--    static const char* cmds[] = {
--       "b", "buffer",      "1", SETTINGR("Buffer size [KW], default: ",COLLECT_BUFSIZE),
--       "d", "data",        "1", SETTINGR("Data cache size [KB], with fallback to: ", GENERIC_DCACHE ),
+-diff --git a/daemon/automount.c b/daemon/automount.c
+-index 23235a7..d743235 100644
+---- a/daemon/automount.c
+-+++ b/daemon/automount.c
+-@@ -84,7 +84,6 @@ static size_t kpkt_len;
+- /* Attributes for creating detached and joinable threads */
+- pthread_attr_t th_attr;
+- pthread_attr_t th_attr_detached;
+--size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
+- 
+- struct master_readmap_cond mrc = {
+- 	PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, 0, NULL, 0, 0, 0, 0};
+-@@ -2620,34 +2619,6 @@ int main(int argc, char *argv[])
+- 		exit(1);
+- 	}
+- 
+--#ifdef _POSIX_THREAD_ATTR_STACKSIZE
+--	if (pthread_attr_setstacksize(
+--			&th_attr_detached, detached_thread_stack_size)) {
+--		logerr("%s: failed to set stack size thread attribute!",
+--		       program);
+--		if (start_pipefd[1] != -1) {
+--			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
+--			close(start_pipefd[1]);
+--		}
+--		release_flag_file();
+--		macro_free_global_table();
+--		exit(1);
+--	}
+--#endif
+--
+--	if (pthread_attr_getstacksize(
+--			&th_attr_detached, &detached_thread_stack_size)) {
+--		logerr("%s: failed to get detached thread stack size!",
+--		       program);
+--		if (start_pipefd[1] != -1) {
+--			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
+--			close(start_pipefd[1]);
+--		}
+--		release_flag_file();
+--		macro_free_global_table();
+--		exit(1);
+--	}
+--
+- 	info(logging, "Starting automounter version %s, master map %s",
+- 		version, master_list->name);
+- 	info(logging, "using kernel protocol version %d.%02d",
+-diff --git a/daemon/state.c b/daemon/state.c
+-index 5156bb2..5df0561 100644
+---- a/daemon/state.c
+-+++ b/daemon/state.c
+-@@ -1177,12 +1177,8 @@ int st_start_handler(void)
+- 	status = pthread_attr_init(pattrs);
+- 	if (status)
+- 		pattrs = NULL;
+--	else {
+-+	else
+- 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
+--#ifdef _POSIX_THREAD_ATTR_STACKSIZE
+--		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
+--#endif
+--	}
+- 
+- 	status = pthread_create(&thid, pattrs, st_queue_handler, NULL);
+- 
+-diff --git a/lib/alarm.c b/lib/alarm.c
+-index f27e13c..1631a9b 100755
+---- a/lib/alarm.c
+-+++ b/lib/alarm.c
+-@@ -270,12 +270,8 @@ int alarm_start_handler(void)
+- 	status = pthread_attr_init(pattrs);
+- 	if (status)
+- 		pattrs = NULL;
+--	else {
+-+	else
+- 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
+--#ifdef _POSIX_THREAD_ATTR_STACKSIZE
+--		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
+--#endif
+--	}
+- 
+- 	status = pthread_condattr_init(&condattrs);
+- 	if (status)
 --- 
--2.30.2
+-cgit 1.2.3-1.el7
 -
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index f55e004923..8c62ead7c3 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  938cb494bcad7e4f24e61eb50fab4aa0acbc3240c80f3ad5c6cf7e6e922618c3  haveged-1.9.14.tar.gz
-+sha256  f882919ccead07ad6687a4784c0c501e617321e96dd0118403464969359cf6ad  haveged-1.9.15.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 5d76bdc3c9..7035142aee 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,13 +4,11 @@
+diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
+index 10ca42ebed..97bc757d6b 100644
+--- a/package/autofs/autofs.hash
++++ b/package/autofs/autofs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
+-sha256  a36b268611b79b07051749870ba540b139938efc84bc0293244c483e94f9ced7  autofs-5.1.7.tar.xz
++sha256  b33d1059855664b20eeda26f3e28ff518fb0c3d58f565570af2ae569dc73c0fd  autofs-5.1.8.tar.xz
+ 
+ # Hash for license files
+ sha256  458028929f712b4795bc5adc31a1d6a2151364ce1b372ac43f613f56c8448fed  COPYING
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 4c5200584f..97b1b6b3e4 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.9.14
-+HAVEGED_VERSION = 1.9.15
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
- HAVEGED_SELINUX_MODULES = entropyd
--# patch touching configure.ac
--HAVEGED_AUTORECONF = YES
- 
- # '--disable-init' as buildroot ships its own sysv/systemd init files
- HAVEGED_CONF_OPTS = \
+-AUTOFS_VERSION = 5.1.7
++AUTOFS_VERSION = 5.1.8
+ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
