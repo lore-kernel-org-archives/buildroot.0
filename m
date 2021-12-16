@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF47C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4EF5C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA70782542;
-	Thu, 16 Dec 2021 19:51:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B3AC61050;
+	Thu, 16 Dec 2021 19:51:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l096RMwItTrv; Thu, 16 Dec 2021 19:51:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Sm4FppWE2Cxg; Thu, 16 Dec 2021 19:51:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0E79828A9;
-	Thu, 16 Dec 2021 19:51:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A1FF1BF3A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01FCE61032;
+	Thu, 16 Dec 2021 19:51:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F7081BF3A9
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 79CF283F19
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8DD7C417A9
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:51:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 996M2DAJJfnR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uD7KlU3F-tSH for <buildroot@lists.busybox.net>;
  Thu, 16 Dec 2021 19:51:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB13E83F2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3B42417B7
  for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:51:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5063681DED; Thu, 16 Dec 2021 19:45:55 +0000 (UTC)
+ id 473C3822BF; Thu, 16 Dec 2021 19:45:55 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 20:23:17 +0100
+Date: Thu, 16 Dec 2021 20:23:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9449089c6ad33c27bdb2cef1d872bcafab8a34ca
-X-Git-Newrev: f0dbd03a0c93ae286d8b70b5455d699c58acf77e
+X-Git-Oldrev: 0966f68dcf2fe2c93f3687210408d56eed0109cb
+X-Git-Newrev: 9449089c6ad33c27bdb2cef1d872bcafab8a34ca
 X-Patchwork-Hint: ignore
-Message-Id: <20211216194555.5063681DED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/civetweb: fix
- BR2_STATIC_SHARED_LIBS typo
+Message-Id: <20211216194555.473C3822BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump to version 3.73.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,37 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0dbd03a0c93ae286d8b70b5455d699c58acf77e
+commit: https://git.buildroot.net/buildroot/commit/?id=9449089c6ad33c27bdb2cef1d872bcafab8a34ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix typo BR2_STATIC_SHARED_LIBS -> BR2_SHARED_STATIC_LIBS added by
-commit db47bc99976c2d4ffb509620a76cfdd369b30559
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/civetweb/civetweb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index 33c3bfdf33..22618fb443 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -54,12 +54,12 @@ ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
- CIVETWEB_INSTALL_STAGING = YES
- CIVETWEB_INSTALL_TARGETS += install-headers
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 803b234c83..100d2d7870 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_73_RTM/src/SHA256SUMS
+-sha256  566d3a68da9b10d7da9ef84eb4fe182f8f04e20d85c55d1bf360bb2c0096d8e5  nss-3.73.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_73_1_RTM/src/SHA256SUMS
++sha256  c768f9fe3129e8bcc2e9679456d7edd9453a225784a8fc7dc4501806f1fe9abe  nss-3.73.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2e26abdfc0..e2f7521b47 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_STATIC_LIBS)$(BR2_STATIC_SHARED_LIBS),y)
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
- CIVETWEB_BUILD_TARGETS += lib
- CIVETWEB_INSTALL_TARGETS += install-lib
- endif
- 
--ifeq ($(BR2_SHARED_LIBS)$(BR2_STATIC_SHARED_LIBS),y)
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
- CIVETWEB_BUILD_TARGETS += slib
- CIVETWEB_INSTALL_TARGETS += install-slib
- endif
+-LIBNSS_VERSION = 3.73
++LIBNSS_VERSION = 3.73.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
