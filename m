@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6CBBC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6321CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 846E040B54;
-	Thu, 16 Dec 2021 19:08:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE85483F2B;
+	Thu, 16 Dec 2021 19:09:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WIttUBY7RNVG; Thu, 16 Dec 2021 19:08:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WuiDtWrA-tCJ; Thu, 16 Dec 2021 19:09:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67E1B4017B;
-	Thu, 16 Dec 2021 19:08:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E1C2F1BF3A9
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:08:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5059C83F1E;
+	Thu, 16 Dec 2021 19:09:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4445D1BF3A9
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEDC641798
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:08:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DAE583F1E
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:08:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dX9fZM_jtVAV for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 19:08:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zmYvlLx57c9M for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 19:08:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 00A3341795
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:08:36 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id y13so90462819edd.13
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 11:08:36 -0800 (PST)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D03F83F04
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:08:47 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id y13so90464651edd.13
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 11:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=EU3SU0fwCMdGJzpp3rKd61RsMTAK57RZ2BhkOMHvz5g=;
- b=ZGNFBPa4CjAZo3vppsJTQn9U+DKoGM1j/yvlpukAgSZKcK7Kkp+7hguhwIo7gThImH
- RkhbT3Qwb0Tk4qm+Z59IuaE7RgEEO1c37lCS7lTCiNqTdOTp+ojBtOYBaiLbJhQICYY/
- wX+ltI+ytTInzdQHb+nnNLQYObbDQBfA0fs7ribON48x3SeBcCOK8N5feIa7ydy7X1fi
- Gyb1vJmm15QqZx4zKIHozUbYk1FhMKE+dZt8p7vPUh4dazLopRKV5M8LVZ5LCmAeVZx4
- D8iSAvVKtpFE6gtZc5WiuOygSCwof8aij1XtNfeFa8KL7TVLvK7MF8xwJPOI39j5gHck
- Ty6A==
+ bh=DkppI1TFEQeoLo3WVoKxWRY/T+rXkM4fCHiAyn1K+vM=;
+ b=CZK3e4Xzn5oR8hctaSCIk/LC5thhZJv6R5tOOzMOCL7p4GTdeh3u3SNNH7NTZmeLbH
+ LQog1VZ0MRVXWaDOB/+GR+pFcYURwNB1cMYjD5Xs6aw4ZIxFezfN7NVFYnfMe3CKOfTT
+ YbQeG7iN2K9ox8gseR7vgGQ4aO5M3DbHQ1y1VI8/8rZe5VuVO7/C88ud6F65lZsuTlsM
+ snVIrI/mfQ1eKA6TJcOUauSpMZvOpwKFbPlq7Bhn56xJBQYpwWepS9hOQLz/Tz8nUxZR
+ bZSUX438AGjoT3iTs7FEM1m5kf13/zkGcEH3Ndoneruz2GTTszv6MZsNopfeDqvo0vlo
+ Z7VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=EU3SU0fwCMdGJzpp3rKd61RsMTAK57RZ2BhkOMHvz5g=;
- b=u7lLN4etjcc4ZXx5OTLf90lTbo9KQ5LRt9rTKoPgSFzeNfO9o1RC/W4hA62DaViHhd
- pkR8NLdKOBj3wasn+pGpHt6gJDmib29s1OgHz9dk7UaKd51Y05VyTkk/vaMQnCFS1jDh
- M0gYnZKBME94SocMmO2hELw2N5AkXqRy797j2aTefTa7Qglu+Cqt3zUcsE+PSnBZ5/DQ
- xPSyNxY6Rh3ogTV/CasWCNGgtxh/UFcJ+6tYBEZT66kFX7+rnmvZUL92mH+958448mOQ
- ye1AtGISOxaCG8xdcffTddKgYnbbDQRGXg5uwpQU3BYlo2mLSqSfoJb5hDXVSYWTOEfc
- j7WA==
-X-Gm-Message-State: AOAM530J3jQC9Exz+NHxU8w3VinowcPOlCljvyRcK7QrVp9Gi1MGwy9w
- trUOtqzChPrJmsgtQL0rqduEQ1TtZpyRFA==
-X-Google-Smtp-Source: ABdhPJyS62NVcJF+ydP99GZR8hnWihaPyeRWXZLBYUqK1oyEce9T7on4EU+w0Ugl9s639x/8OqZk9w==
-X-Received: by 2002:a17:906:dc8d:: with SMTP id
- cs13mr17131546ejc.109.1639681715241; 
- Thu, 16 Dec 2021 11:08:35 -0800 (PST)
+ bh=DkppI1TFEQeoLo3WVoKxWRY/T+rXkM4fCHiAyn1K+vM=;
+ b=hvb1sTFMFu3xdb1bghlDfZFKL5VD2MG2kbw0l2sqa2erQBddX+vfGTmlk8IQd2BY8B
+ kZHTSWbDPe74NbpfvonB0XNLv3vqrLN1Z/wBpUcRrxlrcU8MwdFuvUWPz7zeTikfJxtC
+ KVMDXJrXUsMP3D1fyS0BBZZSznhy4rGUnMIwcylffTejN+YcnUH8IB6sbWzLSJv5kjOb
+ 5DjaCroWwYK1ycRtcawniAUJVrXu1DnTJr3SoeFWUfjGCeybW60+JpZZQj/KUEP3w29P
+ uSTxTDlJxhGU68+CInyL7tofWr+Z/Vd8DCqA5po0rvTaEVvt4wnTj+6Z/0MJC0B+G4SD
+ +LLA==
+X-Gm-Message-State: AOAM531t3FWILkl/q/NxJabOlhpfZUiMHIjFEHRjbxjDBMMsgY2aN4Qv
+ SEgZbYC3bTOzksdbdxp1bkN6MQ==
+X-Google-Smtp-Source: ABdhPJzl8Q1BiNXWl3JAyZ1oNdSO7AeY8MMLUcoQEUvSlyt0wYPKeXThHpQmzFhz5iR0gITPLTs8Zw==
+X-Received: by 2002:a05:6402:350b:: with SMTP id
+ b11mr22450812edd.212.1639681725974; 
+ Thu, 16 Dec 2021 11:08:45 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id e19sm2674459edu.47.2021.12.16.11.08.34
+ by smtp.gmail.com with ESMTPSA id qa33sm548575ejc.71.2021.12.16.11.08.45
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 11:08:34 -0800 (PST)
-Message-ID: <c99dc64c-bb75-2c2c-1b5c-1e799e6be72a@mind.be>
-Date: Thu, 16 Dec 2021 20:08:33 +0100
+ Thu, 16 Dec 2021 11:08:45 -0800 (PST)
+Message-ID: <57a2bc15-b40d-a68c-768d-b5198122e400@mind.be>
+Date: Thu, 16 Dec 2021 20:08:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
 To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20211215164719.31742-1-peter@korsgaard.com>
+References: <20211215170803.27121-1-peter@korsgaard.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211215164719.31742-1-peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH] package/xen: add XSA-385, 386, 388,
- 389 security fixes
+In-Reply-To: <20211215170803.27121-1-peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
+ version 3.2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,8 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>,
- Matt Weber <matthew.weber@collins.com>
+Cc: Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,20 +101,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/12/2021 17:47, Peter Korsgaard wrote:
+On 15/12/2021 18:08, Peter Korsgaard wrote:
 > Fixes the following security issues:
 > 
-> - XSA-385: guests may exceed their designated memory limit
->    https://xenbits.xenproject.org/xsa/advisory-385.html
+> - CVE-2021-44420: Potential bypass of an upstream access control based on
+>    URL paths
 > 
-> - XSA-386: PCI devices with RMRRs not deassigned correctly
->    https://xenbits.xenproject.org/xsa/advisory-386.html
+>    HTTP requests for URLs with trailing newlines could bypass an upstream
+>    access control based on URL paths.
 > 
-> - XSA-388: PoD operations on misaligned GFNs
->    https://xenbits.xenproject.org/xsa/advisory-388.html
+>    This issue has low severity, according to the Django security policy.
 > 
-> - XSA-389: issues with partially successful P2M updates on x86
->    https://xenbits.xenproject.org/xsa/advisory-389.html
+>    https://www.djangoproject.com/weblog/2021/dec/07/security-releases/
+> 
+> In addition, 3.2.8 / 3.2.9 fixes a number of bugs.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -127,55 +124,40 @@ On 15/12/2021 17:47, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   package/xen/xen.hash |  9 +++++++++
->   package/xen/xen.mk   | 17 +++++++++++++++++
->   2 files changed, 26 insertions(+)
+>   package/python-django/python-django.hash | 4 ++--
+>   package/python-django/python-django.mk   | 5 +++--
+>   2 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-> index e30db09516..10a778053a 100644
-> --- a/package/xen/xen.hash
-> +++ b/package/xen/xen.hash
-> @@ -1,3 +1,12 @@
->   # Locally computed
->   sha256  a3dad76a772393a1875e8f44a6059a95fea4bde40f97b800966969ac6f3a498d  xen-4.14.3.tar.gz
->   sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-> +# https://xenbits.xenproject.org/xsa/advisory-385.html
-> +sha256  831e86c3adfec532b1a48a0b967b7c58c37db3733aee8d78216eb9d535b34f12  xsa385-4.15.patch
-> +# https://xenbits.xenproject.org/xsa/advisory-386.html
-> +sha256  f2f83c825e249bba9454437b48bbd8307fe7a224f56484388a67af124dfd279b  xsa386.patch
-> +# https://xenbits.xenproject.org/xsa/advisory-388.html
-> +sha256  6917267482101a3f8f1d13905e14994344a0af81370c7a2b92275fb176b321a0  xsa388-4.14-1.patch
-> +sha256  d5886e046c69f34f98f7e1fc6ffcc36d92f8fc79242b9dc88412c39aa79b4ac3  xsa388-4.14-2.patch
-> +# https://xenbits.xenproject.org/xsa/advisory-389.html
-> +sha256  b243284679b32ab8c817a2e41562d8694d9781fa8096c268bb41b0cd91684baa  xsa389-4.14.patch
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index b635996afb..cfc166dc4c 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -11,6 +11,23 @@ XEN_LICENSE_FILES = COPYING
->   XEN_CPE_ID_VENDOR = xen
->   XEN_CPE_ID_PREFIX = cpe:2.3:o
->   XEN_DEPENDENCIES = host-acpica host-python3
-> +XEN_PATCH = \
-> +	https://xenbits.xenproject.org/xsa/xsa385-4.15.patch \
-> +	https://xenbits.xenproject.org/xsa/xsa386.patch \
-> +	https://xenbits.xenproject.org/xsa/xsa388-4.14-1.patch \
-> +	https://xenbits.xenproject.org/xsa/xsa388-4.14-2.patch \
-> +	https://xenbits.xenproject.org/xsa/xsa389-4.14.patch
-> +
-> +# xsa385-4.15.patch
-> +XEN_IGNORE_CVES += CVE-2021-28706
-> +# xsa386.patch
-> +XEN_IGNORE_CVES += CVE-2021-28702
-> +# xsa388-4.14-1.patch
-> +XEN_IGNORE_CVES += CVE-2021-28704 CVE-2021-28707
-> +# xsa388-4.14-2.patch
-> +XEN_IGNORE_CVES += CVE-2021-28708
-> +# xsa389-4.14.patch
-> +XEN_IGNORE_CVES += CVE-2021-28705 CVE-2021-28709
+> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+> index ab89f0341c..3eea17e70f 100644
+> --- a/package/python-django/python-django.hash
+> +++ b/package/python-django/python-django.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/django/json
+> -md5  2ade1eecca77640abbde6c4589da27dd  Django-3.2.7.tar.gz
+> -sha256  95b318319d6997bac3595517101ad9cc83fe5672ac498ba48d1a410f47afecd2  Django-3.2.7.tar.gz
+> +md5  eaf0c3b4ac6b22cae9068360e6fd2d1b  Django-3.2.10.tar.gz
+> +sha256  074e8818b4b40acdc2369e67dcd6555d558329785408dcd25340ee98f1f1d5c4  Django-3.2.10.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+> index 0850aa1358..4f80208f0e 100644
+> --- a/package/python-django/python-django.mk
+> +++ b/package/python-django/python-django.mk
+> @@ -4,10 +4,11 @@
+>   #
+>   ################################################################################
 >   
->   # Calculate XEN_ARCH
->   ifeq ($(ARCH),aarch64)
+> -PYTHON_DJANGO_VERSION = 3.2.7
+> +PYTHON_DJANGO_VERSION = 3.2.10
+>   PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+>   # The official Django site has an unpractical URL
+> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/59/45/c6fbb3a206df0b7dc3e6e8fae738e042c63d4ddf828c6e1ba10d7417a1d9
+> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/a5/8e/c6dfc718d572e4b33b56824b9e71e5ab9be8072e6747fc6184d206c3fdb3
+> +
+>   PYTHON_DJANGO_LICENSE = BSD-3-Clause
+>   PYTHON_DJANGO_LICENSE_FILES = LICENSE
+>   PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 > 
 _______________________________________________
 buildroot mailing list
