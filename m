@@ -1,80 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB4A7C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 07:20:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19DDCC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 08:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6338F83268;
-	Thu, 16 Dec 2021 07:20:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7320D416E5;
+	Thu, 16 Dec 2021 08:51:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ETYFv7eS8Ij; Thu, 16 Dec 2021 07:20:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AG0RDgCA-qO6; Thu, 16 Dec 2021 08:51:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B86A783227;
-	Thu, 16 Dec 2021 07:20:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FA5A1BF8B4
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 07:20:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B02C4416E0;
+	Thu, 16 Dec 2021 08:51:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CB191BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 08:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87BD640AD3
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 07:20:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B393416E0
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 08:51:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m5aHphyZ6VLc for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 07:20:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E7F540ABE
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 07:20:23 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id t26so6067613wrb.4
- for <buildroot@buildroot.org>; Wed, 15 Dec 2021 23:20:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=E7BTleaSJ4tstQRFyHSHXn39Mb8ai2k6DERZtQow1Qg=;
- b=bSyJjspiKm4+Mr+LI6DMH+/jRgl+qKq5YdbtGsTZ0cSwnrY/oTkNKGb2nWBy1eXbRr
- VP9N7sHv1+XUifcMIfaXHZ9PpFO6reh1nRzXuE4r+RxolGZZyJFTBo0A9PQi+xGybvGL
- PH4+5SOcrnGxr9rQTfhyF82SjrRqT1rDp6PQ7Q8EnXsBFyHzzBlwgfJ1cE1OGCQJsPtP
- EJn+8uwjEphG7RxTtpbIA3M4IcnMmNpA0X2IBzd7ue/i5YdfLJh8DxIVvfrCQsrgBoCH
- lP3MWGieX7mw1mGpt9jcw2/QIRxayzoxWtAcOB7oywiS5YGSRjGo2Jk4BtZKiJY1B76D
- 2pUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=E7BTleaSJ4tstQRFyHSHXn39Mb8ai2k6DERZtQow1Qg=;
- b=HSqfVCEaq1zpJebAM3IVaekiV2KZTjIR7Q9Ul87G58nOQ1sB9qAp3DfiAVGKRAIjHJ
- jObnt4iElu0y5xMMuANklO9iIZWrhmuvXnQAPcXwn+Qew193I19QTm1pE5C1KJommH7P
- 9wOM92ktMwKS+Br77vdokaDKpc1RiRZLoZ3XzbAa7tiH332JnkK604fckBIdiFF2SCwf
- q3P5IVI7KgZlrhiRv2xIaMJGBIfib8ZQW43Ddswl7YXEq6W1Mv6CSXiv2CA5192h05n6
- qP91abvJNS0x8KTmJn0AvO30radYML20FfByxHKgWJkfA/Wf3Bv2VREcVzS+zSJiWPOd
- ZMYg==
-X-Gm-Message-State: AOAM531GIlRh1zPOv7cFZ45cH7ql81hT7tEJFabzZfoIUguMfyQHbuo3
- dGyDefYH9mlI9A2/mpwO4n33Z1WtySpWsg==
-X-Google-Smtp-Source: ABdhPJxRn31Lf+odrwHj3KlPgiFvx/bJWKG7S7RGBwgP7KY7/PKl3U1wLWHYNAlfqnexN091iDPiZg==
-X-Received: by 2002:a05:6000:1868:: with SMTP id
- d8mr8085237wri.285.1639639221386; 
- Wed, 15 Dec 2021 23:20:21 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id j17sm5227857wmq.41.2021.12.15.23.20.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Dec 2021 23:20:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 08:19:59 +0100
-Message-Id: <20211216071959.128707-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3ip-OLJ9AIyD for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 08:51:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from dd5108.kasserver.com (dd5108.kasserver.com [85.13.130.47])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E3A69416DC
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 08:51:13 +0000 (UTC)
+Received: from [192.168.178.25] (ipb21a9ae5.dynamic.kabel-deutschland.de
+ [178.26.154.229])
+ by dd5108.kasserver.com (Postfix) with ESMTPSA id 7255D5241AA8;
+ Thu, 16 Dec 2021 09:51:10 +0100 (CET)
+To: Peter Seiderer <ps.report@gmx.net>,
+ Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+References: <20211214075133.4482-1-florent.aumaitre@medianesysteme.com>
+ <20211215232839.22ae07a9@gmx.net>
+From: Andreas Naumann <dev@andin.de>
+Message-ID: <470a2867-7ecf-c0e8-5f60-27e8581d6377@andin.de>
+Date: Thu, 16 Dec 2021 09:51:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/jansson: bump to version 2.14
+In-Reply-To: <20211215232839.22ae07a9@gmx.net>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5: fix parallel build qmake
+ package (qt5) doesn't build when using parallel build.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,50 +60,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Naumann Andreas <ANaumann@ultratronik.de>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://jansson.readthedocs.io/en/latest/changes.html#version-2-14
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jansson/jansson.hash | 2 +-
- package/jansson/jansson.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+On 15.12.21 23:28, Peter Seiderer wrote:
+> Hello Florent,
+> 
+> On Tue, 14 Dec 2021 08:51:33 +0100, Florent AUMAITRE <florent.aumaitre@medianesysteme.com> wrote:
+> 
+>> Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+>> ---
+>>   package/pkg-qmake.mk           | 22 +++++++++++++++++++++-
+>>   package/qt5/qt5.mk             |  4 +++-
+>>   package/qt5/qt5base/qt5base.mk | 13 +++++++++++++
+>>   3 files changed, 37 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+>> index deb033c1d6..55b3594f32 100644
+>> --- a/package/pkg-qmake.mk
+>> +++ b/package/pkg-qmake.mk
+>> @@ -20,6 +20,23 @@
+>>   #
+>>   ################################################################################
+>>
+>> +# When per-package is enabled, and qmake project is configured to generate
+>> +# pkg-config compatible package, absolute path are generated for "prefix" field
+>> +# of .pc files. In order to keep per-package isolation with sysroot'in, it is
+>> +# needed to remove those absolute path. Same apply for mkspecs files.
+>> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+>> +define PKG_QMAKE_FIXUP_ABSOLUTE_PATH
+>> +	$(Q)find $(STAGING_DIR)/ -name "*.pc" \
+>> +	| xargs --no-run-if-empty \
+>> +	$(SED) "s:$(STAGING_DIR)::g"
+>> +
+>> +	$(Q)find $(HOST_DIR)/ -name "*.pri" \
+>> +		| xargs --no-run-if-empty \
+>> +		$(SED) "s:$(STAGING_DIR):\$$\$$\[QT_SYSROOT\]:g"
+>> +endef
+>> +endif
+>> +
+>> +
+>>   #
+>>   # Hook to sync Qt headers
+>>   #
+>> @@ -89,6 +106,8 @@ define $(2)_INSTALL_STAGING_CMDS
+>>   endef
+>>   endif
+>>
+>> +$(2)_POST_INSTALL_STAGING_HOOKS += PKG_QMAKE_FIXUP_ABSOLUTE_PATH
+>> +
+>>   #
+>>   # Target installation step. Only define it if not already defined by
+>>   # the package .mk file.
+>> @@ -103,9 +122,10 @@ endif
+>>   # We subsequently rsync only the files from the temporary staging dir and that
+>>   # way exclude files for the build host from target.
+>>   #
+>> +# Qt Package (declarative at least) does not install in parallel due to improper make rules
+>>   ifndef $(2)_INSTALL_TARGET_CMDS
+>>   define $(2)_INSTALL_TARGET_CMDS
+>> -	$$(TARGET_MAKE_ENV) $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_BUILDDIR) INSTALL_ROOT=$$($(2)_BUILDDIR)tmp-target-install $$($(2)_INSTALL_TARGET_OPTS)
+>> +	$$(TARGET_MAKE_ENV) $$($(2)_MAKE_ENV) $$(MAKE1) -C $$($(2)_BUILDDIR) INSTALL_ROOT=$$($(2)_BUILDDIR)tmp-target-install $$($(2)_INSTALL_TARGET_OPTS)
+> 
+> Which failure? Does it happen with per-package enabled or without (would
+> like to avoid the forced MAKE1 for all qt packages install) too? In case it
+> happens with per-package disabled it should go to an extra patch...
+> 
+> One qt5declarative failure for parallel install was fixed by 'package/qt5/qt5declarative:
+> fix parallel install' ([1]) some time back...
+> 
+> Regards,
+> Peter
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=a96277a93d36a1828de87b011022ae389a549cbd
 
-diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
-index 5c19316981..0d9dc7b5a5 100644
---- a/package/jansson/jansson.hash
-+++ b/package/jansson/jansson.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f4f377da17b10201a60c1108613e78ee15df6b12016b116b6de42209f47a474f  jansson-2.13.1.tar.gz
-+sha256  fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9  jansson-2.14.tar.bz2
- sha256  1fff7d37d22157bcd81ab53b6c54da755d7c2f868f15807d9bde920f10730da0  LICENSE
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index 2761ce9b16..99e1817eef 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -4,8 +4,10 @@
- #
- ################################################################################
- 
--JANSSON_VERSION = 2.13.1
--JANSSON_SITE = http://www.digip.org/jansson/releases
-+JANSSON_VERSION = 2.14
-+JANSSON_SOURCE = jansson-$(JANSSON_VERSION).tar.bz2
-+JANSSON_SITE = \
-+	https://github.com/akheron/jansson/releases/download/v$(JANSSON_VERSION)
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
- JANSSON_CPE_ID_VENDOR = jansson_project
--- 
-2.33.0
+I have the same question, which exact failure?
+ From my experience, since "qt5: Fix sporadic build failure during 
+top-level parallel build" [2], I have not observed any build failures.
 
+Not saying that the assembled .pc or .pri files in the resulting SDK all 
+have correct pathes. But wouldnt this be a more general problem for all 
+pkg-config packages not just qt?
+
+[2] 
+https://git.buildroot.net/buildroot/commit/?id=8132216e0ecb1cd115ec9d1a211b967e5bda3054
+
+regards,
+Andreas
+
+> 
+>>   	rsync -arv $$($(2)_BUILDDIR)tmp-target-install$$(STAGING_DIR)/ $$(TARGET_DIR)/
+>>   endef
+>>   endif
+>> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+>> index 3ffb7b0063..eced7e2564 100644
+>> --- a/package/qt5/qt5.mk
+>> +++ b/package/qt5/qt5.mk
+>> @@ -27,4 +27,6 @@ endef
+>>   endif
+>>
+>>   # Variable for other Qt applications to use
+>> -QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
+>> +QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++ \
+>> +	PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR) \
+>> +	PKG_CONFIG_LIBDIR=$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig
+>> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+>> index ba2971dc08..3750d4547e 100644
+>> --- a/package/qt5/qt5base/qt5base.mk
+>> +++ b/package/qt5/qt5base/qt5base.mk
+>> @@ -334,4 +334,17 @@ endef
+>>
+>>   QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
+>>
+>> +# CMake config files generated by Qt5 might break per-package isolation because
+>> +# of absolute path generated.
+>> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+>> +define QT5BASE_CMAKECONFIG_FIXUP
+>> +	$(Q)find $(STAGING_DIR)/ -name "*.cmake" \
+>> +		| xargs --no-run-if-empty \
+>> +		$(SED) "s:$(STAGING_DIR)::g"
+>> +endef
+>> +endif
+>> +
+>> +QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_CMAKECONFIG_FIXUP
+>> +
+>> +
+>>   $(eval $(qmake-package))
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
