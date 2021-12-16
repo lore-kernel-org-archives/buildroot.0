@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF76C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61E30C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1095F417AA;
-	Thu, 16 Dec 2021 18:25:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1975461049;
+	Thu, 16 Dec 2021 18:25:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ErWrPq6wRFqf; Thu, 16 Dec 2021 18:25:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YKMorucJHNzX; Thu, 16 Dec 2021 18:25:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E1BE417AF;
-	Thu, 16 Dec 2021 18:25:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0915B1BF36F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BEC961041;
+	Thu, 16 Dec 2021 18:25:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 49ADD1BF36F
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5DEA83F09
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7D3360D77
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id toLPbkGkU8bm for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CZn-9kEK_cbQ for <buildroot@lists.busybox.net>;
  Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F75883F0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F7F86102D
  for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id AB56182293; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
+ id BC7D382293; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 19:08:45 +0100
+Date: Thu, 16 Dec 2021 19:08:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54d962b7685c98b7975ad4db61e11b329a5dba58
-X-Git-Newrev: d8bee3950aa851620d6a954aebad1f984caa105a
+X-Git-Oldrev: dc929dfa4dce82d96f2b1e6bcbee71775f5052c1
+X-Git-Newrev: 8de5996e5cad109baf8f79c0502f355e472e33b5
 X-Patchwork-Hint: ignore
-Message-Id: <20211216181916.AB56182293@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/guile: bump to version 3.0.7
+Message-Id: <20211216181916.BC7D382293@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlcipher: bump to version 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,68 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8bee3950aa851620d6a954aebad1f984caa105a
+commit: https://git.buildroot.net/buildroot/commit/?id=8de5996e5cad109baf8f79c0502f355e472e33b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libtool is not a dependency since version 3.0.6 and
-https://git.savannah.gnu.org/cgit/guile.git/commit/?id=2e26538d6a51bdd6c2e68ad4539ab3750ef8670a
-
-https://git.savannah.gnu.org/cgit/guile.git/tree/NEWS?h=v3.0.7
+https://github.com/sqlcipher/sqlcipher/blob/v4.5.0/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/guile/Config.in  | 1 -
- package/guile/guile.hash | 2 +-
- package/guile/guile.mk   | 5 ++---
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/guile/Config.in b/package/guile/Config.in
-index c26c296e47..b1182a4cee 100644
---- a/package/guile/Config.in
-+++ b/package/guile/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_GUILE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_BDWGC
--	select BR2_PACKAGE_LIBTOOL
- 	help
- 	  Guile is an interpreter and compiler for the Scheme
- 	  programming language, a clean and elegant dialect of Lisp.
-diff --git a/package/guile/guile.hash b/package/guile/guile.hash
-index a163f59fce..c2719fa7f2 100644
---- a/package/guile/guile.hash
-+++ b/package/guile/guile.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  6b7947dc2e3d115983846a268b8f5753c12fd5547e42fbf2b97d75a3b79f0d31  guile-3.0.4.tar.xz
-+sha256  f57d86c70620271bfceb7a9be0c81744a033f08adc7ceba832c9917ab3e691b7  guile-3.0.7.tar.xz
- # Locally computed
- sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index b62d06e704..c74325252f 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index ddc78ef7d6..f831e615d8 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  b8df69b998c042ce7f8a99f07cf11f45dfebe51110ef92de95f1728358853133  sqlcipher-4.4.3.tar.gz
++sha256  20c46a855c47d5a0a159fdcaa8491ec7bdbaa706a734ee52bc76188b929afb14  sqlcipher-4.5.0.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 776e2d0dcf..c47aa48429 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GUILE_VERSION = 3.0.4
-+GUILE_VERSION = 3.0.7
- GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
- GUILE_SITE = $(BR2_GNU_MIRROR)/guile
- GUILE_INSTALL_STAGING = YES
-@@ -15,8 +15,7 @@ GUILE_LICENSE = LGPL-3.0+
- GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
- GUILE_CPE_ID_VENDOR = gnu
- 
--# libtool dependency is needed because guile uses libltdl
--GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf libtool
-+GUILE_DEPENDENCIES = host-guile libunistring libffi gmp bdwgc host-pkgconf
- HOST_GUILE_DEPENDENCIES = host-libunistring host-libffi host-gmp host-bdwgc host-flex host-pkgconf host-gettext
- 
- # The HAVE_GC* CFLAGS specify that we will use internal callbacks
+-SQLCIPHER_VERSION = 4.4.3
++SQLCIPHER_VERSION = 4.5.0
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
