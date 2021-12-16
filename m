@@ -1,55 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D6EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 21:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D076AC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 21:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5043041802;
-	Thu, 16 Dec 2021 21:28:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yf6s12e1P9xs; Thu, 16 Dec 2021 21:28:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA4C1417EF;
-	Thu, 16 Dec 2021 21:28:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3DA161BF392
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3AD4783F38
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:28:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 840FA83F4D;
+	Thu, 16 Dec 2021 21:30:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D4J9_7WzHs9O for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 21:28:40 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YcSoQJCDSStO; Thu, 16 Dec 2021 21:30:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D672983F38;
+	Thu, 16 Dec 2021 21:30:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 30C321BF392
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:30:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 211E8417CE
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 21:30:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AqZBB5-z9TTN for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 21:30:06 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 384AB83F34
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 21:28:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4CB9B417CC
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 21:30:06 +0000 (UTC)
 Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
- by mailout05.t-online.de (Postfix) with SMTP id B178E1824;
- Thu, 16 Dec 2021 22:28:11 +0100 (CET)
+ by mailout05.t-online.de (Postfix) with SMTP id 6A3F810F6A;
+ Thu, 16 Dec 2021 22:30:03 +0100 (CET)
 Received: from fli4l.lan.fli4l ([84.161.188.64]) by fwd70.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1mxyIN-0aPKTp0; Thu, 16 Dec 2021 22:28:11 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42770)
+ esmtp id 1mxyKA-36vBNB0; Thu, 16 Dec 2021 22:30:02 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42772)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1mxyIN-0002xo-5G;
- Thu, 16 Dec 2021 22:28:11 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1mxyKA-0003Hj-Cl;
+ Thu, 16 Dec 2021 22:30:02 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 22:28:11 +0100
-Message-Id: <20211216212811.787978-1-bernd.kuhls@t-online.de>
+Date: Thu, 16 Dec 2021 22:30:02 +0100
+Message-Id: <20211216213002.788654-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1639690091-00004E7B-3E88F11F/0/0 CLEAN NORMAL
-X-TOI-MSGID: 416519a4-52a0-4f14-887a-12c6da9a30fd
-Subject: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to 22.0.0
+X-TOI-EXPURGATEID: 150726::1639690202-00004E7B-C5B72927/0/0 CLEAN NORMAL
+X-TOI-MSGID: ff592fec-532b-4c16-a82c-b213548dc660
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: bump version to
+ 21.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,32 +70,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index 88f82a9596..60d45a315e 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 69a7422741..83c52fa271 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  77473df5440915e7c487a0f1c3f6236a8c29610528c6f0833da9caae834a1741  intel-gmmlib-21.3.3.tar.gz
-+sha256  337c63f5bbc2c7ea2ba85aecd40ae72dc65187ba07c4feea73e129d53f30677c  intel-gmmlib-22.0.0.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 2071d9f533..36e61dc4d2 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
+-sha256  d9358dc784c4146fd21faffbba03c304684978de1ce34d3714bd2c6b50233d14  intel-mediasdk-21.4.1.tar.gz
++sha256  2bcf0bfc2cc4f6a0b865d50c08a327d5bca81738b31a40c8f0e4eba12689d63d  intel-mediasdk-21.4.3.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 57276bbd74..58334b3ddd 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_GMMLIB_VERSION = 21.3.3
-+INTEL_GMMLIB_VERSION = 22.0.0
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+-INTEL_MEDIASDK_VERSION = 21.4.1
++INTEL_MEDIASDK_VERSION = 21.4.3
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
 2.30.2
 
