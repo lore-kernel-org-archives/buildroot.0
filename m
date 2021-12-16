@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9505BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3BA3C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C071417FB;
-	Thu, 16 Dec 2021 20:17:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69D7761058;
+	Thu, 16 Dec 2021 20:17:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1iC-63FH5u9C; Thu, 16 Dec 2021 20:17:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NjJ-G1ReFJir; Thu, 16 Dec 2021 20:17:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99A20402F6;
-	Thu, 16 Dec 2021 20:17:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12DF61C113E
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC9336105C;
+	Thu, 16 Dec 2021 20:17:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 33E801C1148
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9D9F4032D
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:16:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20F1940B60
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:16:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y5HFki89d71R for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f3R4CSBYK4D1 for <buildroot@lists.busybox.net>;
  Thu, 16 Dec 2021 20:16:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AF9C408AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A44F40B61
  for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:16:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 68CDA8228B; Thu, 16 Dec 2021 20:11:18 +0000 (UTC)
+ id 9BB828218A; Thu, 16 Dec 2021 20:11:18 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 21:06:03 +0100
+Date: Thu, 16 Dec 2021 21:08:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60d416fb6cace17627eb2f1009c9ffe6f0f033ad
-X-Git-Newrev: 59a1fcc69620da8eab1c048977fa22d297b18284
+X-Git-Oldrev: 7bb6ebea9918ace84bcc84c7c84e4b57354ef62e
+X-Git-Newrev: e84bb6d29583726d59e4b48270ab354db784c409
 X-Patchwork-Hint: ignore
-Message-Id: <20211216201118.68CDA8228B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lapack: security bump to version
- 3.10.0
+Message-Id: <20211216201118.9BB828218A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+ Intel E800 Series Network Adapters
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59a1fcc69620da8eab1c048977fa22d297b18284
+commit: https://git.buildroot.net/buildroot/commit/?id=e84bb6d29583726d59e4b48270ab354db784c409
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2021-4048: An out-of-bounds read flaw was found in the CLARRV,
-  DLARRV, SLARRV, and ZLARRV functions in lapack through version 3.10.0,
-  as also used in OpenBLAS before version 0.3.18. Specially crafted
-  inputs passed to these functions could cause an application using
-  lapack to crash or possibly disclose portions of its memory.
-- Update license hash, year changed:
-  https://github.com/Reference-LAPACK/lapack/commit/f67034373ee2972b4ea5de5a3d635b30ad3026c2
-- Update indentation in hash file (two spaces)
-
-http://netlib.org/lapack/lapack-3.10.0.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joe Schultz <jschultz@xes-inc.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lapack/lapack.hash | 4 ++--
- package/lapack/lapack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-firmware/Config.in         | 6 ++++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
-index bac7210c29..6f6dbff1a6 100644
---- a/package/lapack/lapack.hash
-+++ b/package/lapack/lapack.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573  lapack-3.9.0.tar.gz
--sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
-+sha256  328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19  lapack-3.10.0.tar.gz
-+sha256  66246b7d3e6736aea46e63fd5e087659474d07edfe2f9b051d085d9b42aaac61  LICENSE
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 41774f6167..f34f685ae2 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 3609c3ec4e..622b1ee685 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -432,6 +432,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
+ 	  Firmware files for Intel 825xx handled by driver e100
+ 	  (e100)
  
--LAPACK_VERSION = 3.9.0
-+LAPACK_VERSION = 3.10.0
- LAPACK_LICENSE = BSD-3-Clause
- LAPACK_LICENSE_FILES = LICENSE
- LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
++config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ICE
++	bool "Intel Ethernet 800 Series"
++	help
++	  Firmware files for Intel Ethernet 800 Series Network Adapters
++	  (ice)
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
+ 	bool "Microchip VSC85xx PHYs"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 79ee0316d3..281ed0189d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -528,6 +528,11 @@ LINUX_FIRMWARE_FILES += e100/*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ICE),y)
++LINUX_FIRMWARE_FILES += intel/ice/ddp/*.pkg
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.ice_enhanced
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY),y)
+ LINUX_FIRMWARE_FILES += microchip/mscc_vsc85*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.microchip
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
