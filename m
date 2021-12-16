@@ -4,88 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B26C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 17:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23812C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C64A440102;
-	Thu, 16 Dec 2021 17:29:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4AC64014B;
+	Thu, 16 Dec 2021 18:19:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xLD0lq2NTl-r; Thu, 16 Dec 2021 17:29:03 +0000 (UTC)
+	with ESMTP id 32egLLBxywpe; Thu, 16 Dec 2021 18:19:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D953B40B37;
-	Thu, 16 Dec 2021 17:29:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB9204017B;
+	Thu, 16 Dec 2021 18:18:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 631CE1BF3AE
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:29:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 727591BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51D3F61039
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:29:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F27D61041
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:18:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UfvlWQReGKfu for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 17:29:00 +0000 (UTC)
+ with ESMTP id oRQHnH36gHiY for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:18:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D69FD61034
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 17:28:59 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id r11so88732295edd.9
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 09:28:59 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EF6F861040
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:18:56 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id y22so19296716edq.2
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 10:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=mZLH/5tLNWrMpEnmM8OOvQX8yGcbkMww4yOsXd0S/CE=;
- b=EY8pSpk8v0CaDE79XH4bzDXu9nYQIDvPuwh1OT/PQDu3Q1taujv+pvH9hQ15reT52b
- McyariWpHLKeum8d0LW+fymno2ufDzSBdt8BLzPgNDhYMED6aiDldb+8QNa69JH9ghBv
- 4oK8vpi+0rP/y07/G/8hWcfhjqTYctIS0LZGTBg7x+4nQIAfdEiiEhtRuaNYgDc0be0U
- Xz24vei53aqy5gBimDE3YO/WqYgnw+/nc283kxsLIOoP5hVYDLGMI0JL8fCMThvUMW+c
- tCAqlhUDjfgvxzxA+GZZZZ2G2yYfbcHtLdJsxHWk8WL3LlTdyQj3odORPsPyy5VoPKZu
- 19dw==
+ bh=VoWpVh7W2LVljUUD1uBSJ1d75WWGP26iY2We47fRUTI=;
+ b=MSRjL5XrO/QY+9kxXrEMvYSDkECYSbK6LdJ/RpVF4PWj5SEz9/roo1mEZx/DsqevCe
+ YTyC2sPG8nkKlhK3dByjQk80DT8arMppSksJisQoOloapr7JMlHms5D/bKNsxfPKyn/1
+ gsFB4m4E9SyQ07i98LeiorcHL8Geoja3Fa73Xq7WriM1S1ojpaTMZxeOgOaXBLYTghcj
+ uCjKi/P99HfBK5U5SSLIL0cFUR3XT/421txy1EbzUpy3z0mDt/m4CTVQq462otmoDjeT
+ f2JK6BH+I+RrZ08ZIPLbE6QcfQxOJcS81laqM8cZHG2wI8FMKrYCMfSoQcNwgavLqD3p
+ ex7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=mZLH/5tLNWrMpEnmM8OOvQX8yGcbkMww4yOsXd0S/CE=;
- b=wEeWxHCqDPi4d0HsCe9lkL3Iy5fIR/87/CPgg9ek4VD62wB/HFcoMETx81egtq+FUZ
- 66KgEWHtuJtTLjCe7XF1aZsmqV81yanuE2HFd56ZECwvIJpmbGhg5JfdrhmD+T0QQS/9
- J69WBZuaXqB9jWrONbZlb3kINcg2zjKwgK9rQPrBuAHLBBaAUH7LIirHfPZgbbtbp4d+
- ysrP+efXXqum4yIdpX2txSr8DVIrfZ/yTJ6+CLgvDacLy0i824hQnGcTy8N1rCP7xPbW
- 9+HH41Qyzh4XCdHyQPqk49RoEaefOEpZYHa/Pqj8D6q1O0HkxQgz1nvATHwRS1/LJkEa
- xKWw==
-X-Gm-Message-State: AOAM53146l0sbHFt89ejFITqYudRkXUl9+1339nPJy+Kxd84S8SLeD96
- gND3bnV8uaSqIApeu180HNVJFQ==
-X-Google-Smtp-Source: ABdhPJyy+m5zMdxgE32cq1vVhCtTaGXzir2nm1G3Dk2oGEAL3uoG/1P3l+Q+uOFJro97jibAEZWngA==
-X-Received: by 2002:a05:6402:147:: with SMTP id
- s7mr21717708edu.8.1639675738167; 
- Thu, 16 Dec 2021 09:28:58 -0800 (PST)
+ bh=VoWpVh7W2LVljUUD1uBSJ1d75WWGP26iY2We47fRUTI=;
+ b=QpEwFll2iBSuSH9Y2DHy5seJ93H9Nv6aqrDLhwCLH/ZqWzYRle6NylYBY8yaPBX3eB
+ 8NNMa5uF+Gw7ecTL39x8TDs4jEQ2yBkcXYWVNDHs4RbWSCudSHkuPVEDLNdVkbgwRimB
+ ovtRGaVsuGKKq3mh6lEnBmZMZC4uMgu0q47Z3u0bjbKB+YnLj3IOn1Fa48Yc0iBHQ+uc
+ AkoXnx70fmHsn4GyD3xxgog+EKc/tSZTmUH/0aD0tFlcAd8Sx2H4NNyAT/pCELy1rFEw
+ fITg3DUxXthU57RHLLAGn0dRUMsPYDTzCMcUH826Cu311r3nTNfmW70pXq2Qsuvqt3k8
+ LKGg==
+X-Gm-Message-State: AOAM531d84NVvi2Gp3vmY0GQHhTrgsm3lS6A5CSXSwizGY/6XvQvGo2/
+ lqVVDIURzWz0ff5/U8Cs18LAxQ==
+X-Google-Smtp-Source: ABdhPJzv8/D1NxVhG385k77xmMySx38vscmuJd3la+1qVk6BB41OPC5tpPIXsYXjOKxLDwI4BRfDug==
+X-Received: by 2002:a17:906:d54e:: with SMTP id
+ cr14mr17652364ejc.458.1639678735033; 
+ Thu, 16 Dec 2021 10:18:55 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id hc33sm2056157ejc.93.2021.12.16.09.28.57
+ by smtp.gmail.com with ESMTPSA id y22sm2729341edi.8.2021.12.16.10.18.54
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 09:28:57 -0800 (PST)
-Message-ID: <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
-Date: Thu, 16 Dec 2021 18:28:56 +0100
+ Thu, 16 Dec 2021 10:18:54 -0800 (PST)
+Message-ID: <7f6c110f-ae1e-5a1b-f27c-5c812c21e071@mind.be>
+Date: Thu, 16 Dec 2021 19:18:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Michael Taubert <info@arachnodroid.de>, buildroot@buildroot.org
-References: <bug-14451-163@https.bugs.busybox.net/>
- <bug-14451-163-aEqUC9bjBs@https.bugs.busybox.net/>
- <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211214211051.2220248-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: don't disable DRI3 for
- some Gallium drivers
+In-Reply-To: <20211214211051.2220248-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/frr: add libcap support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,39 +94,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: bernd.kuhls@t-online.de, romain.naour@gmail.com
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBNaWNoYWVsLAoKT24gMTQvMTIvMjAyMSAyMDowNiwgTWljaGFlbCBUYXViZXJ0IHdyb3Rl
-Ogo+IENlcnRhaW4gR2FsbGl1bSBkcml2ZXJzIG5lZWQgRFJJMyBzdXBwb3J0LCBvdGhlcndpc2Ug
-b3BlbmdsIHdvbid0IHdvcmsuCj4gT24gdGhlIFJhc3BiZXJyeSBQaSA0LCBmb3IgZXhhbXBsZSwg
-Z2x4Z2VhcnMgd2lsbCBjb21wbGFpbiBhYm91dAo+IAo+ICdGYWlsZWQgdG8gb3BlbiBibyAxOiBw
-ZXJtaXNzaW9uIGRlbmllZCcKPiAKPiBUaGVzZSBkcml2ZXJzIG11c3Qgbm90IGJlIHNlbGVjdGVk
-IHRvIGRpc2FibGUgRFJJMyBzdXBwb3J0LiBJdCBzZWVtcyB0bwo+IGJlIHRoZSBzYW1lIGZvciBM
-aW1hIGFuZCBQYW5mcm9zdCwgcGxlYXNlIGNoZWNrIGJ1ZyAxMzgzMS4KPiAKPiBTaWduZWQtb2Zm
-LWJ5OiBNaWNoYWVsIFRhdWJlcnQgPGluZm9AYXJhY2hub2Ryb2lkLmRlPgo+IC0tLQo+ICDCoHBh
-Y2thZ2UvbWVzYTNkL21lc2EzZC5tayB8IDYgKysrKystCj4gIMKgMSBmaWxlIGNoYW5nZWQsIDUg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21l
-c2EzZC9tZXNhM2QubWsgYi9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPiBpbmRleCA2MWIwOTVj
-Y2NhLi45NzgwZDVhOTYwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+
-ICsrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+IEBAIC0xMjEsNyArMTIxLDExIEBAIE1F
-U0EzRF9DT05GX09QVFMgKz0gXAo+ICDCoMKgwqDCoMKgwqDCoCAtRGdhbGxpdW0tZXh0cmEtaHVk
-PXRydWUKPiAgwqBlbmRpZgo+IAo+IC1pZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9EUklfRFJJ
-VkVSKSwpCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX0RSSV9EUklWRVIpIFwKPiArwqDC
-oMKgwqDCoMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1YzRCkgXAo+ICvC
-oMKgwqDCoMKgwqAgJChCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfVkM0KSBcCj4g
-K8KgwqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9MSU1BKSBc
-Cj4gK8KgwqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9QQU5G
-Uk9TVCksKQoKICBUaGUgbWVzYTNkIHN0dWZmIGdvZXMgd2F5IG92ZXIgbXkgaGVhZCwgYWN0dWFs
-bHksIGJ1dCBJIHdvdWxkIHRoaW5rIHRoYXQgdGhlIApwcm9wZXIgc29sdXRpb24gaGVyZSB3b3Vs
-ZCBiZSB0aGF0IHRoZXNlIGNvbmZpZ3Mgc2VsZWN0IApCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RS
-SVZFUi4KCiAgSSBrbm93IGl0IHNvdW5kcyB3ZWlyZCB0aGF0IGEgZ2FsbGl1bSBkcml2ZXIgaXMg
-YWxzbyBhIERSSSBkcml2ZXIsIGJ1dCBJIGd1ZXNzIAp0aGF0J3Mgd2hhdCBpdCBpcy4uLgoKICBC
-ZXJuZCwgY2FuIHlvdSBjb21tZW50PwoKICBSZWdhcmRzLAogIEFybm91dAoKPiAgwqBNRVNBM0Rf
-Q09ORl9PUFRTICs9IFwKPiAgwqDCoMKgwqDCoMKgwqAgLURkcmktZHJpdmVycz0gLURkcmkzPWRp
-c2FibGVkCj4gIMKgZWxzZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 14/12/2021 22:10, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/frr/frr.mk | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+> index e707f50ca1..49b4a190f0 100644
+> --- a/package/frr/frr.mk
+> +++ b/package/frr/frr.mk
+> @@ -29,11 +29,17 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+>   	--enable-user=frr \
+>   	--enable-group=frr \
+>   	--enable-vty-group=frrvty \
+> -	--disable-capabilities \
+>   	--enable-fpm
+>   
+>   HOST_FRR_CONF_OPTS = --enable-clippy-only
+>   
+> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
+> +FRR_DEPENDENCIES += libcap
+> +FRR_CONF_OPTS += --enable-capabilities
+> +else
+> +FRR_CONF_OPTS += --disable-capabilities
+> +endif
+> +
+>   ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>   FRR_CONF_ENV += LIBS=-latomic
+>   endif
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
