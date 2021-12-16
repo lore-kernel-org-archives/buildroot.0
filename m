@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BDE3C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2566C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25A4D83E8B;
-	Thu, 16 Dec 2021 20:14:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EEB960DFC;
+	Thu, 16 Dec 2021 20:14:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cNV6IRFsWsg5; Thu, 16 Dec 2021 20:14:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mbdn1qgpOd-e; Thu, 16 Dec 2021 20:14:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D5ED83F1A;
-	Thu, 16 Dec 2021 20:14:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2E7281BF325
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B40F660C1D;
+	Thu, 16 Dec 2021 20:14:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA9F71BF325
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2AEA583F1A
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D825760C1D
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JTb_8lryGFuk for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 20:14:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9hzhPkwjKPOO for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 55C4B83E94
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:14:09 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id y12so90224620eda.12
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:14:09 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 108346061B
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:14:29 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id y13so91038762edd.13
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:14:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=oE2NxSAPRIQhNv0++opYL8t/GiXCH60EKEkUTvbpTQE=;
- b=NWNWQ9nZvqRq1oiN/t1Uos3bPXsf8TcO19wr1CPWctc9k1nxXIsVImZB8+Cb5Q09k3
- zB/m0S3k/zKywTsfsbAecYfWFkYoadE2vvZA+OYOJHpTFUPqzgP2Fq2UwbJ5o3NiK7Pr
- yYaX7cXFc2D7L89d1mbwdAO0bHMU9B0ksw+gbIkL4zJo7IvHfzIOaAj3eiYoWPWiUByi
- wQlMjqKOqX0St2RkwRNNFBcgZQStMjs4EFH+c2IBVl62KkbEiu7s0HpgOK7iTFHE10L0
- Ak/r8cHRmaV5zMua6k7Q+uyrectKUr/LbdAMUz0Qb7N+yZTr5UU6hw2bR6oi4bJs4jsl
- OWbw==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=SNXXq4biR47CdlnUuvHAHi0CbvJN4naOIJnveFHow/Y=;
+ b=KTztf3qC/LvLq+ypyWYS5LzQaclDp+3bo9ieIfNacO+F3KO1+bbtpQ6vZUMFFLJWJV
+ 3fXGea93okr0jC2Xy1W2BrdAsf8U6lbl0JdXdjJ65kLUUSnEIQHQbI1Q6kW7gMgD8S9L
+ TPL10gFX3SgZxo63FI2jbVVT2SD0tPcgr29GH2Dkc3Gc8DDkwFWvfNp8SkHZVHGn0Pgn
+ RhsZgZM0upO6EXr8U/UUD7eTrJvhDdBuKwivYhxpdtGw2s9XWRxEDLJihLbSmRbK403A
+ DieaJyXmzs7hcepLH1RcuMYKV+V+nWhVqUxnJ5ybS5vlogOEYGVzS/rF7L/H2QI8Ld20
+ fsow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=oE2NxSAPRIQhNv0++opYL8t/GiXCH60EKEkUTvbpTQE=;
- b=MDMFR4rzXvhuVALCWX5pZVvG2LGPtGRT8HUgm2javbeKRBC6PadaMCFFy+BIDMf5Qd
- aGbpphJv6WHEzzwo51StN40H3zfPruraIcAKfaPk3C7vR9yc+YhTiC8TEq2V7+L3Drap
- 4pGBT1R5cyPfJOqUCD6/X3COCTtsKEqnuSjUmSPaEnneo1WsnGNg6Aw2/wYbfq2IHIuv
- MXign6QWHME4RrZ1inTkAGbFtGiUsg+ueMpNqZQfL6mG1g3Fttsn/+JdHieZuPqZY0Tf
- 7qlV0SLomKgd2TmBzNfNoyASsRKu4taIcelyD2TUI9nv7yXU8yGG2P7ZDxf2xtGLPfn7
- B8Og==
-X-Gm-Message-State: AOAM531OpVCTw6+fMRy1n7w9PyODnVnNmd82KbDRe+kuD9ovrif0jUSD
- tvcNLWQa/4CPMLhxAUcw+EEGBEj9oRS5LA==
-X-Google-Smtp-Source: ABdhPJwdWDyYf1g6+IE78BBzULWWavsja/u8r0aW7YZC9ZZUBPInX3oJBwZx+u5iQ4fqntpg5vJ2/Q==
-X-Received: by 2002:a17:906:974c:: with SMTP id
- o12mr16447224ejy.229.1639685647564; 
- Thu, 16 Dec 2021 12:14:07 -0800 (PST)
+ bh=SNXXq4biR47CdlnUuvHAHi0CbvJN4naOIJnveFHow/Y=;
+ b=XJDnpkamtIpuCGU3aIuA8VXGBDnYt8ydCJuz7ioecnauMf+e0FI0Avk+pitojU+RUt
+ hW6eL+J76G52A/z5MGyFPydxR6qQKDVPiVuPbXDfIlmAWrEY5QJrYs+0EipLL9C7DFxF
+ InmvT91pqvMBwFOImWvDxyc9gWtRKXGM+uihOGPtA+I1hvyFpDM6Vsk5d7/ZLzjwfU93
+ 06mIhBM5aGfeh1rc8X0vLx1x7RQq2XX4EM7Ni7aojPY6HKH13ZC8k0YA9yz+eLMAMNCX
+ nH2I5Ogv2n6oRMHoDSLZewY9CZqwowgquNaKhzB1AizeuPChgrqdwFXaS2EWkNqxJzGN
+ j1wQ==
+X-Gm-Message-State: AOAM5309PpdkZhFMD4XicfldUXXVv4MTjdHBy/mxV0vpHpTwhNSk8tLl
+ 4MOwx429mQyHxpQlbNAVl0GhmQ==
+X-Google-Smtp-Source: ABdhPJz9NxpMb6pFqzw/pfNyegQvWvqdn0Ee6zZtnOrxE10YCCyWUuhV0u9MOtjShlTbCaiRl8yNAw==
+X-Received: by 2002:a05:6402:22ef:: with SMTP id
+ dn15mr3374140edb.375.1639685668375; 
+ Thu, 16 Dec 2021 12:14:28 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id sa3sm2120540ejc.113.2021.12.16.12.14.07
+ by smtp.gmail.com with ESMTPSA id d14sm2709535edu.57.2021.12.16.12.14.25
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 12:14:07 -0800 (PST)
-Message-ID: <b6071a81-6f4c-0c9c-4c17-3145f2fd2840@mind.be>
-Date: Thu, 16 Dec 2021 21:14:06 +0100
+ Thu, 16 Dec 2021 12:14:27 -0800 (PST)
+Message-ID: <7c7dd2cf-9446-5a1b-f36f-350211be9f1c@mind.be>
+Date: Thu, 16 Dec 2021 21:14:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
-References: <20211215222507.762310-1-lothar.felten@gmail.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+References: <20211215223905.1844641-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211215222507.762310-1-lothar.felten@gmail.com>
-Subject: Re: [Buildroot] [PATCH] configs/beaglebone_qt5_defconfig: bump to
- u-boot 2021.04
+In-Reply-To: <20211215223905.1844641-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/tvheadend: add optional support
+ for pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,6 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -99,14 +101,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/12/2021 23:25, Lothar Felten wrote:
-> Fixes:
->    /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition...
->    scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+On 15/12/2021 23:39, Bernd Kuhls wrote:
+> pcre2 takes precedence of pcre:
+> https://github.com/tvheadend/tvheadend/blob/master/configure#L473
 > 
->      Tested on beaglebone black and beaglebone white (A6)
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
   Applied to master, thanks.
 
@@ -114,28 +113,31 @@ On 15/12/2021 23:25, Lothar Felten wrote:
   Arnout
 
 > ---
->   configs/beaglebone_qt5_defconfig | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+>   package/tvheadend/tvheadend.mk | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-> index 5f084b77df..03b46e91a7 100644
-> --- a/configs/beaglebone_qt5_defconfig
-> +++ b/configs/beaglebone_qt5_defconfig
-> @@ -32,13 +32,11 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
->   # BR2_TARGET_UBOOT_FORMAT_BIN is not set
->   BR2_TARGET_UBOOT_FORMAT_IMG=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
->   BR2_TARGET_UBOOT_SPL=y
->   BR2_TARGET_UBOOT_SPL_NAME="MLO"
->   BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index 27443307da..4e84e496bf 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -121,11 +121,14 @@ TVHEADEND_DEPENDENCIES += liburiparser
+>   TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_PCRE),y)
+> +ifeq ($(BR2_PACKAGE_PCRE2),y)
+> +TVHEADEND_DEPENDENCIES += pcre2
+> +TVHEADEND_CONF_OPTS += --disable-pcre --enable-pcre2
+> +else ifeq ($(BR2_PACKAGE_PCRE),y)
+>   TVHEADEND_DEPENDENCIES += pcre
+> -TVHEADEND_CONF_OPTS += --enable-pcre
+> +TVHEADEND_CONF_OPTS += --enable-pcre --disable-pcre2
+>   else
+> -TVHEADEND_CONF_OPTS += --disable-pcre
+> +TVHEADEND_CONF_OPTS += --disable-pcre --disable-pcre2
+>   endif
+>   
+>   ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
 > 
 _______________________________________________
 buildroot mailing list
