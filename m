@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEEE6C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:31:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F65FC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA6B61062;
-	Thu, 16 Dec 2021 20:31:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEBA83F6F;
+	Thu, 16 Dec 2021 20:35:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G3iFRfXi0b5Q; Thu, 16 Dec 2021 20:31:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QG0MphoRhdpz; Thu, 16 Dec 2021 20:35:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBEC96105F;
-	Thu, 16 Dec 2021 20:31:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3AA111BF325
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:31:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 942FE83F7B;
+	Thu, 16 Dec 2021 20:35:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C37D51BF325
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38800417DA
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:31:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2E246105F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:35:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iqXqMB_qdBxQ for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 20:31:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0o8P7PvK-yAm for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 20:35:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 097FA417CA
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:31:24 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id g14so90232075edb.8
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:31:24 -0800 (PST)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9A6826105A
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:35:47 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id z9so17582edb.5
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=uOpDnhfbkRzSoq3HeaPnOKjsaPP6ShvHzWNqqGPdUZs=;
- b=bC9tRptHb7Akx156f5hKD2YAMx13BrCd78+yY+czWaC04IPaUrQNP2Ksrpa97xTHx7
- mq2IWmIRYK/ZcwoPaQF+bPzipKRCbP8Qg4IoaDJYQMVjGsqv0trwSrI+nxuDOB2ucbOi
- uSDb94j38vD1tZiQkeEVux9zg0U2+CchQan+/L2CdWcNGOPxIa2JhO0iLzgmTs3+o2yn
- URa4j0Zr5KrlS00tM2+jeF2S5AkB8MqVHuEzhm/IBlawc0Oe/LzWX5FwWVnysarLS2n7
- 97JRWxHs3/50xu+xUSIIg/q0iPny9HFhlPsFLG3/8AFwIU9paf5Jl69+J9Z0PlDjIAhm
- lLGA==
+ bh=HRlnZgdzkyWirWgg6UuW7QgOg7QbEeK4RMxHinlOJhw=;
+ b=dj2EyC0zUNwoihWgSEKWVVKPKIKaJ8RnbeJrzHiCkzkUtO/4CxUulpmqDfAuiI9azD
+ JtxdaPrxBk8bh8f2w1LyH+xNd9VYZnGDMXnJ4AlZCped56dAmqtOt9Ev3weRlDWa1YaG
+ p10im8izopB2tBWpbyz11p36Pu7HP/mG5RPu4U7OVDdcRcvGmkRExz8awkTaeqvDLkCc
+ 0SfB7DgtKEkUs25uIyUBOyJ6hCShnrFnDir01PL5TWOYvWp69xq0LpY1GMEFZts4FvmA
+ oR9bJVLlNdESsXXQj4oQd3xz2vHG9wzPiF4RHSf07BTXT4+EABtBf34Iw8WZbY8lYEXs
+ N4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=uOpDnhfbkRzSoq3HeaPnOKjsaPP6ShvHzWNqqGPdUZs=;
- b=Ztoror5svs/S/SS3HejiTIIvQCwCVYywdBYPvwPT8S42r9wgKOlkTNAmXElJXQak8I
- FKK8m50fLw1whUFQ5HxJroWxf1JLQE7f5wbt429FAukJOXLofSZ/i3Q38k3sOvh6Vtgb
- GJTeqJB9NJFTMnrfj9xwL5ZOr8hufYruHz3250etnB26mkog1qOBS/qLjXRMJ4iNuYIJ
- fCyAcJPgsS6k80eIBB3DVUiavcwje5gbTbz1aDttHvWmmmh4QsS/siG96BNuWVVcSfD+
- 4Fp+SimvJEiG66cf1p7HnKu8dttnlg5gc6RjwEEA754WTzx5tEymAKNSU4WFUfln0mJV
- uuvA==
-X-Gm-Message-State: AOAM5330uD1YdaEfQAazCl4JGh/dEQzbyREDZpJjIyDeSnrrsFIB7muv
- Ch+MFxaHjRC4qAEFhizcGsTlvQ==
-X-Google-Smtp-Source: ABdhPJz3XWQ1xRYB9YKbugez+Gp0f25zI0nK1NXuWOtWeT6Nmp4yrPPiCI5NPUx+dr8lb5EWXUKQQg==
-X-Received: by 2002:a17:907:160e:: with SMTP id
- hb14mr17574983ejc.694.1639686683103; 
- Thu, 16 Dec 2021 12:31:23 -0800 (PST)
+ bh=HRlnZgdzkyWirWgg6UuW7QgOg7QbEeK4RMxHinlOJhw=;
+ b=YqK1BA35Ha8Kek7K2kLM2N9KqRI5WQWhYGL0e1LbEr6MeUr7qZUJpsviOz3Wrh4bdf
+ xdpD1uZHdHwWuIYwB2RUK9t9mPBLLcWuw1ktNS2gaxwzx6gvHCwYsuyo21NYWT1JvOzH
+ H3LvOUQz9LrCWtZPDk2O1m4eXpP2qWsaHCKPx8FfVj0tzsWKWKbOPQhWrj8ZHxe5Eyp1
+ UYYaL296HrbEK9cXSLE4N25QzcgVtKIXPmTwjX4VIu9fwblnYDAOXDLd7vgUZMgOj3sF
+ jgpw1CdctzW1j8bFje3nl+KYrd7QcyFxBULjgFTVTmrFYFJa7VsWtiR6U2VbyqIkcIMe
+ zQrw==
+X-Gm-Message-State: AOAM533AcpCexv5edW0Fn+IrWCQnQbWTWQ9gA5FrkXEFL78ovMDObx5g
+ c0RpnoiJYg6Dg7J3P+q/DB/hHA==
+X-Google-Smtp-Source: ABdhPJw1C8/iYZn+zfkNs/OJtWLE5aJdNsE2GBFte8CZcHrKeUU3MsOWSKVctAATeFal6ymFCSAFoA==
+X-Received: by 2002:a05:6402:c08:: with SMTP id
+ co8mr10593494edb.53.1639686945826; 
+ Thu, 16 Dec 2021 12:35:45 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id h10sm2094516ejx.32.2021.12.16.12.31.22
+ by smtp.gmail.com with ESMTPSA id mr38sm1620948ejc.109.2021.12.16.12.35.45
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 12:31:22 -0800 (PST)
-Message-ID: <c0ae5edb-ad84-ecc3-8e3e-77e0d11b34e1@mind.be>
-Date: Thu, 16 Dec 2021 21:31:21 +0100
+ Thu, 16 Dec 2021 12:35:45 -0800 (PST)
+Message-ID: <3fbde65b-853a-ae70-1962-32ebbd1cc616@mind.be>
+Date: Thu, 16 Dec 2021 21:35:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
 To: Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
 References: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
+ <20211215180021.274991-2-thierry.bultel@linatsea.fr>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
-Subject: Re: [Buildroot] [PATCH 1/3] package/cross-ldd: new package
+In-Reply-To: <20211215180021.274991-2-thierry.bultel@linatsea.fr>
+Subject: Re: [Buildroot] [PATCH 2/3] package/dracut: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,84 +104,99 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 15/12/2021 19:00, Thierry Bultel wrote:
-> cross-ldd works just as ldd, but supports
-> other architectures. It is needed by dracut, for instance.
-
-  I vaguely remember that at some point we considered adding cross-ldd, but 
-instead opted for a different approach. I can't find anything in the archives 
-however. Adam, I suspect this must have been for gobject-introspection, do you 
-remember anything like that?
-
+> dracut is the tool used by desktop distributions to
+> build initrds. In the embedded world, it can be
+> very usefull, too, for instance when wanting to
+> create an initramfs for a system recovery mode.
+> Whereas it is definitively possible to achieve
+> this with buildroot, the process is to have a
+> dedicated buildroot configuration for that,
+> and perform a full build. Instead of doing that,
+> the idea is to use dracut to pick the needed
+> binaries/shared libraries, configuration files,
+> or kernel modules from the 'target' directory.
+> The advantage is to save build time, and also
+> to have a consistency between the packages versions
+> taken for the recovery and the production filesystem.
+> 
 > Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
 > ---
->   package/Config.in.host           |  1 +
->   package/cross-ldd/Config.in.host |  5 +++++
->   package/cross-ldd/cross-ldd.mk   | 20 ++++++++++++++++++++
->   3 files changed, 26 insertions(+)
->   create mode 100644 package/cross-ldd/Config.in.host
->   create mode 100644 package/cross-ldd/cross-ldd.mk
+>   package/Config.in.host        |  1 +
+>   package/dracut/Config.in.host |  8 ++++++++
+>   package/dracut/dracut.mk      | 22 ++++++++++++++++++++++
+>   3 files changed, 31 insertions(+)
+>   create mode 100644 package/dracut/Config.in.host
+>   create mode 100644 package/dracut/dracut.mk
 > 
 > diff --git a/package/Config.in.host b/package/Config.in.host
-> index 6e5a5c5fc5..0e8b071a2b 100644
+> index 0e8b071a2b..42f671a78f 100644
 > --- a/package/Config.in.host
 > +++ b/package/Config.in.host
-> @@ -12,6 +12,7 @@ menu "Host utilities"
->   	source "package/checksec/Config.in.host"
->   	source "package/cmake/Config.in.host"
->   	source "package/cramfs/Config.in.host"
-> +	source "package/cross-ldd/Config.in.host"
+> @@ -15,6 +15,7 @@ menu "Host utilities"
+>   	source "package/cross-ldd/Config.in.host"
 >   	source "package/cryptsetup/Config.in.host"
 >   	source "package/dbus-python/Config.in.host"
+> +	source "package/dracut/Config.in.host"
 >   	source "package/dfu-util/Config.in.host"
-> diff --git a/package/cross-ldd/Config.in.host b/package/cross-ldd/Config.in.host
+>   	source "package/dos2unix/Config.in.host"
+>   	source "package/dosfstools/Config.in.host"
+> diff --git a/package/dracut/Config.in.host b/package/dracut/Config.in.host
 > new file mode 100644
-> index 0000000000..237af701d2
+> index 0000000000..8ed41d3719
 > --- /dev/null
-> +++ b/package/cross-ldd/Config.in.host
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_HOST_CROSS_LDD
-> +	bool "cross ldd"
+> +++ b/package/dracut/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_DRACUT
+> +	bool "host dracut"
 
-  We only add Config.in.host options for tools that are expected to be useful in 
-post-install scripts. I don't think that that's the case here though?
+  Contrary to cross-ldd, I *do* think that it's useful to have a Config.in.host 
+for host-dracut, because that is indeed a tool you'd use in post-image scripts.
+Even if there's a dracut fs, there are probably still use cases not covered by 
+it so it's useful standalone as well.
 
+> +	select BR2_PACKAGE_HOST_KMOD
+> +	select BR2_PACKAGE_HOST_CROSS_LDD
 > +	help
-> +	ldd drop-in replacement for cross-compilation toolchains.
-> +	This is the officially supported version mentioned in the dracut documentation
-> diff --git a/package/cross-ldd/cross-ldd.mk b/package/cross-ldd/cross-ldd.mk
+> +	dracut is used to create an initramfs image by copying tools and files from an installed system and combining it with the dracut framework.
+
+  Wrapping is not correct here. Please use utils/check-package before submitting.
+
+> +
+> +	https://dracut.wiki.kernel.org
+> diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
 > new file mode 100644
-> index 0000000000..9326a508bb
+> index 0000000000..8de89603a5
 > --- /dev/null
-> +++ b/package/cross-ldd/cross-ldd.mk
-> @@ -0,0 +1,20 @@
+> +++ b/package/dracut/dracut.mk
+> @@ -0,0 +1,22 @@
 > +################################################################################
 > +#
-> +# cross-ldd
+> +# dracut
 > +#
 > +################################################################################
 > +
-> +CROSS_LDD_VERSION = 6c9c724ebd6a29c279c6e5734e44c07f067808ec
-> +CROSS_LDD_SOURCE = $(CROSS_LDD_VERSION).zip
+> +DRACUT_VERSION = 055
+> +DRACUT_SOURCE = dracut-$(DRACUT_VERSION).tar.xz
+> +DRACUT_SITE = https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut
 
-  AFAICS there's no reason to use a zip file. Just remove this line and the 
-EXTRACT_CMDS and it should work as well.
-
+  Use BR2_KERNEL_MIRROR instead (at least, I think that should work, right?)
 
   Regards,
   Arnout
 
-> +CROSS_LDD_SITE = https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f/archive
+> +DRACUT_LICENSE = GPL-2.0
+> +DRACUT_LICENSE_FILES = COPYING
 > +
-> +define HOST_CROSS_LDD_EXTRACT_CMDS
-> +	unzip $(HOST_CROSS_LDD_DL_DIR)/$(CROSS_LDD_SOURCE) -d $(@D)
-> +	find $(@D) -name cross-compile-ldd -exec mv {} $(@D) \;
+> +HOST_DRACUT_DEPENDENCIES += host-pkgconf host-kmod host-cross-ldd
+> +
+> +define HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
+> +	$(SED) '/unset LD_LIBRARY_PATH/d' $(HOST_DIR)/bin/dracut
+> +	$(SED) '/unset LD_PRELOAD/d' $(HOST_DIR)/bin/dracut
 > +endef
 > +
-> +define HOST_CROSS_LDD_INSTALL_CMDS
-> +	install -m 755 $(@D)/cross-compile-ldd $(TARGET_CROSS)ldd
-> +endef
+> +HOST_DRACUT_POST_INSTALL_HOOKS+=HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
 > +
-> +$(eval $(host-generic-package))
+> +$(eval $(host-autotools-package))
 > 
 _______________________________________________
 buildroot mailing list
