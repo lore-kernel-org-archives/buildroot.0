@@ -1,46 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B07DC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE0D3C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:27:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4B4B83155;
-	Thu, 16 Dec 2021 18:27:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A830E4175D;
+	Thu, 16 Dec 2021 18:27:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PKIWBPtqzZs4; Thu, 16 Dec 2021 18:27:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XMd0ysNeN-CK; Thu, 16 Dec 2021 18:27:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D76BD82F9E;
-	Thu, 16 Dec 2021 18:27:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4D6E91BF36F
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E99DC41703;
+	Thu, 16 Dec 2021 18:27:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F033A1BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26FDC83F0A
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDF5F6104E
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:26:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hy41g34Q_8BH for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 18:24:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EAA9783F08
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:24:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 81C0482297; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=arachnodroid.de
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id etIlHjlv_6Vn for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:26:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from v220200749773122244.hotsrv.de (unknown
+ [IPv6:2a03:4000:47:39d:747f:15ff:fe4f:d530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E26661041
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arachnodroid.de;
+ s=dkim; t=1639679164;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WimmMYhLoB4wFMwXUKeppbWgbJvcgoXX0PtBWyPehoQ=;
+ b=sBSUqhKeHq4w2sSyC/aAyrmdkY6dTYUi9iUgHENDJAnnpTg86Q2atm8DpZ9pjHg9NDp1rO
+ XazYt3Ys5RpG+GywKWgCbvlM/AhhCFypBmKl2uqMGUmlNiez1w/vMB3mmbJQM9Q/zIyzxg
+ bBSa9NN2eFeByWFH/N2vbMi7xV9DEEc=
+Received: from [192.168.0.240] (ip4d1580a8.dynamic.kabel-deutschland.de
+ [77.21.128.168])
+ by v220200749773122244.hotsrv.de (OpenSMTPD) with ESMTPSA id cbad3a62
+ (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:26:04 +0000 (UTC)
+Message-ID: <575adfc5-e3e1-1bfd-f40d-73d5caa189f5@arachnodroid.de>
+Date: Thu, 16 Dec 2021 19:26:03 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 19:08:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6deb6bdc7cee0664a71f3363f4ee2d2e9d2f031b
-X-Git-Newrev: 5fd174918915bc34995ac28fd9b8a0690b0beb1d
-X-Patchwork-Hint: ignore
-Message-Id: <20211216181916.81C0482297@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/autofs: bump to version 5.1.8
+References: <bug-14451-163@https.bugs.busybox.net/>
+ <bug-14451-163-aEqUC9bjBs@https.bugs.busybox.net/>
+ <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
+ <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
+From: Michael Taubert <info@arachnodroid.de>
+In-Reply-To: <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: don't disable DRI3 for
+ some Gallium drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,182 +74,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fd174918915bc34995ac28fd9b8a0690b0beb1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch (already in version)
-
-https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/tree/CHANGELOG?h=release_5_1_8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...-5-1-7-use-default-stack-size-for-threads.patch | 124 ---------------------
- package/autofs/autofs.hash                         |   2 +-
- package/autofs/autofs.mk                           |   2 +-
- 3 files changed, 2 insertions(+), 126 deletions(-)
-
-diff --git a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch b/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
-deleted file mode 100644
-index f63c399fdc..0000000000
---- a/package/autofs/0001-autofs-5-1-7-use-default-stack-size-for-threads.patch
-+++ /dev/null
-@@ -1,124 +0,0 @@
--From 91edcc55c681dac41d2213b498ec6450aee22d9f Mon Sep 17 00:00:00 2001
--From: Ian Kent <raven@themaw.net>
--Date: Mon, 26 Jul 2021 13:18:38 +0800
--Subject: autofs-5.1.7 - use default stack size for threads
--
--autofs uses PTHREAD_STACK_MIN to set the stack size for threads it
--creates.
--
--In two cases it is used to reduce the stack size for long running
--service threads while it's used to allocate a larger stack for worker
--threads that can have larger memory requirements.
--
--In recent glibc releases PTHREAD_STACK_MIN is no longer a constant
--which can lead to unexpectedly different stack sizes on different
--architectures and the autofs assumption it's a constant causes a
--compile failure.
--
--The need to alter the stack size was due to observed stack overflow
--which was thought to be due the thread stack being too small for autofs
--and glibc alloca(3) usage.
--
--Quite a bit of that alloca(3) usage has been eliminated from autofs now,
--particularly those that might be allocating largish amounts of storage,
--and there has been a lot of change in glibc too so using the thread
--default stack should be ok.
--
--Signed-off-by: Ian Kent <raven@themaw.net>
--
--[Retrieved (and updated to drop CHANGELOG update) from:
--https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/commit/?id=91edcc55c681dac41d2213b498ec6450aee22d9f]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CHANGELOG          |  1 +
-- daemon/automount.c | 29 -----------------------------
-- daemon/state.c     |  6 +-----
-- lib/alarm.c        |  6 +-----
-- 4 files changed, 3 insertions(+), 39 deletions(-)
--
--diff --git a/daemon/automount.c b/daemon/automount.c
--index 23235a7..d743235 100644
----- a/daemon/automount.c
--+++ b/daemon/automount.c
--@@ -84,7 +84,6 @@ static size_t kpkt_len;
-- /* Attributes for creating detached and joinable threads */
-- pthread_attr_t th_attr;
-- pthread_attr_t th_attr_detached;
---size_t detached_thread_stack_size = PTHREAD_STACK_MIN * 144;
-- 
-- struct master_readmap_cond mrc = {
-- 	PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, 0, NULL, 0, 0, 0, 0};
--@@ -2620,34 +2619,6 @@ int main(int argc, char *argv[])
-- 		exit(1);
-- 	}
-- 
---#ifdef _POSIX_THREAD_ATTR_STACKSIZE
---	if (pthread_attr_setstacksize(
---			&th_attr_detached, detached_thread_stack_size)) {
---		logerr("%s: failed to set stack size thread attribute!",
---		       program);
---		if (start_pipefd[1] != -1) {
---			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
---			close(start_pipefd[1]);
---		}
---		release_flag_file();
---		macro_free_global_table();
---		exit(1);
---	}
---#endif
---
---	if (pthread_attr_getstacksize(
---			&th_attr_detached, &detached_thread_stack_size)) {
---		logerr("%s: failed to get detached thread stack size!",
---		       program);
---		if (start_pipefd[1] != -1) {
---			res = write(start_pipefd[1], pst_stat, sizeof(*pst_stat));
---			close(start_pipefd[1]);
---		}
---		release_flag_file();
---		macro_free_global_table();
---		exit(1);
---	}
---
-- 	info(logging, "Starting automounter version %s, master map %s",
-- 		version, master_list->name);
-- 	info(logging, "using kernel protocol version %d.%02d",
--diff --git a/daemon/state.c b/daemon/state.c
--index 5156bb2..5df0561 100644
----- a/daemon/state.c
--+++ b/daemon/state.c
--@@ -1177,12 +1177,8 @@ int st_start_handler(void)
-- 	status = pthread_attr_init(pattrs);
-- 	if (status)
-- 		pattrs = NULL;
---	else {
--+	else
-- 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
---#ifdef _POSIX_THREAD_ATTR_STACKSIZE
---		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
---#endif
---	}
-- 
-- 	status = pthread_create(&thid, pattrs, st_queue_handler, NULL);
-- 
--diff --git a/lib/alarm.c b/lib/alarm.c
--index f27e13c..1631a9b 100755
----- a/lib/alarm.c
--+++ b/lib/alarm.c
--@@ -270,12 +270,8 @@ int alarm_start_handler(void)
-- 	status = pthread_attr_init(pattrs);
-- 	if (status)
-- 		pattrs = NULL;
---	else {
--+	else
-- 		pthread_attr_setdetachstate(pattrs, PTHREAD_CREATE_DETACHED);
---#ifdef _POSIX_THREAD_ATTR_STACKSIZE
---		pthread_attr_setstacksize(pattrs, PTHREAD_STACK_MIN*4);
---#endif
---	}
-- 
-- 	status = pthread_condattr_init(&condattrs);
-- 	if (status)
---- 
--cgit 1.2.3-1.el7
--
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 10ca42ebed..97bc757d6b 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256  a36b268611b79b07051749870ba540b139938efc84bc0293244c483e94f9ced7  autofs-5.1.7.tar.xz
-+sha256  b33d1059855664b20eeda26f3e28ff518fb0c3d58f565570af2ae569dc73c0fd  autofs-5.1.8.tar.xz
- 
- # Hash for license files
- sha256  458028929f712b4795bc5adc31a1d6a2151364ce1b372ac43f613f56c8448fed  COPYING
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 4c5200584f..97b1b6b3e4 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOFS_VERSION = 5.1.7
-+AUTOFS_VERSION = 5.1.8
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKSSdtIG5vdCB0aGF0IGZhbWlsaWFyIHdpdGggdGhlc2UgY29uZmlncywgeWV0
+LiBCdXQgaWYgSSB1bmRlcnN0YW5kIGl0IApyaWdodCwgeW91ciBhZHZpY2UgaXMgdG8gaGF2ZSB0
+aGUgc2VsZWN0aW9uIG9mIHRoZXNlIEdhbGxpdW0gZHJpdmVycyAKc2hvdWxkIGFsc28gc2VsZWN0
+IEJSMl9QQUNLQUdFX01FU0EzRF9EUklfRFJJVkVSLgoKSSB3aWxsIGhhdmUgYSBsb29rIG9uIGhv
+dyB0byBkbyB0aGF0IHRvbW9ycm93IGFuZCBwcm92aWRlIGFub3RoZXIgcGF0Y2ggCnRoZW4uCgpL
+aW5kIHJlZ2FyZHMsCk1pY2hhZWwKCkFtIDE2LjEyLjIwMjEgdW0gMTg6Mjggc2NocmllYiBBcm5v
+dXQgVmFuZGVjYXBwZWxsZToKPiAgwqBIaSBNaWNoYWVsLAo+IAo+IE9uIDE0LzEyLzIwMjEgMjA6
+MDYsIE1pY2hhZWwgVGF1YmVydCB3cm90ZToKPj4gQ2VydGFpbiBHYWxsaXVtIGRyaXZlcnMgbmVl
+ZCBEUkkzIHN1cHBvcnQsIG90aGVyd2lzZSBvcGVuZ2wgd29uJ3Qgd29yay4KPj4gT24gdGhlIFJh
+c3BiZXJyeSBQaSA0LCBmb3IgZXhhbXBsZSwgZ2x4Z2VhcnMgd2lsbCBjb21wbGFpbiBhYm91dAo+
+Pgo+PiAnRmFpbGVkIHRvIG9wZW4gYm8gMTogcGVybWlzc2lvbiBkZW5pZWQnCj4+Cj4+IFRoZXNl
+IGRyaXZlcnMgbXVzdCBub3QgYmUgc2VsZWN0ZWQgdG8gZGlzYWJsZSBEUkkzIHN1cHBvcnQuIEl0
+IHNlZW1zIHRvCj4+IGJlIHRoZSBzYW1lIGZvciBMaW1hIGFuZCBQYW5mcm9zdCwgcGxlYXNlIGNo
+ZWNrIGJ1ZyAxMzgzMS4KPj4KPj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUYXViZXJ0IDxpbmZv
+QGFyYWNobm9kcm9pZC5kZT4KPj4gLS0tCj4+IMKgwqBwYWNrYWdlL21lc2EzZC9tZXNhM2QubWsg
+fCA2ICsrKysrLQo+PiDCoMKgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
+dGlvbigtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIGIvcGFj
+a2FnZS9tZXNhM2QvbWVzYTNkLm1rCj4+IGluZGV4IDYxYjA5NWNjY2EuLjk3ODBkNWE5NjAgMTAw
+NjQ0Cj4+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+PiArKysgYi9wYWNrYWdlL21l
+c2EzZC9tZXNhM2QubWsKPj4gQEAgLTEyMSw3ICsxMjEsMTEgQEAgTUVTQTNEX0NPTkZfT1BUUyAr
+PSBcCj4+IMKgwqDCoMKgwqDCoMKgwqAgLURnYWxsaXVtLWV4dHJhLWh1ZD10cnVlCj4+IMKgwqBl
+bmRpZgo+Pgo+PiAtaWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RSSVZFUiksKQo+PiAr
+aWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RSSVZFUikgXAo+PiArwqDCoMKgwqDCoMKg
+ICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1YzRCkgXAo+PiArwqDCoMKgwqDC
+oMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1ZDNCkgXAo+PiArwqDCoMKg
+wqDCoMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX0xJTUEpIFwKPj4gK8Kg
+wqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9QQU5GUk9TVCks
+KQo+IAo+ICDCoFRoZSBtZXNhM2Qgc3R1ZmYgZ29lcyB3YXkgb3ZlciBteSBoZWFkLCBhY3R1YWxs
+eSwgYnV0IEkgd291bGQgdGhpbmsgCj4gdGhhdCB0aGUgcHJvcGVyIHNvbHV0aW9uIGhlcmUgd291
+bGQgYmUgdGhhdCB0aGVzZSBjb25maWdzIHNlbGVjdCAKPiBCUjJfUEFDS0FHRV9NRVNBM0RfRFJJ
+X0RSSVZFUi4KPiAKPiAgwqBJIGtub3cgaXQgc291bmRzIHdlaXJkIHRoYXQgYSBnYWxsaXVtIGRy
+aXZlciBpcyBhbHNvIGEgRFJJIGRyaXZlciwgYnV0IAo+IEkgZ3Vlc3MgdGhhdCdzIHdoYXQgaXQg
+aXMuLi4KPiAKPiAgwqBCZXJuZCwgY2FuIHlvdSBjb21tZW50Pwo+IAo+ICDCoFJlZ2FyZHMsCj4g
+IMKgQXJub3V0Cj4gCj4+IMKgwqBNRVNBM0RfQ09ORl9PUFRTICs9IFwKPj4gwqDCoMKgwqDCoMKg
+wqDCoCAtRGRyaS1kcml2ZXJzPSAtRGRyaTM9ZGlzYWJsZWQKPj4gwqDCoGVsc2UKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
