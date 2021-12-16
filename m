@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDFBEC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E3DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E6CA4014B;
-	Thu, 16 Dec 2021 18:26:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FADA401AD;
+	Thu, 16 Dec 2021 18:26:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c7_Jn_hKgfdI; Thu, 16 Dec 2021 18:26:38 +0000 (UTC)
+	with ESMTP id sdOb91O24lEW; Thu, 16 Dec 2021 18:26:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86D624017B;
-	Thu, 16 Dec 2021 18:26:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7BD640B54;
+	Thu, 16 Dec 2021 18:26:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39E951BF36F
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CD1D1BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0BE9983F06
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A15883F09
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:24:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cL6094dSMPun for <buildroot@lists.busybox.net>;
+ with ESMTP id H-k6K1mJCmcr for <buildroot@lists.busybox.net>;
  Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2905183F0B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37C7E83F0C
  for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:24:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B4908818E5; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
+ id C487382297; Thu, 16 Dec 2021 18:19:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 19:08:48 +0100
+Date: Thu, 16 Dec 2021 19:08:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8bee3950aa851620d6a954aebad1f984caa105a
-X-Git-Newrev: dc929dfa4dce82d96f2b1e6bcbee71775f5052c1
+X-Git-Oldrev: 8de5996e5cad109baf8f79c0502f355e472e33b5
+X-Git-Newrev: 2a28d25d0c61dfd040362c8af0896e73b4eaa71d
 X-Patchwork-Hint: ignore
-Message-Id: <20211216181916.B4908818E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/leveldb: bump to version 1.23
+Message-Id: <20211216181916.C487382297@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,102 +58,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc929dfa4dce82d96f2b1e6bcbee71775f5052c1
+commit: https://git.buildroot.net/buildroot/commit/?id=2a28d25d0c61dfd040362c8af0896e73b4eaa71d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Refresh second and fourth patches
-- Update indentation in hash file (two spaces)
+Drop patch (already in version) and so autoreconf
 
-https://github.com/google/leveldb/releases/tag/1.23
+https://github.com/jirka-h/haveged/releases/tag/v1.9.15
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/leveldb/0002-CMake-install-libmemenv.a.patch           |  4 +++-
- .../leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch   | 10 ++++++----
- package/leveldb/leveldb.hash                                   |  4 ++--
- package/leveldb/leveldb.mk                                     |  2 +-
- 4 files changed, 12 insertions(+), 8 deletions(-)
+ ...0001-Check-for-sys-auxv.h-before-using-it.patch | 60 ----------------------
+ package/haveged/haveged.hash                       |  2 +-
+ package/haveged/haveged.mk                         |  4 +-
+ 3 files changed, 2 insertions(+), 64 deletions(-)
 
-diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
-index ab23a1881a..ea742b0c49 100644
---- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
-+++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
-@@ -8,6 +8,8 @@ https://git.busybox.net/buildroot/commit/?id=8a10d9ce311c6cb0490d76921cae55618c2
- https://git.busybox.net/buildroot/commit/?id=16f847340d07dce620e4c3fc0a099aa79898d86a
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Fabrice : updated for 1.23]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  CMakeLists.txt | 26 +++++++++++++++++++++++++-
-  1 file changed, 25 insertions(+), 1 deletion(-)
-@@ -48,9 +50,9 @@ index a65afbf..83b2425 100644
-    target_sources(leveldb
-      PRIVATE
- @@ -418,7 +436,7 @@ endif(LEVELDB_BUILD_BENCHMARKS)
-+ endif(LEVELDB_BUILD_BENCHMARKS)
-  
-  if(LEVELDB_INSTALL)
--   include(GNUInstallDirs)
- -  install(TARGETS leveldb
- +  install(TARGETS leveldb memenv
-      EXPORT leveldbTargets
-diff --git a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
-index 2626e88652..714e1b0827 100644
---- a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
-+++ b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
-@@ -7,6 +7,8 @@ Upstream: https://github.com/google/leveldb/pull/686/commits/3e73a396a082efc76e0
- [Thomas: this commit allows to fix the detection of the snappy library
- in static link configurations]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+[Fabrice : updated for 1.23]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  CMakeLists.txt         | 12 ++++++++----
-  cmake/FindSnappy.cmake | 31 +++++++++++++++++++++++++++++++
-@@ -19,14 +21,14 @@ index 78fead6..2efccda 100644
- +++ b/CMakeLists.txt
- @@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
-  # Keep the version below in sync with the one in db.h
-- project(leveldb VERSION 1.22.0 LANGUAGES C CXX)
-+ project(leveldb VERSION 1.23.0 LANGUAGES C CXX)
-  
- +# Include local CMake modules.
- +list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
- +
-- # This project can use C11, but will gracefully decay down to C89.
-- set(CMAKE_C_STANDARD 11)
-- set(CMAKE_C_STANDARD_REQUIRED OFF)
-+ # C standard can be overridden when this is used as a sub-project.
-+ if(NOT CMAKE_C_STANDARD)
-+   # This project can use C11, but will gracefully decay down to C89.
- @@ -31,13 +34,14 @@ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
-  include(TestBigEndian)
-  test_big_endian(LEVELDB_IS_BIG_ENDIAN)
-diff --git a/package/leveldb/leveldb.hash b/package/leveldb/leveldb.hash
-index c4a8499dec..068cb09b0a 100644
---- a/package/leveldb/leveldb.hash
-+++ b/package/leveldb/leveldb.hash
+diff --git a/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch b/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
+deleted file mode 100644
+index 042135f127..0000000000
+--- a/package/haveged/0001-Check-for-sys-auxv.h-before-using-it.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 676abde95bab10e1d26e91682772514010143343 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Sun, 21 Mar 2021 17:00:08 +0100
+-Subject: [PATCH] Check for sys/auxv.h before using it.
+-
+-- fixes uclibc-ng compile (does not provide sys/auxv.h header file)
+-
+-Fixes:
+-
+-  haveged.c:22:10: fatal error: sys/auxv.h: No such file or directory
+-     22 | #include <sys/auxv.h>
+-        |          ^~~~~~~~~~~~
+-
+-[Upstream: https://github.com/jirka-h/haveged/pull/59]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac  | 1 +
+- src/haveged.c | 4 ++++
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index c172a10..a0263f5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -125,6 +125,7 @@ AC_CHECK_HEADERS(stdio.h)
+- AC_CHECK_HEADERS(stdlib.h)
+- AC_CHECK_HEADERS(string.h)
+- AC_CHECK_HEADERS(sys/ioctl.h)
+-+AC_CHECK_HEADERS(sys/auxv.h)
+- AC_CHECK_HEADERS(sys/mman.h)
+- AC_CHECK_HEADERS(sys/types.h)
+- AC_CHECK_HEADERS(sys/socket.h)
+-diff --git a/src/haveged.c b/src/haveged.c
+-index b9cb77b..dad3072 100644
+---- a/src/haveged.c
+-+++ b/src/haveged.c
+-@@ -19,7 +19,9 @@
+-  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-  */
+- #include "config.h"
+-+#if defined(HAVE_SYS_AUXV_H)
+- #include <sys/auxv.h>
+-+#endif
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <getopt.h>
+-@@ -135,8 +137,10 @@ int main(int argc, char **argv)
+- {
+-    volatile char *path = strdup(argv[0]);
+-    volatile char *arg0 = argv[0];
+-+#if defined(HAVE_SYS_AUXV_H)
+-    if (path[0] != '/')
+-       path = (char*)getauxval(AT_EXECFN);
+-+#endif
+-    static const char* cmds[] = {
+-       "b", "buffer",      "1", SETTINGR("Buffer size [KW], default: ",COLLECT_BUFSIZE),
+-       "d", "data",        "1", SETTINGR("Data cache size [KB], with fallback to: ", GENERIC_DCACHE ),
+--- 
+-2.30.2
+-
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index f55e004923..8c62ead7c3 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 55423cac9e3306f4a9502c738a001e4a339d1a38ffbee7572d4a07d5d63949b2  leveldb-1.22.tar.gz
--sha256 ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  LICENSE
-+sha256  9a37f8a6174f09bd622bc723b55881dc541cd50747cbd08831c2a82d620f6d76  leveldb-1.23.tar.gz
-+sha256  ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  LICENSE
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-index 684b618679..a8f9dc3a1b 100644
---- a/package/leveldb/leveldb.mk
-+++ b/package/leveldb/leveldb.mk
-@@ -4,7 +4,7 @@
+-sha256  938cb494bcad7e4f24e61eb50fab4aa0acbc3240c80f3ad5c6cf7e6e922618c3  haveged-1.9.14.tar.gz
++sha256  f882919ccead07ad6687a4784c0c501e617321e96dd0118403464969359cf6ad  haveged-1.9.15.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 5d76bdc3c9..7035142aee 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--LEVELDB_VERSION = 1.22
-+LEVELDB_VERSION = 1.23
- LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
- LEVELDB_LICENSE = BSD-3-Clause
- LEVELDB_LICENSE_FILES = LICENSE
+-HAVEGED_VERSION = 1.9.14
++HAVEGED_VERSION = 1.9.15
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
+ HAVEGED_SELINUX_MODULES = entropyd
+-# patch touching configure.ac
+-HAVEGED_AUTORECONF = YES
+ 
+ # '--disable-init' as buildroot ships its own sysv/systemd init files
+ HAVEGED_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
