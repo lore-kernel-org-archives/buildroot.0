@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7ABBC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 17:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E975DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:03:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 700CB83EE6;
-	Thu, 16 Dec 2021 17:53:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5CElwqK_f8a2; Thu, 16 Dec 2021 17:53:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5DB583EE3;
-	Thu, 16 Dec 2021 17:53:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DCA91BF3AE
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:53:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D3724171D
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:53:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7771441744;
+	Thu, 16 Dec 2021 18:03:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k0SRT1qea40M for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 17:53:42 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ziu4eJYN8Ri1; Thu, 16 Dec 2021 18:03:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9ADE41739;
+	Thu, 16 Dec 2021 18:03:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A9CC1BF3BD
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:03:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E694F83EE5
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y5wF8uW1VpLd for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3E6E416F8
- for <buildroot@uclibc.org>; Thu, 16 Dec 2021 17:53:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24F6983EE3
+ for <buildroot@uclibc.org>; Thu, 16 Dec 2021 18:03:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 950C582236; Thu, 16 Dec 2021 17:48:21 +0000 (UTC)
+ id B91CB82293; Thu, 16 Dec 2021 17:58:04 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 16 Dec 2021 17:53:41 +0000
+Date: Thu, 16 Dec 2021 18:03:24 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -51,7 +51,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14461-163-YpgTuX3IKA@https.bugs.busybox.net/>
+Message-ID: <bug-14461-163-2A0LFWPm3a@https.bugs.busybox.net/>
 In-Reply-To: <bug-14461-163@https.bugs.busybox.net/>
 References: <bug-14461-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -77,13 +77,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14461
 
---- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Wojciech Ziniewicz from comment #2)
+--- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Peter Seiderer from comment #3)
 
-I am pretty sure patch [3] is not in mainline ;-),
-the trick is not the enabling of the target fontconfig/libjepeg but to
-force host-fontconfig/host-libjpeg to be available to fullfill the
-qt5webengine host-pkg-search for all/some libs enabled only for the target...
+And finally the corresponding patchwork link [5]...
+
+[5]
+https://patchwork.ozlabs.org/project/buildroot/patch/20201221203952.22168-3-ps.report@gmx.net/
 
 -- 
 You are receiving this mail because:
