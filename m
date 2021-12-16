@@ -1,51 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82160C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 17:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B26C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 17:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2295361031;
-	Thu, 16 Dec 2021 17:17:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C64A440102;
+	Thu, 16 Dec 2021 17:29:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8rWzB-0oeu60; Thu, 16 Dec 2021 17:17:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xLD0lq2NTl-r; Thu, 16 Dec 2021 17:29:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6759461034;
-	Thu, 16 Dec 2021 17:17:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9FEC1BF3AE
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:17:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D953B40B37;
+	Thu, 16 Dec 2021 17:29:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 631CE1BF3AE
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:29:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B976282F9E
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:17:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51D3F61039
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 17:29:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yRAiI9Ln4unC for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 17:17:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7AE6282D57
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 17:17:13 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id EE3FAE0005;
- Thu, 16 Dec 2021 17:17:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1mxuNL-00077l-85; Thu, 16 Dec 2021 18:17:03 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 16 Dec 2021 18:16:55 +0100
-Message-Id: <20211216171656.27339-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UfvlWQReGKfu for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 17:29:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D69FD61034
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 17:28:59 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so88732295edd.9
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 09:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mZLH/5tLNWrMpEnmM8OOvQX8yGcbkMww4yOsXd0S/CE=;
+ b=EY8pSpk8v0CaDE79XH4bzDXu9nYQIDvPuwh1OT/PQDu3Q1taujv+pvH9hQ15reT52b
+ McyariWpHLKeum8d0LW+fymno2ufDzSBdt8BLzPgNDhYMED6aiDldb+8QNa69JH9ghBv
+ 4oK8vpi+0rP/y07/G/8hWcfhjqTYctIS0LZGTBg7x+4nQIAfdEiiEhtRuaNYgDc0be0U
+ Xz24vei53aqy5gBimDE3YO/WqYgnw+/nc283kxsLIOoP5hVYDLGMI0JL8fCMThvUMW+c
+ tCAqlhUDjfgvxzxA+GZZZZ2G2yYfbcHtLdJsxHWk8WL3LlTdyQj3odORPsPyy5VoPKZu
+ 19dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mZLH/5tLNWrMpEnmM8OOvQX8yGcbkMww4yOsXd0S/CE=;
+ b=wEeWxHCqDPi4d0HsCe9lkL3Iy5fIR/87/CPgg9ek4VD62wB/HFcoMETx81egtq+FUZ
+ 66KgEWHtuJtTLjCe7XF1aZsmqV81yanuE2HFd56ZECwvIJpmbGhg5JfdrhmD+T0QQS/9
+ J69WBZuaXqB9jWrONbZlb3kINcg2zjKwgK9rQPrBuAHLBBaAUH7LIirHfPZgbbtbp4d+
+ ysrP+efXXqum4yIdpX2txSr8DVIrfZ/yTJ6+CLgvDacLy0i824hQnGcTy8N1rCP7xPbW
+ 9+HH41Qyzh4XCdHyQPqk49RoEaefOEpZYHa/Pqj8D6q1O0HkxQgz1nvATHwRS1/LJkEa
+ xKWw==
+X-Gm-Message-State: AOAM53146l0sbHFt89ejFITqYudRkXUl9+1339nPJy+Kxd84S8SLeD96
+ gND3bnV8uaSqIApeu180HNVJFQ==
+X-Google-Smtp-Source: ABdhPJyy+m5zMdxgE32cq1vVhCtTaGXzir2nm1G3Dk2oGEAL3uoG/1P3l+Q+uOFJro97jibAEZWngA==
+X-Received: by 2002:a05:6402:147:: with SMTP id
+ s7mr21717708edu.8.1639675738167; 
+ Thu, 16 Dec 2021 09:28:58 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id hc33sm2056157ejc.93.2021.12.16.09.28.57
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 16 Dec 2021 09:28:57 -0800 (PST)
+Message-ID: <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
+Date: Thu, 16 Dec 2021 18:28:56 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/xserver_xorg-server: security bump to
- version 21.1.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Michael Taubert <info@arachnodroid.de>, buildroot@buildroot.org
+References: <bug-14451-163@https.bugs.busybox.net/>
+ <bug-14451-163-aEqUC9bjBs@https.bugs.busybox.net/>
+ <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: don't disable DRI3 for
+ some Gallium drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,182 +97,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: bernd.kuhls@t-online.de, romain.naour@gmail.com
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerabilities:
-
-* CVE-2021-4008/ZDI-CAN-14192 SProcRenderCompositeGlyphs out-of-bounds
-  access
-
-  The handler for the CompositeGlyphs request of the Render extension does
-  not properly validate the request length leading to out of bounds memory
-  write.
-
-* CVE-2021-4009/ZDI-CAN 14950 SProcXFixesCreatePointerBarrier out-of-bounds
-  access
-
-  The handler for the CreatePointerBarrier request of the XFixes extension
-  does not properly validate the request length leading to out of bounds
-  memory write.
-
-* CVE-2021-4010/ZDI-CAN-14951 SProcScreenSaverSuspend out-of-bounds access
-
-  The handler for the Suspend request of the Screen Saver extension does not
-  properly validate the request length leading to out of bounds memory
-  write.
-
-* CVE-2021-4011/ZDI-CAN-14952 SwapCreateRegister out-of-bounds access
-
-  The handlers for the RecordCreateContext and RecordRegisterClients
-  requests of the Record extension do not properly validate the request
-  length leading to out of bounds memory write.
-
-For details, see the advisory:
-https://lists.x.org/archives/xorg-announce/2021-December/003122.html
-
-Builds without systemd unfortunately got broken.  Add a patch fixing that
-from an upstream merge request:
-https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...error-when-built-without-logind-plat.patch | 90 +++++++++++++++++++
- .../xserver_xorg-server.hash                  |  6 +-
- .../xserver_xorg-server.mk                    |  2 +-
- 3 files changed, 94 insertions(+), 4 deletions(-)
- create mode 100644 package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-
-diff --git a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch b/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-new file mode 100644
-index 0000000000..164c0039bd
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-@@ -0,0 +1,90 @@
-+From 17b6ab4d8cecf55a3784dbefbef9bfcf84ee3b1b Mon Sep 17 00:00:00 2001
-+From: Jocelyn Falempe <jfalempe@redhat.com>
-+Date: Thu, 16 Dec 2021 15:46:43 +0100
-+Subject: [PATCH] Fix compilation error when built without logind/platform bus
-+
-+This was introduced by commit 8eb1396d
-+
-+Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
-+[Peter: from https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ hw/xfree86/common/xf86Events.c               |  9 +--------
-+ hw/xfree86/os-support/linux/systemd-logind.c | 16 +++++++++++-----
-+ include/systemd-logind.h                     |  4 ++--
-+ 3 files changed, 14 insertions(+), 15 deletions(-)
-+
-+diff --git a/hw/xfree86/common/xf86Events.c b/hw/xfree86/common/xf86Events.c
-+index 6076efa80..395bbc7b3 100644
-+--- a/hw/xfree86/common/xf86Events.c
-++++ b/hw/xfree86/common/xf86Events.c
-+@@ -383,14 +383,7 @@ xf86VTLeave(void)
-+         xf86GPUScreens[i]->LeaveVT(xf86GPUScreens[i]);
-+ 
-+     if (systemd_logind_controls_session()) {
-+-        for (i = 0; i < xf86_num_platform_devices; i++) {
-+-            if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
-+-                int major, minor;
-+-                major = xf86_platform_odev_attributes(i)->major;
-+-                minor = xf86_platform_odev_attributes(i)->minor;
-+-                systemd_logind_drop_master(major, minor);
-+-            }
-+-        }
-++        systemd_logind_drop_master();
-+     }
-+ 
-+     if (!xf86VTSwitchAway())
-+diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
-+index 35d5cc75b..f6a223a55 100644
-+--- a/hw/xfree86/os-support/linux/systemd-logind.c
-++++ b/hw/xfree86/os-support/linux/systemd-logind.c
-+@@ -308,13 +308,19 @@ cleanup:
-+  * and ensure the drm_drop_master is done before
-+  * VT_RELDISP when switching VT
-+  */
-+-void systemd_logind_drop_master(int _major, int _minor)
-++void systemd_logind_drop_master(void)
-+ {
-+-    struct systemd_logind_info *info = &logind_info;
-+-    dbus_int32_t major = _major;
-+-    dbus_int32_t minor = _minor;
-++    int i;
-++    for (i = 0; i < xf86_num_platform_devices; i++) {
-++        if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
-++            dbus_int32_t major, minor;
-++            struct systemd_logind_info *info = &logind_info;
-+ 
-+-    systemd_logind_ack_pause(info, minor, major);
-++            major = xf86_platform_odev_attributes(i)->major;
-++            minor = xf86_platform_odev_attributes(i)->minor;
-++            systemd_logind_ack_pause(info, minor, major);
-++        }
-++    }
-+ }
-+ 
-+ static DBusHandlerResult
-+diff --git a/include/systemd-logind.h b/include/systemd-logind.h
-+index a8af2b96d..5c04d0130 100644
-+--- a/include/systemd-logind.h
-++++ b/include/systemd-logind.h
-+@@ -33,7 +33,7 @@ int systemd_logind_take_fd(int major, int minor, const char *path, Bool *paus);
-+ void systemd_logind_release_fd(int major, int minor, int fd);
-+ int systemd_logind_controls_session(void);
-+ void systemd_logind_vtenter(void);
-+-void systemd_logind_drop_master(int major, int minor);
-++void systemd_logind_drop_master(void);
-+ #else
-+ #define systemd_logind_init()
-+ #define systemd_logind_fini()
-+@@ -41,7 +41,7 @@ void systemd_logind_drop_master(int major, int minor);
-+ #define systemd_logind_release_fd(major, minor, fd) close(fd)
-+ #define systemd_logind_controls_session() 0
-+ #define systemd_logind_vtenter()
-+-#define systemd_logind_drop_master(major, minor)
-++#define systemd_logind_drop_master()
-+ #endif
-+ 
-+ #endif
-+-- 
-+2.20.1
-+
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index d389e6713a..6008661db1 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-November/003116.html
--sha256  782e7fef2ca0c7cbe60a937b8bf42dac69c904fb841950fd0363e1c2346ea755  xorg-server-21.1.1.tar.xz
--sha512  8608ed9c1537c95e8a3adea5e3e372a3c5eb841f8e27c84283093f22fb1909e16a800006510da684b13f8f237f33b8a4be3e2537f5f9ab9af4c5ad12770eef0d  xorg-server-21.1.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2021-December/003125.html
-+sha256  c20bf46a9fe8e74bf4e75430637e58d49a02d806609dc161462bceb1ef7e8db0  xorg-server-21.1.2.tar.xz
-+sha512  6d7a0d29d5be09f80ed505c4d6ae964795127525a0ab73a4eab4f601788ab3627033143e5aeb4c2565c6683dd3402084d13acab5554606fbd519c4aec0a79def  xorg-server-21.1.2.tar.xz
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 2518776da8..0cadba92a3 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 21.1.1
-+XSERVER_XORG_SERVER_VERSION = 21.1.2
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
--- 
-2.20.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBNaWNoYWVsLAoKT24gMTQvMTIvMjAyMSAyMDowNiwgTWljaGFlbCBUYXViZXJ0IHdyb3Rl
+Ogo+IENlcnRhaW4gR2FsbGl1bSBkcml2ZXJzIG5lZWQgRFJJMyBzdXBwb3J0LCBvdGhlcndpc2Ug
+b3BlbmdsIHdvbid0IHdvcmsuCj4gT24gdGhlIFJhc3BiZXJyeSBQaSA0LCBmb3IgZXhhbXBsZSwg
+Z2x4Z2VhcnMgd2lsbCBjb21wbGFpbiBhYm91dAo+IAo+ICdGYWlsZWQgdG8gb3BlbiBibyAxOiBw
+ZXJtaXNzaW9uIGRlbmllZCcKPiAKPiBUaGVzZSBkcml2ZXJzIG11c3Qgbm90IGJlIHNlbGVjdGVk
+IHRvIGRpc2FibGUgRFJJMyBzdXBwb3J0LiBJdCBzZWVtcyB0bwo+IGJlIHRoZSBzYW1lIGZvciBM
+aW1hIGFuZCBQYW5mcm9zdCwgcGxlYXNlIGNoZWNrIGJ1ZyAxMzgzMS4KPiAKPiBTaWduZWQtb2Zm
+LWJ5OiBNaWNoYWVsIFRhdWJlcnQgPGluZm9AYXJhY2hub2Ryb2lkLmRlPgo+IC0tLQo+ICDCoHBh
+Y2thZ2UvbWVzYTNkL21lc2EzZC5tayB8IDYgKysrKystCj4gIMKgMSBmaWxlIGNoYW5nZWQsIDUg
+aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21l
+c2EzZC9tZXNhM2QubWsgYi9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPiBpbmRleCA2MWIwOTVj
+Y2NhLi45NzgwZDVhOTYwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+
+ICsrKyBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+IEBAIC0xMjEsNyArMTIxLDExIEBAIE1F
+U0EzRF9DT05GX09QVFMgKz0gXAo+ICDCoMKgwqDCoMKgwqDCoCAtRGdhbGxpdW0tZXh0cmEtaHVk
+PXRydWUKPiAgwqBlbmRpZgo+IAo+IC1pZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9EUklfRFJJ
+VkVSKSwpCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX0RSSV9EUklWRVIpIFwKPiArwqDC
+oMKgwqDCoMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1YzRCkgXAo+ICvC
+oMKgwqDCoMKgwqAgJChCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfVkM0KSBcCj4g
+K8KgwqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9MSU1BKSBc
+Cj4gK8KgwqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9QQU5G
+Uk9TVCksKQoKICBUaGUgbWVzYTNkIHN0dWZmIGdvZXMgd2F5IG92ZXIgbXkgaGVhZCwgYWN0dWFs
+bHksIGJ1dCBJIHdvdWxkIHRoaW5rIHRoYXQgdGhlIApwcm9wZXIgc29sdXRpb24gaGVyZSB3b3Vs
+ZCBiZSB0aGF0IHRoZXNlIGNvbmZpZ3Mgc2VsZWN0IApCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RS
+SVZFUi4KCiAgSSBrbm93IGl0IHNvdW5kcyB3ZWlyZCB0aGF0IGEgZ2FsbGl1bSBkcml2ZXIgaXMg
+YWxzbyBhIERSSSBkcml2ZXIsIGJ1dCBJIGd1ZXNzIAp0aGF0J3Mgd2hhdCBpdCBpcy4uLgoKICBC
+ZXJuZCwgY2FuIHlvdSBjb21tZW50PwoKICBSZWdhcmRzLAogIEFybm91dAoKPiAgwqBNRVNBM0Rf
+Q09ORl9PUFRTICs9IFwKPiAgwqDCoMKgwqDCoMKgwqAgLURkcmktZHJpdmVycz0gLURkcmkzPWRp
+c2FibGVkCj4gIMKgZWxzZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
