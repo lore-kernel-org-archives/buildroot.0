@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2566C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C19C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 20:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EEB960DFC;
-	Thu, 16 Dec 2021 20:14:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B280340465;
+	Thu, 16 Dec 2021 20:14:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mbdn1qgpOd-e; Thu, 16 Dec 2021 20:14:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XEdrb-lfFE7c; Thu, 16 Dec 2021 20:14:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B40F660C1D;
-	Thu, 16 Dec 2021 20:14:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA9F71BF325
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC98B40B5F;
+	Thu, 16 Dec 2021 20:14:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D8C01BF325
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D825760C1D
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87D9940B5F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 20:14:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9hzhPkwjKPOO for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 20:14:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PDZfBiZdQOWt for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 20:14:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 108346061B
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:14:29 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id y13so91038762edd.13
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:14:29 -0800 (PST)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B17B40465
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 20:14:36 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id b7so31887761edd.6
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 12:14:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=SNXXq4biR47CdlnUuvHAHi0CbvJN4naOIJnveFHow/Y=;
- b=KTztf3qC/LvLq+ypyWYS5LzQaclDp+3bo9ieIfNacO+F3KO1+bbtpQ6vZUMFFLJWJV
- 3fXGea93okr0jC2Xy1W2BrdAsf8U6lbl0JdXdjJ65kLUUSnEIQHQbI1Q6kW7gMgD8S9L
- TPL10gFX3SgZxo63FI2jbVVT2SD0tPcgr29GH2Dkc3Gc8DDkwFWvfNp8SkHZVHGn0Pgn
- RhsZgZM0upO6EXr8U/UUD7eTrJvhDdBuKwivYhxpdtGw2s9XWRxEDLJihLbSmRbK403A
- DieaJyXmzs7hcepLH1RcuMYKV+V+nWhVqUxnJ5ybS5vlogOEYGVzS/rF7L/H2QI8Ld20
- fsow==
+ bh=r2NmstxJ8HSLqV975EVrNIccNiCpeXUwC/r1bPMsxpY=;
+ b=N7yktvN0wARs6beBR6ErsnkPw8e/sihPhP5sRT5p4kf0CR0Rm9gGluKprsparA2AA+
+ 7ocDaVbGTHTsABTj5y3yYRZlDPn9+qDuuOFBWYieaigjHkHFnRBVXY2toopu/2nXmLgf
+ xtv6GFxNHHUgLi8/td7yYe7+UNJdV97k1TpcMj/p1d61aBorAfDT6sIFTR32wO4CwiKR
+ khhQQvcmHMOV+V05md+gIb+rZIS3AE+NIKxPfbEiKhvOWNzwpJnbjNCbqEs9HG/VhbSS
+ IOijRiPxsakoOF4k1J5JwxqiAmCYBR3c2Lmg4PSI96aPQ/TF7SHkPBdrfO1xRaQg7O60
+ 3pIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=SNXXq4biR47CdlnUuvHAHi0CbvJN4naOIJnveFHow/Y=;
- b=XJDnpkamtIpuCGU3aIuA8VXGBDnYt8ydCJuz7ioecnauMf+e0FI0Avk+pitojU+RUt
- hW6eL+J76G52A/z5MGyFPydxR6qQKDVPiVuPbXDfIlmAWrEY5QJrYs+0EipLL9C7DFxF
- InmvT91pqvMBwFOImWvDxyc9gWtRKXGM+uihOGPtA+I1hvyFpDM6Vsk5d7/ZLzjwfU93
- 06mIhBM5aGfeh1rc8X0vLx1x7RQq2XX4EM7Ni7aojPY6HKH13ZC8k0YA9yz+eLMAMNCX
- nH2I5Ogv2n6oRMHoDSLZewY9CZqwowgquNaKhzB1AizeuPChgrqdwFXaS2EWkNqxJzGN
- j1wQ==
-X-Gm-Message-State: AOAM5309PpdkZhFMD4XicfldUXXVv4MTjdHBy/mxV0vpHpTwhNSk8tLl
- 4MOwx429mQyHxpQlbNAVl0GhmQ==
-X-Google-Smtp-Source: ABdhPJz9NxpMb6pFqzw/pfNyegQvWvqdn0Ee6zZtnOrxE10YCCyWUuhV0u9MOtjShlTbCaiRl8yNAw==
-X-Received: by 2002:a05:6402:22ef:: with SMTP id
- dn15mr3374140edb.375.1639685668375; 
- Thu, 16 Dec 2021 12:14:28 -0800 (PST)
+ bh=r2NmstxJ8HSLqV975EVrNIccNiCpeXUwC/r1bPMsxpY=;
+ b=ALWb8sRWC1rhM3Nf1HxBIIVaQqscyyPr4ZFSX+hnyTvJnZz0sKW+fxjvkze1E5QA8F
+ k95oicmZfaTMIgpZRYPeSU+UYE5TT/2qox44QnTchGJ1AOL5aZwM1mWuXl7BDGhxlgVR
+ Ok6EAKFE6+PiqJ1BoFdMi1WV6Z+XLP0x/C5BHll84WSdHucCrO7Pt1dtnlVdfytEgD8r
+ V+MGUFEHXhkv4nf0PSwXFo3mz6kFOUJeOSuMVL3PsYxOBpFdVZwZZgNcV1uj/boBQPm3
+ cBtHnYQt0wz1r7WNZUMYStnKxxHAYa0tor35AituVdoKUte+iApFsy6cgZIEzTAKD7i9
+ +CKQ==
+X-Gm-Message-State: AOAM531wNCu6H27PFG8Yc9U9xqTSUjlO4UDWIAKUqlOwFRRLEefFKXxm
+ jmVtWh0+UNFvj7LzJRmbW5ve1A==
+X-Google-Smtp-Source: ABdhPJzT2UW6X5U/jNYL/MibEhuMbnvXbz7b+FQ13EUDCmrVphsC8g+xLTuVsx1hJaYppSorsiO8Kg==
+X-Received: by 2002:a17:907:9605:: with SMTP id
+ gb5mr17678733ejc.685.1639685674524; 
+ Thu, 16 Dec 2021 12:14:34 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id d14sm2709535edu.57.2021.12.16.12.14.25
+ by smtp.gmail.com with ESMTPSA id e8sm2930963edz.73.2021.12.16.12.14.33
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 16 Dec 2021 12:14:27 -0800 (PST)
-Message-ID: <7c7dd2cf-9446-5a1b-f36f-350211be9f1c@mind.be>
-Date: Thu, 16 Dec 2021 21:14:25 +0100
+ Thu, 16 Dec 2021 12:14:34 -0800 (PST)
+Message-ID: <925f6891-2f2e-921b-cf8e-a5d8fe8d6905@mind.be>
+Date: Thu, 16 Dec 2021 21:14:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211215223905.1844641-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211216070201.113909-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211215223905.1844641-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/tvheadend: add optional support
- for pcre2
+In-Reply-To: <20211216070201.113909-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/lapack: security bump to
+ version 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Benjamin Kamath <kamath.ben@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,11 +101,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/12/2021 23:39, Bernd Kuhls wrote:
-> pcre2 takes precedence of pcre:
-> https://github.com/tvheadend/tvheadend/blob/master/configure#L473
+On 16/12/2021 08:02, Fabrice Fontaine wrote:
+> - Fix CVE-2021-4048: An out-of-bounds read flaw was found in the CLARRV,
+>    DLARRV, SLARRV, and ZLARRV functions in lapack through version 3.10.0,
+>    as also used in OpenBLAS before version 0.3.18. Specially crafted
+>    inputs passed to these functions could cause an application using
+>    lapack to crash or possibly disclose portions of its memory.
+> - Update license hash, year changed:
+>    https://github.com/Reference-LAPACK/lapack/commit/f67034373ee2972b4ea5de5a3d635b30ad3026c2
+> - Update indentation in hash file (two spaces)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> http://netlib.org/lapack/lapack-3.10.0.html
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -113,31 +121,33 @@ On 15/12/2021 23:39, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/tvheadend/tvheadend.mk | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
+>   package/lapack/lapack.hash | 4 ++--
+>   package/lapack/lapack.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 27443307da..4e84e496bf 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -121,11 +121,14 @@ TVHEADEND_DEPENDENCIES += liburiparser
->   TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
->   endif
+> diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
+> index bac7210c29..6f6dbff1a6 100644
+> --- a/package/lapack/lapack.hash
+> +++ b/package/lapack/lapack.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256 106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573  lapack-3.9.0.tar.gz
+> -sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
+> +sha256  328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19  lapack-3.10.0.tar.gz
+> +sha256  66246b7d3e6736aea46e63fd5e087659474d07edfe2f9b051d085d9b42aaac61  LICENSE
+> diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+> index 41774f6167..f34f685ae2 100644
+> --- a/package/lapack/lapack.mk
+> +++ b/package/lapack/lapack.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> -ifeq ($(BR2_PACKAGE_PCRE),y)
-> +ifeq ($(BR2_PACKAGE_PCRE2),y)
-> +TVHEADEND_DEPENDENCIES += pcre2
-> +TVHEADEND_CONF_OPTS += --disable-pcre --enable-pcre2
-> +else ifeq ($(BR2_PACKAGE_PCRE),y)
->   TVHEADEND_DEPENDENCIES += pcre
-> -TVHEADEND_CONF_OPTS += --enable-pcre
-> +TVHEADEND_CONF_OPTS += --enable-pcre --disable-pcre2
->   else
-> -TVHEADEND_CONF_OPTS += --disable-pcre
-> +TVHEADEND_CONF_OPTS += --disable-pcre --disable-pcre2
->   endif
->   
->   ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+> -LAPACK_VERSION = 3.9.0
+> +LAPACK_VERSION = 3.10.0
+>   LAPACK_LICENSE = BSD-3-Clause
+>   LAPACK_LICENSE_FILES = LICENSE
+>   LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
 > 
 _______________________________________________
 buildroot mailing list
