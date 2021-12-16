@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2EE4C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31BCEC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 19:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6E1C6101B;
-	Thu, 16 Dec 2021 19:10:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1E36417B7;
+	Thu, 16 Dec 2021 19:10:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yW57xvl63d6c; Thu, 16 Dec 2021 19:10:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cVhJyrtIJW0K; Thu, 16 Dec 2021 19:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1085461050;
-	Thu, 16 Dec 2021 19:09:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33A09417AF;
+	Thu, 16 Dec 2021 19:10:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E3371C113E
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:09:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A07811BF3A9
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B5E7417B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BFC4417AF
  for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 19:09:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SvcCEyQAwA38 for <buildroot@lists.busybox.net>;
+ with ESMTP id dVQnxcgec652 for <buildroot@lists.busybox.net>;
  Thu, 16 Dec 2021 19:09:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8544417AF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C34CF417AD
  for <buildroot@buildroot.org>; Thu, 16 Dec 2021 19:09:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5DD92821EB; Thu, 16 Dec 2021 19:04:23 +0000 (UTC)
+ id 4929E821EB; Thu, 16 Dec 2021 19:04:23 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 16 Dec 2021 20:07:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03943b9b492a9405fd8b494f265ee72780b010ce
-X-Git-Newrev: 7cd070e4f0ebe1b566b33d3bbdfa7bef05c4b4e4
+X-Git-Oldrev: 086d357dfb177ef28d7831716707d2424a2ea4bd
+X-Git-Newrev: 44a97dcb93ebe279f15ce625c23930c50beeb009
 X-Patchwork-Hint: ignore
-Message-Id: <20211216190423.5DD92821EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/taglib: fix build on sparc
+Message-Id: <20211216190423.4929E821EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/privoxy: security bump to version
+ 3.0.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +59,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cd070e4f0ebe1b566b33d3bbdfa7bef05c4b4e4
+commit: https://git.buildroot.net/buildroot/commit/?id=44a97dcb93ebe279f15ce625c23930c50beeb009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure on sparc raised since bump to version
-1.12 in commit b4bdf704fea59db81433bbc07585e4c4db258d9a:
+Fixes the following security issues:
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/build/taglib-1.12/taglib/toolkit/trefcounter.cpp:55:21: error: duplicate 'volatile'
-   55 | # define ATOMIC_INT volatile int
-      |                     ^~~~~~~~
+  - cgi_error_no_template(): Encode the template name to prevent
+    XSS (cross-site scripting) when Privoxy is configured to servce
+    the user-manual itself.
+    Commit 0e668e9409c. OVE-20211102-0001. CVE-2021-44543.
+    Reported by: Artem Ivanov
 
-Fixes:
- - http://autobuild.buildroot.org/results/387feeb6bcc190b3908e405ba5f8a888d7e1f348
+  - get_url_spec_param(): Free memory of compiled pattern spec
+    before bailing.
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit 652b4b7cb0. OVE-20211201-0003. CVE-2021-44540.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - process_encrypted_request_headers(): Free header memory when
+    failing to get the request destination.
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit 0509c58045. OVE-20211201-0002. CVE-2021-44541.
+
+  - send_http_request(): Prevent memory leaks when handling errors
+    Reported by Joshua Rogers (Opera) who also provided the fix.
+    Commit c48d1d6d08. OVE-20211201-0001. CVE-2021-44542.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...latile-on-systems-without-HAVE_GCC_ATOMIC.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/privoxy/privoxy.hash | 8 ++++----
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch b/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
-new file mode 100644
-index 0000000000..d8af73cb08
---- /dev/null
-+++ b/package/taglib/0001-Fix-error-duplicate-volatile-on-systems-without-HAVE_GCC_ATOMIC.patch
-@@ -0,0 +1,34 @@
-+From 1d24bd3399f2284104cbe87d017f87325b1797ab Mon Sep 17 00:00:00 2001
-+From: Oleg Antonyan <oleg.b.antonyan@gmail.com>
-+Date: Thu, 13 May 2021 16:41:35 +0200
-+Subject: [PATCH] =?UTF-8?q?Fix=20"error:=20duplicate=20=E2=80=98volatile?=
-+ =?UTF-8?q?=E2=80=99"=20on=20systems=20without=20HAVE=5FGCC=5FATOMIC=20in?=
-+ =?UTF-8?q?=201.12=20(#1012)?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+* fix error: duplicate volatile
-+
-+* fix volatile ATOMIC_INT in constructor
-+
-+[Retrieved from:
-+https://github.com/taglib/taglib/commit/1d24bd3399f2284104cbe87d017f87325b1797ab]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ taglib/toolkit/trefcounter.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/taglib/toolkit/trefcounter.cpp b/taglib/toolkit/trefcounter.cpp
-+index 18cb596c0..5b089abf9 100644
-+--- a/taglib/toolkit/trefcounter.cpp
-++++ b/taglib/toolkit/trefcounter.cpp
-+@@ -52,7 +52,7 @@
-+ # define ATOMIC_INC(x) __sync_add_and_fetch(&x, 1)
-+ # define ATOMIC_DEC(x) __sync_sub_and_fetch(&x, 1)
-+ #else
-+-# define ATOMIC_INT volatile int
-++# define ATOMIC_INT int
-+ # define ATOMIC_INC(x) (++x)
-+ # define ATOMIC_DEC(x) (--x)
-+ #endif
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 92ecd1dd21..cf1056ecc4 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.32%20%28stable%29/
+-md5  3a0a8ebdf80e0a29154683e74cbf510b  privoxy-3.0.32-stable-src.tar.gz
+-sha1  3a298ab2599fc92555c86dc29a37742d7396a0d3  privoxy-3.0.32-stable-src.tar.gz
++# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.33%20%28stable%29/
++md5  d6caf3eaad4812f0658b68d5b3ba3a06  privoxy-3.0.33-stable-src.tar.gz
++sha1  688da305077d8ecbcf6423e02201f01f7a7098f4  privoxy-3.0.33-stable-src.tar.gz
+ # Locally computed
+-sha256  c61de4008c62445ec18f1f270407cbf2372eaba93beaccdc9e3238bb2defeed7  privoxy-3.0.32-stable-src.tar.gz
++sha256  04b104e70dac61561b9dd110684b250fafc8c13dbe437a60fae18ddd9a881fae  privoxy-3.0.33-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index c1859ed5f2..06642200df 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRIVOXY_VERSION = 3.0.32
++PRIVOXY_VERSION = 3.0.33
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
