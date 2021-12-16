@@ -1,68 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE0D3C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F395C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 16 Dec 2021 18:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A830E4175D;
-	Thu, 16 Dec 2021 18:27:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3470961049;
+	Thu, 16 Dec 2021 18:50:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XMd0ysNeN-CK; Thu, 16 Dec 2021 18:27:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E99DC41703;
-	Thu, 16 Dec 2021 18:27:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F033A1BF36F
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:26:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDF5F6104E
- for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:26:08 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=arachnodroid.de
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id etIlHjlv_6Vn for <buildroot@lists.busybox.net>;
- Thu, 16 Dec 2021 18:26:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from v220200749773122244.hotsrv.de (unknown
- [IPv6:2a03:4000:47:39d:747f:15ff:fe4f:d530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E26661041
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arachnodroid.de;
- s=dkim; t=1639679164;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WimmMYhLoB4wFMwXUKeppbWgbJvcgoXX0PtBWyPehoQ=;
- b=sBSUqhKeHq4w2sSyC/aAyrmdkY6dTYUi9iUgHENDJAnnpTg86Q2atm8DpZ9pjHg9NDp1rO
- XazYt3Ys5RpG+GywKWgCbvlM/AhhCFypBmKl2uqMGUmlNiez1w/vMB3mmbJQM9Q/zIyzxg
- bBSa9NN2eFeByWFH/N2vbMi7xV9DEEc=
-Received: from [192.168.0.240] (ip4d1580a8.dynamic.kabel-deutschland.de
- [77.21.128.168])
- by v220200749773122244.hotsrv.de (OpenSMTPD) with ESMTPSA id cbad3a62
- (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
- for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:26:04 +0000 (UTC)
-Message-ID: <575adfc5-e3e1-1bfd-f40d-73d5caa189f5@arachnodroid.de>
-Date: Thu, 16 Dec 2021 19:26:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R16QgY5ekza1; Thu, 16 Dec 2021 18:50:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68EBE6103B;
+	Thu, 16 Dec 2021 18:50:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E77A51BF36F
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:50:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E09A74017B
+ for <buildroot@lists.busybox.net>; Thu, 16 Dec 2021 18:50:22 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kdtzxby1wffo for <buildroot@lists.busybox.net>;
+ Thu, 16 Dec 2021 18:50:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C93240017
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 18:50:21 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id a18so45908602wrn.6
+ for <buildroot@buildroot.org>; Thu, 16 Dec 2021 10:50:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=wZA9x7rvfluy0OGBMWnan/M3ePodUBh9Ni7kWRyPR9U=;
+ b=naV8k6Q47K3DfwFsBgARgJvoyqnRwBYilATGFTUT8cHz8DGUv1VsJ99OhRvI75Z/zU
+ oKkBgJyQL0mUn6YOsBLLNPWszfrj7NYI3BjHFe+NQB45eCeSRO8+4SZYLFOqKXvu26vF
+ 7aA63Kz317CisTKqWhZyBdBDb5W9qg0uSAM1UBCQuWjICIat9Wq7NCEObe5u5cCzNZkz
+ bZI5yHpqzJFgggMmJY1TWwJwj3m+N9tJerfMXJfqLzPxgfQBBENXjL+hVQzBCTNALj5h
+ pOPGq0MQl7mLOW7luZjIRYdk6kvvJkImWeIr9BHZgV8AduPpSQAq01fTBsiCSQuVRDAI
+ BnVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=wZA9x7rvfluy0OGBMWnan/M3ePodUBh9Ni7kWRyPR9U=;
+ b=cIO6xn0fue46+no7w4IX4Jyj6l4foxdATmc5YX5FqO53ZZqkb0rbseU+Fs9kWEqcnP
+ EXXS7FEuVrJ7iTMPiu6f8TbycfjmKGBmusCQuD7ZxXVCM9p3KI6ToIRA+/P9m8MR0zE2
+ jQCaYcGXPU/sYISJr/tuHCIGFgTrsxALSy9lvUX+mi5gauzaWuMrD3nB4l/6ZihCfd5C
+ RXrE20PPMedxz63cie8R5nFT5Ag3Mwkz+W2kK6EZ7hGXKRgWaQ/mNSY+BDJW9vDSkKox
+ j5kVLfI/xIscpsGOL5gqTcYR5Me4AUW2ggJMPimk1LDOmNagMErpZL51+8fIiZSVVigP
+ T67g==
+X-Gm-Message-State: AOAM532gAPp2NYWk+Aoz0LeLSIqYwSXkKm55zLHi7EpRCX0q9OqQQWWN
+ ds4PeFX3hybdAAue/DKa5XNgyvo6uyST5Q==
+X-Google-Smtp-Source: ABdhPJwkhFfAV0T5MkVqSSTyh5urHzcVUddO0Aygv2THuossbfwMtd9kaYafV35hFi14dQV5n0/meA==
+X-Received: by 2002:a5d:60ce:: with SMTP id x14mr6870645wrt.149.1639680619173; 
+ Thu, 16 Dec 2021 10:50:19 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id b197sm5309964wmb.24.2021.12.16.10.50.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 16 Dec 2021 10:50:18 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <bug-14451-163@https.bugs.busybox.net/>
- <bug-14451-163-aEqUC9bjBs@https.bugs.busybox.net/>
- <5e9075fc-3083-b8d2-2358-cc5281b306ac@arachnodroid.de>
- <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
-From: Michael Taubert <info@arachnodroid.de>
-In-Reply-To: <aafcded5-c0f4-4745-a226-da57d0e7a805@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: don't disable DRI3 for
- some Gallium drivers
+Date: Thu, 16 Dec 2021 19:49:43 +0100
+Message-Id: <20211216184943.580682-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: fix build with help2man
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,46 +85,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKSSdtIG5vdCB0aGF0IGZhbWlsaWFyIHdpdGggdGhlc2UgY29uZmlncywgeWV0
-LiBCdXQgaWYgSSB1bmRlcnN0YW5kIGl0IApyaWdodCwgeW91ciBhZHZpY2UgaXMgdG8gaGF2ZSB0
-aGUgc2VsZWN0aW9uIG9mIHRoZXNlIEdhbGxpdW0gZHJpdmVycyAKc2hvdWxkIGFsc28gc2VsZWN0
-IEJSMl9QQUNLQUdFX01FU0EzRF9EUklfRFJJVkVSLgoKSSB3aWxsIGhhdmUgYSBsb29rIG9uIGhv
-dyB0byBkbyB0aGF0IHRvbW9ycm93IGFuZCBwcm92aWRlIGFub3RoZXIgcGF0Y2ggCnRoZW4uCgpL
-aW5kIHJlZ2FyZHMsCk1pY2hhZWwKCkFtIDE2LjEyLjIwMjEgdW0gMTg6Mjggc2NocmllYiBBcm5v
-dXQgVmFuZGVjYXBwZWxsZToKPiAgwqBIaSBNaWNoYWVsLAo+IAo+IE9uIDE0LzEyLzIwMjEgMjA6
-MDYsIE1pY2hhZWwgVGF1YmVydCB3cm90ZToKPj4gQ2VydGFpbiBHYWxsaXVtIGRyaXZlcnMgbmVl
-ZCBEUkkzIHN1cHBvcnQsIG90aGVyd2lzZSBvcGVuZ2wgd29uJ3Qgd29yay4KPj4gT24gdGhlIFJh
-c3BiZXJyeSBQaSA0LCBmb3IgZXhhbXBsZSwgZ2x4Z2VhcnMgd2lsbCBjb21wbGFpbiBhYm91dAo+
-Pgo+PiAnRmFpbGVkIHRvIG9wZW4gYm8gMTogcGVybWlzc2lvbiBkZW5pZWQnCj4+Cj4+IFRoZXNl
-IGRyaXZlcnMgbXVzdCBub3QgYmUgc2VsZWN0ZWQgdG8gZGlzYWJsZSBEUkkzIHN1cHBvcnQuIEl0
-IHNlZW1zIHRvCj4+IGJlIHRoZSBzYW1lIGZvciBMaW1hIGFuZCBQYW5mcm9zdCwgcGxlYXNlIGNo
-ZWNrIGJ1ZyAxMzgzMS4KPj4KPj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUYXViZXJ0IDxpbmZv
-QGFyYWNobm9kcm9pZC5kZT4KPj4gLS0tCj4+IMKgwqBwYWNrYWdlL21lc2EzZC9tZXNhM2QubWsg
-fCA2ICsrKysrLQo+PiDCoMKgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
-dGlvbigtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rIGIvcGFj
-a2FnZS9tZXNhM2QvbWVzYTNkLm1rCj4+IGluZGV4IDYxYjA5NWNjY2EuLjk3ODBkNWE5NjAgMTAw
-NjQ0Cj4+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+PiArKysgYi9wYWNrYWdlL21l
-c2EzZC9tZXNhM2QubWsKPj4gQEAgLTEyMSw3ICsxMjEsMTEgQEAgTUVTQTNEX0NPTkZfT1BUUyAr
-PSBcCj4+IMKgwqDCoMKgwqDCoMKgwqAgLURnYWxsaXVtLWV4dHJhLWh1ZD10cnVlCj4+IMKgwqBl
-bmRpZgo+Pgo+PiAtaWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RSSVZFUiksKQo+PiAr
-aWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfRFJJX0RSSVZFUikgXAo+PiArwqDCoMKgwqDCoMKg
-ICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1YzRCkgXAo+PiArwqDCoMKgwqDC
-oMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1ZDNCkgXAo+PiArwqDCoMKg
-wqDCoMKgICQoQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX0xJTUEpIFwKPj4gK8Kg
-wqDCoMKgwqDCoCAkKEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9QQU5GUk9TVCks
-KQo+IAo+ICDCoFRoZSBtZXNhM2Qgc3R1ZmYgZ29lcyB3YXkgb3ZlciBteSBoZWFkLCBhY3R1YWxs
-eSwgYnV0IEkgd291bGQgdGhpbmsgCj4gdGhhdCB0aGUgcHJvcGVyIHNvbHV0aW9uIGhlcmUgd291
-bGQgYmUgdGhhdCB0aGVzZSBjb25maWdzIHNlbGVjdCAKPiBCUjJfUEFDS0FHRV9NRVNBM0RfRFJJ
-X0RSSVZFUi4KPiAKPiAgwqBJIGtub3cgaXQgc291bmRzIHdlaXJkIHRoYXQgYSBnYWxsaXVtIGRy
-aXZlciBpcyBhbHNvIGEgRFJJIGRyaXZlciwgYnV0IAo+IEkgZ3Vlc3MgdGhhdCdzIHdoYXQgaXQg
-aXMuLi4KPiAKPiAgwqBCZXJuZCwgY2FuIHlvdSBjb21tZW50Pwo+IAo+ICDCoFJlZ2FyZHMsCj4g
-IMKgQXJub3V0Cj4gCj4+IMKgwqBNRVNBM0RfQ09ORl9PUFRTICs9IFwKPj4gwqDCoMKgwqDCoMKg
-wqDCoCAtRGRyaS1kcml2ZXJzPSAtRGRyaTM9ZGlzYWJsZWQKPj4gwqDCoGVsc2UKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fix the following build failure raised with help2man since bump to
+version 1.30.0 in commit 50c5495f81d3418a0f63fc642dc6beb41cd316e0:
+
+FAILED: docs/man/qmicli.1
+/usr/bin/help2man --output=docs/man/qmicli.1 '--name=Control QMI devices' '--help-option="--help-all"' /home/peko/autobuild/instance-1/output-1/build/libqmi-1.30.2/build/src/qmicli/qmicli
+help2man: can't get `"--help-all"' info from /home/peko/autobuild/instance-1/output-1/build/libqmi-1.30.2/build/src/qmicli/qmicli
+Try `--no-discard-stderr' if option outputs to stderr
+
+Fixes:
+ - http://autobuild.buildroot.org/results/15818b6de7378cd75c59b1d6dc732ed9a20c092a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...add-an-option-to-not-build-man-pages.patch | 65 +++++++++++++++++++
+ package/libqmi/libqmi.mk                      |  1 +
+ 2 files changed, 66 insertions(+)
+ create mode 100644 package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
+
+diff --git a/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch b/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
+new file mode 100644
+index 0000000000..d9053de537
+--- /dev/null
++++ b/package/libqmi/0001-build-add-an-option-to-not-build-man-pages.patch
+@@ -0,0 +1,65 @@
++From 295b75e9c8dc895e281e36b1e8121d09fd556af0 Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Wed, 3 Nov 2021 10:57:51 +0100
++Subject: [PATCH] build: add an option to not build man pages
++
++When cross-compiling, the compiled binaries cannot be run on the build
++machine, unless one defines a helper (e.g. qemu) in the meson
++configuration, which is most of the time undesirable.
++
++If help2man is installed on the build machine, then the build would fail
++because of this, so add an option to disable generating the man pages.
++
++With later versions of meson, it will be possible to automatically
++detect this condition.
++
++Based on the same fix done in libmbim by Nicolas Cavallari, see
++https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/792af73ea90e9689703ab526dd444fdb1c2f8e40
++
++Fixes https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/issues/75
++
++[Retrieved (and backported) from:
++https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/commit/295b75e9c8dc895e281e36b1e8121d09fd556af0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build       | 8 +++++++-
++ meson_options.txt | 1 +
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index e88b43a1..c7312146 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -223,8 +223,8 @@ if enable_gtk_doc
++   subdir('docs/reference/libqmi-glib')
++ endif
++ 
++-help2man = find_program('help2man', required: false)
++-if help2man.found()
+++enable_man = get_option('man')
+++if enable_man
++   subdir('docs/man')
++ endif
++ 
++@@ -237,6 +242,7 @@ summary({
++ output += '    Documentation:         ' + enable_gtk_doc.to_string() + '\n'
++ output += '    bash completion:       ' + enable_bash_completion.to_string() + '\n'
++ output += '    gobject introspection: ' + enable_gir.to_string() + '\n\n'
+++output += '    man pages:             ' + enable_man.to_string() + '\n\n'
++ output += '  System paths\n'
++ output += '    prefix:                ' + qmi_prefix + '\n'
++ output += '    udev base directory:   ' + qmi_username + '\n\n'
++diff --git a/meson_options.txt b/meson_options.txt
++index 4d4f913d..bee5daac 100644
++--- a/meson_options.txt
+++++ b/meson_options.txt
++@@ -16,5 +16,6 @@ option('udevdir', type: 'string', value: '', description: 'where udev base direc
++ 
++ option('introspection', type: 'boolean', value: 'auto', description: 'build introspection support')
++ option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
+++option('man', type: 'boolean', value: 'true', description: 'build man pages using help2man')
++ 
++ option('bash_completion', type: 'boolean', value: true, description: 'install bash completion files')
++-- 
++GitLab
++
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index cd2c2719f9..a4839f1efb 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -12,6 +12,7 @@ LIBQMI_CPE_ID_VENDOR = libqmi_project
+ LIBQMI_INSTALL_STAGING = YES
+ 
+ LIBQMI_DEPENDENCIES = libglib2
++LIBQMI_CONF_OPTS = -Dman=false
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBQMI_DEPENDENCIES += gobject-introspection
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
