@@ -1,89 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EAC4C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F3EC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:39:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5ED661138;
-	Fri, 17 Dec 2021 17:39:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE278400CE;
+	Fri, 17 Dec 2021 17:39:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jtb9KVB6p6VJ; Fri, 17 Dec 2021 17:39:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02F3561119;
-	Fri, 17 Dec 2021 17:39:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EC2CC1BF2AF
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA096400CE
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ojET-IrTaCtO for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 17:39:15 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EA5YKmkYb1lm; Fri, 17 Dec 2021 17:39:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1526C40C09;
+	Fri, 17 Dec 2021 17:39:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C2D51BF2AF
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BE1761138
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2LInVoGNZSCJ for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 17:39:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D40D240C1F
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:39:14 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id o20so10553519eds.10
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 09:39:14 -0800 (PST)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 856C261119
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:39:34 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id b7so10644295edd.6
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 09:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=MxNZqQ1itsCkbSwCKS7FAkNXg3Qz92JLFc6ikYc9xBE=;
- b=GG2As5/8EuTrsL6bfedkFllSrh+vHcX/r63DR4HOsYL1hH2gk8zJ2ECwbblIZAGT5N
- IstO3MSpYNPACnciTe3HOl4dDtAyXeY/c3yvcGiMq8b0Vx5EqdTwVYmGrk3t4/Ntz6F4
- B941jQS4eDa/KXL5TUeIRkfztvdmQUHQU5oJ3M2qA3r2mrGKPmiQQE9A3VgPUPlic/EY
- PKFo2hbfwjkyD30kjgIlM18ccN/zC1jSt/Mvtbd/l7MADLZmhGEhYVM2AP8kMXFgMXD+
- 08KzCmfsWacP3iOHqYJJBzw8MT/4Y8OBOZpinJr3LewXsMGcK10SjcE3dEbLLA2++nPp
- UkhQ==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=H/DrI+Gd7f5zZ7UZjUosRb/m5GERVCDPZqq2FfRpqpU=;
+ b=eNUtCoO++0f8JT/ln8iSFlVBbzJCtQLFCrA2BohqgDmF7xkICYwTJp33rrJqul8qN5
+ pIRW26+MW0Oz+kPqcYAiZ6vq08Q/vx2GL2bcPBLrwZIIIFxHl3E4vmEzZFybcI9hs3BV
+ 7E1RefNfPrbi7eOnFxu3r2FL8SVAZ0A6fTXXTeur3F4P79ABqdjB2oLZ2kJjCHwxZayZ
+ OZVE6NTtX4BucXUVr3+Nr/Rzdp33dHYQ5LBixjZVegxmlSWMNDg2NHqWQcTOHNTCxVqr
+ 0D/ycsOqKrQZMrcDAXa5Kzoa6tkCAZOIH4U+dHtejfNWnVUDdoK1BWhqoqx4uUZE93yx
+ LHRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=MxNZqQ1itsCkbSwCKS7FAkNXg3Qz92JLFc6ikYc9xBE=;
- b=I9oY+WY4yc/vRkqvK3gOzAMKBxc4bjFItzm+VfJLdZH9Wbe785deFktxlAgdVzQ2XE
- 9yDckrp8862OWxQQDoAcIbm0gfMA5OYeTSnAwb7roKdVhmhvd4RsuBJd4MouW13O2Ajz
- eXaONq+S1I9wl+Yp07KtqM7w/NOmQIe4XdlbdPk07rAw7/A+PN8UpZt25mCjv8ww/kyK
- ScnDRzCs8GcE8+M2mTqakL4xQyvf36vbuwjta/jMRcYDkcmGNnzn22lnIsUysRZKx6ru
- uqxjWfxWGv1ybdDCM5LvX0Wg2LvuijnUapBj2hE0/yxpN/rI40/mzqMfYBz29IrViiWH
- y+tw==
-X-Gm-Message-State: AOAM530ZAHyBYD6s56j470w210fDEzCbkYzN7sBuwEkQWFXGLJBt5zs/
- tfQUtOjGs9IMziS4JLSz4Yp3LQ==
-X-Google-Smtp-Source: ABdhPJwCGzaLT4PZ5LTnYzPjIOxsj3qxtWAmMzDA0Ip5YbslXjNGtk46SsrCHbW0rMAmuj91GhCeNA==
-X-Received: by 2002:a17:907:6e15:: with SMTP id
- sd21mr2687715ejc.107.1639762753039; 
- Fri, 17 Dec 2021 09:39:13 -0800 (PST)
+ bh=H/DrI+Gd7f5zZ7UZjUosRb/m5GERVCDPZqq2FfRpqpU=;
+ b=rxgVU7cUHvTXhTCqF7dJgj5ZSB1oOEILWfg7BDnC2RL+jsls6caMSNwO87wHAY27RE
+ ejwX9h6fOhREKapda2q/X4qFJGEfXKdoEkIXfTdFhuH1ST94fOCt2O5fI7sVuf4Lm5t0
+ 0LUwSTvs6SHJjlYiJdJKhK5L4gqUukbf6h2YSWAiNoXl9pc2fxZ0XzFPatcJNI/+JAl/
+ RhmcmHvmtLFI6KvohcEplzdhR/n64B+sZ+lRhHx3rs4N3Bw+b1WRGQyMz8TUl7HyK1RU
+ MLHOwZfUwhF6kV1ZoucHOoiKMp3Au/kQkAOakYW9VxtoP+74HcRgsmjGoWCEGTOdfVbu
+ bc/g==
+X-Gm-Message-State: AOAM532cNg2FKz0IPMJagJ/46ASfWfeKyDbsedrwFjVwdLoYFnXrPngo
+ c3aGVNCJkmKVgboQuGhckJw2bg==
+X-Google-Smtp-Source: ABdhPJyOsA2Py+2q4IzVgWRAuF2ze07MvJtdTZJAVePPOCxIn+uFjPiyiHvfxvP7gA9l5P5xiQVaEw==
+X-Received: by 2002:a05:6402:27d3:: with SMTP id
+ c19mr3903803ede.390.1639762772834; 
+ Fri, 17 Dec 2021 09:39:32 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id hs14sm584403ejc.218.2021.12.17.09.39.12
+ by smtp.gmail.com with ESMTPSA id i22sm324317ejw.75.2021.12.17.09.39.32
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 17 Dec 2021 09:39:12 -0800 (PST)
-Message-ID: <9127381c-c5e4-24b5-9167-cc3ec5b899ca@mind.be>
-Date: Fri, 17 Dec 2021 18:39:12 +0100
+ Fri, 17 Dec 2021 09:39:32 -0800 (PST)
+Message-ID: <868dde51-d7e2-5c8c-6f4d-069d01fb9484@mind.be>
+Date: Fri, 17 Dec 2021 18:39:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211216213002.788654-1-bernd.kuhls@t-online.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211216220840.948363-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211216213002.788654-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-mediasdk: bump version to
- 21.4.3
+In-Reply-To: <20211216220840.948363-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] Config.in.legacy: improve iputils
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,41 +101,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 16/12/2021 22:30, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 16/12/2021 23:08, Fabrice Fontaine wrote:
+> Improve iputils options added by commit
+> db0c2a287970a8832b59f3cf9d81aa18aced2cec
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   Config.in.legacy | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index a314f2ceba..eb977c2685 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -147,16 +147,17 @@ endif
+>   comment "Legacy options removed in 2022.02"
+>   
+>   config BR2_PACKAGE_IPUTILS_TFTPD
+> -	bool "tftpd"
+> +	bool "iputils tftpd option removed"
+>   	select BR2_LEGACY
+>   	help
+> -	  tftpd has been removed from upstream.
+> +	  tftpd has been removed from iputils since version 20211215.
+>   
+>   config BR2_PACKAGE_IPUTILS_TRACEROUTE6
+> -	bool "traceroute6"
+> +	bool "iputils traceroute6 option removed"
+>   	select BR2_LEGACY
+>   	help
+> -	  traceroute6 has been removed from upstream.
+> +	  traceroute6 has been removed from iputils since version
+> +	  20211215.
+
+  Oops, thanks for fixing my messy commit!
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> ---
->   package/intel-mediasdk/intel-mediasdk.hash | 2 +-
->   package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-> index 69a7422741..83c52fa271 100644
-> --- a/package/intel-mediasdk/intel-mediasdk.hash
-> +++ b/package/intel-mediasdk/intel-mediasdk.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  d9358dc784c4146fd21faffbba03c304684978de1ce34d3714bd2c6b50233d14  intel-mediasdk-21.4.1.tar.gz
-> +sha256  2bcf0bfc2cc4f6a0b865d50c08a327d5bca81738b31a40c8f0e4eba12689d63d  intel-mediasdk-21.4.3.tar.gz
->   sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-> diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-> index 57276bbd74..58334b3ddd 100644
-> --- a/package/intel-mediasdk/intel-mediasdk.mk
-> +++ b/package/intel-mediasdk/intel-mediasdk.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
 >   
-> -INTEL_MEDIASDK_VERSION = 21.4.1
-> +INTEL_MEDIASDK_VERSION = 21.4.3
->   INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
->   INTEL_MEDIASDK_LICENSE = MIT
->   INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+>   config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
+>   	bool "libmediaart 'none' backend removed"
 > 
 _______________________________________________
 buildroot mailing list
