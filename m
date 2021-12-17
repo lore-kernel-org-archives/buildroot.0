@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFF59C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 20:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CE6C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 20:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 298B261173;
-	Fri, 17 Dec 2021 20:46:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3648140C27;
+	Fri, 17 Dec 2021 20:47:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sEVGzyOTTK_V; Fri, 17 Dec 2021 20:46:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8OIBdFH0XB-S; Fri, 17 Dec 2021 20:47:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 577E161170;
-	Fri, 17 Dec 2021 20:46:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F6711BF2F0
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:46:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6228F40C24;
+	Fri, 17 Dec 2021 20:47:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B58BB1BF2F0
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CFDB421E0
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:46:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0A2340C24
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:47:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zqLhX-rTTec3 for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 20:46:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19958421DD
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 20:46:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 22E5C81D80; Fri, 17 Dec 2021 20:41:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zhu-c0QF5D8K for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 20:47:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 60FBD40AF4
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 20:47:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3BF0CFF805;
+ Fri, 17 Dec 2021 20:47:41 +0000 (UTC)
+Date: Fri, 17 Dec 2021 21:47:40 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 21:39:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34ed9dae4d6ba7597ce0fef43bd81d3acdbb2d19
-X-Git-Newrev: 0d1da42fcc6976de77bcdf6ad75d17186abc320b
-X-Patchwork-Hint: ignore
-Message-Id: <20211217204106.22E5C81D80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/modsecurity2: new package
+To: Herve Codina <herve.codina@bootlin.com>
+Message-ID: <20211217214740.2eb6c14f@windsurf>
+In-Reply-To: <20211018132532.814742-1-herve.codina@bootlin.com>
+References: <20211018132532.814742-1-herve.codina@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,141 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Tom Marcuzzi <tom.marcuzzi@orolia.com>,
+ Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d1da42fcc6976de77bcdf6ad75d17186abc320b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The modsecurity2 package provides an Apache module implementing
-a web application firewall (WAF) module.
+On Mon, 18 Oct 2021 15:25:31 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-Based on initial work from Tom Marcuzzi <tom.marcuzzi@orolia.com>
-and Nicolas Carrier <nicolas.carrier@orolia.com>
+> The modsecurity2 package provides an Apache module implementing
+> a web application firewall (WAF) module.
+> 
+> Based on initial work from Tom Marcuzzi <tom.marcuzzi@orolia.com>
+> and Nicolas Carrier <nicolas.carrier@orolia.com>
+> 
+> modsecurity2 will be superseeded sooner or later by modsecurity v3
+> ie. libmodsecurity [1] and its Apache connector [2]. libmodsecurity
+> is already supported in Buildroot with its Nginx connector.
+> According to the Apache connector web page and the discussion [3],
+> the Apache connector is not ready for production use.
+> 
+>   [1] https://github.com/SpiderLabs/ModSecurity
+>   [2] https://github.com/SpiderLabs/ModSecurity-apache
+>   [3] https://github.com/SpiderLabs/ModSecurity-apache/issues/80
+> 
+> The best we can do now is to still use modsecurity2 (v2.9.x) for
+> Apache:
+>   https://github.com/SpiderLabs/ModSecurity/tree/v2/master
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-modsecurity2 will be superseeded sooner or later by modsecurity v3
-ie. libmodsecurity [1] and its Apache connector [2]. libmodsecurity
-is already supported in Buildroot with its Nginx connector.
-According to the Apache connector web page and the discussion [3],
-the Apache connector is not ready for production use.
+Thanks, I've applied after:
 
-  [1] https://github.com/SpiderLabs/ModSecurity
-  [2] https://github.com/SpiderLabs/ModSecurity-apache
-  [3] https://github.com/SpiderLabs/ModSecurity-apache/issues/80
+ * Adding a bunch of additional --without-<something> to disable
+   optional dependencies that are not handled
 
-The best we can do now is to still use modsecurity2 (v2.9.x) for
-Apache:
-  https://github.com/SpiderLabs/ModSecurity/tree/v2/master
+ * Adding a dependency on pcre, which even if it is already guaranteed
+   to be there from Apache, is used directly by modsecurity2, so it
+   makes sense to express this dependency.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                             |  2 ++
- package/Config.in                      |  5 +++++
- package/modsecurity2/Config.in         | 13 +++++++++++++
- package/modsecurity2/modsecurity2.hash |  3 +++
- package/modsecurity2/modsecurity2.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 49 insertions(+)
+Thanks!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d64c1b063a..8d9c492c43 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1160,6 +1160,7 @@ F:	package/dtbocfg/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
- F:	package/lua-augeas/
-+F:	package/modsecurity2/
- F:	support/testing/tests/package/test_dtbocfg.py
- F:	support/testing/tests/package/test_lua_augeas.py
- 
-@@ -2019,6 +2020,7 @@ F:	package/bmap-tools/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
- F:	package/lua-augeas/
-+F:	package/modsecurity2/
- F:	package/php-pecl-dbus/
- F:	package/php-xdebug/
- F:	package/python-augeas/
-diff --git a/package/Config.in b/package/Config.in
-index a73e1fb38f..bcf20bf849 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2114,6 +2114,11 @@ menu "Networking applications"
- 	source "package/aircrack-ng/Config.in"
- 	source "package/aoetools/Config.in"
- 	source "package/apache/Config.in"
-+if BR2_PACKAGE_APACHE
-+menu "External Apache modules"
-+	source "package/modsecurity2/Config.in"
-+endmenu
-+endif
- 	source "package/argus/Config.in"
- 	source "package/arp-scan/Config.in"
- 	source "package/arptables/Config.in"
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-new file mode 100644
-index 0000000000..2870386a99
---- /dev/null
-+++ b/package/modsecurity2/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MODSECURITY2
-+	bool "modsecurity2"
-+	depends on BR2_PACKAGE_APACHE
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  ModSecurity is an open source, cross-platform web application
-+	  firewall (WAF) module. Known as the "Swiss Army Knife" of
-+	  WAFs, it enables web application defenders to gain visibility
-+	  into HTTP(S) traffic and provides a power rules language and
-+	  API to implement advanced protections.
-+
-+	  https://github.com/SpiderLabs/ModSecurity
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-new file mode 100644
-index 0000000000..1501b5642e
---- /dev/null
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  686695c650449a338757711254ea78c67dedb1d258e03e5c8686f869388fff8c  modsecurity2-2.9.4.tar.gz
-+sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-new file mode 100644
-index 0000000000..52ae6f4c31
---- /dev/null
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# modsecurity2
-+#
-+################################################################################
-+
-+MODSECURITY2_VERSION = 2.9.4
-+MODSECURITY2_SITE = $(call github,SpiderLabs,ModSecurity,v$(MODSECURITY2_VERSION))
-+MODSECURITY2_LICENSE = Apache-2.0
-+MODSECURITY2_LICENSE_FILES = LICENSE
-+MODSECURITY2_INSTALL_STAGING = YES
-+MODSECURITY2_DEPENDENCIES = apache libxml2 pcre
-+MODSECURITY2_AUTORECONF = YES
-+
-+MODSECURITY2_CONF_OPTS = \
-+	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
-+	--with-libxml=$(STAGING_DIR)/usr \
-+	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
-+	--with-apu=$(STAGING_DIR)/usr/bin/apu-1-config \
-+	--with-apxs=$(STAGING_DIR)/usr/bin/apxs \
-+	--without-curl \
-+	--without-lua \
-+	--without-yajl \
-+	--without-ssdeep
-+
-+$(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
