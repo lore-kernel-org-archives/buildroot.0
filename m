@@ -1,90 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F03EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 21:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1AE6C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 21:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2519660D76;
-	Fri, 17 Dec 2021 21:38:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B73684D6A;
+	Fri, 17 Dec 2021 21:42:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ig7Zpv1cueFB; Fri, 17 Dec 2021 21:38:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53F5A60EAA;
-	Fri, 17 Dec 2021 21:38:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3DFE91BF358
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 21:38:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B1A084B73
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 21:38:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RmPG8y27N-8O for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 21:38:48 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o4M9w0HT-SUy; Fri, 17 Dec 2021 21:42:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0A0C84D61;
+	Fri, 17 Dec 2021 21:41:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A19491BF358
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 21:41:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 987E060EC4
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 21:41:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NTckKR7gbVLt for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 21:41:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB52083F82
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 21:38:47 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id z7so12753605edc.11
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 13:38:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 28EE160EAA
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 21:41:57 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id s1so6516796wrg.1
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 13:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=xl0oP2BmmjN/hXQmijSmKuofa9J5w8y292TWgjphH3U=;
- b=gDdHNuzP/wL1xCDMZWo9ModRg4EEVxCMpmyz19OWIKQg9Yr8E9BcZB/s5+T59+MBLt
- 8a6GzbWHYscadPP4UZIMhRofTyFn8noMAJRSdqUCXBEdhngr2VEN/qkXHtZ5+/TfVYa3
- 8BD4UMZTg6rcLS9nUxKuwfBz1EnQ/kfNoeyqv2WWcyJZxlFOtYIq2Z+u2gul8Crw0ReR
- DTeYUvBQyR3LP9+0vyCXh+5cGWawSnLt2G1P0+iAiBrynfijDubsPsNzvbzi8LSvTpQN
- Zet9pWUYXVzSkBKYuy3Y3g720wjWfLVMa2EZKL/l0WYz0BtsBycTJk88hzDiupx/FrVc
- rksA==
+ bh=nbiklb84fYrnvYmBMEP24dW82WetG0I0kxfp3vp/P6M=;
+ b=g335ohBoyHEYBa8Ns3vFDa1HHO/YQT/YrUOpuSmNbwAVpyBq5hWDdrxmiuAmhYUwRo
+ XhK3xoO03fdBGLw+G2jphF0EmsPcoawPPtQmYL8MO7UAyJrte0+B3eIYEX8BL8TKngfm
+ +sjudyoCtoKtZGVv/pbc+8K3FmDVYLn1ox9+Dh02o8xJGXVwAhIsevhYtbK5ztEtYGHg
+ 3kw3ap8GIAeIZWTHrpah/wN1n697uEzkGsNuaKqqIo6aj7tNv+LLDMxLZSaEa4gu+T9K
+ eeehskslrlVNVLipWXNiWmIELalITADuOew/vglrSAIJY+Z1qOk2TRO0VD+A7FZsZtTb
+ vYGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=xl0oP2BmmjN/hXQmijSmKuofa9J5w8y292TWgjphH3U=;
- b=p6TY3DxoF2DteeMBVxUP0vK/gnqerjOumwcSPHNEGrR4P7lYpF0uXRrj55dO5ggYpI
- nE7LncZImbgP0MLHdeeaa55dcUzt3n/aqZfK7gFYSjYzV8fccwT/oJlrre8/XIADdG4I
- zcIVacUTZ9qqQN/JpDh/gc2jDn0/9OCrPD9Rp/73U5OTTNnmdc79PwBxqXCJmIehDV5K
- 4qPXhRGy0nqGs0nwO8DfRy5nlzAI7/9Z6YfjMkm1VZHSZSSTeJmv1q1hvPj9xVuFoXdg
- NcGT3WGiS98L67lkt42FgaT+HqWm6mG1bd4meSkKjp6cbxv2RsXYcYH/7elWpY5BQxfZ
- iWPA==
-X-Gm-Message-State: AOAM531WCtFj8/5+uuGN9fTwZIoaQvp89ykg+b84dbp+C+6T+mH42E8L
- pYtrsi67K0W1NDHKPmyVHC6OLg==
-X-Google-Smtp-Source: ABdhPJy3mdGSg5HC8D8JmDyxMlyXNw/cPOnLCHcIljrDD4Op05Vi8tPHf4tH6RzmqQG6YMN1TLKJMQ==
-X-Received: by 2002:a05:6402:1778:: with SMTP id
- da24mr4543572edb.144.1639777126054; 
- Fri, 17 Dec 2021 13:38:46 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id gs9sm1911123ejc.30.2021.12.17.13.38.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 17 Dec 2021 13:38:45 -0800 (PST)
-Message-ID: <fcfa858e-fe6c-5a4a-3ea6-cc480db3c169@mind.be>
-Date: Fri, 17 Dec 2021 22:38:44 +0100
+ bh=nbiklb84fYrnvYmBMEP24dW82WetG0I0kxfp3vp/P6M=;
+ b=HW42SrEIvezA/hkhupjt+5kUVNQP7psf3EGABaCLhXBufkwv8jVFymZbHBKj9Odmqb
+ A5/QPgzWQJS2ixFn4c+/reZ4VK7r4uixnx9G5yhiE2geLyqoZ+/eVG4v83+IwAK0clY5
+ ndS/JNd7VCxyaY8po7gCgZ316ZcdXblCk60Z3YGDi0FiP3HGZls9XEGTTjNYx1L5GXpG
+ BhhAmr8so1IJM275qbs5EKnOK93S6OkbPq/5tCuGGoGEaenXxqyr2f8cwD4vBM9Fo8cv
+ XkApFn41dcPt4GziRwEloFOS25PSxH9+sLN/qhSrVfETFpXhjYIHsvxKqGEpXYITI1L5
+ YcpQ==
+X-Gm-Message-State: AOAM530WEWFDrTY+UVJcDgPfxYuWvedJ2fE3TVpbAfEQeaaSxk7R7Nos
+ w5hj3fRR3flD6+JrmHruLl+5b4DPCCYjFA==
+X-Google-Smtp-Source: ABdhPJwHT2rprJd8i2YJnjdW27j3AAyXKDwEEci2goB7rnLz6gB99RTFg4xm7/7+d3kItHlr7dsHUw==
+X-Received: by 2002:a5d:4312:: with SMTP id h18mr4014096wrq.626.1639777315169; 
+ Fri, 17 Dec 2021 13:41:55 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id 138sm11527402wma.17.2021.12.17.13.41.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Dec 2021 13:41:54 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 17 Dec 2021 22:41:21 +0100
+Message-Id: <20211217214121.101414-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Dario Binacchi <dariobin@libero.it>, buildroot@buildroot.org
-References: <20211212123753.11848-1-dariobin@libero.it>
- <20211212123753.11848-3-dariobin@libero.it>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211212123753.11848-3-dariobin@libero.it>
-Subject: Re: [Buildroot] [RESEND PATCH v2,
- 2/4] boot/afboot-stm32: upgrade version
+Subject: [Buildroot] [PATCH 1/1] package/lapack: fix CVE-2021-4048
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,162 +85,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- Lee Jones <lee.jones@linaro.org>
+Cc: Benjamin Kamath <kamath.ben@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix CVE-2021-4048: An out-of-bounds read flaw was found in the CLARRV,
+DLARRV, SLARRV, and ZLARRV functions in lapack through version 3.10.0,
+as also used in OpenBLAS before version 0.3.18. Specially crafted inputs
+passed to these functions could cause an application using lapack to
+crash or possibly disclose portions of its memory.
 
+It should be noted that commit 59a1fcc69620da8eab1c048977fa22d297b18284
+wrongly assumed that this CVE was fixed in version 3.10.0
 
-On 12/12/2021 13:37, Dario Binacchi wrote:
-> Newer versions of the kernel generate device trees that are not
-> storable in a single 16kB sector. In these cases the kernel load address
-> must be changed.
-> The commit 2e499dcff3ef ("Add possibility to use custom kernel load address")
-> adds the possibility to override the default (0x08008000) kernel load
-> address.
-> 
-> This also required changes to the stm32f429_disco_defconfig and
-> stm32f469_disco_xip_defconfig configurations.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-Fix-out-of-bounds-read-in-slarrv.patch | 82 +++++++++++++++++++
+ package/lapack/lapack.mk                      |  3 +
+ 2 files changed, 85 insertions(+)
+ create mode 100644 package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
 
-  I heavily rewrote the commit message again.
+diff --git a/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch b/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
+new file mode 100644
+index 0000000000..43c6444b02
+--- /dev/null
++++ b/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
+@@ -0,0 +1,82 @@
++From 0631b6beaed60ba118b0b027c0f8d35397bf5df0 Mon Sep 17 00:00:00 2001
++From: Keno Fischer <keno@juliacomputing.com>
++Date: Thu, 30 Sep 2021 03:51:23 -0400
++Subject: [PATCH] Fix out of bounds read in slarrv
++
++This was originally reported as https://github.com/JuliaLang/julia/issues/42415.
++I've tracked this down to an our of bounds read on the following line:
++
++https://github.com/Reference-LAPACK/lapack/blob/44ecb6a5ff821b1cbb39f8cc2166cb098e060b4d/SRC/slarrv.f#L423
++
++In the crashing example, `M` is `0`, causing `slarrv` to read uninitialized
++memory from the work array. I believe the `0` for `M` is correct and indeed,
++the documentation above supports that `M` may be zero:
++
++https://github.com/Reference-LAPACK/lapack/blob/44ecb6a5ff821b1cbb39f8cc2166cb098e060b4d/SRC/slarrv.f#L113-L116
++
++I believe it may be sufficient to early-out this function as suggested
++in this PR. However, I have limited context for the full routine here,
++so I would appreciate a sanity check.
++
++[Retrieved from:
++https://github.com/Reference-LAPACK/lapack/commit/38f3eeee3108b18158409ca2a100e6fe03754781]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ SRC/clarrv.f | 2 +-
++ SRC/dlarrv.f | 2 +-
++ SRC/slarrv.f | 2 +-
++ SRC/zlarrv.f | 2 +-
++ 4 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/SRC/clarrv.f b/SRC/clarrv.f
++index 1f09e4da6..42f710757 100644
++--- a/SRC/clarrv.f
+++++ b/SRC/clarrv.f
++@@ -348,7 +348,7 @@ SUBROUTINE CLARRV( N, VL, VU, D, L, PIVMIN,
++ *
++ *     Quick return if possible
++ *
++-      IF( N.LE.0 ) THEN
+++      IF( (N.LE.0).OR.(M.LE.0) ) THEN
++          RETURN
++       END IF
++ *
++diff --git a/SRC/dlarrv.f b/SRC/dlarrv.f
++index b036c1e66..299430361 100644
++--- a/SRC/dlarrv.f
+++++ b/SRC/dlarrv.f
++@@ -350,7 +350,7 @@ SUBROUTINE DLARRV( N, VL, VU, D, L, PIVMIN,
++ *
++ *     Quick return if possible
++ *
++-      IF( N.LE.0 ) THEN
+++      IF( (N.LE.0).OR.(M.LE.0) ) THEN
++          RETURN
++       END IF
++ *
++diff --git a/SRC/slarrv.f b/SRC/slarrv.f
++index 9d72b339a..95f94fd1b 100644
++--- a/SRC/slarrv.f
+++++ b/SRC/slarrv.f
++@@ -350,7 +350,7 @@ SUBROUTINE SLARRV( N, VL, VU, D, L, PIVMIN,
++ *
++ *     Quick return if possible
++ *
++-      IF( N.LE.0 ) THEN
+++      IF( (N.LE.0).OR.(M.LE.0) ) THEN
++          RETURN
++       END IF
++ *
++diff --git a/SRC/zlarrv.f b/SRC/zlarrv.f
++index 51ec558f5..e4be63e0d 100644
++--- a/SRC/zlarrv.f
+++++ b/SRC/zlarrv.f
++@@ -348,7 +348,7 @@ SUBROUTINE ZLARRV( N, VL, VU, D, L, PIVMIN,
++ *
++ *     Quick return if possible
++ *
++-      IF( N.LE.0 ) THEN
+++      IF( (N.LE.0).OR.(M.LE.0) ) THEN
++          RETURN
++       END IF
++ *
+diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+index f34f685ae2..a80131c9ad 100644
+--- a/package/lapack/lapack.mk
++++ b/package/lapack/lapack.mk
+@@ -12,6 +12,9 @@ LAPACK_INSTALL_STAGING = YES
+ LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
+ LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
+ 
++# 0001-Fix-out-of-bounds-read-in-slarrv.patch
++LAPACK_IGNORE_CVES += CVE-2021-4048
++
+ ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+ LAPACK_CONF_OPTS += -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON
+ else
+-- 
+2.33.0
 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-[snip]
-> diff --git a/boot/afboot-stm32/Config.in b/boot/afboot-stm32/Config.in
-> index 309b9e0491..71f4c7e382 100644
-> --- a/boot/afboot-stm32/Config.in
-> +++ b/boot/afboot-stm32/Config.in
-> @@ -5,3 +5,35 @@ config BR2_TARGET_AFBOOT_STM32
->   	  afboot-stm32 is a very small bootloader for STM32 platforms
->   
->   	  https://github.com/mcoquelin-stm32/afboot-stm32
-> +
-> +if BR2_TARGET_AFBOOT_STM32
-> +
-> +choice
-> +	prompt "Board type"
-> +	help
-> +	  Select the proper stm32 board type.
-> +
-> +config BR2_TARGET_AFBOOT_STM32_F429_DISCO
-> +	bool "stm32f429-disco"
-> +
-> +config BR2_TARGET_AFBOOT_STM32_F469_DISCO
-> +	bool "stm32f469-disco"
-
-  I see no reason to add these config options. Building all boards hardly has an 
-effect on build time. Also, it makes it a lot more complicated to add more 
-boards (e.g. by patching afboot-stm32).
-
-  So I removed this and reverted to 'make all'.
-
-> +
-> +endchoice
-> +
-> +config BR2_TARGET_AFBOOT_STM32_KERNEL_ADDR
-> +	hex "Kernel load address"
-> +	default "0x08008000"
-> +	help
-> +	  This is the physical address in your flash memory the kernel will
-> +	  be linked for and stored to. This address is dependent on your own
-> +	  flash usage.
-> +
-> +config BR2_TARGET_AFBOOT_STM32_DTB_ADDR
-> +	hex "Device-tree load address"
-> +	default "0x08004000"
-> +	help
-> +	  This is the physical address in your flash memory the device-tree
-> +	  will be stored to. This address is dependent on your own flash usage.
-> +
-> +endif
-> diff --git a/boot/afboot-stm32/afboot-stm32.hash b/boot/afboot-stm32/afboot-stm32.hash
-> index 75f47295f6..80b9b6a106 100644
-> --- a/boot/afboot-stm32/afboot-stm32.hash
-> +++ b/boot/afboot-stm32/afboot-stm32.hash
-> @@ -1,2 +1,2 @@
->   # Locally calculated
-> -sha256 9b37b661bd3091ceb5d8dc5a56a2dfc02ae9ebc0c63dad3c4289c9d6b3d3ec89  afboot-stm32-0.2.tar.gz
-> +sha256  132f9817e615131856892cbe3df1502cdcd0700a12a48aa6bae8acfd5f093b42  afboot-stm32-3566acd582e5536fb60864281788a30f5527df2d-br1.tar.gz
-> diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
-> index 0fb4735285..80074a3c35 100644
-> --- a/boot/afboot-stm32/afboot-stm32.mk
-> +++ b/boot/afboot-stm32/afboot-stm32.mk
-> @@ -4,17 +4,27 @@
->   #
->   ################################################################################
->   
-> -AFBOOT_STM32_VERSION = 0.2
-> -AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,v$(AFBOOT_STM32_VERSION))
-> +AFBOOT_STM32_VERSION = 3566acd582e5536fb60864281788a30f5527df2d
-> +AFBOOT_STM32_SITE = https://github.com/mcoquelin-stm32/afboot-stm32.git
-
-  There's no reason at all to switch to git download, you can download a tarball 
-from a commit hash as well.
-
-
-  I made all those changes and applied to master. Please double-check if it i 
-still correct.
-
-  Regards,
-  Arnout
-
-
-> +AFBOOT_STM32_SITE_METHOD = git
->   AFBOOT_STM32_INSTALL_IMAGES = YES
->   AFBOOT_STM32_INSTALL_TARGET = NO
->   
-> +ifeq ($(BR2_TARGET_AFBOOT_STM32_F429_DISCO),y)
-> +AFBOOT_STM32_BOARD=stm32f429i-disco
-> +else
-> +AFBOOT_STM32_BOARD=stm32f469i-disco
-> +endif
-> +
->   define AFBOOT_STM32_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) \
-> +		$(AFBOOT_STM32_BOARD) \
-> +		KERNEL_ADDR=$(BR2_TARGET_AFBOOT_STM32_KERNEL_ADDR) \
-> +		DTB_ADDR=$(BR2_TARGET_AFBOOT_STM32_DTB_ADDR)
->   endef
->   
->   define AFBOOT_STM32_INSTALL_IMAGES_CMDS
-> -	$(INSTALL) -m 0755 -t $(BINARIES_DIR) -D $(@D)/stm32*.bin
-> +	$(INSTALL) -m 0755 -t $(BINARIES_DIR) -D $(@D)/$(AFBOOT_STM32_BOARD).bin
->   endef
->   
->   $(eval $(generic-package))
-> diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
-> index 2c0641a6c5..4007eb20a5 100644
-> --- a/configs/stm32f429_disco_defconfig
-> +++ b/configs/stm32f429_disco_defconfig
-> @@ -15,4 +15,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
->   BR2_TARGET_ROOTFS_INITRAMFS=y
->   # BR2_TARGET_ROOTFS_TAR is not set
->   BR2_TARGET_AFBOOT_STM32=y
-> +BR2_TARGET_AFBOOT_STM32_KERNEL_ADDR=0x0800C000
->   BR2_PACKAGE_HOST_OPENOCD=y
-> diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
-> index e8b2cf3d21..4c49ffcc7a 100644
-> --- a/configs/stm32f469_disco_xip_defconfig
-> +++ b/configs/stm32f469_disco_xip_defconfig
-> @@ -1,6 +1,5 @@
->   BR2_arm=y
->   BR2_cortex_m4=y
-> -BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
->   # BR2_UCLIBC_INSTALL_UTILS is not set
->   BR2_GCC_ENABLE_LTO=y
->   BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
-> @@ -16,4 +15,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
->   BR2_TARGET_ROOTFS_INITRAMFS=y
->   # BR2_TARGET_ROOTFS_TAR is not set
->   BR2_TARGET_AFBOOT_STM32=y
-> +BR2_TARGET_AFBOOT_STM32_F469_DISCO=y
-> +BR2_TARGET_AFBOOT_STM32_KERNEL_ADDR=0x0800C000
->   BR2_PACKAGE_HOST_OPENOCD=y
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
