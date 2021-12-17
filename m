@@ -1,83 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDFE3C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 19:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03EE6C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 19:10:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93CE140C28;
-	Fri, 17 Dec 2021 19:10:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7223084D55;
+	Fri, 17 Dec 2021 19:10:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wO48R5IFr5DF; Fri, 17 Dec 2021 19:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TufYNXi_OzEF; Fri, 17 Dec 2021 19:10:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60BD140579;
-	Fri, 17 Dec 2021 19:10:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D35684D51;
+	Fri, 17 Dec 2021 19:10:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CEE181BF35E
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BE481BF35E
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD47784D51
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3978A84D51
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NT3TnpW81xZ0 for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 19:10:05 +0000 (UTC)
+ with ESMTP id teTlklb2NU34 for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 19:10:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C75C784D20
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 19:10:04 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- y83-20020a1c7d56000000b003456dfe7c5cso3800307wmc.1
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 11:10:04 -0800 (PST)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3003384D20
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 19:10:06 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ j140-20020a1c2392000000b003399ae48f58so4713406wmj.5
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 11:10:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=geCtml+kMKgtkAAvfCpR21bNRmrrJdLvisBHkg904WE=;
- b=p2HDZCcxzRBUicwiXL1HI4GPcyHk5AIBAunAxZljcOrqiuHYS+IEKTVDv7qsTW1Egt
- ShndXQethXbINAofXn7vnnBqHIOiIcIc+XFxY07vSFrOiY1jnvKG3NJIYtbNz/9TK2dT
- ypykTmk9+EOmDNXZNLkgcVc2CZnHzg/NSCVclCVHAaJvHqxXvKf40GaTBhrVrorBal8e
- tpw0ccdBji1u1bcEj40i49J2xTieHRNXPKLhxkqlO+mHBpIwI/kB28ZRUdeHq8GHEMMN
- 5gKFjfrSiunaJSFURdkYTrOsTDM6ekM43G/tm6VGxDJ4Zzv1MgHrjO5JsKuMDm+Q7pa8
- yFYQ==
+ bh=xVdaxbIkqb8bvUAd9tj9Gahomc+k1mLq1C3Xx0pKytQ=;
+ b=jieWGhRO5MRqlw4ex/nQU1USbOpc6gSW1qjC5MOvaEa7qnAMcIBhFpETohCFPdGpLt
+ 4gG4G5SVW796rFJfj9uFEcSJn7qpeuw8s6CHMBLm0Wf2sxfXhQzMefWrFbn2WCgRvzyA
+ SEnzX99zUCqrGn7n9zBFk6lY852uQH9n7xZUUHDi2VmNnuzvHXkzGnthGjIdDRWt7W9q
+ W3AGqdw56WhkhbLnwPQHYp4VjG1299hcw1nb9wrZwPCjq3O2Q90qyK+rIXB5Xxfuk0vr
+ 3DARwz3T/1uffHz8ijJRbuAli5Y157B7gXDhD86KK5TzpmESG9ezAeWWvAR9R9IxOXRV
+ /mqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=geCtml+kMKgtkAAvfCpR21bNRmrrJdLvisBHkg904WE=;
- b=HFfVzGpEVpD0+pTauGZSziGKB/LFc6cBy7zIUAD6gQu93cZw1XscE14yV38rRu1F1O
- WxOSyAT+b4vt4KUoemVZa/SfUdsLLPAlu7GCKyQ383MhmvEP5PDlldKL9znaWws+mz02
- gFUwkmYJ1z0JVA63X5tkeGd23/jQEjTdq+FqNLMZ7MSv6xwQMZ2AxN4ETOO97NpYx/Qq
- Ibm4qd4bYw2vkqOTa33HNTNUfmyEltgGJIRfo27BkQKY8s0zPMzVZaMGMSUc+AHb9g+4
- RYbzlOMUzGc3+r6igS1V1tapw0K6vobo+FKIjjYuf8hP3JG7xHFD2XwZOIB/cXYpDAGq
- AiDw==
-X-Gm-Message-State: AOAM530tH7U8mqF//XNPxPbhFSLEMlYAE8tg55S4OIXj7CXSsrjaGbEX
- 7Zbaj0bxfGCkZUHdBU6pIUxV7nOnZKbbOA==
-X-Google-Smtp-Source: ABdhPJx7g5AesPHzM0as1z9sX6uzZ5o0FIQDNhViYnBU7ID5v+/X1cztRkyGWeRkbZE579L8GYNC3g==
-X-Received: by 2002:a05:600c:600c:: with SMTP id
- az12mr3846451wmb.86.1639768202779; 
- Fri, 17 Dec 2021 11:10:02 -0800 (PST)
+ bh=xVdaxbIkqb8bvUAd9tj9Gahomc+k1mLq1C3Xx0pKytQ=;
+ b=E8GMS56of/k2DVacQsgntZzor7kwoOs0SZr9Tq8pQNcIn0F2qleVkcPHnCN4Vd3YPo
+ HLgb49sSsGZbsQ5PPVIJnUpxzK8cTdTFRd26MoE/hZEN87wYrTuYXdjAca01hrQ9CKAo
+ yRxrhR3A+DnfFkepAxHDeykwsvId2C2Dd708koO8ZDae2T7v48HrGdGnWrFi1IZj+OHo
+ fD2+ORilm5jbjPI+H7IkjG6v6xPxPESmkwM9v02+ISXVhec/V0cuYwsvs7//uqleVmBC
+ IPghHSUdTBgyzNNdWgZYvNAUvVfPpLRolXiJdMQ2JSTCT6nckRUB8n1lnjakZneakAw/
+ Kn3w==
+X-Gm-Message-State: AOAM531JpSDfavhNt6+KhnNOWb2fwDabAtmhs0a7y0l1LLDUH6IofpHg
+ Ve+aCaZSuPA0v654qsYe6zrQtcPqa9AH8w==
+X-Google-Smtp-Source: ABdhPJy0xjm8wqdvnsraVne/duYdIbvwIhyDyk5f98OqhE/8dk8cWfaZmi4WQGaNVyQCbr94PYmUjw==
+X-Received: by 2002:a05:600c:24e:: with SMTP id
+ 14mr3863101wmj.67.1639768204192; 
+ Fri, 17 Dec 2021 11:10:04 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id z22sm2860101wmi.26.2021.12.17.11.10.02
+ by smtp.gmail.com with ESMTPSA id z22sm2860101wmi.26.2021.12.17.11.10.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Dec 2021 11:10:02 -0800 (PST)
+ Fri, 17 Dec 2021 11:10:03 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 20:08:52 +0100
-Message-Id: <20211217190853.18713-2-fontaine.fabrice@gmail.com>
+Date: Fri, 17 Dec 2021 20:08:53 +0100
+Message-Id: <20211217190853.18713-3-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211217190853.18713-1-fontaine.fabrice@gmail.com>
 References: <20211217190853.18713-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] package/gupnp-dlna: bump to version 0.12.0
+Subject: [Buildroot] [PATCH 3/3] package/rygel: bump to version 0.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,71 +94,152 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- GStreamer 0.10 back-end has been dropped with
-  https://gitlab.gnome.org/GNOME/gupnp-dlna/-/commit/af50a8ac988c3929cec1afc6f85458d98ce80485
-- Switch to meson-package (to avoid autoreconf as no configure is
-  shipped anymore)
-- Update indention in hash file (two spaces)
+- Switch to meson-package
+- gdk-pixbuf and gupnp-dlna are now mandatory
+- gstreamer1-editing-services is mandatory with gstreamer engine
 
-https://gitlab.gnome.org/GNOME/gupnp-dlna/-/blob/gupnp-dlna-0.12.0/NEWS
+https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-0.40.2/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gupnp-dlna/gupnp-dlna.hash |  6 +++---
- package/gupnp-dlna/gupnp-dlna.mk   | 16 +++++++---------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ package/rygel/Config.in  |  5 ++--
+ package/rygel/rygel.hash |  4 ++--
+ package/rygel/rygel.mk   | 51 +++++++++++++++++-----------------------
+ 3 files changed, 27 insertions(+), 33 deletions(-)
 
-diff --git a/package/gupnp-dlna/gupnp-dlna.hash b/package/gupnp-dlna/gupnp-dlna.hash
-index 01c7489738..dd9f2e4e4f 100644
---- a/package/gupnp-dlna/gupnp-dlna.hash
-+++ b/package/gupnp-dlna/gupnp-dlna.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.10/gupnp-dlna-0.10.5.sha256sum:
--sha256	123e368227c11d5c17fc1aa76cbdaffa345355eb51d172cd39fc74a5b468ff6a	gupnp-dlna-0.10.5.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.12/gupnp-dlna-0.12.0.sha256sum:
-+sha256  3d53b96f85bc5628d33e367ec9bf2adb38ef2b34d7ad0434a6ba0cf4ad9048e6  gupnp-dlna-0.12.0.tar.xz
+diff --git a/package/rygel/Config.in b/package/rygel/Config.in
+index 86d6a38e1e..df48918833 100644
+--- a/package/rygel/Config.in
++++ b/package/rygel/Config.in
+@@ -3,7 +3,9 @@ config BR2_PACKAGE_RYGEL
+ 	depends on BR2_USE_WCHAR # gupnp-av
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
+ 	depends on BR2_USE_MMU # gupnp-av
++	select BR2_PACKAGE_GDK_PIXBUF
+ 	select BR2_PACKAGE_GUPNP_AV
++	select BR2_PACKAGE_GUPNP_DLNA
+ 	select BR2_PACKAGE_LIBGEE
+ 	select BR2_PACKAGE_LIBMEDIAART
+ 	select BR2_PACKAGE_SQLITE
+@@ -37,10 +39,9 @@ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
  
- # Locally computed:
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-index dd548e3e2d..4f75c9b527 100644
---- a/package/gupnp-dlna/gupnp-dlna.mk
-+++ b/package/gupnp-dlna/gupnp-dlna.mk
-@@ -4,8 +4,8 @@
+ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
+ 	bool "gstreamer1"
+-	select BR2_PACKAGE_GDK_PIXBUF
+-	select BR2_PACKAGE_GUPNP_DLNA
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
+ 
+ endchoice
+ 
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+index 33b44aecc2..04b11ff54a 100644
+--- a/package/rygel/rygel.hash
++++ b/package/rygel/rygel.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.38/rygel-0.38.3.sha256sum:
+-sha256  08c21a577f7bdad26446a75ffa32778b26842c3b1188165f0b19818559747d00  rygel-0.38.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.40/rygel-0.40.2.sha256sum:
++sha256  c9e8c736296d22c4defe959727a29d31437bbd2b7aa0c6470d6be24011050697  rygel-0.40.2.tar.xz
+ 
+ # Locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index 21c8ebee6a..c541cdc0ed 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -4,14 +4,16 @@
  #
  ################################################################################
  
--GUPNP_DLNA_VERSION_MAJOR = 0.10
--GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).5
-+GUPNP_DLNA_VERSION_MAJOR = 0.12
-+GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).0
- GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
- GUPNP_DLNA_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
-@@ -15,20 +15,18 @@ GUPNP_DLNA_LICENSE_FILES = COPYING
- GUPNP_DLNA_INSTALL_STAGING = YES
- GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
+-RYGEL_VERSION_MAJOR = 0.38
+-RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).3
++RYGEL_VERSION_MAJOR = 0.40
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).2
+ RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
+ RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
+ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
+ RYGEL_LICENSE_FILES = COPYING COPYING.logo
+ RYGEL_DEPENDENCIES = \
++	gdk-pixbuf \
+ 	gupnp-av \
++	gupnp-dlna \
+ 	libgee \
+ 	libmediaart \
+ 	sqlite \
+@@ -20,51 +22,42 @@ RYGEL_INSTALL_STAGING = YES
  
--GUPNP_DLNA_CONF_OPTS = --disable-legacy-gstreamer-metadata-backend
+ RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ RYGEL_CONF_OPTS += \
+-	--disable-apidocs \
+-	--disable-coverage \
+-	--disable-example-plugins \
+-	--enable-external-plugin \
+-	--enable-lms-plugin \
+-	--enable-mpris-plugin \
+-	--enable-ruih-plugin \
+-	--disable-tracker-plugin
 -
+-ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+-RYGEL_DEPENDENCIES += gdk-pixbuf
+-endif
++	-Dapi-docs=false \
++	-Dexamples=false \
++	-Dtests=false
++RYGEL_PLUGINS = external,lms,mpris,ruih
+ 
  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GUPNP_DLNA_CONF_OPTS += --enable-introspection
-+GUPNP_DLNA_CONF_OPTS += -Dintrospection=true -Dvapi=true
- GUPNP_DLNA_DEPENDENCIES += host-vala gobject-introspection
+-RYGEL_CONF_OPTS += --enable-introspection
++RYGEL_CONF_OPTS += -Dintrospection=enabled
+ RYGEL_DEPENDENCIES += gobject-introspection
  else
--GUPNP_DLNA_CONF_OPTS += --disable-introspection
-+GUPNP_DLNA_CONF_OPTS += -Dintrospection=false -Dvapi=false
+-RYGEL_CONF_OPTS += --disable-introspection
++RYGEL_CONF_OPTS += -Dintrospection=disabled
  endif
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
--GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
-+GUPNP_DLNA_CONF_OPTS += -Dgstreamer_backend=enabled
- GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
- else
--GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
-+GUPNP_DLNA_CONF_OPTS += -Dgstreamer_backend=disabled
+ ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
+ RYGEL_CONF_OPTS += \
+-	--with-media-engine=gstreamer \
+-	--enable-playbin-plugin \
+-	--enable-media_export-plugin \
+-	--enable-gst-launch-plugin
++	-Dengines=gstreamer \
++	-Dgstreamer=enabled
++RYGEL_PLUGINS += ,playbin,media-export,gst-launch
+ RYGEL_DEPENDENCIES += \
+-	gupnp-dlna \
+ 	gst1-plugins-base \
+-	gstreamer1
++	gstreamer1 \
++	gstreamer1-editing-services
+ else ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE),y)
+ RYGEL_CONF_OPTS += \
+-	--with-media-engine=simple \
+-	--disable-playbin-plugin \
+-	--disable-media_export-plugin \
+-	--disable-gst-launch-plugin
++	-Dengines=simple \
++	-Dgstreamer=disabled
  endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+-RYGEL_CONF_OPTS += --with-ui
++RYGEL_CONF_OPTS += -Dgtk=enabled
+ RYGEL_DEPENDENCIES += libgtk3
+ else
+-RYGEL_CONF_OPTS += --without-ui
++RYGEL_CONF_OPTS += -Dgtk=disabled
+ endif
+ 
++RYGEL_CONF_OPTS += -Dplugins="$(RYGEL_PLUGINS)"
++
+ define RYGEL_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/rygel/S99rygel \
+ 		$(TARGET_DIR)/etc/init.d/S99rygel
+@@ -75,4 +68,4 @@ define RYGEL_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rygel.service
+ endef
  
 -$(eval $(autotools-package))
 +$(eval $(meson-package))
