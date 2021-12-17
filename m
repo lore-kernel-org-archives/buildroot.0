@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03EE6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 19:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 117A4C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 19:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7223084D55;
-	Fri, 17 Dec 2021 19:10:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B74D841C41;
+	Fri, 17 Dec 2021 19:12:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TufYNXi_OzEF; Fri, 17 Dec 2021 19:10:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qBb1LQfFbi2X; Fri, 17 Dec 2021 19:12:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D35684D51;
-	Fri, 17 Dec 2021 19:10:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BE481BF35E
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC9E5417C9;
+	Fri, 17 Dec 2021 19:12:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BC221BF35E
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3978A84D51
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A81D61119
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:12:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id teTlklb2NU34 for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 19:10:06 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FIcwGYRUrPIk for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 19:12:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3003384D20
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 19:10:06 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- j140-20020a1c2392000000b003399ae48f58so4713406wmj.5
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 11:10:06 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E29060EC6
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 19:12:12 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id o29so2282769wms.2
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 11:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=xVdaxbIkqb8bvUAd9tj9Gahomc+k1mLq1C3Xx0pKytQ=;
- b=jieWGhRO5MRqlw4ex/nQU1USbOpc6gSW1qjC5MOvaEa7qnAMcIBhFpETohCFPdGpLt
- 4gG4G5SVW796rFJfj9uFEcSJn7qpeuw8s6CHMBLm0Wf2sxfXhQzMefWrFbn2WCgRvzyA
- SEnzX99zUCqrGn7n9zBFk6lY852uQH9n7xZUUHDi2VmNnuzvHXkzGnthGjIdDRWt7W9q
- W3AGqdw56WhkhbLnwPQHYp4VjG1299hcw1nb9wrZwPCjq3O2Q90qyK+rIXB5Xxfuk0vr
- 3DARwz3T/1uffHz8ijJRbuAli5Y157B7gXDhD86KK5TzpmESG9ezAeWWvAR9R9IxOXRV
- /mqw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=BA8pmMSJEPpscnkjasnhmQdSKD+NDrReSyfzdq7M+KM=;
+ b=oebIMnQzvtnvIB6FCJSIEzhr6tyBhYSgkGaffuWu/SP00+0WZ0R/EdBcVz6HFuANep
+ fo8sfSSdeBlgpdFcDBm96pMxmkrpxOIcmh5yivf8mOtIUE9INHBS1Od4NgBK1DlxdQ31
+ uFgCTbJot2rml3R/+NBLr5Z5zQs+BXQVJKJYuyDDaqBO1lHs1OXOiza41tTMgvyyvkc8
+ Oehc894TrJFzXvjc9PZRuOB6ptfmcRvN3RYj4m9wWdTByXoA7MxFRb4/lvZ0ndxUvrSI
+ s4GeXd6V9yEOEqrKGxrgSzRonpx0Xn5hn5BI2b6OVl/THkL4FwY42zb6d3dWt+BdJzu0
+ AZ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=xVdaxbIkqb8bvUAd9tj9Gahomc+k1mLq1C3Xx0pKytQ=;
- b=E8GMS56of/k2DVacQsgntZzor7kwoOs0SZr9Tq8pQNcIn0F2qleVkcPHnCN4Vd3YPo
- HLgb49sSsGZbsQ5PPVIJnUpxzK8cTdTFRd26MoE/hZEN87wYrTuYXdjAca01hrQ9CKAo
- yRxrhR3A+DnfFkepAxHDeykwsvId2C2Dd708koO8ZDae2T7v48HrGdGnWrFi1IZj+OHo
- fD2+ORilm5jbjPI+H7IkjG6v6xPxPESmkwM9v02+ISXVhec/V0cuYwsvs7//uqleVmBC
- IPghHSUdTBgyzNNdWgZYvNAUvVfPpLRolXiJdMQ2JSTCT6nckRUB8n1lnjakZneakAw/
- Kn3w==
-X-Gm-Message-State: AOAM531JpSDfavhNt6+KhnNOWb2fwDabAtmhs0a7y0l1LLDUH6IofpHg
- Ve+aCaZSuPA0v654qsYe6zrQtcPqa9AH8w==
-X-Google-Smtp-Source: ABdhPJy0xjm8wqdvnsraVne/duYdIbvwIhyDyk5f98OqhE/8dk8cWfaZmi4WQGaNVyQCbr94PYmUjw==
-X-Received: by 2002:a05:600c:24e:: with SMTP id
- 14mr3863101wmj.67.1639768204192; 
- Fri, 17 Dec 2021 11:10:04 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=BA8pmMSJEPpscnkjasnhmQdSKD+NDrReSyfzdq7M+KM=;
+ b=HmXxeYTjjIbztuISCguSrDJsjDQumUFCWaqRrjs9mtJUK4HpPvf9PsjQrr2Jk0MyGM
+ uQEQlQvI3KMjFW0HR1jBzOmDgvYgWEDF9KTODXmBxPYOt0Zqr8LpmgeMtorgNss9141D
+ 5B5l9jCCG/ckHPkiePrj3dAgVyginG8gU8vskEw7CU19VzHjVK7ZiTPLoI5tgdGsfzuA
+ 9+3qKfX8j83RSWal24yAoBwzkxJCiR9rouiNjP3wBmMxXXC40Nfx9vV/ChqeM6Ckd4mb
+ ieeU0xJpMM0DcMMCLAp9IJ7Y2L3BqdQsRuk+k90nU8j1XoTVNWdDQ5ytf+cAq7kHrHV2
+ 5/0Q==
+X-Gm-Message-State: AOAM530RRJFU4K1vC+Pvc4C8T56YgW7ouoefsKXNRF9kDI/aUSnPMnva
+ GXkoO/KtLqWZ7JS+0nX+I9vAwC7kVMk0vw==
+X-Google-Smtp-Source: ABdhPJwTu/qm+akN1YqinqURje4GJXpjRsduA4D+K+9l9VkRqjttb7xdaLBYQFKzfD7b68C+eeyyvw==
+X-Received: by 2002:a1c:1b15:: with SMTP id b21mr3892435wmb.174.1639768330393; 
+ Fri, 17 Dec 2021 11:12:10 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id z22sm2860101wmi.26.2021.12.17.11.10.03
+ by smtp.gmail.com with ESMTPSA id t11sm7803643wrz.97.2021.12.17.11.12.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Dec 2021 11:10:03 -0800 (PST)
+ Fri, 17 Dec 2021 11:12:10 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 20:08:53 +0100
-Message-Id: <20211217190853.18713-3-fontaine.fabrice@gmail.com>
+Date: Fri, 17 Dec 2021 20:11:44 +0100
+Message-Id: <20211217191144.24775-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211217190853.18713-1-fontaine.fabrice@gmail.com>
-References: <20211217190853.18713-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] package/rygel: bump to version 0.40.2
+Subject: [Buildroot] [PATCH 1/1] package/libmbim: bump to version 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,162 +85,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Switch to meson-package
-- gdk-pixbuf and gupnp-dlna are now mandatory
-- gstreamer1-editing-services is mandatory with gstreamer engine
+Drop patches (already in version)
 
-https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-0.40.2/NEWS
+https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/blob/1.26.2/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rygel/Config.in  |  5 ++--
- package/rygel/rygel.hash |  4 ++--
- package/rygel/rygel.mk   | 51 +++++++++++++++++-----------------------
- 3 files changed, 27 insertions(+), 33 deletions(-)
+ ...im-glib-meson.build-fix-static-build.patch | 34 -----------
+ ...add-an-option-to-not-build-man-pages.patch | 60 -------------------
+ package/libmbim/libmbim.hash                  |  2 +-
+ package/libmbim/libmbim.mk                    |  2 +-
+ 4 files changed, 2 insertions(+), 96 deletions(-)
+ delete mode 100644 package/libmbim/0001-src-libmbim-glib-meson.build-fix-static-build.patch
+ delete mode 100644 package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
 
-diff --git a/package/rygel/Config.in b/package/rygel/Config.in
-index 86d6a38e1e..df48918833 100644
---- a/package/rygel/Config.in
-+++ b/package/rygel/Config.in
-@@ -3,7 +3,9 @@ config BR2_PACKAGE_RYGEL
- 	depends on BR2_USE_WCHAR # gupnp-av
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
- 	depends on BR2_USE_MMU # gupnp-av
-+	select BR2_PACKAGE_GDK_PIXBUF
- 	select BR2_PACKAGE_GUPNP_AV
-+	select BR2_PACKAGE_GUPNP_DLNA
- 	select BR2_PACKAGE_LIBGEE
- 	select BR2_PACKAGE_LIBMEDIAART
- 	select BR2_PACKAGE_SQLITE
-@@ -37,10 +39,9 @@ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
- 
- config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
- 	bool "gstreamer1"
--	select BR2_PACKAGE_GDK_PIXBUF
--	select BR2_PACKAGE_GUPNP_DLNA
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 
- endchoice
- 
-diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
-index 33b44aecc2..04b11ff54a 100644
---- a/package/rygel/rygel.hash
-+++ b/package/rygel/rygel.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.38/rygel-0.38.3.sha256sum:
--sha256  08c21a577f7bdad26446a75ffa32778b26842c3b1188165f0b19818559747d00  rygel-0.38.3.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.40/rygel-0.40.2.sha256sum:
-+sha256  c9e8c736296d22c4defe959727a29d31437bbd2b7aa0c6470d6be24011050697  rygel-0.40.2.tar.xz
- 
- # Locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index 21c8ebee6a..c541cdc0ed 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -4,14 +4,16 @@
+diff --git a/package/libmbim/0001-src-libmbim-glib-meson.build-fix-static-build.patch b/package/libmbim/0001-src-libmbim-glib-meson.build-fix-static-build.patch
+deleted file mode 100644
+index 6ccad9abf8..0000000000
+--- a/package/libmbim/0001-src-libmbim-glib-meson.build-fix-static-build.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From ff1f9d7c9bc163de3117383b7cea9cd99585462a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 31 Jul 2021 23:42:35 +0200
+-Subject: [PATCH] src/libmbim-glib/meson.build: fix static build
+-
+-Replace shared_library by library to fix static build failure with
+-toolchains that don't support dynamic library
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/8553211d87a2c41d8b47b51bbb193736fce49714
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/merge_requests/83]
+----
+- src/libmbim-glib/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/libmbim-glib/meson.build b/src/libmbim-glib/meson.build
+-index e3337db..5de3564 100644
+---- a/src/libmbim-glib/meson.build
+-+++ b/src/libmbim-glib/meson.build
+-@@ -76,7 +76,7 @@ version_header = configure_file(
+- 
+- symbol_map = join_paths(meson.current_source_dir(), 'symbol.map')
+- 
+--libmbim_glib = shared_library(
+-+libmbim_glib = library(
+-   libname,
+-   version: mbim_glib_version,
+-   sources: version_header,
+--- 
+-2.30.2
+-
+diff --git a/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch b/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
+deleted file mode 100644
+index c91756e9a6..0000000000
+--- a/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 792af73ea90e9689703ab526dd444fdb1c2f8e40 Mon Sep 17 00:00:00 2001
+-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Date: Thu, 14 Oct 2021 12:25:46 +0200
+-Subject: [PATCH] meson.build: add an option to not build man pages.
+-
+-When cross-compiling, the compiled binaries cannot be run on the build
+-machine, unless one defines a helper (e.g. qemu) in the meson
+-configuration, which is most of the time undesirable.
+-
+-If help2man is installed on the build machine, then the build would fail
+-because of this, so add an option to disable generating the man pages.
+-
+-With later versions of meson, it will be possible to automatically
+-detect this condition.
+-
+-[Retrieved (and backported) from:
+-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/792af73ea90e9689703ab526dd444fdb1c2f8e40]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- meson.build       | 8 +++++++-
+- meson_options.txt | 1 +
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 1c5ee2d..59f1727 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -184,8 +184,8 @@ if enable_gtk_doc
+-   subdir('docs/reference/libmbim-glib')
+- endif
+- 
+--help2man = find_program('help2man', required: false)
+--if help2man.found()
+-+enable_man = get_option('man')
+-+if enable_man
+-   subdir('docs/man')
+- endif
+- 
+-@@ -198,6 +203,7 @@ summary({
+- output += '    Documentation:         ' + enable_gtk_doc.to_string() + '\n'
+- output += '    bash completion:       ' + enable_bash_completion.to_string() + '\n'
+- output += '    gobject introspection: ' + enable_gir.to_string() + '\n\n'
+-+output += '    man pages:             ' + enable_man.to_string() + '\n\n'
+- output += '  System paths\n'
+- output += '    prefix:                ' + mbim_prefix + '\n'
+- output += '    udev base directory:   ' + mbim_username + '\n\n'
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 1305957..bfa33ab 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -7,5 +7,6 @@ option('udevdir', type: 'string', value: '', description: 'where udev base direc
+- 
+- option('introspection', type: 'boolean', value: 'true', description: 'build introspection support')
+- option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
+-+option('man', type: 'boolean', value: 'true', description: 'build man pages using help2man')
+- 
+- option('bash_completion', type: 'boolean', value: true, description: 'install bash completion files')
+--- 
+-GitLab
+-
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 07cfd69163..7ecc99d333 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  63b53db0196dadea673f04524b0683ce40282f25bfd513d398e2a10b992cac01  libmbim-1.26.0.tar.gz
++sha256  c12e61ea462fca40ddba2a8e1e401242d4f13827944369fad27ff70936b1e09d  libmbim-1.26.2.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 6737afebe8..eba5f0a6e0 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RYGEL_VERSION_MAJOR = 0.38
--RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).3
-+RYGEL_VERSION_MAJOR = 0.40
-+RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).2
- RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
- RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
- RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
- RYGEL_LICENSE_FILES = COPYING COPYING.logo
- RYGEL_DEPENDENCIES = \
-+	gdk-pixbuf \
- 	gupnp-av \
-+	gupnp-dlna \
- 	libgee \
- 	libmediaart \
- 	sqlite \
-@@ -20,51 +22,42 @@ RYGEL_INSTALL_STAGING = YES
- 
- RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- RYGEL_CONF_OPTS += \
--	--disable-apidocs \
--	--disable-coverage \
--	--disable-example-plugins \
--	--enable-external-plugin \
--	--enable-lms-plugin \
--	--enable-mpris-plugin \
--	--enable-ruih-plugin \
--	--disable-tracker-plugin
--
--ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
--RYGEL_DEPENDENCIES += gdk-pixbuf
--endif
-+	-Dapi-docs=false \
-+	-Dexamples=false \
-+	-Dtests=false
-+RYGEL_PLUGINS = external,lms,mpris,ruih
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--RYGEL_CONF_OPTS += --enable-introspection
-+RYGEL_CONF_OPTS += -Dintrospection=enabled
- RYGEL_DEPENDENCIES += gobject-introspection
- else
--RYGEL_CONF_OPTS += --disable-introspection
-+RYGEL_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
- RYGEL_CONF_OPTS += \
--	--with-media-engine=gstreamer \
--	--enable-playbin-plugin \
--	--enable-media_export-plugin \
--	--enable-gst-launch-plugin
-+	-Dengines=gstreamer \
-+	-Dgstreamer=enabled
-+RYGEL_PLUGINS += ,playbin,media-export,gst-launch
- RYGEL_DEPENDENCIES += \
--	gupnp-dlna \
- 	gst1-plugins-base \
--	gstreamer1
-+	gstreamer1 \
-+	gstreamer1-editing-services
- else ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE),y)
- RYGEL_CONF_OPTS += \
--	--with-media-engine=simple \
--	--disable-playbin-plugin \
--	--disable-media_export-plugin \
--	--disable-gst-launch-plugin
-+	-Dengines=simple \
-+	-Dgstreamer=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
--RYGEL_CONF_OPTS += --with-ui
-+RYGEL_CONF_OPTS += -Dgtk=enabled
- RYGEL_DEPENDENCIES += libgtk3
- else
--RYGEL_CONF_OPTS += --without-ui
-+RYGEL_CONF_OPTS += -Dgtk=disabled
- endif
- 
-+RYGEL_CONF_OPTS += -Dplugins="$(RYGEL_PLUGINS)"
-+
- define RYGEL_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/rygel/S99rygel \
- 		$(TARGET_DIR)/etc/init.d/S99rygel
-@@ -75,4 +68,4 @@ define RYGEL_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/rygel.service
- endef
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-LIBMBIM_VERSION = 1.26.0
++LIBMBIM_VERSION = 1.26.2
+ LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBMBIM_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.33.0
 
