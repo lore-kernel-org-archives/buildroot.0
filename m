@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BF72C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 22:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDC1BC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 22:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB8D060F2B;
-	Fri, 17 Dec 2021 22:05:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F58D40C52;
+	Fri, 17 Dec 2021 22:06:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rnq_6GmPGzdN; Fri, 17 Dec 2021 22:05:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KjNNifjuiH6d; Fri, 17 Dec 2021 22:06:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB086118C;
-	Fri, 17 Dec 2021 22:05:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E9E01BF5AA
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:05:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EDD240C53;
+	Fri, 17 Dec 2021 22:06:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AD39C1BF5AA
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D65C84D78
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:05:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B58F40C53
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:06:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UT8_T5w_sjDg for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 22:05:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v1YI11aHZhQH for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 22:06:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E378384D62
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 22:05:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52E4240C69
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 22:06:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CFF6B81292; Fri, 17 Dec 2021 22:00:30 +0000 (UTC)
+ id 3FF2881294; Fri, 17 Dec 2021 22:00:46 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 23:04:51 +0100
+Date: Fri, 17 Dec 2021 23:06:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 494807e28dd4c7a0ad87224ac8d60910c8dabf43
-X-Git-Newrev: c4b36ba4b6adb2840cd9a9bbab00fd9b09dbc06a
+X-Git-Oldrev: c4b36ba4b6adb2840cd9a9bbab00fd9b09dbc06a
+X-Git-Newrev: 3965f09cb427af411055a783cd14b501b2b28285
 X-Patchwork-Hint: ignore
-Message-Id: <20211217220030.CFF6B81292@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: select videorate when
- building with media-stream support
+Message-Id: <20211217220046.3FF2881294@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jitterentropy-library: bump to
+ version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,31 +59,225 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4b36ba4b6adb2840cd9a9bbab00fd9b09dbc06a
+commit: https://git.buildroot.net/buildroot/commit/?id=3965f09cb427af411055a783cd14b501b2b28285
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-ERROR GST_PIPELINE gst/parse/grammar.y:857:priv_gst_parse_yyparse: no element "videorate"
+- Use official tarball
+- Drop patches (already in version)
+- license files renamed with
+  https://github.com/smuellerDD/jitterentropy-library/commit/a08ae564c422b54ad3332d38be033933ade4df6d
+- Update indentation in hash file (two spaces)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+https://github.com/smuellerDD/jitterentropy-library/blob/v3.3.1/CHANGES.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../0001-Makefile-cleanup-install.patch            | 54 ---------------------
+ ...2-Makefile-add-additional-install-targets.patch | 56 ----------------------
+ ...allow-the-user-to-disable-stack-protector.patch | 36 --------------
+ .../jitterentropy-library.hash                     |  8 ++--
+ .../jitterentropy-library/jitterentropy-library.mk |  8 ++--
+ 5 files changed, 9 insertions(+), 153 deletions(-)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 8357051e93..36523bdb41 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -109,6 +109,7 @@ if BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+diff --git a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch b/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
+deleted file mode 100644
+index 9c7e40369a..0000000000
+--- a/package/jitterentropy-library/0001-Makefile-cleanup-install.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 060b9b4147f6e5ff386a8b017796118d783e59fa Mon Sep 17 00:00:00 2001
+-From: Matt Weber <matthew.weber@rockwellcollins.com>
+-Date: Tue, 22 Oct 2019 12:44:30 -0500
+-Subject: [PATCH] Makefile: cleanup install for rebuilds
+-
+-Support the ability to rebuild and redeploy without a clean. This
+-required some force linking and man archive creation.
+-
+-Provide the ability to override the stripping of the shared lib for
+-cases where a embedded target build may want to control stripping
+-or provide cross arch tools.
+-
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-Signed-off-by: Stephan Mueller <smueller@chronox.de>
+-[Retrieved from:
+-https://github.com/smuellerDD/jitterentropy-library/commit/060b9b4147f6e5ff386a8b017796118d783e59fa]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile | 10 ++++++----
+- 1 file changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 4ff069b..2e78607 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -14,6 +14,8 @@ LIBDIR := lib
+- # include target directory
+- INCDIR := include
+- 
+-+INSTALL_STRIP ?= install -s
+-+
+- NAME := jitterentropy
+- LIBMAJOR=$(shell cat jitterentropy-base.c | grep define | grep MAJVERSION | awk '{print $$3}')
+- LIBMINOR=$(shell cat jitterentropy-base.c | grep define | grep MINVERSION | awk '{print $$3}')
+-@@ -58,15 +60,15 @@ cppcheck:
+- install:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+--	gzip -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+-+	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+--	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+-+	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+- 	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+--	ln -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+--	ln -s lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+-+	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+-+	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+- 
+- clean:
+- 	@- $(RM) $(NAME)
+diff --git a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch b/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
+deleted file mode 100644
+index a331c9f33b..0000000000
+--- a/package/jitterentropy-library/0002-Makefile-add-additional-install-targets.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From d545d76cb3173cc98e1421604929248f2d882821 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 24 Oct 2019 18:48:47 +0200
+-Subject: [PATCH] Makefile: add additional install targets
+-
+-Add install-includes, install-man, install-shared and install-static
+-targets to allow the user to configure what must be installed
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/smuellerDD/jitterentropy-library/pull/11]
+----
+- Makefile | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 2e78607..41bc4f7 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -57,19 +57,29 @@ scan: $(analyze_plists)
+- cppcheck:
+- 	cppcheck --force -q --enable=performance --enable=warning --enable=portability *.h *.c
+- 
+--install:
+-+install: install-man install-shared install-includes
+-+
+-+install-man:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+- 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+- 	gzip -f -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+-+
+-+install-shared:
+- 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+- 	$(INSTALL_STRIP) -m 0755 lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+--	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+--	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+--	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+- 	$(RM) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+- 	ln -sf lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so.$(LIBMAJOR)
+- 	ln -sf lib$(NAME).so.$(LIBMAJOR) $(DESTDIR)$(PREFIX)/$(LIBDIR)/lib$(NAME).so
+- 
+-+install-includes:
+-+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)
+-+	install -m 0644 jitterentropy.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+-+	install -m 0644 jitterentropy-base-user.h $(DESTDIR)$(PREFIX)/$(INCDIR)/
+-+
+-+install-static:
+-+	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+-+	install -m 0755 lib$(NAME).a $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+-+
+- clean:
+- 	@- $(RM) $(NAME)
+- 	@- $(RM) $(OBJS)
+--- 
+-2.23.0
+-
+diff --git a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch b/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
+deleted file mode 100644
+index eeff0a0fec..0000000000
+--- a/package/jitterentropy-library/0003-Makefile-allow-the-user-to-disable-stack-protector.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 37e8a6a7e5875e20a8de07fbfbb69912f1964f7d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 28 Oct 2019 09:47:49 +0100
+-Subject: [PATCH] Makefile: allow the user to disable stack protector
+-
+-Allow the user to disable stack-protector by overriding CFLAGS as it is
+-not supported by all toolchains.
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/cba1ae830c7a4d1740098fe67aec59b4dc2f9a03
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/smuellerDD/jitterentropy-library/pull/12]
+----
+- Makefile | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 41bc4f7..b0f20e2 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,9 +1,9 @@
+- # Compile Noise Source as user space application
+- 
+- CC ?= gcc
+--CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0
+- #Hardening
+--CFLAGS +=-fstack-protector-all -fwrapv --param ssp-buffer-size=4
+-+CFLAGS ?=-fstack-protector-all --param ssp-buffer-size=4
+-+CFLAGS +=-Wextra -Wall -pedantic -fPIC -O0 -fwrapv
+- LDFLAGS +=-Wl,-z,relro,-z,now
+- 
+- # Change as necessary
+--- 
+-2.23.0
+-
+diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
+index 5ff38f6fea..760befab53 100644
+--- a/package/jitterentropy-library/jitterentropy-library.hash
++++ b/package/jitterentropy-library/jitterentropy-library.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256	42d4bd1050b5f0d7b45b5453e5b6cfc45c0492bb428791f571d8f69b066351a4  jitterentropy-library-2.2.0.tar.gz
+-sha256	96b5a6b49aaeeba9036f9b80e6e299d613a8eca158741a25a67dc78792413e23  COPYING
+-sha256	13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  COPYING.bsd
+-sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING.gplv2
++sha256  9fcc954763a1dd4afe614a1b360f53b600d3376bbcc4b19177f27abf191ebad5  jitterentropy-library-3.3.1.tar.xz
++sha256  7e06574ff822594269083a796d06fa4e5e78c40efe5ca01a72d2a4662e8206df  LICENSE
++sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
+diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
+index d9dc031c35..830da0e065 100644
+--- a/package/jitterentropy-library/jitterentropy-library.mk
++++ b/package/jitterentropy-library/jitterentropy-library.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_WPEWEBKIT_MEDIA_STREAM
- 	bool "media-stream support"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEORATE
- 	help
- 	  This option enables media-stream support.
- 
+-JITTERENTROPY_LIBRARY_VERSION = 2.2.0
+-JITTERENTROPY_LIBRARY_SITE = $(call github,smuellerDD,$(JITTERENTROPY_LIBRARY_NAME),v$(JITTERENTROPY_LIBRARY_VERSION))
++JITTERENTROPY_LIBRARY_VERSION = 3.3.1
++JITTERENTROPY_LIBRARY_SOURCE = \
++	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
++JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
+ JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
+-JITTERENTROPY_LIBRARY_LICENSE_FILES = COPYING COPYING.bsd COPYING.gplv2
++JITTERENTROPY_LIBRARY_LICENSE_FILES = LICENSE LICENSE.bsd LICENSE.gplv2
+ JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
+ JITTERENTROPY_LIBRARY_INSTALL_TARGETS = install-includes
+ JITTERENTROPY_LIBRARY_SELINUX_MODULES = entropyd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
