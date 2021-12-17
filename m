@@ -1,60 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5460C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 18:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F21F1C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 866076114B;
-	Fri, 17 Dec 2021 18:27:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5018740ACC;
+	Fri, 17 Dec 2021 19:10:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qk6dx537aGZK; Fri, 17 Dec 2021 18:27:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qf3gO9Rq2lJZ; Fri, 17 Dec 2021 19:10:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF17961147;
-	Fri, 17 Dec 2021 18:27:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E7F81BF28C
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:27:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88E224091F;
+	Fri, 17 Dec 2021 19:10:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 608E51BF35E
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E56741FBB
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:27:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D4B761152
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 19:10:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eaTFFhHIM4wV for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 18:27:11 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8C6841F61
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 18:27:10 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id yHptmQk4NTHgOyHptmJpfb; Fri, 17 Dec 2021 19:20:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1639765205; bh=p61bxp8pQUHFNZyY9YP00HGNBHGws8qKefY/ybGUUC4=;
- h=From:To:Subject:Date:MIME-Version;
- b=WtQ4JHs9tyEIhjevMgnqnQ5GNBrKYzAkLA/mBnv9LJ4PQj+LkE+QKNhuz1gaJU1j7
- UnbrhAvNVlSwadSzGCzYPQ12MquT0U8snStxqsRqcl5AnNZ3m8wRvZgGkLBkFWQi6E
- FlwW3RLFqpixOCDwnaxeCWIFyW+GoFq9gWl/tK4EyKPXJ6M0bckhI36bpT5Vi4HIKt
- JRrm6HFodqv1nK+DnjxHwYJSJ9DIS5DxkMyaqx9uK2q6ufFLzRtCP2cEcVw7hrQIBk
- hAlRPL1IWU+9KGx7OzHDv0u/HNwQojbO7C85Zl2WQncOX+zbdgimbxKy4zruMGmhQc
- ZJ8fQh7aYnyrQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b3OMUTG9UdqU for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 19:10:03 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 06A9D60FC3
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 19:10:02 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ y83-20020a1c7d56000000b003456dfe7c5cso3800265wmc.1
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 11:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ysUJ53uvvFjMS6sV/rsujOHVRmM0U3Oy/k1+jbgFSfQ=;
+ b=fi20w9+bxLgXLlhZZgIsgf7rcK7br3c1xCb12rdWbCD0U7ZylTXFl4++QSzMe0+4az
+ M6gDFqRYWAv2qJcPb7fC58lhxUYPl4S8W1Yt7BUi2jAov6heYKgR86saey1pGn0g8mrB
+ CfLWrtxPfKiNXcOuIC7xhFi1uxU/16dobVAfKJsfykoal9/E6R3FSs9z5n2D50gf8nfZ
+ kbajxyHZOQNr1ePIKMBmr8CIG1Ad6H0O9Q0FiTkrrr0O6tIL0GDUdsUksdEUoBOwr5MT
+ w/RVt0aCB+UwDSopheTSCrmYbjAN25CkZdONvhI4nlIIZHrahwAQFKCFNQRlwSAf81an
+ flVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ysUJ53uvvFjMS6sV/rsujOHVRmM0U3Oy/k1+jbgFSfQ=;
+ b=hVh8L0N6BVZTL4lf259dpZRv/OcOvgqrC6wC5ztkUJcFYicEWMJ+E99scpFBHsFNJo
+ KJbPplm/A23txSF2qXpWX06noi5O9ZDCm9Cs07Ys+aC1X6BhzRFEPoATKxzXYN3JKFt8
+ /Q5Brsk+hHunqKDpW+9jBV1XI3kk7+E+gij9CCUBfgikUhKbCNfEmad5LoNo+VIG2/Gt
+ 4liVFN8JemfCq/wKnkusMRxhIq2Is1Pb9C5oNiKTyhsmtC+IDnuUK1YoA9vDFU5Pew1R
+ H0l4iuYPYIsBKfnbpNmPeEW6e5vgkJ1QBbJdsFtT3oh9MTdwCwmR5FvStt190bytisXH
+ 9O5A==
+X-Gm-Message-State: AOAM530KSRRCz+Ih7uDYNP8L//pC7LeRxsmFhirUTdIK5AXvajVDVxCc
+ 9L0hJc/JDpvinjRHejq416DBurAggNiwgg==
+X-Google-Smtp-Source: ABdhPJyzYI92fYKP43CYEHtl/Y+B84ioGyV8PLrgF+wO3oZRjYR7U6Anw+Fm8UHJnDvcNQM6grSLEA==
+X-Received: by 2002:a05:600c:19d1:: with SMTP id
+ u17mr10605400wmq.148.1639768200921; 
+ Fri, 17 Dec 2021 11:10:00 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id z22sm2860101wmi.26.2021.12.17.11.10.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Dec 2021 11:10:00 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 19:20:04 +0100
-Message-Id: <20211217182004.2399542-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Fri, 17 Dec 2021 20:08:51 +0100
+Message-Id: <20211217190853.18713-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfOn0O5scaEWFZMD58SiVGo2wBnMX8c4WUG+aepZSRpn0cAh9y7e4eNRDgER+WCX4mFb6yT630/6wNhxbbKoy7CrUmp0FfUTd7eVuTo0IvCd1ihJC206j
- PxYFsYjn1iOIfIhpKXTgKSz72hTVmM1h1X+pLSXsWEm0FG9Ep0gRvyvbskw9xL5djwhO4X1Y/yAxu1a8zIvuZc5So9uwFCMe645FMRWytZYlL7JBL3qMMPq2
- oVrCUlyKCtfckRwrCOKt5AcIzdprviF6cF74hLB9Qtg=
-Subject: [Buildroot] [PATCH] package/libnspr: bump to version 4.33
+Subject: [Buildroot] [PATCH 1/3] package/gupnp-dlna: add introspection
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +88,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+- introspection support is needed to build latest rygel version
+- build vala bindings to avoid a build failure as already done in other
+  packages such as gssdp in commit
+  d513e55930eda15a5fb15e00c1da774e6c18f66c
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 13d3958735..0064a9b279 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/SHA256SUMS
--sha256  bb6bf4f534b9559cf123dcdc6f9cd8167de950314a90a88b2a329c16836e7f6c  nspr-4.32.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.33/src/SHA256SUMS
-+sha256  b23ee315be0e50c2fb1aa374d17f2d2d9146a835b1a79c1918ea15d075a693d7  nspr-4.33.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8f16a8076f..7491d18884 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gupnp-dlna/gupnp-dlna.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+index 85d30b7cd2..dd548e3e2d 100644
+--- a/package/gupnp-dlna/gupnp-dlna.mk
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -15,9 +15,14 @@ GUPNP_DLNA_LICENSE_FILES = COPYING
+ GUPNP_DLNA_INSTALL_STAGING = YES
+ GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
  
--LIBNSPR_VERSION = 4.32
-+LIBNSPR_VERSION = 4.33
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-GUPNP_DLNA_CONF_OPTS = \
+-	--disable-introspection \
+-	--disable-legacy-gstreamer-metadata-backend
++GUPNP_DLNA_CONF_OPTS = --disable-legacy-gstreamer-metadata-backend
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++GUPNP_DLNA_CONF_OPTS += --enable-introspection
++GUPNP_DLNA_DEPENDENCIES += host-vala gobject-introspection
++else
++GUPNP_DLNA_CONF_OPTS += --disable-introspection
++endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
