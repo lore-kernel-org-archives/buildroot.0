@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C238EC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E8CC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FBB9400CE;
-	Fri, 17 Dec 2021 17:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3653140C1A;
+	Fri, 17 Dec 2021 17:39:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zATqMWVna5xN; Fri, 17 Dec 2021 17:38:50 +0000 (UTC)
+	with ESMTP id knqrkR13UgJX; Fri, 17 Dec 2021 17:39:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E74840C04;
-	Fri, 17 Dec 2021 17:38:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B6B8E1BF2AF
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:38:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42DC840C04;
+	Fri, 17 Dec 2021 17:39:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EFB51BF2AF
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF95761119
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:38:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CDB484CA4
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:39:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nZ3emYXc6T5Q for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 17:38:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id okYw7DtYgo9o for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 17:39:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 353CE60FC3
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:38:45 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id x15so10730118edv.1
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 09:38:45 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8DBC784C40
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:39:01 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id t5so10831445edd.0
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 09:39:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ypyC4HgdHPyR1bke0qrIKP7xYdN1oWn7QWxvKhWCrTE=;
- b=U3K/aPG+7G6smc3RLz3OGhlYEL6AykxNvHfm0r2mnur1D90F8EqjJWFhT1MXjvqVp/
- ObKE7CTE8JsdaDCXfH9Ut+XVOZ91eBcaoGo6Jyji9hSfjcFIKrHKBvzTW30A4MXdcUL0
- vFZC6saUaVDbBeB7v42aeS77nQF+J5KAiAmoT2JyRNtm57UBUUJdvuaDF9j+WRl2lJEN
- /t5ohsoaBAVk3Wwp0/MLZQYA/BqdeA/kp2mQRNkPeUaJPfczxYfm8anGMBl1E/HV5WAe
- ekjGWXe4HXCnnA0DtKRVu9TTFeKP53/L0xlqZnTlhVQpulehEhSnJxsmyh7oFqrvuYZx
- D2OQ==
+ bh=bo8jLSFaIiEJ286WxwG2GOFZe8WLr0q+i4s/eIFMTyo=;
+ b=ZR1thbuTwkfVb3kAMhSE7rtMFUsWZ67lTPe9j/dXzdCz7ghjfs/OzKxA8dg8wKgZUn
+ StpfC22C4M74HXllKC2pctYQpX+ZjqUgEXz2paY71XXzY8QLratBH/YpGogY6w1tbyST
+ dH1lKi6teg+izhFsgEv+gO58NykD9RIVbIdwstGyGcwkGgUpG9qf34c9dtXLb4ysLKQ/
+ uFyC5Tb5/Mc5z6myZas7HalczHL5k0qWunbpknxJ8vIqHnpXMfkdtPQ+GQR2JBffQkSP
+ gm25joXpAMshCZzDLbM7o0MlzXnluluVp0X8MqE2ZQTEeUZmBGlgLnjK4DBiJH5sb8JW
+ KZEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ypyC4HgdHPyR1bke0qrIKP7xYdN1oWn7QWxvKhWCrTE=;
- b=UspEeySIQJfjcXBBeFL9akwlMJbZe4gHLyGpEt7bAzcYY/Dd20L+sSr9NqSlr4UrsD
- MbjeEbvnpSq4tOgH7b0JNj3jcARdgbPYSXxsTmdgqhC9FdjnZ78HSjXx4i6SNK5njttg
- IlDsXZHqrfOvGMR/kBd5Xz0vxYnkpFYuslflNcloXDoy0z7M4NVrZAoGuqex06CpfQwW
- QDK2N5JVHujDWaPTtENtYKv8s8hM0mahf1Dp9xresm3zxLRe3Z1/lNHeoZzws2BDvWZ+
- k5W/OscBrWeWV87Y27Ngmutw57eO5HTvq71IqkQHdyJ7oQo6XtSUt6NBy090aV1ETflv
- FQ5g==
-X-Gm-Message-State: AOAM533QsYSyXpm8adHbdKq5R/ASn/y1ADAWoYeoxZEmB6YyKeilDmhN
- vFodkAKZB+kNAAKgCkRjTcX37w==
-X-Google-Smtp-Source: ABdhPJxmOnSmA1+hL4j4equOW9+O9f8TCPqbwBbGWlhwgdLdq2G6kwMs8Z1fhjb6BzlnuKl7rtH2UQ==
-X-Received: by 2002:a17:906:9b91:: with SMTP id
- dd17mr3316767ejc.371.1639762724206; 
- Fri, 17 Dec 2021 09:38:44 -0800 (PST)
+ bh=bo8jLSFaIiEJ286WxwG2GOFZe8WLr0q+i4s/eIFMTyo=;
+ b=ImtdRw/2qvC4UDvhlNLIVL6EsBbimA0ZMvPgoeOibYcw0GI0uOc763lUmAzhTZGD4E
+ zm53LsEjpsoGxLaGp3+G3X9M0kFRSHOWdCFrQju3RKBvntkAxZMgnU03QC7q71tzTbsw
+ yj2jgjBamMKsZVLexMP9wH+5RVIWezONGlR/xaPrdKp0HxTbHjk60TZzCFVQynU0oKLh
+ uQLVr35fU32GH6EFFSo1iT/c2UOeHc0o13/uVgqMhAreqRyiQFYwokRb7cGvvlZ7M3O+
+ z3g7Iy6G2hNJJrrOuaXepR5HaHdIAY1DAFy2vfMJP4nSkzrs+HK/Bcl3C3w8kPX06w0V
+ G+kA==
+X-Gm-Message-State: AOAM531w1jWKDxF3v+9ib3yvZ6P2krG37rQ0eHkezxwFvzoIAN9nb1aS
+ CdOIJejp5S4DxMlo5+Bw/gll4g==
+X-Google-Smtp-Source: ABdhPJyKxIp2cHd/KNlW5Y8lueaLq+0TlZ6KtcdIeX3um6xbcFjEAMop6K9cBa+Ieq96M/aAjEfSbg==
+X-Received: by 2002:a17:906:7299:: with SMTP id
+ b25mr3383393ejl.550.1639762739658; 
+ Fri, 17 Dec 2021 09:38:59 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id o17sm3010852ejj.162.2021.12.17.09.38.43
+ by smtp.gmail.com with ESMTPSA id l18sm3081572ejo.114.2021.12.17.09.38.59
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 17 Dec 2021 09:38:43 -0800 (PST)
-Message-ID: <219083fb-3351-170c-d256-9e52098c4f3b@mind.be>
-Date: Fri, 17 Dec 2021 18:38:42 +0100
+ Fri, 17 Dec 2021 09:38:59 -0800 (PST)
+Message-ID: <3f89fc32-268f-625c-4db0-d4917d4ff436@mind.be>
+Date: Fri, 17 Dec 2021 18:38:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
 To: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
-References: <20211216212724.787872-1-bernd.kuhls@t-online.de>
+References: <20211216212811.787978-1-bernd.kuhls@t-online.de>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20211216212724.787872-1-bernd.kuhls@t-online.de>
-Subject: Re: [Buildroot] [PATCH 1/3] package/intel-mediasdk: switch _SITE to
- https
+In-Reply-To: <20211216212811.787978-1-bernd.kuhls@t-online.de>
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-gmmlib: bump version to
+ 22.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,8 +95,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>,
- Theo Debrouwere <t.debrouwere@televic.com>
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,31 +103,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 16/12/2021 22:27, Bernd Kuhls wrote:
+On 16/12/2021 22:28, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  Series applied to master, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/intel-mediasdk/intel-mediasdk.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+>   package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-> index 58334b3ddd..9f082bfa90 100644
-> --- a/package/intel-mediasdk/intel-mediasdk.mk
-> +++ b/package/intel-mediasdk/intel-mediasdk.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+> index 88f82a9596..60d45a315e 100644
+> --- a/package/intel-gmmlib/intel-gmmlib.hash
+> +++ b/package/intel-gmmlib/intel-gmmlib.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  77473df5440915e7c487a0f1c3f6236a8c29610528c6f0833da9caae834a1741  intel-gmmlib-21.3.3.tar.gz
+> +sha256  337c63f5bbc2c7ea2ba85aecd40ae72dc65187ba07c4feea73e129d53f30677c  intel-gmmlib-22.0.0.tar.gz
+>   sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+> diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+> index 2071d9f533..36e61dc4d2 100644
+> --- a/package/intel-gmmlib/intel-gmmlib.mk
+> +++ b/package/intel-gmmlib/intel-gmmlib.mk
+> @@ -4,7 +4,7 @@
+>   #
 >   ################################################################################
 >   
->   INTEL_MEDIASDK_VERSION = 21.4.3
-> -INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
-> +INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
->   INTEL_MEDIASDK_LICENSE = MIT
->   INTEL_MEDIASDK_LICENSE_FILES = LICENSE
->   
+> -INTEL_GMMLIB_VERSION = 21.3.3
+> +INTEL_GMMLIB_VERSION = 22.0.0
+>   INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+>   INTEL_GMMLIB_LICENSE = MIT
+>   INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 > 
 _______________________________________________
 buildroot mailing list
