@@ -1,78 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 630B6C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 22:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B96C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 23:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D90CA61119;
-	Fri, 17 Dec 2021 22:54:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC1B740C18;
+	Fri, 17 Dec 2021 23:32:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tlAy9sbBsg10; Fri, 17 Dec 2021 22:54:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vymw54-Un7dB; Fri, 17 Dec 2021 23:32:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 500ED60E9B;
-	Fri, 17 Dec 2021 22:54:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 881E21BF5AA
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:54:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFDEC40C12;
+	Fri, 17 Dec 2021 23:32:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B145C1BF86B
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 23:32:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 709F960E9B
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 22:54:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92D5184C3B
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 23:32:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MRhnYX16fkZ4 for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 22:54:48 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TVUEjsWC6ToQ for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 23:32:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 78D2B60E06
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 22:54:48 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id z206so2576153wmc.1
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 14:54:48 -0800 (PST)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3773484C25
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 23:32:33 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id u13so431229lff.12
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 15:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bhIzMsdmSkIbWSsSW0bTL700SN4zJsDGNX9Yfj4tytM=;
- b=DDYUnrJ4PCe7OA4Z06JZuw7MiBotAHGa8ZWPWD0ieekzCnSnIKL10hTgE5JuxR6D5W
- z3G8+Drte5zREOUXIaPVz6tZOe2XMTr9I99rrs75xhgM4pzyhZAFSgYnVSc5HK83iU6H
- sCidUhBFLHZVV4kZ67KgDnu/zNA5HkDSlOvyehWaOCdDfnHXRNBl/Tz6Oo4X1ZQMo8Xq
- NKe4s+7Bw62kkFd0oqk518XDZLjH7bvLyyfJuOS7xpCMCsrfKV+WdPkAKX/Bk+F0EcHo
- owahyvQc3+4aRpYwpo4JjddQSyzIRuMHmYg2cp7+RpAhT3N1Vb6nemsTPh2ls7BLXMBt
- 6N0A==
+ bh=TZzq/qsOsVzp1PqF5sYejorUNJnt23PpZIoglOxEVfY=;
+ b=B5q/YonTPXQyfYW+VUDpqAFcINNF4Vzim0kCoYZo57iF9F+H58BAd2+PkGAUnUAQ5i
+ p+FQbWyOYhlagT71Ye4zG1wUOo1gtuiyP2j2vgvSQUnKfD/vjqUMv6NxSfthiE4qeMx2
+ +X/QbWyr50KEUrbFG5UB+Ter5+8Zz6AOnFY7fwIGEMwe0sbkUQQGEdrIhKHbmWRqZBbi
+ SWLuUZDztFrSU24g0BVjze/mzRnWiDgUkXWjPJEdhVgWO6X+RbY5g+XpVQ2RnCixfLvF
+ dtFcDTgOWQqDsKWotROxtK04OyBiZ4xw4dzNqEAYDirNoEgrpy1jmkypIj6rcYVLcjg3
+ tIpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=bhIzMsdmSkIbWSsSW0bTL700SN4zJsDGNX9Yfj4tytM=;
- b=aRlce6DrDvr4NaggmDcAgZCgU95iOESMxpr7aybDp5MlfdzjhLW8wSLYeEtUeESkox
- LUIGGGLKA0aBvS2ydBBlhQvOW19SDtxyJMYK8XjQtmqre6ZrVjdd7990Jw+zFld798Ry
- g6BpXktiCStHrjql5f2A41uljH2xIZhAN0m5LknTiQAfWaXbaB5EJ8wDDWD49Ievdl1b
- hFjqEMDs6Obgb9EKhc9TZInowHuihidcbLixD7T6idgcrxSt4/j3h2ZcWE6MY+jGr8U7
- cpAcqA9X23cGe1ec0cKxMAJqcFPHMdplS6gLTjGzHaAuFNuuxHndzy4KljrYjxeWyb0Q
- ghdw==
-X-Gm-Message-State: AOAM531pQJ72spvAG/NZsrxOshXhRbwXkEVvxeXw6LPhPAMoJC6EALfM
- XjxWyi7yklMk2a/MrHukLpwOTFnXRBh9Rw==
-X-Google-Smtp-Source: ABdhPJzxRfaXC8AA4RQOfrolz0eN7lk6IESCrQmjSVbtsebpBf55+xoL+LVIgvWmyUrUqFuvT04gQA==
-X-Received: by 2002:a05:600c:1e24:: with SMTP id
- ay36mr3976956wmb.84.1639781686566; 
- Fri, 17 Dec 2021 14:54:46 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id b10sm9683963wri.78.2021.12.17.14.54.46
+ bh=TZzq/qsOsVzp1PqF5sYejorUNJnt23PpZIoglOxEVfY=;
+ b=w52U7PcyxDlviPQ+2lOgTjttJ+NpA95NUQzcXie9a3mXD1EsHqeP9XsaLjXZttPGfF
+ eGuWO+XoFoBSHk13feaL16OX2WPwCMsResYRHrNOdwcZfaV3QVjQQuzBUV8sJ875vmE/
+ iM+r/Z2DFXbXp1/oDI12tZWyCLfPTKsj0gvFHljZQtBjeVZiLcYlhuDWxopGwcfvU/QV
+ h7dTpE7nSI2+PgHJQe452JTpFWm7Q8ZUPQ+7fSQnhs9GFOT86aDUCZ8G3QrTYHdHEG6D
+ FoEPEgW0XpvTCXhFQp/fTABwPad32gymN1pzhHBOYfz5rickr2F5XlfEuVHwz0wyHIga
+ 4H2g==
+X-Gm-Message-State: AOAM532e8tIFiErhpXyNZgIgkflIeDGjCsuVhH8R7J3WzY/iGDKLRNwT
+ +aAIxL/g9P08IFA3onu4B3Mm9tQQdGz14w==
+X-Google-Smtp-Source: ABdhPJxsLDhnQpO8363GKb9vv/7Lp3x9hdbgTCB0Ssf6S7PW3KdZwwQKyZ/decRN0OwwLH/Mbw9D+A==
+X-Received: by 2002:a05:6512:5c8:: with SMTP id
+ o8mr4019185lfo.659.1639783950927; 
+ Fri, 17 Dec 2021 15:32:30 -0800 (PST)
+Received: from hellfire.local ([178.155.5.134])
+ by smtp.gmail.com with ESMTPSA id y32sm591628lfa.302.2021.12.17.15.32.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Dec 2021 14:54:46 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fri, 17 Dec 2021 15:32:30 -0800 (PST)
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 17 Dec 2021 23:54:16 +0100
-Message-Id: <20211217225416.107885-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Sat, 18 Dec 2021 02:32:27 +0300
+Message-Id: <20211217233227.16411-1-kuzminov.sergey81@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cups-pk-helper: fix dependencies
+Subject: [Buildroot] [PATCH] board/orangepi/orangepi-zero:using UUID to root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,53 +85,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix dependencies which are wrong since the addition of the package in
-commit e13c9ccf436cf13b53bec6933e5be4bb071cfad9 resulting in the
-following build failure:
+The mmc block device number can vary. Passing a mmc block device to specify the location of the rootfs is not a reliable approach.
 
-Makefile:587: *** duktape is in the dependency chain of polkit that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-
-Fixes:
- - http://autobuild.buildroot.org/results/706a09b245880e99109a4cc99faffe83f458afc4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 ---
- package/cups-pk-helper/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ board/orangepi/orangepi-zero/boot.cmd | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cups-pk-helper/Config.in b/package/cups-pk-helper/Config.in
-index 63a0d3acd8..113f433795 100644
---- a/package/cups-pk-helper/Config.in
-+++ b/package/cups-pk-helper/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_CUPS_PK_HELPER
- 	bool "cups-pk-helper"
-+	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # polkit -> c++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, polkit
- 	depends on BR2_USE_WCHAR # libglib2
-+	depends on !BR2_STATIC_LIBS # polkit -> duktape
- 	depends on BR2_PACKAGE_CUPS
- 	select BR2_PACKAGE_POLKIT
- 	help
-@@ -11,7 +13,7 @@ config BR2_PACKAGE_CUPS_PK_HELPER
+diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
+index 44f0885ff4..d094a64fe5 100644
+--- a/board/orangepi/orangepi-zero/boot.cmd
++++ b/board/orangepi/orangepi-zero/boot.cmd
+@@ -1,6 +1,7 @@
+ setenv fdt_high ffffffff
  
- 	  https://wiki.freedesktop.org/www/Software/cups-pk-helper/
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++part uuid mmc 0:2 uuid
++setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
  
--comment "cups-pk-helper support needs a toolchain with threads, wchar, gcc >= 7"
-+comment "cups-pk-helper support needs a toolchain with threads, wchar, dynamic library, gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ fatload mmc 0 $kernel_addr_r zImage
+ fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
 -- 
-2.33.0
+2.32.0
 
 _______________________________________________
 buildroot mailing list
