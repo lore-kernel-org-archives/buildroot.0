@@ -1,50 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720E3C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 18:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5460C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 18:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E3AE40C10;
-	Fri, 17 Dec 2021 18:06:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 866076114B;
+	Fri, 17 Dec 2021 18:27:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kGSsxb5YsigY; Fri, 17 Dec 2021 18:06:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qk6dx537aGZK; Fri, 17 Dec 2021 18:27:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D43D140633;
-	Fri, 17 Dec 2021 18:06:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF17961147;
+	Fri, 17 Dec 2021 18:27:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB21C1BF28C
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:06:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E7F81BF28C
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8A2141F13
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:06:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E56741FBB
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 18:27:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id abFcPTxGPNaL for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 18:06:20 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 931AC41EF7
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 18:06:20 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id E6F3C200005;
- Fri, 17 Dec 2021 18:06:16 +0000 (UTC)
-Date: Fri, 17 Dec 2021 19:06:16 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20211217190616.0b919453@windsurf>
-In-Reply-To: <20211208232148.3694208-1-giulio.benetti@benettiengineering.com>
-References: <20211208232148.3694208-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+ with ESMTP id eaTFFhHIM4wV for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 18:27:11 +0000 (UTC)
+X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
+Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8C6841F61
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 18:27:10 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.138.59])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id yHptmQk4NTHgOyHptmJpfb; Fri, 17 Dec 2021 19:20:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1639765205; bh=p61bxp8pQUHFNZyY9YP00HGNBHGws8qKefY/ybGUUC4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=WtQ4JHs9tyEIhjevMgnqnQ5GNBrKYzAkLA/mBnv9LJ4PQj+LkE+QKNhuz1gaJU1j7
+ UnbrhAvNVlSwadSzGCzYPQ12MquT0U8snStxqsRqcl5AnNZ3m8wRvZgGkLBkFWQi6E
+ FlwW3RLFqpixOCDwnaxeCWIFyW+GoFq9gWl/tK4EyKPXJ6M0bckhI36bpT5Vi4HIKt
+ JRrm6HFodqv1nK+DnjxHwYJSJ9DIS5DxkMyaqx9uK2q6ufFLzRtCP2cEcVw7hrQIBk
+ hAlRPL1IWU+9KGx7OzHDv0u/HNwQojbO7C85Zl2WQncOX+zbdgimbxKy4zruMGmhQc
+ ZJ8fQh7aYnyrQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Fri, 17 Dec 2021 19:20:04 +0100
+Message-Id: <20211217182004.2399542-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/postgis: re-enable Microblaze
- architecture
+X-CMAE-Envelope: MS4wfOn0O5scaEWFZMD58SiVGo2wBnMX8c4WUG+aepZSRpn0cAh9y7e4eNRDgER+WCX4mFb6yT630/6wNhxbbKoy7CrUmp0FfUTd7eVuTo0IvCd1ihJC206j
+ PxYFsYjn1iOIfIhpKXTgKSz72hTVmM1h1X+pLSXsWEm0FG9Ep0gRvyvbskw9xL5djwhO4X1Y/yAxu1a8zIvuZc5So9uwFCMe645FMRWytZYlL7JBL3qMMPq2
+ oVrCUlyKCtfckRwrCOKt5AcIzdprviF6cF74hLB9Qtg=
+Subject: [Buildroot] [PATCH] package/libnspr: bump to version 4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,42 +66,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAgOSBEZWMgMjAyMSAwMDoyMTo0OCArMDEwMApHaXVsaW8gQmVuZXR0aSA8Z2l1bGlv
-LmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4gd3JvdGU6Cgo+IFdoaWxlIGFkZGluZyB0
-aGlzIHBhY2thZ2Ugd2l0aCBjb21taXRbMV0gTWljcm9ibGF6ZSBhcmNoaXRlY3R1cmUgaGFzIGJl
-ZW4KPiBkaXNhYmxlZCBieSBkZWZhdWx0IHBvaW50aW5nIHRoYXQgaXQgc3VmZmVycyBmcm9tIGdj
-YyBJQ0UsIGJ1dCB0aGlzIGlzIG5vdAo+IHRydWUsIGluZGVlZCB0aGUgYnVpbGQgZXJyb3IgaXMg
-cmVmZXJyZWQgdG8gbGliZ2VvcyB0aGF0IGlzIHBvc3RnaXMKPiBkZXBlbmRlbmN5Ogo+IGBgYAo+
-ICAgZHVyaW5nIFJUTCBwYXNzOiByZWxvYWQKPiAgIC4uLi9ib290bGluLW1pY3JvYmxhemVlbC11
-Y2xpYmMvYnVpbGQvbGliZ2Vvcy0zLjkuMC9zcmMvZ2VvbS91dGlsL0RlbnNpZmllci5jcHA6IElu
-IHN0YXRpYyBtZW1iZXIgZnVuY3Rpb24g4oCYc3RhdGljIHN0ZDo6dW5pcXVlX3B0cjxzdGQ6OnZl
-Y3RvcjxnZW9zOjpnZW9tOjpDb29yZGluYXRlPiA+IGdlb3M6Omdlb206OnV0aWw6OkRlbnNpZmll
-cjo6ZGVuc2lmeVBvaW50cyhnZW9zOjpnZW9tOjpDb29yZGluYXRlOjpWZWN0LCBkb3VibGUsIGNv
-bnN0IGdlb3M6Omdlb206OlByZWNpc2lvbk1vZGVsKinigJk6Cj4gICAuLi4vYm9vdGxpbi1taWNy
-b2JsYXplZWwtdWNsaWJjL2J1aWxkL2xpYmdlb3MtMy45LjAvc3JjL2dlb20vdXRpbC9EZW5zaWZp
-ZXIuY3BwOjEyODoxOiBpbnRlcm5hbCBjb21waWxlciBlcnJvcjogaW4gZ2VuX3JlZ19ydHgsIGF0
-IGVtaXQtcnRsLmM6MTE1NQo+ICAgMTI4IHwgfQo+ICAgICAgIHwgXgo+IGBgYAo+IAo+IFRoaXMg
-YnVpbGQgZXJyb3IgaGFzIGJlZW4gd29ya2VkIGFyb3VuZCB3aXRoIHRoaXMgY29tbWl0WzJdIGFu
-ZCBJJ3ZlIGp1c3QKPiB0ZXN0ZWQgdGhpcyBidWlsZCB3aXRoIE1pY3JvYmxhemUgZ2NjIDkuMy85
-LjQvMTAuMyBhbmQgMTEuMiBhbmQgaXQgYnVpbGRzCj4gc3VjY2VzZnVsbHkgc2luY2UgdGhlIGJ1
-ZyBhYm92ZSBpcyBnY2MgYnVnIDkwNjIwWzNdIGFuZCBpdCdzIGJlZW4gaGFuZGxlZAo+IGluIGxp
-Ymdlb3MgYWxyZWFkeS4KPiAKPiBTbyBsZXQncyBhbGxvdyBNaWNyb2JsYXplKGVsL2JlKSB0byBi
-dWlsZCB0aGlzIHBvc3RnaXMuCj4gCj4gWzFdOiBodHRwczovL2dpdC5idWlsZHJvb3QubmV0L2J1
-aWxkcm9vdC9jb21taXQvP2lkPTliYjEwMzQ0NTVkZTI5OTg3NmRmZDAzYzUwNzRkOGJiOTYyMmY4
-NzM5YmIxMDM0NDU1ZGUyOTk4NzZkZmQwM2M1MDc0ZDhiYjk2MjJmODczCj4gWzJdOiBodHRwczov
-L2dpdC5idWlsZHJvb3QubmV0L2J1aWxkcm9vdC9jb21taXQvP2lkPTg0N2I0NDFiMWNhMjIzMGM0
-ZjI2YTQ5YWFlZGU2OWVjYTVlN2U3YWQKPiBbM106IGh0dHBzOi8vZ2NjLmdudS5vcmcvYnVnemls
-bGEvc2hvd19idWcuY2dpP2lkPTkwNjIwCj4gCj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0
-dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4gLS0tCj4gIHBhY2th
-Z2UvcG9zdGdpcy9Db25maWcuaW4gfCAyIC0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGRlbGV0aW9u
-cygtKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6
-em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcK
-aHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 13d3958735..0064a9b279 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/SHA256SUMS
+-sha256  bb6bf4f534b9559cf123dcdc6f9cd8167de950314a90a88b2a329c16836e7f6c  nspr-4.32.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.33/src/SHA256SUMS
++sha256  b23ee315be0e50c2fb1aa374d17f2d2d9146a835b1a79c1918ea15d075a693d7  nspr-4.33.tar.gz
+ # Locally calculated
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 8f16a8076f..7491d18884 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.32
++LIBNSPR_VERSION = 4.33
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
