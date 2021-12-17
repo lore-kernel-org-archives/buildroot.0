@@ -1,88 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FE6C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC7F6C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F8E642011;
-	Fri, 17 Dec 2021 17:45:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FF7384D19;
+	Fri, 17 Dec 2021 17:45:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G1xviTSJavBO; Fri, 17 Dec 2021 17:45:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0529284CA4;
+	Fri, 17 Dec 2021 17:45:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5D91BF2AF
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C95642002
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gWYKKEoqPsYx; Fri, 17 Dec 2021 17:45:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FB2C42053;
-	Fri, 17 Dec 2021 17:45:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DA4BB1BF2AF
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D76E784CE8
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oHGsEhA2YPNl for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 17:45:02 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB6EB84BCF
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:45:01 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id y13so10559390edd.13
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 09:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=FjME9Df3Y2VgSI9iCc7K8PVE9uHXfUtKgcAyfkJ/MYc=;
- b=RT5RgHgfwhIZIeTL3Dx7sNPX1XAR87awGK5PGaVngXaRkmZsxaolE2kBCON3VPi5gs
- dhZX8mZ4OaKb18kNwKkAICW1FegSYXlGAIyGVbFDxORpOz7HPit7lzP1WHdgUH4pQr/n
- R3z/pbguUsdXsjwRhMLqLT7gvMuYe2EBHYo1KY6jtnitcGwXW3KXWRUuh1DjKv66yDiV
- 57kJPo0GY2XSNZAmJukRDC2feP3YfDsbfxivF40RJa562YvLYjMjoM4xCzZaHRWGTkOi
- /bCkJIDdCIxJO5n0JevJI9zP87dvVT+j0+KNDvVLKTOtUtYkAbCCh9qxriYQX+IewGIb
- lutA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=FjME9Df3Y2VgSI9iCc7K8PVE9uHXfUtKgcAyfkJ/MYc=;
- b=xPy6emLO+Ts72dOh7n6FfkcXFah9KOMMnN9IbW26m3HQxNrZkRG1+hrJLIaZarI4jl
- XjWM7bjHX/g29cXMLqpqVp9m3z0EWp0QO5TMudb08qS9z2HbXQndFwhIOk8n28vVfnG2
- 0jELyBIBkzFQSNZVJpWau3WwJ2IX6q4xizaLnK7b1FgPNfDXO25PiN3IjeqgMBEKklMh
- m8zMcOet2IE+N1zR6se5hILuKAX/5LurXKTHl9dxn4JxcbX2CCCg6SsNuToJQB1y8KQb
- U94KA3Ei8wjxNyZJuWjlNk1gNyxPy0ldUHm+0+h+TCV9ZkD9vkxQ+empzredsl+80BNj
- Fa0A==
-X-Gm-Message-State: AOAM532fRQebJCjyA53539Wpb8S1S6fG27yslnP+xwBx4I6WfacjfBQn
- iP++Qviwt5xvHzlua7wqasepPw==
-X-Google-Smtp-Source: ABdhPJyT+Gg8rchknaIHQc9l6AWXPrnDEs6kKIEeeGmp1gre5zt3/LFGZzXhCgumy+48fd2p0SL/9g==
-X-Received: by 2002:a17:906:39c8:: with SMTP id
- i8mr1577648eje.335.1639763099860; 
- Fri, 17 Dec 2021 09:44:59 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id cw11sm1585774ejc.87.2021.12.17.09.44.59
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 17 Dec 2021 09:44:59 -0800 (PST)
-Message-ID: <98fcae47-8a49-e6e9-332d-320e94ecd726@mind.be>
-Date: Fri, 17 Dec 2021 18:44:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211216233423.1534607-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211216233423.1534607-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmbim: fix build with help2man
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gtfCChmrZcJ6 for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 17:45:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F034841FCB
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:45:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 4EDC38251B; Fri, 17 Dec 2021 17:40:24 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Fri, 17 Dec 2021 18:30:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c9e545d98be9a523c7edf3d421c977bcfc9f006b
+X-Git-Newrev: 44cd33baa2254dc98d756076f96ac1fbcbd0c289
+X-Patchwork-Hint: ignore
+Message-Id: <20211217174024.4EDC38251B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in.legacy: improve iputils options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,118 +52,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Aleksander Morgado <aleksander@aleksander.es>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=44cd33baa2254dc98d756076f96ac1fbcbd0c289
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Improve iputils options added by commit
+db0c2a287970a8832b59f3cf9d81aa18aced2cec
 
-On 17/12/2021 00:34, Fabrice Fontaine wrote:
-> Fix the following build failure with help2man raised since bump to
-> version 1.26.0 in commit be76508af2b2253f95137a28198139732be2dcb3:
-> 
-> FAILED: docs/man/mbimcli.1
-> /usr/bin/help2man --output=docs/man/mbimcli.1 '--name=Control MBIM devices' '--help-option="--help-all"' /home/peko/autobuild/instance-1/output-1/build/libmbim-1.26.0/build/src/mbimcli/mbimcli
-> help2man: can't get `"--help-all"' info from /home/peko/autobuild/instance-1/output-1/build/libmbim-1.26.0/build/src/mbimcli/mbimcli
-> Try `--no-discard-stderr' if option outputs to stderr
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/eaa2ba54b9c74f07292d3cad4fa96c80e6079702
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   ...add-an-option-to-not-build-man-pages.patch | 60 +++++++++++++++++++
->   package/libmbim/libmbim.mk                    |  1 +
->   2 files changed, 61 insertions(+)
->   create mode 100644 package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
-> 
-> diff --git a/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch b/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
-> new file mode 100644
-> index 0000000000..c91756e9a6
-> --- /dev/null
-> +++ b/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
-> @@ -0,0 +1,60 @@
-> +From 792af73ea90e9689703ab526dd444fdb1c2f8e40 Mon Sep 17 00:00:00 2001
-> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> +Date: Thu, 14 Oct 2021 12:25:46 +0200
-> +Subject: [PATCH] meson.build: add an option to not build man pages.
-> +
-> +When cross-compiling, the compiled binaries cannot be run on the build
-> +machine, unless one defines a helper (e.g. qemu) in the meson
-> +configuration, which is most of the time undesirable.
-> +
-> +If help2man is installed on the build machine, then the build would fail
-> +because of this, so add an option to disable generating the man pages.
-> +
-> +With later versions of meson, it will be possible to automatically
-> +detect this condition.
-> +
-> +[Retrieved (and backported) from:
-> +https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/792af73ea90e9689703ab526dd444fdb1c2f8e40]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + meson.build       | 8 +++++++-
-> + meson_options.txt | 1 +
-> + 2 files changed, 8 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 1c5ee2d..59f1727 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -184,8 +184,8 @@ if enable_gtk_doc
-> +   subdir('docs/reference/libmbim-glib')
-> + endif
-> +
-> +-help2man = find_program('help2man', required: false)
-> +-if help2man.found()
-> ++enable_man = get_option('man')
-> ++if enable_man
-> +   subdir('docs/man')
-> + endif
-> +
-> +@@ -198,6 +203,7 @@ summary({
-> + output += '    Documentation:         ' + enable_gtk_doc.to_string() + '\n'
-> + output += '    bash completion:       ' + enable_bash_completion.to_string() + '\n'
-> + output += '    gobject introspection: ' + enable_gir.to_string() + '\n\n'
-> ++output += '    man pages:             ' + enable_man.to_string() + '\n\n'
-> + output += '  System paths\n'
-> + output += '    prefix:                ' + mbim_prefix + '\n'
-> + output += '    udev base directory:   ' + mbim_username + '\n\n'
-> +diff --git a/meson_options.txt b/meson_options.txt
-> +index 1305957..bfa33ab 100644
-> +--- a/meson_options.txt
-> ++++ b/meson_options.txt
-> +@@ -7,5 +7,6 @@ option('udevdir', type: 'string', value: '', description: 'where udev base direc
-> +
-> + option('introspection', type: 'boolean', value: 'true', description: 'build introspection support')
-> + option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
-> ++option('man', type: 'boolean', value: 'true', description: 'build man pages using help2man')
-> +
-> + option('bash_completion', type: 'boolean', value: true, description: 'install bash completion files')
-> +--
-> +GitLab
-> +
-> diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-> index cdc3fabedb..6737afebe8 100644
-> --- a/package/libmbim/libmbim.mk
-> +++ b/package/libmbim/libmbim.mk
-> @@ -12,6 +12,7 @@ LIBMBIM_CPE_ID_VENDOR = freedesktop
->   LIBMBIM_INSTALL_STAGING = YES
->   
->   LIBMBIM_DEPENDENCIES = libglib2
-> +LIBMBIM_CONF_OPTS = -Dman=false
->   
->   ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
->   LIBMBIM_DEPENDENCIES += gobject-introspection
-> 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c5bbb8881e..d240bda810 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -147,16 +147,17 @@ endif
+ comment "Legacy options removed in 2022.02"
+ 
+ config BR2_PACKAGE_IPUTILS_TFTPD
+-	bool "tftpd"
++	bool "iputils tftpd option removed"
+ 	select BR2_LEGACY
+ 	help
+-	  tftpd has been removed from upstream.
++	  tftpd has been removed from iputils since version 20211215.
+ 
+ config BR2_PACKAGE_IPUTILS_TRACEROUTE6
+-	bool "traceroute6"
++	bool "iputils traceroute6 option removed"
+ 	select BR2_LEGACY
+ 	help
+-	  traceroute6 has been removed from upstream.
++	  traceroute6 has been removed from iputils since version
++	  20211215.
+ 
+ config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
+ 	bool "libmediaart 'none' backend removed"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
