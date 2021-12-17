@@ -1,50 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CE6C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 20:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5213CC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 20:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3648140C27;
-	Fri, 17 Dec 2021 20:47:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED432421E4;
+	Fri, 17 Dec 2021 20:49:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8OIBdFH0XB-S; Fri, 17 Dec 2021 20:47:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R9VVihtqvTCe; Fri, 17 Dec 2021 20:49:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6228F40C24;
-	Fri, 17 Dec 2021 20:47:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B58BB1BF2F0
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:47:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7E78421E2;
+	Fri, 17 Dec 2021 20:49:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 688191BF2F0
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0A2340C24
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:47:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5753084D82
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 20:49:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zhu-c0QF5D8K for <buildroot@lists.busybox.net>;
- Fri, 17 Dec 2021 20:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DA2JW42IpcyY for <buildroot@lists.busybox.net>;
+ Fri, 17 Dec 2021 20:49:44 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 60FBD40AF4
- for <buildroot@buildroot.org>; Fri, 17 Dec 2021 20:47:44 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9E4E784D81
+ for <buildroot@buildroot.org>; Fri, 17 Dec 2021 20:49:44 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3BF0CFF805;
- Fri, 17 Dec 2021 20:47:41 +0000 (UTC)
-Date: Fri, 17 Dec 2021 21:47:40 +0100
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 37BD460007;
+ Fri, 17 Dec 2021 20:49:40 +0000 (UTC)
+Date: Fri, 17 Dec 2021 21:49:40 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20211217214740.2eb6c14f@windsurf>
-In-Reply-To: <20211018132532.814742-1-herve.codina@bootlin.com>
-References: <20211018132532.814742-1-herve.codina@bootlin.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20211217214940.106e9ed5@windsurf>
+In-Reply-To: <20211018221415.60dc705a@windsurf>
+References: <20211014215455.2444205-1-giulio.benetti@benettiengineering.com>
+ <20211018221415.60dc705a@windsurf>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/modsecurity2: new package
+Subject: Re: [Buildroot] [PATCH 1/2] package/erlang-jiffy: fix build failure
+ due to lack of -fPIC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,50 +58,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tom Marcuzzi <tom.marcuzzi@orolia.com>,
- Matthew Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Johan Oudinet <johan.oudinet@gmail.com>, Will Newton <will.newton@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Mon, 18 Oct 2021 22:14:15 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Mon, 18 Oct 2021 15:25:31 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
-
-> The modsecurity2 package provides an Apache module implementing
-> a web application firewall (WAF) module.
+> Thanks! However, did you review the discussion at:
 > 
-> Based on initial work from Tom Marcuzzi <tom.marcuzzi@orolia.com>
-> and Nicolas Carrier <nicolas.carrier@orolia.com>
+>   https://lore.kernel.org/buildroot/20201224101440.3427472-1-fontaine.fabrice@gmail.com/
 > 
-> modsecurity2 will be superseeded sooner or later by modsecurity v3
-> ie. libmodsecurity [1] and its Apache connector [2]. libmodsecurity
-> is already supported in Buildroot with its Nginx connector.
-> According to the Apache connector web page and the discussion [3],
-> the Apache connector is not ready for production use.
-> 
->   [1] https://github.com/SpiderLabs/ModSecurity
->   [2] https://github.com/SpiderLabs/ModSecurity-apache
->   [3] https://github.com/SpiderLabs/ModSecurity-apache/issues/80
-> 
-> The best we can do now is to still use modsecurity2 (v2.9.x) for
-> Apache:
->   https://github.com/SpiderLabs/ModSecurity/tree/v2/master
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Especially the feedback from Arnout around the end of the thread?
 
-Thanks, I've applied after:
-
- * Adding a bunch of additional --without-<something> to disable
-   optional dependencies that are not handled
-
- * Adding a dependency on pcre, which even if it is already guaranteed
-   to be there from Apache, is used directly by modsecurity2, so it
-   makes sense to express this dependency.
-
-Thanks!
+Ping?
 
 Thomas
 -- 
