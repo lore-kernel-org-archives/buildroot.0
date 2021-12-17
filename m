@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E006C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A71BCC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 17 Dec 2021 17:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1FFB415EE;
-	Fri, 17 Dec 2021 17:47:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6424442011;
+	Fri, 17 Dec 2021 17:47:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qqW3FbgGY8H2; Fri, 17 Dec 2021 17:47:04 +0000 (UTC)
+	with ESMTP id 4NFE-iIqemiI; Fri, 17 Dec 2021 17:47:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E5864172D;
-	Fri, 17 Dec 2021 17:47:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E7934205B;
+	Fri, 17 Dec 2021 17:47:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 14D461C1162
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3FF7D1BF2AF
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3D2A61138
- for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4686C60E74
+ for <buildroot@lists.busybox.net>; Fri, 17 Dec 2021 17:45:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X__YmvLrHG1g for <buildroot@lists.busybox.net>;
+ with ESMTP id LfOoOjcmhbNZ for <buildroot@lists.busybox.net>;
  Fri, 17 Dec 2021 17:45:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1924861139
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FB1F6113E
  for <buildroot@buildroot.org>; Fri, 17 Dec 2021 17:45:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 7B87182518; Fri, 17 Dec 2021 17:40:24 +0000 (UTC)
+ id 72F3D82226; Fri, 17 Dec 2021 17:40:24 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Fri, 17 Dec 2021 18:42:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cbe87226800f75ab76104d1ac2827a31dd137523
-X-Git-Newrev: a315d7c98bb0a853e9fe84639ea15595d9dd4b85
+X-Git-Oldrev: 9cf314745ad2e4f684aa07566163e46655ffcc5b
+X-Git-Newrev: cbe87226800f75ab76104d1ac2827a31dd137523
 X-Patchwork-Hint: ignore
-Message-Id: <20211217174024.7B87182518@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmbim: fix build with help2man
+Message-Id: <20211217174024.72F3D82226@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tcllib: bump to version 1.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,105 +58,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a315d7c98bb0a853e9fe84639ea15595d9dd4b85
+commit: https://git.buildroot.net/buildroot/commit/?id=cbe87226800f75ab76104d1ac2827a31dd137523
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with help2man raised since bump to
-version 1.26.0 in commit be76508af2b2253f95137a28198139732be2dcb3:
+Update hash of license.terms (reformatting with
+https://github.com/tcltk/tcllib/commit/628ec67635e48f611c5462b7c574e44cd301f83e)
 
-FAILED: docs/man/mbimcli.1
-/usr/bin/help2man --output=docs/man/mbimcli.1 '--name=Control MBIM devices' '--help-option="--help-all"' /home/peko/autobuild/instance-1/output-1/build/libmbim-1.26.0/build/src/mbimcli/mbimcli
-help2man: can't get `"--help-all"' info from /home/peko/autobuild/instance-1/output-1/build/libmbim-1.26.0/build/src/mbimcli/mbimcli
-Try `--no-discard-stderr' if option outputs to stderr
-
-Fixes:
- - http://autobuild.buildroot.org/results/eaa2ba54b9c74f07292d3cad4fa96c80e6079702
+https://core.tcl-lang.org/tcllib/doc/tcllib-1-20/support/releases/history/README-1.20.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...uild-add-an-option-to-not-build-man-pages.patch | 60 ++++++++++++++++++++++
- package/libmbim/libmbim.mk                         |  1 +
- 2 files changed, 61 insertions(+)
+ package/tcllib/tcllib.hash | 6 ++++--
+ package/tcllib/tcllib.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch b/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
-new file mode 100644
-index 0000000000..c91756e9a6
---- /dev/null
-+++ b/package/libmbim/0002-meson-build-add-an-option-to-not-build-man-pages.patch
-@@ -0,0 +1,60 @@
-+From 792af73ea90e9689703ab526dd444fdb1c2f8e40 Mon Sep 17 00:00:00 2001
-+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+Date: Thu, 14 Oct 2021 12:25:46 +0200
-+Subject: [PATCH] meson.build: add an option to not build man pages.
+diff --git a/package/tcllib/tcllib.hash b/package/tcllib/tcllib.hash
+index d08b5a172a..fb80841998 100644
+--- a/package/tcllib/tcllib.hash
++++ b/package/tcllib/tcllib.hash
+@@ -1,3 +1,5 @@
++# From https://core.tcl-lang.org/tcllib/uv/tcllib-1.20.SHA256
++sha256  199e8ec7ee26220e8463bc84dd55c44965fc8ef4d4ac6e4684b2b1c03b1bd5b9  tcllib-1.20.tar.xz
 +
-+When cross-compiling, the compiled binaries cannot be run on the build
-+machine, unless one defines a helper (e.g. qemu) in the meson
-+configuration, which is most of the time undesirable.
-+
-+If help2man is installed on the build machine, then the build would fail
-+because of this, so add an option to disable generating the man pages.
-+
-+With later versions of meson, it will be possible to automatically
-+detect this condition.
-+
-+[Retrieved (and backported) from:
-+https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/commit/792af73ea90e9689703ab526dd444fdb1c2f8e40]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build       | 8 +++++++-
-+ meson_options.txt | 1 +
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 1c5ee2d..59f1727 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -184,8 +184,8 @@ if enable_gtk_doc
-+   subdir('docs/reference/libmbim-glib')
-+ endif
-+ 
-+-help2man = find_program('help2man', required: false)
-+-if help2man.found()
-++enable_man = get_option('man')
-++if enable_man
-+   subdir('docs/man')
-+ endif
-+ 
-+@@ -198,6 +203,7 @@ summary({
-+ output += '    Documentation:         ' + enable_gtk_doc.to_string() + '\n'
-+ output += '    bash completion:       ' + enable_bash_completion.to_string() + '\n'
-+ output += '    gobject introspection: ' + enable_gir.to_string() + '\n\n'
-++output += '    man pages:             ' + enable_man.to_string() + '\n\n'
-+ output += '  System paths\n'
-+ output += '    prefix:                ' + mbim_prefix + '\n'
-+ output += '    udev base directory:   ' + mbim_username + '\n\n'
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 1305957..bfa33ab 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -7,5 +7,6 @@ option('udevdir', type: 'string', value: '', description: 'where udev base direc
-+ 
-+ option('introspection', type: 'boolean', value: 'true', description: 'build introspection support')
-+ option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
-++option('man', type: 'boolean', value: 'true', description: 'build man pages using help2man')
-+ 
-+ option('bash_completion', type: 'boolean', value: true, description: 'install bash completion files')
-+-- 
-+GitLab
-+
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index cdc3fabedb..6737afebe8 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -12,6 +12,7 @@ LIBMBIM_CPE_ID_VENDOR = freedesktop
- LIBMBIM_INSTALL_STAGING = YES
+ # Locally computed:
+-sha256  0db9e17d6c0f44d3ca2df2ea5023e35c0f3767e7008c3cb26d201446eb68add1  tcllib-1.13.tar.bz2
+-sha256  530ec70eb11a455bd582d86b6d74c2dd7cc367d90b8bbdd59fcb43ae02f95a4b  license.terms
++sha256  38e1f556213f4008cfd280457af57c76a1fe043dc026ece1c704c09b5f6e865c  license.terms
+diff --git a/package/tcllib/tcllib.mk b/package/tcllib/tcllib.mk
+index dfa35c8941..0f60eb8aca 100644
+--- a/package/tcllib/tcllib.mk
++++ b/package/tcllib/tcllib.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- LIBMBIM_DEPENDENCIES = libglib2
-+LIBMBIM_CONF_OPTS = -Dman=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBMBIM_DEPENDENCIES += gobject-introspection
+-TCLLIB_VERSION = 1.13
+-TCLLIB_SOURCE = tcllib-$(TCLLIB_VERSION).tar.bz2
++TCLLIB_VERSION = 1.20
++TCLLIB_SOURCE = tcllib-$(TCLLIB_VERSION).tar.xz
+ TCLLIB_SITE = http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
+ TCLLIB_LICENSE = TCL
+ TCLLIB_LICENSE_FILES = license.terms
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
