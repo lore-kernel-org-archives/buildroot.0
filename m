@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5201CC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 16:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAF32C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 16:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B00E842207;
-	Sat, 18 Dec 2021 16:07:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B9AC4011D;
+	Sat, 18 Dec 2021 16:37:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hmj3fcOtfGSJ; Sat, 18 Dec 2021 16:07:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0196C421E0;
-	Sat, 18 Dec 2021 16:07:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 854AC1BF2BE
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:07:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71F9840239
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:07:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=linatsea.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7jaxljXZocx for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 16:07:48 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZMTeodBUjlV3; Sat, 18 Dec 2021 16:37:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EF0440386;
+	Sat, 18 Dec 2021 16:37:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D1E41BF2BE
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:37:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8820183EE9
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:37:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rIYKfwM-XTFK for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 16:37:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B5C524011D
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 16:07:47 +0000 (UTC)
-Received: (Authenticated sender: thierry.bultel@linatsea.fr)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 620FC1C0006
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 16:07:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
- t=1639843664;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lPuKAFnNRzUSrEudWxf+EtE5WLlBYcsBJUraswHJlfQ=;
- b=e6IajcDOlo6LTU+ZHBcM6Nzhf5JzUdyQpQM7ZKCDuh71cq+OMddiJ40lryX2qppPWafTJY
- usd6lBPa3W1E7jt60UdwSN0dL+Dg7rp57jYY+h9Kc7HpNCUhxiVmZx1QRvgDbS6rRyy8oA
- 6nrYilTfVY+3ecGU1YbWRked6MQ4Dv79F3r3sbV0wRR5KhE3nvIjNYEn4a9Y7ZUi53KrCS
- 57MvheqFuY8ek+uFKURjQmKYV0OBfG04j3lpYEmv/dajK/egpm4yF4IDWxDcoa6HcjCdzw
- QPPZJ61aFsyw86GS7MUZAqon1aajpCyGvSxMuXbF5BOCKMZyTymR6hynY3kXrw==
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3CE7183E22
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 16:37:48 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6035E200005;
+ Sat, 18 Dec 2021 16:37:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1myciO-0003TL-9W; Sat, 18 Dec 2021 17:37:44 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
- <20211215180021.274991-3-thierry.bultel@linatsea.fr>
- <966fe55d-c5d7-7f5a-63ec-f68be64a38c6@mind.be>
- <f5028ffa-5461-ae87-ad4c-227605361ddf@linatsea.fr>
- <28def8c0-8d05-015e-e9b2-a25b31d9237b@mind.be>
- <32989bcc-4244-07fb-f544-cdc382dfc4c3@linatsea.fr>
- <20211218132258.GK2603@scaer>
-From: Thierry Bultel <thierry.bultel@linatsea.fr>
-Message-ID: <5900f579-94b8-7bb3-4eb5-86c686bfa27f@linatsea.fr>
-Date: Sat, 18 Dec 2021 17:07:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Date: Sat, 18 Dec 2021 17:37:41 +0100
+Message-Id: <20211218163742.13297-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20211218132258.GK2603@scaer>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH 3/3] fs/dracut: new fs type
+Subject: [Buildroot] [PATCH] configs/roseapplypi_defconfig: bump kernel to
+ 5.15.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,40 +56,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpMZSAxOC8xMi8yMDIxIMOgIDE0OjIyLCBZYW5uIEUuIE1PUklOIGEgw6ljcml0wqA6Cj4gVGhp
-ZXJyeSwgQWxsLApIaSBZYW5uLApOaWNlIHRvIGhlYXIgZnJvbSB5b3UgYWdhaW4KPgo+IE9uIDIw
-MjEtMTItMTcgMjI6NTAgKzAxMDAsIFRoaWVycnkgQnVsdGVsIHNwYWtlIHRodXNseToKPj4gR29v
-ZCBpZGVhLiBCdXQgZHJhY3V0IGdlbmVyYXRlcyBhIGd6aXBwZWQgY3BpbyBpbWFnZS4KPiBUaGF0
-IHRoZSBjcGlvIGlzIGd6aXBwZWQgaXMgdW5mb3J0dWFudGUsIGJlY2F1c2UgdGhlIGtlcm5lbCB3
-aWxsIGFnYWluCj4gY29tcHJlc3MgaXQgYXMgcGFydCBvZiBpdHMgb3duIGNvbXByZXNzaW9uICh3
-aGVtIGl0IGlzIHVzZWQgYXMgYW4KPiBpbml0cmFtZnMsIElJUkMpLgpZZXMsIGl0IGlzIG5vdCBh
-aW1lZCB0byBiZSB1c2VkIGxpa2UgdGhhdC4KCkNsZWFybHksIHRoZSBvcmlnaW4gb2YgZHJhY3V0
-IGlzIHRoZSBkZXNrdG9wIHdvcmxkICh3aGVyZSB0aGUgaW5pdHJkIGlzIApzZXBhcmF0ZWQpCgpC
-dXQgSSByZWFsbHkgZm91bmQgaXQgY29udmVuaWVudCAoYXMgSSBzYXkgaW4gdGhlIGNvbW1pdCBk
-ZXNjcmlwdGlvbikgCmZvciB0aGUgZW1iZWRkZWQKd29ybGQsIHR5cGljYWxseSB0byBidWlsZCBh
-IHJlY292ZXJ5IHN5c3RlbSAodGhpcyBpcyBteSB1c2UgY2FzZSkKSW4gYWRkaXRpb24gdG8gdGhl
-IGRyYWN1dCBmZWF0dXJlcyB5b3UgbWVudGlvbiBpbiB5b3VyIG90aGVyIG1haWwsIHRoZXJlIAph
-cmUgYWxzbwp0aGUgaGFuZGxpbmcgb2YgZGVwZW5kZW5jaWVzIHRvIGZpcm13YXJlcyAocHJvdmlk
-ZWQgdGhhdCB0aGUga2VybmVsIAptb2R1bGVzIGRlY2xhcmUgaXQKYnkgdGhlIE1PRFVMRV9GSVJN
-V0FSRSBtYWNybywgYW5kIHRoYXQgaXMgbm90IHRoZSBjYXNlIG9mIGFsbCBvZiB0aGVtLCBJCmVu
-Y291bnRlcmVkIHNvbWUgc3RhZ2luZyBkcml2ZXJzIHRoYXQgZG8gbm90KQphbmQgdGhlIHJlc3Bl
-Y3Qgb2Ygc3ltbGlua3MuClRoZSBjb25jZXB0IG9mIGRyYWN1dCBtb2R1bGVzIGlzIG5pY2UsIHRv
-by4KPgo+PiBNYXliZSwgaW5zdGVhZCwgdGhlCj4+ICJjcGlvIiBhbmQgImRyYWN1dCIgb3B0aW9u
-cyAoZXhjbHVzaXZlcykgY291bGQgYmUgYnV0IGluIGEgIkluaXRpYWwgUkFNCj4+IGZpbGVzeXN0
-ZW0iIG1lbnUuCj4gV2UgYWxyZWFkeSBoYXZlIHN1Y2ggYSBmaWxlc3lzdGVtOgo+ICAgICAgZnMv
-aW5pdHJhbWZzLwo+ICAgICAgICAgICJpbml0aWFsIFJBTSBmaWxlc3lzdGVtIGxpbmtlZCBpbnRv
-IGxpbnV4IGtlcm5lbCIKPgo+IEFuZCB0aGlzIG9uZSBpcyB0cmlja3ksIGJlY2F1c2UgaXQgaG9v
-a3MgaW50byBsaW51eC9saW51eC5tayB3aXRoIG1hbnVhbAo+IGFuZCBjdXN0b20gZGVwZW5kZW5j
-aWVzIChzZWUgbGludXgvbGludXgubWtANTcxKS4gSSBhbSBub3QgMTAwJSBoYXBweSBvbgo+IGhv
-dyB0aGlzIGlzIGRvbmUsIGJ1dCB3ZSBjYW4ndCByZWFsbHkgaGF2ZSBiZXR0ZXIuLi4KPgo+IFNv
-LCBJIHRoaW5rIHRoYXQgaGF2aW5nIGRyYWN1dCBiZSBhbiBvcHRpb24gb2YgY3BpbyBpcyB0aGUg
-ZWFzaWVzdCB3YXkKPiB0byBnby4uLgoKVGhhbmtzIFlhbm4sIEkgYWdyZWUsIGFuZCBJIGFtIGFi
-b3V0IHRvIHNlbmQgYSBwYXRjaCBzZXQgdGhhdCBkb2VzIHRoZSAKdHJpY2sgbGlrZSB0aGF0LgpS
-ZWdhcmRzLApUaGllcnJ5CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+The kernel now has support for dma, ethernet, i2c, mmc, pinctrl, regulator,
+so enable drivers for those, change to a ext4 rootfs and enable DHCP on
+eth0.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/roseapplepi/genimage.cfg |  6 ++++++
+ board/roseapplepi/linux.config | 25 +++++++++++++++++++++++++
+ board/roseapplepi/uEnv.txt     |  2 +-
+ configs/roseapplepi_defconfig  |  7 ++++---
+ 4 files changed, 36 insertions(+), 4 deletions(-)
+
+diff --git a/board/roseapplepi/genimage.cfg b/board/roseapplepi/genimage.cfg
+index f1bceb0ede..4c5a8de902 100644
+--- a/board/roseapplepi/genimage.cfg
++++ b/board/roseapplepi/genimage.cfg
+@@ -36,4 +36,10 @@ image sdcard.img {
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
+ }
+diff --git a/board/roseapplepi/linux.config b/board/roseapplepi/linux.config
+index aea48b7730..89e7c8917f 100644
+--- a/board/roseapplepi/linux.config
++++ b/board/roseapplepi/linux.config
+@@ -26,19 +26,44 @@ CONFIG_INET=y
+ # CONFIG_IPV6 is not set
+ # CONFIG_WIRELESS is not set
+ # CONFIG_ETHTOOL_NETLINK is not set
++CONFIG_NETDEVICES=y
++CONFIG_OWL_EMAC=y
++CONFIG_REALTEK_PHY=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_ATC260X_ONKEY=y
+ # CONFIG_VT is not set
+ CONFIG_SERIAL_OWL=y
+ # CONFIG_HW_RANDOM is not set
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_OWL=y
++CONFIG_PINCTRL=y
++CONFIG_PINCTRL_OWL=y
++CONFIG_PINCTRL_S500=y
++CONFIG_POWER_RESET=y
++CONFIG_POWER_RESET_ATC260X=y
++CONFIG_MFD_ATC260X_I2C=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ATC260X=y
+ # CONFIG_HID is not set
+ # CONFIG_USB_SUPPORT is not set
++CONFIG_MMC=y
++CONFIG_MMC_OWL=y
++CONFIG_DMADEVICES=y
++CONFIG_OWL_DMA=y
+ # CONFIG_VIRTIO_MENU is not set
+ # CONFIG_VHOST_MENU is not set
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_EXT4_FS=y
++CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ # CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
+ # CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
+ # CONFIG_CRYPTO_HW is not set
+ # CONFIG_FTRACE is not set
+diff --git a/board/roseapplepi/uEnv.txt b/board/roseapplepi/uEnv.txt
+index 2b9de727b4..339eb8aa0a 100644
+--- a/board/roseapplepi/uEnv.txt
++++ b/board/roseapplepi/uEnv.txt
+@@ -1,3 +1,3 @@
+ # no ramdisk
+ ramdisk_addr_r=-
+-bootargs=console=ttyOWL2,115200
++bootargs=console=ttyOWL2,115200 root=/dev/mmcblk0p2 rootwait clk_ignore_unused
+diff --git a/configs/roseapplepi_defconfig b/configs/roseapplepi_defconfig
+index 2af94d010b..f4efacf80d 100644
+--- a/configs/roseapplepi_defconfig
++++ b/configs/roseapplepi_defconfig
+@@ -3,15 +3,16 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_GLOBAL_PATCH_DIR="board/roseapplepi/patches"
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 5.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/roseapplepi/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/roseapplepi/genimage.cfg"
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/roseapplepi/linux.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
