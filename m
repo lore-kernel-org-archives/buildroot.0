@@ -1,65 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D03BC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 22:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D1B0C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 22:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE76D84E1D;
-	Sat, 18 Dec 2021 22:49:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F2BF40204;
+	Sat, 18 Dec 2021 22:49:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iSqOXQoyZTaf; Sat, 18 Dec 2021 22:49:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FpI-cFH9NYbX; Sat, 18 Dec 2021 22:49:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1C4084E0B;
-	Sat, 18 Dec 2021 22:49:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2554D1BF5AE
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:49:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBDBF400C1;
+	Sat, 18 Dec 2021 22:49:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF1791BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BB4741DD2
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:49:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1F53607C1
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:49:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qw8m1ykFxG97 for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 22:49:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DEDF241DBF
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 22:49:32 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4cb3:149f:d03e:db5a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id DBC695FF33;
- Sat, 18 Dec 2021 23:49:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639867770;
- bh=/GIzoy6fSXUlwvVaJ6h7JDs4QzzSFyby++CW2Ha8UtY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b6rEyealli1oI5e91x6C5xQx9kowvRLt4g+yAUIs4evuluGuYZmAFy7fJjYqKS4De
- cOGgUTyTSfR0iK4F8l0TT0xZTd2IWEq/2/y4S4f6dpHOMzf/ZgU2l8wNaXJ4i1aYmZ
- NSOSweLvhHwEyQEPfFXvKtJW5UzjA5Gt/71keBQVN9dEgYHDzggkIIc07krUINXsBi
- RLoHCPau2hplh1U2C/B4PcZnzDTbj7ezFYtJBthfvL2nV0M5cA1cEPgjpmU1qrdN/F
- EMNSdluCK+SOWgL2zCZFbV6iUkQuSLikhUBCLCYJ3WETyuoVqGN1kBsf+ccjlBNQCA
- /ZHzbZIGrcCog==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Dec 2021 23:49:23 +0100
-Date: Sat, 18 Dec 2021 23:49:23 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211218224923.GX2603@scaer>
-References: <20211218223506.578057-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211218223506.578057-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenaptx: fix typo
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1VmyjoH6ANNL for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 22:49:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1833860768
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 22:49:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 9F6D97F908; Sat, 18 Dec 2021 22:44:19 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 18 Dec 2021 23:48:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb3fec9d64e765d7485cf4b7b09bd18cc68dd328
+X-Git-Newrev: aab198fdd48de28905d16955fd8964fab3db3c42
+X-Patchwork-Hint: ignore
+Message-Id: <20211218224419.9F6D97F908@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenaptx: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,55 +52,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yunhao Tian <t123yh.xyz@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=aab198fdd48de28905d16955fd8964fab3db3c42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-12-18 23:35 +0100, Fabrice Fontaine spake thusly:
-> Replace libogg by libopenaptx
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Replace libogg by libopenaptx
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libopenaptx/libopenaptx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libopenaptx/libopenaptx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libopenaptx/libopenaptx.mk b/package/libopenaptx/libopenaptx.mk
-> index 49e89d871c..12c33f6225 100644
-> --- a/package/libopenaptx/libopenaptx.mk
-> +++ b/package/libopenaptx/libopenaptx.mk
-> @@ -1,6 +1,6 @@
->  ################################################################################
->  #
-> -# libogg
-> +# libopenaptx
->  #
->  ################################################################################
->  
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libopenaptx/libopenaptx.mk b/package/libopenaptx/libopenaptx.mk
+index a4f58050b7..75a5532e96 100644
+--- a/package/libopenaptx/libopenaptx.mk
++++ b/package/libopenaptx/libopenaptx.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libogg
++# libopenaptx
+ #
+ ################################################################################
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
