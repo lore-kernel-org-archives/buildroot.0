@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1191BC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 13:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5201CC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 16:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 902F442204;
-	Sat, 18 Dec 2021 13:23:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B00E842207;
+	Sat, 18 Dec 2021 16:07:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pSOtIMzERQul; Sat, 18 Dec 2021 13:23:09 +0000 (UTC)
+	with ESMTP id hmj3fcOtfGSJ; Sat, 18 Dec 2021 16:07:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E95634201F;
-	Sat, 18 Dec 2021 13:23:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 036DB1BF59F
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:23:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0196C421E0;
+	Sat, 18 Dec 2021 16:07:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 854AC1BF2BE
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:07:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E659460E75
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71F9840239
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 16:07:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LbwA4Wq40AVs for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D49460E6E
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:788a:3424:5325:e3c2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B5A613F814;
- Sat, 18 Dec 2021 14:22:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639833783;
- bh=Zz9cV5ItjZOrvb40wgILJFN3pYLtGg69cMiU7OWVcg8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iqg15b0fLa1G03A3fAohAnIIJgjh4UoGRXSWEuG1BbY7nmUxAjzbRsCVCXK1OcN38
- w2uH5iFs+o2IoSSsLbcI4SjDd82sD6iT1s5S4NOs6KK20+YKYlBREHo25ClevkMpl0
- DEconBxYscRDmM4kVrbaZ+i4eqzvxYszvMR0XLCMsZheCNXBMkYUvMu67yTVvmEAhd
- 9cCHVtfnhqAAqvMDdjCjJaBF97u+/lZE6GpfAqopqLVudF3I492ii62n5uRdXGzlsA
- 7QrDWhTl0GGEfSJV7tqmyOdSq8BVZ6BuchhyjLpf1KOd5MfgOqKNQS/snkcJhq8WbL
- NIUBnNS3Yjqeg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Dec 2021 14:22:58 +0100
-Date: Sat, 18 Dec 2021 14:22:58 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thierry Bultel <thierry.bultel@linatsea.fr>
-Message-ID: <20211218132258.GK2603@scaer>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=linatsea.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K7jaxljXZocx for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 16:07:48 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5C524011D
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 16:07:47 +0000 (UTC)
+Received: (Authenticated sender: thierry.bultel@linatsea.fr)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 620FC1C0006
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 16:07:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
+ t=1639843664;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=lPuKAFnNRzUSrEudWxf+EtE5WLlBYcsBJUraswHJlfQ=;
+ b=e6IajcDOlo6LTU+ZHBcM6Nzhf5JzUdyQpQM7ZKCDuh71cq+OMddiJ40lryX2qppPWafTJY
+ usd6lBPa3W1E7jt60UdwSN0dL+Dg7rp57jYY+h9Kc7HpNCUhxiVmZx1QRvgDbS6rRyy8oA
+ 6nrYilTfVY+3ecGU1YbWRked6MQ4Dv79F3r3sbV0wRR5KhE3nvIjNYEn4a9Y7ZUi53KrCS
+ 57MvheqFuY8ek+uFKURjQmKYV0OBfG04j3lpYEmv/dajK/egpm4yF4IDWxDcoa6HcjCdzw
+ QPPZJ61aFsyw86GS7MUZAqon1aajpCyGvSxMuXbF5BOCKMZyTymR6hynY3kXrw==
+To: buildroot@buildroot.org
 References: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
  <20211215180021.274991-3-thierry.bultel@linatsea.fr>
  <966fe55d-c5d7-7f5a-63ec-f68be64a38c6@mind.be>
  <f5028ffa-5461-ae87-ad4c-227605361ddf@linatsea.fr>
  <28def8c0-8d05-015e-e9b2-a25b31d9237b@mind.be>
  <32989bcc-4244-07fb-f544-cdc382dfc4c3@linatsea.fr>
+ <20211218132258.GK2603@scaer>
+From: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <5900f579-94b8-7bb3-4eb5-86c686bfa27f@linatsea.fr>
+Date: Sat, 18 Dec 2021 17:07:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <32989bcc-4244-07fb-f544-cdc382dfc4c3@linatsea.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+In-Reply-To: <20211218132258.GK2603@scaer>
+Content-Language: en-US
 Subject: Re: [Buildroot] [PATCH 3/3] fs/dracut: new fs type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,47 +77,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thierry, All,
-
-On 2021-12-17 22:50 +0100, Thierry Bultel spake thusly:
-> Good idea. But dracut generates a gzipped cpio image.
-
-That the cpio is gzipped is unfortuante, because the kernel will again
-compress it as part of its own compression (whem it is used as an
-initramfs, IIRC).
-
-> Maybe, instead, the
-> "cpio" and "dracut" options (exclusives) could be but in a "Initial RAM
-> filesystem" menu.
-
-We already have such a filesystem:
-    fs/initramfs/
-        "initial RAM filesystem linked into linux kernel"
-
-And this one is tricky, because it hooks into linux/linux.mk with manual
-and custom dependencies (see linux/linux.mk@571). I am not 100% happy on
-how this is done, but we can't really have better...
-
-So, I think that having dracut be an option of cpio is the easiest way
-to go...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpMZSAxOC8xMi8yMDIxIMOgIDE0OjIyLCBZYW5uIEUuIE1PUklOIGEgw6ljcml0wqA6Cj4gVGhp
+ZXJyeSwgQWxsLApIaSBZYW5uLApOaWNlIHRvIGhlYXIgZnJvbSB5b3UgYWdhaW4KPgo+IE9uIDIw
+MjEtMTItMTcgMjI6NTAgKzAxMDAsIFRoaWVycnkgQnVsdGVsIHNwYWtlIHRodXNseToKPj4gR29v
+ZCBpZGVhLiBCdXQgZHJhY3V0IGdlbmVyYXRlcyBhIGd6aXBwZWQgY3BpbyBpbWFnZS4KPiBUaGF0
+IHRoZSBjcGlvIGlzIGd6aXBwZWQgaXMgdW5mb3J0dWFudGUsIGJlY2F1c2UgdGhlIGtlcm5lbCB3
+aWxsIGFnYWluCj4gY29tcHJlc3MgaXQgYXMgcGFydCBvZiBpdHMgb3duIGNvbXByZXNzaW9uICh3
+aGVtIGl0IGlzIHVzZWQgYXMgYW4KPiBpbml0cmFtZnMsIElJUkMpLgpZZXMsIGl0IGlzIG5vdCBh
+aW1lZCB0byBiZSB1c2VkIGxpa2UgdGhhdC4KCkNsZWFybHksIHRoZSBvcmlnaW4gb2YgZHJhY3V0
+IGlzIHRoZSBkZXNrdG9wIHdvcmxkICh3aGVyZSB0aGUgaW5pdHJkIGlzIApzZXBhcmF0ZWQpCgpC
+dXQgSSByZWFsbHkgZm91bmQgaXQgY29udmVuaWVudCAoYXMgSSBzYXkgaW4gdGhlIGNvbW1pdCBk
+ZXNjcmlwdGlvbikgCmZvciB0aGUgZW1iZWRkZWQKd29ybGQsIHR5cGljYWxseSB0byBidWlsZCBh
+IHJlY292ZXJ5IHN5c3RlbSAodGhpcyBpcyBteSB1c2UgY2FzZSkKSW4gYWRkaXRpb24gdG8gdGhl
+IGRyYWN1dCBmZWF0dXJlcyB5b3UgbWVudGlvbiBpbiB5b3VyIG90aGVyIG1haWwsIHRoZXJlIAph
+cmUgYWxzbwp0aGUgaGFuZGxpbmcgb2YgZGVwZW5kZW5jaWVzIHRvIGZpcm13YXJlcyAocHJvdmlk
+ZWQgdGhhdCB0aGUga2VybmVsIAptb2R1bGVzIGRlY2xhcmUgaXQKYnkgdGhlIE1PRFVMRV9GSVJN
+V0FSRSBtYWNybywgYW5kIHRoYXQgaXMgbm90IHRoZSBjYXNlIG9mIGFsbCBvZiB0aGVtLCBJCmVu
+Y291bnRlcmVkIHNvbWUgc3RhZ2luZyBkcml2ZXJzIHRoYXQgZG8gbm90KQphbmQgdGhlIHJlc3Bl
+Y3Qgb2Ygc3ltbGlua3MuClRoZSBjb25jZXB0IG9mIGRyYWN1dCBtb2R1bGVzIGlzIG5pY2UsIHRv
+by4KPgo+PiBNYXliZSwgaW5zdGVhZCwgdGhlCj4+ICJjcGlvIiBhbmQgImRyYWN1dCIgb3B0aW9u
+cyAoZXhjbHVzaXZlcykgY291bGQgYmUgYnV0IGluIGEgIkluaXRpYWwgUkFNCj4+IGZpbGVzeXN0
+ZW0iIG1lbnUuCj4gV2UgYWxyZWFkeSBoYXZlIHN1Y2ggYSBmaWxlc3lzdGVtOgo+ICAgICAgZnMv
+aW5pdHJhbWZzLwo+ICAgICAgICAgICJpbml0aWFsIFJBTSBmaWxlc3lzdGVtIGxpbmtlZCBpbnRv
+IGxpbnV4IGtlcm5lbCIKPgo+IEFuZCB0aGlzIG9uZSBpcyB0cmlja3ksIGJlY2F1c2UgaXQgaG9v
+a3MgaW50byBsaW51eC9saW51eC5tayB3aXRoIG1hbnVhbAo+IGFuZCBjdXN0b20gZGVwZW5kZW5j
+aWVzIChzZWUgbGludXgvbGludXgubWtANTcxKS4gSSBhbSBub3QgMTAwJSBoYXBweSBvbgo+IGhv
+dyB0aGlzIGlzIGRvbmUsIGJ1dCB3ZSBjYW4ndCByZWFsbHkgaGF2ZSBiZXR0ZXIuLi4KPgo+IFNv
+LCBJIHRoaW5rIHRoYXQgaGF2aW5nIGRyYWN1dCBiZSBhbiBvcHRpb24gb2YgY3BpbyBpcyB0aGUg
+ZWFzaWVzdCB3YXkKPiB0byBnby4uLgoKVGhhbmtzIFlhbm4sIEkgYWdyZWUsIGFuZCBJIGFtIGFi
+b3V0IHRvIHNlbmQgYSBwYXRjaCBzZXQgdGhhdCBkb2VzIHRoZSAKdHJpY2sgbGlrZSB0aGF0LgpS
+ZWdhcmRzLApUaGllcnJ5CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
