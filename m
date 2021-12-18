@@ -1,65 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BB2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 22:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6367FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 23:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E054421AA;
-	Sat, 18 Dec 2021 22:55:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 005144021C;
+	Sat, 18 Dec 2021 23:11:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2J0E60QptuWM; Sat, 18 Dec 2021 22:55:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AE2C42143;
-	Sat, 18 Dec 2021 22:55:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EC2A81BF5AE
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:55:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5002400C1
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 22:55:31 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9geAkgQ88Uz2 for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 22:55:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B2E35400AF
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 22:55:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4cb3:149f:d03e:db5a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D5F8C5FF33;
- Sat, 18 Dec 2021 23:55:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639868128;
- bh=e8pvZ+QQCmocjpKoiaf5vhTrj83f/wnOszz7rlC+aV4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b7JnVGOWHhWJdzE5FdTZMk2zIojiMNfgCC/srG6dPeEpb1cGbUaBpmK05YqF5hwrL
- MP78InQc4ybiZvep9YqQ0jBbBxkT5+VNS6eRXVSpVJFHtf8VG0iJsEOQToJEy37UiE
- xjsP9e3CFhyylzyblRr3PSSBE84dXHrpAzKatI+mmdMZCwzB7JrsHOkNi1F3mhGnvN
- FvqCJ4AwaMOqK8CPueYQOpQ58dD7Jcbx+F9G+7Bx4xByYD2lHhjVCH6XXRNGSyH2aa
- pgxes+Adq3SPRQ6iiGoBwtnMDCvtrgIAtvNivfxGjJw+l6UWDp22/ZYl8WoTKYUr1X
- kSlVC1Gj/JIQw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Dec 2021 23:55:21 +0100
-Date: Sat, 18 Dec 2021 23:55:21 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211218225521.GZ2603@scaer>
-References: <20211218223534.578115-1-fontaine.fabrice@gmail.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5uN0RCdOI1VM; Sat, 18 Dec 2021 23:11:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A9D940204;
+	Sat, 18 Dec 2021 23:11:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B306B1BF306
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:11:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1B2981C44
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:11:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2p-tQFXainvF for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 23:11:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6259781448
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 23:11:22 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ b186-20020a1c1bc3000000b00345734afe78so3995660wmb.0
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 15:11:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=G+y1bLUqjWoFgExAIroinXK9axlzTv2fIg1OsupEO2s=;
+ b=YUWUc0BcTI1mI3a5gbhdWStUVMovwGLVvngnINfCldsI2nMiJWlV7gHKriw0EoppFe
+ yptLYN40pNgfmyZTrKsest0Clyl8Ua6L2ZLGx2JmxzmSE+z+RFig8JlnC0NfiDAY+NiA
+ 7pDd6VQRaa+xWMgHt5dN4Q9KKKJ3ZK+sRcH0CxwC4yAvuvErdNAMsroPmfHep9UK6te+
+ QFKBZAUIaIyKYa9Fkl35uBCD+Sl+60KfNCvzhEwZq3ZbrTeRLsOcRCanMn94SXJh06uf
+ FgECqpBGWhPkzM2qN5qBCTAu4bOZDTUefJ+dLEEJS1Tey5+aV260s6N0zObHUuDR90/i
+ RtYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=G+y1bLUqjWoFgExAIroinXK9axlzTv2fIg1OsupEO2s=;
+ b=6FYwso4T/iuHDqTUJsfUmxSbZvBnIV/L5R+7SBeXXrFiz018nspxyufCWfYblsTC4A
+ YktslLTczP2NeFlTIT/Tv3+UaFvWNtSjkZTRYrYRIFOxn1o7Az/A9NpOfc8Ogk0qowDz
+ crPmFxb1giExSJ1A378VBBxNFKoZzoKCOUwUDRq0CXCk/gGu04rmBVLVx27j6bJlThLE
+ w/1aK6yq+0RWD7VHkkq5ayNeLRHS66PsTBPxVPINeGX/TvFX5yzaZYc4sw8laER2S4uH
+ 4AUpJRWyGCSEhlc7EEDWMroMENzEg9dX81E2Qfqz0X52Sua96u0BrJtRY5JWAZ1qnEjE
+ Pgrw==
+X-Gm-Message-State: AOAM533tnQJ0jYfaY0L/0iCLK3o4h9c5CHfizS++ULMLuDuxO20Ymcgc
+ h8zevRPus4O84SLisLTtpjMjr2V5RBuUSQ==
+X-Google-Smtp-Source: ABdhPJxLXGjztM3zLNTik1+DUQBMIWSl96s7ZjoA4Q6LeQFELKS5R0P8mn6D38VfEKXsnVj5qmT2rQ==
+X-Received: by 2002:a1c:ac46:: with SMTP id v67mr15331954wme.182.1639869080370; 
+ Sat, 18 Dec 2021 15:11:20 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id l5sm14833342wms.16.2021.12.18.15.11.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 18 Dec 2021 15:11:20 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 19 Dec 2021 00:10:46 +0100
+Message-Id: <20211218231047.665943-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211218223534.578115-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenaptx: fix license
+Subject: [Buildroot] [PATCH 1/2] package/imagemagick: fix dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,65 +86,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yunhao Tian <t123yh.xyz@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS dependency was wrongly added to
+BR2_PACKAGE_HOST_IMAGEMAGICK by commit
+df20e4546384d1c249a6a0541183590671e83d77, indeed host-librsvg is only
+needed by BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
 
-On 2021-12-18 23:35 +0100, Fabrice Fontaine spake thusly:
-> License is GPL-3.0+, not GPL-3.0 since the addition of the package in
-> commit 1e4050b2d0372e1b47b57cc4210e3da5cb8ec3de
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libopenaptx/libopenaptx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libopenaptx/libopenaptx.mk b/package/libopenaptx/libopenaptx.mk
-> index f768dca1db..49e89d871c 100644
-> --- a/package/libopenaptx/libopenaptx.mk
-> +++ b/package/libopenaptx/libopenaptx.mk
-> @@ -6,7 +6,7 @@
->  
->  LIBOPENAPTX_VERSION = 0.2.1
->  LIBOPENAPTX_SITE = https://github.com/pali/libopenaptx/releases/download/$(LIBOPENAPTX_VERSION)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/imagemagick/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In master, we have:
-
-    LIBOPENAPTX_SITE = $(call github,pali,libopenaptx,$(LIBOPENAPTX_VERSION))
-
-Did you forget to sned the corresponding fix (I agree that we should use
-the released tarball rather than use the github helper)?
-
-> -LIBOPENAPTX_LICENSE = GPL-3.0
-> +LIBOPENAPTX_LICENSE = GPL-3.0+
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  LIBOPENAPTX_LICENSE_FILES = COPYING
->  LIBOPENAPTX_INSTALL_STAGING = YES
->  
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
+index e12d82939a..671b0995dc 100644
+--- a/package/imagemagick/Config.in.host
++++ b/package/imagemagick/Config.in.host
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_HOST_IMAGEMAGICK
+ 	bool "host imagemagick"
+-	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+ 	help
+ 	  ImageMagick(R) is a software suite to create, edit, and
+ 	  compose bitmap images. It can read, convert and write images
+@@ -17,6 +16,7 @@ if BR2_PACKAGE_HOST_IMAGEMAGICK
+ 
+ config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
+ 	bool "SVG support"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+ 	help
+ 	  Say 'y' here is you need ImageMagick tools (like convert)
+ 	  to support SVG.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
