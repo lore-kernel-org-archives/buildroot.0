@@ -4,63 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0ADAC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 21:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B35FFC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 21:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB7084D38;
-	Sat, 18 Dec 2021 21:08:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C6C384BF6;
+	Sat, 18 Dec 2021 21:12:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1B7_j47pq7fb; Sat, 18 Dec 2021 21:08:52 +0000 (UTC)
+	with ESMTP id EqAC5bxLTtkH; Sat, 18 Dec 2021 21:12:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0CA584CD3;
-	Sat, 18 Dec 2021 21:08:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4FFD84BD2;
+	Sat, 18 Dec 2021 21:12:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 637741BF2A0
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 21:08:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 46ACA1BF2A0
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 21:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 508C24012B
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 21:08:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 343824012B
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 21:12:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7W3zRYM_VCKf for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 21:08:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 45EE340022
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 21:08:49 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4cb3:149f:d03e:db5a])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3A70B5FF3F;
- Sat, 18 Dec 2021 22:08:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639861726;
- bh=fLHWImB1U4pnHZUvc5XA7m2zklEtlqH0uI6C5bTWGQQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ePaxOLb8M0Eac7RH/nR5Zys8++02WF4/g1kzkkv4tCF/G9h3RgWq95n4hLHPIRH7f
- aCn7SsJDlQ8nsKKD/yqi0xetbuUI6RLwm0aEdDwHQyJfkAB4IqNyBLBMLisOWshzgI
- ZmCHD/AQQ32is4OOsCK/L2EY9ADzuDdDoIdb3QkzPssK+HuuSheuVveCDC755tsX9/
- IQyw2IiQdMb7QCK26rVaw8zKZlSdGfhEnr3MVElI6WCE6LDxAU6Mb/DQBm19075IwW
- +wWroYDf9uFoRB1r2tfeZzUJ7vrKD5EddNwh5umT3dyDRAdN1LdC2v6a2RE4Pgc8+V
- 2Bxkcin4zG5Ig==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Dec 2021 22:08:39 +0100
-Date: Sat, 18 Dec 2021 22:08:39 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ with ESMTP id wH2GFgc-BYFq for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 21:12:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 345CF40022
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 21:12:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id E07088232C; Sat, 18 Dec 2021 21:07:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <20211218210839.GM2603@scaer>
-References: <20211218210359.2092979-1-yann.morin.1998@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211218210359.2092979-1-yann.morin.1998@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: rename the
- stm32f4?9_disco_defconfig entries
+Date: Sat, 18 Dec 2021 22:12:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 15e6a21f30721c7a9ce95d22fa4d76cd36dff971
+X-Git-Newrev: b8aebcfd823f83c169d78cfada346684ef538aa8
+X-Patchwork-Hint: ignore
+Message-Id: <20211218210720.E07088232C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/roseapplypi_defconfig: bump kernel
+ to 5.15.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,59 +53,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- Dario Binacchi <dariobin@libero.it>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b8aebcfd823f83c169d78cfada346684ef538aa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-12-18 22:03 +0100, Yann E. MORIN spake thusly:
-> Commit 494807e28dd4 (configs/stm32f4{2|6}9_*_defconfig: rename
-> configurations) forgot to also rename the corresponding entries
-> in the DEVELOPERS file.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Dario Binacchi <dariobin@libero.it>
-> Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+The kernel now has support for dma, ethernet, i2c, mmc, pinctrl, regulator,
+so enable drivers for those, change to a ext4 rootfs and enable DHCP on
+eth0.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/roseapplepi/genimage.cfg |  6 ++++++
+ board/roseapplepi/linux.config | 25 +++++++++++++++++++++++++
+ board/roseapplepi/uEnv.txt     |  2 +-
+ configs/roseapplepi_defconfig  |  7 ++++---
+ 4 files changed, 36 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 61e3ea4381..35f3be81b8 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -529,8 +529,8 @@ F:	package/tini/
->  N:	Christophe Priouzeau <christophe.priouzeau@foss.st.com>
->  F:	board/stmicroelectronics/stm32f429-disco/
->  F:	board/stmicroelectronics/stm32f469-disco/
-> -F:	configs/stm32f429_disco_defconfig
-> -F:	configs/stm32f469_disco_defconfig
-> +F:	configs/stm32f429_disco_xip_defconfig
-> +F:	configs/stm32f469_disco_sd_defconfig
->  
->  N:	Christophe Vu-Brugier <cvubrugier@fastmail.fm>
->  F:	package/drbd-utils/
-> -- 
-> 2.25.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/roseapplepi/genimage.cfg b/board/roseapplepi/genimage.cfg
+index f1bceb0ede..4c5a8de902 100644
+--- a/board/roseapplepi/genimage.cfg
++++ b/board/roseapplepi/genimage.cfg
+@@ -36,4 +36,10 @@ image sdcard.img {
+ 		bootable = "true"
+ 		image = "boot.vfat"
+ 	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
+ }
+diff --git a/board/roseapplepi/linux.config b/board/roseapplepi/linux.config
+index aea48b7730..89e7c8917f 100644
+--- a/board/roseapplepi/linux.config
++++ b/board/roseapplepi/linux.config
+@@ -26,19 +26,44 @@ CONFIG_INET=y
+ # CONFIG_IPV6 is not set
+ # CONFIG_WIRELESS is not set
+ # CONFIG_ETHTOOL_NETLINK is not set
++CONFIG_NETDEVICES=y
++CONFIG_OWL_EMAC=y
++CONFIG_REALTEK_PHY=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_ATC260X_ONKEY=y
+ # CONFIG_VT is not set
+ CONFIG_SERIAL_OWL=y
+ # CONFIG_HW_RANDOM is not set
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_OWL=y
++CONFIG_PINCTRL=y
++CONFIG_PINCTRL_OWL=y
++CONFIG_PINCTRL_S500=y
++CONFIG_POWER_RESET=y
++CONFIG_POWER_RESET_ATC260X=y
++CONFIG_MFD_ATC260X_I2C=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ATC260X=y
+ # CONFIG_HID is not set
+ # CONFIG_USB_SUPPORT is not set
++CONFIG_MMC=y
++CONFIG_MMC_OWL=y
++CONFIG_DMADEVICES=y
++CONFIG_OWL_DMA=y
+ # CONFIG_VIRTIO_MENU is not set
+ # CONFIG_VHOST_MENU is not set
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_EXT4_FS=y
++CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ # CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
+ # CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
+ # CONFIG_CRYPTO_HW is not set
+ # CONFIG_FTRACE is not set
+diff --git a/board/roseapplepi/uEnv.txt b/board/roseapplepi/uEnv.txt
+index 2b9de727b4..339eb8aa0a 100644
+--- a/board/roseapplepi/uEnv.txt
++++ b/board/roseapplepi/uEnv.txt
+@@ -1,3 +1,3 @@
+ # no ramdisk
+ ramdisk_addr_r=-
+-bootargs=console=ttyOWL2,115200
++bootargs=console=ttyOWL2,115200 root=/dev/mmcblk0p2 rootwait clk_ignore_unused
+diff --git a/configs/roseapplepi_defconfig b/configs/roseapplepi_defconfig
+index 2af94d010b..f4efacf80d 100644
+--- a/configs/roseapplepi_defconfig
++++ b/configs/roseapplepi_defconfig
+@@ -3,15 +3,16 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_GLOBAL_PATCH_DIR="board/roseapplepi/patches"
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 5.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/roseapplepi/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/roseapplepi/genimage.cfg"
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/roseapplepi/linux.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
