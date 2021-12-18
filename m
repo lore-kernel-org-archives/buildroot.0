@@ -1,67 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DC7C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 13:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1191BC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 13:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD32283DF2;
-	Sat, 18 Dec 2021 13:16:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 902F442204;
+	Sat, 18 Dec 2021 13:23:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dzLbFzI3evh0; Sat, 18 Dec 2021 13:16:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7B3783440;
-	Sat, 18 Dec 2021 13:16:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 610EC1BF59F
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:16:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C5A24154E
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:16:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OktFC5EADKsY for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 13:16:40 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EA67402F7
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 13:16:40 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pSOtIMzERQul; Sat, 18 Dec 2021 13:23:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E95634201F;
+	Sat, 18 Dec 2021 13:23:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 036DB1BF59F
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:23:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E659460E75
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LbwA4Wq40AVs for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D49460E6E
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 13:23:06 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:788a:3424:5325:e3c2])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C1ADB13F86E;
- Sat, 18 Dec 2021 14:16:28 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B5A613F814;
+ Sat, 18 Dec 2021 14:22:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1639833397;
- bh=98lDfA6yqSrXo8wWwoibiYebhLIJG2YMPtbFkOZ6lgU=;
+ s=smtp-20201208; t=1639833783;
+ bh=Zz9cV5ItjZOrvb40wgILJFN3pYLtGg69cMiU7OWVcg8=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lH15CwFknJVBZVaRbGxdp9V+HbKos4uZwifcgzqPfuI4dJVuKscrTU/M6xh8HzfiM
- ItFhYIMXLpQQeedWMqEKdxzU/Bxqke8/3CgGbQiR29Ii1EcmTtRIjDVE5dci8R98wV
- DlCV4nXHsYdqKL/HkFtYQ/ctX4UPS3kUJQg5yhEZto3ohHRLc7zf169XTg0lUjyTSZ
- vcpdQPU6uHPz6KJ6NivwnAEHf0ZGfdMlpCJqlfSligARubV7U1aa4DSRJYkCSWpJhB
- NbGx1fVaygf5NpGDx3hDWsgHUNVvsLmJ0lfPO/Vm1Bh1d6L6LGTSD8PxI/847YSOQE
- 37LIBtQMg8MYw==
+ b=iqg15b0fLa1G03A3fAohAnIIJgjh4UoGRXSWEuG1BbY7nmUxAjzbRsCVCXK1OcN38
+ w2uH5iFs+o2IoSSsLbcI4SjDd82sD6iT1s5S4NOs6KK20+YKYlBREHo25ClevkMpl0
+ DEconBxYscRDmM4kVrbaZ+i4eqzvxYszvMR0XLCMsZheCNXBMkYUvMu67yTVvmEAhd
+ 9cCHVtfnhqAAqvMDdjCjJaBF97u+/lZE6GpfAqopqLVudF3I492ii62n5uRdXGzlsA
+ 7QrDWhTl0GGEfSJV7tqmyOdSq8BVZ6BuchhyjLpf1KOd5MfgOqKNQS/snkcJhq8WbL
+ NIUBnNS3Yjqeg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Dec 2021 14:16:28 +0100
-Date: Sat, 18 Dec 2021 14:16:28 +0100
+ Sat, 18 Dec 2021 14:22:58 +0100
+Date: Sat, 18 Dec 2021 14:22:58 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20211218131628.GJ2603@scaer>
+To: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <20211218132258.GK2603@scaer>
 References: <20211215180021.274991-1-thierry.bultel@linatsea.fr>
  <20211215180021.274991-3-thierry.bultel@linatsea.fr>
  <966fe55d-c5d7-7f5a-63ec-f68be64a38c6@mind.be>
  <f5028ffa-5461-ae87-ad4c-227605361ddf@linatsea.fr>
  <28def8c0-8d05-015e-e9b2-a25b31d9237b@mind.be>
+ <32989bcc-4244-07fb-f544-cdc382dfc4c3@linatsea.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <28def8c0-8d05-015e-e9b2-a25b31d9237b@mind.be>
+In-Reply-To: <32989bcc-4244-07fb-f544-cdc382dfc4c3@linatsea.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 Subject: Re: [Buildroot] [PATCH 3/3] fs/dracut: new fs type
 X-BeenThere: buildroot@buildroot.org
@@ -75,75 +76,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QXJub3V0LCBUaGllcnJ5LCBBbGwsCgpPbiAyMDIxLTEyLTE3IDE5OjA1ICswMTAwLCBBcm5vdXQg
-VmFuZGVjYXBwZWxsZSBzcGFrZSB0aHVzbHk6Cj4gPj4+K2lmIEJSMl9UQVJHRVRfUk9PVEZTX0RS
-QUNVVAo+ID4+Pitjb25maWcgQlIyX1RBUkdFVF9ST09URlNfRFJBQ1VUX0NPTkZfRklMRQo+ID4+
-PivCoMKgwqAgc3RyaW5nICJjb25maWd1cmF0aW9uIGZpbGUiCj4gPj7CoElzIHRoZXJlIGEgcG9z
-c2liaWxpdHkgZm9yIGEgZGVmYXVsdCBjb25maWd1cmF0aW9uIGZpbGU/Cj4gPldvdWxkIHRoYXQg
-cmVhbGx5IG1ha2Ugc2Vuc2UgPyBXaGF0IHdvdWxkIGJlIGRlZmF1bHQgdGhlIGV4cGVjdGVkIHBh
-Y2thZ2VzCj4gPmluIHRoZSByYW0gZGlzayA/Cj4gIFllYWgsIE9LLCBnb29kIHBvaW50Li4uCgpB
-Z3JlZWQsIHRoZXJlIGNhbid0IGJlIGEgcmVhc29uYWJsZSBkZWZhdWx0LgoKPiA+Tm90aWNlIHRo
-YXQgdGhlIGNvbnRlbnQgb2YgdGhlIGNvbmZpZyBmaWxlIHN0cm9uZ2x5IGRlcGVuZHMgb24gdGhl
-IGluaXQKPiA+c3lzdGVtIChkcmFjdXQgYmVpbmcgbW9zdGx5Cj4gPnRob3VnaHQgZm9yIHN5c3Rl
-bWQsIGJ1dCBJIHVzZSBpdCB3aXRoIGJ1c3lib3gvaW5pdC5kIGluIG15IGNhc2UpLgo+ID5CdXQg
-SSBhZ3JlZSB0aGF0IEkgbXVzdCBhZGQgYW4gZXJyb3IgaW4gdGhlIC5tayB3aGVuIHRoZSBmaWxl
-IGlzIG5vdAo+ID5zcGVjaWZpZWQvZG9lcyBub3QgZXhpc3QKClllcywgY2F0Y2hpbmcgdGhhdCBu
-aWNlbHkgd291bGQgYmUgYmV0dGVyLiBXaGF0IHdlIHVzdWFsbHkgZG8gaXM6CgogICAgaWZlcSAo
-JChCUl9EVUlMRElORykuJChCUjJfVEFSR0VUX1JPT1RGU19EUkFDVVRfQ09ORl9GSUxFKSx5LikK
-ICAgICQoZXJyb3IgTm8gZmlsZSBzcGVjaWZpZWQgaW4gQlIyX1RBUkdFVF9ST09URlNfRFJBQ1VU
-X0NPTkZfRklMRSkKICAgIGVuZGlmCgpBbmQgaWYgdGhlIGZpbGUgaXMgbWlzc2luZywgdGhlbiBw
-cmVzdW1hYmx5IGRyYWN1dCB3aWxsIGV4aXQgaW4gZXJyb3IsCndoaWNoIGlzIHN1ZmZpY2llbnQg
-Zm9yIG1lLgoKPiBbc25pcF0KPiA+Pj4rIyBkZXZ0bXBmcyBkb2VzIG5vdCBnZXQgYXV0b21vdW50
-ZWQgd2hlbiBpbml0cmFtZnMgaXMgdXNlZC4KPiA+Pj4rIyBBZGQgYSBwcmUtaW5pdCBzY3JpcHQg
-dG8gbW91bnQgaXQgYmVmb3JlIHJ1bm5pbmcgaW5pdAo+ID4+PisjIFdlIG11c3QgaGF2ZSAvZGV2
-L2NvbnNvbGUgdmVyeSBlYXJseSwgZXZlbiBiZWZvcmUgL2luaXQgcnVucywKPiA+Pj4rIyBmb3Ig
-c3RkaW4vc3Rkb3V0L3N0ZGVycgo+ID4+PitkZWZpbmUgUk9PVEZTX0RSQUNVVF9BRERfSU5JVAo+
-ID4+PivCoMKgwqAgaWYgWyAhIC1lICQoVEFSR0VUX0RJUikvaW5pdCBdOyB0aGVuIFwKPiA+Pj4r
-wqDCoMKgwqDCoMKgwqAgJChJTlNUQUxMKSAtbSAwNzU1IGZzL2NwaW8vaW5pdCAkKFRBUkdFVF9E
-SVIpL2luaXQ7IFwKPiA+Pj4rwqDCoMKgIGZpCj4gPj4+K8KgwqDCoCBta2RpciAtcCAkKFRBUkdF
-VF9ESVIpL2Rldgo+ID4+PivCoMKgwqAgbWtub2QgLW0gMDYyMiAkKFRBUkdFVF9ESVIpL2Rldi9j
-b25zb2xlIGMgNSAxCj4gPj4+K2VuZGVmCj4gPj4+Kwo+ID4+PitlbmRpZiAjIEJSMl9ST09URlNf
-REVWSUNFX0NSRUFUSU9OX1NUQVRJQwo+ID4+Cj4gPj7CoFRoZSBhYm92ZSBpcyB0aGUgc2FtZSBs
-b2dpYyBhcyBpbiBjcGlvLm1rLiBJdCB3b3VsZCBiZSBiZXR0ZXIgaWYgd2UKPiA+PmNvdWxkIHJl
-ZmFjdG9yIHRoYXQgdG8gYSBjb21tb24gcGxhY2UuCj4gPgo+ID5JIGRlZmluaXRpdmVseSBhZ3Jl
-ZSwgdGhhdCBpcyB3aGF0IEkgc2FpZCBteXNlbGYuIEJ1dCB3aGF0IGlzIHRoZSBtb3N0Cj4gPmFw
-cHJvcHJpYXRlIHBsYWNlIHRvIHB1dCBpdCA/Cj4gCj4gIEkgd291bGRuJ3QgYmUgb3Bwb3NlZCB0
-byBwdXR0aW5nIGl0IGluIGZzL2NvbW1vbi5tay4gWWFubiwgd2hhdCBkbyB5b3UgdGhpbms/CgpO
-b3Qgc3VyZS4gVXN1YWxseSwgd2UgdHJ5IG5vdCB0byBjb21vbmFsaXNlIHRoaW5ncyB1bnRpbCB3
-ZSBoYXZlIGF0CmxlYXN0IGEgZmV3IHVzZXJzLgoKSW4gIHRoaXMgY2FzZSwgaXQgaXMgdmVyeSBp
-bXByb2JhYmx5IHRoYXQgd2UgaGF2ZSBlbm91Z2ggdXNlcnMgdG8Kd2FycmFudCBjb21tb24gY29k
-ZSwgc28gZHVwbGljYXRpb24gaXMgc3RpbGwgT0sgaW4gbXkgb3Bpbmlvbi4KCkhvd2V2ZXIuLi4K
-Cj4gIEkgYW0sIGhvd2V2ZXIsIHRoaW5raW5nIHNvbWV0aGluZyBlbHNlIGFzIHdlbGwuIFdoYXQg
-ZG9lcyB0aGUgZHJhY3V0IGZzCj4gcHJvZHVjZT8gSXMgaXQgYSBjcGlvIGltYWdlPyBJZiBzbywg
-dGhlbiBpdCBtaWdodCBiZSBhIGdvb2QgaWRlYSB0byBpbnN0ZWFkCj4gbWFrZSB0aGlzIGEgc3Vi
-b3B0aW9uIG9mIGNwaW8uIFRoaXMsIGluIHR1cm4sIHdvdWxkIG1ha2UgaXQgcG9zc2libGUgdG8g
-dXNlCj4gZHJhY3V0IGZvciBhbiBpbml0cmFtZnMuCgpUaGlzIHdhcyB0byBiZSBteSBwcm9wb3Nh
-bCB0b286IGV4dGVuZHMgdGhlIGV4aXN0aW5nIGZzL2NwaW8gdG8Kb3B0aW9uYWxseSB1c2UgZHJh
-Y3V0IHRvIHByZXBhcmUgdGhlIGZpbGUgbGlzdC4KCkkgd2FzIHdvbmRlcmluZyB3aHkgd2UgZGlk
-IG5vdCBqdXN0IGhhbmQgb3ZlciBzdWNoIGEgbGlzdCB0byBjcGlvCihyZXBsYWNpbmcgdGhlIGV4
-aXN0aW5nICdmaW5kJykuIEJ1dCBkcmFjdXQgaXMgbW9yZSB0aGFuIGpzdXQgYSBmaWxlCmxpc3Q6
-IGl0IHByZXN1bWFibHkga25vd3MgaG93IHRvIGhhbmRsZSBsaWJyYXJ5IGRlcGVuZGVuY2llcyAo
-TkVFREVEKQphbmQgZm9sbG93cyByZWN1cnNpdmVseSwgYW5kIHNpbWlsYXJseSBmb3Iga2VybmVs
-IG1vZHVsZXMuIE90aGVyd2lzZSwKZHJhY3V0IHdvdWxkIGJlIG9mIHZlcnkgbGl0dGxlIGludGVy
-ZXN0Li4uCgooSSBzZWUgdGhhdCBUaGllcnJ5IGFsc28gcmVwbGllZCwgYnV0IEkgd2FzIG5vdCBv
-biBDYyBzbyBJIG5lYXJseSBtaXNzZWQKaXQuLi4gSSdsbCByZXBseSBmdXJ0aGVyIHRvIFRoaWVy
-cnkgbWVzc2FnZSBpbiBhIG1vbWVudC4uLikKClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAK
-Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
-LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
-ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
-IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
-ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
-WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
-LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
-eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
-LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+Thierry, All,
+
+On 2021-12-17 22:50 +0100, Thierry Bultel spake thusly:
+> Good idea. But dracut generates a gzipped cpio image.
+
+That the cpio is gzipped is unfortuante, because the kernel will again
+compress it as part of its own compression (whem it is used as an
+initramfs, IIRC).
+
+> Maybe, instead, the
+> "cpio" and "dracut" options (exclusives) could be but in a "Initial RAM
+> filesystem" menu.
+
+We already have such a filesystem:
+    fs/initramfs/
+        "initial RAM filesystem linked into linux kernel"
+
+And this one is tricky, because it hooks into linux/linux.mk with manual
+and custom dependencies (see linux/linux.mk@571). I am not 100% happy on
+how this is done, but we can't really have better...
+
+So, I think that having dracut be an option of cpio is the easiest way
+to go...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
