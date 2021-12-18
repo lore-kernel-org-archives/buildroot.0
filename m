@@ -1,47 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D11B3C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 13:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5895C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 13:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3729742286;
-	Sat, 18 Dec 2021 13:01:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3995D40A0F;
+	Sat, 18 Dec 2021 13:04:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bP3LOQJqQNPj; Sat, 18 Dec 2021 13:01:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SVPph-a5PIOJ; Sat, 18 Dec 2021 13:04:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7502542284;
-	Sat, 18 Dec 2021 13:01:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16EA31BF5DB
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:01:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E24B40C7E;
+	Sat, 18 Dec 2021 13:04:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C001B1BF59F
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10D9142284
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:01:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A561F40C7D
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 13:04:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LSe_l0AB0n4v for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 13:01:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 417EB42283
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 13:01:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id B8BA182258; Sat, 18 Dec 2021 12:55:44 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 18 Dec 2021 14:00:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ba8e88e396f216ac8486580b8817aac92ae93b2
-X-Git-Newrev: debc50bd594f98aa433e2de336018d769a3496ec
-X-Patchwork-Hint: ignore
-Message-Id: <20211218125544.B8BA182258@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/grep: fix build with microblazeel
- and or1k
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8rHCsdkI24mY for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 13:04:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9EF2740C78
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 13:04:19 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:788a:3424:5325:e3c2])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 333B813F81D;
+ Sat, 18 Dec 2021 14:04:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1639832656;
+ bh=f3MKLZoUuH4zNXmk/z9FAgmCYlQ7JfRZk4HOmJAGtWM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=i02cPKL2146m3o1a9gxl2jt0CKrR+3SVuGSt7z1wUJxbV/r47FIYf1exB150FmBZ9
+ 5PakAO5KOxtt25SD0ODIzhl3FH2WQiNyxSOhatr3J+TNL0OgKK5NUFy9VGVd+Nk8CA
+ hCCKSNIAVpiJaaOSd+7g4S6Mvq2zRUREKDjrD6MkiKzdbHLi5lVy2GK3GaJZ3fcPw9
+ Y6o8jeyvP7SHe03AFbmzA0KD+AR2x7isd1iRa0NQfX188rIkQfV/zZp2k8ih/PgESh
+ LDz9pdH/C0xICemNUYXF2JWaKVG+j7sqmIirmiB+MRaMDnXa8DIcB+LNwizjl7YccS
+ m338UOT67JR6g==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 18 Dec 2021 14:04:09 +0100
+Date: Sat, 18 Dec 2021 14:04:09 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211218130409.GI2603@scaer>
+References: <20211218101238.565215-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20211218101238.565215-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/grep: fix build with
+ microblazeel and or1k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,125 +70,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=debc50bd594f98aa433e2de336018d769a3496ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix the following build failure with microblazeel and or1k raised since
-bump to version 3.7 in commit f1f0b633eb1c4bc006b95daad8f299028e89d19d:
-
-sigsegv.c: In function 'sigsegv_handler':
-sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
-  979 |                       : vma.is_near_this (addr, &vma))
-      |
-
-Fixes:
- - http://autobuild.buildroot.org/results/78142463ba8cc5f6c1bf15295095a271422294f4
- - http://autobuild.buildroot.org/results/f300b1b5e958f096a9d58197a44dcf0c2abd3585
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-sigsegv-fix-build-on-microblazeel.patch   | 32 ++++++++++++++++++++++
- package/grep/0002-sigsegv-fix-build-on-or1k.patch  | 32 ++++++++++++++++++++++
- package/grep/grep.mk                               |  2 ++
- 3 files changed, 66 insertions(+)
-
-diff --git a/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch b/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch
-new file mode 100644
-index 0000000000..06869b716e
---- /dev/null
-+++ b/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch
-@@ -0,0 +1,32 @@
-+From 3079cea1b18fe72aa1da6b04e561abfb36f4f443 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Nov 2021 09:57:23 +0100
-+Subject: sigsegv: fix build on microblazeel
-+
-+Fix the following build failure on microblazeel with diffutils 3.8:
-+sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
-+http://autobuild.buildroot.org/results/5ecd55b7c72f9630a7acc72341ccb60e94ddb574
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=3079cea1b18fe72aa1da6b04e561abfb36f4f443]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ m4/stack-direction.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
-+index c90d69733..70286c8f5 100644
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -37,7 +37,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
-+       m68* | \
-+       m88k | \
-+       mcore | \
-+-      microblaze | \
-++      microblaze* | \
-+       mips* | \
-+       mmix | \
-+       mn10200 | \
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/grep/0002-sigsegv-fix-build-on-or1k.patch b/package/grep/0002-sigsegv-fix-build-on-or1k.patch
-new file mode 100644
-index 0000000000..73385fe9f7
---- /dev/null
-+++ b/package/grep/0002-sigsegv-fix-build-on-or1k.patch
-@@ -0,0 +1,32 @@
-+From 496c1740e5475be85b65fdb2b143771f09ed27cb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Nov 2021 10:06:31 +0100
-+Subject: sigsegv: fix build on or1k
-+
-+Fix the following build failure on or1k with diffutils 3.8
-+https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=e54aa6196947ed22ff66bcd714e4fc7bd0c5c3b4
-+sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
-+http://autobuild.buildroot.org/results/5427e52489d29ed4f18b4a70b3c36f0f7bb0ddd9
-+
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=496c1740e5475be85b65fdb2b143771f09ed27cb]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ m4/stack-direction.m4 | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
-+index 70286c8f5..29e398d77 100644
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -45,6 +45,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
-+       nios2 | \
-+       nds32* | \
-+       ns32k | \
-++      or1k | \
-+       pdp11 | \
-+       pj* | \
-+       powerpc* | rs6000 | \
-+-- 
-+cgit v1.2.1
-+
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 233f5fe633..a485f23dc7 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -10,6 +10,8 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPL-3.0+
- GREP_LICENSE_FILES = COPYING
- GREP_CPE_ID_VENDOR = gnu
-+# We're patching m4/stack-direction.m4
-+GREP_AUTORECONF = YES
- GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- # install into /bin like busybox grep
- GREP_CONF_OPTS = --exec-prefix=/
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmFicmljZSwgQWxsLAoKT24gMjAyMS0xMi0xOCAxMToxMiArMDEwMCwgRmFicmljZSBGb250YWlu
+ZSBzcGFrZSB0aHVzbHk6Cj4gRml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aXRoIG1p
+Y3JvYmxhemVlbCBhbmQgb3IxayByYWlzZWQgc2luY2UKPiBidW1wIHRvIHZlcnNpb24gMy43IGlu
+IGNvbW1pdCBmMWYwYjYzM2ViMWM0YmMwMDZiOTVkYWFkOGYyOTkwMjhlODlkMTlkOgo+IAo+IHNp
+Z3NlZ3YuYzogSW4gZnVuY3Rpb24gJ3NpZ3NlZ3ZfaGFuZGxlcic6Cj4gc2lnc2Vndi5jOjk3OToy
+ODogZXJyb3I6ICdzdHJ1Y3Qgdm1hX3N0cnVjdCcgaGFzIG5vIG1lbWJlciBuYW1lZCAnaXNfbmVh
+cl90aGlzJwo+ICAgOTc5IHwgICAgICAgICAgICAgICAgICAgICAgIDogdm1hLmlzX25lYXJfdGhp
+cyAoYWRkciwgJnZtYSkpCj4gICAgICAgfAo+IAo+IEZpeGVzOgo+ICAtIGh0dHA6Ly9hdXRvYnVp
+bGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzc4MTQyNDYzYmE4Y2M1ZjZjMWJmMTUyOTUwOTVhMjcx
+NDIyMjk0ZjQKPiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9mMzAw
+YjFiNWU5NThmMDk2YTlkNTgxOTdhNDRkY2YwYzJhYmQzNTg1Cj4gCj4gU2lnbmVkLW9mZi1ieTog
+RmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CgpBcHBsaWVkIHRv
+IG1hc3RlciwgdGhhbmtzLiBCdXQgc2VlIGJlbG93IGZvciBhIGxpdHRsZSBuaXQuLi4KCj4gLS0t
+Cj4gIC4uLjAxLXNpZ3NlZ3YtZml4LWJ1aWxkLW9uLW1pY3JvYmxhemVlbC5wYXRjaCB8IDMyICsr
+KysrKysrKysrKysrKysrKysKPiAgLi4uL2dyZXAvMDAwMi1zaWdzZWd2LWZpeC1idWlsZC1vbi1v
+cjFrLnBhdGNoIHwgMzIgKysrKysrKysrKysrKysrKysrKwo+ICBwYWNrYWdlL2dyZXAvZ3JlcC5t
+ayAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+ICAzIGZpbGVzIGNoYW5nZWQsIDY2
+IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ3JlcC8wMDAxLXNp
+Z3NlZ3YtZml4LWJ1aWxkLW9uLW1pY3JvYmxhemVlbC5wYXRjaAo+ICBjcmVhdGUgbW9kZSAxMDA2
+NDQgcGFja2FnZS9ncmVwLzAwMDItc2lnc2Vndi1maXgtYnVpbGQtb24tb3Ixay5wYXRjaAo+IAo+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dyZXAvMDAwMS1zaWdzZWd2LWZpeC1idWlsZC1vbi1taWNy
+b2JsYXplZWwucGF0Y2ggYi9wYWNrYWdlL2dyZXAvMDAwMS1zaWdzZWd2LWZpeC1idWlsZC1vbi1t
+aWNyb2JsYXplZWwucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAw
+MDAuLjRhZmViNDc5NzEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9ncmVwLzAwMDEt
+c2lnc2Vndi1maXgtYnVpbGQtb24tbWljcm9ibGF6ZWVsLnBhdGNoCj4gQEAgLTAsMCArMSwzMiBA
+QAo+ICtGcm9tIDMwNzljZWExYjE4ZmU3MmFhMWRhNmIwNGU1NjFhYmZiMzZmNGY0NDMgTW9uIFNl
+cCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZh
+YnJpY2VAZ21haWwuY29tPgo+ICtEYXRlOiBUaHUsIDExIE5vdiAyMDIxIDA5OjU3OjIzICswMTAw
+Cj4gK1N1YmplY3Q6IHNpZ3NlZ3Y6IGZpeCBidWlsZCBvbiBtaWNyb2JsYXplZWwKPiArCj4gK0Zp
+eCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUgb24gbWljcm9ibGF6ZWVsIHdpdGggZGlmZnV0
+aWxzIDMuODoKPiArc2lnc2Vndi5jOjk3OToyODogZXJyb3I6ICdzdHJ1Y3Qgdm1hX3N0cnVjdCcg
+aGFzIG5vIG1lbWJlciBuYW1lZCAnaXNfbmVhcl90aGlzJwo+ICtodHRwOi8vYXV0b2J1aWxkLmJ1
+aWxkcm9vdC5vcmcvcmVzdWx0cy81ZWNkNTViN2M3MmY5NjMwYTdhY2M3MjM0MWNjYjYwZTk0ZGRi
+NTc0Cj4gKwo+ICtbUmV0cmlldmVkIGZyb206Cj4gK2h0dHBzOi8vZ2l0LnNhdmFubmFoLmdudS5v
+cmcvY2dpdC9nbnVsaWIuZ2l0L3BhdGNoLz9pZD0zMDc5Y2VhMWIxOGZlNzJhYTFkYTZiMDRlNTYx
+YWJmYjM2ZjRmNDQzXQogICAgICAgICAgICAgICAgICAsLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS1eXl5eXgogICAgICAgICAgICAgICAgIC8KSSd2ZSBjaGFuZ2VkIHRoYXQgd2l0aCBzL3Bh
+dGNoL2NvbW1pdC8gc28gdGhhdCBpdCBwb2ludHMgdG8gdGhlIG5pY2UKaHRtbCBwYWdlIHJhdGhl
+ciB0aGFuIHRoZSByYXcgcGF0Y2gsIGxpa2UgaXMgZG9uZSBpbiB0aGUgc2Vjb25kIHBhdGNoLApi
+ZWxvdy4uLgoKPiArU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFi
+cmljZUBnbWFpbC5jb20+Cj4gKy0tLQo+ICsgbTQvc3RhY2stZGlyZWN0aW9uLm00IHwgMiArLQo+
+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtk
+aWZmIC0tZ2l0IGEvbTQvc3RhY2stZGlyZWN0aW9uLm00IGIvbTQvc3RhY2stZGlyZWN0aW9uLm00
+Cj4gK2luZGV4IGM5MGQ2OTczMy4uNzAyODZjOGY1IDEwMDY0NAo+ICstLS0gYS9tNC9zdGFjay1k
+aXJlY3Rpb24ubTQKPiArKysrIGIvbTQvc3RhY2stZGlyZWN0aW9uLm00Cj4gK0BAIC0zNyw3ICsz
+Nyw3IEBAIEFDX0RFRlVOKFtTVl9TVEFDS19ESVJFQ1RJT05dLAo+ICsgICAgICAgbTY4KiB8IFwK
+PiArICAgICAgIG04OGsgfCBcCj4gKyAgICAgICBtY29yZSB8IFwKPiArLSAgICAgIG1pY3JvYmxh
+emUgfCBcCj4gKysgICAgICBtaWNyb2JsYXplKiB8IFwKPiArICAgICAgIG1pcHMqIHwgXAo+ICsg
+ICAgICAgbW1peCB8IFwKPiArICAgICAgIG1uMTAyMDAgfCBcCj4gKy0tIAo+ICtjZ2l0IHYxLjIu
+MQo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ncmVwLzAwMDItc2lnc2Vndi1maXgtYnVpbGQt
+b24tb3Ixay5wYXRjaCBiL3BhY2thZ2UvZ3JlcC8wMDAyLXNpZ3NlZ3YtZml4LWJ1aWxkLW9uLW9y
+MWsucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjczMzg1
+ZmU5ZjcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9ncmVwLzAwMDItc2lnc2Vndi1m
+aXgtYnVpbGQtb24tb3Ixay5wYXRjaAo+IEBAIC0wLDAgKzEsMzIgQEAKPiArRnJvbSA0OTZjMTc0
+MGU1NDc1YmU4NWI2NWZkYjJiMTQzNzcxZjA5ZWQyN2NiIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAw
+MQo+ICtGcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4K
+PiArRGF0ZTogVGh1LCAxMSBOb3YgMjAyMSAxMDowNjozMSArMDEwMAo+ICtTdWJqZWN0OiBzaWdz
+ZWd2OiBmaXggYnVpbGQgb24gb3Ixawo+ICsKPiArRml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFp
+bHVyZSBvbiBvcjFrIHdpdGggZGlmZnV0aWxzIDMuOAo+ICtodHRwczovL2dpdC5zYXZhbm5haC5n
+bnUub3JnL2NnaXQvZ251bGliLmdpdC9jb21taXQvP2lkPWU1NGFhNjE5Njk0N2VkMjJmZjY2YmNk
+NzE0ZTRmYzdiZDBjNWMzYjQKPiArc2lnc2Vndi5jOjk3OToyODogZXJyb3I6ICdzdHJ1Y3Qgdm1h
+X3N0cnVjdCcgaGFzIG5vIG1lbWJlciBuYW1lZCAnaXNfbmVhcl90aGlzJwo+ICtodHRwOi8vYXV0
+b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy81NDI3ZTUyNDg5ZDI5ZWQ0ZjE4YjRhNzBiM2Mz
+NmYwZjdiYjBkZGQ5Cj4gKwo+ICtbUmV0cmlldmVkIGZyb206Cj4gK2h0dHBzOi8vZ2l0LnNhdmFu
+bmFoLmdudS5vcmcvY2dpdC9nbnVsaWIuZ2l0L2NvbW1pdC8/aWQ9NDk2YzE3NDBlNTQ3NWJlODVi
+NjVmZGIyYjE0Mzc3MWYwOWVkMjdjYl0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAsXl5eXl5eCi4uIGhlcmUgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS3CtAoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gK1NpZ25lZC1vZmYtYnk6
+IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ICstLS0KPiAr
+IG00L3N0YWNrLWRpcmVjdGlvbi5tNCB8IDEgKwo+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvbTQvc3RhY2stZGlyZWN0aW9uLm00IGIvbTQvc3Rh
+Y2stZGlyZWN0aW9uLm00Cj4gK2luZGV4IDcwMjg2YzhmNS4uMjllMzk4ZDc3IDEwMDY0NAo+ICst
+LS0gYS9tNC9zdGFjay1kaXJlY3Rpb24ubTQKPiArKysrIGIvbTQvc3RhY2stZGlyZWN0aW9uLm00
+Cj4gK0BAIC00NSw2ICs0NSw3IEBAIEFDX0RFRlVOKFtTVl9TVEFDS19ESVJFQ1RJT05dLAo+ICsg
+ICAgICAgbmlvczIgfCBcCj4gKyAgICAgICBuZHMzMiogfCBcCj4gKyAgICAgICBuczMyayB8IFwK
+PiArKyAgICAgIG9yMWsgfCBcCj4gKyAgICAgICBwZHAxMSB8IFwKPiArICAgICAgIHBqKiB8IFwK
+PiArICAgICAgIHBvd2VycGMqIHwgcnM2MDAwIHwgXAo+ICstLSAKPiArY2dpdCB2MS4yLjEKPiAr
+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ3JlcC9ncmVwLm1rIGIvcGFja2FnZS9ncmVwL2dyZXAu
+bWsKPiBpbmRleCAyMzNmNWZlNjMzLi5hNDg1ZjIzZGM3IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
+Z3JlcC9ncmVwLm1rCj4gKysrIGIvcGFja2FnZS9ncmVwL2dyZXAubWsKPiBAQCAtMTAsNiArMTAs
+OCBAQCBHUkVQX1NPVVJDRSA9IGdyZXAtJChHUkVQX1ZFUlNJT04pLnRhci54ego+ICBHUkVQX0xJ
+Q0VOU0UgPSBHUEwtMy4wKwo+ICBHUkVQX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4gIEdSRVBf
+Q1BFX0lEX1ZFTkRPUiA9IGdudQo+ICsjIFdlJ3JlIHBhdGNoaW5nIG00L3N0YWNrLWRpcmVjdGlv
+bi5tNAo+ICtHUkVQX0FVVE9SRUNPTkYgPSBZRVMKPiAgR1JFUF9ERVBFTkRFTkNJRVMgPSAkKFRB
+UkdFVF9OTFNfREVQRU5ERU5DSUVTKQo+ICAjIGluc3RhbGwgaW50byAvYmluIGxpa2UgYnVzeWJv
+eCBncmVwCj4gIEdSRVBfQ09ORl9PUFRTID0gLS1leGVjLXByZWZpeD0vCj4gLS0gCj4gMi4zMy4w
+Cj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRl
+ZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2
+IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAg
+ICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBB
+R0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1n
+ZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAg
+fAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
