@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 686E2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 23:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DCFC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 23:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1571860B49;
-	Sat, 18 Dec 2021 23:19:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC14340235;
+	Sat, 18 Dec 2021 23:23:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dA7AuJt6mh_t; Sat, 18 Dec 2021 23:19:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E02D607DE;
-	Sat, 18 Dec 2021 23:19:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7DD81BF306
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:19:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADD3440204
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:19:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4oLsrqsaMNk5 for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 23:19:25 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PT0n_MuRBjy2; Sat, 18 Dec 2021 23:23:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0570340204;
+	Sat, 18 Dec 2021 23:23:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DDC5B1BF306
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:23:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA60741820
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 23:23:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nFJQXmsDTfTe for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 23:23:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 95560400AF
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 23:19:25 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id q16so11636487wrg.7
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 15:19:25 -0800 (PST)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 065EA417FB
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 23:23:06 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id q16so11651733wrg.7
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 15:23:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h+lMAte9OALclwmooZcNZF/tWhrL3Mux6rzvFaVXfKk=;
- b=mnhK8tw0B5Jpdpedc8MSWK3XFXPFpWQamKr/B9LtRylkf6N2pDP3RX2/B7iUrFYmpg
- UxJxO3nmJzbebXxrsO1vAQXWg6Y0o7mwxaRdw+EdZOJ4RqrnjKb3+aw38xBLqfFIr3SQ
- DVXClUSwZCXKr/8HjM+QAI7Nt29czmghWVROSdcRUlUlBjw/YNShrNWIGrfCUL6kFOzB
- i9fluUnj9EOMdjfrk8SGRKmROCz31B2JJPgdiG3u9D9AHSMD4USISa98UBkrqOykcbwK
- 8XXwkXIMsU7AramfMSuHDaK9zqNcqUDWA52zhTdWcCgHY1hCE7gdrpQyNs/KGxXdw221
- uYZA==
+ bh=Sa+/NzS24mUuVImhOGOcl9R7j3XHuOsaaRl9dbWR6vo=;
+ b=PWWU2XY1syC31BeHpoHDO0U3aViII70qP6Q5HF8tFnx9Fao3q1COTZVSj062mcnKP0
+ 6QMiYUMtXQZwRu8ug/MjB8LjJBZi4bK6CBml12DavuQaKsWOHrTA96MAaEsW494oI5Zd
+ 62OjYyvYZtJuLV4Ddl6aovv3j6oC/oEHqYAFUclzOoT3YsOHFXsqpAio9Gcmo126nC2J
+ VlTZynOcvlyyzK88eXlQpTaUbM4qwXunU17mGOtNj7hRV6w/dK+J9r2l4txVL3BGN4+0
+ C3gRFXGHoRT66wl0nedvsY5X6QtBCJNfCG5HFctx0ElMG8TyUZ1320zb27bEyDwiC1ld
+ LBIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h+lMAte9OALclwmooZcNZF/tWhrL3Mux6rzvFaVXfKk=;
- b=u1OzrU6cLDsLfC8Bf7Cz/tpsO4CdmioYFaT7WkEwZW0CYO6WHoqKaiYOdjKdB7z7Zw
- fw4rAhzS9H1Dqjdj3eRejgJvbceEppfp85JykEsapFAwMIPID+7UusWu9gZyW/kcIRQi
- 96LC5e2D1eSP22yyWaKXxvy1qQPEcgpgdmkeB30i7SSjHagC6eixsxmLVPu7Dwp+zj04
- 2DzLN1Y71rb56BuPjJym1+tyZWqv6xDg0HatWDshI00OGCcdc9kTYZ8et7QNg2DRWizO
- Zu8skw+ByYKISeRf9DfGeYgC63v0TSXfOAz4A2kzR/LjAJ3CRhYXT/1+SiqpjOGKCF0a
- hmyA==
-X-Gm-Message-State: AOAM530crGiJUEDXqxgVQ6yURLuVnPWGoj8UWsK0lZi+4xFaOQHR4sfc
- 8uPeIZl9eLNnYZbYqfKMG+L/n9Tx20WOlw==
-X-Google-Smtp-Source: ABdhPJwWMKZKCioVKKxmgSZHmiJXZisrDAeqAZNj5c4u6SoivIjJawOFcVK+knTrh+n2X0gBLJScIQ==
-X-Received: by 2002:a05:6000:1848:: with SMTP id
- c8mr7389631wri.265.1639869563628; 
- Sat, 18 Dec 2021 15:19:23 -0800 (PST)
+ bh=Sa+/NzS24mUuVImhOGOcl9R7j3XHuOsaaRl9dbWR6vo=;
+ b=x7fyDT0ehBRi1pBM4lvdvgFKP2XSzU60f5db6zh86fyRcFFYEedZO/ZmzzfK9tt61p
+ YSNNRhLQN1FWETmxnlYoILNr85W2wFlMsPtRD2CEutHunpuUoI0fhzUw9g1vh8YD52K/
+ LEFHXaq1XvV5n5N5scyLtjZ3aWkKGfxjUxhP5/LfRyyPUcoeBNz0aisiDcoYuMbsac/u
+ yQnb9EJaK6Ww2+XwV0eaBzICm+4KKb7ukT96s9xkNcB4X/HnIadcwb1jDOQGwgXFhpUJ
+ lec+pCtd+xuuDlxERKMgyH9YHSaM/5+fG+jXPeD2DxG6NwNm8S4m0YuLF4btyz3SVQ+U
+ qnMg==
+X-Gm-Message-State: AOAM532e0Uivnrn5ulMEbImislm89Q3DlWvJC20FyTyUmoY+x8wZ7Llm
+ +npLsGHuNG63ZThZCo2syijy7GEpoCaXQw==
+X-Google-Smtp-Source: ABdhPJxFWrmXa1P9pb+gaDtIq/NtK/OPAcjrzkAFWjdXdDKae8BUYOkQRRIoI8EGQWaMGmGYJpE0IA==
+X-Received: by 2002:a5d:6488:: with SMTP id o8mr7616403wri.631.1639869785202; 
+ Sat, 18 Dec 2021 15:23:05 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id l26sm4228297wme.36.2021.12.18.15.19.23
+ by smtp.gmail.com with ESMTPSA id g124sm14237118wme.28.2021.12.18.15.23.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Dec 2021 15:19:23 -0800 (PST)
+ Sat, 18 Dec 2021 15:23:05 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Dec 2021 00:18:55 +0100
-Message-Id: <20211218231855.666502-1-fontaine.fabrice@gmail.com>
+Date: Sun, 19 Dec 2021 00:22:38 +0100
+Message-Id: <20211218232238.667138-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/adwaita-icon-theme: needs host gcc
- >= 4.9
+Subject: [Buildroot] [PATCH 1/1] package/libopenaptx: use official tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,47 +85,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Yunhao Tian <t123yh.xyz@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host gcc >= 4.9 is needed since bump of harfbuzz to version 3.1.2 in
-commit 6861933d22006fbe8c961a41506beac826881f33 to avoid the following
-build failure:
-
-In file included from ../src/hb-serialize.hh:36:0,
-                 from ../src/hb-machinery.hh:37,
-                 from ../src/hb-common.cc:30:
-../src/hb-map.hh:67:18: error: 'is_trivially_copyable' is not a member of 'std'
-   static_assert (std::is_trivially_copyable<K>::value, "");
-                  ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/ef12550581a32c8096f42d05575f0f6ea9411a6c
+Use official tarball and while at it use 2 spaces and reorder files in
+libopenaptx.hash
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/adwaita-icon-theme/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libopenaptx/libopenaptx.hash | 4 ++--
+ package/libopenaptx/libopenaptx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/adwaita-icon-theme/Config.in b/package/adwaita-icon-theme/Config.in
-index d200570e76..4e5a9f9cb9 100644
---- a/package/adwaita-icon-theme/Config.in
-+++ b/package/adwaita-icon-theme/Config.in
-@@ -1,5 +1,10 @@
- config BR2_PACKAGE_ADWAITA_ICON_THEME
- 	bool "adwaita icon theme"
-+	# host-libgtk3 -> host-librsvg -> host-pango -> host-harfbuzz
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
- 	help
- 	  Adwaita icon theme
-+
-+comment "adwaita icon theme needs a toolchain w/ host gcc >= 4.9"
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+diff --git a/package/libopenaptx/libopenaptx.hash b/package/libopenaptx/libopenaptx.hash
+index 76b4e66c9b..acaec5d642 100644
+--- a/package/libopenaptx/libopenaptx.hash
++++ b/package/libopenaptx/libopenaptx.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
+-sha256 a19b3b642def6f86441b73dd4efda6e6f13d49e7e2d6e5e91cc7eb464ebb505a libopenaptx-0.2.1.tar.gz
++sha256  f13eac1ebfe31a563943cd47819eece1109960e10a1e85c111975bcfd37d5361  libopenaptx-0.2.1.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libopenaptx/libopenaptx.mk b/package/libopenaptx/libopenaptx.mk
+index c2f5fa2390..12c33f6225 100644
+--- a/package/libopenaptx/libopenaptx.mk
++++ b/package/libopenaptx/libopenaptx.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBOPENAPTX_VERSION = 0.2.1
+-LIBOPENAPTX_SITE = $(call github,pali,libopenaptx,$(LIBOPENAPTX_VERSION))
++LIBOPENAPTX_SITE = https://github.com/pali/libopenaptx/releases/download/$(LIBOPENAPTX_VERSION)
+ LIBOPENAPTX_LICENSE = GPL-3.0+
+ LIBOPENAPTX_LICENSE_FILES = COPYING
+ LIBOPENAPTX_INSTALL_STAGING = YES
 -- 
 2.33.0
 
