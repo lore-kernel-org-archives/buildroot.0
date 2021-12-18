@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCC0C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 09:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52DCDC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 18 Dec 2021 10:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5822184DA7;
-	Sat, 18 Dec 2021 09:57:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBFF242273;
+	Sat, 18 Dec 2021 10:13:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1gQMUl1XamAo; Sat, 18 Dec 2021 09:57:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3M6YSP6iYrs4; Sat, 18 Dec 2021 10:13:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A916383E31;
-	Sat, 18 Dec 2021 09:57:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1161BF5F5
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 09:57:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0287242207;
+	Sat, 18 Dec 2021 10:13:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A90E61BF5EA
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 10:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39B2660F15
- for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 09:57:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4C3340145
+ for <buildroot@lists.busybox.net>; Sat, 18 Dec 2021 10:13:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iRDMNfpfpYdj for <buildroot@lists.busybox.net>;
- Sat, 18 Dec 2021 09:57:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xqzDfizT29FM for <buildroot@lists.busybox.net>;
+ Sat, 18 Dec 2021 10:13:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2F0F060ED9
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 09:57:31 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id t18so8682740wrg.11
- for <buildroot@buildroot.org>; Sat, 18 Dec 2021 01:57:31 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F8FF401D6
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 10:13:12 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ bg2-20020a05600c3c8200b0034565c2be15so5750520wmb.0
+ for <buildroot@buildroot.org>; Sat, 18 Dec 2021 02:13:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=McBcRigofMSWPyxkSTfV24xZquA7a1/cJpYA7AhVgX0=;
- b=U5NP1KVI949CSaVTysq4HvtV++HaTO9x6vvIK4oBQkfZObi68RzzNYVTFnCbh+bNoW
- Aeacu8IROodVMJvfyt+cqX/JGRIEVLD/9q/ePT2X6hUmtHK687PFMWARMocN4eO6FjPp
- Delw6RxT+664rDfsVHnEnt89jbw+4rzn9znPmwdLvVbGN08dqgO18qpxNtoY5rGZE5Rz
- HkhIv5k9kKiPXKQFCHBXLcXSayK0r0lokcUcX1wegrnzaEibXy5u6ykYCtvJPKPwTQ2I
- B2wuylHeI6ltDmR0txDYn0oEXst0v2vAawTGhiSV9jmDg8YeKRYeOcVfWMeLUlLcL7MS
- oSkg==
+ bh=XLgAEJvwE03pUciJoyQrqiPf7IPhPtJ/LlOBJ1DM/JE=;
+ b=j9NWG7LcXSKW8KstQJ4ilKXWMGbJj1s59mIyaD+YbeA9LZOmM8znnKpis4KxruHJtB
+ xSvoEympwT0VthIzOtjoAqAu/auoY5G86X/4dQAKAdx+NEwbbINSU6bZFUKKTUTpFh+f
+ SWDz5f6rXNTUrw9M15l2ebB4y8FNlYffQ9JeFnR1MFtN/Va/RJhIsrnKiSN/JS7IlM00
+ 0OV2JBo4NKZLzZTusr2bSfZvA366mT7RZkAU3FAdprNXTgUtQXg25bvMqyWEdftRrbvS
+ WBAsEFk7aUsLPIcvNopLiNHGrZWpSacQQv1fxSBSkaiL+snDkWQT2v+Yei412SO6zSlp
+ /yfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=McBcRigofMSWPyxkSTfV24xZquA7a1/cJpYA7AhVgX0=;
- b=vBRvnv27D0qi/RHwnxEVvyuVI2SVvHWdNIv1Y6eImxLf75RoEgqnkaVT5g9sAh8WYC
- GscTVLTcCr4+MEUNWS2uK6UmswD68aMTpnaq8l4j/dsfKM3p6TCksw2bMUXztDI++SIT
- ffAZemvDayebnoM0eYa3fKFJ5qxEXiCNEenKwjxy7+YIsW/+k85sKAz/SHFGXDhOspVW
- s0tzaiwo8NKQ+k4qBovNQq8WvdcsTK92Pz3KGxWvyS7hrFYI39B6qXep1igxT13u1wQt
- xzslfSUv5is/nWsGrUcVBEVi1oXDLAsX0SwV7aobylV8SpquQSD044sF1qrmQYGwxT/R
- 0m2g==
-X-Gm-Message-State: AOAM531xVtrIkjWF3trFXrb/z0hZV3R7L/RYlak0hZ+Lh90HuE0qUxFh
- p5JgZ07UeApXpJ3vEonb/qR3NGhI1N/ifA==
-X-Google-Smtp-Source: ABdhPJx9NoQuGCmW8Xc9qTPMC+DRFo36ZfMaUE4KdPO4ZDYF5kg+7wpvY7sKTxZTHL71x4RSs0dQnA==
-X-Received: by 2002:adf:bb89:: with SMTP id q9mr5771544wrg.337.1639821449195; 
- Sat, 18 Dec 2021 01:57:29 -0800 (PST)
+ bh=XLgAEJvwE03pUciJoyQrqiPf7IPhPtJ/LlOBJ1DM/JE=;
+ b=gIFnKsLphdPM6hZnYb92z3Bfuh6MmAEdsU9RlBAIuVbIswiBnqTwQ7MwQ8F58JyA4d
+ GWoMTuZJIkN7MJayKmyCNCQpzSS6D3ixDOl9WSp41PKx49wJtJwY62J3OvO88nVI0Wze
+ tGXcO2G0Wvk0oL+XBNObC3JQLCJPrFKTNpTr4BpKZFWOQUZyfW8Pr7KGSNZwita/X81Q
+ 7MtfhsQNKSwaI1AxqT2Cf3nMneue47rL0SOcMwBGQdGsnDjL7KEEjbJ+Dv0ylP5tv7lv
+ 6bDoraqeoF7lBnTIPO/JsZM2ncQUksD1zm89uy8CSFuM6fpHorNU7vVOT67pT/4SsUoW
+ Ytqw==
+X-Gm-Message-State: AOAM53254edNRmYJY+ckjGP8VKg7ES6/sGhyZm2MCQZCJwDJhZbQx/hm
+ rp7TkLY1RiEfwvAflWGhYzJjE4EsYZShrg==
+X-Google-Smtp-Source: ABdhPJw4hWq2T1lqWFp55LfCKFkQrsxQjP3iSUnQw6UK6Y6Jiser//dQbiYibWY0l67jTI234+AWNA==
+X-Received: by 2002:a05:600c:35d2:: with SMTP id
+ r18mr13085363wmq.166.1639822390170; 
+ Sat, 18 Dec 2021 02:13:10 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id b19sm14522494wmb.38.2021.12.18.01.57.28
+ by smtp.gmail.com with ESMTPSA id e12sm12260125wrq.20.2021.12.18.02.13.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Dec 2021 01:57:28 -0800 (PST)
+ Sat, 18 Dec 2021 02:13:09 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 18 Dec 2021 10:56:55 +0100
-Message-Id: <20211218095655.521317-1-fontaine.fabrice@gmail.com>
+Date: Sat, 18 Dec 2021 11:12:38 +0100
+Message-Id: <20211218101238.565215-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with glibc >=
- 2.34
+Subject: [Buildroot] [PATCH 1/1] package/grep: fix build with microblazeel
+ and or1k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,95 +88,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with glibc >= 2.34:
+Fix the following build failure with microblazeel and or1k raised since
+bump to version 3.7 in commit f1f0b633eb1c4bc006b95daad8f299028e89d19d:
 
-In file included from timerobj.c:32:
-In function 'threadobj_set_current',
-    inlined from 'server_prologue' at timerobj.c:94:2:
-../../include/copperplate/threadobj.h:252:9: error: 'pthread_setspecific' expecting 1 byte in a region of size 0 [-Werror=stringop-overread]
-  252 |         pthread_setspecific(threadobj_tskey, thobj);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sigsegv.c: In function 'sigsegv_handler':
+sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
+  979 |                       : vma.is_near_this (addr, &vma))
+      |
 
 Fixes:
- - http://autobuild.buildroot.org/results/ed93f916eda304b30f320816c85d1b0d4488c699
+ - http://autobuild.buildroot.org/results/78142463ba8cc5f6c1bf15295095a271422294f4
+ - http://autobuild.buildroot.org/results/f300b1b5e958f096a9d58197a44dcf0c2abd3585
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...id-addresses-for-pthread_setspecific.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/xenomai/3.0.10/0003-lib-cobalt-copperplate-Use-valid-addresses-for-pthread_setspecific.patch
+ ...01-sigsegv-fix-build-on-microblazeel.patch | 32 +++++++++++++++++++
+ .../grep/0002-sigsegv-fix-build-on-or1k.patch | 32 +++++++++++++++++++
+ package/grep/grep.mk                          |  2 ++
+ 3 files changed, 66 insertions(+)
+ create mode 100644 package/grep/0001-sigsegv-fix-build-on-microblazeel.patch
+ create mode 100644 package/grep/0002-sigsegv-fix-build-on-or1k.patch
 
-diff --git a/package/xenomai/3.0.10/0003-lib-cobalt-copperplate-Use-valid-addresses-for-pthread_setspecific.patch b/package/xenomai/3.0.10/0003-lib-cobalt-copperplate-Use-valid-addresses-for-pthread_setspecific.patch
+diff --git a/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch b/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch
 new file mode 100644
-index 0000000000..0c39a4ecf7
+index 0000000000..4afeb47971
 --- /dev/null
-+++ b/package/xenomai/3.0.10/0003-lib-cobalt-copperplate-Use-valid-addresses-for-pthread_setspecific.patch
-@@ -0,0 +1,57 @@
-+From 627d488db3aa71406e32d4d8934629e8b0f35905 Mon Sep 17 00:00:00 2001
-+From: Jan Kiszka <jan.kiszka@siemens.com>
-+Date: Sat, 16 Oct 2021 15:46:33 +0200
-+Subject: [PATCH] lib/{cobalt,copperplate}: Use valid addresses for
-+ pthread_setspecific
++++ b/package/grep/0001-sigsegv-fix-build-on-microblazeel.patch
+@@ -0,0 +1,32 @@
++From 3079cea1b18fe72aa1da6b04e561abfb36f4f443 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 11 Nov 2021 09:57:23 +0100
++Subject: sigsegv: fix build on microblazeel
 +
-+glibx 2.34 and newer annotated pthread_setspecific in a way that gcc-11
-+complains about non-NULL pointers that are outside of what is considered
-+valid. So use dummy addresses instead. namely the related pthread keys.
-+Those pointers will never be dereferenced in both use cases.
-+
-+See also https://sourceware.org/bugzilla/show_bug.cgi?id=28458.
-+
-+Reported-by: Vitaly Chikunov <vt@altlinux.org>
-+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
++Fix the following build failure on microblazeel with diffutils 3.8:
++sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
++http://autobuild.buildroot.org/results/5ecd55b7c72f9630a7acc72341ccb60e94ddb574
 +
 +[Retrieved from:
-+https://source.denx.de/Xenomai/xenomai/-/commit/627d488db3aa71406e32d4d8934629e8b0f35905]
++https://git.savannah.gnu.org/cgit/gnulib.git/patch/?id=3079cea1b18fe72aa1da6b04e561abfb36f4f443]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ include/copperplate/threadobj.h | 6 +++++-
-+ lib/cobalt/printf.c             | 2 +-
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
++ m4/stack-direction.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/include/copperplate/threadobj.h b/include/copperplate/threadobj.h
-+index 7e6904f4c..c8363415b 100644
-+--- a/include/copperplate/threadobj.h
-++++ b/include/copperplate/threadobj.h
-+@@ -173,7 +173,11 @@ void threadobj_save_timeout(struct threadobj_corespec *corespec,
-+ #define __THREAD_M_SPARE6	(1 << 22)
-+ #define __THREAD_M_SPARE7	(1 << 23)
-+ 
-+-#define THREADOBJ_IRQCONTEXT    ((struct threadobj *)-2UL)
-++/*
-++ * We need to use a valid address here. The object will never be dereferenced
-++ * when it is identified as IRQ context, so the pthread key itself is fine.
-++ */
-++#define THREADOBJ_IRQCONTEXT	((struct threadobj *)&threadobj_tskey)
-+ 
-+ struct traceobj;
-+ struct syncobj;
-+diff --git a/lib/cobalt/printf.c b/lib/cobalt/printf.c
-+index 8982ddc93..0aa5940c6 100644
-+--- a/lib/cobalt/printf.c
-++++ b/lib/cobalt/printf.c
-+@@ -729,7 +729,7 @@ done:
-+ 	pthread_cond_init(&printer_wakeup, NULL);
-+ 	spawn_printer_thread();
-+ 	/* We just need a non-zero TSD to trigger the dtor upon unwinding. */
-+-	pthread_setspecific(cleanup_key, (void *)1);
-++	pthread_setspecific(cleanup_key, &cleanup_key);
-+ 
-+ 	atexit(rt_print_flush_buffers);
-+ }
++diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
++index c90d69733..70286c8f5 100644
++--- a/m4/stack-direction.m4
+++++ b/m4/stack-direction.m4
++@@ -37,7 +37,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
++       m68* | \
++       m88k | \
++       mcore | \
++-      microblaze | \
+++      microblaze* | \
++       mips* | \
++       mmix | \
++       mn10200 | \
 +-- 
-+GitLab
++cgit v1.2.1
 +
+diff --git a/package/grep/0002-sigsegv-fix-build-on-or1k.patch b/package/grep/0002-sigsegv-fix-build-on-or1k.patch
+new file mode 100644
+index 0000000000..73385fe9f7
+--- /dev/null
++++ b/package/grep/0002-sigsegv-fix-build-on-or1k.patch
+@@ -0,0 +1,32 @@
++From 496c1740e5475be85b65fdb2b143771f09ed27cb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 11 Nov 2021 10:06:31 +0100
++Subject: sigsegv: fix build on or1k
++
++Fix the following build failure on or1k with diffutils 3.8
++https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=e54aa6196947ed22ff66bcd714e4fc7bd0c5c3b4
++sigsegv.c:979:28: error: 'struct vma_struct' has no member named 'is_near_this'
++http://autobuild.buildroot.org/results/5427e52489d29ed4f18b4a70b3c36f0f7bb0ddd9
++
++[Retrieved from:
++https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=496c1740e5475be85b65fdb2b143771f09ed27cb]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ m4/stack-direction.m4 | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
++index 70286c8f5..29e398d77 100644
++--- a/m4/stack-direction.m4
+++++ b/m4/stack-direction.m4
++@@ -45,6 +45,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
++       nios2 | \
++       nds32* | \
++       ns32k | \
+++      or1k | \
++       pdp11 | \
++       pj* | \
++       powerpc* | rs6000 | \
++-- 
++cgit v1.2.1
++
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 233f5fe633..a485f23dc7 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -10,6 +10,8 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_CPE_ID_VENDOR = gnu
++# We're patching m4/stack-direction.m4
++GREP_AUTORECONF = YES
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ # install into /bin like busybox grep
+ GREP_CONF_OPTS = --exec-prefix=/
 -- 
 2.33.0
 
