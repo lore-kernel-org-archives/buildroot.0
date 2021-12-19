@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59A9EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 19 Dec 2021 14:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF9A2C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Dec 2021 15:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D8A5A40146;
-	Sun, 19 Dec 2021 14:20:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 244F560B61;
+	Sun, 19 Dec 2021 15:30:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fZUrtfnR5rrq; Sun, 19 Dec 2021 14:20:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DgW4ioU16HSZ; Sun, 19 Dec 2021 15:30:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC5BB40182;
-	Sun, 19 Dec 2021 14:20:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DDC41BF3E0
- for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 14:20:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8808760B5F;
+	Sun, 19 Dec 2021 15:30:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F1711BF475
+ for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 15:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C18C81457
- for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 14:20:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6DAE960B5F
+ for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 15:30:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QGIBaKbywhQt for <buildroot@lists.busybox.net>;
- Sun, 19 Dec 2021 14:20:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0601E80BB7
- for <buildroot@buildroot.org>; Sun, 19 Dec 2021 14:20:44 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 56D55200005;
- Sun, 19 Dec 2021 14:20:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1myx3H-0001dD-5z; Sun, 19 Dec 2021 15:20:39 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ChHbb3vcoYf8 for <buildroot@lists.busybox.net>;
+ Sun, 19 Dec 2021 15:30:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C43B060B5C
+ for <buildroot@buildroot.org>; Sun, 19 Dec 2021 15:30:30 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id v11so14839462wrw.10
+ for <buildroot@buildroot.org>; Sun, 19 Dec 2021 07:30:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ptb/6jIo64m9qbG4aZa48EXK0ZRhbXnd/tDOBEsi+gc=;
+ b=UPE28TYTuagraJy+8p3t7Vn6gVoZ7lJDqvx2a5L2hl8KO3eN5koBiWwJAJPURbcLD0
+ 1JhQKUwCmm+RTsLm3Kyp/Nc74KiPqPH61Ki5ietuTa0ONHl8aohxXLuK3QTvyBfduz+0
+ LxJcH76EXLhRT1PAVW0ugXJc9x+GoqEs7EzFlts2ESShELMpNveXQrf3Teo20TPwduzk
+ pPMC/gJh0j14BSW3xJ3xj0acjcpEUAvTtjWGvFKLpz6CnoYyilUhdz4Z2/jBsHQJtZYX
+ l9km7q7y4UXdHibebgCiNqUJNnZS3Pb81pqEhE/g1ix47TqJK8BV/1Z0E78CppTOdk90
+ yifA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ptb/6jIo64m9qbG4aZa48EXK0ZRhbXnd/tDOBEsi+gc=;
+ b=YEvyWueGUYYhbPQv7fPhjhswcwNeTu+ogiPD/Kr0C21yDmxxajlUtoM3eFz+27yagj
+ 448Fjoy7SGkWloAET+9psXEnPA3EaVHrFYHOd/4k6CgWuvC5JjsEMVZtZ1OTY/GfxfPu
+ nlHh361FinKNr0WlQdm16z96kFFztmvrVZQFWTcHxVwn9MPt0rqv22BTMEKTwWR7mQJp
+ Q1cdmlYIUE+2NMuzVpcY2FTxpkxfn1v0bjNaElg5hrbhTKQKB1bpUaH5erADFqiNiWnl
+ GAg8xukRFxKs0q6n1YnuoPz0mzkYQ6zcu/bD4N8ycd1wG3IeVw7KpsLvDPvmXERToYoz
+ d0RQ==
+X-Gm-Message-State: AOAM532vxZOiWzCsFacpicHoIIRocYA3M5ffyosyjohJJslfL3f4J7u9
+ cum0O8ZU6wd2cw5Rtd1nyfSc/eqwJnG1QA==
+X-Google-Smtp-Source: ABdhPJwFrCU9f4QspJVsf2iHtMoUCWPucU7kXTETA0w45wN1pmKlFppbl+CU5zdFoPwA5NgprkaHnQ==
+X-Received: by 2002:a05:6000:23a:: with SMTP id
+ l26mr9479561wrz.666.1639927828866; 
+ Sun, 19 Dec 2021 07:30:28 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id b16sm5313461wmq.41.2021.12.19.07.30.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Dec 2021 07:30:28 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 19 Dec 2021 15:20:33 +0100
-Message-Id: <20211219142035.6220-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211219142035.6220-1-peter@korsgaard.com>
-References: <20211219142035.6220-1-peter@korsgaard.com>
+Date: Sun, 19 Dec 2021 16:29:53 +0100
+Message-Id: <20211219152953.1084462-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] board/*/genimage.cfg: use
- partition-table-type = "gpt" for genimage-15
+Subject: [Buildroot] [PATCH 1/1] package/guile: drop unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,280 +84,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>,
- Alistair Francis <alistair@alistair23.me>,
- Suniel Mahesh <sunil@amarulasolutions.com>,
- Gerome Burlats <gerome.burlats@smile.fr>, Michael Walle <michael@walle.cc>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Genimage 15 deprecated the gpt option and now prints a warning when it is
-used:
+Commit d8bee3950aa851620d6a954aebad1f984caa105a forgot to drop
+--with-libltdl-prefix
 
-INFO: hdimage(sdcard.img): The option 'gpt' is deprecated. Use 'partition-table-type' instead
-
-So change the genimage configuration files to use that instead.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/aarch64-efi/genimage-efi.cfg                 | 2 +-
- board/beaglev/genimage.cfg                         | 2 +-
- board/friendlyarm/nanopc-t4/genimage.cfg           | 2 +-
- board/friendlyarm/nanopi-m4/genimage.cfg           | 2 +-
- board/kontron/smarc-sal28/genimage.cfg             | 2 +-
- board/minnowboard/genimage.cfg                     | 2 +-
- board/orangepi/orangepi-pc-plus/genimage.cfg       | 2 +-
- board/orangepi/orangepi-r1/genimage.cfg            | 2 +-
- board/orangepi/orangepi-rk3399/genimage.cfg        | 2 +-
- board/orangepi/orangepi-zero-plus2/genimage.cfg    | 2 +-
- board/pc/genimage-efi.cfg                          | 2 +-
- board/pine64/rockpro64/genimage.cfg                | 2 +-
- board/qemu/aarch64-sbsa/genimage.cfg               | 2 +-
- board/radxa/rockpi-4/genimage.cfg                  | 2 +-
- board/radxa/rockpi-n10/genimage.cfg                | 2 +-
- board/radxa/rockpi-n8/genimage.cfg                 | 2 +-
- board/sifive/hifive-unleashed/genimage_sdcard.cfg  | 2 +-
- board/sifive/hifive-unleashed/genimage_spi-nor.cfg | 2 +-
- 18 files changed, 18 insertions(+), 18 deletions(-)
+ package/guile/guile.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/board/aarch64-efi/genimage-efi.cfg b/board/aarch64-efi/genimage-efi.cfg
-index 13d69e5e42..87e85816bc 100644
---- a/board/aarch64-efi/genimage-efi.cfg
-+++ b/board/aarch64-efi/genimage-efi.cfg
-@@ -13,7 +13,7 @@ image efi-part.vfat {
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index c74325252f..0f245fca76 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -64,7 +64,6 @@ GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/bin/guile \
+ 	CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
  
- image disk.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
+ GUILE_CONF_OPTS += \
+-	--with-libltdl-prefix=$(STAGING_DIR)/usr/lib \
+ 	--with-libgmp-prefix=$(STAGING_DIR)/usr/lib \
+ 	--with-libunistring-prefix=$(STAGING_DIR)/usr/lib
  
- 	partition boot {
-diff --git a/board/beaglev/genimage.cfg b/board/beaglev/genimage.cfg
-index 3b28e8dbb6..deefdbc110 100644
---- a/board/beaglev/genimage.cfg
-+++ b/board/beaglev/genimage.cfg
-@@ -1,6 +1,6 @@
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition rootfs {
-diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
-index e616be6349..d63c293ab4 100644
---- a/board/friendlyarm/nanopc-t4/genimage.cfg
-+++ b/board/friendlyarm/nanopc-t4/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
-index 03f39adfab..35d056ae6e 100644
---- a/board/friendlyarm/nanopi-m4/genimage.cfg
-+++ b/board/friendlyarm/nanopi-m4/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
-index 8c8a7baaae..0ad020b347 100644
---- a/board/kontron/smarc-sal28/genimage.cfg
-+++ b/board/kontron/smarc-sal28/genimage.cfg
-@@ -1,6 +1,6 @@
- image sdcard-emmc.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition rcw {
-diff --git a/board/minnowboard/genimage.cfg b/board/minnowboard/genimage.cfg
-index 2eccce2de4..b169d1d067 100644
---- a/board/minnowboard/genimage.cfg
-+++ b/board/minnowboard/genimage.cfg
-@@ -17,7 +17,7 @@ image efi-part.vfat {
- #  * the efi-partition created above
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition boot {
-diff --git a/board/orangepi/orangepi-pc-plus/genimage.cfg b/board/orangepi/orangepi-pc-plus/genimage.cfg
-index 7c3b4cd746..e730b38096 100644
---- a/board/orangepi/orangepi-pc-plus/genimage.cfg
-+++ b/board/orangepi/orangepi-pc-plus/genimage.cfg
-@@ -15,7 +15,7 @@ image boot.vfat {
- image sdcard.img {
- 	hdimage {
- 		# for root=PARTLABEL support
--		gpt = true
-+		partition-table-type = "gpt"
- 		# default GPT location conflicts with bootloaders, move it after
- 		gpt-location = 1M
- 	}
-diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
-index e42c37d5fd..e93e802bd9 100644
---- a/board/orangepi/orangepi-r1/genimage.cfg
-+++ b/board/orangepi/orangepi-r1/genimage.cfg
-@@ -15,7 +15,7 @@ image boot.vfat {
- image sdcard.img {
- 	hdimage {
- 		# for root=PARTLABEL support
--		gpt = true
-+		partition-table-type = "gpt"
- 		# default GPT location conflicts with spl, move it after
- 		gpt-location = 1M
- 	}
-diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
-index ceab37963d..c94e0bc7cc 100644
---- a/board/orangepi/orangepi-rk3399/genimage.cfg
-+++ b/board/orangepi/orangepi-rk3399/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-index f51ce3f854..aee9719ae4 100644
---- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
-+++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-@@ -13,7 +13,7 @@ image boot.vfat {
- image sdcard.img {
- 	hdimage {
- 		# for root=PARTLABEL support
--		gpt = true
-+		partition-table-type = "gpt"
- 		# default GPT location conflicts with bootloaders, move it after
- 		gpt-location = 1M
- 	}
-diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
-index 9cf701b798..035a077a78 100644
---- a/board/pc/genimage-efi.cfg
-+++ b/board/pc/genimage-efi.cfg
-@@ -14,7 +14,7 @@ image efi-part.vfat {
- 
- image disk.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition boot {
-diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
-index aa2095b916..14dd0e1d18 100644
---- a/board/pine64/rockpro64/genimage.cfg
-+++ b/board/pine64/rockpro64/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
-index 957f1a0530..121ae9f37b 100644
---- a/board/qemu/aarch64-sbsa/genimage.cfg
-+++ b/board/qemu/aarch64-sbsa/genimage.cfg
-@@ -14,7 +14,7 @@ image efi-part.vfat {
- 
- image disk.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition boot {
-diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
-index 197968320e..a5100af420 100644
---- a/board/radxa/rockpi-4/genimage.cfg
-+++ b/board/radxa/rockpi-4/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
-index b3ade327d6..652e75db11 100644
---- a/board/radxa/rockpi-n10/genimage.cfg
-+++ b/board/radxa/rockpi-n10/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
-index 3329576b76..2e064d48c0 100644
---- a/board/radxa/rockpi-n8/genimage.cfg
-+++ b/board/radxa/rockpi-n8/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition loader1 {
-diff --git a/board/sifive/hifive-unleashed/genimage_sdcard.cfg b/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-index e7f98a47ce..e66f221d73 100644
---- a/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-+++ b/board/sifive/hifive-unleashed/genimage_sdcard.cfg
-@@ -1,6 +1,6 @@
- image sdcard.img {
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition u-boot-spl {
-diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-index 2e5d89bfe8..903e675a90 100644
---- a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-+++ b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-@@ -2,7 +2,7 @@ image spi-nor.img {
- 	size = 32M
- 
- 	hdimage {
--		gpt = true
-+		partition-table-type = "gpt"
- 	}
- 
- 	partition u-boot-spl {
 -- 
-2.20.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
