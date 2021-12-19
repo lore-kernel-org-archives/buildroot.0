@@ -4,75 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A34CC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 19 Dec 2021 16:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F773C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 19 Dec 2021 16:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE68640364;
-	Sun, 19 Dec 2021 16:00:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DEF8F403A2;
+	Sun, 19 Dec 2021 16:03:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LmbIHmKPOCbR; Sun, 19 Dec 2021 16:00:20 +0000 (UTC)
+	with ESMTP id GdjfwryIwD7M; Sun, 19 Dec 2021 16:03:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA61540368;
-	Sun, 19 Dec 2021 16:00:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0D7391BF3A3
- for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 16:00:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E48340364;
+	Sun, 19 Dec 2021 16:03:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E04E1BF3A3
+ for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 16:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1A2241659
- for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 16:00:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7686B60B65
+ for <buildroot@lists.busybox.net>; Sun, 19 Dec 2021 16:03:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LPu-N92c2Glt for <buildroot@lists.busybox.net>;
- Sun, 19 Dec 2021 16:00:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vd7nYNwwrWYM for <buildroot@lists.busybox.net>;
+ Sun, 19 Dec 2021 16:03:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D700E41645
- for <buildroot@buildroot.org>; Sun, 19 Dec 2021 16:00:17 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id y13so28422277edd.13
- for <buildroot@buildroot.org>; Sun, 19 Dec 2021 08:00:17 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 80EAD60B64
+ for <buildroot@buildroot.org>; Sun, 19 Dec 2021 16:03:11 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ d198-20020a1c1dcf000000b0034569cdd2a2so5051531wmd.5
+ for <buildroot@buildroot.org>; Sun, 19 Dec 2021 08:03:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=G7f4PXOnNljFcQr14wFYtZ+GvOIqrSCmq5h8eLOH6js=;
- b=o3ALv/Wfc49sKIdIkzdw/CHhsNw9Dkr5JciNcJhcLjm6GCNRSChwF/G2m4Fc0JOrZa
- JYphmBAbaGHm/9zs1TI+4FqAtyKVZUr14EyelX8/RpuTx44Qa9lwmeG31OJFNqhsjh+o
- PJ+mfp+j353WuaqaOWHDl4GBCcD6UB4yUAhYo6N0hJ8bYu6TQv2cp8kE/bKWkWpwKgfE
- 5QbKBq7nteH9xF/qapLpKcF98zc4KbVbMFTBKBPW2uxlNuYNiVeqdVhm66iTbqBTB7d5
- koYMApbqJWLnZApXL5kTl5D0C/8GC3aTB6aJVje6Kx342JPrMODd05DURQ4tjoLKpleJ
- 75RQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zwo/Lv+tzB2BA7LZAVA8YRCwLqxGjiQv2wN03PM2/6E=;
+ b=oiH3EV0p/RU6Vo1yeZBxMXVjxA/ZnL0qfPxDlc7R6me1eMIfNrioQ4N1epoye3UHoh
+ 57zkaK1PB5WzYJ+Pl1hDmec3lok+dYG/mKcZ7KDSZpx8hFkHvfltT1eTP1XPsqe5vkTG
+ 0srweMdUSw9RJDRgsuBL92UEuNFrYPwo3yf0LEFnuYe1SIuSlnW+5NA4XrbQEFX6YmSW
+ 3J48xRhHPKkTOT3+eAk1wHFl2sd0Z19ll/KCHY2dbRATZyS84XhQLAuGgmf9tFAbXg2d
+ 4cCs6Q3azB7K+fwyiwDwFqcoEdlDUcJtje/DrclcT2XgwQNj/eYtPRTY3vj/jRpJlx8y
+ 0xAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=G7f4PXOnNljFcQr14wFYtZ+GvOIqrSCmq5h8eLOH6js=;
- b=rLp2H11BypoqKt2JH9jeT+aoCPQa1+U/6VhnECLsL1CslBCbwAlqgoMllFxT/3Klie
- 3ZrKVIbCNsotpl+SMRZVPc5AvXiQYJ1GeBT/YdWUYjb2C/r0lm5R5PTVlc35N8IMp/wW
- jtd6q0ZzPQe2+K0AIUr86j4ApIl3pW5Usn17Jz4BY8ObcPld3ubhaYRWHrK0ZmsLBSMT
- 7oFYzA+PWWduuHbzN5WOy0Cwrx4Xg5/UGyDtFpy619QXq9dlfh2j6EbDY+JCtOwOm7Uf
- Nz21VH4curEdYJfzYiF0to6DAoSrRe99mDQPBj+cCMW5J61Ux++heq64LtpPOtswjji7
- Dp+A==
-X-Gm-Message-State: AOAM532keGR7euDnOJdTB3CF9BLz/n7tm8i7LZA60ePPW/6QNtktblQG
- n8panOJ2kazpOamABkSko7qV8LSW5+d2bCqCSak=
-X-Google-Smtp-Source: ABdhPJxxTgJjx2SDvDH0KUrACRNa/9wjnlUMmbbXOPddfejb0Oii+Q27tWGUfLs/2oojfEkjKidtjaU1kLW8dWsUckk=
-X-Received: by 2002:a17:907:1c9c:: with SMTP id
- nb28mr9650010ejc.184.1639929615885; 
- Sun, 19 Dec 2021 08:00:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211219153207.1084655-1-fontaine.fabrice@gmail.com>
- <87h7b4ehaw.fsf@tarshish>
-In-Reply-To: <87h7b4ehaw.fsf@tarshish>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zwo/Lv+tzB2BA7LZAVA8YRCwLqxGjiQv2wN03PM2/6E=;
+ b=3c+t2Q7kSWkXDmD8SOFKQz4MdXuUG5q10yKIvAZmqglGIvNtrbuK2z2XlIThYGFLwI
+ stPbEQxRB5ATZ34HTKxU0eRDf5jQPGDleb+/p/iOg7GckFzV2EcPWB0QChfwUqq8225q
+ GVfQmLyzc7P4Yo0bKhlIIR3JyiZ1J14qLKAoffJ+2HKJz+5QTgRwjKUbmhraswUmYe2E
+ t7w+Gq3gJ3HW5ijYXM0kE1pSdnJhYYIVYhOrCAJ92MQIhiyPCNP6JkBvF9rxS2qysard
+ F37edKQMo9aOHuAwMaysXw4vGG/i/QpkrOcQT9KB6P41enumsqFXaPltHe1LTRjBPfhq
+ LE9w==
+X-Gm-Message-State: AOAM530X0UQOogMdUmneG42+Ny4GoKJcvrMhX9d/bBsICf2TSjChGU46
+ QArCTbxLUu/3cT71t+2DMyPJ7wDWJ2z9yQ==
+X-Google-Smtp-Source: ABdhPJy3Ya5Rhq4g39oNN7sQoclWRGw3m7Pm7LQxxg/sIdtvbLsRO8xcueRj02C9mwCR6xn88pbHpg==
+X-Received: by 2002:a05:600c:1d28:: with SMTP id
+ l40mr10643812wms.192.1639929789539; 
+ Sun, 19 Dec 2021 08:03:09 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id n8sm13472219wri.47.2021.12.19.08.03.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Dec 2021 08:03:09 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 19 Dec 2021 16:59:38 +0100
-Message-ID: <CAPi7W81Jm0zos4T9TGOsxTZJnDw5kw33=4_vEkHQcz7jwsMjxg@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
-Subject: Re: [Buildroot] [PATCH 1/1] package/jitterentropy-library: fix
- build without stack-protector
+To: buildroot@buildroot.org
+Date: Sun, 19 Dec 2021 17:02:34 +0100
+Message-Id: <20211219160234.1358835-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/pppd: fix build with kernel >= 5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,103 +87,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQmFydWNoLAoKTGUgZGltLiAxOSBkw6ljLiAyMDIxIMOgIDE2OjM4LCBCYXJ1Y2ggU2lhY2gg
-PGJhcnVjaEB0a29zLmNvLmlsPiBhIMOpY3JpdCA6Cj4KPiBIaSBGYWJyaWNlLAo+Cj4gT24gU3Vu
-LCBEZWMgMTkgMjAyMSwgRmFicmljZSBGb250YWluZSB3cm90ZToKPiA+IEZpeCB0aGUgZm9sbG93
-aW5nIGJ1aWxkIGZhaWx1cmUgd2l0aG91dCBzdGFjay1wcm90ZWN0b3IgcmFpc2VkIHNpbmNlCj4g
-PiBidW1wIHRvIHZlcnNpb24gMy4zLjEgaW4gY29tbWl0IDM5NjVmMDljYjQyN2FmNDExMDU1YTc4
-M2NkMTRiNTAxYjJiMjgyODUKPiA+IGFuZAo+ID4gaHR0cHM6Ly9naXRodWIuY29tL3NtdWVsbGVy
-REQvaml0dGVyZW50cm9weS1saWJyYXJ5L2NvbW1pdC81YjNjYjdmMzVlNDFiYTJmMzRhNzVkMDA0
-Y2YwOTVjOTY1YTFhMGM0Ogo+ID4KPiA+IC9ob21lL2J1aWxkcm9vdC9hdXRvYnVpbGQvaW5zdGFu
-Y2UtMC9vdXRwdXQtMS9ob3N0L29wdC9leHQtdG9vbGNoYWluL2Jpbi8uLi9saWIvZ2NjL2k2ODYt
-YnVpbGRyb290LWxpbnV4LXVjbGliYy85LjMuMC8uLi8uLi8uLi8uLi9pNjg2LWJ1aWxkcm9vdC1s
-aW51eC11Y2xpYmMvYmluL2xkOiBzcmMvaml0dGVyZW50cm9weS1iYXNlLm86IGluIGZ1bmN0aW9u
-IGBqZW50X2ZpcHNfZW5hYmxlZCc6Cj4gPiBqaXR0ZXJlbnRyb3B5LWJhc2UuYzooLnRleHQrMHgx
-MzEpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBfX3N0YWNrX2Noa19mYWlsX2xvY2FsJwo+ID4K
-PiA+IEZpeGVzOgo+ID4gIC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMv
-OGRlLzhkZWU0NjJkMTZkOTM0ZGQxNzNkNThmMTc5MzNjNjkxMWU0MzM2YmYvYnVpbGQtZW5kLmxv
-Zwo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJp
-Y2VAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgLi4uLU1ha2VmaWxlLWFkZC1FTkFCTEVfU1RBQ0tf
-UFJPVEVDVE9SLnBhdGNoIHwgNTIgKysrKysrKysrKysrKysrKysrKwo+ID4gIC4uLi9qaXR0ZXJl
-bnRyb3B5LWxpYnJhcnkubWsgICAgICAgICAgICAgICAgICB8ICAyICstCj4gPiAgMiBmaWxlcyBj
-aGFuZ2VkLCA1MyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gPiAgY3JlYXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2Uvaml0dGVyZW50cm9weS1saWJyYXJ5LzAwMDEtTWFrZWZpbGUtYWRkLUVO
-QUJMRV9TVEFDS19QUk9URUNUT1IucGF0Y2gKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9q
-aXR0ZXJlbnRyb3B5LWxpYnJhcnkvMDAwMS1NYWtlZmlsZS1hZGQtRU5BQkxFX1NUQUNLX1BST1RF
-Q1RPUi5wYXRjaCBiL3BhY2thZ2Uvaml0dGVyZW50cm9weS1saWJyYXJ5LzAwMDEtTWFrZWZpbGUt
-YWRkLUVOQUJMRV9TVEFDS19QUk9URUNUT1IucGF0Y2gKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
-Cj4gPiBpbmRleCAwMDAwMDAwMDAwLi5jNDM4ODY2M2IwCj4gPiAtLS0gL2Rldi9udWxsCj4gPiAr
-KysgYi9wYWNrYWdlL2ppdHRlcmVudHJvcHktbGlicmFyeS8wMDAxLU1ha2VmaWxlLWFkZC1FTkFC
-TEVfU1RBQ0tfUFJPVEVDVE9SLnBhdGNoCj4gPiBAQCAtMCwwICsxLDUyIEBACj4gPiArRnJvbSAy
-NzJlZTQ3ODkyNTYzZTg0OWY2YjFiZjU5YjAxNzNmOGFhMzNiNjMxIE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQo+ID4gK0Zyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
-aWwuY29tPgo+ID4gK0RhdGU6IFN1biwgMTkgRGVjIDIwMjEgMTE6MzY6MTMgKzAxMDAKPiA+ICtT
-dWJqZWN0OiBbUEFUQ0hdIE1ha2VmaWxlOiBhZGQgRU5BQkxFX1NUQUNLX1BST1RFQ1RPUgo+ID4g
-Kwo+ID4gK0FkZCBFTkFCTEVfU1RBQ0tfUFJPVEVDVE9SIGFzIGJ1aWxkIG9uIGVtYmVkZGVkIHRv
-b2xjaGFpbnMgd2l0aG91dAo+ID4gK3N0YWNrLXByb3RlY3RvciBpcyBhZ2FpbiBicm9rZW4gc2lu
-Y2UKPiA+ICtodHRwczovL2dpdGh1Yi5jb20vc211ZWxsZXJERC9qaXR0ZXJlbnRyb3B5LWxpYnJh
-cnkvY29tbWl0LzViM2NiN2YzNWU0MWJhMmYzNGE3NWQwMDRjZjA5NWM5NjVhMWEwYzQ6Cj4gPiAr
-Cj4gPiArL2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9pbnN0YW5jZS0wL291dHB1dC0xL2hvc3Qv
-b3B0L2V4dC10b29sY2hhaW4vYmluLy4uL2xpYi9nY2MvaTY4Ni1idWlsZHJvb3QtbGludXgtdWNs
-aWJjLzkuMy4wLy4uLy4uLy4uLy4uL2k2ODYtYnVpbGRyb290LWxpbnV4LXVjbGliYy9iaW4vbGQ6
-IHNyYy9qaXR0ZXJlbnRyb3B5LWJhc2UubzogaW4gZnVuY3Rpb24gYGplbnRfZmlwc19lbmFibGVk
-JzoKPiA+ICtqaXR0ZXJlbnRyb3B5LWJhc2UuYzooLnRleHQrMHgxMzEpOiB1bmRlZmluZWQgcmVm
-ZXJlbmNlIHRvIGBfX3N0YWNrX2Noa19mYWlsX2xvY2FsJwo+ID4gKwo+ID4gK0ZpeGVzOgo+ID4g
-KyAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzhkZWU0NjJkMTZkOTM0
-ZGQxNzNkNThmMTc5MzNjNjkxMWU0MzM2YmYKPiA+ICsKPiA+ICtTaWduZWQtb2ZmLWJ5OiBGYWJy
-aWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+ICtTaWduZWQtb2Zm
-LWJ5OiBTdGVwaGFuIE11ZWxsZXIgPHNtdWVsbGVyQGNocm9ub3guZGU+Cj4gPiArW1JldHJpZXZl
-ZCBmcm9tOgo+ID4gK2h0dHBzOi8vZ2l0aHViLmNvbS9zbXVlbGxlckREL2ppdHRlcmVudHJvcHkt
-bGlicmFyeS9jb21taXQvMjcyZWU0Nzg5MjU2M2U4NDlmNmIxYmY1OWIwMTczZjhhYTMzYjYzMV0K
-PiA+ICstLS0KPiA+ICsgTWFrZWZpbGUgfCAxMSArKysrKysrLS0tLQo+ID4gKyAxIGZpbGUgY2hh
-bmdlZCwgNyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQo+ID4gKwo+ID4gK2RpZmYgLS1n
-aXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCj4gPiAraW5kZXggZGZiOTZhOC4uYzk5OWVmNSAxMDA2
-NDQKPiA+ICstLS0gYS9NYWtlZmlsZQo+ID4gKysrKyBiL01ha2VmaWxlCj4gPiArQEAgLTIsNiAr
-Miw3IEBACj4gPiArCj4gPiArIENDID89IGdjYwo+ID4gKyAjSGFyZGVuaW5nCj4gPiArK0VOQUJM
-RV9TVEFDS19QUk9URUNUT1IgPz0gMQo+ID4gKyBDRkxBR1MgPz0gLWZ3cmFwdiAtLXBhcmFtIHNz
-cC1idWZmZXItc2l6ZT00IC1mdmlzaWJpbGl0eT1oaWRkZW4gLWZQSUUgLVdjYXN0LWFsaWduIC1X
-bWlzc2luZy1maWVsZC1pbml0aWFsaXplcnMgLVdzaGFkb3cgLVdzd2l0Y2gtZW51bQo+ID4gKyBD
-RkxBR1MgKz0tV2V4dHJhIC1XYWxsIC1wZWRhbnRpYyAtZlBJQyAtTzAgLWZ3cmFwdiAtV2NvbnZl
-cnNpb24KPiA+ICsgTERGTEFHUyArPS1XbCwteixyZWxybywteixub3cgLWxwdGhyZWFkCj4gPiAr
-QEAgLTEzLDEwICsxNCwxMiBAQCBlbHNlCj4gPiArICAgR0NDX0dURVFfNDkwIDo9ICQoc2hlbGwg
-ZXhwciBgJChDQykgLWR1bXBmdWxsdmVyc2lvbiB8IHNlZCAtZSAncy9cLlwoWzAtOV1bMC05XVwp
-L1wxL2cnIC1lICdzL1wuXChbMC05XVwpLzBcMS9nJyAtZSAncy9eWzAtOV1cezMsNFx9JCQvJjAw
-LydgIFw+PSA0MDkwMCkKPiA+ICsgZW5kaWYKPiA+ICsKPiA+ICstaWZlcSAiJChHQ0NfR1RFUV80
-OTApIiAiMSIKPiA+ICstICBDRkxBR1MgKz0gLWZzdGFjay1wcm90ZWN0b3Itc3Ryb25nCj4gPiAr
-LWVsc2UKPiA+ICstICBDRkxBR1MgKz0gLWZzdGFjay1wcm90ZWN0b3ItYWxsCj4gPiArK2lmZXEg
-IiQoRU5BQkxFX1NUQUNLX1BST1RFQ1RPUikiICIxIgo+ID4gKysgIGlmZXEgIiQoR0NDX0dURVFf
-NDkwKSIgIjEiCj4gPiArKyAgICBDRkxBR1MgKz0gLWZzdGFjay1wcm90ZWN0b3Itc3Ryb25nCj4g
-PiArKyAgZWxzZQo+ID4gKysgICAgQ0ZMQUdTICs9IC1mc3RhY2stcHJvdGVjdG9yLWFsbAo+ID4g
-KysgIGVuZGlmCj4gPiArIGVuZGlmCj4gPiArCj4gPiArICMgQ2hhbmdlIGFzIG5lY2Vzc2FyeQo+
-ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvaml0dGVyZW50cm9weS1saWJyYXJ5L2ppdHRlcmVudHJv
-cHktbGlicmFyeS5tayBiL3BhY2thZ2Uvaml0dGVyZW50cm9weS1saWJyYXJ5L2ppdHRlcmVudHJv
-cHktbGlicmFyeS5tawo+ID4gaW5kZXggODMwZGEwZTA2NS4uNGNkZWJmNDZhMyAxMDA2NDQKPiA+
-IC0tLSBhL3BhY2thZ2Uvaml0dGVyZW50cm9weS1saWJyYXJ5L2ppdHRlcmVudHJvcHktbGlicmFy
-eS5tawo+ID4gKysrIGIvcGFja2FnZS9qaXR0ZXJlbnRyb3B5LWxpYnJhcnkvaml0dGVyZW50cm9w
-eS1saWJyYXJ5Lm1rCj4gPiBAQCAtMjYsNyArMjYsNyBAQCBlbmRpZgo+ID4KPiA+ICBkZWZpbmUg
-SklUVEVSRU5UUk9QWV9MSUJSQVJZX0JVSUxEX0NNRFMKPiA+ICAgICAgICQoVEFSR0VUX01BS0Vf
-RU5WKSAkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgJChNQUtFKSAtQyAkKEBEKSBcCj4gPiAtICAg
-ICAgICAgICAgICQoSklUVEVSRU5UUk9QWV9MSUJSQVJZX0JVSUxEX1RBUkdFVFMpCj4gPiArICAg
-ICAgICAgICAgIEVOQUJMRV9TVEFDS19QUk9URUNUT1I9MCAkKEpJVFRFUkVOVFJPUFlfTElCUkFS
-WV9CVUlMRF9UQVJHRVRTKQo+Cj4gV2h5IGRpc2FibGUgc3RhY2sgcHJvdGVjdG9yIHVuY29uZGl0
-aW9uYWxseSBpbnN0ZWFkIG9mIG1ha2luZyBpdCBkZXBlbmQKPiBvbiBCUjJfVE9PTENIQUlOX0hB
-U19TU1A/CkZyb20gbXkgdW5kZXJzdGFuZGluZywgcGFzc2luZyAtZnN0YWNrLXByb3RlY3Rvci1z
-dHJvbmcgb3IKLWZzdGFjay1wcm90ZWN0b3ItYWxsIHdpbGwgYmUgbWFkZSBieSB0aGUgdG9vbGNo
-YWluIHdyYXBwZXIuClNvIHRoZXJlIGlzIG5vIG5lZWQgdG8gbWFrZSBpdCBjb25kaXRpb25hbCBv
-biBCUjJfU1NQX1NUUk9ORyBvciBCUjJfU1NQX0FMTAo+Cj4gYmFydWNoCj4KPiA+ICBlbmRlZgo+
-ID4KPiA+ICBkZWZpbmUgSklUVEVSRU5UUk9QWV9MSUJSQVJZX0lOU1RBTExfU1RBR0lOR19DTURT
-Cj4KPgo+IC0tCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB+LiAufiAgIFRrIE9wZW4gU3lzdGVtcwo+ID19LS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tb29PLS1VLS1Pb28tLS0tLS0tLS0tLS17PQo+ICAg
-IC0gYmFydWNoQHRrb3MuY28uaWwgLSB0ZWw6ICs5NzIuNTIuMzY4LjQ2NTYsIGh0dHA6Ly93d3cu
-dGtvcy5jby5pbCAtCkJlc3QgUmVnYXJkcywKCkZhYnJpY2UKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Fix the following build failure with kernel >= 5.15:
+
+sys-linux.c:148:10: fatal error: linux/ipx.h: No such file or directory
+  148 | #include <linux/ipx.h>
+      |          ^~~~~~~~~~~~~
+
+This hook could be removed as soon as a new pppd version is released:
+https://github.com/ppp-project/ppp/pull/326
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5a7f89e5178735f4d3e3f3360f0feb263f6ac431
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pppd/pppd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 71bfceb607..19b6f3ccce 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -57,6 +57,13 @@ ifeq ($(BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF),y)
+ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15),y)
++define PPPD_DROP_IPX
++	$(SED) 's/-DIPX_CHANGE//' $(PPPD_DIR)/pppd/Makefile.linux
++endef
++PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_IPX
++endif
++
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+ 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
