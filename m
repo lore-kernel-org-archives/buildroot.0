@@ -4,85 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE288C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 22:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6B52C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 22:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6124360E69;
-	Mon, 20 Dec 2021 22:41:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79B6460E72;
+	Mon, 20 Dec 2021 22:42:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wXr2LMOktpou; Mon, 20 Dec 2021 22:41:44 +0000 (UTC)
+	with ESMTP id oWdWQq8o0JTU; Mon, 20 Dec 2021 22:42:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B833760E39;
-	Mon, 20 Dec 2021 22:41:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFEEE1BF5A6
- for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:41:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C335460E39;
+	Mon, 20 Dec 2021 22:42:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CF4451BF5A6
+ for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACB0A4019D
- for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:41:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF52F40241
+ for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:42:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 88iSSmnHVY2a for <buildroot@lists.busybox.net>;
- Mon, 20 Dec 2021 22:41:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B48A440129
- for <buildroot@buildroot.org>; Mon, 20 Dec 2021 22:41:41 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id b13so15788072edd.8
- for <buildroot@buildroot.org>; Mon, 20 Dec 2021 14:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=vy/iJedRYAkPo2CszQ/IAZD+fQbqmk1lP9sTzafTJYA=;
- b=RYlqg+XnlX85XNB8tgk+SkMUC/M0iDBZe+P9H3xK71To4N2DWEuEN2/5VkNADabxwV
- KDslOv0mvkWhsjve8dpGhOuiq2X7Tr0tqEtDM6xx1MC7N1AkKmmwUOjUslao1rknbh1v
- V7Ctoql2ZWhxcHqdNVmJg+85/iTv02Fgco83Su0NqNL5GOcMECpahfrLIr++yj3YvcRs
- ZEVmzwRmONl1sJOTDUtZBu9j8SruX/TJggxUcD0AervnszjtMZS1vCkqpqwr9J5JgpwH
- WqfTsHdId+yrUWcWzM0Ia/Y39LuJNyHSzKh3e/Zh8F/DlvJDhX8r3FozENpptTQ3RyhO
- WjJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=vy/iJedRYAkPo2CszQ/IAZD+fQbqmk1lP9sTzafTJYA=;
- b=fjjsiqAAg5WBOgwBaKRLrZaiYdRnl1jopL0zdsZRgP4JMAtwOwsEqLQe3l6aHcwHR8
- M8hFshLReApxF34ia4rbT2jOqwdKd0Of5myNsyBZDWpJF4TicfLDcSWy9fg6HNEKvh2v
- OCuctlMztksnMFVeS/u2Q99lhOYU/7a5FBsnsbvJMKiGKLbcR0bdCWdvxAJiRPe7UU+R
- Pf1GVkmPDSoAGma+2RDfGi1kbYcctcRNKlnA8hEnDcJPV2TQZfGKevBXWbMWchADEUrg
- H4iTP8gOYuvNAWNhD4XYjs04/Ia89Pll+xYOm8X5yzCxw5iXl4FkSoFgn7icKpJWaNOQ
- 1b/g==
-X-Gm-Message-State: AOAM53392iqYTMAaR8+n+vsn4Oa1s+LcKv2wAswBRnVvlTu1DcXgQxgV
- I1ACxIzf6W8fi6lMvWj4unkSjQ==
-X-Google-Smtp-Source: ABdhPJyNfUTo1SqlKW3/b7xeoAlUnIR/zwVBcWRiDAghbo+GtSHxtYGetw63LYQck5jUo7UhB06vTw==
-X-Received: by 2002:a17:907:98b8:: with SMTP id
- ju24mr261394ejc.516.1640040099744; 
- Mon, 20 Dec 2021 14:41:39 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id qf14sm2765758ejc.18.2021.12.20.14.41.39
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 20 Dec 2021 14:41:39 -0800 (PST)
-Message-ID: <949ff591-96c1-3514-0c1f-3f6569ef467c@mind.be>
-Date: Mon, 20 Dec 2021 23:41:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
-References: <20211220084621.3346121-1-buildroot@heine.tech>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211220084621.3346121-1-buildroot@heine.tech>
-Subject: Re: [Buildroot] [PATCH] package/grpc: bump version to 1.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CMW7YS-qo9BF for <buildroot@lists.busybox.net>;
+ Mon, 20 Dec 2021 22:42:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4D4440210
+ for <buildroot@buildroot.org>; Mon, 20 Dec 2021 22:42:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id DA089828BA; Mon, 20 Dec 2021 22:36:40 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Mon, 20 Dec 2021 23:05:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 68c8c37d7d15a11d91b699f15dbaa00adcd4773e
+X-Git-Newrev: 6acdbb81c8d6cdd3ecb476ae24e72fd4547011c3
+X-Patchwork-Hint: ignore
+Message-Id: <20211220223640.DA089828BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rygel: bump to version 0.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +52,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Rose <robertroyrose@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=6acdbb81c8d6cdd3ecb476ae24e72fd4547011c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- Switch to meson-package
+- gdk-pixbuf and gupnp-dlna are now mandatory
+- gstreamer1-editing-services is mandatory with gstreamer engine
 
-On 20/12/2021 09:46, Michael Nosthoff via buildroot wrote:
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-0.40.2/NEWS
 
-  Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/rygel/Config.in  |  5 +++--
+ package/rygel/rygel.hash |  4 ++--
+ package/rygel/rygel.mk   | 51 +++++++++++++++++++++---------------------------
+ 3 files changed, 27 insertions(+), 33 deletions(-)
 
-  Regards,
-  Arnout
-
-> ---
->   package/grpc/grpc.hash | 2 +-
->   package/grpc/grpc.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-> index 0e81410358..3da1d9a323 100644
-> --- a/package/grpc/grpc.hash
-> +++ b/package/grpc/grpc.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  b2f2620c762427bfeeef96a68c1924319f384e877bc0e084487601e4cc6e434c  grpc-1.42.0.tar.gz
-> +sha256  9647220c699cea4dafa92ec0917c25c7812be51a18143af047e20f3fb05adddc  grpc-1.43.0.tar.gz
->   sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index 025ab40777..2e8bc5049f 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -GRPC_VERSION = 1.42.0
-> +GRPC_VERSION = 1.43.0
->   GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
->   GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
->   GRPC_LICENSE_FILES = LICENSE
-> 
+diff --git a/package/rygel/Config.in b/package/rygel/Config.in
+index 86d6a38e1e..df48918833 100644
+--- a/package/rygel/Config.in
++++ b/package/rygel/Config.in
+@@ -3,7 +3,9 @@ config BR2_PACKAGE_RYGEL
+ 	depends on BR2_USE_WCHAR # gupnp-av
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
+ 	depends on BR2_USE_MMU # gupnp-av
++	select BR2_PACKAGE_GDK_PIXBUF
+ 	select BR2_PACKAGE_GUPNP_AV
++	select BR2_PACKAGE_GUPNP_DLNA
+ 	select BR2_PACKAGE_LIBGEE
+ 	select BR2_PACKAGE_LIBMEDIAART
+ 	select BR2_PACKAGE_SQLITE
+@@ -37,10 +39,9 @@ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
+ 
+ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
+ 	bool "gstreamer1"
+-	select BR2_PACKAGE_GDK_PIXBUF
+-	select BR2_PACKAGE_GUPNP_DLNA
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
+ 
+ endchoice
+ 
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+index 33b44aecc2..04b11ff54a 100644
+--- a/package/rygel/rygel.hash
++++ b/package/rygel/rygel.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.38/rygel-0.38.3.sha256sum:
+-sha256  08c21a577f7bdad26446a75ffa32778b26842c3b1188165f0b19818559747d00  rygel-0.38.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.40/rygel-0.40.2.sha256sum:
++sha256  c9e8c736296d22c4defe959727a29d31437bbd2b7aa0c6470d6be24011050697  rygel-0.40.2.tar.xz
+ 
+ # Locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index 21c8ebee6a..c541cdc0ed 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -4,14 +4,16 @@
+ #
+ ################################################################################
+ 
+-RYGEL_VERSION_MAJOR = 0.38
+-RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).3
++RYGEL_VERSION_MAJOR = 0.40
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).2
+ RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
+ RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
+ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
+ RYGEL_LICENSE_FILES = COPYING COPYING.logo
+ RYGEL_DEPENDENCIES = \
++	gdk-pixbuf \
+ 	gupnp-av \
++	gupnp-dlna \
+ 	libgee \
+ 	libmediaart \
+ 	sqlite \
+@@ -20,51 +22,42 @@ RYGEL_INSTALL_STAGING = YES
+ 
+ RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ RYGEL_CONF_OPTS += \
+-	--disable-apidocs \
+-	--disable-coverage \
+-	--disable-example-plugins \
+-	--enable-external-plugin \
+-	--enable-lms-plugin \
+-	--enable-mpris-plugin \
+-	--enable-ruih-plugin \
+-	--disable-tracker-plugin
+-
+-ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+-RYGEL_DEPENDENCIES += gdk-pixbuf
+-endif
++	-Dapi-docs=false \
++	-Dexamples=false \
++	-Dtests=false
++RYGEL_PLUGINS = external,lms,mpris,ruih
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-RYGEL_CONF_OPTS += --enable-introspection
++RYGEL_CONF_OPTS += -Dintrospection=enabled
+ RYGEL_DEPENDENCIES += gobject-introspection
+ else
+-RYGEL_CONF_OPTS += --disable-introspection
++RYGEL_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
+ RYGEL_CONF_OPTS += \
+-	--with-media-engine=gstreamer \
+-	--enable-playbin-plugin \
+-	--enable-media_export-plugin \
+-	--enable-gst-launch-plugin
++	-Dengines=gstreamer \
++	-Dgstreamer=enabled
++RYGEL_PLUGINS += ,playbin,media-export,gst-launch
+ RYGEL_DEPENDENCIES += \
+-	gupnp-dlna \
+ 	gst1-plugins-base \
+-	gstreamer1
++	gstreamer1 \
++	gstreamer1-editing-services
+ else ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE),y)
+ RYGEL_CONF_OPTS += \
+-	--with-media-engine=simple \
+-	--disable-playbin-plugin \
+-	--disable-media_export-plugin \
+-	--disable-gst-launch-plugin
++	-Dengines=simple \
++	-Dgstreamer=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+-RYGEL_CONF_OPTS += --with-ui
++RYGEL_CONF_OPTS += -Dgtk=enabled
+ RYGEL_DEPENDENCIES += libgtk3
+ else
+-RYGEL_CONF_OPTS += --without-ui
++RYGEL_CONF_OPTS += -Dgtk=disabled
+ endif
+ 
++RYGEL_CONF_OPTS += -Dplugins="$(RYGEL_PLUGINS)"
++
+ define RYGEL_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/rygel/S99rygel \
+ 		$(TARGET_DIR)/etc/init.d/S99rygel
+@@ -75,4 +68,4 @@ define RYGEL_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rygel.service
+ endef
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
