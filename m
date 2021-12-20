@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DDDAC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 22:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1993C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 22:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDE4840129;
-	Mon, 20 Dec 2021 22:44:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9977B4067C;
+	Mon, 20 Dec 2021 22:44:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cyEd2i2_f3PJ; Mon, 20 Dec 2021 22:44:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oO4CEU35nzgC; Mon, 20 Dec 2021 22:44:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDDA44019D;
-	Mon, 20 Dec 2021 22:44:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6D8B31BF5A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED91E40629;
+	Mon, 20 Dec 2021 22:44:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C9A3E1BF5A6
  for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 516368174C
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE6A3409B3
  for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 22:42:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5dtaFylSo2qb for <buildroot@lists.busybox.net>;
- Mon, 20 Dec 2021 22:42:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N3_Yn4-bqAR1 for <buildroot@lists.busybox.net>;
+ Mon, 20 Dec 2021 22:42:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DACE481498
- for <buildroot@buildroot.org>; Mon, 20 Dec 2021 22:42:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 168EB409A8
+ for <buildroot@buildroot.org>; Mon, 20 Dec 2021 22:42:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D099E828B8; Mon, 20 Dec 2021 22:36:40 +0000 (UTC)
+ id 0E3D38289B; Mon, 20 Dec 2021 22:36:41 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 20 Dec 2021 23:05:51 +0100
+Date: Mon, 20 Dec 2021 23:06:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a42caa7a23091919c01dacb84df8dd2301e6b0b1
-X-Git-Newrev: 68c8c37d7d15a11d91b699f15dbaa00adcd4773e
+X-Git-Oldrev: 6000c027f99c5ba9baa1caca1f41e93b668f03c1
+X-Git-Newrev: da6fbde369c74a6e04c486cc40e1058b203edba8
 X-Patchwork-Hint: ignore
-Message-Id: <20211220223640.D099E828B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp-dlna: bump to version 0.12.0
+Message-Id: <20211220223641.0E3D38289B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add the
+ stm32f469_disco_xip_defconfig entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,78 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68c8c37d7d15a11d91b699f15dbaa00adcd4773e
+commit: https://git.buildroot.net/buildroot/commit/?id=da6fbde369c74a6e04c486cc40e1058b203edba8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- GStreamer 0.10 back-end has been dropped with
-  https://gitlab.gnome.org/GNOME/gupnp-dlna/-/commit/af50a8ac988c3929cec1afc6f85458d98ce80485
-- Switch to meson-package (to avoid autoreconf as no configure is
-  shipped anymore)
-- Update indention in hash file (two spaces)
+Commit a3e3d9c19829 ("configs/stm32f469_disco_xip_defconfig: alternative
+defconfig for XIP configurations") forgot to add the corresponding entry
+in the DEVELOPERS file.
 
-https://gitlab.gnome.org/GNOME/gupnp-dlna/-/blob/gupnp-dlna-0.12.0/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+Cc: Yauheni Saldatsenka <eugentoo@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gupnp-dlna/gupnp-dlna.hash |  6 +++---
- package/gupnp-dlna/gupnp-dlna.mk   | 16 +++++++---------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gupnp-dlna/gupnp-dlna.hash b/package/gupnp-dlna/gupnp-dlna.hash
-index 01c7489738..dd9f2e4e4f 100644
---- a/package/gupnp-dlna/gupnp-dlna.hash
-+++ b/package/gupnp-dlna/gupnp-dlna.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.10/gupnp-dlna-0.10.5.sha256sum:
--sha256	123e368227c11d5c17fc1aa76cbdaffa345355eb51d172cd39fc74a5b468ff6a	gupnp-dlna-0.10.5.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.12/gupnp-dlna-0.12.0.sha256sum:
-+sha256  3d53b96f85bc5628d33e367ec9bf2adb38ef2b34d7ad0434a6ba0cf4ad9048e6  gupnp-dlna-0.12.0.tar.xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4125adcddf..64db6c51d0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -531,6 +531,7 @@ F:	board/stmicroelectronics/stm32f429-disco/
+ F:	board/stmicroelectronics/stm32f469-disco/
+ F:	configs/stm32f429_disco_xip_defconfig
+ F:	configs/stm32f469_disco_sd_defconfig
++F:	configs/stm32f469_disco_xip_defconfig
  
- # Locally computed:
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-index dd548e3e2d..4f75c9b527 100644
---- a/package/gupnp-dlna/gupnp-dlna.mk
-+++ b/package/gupnp-dlna/gupnp-dlna.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GUPNP_DLNA_VERSION_MAJOR = 0.10
--GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).5
-+GUPNP_DLNA_VERSION_MAJOR = 0.12
-+GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).0
- GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
- GUPNP_DLNA_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
-@@ -15,20 +15,18 @@ GUPNP_DLNA_LICENSE_FILES = COPYING
- GUPNP_DLNA_INSTALL_STAGING = YES
- GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
- 
--GUPNP_DLNA_CONF_OPTS = --disable-legacy-gstreamer-metadata-backend
--
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GUPNP_DLNA_CONF_OPTS += --enable-introspection
-+GUPNP_DLNA_CONF_OPTS += -Dintrospection=true -Dvapi=true
- GUPNP_DLNA_DEPENDENCIES += host-vala gobject-introspection
- else
--GUPNP_DLNA_CONF_OPTS += --disable-introspection
-+GUPNP_DLNA_CONF_OPTS += -Dintrospection=false -Dvapi=false
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
--GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
-+GUPNP_DLNA_CONF_OPTS += -Dgstreamer_backend=enabled
- GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
- else
--GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
-+GUPNP_DLNA_CONF_OPTS += -Dgstreamer_backend=disabled
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ N:	Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+ F:	package/drbd-utils/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
