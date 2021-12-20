@@ -1,66 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22E22C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 09:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56481C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Dec 2021 09:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC35641BE8;
-	Mon, 20 Dec 2021 09:34:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01BF84057E;
+	Mon, 20 Dec 2021 09:38:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZUaDYAEWsQgs; Mon, 20 Dec 2021 09:34:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CBFB41BDB;
-	Mon, 20 Dec 2021 09:34:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 76C521BF3F6
- for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 09:34:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62DB7401D5
- for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 09:34:26 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UZOGwHOh_mbl for <buildroot@lists.busybox.net>;
- Mon, 20 Dec 2021 09:34:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBA03400F3
- for <buildroot@buildroot.org>; Mon, 20 Dec 2021 09:34:24 +0000 (UTC)
-Received: from [192.168.50.18] ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id zF3lmkX9qYYTXzF3mmab1b; Mon, 20 Dec 2021 10:34:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1639992862; bh=2wAcUqhNaUKJGlcty23ImmrgFYvv50jxX3BHdjLMOwE=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=IXWC0R1Wi8aCP3r7Fw/ov9L5cSZ3E+bNxMQPCs/U4ChUKoIcP1WoRrfVwitdUE3UA
- QZ36BJ2azo1hBuq70ebky+16/1t35hilSB50xjRBebe95vxgzHIfmCxLD1gRk9b74S
- 7Upp34wMR63gkQN6ek+/QBHAY0EtF7Qi9SWom+Yil51q4M/8b7dm9RxbZBNJwVNHCb
- BYVPgu6Gu6cYKRRaE0+i43pI6H+1uBPRtmi9EpOTw1QXEgUzuzkoITD15wiBQohbHb
- e7nTEWrgd42OijcsjVJc048g4ZeocEgRtlb0OIciXP5DREh+t9i6czDhbOtmr4jzy+
- FiafcskAg0ISA==
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h3e1kjHMlI-9; Mon, 20 Dec 2021 09:38:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 100DB401D5;
+	Mon, 20 Dec 2021 09:38:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DB571BF3F6
+ for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 09:38:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76B8160C1B
+ for <buildroot@lists.busybox.net>; Mon, 20 Dec 2021 09:38:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Rgfgz6sUJ1x for <buildroot@lists.busybox.net>;
+ Mon, 20 Dec 2021 09:38:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E62F960C1D
+ for <buildroot@buildroot.org>; Mon, 20 Dec 2021 09:38:27 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id v7so11462902wrv.12
+ for <buildroot@buildroot.org>; Mon, 20 Dec 2021 01:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p6q0gsRMwrCuGrn7sOHhQ8ZCQ/CNR+OmjNyezG9tqhI=;
+ b=Awj1u0rtu55QcfW+Wo3JEL1VPc675KPIBMM+hfYlfse+GRe71b8SkxN9aHVDGO/pnJ
+ 4XCU0TUswFeEjrJo84mv75t11ELMHwG+9PVG+vfHfJW0X+EcJhXlGbZeuZbVw8Djrpwx
+ oJ6UTzbVOSrRPQShvhdtOWHIYVcLY/5kpe+gNaBLbglAtEs2XVlpTiEgWrlFocZsDRRB
+ karoEz+9Y0NPHwjQXf7Q8MHvVKWHynQdt3osGD+johQMIJ9bS8rvSV5OOnQcIeZj6MKO
+ bmsMWNuHHlLGHiBbKSH9htBr6apmnBPq3PSu7nVreOU9mYDOEGZgDXGF/6CSVFv9hTnx
+ j0Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=p6q0gsRMwrCuGrn7sOHhQ8ZCQ/CNR+OmjNyezG9tqhI=;
+ b=N9E9PFHp5GHHKmqhPHNy5NyRy7SLsXGQagAPzt0YI0yyPP2HpgmrLD7OjOtwBoe8el
+ ui6ycm4HhJiyc4VgZW+FFPW2NsLHFlZjn/Pkbcm6lGpScfLt2ZDRRfIQCDCGqKG2Gc5p
+ Ev4iYO7L0oxtqvA4L8wLW/EkCZb4q1M6LUysC3F14rnDSzim2tdTk8MUTHatPCOxMKLT
+ /Gn9ma8ezMQ0/RHYGePej00wchoqK5+bjJTs3+/L4uXRHHsxojrOHqG+GR2Vu5w9OSTD
+ dxqtQQLGiWBjDi8scGAH39Dze+YgQwem/bQqb/zp/mEEIIp3rmlyNkaSysqRiMVeoSDs
+ Ji1g==
+X-Gm-Message-State: AOAM530j4KHrVJJ+4+hyVHpaLoMgCQshFF0JLK3dW98dNXwISdseXoAw
+ 5vonlnpDW8EyTp7dXXrImeMj7E7EuI/yHw==
+X-Google-Smtp-Source: ABdhPJzE7qLDB19IQPOw9fGK4RbGhv9SmXSE8zFdOHOMTcF+XctBK5Z6+Fu8MVPj23yL5SeF6Yrz0w==
+X-Received: by 2002:a05:6000:3c1:: with SMTP id
+ b1mr7218206wrg.394.1639993106018; 
+ Mon, 20 Dec 2021 01:38:26 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id i12sm5645303wrp.96.2021.12.20.01.38.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Dec 2021 01:38:25 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <20211014215455.2444205-1-giulio.benetti@benettiengineering.com>
- <20211014215455.2444205-2-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <8ef44878-632a-b7e8-e29c-d9fb4f7bb734@benettiengineering.com>
-Date: Mon, 20 Dec 2021 10:34:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Date: Mon, 20 Dec 2021 10:37:50 +0100
+Message-Id: <20211220093750.1930337-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20211014215455.2444205-2-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfPSDXY9ShqY9bWbXkyBMXj2/VuXfKZ3F/H5GdT2IaUQIhZ80YubhL19AzBHAdCJCgSiw+x7GwXonZ3ycsVGIYY3qzJWA/tpcaNE4MKywGb/T+sCdyADP
- cxCMPLefv2U5G1Wbl/x0cP5P2kycX/tsdtEu8VN2aaMjJPbbIM0mmotQpAT4la8dehnhWMjV5fa0LDD+sAweGGid5LjqSPrq7YnM8MPbKrzPtUW9RvXZV8yc
- A0z7tipHW5eFlCc7i8lTSkYab1dH8dBbqfIAza3kJgk=
-Subject: Re: [Buildroot] [PATCH 2/2] package/erlang-jiffy: bump version to
- 1.0.9
+Subject: [Buildroot] [PATCH 1/1] package/rtl_433: bump to version 21.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,51 +86,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Will Newton <will.newton@gmail.com>,
- Johan Oudinet <johan.oudinet@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kindly ping
+https://github.com/merbanan/rtl_433/releases/tag/21.12
 
-On 14/10/21 23:54, Giulio Benetti wrote:
-> Bump version to 1.0.9
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/erlang-jiffy/erlang-jiffy.hash | 2 +-
->   package/erlang-jiffy/erlang-jiffy.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
-> index 19e4f96012..93c5e1f8c8 100644
-> --- a/package/erlang-jiffy/erlang-jiffy.hash
-> +++ b/package/erlang-jiffy/erlang-jiffy.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  7cf67840c58b8732e12c84c8a3b714774da2601ae5e6a57f286273e25b205516  erlang-jiffy-1.0.6.tar.gz
-> +sha256  45c224afe0ea2d3ece39e227f01f5585ad53b8b91d2d6924f9f50548874ae879  erlang-jiffy-1.0.9.tar.gz
->   sha256  0fa8afad2f02c08850a16e36fe55376ee19732b3a116a0207f2a73c857777a49  LICENSE
-> diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
-> index dce6a0f8b3..25e7227c39 100644
-> --- a/package/erlang-jiffy/erlang-jiffy.mk
-> +++ b/package/erlang-jiffy/erlang-jiffy.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -ERLANG_JIFFY_VERSION = 1.0.6
-> +ERLANG_JIFFY_VERSION = 1.0.9
->   ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
->   ERLANG_JIFFY_LICENSE = MIT (core), \
->   	BSD-3-Clause (Google double conversion library), \
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rtl_433/rtl_433.hash | 2 +-
+ package/rtl_433/rtl_433.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
+index 9ace444b78..fd479dfd21 100644
+--- a/package/rtl_433/rtl_433.hash
++++ b/package/rtl_433/rtl_433.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  d8b87535b4e65264018771b6b288259d81137482fc938d01e0c03ac071c03bd5  rtl_433-21.05.tar.gz
++sha256  b362ef3410adec64aee7ad8e6d4d74875f1b3d59ef6fb4856e96adc03876dc65  rtl_433-21.12.tar.gz
+ # License file, locally calculated
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+index df00c09518..a5139ddae6 100644
+--- a/package/rtl_433/rtl_433.mk
++++ b/package/rtl_433/rtl_433.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL_433_VERSION = 21.05
++RTL_433_VERSION = 21.12
+ RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
+ RTL_433_LICENSE = GPL-2.0+
+ RTL_433_LICENSE_FILES = COPYING
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
