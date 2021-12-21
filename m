@@ -1,59 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 970C8C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 15:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DB8C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 19:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CDDF4016B;
-	Tue, 21 Dec 2021 15:01:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 186D14159A;
+	Tue, 21 Dec 2021 19:08:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z-ETNCRZQ2Tw; Tue, 21 Dec 2021 15:01:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pGPTT8jZO6yd; Tue, 21 Dec 2021 19:08:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 023B440A1C;
-	Tue, 21 Dec 2021 15:01:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E1394158B;
+	Tue, 21 Dec 2021 19:08:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75AEF1BF5DA
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 15:01:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9A2341BF3C9
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 19:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 663D3408E9
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 15:01:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 973F94158B
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 19:08:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=linux.microsoft.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Is_e8128oXyn for <buildroot@lists.busybox.net>;
- Tue, 21 Dec 2021 15:01:13 +0000 (UTC)
-X-Greylist: delayed 00:05:56 by SQLgrey-1.8.0
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4893A408DD
- for <buildroot@buildroot.org>; Tue, 21 Dec 2021 15:01:13 +0000 (UTC)
-Received: from machine.home (lfbn-lyo-1-1484-111.w86-207.abo.wanadoo.fr
- [86.207.51.111])
- by linux.microsoft.com (Postfix) with ESMTPSA id 6A7CA20B717A;
- Tue, 21 Dec 2021 06:55:21 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6A7CA20B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
- s=default; t=1640098522;
- bh=qTRa5imnT21YfoHxOoJoFle0iW4/CKR7RkO0vVCIkUw=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=IoWafbVe3FIwdcQJqT7gExtGZkB/8jkYqebeGR6nuD4yLJvigVJvWwjwJ+nwBi2vc
- 0TzlSoGvggHXh1odGMVRm/DqVECZsDPtbGCKMfnaAvz5fnqeZy+wpypRC9M6vBccgU
- LG3i+5dkC13VfKGRlPie4+oUgvMSFKZEabhP102Q=
-From: Francis Laniel <flaniel@linux.microsoft.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Dec 2021 15:54:28 +0100
-Message-Id: <20211221145428.43829-2-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211221145428.43829-1-flaniel@linux.microsoft.com>
-References: <20211221145428.43829-1-flaniel@linux.microsoft.com>
+ with ESMTP id Rt3smkTbRrlA for <buildroot@lists.busybox.net>;
+ Tue, 21 Dec 2021 19:08:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
+ [IPv6:2607:f8b0:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 627A740907
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 19:08:11 +0000 (UTC)
+Received: by mail-ot1-x334.google.com with SMTP id
+ v22-20020a9d4e96000000b005799790cf0bso5353579otk.5
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 11:08:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=I9L0IlCGpvMndgXq8hwmOE7xCASPo7/+PgN9modWckQ=;
+ b=jGdPDLHw+WJsJfJrv//kcSlFCqRIiRjj574RXgRXAMkay91neCmgvTBXQUnzhCXQ78
+ lSW623F2DYUyYhFChNq7NQw+4s6mVljhvO7X+WS2EB6WPwdo9tmTrgPFbpvxic6tWiAv
+ ONWjp2k1x/9ItLbt0JhM8VGGi6Iz7lo8WUN4f9UDET1ko7nqmV1Der3wRh2p0/YW4Hq3
+ eAS7sl3dqGbRS6eJLLT0ErqX1C5tOsEra5avQRtdYRbcUPUv2kL5VqDWxnFa4/vmbkRU
+ Q6woTt6nH55OtrovDqa9dhmO3wOoADqhTKE1QpdW+rNx2toKd40xWVFC9kapIU+s0M/D
+ Cauw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=I9L0IlCGpvMndgXq8hwmOE7xCASPo7/+PgN9modWckQ=;
+ b=GckPte/RvPdINnfATliEyTUCqPZWpTqQ/7GBv6ATFtvbEQ39Qb5McByU78vxmbGE/g
+ LScEIiUZkQp+ezbNTgOEScQVFd2hS8FwPU9+ljgQe7yOZifwoHnhQcCcFDroieuKWlSJ
+ Wbvn/yNv3+4f7lXnYrqW3W4si0Et5m3V2cifmxgz5i/1YuHrLKpo8qTX8taelWw1V2uo
+ QCP5dd2lc5iycQ7SGK3eJd1Va27W815EinXerGCF+/OqZvOHWTr5LT04vUMwHQEsNTX/
+ 4inRDjmOx7zAyQX6qXx2vmXKiVERl5mh8HJWK8GYnsS/WmgFHJLu9P5cVKRHoY8Q/no9
+ OtYw==
+X-Gm-Message-State: AOAM533U7xlSmDRxCdB2slo0zkAtpkxJNjDy7J4fx2+uMvW3QLeBJqrj
+ FI1su8LT9VUYdxvyHMcMaN171tR6gEOFF8BVxV4=
+X-Google-Smtp-Source: ABdhPJx6uUxaNVW83jazcciNZZG/9fbNPZilS7QinfU57BSLufsxC61m+c6Zl/c4oZzBifBt8TPPA2vyxpCAKBMqJAo=
+X-Received: by 2002:a9d:7855:: with SMTP id c21mr3297453otm.167.1640113690281; 
+ Tue, 21 Dec 2021 11:08:10 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [RFC PATCH v1 1/2] package/pahole: new host package
+References: <20211220084645.28659-1-james.hilliard1@gmail.com>
+ <7f99f3a3-cc60-a874-afbf-8f89259f63ff@mind.be>
+In-Reply-To: <7f99f3a3-cc60-a874-afbf-8f89259f63ff@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 21 Dec 2021 12:07:59 -0700
+Message-ID: <CADvTj4rb=3jCU6+bBOM7GEt2Cym5pSTJELWcAiwN-Uup+LxwQA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/1] package/connman: add iwd support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,105 +80,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francis Laniel <flaniel@linux.microsoft.com>,
- Samuel Martin <s.martin49@gmail.com>
+Cc: Martin Bark <martin@barkynet.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-pahole is a tool used to show data structure embedded in debugging information
-formats like DWARF.
-It is notably needed by the Linux kernel to generate BPF Type Format (BTF)
-information used by Compile Once - Run Everywhere (CO-RE) BPF tools.
+On Mon, Dec 20, 2021 at 3:34 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 20/12/2021 09:46, James Hilliard wrote:
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   package/connman/connman.mk | 7 +++++++
+> >   1 file changed, 7 insertions(+)
+> >
+> > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> > index e5e596c973..d3ebb40a1c 100644
+> > --- a/package/connman/connman.mk
+> > +++ b/package/connman/connman.mk
+> > @@ -85,6 +85,13 @@ else
+> >   CONNMAN_CONF_OPTS += --disable-wispr
+> >   endif
+> >
+> > +ifeq ($(BR2_PACKAGE_IWD),y)
+> > +CONNMAN_CONF_OPTS += --enable-iwd
+>
+>   No need to add iwd to CONNMAN_DEPENDENCIES?
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
----
- DEVELOPERS                    |  3 +++
- package/Config.in.host        |  1 +
- package/pahole/Config.in.host |  6 ++++++
- package/pahole/pahole.hash    |  2 ++
- package/pahole/pahole.mk      | 20 ++++++++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/pahole/Config.in.host
- create mode 100644 package/pahole/pahole.hash
- create mode 100644 package/pahole/pahole.mk
+From what I can tell iwd is only needed at runtime.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 64db6c51d0..70df957415 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -939,6 +939,9 @@ N:	Floris Bos <bos@je-eigen-domein.nl>
- F:	package/ipmitool/
- F:	package/odhcploc/
- 
-+N:	Francis Laniel <flaniel@linux.microsoft.com>
-+F:	package/pahole/
-+
- N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 6e5a5c5fc5..ae512c5643 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -60,6 +60,7 @@ menu "Host utilities"
- 	source "package/omap-u-boot-utils/Config.in.host"
- 	source "package/openocd/Config.in.host"
- 	source "package/opkg-utils/Config.in.host"
-+	source "package/pahole/Config.in.host"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pigz/Config.in.host"
-diff --git a/package/pahole/Config.in.host b/package/pahole/Config.in.host
-new file mode 100644
-index 0000000000..e427629632
---- /dev/null
-+++ b/package/pahole/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PAHOLE
-+	bool "host pahole"
-+	help
-+	  Pahole and other DWARF utils.
-+
-+	  https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
-new file mode 100644
-index 0000000000..2573fde8c9
---- /dev/null
-+++ b/package/pahole/pahole.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 76b7eaf5747dbb7250a1a50185136d4639e0d70aa11c5d7c68139c0c8ca9be80 pahole-v1.22-br1.tar.gz
-diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
-new file mode 100644
-index 0000000000..1f69f5391e
---- /dev/null
-+++ b/package/pahole/pahole.mk
-@@ -0,0 +1,20 @@
-+########################################################################
-+#
-+# pahole
-+#
-+########################################################################
-+
-+PAHOLE_VERSION = v1.22
-+PAHOLE_SITE = git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-+PAHOLE_SITE_METHOD = git
-+# pahole contains git submodule and relies on them to be built.
-+# We need to add this option to fetch the submodules before creating the
-+# archive.
-+PAHOLE_GIT_SUBMODULES = YES
-+# Better to build it statically so we do not rely on the host having
-+# corresponding libraries.
-+HOST_PAHOLE_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF -D__LIB=lib
-+PAHOLE_LICENSE = GPL-2.0
-+PAHOLE_LICENSE_FILES = COPYING
-+
-+$(eval $(host-cmake-package))
--- 
-2.30.2
-
+>
+>   Regards,
+>   Arnout
+>
+> > +else
+> > +CONNMAN_CONF_OPTS += --disable-iwd
+> > +endif
+> > +
+> > +
+> >   define CONNMAN_INSTALL_INIT_SYSV
+> >       $(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+> >   endef
+> >
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
