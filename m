@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E1D9C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 09:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A3EBC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 11:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7562826D5;
-	Tue, 21 Dec 2021 09:34:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0FAF8271A;
+	Tue, 21 Dec 2021 11:00:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8eBjE5bSylW6; Tue, 21 Dec 2021 09:34:22 +0000 (UTC)
+	with ESMTP id mRmJmAK9lNRT; Tue, 21 Dec 2021 11:00:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AC2782611;
-	Tue, 21 Dec 2021 09:34:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8F18826DE;
+	Tue, 21 Dec 2021 10:59:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 144111BF83B
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 09:34:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9A3731BF298
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 10:59:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11E084049F
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 09:34:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 883A2408A1
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 10:59:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ohb4qNp_5Y0j for <buildroot@lists.busybox.net>;
- Tue, 21 Dec 2021 09:34:18 +0000 (UTC)
+ with ESMTP id DnM95j6uTeuE for <buildroot@lists.busybox.net>;
+ Tue, 21 Dec 2021 10:59:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AFB224047D
- for <buildroot@buildroot.org>; Tue, 21 Dec 2021 09:34:18 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- bg19-20020a05600c3c9300b0034565e837b6so826999wmb.1
- for <buildroot@buildroot.org>; Tue, 21 Dec 2021 01:34:18 -0800 (PST)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 668F54089F
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 10:59:56 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id d9so6591486wrb.0
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 02:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Dvuru5x4MGOt+6GAhp0RSJxK+OLLLF+Rk0cNPCI9JwY=;
- b=QRFz4R0uBreZp1JMnczS6HZDrKlEWd26Mq31SdsNPdYbW1KydFbdsNhx0CYSEMaQTJ
- tZU6Hg9FNJThI9U9F77U2al9upJ2TZYe8ZpfzvqqU5+pGzgeQZ3vTUBZGlPW3G1OObYd
- A+mSHcv4lImOcBaiSI0j2+++p4z2urbiiQsZZ4O/4oLv6iaClbDn4AABNSyw51PThizb
- BUUp/q2cBj0P9C3v246o1abOBIe6Pw9EAWD4pVu7+DyhdADEJ17vKcMmlT8Bu4LjMIyV
- mqOCkYU5TYeSS8V54ziZb92OauIkFPI+J9B90+X/k7HzcXqsmBmPO6iiHSMsOPAoVHCh
- gQZA==
+ bh=zFqex2fnBfJKHq7tu/iYwI4GuoqKF9qPvq4xwuzAsJE=;
+ b=KZuZ8v4mgG1tw0uqayKQcxnqIPUh66ikOkmv6/GkEHirF1PGZnRh9vmo7OdRd0HBk2
+ HRM+0TCVGFiSrkrXs0YGdtD9Czody+ERgYQJl2g17mxQ5FYJSekQJxHsVZdjDivSY0yz
+ vcrMD9FlKfq2RS14w6PmLvs46mfWNPBO4XbGviZiR1POh3/JQpFTq99oNWdtYnUTm6Hk
+ bMs9jFjE1L3vaaGM4NqCphGxmBHBkVSqzkJS30zhs0xGn7CpnsELYMMQC6alynfdkLMM
+ Z/ew7/V5zg5BeG87+lZGOAGC8b61K0Fl2naBJxyApUTHikyf8gnafa57C7OlcTVKGNru
+ 6q/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Dvuru5x4MGOt+6GAhp0RSJxK+OLLLF+Rk0cNPCI9JwY=;
- b=Nq7+RdK5ZFg+Z0sh9vJlsx/j6Ah196t+clsHsEPshj3/Z+qP/TJgkuSKb0OurANY51
- +q93U8dH1XK2j7nGFhYM+Rq6LO7tgMcb/h3BqaFtsESoIV1nnm2tON0JKYNWTk/ATjyX
- Xtr7ukaJbcHU4sPM8yyFriBsaPqX1MNadF1xQST/OTbH1xrrA1Iz244KZO9++aurYBd5
- ooRSj4LJ+hSmrSxbXbJU9EOCMZ2acqdl1CBDXjSY+1WsZ27t+MBay8AdBQVIjo5ojqLJ
- orFQDlctkEmBHf6n2o0ojAoIBS5VZX1aY+WPHXyubGKmnhgwtH0ySCnb3TPvO3s2xYBI
- pEGQ==
-X-Gm-Message-State: AOAM53319QcgpXHVuTNK5s3qHGdisajHc7j/O4Djm0A6u1KLMiY2aDAj
- 69eOyl5bZD7bTA7Xvbxqw1A9P7QPCfjNag==
-X-Google-Smtp-Source: ABdhPJw42op//El1E3D5nqOwqCzWA24jyh4yVzdj1F+0qQKxAKJp8f+1cmwZD00a1Brq0uW7bMfBqw==
-X-Received: by 2002:a1c:f012:: with SMTP id a18mr1843931wmb.73.1640079256827; 
- Tue, 21 Dec 2021 01:34:16 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id d10sm1499122wri.57.2021.12.21.01.34.16
+ bh=zFqex2fnBfJKHq7tu/iYwI4GuoqKF9qPvq4xwuzAsJE=;
+ b=Jx9P65T8MmPGBtLhjjapwTClbYu4zrFmA3pfoYFaJuWTdYxJb23xmrxuRgesNmpZ37
+ GXBGxLynGHcg9ZXrm6+TxLidAtlpqPBnQhYIjuxbOha8sKogM4Pf1XSLvVBql/uPy0F9
+ OQzwIjYlRtmRgeOqi0hJT3dfntsMXG9kGHOZoBjmUJtKfovc6Un2dJD0b4UsR88FLt8M
+ 4Lxw7lSqg9HXEr/MiFNKO+skqcIz6YGriQw4KKHGcwbc2BrCPcxJYabXfN5RZ/VKBu/8
+ d3h5F3Y4YfBzThXb/26KlloNGuerYIlnfOLnxOznWNBjY7CiESpcZv1pBINvfCMDarr7
+ 3P1g==
+X-Gm-Message-State: AOAM5335iLaEDgAsqZ3L4cnTJBSqzg8dJXVKjTU/0hF7BnsWZ0ELszRI
+ eoYVayx1tl6itJ7oe7XOsMrHWnfCPaJ4VQ==
+X-Google-Smtp-Source: ABdhPJxN9XV38zZk5G34Ogds/q/UQIrDW6JgKjcwIBDYe8CYIW6m0QDEFZRVkk4sFGIRFdGFHwJL0w==
+X-Received: by 2002:adf:fb06:: with SMTP id c6mr2111599wrr.625.1640084394363; 
+ Tue, 21 Dec 2021 02:59:54 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id e5sm4559000wrq.116.2021.12.21.02.59.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Dec 2021 01:34:16 -0800 (PST)
+ Tue, 21 Dec 2021 02:59:54 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Dec 2021 10:33:35 +0100
-Message-Id: <20211221093335.3362615-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Dec 2021 11:58:48 +0100
+Message-Id: <20211221105848.8586-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/php-apcu: fix license hash
+Subject: [Buildroot] [PATCH 1/1] package/rygel: gobject-introspection is
+ mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,36 +86,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix license hash which is wrong since the addition of the package in
-commit 8ddeeffa186d8bce875ac713c1e71483c618842a
+vapi (and gobject-introspection) is mandatory since bump to version
+0.40.2 in commit 6acdbb81c8d6cdd3ecb476ae24e72fd4547011c3:
 
-While at it, update indentation in hash file (two spaces)
+valac -C --pkg posix --pkg libxml-2.0 --pkg gmodule-2.0 --pkg gio-2.0 --pkg gssdp-1.2 --pkg gee-0.8 --pkg gupnp-1.2 --target-glib ' 2.56' --pkg glib-2.0 --color=always --directory src/librygel-core/librygel-core-2.6.so.2.0.4.p --basedir ../src/librygel-core --library rygel-core-2.6 --header src/librygel-core/rygel-core.h --vapi ../rygel-core-2.6.vapi --gir ../Rygel-2.6.gir ../src/librygel-core/rygel-build-config.vapi ../src/librygel-core/rygel-connection-manager.vala ../src/librygel-core/rygel-basic-management.vala ../src/librygel-core/rygel-basic-management-test.vala ../src/librygel-core/rygel-basic-management-test-ping.vala ../src/librygel-core/rygel-basic-management-test-nslookup.vala ../src/librygel-core/rygel-basic-management-test-traceroute.vala ../src/librygel-core/rygel-description-file.vala ../src/librygel-core/rygel-dlna-profile.vala ../src/librygel-core/rygel-energy-management.vala ../src/librygel-core/rygel-root-device.vala ../src/librygel-core/rygel-root-device-factory.v
+ ala ../src/librygel-core/rygel-dbus-interface.vala ../src/librygel-core/rygel-log-handler.vala ../src/librygel-core/rygel-meta-config.vala ../src/librygel-core/rygel-plugin-loader.vala ../src/librygel-core/rygel-recursive-module-loader.vala ../src/librygel-core/rygel-plugin.vala ../src/librygel-core/rygel-resource-info.vala ../src/librygel-core/rygel-media-device.vala ../src/librygel-core/rygel-configuration.vala ../src/librygel-core/rygel-base-configuration.vala ../src/librygel-core/rygel-cmdline-config.vala ../src/librygel-core/rygel-environment-config.vala ../src/librygel-core/rygel-user-config.vala ../src/librygel-core/rygel-state-machine.vala ../src/librygel-core/rygel-v1-hacks.vala ../src/librygel-core/rygel-icon-info.vala ../src/librygel-core/rygel-xml-utils.vala ../src/librygel-core/rygel-plugin-information.vala
+error: Package `gssdp-1.2' not found in specified Vala API directories or GObject-Introspection GIR directories
+error: Package `gupnp-1.2' not found in specified Vala API directories or GObject-Introspection GIR directories
+
+Add a dependency on !BR2_PACKAGE_PYTHON instead of BR2_PACKAGE_PYTHON3
+to avoid the following recursive dependency:
+
+package/gstreamer1/gstreamer1/Config.in:5:error: recursive dependency detected!
+package/gstreamer1/gstreamer1/Config.in:5:	symbol BR2_PACKAGE_GSTREAMER1 is selected by BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
+package/rygel/Config.in:46:	symbol BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1 is part of choice <choice>
+package/rygel/Config.in:39:	choice <choice> contains symbol <choice>
+package/rygel/Config.in:39:	choice <choice> contains symbol BR2_PACKAGE_RYGEL
+package/rygel/Config.in:1:	symbol BR2_PACKAGE_RYGEL depends on BR2_PACKAGE_PYTHON3
+package/python3/Config.in:5:	symbol BR2_PACKAGE_PYTHON3 is selected by BR2_PACKAGE_JACK2_DBUS
+package/jack2/Config.in:35:	symbol BR2_PACKAGE_JACK2_DBUS depends on BR2_PACKAGE_JACK2
+package/jack2/Config.in:1:	symbol BR2_PACKAGE_JACK2 is selected by BR2_PACKAGE_FLUIDSYNTH_JACK2
+package/fluidsynth/Config.in:37:	symbol BR2_PACKAGE_FLUIDSYNTH_JACK2 depends on BR2_PACKAGE_FLUIDSYNTH
+package/fluidsynth/Config.in:1:	symbol BR2_PACKAGE_FLUIDSYNTH is selected by BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH
+package/gstreamer1/gst1-plugins-bad/Config.in:425:	symbol BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FLUIDSYNTH depends on BR2_PACKAGE_GSTREAMER1
 
 Fixes:
- - http://autobuild.buildroot.org/results/0829e7f1f7a18976363b3e3f79ac9865cd099df4
+ - http://autobuild.buildroot.org/results/027ce84895fab6fb251dd37cd5cfb7169287a2de
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/php-apcu/php-apcu.hash | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/rygel/Config.in | 16 +++++++++++++---
+ package/rygel/rygel.mk  |  9 ++-------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/package/php-apcu/php-apcu.hash b/package/php-apcu/php-apcu.hash
-index 8b286d5ae3..3aae4120d2 100644
---- a/package/php-apcu/php-apcu.hash
-+++ b/package/php-apcu/php-apcu.hash
-@@ -1,2 +1,3 @@
--sha256 b99d40fafec06f4d132fcee53e7526ddbfc1d041ea6e04e17389dfad28f9c390  apcu-5.1.20.tgz
--sha256 c48761c645c6fa42b57af0e65d893217dc69bcd8d879ace74d6abbf1c5f73a8f  LICENSE
-+# Locally computed:
-+sha256  b99d40fafec06f4d132fcee53e7526ddbfc1d041ea6e04e17389dfad28f9c390  apcu-5.1.20.tgz
-+sha256  ecc8b74820c32fb82ddee80446205408585d75d1632ac959fb3cdf8eaf3877b5  LICENSE
+diff --git a/package/rygel/Config.in b/package/rygel/Config.in
+index df48918833..04871e00b1 100644
+--- a/package/rygel/Config.in
++++ b/package/rygel/Config.in
+@@ -2,8 +2,14 @@ config BR2_PACKAGE_RYGEL
+ 	bool "rygel"
+ 	depends on BR2_USE_WCHAR # gupnp-av
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
+-	depends on BR2_USE_MMU # gupnp-av
++	depends on BR2_USE_MMU # gupnp-av, gobject-introspection
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # gobject-introspection
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
++	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection -> host-qemu
++	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
++	depends on !BR2_PACKAGE_PYTHON # gobject-introspection
+ 	select BR2_PACKAGE_GDK_PIXBUF
++	select BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	select BR2_PACKAGE_GUPNP_AV
+ 	select BR2_PACKAGE_GUPNP_DLNA
+ 	select BR2_PACKAGE_LIBGEE
+@@ -45,8 +51,12 @@ config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
+ 
+ endchoice
+ 
+-comment "rygel needs a toolchain w/ wchar, threads"
++comment "rygel needs a glibc toolchain w/ wchar, threads, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_HOST_GCC_AT_LEAST_8
+ 
+ endif # BR2_PACKAGE_RYGEL
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index c541cdc0ed..bfcd5df3c6 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -12,6 +12,7 @@ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
+ RYGEL_LICENSE_FILES = COPYING COPYING.logo
+ RYGEL_DEPENDENCIES = \
+ 	gdk-pixbuf \
++	gobject-introspection \
+ 	gupnp-av \
+ 	gupnp-dlna \
+ 	libgee \
+@@ -24,16 +25,10 @@ RYGEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ RYGEL_CONF_OPTS += \
+ 	-Dapi-docs=false \
+ 	-Dexamples=false \
++	-Dintrospection=enabled \
+ 	-Dtests=false
+ RYGEL_PLUGINS = external,lms,mpris,ruih
+ 
+-ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-RYGEL_CONF_OPTS += -Dintrospection=enabled
+-RYGEL_DEPENDENCIES += gobject-introspection
+-else
+-RYGEL_CONF_OPTS += -Dintrospection=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
+ RYGEL_CONF_OPTS += \
+ 	-Dengines=gstreamer \
 -- 
 2.33.0
 
