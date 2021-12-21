@@ -1,79 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54E60C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 13:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16E5C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Dec 2021 13:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D04B760B9F;
-	Tue, 21 Dec 2021 13:06:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A3E340215;
+	Tue, 21 Dec 2021 13:21:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fFqB8zl4yHCZ; Tue, 21 Dec 2021 13:06:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4E4F60ECB;
-	Tue, 21 Dec 2021 13:06:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D05671BF5DC
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 13:06:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE45F4092E
- for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 13:06:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KJP0cbLe1dGA for <buildroot@lists.busybox.net>;
- Tue, 21 Dec 2021 13:06:18 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YyZ_S9MDTVWl; Tue, 21 Dec 2021 13:21:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A61F0401BC;
+	Tue, 21 Dec 2021 13:21:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8B891BF5DC
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 13:21:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8B2C812F3
+ for <buildroot@lists.busybox.net>; Tue, 21 Dec 2021 13:21:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id phTXdKg79Ib9 for <buildroot@lists.busybox.net>;
+ Tue, 21 Dec 2021 13:21:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1F4F40921
- for <buildroot@buildroot.org>; Tue, 21 Dec 2021 13:06:17 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id s1so21426962wra.6
- for <buildroot@buildroot.org>; Tue, 21 Dec 2021 05:06:17 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8484681310
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 13:21:40 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ a203-20020a1c7fd4000000b003457874263aso1690984wmd.2
+ for <buildroot@buildroot.org>; Tue, 21 Dec 2021 05:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=I8rw0iSeBbhcHrSCf59G+cThvOJOU2nt0EC3zVLgxj8=;
- b=fbEbmAzizfZwJLHD618dBhKiykIane7KcWC0HcZ8Z9BNSv2FJZ1mAV8MNXZu+xLbOQ
- 9g47wCPt0Y2t+CTz54AZQqrgfyyH6yhKVPXnlmdmVw8VW52cM3ZEDUg3XtlgSkYsHEGi
- 0lT3crV9jdsJ+XpwHZd8vAieUF6Hk3/xUZJOXScldOVhp7rDq2f/F9bOiXgLC/OmKsGf
- tuyfo0Aa8NOJ6uNaFQ9+Wg0bdtaS/fgUC9VwxlzLo9sTrpkbGWEc8u7bed4a+r8lb2in
- 9Xq5NsRKbBGRcSLUtisheG9tykTjmLrZIsCTGogZt1p9b483zJlrlEgkRXVJUXIqIzEN
- vTHw==
+ bh=4zLedJ56cHLg3UjNx+PWJAW/zd4plY+Z8jU8lK1deX8=;
+ b=N593kpxypiNeLliRjoMhlZUVQVVdhoPaKDYg7tpXeFFisfrlYglMc2kwhFbXn7+C8H
+ pFC9De9UcDpyKXBEWvTQmSI/4NWgpV/I53RUT92l5DCB5JK/Z5TUKLDs2DlTKVzkbnYL
+ ebZTKxLDFwPMzEKD1eFYkeLN1+ClwSNh1r1YRjy4YxbfaJJ8z6tzG6teZEWS+SivWN+b
+ 5Kpvg32f70x/m6wJOvyY65sLonxDkfp/dyNV4btej033Adq3bM8Sez1pYpdLd50I2LHO
+ uv96eM+KSArC31cS1ea+yFnhZQ6an9j+aoqxII7C/8Fgy8B3rvecGLjkAjZCw/O/ZDlp
+ rhSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=I8rw0iSeBbhcHrSCf59G+cThvOJOU2nt0EC3zVLgxj8=;
- b=YionEbCWE72v+xJKnWZ6ajlbdzXrxlJ8fIMu1r+U3b9ym7E5hftct/CzSleJbMdKOZ
- mFbqqL/xvQUesU/3SRHuTTdCpzgqaAgA3OpRdedEubBpw3Js6SGyDr1b+BrdFYTOUAiE
- +R1qf2yU+BVmDXZaEEmafzcDf+yoeTkuW3A0iCYvDoZ7zXFZINe+zOe4BRNBtfJKEF9i
- wFjH5RPqNQSg6ljKmKPV8kmr8H0tDgEkBZlLvsh58e4IU5HXauE/U7563Pq7nQe4vu3S
- 984WBhuF457m0vNWv8bmfI22pe6spjBODHxDAwLqQM0BE0QioBEecQIxVQty5FBLPpMb
- gLnQ==
-X-Gm-Message-State: AOAM533t4oGgKUbGTHJeLpxEtQKal5S4k1gpCkY6m3NEopkiPx3Ms4hf
- zPg2GMgc5q8mHhu/Tqc50/t+rF95fRJkPQ==
-X-Google-Smtp-Source: ABdhPJwBxauQxU3+ib4EuIx5PuPmjSmyQRPAaWoz5BbnhLio/wFuEG8gIVMpbmQqp9y+orO9kXqJBA==
-X-Received: by 2002:a5d:6e85:: with SMTP id k5mr2699021wrz.545.1640091976142; 
- Tue, 21 Dec 2021 05:06:16 -0800 (PST)
+ bh=4zLedJ56cHLg3UjNx+PWJAW/zd4plY+Z8jU8lK1deX8=;
+ b=xfChbNAabC3oelt4jW0tK0RzuNhOn+iLobIJpv9m10zeqkBxsBGNSilXrB8ahADrUC
+ CnCxNCCngHR+kN5cIBqlzLaLNHqeCCajONA/GjAwZoRnILcc5ST8N/5/+ASyB+Bl/OO+
+ 4Dvwj4B8mnOSwS+PvFoYuxmqCj/n03gPYKmRiTsrah97zwsZ/rY8z5tOaxnSPkmzP/Pn
+ 5ud/Lm0VY0k2kNNJ75Lway9DPBTP/aXGlBDN3sC525BEgted7HwVFHkmXaMjWX2Nn4yB
+ CWWZQVmLRRjMroTc+9NgHdR+Fpe/0Pk3n0Mz2aAzOLfTpuYyx6thS+27eMBQhuLyuqem
+ E0ew==
+X-Gm-Message-State: AOAM532t+ckAfie8ytNZu2Umx5gr2ZVnMqVZSP6rKFvnHazTQBUU6hBB
+ Yl5iFbsKvpkhLmrfh9GYzgF+YRCoVi4MJQ==
+X-Google-Smtp-Source: ABdhPJyzAaMl3QtsKR0go0O06nfnCiLReeV3R+/Q74pndddxLt32RrGVzwOcxBIHvbwisbaeneJQlw==
+X-Received: by 2002:a05:600c:350e:: with SMTP id
+ h14mr2736644wmq.154.1640092898701; 
+ Tue, 21 Dec 2021 05:21:38 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id 1sm8295774wry.33.2021.12.21.05.06.15
+ by smtp.gmail.com with ESMTPSA id b197sm2399594wmb.24.2021.12.21.05.21.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Dec 2021 05:06:15 -0800 (PST)
+ Tue, 21 Dec 2021 05:21:38 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Dec 2021 14:05:44 +0100
-Message-Id: <20211221130544.103759-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Dec 2021 14:20:56 +0100
+Message-Id: <20211221132056.111661-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 3.0.4
+Subject: [Buildroot] [PATCH 1/1] package/minissdpd: bump to version
+ 1.5.20211105
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,36 +94,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.4
+- Update license hash (year updated)
+- DESTDIR must now be used instead of PREFIX
+
+http://miniupnp.free.fr/files/changelog.php?file=minissdpd-1.5.20211105.tar.gz
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/minissdpd/minissdpd.hash | 4 ++--
+ package/minissdpd/minissdpd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index 6043f96f3a..3e87e64dae 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
+diff --git a/package/minissdpd/minissdpd.hash b/package/minissdpd/minissdpd.hash
+index 385a5a0c2a..e14fe7ab2c 100644
+--- a/package/minissdpd/minissdpd.hash
++++ b/package/minissdpd/minissdpd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  5f1dd0d38adbe9785cb9c4e6e47738c109d73a0afa86e58c4025ce3e2cc504ed  minizip-3.0.3.tar.gz
-+sha256  2ab219f651901a337a7d3c268128711b80330a99ea36bdc528c76b591a624c3c  minizip-3.0.4.tar.gz
- sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 2d0f63959e..07f67c1354 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
+ # Locally computed:
+-sha256  177ab1907cc0fd20c8cafd13ca8674c7ec1828aa6101da9bb066408ccada7350  minissdpd-1.5.20200928.tar.gz
+-sha256  00c8368dd1574b025df65f24f61c32d1297ff9b6dc695fda964b1b1efc7a53d3  LICENSE
++sha256  a073be9c6d9194feaeccf31cd986c48afd2212426b6594e75166cedff1c461aa  minissdpd-1.5.20211105.tar.gz
++sha256  45950e1d443106906f83a4ec7b9c2e1a9d6457130737a493cff0e5b7a39da570  LICENSE
+diff --git a/package/minissdpd/minissdpd.mk b/package/minissdpd/minissdpd.mk
+index 159c5855c1..2b9fac4df1 100644
+--- a/package/minissdpd/minissdpd.mk
++++ b/package/minissdpd/minissdpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINIZIP_VERSION = 3.0.3
-+MINIZIP_VERSION = 3.0.4
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = host-pkgconf
- MINIZIP_INSTALL_STAGING = YES
+-MINISSDPD_VERSION = 1.5.20200928
++MINISSDPD_VERSION = 1.5.20211105
+ MINISSDPD_SITE = http://miniupnp.free.fr/files
+ MINISSDPD_LICENSE = BSD-3-Clause
+ MINISSDPD_LICENSE_FILES = LICENSE
+@@ -20,7 +20,7 @@ endef
+ 
+ define MINISSDPD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		PREFIX=$(TARGET_DIR) install
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ # Use dedicated init scripts for systemV and systemd instead of using
 -- 
 2.33.0
 
