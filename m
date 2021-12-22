@@ -1,80 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 843E6C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 17:17:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0AEAC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 17:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1432860FE4;
-	Wed, 22 Dec 2021 17:17:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26F08818CD;
+	Wed, 22 Dec 2021 17:18:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N--LV-lybtn6; Wed, 22 Dec 2021 17:17:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QlqBfQi1VdLb; Wed, 22 Dec 2021 17:18:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7177C60FD1;
-	Wed, 22 Dec 2021 17:17:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CFFB41BF27E
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:17:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 824BE814B7;
+	Wed, 22 Dec 2021 17:18:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C22F41BF27E
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFB9A40260
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:17:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B162D814B7
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:18:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GN4mxLsFV5YY for <buildroot@lists.busybox.net>;
- Wed, 22 Dec 2021 17:17:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9XDNEqPxa-gV for <buildroot@lists.busybox.net>;
+ Wed, 22 Dec 2021 17:17:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 64AD340224
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 17:17:06 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id t18so6223729wrg.11
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 09:17:06 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 603DE8148E
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 17:17:59 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id i12so2050448wmq.4
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 09:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OOLxziOuQ50wGgFk5DPhw9t2FLUR9h66F7D58yIIF6Q=;
- b=W89SK5d0prfjgSpIjpWQ1LK+BhqTcwqBLQWgEF+ZhYx2DK54zP3lf7j3U7DxZBzIHu
- VC+ieO2auTBq3RWUhqs9gbIVQszt0dqjSrSgI7UgRLAXLwdx8DvcYHXx1hYCCtyPNj8k
- yZE7Q9Nd9Xj6sVFBz2Qpp1VhvgVbsHZ+FK+VVEyVq+WUb6hNjusl/fBqk/03/hhEa50a
- e3E4WjgeP+y+SbDIaGRkmDZCZZEErwsF1jzowcPBAR73H75MgFXyitNkHMyXCNbjjrMh
- QJRFKmbEQGYPmefvn7cFtKQ5iligw7qZuSTe9hEXU3P9OSJR/JbNLfGVH38w98ioDiYC
- 7fUg==
+ bh=TVh/mtJch/OAe+6c2BH7KOI3SrYw6VgJI9za6wuK56k=;
+ b=RfIVFUak1S+ZGeeNm6j1JuPrv0D+n1hNAAg7bq3jJfDvzWjuqQuxC8oJVGwK5rH5BJ
+ HYRBdVXLol9pwUSjsqL+X3QXhE0Cv0Q+ZPjQcaKzXH+aSp/+4dCopRZEbS8DUfpE3D6l
+ FNyOCsttpH/HTjF5zAOGli6B5QxuoeTCk/yaf50Yf6w1ktuMGQOLZMkk/eLiHPTrMM0e
+ g1kaztg37LbsrzyK5T8MkTRY6+ctrVEEKz3kXbs8qKA41PsOf/hR3cCEkEpqFIu6jlpz
+ D+S40P5J6bwh6lpyTG8u1oOiFUWstGfBjtW2zKf1Q+hpgQ11cLrbqoVimsCDQPbZjbAO
+ OXSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OOLxziOuQ50wGgFk5DPhw9t2FLUR9h66F7D58yIIF6Q=;
- b=dh2M/7rWdMx8BvTsk/swgQHLheaw4h7qiKpNs9pT6jMjvBIQnTeWzDn6IZXFFO93kS
- Y4FwuLMSsKOBbvoMF3kF+hQ+lNxkU11/FXswkmTXNhj+HggarrKEGOLnw42cx8VZUg9+
- PMlVIm4sXSgKkcICSe5OW3t8D9WvPrRRZwv3m7ZzL3fMbEO/0I/nYIxmewt1USUjjWbu
- FEiv39p5jGi+V2OWkG187bE4y/l8JJO/iJ/AgH+ACQOf3bi6wXkH4MaogFGB/UtzQ0AP
- CWwJnzUlCtu1/uOWwCz44iT3ADUZ38Eyn5uRXA7D7kqOhZB+BzxNIVMWJDpZKmC3o7bE
- T+jg==
-X-Gm-Message-State: AOAM533XOHTTebe4JHHWwphAJoSkMr7rxGdc6d5lpZkt3o/DGx+eLxoT
- 1QQOUWnGe5JXdYEnpIpyl6yXiYIfw4M9qA==
-X-Google-Smtp-Source: ABdhPJw0vtLmlbBKkFQ/kC+11ZMQ2PNCgJcqR0/4oj+0ZmTHlALR08wk+7Ne+uJy0BeZj/bHWUCuvg==
-X-Received: by 2002:a05:6000:144a:: with SMTP id
- v10mr2681131wrx.357.1640193424631; 
- Wed, 22 Dec 2021 09:17:04 -0800 (PST)
+ bh=TVh/mtJch/OAe+6c2BH7KOI3SrYw6VgJI9za6wuK56k=;
+ b=cyW05A/Do/HiZ95f2W+SNKEvPvCpzmtlasywxUF6aOAJ0IiV5bJFfitNPoMeBqB+F6
+ sIS9h/yODKOP6Tpt30T/bxSpj383EjVS9bp6ThirqWR26zKsspW5biVEX1dWbpxD58Ni
+ qOxBCXY/CtGtjLSZpULRb/+Ed+LvJWZprDv0urkHYb31XFqyICLwqRilrr2tUA6/+79m
+ EBc5RZ+QbQs23610BXOD3MBjtaMmPtbjeInwgGCr4I2jj4Nk0XUu8Y0YyTOe+R2eIiae
+ ILJ2irsdzxSO5rSn/p54aOpUSn1ObdDfS6/z1kF0sHbE9qh1x0AGxFeI6BzqfaKvts1E
+ Il+w==
+X-Gm-Message-State: AOAM533TNtdUBYtEniZKd0Ob9qpdohtFoHKikeFwm8d8W6SV+D+bGubP
+ vvpa4vfG3AUyNtMVwfFnlBLjfMVqm555Yw==
+X-Google-Smtp-Source: ABdhPJzU+dppZ2I12RJpvDQ6T1l+nVvgwyb8JV/K+ft0i1Ye6X6/4sMHqGgKZvsUllbmQDScAfHuIQ==
+X-Received: by 2002:a7b:ce8e:: with SMTP id q14mr1607343wmj.51.1640193477498; 
+ Wed, 22 Dec 2021 09:17:57 -0800 (PST)
 Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
  [62.178.205.20])
- by smtp.gmail.com with ESMTPSA id o10sm3067454wrc.55.2021.12.22.09.17.04
+ by smtp.gmail.com with ESMTPSA id m15sm2826964wrw.27.2021.12.22.09.17.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Dec 2021 09:17:04 -0800 (PST)
+ Wed, 22 Dec 2021 09:17:57 -0800 (PST)
 From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Dec 2021 18:16:57 +0100
-Message-Id: <20211222171658.306816-1-nolange79@gmail.com>
+Date: Wed, 22 Dec 2021 18:17:50 +0100
+Message-Id: <20211222171750.306943-1-nolange79@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/lttng-tools: bump to version 2.13.2
+Subject: [Buildroot] [PATCH] package/zstd: bump to version 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,8 +83,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -95,51 +92,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/lttng-tools/0001-configure.ac-add-disable-tests.patch | 4 ++--
- package/lttng-tools/lttng-tools.hash                          | 4 ++--
- package/lttng-tools/lttng-tools.mk                            | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/zstd/zstd.hash | 4 ++--
+ package/zstd/zstd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lttng-tools/0001-configure.ac-add-disable-tests.patch b/package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-index f569c7ec70..4bc9239c3d 100644
---- a/package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-+++ b/package/lttng-tools/0001-configure.ac-add-disable-tests.patch
-@@ -23,8 +23,8 @@ index 04f9cef4..372cdf3d 100644
- +	      [Disable the build of the test components]))
-  
-  
-- # Always build libconfig since it a dependency of libcommon
--@@ -1027,6 +1029,7 @@ AM_CONDITIONAL([BUILD_BIN_LTTNG_SESSIOND], [test x$enable_bin_lttng_sessiond !=
-+ build_lib_consumer=no
-+@@ -1013,6 +1015,7 @@ AM_CONDITIONAL([BUILD_BIN_LTTNG_SESSIOND], [test x$enable_bin_lttng_sessiond !=
-  
-  # Export the tests and extras build conditions.
-  AS_IF([\
-diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
-index a94ecc4a35..5b5f55da30 100644
---- a/package/lttng-tools/lttng-tools.hash
-+++ b/package/lttng-tools/lttng-tools.hash
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 2d7bf37b2a..d7d8a448ff 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
 @@ -1,5 +1,5 @@
--# From https://lttng.org/files/lttng-tools/lttng-tools-2.12.3.tar.bz2.sha256
--sha256  2890da230edd523fcf497e9eb28133b7606d64fa01bcbffadbfcba42104db153  lttng-tools-2.12.3.tar.bz2
-+# From https://lttng.org/files/lttng-tools/lttng-tools-2.13.2.tar.bz2.sha256
-+sha256  ced2ba00020da77fd17ac92b5a53825502409a07e3aeca28f9515d4a844fd7bd  lttng-tools-2.13.2.tar.bz2
+-# From https://github.com/facebook/zstd/releases/download/v1.5.0/zstd-1.5.0.tar.gz.sha256
+-sha256  5194fbfa781fcf45b98c5e849651aa7b3b0a008c6b72d4a0db760f3002291e94  zstd-1.5.0.tar.gz
++# From https://github.com/facebook/zstd/releases/download/v1.5.1/zstd-1.5.1.tar.gz.sha256
++sha256  e28b2f2ed5710ea0d3a1ecac3f6a947a016b972b9dd30242369010e5f53d7002  zstd-1.5.1.tar.gz
  
- # Locally computed
- sha256  068e55c7dbe597400199aee75ac5e71bdb2ca88c4c9a4cfa8e1fbc61f933eda5  LICENSE
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index fdc5c33bd2..efa22a52e3 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
+ # License files (locally computed)
+ sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index e970d87cbf..476190e9ae 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTTNG_TOOLS_VERSION = 2.12.3
-+LTTNG_TOOLS_VERSION = 2.13.2
- LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_INSTALL_STAGING = YES
+-ZSTD_VERSION = 1.5.0
++ZSTD_VERSION = 1.5.1
+ ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
 -- 
 2.34.1
 
