@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F70C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 08:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CAEDC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 08:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EF9682F51;
-	Wed, 22 Dec 2021 08:30:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF806415D7;
+	Wed, 22 Dec 2021 08:35:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UncCx_ery1W7; Wed, 22 Dec 2021 08:30:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XCuQqH6bb9Zq; Wed, 22 Dec 2021 08:35:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7FB382D0F;
-	Wed, 22 Dec 2021 08:30:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DEDA91BF2FA
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 08:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE975415D8;
+	Wed, 22 Dec 2021 08:35:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2445E1BF2FA
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 08:35:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB6C760EDC
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 08:30:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12E47415D9
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 08:35:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=heine.tech
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kwxYZjbBc6Np for <buildroot@lists.busybox.net>;
- Wed, 22 Dec 2021 08:30:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7AD9060E66
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 08:30:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9F6311814B9; Wed, 22 Dec 2021 09:30:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1640161842; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=8bQ0mbjsjY9CQpf2XdQOc2SUNoyyuv/Q9MB6J30XRTY=;
- b=RHsX86hlXTE2wZmfWyOeF810tvVWdpS/oHymSM7o/okeaOezV3KTWX4c6/GqZqwJTiyRhO
- /MjdJi2qXKKN4ugxEYwgDxdmikTTLUPTZ8hnoqRuU8IPC1BYOHqhVl4M47A0F1GD0Z3tUI
- 1nbR9OxhGB7hl/vl8NCVBsa9aWruDkc=
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zicswYa_NG_g for <buildroot@lists.busybox.net>;
+ Wed, 22 Dec 2021 08:35:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B76D64157E
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 08:35:25 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id bu9so3728686lfb.7
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 00:35:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Pv5xBt823aR8vyQx7BuBgDPyp3m0Fo54cS+oG4ippZM=;
+ b=P9osHX+bR6V2LqDtI1uowA0qkmcVmRK47ZBJBV1d9ZZQHwVU+d5aXywdKfTfD9N74g
+ d3eH6TihwhZwZ0Ax5se/3okJHNiijEQdMaiU737BOanMo3iDnUvGa72WzbB8Q/i0k4Ik
+ YF4/WbtYFv5yTCBAUA4tfPlFRyrlCiOjNu867pkPwLtb75+HfWGJVwX7eabb8bShx+21
+ lC+qLxALZ6p3VUkQLX6N+y61ZRGxcNI6aWHJSdIOci3mx1EVsS4QK8BNPfpqTOgjqtlv
+ erBaL16NkKDOIhyySb6FOWgIYhS4ip/Fhdi6HvjSabVhNKe63Vrj5E/KQI+0GD94XANi
+ XUKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Pv5xBt823aR8vyQx7BuBgDPyp3m0Fo54cS+oG4ippZM=;
+ b=WWeOTT5X+CwlWq5DHHbAhsjV6RYUAXLYlJgCaVLT+CUtS4p4D1ouAg6YjkVy/1x6mU
+ fNByxMXa8fXfcXsLYU10R3MW4dIhNbk/CiI3vHCVMSu+x8VMaNUtwJBvq0EAg0mxl/ux
+ bmual+B1Cd++dvz5Ko6qgW/Te07KDbrP2VIMzS+cJMvsdvRvVJ6W89iBceid9T4LnXUL
+ hEfn9n77ptlPEiqpZWFP4NrWm7+Eaw289Jiy4nfcfZfsp9C8T/rj2fgDJLjYDTEeUmWD
+ 2zQBF+esI4p85541p1cRGFDzpHYnAaUzQYS5P006BDnQ/jOReGqMsmmg3lochGFpURWf
+ iMDw==
+X-Gm-Message-State: AOAM533CMCtwsK3qqCYd6ofAZffEIHnHLLl/qD+C0RZGHY5FIm5UnChc
+ 4Mgo1gOKwgAablcgTTSG/xpP6megyes=
+X-Google-Smtp-Source: ABdhPJy7mCzdZMXx6JhffMRbF4VXCd4nxFFoC/EjCLzkEr/Xs/rsEJNhdcYpmBf0z7kHi/iWg6d6AA==
+X-Received: by 2002:a19:505b:: with SMTP id z27mr1645049lfj.399.1640162123208; 
+ Wed, 22 Dec 2021 00:35:23 -0800 (PST)
+Received: from localhost.localdomain ([98.128.186.122])
+ by smtp.gmail.com with ESMTPSA id x28sm147988lfa.85.2021.12.22.00.35.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Dec 2021 00:35:22 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Dec 2021 09:30:19 +0100
-Message-Id: <20211222083020.49627-1-buildroot@heine.tech>
+Date: Wed, 22 Dec 2021 09:35:13 +0100
+Message-Id: <20211222083515.1150267-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.2
-Subject: [Buildroot] [PATCH] package/boost: fix interprocess with musl
+Subject: [Buildroot] [PATCH v2 0/2] package/makedevs: allow recursive on
+ directory with symlinks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,66 +83,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Joachim Wiberg <troglobit@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Interprocess in 1.78.0 broke on musl with commit efc75031f568a16e8520019deeb71e272818c467
-by using stuff from sys/stat.h without including it.
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.net/results/8af247ad084d510cd1100f76cb57a7fd32fcdb69
+while fixing the chmod() issue with symlinks in makedevs, I realized
+the program was also in need for some coding style cleanup as well.
+So I'm including a patch just to quell my inner daemons, you may of
+course skip that part entirely if you don't agree with my changes :)
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- ...stat_h-include-on-musl-based-systems.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/boost/0001-fix-missing-sys_stat_h-include-on-musl-based-systems.patch
+The first version was reviewed by Yann on IRC, suggesting we instead
+use lchmod() everywhere instead of skipping symlinks.  I deceided to
+only change the two places that made sense.
 
-diff --git a/package/boost/0001-fix-missing-sys_stat_h-include-on-musl-based-systems.patch b/package/boost/0001-fix-missing-sys_stat_h-include-on-musl-based-systems.patch
-new file mode 100644
-index 0000000000..132b88e47e
---- /dev/null
-+++ b/package/boost/0001-fix-missing-sys_stat_h-include-on-musl-based-systems.patch
-@@ -0,0 +1,33 @@
-+From de657e01635306085488290ea83de541ec393f8b Mon Sep 17 00:00:00 2001
-+From: Leonardo Neumann <leonardo@neumann.dev.br>
-+Date: Mon, 13 Dec 2021 01:07:20 -0300
-+Subject: [PATCH] Fix missing sys/stat.h include on musl-based systems
-+
-+Boost 1.78.0 fails to build on musl-based systems because musl does
-+not include sys/stat.h by default.
-+
-+Fixes #161 ("Boost compiler error")
-+[buildroot@heine.tech:
-+  - patch from https://github.com/boostorg/interprocess/pull/162
-+  - alter path to match boost release
-+]
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-+---
-+ boost/interprocess/permissions.hpp | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/boost/interprocess/permissions.hpp b/boost/interprocess/permissions.hpp
-+index ab55411e..0b21a685 100644
-+--- a/boost/interprocess/permissions.hpp
-++++ b/boost/interprocess/permissions.hpp
-+@@ -29,6 +29,10 @@
-+ 
-+ #include <boost/interprocess/detail/win32_api.hpp>
-+ 
-++#else
-++
-++#include <sys/stat.h>
-++
-+ #endif
-+ 
-+ #endif   //#ifndef BOOST_INTERPROCESS_DOXYGEN_INVOKED
+Best regards
+ /Joachim
+
+Joachim Wiberg (2):
+  package/makedevs: allow recursive on directory with symlinks
+  package/makedevs: coding style and whitespace cleanup
+
+ package/makedevs/makedevs.c | 78 +++++++++++++++++++++++--------------
+ 1 file changed, 49 insertions(+), 29 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
