@@ -1,75 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AA85C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 15:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2275DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 17:16:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B38764150F;
-	Wed, 22 Dec 2021 15:10:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BB7060B9C;
+	Wed, 22 Dec 2021 17:16:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6YN5ao77p4m9; Wed, 22 Dec 2021 15:10:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m1H7t_WyChWD; Wed, 22 Dec 2021 17:16:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1897C41517;
-	Wed, 22 Dec 2021 15:10:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE0431BF283
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 15:10:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E2D760E61;
+	Wed, 22 Dec 2021 17:16:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D7B9A1BF27E
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB16541517
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 15:10:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BEB6D4098A
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:16:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ve6R8cRqUzbS for <buildroot@lists.busybox.net>;
- Wed, 22 Dec 2021 15:10:11 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HVaIoT6VGFle for <buildroot@lists.busybox.net>;
+ Wed, 22 Dec 2021 17:16:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A3E8A4150F
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 15:10:11 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id x15so9999871edv.1
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 07:10:11 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 659EC40273
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 17:16:49 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id t18so6222176wrg.11
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 09:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=dAO/4VHyU9FbY4vlgtYFKy90GKTI4JS7SUVwAiwcmcY=;
- b=pZtR77CTGaXmY8Y4OSMjMyUg+K8YoO4z8DKDui+AXPWJlR7KvvYK2Uyxg3hAWAx1Ug
- 1eIcWAoTs1Mua3q66uDwMiDCHyANmAAOQs2ZGiZy92UJFMTZwxgZPcm6lfLOsruXZ3+B
- GhSOnkQXVfAJZatcYGtfZseSlWKJTchO7SRVfcmNfTe+jrocRJolfexQw8svnEWLHPZZ
- R7XQxgKNhUDG+Z21jJREbtYjt6InX3mkCm6kxytO3lF6ikTt9Xg53tGlSl5pw8ahRzHU
- WOHR3FJYqxSPH0WZfJ4GE09yc1sMunraI/9wpKAYTxRV8wJO+YyEEQ1cT+gC/70AXYZB
- 50bw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PyhTMGKJatuBemTpOHbSh13WzqyfmxAcOo+f+7NOyGk=;
+ b=Vf9ykI3o7I7jTcyyDRluThYOhtLPtuXcnA15x7JID1eBYBtky5Kc1fnTivThSdlKsD
+ pcsJANYprFI4CFaaryiXSA9ixx7QtE+0dgmRKQVwNQ93NXsHWnn3acLd5DHT+n3f7ZKk
+ 3S3sk1WzcC4rL/Yl8XaYlVXLCQcE2m8dsvEuu7dQzi/nS4WmK3BDXGBoJzUhIeIhAUaS
+ 05JqIwP35qjewerSiiIc/9ppZkd6PhjeURsA/CblEM5gsUKMk4BhuP6ODx0/HLoyPPpe
+ asQMzro8JMJOTmMSaIGqoCKbKw2TKZ6m0FCtBL8YFLLHBMSJEakryRB9qXXGlyMMeMi2
+ Tlgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=dAO/4VHyU9FbY4vlgtYFKy90GKTI4JS7SUVwAiwcmcY=;
- b=exAz49GwWhISvmtV/p8M/uqShbRhz7u4oKzEXXVGUSqjXWAvreJZEfwjx2cYOaz1CZ
- 5kYykHgrwPV2wlv+JcB9Z61g0mFOg3tPo7udTwkEbtu1HBIIcXlEDa2Y5F7Xuqi9xWpz
- B1QNptJEWaZtp57wKxoPRmOjuq2rUGAA0NlA6+l5mkiZpbwfXIe1Hytagn/WTjBNoifK
- NBNYYs8uq26Rjm3Ye9nWcEwkoGy82dHD6oWyBhlfMAFCfu3jhFjHEhNRj6jkg/ujtlhh
- nKo+wQdHVUKt6MKJC+N5JG9voTOXtUUAlMkS25NyKMMn8KpY/G1PohpPyNSsnB64ZWma
- 08+Q==
-X-Gm-Message-State: AOAM531Vtr8ms7ZVmdbIBSEM2uCU+NDcCmjpJ/g5shS4HuPCxkMkfuT5
- WoyFvf0Ym4bq32LK6u2+9rk3QnE84TJlFsoOcvo=
-X-Google-Smtp-Source: ABdhPJy0Z51ke7mBlzCFVFPDcMXjmoitcKve35fbih7dJudaIQ4bd8ee2R24SR914XtvWAZonoUYeJprHgJr08Im3BY=
-X-Received: by 2002:a05:6402:3593:: with SMTP id
- y19mr2383801edc.25.1640185809898; 
- Wed, 22 Dec 2021 07:10:09 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=PyhTMGKJatuBemTpOHbSh13WzqyfmxAcOo+f+7NOyGk=;
+ b=zuFJWJliUaUTRZT7yB7pUjU1P4vFQwzTdmuykos49wi3dFL7jtM5FHTOxIxC17Dl6d
+ H1rTZLGu7MGN1+D+Qbr4UTDWRRfFTl4/GfiMLE8H9BOhZtG/c1Pv4p685A8k7Hq7Xt5Z
+ OJCoLHpP3qpOirWOx6GDV4TlKHEblYCWcd6gEGFBrnXmCeNUdFD1rmrpnqGBHCHFfp5O
+ 64zgI19QkuZAzzFBx+/LUpNHPkkzJC6Bc4RLBE1oRGAIL0LyL/N68f46Sx0bT56xnd/S
+ Bicw5Q5kXTxngxGshlwPFsVcoE7Kl0dRghQIjYheES6p+FWMKReq7Uh/b20JK6kBt7il
+ 3fZQ==
+X-Gm-Message-State: AOAM532gZZTBTIbIaPJszfYKupFsxmoXTlDoZvBse7mymD8o8atdy+3r
+ g+uctbcU+irVtJlfpMdjiv3ZzZkQRSfJXA==
+X-Google-Smtp-Source: ABdhPJwtCCjTdaRbPuztd/pZD9PRFGRIJPf7ZElwOKOUWwjNKTaTb9uWSa0C+Sbk/kbtmF72FanPKw==
+X-Received: by 2002:a5d:4385:: with SMTP id i5mr2691419wrq.178.1640193408272; 
+ Wed, 22 Dec 2021 09:16:48 -0800 (PST)
+Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
+ [62.178.205.20])
+ by smtp.gmail.com with ESMTPSA id j85sm9595008wmj.3.2021.12.22.09.16.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Dec 2021 09:16:47 -0800 (PST)
+From: Norbert Lange <nolange79@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 22 Dec 2021 18:16:40 +0100
+Message-Id: <20211222171641.306788-1-nolange79@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211222140737.1179968-1-fontaine.fabrice@gmail.com>
- <20211222153846.6fce3a2d@windsurf>
-In-Reply-To: <20211222153846.6fce3a2d@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Dec 2021 16:09:26 +0100
-Message-ID: <CAPi7W83J6TXe4MvbDVY-h1seFX=ecCccLgajiXDWSWyqE9314w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: force host-python3
+Subject: [Buildroot] [PATCH] package/lttng-libust: bump to version 2.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,37 +85,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Norbert Lange <nolange79@gmail.com>,
+ Philippe Proulx <eeppeliteloop@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgbWVyLiAyMiBkw6ljLiAyMDIxIMOgIDE1OjM4LCBUaG9tYXMgUGV0YXp6b25pCjx0aG9tYXMu
-cGV0YXp6b25pQGJvb3RsaW4uY29tPiBhIMOpY3JpdCA6Cj4KPiBPbiBXZWQsIDIyIERlYyAyMDIx
-IDE1OjA3OjM3ICswMTAwCj4gRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFp
-bC5jb20+IHdyb3RlOgo+Cj4gPiBCdWlsZCBvZiBub2RlanMgZmFpbHMgaWYgcHl0aG9uIDMuMTAg
-aXMgaW5zdGFsbGVkIG9uIGhvc3QuCj4gPiBBcyBzdWdnZXN0ZWQgYnkgQXJub3V0IGluCj4gPiBo
-dHRwczovL2J1Z3MuYnVpbGRyb290Lm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MTQ0NTEsIHVzZSB0aGUg
-c2FtZQo+ID4gd29ya2Fyb3VuZCB0aGFuIGluIHF0NXdlYmtpdCB0byBmb3JjZSBob3N0LXB5dGhv
-bjMgKHdoaWNoIGlzIGluIHZlcnNpb24KPiA+IDMuOSkKPgo+IFdlIGFscmVhZHkgaGF2ZSBwYXRj
-aGVzIHBlbmRpbmcgdGhhdCBidW1wIGhvc3QtcHl0aG9uMyB0byAzLjEwLCBzbyBpcwo+IHRoaXMg
-cmVhbGx5IHRoZSByaWdodCBhcHByb2FjaD8KPgo+IE9yIGFyZSB5b3Ugc2VuZGluZyB0aGlzIGFz
-IHNvbWV0aGluZyB3ZSBzaG91bGQgdGhlbiBiYWNrcG9ydCBpbiBzdGFibGUKPiByZWxlYXNlcywg
-YXMgYSBmaXg/Ckkgd291bGQgc2F5IHRoYXQgdGhpcyBwYXRjaCBzaG91bGQgYmUgYXBwbGllZCBp
-biBzdGFibGUgcmVsZWFzZXMgYW5kIG1hc3Rlci4KSU1ITywgdGhpcyBpcyBub3QgZXhwZWN0ZWQv
-Y29ycmVjdCB0aGF0IG5vZGVqcyB1c2VzIHRoZSBweXRob24gYmluYXJ5CnRoYXQgaXQgZm91bmRz
-IG9uIGhvc3QgaW5zdGVhZCBvZiBob3N0LXB5dGhvbjMuCkN1cnJlbnRseSB0aGlzIGlzIHJhaXNp
-bmcgYSBidWlsZCBmYWlsdXJlIHdpdGggcHl0aG9uIDMuMTAgYnV0CnRvbW9ycm93LCB0aGlzIGNv
-dWxkIGFnYWluIHJhaXNlIHVuZXhwZWN0ZWQgYnVpbGQgZmFpbHVyZXMsIGZvcgpleGFtcGxlLCBp
-ZiBub2RlanMgcmVtb3ZlcyBzdXBwb3J0IGZvciBweXRob24gMi4KPgo+ID4gSXQgc2hvdWxkIGJl
-IG5vdGVkIHRoYXQgcHl0aG9uIDMuMTAgc3VwcG9ydCBoYXMgYmVlbiBhZGRlZCBpbiB2ZXJzaW9u
-Cj4gPiAxNC4xOC4yOiBodHRwczovL2dpdGh1Yi5jb20vbm9kZWpzL25vZGUvcmVsZWFzZXMvdGFn
-L3YxNC4xOC4yCj4KPiBJc24ndCB0aGlzIGEgYmV0dGVyIGFwcHJvYWNoID8KPgo+IFRob21hcwo+
-IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVk
-ZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9i
-b290bGluLmNvbQpCZXN0IFJlZ2FyZHMsCgpGYWJyaWNlCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+Add a patch to disable building of docs and tests,
+the tests cause problems unless the package is
+reconfigured.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ .../lttng-libust/0001-remove-doc-and-test.patch   | 15 +++++++++++++++
+ package/lttng-libust/lttng-libust.hash            |  4 ++--
+ package/lttng-libust/lttng-libust.mk              |  3 ++-
+ 3 files changed, 19 insertions(+), 3 deletions(-)
+ create mode 100644 package/lttng-libust/0001-remove-doc-and-test.patch
+
+diff --git a/package/lttng-libust/0001-remove-doc-and-test.patch b/package/lttng-libust/0001-remove-doc-and-test.patch
+new file mode 100644
+index 0000000000..5077138444
+--- /dev/null
++++ b/package/lttng-libust/0001-remove-doc-and-test.patch
+@@ -0,0 +1,15 @@
++diff -burN lttng-ust-2.13.1.org/Makefile.am lttng-ust-2.13.1/Makefile.am
++--- lttng-ust-2.13.1.org/Makefile.am	2021-12-09 20:45:58.000000000 +0100
+++++ lttng-ust-2.13.1/Makefile.am	2021-12-12 01:10:44.097204904 +0100
++@@ -6,8 +6,6 @@
++ 	include \
++ 	src \
++ 	tools \
++-	doc \
++-	tests \
++ 	extras
++ 
++ dist_doc_DATA = \
++
++---
++Signed-off-by: Norbert Lange <nolange79@gmail.com>
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index 40bd870e86..23839e42cc 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,5 +1,5 @@
+-# From https://lttng.org/files/lttng-ust/lttng-ust-2.12.1.tar.bz2.sha256
+-sha256  48a3948b168195123a749d22818809bd25127bb5f1a66458c3c012b210d2a051  lttng-ust-2.12.1.tar.bz2
++# From https://lttng.org/files/lttng-ust/lttng-ust-2.13.2.tar.bz2.sha256
++sha256  5667bf0269e1e62e2d9cb974c456ff86e0401bd7aa3bfc8d5fdb97233249eddc  lttng-ust-2.13.1.tar.bz2
+ 
+ # Hash for license file
+ sha256  74125a84c2166300776980166e29de40d5f98d1a75e487f0bbc0c03b4cd2342e  COPYING
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 608e8781b1..e9a1aecbc1 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+-LTTNG_LIBUST_VERSION = 2.12.1
++LTTNG_LIBUST_VERSION = 2.13.1
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
+@@ -15,6 +15,7 @@ LTTNG_LIBUST_CONF_OPTS = \
+ 	--disable-man-pages \
+ 	--disable-examples \
+ 	--with-lttng-system-rundir=/run/lttng
++LTTNG_LIBUST_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ LTTNG_LIBUST_DEPENDENCIES += python
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
