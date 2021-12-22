@@ -1,46 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70A1C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 17:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 770FCC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 22 Dec 2021 17:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5372940227;
-	Wed, 22 Dec 2021 17:53:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CC8140278;
+	Wed, 22 Dec 2021 17:53:40 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o7tyLjs9F9o7; Wed, 22 Dec 2021 17:53:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 834FB40232;
+	Wed, 22 Dec 2021 17:53:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C315B1BF27E
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:53:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD9D340227
+ for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:53:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FGLl3VO2qGHl; Wed, 22 Dec 2021 17:53:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CBD040273;
-	Wed, 22 Dec 2021 17:53:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 586D11BF27E
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:53:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47440826FF
- for <buildroot@lists.busybox.net>; Wed, 22 Dec 2021 17:53:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ctf5qp5GDsmU for <buildroot@lists.busybox.net>;
- Wed, 22 Dec 2021 17:53:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF05181B71
- for <buildroot@buildroot.org>; Wed, 22 Dec 2021 17:53:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 86B3182A42; Wed, 22 Dec 2021 17:47:48 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7mzkdZnb8P57 for <buildroot@lists.busybox.net>;
+ Wed, 22 Dec 2021 17:53:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 806CA4058B
+ for <buildroot@buildroot.org>; Wed, 22 Dec 2021 17:53:25 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id EE605200009;
+ Wed, 22 Dec 2021 17:53:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n05nl-0007HD-05; Wed, 22 Dec 2021 18:53:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 Dec 2021 18:53:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1055ae6c6b307331ff50d9e3dfaa82a37c8f9038
-X-Git-Newrev: 84b29ef40baf408b8b22085b336967aca83212db
-X-Patchwork-Hint: ignore
-Message-Id: <20211222174748.86B3182A42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl_433: bump to version 21.12
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211220093750.1930337-1-fontaine.fabrice@gmail.com>
+Date: Wed, 22 Dec 2021 18:53:20 +0100
+In-Reply-To: <20211220093750.1930337-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 20 Dec 2021 10:37:50 +0100")
+Message-ID: <874k70plv3.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtl_433: bump to version 21.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,47 +58,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84b29ef40baf408b8b22085b336967aca83212db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-https://github.com/merbanan/rtl_433/releases/tag/21.12
+ > https://github.com/merbanan/rtl_433/releases/tag/21.12
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rtl_433/rtl_433.hash | 2 +-
- package/rtl_433/rtl_433.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
-index 9ace444b78..fd479dfd21 100644
---- a/package/rtl_433/rtl_433.hash
-+++ b/package/rtl_433/rtl_433.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  d8b87535b4e65264018771b6b288259d81137482fc938d01e0c03ac071c03bd5  rtl_433-21.05.tar.gz
-+sha256  b362ef3410adec64aee7ad8e6d4d74875f1b3d59ef6fb4856e96adc03876dc65  rtl_433-21.12.tar.gz
- # License file, locally calculated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-index df00c09518..a5139ddae6 100644
---- a/package/rtl_433/rtl_433.mk
-+++ b/package/rtl_433/rtl_433.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL_433_VERSION = 21.05
-+RTL_433_VERSION = 21.12
- RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
- RTL_433_LICENSE = GPL-2.0+
- RTL_433_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
