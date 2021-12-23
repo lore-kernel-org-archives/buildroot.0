@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE16C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 17:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0762AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 17:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3DE6832AA;
-	Thu, 23 Dec 2021 17:39:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CFDD4165C;
+	Thu, 23 Dec 2021 17:45:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uFiTwjiwKAFv; Thu, 23 Dec 2021 17:39:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id h7xOXknVN_o0; Thu, 23 Dec 2021 17:45:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 591AB832B0;
-	Thu, 23 Dec 2021 17:39:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DDA1A1BF2E5
- for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:38:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B26441671;
+	Thu, 23 Dec 2021 17:45:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 65A321BF2E5
+ for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C69F340ACD
- for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:38:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55FB84165A
+ for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:45:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HsIz0uMR43Xp for <buildroot@lists.busybox.net>;
- Thu, 23 Dec 2021 17:38:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fip_Pw_ha1P9 for <buildroot@lists.busybox.net>;
+ Thu, 23 Dec 2021 17:45:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4425940AAB
- for <buildroot@buildroot.org>; Thu, 23 Dec 2021 17:38:35 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5907141652
+ for <buildroot@buildroot.org>; Thu, 23 Dec 2021 17:45:24 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 2EFFB60007;
- Thu, 23 Dec 2021 17:38:34 +0000 (UTC)
-Date: Thu, 23 Dec 2021 18:38:33 +0100
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 5AF24FF808;
+ Thu, 23 Dec 2021 17:45:22 +0000 (UTC)
+Date: Thu, 23 Dec 2021 18:45:21 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20211223183833.3d4ce644@windsurf>
-In-Reply-To: <20211222231825.798177-1-aperez@igalia.com>
-References: <20211222231825.798177-1-aperez@igalia.com>
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20211223184521.54eae6ef@windsurf>
+In-Reply-To: <20211223011147.2050411-1-christian@paral.in>
+References: <20211223011147.2050411-1-christian@paral.in>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.34.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.60.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,29 +56,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 23 Dec 2021 01:18:25 +0200
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Wed, 22 Dec 2021 17:11:47 -0800
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-> This is a minor release which provides fixes for CVE-2021-30887
-> and CVE-2021-30890. Full release notes can be found at:
-> 
->   https://wpewebkit.org/release/wpewebkit-2.34.3.html
-> 
-> An accompanying security advisory has been published at:
-> 
->   https://wpewebkit.org/security/WSA-2021-0007.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Christian Stewart <christian@paral.in>
 > ---
->  package/wpewebkit/wpewebkit.hash | 8 ++++----
->  package/wpewebkit/wpewebkit.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/meson/meson.hash | 4 ++--
+>  package/meson/meson.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
