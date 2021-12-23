@@ -1,88 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DF3BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 08:53:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C1FC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 09:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D65981987;
-	Thu, 23 Dec 2021 08:53:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33C4440600;
+	Thu, 23 Dec 2021 09:08:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OxGc4QeiImbM; Thu, 23 Dec 2021 08:53:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pogqoks_y4P6; Thu, 23 Dec 2021 09:08:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74CD081467;
-	Thu, 23 Dec 2021 08:53:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B84241BF4D7
- for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 08:53:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49F60405F7;
+	Thu, 23 Dec 2021 09:08:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74D741BF4D6
+ for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 09:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4FD04043D
- for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 08:53:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61FAF405F7
+ for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 09:08:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HnVWlTCXoGcR for <buildroot@lists.busybox.net>;
- Thu, 23 Dec 2021 08:53:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYEh-ezSYirR for <buildroot@lists.busybox.net>;
+ Thu, 23 Dec 2021 09:08:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
- [IPv6:2a00:1450:4864:20::22a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2F58040438
- for <buildroot@buildroot.org>; Thu, 23 Dec 2021 08:53:07 +0000 (UTC)
-Received: by mail-lj1-x22a.google.com with SMTP id i63so7982245lji.3
- for <buildroot@buildroot.org>; Thu, 23 Dec 2021 00:53:07 -0800 (PST)
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E60EE400B5
+ for <buildroot@buildroot.org>; Thu, 23 Dec 2021 09:08:05 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id 207so7981341ljf.10
+ for <buildroot@buildroot.org>; Thu, 23 Dec 2021 01:08:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=subject:to:cc:references:from:message-id:date:user-agent
- :mime-version:in-reply-to:content-language:content-transfer-encoding;
- bh=tY8O+d7cor98DSC6B/Dh2TngkgHL8QiJsee/ppokbpk=;
- b=G2TYuXY+ZF3SfytuHRZjLYyVOHwTbVEESX8TJsy+Kfp3nYyJ9MbnFr85yenmuZVAl8
- MaNlrk6GuPs9srE1bZiwEgOKFiXS0ZT7CvaGGKr07cUoK9ZzJ1q2OIc2LrzqIEEPi60l
- xKIrByeBdu5uzyBgcaPRN2tPBj1bwMbMBs9hfSgOomr/udcmW0bq6ll+sHuFSmLv6uiE
- zC64t8XZ8ZaCEy3eardGsc1PJ41n3Vt+ehWkBAIXHhub12jRhkrj+LtJPHSTucxjDpCR
- EPJbu4TZERg9G0ydnniMipWtlM3cFxvUkPi0bq4E7A10WgL5G17OQCnpZ8Uk7KY8aPgQ
- ymtg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3KnnMFO3EQ2kdtG8kRLTNqZ4G7JFI5oXiCmNhbzvY3c=;
+ b=bcK6RbjwLG25brsBKqHVetL8jP2XXpp9yHPCr6jO/alrwwnyyuNwcystt+CFfLyhlx
+ yMcNv9GUoaO5zfihypavc7Lnwj8v5Trlr1J2yllbOWsg5udjUiEdX7g1Ffahng1HW/pp
+ 03viQ2ZbzX5rZDQI86Mpgex7+jWPElE5R+rAsCab6pU939Ap5k+VuWEjt53GIgwfbeCB
+ 1dF864GUw/iJ7p9YZQGzbRRww7gTs87DQWIEhT97FWA3MpOlYljuVqLbuQwGdD+T7Qzu
+ uKghamfwUrOZKwc+bXTy3SexKu2KMnMaMyRo9IjF7bqsZD+NfKRry0svqvQF86G9dxSz
+ KewQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:subject:to:cc:references:from:message-id:date
- :user-agent:mime-version:in-reply-to:content-language
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=tY8O+d7cor98DSC6B/Dh2TngkgHL8QiJsee/ppokbpk=;
- b=mMIfInKZcZTv88da1GTnVq37HnEWqzszL0+d9CK9Dq3rPpIb5QYKD7OkvsQX2TN7u7
- RqgxxYHNNMkJ+evZcjVkWJqbk1ldsKPejDbxYJtrUJPvjGl0EEN7Y8B3ywnw+o1TT2gJ
- GKvZEzdJDR2BSgYrboo6EehB32L4l+FC5hcJqcNySVCkRkTUByAWVW/fR0CRejJEMVQV
- DsPnDhRAjZDYzE6w1LBxSWt0W089QadNYlPCw/kreUfLDc/NgZBV5LwdXCS4NDtBeLW8
- c7gPbXExBy/nZouLXmj2a6HLo52N8w98UJ4veWYB+35QX7pgSALKWc22jMRpbM1Z2LZL
- zuLw==
-X-Gm-Message-State: AOAM533zo+8qDAy5gGjvOrjtQsOPeCkjOiy8liKgJtvJXeVh/Qdsm/CZ
- RVWUtz74WjjFqBcKG77xmSKgIqbvK+0=
-X-Google-Smtp-Source: ABdhPJxI/SoG4mLeqrV/o4aXNw+mJ9qV7BlGJ36ia4BqAw3f7la4PrpKxTV7jPc+67MJGBzZhg8ZJw==
-X-Received: by 2002:a2e:b0c5:: with SMTP id g5mr985567ljl.381.1640249585522;
- Thu, 23 Dec 2021 00:53:05 -0800 (PST)
-Received: from [10.0.196.136] ([98.128.186.122])
- by smtp.googlemail.com with ESMTPSA id m7sm442947lfr.133.2021.12.23.00.53.04
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 23 Dec 2021 00:53:05 -0800 (PST)
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20211222083515.1150267-1-troglobit@gmail.com>
- <20211222083515.1150267-3-troglobit@gmail.com>
- <dc4b99fa-1893-d022-ba29-db80c2fc05ba@mind.be>
- <7592df87-e875-5016-db4f-57e5988dfbc4@gmail.com>
- <3d0ea2c6-5d00-c4cf-7008-88aac6ecd788@mind.be>
+ bh=3KnnMFO3EQ2kdtG8kRLTNqZ4G7JFI5oXiCmNhbzvY3c=;
+ b=ff7kP9BOV/rG9GXoxsVHoc/Z4bpgz7ASuBsl6eQREyf76pwj1T5qelsyRDopyQI9DX
+ s0IXCNbmEQ9ojJk/AgCBysnqW1EwXu76MSR12HFePU/i8XU8oj30s8NJLyhj4u0Izu0m
+ YTzal8S+nbpVsyvjHYQQyu4b40d36w/uKv4GxE/Jwo7C+xqecZ4WJPfeYIggDR0Z6CTj
+ OZv5VQ3W9Ao2gTcKfWdKkZAuZmcGjRbtFffOvEhSy7clvkFjpURb73MnVwtvUTHM88kt
+ AvpeO/Ru8yrk5n6A1qsRN1QBQNfeW5CFhunZ4cu19GdM76Ge849rxIDbHxfue4PiRQ8D
+ JafQ==
+X-Gm-Message-State: AOAM530CVZpf3AGLibVr44jTUdriho2FK3bkllgMBifkbrtVx8aXlaRj
+ zDLk3WT4Tg/dO9KI+GmKPO1DWwmQ1zu1fQ==
+X-Google-Smtp-Source: ABdhPJyJnZiTkUiuyj0vekeUkIPdKI2QJu9p0KydgRb4DQYr9Gb92Woiq5Wua+jygMQl4yN7caJzEw==
+X-Received: by 2002:a2e:83cd:: with SMTP id s13mr797211ljh.373.1640250483538; 
+ Thu, 23 Dec 2021 01:08:03 -0800 (PST)
+Received: from localhost.localdomain ([98.128.186.122])
+ by smtp.gmail.com with ESMTPSA id br39sm446854lfb.243.2021.12.23.01.08.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 23 Dec 2021 01:08:02 -0800 (PST)
 From: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <e49e2ea8-8bb1-4f7e-8d2b-88a87180508b@gmail.com>
-Date: Thu, 23 Dec 2021 09:53:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+To: buildroot@buildroot.org
+Date: Thu, 23 Dec 2021 10:07:57 +0100
+Message-Id: <20211223090800.1716321-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <3d0ea2c6-5d00-c4cf-7008-88aac6ecd788@mind.be>
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/makedevs: coding style and
- whitespace cleanup
+Subject: [Buildroot] [PATCH v3 0/3] package/makedevs: allow recursive on
+ directory with symlinks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,32 +83,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joachim Wiberg <troglobit@gmail.com>,
+ Matt Weber <matthew.weber@collins.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTIvMjIvMjEgOToyNCBQTSwgQXJub3V0IFZhbmRlY2FwcGVsbGUgd3JvdGU6Cj4gT24gMjIv
-MTIvMjAyMSAyMDozMiwgSm9hY2hpbSBXaWJlcmcgd3JvdGU6Cj4+IE9uIDEyLzIyLzIxIDM6MTIg
-UE0sIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Pj4gQWx0aG91Z2ggSSdtIE9LIHdpdGgg
-dGhlIGNoYW5nZXMgcGVyIHNlLCBJIGdlbmVyYWwgSSBkb24ndCBiZWxpZXZlIG11Y2gKPj4+IGlu
-IG1hbnVhbGx5IG1haW50YWluZWQgY29kaW5nIHN0eWxlLiBTbyBJJ2QgcHJvcG9zZSB0byBhdCBs
-ZWFzdCBpbmNsdWRlCj4+PiBhIC5jbGFuZy1mb3JtYXQgZmlsZSBpbiB0aGUgdG9wIGxldmVsIGRp
-cmVjdG9yeSB0aGF0IGRlZmluZXMgb3VyIGNvZGluZwo+Pj4gc3R5bGUuIFdlIHdvdWxkbid0IGVu
-Zm9yY2UgaXQgd2l0aCBDSSBvciBhbnl0aGluZyAoYXQgbGVhc3QsIG5vdCBmb3IgdGhlCj4+PiB0
-aW1lIGJlaW5nKSwgYnV0IGF0IGxlYXN0IGl0IG1ha2VzIGl0IGVhc3kgdG8gYXBwbHkgdGhlIGNv
-ZGluZyBzdHlsZSBhbmQKPj4+IHRvIGtub3cgdGhhdCBpdCdzIGNvcnJlY3QuCj4+IFdlIGRvbid0
-IHNlZW0gdG8gaGF2ZSBhbnkgLmNsYW5nLWZvcm1hdCBmaWxlIGF0IHRoZSBtb21lbnQsIHNvIGlm
-IEkgY29weQo+PiB0aGUgbGF0ZXN0IHZlcnNpb24gZnJvbSBrZXJuZWwub3JnLCB3aGVyZSBpbiB0
-aGUgdHJlZSBzaG91bGQgaXQgbGl2ZT8KPiDCoEF0IHRoZSB0b3AgbGV2ZWwsIHNvIGNsYW5nLWZv
-cm1hdCBhbmQgZWRpdG9ycyBmaW5kIGl0IG91dCBvZiB0aGUgYm94LgoKQXBvbG9naWVzLCBJIHNl
-ZSBub3cgeW91IHdyb3RlIHRoYXQgYWxyZWFkeSBpbiB5b3VyIG9yaWdpbmFsIHJlcGx5LCBidXQK
-aXQgc2VlbXMgbXkgZXllcyBmYWlsZWQgbWUuCgpJJ20gY29tcGlsaW5nIGEgdjMgb2YgbXkgcGF0
-Y2ggc2V0IG5vdywgd2hpY2ggaW5jbHVkZXMgdGhlIC5jbGFuZy1mb3JtYXQKYXMgYSBzZXBhcmF0
-ZSBjb21taXQuICBJIGV4cGVjdCB0aGVyZSBtYXkgYmUgc29tZSBkaXNjdXNzaW9uIHJlZ2FyZGlu
-ZwptYXggbGluZSBsZW5ndGhzIGFuZCBzdWNoLCBidXQgaG9wZWZ1bGx5IGl0IHdvbid0IGJlIHRv
-byBjb250cm92ZXJzaWFsLgoKQmVzdCByZWdhcmRzCiAvSm9hY2hpbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Hi,
+
+take three on fixing the problem with, as it turns out, *dangling*,
+symlinks when running makedevs recursively on a directory.  Thanks to
+Arnout for pointing this out!
+
+As started in v2, this patch set includes a coding style cleanup, and
+now also with a first .clang-format for Buildroot, as suggested by
+Arnout.  I've not enforced it strictly on the code base, e.g. max line
+lengths caused a way too big diff.
+
+Best regards
+ /Joachim
+
+---
+
+v3:
+- Problem only applies to *dangling* symlinks, feedback from Arnout
+  Patch updated to skip chmod() on symlinks that cannot be accessed
+- Import .clang-format file from Linux 5.15.6, suggestion by Arnout
+- Employ clang-format to improve coding style cleanup, see commit
+  notes for exceptions made
+
+v2: 
+ - Use lchown() instead on symlinks, feedback from Yann
+ - Initial coding style cleanup
+
+v1:
+ - Skip recursive chown() and chmod() on all symlinks
+
+Joachim Wiberg (3):
+  package/makedevs: allow recursive on directory with dangling symlinks
+  .clang-format: initial import from Linux 5.15.6
+  package/makedevs: coding style and whitespace cleanup
+
+ .clang-format               | 566 ++++++++++++++++++++++++++++++++++++
+ package/makedevs/makedevs.c | 119 ++++----
+ 2 files changed, 631 insertions(+), 54 deletions(-)
+ create mode 100644 .clang-format
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
