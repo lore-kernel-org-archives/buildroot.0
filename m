@@ -1,58 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C90CAC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 24 Dec 2021 08:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 767AAC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 24 Dec 2021 08:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3AE8E40241;
-	Fri, 24 Dec 2021 08:31:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E05E3832C6;
+	Fri, 24 Dec 2021 08:57:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hPeAGPbZYaTc; Fri, 24 Dec 2021 08:31:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AKmBpC3hUGSB; Fri, 24 Dec 2021 08:57:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6146440231;
-	Fri, 24 Dec 2021 08:31:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB531C115D
- for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 08:30:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E39482A26;
+	Fri, 24 Dec 2021 08:57:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 303931BF3C3
+ for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 08:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EABA3416AC
- for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 08:30:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EE7B60A46
+ for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 08:57:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QnYhSY3C9Qdv for <buildroot@lists.busybox.net>;
- Fri, 24 Dec 2021 08:30:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C21E4416AB
- for <buildroot@buildroot.org>; Fri, 24 Dec 2021 08:30:46 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout08.t-online.de (Postfix) with SMTP id C7A0B163FA
- for <buildroot@buildroot.org>; Fri, 24 Dec 2021 09:30:29 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.199.75]) by fwd87.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n0fy9-0TmmSf0; Fri, 24 Dec 2021 09:30:29 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58186)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n0fy9-0003w1-3H
- for buildroot@buildroot.org; Fri, 24 Dec 2021 09:30:29 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NWPI3Z6m6dzc for <buildroot@lists.busybox.net>;
+ Fri, 24 Dec 2021 08:57:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EA8460808
+ for <buildroot@buildroot.org>; Fri, 24 Dec 2021 08:57:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 8484082A9C; Fri, 24 Dec 2021 08:51:33 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Dec 2021 09:30:28 +0100
-Message-Id: <20211224083029.772045-2-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211224083029.772045-1-bernd.kuhls@t-online.de>
-References: <20211224083029.772045-1-bernd.kuhls@t-online.de>
-MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1640334629-00000271-173E3A8A/0/0 CLEAN NORMAL
-X-TOI-MSGID: f446c08d-d89f-4e4a-ac5d-f12fb81e7857
-Subject: [Buildroot] [PATCH 2/3] package/kodi-pvr-plutotv: bump version to
- 19.0.3-Matrix
+Date: Thu, 23 Dec 2021 18:47:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d9721168b3b0970f9d2985c09e97274d0f429dfc
+X-Git-Newrev: c94dd92c0ff28ad72a1f9cda2d3b06d654617d40
+X-Patchwork-Hint: ignore
+Message-Id: <20211224085133.8484082A9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pppd: fix build with kernel >= 5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +52,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=c94dd92c0ff28ad72a1f9cda2d3b06d654617d40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix the following build failure with kernel >= 5.15:
+
+sys-linux.c:148:10: fatal error: linux/ipx.h: No such file or directory
+  148 | #include <linux/ipx.h>
+      |          ^~~~~~~~~~~~~
+
+This hook could be removed as soon as a new pppd version is released:
+https://github.com/ppp-project/ppp/pull/326
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5a7f89e5178735f4d3e3f3360f0feb263f6ac431
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash | 2 +-
- package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pppd/pppd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
-index 6f115bb8f8..4673bbbf88 100644
---- a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
-+++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1707cd9c61e6874f7e3ea75e1136ea0ccdf8be67a2a41ee09feab746a36f4d14  kodi-pvr-plutotv-19.0.1-Matrix.tar.gz
-+sha256  79e753d7329a4e61e56618c0e821cdd5dccb81c3659838a9de2df407a5bd7c10  kodi-pvr-plutotv-19.0.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
-index f2d1879b6e..a9ac03a007 100644
---- a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
-+++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 71bfceb607..19b6f3ccce 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -57,6 +57,13 @@ ifeq ($(BR2_PACKAGE_PPPD_OVERWRITE_RESOLV_CONF),y)
+ PPPD_POST_EXTRACT_HOOKS += PPPD_SET_RESOLV_CONF
+ endif
  
--KODI_PVR_PLUTOTV_VERSION = 19.0.1-Matrix
-+KODI_PVR_PLUTOTV_VERSION = 19.0.3-Matrix
- KODI_PVR_PLUTOTV_SITE = $(call github,kodi-pvr,pvr.plutotv,$(KODI_PVR_PLUTOTV_VERSION))
- KODI_PVR_PLUTOTV_LICENSE = GPL-2.0+
- KODI_PVR_PLUTOTV_LICENSE_FILES = LICENSE.md
--- 
-2.30.2
-
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15),y)
++define PPPD_DROP_IPX
++	$(SED) 's/-DIPX_CHANGE//' $(PPPD_DIR)/pppd/Makefile.linux
++endef
++PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_IPX
++endif
++
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+ 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
