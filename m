@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8BCC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 17:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E25C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 17:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 591AF4169D;
-	Thu, 23 Dec 2021 17:38:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3281A40AC6;
+	Thu, 23 Dec 2021 17:38:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 48RuvmK-aTVe; Thu, 23 Dec 2021 17:38:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RH-J-NpTbz6A; Thu, 23 Dec 2021 17:38:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 131D741691;
-	Thu, 23 Dec 2021 17:38:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4137340AD5;
+	Thu, 23 Dec 2021 17:38:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8A891BF2E5
- for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:38:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 091701BF2E5
+ for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C424940A9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7EDD400D8
  for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 17:38:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iJ09Qf-wqzTW for <buildroot@lists.busybox.net>;
+ with ESMTP id nTLgMrL9MH0l for <buildroot@lists.busybox.net>;
  Thu, 23 Dec 2021 17:38:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD99F400D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF80640386
  for <buildroot@buildroot.org>; Thu, 23 Dec 2021 17:38:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5FBE681934; Thu, 23 Dec 2021 17:32:38 +0000 (UTC)
+ id 7318982A89; Thu, 23 Dec 2021 17:32:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 23 Dec 2021 18:37:58 +0100
+Date: Thu, 23 Dec 2021 18:38:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdc3f6888f669919bf8820be1eb75340b48ee7e1
-X-Git-Newrev: b9d7644c53a501a6abf15c5a9c7ff7eedd4f60c7
+X-Git-Oldrev: 06a372a9ce214cee41db38e8b4ba3ba1e5995f1f
+X-Git-Newrev: d7056bc60fa9c2e03c40e044f98c31828ae9ae62
 X-Patchwork-Hint: ignore
-Message-Id: <20211223173238.5FBE681934@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.34.3
+Message-Id: <20211223173238.7318982A89@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 21.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9d7644c53a501a6abf15c5a9c7ff7eedd4f60c7
+commit: https://git.buildroot.net/buildroot/commit/?id=d7056bc60fa9c2e03c40e044f98c31828ae9ae62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a minor release which provides fixes for CVE-2021-30887
-and CVE-2021-30890. Full release notes can be found at:
+Bumping intel-gmmlib to 22.0.0 with commit befdaea1df introduced changes
+which cause build errors on older versions of mediadriver:
+https://github.com/intel/gmmlib/issues/93
 
-  https://wpewebkit.org/release/wpewebkit-2.34.3.html
+Bump this package to fix the build errors.
 
-An accompanying security advisory has been published at:
+Fixes:
+http://autobuild.buildroot.net/results/814334887b0dda5bf052f7b99672c6abbc7cbbb7
 
-  https://wpewebkit.org/security/WSA-2021-0007.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index a71c1afc72..52652b72ae 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.34.2.tar.xz.sums
--md5  b26f07bc809d9fd3e54e815c22312f15  wpewebkit-2.34.2.tar.xz
--sha1  4200ef87a4e1eb1921f0f40779742381598e1429  wpewebkit-2.34.2.tar.xz
--sha256  b1a3733c2d486c4da27f9636ccc39947da7d84258cd7a24a6fb0b842c9595c0b  wpewebkit-2.34.2.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.34.3.tar.xz.sums
-+md5  f8eb92825bf6477fb04ca017926c2458  wpewebkit-2.34.3.tar.xz
-+sha1  a72f507dfd6d4d579b2e6c939d7c171c2cfb1d92  wpewebkit-2.34.3.tar.xz
-+sha256  c35de4bfce35c81cbd6c1da27879b4ea33e20bd51d750ce296a4d100d45f40fc  wpewebkit-2.34.3.tar.xz
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 1678ea5254..c2a8e2a240 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d62cc04254f57c62149cd8bc135e3562b8dc05c0815362b9a83adf200522e777  intel-media-21.4.2.tar.gz
++sha256  9b5ef7716c5d8199229512020c18dce5cabee25fbf3f1912179502bedb655919  intel-media-21.4.3.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 4625831b4e..7e949b5e7a 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index d936b342bf..64c179534f 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
  
--WPEWEBKIT_VERSION = 2.34.2
-+WPEWEBKIT_VERSION = 2.34.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-INTEL_MEDIADRIVER_VERSION = 21.4.2
++INTEL_MEDIADRIVER_VERSION = 21.4.3
+ INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
