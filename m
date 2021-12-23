@@ -4,79 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C312C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 09:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82F06C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Dec 2021 09:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B41AE60ADF;
-	Thu, 23 Dec 2021 09:08:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 301E060B79;
+	Thu, 23 Dec 2021 09:08:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RXhG1KHfsKiL; Thu, 23 Dec 2021 09:08:35 +0000 (UTC)
+	with ESMTP id PFzBAXql-HPu; Thu, 23 Dec 2021 09:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7519960B79;
-	Thu, 23 Dec 2021 09:08:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 823AC1BF4D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 043AB60DCA;
+	Thu, 23 Dec 2021 09:08:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EDAF21BF4D6
  for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 09:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7ECE181773
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB31940591
  for <buildroot@lists.busybox.net>; Thu, 23 Dec 2021 09:08:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XGUM9ru98MoM for <buildroot@lists.busybox.net>;
- Thu, 23 Dec 2021 09:08:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jbjZAdBIGQO5 for <buildroot@lists.busybox.net>;
+ Thu, 23 Dec 2021 09:08:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D3BEC81772
- for <buildroot@buildroot.org>; Thu, 23 Dec 2021 09:08:07 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id j11so9287653lfg.3
- for <buildroot@buildroot.org>; Thu, 23 Dec 2021 01:08:07 -0800 (PST)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC30B40574
+ for <buildroot@buildroot.org>; Thu, 23 Dec 2021 09:08:08 +0000 (UTC)
+Received: by mail-lj1-x236.google.com with SMTP id m12so8035899ljj.6
+ for <buildroot@buildroot.org>; Thu, 23 Dec 2021 01:08:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=H3/Bj/+Akzfc1tPBT4IWWKnlH778djanBSoEzg4bvow=;
- b=kvRaSt9Tru8S6u06VM1IVbHSEhMyeJHIOjmMT2XIiRkHqMirrdESMU/aZ3E2ovqNAU
- QwZBQnF6lPFHoexxSbin8qUFmA+eq+TKja2pSSCN3uEEjbszRlWp3SbW85p0rWGiteyQ
- DmIQkgIsPcun7Sagv6xcKQj8Idp2aNy4URV1/eXPnncLDazXZIP1RYeHZjJGm5cLdVx4
- VLETNhQojUcZzVBjkqKm6j0L4MTI4wqJHUuRvHQC5AzmWjEuTUFHuI05itExuqr7FzbB
- QkRIMm5k/MR1UQ6cXuzWPwz0p0YdM+wwJeHkqCdF+2lKVQ4bfqJVTmn25QQvVLUEiaXO
- qy4w==
+ bh=OvfOzVgHeti6l9LxNmvOMbRXTuP7ioRruzb2TgKjPtU=;
+ b=Wie7kJEIOabH6aschICRWoqIcUMLv8SLvOzKTaQBonSZQHCex+bCUXern/xOQMW863
+ 0FuzhUIOv05m0YQmluycA1m0XvsL3pymCWvJdAHu7HVRasURMj9ojSqiekoTDORVP+hl
+ 7/JU4Sppdcc/ChPdCWmL6F8MR6/CKKuVm6PRfx2DbGbuZOWkRPgbb82/qx7rBy01zEM8
+ Gqo8A6PZUK3vVk3g7l7J4N0xpiD5pt52XJfM0gSMmUo8CVFHSdrXaiBJ2uz94sfWMETI
+ xKWkCcuwRJCI1sku2aZ8i6UIE8jF9YT+85dNHzv5BtTxHLTEMIzNbgzPH4TWxuL1ZHWZ
+ 8WhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=H3/Bj/+Akzfc1tPBT4IWWKnlH778djanBSoEzg4bvow=;
- b=VFLXrDenGIYhp/X15N+S7PbpDycL9nrtQe23JiCyUrMUs2j5xP0luuRaYUJIU0cdRi
- WPafpZqgkPTrDqgE1NulNRP2u2ihR2CWqDCyOpuZc4IBYHSbqThWjGueMuCFOf7KpmPt
- xy9rT3VuTYHCOOLS48VyNfRO7tAWSudiunHUIjtnIcUs/QwwJIO7kMqJ6pUzw3jLmwb4
- wpDTy5p7SP+6L22wRks2fjBYSenjTLEWhJtv6jTAMl6LL2USbR6N+Z9sHnIdF8zX4bmh
- vUtOC2OzNeHsYOiZgF+K9kAtD9CM1KeyKLbxctXiAYYas7vkC8N/Anxg2Uou7rCIZ0aI
- M1Cg==
-X-Gm-Message-State: AOAM531r4ptlJkF9ija464iLPA4R3yJxDUU80MyvIycGcrkeWTkKMffD
- QFqIAPEZtejL9s5EzAdZUYRSVmHv3c0DsA==
-X-Google-Smtp-Source: ABdhPJx3FbGEmQjHJOSKO18H3NXO0izYS1dbdEv4SBphCU7+7lwT3Fnp13kVjx4ByJhgtpxmr82iBA==
-X-Received: by 2002:a05:6512:3487:: with SMTP id
- v7mr1236459lfr.94.1640250485200; 
- Thu, 23 Dec 2021 01:08:05 -0800 (PST)
+ bh=OvfOzVgHeti6l9LxNmvOMbRXTuP7ioRruzb2TgKjPtU=;
+ b=uvJwnIlIy5+gi+DSDdlv8MreOUL6qqCPQbR+K6PlT1dUeTTaPHEQl9ud//Ge64q9JG
+ PDM87LwmbNIT2XWXsGds6VY7imHq5uz/W9wiGjbGvXj1jWgdnJ1V/8JPGJZqEhnNhq6V
+ qf3TEyxd7nXyF/ys7drgiSFUTzfzu5Q7hyfq/D/iSXlacus7qB358XSMJNl3IQJF4Ygx
+ WbYpqjv5/BkLOOrCQPajY631wCXzUycag66C90CkG9fLvOTwX24fGXS9wsuaUCRHFMs2
+ Nf7YSrqORIncpzxlyPf8dmp3zkVOGMXDNy6nmvs+zsjytp/T9c7Lw4bZEmJAKVcr6kfv
+ SUkQ==
+X-Gm-Message-State: AOAM531cHyhhrTQar0+mbyWYPFcbaRzXd6q2A2Zw9sq0Ivi94AC3zjZo
+ 2vgeyfHzATfaTmcyVLv+la6wqc/HD419Mg==
+X-Google-Smtp-Source: ABdhPJyqhmlyNvYk8+2Xc3AqmCIee+LSYzczPjLIEs9YwZSsKF821lbXomyTvtHW7EazuZxowiyM4A==
+X-Received: by 2002:a2e:6e15:: with SMTP id j21mr1080086ljc.195.1640250486589; 
+ Thu, 23 Dec 2021 01:08:06 -0800 (PST)
 Received: from localhost.localdomain ([98.128.186.122])
- by smtp.gmail.com with ESMTPSA id br39sm446854lfb.243.2021.12.23.01.08.04
+ by smtp.gmail.com with ESMTPSA id br39sm446854lfb.243.2021.12.23.01.08.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 23 Dec 2021 01:08:04 -0800 (PST)
+ Thu, 23 Dec 2021 01:08:05 -0800 (PST)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 23 Dec 2021 10:07:59 +0100
-Message-Id: <20211223090800.1716321-3-troglobit@gmail.com>
+Date: Thu, 23 Dec 2021 10:08:00 +0100
+Message-Id: <20211223090800.1716321-4-troglobit@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211223090800.1716321-1-troglobit@gmail.com>
 References: <20211223090800.1716321-1-troglobit@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/3] .clang-format: initial import from Linux
- 5.15.6
+Subject: [Buildroot] [PATCH v3 3/3] package/makedevs: coding style and
+ whitespace cleanup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,592 +95,315 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Intended as an aid when working with in-tree C files, like makdevs.c
+This program is cobbled up with parts from all over the place, mostly
+BusyBox, so the style has not been kept consistent.  This patch is a
+modest attempt to clean it up a bit.  Some changes, e.g., comments are
+for consistency with the rest of the program.
 
-Notice max number of columns is set to 80, despite the LKML discussion
-to not enforce this limit in checkpatch.pl, see [1] for details, hence
-use with care and perhaps try to avoid unnecessary line breaks.
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
+ - The (new) top level .clang-format file has been used as an aid
+ - Overly long lines have been kept to keep the diff small and any
+   discussions on max line length in the project to a minimum
+ - Comment indentation has been kept, again to keep the diff small
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- .clang-format | 566 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 566 insertions(+)
- create mode 100644 .clang-format
+ package/makedevs/makedevs.c | 111 +++++++++++++++++++-----------------
+ 1 file changed, 60 insertions(+), 51 deletions(-)
 
-diff --git a/.clang-format b/.clang-format
-new file mode 100644
-index 0000000000..91b92e97e5
---- /dev/null
-+++ b/.clang-format
-@@ -0,0 +1,566 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# clang-format configuration file. Intended for clang-format >= 4.
-+#
-+# For more information, see:
-+#
-+#   Documentation/process/clang-format.rst
-+#   https://clang.llvm.org/docs/ClangFormat.html
-+#   https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-+#
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index 2796cd5e78..ec7db8f3e8 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -44,7 +44,7 @@ uid_t recursive_uid;
+ gid_t recursive_gid;
+ unsigned int recursive_mode;
+ #define PASSWD_PATH "etc/passwd"  /* MUST be relative */
+-#define GROUP_PATH "etc/group"  /* MUST be relative */
++#define GROUP_PATH  "etc/group"   /* MUST be relative */
+ 
+ void bb_verror_msg(const char *s, va_list p)
+ {
+@@ -76,10 +76,12 @@ void bb_error_msg_and_die(const char *s, ...)
+ 
+ void bb_vperror_msg(const char *s, va_list p)
+ {
+-	int err=errno;
+-	if(s == 0) s = "";
++	int err = errno;
++	if (s == 0)
++		s = "";
+ 	bb_verror_msg(s, p);
+-	if (*s) s = ": ";
++	if (*s)
++		s = ": ";
+ 	fprintf(stderr, "%s%s\n", s, strerror(err));
+ }
+ 
+@@ -129,8 +131,8 @@ int bb_make_directory (char *path, long mode, int flags)
+ 	if (mode == -1) {
+ 		umask(mask);
+ 		mode = (S_IXUSR | S_IXGRP | S_IXOTH |
+-				S_IWUSR | S_IWGRP | S_IWOTH |
+-				S_IRUSR | S_IRGRP | S_IROTH) & ~mask;
++			S_IWUSR | S_IWGRP | S_IWOTH |
++			S_IRUSR | S_IRGRP | S_IROTH) & ~mask;
+ 	} else {
+ 		umask(mask & ~0300);
+ 	}
+@@ -154,18 +156,22 @@ int bb_make_directory (char *path, long mode, int flags)
+ 		}
+ 
+ 		if (mkdir(path, 0777) < 0) {
+-			/* If we failed for any other reason than the directory
+-			 * already exists, output a diagnostic and return -1.*/
+-			if ((errno != EEXIST && errno != EISDIR)
+-					|| !(flags & FILEUTILS_RECUR)
+-					|| (stat(path, &st) < 0 || !S_ISDIR(st.st_mode))) {
++			/*
++			 * If we failed for any other reason than the directory
++			 * already exists, output a diagnostic and return -1.
++			 */
++			if ((errno != EEXIST && errno != EISDIR) ||
++			    !(flags & FILEUTILS_RECUR) ||
++			    (stat(path, &st) < 0 || !S_ISDIR(st.st_mode))) {
+ 				fail_msg = "create";
+ 				umask(mask);
+ 				break;
+ 			}
+-			/* Since the directory exists, don't attempt to change
++			/*
++			 * Since the directory exists, don't attempt to change
+ 			 * permissions if it was the full target.  Note that
+-			 * this is not an error conditon. */
++			 * this is not an error conditon.
++			 */
+ 			if (!c) {
+ 				umask(mask);
+ 				return 0;
+@@ -173,11 +179,13 @@ int bb_make_directory (char *path, long mode, int flags)
+ 		}
+ 
+ 		if (!c) {
+-			/* Done.  If necessary, updated perms on the newly
++			/*
++			 * Done.  If necessary, updated perms on the newly
+ 			 * created directory.  Failure to update here _is_
+-			 * an error.*/
++			 * an error.
++			 */
+ 			umask(mask);
+-			if ((mode != -1) && (chmod(path, mode) < 0)){
++			if ((mode != -1) && (chmod(path, mode) < 0)) {
+ 				fail_msg = "set permissions of";
+ 				break;
+ 			}
+@@ -189,25 +197,29 @@ int bb_make_directory (char *path, long mode, int flags)
+ 
+ 	} while (1);
+ 
+-	bb_perror_msg ("Cannot %s directory `%s'", fail_msg, path);
++	bb_perror_msg("Cannot %s directory `%s'", fail_msg, path);
+ 	return -1;
+ }
+ 
+-const char * const bb_msg_memory_exhausted = "memory exhausted";
++const char *const bb_msg_memory_exhausted = "memory exhausted";
+ 
+ void *xmalloc(size_t size)
+ {
+ 	void *ptr = malloc(size);
 +
-+# Buildroot: imported unmodified from Linux 5.15.6 -- please note,
-+#            this is not enforced at the moment.  Intended as an aid
-+#            when working with in-tree C files, like makedevs.c
-+#
-+---
-+AccessModifierOffset: -4
-+AlignAfterOpenBracket: Align
-+AlignConsecutiveAssignments: false
-+AlignConsecutiveDeclarations: false
-+#AlignEscapedNewlines: Left # Unknown to clang-format-4.0
-+AlignOperands: true
-+AlignTrailingComments: false
-+AllowAllParametersOfDeclarationOnNextLine: false
-+AllowShortBlocksOnASingleLine: false
-+AllowShortCaseLabelsOnASingleLine: false
-+AllowShortFunctionsOnASingleLine: None
-+AllowShortIfStatementsOnASingleLine: false
-+AllowShortLoopsOnASingleLine: false
-+AlwaysBreakAfterDefinitionReturnType: None
-+AlwaysBreakAfterReturnType: None
-+AlwaysBreakBeforeMultilineStrings: false
-+AlwaysBreakTemplateDeclarations: false
-+BinPackArguments: true
-+BinPackParameters: true
-+BraceWrapping:
-+  AfterClass: false
-+  AfterControlStatement: false
-+  AfterEnum: false
-+  AfterFunction: true
-+  AfterNamespace: true
-+  AfterObjCDeclaration: false
-+  AfterStruct: false
-+  AfterUnion: false
-+  #AfterExternBlock: false # Unknown to clang-format-5.0
-+  BeforeCatch: false
-+  BeforeElse: false
-+  IndentBraces: false
-+  #SplitEmptyFunction: true # Unknown to clang-format-4.0
-+  #SplitEmptyRecord: true # Unknown to clang-format-4.0
-+  #SplitEmptyNamespace: true # Unknown to clang-format-4.0
-+BreakBeforeBinaryOperators: None
-+BreakBeforeBraces: Custom
-+#BreakBeforeInheritanceComma: false # Unknown to clang-format-4.0
-+BreakBeforeTernaryOperators: false
-+BreakConstructorInitializersBeforeComma: false
-+#BreakConstructorInitializers: BeforeComma # Unknown to clang-format-4.0
-+BreakAfterJavaFieldAnnotations: false
-+BreakStringLiterals: false
-+ColumnLimit: 80
-+CommentPragmas: '^ IWYU pragma:'
-+#CompactNamespaces: false # Unknown to clang-format-4.0
-+ConstructorInitializerAllOnOneLineOrOnePerLine: false
-+ConstructorInitializerIndentWidth: 8
-+ContinuationIndentWidth: 8
-+Cpp11BracedListStyle: false
-+DerivePointerAlignment: false
-+DisableFormat: false
-+ExperimentalAutoDetectBinPacking: false
-+#FixNamespaceComments: false # Unknown to clang-format-4.0
+ 	if (ptr == NULL && size != 0)
+ 		bb_error_msg_and_die(bb_msg_memory_exhausted);
 +
-+# Taken from:
-+#   git grep -h '^#define [^[:space:]]*for_each[^[:space:]]*(' include/ \
-+#   | sed "s,^#define \([^[:space:]]*for_each[^[:space:]]*\)(.*$,  - '\1'," \
-+#   | sort | uniq
-+ForEachMacros:
-+  - 'apei_estatus_for_each_section'
-+  - 'ata_for_each_dev'
-+  - 'ata_for_each_link'
-+  - '__ata_qc_for_each'
-+  - 'ata_qc_for_each'
-+  - 'ata_qc_for_each_raw'
-+  - 'ata_qc_for_each_with_internal'
-+  - 'ax25_for_each'
-+  - 'ax25_uid_for_each'
-+  - '__bio_for_each_bvec'
-+  - 'bio_for_each_bvec'
-+  - 'bio_for_each_bvec_all'
-+  - 'bio_for_each_integrity_vec'
-+  - '__bio_for_each_segment'
-+  - 'bio_for_each_segment'
-+  - 'bio_for_each_segment_all'
-+  - 'bio_list_for_each'
-+  - 'bip_for_each_vec'
-+  - 'bitmap_for_each_clear_region'
-+  - 'bitmap_for_each_set_region'
-+  - 'blkg_for_each_descendant_post'
-+  - 'blkg_for_each_descendant_pre'
-+  - 'blk_queue_for_each_rl'
-+  - 'bond_for_each_slave'
-+  - 'bond_for_each_slave_rcu'
-+  - 'bpf_for_each_spilled_reg'
-+  - 'btree_for_each_safe128'
-+  - 'btree_for_each_safe32'
-+  - 'btree_for_each_safe64'
-+  - 'btree_for_each_safel'
-+  - 'card_for_each_dev'
-+  - 'cgroup_taskset_for_each'
-+  - 'cgroup_taskset_for_each_leader'
-+  - 'cpufreq_for_each_entry'
-+  - 'cpufreq_for_each_entry_idx'
-+  - 'cpufreq_for_each_valid_entry'
-+  - 'cpufreq_for_each_valid_entry_idx'
-+  - 'css_for_each_child'
-+  - 'css_for_each_descendant_post'
-+  - 'css_for_each_descendant_pre'
-+  - 'device_for_each_child_node'
-+  - 'displayid_iter_for_each'
-+  - 'dma_fence_chain_for_each'
-+  - 'do_for_each_ftrace_op'
-+  - 'drm_atomic_crtc_for_each_plane'
-+  - 'drm_atomic_crtc_state_for_each_plane'
-+  - 'drm_atomic_crtc_state_for_each_plane_state'
-+  - 'drm_atomic_for_each_plane_damage'
-+  - 'drm_client_for_each_connector_iter'
-+  - 'drm_client_for_each_modeset'
-+  - 'drm_connector_for_each_possible_encoder'
-+  - 'drm_for_each_bridge_in_chain'
-+  - 'drm_for_each_connector_iter'
-+  - 'drm_for_each_crtc'
-+  - 'drm_for_each_crtc_reverse'
-+  - 'drm_for_each_encoder'
-+  - 'drm_for_each_encoder_mask'
-+  - 'drm_for_each_fb'
-+  - 'drm_for_each_legacy_plane'
-+  - 'drm_for_each_plane'
-+  - 'drm_for_each_plane_mask'
-+  - 'drm_for_each_privobj'
-+  - 'drm_mm_for_each_hole'
-+  - 'drm_mm_for_each_node'
-+  - 'drm_mm_for_each_node_in_range'
-+  - 'drm_mm_for_each_node_safe'
-+  - 'flow_action_for_each'
-+  - 'for_each_acpi_dev_match'
-+  - 'for_each_active_dev_scope'
-+  - 'for_each_active_drhd_unit'
-+  - 'for_each_active_iommu'
-+  - 'for_each_aggr_pgid'
-+  - 'for_each_available_child_of_node'
-+  - 'for_each_bio'
-+  - 'for_each_board_func_rsrc'
-+  - 'for_each_bvec'
-+  - 'for_each_card_auxs'
-+  - 'for_each_card_auxs_safe'
-+  - 'for_each_card_components'
-+  - 'for_each_card_dapms'
-+  - 'for_each_card_pre_auxs'
-+  - 'for_each_card_prelinks'
-+  - 'for_each_card_rtds'
-+  - 'for_each_card_rtds_safe'
-+  - 'for_each_card_widgets'
-+  - 'for_each_card_widgets_safe'
-+  - 'for_each_cgroup_storage_type'
-+  - 'for_each_child_of_node'
-+  - 'for_each_clear_bit'
-+  - 'for_each_clear_bit_from'
-+  - 'for_each_cmsghdr'
-+  - 'for_each_compatible_node'
-+  - 'for_each_component_dais'
-+  - 'for_each_component_dais_safe'
-+  - 'for_each_comp_order'
-+  - 'for_each_console'
-+  - 'for_each_cpu'
-+  - 'for_each_cpu_and'
-+  - 'for_each_cpu_not'
-+  - 'for_each_cpu_wrap'
-+  - 'for_each_dapm_widgets'
-+  - 'for_each_dev_addr'
-+  - 'for_each_dev_scope'
-+  - 'for_each_dma_cap_mask'
-+  - 'for_each_dpcm_be'
-+  - 'for_each_dpcm_be_rollback'
-+  - 'for_each_dpcm_be_safe'
-+  - 'for_each_dpcm_fe'
-+  - 'for_each_drhd_unit'
-+  - 'for_each_dss_dev'
-+  - 'for_each_dtpm_table'
-+  - 'for_each_efi_memory_desc'
-+  - 'for_each_efi_memory_desc_in_map'
-+  - 'for_each_element'
-+  - 'for_each_element_extid'
-+  - 'for_each_element_id'
-+  - 'for_each_endpoint_of_node'
-+  - 'for_each_evictable_lru'
-+  - 'for_each_fib6_node_rt_rcu'
-+  - 'for_each_fib6_walker_rt'
-+  - 'for_each_free_mem_pfn_range_in_zone'
-+  - 'for_each_free_mem_pfn_range_in_zone_from'
-+  - 'for_each_free_mem_range'
-+  - 'for_each_free_mem_range_reverse'
-+  - 'for_each_func_rsrc'
-+  - 'for_each_hstate'
-+  - 'for_each_if'
-+  - 'for_each_iommu'
-+  - 'for_each_ip_tunnel_rcu'
-+  - 'for_each_irq_nr'
-+  - 'for_each_link_codecs'
-+  - 'for_each_link_cpus'
-+  - 'for_each_link_platforms'
-+  - 'for_each_lru'
-+  - 'for_each_matching_node'
-+  - 'for_each_matching_node_and_match'
-+  - 'for_each_member'
-+  - 'for_each_memcg_cache_index'
-+  - 'for_each_mem_pfn_range'
-+  - '__for_each_mem_range'
-+  - 'for_each_mem_range'
-+  - '__for_each_mem_range_rev'
-+  - 'for_each_mem_range_rev'
-+  - 'for_each_mem_region'
-+  - 'for_each_migratetype_order'
-+  - 'for_each_msi_entry'
-+  - 'for_each_msi_entry_safe'
-+  - 'for_each_msi_vector'
-+  - 'for_each_net'
-+  - 'for_each_net_continue_reverse'
-+  - 'for_each_netdev'
-+  - 'for_each_netdev_continue'
-+  - 'for_each_netdev_continue_rcu'
-+  - 'for_each_netdev_continue_reverse'
-+  - 'for_each_netdev_feature'
-+  - 'for_each_netdev_in_bond_rcu'
-+  - 'for_each_netdev_rcu'
-+  - 'for_each_netdev_reverse'
-+  - 'for_each_netdev_safe'
-+  - 'for_each_net_rcu'
-+  - 'for_each_new_connector_in_state'
-+  - 'for_each_new_crtc_in_state'
-+  - 'for_each_new_mst_mgr_in_state'
-+  - 'for_each_new_plane_in_state'
-+  - 'for_each_new_private_obj_in_state'
-+  - 'for_each_node'
-+  - 'for_each_node_by_name'
-+  - 'for_each_node_by_type'
-+  - 'for_each_node_mask'
-+  - 'for_each_node_state'
-+  - 'for_each_node_with_cpus'
-+  - 'for_each_node_with_property'
-+  - 'for_each_nonreserved_multicast_dest_pgid'
-+  - 'for_each_of_allnodes'
-+  - 'for_each_of_allnodes_from'
-+  - 'for_each_of_cpu_node'
-+  - 'for_each_of_pci_range'
-+  - 'for_each_old_connector_in_state'
-+  - 'for_each_old_crtc_in_state'
-+  - 'for_each_old_mst_mgr_in_state'
-+  - 'for_each_oldnew_connector_in_state'
-+  - 'for_each_oldnew_crtc_in_state'
-+  - 'for_each_oldnew_mst_mgr_in_state'
-+  - 'for_each_oldnew_plane_in_state'
-+  - 'for_each_oldnew_plane_in_state_reverse'
-+  - 'for_each_oldnew_private_obj_in_state'
-+  - 'for_each_old_plane_in_state'
-+  - 'for_each_old_private_obj_in_state'
-+  - 'for_each_online_cpu'
-+  - 'for_each_online_node'
-+  - 'for_each_online_pgdat'
-+  - 'for_each_pci_bridge'
-+  - 'for_each_pci_dev'
-+  - 'for_each_pci_msi_entry'
-+  - 'for_each_pcm_streams'
-+  - 'for_each_physmem_range'
-+  - 'for_each_populated_zone'
-+  - 'for_each_possible_cpu'
-+  - 'for_each_present_cpu'
-+  - 'for_each_prime_number'
-+  - 'for_each_prime_number_from'
-+  - 'for_each_process'
-+  - 'for_each_process_thread'
-+  - 'for_each_prop_codec_conf'
-+  - 'for_each_prop_dai_codec'
-+  - 'for_each_prop_dai_cpu'
-+  - 'for_each_prop_dlc_codecs'
-+  - 'for_each_prop_dlc_cpus'
-+  - 'for_each_prop_dlc_platforms'
-+  - 'for_each_property_of_node'
-+  - 'for_each_registered_fb'
-+  - 'for_each_requested_gpio'
-+  - 'for_each_requested_gpio_in_range'
-+  - 'for_each_reserved_mem_range'
-+  - 'for_each_reserved_mem_region'
-+  - 'for_each_rtd_codec_dais'
-+  - 'for_each_rtd_components'
-+  - 'for_each_rtd_cpu_dais'
-+  - 'for_each_rtd_dais'
-+  - 'for_each_set_bit'
-+  - 'for_each_set_bit_from'
-+  - 'for_each_set_clump8'
-+  - 'for_each_sg'
-+  - 'for_each_sg_dma_page'
-+  - 'for_each_sg_page'
-+  - 'for_each_sgtable_dma_page'
-+  - 'for_each_sgtable_dma_sg'
-+  - 'for_each_sgtable_page'
-+  - 'for_each_sgtable_sg'
-+  - 'for_each_sibling_event'
-+  - 'for_each_subelement'
-+  - 'for_each_subelement_extid'
-+  - 'for_each_subelement_id'
-+  - '__for_each_thread'
-+  - 'for_each_thread'
-+  - 'for_each_unicast_dest_pgid'
-+  - 'for_each_vsi'
-+  - 'for_each_wakeup_source'
-+  - 'for_each_zone'
-+  - 'for_each_zone_zonelist'
-+  - 'for_each_zone_zonelist_nodemask'
-+  - 'fwnode_for_each_available_child_node'
-+  - 'fwnode_for_each_child_node'
-+  - 'fwnode_graph_for_each_endpoint'
-+  - 'gadget_for_each_ep'
-+  - 'genradix_for_each'
-+  - 'genradix_for_each_from'
-+  - 'hash_for_each'
-+  - 'hash_for_each_possible'
-+  - 'hash_for_each_possible_rcu'
-+  - 'hash_for_each_possible_rcu_notrace'
-+  - 'hash_for_each_possible_safe'
-+  - 'hash_for_each_rcu'
-+  - 'hash_for_each_safe'
-+  - 'hctx_for_each_ctx'
-+  - 'hlist_bl_for_each_entry'
-+  - 'hlist_bl_for_each_entry_rcu'
-+  - 'hlist_bl_for_each_entry_safe'
-+  - 'hlist_for_each'
-+  - 'hlist_for_each_entry'
-+  - 'hlist_for_each_entry_continue'
-+  - 'hlist_for_each_entry_continue_rcu'
-+  - 'hlist_for_each_entry_continue_rcu_bh'
-+  - 'hlist_for_each_entry_from'
-+  - 'hlist_for_each_entry_from_rcu'
-+  - 'hlist_for_each_entry_rcu'
-+  - 'hlist_for_each_entry_rcu_bh'
-+  - 'hlist_for_each_entry_rcu_notrace'
-+  - 'hlist_for_each_entry_safe'
-+  - 'hlist_for_each_entry_srcu'
-+  - '__hlist_for_each_rcu'
-+  - 'hlist_for_each_safe'
-+  - 'hlist_nulls_for_each_entry'
-+  - 'hlist_nulls_for_each_entry_from'
-+  - 'hlist_nulls_for_each_entry_rcu'
-+  - 'hlist_nulls_for_each_entry_safe'
-+  - 'i3c_bus_for_each_i2cdev'
-+  - 'i3c_bus_for_each_i3cdev'
-+  - 'ide_host_for_each_port'
-+  - 'ide_port_for_each_dev'
-+  - 'ide_port_for_each_present_dev'
-+  - 'idr_for_each_entry'
-+  - 'idr_for_each_entry_continue'
-+  - 'idr_for_each_entry_continue_ul'
-+  - 'idr_for_each_entry_ul'
-+  - 'in_dev_for_each_ifa_rcu'
-+  - 'in_dev_for_each_ifa_rtnl'
-+  - 'inet_bind_bucket_for_each'
-+  - 'inet_lhash2_for_each_icsk_rcu'
-+  - 'key_for_each'
-+  - 'key_for_each_safe'
-+  - 'klp_for_each_func'
-+  - 'klp_for_each_func_safe'
-+  - 'klp_for_each_func_static'
-+  - 'klp_for_each_object'
-+  - 'klp_for_each_object_safe'
-+  - 'klp_for_each_object_static'
-+  - 'kunit_suite_for_each_test_case'
-+  - 'kvm_for_each_memslot'
-+  - 'kvm_for_each_vcpu'
-+  - 'list_for_each'
-+  - 'list_for_each_codec'
-+  - 'list_for_each_codec_safe'
-+  - 'list_for_each_continue'
-+  - 'list_for_each_entry'
-+  - 'list_for_each_entry_continue'
-+  - 'list_for_each_entry_continue_rcu'
-+  - 'list_for_each_entry_continue_reverse'
-+  - 'list_for_each_entry_from'
-+  - 'list_for_each_entry_from_rcu'
-+  - 'list_for_each_entry_from_reverse'
-+  - 'list_for_each_entry_lockless'
-+  - 'list_for_each_entry_rcu'
-+  - 'list_for_each_entry_reverse'
-+  - 'list_for_each_entry_safe'
-+  - 'list_for_each_entry_safe_continue'
-+  - 'list_for_each_entry_safe_from'
-+  - 'list_for_each_entry_safe_reverse'
-+  - 'list_for_each_entry_srcu'
-+  - 'list_for_each_prev'
-+  - 'list_for_each_prev_safe'
-+  - 'list_for_each_safe'
-+  - 'llist_for_each'
-+  - 'llist_for_each_entry'
-+  - 'llist_for_each_entry_safe'
-+  - 'llist_for_each_safe'
-+  - 'mci_for_each_dimm'
-+  - 'media_device_for_each_entity'
-+  - 'media_device_for_each_intf'
-+  - 'media_device_for_each_link'
-+  - 'media_device_for_each_pad'
-+  - 'nanddev_io_for_each_page'
-+  - 'netdev_for_each_lower_dev'
-+  - 'netdev_for_each_lower_private'
-+  - 'netdev_for_each_lower_private_rcu'
-+  - 'netdev_for_each_mc_addr'
-+  - 'netdev_for_each_uc_addr'
-+  - 'netdev_for_each_upper_dev_rcu'
-+  - 'netdev_hw_addr_list_for_each'
-+  - 'nft_rule_for_each_expr'
-+  - 'nla_for_each_attr'
-+  - 'nla_for_each_nested'
-+  - 'nlmsg_for_each_attr'
-+  - 'nlmsg_for_each_msg'
-+  - 'nr_neigh_for_each'
-+  - 'nr_neigh_for_each_safe'
-+  - 'nr_node_for_each'
-+  - 'nr_node_for_each_safe'
-+  - 'of_for_each_phandle'
-+  - 'of_property_for_each_string'
-+  - 'of_property_for_each_u32'
-+  - 'pci_bus_for_each_resource'
-+  - 'pcl_for_each_chunk'
-+  - 'pcl_for_each_segment'
-+  - 'pcm_for_each_format'
-+  - 'ping_portaddr_for_each_entry'
-+  - 'plist_for_each'
-+  - 'plist_for_each_continue'
-+  - 'plist_for_each_entry'
-+  - 'plist_for_each_entry_continue'
-+  - 'plist_for_each_entry_safe'
-+  - 'plist_for_each_safe'
-+  - 'pnp_for_each_card'
-+  - 'pnp_for_each_dev'
-+  - 'protocol_for_each_card'
-+  - 'protocol_for_each_dev'
-+  - 'queue_for_each_hw_ctx'
-+  - 'radix_tree_for_each_slot'
-+  - 'radix_tree_for_each_tagged'
-+  - 'rb_for_each'
-+  - 'rbtree_postorder_for_each_entry_safe'
-+  - 'rdma_for_each_block'
-+  - 'rdma_for_each_port'
-+  - 'rdma_umem_for_each_dma_block'
-+  - 'resource_list_for_each_entry'
-+  - 'resource_list_for_each_entry_safe'
-+  - 'rhl_for_each_entry_rcu'
-+  - 'rhl_for_each_rcu'
-+  - 'rht_for_each'
-+  - 'rht_for_each_entry'
-+  - 'rht_for_each_entry_from'
-+  - 'rht_for_each_entry_rcu'
-+  - 'rht_for_each_entry_rcu_from'
-+  - 'rht_for_each_entry_safe'
-+  - 'rht_for_each_from'
-+  - 'rht_for_each_rcu'
-+  - 'rht_for_each_rcu_from'
-+  - '__rq_for_each_bio'
-+  - 'rq_for_each_bvec'
-+  - 'rq_for_each_segment'
-+  - 'scsi_for_each_prot_sg'
-+  - 'scsi_for_each_sg'
-+  - 'sctp_for_each_hentry'
-+  - 'sctp_skb_for_each'
-+  - 'shdma_for_each_chan'
-+  - '__shost_for_each_device'
-+  - 'shost_for_each_device'
-+  - 'sk_for_each'
-+  - 'sk_for_each_bound'
-+  - 'sk_for_each_entry_offset_rcu'
-+  - 'sk_for_each_from'
-+  - 'sk_for_each_rcu'
-+  - 'sk_for_each_safe'
-+  - 'sk_nulls_for_each'
-+  - 'sk_nulls_for_each_from'
-+  - 'sk_nulls_for_each_rcu'
-+  - 'snd_array_for_each'
-+  - 'snd_pcm_group_for_each_entry'
-+  - 'snd_soc_dapm_widget_for_each_path'
-+  - 'snd_soc_dapm_widget_for_each_path_safe'
-+  - 'snd_soc_dapm_widget_for_each_sink_path'
-+  - 'snd_soc_dapm_widget_for_each_source_path'
-+  - 'tb_property_for_each'
-+  - 'tcf_exts_for_each_action'
-+  - 'udp_portaddr_for_each_entry'
-+  - 'udp_portaddr_for_each_entry_rcu'
-+  - 'usb_hub_for_each_child'
-+  - 'v4l2_device_for_each_subdev'
-+  - 'v4l2_m2m_for_each_dst_buf'
-+  - 'v4l2_m2m_for_each_dst_buf_safe'
-+  - 'v4l2_m2m_for_each_src_buf'
-+  - 'v4l2_m2m_for_each_src_buf_safe'
-+  - 'virtio_device_for_each_vq'
-+  - 'while_for_each_ftrace_op'
-+  - 'xa_for_each'
-+  - 'xa_for_each_marked'
-+  - 'xa_for_each_range'
-+  - 'xa_for_each_start'
-+  - 'xas_for_each'
-+  - 'xas_for_each_conflict'
-+  - 'xas_for_each_marked'
-+  - 'xbc_array_for_each_value'
-+  - 'xbc_for_each_key_value'
-+  - 'xbc_node_for_each_array_value'
-+  - 'xbc_node_for_each_child'
-+  - 'xbc_node_for_each_key_value'
-+  - 'zorro_for_each_dev'
+ 	return ptr;
+ }
+ 
+ void *xcalloc(size_t nmemb, size_t size)
+ {
+ 	void *ptr = calloc(nmemb, size);
 +
-+#IncludeBlocks: Preserve # Unknown to clang-format-5.0
-+IncludeCategories:
-+  - Regex: '.*'
-+    Priority: 1
-+IncludeIsMainRegex: '(Test)?$'
-+IndentCaseLabels: false
-+#IndentPPDirectives: None # Unknown to clang-format-5.0
-+IndentWidth: 8
-+IndentWrappedFunctionNames: false
-+JavaScriptQuotes: Leave
-+JavaScriptWrapImports: true
-+KeepEmptyLinesAtTheStartOfBlocks: false
-+MacroBlockBegin: ''
-+MacroBlockEnd: ''
-+MaxEmptyLinesToKeep: 1
-+NamespaceIndentation: None
-+#ObjCBinPackProtocolList: Auto # Unknown to clang-format-5.0
-+ObjCBlockIndentWidth: 8
-+ObjCSpaceAfterProperty: true
-+ObjCSpaceBeforeProtocolList: true
+ 	if (ptr == NULL && nmemb != 0 && size != 0)
+ 		bb_error_msg_and_die(bb_msg_memory_exhausted);
 +
-+# Taken from git's rules
-+#PenaltyBreakAssignment: 10 # Unknown to clang-format-4.0
-+PenaltyBreakBeforeFirstCallParameter: 30
-+PenaltyBreakComment: 10
-+PenaltyBreakFirstLessLess: 0
-+PenaltyBreakString: 10
-+PenaltyExcessCharacter: 100
-+PenaltyReturnTypeOnItsOwnLine: 60
+ 	return ptr;
+ }
+ 
+@@ -216,6 +228,7 @@ void *xrealloc(void *ptr, size_t size)
+ 	ptr = realloc(ptr, size);
+ 	if (ptr == NULL && size != 0)
+ 		bb_error_msg_and_die(bb_msg_memory_exhausted);
 +
-+PointerAlignment: Right
-+ReflowComments: false
-+SortIncludes: false
-+#SortUsingDeclarations: false # Unknown to clang-format-4.0
-+SpaceAfterCStyleCast: false
-+SpaceAfterTemplateKeyword: true
-+SpaceBeforeAssignmentOperators: true
-+#SpaceBeforeCtorInitializerColon: true # Unknown to clang-format-5.0
-+#SpaceBeforeInheritanceColon: true # Unknown to clang-format-5.0
-+SpaceBeforeParens: ControlStatements
-+#SpaceBeforeRangeBasedForLoopColon: true # Unknown to clang-format-5.0
-+SpaceInEmptyParentheses: false
-+SpacesBeforeTrailingComments: 1
-+SpacesInAngles: false
-+SpacesInContainerLiterals: false
-+SpacesInCStyleCastParentheses: false
-+SpacesInParentheses: false
-+SpacesInSquareBrackets: false
-+Standard: Cpp03
-+TabWidth: 8
-+UseTab: Always
-+...
+ 	return ptr;
+ }
+ 
+@@ -234,8 +247,9 @@ char *private_get_line_from_file(FILE *file, int c)
+ 			linebuf = xrealloc(linebuf, linebufsz += GROWBY);
+ 		}
+ 		linebuf[idx++] = (char)ch;
+-		if (!ch) return linebuf;
+-		if (c<2 && ch == '\n') {
++		if (!ch)
++			return linebuf;
++		if (c < 2 && ch == '\n') {
+ 			if (c) {
+ 				--idx;
+ 			}
+@@ -263,7 +277,7 @@ long my_getpwnam(const char *name)
+ 	FILE *stream;
+ 
+ 	stream = bb_xfopen(PASSWD_PATH, "r");
+-	while(1) {
++	while (1) {
+ 		errno = 0;
+ 		myuser = fgetpwent(stream);
+ 		if (myuser == NULL)
+@@ -284,7 +298,7 @@ long my_getgrnam(const char *name)
+ 	FILE *stream;
+ 
+ 	stream = bb_xfopen(GROUP_PATH, "r");
+-	while(1) {
++	while (1) {
+ 		errno = 0;
+ 		mygroup = fgetgrent(stream);
+ 		if (mygroup == NULL)
+@@ -312,12 +326,12 @@ unsigned long get_ug_id(const char *s, long (*my_getxxnam)(const char *))
+ 	return r;
+ }
+ 
+-char * last_char_is(const char *s, int c)
++char *last_char_is(const char *s, int c)
+ {
+ 	char *sret = (char *)s;
+ 	if (sret) {
+ 		sret = strrchr(sret, c);
+-		if(sret != NULL && *(sret+1) != 0)
++		if (sret != NULL && *(sret + 1) != 0)
+ 			sret = NULL;
+ 	}
+ 	return sret;
+@@ -347,7 +361,7 @@ char *concat_path_file(const char *path, const char *filename)
+ 	lc = last_char_is(path, '/');
+ 	while (*filename == '/')
+ 		filename++;
+-	bb_xasprintf(&outbuf, "%s%s%s", path, (lc==NULL ? "/" : ""), filename);
++	bb_xasprintf(&outbuf, "%s%s%s", path, (lc == NULL ? "/" : ""), filename);
+ 
+ 	return outbuf;
+ }
+@@ -437,9 +451,8 @@ void bb_show_usage(void)
+ 	exit(1);
+ }
+ 
+-int bb_recursive(const char *fpath, const struct stat *sb,
+-		int tflag, struct FTW *ftwbuf){
+-
++int bb_recursive(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
++{
+ 	if (lchown(fpath, recursive_uid, recursive_gid) == -1) {
+ 		bb_perror_msg("chown failed for %s", fpath);
+ 		return -1;
+@@ -469,16 +482,16 @@ int main(int argc, char **argv)
+ 	bb_applet_name = basename(argv[0]);
+ 
+ 	while ((opt = getopt(argc, argv, "d:")) != -1) {
+-		switch(opt) {
+-			case 'd':
+-				table = bb_xfopen((line=optarg), "r");
+-				break;
+-			default:
+-				bb_show_usage();
++		switch (opt) {
++		case 'd':
++			table = bb_xfopen((line = optarg), "r");
++			break;
++		default:
++			bb_show_usage();
+ 		}
+ 	}
+ 
+-	if (optind >= argc || (rootdir=argv[optind])==NULL) {
++	if (optind >= argc || (rootdir = argv[optind]) == NULL) {
+ 		bb_error_msg_and_die("root directory not speficied");
+ 	}
+ 
+@@ -527,12 +540,11 @@ int main(int argc, char **argv)
+ 			continue;
+ 		}
+ 
+-		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u", name,
+-						&type, &mode, user, group, &major,
+-						&minor, &start, &increment, &count)) ||
+-				((major | minor | start | count | increment) > 0xfffff))
+-		{
+-			if (*line=='\0' || *line=='#' || isspace(*line))
++		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u",
++				name, &type, &mode, user, group, &major, &minor,
++				&start, &increment, &count)) ||
++		    ((major | minor | start | count | increment) > 0xfffff)) {
++			if (*line == '\0' || *line == '#' || isspace(*line))
+ 				continue;
+ 			bb_error_msg("line %d invalid: '%s'\n", linenum, line);
+ 			ret = EXIT_FAILURE;
+@@ -567,7 +579,7 @@ int main(int argc, char **argv)
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+ 			}
+-			if ((mode != -1) && (chmod(full_name, mode) < 0)){
++			if ((mode != -1) && (chmod(full_name, mode) < 0)) {
+ 				bb_perror_msg("line %d: chmod failed for %s", linenum, full_name);
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+@@ -587,7 +599,7 @@ int main(int argc, char **argv)
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+ 			}
+-			if ((mode != -1) && (chmod(full_name, mode) < 0)){
++			if ((mode != -1) && (chmod(full_name, mode) < 0)) {
+ 				bb_perror_msg("line %d: chmod failed for %s", linenum, full_name);
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+@@ -601,19 +613,16 @@ int main(int argc, char **argv)
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+ 			}
+-		} else
+-		{
++		} else {
+ 			dev_t rdev;
+ 			unsigned i;
+ 			char *full_name_inc;
+ 
+ 			if (type == 'p') {
+ 				mode |= S_IFIFO;
+-			}
+-			else if (type == 'c') {
++			} else if (type == 'c') {
+ 				mode |= S_IFCHR;
+-			}
+-			else if (type == 'b') {
++			} else if (type == 'b') {
+ 				mode |= S_IFBLK;
+ 			} else {
+ 				bb_error_msg("line %d: Unsupported file type %c", linenum, type);
+@@ -621,7 +630,7 @@ int main(int argc, char **argv)
+ 				goto loop;
+ 			}
+ 
+-			full_name_inc = xmalloc(strlen(full_name) + sizeof(int)*3 + 2);
++			full_name_inc = xmalloc(strlen(full_name) + sizeof(int) * 3 + 2);
+ 			if (count)
+ 				count--;
+ 			for (i = start; i <= start + count; i++) {
+@@ -640,7 +649,7 @@ int main(int argc, char **argv)
+ 			}
+ 			free(full_name_inc);
+ 		}
+-loop:
++	loop:
+ 		free(line);
+ 	}
+ 	fclose(table);
 -- 
 2.25.1
 
