@@ -1,75 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37B3CC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 24 Dec 2021 10:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 319E7C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Dec 2021 16:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96AAA416CC;
-	Fri, 24 Dec 2021 10:50:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8867760A70;
+	Fri, 24 Dec 2021 16:23:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yP1J8miP_E5M; Fri, 24 Dec 2021 10:50:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MruiJuxUP005; Fri, 24 Dec 2021 16:23:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF7ED416C8;
-	Fri, 24 Dec 2021 10:50:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6318C1BF369
- for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 10:50:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 939CE60AB0;
+	Fri, 24 Dec 2021 16:23:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C56911BF31C
+ for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 16:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5084C400F2
- for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 10:50:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3A6260AB0
+ for <buildroot@lists.busybox.net>; Fri, 24 Dec 2021 16:23:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kzknoGjHONRS for <buildroot@lists.busybox.net>;
- Fri, 24 Dec 2021 10:50:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9DE88400BF
- for <buildroot@buildroot.org>; Fri, 24 Dec 2021 10:50:24 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id y13so31985353edd.13
- for <buildroot@buildroot.org>; Fri, 24 Dec 2021 02:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=EI2cCVikX9vhdLZLcCbC/XLv3oFpkhU4/KTwgaPJRRc=;
- b=chUB9dtSlq3P7ScI3uaQpl4sg6/NMBmaMpkV2MOuJ7NHdvMaooeYrzcNC3TK8gKKcq
- IqRKV/kEXwBDr6LukpTeQIlhEA9UXoSDecATdL6wAYqMqAS0OXaiqZG/utXcWebb4U/8
- Ib4pmCpMCIe/DydEcry1KQwJpp3cG8DzZwTy2S8/t80NmTi4jSGJMCVuTQgu6vHV7mMy
- o0T16OGb3FP7+CIUbVfWReS9KfPRm/5A9m13CPCslV2zlS0KUeMqIncZPDs91tXleUan
- X/qFHzo0YUv1Lomn815nm+0f7qIeCOyWUhcry8zHQopG+ZmWu08sRQdvw8CJLumxw0UN
- ceXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=EI2cCVikX9vhdLZLcCbC/XLv3oFpkhU4/KTwgaPJRRc=;
- b=3n3+ubx2CJW/dRS5/9lKuJR9vfa6iuc1tJvX18XUs3D2cqS+W18mWzfY/kFjk5/fi9
- 8u4T9b0IPt0sQoqJS5d3wUePKGMDftVBu88N1VMgSu4u6zvQ+/kK2AGAPjGLINMah/18
- 6m1hlMppkRJnmgHsi1mL332TrKxrlg3f6HRqeZVoRnJvCusvz81Mfpon3p1fbqFeWm59
- J4JsNFHnTrpuDNL5Vx71syWY4W5qZxQL1tPNjg8VhvYxSnKv+M9VUUc4SAFMU9TEZn78
- WlvG43evSwDll01c6Xfogat2Hah2m4wfB4ejMO510Et2UKY1WtI8AOlTqQbceofFVoqI
- xzHg==
-X-Gm-Message-State: AOAM533RQ2DNLJhxdxkdDVowFdc5dsRrn9hAeJS5Zdb6l3Z/9dhTFOUS
- 0Qi7bstRRzn7nzpD4SfEfweTTwdChjKldkrZZLc=
-X-Google-Smtp-Source: ABdhPJznlRfPfQujF9S34EkHaf+KOU4XwtG3OCbg/5LSDAKdk2GhyilUHzNH996oAdIcaJCNLm6+fF17RmLwzsIfWSc=
-X-Received: by 2002:a50:a41e:: with SMTP id u30mr5422930edb.388.1640343022771; 
- Fri, 24 Dec 2021 02:50:22 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A8L3EojpwjeJ for <buildroot@lists.busybox.net>;
+ Fri, 24 Dec 2021 16:23:03 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E2A8B60A70
+ for <buildroot@buildroot.org>; Fri, 24 Dec 2021 16:23:02 +0000 (UTC)
+Received: from iago.. (unknown [151.47.222.98])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 15777C0AAEE0;
+ Fri, 24 Dec 2021 17:22:58 +0100 (CET)
+From: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Date: Fri, 24 Dec 2021 17:21:52 +0100
+Message-Id: <20211224162152.1035557-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211224095257.2909635-1-yann.morin.1998@free.fr>
-In-Reply-To: <20211224095257.2909635-1-yann.morin.1998@free.fr>
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 24 Dec 2021 02:50:11 -0800
-Message-ID: <CAMo8BfLwKGyJ7yNoG_Px8hnzR7k6jyDZtZfZKhHaM1Am7eeqdg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH] package/gcc: fix xtensa overlay for gcc
- ccache hash
+X-Virus-Scanned: clamav-milter 0.103.3 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH 1/1] package/zziplib: fix static build failure
+ with mpd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,31 +55,262 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
+ Andreas Ziegler <br015@umbiko.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Dec 24, 2021 at 1:53 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Commit b3b60706221d (arch/xtensa: allow specifying path to tarball file)
-> m issed a place where the xtensa overlay was refrenced, thus breaking
-> the calculation for the ccache hash.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/gcc/gcc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The latest released version of zziplib copies static libraries with appended 
+major version, but omits creating the necessary links to the base file names. 
+This prevents the linker to find the libraries via the search path. 
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+There is a discussion upstream: https://github.com/gdraheim/zziplib/issues/117
 
+Update zzip/CMakeLists.txt to the current master, version a32538e to enable 
+creation of symlinks. 
+
+This resolves the following autobuild issue:
+
+http://autobuild.buildroot.net/results/ba711034c0abe980f677e26de41739223e2f66e9
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+---
+ ...01-update-zzip-cmakelists-to-a32538e.patch | 220 ++++++++++++++++++
+ 1 file changed, 220 insertions(+)
+ create mode 100644 package/zziplib/0001-update-zzip-cmakelists-to-a32538e.patch
+
+diff --git a/package/zziplib/0001-update-zzip-cmakelists-to-a32538e.patch b/package/zziplib/0001-update-zzip-cmakelists-to-a32538e.patch
+new file mode 100644
+index 0000000000..1ed9243f69
+--- /dev/null
++++ b/package/zziplib/0001-update-zzip-cmakelists-to-a32538e.patch
+@@ -0,0 +1,220 @@
++--- zziplib-0.13.72/zzip/CMakeLists.txt
+++++ zziplib-a32538e/zzip/CMakeLists.txt
++@@ -14,12 +14,11 @@
++ 
++ # options ###########################################################
++ option(BUILD_SHARED_LIBS "Build a shared library" ON)
++-option(BUILD_STATIC_LIBS "Build the static library" OFF)
++ option(MSVC_STATIC_RUNTIME "Build with static runtime libs (/MT)" ON)
++ option(ZZIPMMAPPED "Build libzzipmmapped (not fully portable)" ON)
++ option(ZZIPFSEEKO "Build libzzipfseeko (based on posix.1 api)" ON)
++ 
++-if(UNIX)
+++if(UNIX OR MINGW)
++ option(ZZIP_COMPAT "Build compatibility with old libzzip releases" ON)
++ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" ON)
++ option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" ON)
++@@ -27,6 +26,12 @@
++ option(ZZIP_COMPAT "Build compatibility with old libzzip releases" OFF)
++ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
++ option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
+++endif()
+++
+++if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
+++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
+++else()
+++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
++ endif()
++ 
++ # used in zzip/_config.h
++@@ -114,7 +119,7 @@
++     )
++ endif()
++ 
++-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+++set(CMAKE_POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS})
++ add_definitions ( -DHAVE_CONFIG_H )
++ 
++ set(RELNUM "${PROJECT_VERSION_MAJOR}")
++@@ -276,103 +281,103 @@
++     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++ endif()
++ 
++-if(ZZIP_COMPAT)
++-  install(FILES ${outdir}/compat/zzip.h ${outdir}/compat/zziplib.h ${outdir}/compat/zzip-io.h 
++-          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++-  if(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
+++if(ZZIP_COMPAT OR ZZIP_LIBTOOL)
+++  if(BUILD_SHARED_LIBS AND CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
++     set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
++     set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
++-    set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
++     get_target_property(libname libzzip OUTPUT_NAME)
++     get_target_property(librelease libzzip RELEASE_POSTFIX)
++-    get_target_property(libversion libzzip VERSION)
++-    install(CODE "execute_process(COMMAND bash -c \"set -e
++-        cd $DESTDIR/${libdir}
++-        if [ -f ${lib}${libname}${librelease}.${libversion}${dll} ]; then
++-          # Fix for APPLE where dylib goes in the end
++-          ln -s ${lib}${libname}${librelease}.${libversion}${dll} ${lib}${libname}${librelease}${dll}.${libversion}
++-        fi
++-        [ -f ${lib}${libname}${librelease}${dll}.${libversion} ] || exit 0
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.10
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.11
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.12
++-        \")")
+++    add_custom_target(libzzip_links ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${librelease}${dll}.10
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${librelease}${dll}.11
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${librelease}${dll}.12
+++        )
+++    install(FILES
+++      ${outdir}/${lib}${libname}${librelease}${dll}.10
+++      ${outdir}/${lib}${libname}${librelease}${dll}.11
+++      ${outdir}/${lib}${libname}${librelease}${dll}.12
+++      DESTINATION ${CMAKE_INSTALL_LIBDIR})
++   endif()
++ endif()
++ 
+++if(ZZIP_COMPAT)
+++  install(FILES ${outdir}/compat/zzip.h ${outdir}/compat/zziplib.h ${outdir}/compat/zzip-io.h
+++          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+++endif()
+++
++ if(ZZIP_LIBTOOL)
++-  if(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
+++  if(BUILD_SHARED_LIBS AND CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
++     set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
++     set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
++-    set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
++-    get_target_property(libname libzzip OUTPUT_NAME)
++-    get_target_property(librelease libzzip RELEASE_POSTFIX)
++-    get_target_property(libversion libzzip VERSION)
++-    install(CODE "execute_process(COMMAND bash -c \"set -e
++-        cd $DESTDIR/${libdir}
++-        if [ -f ${lib}${libname}${librelease}.${libversion}${dll} ]; then
++-          # Fix for APPLE where dylib goes in the end
++-          ln -s ${lib}${libname}${librelease}.${libversion}${dll} ${lib}${libname}${librelease}${dll}.${libversion}
++-        fi
++-        [ -f ${lib}${libname}${librelease}${dll}.${libversion} ] || exit 0
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${dll}
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.10
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.11
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.12
++-        \")")
++     if(ZZIPFSEEKO)
++     get_target_property(libname libzzipfseeko OUTPUT_NAME)
++     get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
++-    get_target_property(libversion libzzipfseeko VERSION)
++-    install(CODE "execute_process(COMMAND bash -c \"set -e
++-        cd $DESTDIR/${libdir}
++-        if [ -f ${lib}${libname}${librelease}.${libversion}${dll} ]; then
++-          # Fix for APPLE where dylib goes in the end
++-          ln -s ${lib}${libname}${librelease}.${libversion}${dll} ${lib}${libname}${librelease}${dll}.${libversion}
++-        fi
++-        [ -f ${lib}${libname}${librelease}${dll}.${libversion} ] || exit 0
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${dll}
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.10
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.11
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.12
++-        \")")
+++    add_custom_target(libzzipfseeko_links ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${librelease}${dll}.10
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${librelease}${dll}.11
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${librelease}${dll}.12
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${librelease}${dll}.10
+++        ${outdir}/${lib}${libname}${librelease}${dll}.11
+++        ${outdir}/${lib}${libname}${librelease}${dll}.12
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
++     endif(ZZIPFSEEKO)
++     if(ZZIPMMAPPED)
++     get_target_property(libname libzzipmmapped OUTPUT_NAME)
++     get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
++-    get_target_property(libversion libzzipmmapped VERSION)
++-    install(CODE "execute_process(COMMAND bash -c \"set -e
++-        cd $DESTDIR/${libdir}
++-        if [ -f ${lib}${libname}${librelease}.${libversion}${dll} ]; then
++-          # Fix for APPLE where dylib goes in the end
++-          ln -s ${lib}${libname}${librelease}.${libversion}${dll} ${lib}${libname}${librelease}${dll}.${libversion}
++-        fi
++-        [ -f ${lib}${libname}${librelease}${dll}.${libversion} ] || exit 0
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${dll}
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.10
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.11
++-        echo -n .. Installing: `pwd`
++-        ln -svf ${lib}${libname}${librelease}${dll}.${libversion} ${lib}${libname}${librelease}${dll}.12
++-        \")")
+++    add_custom_target(libzzipmmaped_links ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${librelease}${dll}.10
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${librelease}${dll}.11
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${librelease}${dll}.12
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${librelease}${dll}.10
+++        ${outdir}/${lib}${libname}${librelease}${dll}.11
+++        ${outdir}/${lib}${libname}${librelease}${dll}.12
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
++     endif(ZZIPMMAPPED)
++   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
++ endif(ZZIP_LIBTOOL)
+++
+++if(ZZIP_LIBLATEST)
+++  if(BUILD_SHARED_LIBS)
+++    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
+++    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
+++  else()
+++    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
+++    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
+++  endif()
+++    get_target_property(libname libzzip OUTPUT_NAME)
+++    get_target_property(librelease libzzip RELEASE_POSTFIX)
+++    add_custom_target(libzzip_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    if(ZZIPFSEEKO)
+++    get_target_property(libname libzzipfseeko OUTPUT_NAME)
+++    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
+++    add_custom_target(libzzipfseeko_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    endif(ZZIPFSEEKO)
+++    if(ZZIPMMAPPED)
+++    get_target_property(libname libzzipmmapped OUTPUT_NAME)
+++    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
+++    add_custom_target(libzzipmmaped_latest ALL
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
+++        )
+++    install(FILES
+++        ${outdir}/${lib}${libname}${dll}
+++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++    endif(ZZIPMMAPPED)
+++endif(ZZIP_LIBLATEST)
+++
++ 
++ ## messages ##############################################
++ 
++
 -- 
-Thanks.
--- Max
+2.33.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
