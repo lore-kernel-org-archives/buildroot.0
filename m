@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25DE9C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Dec 2021 19:49:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08529C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Dec 2021 21:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5A1560ACF;
-	Sat, 25 Dec 2021 19:49:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F7E041525;
+	Sat, 25 Dec 2021 21:45:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1hRofgSDV-Q7; Sat, 25 Dec 2021 19:49:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OmfOypCRQD67; Sat, 25 Dec 2021 21:45:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1670460C13;
-	Sat, 25 Dec 2021 19:49:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 77A6F1BF32B
- for <buildroot@lists.busybox.net>; Sat, 25 Dec 2021 19:49:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95C5B4152A;
+	Sat, 25 Dec 2021 21:45:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 565431BF2EB
+ for <buildroot@lists.busybox.net>; Sat, 25 Dec 2021 21:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 667CF60C13
- for <buildroot@lists.busybox.net>; Sat, 25 Dec 2021 19:49:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3FB01824EE
+ for <buildroot@lists.busybox.net>; Sat, 25 Dec 2021 21:45:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uFR8uOIIdUom for <buildroot@lists.busybox.net>;
- Sat, 25 Dec 2021 19:49:06 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NYB10fANGNOd for <buildroot@lists.busybox.net>;
+ Sat, 25 Dec 2021 21:45:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2139060ACF
- for <buildroot@buildroot.org>; Sat, 25 Dec 2021 19:49:06 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id r17so23700616wrc.3
- for <buildroot@buildroot.org>; Sat, 25 Dec 2021 11:49:05 -0800 (PST)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BF2C81C40
+ for <buildroot@buildroot.org>; Sat, 25 Dec 2021 21:45:37 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id o7so12761957ioo.9
+ for <buildroot@buildroot.org>; Sat, 25 Dec 2021 13:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=gYuh2qUIN21nJXGus/VaUL3eESrYFcJ7TwFY2/3Ac7Q=;
- b=K8dbu1gjQDr1bsYrEZVCB5r4iRb/sNiDp0rsObpxPvmR7sd7RXS6yMtn2zcSrEW8Uu
- S1xspJISzoZ5p285OcmujY6T+WQjzBb/jGJJeO5Ifowhnr4kCL8hUCT2GpxAVTIlUFP0
- DU6FuwefnUXSOVILWW0UzUeKjJZXB1AIZ8tBZ12F7SjySAgCJipOS736y6kc/eamzlfz
- zKYXFWclEjIaKWG7aU6aGQwq2L3RA5F1jIDYntZFDEXyVS33guUA5NLCM7GEIg36Lpyn
- Y7WQznTHtwcVabk/BaquqQ0H6HAAvuDdWYtVk6ahcF9Lfw2bVq/leWbRKCGhWz8brULL
- vIyw==
+ bh=VB1acKtgfNR3B4k/tq/7mtXyuYC0gW+a3LhH3g3Teko=;
+ b=jkUR3i9LSg/BZKB9E/Jv3uIYhd95Vxy2qWKuOZpW5OyVgPDbzAWgUHzzYTi2cQxjFf
+ Bj1dL77WqWlZpKGM2PZRszyDfeCo7osXWrBUroVwR8LTYwMr3zJQaEGJ9TQsWZmaKKcB
+ SrFhJHG5O4jMwtJ0pSTkvFV3dJCmlrVOfpfyBWREWeMqKAePYMfj9Wvs715Agb40bDjb
+ HBsrExAAr+y7v8DYnMwmBKTKfQLtZ/naLSLj3u5aqjGVn+4sFodfUuyzRDIfeWD6MrO5
+ Ew4W7fjbJ7dDV5v0vdWx8aWfu55+HAjTa6VYQ9NMSbcfCMytpcLj6EzB6vZlKW1OXxd3
+ vCAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=gYuh2qUIN21nJXGus/VaUL3eESrYFcJ7TwFY2/3Ac7Q=;
- b=UR0sIa8GtxQ8ZdZiTMoTQIuLOgCg7WSlLC6L1lahr8Vu5HmM4aJD1sLkIP4UDWZFJ8
- v4pYmN+5y0GWZ3kN/fNurBkbzqJIULtUr4a62tCxu6fc2kluAZLAYvUaip8jwI2X37BT
- T9yCrHaiTsuuxv6DswbWdN776Es3zY6yQkoUb7H+ztmm3t4alhg0DW0BOce8YT4XCIcK
- JsFCHV2OvxBgQ71NAvjHNt9ZglNIYUumL0AYn+L1OYMWeziNmhrqVXNkeSzRDZSote9Z
- kHoVa0f2CfGTRzH4z49e+K8E2FZ5zu/L71xkoyvHSf6+sZDeQFJlsSGWam7ErlLFYRFJ
- 3o0g==
-X-Gm-Message-State: AOAM5318t8NkE3ZxsUBioDvBjrQrCBvls0ptPIrAeu2QTzbVPfKOtSfm
- cIRhEP0xqh6OmIjE60GAzgdN7wxk0ceFSg==
-X-Google-Smtp-Source: ABdhPJxeYdmwBzgVgN5OYaYnKlfe+FM3voEIDyDc10wyTmUq4bQteotc3N5VALRQwawC2kwRNTBN6Q==
-X-Received: by 2002:adf:bb4a:: with SMTP id x10mr7920539wrg.662.1640461744155; 
- Sat, 25 Dec 2021 11:49:04 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id g18sm9654846wmq.5.2021.12.25.11.49.03
+ bh=VB1acKtgfNR3B4k/tq/7mtXyuYC0gW+a3LhH3g3Teko=;
+ b=iZK8OdJetOct1xbYqc7kCkCyxAcjy0k+r7rb4kM4lURMdo2P6ZoecFjGBOYUAuwwBd
+ /RfMDt513l28Ew8dMKyNv1Nz6wOyM6DmDmi4EEqGOOHVAQyen7Fyyi0h/pbiKY1HZauc
+ isffFJDUxqEccntOwGgT+8Nb2Vz1ScjUG1Y0ODcjc+NZq6KB66xPTW0lFNy7dBCF7b7y
+ +eB58+L/DgKY5o2PxJFQpvmJjagbzK75Nws/08xU8GTKXJbDIDS659XRr+qOATczcbeL
+ LNPVwnufiB9ggQZ8q1u9wdzsF7od+C2KnTxQQrJa+dtijbgbW4DKKFMXgi5wIZGwYsxH
+ L8WA==
+X-Gm-Message-State: AOAM5331wtO+lWIa8YvecdrOwoHUYcDx1IaqznGR4dqDzX0lkG9JejKd
+ TAAAD56A0BiHwEcpEXgw7Tgxh0GU2X0RAA==
+X-Google-Smtp-Source: ABdhPJwBdMig/C4HeBcqs76ABNi/O6W6Pv3BGv7kqIY7KuF184BzMczgsdZZoXrrNqT6goomMeL7lQ==
+X-Received: by 2002:a05:6638:13d3:: with SMTP id
+ i19mr5219792jaj.81.1640468736994; 
+ Sat, 25 Dec 2021 13:45:36 -0800 (PST)
+Received: from james-x399.localdomain (71-218-252-115.hlrn.qwest.net.
+ [71.218.252.115])
+ by smtp.gmail.com with ESMTPSA id q17sm6363140ilm.32.2021.12.25.13.45.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Dec 2021 11:49:03 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 25 Dec 2021 13:45:36 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Dec 2021 20:48:25 +0100
-Message-Id: <20211225194825.499030-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Sat, 25 Dec 2021 14:45:32 -0700
+Message-Id: <20211225214533.1509713-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gzip: bump to version 1.11
+Subject: [Buildroot] [PATCH v2 1/2] package/cryptsetup: bump to version 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,51 +86,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Norbert Lange <nolange79@gmail.com>, Martin Hicks <mort@bork.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+Enable optional ssh-token support when available.
 
-https://savannah.gnu.org/forum/forum.php?forum_id=10044
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/gzip/gzip.hash | 6 +++---
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-Remove-json_object-typedef.patch     | 48 -------------------
+ package/cryptsetup/cryptsetup.hash            |  4 +-
+ package/cryptsetup/cryptsetup.mk              | 12 ++++-
+ 3 files changed, 12 insertions(+), 52 deletions(-)
+ delete mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 5675b3ed50..1cf73ff912 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gzip/gzip-1.10.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gzip/gzip-1.11.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256 8425ccac99872d544d4310305f915f5ea81e04d0f437ef1a230dc9d1c819d7c0  gzip-1.10.tar.xz
-+sha256  9b9a95d68fdcb936849a4d6fada8bf8686cddf58b9b26c9c4289ed0c92a77907  gzip-1.11.tar.xz
- # Locally calculated
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index c8fd3ddb7a..92588fcdb8 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+deleted file mode 100644
+index bbfd1aa075..0000000000
+--- a/package/cryptsetup/0001-Remove-json_object-typedef.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 15 Aug 2018 14:13:46 +0300
+-Subject: [PATCH] Remove json_object typedef
+-
+-The json-c header already defines the same typedef. While C11 allows
+-typedef redefinition to the same type, older versions of gcc disallow
+-that.
+-
+-In file included from lib/luks2/luks2_internal.h:32,
+-                 from lib/luks2/luks2_disk_metadata.c:24:
+-lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Upstream status:
+-https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/91]
+----
+- lib/luks2/luks2.h | 1 -
+- lib/setup.c       | 1 +
+- 2 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
+-index ee57b41ba974..25e36190da45 100644
+---- a/lib/luks2/luks2.h
+-+++ b/lib/luks2/luks2.h
+-@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
+- /*
+-  * LUKS2 header in-memory.
+-  */
+--typedef struct json_object json_object;
+- struct luks2_hdr {
+- 	size_t		hdr_size;
+- 	uint64_t	seqid;
+-diff --git a/lib/setup.c b/lib/setup.c
+-index fddbe7ef7897..856f6e80f465 100644
+---- a/lib/setup.c
+-+++ b/lib/setup.c
+-@@ -28,6 +28,7 @@
+- #include <sys/utsname.h>
+- #include <fcntl.h>
+- #include <errno.h>
+-+#include <json-c/json.h>
+- 
+- #include "libcryptsetup.h"
+- #include "luks.h"
+--- 
+-2.18.0
+-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 0aa3f79df7..b3bb859bdc 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
+-sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.4/sha256sums.asc
++sha256  170cc2326a9daeeeb578579176bd10d4a60ee5c4fc5bc69018ce67dafc540b9c  cryptsetup-2.4.2.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 3cf6c8a301..980a36faa8 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GZIP_VERSION = 1.10
-+GZIP_VERSION = 1.11
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+-CRYPTSETUP_VERSION_MAJOR = 2.3
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
++CRYPTSETUP_VERSION_MAJOR = 2.4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
+@@ -33,6 +33,13 @@ else
+ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSSH),y)
++CRYPTSETUP_DEPENDENCIES += libssh
++CRYPTSETUP_CONF_OPTS += --enable-ssh-token
++else
++CRYPTSETUP_CONF_OPTS += --disable-ssh-token
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
+ CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=/usr/lib/tmpfiles.d
+ else
+@@ -49,6 +56,7 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 
+ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+ 	--disable-kernel_crypto \
++	--disable-ssh-token \
+ 	--enable-blkid \
+ 	--with-tmpfilesdir=no
+ 
 -- 
-2.33.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
