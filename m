@@ -4,43 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84929C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C75ACC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:03:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44FA940276;
-	Sun, 26 Dec 2021 15:03:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72FAE408BD;
+	Sun, 26 Dec 2021 15:03:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id awNn1xeu3xdW; Sun, 26 Dec 2021 15:03:15 +0000 (UTC)
+	with ESMTP id BZd4M8qgIF8g; Sun, 26 Dec 2021 15:03:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95A23409A7;
-	Sun, 26 Dec 2021 15:03:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EBFD91BF2F4
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEB0240278;
+	Sun, 26 Dec 2021 15:03:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FED41BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:03:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA4D760D79
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D54281464
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:03:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XQzQFGPPSYEv for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 15:02:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FABD60DC6
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:02:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 35F7982976; Sun, 26 Dec 2021 14:57:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 410NgbmWxGnv for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 15:03:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0DFF481457
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:03:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 260E5200002;
+ Sun, 26 Dec 2021 15:03:44 +0000 (UTC)
+Date: Sun, 26 Dec 2021 16:03:43 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 16:02:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dde6b3b9dbffdb68c2ec724b8b142bd2dc07dc3c
-X-Git-Newrev: 6c5173be6eebe47b5b198ad6dc56b8d360156e74
-X-Patchwork-Hint: ignore
-Message-Id: <20211226145708.35F7982976@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp: bump to version 1.4.1
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211226160343.1e5df0e5@windsurf>
+In-Reply-To: <20211221130237.94142-1-fontaine.fabrice@gmail.com>
+References: <20211221130237.94142-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnpupnp: bump to version 4.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,49 +55,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c5173be6eebe47b5b198ad6dc56b8d360156e74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 21 Dec 2021 14:02:37 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.4.1/NEWS
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libnpupnp/libnpupnp.hash | 4 ++--
+>  package/libnpupnp/libnpupnp.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index 9eb1eb467b..1825298f24 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.3/gupnp-1.3.1.sha256sum:
--sha256  df70fe8321bfc53cadb6860edcff2e0dc456ec81899b463f41723684803d1408  gupnp-1.3.1.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.4/gupnp-1.4.1.sha256sum:
-+sha256  899196b5e66f03b8e25f046a7a658cd2a6851becb83f2d55345ab3281655dc0c  gupnp-1.4.1.tar.xz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 7ee67d3382..02d9b289e0 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GUPNP_VERSION_MAJOR = 1.3
-+GUPNP_VERSION_MAJOR = 1.4
- GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).1
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
