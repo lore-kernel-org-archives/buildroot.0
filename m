@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B71ADC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 16:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FF46C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 16:27:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6227F408A1;
-	Sun, 26 Dec 2021 16:25:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC15B408B8;
+	Sun, 26 Dec 2021 16:27:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j4AqtFjBFGCR; Sun, 26 Dec 2021 16:25:31 +0000 (UTC)
+	with ESMTP id 4lbEQ9PnlQBD; Sun, 26 Dec 2021 16:27:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7B12408A2;
-	Sun, 26 Dec 2021 16:25:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17C78408AB;
+	Sun, 26 Dec 2021 16:27:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFC8A1BF2BF
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:25:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 47C081BF2BF
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B972B40347
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:25:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3313540347
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:27:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YuraegQT37FY for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 16:25:26 +0000 (UTC)
+ with ESMTP id cZKsx1pEmb5d for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 16:27:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E389C40120
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 16:25:25 +0000 (UTC)
-Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
- by mailout07.t-online.de (Postfix) with SMTP id E0E1FD44D;
- Sun, 26 Dec 2021 17:25:22 +0100 (CET)
-Received: from fli4l.lan.fli4l ([91.58.0.156]) by fwd76.t-online.de
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 18C5340120
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 16:27:41 +0000 (UTC)
+Received: from fwd84.dcpf.telekom.de (fwd84.aul.t-online.de [10.223.144.110])
+ by mailout12.t-online.de (Postfix) with SMTP id 723C219364
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 17:27:38 +0100 (CET)
+Received: from fli4l.lan.fli4l ([91.58.0.156]) by fwd84.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n1WKe-4TQhFp0; Sun, 26 Dec 2021 17:25:13 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51400)
+ esmtp id 1n1WMz-1A1A9p0; Sun, 26 Dec 2021 17:27:37 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51402)
  by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n1WKe-0008Nc-GD;
- Sun, 26 Dec 2021 17:25:12 +0100
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n1WMy-0000Lx-Mf
+ for buildroot@buildroot.org; Sun, 26 Dec 2021 17:27:36 +0100
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 17:25:12 +0100
-Message-Id: <20211226162512.4843-1-bernd.kuhls@t-online.de>
+Date: Sun, 26 Dec 2021 17:27:36 +0100
+Message-Id: <20211226162736.5528-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1640535913-0001619A-5EAE3B50/0/0 CLEAN NORMAL
-X-TOI-MSGID: ac69b067-d132-4d58-8da7-8b9d953213d5
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.2
+X-TOI-EXPURGATEID: 150726::1640536057-00009E39-94CCC544/0/0 CLEAN NORMAL
+X-TOI-MSGID: 86631693-6440-4d39-b4ab-50a3d6356505
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 8.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,63 +61,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
+Changelog: https://www.php.net/ChangeLog-8.php#8.0.14
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 6469716806..811e4b8204 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 254484e72f..329410b54f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  cd976805ec2e9198417651027dfe16854ba2c2c388151ab9d4d268513d52ed52  php-8.0.13.tar.xz
++sha256  fbde8247ac200e4de73449d9fefc8b495d323b5be9c10cdb645fb431c91156e3  php-8.0.14.tar.xz
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.3.1
-+MESA3D_HEADERS_VERSION = 21.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f12918dbfe..822e3e63c6 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000656.html
--sha256  2b0dc2540cb192525741d00f706dbc4586349185dafc65729c7fda0800cc474d  mesa-21.3.1.tar.xz
--sha512  43f019d4810bafd177b1a41207ae20a77982e4e6df3ab2b7a700273748cbc766694bd44594c898c4bd7848a94200fd28237a67d290c4e06595e6eab71cb716e8  mesa-21.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
-+sha256  e2e7bafb8307e7abc3bf982f39382fae3619c84b45504920a21504be52f126bd  mesa-21.3.2.tar.xz
-+sha512  35c510cbab70be43bc207720a12fe85b0c010fafa147238f2c22dd873967278f187ee7675a662882ead3598305f1f37804567deb93022a692ca259f563abfdac  mesa-21.3.2.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f06517ac3e..2805bbea3f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+ # License file
+ sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 8c45da77a2..ca59334104 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.3.1
-+MESA3D_VERSION = 21.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-PHP_VERSION = 8.0.13
++PHP_VERSION = 8.0.14
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.30.2
 
