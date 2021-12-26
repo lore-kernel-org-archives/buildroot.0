@@ -4,77 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12F1DC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 18:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1082C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 20:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5353B400A2;
-	Sun, 26 Dec 2021 18:51:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B2B140300;
+	Sun, 26 Dec 2021 20:23:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UZeUmPJoPAOR; Sun, 26 Dec 2021 18:51:17 +0000 (UTC)
+	with ESMTP id xr3IagqghnHP; Sun, 26 Dec 2021 20:23:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5456940319;
-	Sun, 26 Dec 2021 18:51:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3CCB81BF391
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 18:50:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B5B24030F;
+	Sun, 26 Dec 2021 20:22:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 732871BF335
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 20:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 372BE400A2
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 18:50:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FB4D8131C
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 20:22:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iU3enTXXs-Hd for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 18:50:20 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ggYBAUJUp2eJ for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 20:22:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com
- [IPv6:2607:f8b0:4864:20::f35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 30D934008D
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 18:50:19 +0000 (UTC)
-Received: by mail-qv1-xf35.google.com with SMTP id kj16so12257533qvb.2
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 10:50:19 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5CF781310
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 20:22:55 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id w20so19697344wra.9
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 12:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=9SbSoISW1t9JVlQNrERd6V0Q0nr69DsIuXXXA6/DWcc=;
- b=UpXksEHMP399In94OXjgFNyhDOVWqiDjmYixCQYLxgj2a6+xTELQW6VvQF69blUbv8
- 0Ek4S87UUh4oDxEFFRrR+tG+ZcPMuxw4HyL4Jl9KCyo6eQc5v6y7FrslbdnTzGAhGKe6
- SF7tKC+oyzC1RsaAoM2DPlExsfa0VI9LCJOsRBtMy7nlqQnAm/xFLvFl3y5w64OGR0FY
- jQyvcztIpmIICfVYwgIkQopqo3NhbrXB9EkmFOCApuddZkO/e+JW/dSBJpO3F562myYS
- wOZJld4dlHA0K1ZBMxZI1s1b7ot1Zlsfdcse9xNrMBQBo6l9fZ6RHNp+iACfS0Q+6oo2
- ZKtQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zKS4GcbcM6rjY7UYR48WuqD6ZjtY0eM6sqA5hJHWOUk=;
+ b=eq7uppNp8HIqGKs+EgomzcbNUGzaYi2Q9wP4rivEccON/sPn/kKvsYnUmB7+cg3+5N
+ jLsRGOXWPZTv48t+vstisQzB6JDMO298YjusisPWNhD1SzghFCAPvKP5QsOOx/tG37AH
+ QvH8Qc7UfmvGQKS1f1gmagSJHq55fjyfDhrJ3DlaEcHMHS1xT5F1XXxPCdSHsqsuidfZ
+ x2Y4UL+lAZeo0YObN26WUy63fN0qx5+7Sd2PD6zIAPprMRG7G38MywZOaK6do6kqxPFi
+ HUT4yiBastVq+NMaBfA8bWJI6gTfX/LMKG6syEG4q1HBVeKAKcuSAK7/MCywVDIyfxR5
+ /Kag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=9SbSoISW1t9JVlQNrERd6V0Q0nr69DsIuXXXA6/DWcc=;
- b=UW5fAQGjRBV3+YjjkrpyKakoCdbtJCEvMMZWZ6iqGt+NnXshswL3y1X+djC4CMQbpk
- MguWJOxFsXQ/VXPJg4J5FTvipByG7Q9gLth5vQrU280BQymcC2oSF6BkMe5VTYzUYB1E
- mNTwFmbjH0Qr+/3P0LGwOA5Z2YjFCEJ4o4XT1E56C0g2m9eEW2NU+DfZy9DNz7q56drn
- SXz2tO0JsREa7vd7hBWUFz4iBzIlhEudt5LZ9MCftXlUPMyFB+/fGGdIWCXUwRWmfNQC
- v0ZihAK2oFgASgc3yGFByu8N8Bm6j3Fz/kBMcE7o8lSffHBSCd+kMutdwUCYTW+bgzXf
- zvOA==
-X-Gm-Message-State: AOAM531S+QsJAsP4r1sW0ynsA9+AgkSmzldrlysLs7f1JMn3YyGIvOLT
- VbfMV87SUujqsZ76/tNzGGtiyYib6Xk=
-X-Google-Smtp-Source: ABdhPJzatpqsyjgFQ2z+2wFkmLkGfEHcaS2ReelZb6GtFL4UqrxuMFxoGiFt8s1BBa7cp5Lvy/v10g==
-X-Received: by 2002:a05:6214:e63:: with SMTP id
- jz3mr12719400qvb.65.1640544618964; 
- Sun, 26 Dec 2021 10:50:18 -0800 (PST)
-Received: from localhost.localdomain ([179.232.77.5])
- by smtp.gmail.com with ESMTPSA id j22sm12349717qko.68.2021.12.26.10.50.17
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=zKS4GcbcM6rjY7UYR48WuqD6ZjtY0eM6sqA5hJHWOUk=;
+ b=TJx0ccx7oNmVJzvEf7WCRb57HKzqVCW7To62fotEJfv3OE6pbrp35BZAGfMcaiNgc7
+ Fen6u7oq3a9lbvnsdj6t8/UFrOKelFAOXr4xBAWdSWfG7cjKFmrAF/lQXjUTLIcdnm4R
+ RsIYByqdx4lRIhLTrq1eS6diGaAeR7PFAlAjfofmFzsuWX/uzyud+Mp6FnRMfZb0zuZ0
+ 4Zg3ZR/OQuD9kNH6ZqK+I9gGcdFuWpsk6wNyXOWllpvbTlj96EfVX5W7yyJLDhbs8YsM
+ PjyBoBJu0C65FEGsQOD7m7CYck5C7dLHHuI7SvVijTneKLFQrG/poBK5fIbvwcFtywHn
+ JivQ==
+X-Gm-Message-State: AOAM531H+URxiOMrOg2Qb0BM7syfrHdvCL3guzuR3TkR9572U7yGG26W
+ v187nWi646qJpxd8vh3mHdugvud2JNS+NA==
+X-Google-Smtp-Source: ABdhPJwhvzl0gD15B9NLQAf1NHPff/WOmRLo0mIDgtc1IRYy1Lagos1XkAEPJALWKgbANJ2BWOsOdg==
+X-Received: by 2002:adf:fdc3:: with SMTP id i3mr10433103wrs.125.1640550173936; 
+ Sun, 26 Dec 2021 12:22:53 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id z17sm16868998wmi.22.2021.12.26.12.22.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Dec 2021 10:50:18 -0800 (PST)
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ Sun, 26 Dec 2021 12:22:53 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 15:49:19 -0300
-Message-Id: <20211226184919.2753591-6-ricardo.martincoski@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211226184919.2753591-1-ricardo.martincoski@gmail.com>
-References: <20211226184919.2753591-1-ricardo.martincoski@gmail.com>
+Date: Sun, 26 Dec 2021 21:22:14 +0100
+Message-Id: <20211226202214.1388641-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 5/5] utils/checkpackagelib/lib_sysv: run
- shellcheck
+Subject: [Buildroot] [PATCH 1/1] package/hiawatha: bump to version 11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,146 +85,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For simplicity, when shellcheck returns one or more warnings, count it
-as a single check-package warning.
-The developer can get the full output either by running shellcheck
-directly or by calling check-package with enough -v.
+https://gitlab.com/hsleisink/hiawatha/-/blob/v11.1/ChangeLog
 
-Examples:
-
-|$ ./utils/docker-run utils/check-package --include Shellcheck package/polkit/S50polkit
-|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
-|51 lines processed
-|1 warnings generated
-
-|$ ./utils/docker-run utils/check-package --include Shellcheck -vvvvvvvvvvv package/polkit/S50polkit
-|package/polkit/S50polkit:0: run 'shellcheck' and fix the warnings
-|In package/polkit/S50polkit line 43:
-|< tab  >start|stop|restart|reload)
-|                           ^----^ SC2221: This pattern always overrides a later one on line 45.
-|In package/polkit/S50polkit line 45:
-|< tab  >reload)
-|        ^----^ SC2222: This pattern never matches because of a previous pattern on line 43.
-|For more information:
-|  https://www.shellcheck.net/wiki/SC2221 -- This pattern always overrides a l...
-|  https://www.shellcheck.net/wiki/SC2222 -- This pattern never matches becaus...
-|51 lines processed
-|1 warnings generated
-
-NOTICE: shellcheck results depends on the version of the tool.
-This is why the examples above run inside the docker image.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Please read the cover letter before applying.
----
- utils/checkpackagelib/lib_sysv.py  |  1 +
- utils/checkpackagelib/test_tool.py | 46 ++++++++++++++++++++++++++++++
- utils/checkpackagelib/tool.py      | 15 ++++++++++
- 3 files changed, 62 insertions(+)
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib_sysv.py b/utils/checkpackagelib/lib_sysv.py
-index 77e6283b25..786510badf 100644
---- a/utils/checkpackagelib/lib_sysv.py
-+++ b/utils/checkpackagelib/lib_sysv.py
-@@ -7,6 +7,7 @@ from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
- from checkpackagelib.tool import NotExecutable as NotExecutable_base
-+from checkpackagelib.tool import Shellcheck            # noqa: F401
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 2fba5600a2..b06dc2e661 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  79d85d165d68dd7043bbd337f5bc7dd10d8632d68ba61d0e557f84bd687c9727  hiawatha-10.11.tar.gz
++sha256  d21722986f64163e30a560283123cdf4d6cb5ff8188ab754387b26724565268d  hiawatha-11.1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index a917adc9a4..5618e6900d 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
- class Indent(_CheckFunction):
-diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
-index aab7cb51c9..c5c1d48dfe 100644
---- a/utils/checkpackagelib/test_tool.py
-+++ b/utils/checkpackagelib/test_tool.py
-@@ -64,3 +64,49 @@ def test_NotExecutable_hint(testname, hint, filename, permissions, string, expec
-             return hint
-     warnings = check_file(NotExecutable, filename, string, permissions)
-     assert warnings == expected
-+
-+
-+Shellcheck = [
-+    ('missing shebang',
-+     'empty.sh',
-+     '',
-+     ["dir/empty.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/empty.sh line 1:",
-+      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y..."]),
-+    ('sh shebang',
-+     'sh-shebang.sh',
-+     '#!/bin/sh',
-+     []),
-+    ('bash shebang',
-+     'bash-shebang.sh',
-+     '#!/bin/bash',
-+     []),
-+    ('2 warnings',
-+     'unused.sh',
-+     'unused=""',
-+     ["dir/unused.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/unused.sh line 1:",
-+      'unused=""',
-+      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.",
-+      "^----^ SC2034: unused appears unused. Verify use (or export if used externally).",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y...",
-+      "  https://www.shellcheck.net/wiki/SC2034 -- unused appears unused. Verify use..."]),
-+    ('tab',
-+     'tab.sh',
-+     '\t#!/bin/sh',
-+     ["dir/tab.sh:0: run 'shellcheck' and fix the warnings",
-+      "In dir/tab.sh line 1:",
-+      '\t#!/bin/sh',
-+      "^-- SC1114: Remove leading spaces before the shebang.",
-+      "For more information:",
-+      "  https://www.shellcheck.net/wiki/SC1114 -- Remove leading spaces before the ..."]),
-+    ]
-+
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', Shellcheck)
-+def test_Shellcheck(testname, filename, string, expected):
-+    warnings = check_file(m.Shellcheck, filename, string)
-+    assert warnings == expected
-diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-index e931272554..47f9634486 100644
---- a/utils/checkpackagelib/tool.py
-+++ b/utils/checkpackagelib/tool.py
-@@ -1,4 +1,5 @@
- import os
-+import subprocess
- from checkpackagelib.base import _Tool
- 
- 
-@@ -6,3 +7,17 @@ class NotExecutable(_Tool):
-     def run(self):
-         if os.access(self.filename, os.X_OK):
-             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
-+
-+
-+class Shellcheck(_Tool):
-+    def run(self):
-+        cmd = ['shellcheck', self.filename]
-+        try:
-+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+            stdout = p.communicate()[0]
-+            processed_output = [str(line.decode().rstrip()) for line in stdout.splitlines() if line]
-+            if p.returncode == 0:
-+                return
-+            return ["{}:0: run 'shellcheck' and fix the warnings".format(self.filename)] + processed_output
-+        except FileNotFoundError:
-+            return ["{}:0: failed to call 'shellcheck'".format(self.filename)]
+-HIAWATHA_VERSION = 10.11
++HIAWATHA_VERSION = 11.1
+ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
