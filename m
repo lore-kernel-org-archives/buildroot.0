@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F88DC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F32C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1159460DC6;
-	Sun, 26 Dec 2021 15:01:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6225760D80;
+	Sun, 26 Dec 2021 15:01:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eWo-hjGn9-Qo; Sun, 26 Dec 2021 15:01:19 +0000 (UTC)
+	with ESMTP id gPnVHXbaqU4R; Sun, 26 Dec 2021 15:01:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8881960D80;
-	Sun, 26 Dec 2021 15:01:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9FF5B1BF2F4
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5B5E60C15;
+	Sun, 26 Dec 2021 15:01:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 88F011BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DCC140966
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77C4960C15
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A1fDpnADxvY3 for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 15:01:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fOHlJESBZJ_Q for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 15:01:51 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F4F0408FD
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:01:07 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F5E960596
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:01:51 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 245DE200005;
- Sun, 26 Dec 2021 15:01:03 +0000 (UTC)
-Date: Sun, 26 Dec 2021 16:01:03 +0100
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 86D6F20002;
+ Sun, 26 Dec 2021 15:01:47 +0000 (UTC)
+Date: Sun, 26 Dec 2021 16:01:46 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211226160103.0dcef6c8@windsurf>
-In-Reply-To: <20211226145218.672996-1-fontaine.fabrice@gmail.com>
-References: <20211226145218.672996-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211226160146.7a0f3f08@windsurf>
+In-Reply-To: <20211221123406.22392-1-fontaine.fabrice@gmail.com>
+References: <20211221123406.22392-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fakeroot: bump to version 1.26
+Subject: Re: [Buildroot] [PATCH 1/1] package/atop: bump to version 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,36 +56,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 26 Dec 2021 15:52:18 +0100
+On Tue, 21 Dec 2021 13:34:06 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Drop first patch (not needed anymore)
-> - Drop second to fifth patches (already in version)
-> - Drop autoreconf
+> Drop patches (already in version)
 > 
-> https://salsa.debian.org/clint/fakeroot/-/blob/debian/1.26-1/debian/changelog
+> https://www.atoptool.nl/downloadatop.php
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/fakeroot/0001-skip-doc-subdirs.patch  | 14 ----
->  ...fine-_STAT_VER-if-not-already-define.patch | 45 -----------
->  ...d-wrappers-for-new-glibc-2.33-symbol.patch | 80 -------------------
->  ....ac-fix-__xmknod-at-pointer-argument.patch | 66 ---------------
->  .../0005-fix-build-regression-on-macOS.patch  | 63 ---------------
->  package/fakeroot/fakeroot.hash                |  4 +-
->  package/fakeroot/fakeroot.mk                  |  6 +-
->  7 files changed, 4 insertions(+), 274 deletions(-)
->  delete mode 100644 package/fakeroot/0001-skip-doc-subdirs.patch
->  delete mode 100644 package/fakeroot/0002-libfakeroot.c-define-_STAT_VER-if-not-already-define.patch
->  delete mode 100644 package/fakeroot/0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
->  delete mode 100644 package/fakeroot/0004-configure.ac-fix-__xmknod-at-pointer-argument.patch
->  delete mode 100644 package/fakeroot/0005-fix-build-regression-on-macOS.patch
+>  ...1-ifprop.c-fix-build-with-kernel-4.6.patch | 51 -------------------
+>  .../0002-photosyst.c-fix-build-on-musl.patch  | 38 --------------
+>  package/atop/atop.hash                        |  2 +-
+>  package/atop/atop.mk                          |  2 +-
+>  4 files changed, 2 insertions(+), 91 deletions(-)
+>  delete mode 100644 package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch
+>  delete mode 100644 package/atop/0002-photosyst.c-fix-build-on-musl.patch
 
 Applied to master, thanks.
 
