@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C466EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 22:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0C6AC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 22:31:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A35B80E48;
-	Sun, 26 Dec 2021 22:31:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fM_ishg-gE_2; Sun, 26 Dec 2021 22:31:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3DC880CE6;
-	Sun, 26 Dec 2021 22:31:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F9391BF2B9
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:31:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CDC860E18
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:31:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B03F60E1B;
+	Sun, 26 Dec 2021 22:31:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Oe985UoTxSIm for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HKjYspAC5F30; Sun, 26 Dec 2021 22:31:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDD9160E18;
+	Sun, 26 Dec 2021 22:31:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 844291BF973
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:31:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7287240441
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:31:09 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vj_MDtMdt69f for <buildroot@lists.busybox.net>;
  Sun, 26 Dec 2021 22:31:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4AEB60DCB
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABCD640298
  for <buildroot@buildroot.org>; Sun, 26 Dec 2021 22:31:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0197282B7B; Sun, 26 Dec 2021 22:25:25 +0000 (UTC)
+ id ED21482B6F; Sun, 26 Dec 2021 22:25:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 23:31:00 +0100
+Date: Sun, 26 Dec 2021 23:30:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3477d7b1428f460fdf6a75a43604a021a74cf6fc
-X-Git-Newrev: 13bf0b6f76d158916808e95c2d006c7f62230862
+X-Git-Oldrev: e616be805221e56374c048597c3b033651350f17
+X-Git-Newrev: 3477d7b1428f460fdf6a75a43604a021a74cf6fc
 X-Patchwork-Hint: ignore
-Message-Id: <20211226222525.0197282B7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.21.3
+Message-Id: <20211226222524.ED21482B6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13bf0b6f76d158916808e95c2d006c7f62230862
+commit: https://git.buildroot.net/buildroot/commit/?id=3477d7b1428f460fdf6a75a43604a021a74cf6fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-http://stellarium.org/release/2021/12/25/stellarium-0.21.3.html
+https://forum.torproject.net/t/release-0-4-6-9-and-0-4-7-3-alpha/1265
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stellarium/stellarium.hash | 4 ++--
- package/stellarium/stellarium.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index 4c949d6587..c3f2e0e8d4 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/Stellarium/stellarium/releases
--sha1  e61b66eae54888cf90f6dab7b49bc4ca6d9d941b   stellarium-0.21.2.tar.gz
--sha256  e588b66a173834f74a6462f5219ce4d38e8f87405b932267f6f1d2d4dbff4a82  stellarium-0.21.2.tar.gz
-+sha1  a3396c403050e073c592da695faeb048c1d5e19b  stellarium-0.21.3.tar.gz
-+sha256  8ac6c054d12f136fe0d5c0deaaa8d7b69dd2a462be1711a187364574aef97e7f  stellarium-0.21.3.tar.gz
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 4dabf777cb..63d47d7fa6 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 810eb0541b..ca5c07b2a7 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
+-sha256  15ce1a37b4cc175b07761e00acdcfa2c08f0d23d6c3ab9c97c464bd38cc5476a  tor-0.4.6.8.tar.gz
++sha256  c7e93380988ce20b82aa19c06cdb2f10302b72cfebec7c15b5b96bcfc94ca9a9  tor-0.4.6.9.tar.gz
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 31e6211693..fc1db6da6b 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLARIUM_VERSION = 0.21.2
-+STELLARIUM_VERSION = 0.21.3
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
+-TOR_VERSION = 0.4.6.8
++TOR_VERSION = 0.4.6.9
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
