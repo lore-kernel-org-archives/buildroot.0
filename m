@@ -4,77 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 391FCC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 16:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B71ADC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 16:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFE1D402A4;
-	Sun, 26 Dec 2021 16:22:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6227F408A1;
+	Sun, 26 Dec 2021 16:25:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YSvs1Ibtw2qk; Sun, 26 Dec 2021 16:22:11 +0000 (UTC)
+	with ESMTP id j4AqtFjBFGCR; Sun, 26 Dec 2021 16:25:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 342C540286;
-	Sun, 26 Dec 2021 16:22:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B0B761BF2BF
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:21:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7B12408A2;
+	Sun, 26 Dec 2021 16:25:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BFC8A1BF2BF
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0C0840286
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:21:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B972B40347
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 16:25:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gcOzGkK9yAUY for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 16:21:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2B5540285
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 16:21:56 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id b73so8244626wmd.0
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 08:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=ndEX/6pvmrJ/SRF+wS3cJezsNBKPeqbZ6Y8OjUofY2k=;
- b=SXaJrujN7/fyZzPC2hhgUYL31wD2FkZexLYsbbbpcefDh1YAoGt4x21qAD6oWzwj2e
- 7pKP6a9JCnBLtqEzL+QXKN/SJOih4Tx6O+YKeRlpp+CSdK5+d/7yOELr+w1i3PP1dIi6
- I750Xrvb8l3AyTwxt8Z/VCe+Z0fWtEfIpebBHhBtNHeKBFjm8ZqqJEfbAQKnoTZplWVG
- +ciAHG0aLKI5LGbLDdY77D2C2gcm8Fb+RvuiuqsYljgMxAj3TC+RRri4kj8mjGbbyOnR
- RZsCJRUBmWj77YfL3lD1+RN/nxJBZMjMb6EiRzrVhILwam1Yd9+LGc/4wQXolxGf8ZZ6
- oxVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=ndEX/6pvmrJ/SRF+wS3cJezsNBKPeqbZ6Y8OjUofY2k=;
- b=ukkxzenKk2D6vhNdAAl1GJpB0Vbj2K6FbESrsJh2YHfcI7jCDfgTO+yKfzmYWPWNxj
- 6UHuHAjr7duLZ4YUutchCFPhJ0ubzGXAfsweHKh9+dwoga8DCPULjgD4IYCkjp6ng99F
- d77VcIlAtLYgRli9D7PqlYBBGNfpwVjfFmfgq62I4jS49myAFY+wfxxCkQuWcPDAL+/3
- mgkKume9EIdY20PKqUU7hMgJK9ycY0VIhZHcZU52Z0ymCdMGHs8DL6CiO+uEjTjMVcSr
- JfNcN2e758qfFiAWuu4GlNA/C/WvYXx7EnvHuBeo8hvxDy3TxYSjpV8NoLW8t+GJHX9Z
- zs6Q==
-X-Gm-Message-State: AOAM530rbSCtz7+NM4DdBhPr5QT6A54BznUc7pAp9ZSPgcZp9RmBrcb6
- FtO8RmmynuH6tnMEWoNAPZaFVXSvnxAF0w==
-X-Google-Smtp-Source: ABdhPJypXViuBZkokJQM5DShJRLg0HZV63FebkYNFF0+y0Lmzxd+N36+OnVsR5ChZKB6STxOo/FLnw==
-X-Received: by 2002:a05:600c:3ac8:: with SMTP id
- d8mr10606015wms.72.1640535714882; 
- Sun, 26 Dec 2021 08:21:54 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id z5sm12740310wru.87.2021.12.26.08.21.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Dec 2021 08:21:54 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YuraegQT37FY for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 16:25:26 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E389C40120
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 16:25:25 +0000 (UTC)
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout07.t-online.de (Postfix) with SMTP id E0E1FD44D;
+ Sun, 26 Dec 2021 17:25:22 +0100 (CET)
+Received: from fli4l.lan.fli4l ([91.58.0.156]) by fwd76.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n1WKe-4TQhFp0; Sun, 26 Dec 2021 17:25:13 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51400)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n1WKe-0008Nc-GD;
+ Sun, 26 Dec 2021 17:25:12 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 17:20:57 +0100
-Message-Id: <20211226162057.1052161-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211226162057.1052161-1-fontaine.fabrice@gmail.com>
-References: <20211226162057.1052161-1-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Dec 2021 17:25:12 +0100
+Message-Id: <20211226162512.4843-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/libseccomp: bump to version 2.5.3
+X-TOI-EXPURGATEID: 150726::1640535913-0001619A-5EAE3B50/0/0 CLEAN NORMAL
+X-TOI-MSGID: ac69b067-d132-4d58-8da7-8b9d953213d5
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,91 +62,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- host-gperf is a mandatory dependency since version 2.5.0 and
-  https://github.com/seccomp/libseccomp/commit/9b129c41ac1f43d373742697aa2faf6040b9dfab
-- RISC-V 64 bits is supported since version 2.5.0 and
-  https://github.com/seccomp/libseccomp/commit/5432e15521d5ce5a7d3f26bf78674cbaa9d73d1f
-- Add a dependency on kernel >= 3.17 because __NR_seccomp is
-  unconditionally used since version 2.5.0 and
-  https://github.com/seccomp/libseccomp/commit/dead12bc788b259b148cc4d93b970ef0bd602b1a
-  and __NR_seccomp is only available since
-  https://github.com/torvalds/linux/commit/48dc92b9fc3926844257316e75ba11eb5c742b2c
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
 
-https://github.com/seccomp/libseccomp/blob/v2.5.3/CHANGELOG
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libseccomp/Config.in       | 7 ++++---
- package/libseccomp/libseccomp.hash | 4 ++--
- package/libseccomp/libseccomp.mk   | 3 ++-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
-index da1d9008e6..7de91c07c5 100644
---- a/package/libseccomp/Config.in
-+++ b/package/libseccomp/Config.in
-@@ -5,12 +5,13 @@ config BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_powerpc64 || BR2_powerpc
-+	default y if BR2_RISCV_64
- 	default y if BR2_s390x
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 6469716806..811e4b8204 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- config BR2_PACKAGE_LIBSECCOMP
- 	bool "libseccomp"
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	help
- 	  High level interface to the Linux Kernel's seccomp filter
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.3.1
++MESA3D_HEADERS_VERSION = 21.3.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f12918dbfe..822e3e63c6 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000656.html
+-sha256  2b0dc2540cb192525741d00f706dbc4586349185dafc65729c7fda0800cc474d  mesa-21.3.1.tar.xz
+-sha512  43f019d4810bafd177b1a41207ae20a77982e4e6df3ab2b7a700273748cbc766694bd44594c898c4bd7848a94200fd28237a67d290c4e06595e6eab71cb716e8  mesa-21.3.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
++sha256  e2e7bafb8307e7abc3bf982f39382fae3619c84b45504920a21504be52f126bd  mesa-21.3.2.tar.xz
++sha512  35c510cbab70be43bc207720a12fe85b0c010fafa147238f2c22dd873967278f187ee7675a662882ead3598305f1f37804567deb93022a692ca259f563abfdac  mesa-21.3.2.tar.xz
  
-@@ -24,6 +25,6 @@ config BR2_PACKAGE_LIBSECCOMP
- 
- 	  https://github.com/seccomp/libseccomp
- 
--comment "libseccomp needs a toolchain w/ headers >= 3.12"
-+comment "libseccomp needs a toolchain w/ headers >= 3.17"
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-index 2d07c1c1fa..20b8864727 100644
---- a/package/libseccomp/libseccomp.hash
-+++ b/package/libseccomp/libseccomp.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/seccomp/libseccomp/releases/tag/v2.4.4
--sha256  4e79738d1ef3c9b7ca9769f1f8b8d84fc17143c2c1c432e53b9c64787e0ff3eb  libseccomp-2.4.4.tar.gz
-+# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.3
-+sha256  59065c8733364725e9721ba48c3a99bbc52af921daf48df4b1e012fbc7b10a76  libseccomp-2.5.3.tar.gz
- # Locally calculated
- sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index e7512730d5..ee2cb126f1 100644
---- a/package/libseccomp/libseccomp.mk
-+++ b/package/libseccomp/libseccomp.mk
-@@ -4,11 +4,12 @@
- #
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f06517ac3e..2805bbea3f 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBSECCOMP_VERSION = 2.4.4
-+LIBSECCOMP_VERSION = 2.5.3
- LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
- LIBSECCOMP_LICENSE = LGPL-2.1
- LIBSECCOMP_LICENSE_FILES = LICENSE
- LIBSECCOMP_CPE_ID_VENDOR = libseccomp_project
- LIBSECCOMP_INSTALL_STAGING = YES
-+LIBSECCOMP_DEPENDENCIES = host-gperf
- 
- $(eval $(autotools-package))
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.3.1
++MESA3D_VERSION = 21.3.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.33.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
