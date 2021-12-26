@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63DA9C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8332DC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1829E40947;
-	Sun, 26 Dec 2021 15:02:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E6724095D;
+	Sun, 26 Dec 2021 15:03:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hHLIJOjYAj15; Sun, 26 Dec 2021 15:02:51 +0000 (UTC)
+	with ESMTP id V1-XngOkfiex; Sun, 26 Dec 2021 15:03:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6032840900;
-	Sun, 26 Dec 2021 15:02:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5333E1BF2F4
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98A88402EA;
+	Sun, 26 Dec 2021 15:03:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CA6D1BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 408DA40582
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7BD3B40900
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UqjgcBQP8T4u for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 15:02:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9lx3eZ970R4p for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 15:02:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA57540108
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:02:29 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 69867408FD
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:02:47 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D6B5DE0003;
- Sun, 26 Dec 2021 15:02:26 +0000 (UTC)
-Date: Sun, 26 Dec 2021 16:02:26 +0100
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 25B5960009;
+ Sun, 26 Dec 2021 15:02:45 +0000 (UTC)
+Date: Sun, 26 Dec 2021 16:02:44 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211226160226.0addc8cf@windsurf>
-In-Reply-To: <20211221124614.24802-1-fontaine.fabrice@gmail.com>
-References: <20211221124614.24802-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211226160244.7be04f3c@windsurf>
+In-Reply-To: <20211221125710.28506-1-fontaine.fabrice@gmail.com>
+References: <20211221125710.28506-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/gssdp: bump to version 1.4.0.1
+Subject: Re: [Buildroot] [PATCH v2, 1/1] package/gupnp: bump to version 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,16 +62,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 21 Dec 2021 13:46:14 +0100
+On Tue, 21 Dec 2021 13:57:10 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.4.0.1/NEWS
+> https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.4.1/NEWS
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/gssdp/gssdp.hash | 4 ++--
->  package/gssdp/gssdp.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Changes v1 -> v2:
+>  - Fix tarball hash
 
 Applied to master, thanks.
 
