@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 974B8C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 22:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99997C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 22:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 422EC81493;
-	Sun, 26 Dec 2021 22:34:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F58E81471;
+	Sun, 26 Dec 2021 22:34:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DELQdjB-0AOV; Sun, 26 Dec 2021 22:34:24 +0000 (UTC)
+	with ESMTP id P4OhsFHvkTZN; Sun, 26 Dec 2021 22:34:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC7A88148A;
-	Sun, 26 Dec 2021 22:34:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ABE7A1BF2B9
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:34:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ABB878148F;
+	Sun, 26 Dec 2021 22:34:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CEEDD1BF2B9
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96A8C4099A
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:34:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD22B40591
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 22:34:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fReGedOsm2dD for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 22:34:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rUxmYTa0vrEE for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 22:34:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 73A9140999
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 22:34:21 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ACD084029B
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 22:34:28 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id A990F100007;
- Sun, 26 Dec 2021 22:34:19 +0000 (UTC)
-Date: Sun, 26 Dec 2021 23:34:18 +0100
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id B94741BF203;
+ Sun, 26 Dec 2021 22:34:25 +0000 (UTC)
+Date: Sun, 26 Dec 2021 23:34:25 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211226233418.47d0eeaa@windsurf>
-In-Reply-To: <20211226202214.1388641-1-fontaine.fabrice@gmail.com>
-References: <20211226202214.1388641-1-fontaine.fabrice@gmail.com>
+Message-ID: <20211226233425.6cc2305d@windsurf>
+In-Reply-To: <20211226181539.1359099-1-fontaine.fabrice@gmail.com>
+References: <20211226181539.1359099-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/hiawatha: bump to version 11.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/checksec: bump to version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,22 +56,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 26 Dec 2021 21:22:14 +0100
+On Sun, 26 Dec 2021 19:15:39 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://gitlab.com/hsleisink/hiawatha/-/blob/v11.1/ChangeLog
+> - Update indentation in hash file (two spaces)
+> - Update hash of LICENSE.txt, link on BSD license added with:
+>   https://github.com/slimm609/checksec.sh/commit/ab89f24ad3cbf33d49716bb8ea4c4cc32ff771d5
+> 
+> https://github.com/slimm609/checksec.sh/blob/2.5.0/ChangeLog
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/hiawatha/hiawatha.hash | 2 +-
->  package/hiawatha/hiawatha.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/checksec/checksec.hash | 4 ++--
+>  package/checksec/checksec.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
