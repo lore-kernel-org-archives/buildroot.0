@@ -1,81 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C65EAC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1137C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62D4860D79;
-	Sun, 26 Dec 2021 15:12:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B36B40491;
+	Sun, 26 Dec 2021 15:22:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nlfmdjerG_MY; Sun, 26 Dec 2021 15:12:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VUb9vnDWgMET; Sun, 26 Dec 2021 15:22:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C20E260B8C;
-	Sun, 26 Dec 2021 15:12:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DF2BC1BF2EA
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:12:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF6B8401DF;
+	Sun, 26 Dec 2021 15:22:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 915951BF2EA
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE24E402E1
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:12:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E6CC401DF
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:22:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2FhZ8YESC9Ux for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 15:12:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xUaehgRwJPPG for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 15:22:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AFC0640108
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:12:15 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id j18so27427784wrd.2
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 07:12:15 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 97CBA40199
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:22:07 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id s1so27517452wrg.1
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 07:22:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EVNBzeBE+D2Ua2hRs8DjhSxUzucevzmwJyNi/rsYHNw=;
- b=HEBVaAp9VaEN0dqFfuFgCjWnplVeVz/R6i2LiQAOTemeM76X3gkB9nSq2mKEzkfnT5
- DW/ror4tMEjCV1JaOKNp1E4PE+3x+MmPJ0LF6nKbPQsaw2pt23YYOtDw3VwLHB//a+k0
- 5q9VXY4gbHhyxVfp9kZhJqZBaRVkcNATM4s5B4DUcmO9bphsDRGPh8N3xAsWv6xvpI9k
- ojh2ytCxvoYsmxX0+l/DxlDak/d1qjm4lWK3C8sadvp216fFzAmHy8VavSOZQfEFUj0e
- UgFgc1vZ9bXB5TCfy+ui0HbRufwJOC9tSOOKBAR+7ozZeom33xOy5cSnQEwn8CT0+TzB
- 5Mhw==
+ bh=3C82Mbma7QKR5dOqLEWBA8kl1y9rUtRIVdscyNzy+fQ=;
+ b=j4VB+L2ImdG9RTJ8vv80mzpjeA6pt/363HD89cIR4D6dSwLvX9nDELLAxqaGmTGvfq
+ cyreie2b0UMwcHEdHLZGM2blqasXSs2LjcCydqFbWWnDGau9iG/NLwf21OS70FAdVtfH
+ aTpo9cCSftwOi0U0Va1XPO/8Tg18xCOPs2KCHAFS8ANXwdKovqI8Z11P3SDrgR0qDRiu
+ Oe1CZHAecOlftMIve7TbWSbwQXUDIzn0Yr42bw8x77fcMRiSeVEC752wMgBRFk+F3MfW
+ zxBLKdNLvhiv5KrJ7vIhmNiTSZQgpHF7ssYpD1QjzuSu6VEA8YxkMcGkENae8THvIhu4
+ d1yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EVNBzeBE+D2Ua2hRs8DjhSxUzucevzmwJyNi/rsYHNw=;
- b=oZes4cVFPgqTjPKrEg1WhM9X7eUZL/isBW8LVwrkD/MtrgdXvSkQHxOWLZqw1Ntrv9
- GKkj9Kv0S13bdbIdXCnwam5dgV01bZI302l2YCZwuZv0jz3CAde0ho91mOtmFxFtKoJi
- w+/NmmqqTq+/dfuTrxwxzNd8XWRYfaL4hRSroZSyKLbRP8fPSFpW9M3fSlaGs4WdRo4F
- YtHv5Mh8+dToPWkhLoSWsfInRgE38uADqlFRBquv5tPiSS05cBGnjiSt/Kfavv9xzLiw
- 43UzRICWmgcul/X83dXR0fBp0ZTaaNJjoabkcMIFcWC9uKvw7Rfwb7DvRFvHa9j5cj5g
- MI2A==
-X-Gm-Message-State: AOAM532wesm3Yk+nb/ncE1qk202x5BlxINsBx0KO+yW0W8fnHlQWA/v+
- JFUFlQBS6P/wOVbUlEyQZomdjSPVZh0iFw==
-X-Google-Smtp-Source: ABdhPJxv2GYvQa02dMYHym2sDCaXuw8WS8laRftwFrWmzF1JxWwZ05txlU/8XLEg0OoS6tKxmbheXg==
-X-Received: by 2002:a05:6000:168c:: with SMTP id
- y12mr10488407wrd.409.1640531533637; 
- Sun, 26 Dec 2021 07:12:13 -0800 (PST)
+ bh=3C82Mbma7QKR5dOqLEWBA8kl1y9rUtRIVdscyNzy+fQ=;
+ b=f805Qo3gwwTzNrUZZawiw9qM17bmR9WVkQXkRwHh92zzgdAHpML31UCfN9j8jEMYhf
+ Ob+tRXiu65EZTl6mOHWhXixB7G8+noNWH3P9Zjz/wCXGZShoe63njOmEhK+UjJYXpHY1
+ wjcKwhJ3drIZdcOMe2qnf/nr6RjAri6u1nArex3nUptso9s030GTfutT/8g8jElmollA
+ MPJsN3SD2ImqaBXimpLBK/MvJAzIT5xbjHtgwjTxN6tm/cLm/cas6OCmFq3KaE8yAaVq
+ EWrOdNUTj+mEyJl1JIYwfoRCzNW9MWx4TrXWw/RT+7l33jUekCxw42RsecCyET/urdkV
+ oHYw==
+X-Gm-Message-State: AOAM533hyfkL2uFTxNYPJIdYRAmPs/nCSDqTWuuTf3Cm8kVPCd1c1IU6
+ 3Z96kr6dwbD7U5m3z2qkRUkNqlCSiAFyOw==
+X-Google-Smtp-Source: ABdhPJzuIIrtjag74BBJmfhZlMrj//gcrgYQEp/IqMrucDyYue56ZHGVYcEGPoU++nYufTD8r08MkQ==
+X-Received: by 2002:adf:9d82:: with SMTP id p2mr10099866wre.414.1640532125835; 
+ Sun, 26 Dec 2021 07:22:05 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id s22sm16546775wmc.1.2021.12.26.07.12.13
+ by smtp.gmail.com with ESMTPSA id p22sm21342512wms.2.2021.12.26.07.22.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Dec 2021 07:12:13 -0800 (PST)
+ Sun, 26 Dec 2021 07:22:05 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 16:11:12 +0100
-Message-Id: <20211226151112.674069-1-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Dec 2021 16:21:24 +0100
+Message-Id: <20211226152124.790592-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/linux-pam: add openssl optional
- dependency
+Subject: [Buildroot] [PATCH 1/1] package/libgpgme: bump to version 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,32 +89,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-openssl is an optional dependency since version 1.5.2 and
-https://github.com/linux-pam/linux-pam/commit/b3bb13e18a74e9ece825b7de1b81db97ebb107a0
+https://dev.gnupg.org/T5499
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-pam/linux-pam.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libgpgme/libgpgme.hash | 4 ++--
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index e309f6a5a4..789dcf5c7b 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -42,6 +42,13 @@ else
- LINUX_PAM_CONF_OPTS += --disable-audit
- endif
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 35767a27fe..ca2a79496c 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.15.1.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.16.0.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  eebc3c1b27f1c8979896ff361ba9bb4778b508b2496c2fc10e3775a40b1de1ad  gpgme-1.15.1.tar.bz2
++sha256  6c8cc4aedb10d5d4c905894ba1d850544619ee765606ac43df7405865de29ed0  gpgme-1.16.0.tar.bz2
+ # Locally calculated
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 95a419258b..f61e9fe41a 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LINUX_PAM_CONF_OPTS += --enable-openssl
-+LINUX_PAM_DEPENDENCIES += openssl
-+else
-+LINUX_PAM_CONF_OPTS += --disable-openssl
-+endif
-+
- # Install default pam config (deny everything except login)
- define LINUX_PAM_INSTALL_CONFIG
- 	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
+-LIBGPGME_VERSION = 1.15.1
++LIBGPGME_VERSION = 1.16.0
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
 -- 
 2.33.0
 
