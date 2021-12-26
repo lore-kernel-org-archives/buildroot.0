@@ -4,47 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F32C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97771C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 15:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6225760D80;
-	Sun, 26 Dec 2021 15:01:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 580C760D88;
+	Sun, 26 Dec 2021 15:02:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gPnVHXbaqU4R; Sun, 26 Dec 2021 15:01:56 +0000 (UTC)
+	with ESMTP id Aq-9Nnp4R0_e; Sun, 26 Dec 2021 15:02:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5B5E60C15;
-	Sun, 26 Dec 2021 15:01:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C51A460D79;
+	Sun, 26 Dec 2021 15:02:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 88F011BF2F4
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE42A1BF2F4
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77C4960C15
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:01:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDB7360D79
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 15:02:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fOHlJESBZJ_Q for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 15:01:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F5E960596
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:01:51 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 86D6F20002;
- Sun, 26 Dec 2021 15:01:47 +0000 (UTC)
-Date: Sun, 26 Dec 2021 16:01:46 +0100
+ with ESMTP id hOrNu_W_aYZm for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 15:02:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2BA3360C15
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 15:02:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 23A8182AF2; Sun, 26 Dec 2021 14:56:40 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211226160146.7a0f3f08@windsurf>
-In-Reply-To: <20211221123406.22392-1-fontaine.fabrice@gmail.com>
-References: <20211221123406.22392-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/atop: bump to version 2.7.0
+To: buildroot@buildroot.org
+Date: Sun, 26 Dec 2021 16:02:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 30d1b3e573a852bc44e9c1e3c75c724b24dce533
+X-Git-Newrev: dde6b3b9dbffdb68c2ec724b8b142bd2dc07dc3c
+X-Patchwork-Hint: ignore
+Message-Id: <20211226145640.23A8182AF2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gssdp: bump to version 1.4.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,37 +52,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 21 Dec 2021 13:34:06 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dde6b3b9dbffdb68c2ec724b8b142bd2dc07dc3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop patches (already in version)
-> 
-> https://www.atoptool.nl/downloadatop.php
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...1-ifprop.c-fix-build-with-kernel-4.6.patch | 51 -------------------
->  .../0002-photosyst.c-fix-build-on-musl.patch  | 38 --------------
->  package/atop/atop.hash                        |  2 +-
->  package/atop/atop.mk                          |  2 +-
->  4 files changed, 2 insertions(+), 91 deletions(-)
->  delete mode 100644 package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch
->  delete mode 100644 package/atop/0002-photosyst.c-fix-build-on-musl.patch
+https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.4.0.1/NEWS
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index 4954568420..c9bbd66083 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.3/gssdp-1.3.1.sha256sum:
+-sha256  affbf145c26e02dda9d31f9da9fd5182bd2cc36565ab8ee2e877567b2fd206cd  gssdp-1.3.1.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.4/gssdp-1.4.0.1.sha256sum:
++sha256  8676849d57fb822b8728856dbadebf3867f89ee47a0ec47a20045d011f431582  gssdp-1.4.0.1.tar.xz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index c7982f16c5..f1fed3713d 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GSSDP_VERSION_MAJOR = 1.3
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).1
++GSSDP_VERSION_MAJOR = 1.4
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).0.1
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
