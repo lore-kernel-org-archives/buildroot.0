@@ -1,48 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC7F4C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 10:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F479C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Dec 2021 10:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41F77824EE;
-	Sun, 26 Dec 2021 10:45:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aBsPfGURSc05; Sun, 26 Dec 2021 10:45:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85EF3824DF;
-	Sun, 26 Dec 2021 10:45:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EBB3B1BF476
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 10:45:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2D4841573
- for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 10:45:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBCEC40966;
+	Sun, 26 Dec 2021 10:46:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TsByxosZaa1l for <buildroot@lists.busybox.net>;
- Sun, 26 Dec 2021 10:45:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 96DC240966
- for <buildroot@buildroot.org>; Sun, 26 Dec 2021 10:45:27 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id C41A7E0003;
- Sun, 26 Dec 2021 10:45:25 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o_R05xx4ZEEs; Sun, 26 Dec 2021 10:46:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D261441573;
+	Sun, 26 Dec 2021 10:46:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 93E2E1BF476
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 10:46:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82AC660D70
+ for <buildroot@lists.busybox.net>; Sun, 26 Dec 2021 10:46:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MAJhX6WXZT2C for <buildroot@lists.busybox.net>;
+ Sun, 26 Dec 2021 10:46:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABA3360D6C
+ for <buildroot@buildroot.org>; Sun, 26 Dec 2021 10:46:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0EF9682A91; Sun, 26 Dec 2021 10:40:44 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Dec 2021 11:45:19 +0100
-Message-Id: <20211226104520.663206-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/glibc: add a patch to fix build issue
- in kernels >= 3.15 and < 5.1 on Microblaze
+Date: Sun, 26 Dec 2021 11:46:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3e4c2d6213a09e9a0c598f800510acd6687ffcda
+X-Git-Newrev: 790abe41827d6ca705fa3c39101728e5d98f57d4
+X-Patchwork-Hint: ignore
+Message-Id: <20211226104044.0EF9682A91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lttng-libust: fix legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,124 +52,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As explained in the patch itself, there is a bug in the handling of
-__pselect32() in glibc for the Microblaze architecture. There a
-special Microblaze variant that was added to support kernels older
-than < 3.15, but it "hides" a generic implementation that is needed to
-support kernels newer than 3.15 but older than 5.1 (which is when the
-time64 support for 32-bit architectures was added, making __pselect32
-no longer needed).
+commit: https://git.buildroot.net/buildroot/commit/?id=790abe41827d6ca705fa3c39101728e5d98f57d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bug causes a glibc build failure for kernels >= 3.15 but < 5.1,
-on Microblaze.
+COPYING has been removed since version 2.13.0 and
+https://github.com/lttng/lttng-ust/commit/c0c0989ab70574e09b2f7e8b48c2da6af664a849
+resulting in the following build failure since bump to version 2.13.1 in
+commit 733bf73e3ff86dd80e68e22c0ccc2f43e4a3d475:
 
+ERROR: COPYING has wrong sha256 hash:
+ERROR: expected: 74125a84c2166300776980166e29de40d5f98d1a75e487f0bbc0c03b4cd2342e
+ERROR: got     :
+
+So use the new license files, add BSD-3-Clause (which was added in
+version 2.13.0 and
+https://github.com/lttng/lttng-ust/commit/d8621b3ea82b7fc1937b0eefb2b1316b2ce361a5)
+and don't add BSD-2-Clause and GPL-3.0+ as tests are disabled
+
+Fixes:
+ - http://autobuild.buildroot.org/results/470d6401f2a97f4ac91b2d8cfb1af90b638320a9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...v-linux-microblaze-pselect32.c-add-m.patch | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
+ package/lttng-libust/lttng-libust.hash | 8 ++++++--
+ package/lttng-libust/lttng-libust.mk   | 4 ++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch b/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
-new file mode 100644
-index 0000000000..3597cd6a11
---- /dev/null
-+++ b/package/glibc/2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/0001-sysdeps-unix-sysv-linux-microblaze-pselect32.c-add-m.patch
-@@ -0,0 +1,85 @@
-+From af06fe63f9babb6d0179ae5d7d9245daada6bf56 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 26 Dec 2021 10:30:01 +0100
-+Subject: [PATCH] sysdeps/unix/sysv/linux/microblaze/pselect32.c: add missing
-+ implementation when !__ASSUME_TIME64_SYSCALLS
-+
-+In commit a92f4e6299fe0e3cb6f77e79de00817aece501ce ("linux: Add time64
-+pselect support"), a Microblaze specific implementation of
-+__pselect32() was added to cover the case of kernels < 3.15 which lack
-+the pselect6 system call.
-+
-+This new file sysdeps/unix/sysv/linux/microblaze/pselect32.c takes
-+precedence over the default implementation
-+sysdeps/unix/sysv/linux/pselect32.c.
-+
-+However sysdeps/unix/sysv/linux/pselect32.c provides an implementation
-+of __pselect32() which is needed when __ASSUME_TIME64_SYSCALLS is not
-+defined. On Microblaze, which is a 32-bit architecture,
-+__ASSUME_TIME64_SYSCALLS is only true for kernels >= 5.1.
-+
-+Due to sysdeps/unix/sysv/linux/microblaze/pselect32.c taking
-+precedence over sysdeps/unix/sysv/linux/pselect32.c, it means that
-+when we are with a kernel >= 3.15 but < 5.1, we need a __pselect32()
-+implementation, but sysdeps/unix/sysv/linux/microblaze/pselect32.c
-+doesn't provide it, and sysdeps/unix/sysv/linux/pselect32.c which
-+would provide it is not compiled in.
-+
-+This causes the following build failure on Microblaze with for example
-+Linux kernel headers 4.9:
-+
-+/home/thomas/buildroot/buildroot/output/host/lib/gcc/microblazeel-buildroot-linux-gnu/10.3.0/../../../../microblazeel-buildroot-linux-gnu/bin/ld: /home/thomas/buildroot/buildroot/output/build/glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/build/libc_pic.os: in function `__pselect64':
-+(.text+0x120b44): undefined reference to `__pselect32'
-+collect2: error: ld returned 1 exit status
-+
-+To fix this, we take a crude approach: replicate in
-+sysdeps/unix/sysv/linux/microblaze/pselect32.c the
-+!__ASSUME_TIME64_SYSCALLS implementation that is already in
-+sysdeps/unix/sysv/linux/pselect32.c.
-+
-+Upstream: https://sourceware.org/pipermail/libc-alpha/2021-December/134635.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../unix/sysv/linux/microblaze/pselect32.c    | 22 +++++++++++++++++--
-+ 1 file changed, 20 insertions(+), 2 deletions(-)
-+
-+diff --git a/sysdeps/unix/sysv/linux/microblaze/pselect32.c b/sysdeps/unix/sysv/linux/microblaze/pselect32.c
-+index 70b7b52a48..6b6b3e8a2e 100644
-+--- a/sysdeps/unix/sysv/linux/microblaze/pselect32.c
-++++ b/sysdeps/unix/sysv/linux/microblaze/pselect32.c
-+@@ -22,7 +22,25 @@
-+ #include <sys/poll.h>
-+ #include <sysdep-cancel.h>
-+ 
-+-#ifndef __ASSUME_PSELECT
-++#if !defined(__ASSUME_TIME64_SYSCALLS)
-++int
-++__pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
-++	     fd_set *exceptfds, const struct __timespec64 *timeout,
-++	     const sigset_t *sigmask)
-++{
-++  struct timespec ts32, *pts32 = NULL;
-++  if (timeout != NULL)
-++    {
-++      ts32 = valid_timespec64_to_timespec (*timeout);
-++      pts32 = &ts32;
-++    }
-++
-++  return SYSCALL_CANCEL (pselect6, nfds, readfds, writefds, exceptfds,
-++			 pts32,
-++			 ((__syscall_ulong_t[]){ (uintptr_t) sigmask,
-++						 __NSIG_BYTES }));
-++}
-++#elif !defined(__ASSUME_PSELECT)
-+ int
-+ __pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
-+ 	     fd_set *exceptfds, const struct __timespec64 *timeout,
-+@@ -57,4 +75,4 @@ __pselect32 (int nfds, fd_set *readfds, fd_set *writefds,
-+ 
-+   return ret;
-+ }
-+-#endif /* __ASSUME_PSELECT  */
-++#endif
-+-- 
-+2.31.1
-+
--- 
-2.31.1
-
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index 23839e42cc..42f2b372dc 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,5 +1,9 @@
+ # From https://lttng.org/files/lttng-ust/lttng-ust-2.13.2.tar.bz2.sha256
+ sha256  5667bf0269e1e62e2d9cb974c456ff86e0401bd7aa3bfc8d5fdb97233249eddc  lttng-ust-2.13.1.tar.bz2
+ 
+-# Hash for license file
+-sha256  74125a84c2166300776980166e29de40d5f98d1a75e487f0bbc0c03b4cd2342e  COPYING
++# Hash for license files
++sha256  5b52242fd2045d62dd664c8358137b46c1e08efdba674c91cbfc06585efe1ce7  LICENSE
++sha256  f206ce02ddf94d03120b58381064702729a0e6cbb03cafc84dc0e434ce5689fa  LICENSES/BSD-3-Clause
++sha256  6841c85b94f9dab319356e3aaf9e969fcedad51d3aaadf665bf86f34f4186b62  LICENSES/GPL-2.0
++sha256  d72921266bc8452a8789f8a04a82755373990d00b7e0b0f1a8edb8f854e94d1c  LICENSES/LGPL-2.1
++sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/MIT
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index e3e1cdebf2..690d18fe3d 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -7,8 +7,8 @@
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+ LTTNG_LIBUST_VERSION = 2.13.1
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+-LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
+-LTTNG_LIBUST_LICENSE_FILES = COPYING
++LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond), BSD-3-Clause (snprintf)
++LTTNG_LIBUST_LICENSE_FILES = LICENSE LICENSES/BSD-3-Clause LICENSES/GPL-2.0 LICENSES/LGPL-2.1 LICENSES/MIT
+ LTTNG_LIBUST_INSTALL_STAGING = YES
+ LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
+ LTTNG_LIBUST_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
