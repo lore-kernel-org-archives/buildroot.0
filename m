@@ -1,51 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD759C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 07:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26C62C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 08:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E80F4019D;
-	Mon, 27 Dec 2021 07:41:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1F2360E31;
+	Mon, 27 Dec 2021 08:40:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x2EvYgsDxcPO; Mon, 27 Dec 2021 07:41:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Wce4KpS9Kw0; Mon, 27 Dec 2021 08:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3525A40995;
-	Mon, 27 Dec 2021 07:41:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD7961BF573
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 07:41:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36A0860C0A;
+	Mon, 27 Dec 2021 08:40:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CD9551BF36A
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 08:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BAAB740995
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 07:41:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC7C460C0A
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 08:40:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZxAIuqP80RlQ for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 07:41:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7C284093A
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 07:41:17 +0000 (UTC)
-Received: from iago.. (unknown [151.35.88.157])
- by serv15.avernis.de (Postfix) with ESMTPSA id 76102C0ABA36;
- Mon, 27 Dec 2021 08:41:14 +0100 (CET)
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 08:40:56 +0100
-Message-Id: <20211227074056.13882-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211224182228.70f47125@windsurf>
-References: <20211224182228.70f47125@windsurf>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0LLvRkcC5WJ0 for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 08:40:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 18CA960692
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 08:40:16 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id bn20so24694602ljb.8
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 00:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:from:date:message-id:subject:to;
+ bh=TPTjxxwdqIJAa6Vp3PDEaBiXdcCn1x8XZmvVkp/w/MA=;
+ b=fm7bN9PahzECRKk7jv8ULAre//69t9U6S6kCK4r2BshASNB2aG4QLxAcfmKrVYigPM
+ DAFvKYeMMgQncJQoFvNfWYUNZMcfz1wt6x/Uj5LTFD3Jz4FeqTgect35as0V2TQPxUrY
+ kGOR56EhJsKQV+PVFWSfrJg7476/TsKRY1A6TqgKd/SQpOVR+Ve4jytf9BSIrVhh1ytG
+ T2TREB6o3tO+RRQE+aR1uzOhFCvJHEtDYL5ECYzpDNoybugufeEhBcCSa14S90wbvr/i
+ O1RIDOSwsvnHljJLvRg9yG33p2d4Oiue3nwcxwmLm9DH2jWpaxUFMVyaDC/56lKQUcFk
+ g86Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=TPTjxxwdqIJAa6Vp3PDEaBiXdcCn1x8XZmvVkp/w/MA=;
+ b=ZAGrVfhzU+YQ+TpdABgrABXt8dUwIkWeNxIUB39nhnOOr5ZPB3ekaEnF+Mh5A4GDan
+ Qb1H9WztxieHj8Cj/XZJhZJUWRgLELqe5hGfFxWRJ8B1EEEt11Wul6nK6BFTnpbpX1Tw
+ DM8zBCD4v1KVKmWAr68r1aAV2TIQIYzLQoRiafYDNO1e5GZJsy6Av9mMj1/J+8ouZHwi
+ SiaKK8Sud0u3dmUWoALA12MBQiagPuPpZDaCYx+UOnpVPZyKrvpEmMVqNSTgGazFs/kX
+ 7mXPI1lMf6jiM9E5yrkVCHqy0O+X2K6igBXu71ch3zZbGrJKV0e8qTiR2zmp+nxAukzZ
+ LIvA==
+X-Gm-Message-State: AOAM530fJxWSeE2EFlHyycipyaD0rZTe3ad5/u8n+TPiHh6leN7RsaNm
+ fwLuiHPLSzB360b+1evkM4/kW4CxgLnxLeHHG2zPUU4l
+X-Google-Smtp-Source: ABdhPJz32l8XALbZ03S/l1tsQLcBe4ruTtRnIyKGc7rY+ML8GSoSYMpZZbJQyzzV/PqsLJl+qmGvDk1Bd9KqAcfaRcU=
+X-Received: by 2002:a2e:9ece:: with SMTP id h14mr13396276ljk.206.1640594411671; 
+ Mon, 27 Dec 2021 00:40:11 -0800 (PST)
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.3 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH v2 1/1] package/zziplib: fix static build
- failure with mpd
+From: "Juan A. Rubio" <jarubio2001@gmail.com>
+Date: Mon, 27 Dec 2021 09:40:00 +0100
+Message-ID: <CAE58QoPWoZdZq=cOpo0MRJXgZDfa5Ad07HtYooT9LKho5KRS8A@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: [Buildroot] Same 32-bit image for 64-bit and 32-bit platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,122 +75,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
- Andreas Ziegler <br015@umbiko.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The current released version of zziplib copies static libraries with appended 
-major version, but omits creating the necessary links to the base file names. 
-This prevents the linker to find the libraries via the search path.
+Hi,
 
-This issue (https://github.com/gdraheim/zziplib/issues/117) has been fixed 
-upstream; this patch extracts the necessary part of commit 0e8d35f92efb680c81f6ec1fca9f11d173dce389, to enable creation of symlinks.
+I'm looking for information on whether it's possible to produce and
+use the same Buildroot image and associated sdk for two different
+boards, one based on an imx6 and the other on imx8. Is this something
+that Buildroot supports at all? do I need two separate Buildroot
+environments/builds, one for the 32-bit imx6 and another for the
+64-bit imx8?
 
-This resolves the following autobuild issue:
-
-http://autobuild.buildroot.net/results/ba711034c0abe980f677e26de41739223e2f66e9
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
-Changes v1 -> v2:
- - extract link creation from commit 0e8d35f
-
- ...-implant-ZZIP_LIBLATEST-for-zzip_lib.patch | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-
-diff --git a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-new file mode 100644
-index 0000000000..50380861bc
---- /dev/null
-+++ b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
-@@ -0,0 +1,78 @@
-+Extract link creation for versioned libraries from commit
-+0e8d35f92efb680c81f6ec1fca9f11d173dce389.
-+
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-+
-+---
-+From 0e8d35f92efb680c81f6ec1fca9f11d173dce389 Mon Sep 17 00:00:00 2001
-+From: Guido Draheim <guidod@gmx.de>
-+Date: Sat, 22 May 2021 15:13:28 +0200
-+Subject: [PATCH] #117 implant ZZIP_LIBLATEST for zzip.lib
-+
-+---
-+ zzip/CMakeLists.txt | 57 +++++++++++++++++++++++++++++++++++----------
-+ 1 file changed, 45 insertions(+), 12 deletions(-)
-+
-+diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
-+index a966d5f..ccd08b6 100644
-+--- a/zzip/CMakeLists.txt
-++++ b/zzip/CMakeLists.txt
-+@@ -28,6 +28,12 @@ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
-+ option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
-+ endif()
-+ 
-++if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
-++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
-++else()
-++option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
-++endif()
-++
-+ # used in zzip/_config.h
-+ set(ZZIP_PACKAGE "${PROJECT_NAME}lib")
-+ set(ZZIP_VERSION "${PROJECT_VERSION}")
-+@@ -346,6 +340,45 @@ if(ZZIP_LIBTOOL)
-+   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
-+ endif(ZZIP_LIBTOOL)
-+ 
-++if(ZZIP_LIBLATEST)
-++  if(BUILD_SHARED_LIBS)
-++    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
-++    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
-++  else()
-++    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
-++    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
-++  endif()
-++    get_target_property(libname libzzip OUTPUT_NAME)
-++    get_target_property(librelease libzzip RELEASE_POSTFIX)
-++    add_custom_target(libzzip_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    if(ZZIPFSEEKO)
-++    get_target_property(libname libzzipfseeko OUTPUT_NAME)
-++    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
-++    add_custom_target(libzzipfseeko_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    endif(ZZIPFSEEKO)
-++    if(ZZIPMMAPPED)
-++    get_target_property(libname libzzipmmapped OUTPUT_NAME)
-++    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
-++    add_custom_target(libzzipmmaped_latest ALL
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
-++        )
-++    install(FILES
-++        ${outdir}/${lib}${libname}${dll}
-++        DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++    endif(ZZIPMMAPPED)
-++endif(ZZIP_LIBLATEST)
-++
-++
-+ ## messages ##############################################
-+ 
-+ message(STATUS "lib zzipfseeko  to be compiled: ${ZZIPFSEEKO}")
--- 
-2.33.1
-
+Thanks,
+Juan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
