@@ -1,47 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BCD1C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A9D0C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDFE760ADB;
-	Mon, 27 Dec 2021 20:17:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BEA5F8134C;
+	Mon, 27 Dec 2021 20:17:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GOVFEiybfx8S; Mon, 27 Dec 2021 20:17:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Td7X-vK4HzcZ; Mon, 27 Dec 2021 20:17:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5158160AA1;
-	Mon, 27 Dec 2021 20:17:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C30181BF3C6
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:17:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DED481340;
+	Mon, 27 Dec 2021 20:17:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C30ED1BF3C6
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B07DE4018A
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:17:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1FE14020A
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:17:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4vGpy2Cpzxuq for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 20:17:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 776AE40191
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:17:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AC2C982BA8; Mon, 27 Dec 2021 20:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1QEqb_W__YO4 for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 20:17:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 27D1440204
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:17:44 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 39EF8240007;
+ Mon, 27 Dec 2021 20:17:42 +0000 (UTC)
+Date: Mon, 27 Dec 2021 21:17:41 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 21:17:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f69d630c083255f2efc79e6f9fb2d7b271000115
-X-Git-Newrev: 2979ff04bd7d3a9d38e4150aa158a4486cfb013c
-X-Patchwork-Hint: ignore
-Message-Id: <20211227201139.AC2C982BA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6-sabreauto: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20211227211741.519cc4c6@windsurf>
+In-Reply-To: <20211227144404.2484384-1-festevam@gmail.com>
+References: <20211227144404.2484384-1-festevam@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] configs/imx23evk: Bump the U-Boot version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,43 +56,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2979ff04bd7d3a9d38e4150aa158a4486cfb013c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 27 Dec 2021 11:44:04 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
-error:
+> Bump U-Boot to version 2021.10.
+> 
+> This fixes the following error:
+> 
+> /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+> collect2: error: ld returned 1 exit status
+> 
+> Fixes: 
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006170
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/imx23evk_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-include/image.h:1178:12: fatal error: openssl/evp.h: No such file or directory
- 1178 | #  include <openssl/evp.h>
-      |            ^~~~~~~~~~~~~~~
+Applied to master, thanks.
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006172
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/imx6-sabreauto_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
-index 7df774988a..24b3fd387f 100644
---- a/configs/imx6-sabreauto_defconfig
-+++ b/configs/imx6-sabreauto_defconfig
-@@ -29,6 +29,7 @@ BR2_TARGET_UBOOT_NEEDS_LZOP=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
