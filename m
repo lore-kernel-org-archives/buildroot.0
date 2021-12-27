@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D3ABC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ED9AC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39D9040257;
-	Mon, 27 Dec 2021 20:03:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 679BD40191;
+	Mon, 27 Dec 2021 20:03:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GpXhrLkPpN3L; Mon, 27 Dec 2021 20:03:15 +0000 (UTC)
+	with ESMTP id 8i2UGuduIz3h; Mon, 27 Dec 2021 20:03:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98C9940294;
-	Mon, 27 Dec 2021 20:03:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC60F4051E;
+	Mon, 27 Dec 2021 20:03:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 60B9D1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:02:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7534A1BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C497E4018A
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:01:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AAF640193
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:01:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d3MbDgGBu0ve for <buildroot@lists.busybox.net>;
+ with ESMTP id z1Lg2MbC5Qqm for <buildroot@lists.busybox.net>;
  Mon, 27 Dec 2021 20:01:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2158D40199
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CA1F40191
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:01:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6ADD982BA8; Mon, 27 Dec 2021 19:56:11 +0000 (UTC)
+ id 5A4D382A9A; Mon, 27 Dec 2021 19:56:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 21:01:19 +0100
+Date: Mon, 27 Dec 2021 21:01:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13de7eb4348cb046afc6b16bb008468b4e27171c
-X-Git-Newrev: a58f2ad0439956219fb7b0d48365901e4a7e77e2
+X-Git-Oldrev: 583125556e4a94855de7a4456838005e36073102
+X-Git-Newrev: 15bc3d232c796c1e231c59583d55e31a281ff6ff
 X-Patchwork-Hint: ignore
-Message-Id: <20211227195611.6ADD982BA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-visualisation-waveform bump
- version to 19.0.2-Matrix
+Message-Id: <20211227195611.5A4D382A9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-visualisation-goom: bump
+ version to 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a58f2ad0439956219fb7b0d48365901e4a7e77e2
+commit: https://git.buildroot.net/buildroot/commit/?id=15bc3d232c796c1e231c59583d55e31a281ff6ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index d5538651bb..efd8eddc66 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index e4970972ec..6fec1d495e 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5b025f3c1b15108b958a56ebbacf315865c7e527258778fe9580469876e4858c  kodi-visualisation-waveform-19.0.1-Matrix.tar.gz
-+sha256  a6180038f43d9344678952d29b6479e24194e6038518f9064e80781bf303ae70  kodi-visualisation-waveform-19.0.2-Matrix.tar.gz
+-sha256  03f4228421a1fe38d619d5599f31de04e2207647c5aae7ac83809e5324890437  kodi-visualisation-goom-19.0.0-Matrix.tar.gz
++sha256  167206c02b7c4ace0b5446cac013f77a7a238d2a9a7cc768987088b42ac1d941  kodi-visualisation-goom-19.0.1-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index b7694cf574..71acd733a0 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index 37adccc9bf..c7168af306 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.1-Matrix
-+KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.2-Matrix
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
+-KODI_VISUALISATION_GOOM_VERSION = 19.0.0-Matrix
++KODI_VISUALISATION_GOOM_VERSION = 19.0.1-Matrix
+ KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
