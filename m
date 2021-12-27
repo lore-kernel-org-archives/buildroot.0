@@ -1,50 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7639AC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 10:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6EA1C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 10:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DF9C405D0;
-	Mon, 27 Dec 2021 10:21:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98A2D80B8D;
+	Mon, 27 Dec 2021 10:21:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8t_kKO8_IWuD; Mon, 27 Dec 2021 10:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BJ6nuJ6Mb2a0; Mon, 27 Dec 2021 10:21:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A88914032E;
-	Mon, 27 Dec 2021 10:21:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B7E351BF4DB
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:20:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02E4080B87;
+	Mon, 27 Dec 2021 10:21:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 052541BF4DB
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A52E140354
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:20:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8A9760C0A
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:20:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AAP0SlxKU9G8 for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 10:20:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B56940210
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 10:20:13 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 7555AFF80C;
- Mon, 27 Dec 2021 10:20:10 +0000 (UTC)
-Date: Mon, 27 Dec 2021 11:20:10 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kgz4Jh-oG30S for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 10:20:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42CAE60BDB
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 10:20:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 63D2A82ACE; Mon, 27 Dec 2021 10:15:03 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Joel Stanley <joel@jms.id.au>
-Message-ID: <20211227112010.104bb9f0@windsurf>
-In-Reply-To: <20211220220517.1619994-1-joel@jms.id.au>
-References: <20211220220517.1619994-1-joel@jms.id.au>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pdbg: Bump version to v3.4
+To: buildroot@buildroot.org
+Date: Mon, 27 Dec 2021 11:20:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a1f04eb87273cde5555413ebe97f392096fbc513
+X-Git-Newrev: 617e3f74700968e3541648e5481129fbfc60c9b3
+X-Patchwork-Hint: ignore
+Message-Id: <20211227101503.63D2A82ACE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/axel: bump version to 2.17.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,32 +52,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 21 Dec 2021 08:35:17 +1030
-Joel Stanley <joel@jms.id.au> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=617e3f74700968e3541648e5481129fbfc60c9b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove patch that is now upstream.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../pdbg/0001-template-Fix-alignment.patch    | 39 -------------------
->  package/pdbg/pdbg.hash                        |  2 +-
->  package/pdbg/pdbg.mk                          |  2 +-
->  3 files changed, 2 insertions(+), 41 deletions(-)
->  delete mode 100644 package/pdbg/0001-template-Fix-alignment.patch
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/axel/axel.hash | 2 +-
+ package/axel/axel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/axel/axel.hash b/package/axel/axel.hash
+index 552f940652..ca7ad5c1d3 100644
+--- a/package/axel/axel.hash
++++ b/package/axel/axel.hash
+@@ -1,2 +1,2 @@
+-sha256  46eb4f10a11c4e50320ae6a034ef03ffe59dc11c3c6542a9867a3e4dc0c4b44e  axel-2.17.10.tar.xz
++sha256  580b2c18692482fd7f1e2b2819159484311ffc50f6d18924dceb80fd41d4ccf9  axel-2.17.11.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 8e3d7679e7..191484d11b 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AXEL_VERSION = 2.17.10
++AXEL_VERSION = 2.17.11
+ AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
+ AXEL_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
