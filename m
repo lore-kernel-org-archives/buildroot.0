@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F8A3C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D36FC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BB0C40199;
-	Mon, 27 Dec 2021 20:00:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EBA4813EE;
+	Mon, 27 Dec 2021 20:00:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C9oR5OhhqWgv; Mon, 27 Dec 2021 20:00:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t7K4Fx4fspFZ; Mon, 27 Dec 2021 20:00:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7156B40350;
-	Mon, 27 Dec 2021 20:00:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A88991BF8B4
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:00:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 828DF81765;
+	Mon, 27 Dec 2021 20:00:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 495651BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 942B640673
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A48C813CF
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:00:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P-Wp71Gol_hW for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OSoYyIGVvYGC for <buildroot@lists.busybox.net>;
  Mon, 27 Dec 2021 20:00:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2277403B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0B53813BD
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:00:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2932E82A9A; Mon, 27 Dec 2021 19:54:33 +0000 (UTC)
+ id 175ED82BA8; Mon, 27 Dec 2021 19:54:33 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Mon, 27 Dec 2021 20:59:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: acc79fbd9ee52e7498b436984ebefcee9105ef5d
-X-Git-Newrev: 6b2b1d26cc34553c651e32e8fa37111930e53b9e
+X-Git-Oldrev: cc28c7aa6df7798ce5ca79d6d1c7c2eb115ba220
+X-Git-Newrev: 288f2faae38a12342f8df0d372ff3ff371b18dde
 X-Patchwork-Hint: ignore
-Message-Id: <20211227195433.2932E82A9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.50.3
+Message-Id: <20211227195433.175ED82BA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/enchant: bump to 2.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b2b1d26cc34553c651e32e8fa37111930e53b9e
+commit: https://git.buildroot.net/buildroot/commit/?id=288f2faae38a12342f8df0d372ff3ff371b18dde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/enchant/enchant.hash | 2 +-
+ package/enchant/enchant.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 8208155610..a6c924a8c9 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.10.sha256sum
--sha256  21e1f5798bcdfda75eabc4280514b0896ab56f656d4e7e66030b9a2535ecdc98  pango-1.48.10.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.3.sha256sum
-+sha256  4add05edf51c1fb375a1ccde7498914120e23cb280dd7395b1aeb441f1838a4c  pango-1.50.3.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 7d3d6626d9..684407228f 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
+index 9cee2d78e1..9df5316aac 100644
+--- a/package/enchant/enchant.hash
++++ b/package/enchant/enchant.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  3b0f2215578115f28e2a6aa549b35128600394304bd79d6f28b0d3b3d6f46c03  enchant-2.2.15.tar.gz
++sha256  ce9ba47fd4d34031bd69445598a698a6611602b2b0e91d705e91a6f5099ead6e  enchant-2.3.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
+index 3135550f73..e00fcb25e1 100644
+--- a/package/enchant/enchant.mk
++++ b/package/enchant/enchant.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PANGO_VERSION_MAJOR = 1.48
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).10
-+PANGO_VERSION_MAJOR = 1.50
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).3
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+-ENCHANT_VERSION = 2.2.15
++ENCHANT_VERSION = 2.3.2
+ ENCHANT_SITE = \
+ 	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
+ ENCHANT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
