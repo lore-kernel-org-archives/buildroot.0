@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D67DC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE5E3C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C583F401A3;
-	Mon, 27 Dec 2021 20:02:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9011E60A9C;
+	Mon, 27 Dec 2021 20:02:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lnmB4lrBoCeZ; Mon, 27 Dec 2021 20:02:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DWpPyxLoQqoz; Mon, 27 Dec 2021 20:02:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C82184018A;
-	Mon, 27 Dec 2021 20:02:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 137B11BF983
+	by smtp3.osuosl.org (Postfix) with ESMTP id E018860A93;
+	Mon, 27 Dec 2021 20:02:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A4FEA1BF8B4
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE493401AE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9742C60A6F
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:01:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JYjsYO_LRY3s for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 20:01:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6vLcuyIiSvpC for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 20:01:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0370B4018A
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:01:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6E2D60A8B
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:01:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4050482A9A; Mon, 27 Dec 2021 19:56:11 +0000 (UTC)
+ id 2FC7482BA8; Mon, 27 Dec 2021 19:56:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 21:01:12 +0100
+Date: Mon, 27 Dec 2021 21:01:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1545d192290bb85a3db369f36591b8cdafa0e084
-X-Git-Newrev: f54776b6b145a4ccab81ba2717f6540f8e48b17e
+X-Git-Oldrev: 5ce6e12d6613f2a409ba86c707ab845642983f04
+X-Git-Newrev: 67d2d7a294f0b7e01e042421066d202f125a6511
 X-Patchwork-Hint: ignore
-Message-Id: <20211227195611.4050482A9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-screensaver-pingpong: bump
+Message-Id: <20211227195611.2FC7482BA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-screensaver-cpblobs: bump
  version to 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,38 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f54776b6b145a4ccab81ba2717f6540f8e48b17e
+commit: https://git.buildroot.net/buildroot/commit/?id=67d2d7a294f0b7e01e042421066d202f125a6511
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk   | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index b62a96b235..20e725f07a 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index ed0dae2c56..80dfbad357 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  42d7a0b25dc1b8e1c9171efe066643a7b57162709fcba137f90eb9d24496d2e4  kodi-screensaver-pingpong-19.0.0-Matrix.tar.gz
-+sha256  d8d87943bfb795fc66565d06197a6b3a12b2cdc2b60269197ddccf295217b776  kodi-screensaver-pingpong-19.0.1-Matrix.tar.gz
+-sha256  947ce3bd4edd86da3e01e92ea2da804ca27ffef2fe2492dbf8b5fc8299c52890  kodi-screensaver-cpblobs-19.0.0-Matrix.tar.gz
++sha256  f281efde421cfe9d5f251520853e43e8b1ee128de216af760fcafb80861f504b  kodi-screensaver-cpblobs-19.0.1-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 71588031e5..fffdc82d88 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index 6f462e7d27..9ca6718c92 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PINGPONG_VERSION = 19.0.0-Matrix
-+KODI_SCREENSAVER_PINGPONG_VERSION = 19.0.1-Matrix
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 19.0.0-Matrix
++KODI_SCREENSAVER_CPBLOBS_VERSION = 19.0.1-Matrix
+ KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
+ KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
+ KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
