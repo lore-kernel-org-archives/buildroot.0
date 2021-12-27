@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5528EC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 406BAC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1110760AEB;
-	Mon, 27 Dec 2021 20:10:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4wGssdbyIvOz; Mon, 27 Dec 2021 20:10:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 693C760AAE;
-	Mon, 27 Dec 2021 20:10:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 194531BF3C6
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:09:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1749840362
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:09:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3FC44051E;
+	Mon, 27 Dec 2021 20:10:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ldJIAgwCVEZp for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 20:09:18 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kxt-gm2CQeKv; Mon, 27 Dec 2021 20:10:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF9C4035C;
+	Mon, 27 Dec 2021 20:10:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B733F1BF3C6
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:09:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6E9F60A93
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:09:19 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vkDCVVkdGcG7 for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 20:09:19 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3AB7B40257
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B9AFB60A8C
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:09:18 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 6F3031C0007;
- Mon, 27 Dec 2021 20:09:16 +0000 (UTC)
-Date: Mon, 27 Dec 2021 21:08:31 +0100
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 11D3C1C0008;
+ Mon, 27 Dec 2021 20:09:17 +0000 (UTC)
+Date: Mon, 27 Dec 2021 21:08:39 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabio Estevam <festevam@gmail.com>
-Message-ID: <20211227210831.654229bd@windsurf>
-In-Reply-To: <20211227184653.3248009-1-festevam@gmail.com>
-References: <20211227184653.3248009-1-festevam@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211227210839.7557d103@windsurf>
+In-Reply-To: <20211227190636.2885882-1-fontaine.fabrice@gmail.com>
+References: <20211227190636.2885882-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] configs/imx6sx-sdb: Bump U-Boot and
- kernel
+Subject: Re: [Buildroot] [PATCH 1/1] package/ncmpc: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,15 +62,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 27 Dec 2021 15:46:53 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+On Mon, 27 Dec 2021 20:06:36 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Bump U-Boot to version 2021.10 and kernel to 5.15.11.
+> threads dependency was wrongly removed by commit
+> d29d1368478df621c2426820e1a6019225467234
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/151765cb4000643048e8d86c7a49bc8bcbf9f390
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes since v1:
-> - Fix typo in the U-Boot version.
+>  package/ncmpc/Config.in | 5 +++--
+>  package/ncmpc/ncmpc.mk  | 3 +--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
