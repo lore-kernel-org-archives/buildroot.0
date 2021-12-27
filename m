@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3170C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E8CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8614360A93;
-	Mon, 27 Dec 2021 20:07:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C24DB60AD1;
+	Mon, 27 Dec 2021 20:08:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5inrmLfU0zc6; Mon, 27 Dec 2021 20:07:51 +0000 (UTC)
+	with ESMTP id cJKVFxNK-V8X; Mon, 27 Dec 2021 20:08:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFB4A60A9C;
-	Mon, 27 Dec 2021 20:07:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DB1211BF3C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1285E60AA7;
+	Mon, 27 Dec 2021 20:08:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E4A4D1BF983
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:07:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9F964035A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E0A4860AA7
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:07:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zWpSC6r5Q6DN for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LbeNa3AFiDxj for <buildroot@lists.busybox.net>;
  Mon, 27 Dec 2021 20:07:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2946040354
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30F4F60A6F
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:07:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 60C6682BA9; Mon, 27 Dec 2021 20:02:02 +0000 (UTC)
+ id 68F7282BAA; Mon, 27 Dec 2021 20:02:02 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 21:06:50 +0100
+Date: Mon, 27 Dec 2021 21:06:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 635f4b8b5a04d0802aa429fb92dbcd757feed66c
-X-Git-Newrev: d9f72e37bdad345d80a5dd1c12ab7df2396b35b8
+X-Git-Oldrev: d9f72e37bdad345d80a5dd1c12ab7df2396b35b8
+X-Git-Newrev: 9a04bbec1cd59be3298e68da3c12fc4b522a179e
 X-Patchwork-Hint: ignore
-Message-Id: <20211227200202.60C6682BA9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6ullevk: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+Message-Id: <20211227200202.68F7282BAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx6slevk: bump U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +58,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9f72e37bdad345d80a5dd1c12ab7df2396b35b8
+commit: https://git.buildroot.net/buildroot/commit/?id=9a04bbec1cd59be3298e68da3c12fc4b522a179e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
-error:
+Bump U-Boot to version 2021.10 to fix the following build error:
 
-include/image.h:1178:12: fatal error: openssl/evp.h: No such file or directory
- 1178 | #  include <openssl/evp.h>
-      |            ^~~~~~~~~~~~~~~
+/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 
 Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006189
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006177
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6ullevk_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/imx6slevk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/imx6ullevk_defconfig b/configs/imx6ullevk_defconfig
-index 06641f1458..c6e2981697 100644
---- a/configs/imx6ullevk_defconfig
-+++ b/configs/imx6ullevk_defconfig
-@@ -25,6 +25,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/imx6slevk_defconfig b/configs/imx6slevk_defconfig
+index 90a02964e7..ee7f066f71 100644
+--- a/configs/imx6slevk_defconfig
++++ b/configs/imx6slevk_defconfig
+@@ -11,7 +11,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
