@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A69C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E6C6C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 20:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 594C960A9C;
-	Mon, 27 Dec 2021 20:04:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2A88404EF;
+	Mon, 27 Dec 2021 20:05:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s0s4qPAQRORB; Mon, 27 Dec 2021 20:04:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hIQ7ko4JkQZN; Mon, 27 Dec 2021 20:05:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB54560A6F;
-	Mon, 27 Dec 2021 20:04:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F8AE1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:03:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0FA4C40350;
+	Mon, 27 Dec 2021 20:05:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A5A31BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DC0660A8C
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:03:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 384F440335
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 20:03:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fdfxGL26wCwH for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 20:03:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gCUFxLTuRnfz for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 20:03:22 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 11D7560A6F
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:03:09 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E727D40190
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 20:03:21 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 52C8360007;
- Mon, 27 Dec 2021 20:03:06 +0000 (UTC)
-Date: Mon, 27 Dec 2021 21:03:05 +0100
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id F049EFF802;
+ Mon, 27 Dec 2021 20:03:18 +0000 (UTC)
+Date: Mon, 27 Dec 2021 21:03:17 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Horatiu Vultur via buildroot <buildroot@buildroot.org>
-Message-ID: <20211227210305.5508fd10@windsurf>
-In-Reply-To: <20211227134744.2921600-1-horatiu.vultur@microchip.com>
-References: <20211227134744.2921600-1-horatiu.vultur@microchip.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20211227210317.10074012@windsurf>
+In-Reply-To: <20211227172604.31575-1-bernd.kuhls@t-online.de>
+References: <20211227172604.31575-1-bernd.kuhls@t-online.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package: mrp: bump to version 1.2
+Subject: Re: [Buildroot] [PATCH 1/9] package/kodi-screensaver-asterwave:
+ bump version to 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,26 +57,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 27 Dec 2021 14:47:44 +0100
-Horatiu Vultur via buildroot <buildroot@buildroot.org> wrote:
+On Mon, 27 Dec 2021 18:25:56 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> This version requires cfm package
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/cfm/cfm.mk    | 1 +
->  package/mrp/Config.in | 1 +
->  package/mrp/mrp.hash  | 2 +-
->  package/mrp/mrp.mk    | 4 ++--
->  4 files changed, 5 insertions(+), 3 deletions(-)
+>  .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash  | 2 +-
+>  .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Series applied to master, thanks!
 
 Thomas
 -- 
