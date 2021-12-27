@@ -4,74 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04589C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 09:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED4C7C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 09:50:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73650813D4;
-	Mon, 27 Dec 2021 09:50:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E4B4813D7;
+	Mon, 27 Dec 2021 09:50:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C8pD2FP2KLeQ; Mon, 27 Dec 2021 09:50:16 +0000 (UTC)
+	with ESMTP id SBTerKXozaVY; Mon, 27 Dec 2021 09:50:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9360813CB;
-	Mon, 27 Dec 2021 09:50:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF2B781445;
+	Mon, 27 Dec 2021 09:50:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5F0D1BF3FD
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 09:50:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 776411BF3FD
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 09:50:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A500B813CB
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 09:50:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66C43813CF
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 09:50:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A86-uPrQ5hd1 for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 09:50:13 +0000 (UTC)
+ with ESMTP id 61Oc-opnnwUi for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 09:50:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07D5F813CA
- for <buildroot@busybox.net>; Mon, 27 Dec 2021 09:50:12 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id bm14so59699931edb.5
- for <buildroot@busybox.net>; Mon, 27 Dec 2021 01:50:12 -0800 (PST)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8354B81445
+ for <buildroot@busybox.net>; Mon, 27 Dec 2021 09:50:28 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id o20so59629491eds.10
+ for <buildroot@busybox.net>; Mon, 27 Dec 2021 01:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=HK03Cf3oL6EhC3AbPRoCjX5SWcXCa/kjsXZhTnsKOOM=;
- b=MH0omIkZh0x1S7HMXk8+L+rZ/7PQilyf55KCqJz/jglISwUn3KHhUKhV1d1iXplsG1
- jEvQnzwcOQTGP2wpWF/usLhyyk/+WkzDub6MRlGnQGm6Fo+pqI95loQMubkGJMwS5lLa
- H98IihA0cYGCntb2SWu+Lt4j7BY9fbAt+ccCkLJXa8nS2gdY80/GTkbcCRz28+MOFEa1
- /zRA63jqBoA8F/3BlCbWvHWnvrg7qQ39iVqcUFaM112OXW9YqxoQ3xaGZ6W0jPI5DKg5
- S1DkKJYeMaPuPClRetcXEJOXx1JA25MdjdmI+8E3VES03nffiPNY4vZNXFTsclzgfFQd
- fyeg==
+ bh=oVIKXJI/9a0P2J2VC+76Qvurlr+7hDWHuZW6Uc0JW+Y=;
+ b=E5lHSrRzfocYZsMfRsenqsN13mWcTCIMnePfXFx83xjixCwBvvpmUi+YvGrjSSmV8y
+ m/pTfH5TIA1hnKRFM8QUoeS9LArPVx7QFn2hT9xT1+iqtvM4EWIulj0d50UG+Y0isCqH
+ yiY/fTCbXx65cFOvuyKQrqnNb1DFJNPTaGkHx6+fCTTIWwnqOWNyreveh6i9k+so9LZB
+ Jbyg/hg+AZSaMooiH2pnj5GHBhZbGeEmtdICT/qQvcaSyum7lAnzItjuxENR3uwO2Z77
+ fb79TEbRct4bWyrbgQkIRwbJFn3TaTrBrpVVFce7NfIZmcPA3OF9fAlFt7gWbFydNq+d
+ CejQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=HK03Cf3oL6EhC3AbPRoCjX5SWcXCa/kjsXZhTnsKOOM=;
- b=Wa6lFnvkwmPI5Av+Wlgm16BY1vOCNoVWOx9E/c6AfRJniodXoIrJnrNKFCjcMPWefc
- O/E6VKIVvwFu+5TAJVJlcsowDfBIqzQBQDdVn9lCvWYLfmyX0KLtvuChx14N1fxgeGkI
- 6bVjkeG/Ubrn7wMjgi3uo78tNDQl0ebYx8JGBlupum4vG3K+JHv4OFB03IefNetXfkVm
- y2nEQzCNT/B2lQk7H1nexUqxkNEXmoP9aHf/oC2YV2zSqRwAU2GQia8ddlKD9ebK3ShZ
- ZvZhX76NtIY3qCZY/3HQH5B36d71eTrp6uIaSu6aJ9U6s5SFQOtK1Hp44TCl+17pflHJ
- Fqfg==
-X-Gm-Message-State: AOAM533P9t4sXrEtPOtw9zVmLCeNSW1zN7CWzY5aNWoilywVbwJ+W4Im
- ZYVBxFVX9tVzGc4pH6IlZ3dyujYG+Uc=
-X-Google-Smtp-Source: ABdhPJxWvkBuF33JVOoqpxyyWvDUf2rimzGllJsMvwkeDBvmpNCBUPRkXnPwxyjEANGQDUaR1qnO5Q==
-X-Received: by 2002:aa7:c54f:: with SMTP id s15mr15894363edr.240.1640598610966; 
- Mon, 27 Dec 2021 01:50:10 -0800 (PST)
+ bh=oVIKXJI/9a0P2J2VC+76Qvurlr+7hDWHuZW6Uc0JW+Y=;
+ b=aJbtUw+DD34CyeG9DeT8IRhWiSQUwCWlENzK1xAVzMCrDAA8HMPG9ENJV6lIkT5l6D
+ M1cYTkdkD7sWpqh2FGOa7I2NbPgizBntap2NLPYrDNHYDAhyyLXWmUghtWV1JK97XJ7U
+ A2r4ZIEXHts+fyBsr8la79OC3ehOCK0/q0UFC4Jxx+9FxGBXjZNQ+X0j2Tl//3F5l6CX
+ v7eCxWmrLGSwIlP0wgKwQjPcq28XpPW745xAdd7E3KDo4WRSV8LBH137GAu/WbeDTwVG
+ zxcLQbsf7PLaHKXicxSDIjzUqG0f4urmWaxHN8xk/7Sf2ynsbVTeBmXWQ0+Vr5GA3jyv
+ 94QA==
+X-Gm-Message-State: AOAM530nKL8YL6MJiiSdHLdqwLgK2IkXq80YHzzSlehDB2X6fMKksRV+
+ h3kTGVBbjqzoproO9m68KIJHxdnCu2I=
+X-Google-Smtp-Source: ABdhPJwXvxWxp85TiN4onjpyTAdFt7y5M6FaaYDjYs+ArvVnTf4GdM8ftvylJ9ruBEiY7Hz1BvApPA==
+X-Received: by 2002:a05:6402:1250:: with SMTP id
+ l16mr16043632edw.0.1640598626797; 
+ Mon, 27 Dec 2021 01:50:26 -0800 (PST)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id 16sm4976582ejz.34.2021.12.27.01.50.10
+ by smtp.gmail.com with ESMTPSA id cw11sm4986356ejc.69.2021.12.27.01.50.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Dec 2021 01:50:10 -0800 (PST)
+ Mon, 27 Dec 2021 01:50:26 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon, 27 Dec 2021 10:50:02 +0100
-Message-Id: <20211227095002.1051348-1-francois.perrad@gadz.org>
+Date: Mon, 27 Dec 2021 10:50:19 +0100
+Message-Id: <20211227095019.1051401-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/htop: bump to version 3.1.2
+Subject: [Buildroot] [PATCH] package/nano: bump to version 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,32 +91,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/htop/htop.hash | 2 +-
- package/htop/htop.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index 9de7926e3..dffe5ca1a 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b52280ad05a535ec632fbcd47e8e2c40a9376a9ddbd7caa00b38b9d6bb87ced6  htop-3.1.1.tar.gz
-+sha256  fe9559637c8f21f5fd531a4c072048a404173806acbdad1359c6b82fd87aa001  htop-3.1.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 12e48f437..7caa47ce1 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index c2af67a0f..80529437d 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.9.tar.xz.asc
++# https://www.nano-editor.org/dist/v6/nano-6.0.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  757db8cda4bb2873599e47783af463e3b547a627b0cabb30ea7bf71fb4c24937  nano-5.9.tar.xz
++sha256  93ac8cb68b4ad10e0aaeb80a2dd15c5bb89eb665a4844f7ad01c67efcb169ea2  nano-6.0.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index fba318b03..30db3249e 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--HTOP_VERSION = 3.1.1
-+HTOP_VERSION = 3.1.2
- HTOP_SITE = $(call github,htop-dev,htop,$(HTOP_VERSION))
- HTOP_DEPENDENCIES = ncurses
- HTOP_AUTORECONF = YES
+-NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).9
++NANO_VERSION_MAJOR = 6
++NANO_VERSION = $(NANO_VERSION_MAJOR).0
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
 2.32.0
 
