@@ -1,72 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B9A8C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 13:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 140CAC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 14:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0AFE60E5D;
-	Mon, 27 Dec 2021 13:45:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8474A409B4;
+	Mon, 27 Dec 2021 14:43:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IZej90_S5Eb3; Mon, 27 Dec 2021 13:45:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DjRgQTSphBhr; Mon, 27 Dec 2021 14:43:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EE0D60E57;
-	Mon, 27 Dec 2021 13:45:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 53AB31BF48C
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 13:45:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC607409A8;
+	Mon, 27 Dec 2021 14:43:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 47BEC1BF3ED
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 14:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4287360E57
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 13:45:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40B2040947
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 14:43:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ugDwywV6vn8F for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 13:45:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 94fpL88pukMR for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 14:43:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5EE2060592
- for <buildroot@buildroot.org>; Mon, 27 Dec 2021 13:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1640612742; x=1672148742;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=zQAqmr6itbApQwSmCnmfWkZ4Omh6UROUOyuSetWWR/U=;
- b=TdqXrTm2fXTFX11C8DKt7K31cpUa2A3v+jovoNZDZEgVa8BpRvMZCHl4
- Npcf1M2VggE3p66Qdu6GIs9w56O9j1wxJsTPS1ir4X0lemBK5ADu8wog1
- TzxnGZ/lA42uHOTFQ+FGfgzT//1ndrU+Zz+2cxUWh0/wHjBJ/EZuSSBAc
- YyXDcKKSfO0DS1zju8tnX6fluFIgDHFXq1B4Rg/1kXcmsg+2R2Mgwbp0H
- qa1kxwCvSmWlte20hQ1PDtjRXb8qz/f07Yn7tB7wcR1IKPjDV83jn/2YR
- F7TuwDAhIBxZSB251EF4cj6CJy/nGcO0yD0YU5pSXzizre6awuiX1CnHi g==;
-IronPort-SDR: 0lnOXT03apObE3lCn+WXlybGMGsaJQ4H0xnorXAid9TrK73g0ARnUr3qWkbCRVb/pG64VU+iwt
- KTFa1JMWXBKil71n9Xb8jC/zdozflJtScOwXqAO4nShNPr6famJ8lVFEqajfLPBL5+/d6L/vMv
- Y6lHhbRb20ReW7kmpcwvfGj4ipi0dJoMdytqHvx4C3mqK6emuWC4T3BE2vyYqCNaIY3+t1YSP4
- XwmXXuB7itlrTjJgKP3uzIdmrG3QYJy0MEcdv0KLdc3HA9ZqtxQ69GhtG1Yf+LeenDAlIkT4b7
- mqslVcNizBQrHLj8pEEB3wEa
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; d="scan'208";a="140958610"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 27 Dec 2021 06:45:41 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 27 Dec 2021 06:45:41 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 27 Dec 2021 06:45:41 -0700
-To: <buildroot@buildroot.org>
-Date: Mon, 27 Dec 2021 14:47:44 +0100
-Message-ID: <20211227134744.2921600-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B1E640170
+ for <buildroot@buildroot.org>; Mon, 27 Dec 2021 14:43:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id ABCF5200003;
+ Mon, 27 Dec 2021 14:43:09 +0000 (UTC)
+Date: Mon, 27 Dec 2021 15:43:08 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Message-ID: <20211227154308.1bcc4a4d@windsurf>
+In-Reply-To: <YcchfJG1EDtyepcy@curiosity>
+References: <20211219142035.6220-1-peter@korsgaard.com>
+ <20211219142035.6220-2-peter@korsgaard.com>
+ <YcchfJG1EDtyepcy@curiosity>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package: mrp: bump to version 1.2
+Subject: Re: [Buildroot] [PATCH 2/2] board/*/genimage.cfg: use
+ partition-table-type = "gpt" for genimage-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,76 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Horatiu Vultur via buildroot <buildroot@buildroot.org>
-Reply-To: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc: Alistair Francis <alistair@alistair23.me>,
+ Gerome Burlats <gerome.burlats@smile.fr>, Michael Walle <michael@walle.cc>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version requires cfm package
+Hello Sergey,
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- package/cfm/cfm.mk    | 1 +
- package/mrp/Config.in | 1 +
- package/mrp/mrp.hash  | 2 +-
- package/mrp/mrp.mk    | 4 ++--
- 4 files changed, 5 insertions(+), 3 deletions(-)
+On Sat, 25 Dec 2021 16:49:48 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-diff --git a/package/cfm/cfm.mk b/package/cfm/cfm.mk
-index a998bb11ca..850b8d604c 100644
---- a/package/cfm/cfm.mk
-+++ b/package/cfm/cfm.mk
-@@ -9,6 +9,7 @@ CFM_SITE = $(call github,microchip-ung,cfm,v$(CFM_VERSION))
- CFM_DEPENDENCIES = libev libmnl libnl
- CFM_LICENSE = GPL-2.0
- CFM_LICENSE_FILES = LICENSE
-+CFM_INSTALL_STAGING = YES
- 
- define CFM_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D $(CFM_PKGDIR)/S65cfm \
-diff --git a/package/mrp/Config.in b/package/mrp/Config.in
-index 0ca18a4ef2..ac42fa4773 100644
---- a/package/mrp/Config.in
-+++ b/package/mrp/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_MRP
- 	select BR2_PACKAGE_LIBEV
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNL
-+	select BR2_PACKAGE_CFM
- 	help
- 	  This is the userspace application that configures the kernel
- 	  to run MRP protocol. The userspace application is made of 2
-diff --git a/package/mrp/mrp.hash b/package/mrp/mrp.hash
-index 02a848c7eb..47cf461882 100644
---- a/package/mrp/mrp.hash
-+++ b/package/mrp/mrp.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  1a6c76d058bb425a7ec8b69a65de797650961161ec016b51ac8a1965e1ac304f  mrp-1.1.tar.gz
-+sha256  2b960d14c861b4e0332f411440b41a9c1c06ecce8ed6197944a74b1c8279c1cc  mrp-1.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mrp/mrp.mk b/package/mrp/mrp.mk
-index 7e31e442ce..213afbcdf5 100644
---- a/package/mrp/mrp.mk
-+++ b/package/mrp/mrp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--MRP_VERSION = 1.1
-+MRP_VERSION = 1.2
- MRP_SITE = $(call github,microchip-ung,mrp,v$(MRP_VERSION))
--MRP_DEPENDENCIES = libev libmnl libnl
-+MRP_DEPENDENCIES = libev libmnl libnl cfm
- MRP_LICENSE = GPL-2.0
- MRP_LICENSE_FILES = LICENSE
- 
+> Build still fails for orangepi-zero-plus2 with this patch. I get the
+> following subsequent error messages from genimage:
+> 
+> ERROR: hdimage(sdcard.img): part boot: 'partition-type' is only valid for mbr and hybrid partition-table-type
+> 
+> After changing 'partition-type' entries to the appropriate 'partition-type-uuid',
+> genimage complains about overlaps:
+> 
+> ERROR: hdimage(sdcard.img): partition [GPT array] (offset 0x100000, size 0x4000) overlaps previous partition u-boot (offset 0x2000, size 0x102000)
+> ERROR: hdimage(sdcard.img): bootloaders, etc. that overlap with the partition table must declare the overlapping area as a hole.
+> 
+> It looks like new genimage is able to keep track of partition table.
+> IIUC this can be fixed either using new 'holes' feature or just updating
+> size of the bootloader file. For instance, with the following patch
+> applied orangepi-pc-plus builds and boots fine:
+
+Have you looked at
+https://patchwork.ozlabs.org/project/buildroot/patch/20211219142035.6220-1-peter@korsgaard.com/
+which is PATCH 1/2 of this series? It fixes exactly the problem you're
+pointing to, just for a different board.
+
+Do not hesitate to send patches to fix other boards.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.33.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
