@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECACC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 21:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83FB9C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 21:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBC424020B;
-	Mon, 27 Dec 2021 21:21:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AAD94017D;
+	Mon, 27 Dec 2021 21:22:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NCfY1RotAvuA; Mon, 27 Dec 2021 21:21:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dPgVmBnHArKV; Mon, 27 Dec 2021 21:22:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6A2D401A3;
-	Mon, 27 Dec 2021 21:21:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1160C1BF9A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DA654018B;
+	Mon, 27 Dec 2021 21:21:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 212FE1BF9AA
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 21:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2D0E60769
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 21:21:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A291401AF
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 21:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KdXMJh5YUuI7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 22l2E26W_x5U for <buildroot@lists.busybox.net>;
  Mon, 27 Dec 2021 21:21:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 502F26077D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 240AB4014E
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 21:21:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6FCDE82BA7; Mon, 27 Dec 2021 21:15:33 +0000 (UTC)
+ id 3D5E382BA7; Mon, 27 Dec 2021 21:15:33 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 22:20:02 +0100
+Date: Mon, 27 Dec 2021 22:19:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6bcbaf130de9c84dc8f68d70027e684a4c214e70
-X-Git-Newrev: 5563a9c7c95e23b2ef008db785f6ae74ad366c41
+X-Git-Oldrev: c09d759a6497f3c979d1dba3df531833e25e4c47
+X-Git-Newrev: 35cf2a00b2a97d32b80491043e802e8ed69bfbf9
 X-Patchwork-Hint: ignore
-Message-Id: <20211227211533.6FCDE82BA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linuxconsoletools: bump to version
- 1.7.1
+Message-Id: <20211227211533.3D5E382BA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: bump to version
+ 20.10.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5563a9c7c95e23b2ef008db785f6ae74ad366c41
+commit: https://git.buildroot.net/buildroot/commit/?id=35cf2a00b2a97d32b80491043e802e8ed69bfbf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
-
-https://sourceforge.net/p/linuxconsole/code/ci/release-1.7.1/tree/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linuxconsoletools/linuxconsoletools.hash | 4 ++--
- package/linuxconsoletools/linuxconsoletools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
-index caacf70e45..889f6d1d6c 100644
---- a/package/linuxconsoletools/linuxconsoletools.hash
-+++ b/package/linuxconsoletools/linuxconsoletools.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 5e15842859..d1323f507d 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	95d112f06393806116341d593bda002c8bc44119c1538407623268fed90d8c34	linuxconsoletools-1.7.0.tar.bz2
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  bd4d4b7e37da02fc67e47ddf20b6f1243c0a7af7b02b918d5e72138ea8727547  linuxconsoletools-1.7.1.tar.bz2
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
-index f26d874d96..306a5b1fa0 100644
---- a/package/linuxconsoletools/linuxconsoletools.mk
-+++ b/package/linuxconsoletools/linuxconsoletools.mk
+-sha256  359e8854d0d51bc884d434f182f64ca62f25fbbe7b9c6a336eb09f212fe8cc9a  docker-engine-20.10.9.tar.gz
++sha256  6fa7835bf7c17c293621967bd5096642fa1e3e1b597fbc7d7bd35f455d886495  docker-engine-20.10.11.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 84366d9334..45fa7fa53e 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUXCONSOLETOOLS_VERSION = 1.7.0
-+LINUXCONSOLETOOLS_VERSION = 1.7.1
- LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
- LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
- LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
+-DOCKER_ENGINE_VERSION = 20.10.9
++DOCKER_ENGINE_VERSION = 20.10.11
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
