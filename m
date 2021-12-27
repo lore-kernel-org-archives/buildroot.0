@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891ACC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 21:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BC8BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 21:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FB8940197;
-	Mon, 27 Dec 2021 21:22:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 262CB607DE;
+	Mon, 27 Dec 2021 21:22:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yo3QpuxKOlh6; Mon, 27 Dec 2021 21:22:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Fc24uRhokdhu; Mon, 27 Dec 2021 21:22:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B85340190;
-	Mon, 27 Dec 2021 21:22:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8AF671BF35D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92F6A60769;
+	Mon, 27 Dec 2021 21:22:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CBE301BF35D
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 21:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 251764014E
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA29C60769
  for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 21:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KO9-j35ONSia for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BTHP9BLSr7-Y for <buildroot@lists.busybox.net>;
  Mon, 27 Dec 2021 21:21:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41D48401A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28D5960767
  for <buildroot@buildroot.org>; Mon, 27 Dec 2021 21:21:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5F25282BAD; Mon, 27 Dec 2021 21:15:33 +0000 (UTC)
+ id 4508382BAD; Mon, 27 Dec 2021 21:15:33 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Dec 2021 22:19:59 +0100
+Date: Mon, 27 Dec 2021 22:19:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53dc91b8f259434e87e7bade653f4af16043f69c
-X-Git-Newrev: d790dcace2003d07e450fe5b7b93857fef82f0cb
+X-Git-Oldrev: 35cf2a00b2a97d32b80491043e802e8ed69bfbf9
+X-Git-Newrev: 60acafc80648bd87e86c574912ee71bd8bc64cbf
 X-Patchwork-Hint: ignore
-Message-Id: <20211227211533.5F25282BAD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/davfs2: bump to version 1.6.1
+Message-Id: <20211227211533.4508382BAD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-cli: bump to version
+ 20.10.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d790dcace2003d07e450fe5b7b93857fef82f0cb
+commit: https://git.buildroot.net/buildroot/commit/?id=60acafc80648bd87e86c574912ee71bd8bc64cbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://savannah.nongnu.org/forum/forum.php?forum_id=10067
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/davfs2/davfs2.hash | 2 +-
- package/davfs2/davfs2.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
-index 88a314d1c2..a555779dbc 100644
---- a/package/davfs2/davfs2.hash
-+++ b/package/davfs2/davfs2.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 6eb9413a11..fbcda5753e 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  2e6b675685bd917772be60f0999ae098c80f79ff20dc131e8fec4547cbb63b50  davfs2-1.6.0.tar.gz
-+sha256  ce3eb948ece582a51c934ccb0cc70e659839172717caff173f69a5e2af90c5c0  davfs2-1.6.1.tar.gz
- # License file, locally calculated
- sha256  0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index 9b96140fd8..42192faa59 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
+-sha256  d91010813824070dd2380013c8f343e61e6dda170f7853f024bda39b432b64ba  docker-cli-20.10.9.tar.gz
++sha256  55d55fdead906cbea8608ef39d5a62d54d1118e604a5ae7e2d58b4fb54a599a7  docker-cli-20.10.11.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 3a344bca36..0e35a60d43 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAVFS2_VERSION = 1.6.0
-+DAVFS2_VERSION = 1.6.1
- DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
+-DOCKER_CLI_VERSION = 20.10.9
++DOCKER_CLI_VERSION = 20.10.11
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
