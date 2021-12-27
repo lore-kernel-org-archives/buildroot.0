@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A599C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 10:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E296C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Dec 2021 10:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9D9981398;
-	Mon, 27 Dec 2021 10:20:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C227160DDF;
+	Mon, 27 Dec 2021 10:20:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NtOlTPRCqfSo; Mon, 27 Dec 2021 10:20:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PVko3hVBNNfr; Mon, 27 Dec 2021 10:20:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B2E281392;
-	Mon, 27 Dec 2021 10:20:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4530B60BDB;
+	Mon, 27 Dec 2021 10:20:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A59EE1BF4DB
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:19:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E3DB61BF4DB
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93573813D4
- for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:19:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1F12813D4
+ for <buildroot@lists.busybox.net>; Mon, 27 Dec 2021 10:19:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7V0fqwW5eDWU for <buildroot@lists.busybox.net>;
- Mon, 27 Dec 2021 10:19:03 +0000 (UTC)
+ with ESMTP id FCyphQwiQQMu for <buildroot@lists.busybox.net>;
+ Mon, 27 Dec 2021 10:19:17 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B9FF181392
- for <buildroot@busybox.net>; Mon, 27 Dec 2021 10:19:02 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93E0881418
+ for <buildroot@busybox.net>; Mon, 27 Dec 2021 10:19:17 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 2CBBFFF80A;
- Mon, 27 Dec 2021 10:18:59 +0000 (UTC)
-Date: Mon, 27 Dec 2021 11:18:58 +0100
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 83C88E0008;
+ Mon, 27 Dec 2021 10:19:15 +0000 (UTC)
+Date: Mon, 27 Dec 2021 11:19:07 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20211227111858.6c99b792@windsurf>
-In-Reply-To: <20211227095002.1051348-1-francois.perrad@gadz.org>
-References: <20211227095002.1051348-1-francois.perrad@gadz.org>
+Message-ID: <20211227111907.477491d3@windsurf>
+In-Reply-To: <20211227095050.1051510-1-francois.perrad@gadz.org>
+References: <20211227095050.1051510-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/htop: bump to version 3.1.2
+Subject: Re: [Buildroot] [PATCH] package/prosody: bump to version 0.11.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,14 +62,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 27 Dec 2021 10:50:02 +0100
+On Mon, 27 Dec 2021 10:50:50 +0100
 Francois Perrad <fperrad@gmail.com> wrote:
 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/htop/htop.hash | 2 +-
->  package/htop/htop.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/prosody/prosody.hash | 8 ++++----
+>  package/prosody/prosody.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
