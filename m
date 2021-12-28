@@ -1,52 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF8FC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 17:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF06BC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 20:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECD1040010;
-	Tue, 28 Dec 2021 17:14:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NHSEvqDXsI7P; Tue, 28 Dec 2021 17:14:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0865B4023B;
-	Tue, 28 Dec 2021 17:14:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3B28B1BF42E
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 17:14:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29F2460ADB
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 17:14:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59CC260B5B;
+	Tue, 28 Dec 2021 20:21:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTRcS8OIpuVA for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 17:14:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC8E66066D
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 17:14:51 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 726CFE0006;
- Tue, 28 Dec 2021 17:14:48 +0000 (UTC)
-Date: Tue, 28 Dec 2021 18:14:47 +0100
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sQlDqiCrSE34; Tue, 28 Dec 2021 20:21:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFAC760B36;
+	Tue, 28 Dec 2021 20:21:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B9401BF344
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:21:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 385B581B23
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:21:20 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qJ2XodYKqkZH for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 20:21:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6421C81AF4
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 20:21:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 5A9B182BDA; Tue, 28 Dec 2021 20:15:31 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211228181447.2a42dc86@windsurf>
-In-Reply-To: <CAPi7W80OfGF3AhM2h6mjtsUjLEnYEV4gteJ12GFq4edNysEV5A@mail.gmail.com>
-References: <20211228153345.4087026-1-fontaine.fabrice@gmail.com>
- <20211228164916.2beec0d6@windsurf>
- <CAPi7W80OfGF3AhM2h6mjtsUjLEnYEV4gteJ12GFq4edNysEV5A@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/mbedtls3: new package
+To: buildroot@buildroot.org
+Date: Tue, 28 Dec 2021 21:20:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 22ad0f2569ff849dd2eefdd6c0412d961c762f95
+X-Git-Newrev: 396c2513253b38789f0ef46873870530a5fa4968
+X-Patchwork-Hint: ignore
+Message-Id: <20211228201531.5A9B182BDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/atkmm: bump to version 2.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +52,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=396c2513253b38789f0ef46873870530a5fa4968
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Dec 2021 18:07:03 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Switch to meson-package as configure is not shipped anymore
 
-> > An important (and unfortunate point) is that apparently mbedtls3 cannot
-> > be installed side-by-side with mbedtls. At least that's what your
-> > "depends on !BR2_PACKAGE_MBEDTLS" seems to hint.  
-> Indeed, both versions install their headers in include/mbedtls.
-> >
-> > This is a major annoyance, and I'm not sure how Linux distributions
-> > will handle this migration if they cannot have mbedtls 2.x and mbedtls
-> > 3.x installed side by side.  
-> 3.0 was released in July.
-> To my knowledge, hiawatha is one of the first package that uses this
-> new API and buildroot will probably be one of the first build system
-> that will provide mbedts3.
-> IMHO, being unable to install both versions side by side is pretty
-> common: we had the same issue with libupnp 1.6.x and libupnp 1.8.x.
-> Concerning libupnp, we even had to revert the possibility to install
-> both versions side by side because it was a "burden to programs
-> linking against libupnp":
-> https://github.com/pupnp/pupnp/commit/07f504c61bd9e4d93eb3d373ffc8527cafe0b9af
+This will fix the following build failure raised since bump of glibmm to
+version 2.68.2 in commit dddb65efbdf2c7952f22a1e51009f17f1676db4a:
 
-I'm not sure to follow you here. The fact that it's pretty common
-doesn't make it a good solution. It makes the transition period
-absolutely awful.
+Package 'glibmm-2.4', required by 'virtual:world', not found
 
-With the currently proposed approach, someone who today has a working
-configuration that has hiawatha and belle-sip can conveniently build
-both in the same image. With your patch applied, this is no longer
-possible, due to hiawatha now using mbedtls3, which cannot be installed
-side-by-side with mbedtls.
+https://gitlab.gnome.org/GNOME/atkmm/-/blob/2.36.1/NEWS
 
-This doesn't seem very acceptable for us, and probably is even less
-acceptable for major Linux distributions.
+Fixes:
+ - http://autobuild.buildroot.org/results/0c4932738aa509f582074f399dfbe1c70ac74070
 
-Has this been discussed with upstream mbedtls ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/atkmm/atkmm.hash | 4 ++--
+ package/atkmm/atkmm.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+index 42cc2d7221..f965ad29cb 100644
+--- a/package/atkmm/atkmm.hash
++++ b/package/atkmm/atkmm.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.24/atkmm-2.24.2.sha256sum
+-sha256  ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd  atkmm-2.24.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
++sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
+ # locally computed
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+index 234a937bba..3bcb941c9f 100644
+--- a/package/atkmm/atkmm.mk
++++ b/package/atkmm/atkmm.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ATKMM_VERSION_MAJOR = 2.24
+-ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).2
++ATKMM_VERSION_MAJOR = 2.36
++ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
+ ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
+ ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+ ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+@@ -13,4 +13,4 @@ ATKMM_LICENSE_FILES = COPYING COPYING.tools
+ ATKMM_INSTALL_STAGING = YES
+ ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
