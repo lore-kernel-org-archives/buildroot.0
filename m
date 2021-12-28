@@ -1,50 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F01CBC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 20:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25667C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 20:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE03D40879;
-	Tue, 28 Dec 2021 20:44:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D915560B52;
+	Tue, 28 Dec 2021 20:45:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbh4sYnZqyGq; Tue, 28 Dec 2021 20:44:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Knkd1vI1yiMe; Tue, 28 Dec 2021 20:45:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2195640891;
-	Tue, 28 Dec 2021 20:44:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 446831BF344
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:44:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37A2860B09;
+	Tue, 28 Dec 2021 20:45:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E8CF61BF344
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3415581390
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:44:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D61A340253
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 20:45:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5TxEDdmii5Ki for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 20:44:20 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eVijy_SmJRdF for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 20:44:59 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4994D81319
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 20:44:20 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 388BC6000B;
- Tue, 28 Dec 2021 20:44:18 +0000 (UTC)
-Date: Tue, 28 Dec 2021 21:44:17 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211228214417.6afc81b3@windsurf>
-In-Reply-To: <20211228133959.3690191-1-fontaine.fabrice@gmail.com>
-References: <20211228133959.3690191-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 492C84023F
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 20:44:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:25ef:2aa8:94fa:832d])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 822A313F7F0;
+ Tue, 28 Dec 2021 21:44:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1640724296;
+ bh=ReUsdYoT2VK7ZQ2bPST7qg0GNGgzu/8s/SSWHciKsYk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=NXM5mkDCa1phL22EkjzFAsLtA9sX0vqvuoHO80+ZqHcmxVeSee3zrSsxz8xyhu1LK
+ 77W0SHOzvt81mtl0KVSKHoWfLQb33ApZRxLYQYNeeac1loCSwM8fLoeEKrx3RIjoMt
+ 3ecjZT4t24PzxOdJnB7YxrAAlMK2Vvf4fut3K6hSQS4iPAeKH0Onz+ehV5bVO2wE8b
+ MZWpG2nxBBfroR6o3YZ+11YjlK/GEEar2rRxeEIu48Jvj4L82iiG8PyV9RkHSN8TIk
+ +o27dEwxV/FLcseV51cHCLBwA6tfXbzHhQSZfAwabH40ROobWa1+W8XAlx9HU8eCrg
+ ulYWWt1jvKu1A==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 28 Dec 2021 21:44:48 +0100
+Date: Tue, 28 Dec 2021 21:44:48 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20211228204448.GB3390456@scaer>
+References: <20211227215833.1136054-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/rng-tools: fix musl build
+Content-Disposition: inline
+In-Reply-To: <20211227215833.1136054-1-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/gcc/Config.in.host: fix
+ BR2_GCC_VERSION_ARC select of BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,39 +72,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 28 Dec 2021 14:39:59 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Thomas, All,
 
-> Fix the following musl build failure raised since bump to version 6.14
-> in commit 5292d1cf9ad0605cc264fedc75c1b9a169aa183b:
-> 
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: rngd-rngd_jitter.o: in function `rngd_notime_start':
-> rngd_jitter.c:(.text+0xdc2): undefined reference to `pthread_attr_setaffinity_np'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3ec7df86856aa9bee2f18a8faa44fd58bc8a6657
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2021-12-27 22:58 +0100, Thomas Petazzoni spake thusly:
+> When the gcc arc version was bumped to a version using gcc
+> 10.x (arc-2020.09-release) in commit
+> 0791abfba0227803b19895ea22326f4e17ac93dc, the select of
+> BR2_GCC_VERSION_ARC on the appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
+> was not updated. This commit fixes this issue.
+
+I've slightly rephrased the commit log to also add a reference to
+0b4c7ba01cfe (toolchain: update option descriptions for ARC tools
+arc-2020.09-release) which also missed updating the select.
+
+Nice catch, applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  ...ct-non-posix-extensions-for-pthreads.patch | 43 ++++++++++++++++
->  ...-either-pthread-affinity-set-methods.patch | 49 +++++++++++++++++++
->  2 files changed, 92 insertions(+)
->  create mode 100644 package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
->  create mode 100644 package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
+>  package/gcc/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index aa2665cbee..a1fe192d3a 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -12,7 +12,7 @@ config BR2_GCC_VERSION_ARC
+>  	bool "gcc arc (10.x)"
+>  	# Only supported architecture
+>  	depends on BR2_arc
+> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+>  
+>  config BR2_GCC_VERSION_POWERPC_SPE
+>  	bool "gcc powerpc spe"
+> -- 
+> 2.31.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
