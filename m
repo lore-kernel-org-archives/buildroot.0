@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEA9C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 13:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70A0CC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 13:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D053660804;
-	Tue, 28 Dec 2021 13:48:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EE7E4013A;
+	Tue, 28 Dec 2021 13:53:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XFO3FCWVzKHK; Tue, 28 Dec 2021 13:48:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b0FE3vxsoZ7B; Tue, 28 Dec 2021 13:53:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 423BF6064D;
-	Tue, 28 Dec 2021 13:48:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DCF351BF363
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:48:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEE5F40145;
+	Tue, 28 Dec 2021 13:53:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F051A1BF363
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9A9D81418
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:48:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF0BD60687
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:53:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DhwKA2CsEXAn for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 13:48:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EZb8BSucQ71F for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 13:53:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DAF818140A
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 13:48:11 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id k18so1772692wrg.11
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 05:48:11 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DC456064D
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 13:53:48 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id c66so11650455wma.5
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 05:53:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=y3drFJ1LYrYHKXJS7VsXlS8aQs0uEOoSJEJBBYrhWpE=;
- b=a1lMkUAEBpiIRM76fPJQWX+k9wkeIFAQoi0MwPLQRz4JSU/6z7k8StuKGc3Q9uLVKy
- JNgWnb4cc/9UpAqHo7r0PQOVMezl5B0UKoj1+tzr/+qE0tWtvps6SNZQBeyuEPYGeBob
- n4mdu3zXk2/e9jQ7dDZAlU5fo8l8go7BjhXYsV3TfI9ZQ8ZrfaYafOMaHpkQD2qhBGdi
- se9h3ebNjDKDN4gQOz6NYUYQ91U4lxSchzXNf7HLXM7BYBcwoUVKv05ukHBCJna4a/Mq
- db2NlAtBLo5AImGeXTXkY+vL5GQM917BnozK3NcwPtNYRErLIP0bjkSX1B4cuAXm0Cg4
- Rgjg==
+ bh=SBUtv+P5pdT/f91amUGa85XLXzpKcsEVeRpaKYWJJag=;
+ b=Vhk8V3AXSid05DSoNT9i3NsvvT5hy/F+20npoZ5hC/OSw7NMu6m8cVzzolgA/VitMk
+ L0O9tuAhOVvR3D4Hp2K1YhV/OUvg3iyw1cVvQ4aThqRtOaPYAOb6RGe0RFinKAErbAF4
+ 2ksNl0YAwE2d/DRZrCM7K44pIBzRZzCfK8hzTvvpUcA6EGZaJ1c7fIQvP1dbYbjFbR4R
+ 9XhO34Wpix6kv1q5lbHX9mubgoeP+RHk+GAhdNRmW6+pPxi2zMsUImioMrniw57jRdss
+ /CWdQyjyjk1DlqJGD4gupt290QHv79e5ZtIYGQnjTWDOq1pA5z6F70cGLFx1UazokUU9
+ upZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=y3drFJ1LYrYHKXJS7VsXlS8aQs0uEOoSJEJBBYrhWpE=;
- b=6L21YupYTxbUd90vk+RcgLS3LuG1dv3D+gAQQqSXawXR1yqT+m28ZEjSMJoDyyXHal
- SfE+aO6ETLRrjbxStAokIhWovUyw9wo51YQKpNvLGbafaRKVtEPCMxFOiU2EWkRQ0MXD
- hjEzc7zNnm4xaz+ggf26UtkfgSPwFJc9ci10YsQU6XjoXnyDsksttZRmRT9leo9ebW8c
- g3Gn8shXmROAJYTx1cqweOmy1aLUshetkQ7F35tTxlbhcu8A3Cq+NZIqDHDlAFTQO0id
- YDtttqm40anBDGx+B+KOy9Rkvcediw8wTu2ZiHNTIJ6Fzaf/qpaWEfWXUDDttNr4CeyC
- 7g1w==
-X-Gm-Message-State: AOAM531dMo2GCKg6woS4G1XXagKlFNz+AKVttU0c4zfydcgFNVKsuqDU
- FRcfdBfmbiCAH3k6rOfeMTG0VKHJkRj40A==
-X-Google-Smtp-Source: ABdhPJzvzkS9ls8BMF8b6+US+rSbrSpSdsbxime+/9mmBlBoIlVn0ylX6LsksdTw8d/VwJKIQvsgcQ==
-X-Received: by 2002:a5d:4cca:: with SMTP id c10mr16894835wrt.224.1640699290064; 
- Tue, 28 Dec 2021 05:48:10 -0800 (PST)
+ bh=SBUtv+P5pdT/f91amUGa85XLXzpKcsEVeRpaKYWJJag=;
+ b=qv5r2bj9mc9D7XvBhQDY2tOynrVOrSFlmvJVvVSYVtJN2JqzINHIBiwfyZjdf8paiq
+ anWB6EwXqkjTM6+yOOAtCK2xwscj6lS6zzODhS+6DJBlzIKpzCzolFr1jOxGLu1+aXon
+ x45DxRcfU+NgUutJH3Qnx1cuyXqWsxoRGNOnsCpNPOu0jF8/rLGKXMAVLSpK9/zsacAG
+ g9nMiH7k6nxB0bVIkrfqIAN07YP3BqKMMSyyvl++4o20liwZRWCd3lx0OI4jKwwJ1S7P
+ VrklOao+4/7h2TK9xpai5+CuSrFcgW9CzVZO5z8k00HbbghT5Zg1crk6wsZDFZopv5Bh
+ hLCQ==
+X-Gm-Message-State: AOAM533XglU6lTlOn9nZz4doMl5YPpB5blo6ZgIjQgyzIQOMmGCP/bWg
+ bBvJKF879mVqMYFRVhh/yedGuUMKxWJN8Q==
+X-Google-Smtp-Source: ABdhPJyGMs6n6SPgJtBDJnEwqEAhSBjhgnAey/1Plx7LxlPnEUguIbzpGJjcl3qLq6ZPuBNIrJFsIA==
+X-Received: by 2002:a05:600c:35d4:: with SMTP id
+ r20mr17781638wmq.190.1640699626474; 
+ Tue, 28 Dec 2021 05:53:46 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id o12sm19759262wrc.69.2021.12.28.05.48.09
+ by smtp.gmail.com with ESMTPSA id d4sm17941021wrx.102.2021.12.28.05.53.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Dec 2021 05:48:09 -0800 (PST)
+ Tue, 28 Dec 2021 05:53:46 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 14:47:29 +0100
-Message-Id: <20211228134729.3691438-1-fontaine.fabrice@gmail.com>
+Date: Tue, 28 Dec 2021 14:53:05 +0100
+Message-Id: <20211228135305.3696192-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-yatl: bump to version
- 20211217.1
+Subject: [Buildroot] [PATCH 1/1] package/opencv4: bump to version 4.5.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,45 +86,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop patch (already in version)
+
+https://github.com/opencv/opencv/wiki/ChangeLog#version455
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-yatl/python-yatl.hash | 4 ++--
- package/python-yatl/python-yatl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...src-cap_ffmpeg_impl.hpp-fix-build-wi.patch | 52 -------------------
+ package/opencv4/opencv4.hash                  |  2 +-
+ package/opencv4/opencv4.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 54 deletions(-)
+ delete mode 100644 package/opencv4/0001-modules-videoio-src-cap_ffmpeg_impl.hpp-fix-build-wi.patch
 
-diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
-index 6f4623c516..8ce192bf95 100644
---- a/package/python-yatl/python-yatl.hash
-+++ b/package/python-yatl/python-yatl.hash
+diff --git a/package/opencv4/0001-modules-videoio-src-cap_ffmpeg_impl.hpp-fix-build-wi.patch b/package/opencv4/0001-modules-videoio-src-cap_ffmpeg_impl.hpp-fix-build-wi.patch
+deleted file mode 100644
+index 6d5d6d0647..0000000000
+--- a/package/opencv4/0001-modules-videoio-src-cap_ffmpeg_impl.hpp-fix-build-wi.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 4c92a2869b9a8f736a12ba859b74e5cadce62387 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Nov 2021 09:50:17 +0100
+-Subject: [PATCH] modules/videoio/src/cap_ffmpeg_impl.hpp: fix build with gcc
+- 4.8
+-
+-Fix the following build failure with gcc 4.8:
+-
+-In file included from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_impl.hpp:100:0,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg.cpp:50:
+-/home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_hw.hpp: In constructor 'HWAccelIterator::HWAccelIterator(cv::VideoAccelerationType, bool, AVDictionary*)':
+-/home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg_hw.hpp:939:23: error: use of deleted function 'std::basic_istringstream<char>& std::basic_istringstream<char>::operator=(const std::basic_istringstream<char>&)'
+-             s_stream_ = std::istringstream(accel_list);
+-                       ^
+-In file included from /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/complex:45:0,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/core/include/opencv2/core/cvstd.inl.hpp:47,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/core/include/opencv2/core.hpp:3306,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/include/opencv2/videoio.hpp:46,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/precomp.hpp:57,
+-                 from /home/buildroot/autobuild/instance-3/output-1/build/opencv4-4.5.4/modules/videoio/src/cap_ffmpeg.cpp:42:
+-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/sstream:272:11: note: 'std::basic_istringstream<char>& std::basic_istringstream<char>::operator=(const std::basic_istringstream<char>&)' is implicitly deleted because the default definition would be ill-formed:
+-     class basic_istringstream : public basic_istream<_CharT, _Traits>
+-           ^
+-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-none-linux-gnueabi/include/c++/4.8.3/sstream:272:11: error: use of deleted function 'std::basic_istream<char>& std::basic_istream<char>::operator=(const std::basic_istream<char>&)'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/60f8846b435dafda0ced412d59ffe15bdff0810d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/opencv/opencv/commit/4c92a2869b9a8f736a12ba859b74e5cadce62387]
+----
+- modules/videoio/src/cap_ffmpeg_impl.hpp | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/modules/videoio/src/cap_ffmpeg_impl.hpp b/modules/videoio/src/cap_ffmpeg_impl.hpp
+-index d393b73ff4a2..76e1b855b7c8 100644
+---- a/modules/videoio/src/cap_ffmpeg_impl.hpp
+-+++ b/modules/videoio/src/cap_ffmpeg_impl.hpp
+-@@ -93,6 +93,12 @@ extern "C" {
+- }
+- #endif
+- 
+-+// GCC 4.x compilation bug. Details: https://github.com/opencv/opencv/issues/20292
+-+#if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)
+-+#undef USE_AV_HW_CODECS
+-+#define USE_AV_HW_CODECS 0
+-+#endif
+-+
+- //#define USE_AV_HW_CODECS 0
+- #ifndef USE_AV_HW_CODECS
+- #if LIBAVUTIL_VERSION_MAJOR >= 56 // FFMPEG 4.0+
+diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
+index 791ebe3d35..6d43138be8 100644
+--- a/package/opencv4/opencv4.hash
++++ b/package/opencv4/opencv4.hash
 @@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/yatl/json
--md5  2954413784ced7e52513ae12b2183c88  yatl-20210326.1.tar.gz
--sha256  add729efdc2c9c06e0fcf640d97d4c500de611a38d5fdcc2ec12545d5ab14ca1  yatl-20210326.1.tar.gz
-+md5  551136eba4c5551c01b051341b190641  yatl-20211217.1.tar.gz
-+sha256  d22bf7abe40d9bdd16bd15824d2df65e65e405df6ecb8601fdc7c233bf6b3004  yatl-20211217.1.tar.gz
-diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
-index 3a9e2748a5..12a8039891 100644
---- a/package/python-yatl/python-yatl.mk
-+++ b/package/python-yatl/python-yatl.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256  c20bb83dd790fc69df9f105477e24267706715a9d3c705ca1e7f613c7b3bad3d  opencv4-4.5.4.tar.gz
++sha256  a1cfdcf6619387ca9e232687504da996aaa9f7b5689986b8331ec02cb61d28ad  opencv4-4.5.5.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index 1859b866dd..e75f7144de 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YATL_VERSION = 20210326.1
-+PYTHON_YATL_VERSION = 20211217.1
- PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
--PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/9d/76/5906d641f452dc2ee56795e2152dafc1d212cd411d1cb893af29a7d06e33
-+PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/03/05/0be8164e8151fd8c96caeb2560f955dc2dc1a969f0868f48c046cd863fe6
- PYTHON_YATL_SETUP_TYPE = setuptools
- PYTHON_YATL_LICENSE = BSD-3-Clause
- 
+-OPENCV4_VERSION = 4.5.4
++OPENCV4_VERSION = 4.5.5
+ OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
+ OPENCV4_INSTALL_STAGING = YES
+ OPENCV4_LICENSE = Apache-2.0
 -- 
 2.33.0
 
