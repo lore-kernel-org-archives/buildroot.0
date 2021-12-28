@@ -1,49 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A424C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DECDC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 19068403AC;
-	Tue, 28 Dec 2021 21:05:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pKyTMykuBrjN; Tue, 28 Dec 2021 21:05:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 463BE4023F;
-	Tue, 28 Dec 2021 21:05:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 343741BF39D
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:05:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31142401CD
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:05:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2678840258;
+	Tue, 28 Dec 2021 21:08:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kn91p5GJPhks for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:05:51 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1451A40193
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:05:50 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id BFBCD240003;
- Tue, 28 Dec 2021 21:05:47 +0000 (UTC)
-Date: Tue, 28 Dec 2021 22:05:46 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AkoXdnuSk0ya; Tue, 28 Dec 2021 21:08:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56FF44025C;
+	Tue, 28 Dec 2021 21:08:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D80221BF39D
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:08:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C457381390
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:08:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0RMNcH-ZXPwI for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:07:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED8068131C
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:07:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id CDF9182A9A; Tue, 28 Dec 2021 21:02:10 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: chenxy <field.xue@gmail.com>
-Message-ID: <20211228220546.231d7fee@windsurf>
-In-Reply-To: <20211102141848.364177-1-field.xue@gmail.com>
-References: <20211102141848.364177-1-field.xue@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] feat: add siitool package
+To: buildroot@buildroot.org
+Date: Tue, 28 Dec 2021 22:07:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a6a2ce15d771ce32c282868a0504759a942cddd
+X-Git-Newrev: f877c668114c3dab465127a307b3268f1f34db5b
+X-Patchwork-Hint: ignore
+Message-Id: <20211228210210.CDF9182A9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectd: add missing comment for
+ mysql dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,35 +53,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello fieldxy,
+commit: https://git.buildroot.net/buildroot/commit/?id=f877c668114c3dab465127a307b3268f1f34db5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Nov 2021 22:18:47 +0800
-chenxy <field.xue@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/collectd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> From: fieldxy <field.xue@gmail.com>
-> 
-> - Siitool generates your SII/EEPROM files from the ESI/XML description files of
->   your EtherCAT devices. The program is also capable of interpreting a raw SII/EEPROM
->   file and print it in a human-friendly syntax.
-> - git web https://github.com/synapticon/siitool
-
-Thanks for your patch. But unfortunately, as it is, we can't apply it
-as we don't accept anonymous contributions. Could you resubmit with
-your full name?
-
-Thanks a lot!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index d44d4e4913..9c38d87bcb 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -384,6 +384,10 @@ config BR2_PACKAGE_COLLECTD_MYSQL
+ 	  Connects to a MySQL database and issues a "show status"
+ 	  command.
+ 
++comment "mysql needs a toolchain w/ C++, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_COLLECTD_NETLINK
+ 	bool "netlink"
+ 	select BR2_PACKAGE_LIBMNL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
