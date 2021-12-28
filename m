@@ -1,47 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3484EC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9634FC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:58:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C44718142C;
-	Tue, 28 Dec 2021 21:57:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C3BB405B0;
+	Tue, 28 Dec 2021 21:58:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qPghg3ZNKp5I; Tue, 28 Dec 2021 21:57:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XebyN58b50bm; Tue, 28 Dec 2021 21:58:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1418E813B2;
-	Tue, 28 Dec 2021 21:57:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 516DD405AE;
+	Tue, 28 Dec 2021 21:58:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 482271BF39D
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:57:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CFDF41BF39D
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37EAD40886
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:57:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF8FC4088A
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:58:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e_0lha172xZP for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:57:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDE6340881
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:57:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A97E681D34; Tue, 28 Dec 2021 21:51:38 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 22:57:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b00c034fe58ad2ae87b2289e07912b6c10d19ee1
-X-Git-Newrev: f717bd22abd1c6b4718245fd9645cc9070715c03
-X-Patchwork-Hint: ignore
-Message-Id: <20211228215138.A97E681D34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/squashfs: add upstream patch to
- fix symlinks
+ with ESMTP id QB-ClvuRpsFH for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:58:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C732940881
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:58:09 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B8ED41C0004;
+ Tue, 28 Dec 2021 21:58:06 +0000 (UTC)
+Date: Tue, 28 Dec 2021 22:58:05 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20211228225805.47df3c46@windsurf>
+In-Reply-To: <20211023050119.3293369-1-james.hilliard1@gmail.com>
+References: <20211023050119.3293369-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/nodejs: expose capability to
+ compile host library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,85 +57,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Martin Bark <martin@barkynet.com>, Linus Kaschulla <linus@cosmos-ink.net>,
+ Daniel Price <daniel.price@gmail.com>, Adam Duskett <aduskett@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f717bd22abd1c6b4718245fd9645cc9070715c03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 22 Oct 2021 23:01:19 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Since version 4.5, squashfs-tools provides two additional utilities:
-sqfstar and sqfscat. But their functionality is bundled within
-mksquashfs and unsquashfs respectively, so that sqfstar is a symlink
-to sqfstar, and sqfscat a symlink to unsquashfs.
+> From: Linus Kaschulla <linus@cosmos-ink.net>
+> 
+> To use nodejs on the host (independant of the actual system)
+> to create some static files to place onto the target rootfs
+> nodejs can be very helpful.
+> 
+> The provided nodejs package didn't show the possibility to
+> create a host package. But upon further examination I noticed
+> that the package does it in fact (in the .mk). It specifies
+> dependencies for the package with the host prefix and also
+> invokes $(host-generic-package) as well as $(generic-package)
+> which is the only one assumed from the config.
+> 
+> With this change other packages can require BR2_PACKAGE_HOST_NODEJS
+> without any problems or the buildsystem not fully knowing about this.
+> Seems that someone added the capability (as a step for the cross-
+> compiled nodejs) and didn't notice that this is a handy package by itself.
+> 
+> When installing global npm packages (with -g), the parameter
+> `--prefix $(HOST_DIR)` can be used to ensure that nodejs doesn't try
+> to install it onto the real host filesystem.
+> 
+> I already used this change to create static web files from Angular
+> and place onto a target that doesn't need nodejs itself.
+> 
+> This patch contains fixes based on feedback from:
+> - Peter Seiderer <ps.report@gmx.net>
+> - Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - move nodejs 14 dependency selection to host package
+> ---
+>  package/Config.in.host        |  1 +
+>  package/nodejs/Config.in      |  6 +-----
+>  package/nodejs/Config.in.host | 13 +++++++++++++
+>  3 files changed, 15 insertions(+), 5 deletions(-)
+>  create mode 100644 package/nodejs/Config.in.host
 
-Unfortunately, due to how the symlinks were created, they had a bogus
-target when INSTALL_DIR was not empty, leading to things like this:
+I've applied to master, after significantly simplifying the commit log,
+which was a bit verbose for no good reason.
 
- ./usr/bin/sqfscat -> /home/peko/autobuild/instance-1/output-2/target/usr/bin/unsquashfs
- ./usr/bin/sqfstar -> /home/peko/autobuild/instance-1/output-2/target/usr/bin/mksquashfs
+Thanks!
 
-Not only they are wrong, but they also cause reproducible build
-issues (this is how they were detected).
-
-This commit backports an upstream patch that fixes this problem.
-
-This is also fixing the squashfs-tools part of the reproducible build
-issues at:
-
-  http://autobuild.buildroot.net/results/00af5dca8c30b243af1e8cde3b02e264f7603442/diffoscope-results.txt
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...id-use-of-INSTALL_DIR-for-symlink-targets.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/package/squashfs/0001-Avoid-use-of-INSTALL_DIR-for-symlink-targets.patch b/package/squashfs/0001-Avoid-use-of-INSTALL_DIR-for-symlink-targets.patch
-new file mode 100644
-index 0000000000..997719e63a
---- /dev/null
-+++ b/package/squashfs/0001-Avoid-use-of-INSTALL_DIR-for-symlink-targets.patch
-@@ -0,0 +1,37 @@
-+From f5c908e92d4c055859be2fddbda266d9e3bfd415 Mon Sep 17 00:00:00 2001
-+From: Patrick McCarty <patrick.mccarty@intel.com>
-+Date: Mon, 26 Jul 2021 11:38:43 -0700
-+Subject: [PATCH] Avoid use of INSTALL_DIR for symlink targets
-+
-+In case INSTALL_DIR is overridden with a staged install location, using
-+INSTALL_DIR for the symlink target path prefix will yield an incorrect location
-+for the final installation.
-+
-+Because the symlink itself is already installed to INSTALL_DIR, simply removing
-+the INSTALL_DIR prefix suffices as a fix.
-+
-+Note that using $DESTDIR/$INSTALL_DIR where appropriate can avoid this type of
-+issue, but that can be considered a future enhancement.
-+
-+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
-+Upstream: f5c908e92d4c055859be2fddbda266d9e3bfd415
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ squashfs-tools/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/squashfs-tools/Makefile b/squashfs-tools/Makefile
-+index f5a55f1..7262a2e 100755
-+--- a/squashfs-tools/Makefile
-++++ b/squashfs-tools/Makefile
-+@@ -406,5 +406,5 @@ install: mksquashfs unsquashfs
-+ 	mkdir -p $(INSTALL_DIR)
-+ 	cp mksquashfs $(INSTALL_DIR)
-+ 	cp unsquashfs $(INSTALL_DIR)
-+-	ln -fs $(INSTALL_DIR)/unsquashfs $(INSTALL_DIR)/sqfscat
-+-	ln -fs $(INSTALL_DIR)/mksquashfs $(INSTALL_DIR)/sqfstar
-++	ln -fs unsquashfs $(INSTALL_DIR)/sqfscat
-++	ln -fs mksquashfs $(INSTALL_DIR)/sqfstar
-+-- 
-+2.31.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
