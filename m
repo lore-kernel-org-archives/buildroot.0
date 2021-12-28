@@ -1,77 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CAFFC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 10:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C0E3C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 11:06:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0237781B23;
-	Tue, 28 Dec 2021 10:35:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DBA840290;
+	Tue, 28 Dec 2021 11:06:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0X_e35Dpo8ZM; Tue, 28 Dec 2021 10:35:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3PohOel6x9JT; Tue, 28 Dec 2021 11:06:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D78B81B48;
-	Tue, 28 Dec 2021 10:35:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89A701BF362
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 10:35:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7337402F8;
+	Tue, 28 Dec 2021 11:06:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 184CB1BF592
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 11:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A96281B48
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 10:35:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 070F240201
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 11:06:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J10s0ilncJhe for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 10:35:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pyzhnC-9h9XE for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 11:06:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7515E81B23
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 10:35:45 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id t26so37484413wrb.4
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 02:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 046FE401B7
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 11:06:14 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id s1so37669027wra.6
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 03:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OAdDHjwV92cUC0cjPTecZBLqRcZU9WG1Ksn+Qr/Zl4c=;
- b=SHvAtnKtGa8eAksc00SxCDo0VLeQD5b9vYpstBW/FFNe0M1rV+2nkuiVUxDRXTt3BW
- ZO2N6kxYJojzr0q3aJWLcB6tJIg/oY8lpVnTDoX2ldBh+J3rovDdT2vr56MxZiwvwh2n
- aiL9jKCkcFKdjPBU7YeLaOzJToP7nuItlm9D3G766WKG3B3TjM9/CAiPnw3upcMbkI18
- O8ZClbeHUx+L+B8PqVRfPvUdfb5cNyrlkkK45yKPo8vvo0hbnWSlEsvXf6nneAJVO5Eb
- +HiYHtmY0Uyi8csDiQGFMGfVcTsJ3l27CvZFRdtSXRr0m1HHPKq2jg8dg8KzbePQyxev
- 82fA==
+ bh=dSAAX0HFcEURXd/DCSx9xkgmi2DVv01rxKnm4+qSR8w=;
+ b=H3nqORTy+ukXymohKATguana7ovPtS14bpYIGXV0y6uEFttnJ+aHT3og7/CO7qyoQX
+ ClsGN8Vdu9deFKWNlq8XovBmauWmKaw8SQXr9wWMMM2dnAIZ/nEtXVOFnqBIQvvPV62C
+ 8rfd8upDfZAngyfah1uc4eOnl6FwrvePgRFgrAVvzMCeKXo/VlI55KqXuE0P9Y2ywnpg
+ ROXqJgdo3r7nKJ7oHIlpIFmSCNhZ0pynMWbYmf9OnNatMc3ErLi1qJZ2hgHvLxPEDq07
+ S0qX4q8Hh3OKxZslUOmkX5IsYADNBT/ad2N/J14Rh/lzQanvPUejSz7OalmS65UGqdAu
+ Locg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=OAdDHjwV92cUC0cjPTecZBLqRcZU9WG1Ksn+Qr/Zl4c=;
- b=4cBfIDLWANHRIfFjkjWxmJ3KFQz1kdWxdD+fKvwQIgV6jLeGIZpGm64oDs8xsCxVlL
- 99H31+WwK13FYQ80ACVvObfpeiRo0kQ+OwG5W93+f3KDPhSWYv7t28QiAJHC8NERqImq
- yrMPFOG3ATe3nHE5Vu9jhVAwHBQ72FSVgbv+99f/VNq45dpIzUYEMZbo1Q8JvmhANc32
- C105OeLqtFewT+fO3B0bzBGVhLwjummG313dYxEGW+hW5s8oF+9h10OMiCX7CTsoy2ON
- 00pAyJ6tN5THLGUQd5QzJxc5Vyx5wEQOQh2Su4UqLnmzbi3eP7cKe0S9ZkA/BLnd3zpl
- FA3A==
-X-Gm-Message-State: AOAM533UlixuX2avmWAD6+sp8yDy1QabTYccmCZhf5JjxwZpaYNUJbxG
- k+sxlXyjSpw+Ng+3Aq+JOgeVYmhtqU97Sw==
-X-Google-Smtp-Source: ABdhPJyxMuFqeJEuAayKHghhJemYeyo7joFQUVXsmqoDqVJs0mVukmbVMR/E00WDOnw58PkPKcVRNQ==
-X-Received: by 2002:adf:ec8b:: with SMTP id z11mr15982856wrn.378.1640687743511; 
- Tue, 28 Dec 2021 02:35:43 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id l8sm18217571wrv.25.2021.12.28.02.35.42
+ bh=dSAAX0HFcEURXd/DCSx9xkgmi2DVv01rxKnm4+qSR8w=;
+ b=AMkZH40TbN+maibYYwJttgor5Kc0Cyug0pGlHdb6jgZooFr0CbM+jG6NFsGqmVlsIn
+ 6TZiBcECMxWfR7K+ns0XT83CO0X691Qz7Sy1PPPuuDO2/oUJ7nevzYhrjawgEmTWxeiA
+ 4d3fGL0chy3/oBC8z5CoLqvSu0OGkqVfgx2PPOTy0VIIpzIAOgTZXpPgD58wQgrc4BUb
+ ayYT3QWVf8rY7BCQMHbUsS2rvPXYQth2oLutaWa8ERqFu/7eaP9yYgJmSjwecewvo3+m
+ maMy1+o+80oFPKA1eh8CJ6XPZJAb7Hi4NYBMf3wfFlUdcxpJotdgwfD50sUOfY1pMVUg
+ 9mMQ==
+X-Gm-Message-State: AOAM530OFeD0ytZVbPtdIK0w83jiyVdFPV9wZZEy/mYt+7y2d0wk0Dh+
+ uOQbjz2sQatj9vGuH7quP1fU7249ZnQ=
+X-Google-Smtp-Source: ABdhPJwjXrFKOU6XWRVYuLShE581AuSGB4cZKm9lsicR1NBSA/mjAL/5M+ECVRS5x2kdzY0sMtp5JA==
+X-Received: by 2002:a05:6000:1a87:: with SMTP id
+ f7mr16169255wry.150.1640689573276; 
+ Tue, 28 Dec 2021 03:06:13 -0800 (PST)
+Received: from winie.fritz.box (i59F5253A.versanet.de. [89.245.37.58])
+ by smtp.gmail.com with ESMTPSA id o8sm20754690wry.20.2021.12.28.03.06.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Dec 2021 02:35:43 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 28 Dec 2021 03:06:12 -0800 (PST)
+X-Google-Original-From: Florian La Roche <Florian.LaRoche@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 11:35:01 +0100
-Message-Id: <20211228103501.3645778-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Tue, 28 Dec 2021 12:06:10 +0100
+Message-Id: <20211228110610.304548-1-Florian.LaRoche@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/zchunk: needs argp
+Subject: [Buildroot] [PATCH 1/1] package/rt-tests: bump version to 2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,55 +84,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Florian La Roche via buildroot <buildroot@buildroot.org>
+Reply-To: Florian La Roche <florian.laroche@googlemail.com>
+Cc: Florian La Roche <Florian.LaRoche@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since the addition of the package
-in commit c618da772df32679fdd338b99f44133655c9113f:
-
-../output-1/build/zchunk-1.1.16/meson.build:35:4: ERROR: C shared or static library 'argp' not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/f82d06e95ac497aa8215268a7a58e929a05b32e3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
 ---
- package/zchunk/Config.in | 1 +
- package/zchunk/zchunk.mk | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ package/rt-tests/rt-tests.hash | 2 +-
+ package/rt-tests/rt-tests.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zchunk/Config.in b/package/zchunk/Config.in
-index d610e15997..2c8db434ce 100644
---- a/package/zchunk/Config.in
-+++ b/package/zchunk/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ZCHUNK
- 	bool "zchunk"
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBCURL
- 	help
- 	  A file format designed for highly efficient deltas while
-diff --git a/package/zchunk/zchunk.mk b/package/zchunk/zchunk.mk
-index d8538542f1..6f7ac799a0 100644
---- a/package/zchunk/zchunk.mk
-+++ b/package/zchunk/zchunk.mk
-@@ -9,7 +9,9 @@ ZCHUNK_SITE = $(call github,zchunk,zchunk,$(ZCHUNK_VERSION))
- ZCHUNK_LICENSE = BSD-2-Clause
- ZCHUNK_LICENSE_FILES = LICENSE
- ZCHUNK_INSTALL_STAGING = YES
--ZCHUNK_DEPENDENCIES = libcurl
-+ZCHUNK_DEPENDENCIES = \
-+	libcurl \
-+	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
+diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
+index c731feaf21..4f84e0d0ca 100644
+--- a/package/rt-tests/rt-tests.hash
++++ b/package/rt-tests/rt-tests.hash
+@@ -1,4 +1,4 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
+-sha256 48346ab2b5bf2ffbdb1ed0d4540e9e8e22f6665e6bb3d59c22614f9722b13a91  rt-tests-2.2.tar.xz
++sha256 b5e7959bcb5c703b2743030751af975ea4e04962e29fc1118f4b605987585735  rt-tests-2.3.tar.xz
+ # locally computed hash
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index a0d7f76e8e..056a4a6723 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -6,7 +6,7 @@
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- ZCHUNK_DEPENDENCIES += openssl
+ RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
+ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+-RT_TESTS_VERSION = 2.2
++RT_TESTS_VERSION = 2.3
+ RT_TESTS_LICENSE = GPL-2.0+
+ RT_TESTS_LICENSE_FILES = COPYING
+ 
 -- 
-2.33.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
