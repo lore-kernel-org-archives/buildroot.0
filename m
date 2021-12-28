@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C34DC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C811AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A94C60B6E;
-	Tue, 28 Dec 2021 21:03:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 572C660B66;
+	Tue, 28 Dec 2021 21:03:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4PMPqJOpmkCz; Tue, 28 Dec 2021 21:03:20 +0000 (UTC)
+	with ESMTP id qbpF9UHb8E_G; Tue, 28 Dec 2021 21:03:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5619560B66;
-	Tue, 28 Dec 2021 21:03:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7822F60B73;
+	Tue, 28 Dec 2021 21:03:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 942F91BF344
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E481A1BF344
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F0B640253
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CFBF40586
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HynZgZSXiKqD for <buildroot@lists.busybox.net>;
+ with ESMTP id XT8IU7qjLDFt for <buildroot@lists.busybox.net>;
  Tue, 28 Dec 2021 21:02:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D149405B0
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:02:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F225A403AC
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:02:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E560182BDD; Tue, 28 Dec 2021 20:56:26 +0000 (UTC)
+ id DC08582BDC; Tue, 28 Dec 2021 20:56:26 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 22:01:50 +0100
+Date: Tue, 28 Dec 2021 21:47:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d94e2b6dd4f291a77bbfd06eabb7ce85c9bb6aa9
-X-Git-Newrev: 444f6d22cc954f080bc92fe445dad27361401c04
+X-Git-Oldrev: 72de4a84fb53f708330f98eb84c1c7e07d8cea71
+X-Git-Newrev: d94e2b6dd4f291a77bbfd06eabb7ce85c9bb6aa9
 X-Patchwork-Hint: ignore
-Message-Id: <20211228205626.E560182BDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/microchip_sama7g5ek: new defconfigs
+Message-Id: <20211228205626.DC08582BDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rng-tools: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,194 +58,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=444f6d22cc954f080bc92fe445dad27361401c04
+commit: https://git.buildroot.net/buildroot/commit/?id=d94e2b6dd4f291a77bbfd06eabb7ce85c9bb6aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new defconfigs for sama7g5 evaluation kit.
-Update README with new defconfigs.
-Board uses linux 5.15 mainline.
+Fix the following musl build failure raised since bump to version 6.14
+in commit 5292d1cf9ad0605cc264fedc75c1b9a169aa183b:
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: rngd-rngd_jitter.o: in function `rngd_notime_start':
+rngd_jitter.c:(.text+0xdc2): undefined reference to `pthread_attr_setaffinity_np'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3ec7df86856aa9bee2f18a8faa44fd58bc8a6657
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                    |  5 ++
- board/atmel/readme.txt                        |  2 +
- board/microchip/sama7g5ek/genimage.cfg        | 31 ++++++++++++
- configs/microchip_sama7g5ek_mmc_defconfig     | 25 ++++++++++
- configs/microchip_sama7g5ek_mmc_dev_defconfig | 68 +++++++++++++++++++++++++++
- 5 files changed, 131 insertions(+)
+ ...-detect-non-posix-extensions-for-pthreads.patch | 43 +++++++++++++++++++
+ ...se-of-either-pthread-affinity-set-methods.patch | 49 ++++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cdfe922d66..78e41b7d7c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -789,6 +789,11 @@ F:	package/optee-client/
- F:	package/optee-examples/
- F:	package/optee-test/
- 
-+N:	Eugen Hristev <eugen.hristev@microchip.com>
-+F:	board/atmel/readme.txt
-+F:	board/microchip/sama7g5ek/
-+F:	configs/microchip_sama7g5ek*
-+
- N:	Eugene Tarassov <eugene@largest.net>
- F:	package/tcf-agent/
- 
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index a29d027214..a9c427e90b 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -25,6 +25,8 @@ This guide covers the following configurations:
-  - microchip_sam9x60ek_mmc_dev_defconfig
-  - microchip_sama5d2_icp_mmc_defconfig
-  - microchip_sama5d2_icp_mmc_dev_defconfig
-+ - microchip_sama7g5ek_mmc_defconfig
-+ - microchip_sama7g5ek_mmc_dev_defconfig
- 
- These configurations will use AT91Bootstrap, u-boot and a linux kernel from
- the git trees maintained by Atmel.
-diff --git a/board/microchip/sama7g5ek/genimage.cfg b/board/microchip/sama7g5ek/genimage.cfg
+diff --git a/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch b/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
 new file mode 100644
-index 0000000000..ade29e4b5d
+index 0000000000..ba6cf63d7c
 --- /dev/null
-+++ b/board/microchip/sama7g5ek/genimage.cfg
-@@ -0,0 +1,31 @@
-+# Image for SD card boot on Microchip SAMA7G5EK (sama7g5 evaluation kit)
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama7g5ek.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
++++ b/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
+@@ -0,0 +1,43 @@
++From d1840e54a15fc454936cada10cce7fd91d06232b Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@gmail.com>
++Date: Thu, 15 Jul 2021 08:43:01 -0400
++Subject: [PATCH] Adding ability to detect non-posix extensions for pthreads
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++Theres a desire to build rngd with musl, which doesn't have all the gnu
++extensions (but it has some).  So test for those.  Note, this requires
++the addition of the USE_EXTENSIONS macro to enable -d_GNU_SOURCE
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 1M
-+	}
++Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/configs/microchip_sama7g5ek_mmc_defconfig b/configs/microchip_sama7g5ek_mmc_defconfig
++[Retrieved from:
++https://github.com/nhorman/rng-tools/commit/d1840e54a15fc454936cada10cce7fd91d06232b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 0fe06fc..de7dca3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -25,6 +25,7 @@ AC_CANONICAL_TARGET dnl required for broken AX_PTHREAD
++ AM_INIT_AUTOMAKE([foreign])
++ AC_CONFIG_HEADERS([rng-tools-config.h])
++ AC_CONFIG_MACRO_DIRS([m4])
+++AC_USE_SYSTEM_EXTENSIONS
++ 
++ dnl Parse options
++ 
++@@ -100,6 +101,12 @@ AS_IF(
++ 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
++ )
++ 
+++AC_CHECK_DECL(pthread_attr_setaffinity_np,
+++		[AC_DEFINE([HAVE_PTHREAD_ATTR_SETAFFINITY], 1,[Set ATTR_SETAFFINITY])],
+++		[ AC_CHECK_DECL(pthread_setaffinity_np,
+++		   [AC_DEFINE([HAVE_PTHREAD_SETAFFINITY],1, [Set PTHREAD_SETAFFINITY])], [ AC_MSG_ERROR([Neither pthread_setaffinity_np nor pthread_attr_setaffinity_np found])],[[#include <pthread.h>]])
+++		], [[#include <pthread.h>]])
+++
++ AS_IF(
++ 	[ test "x$with_nistbeacon" != "xno"],
++ 	[
+diff --git a/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch b/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
 new file mode 100644
-index 0000000000..940b658c7d
+index 0000000000..17285baa6a
 --- /dev/null
-+++ b/configs/microchip_sama7g5ek_mmc_defconfig
-@@ -0,0 +1,25 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama7g5ek/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sama7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama7g5ek"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2021.04)/u-boot-at91-linux4sam-2021.04.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama7g5ek_mmc1"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-new file mode 100644
-index 0000000000..e7f2f9ca83
---- /dev/null
-+++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-@@ -0,0 +1,68 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PTHREAD_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama7g5ek/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sama7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama7g5ek"
-+BR2_PACKAGE_LINUX_TOOLS_IIO=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_STRACE=y
-+BR2_PACKAGE_TREE=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBSYSFS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_ARGP_STANDALONE=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_HTOP=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2021.04)/u-boot-at91-linux4sam-2021.04.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama7g5ek_mmc1"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++++ b/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
+@@ -0,0 +1,49 @@
++From 5caa086dc14cecf68d1a5c31e87ba1efb2c00893 Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@gmail.com>
++Date: Thu, 15 Jul 2021 08:48:10 -0400
++Subject: [PATCH] Allow for use of either pthread affinity set methods
++
++musl has support for pthread_setaffinity_np, but not
++pthread_attr_setaffinity_np.  so check for hte existence of either
++function in configure, and use the appropriate one.
++
++Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
++
++[Retrieved from:
++https://github.com/nhorman/rng-tools/commit/5caa086dc14cecf68d1a5c31e87ba1efb2c00893]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ rngd_jitter.c | 15 ++++++++++++++-
++ 1 file changed, 14 insertions(+), 1 deletion(-)
++
++diff --git a/rngd_jitter.c b/rngd_jitter.c
++index ea29436..5c7e09e 100644
++--- a/rngd_jitter.c
+++++ b/rngd_jitter.c
++@@ -67,12 +67,25 @@ static int rngd_notime_start(void *ctx,
++ 	for(i=i-1;i>=0;i--) {
++ 		CPU_SET(i,cpus);
++ 	}
++-	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
++ 
+++        /*
+++	 * Note that only one of:
+++	 * HAVE_PTHREAD_ATTR_SETAFFINITY
+++	 * and
+++	 * HAVE_PTHREAD_SETAFFINITY
+++	 * Will ever be set, as per the configure.ac logic
+++	 */
+++#ifdef HAVE_PTHREAD_ATTR_SETAFFINITY
+++	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
+++#endif
++ 	ret = -pthread_create(&thread_ctx->notime_thread_id,
++ 				&thread_ctx->notime_pthread_attr,
++ 				start_routine, arg);
++ 
+++#ifdef HAVE_PTHREAD_SETAFFINITY
+++	pthread_setaffinity_np(&thread_ctx->notime_thread_id, cpusize, cpus);
+++#endif
+++
++ 	CPU_FREE(cpus);
++ 	return ret;
++ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
