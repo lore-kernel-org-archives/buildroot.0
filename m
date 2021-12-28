@@ -4,47 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960ACC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5D49C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22E1D819F6;
-	Tue, 28 Dec 2021 21:45:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50405818CA;
+	Tue, 28 Dec 2021 21:48:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iQZfC-LTo3ON; Tue, 28 Dec 2021 21:45:33 +0000 (UTC)
+	with ESMTP id PC4tqm8Aizk8; Tue, 28 Dec 2021 21:48:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 937E2818CA;
-	Tue, 28 Dec 2021 21:45:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDDE61BF39D
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:45:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCDDA8198A;
+	Tue, 28 Dec 2021 21:48:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B4DAE1BF39D
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAF97818CA
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:45:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A18CA40881
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:48:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cVB0vSRJ6VS5 for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:45:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 95279818BE
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:45:30 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 96A25240007;
- Tue, 28 Dec 2021 21:45:28 +0000 (UTC)
-Date: Tue, 28 Dec 2021 22:45:27 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Ankur Tyagi <ankur.tyagi@gallagher.com>
-Message-ID: <20211228224527.55b5c79c@windsurf>
-In-Reply-To: <20210928213650.912-1-ankur.tyagi@gallagher.com>
-References: <20210928213650.912-1-ankur.tyagi@gallagher.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libevent: add -fPIC to CFLAGS
- when BR2_PIC_PIE is set
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oj4j6ZQhSY7B for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:48:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E922E4087D
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:48:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BD2C582B78; Tue, 28 Dec 2021 21:42:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 28 Dec 2021 22:47:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cf494c78c1b3963e80a5c601e3e23346cac494e1
+X-Git-Newrev: b00c034fe58ad2ae87b2289e07912b6c10d19ee1
+X-Patchwork-Hint: ignore
+Message-Id: <20211228214236.BD2C582B78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-rebar: fix linking failure
+ on shared library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +53,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Ankur,
+commit: https://git.buildroot.net/buildroot/commit/?id=b00c034fe58ad2ae87b2289e07912b6c10d19ee1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Sep 2021 10:36:50 +1300
-Ankur Tyagi <ankur.tyagi@gallagher.com> wrote:
+Add patch to fix linking failure while creating shared library. As
+explained in the patch itself, there is no specific variable for when we
+link a shared library and rebar itself rely on the default LDFLAGS. Since
+by default every CFLAGS is filled with -fPIC we need to make sure that
+every LDFLAGS is the same, so not having any other *_LDFLAGS variable to
+fille with -fPIC let's add it to the main LDFLAGS.
 
-> Otherwise build fails with following error:
-> Toolchain wrapper executing: '/tools/aarch64-linux-gnu/bin//aarch64-linux-gnu-gcc' '--sysroot' '/home/user/work/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot' '-mabi=lp64' '-fstack-protector-strong' '-fstack-clash-protection' '-mcpu=cortex-a35' '-fPIE' '-Wl,-z,now' '-Wl,-z,relro' '-shared' '.libs/buffer.o' '.libs/bufferevent.o' '.libs/bufferevent_filter.o' '.libs/bufferevent_pair.o' '.libs/bufferevent_ratelim.o' '.libs/bufferevent_sock.o' '.libs/event.o' '.libs/evmap.o' '.libs/evthread.o' '.libs/evutil.o' '.libs/evutil_rand.o' '.libs/evutil_time.o' '.libs/listener.o' '.libs/log.o' '.libs/strlcpy.o' '.libs/select.o' '.libs/poll.o' '.libs/epoll.o' '.libs/signal.o' '-Os' '-g2' '-pthread' '-pthread' '-Wl,-soname' '-Wl,libevent_core-2.1.so.7' '-o' '.libs/libevent_core-2.1.so.7.0.1'
-> /tools/aarch64-linux-gnu/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/ld: .libs/evmap.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `event_changelist_add_' which may bind externally can not be used when making a shared object; recompile with -fPIC
-> .libs/evmap.o: in function `evmap_check_integrity_':
-> /home/user/work/cxos-buildroot/output/build/libevent-2.1.12/evmap.c:1007:(.text+0x13ac): dangerous relocation: unsupported relocation
-> collect2: error: ld returned 1 exit status
-> Makefile:1516: recipe for target 'libevent_core.la' failed
-> make[3]: *** [libevent_core.la] Error 1
-> 
-> Signed-off-by: Ankur Tyagi <ankur.tyagi@gallagher.com>
-> ---
->  package/libevent/libevent.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Fixes:
+http://autobuild.buildroot.net/results/602/60296a48210e7ffc6bc9fa50ee586441a8957e85/
 
-I have looked at all the patches you have sent to add -fPIC flags in
-various packages. However, I don't understand why this would be needed.
-I've just tried building libevent on aarch64, and it builds fine, with
-BR2_PIC_PIE=y. Also, our autobuilders have not detected anything.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ort_compiler-add-fPIC-to-LDFLAGS-by-defau.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-So I'm afraid, you will have to provide more details: which toolchain
-is used, which Buildroot configuration, so that we can reproduce the
-problem.
-
-I'm for now marking the patches as "Rejected" in our patch tracking
-system, but please provide more details so that we can see how to
-address it.
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/erlang-rebar/0001-src-rebar_port_compiler-add-fPIC-to-LDFLAGS-by-defau.patch b/package/erlang-rebar/0001-src-rebar_port_compiler-add-fPIC-to-LDFLAGS-by-defau.patch
+new file mode 100644
+index 0000000000..a9c1670a1f
+--- /dev/null
++++ b/package/erlang-rebar/0001-src-rebar_port_compiler-add-fPIC-to-LDFLAGS-by-defau.patch
+@@ -0,0 +1,35 @@
++From 7f54d48ee5db037778ead310e0b8278f3fe70b41 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 19 Dec 2021 07:52:55 +0100
++Subject: [PATCH] src/rebar_port_compiler: add -fPIC to LDFLAGS by default
++
++Since both DRV_CFLAGS and EXE_CFLAGS list -fPIC we need also the LDFLAGS
++to follow them. Unfortunately adding -fPIC only to DRV_LDFLAGS and
++EXE_LDFLAGS is not sufficient, since when linking as a library(.so) it
++doesn't take into account those variables. Since -fPIC is needed by default
++by any kind of linking, let's add it to the general -fPIC. Rebar seems to
++link libraries without taking into account any variable listed in:
++src/rebar_port_compiler.erl
++this after testing and tracing for every variable.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ src/rebar_port_compiler.erl | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/rebar_port_compiler.erl b/src/rebar_port_compiler.erl
++index 9679c80..bd08b21 100644
++--- a/src/rebar_port_compiler.erl
+++++ b/src/rebar_port_compiler.erl
++@@ -645,6 +645,8 @@ default_env() ->
++      {"OBJCOPY", get_tool(Arch, "objcopy", "objcopy")},
++      {"OBJDUMP", get_tool(Arch, "objdump", "objdump")},
++ 
+++     {"LDFLAGS", "-fPIC $LDFLAGS"},
+++
++      {"DRV_CXX_TEMPLATE",
++       "$CXX -c $CXXFLAGS $DRV_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
++      {"DRV_CC_TEMPLATE",
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
