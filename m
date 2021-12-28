@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D4C2C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDB7AC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 163338134B;
-	Tue, 28 Dec 2021 21:02:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F80E405B0;
+	Tue, 28 Dec 2021 21:02:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hsTPlGerykbs; Tue, 28 Dec 2021 21:02:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3bQWYPdj4LqX; Tue, 28 Dec 2021 21:02:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6006681328;
-	Tue, 28 Dec 2021 21:02:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D4014058B;
+	Tue, 28 Dec 2021 21:02:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E255A1BF344
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 120521BF9AC
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE63C40586
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1554400BA
  for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:02:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fbl4xg5t2Aa0 for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:02:14 +0000 (UTC)
+ with ESMTP id bJvJyRiRz6jA for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:02:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D18CA400BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 004B8405AF
  for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:02:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B62F482977; Tue, 28 Dec 2021 20:56:26 +0000 (UTC)
+ id ECDF682977; Tue, 28 Dec 2021 20:56:26 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 21:47:22 +0100
+Date: Tue, 28 Dec 2021 22:01:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 81662cf228290f4abd72243730156baabb8b91c9
-X-Git-Newrev: 33de45c0672d44ae544cfb5f56dc60ec809322d3
+X-Git-Oldrev: 444f6d22cc954f080bc92fe445dad27361401c04
+X-Git-Newrev: 0a6a2ce15d771ce32c282868a0504759a942cddd
 X-Patchwork-Hint: ignore
-Message-Id: <20211228205626.B62F482977@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv3: bump to version 3.4.17
+Message-Id: <20211228205626.ECDF682977@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/microchip_sama5d2_icp: update
+ at91bootstrap version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,88 +59,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33de45c0672d44ae544cfb5f56dc60ec809322d3
+commit: https://git.buildroot.net/buildroot/commit/?id=0a6a2ce15d771ce32c282868a0504759a942cddd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
+Update AT91bootstrap version to released 4.0.0 instead of using a release
+candidate.
 
-https://github.com/opencv/opencv/wiki/ChangeLog#version3417
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ne-argument-version-of-SetTotalBytesLimit.patch | 39 ----------------------
- package/opencv3/opencv3.hash                       |  2 +-
- package/opencv3/opencv3.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
+ configs/microchip_sama5d2_icp_mmc_defconfig     | 2 +-
+ configs/microchip_sama5d2_icp_mmc_dev_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv3/0001-Use-the-one-argument-version-of-SetTotalBytesLimit.patch b/package/opencv3/0001-Use-the-one-argument-version-of-SetTotalBytesLimit.patch
-deleted file mode 100644
-index d169e04ef2..0000000000
---- a/package/opencv3/0001-Use-the-one-argument-version-of-SetTotalBytesLimit.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 9cfa84313c5833d7295fcf57be93d5d2aaadfd88 Mon Sep 17 00:00:00 2001
--From: Vincent Rabaud <vrabaud@google.com>
--Date: Sat, 10 Jul 2021 00:21:52 +0200
--Subject: [PATCH] Use the one argument version of SetTotalBytesLimit.
--
--The two argument versions has been deprecated, cf
--https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.io.coded_stream
--
--[Retrieved from:
--https://github.com/opencv/opencv/commit/9cfa84313c5833d7295fcf57be93d5d2aaadfd88]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- modules/dnn/src/caffe/caffe_io.cpp | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/modules/dnn/src/caffe/caffe_io.cpp b/modules/dnn/src/caffe/caffe_io.cpp
--index 2fc4d84f4604..ebecf95eea3a 100644
----- a/modules/dnn/src/caffe/caffe_io.cpp
--+++ b/modules/dnn/src/caffe/caffe_io.cpp
--@@ -92,6 +92,7 @@
-- #ifdef HAVE_PROTOBUF
-- #include <google/protobuf/io/coded_stream.h>
-- #include <google/protobuf/io/zero_copy_stream_impl.h>
--+#include <google/protobuf/stubs/common.h>
-- #include <google/protobuf/text_format.h>
-- 
-- #include <opencv2/core.hpp>
--@@ -1111,7 +1112,11 @@ static const int kProtoReadBytesLimit = INT_MAX;  // Max size of 2 GB minus 1 by
-- 
-- bool ReadProtoFromBinary(ZeroCopyInputStream* input, Message *proto) {
--     CodedInputStream coded_input(input);
--+#if GOOGLE_PROTOBUF_VERSION >= 3006000
--+    coded_input.SetTotalBytesLimit(kProtoReadBytesLimit);
--+#else
--     coded_input.SetTotalBytesLimit(kProtoReadBytesLimit, 536870912);
--+#endif
-- 
--     return proto->ParseFromCodedStream(&coded_input);
-- }
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index 59af557198..30308188aa 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b1e8470b18e9e793bf70b4ae051bbc9bf81fa45f8cbfee1e6c88858c90be8ff7  opencv3-3.4.15.tar.gz
-+sha256  1353eec67849aadb20df71d8bae18b83708e18fc5da080fe5efeabb1e99b2ee8  opencv3-3.4.17.tar.gz
- sha256  9076d3d934839a2f8e7bfe549abda6faea4751f1edd6e9460ff703559890ad5f  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index f3511bbcb9..8e4c90786e 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV3_VERSION = 3.4.15
-+OPENCV3_VERSION = 3.4.17
- OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
+diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
+index e41fdf2d31..5d0eac3250 100644
+--- a/configs/microchip_sama5d2_icp_mmc_defconfig
++++ b/configs/microchip_sama5d2_icp_mmc_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc2)/at91bootstrap-v4.0.0-rc2.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+index 50ae0a9ce7..46e802f67b 100644
+--- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
++++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+@@ -60,7 +60,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0-rc2)/at91bootstrap-v4.0.0-rc2.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
