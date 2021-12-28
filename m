@@ -1,47 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD86C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0274FC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3129C4058B;
-	Tue, 28 Dec 2021 21:15:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE36F817FF;
+	Tue, 28 Dec 2021 21:15:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WlOOrqWjTYhR; Tue, 28 Dec 2021 21:15:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kOCUweWM8Fli; Tue, 28 Dec 2021 21:15:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CFBD405AF;
-	Tue, 28 Dec 2021 21:15:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CD9981773;
+	Tue, 28 Dec 2021 21:15:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE0AB1BF9AC
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BF581BF39D
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC393403AC
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55F78403AC
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KoA1Wfykc1zd for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:15:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DEC7F40253
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:15:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C167982BDC; Tue, 28 Dec 2021 21:09:14 +0000 (UTC)
+ with ESMTP id W48ntReewLOe for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:15:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 18C76405C3
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:15:15 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id ADFBB1C0005;
+ Tue, 28 Dec 2021 21:15:13 +0000 (UTC)
+Date: Tue, 28 Dec 2021 22:15:13 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 22:14:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35ef82fe3bd866227eab11cc3f72a414f614cca6
-X-Git-Newrev: cf494c78c1b3963e80a5c601e3e23346cac494e1
-X-Patchwork-Hint: ignore
-Message-Id: <20211228210914.C167982BDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_ppc_e500mc: enable dhcp on
- network interface
+To: =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>
+Message-ID: <20211228221513.35bce0e3@windsurf>
+In-Reply-To: <20211112160413.2736382-2-clg@kaod.org>
+References: <20211112160413.2736382-1-clg@kaod.org>
+ <20211112160413.2736382-2-clg@kaod.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/3] configs/qemu_ppc64_e5500: Enable dhcp
+ on network interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,62 +58,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7601036899292672947=="
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7601036899292672947==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=cf494c78c1b3963e80a5c601e3e23346cac494e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a virtio-net-pci device with a user mode host network backend
-
-Cc: Bin Meng <bmeng.cn@gmail.com>
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/qemu/ppc-e500mc/readme.txt  | 2 +-
- configs/qemu_ppc_e500mc_defconfig | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/board/qemu/ppc-e500mc/readme.txt b/board/qemu/ppc-e500mc/readme.txt
-index 77a864ed2b..76bad015d2 100644
---- a/board/qemu/ppc-e500mc/readme.txt
-+++ b/board/qemu/ppc-e500mc/readme.txt
-@@ -1,5 +1,5 @@
- Run the emulation with:
- 
-- qemu-system-ppc -M ppce500 -cpu e500mc -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc_e500mc_defconfig
-+ qemu-system-ppc -M ppce500 -cpu e500mc -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -net nic,model=virtio-net-pci -net user -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc_e500mc_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
-index 1a5b1e3c2c..232bc1f70c 100644
---- a/configs/qemu_ppc_e500mc_defconfig
-+++ b/configs/qemu_ppc_e500mc_defconfig
-@@ -2,7 +2,8 @@
- BR2_powerpc=y
- BR2_powerpc_e500mc=y
- 
--# Serial port config
-+# System
-+BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # Image
-
---===============7601036899292672947==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7601036899292672947==--
+T24gRnJpLCAxMiBOb3YgMjAyMSAxNzowNDoxMiArMDEwMApDw6lkcmljIExlIEdvYXRlciA8Y2xn
+QGthb2Qub3JnPiB3cm90ZToKCj4gQWRkIGEgdmlydGlvLW5ldC1wY2kgZGV2aWNlIHdpdGggYSB1
+c2VyIG1vZGUgaG9zdCBuZXR3b3JrIGJhY2tlbmQKPiAKPiBTaWduZWQtb2ZmLWJ5OiBDw6lkcmlj
+IExlIEdvYXRlciA8Y2xnQGthb2Qub3JnPgo+IC0tLQo+ICBib2FyZC9xZW11L3BwYzY0LWU1NTAw
+L3JlYWRtZS50eHQgIHwgMiArLQo+ICBjb25maWdzL3FlbXVfcHBjNjRfZTU1MDBfZGVmY29uZmln
+IHwgMyArKy0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6
+b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpo
+dHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
