@@ -1,80 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05654C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 14:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B75C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 14:55:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF26E4023C;
-	Tue, 28 Dec 2021 14:50:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83F864059E;
+	Tue, 28 Dec 2021 14:55:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id No_1mu4aq41m; Tue, 28 Dec 2021 14:50:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BVGOjy6NYIXD; Tue, 28 Dec 2021 14:55:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05BE140201;
-	Tue, 28 Dec 2021 14:50:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9491F1BF471
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 14:50:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82A5F40162;
+	Tue, 28 Dec 2021 14:55:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F96B1BF471
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 14:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 838DB81A8E
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 14:50:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47E2A40162
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 14:55:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DMNFgUksvQGS for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 14:50:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OaPu0dag1yIW for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 14:55:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6717C8198A
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 14:50:27 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id q16so38845317wrg.7
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 06:50:27 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CFA0A40144
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 14:55:05 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id w20so29862909wra.9
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 06:55:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=lEB/A2SoRm+y5iXKM6XwC3nIzJSlLQlWwL3XmBm82+o=;
- b=gw6gfQ9YBXuJjlk9m/rpicLdUnTlHJtYlFWEWhHIBA05ZorMkRTxdWgAq0TNkH8wwU
- cu93dGKZ9iX1Eml/GRpQqeAq9HO+Qx2ssAfVmB0FdCi1+Q5ewjoDn8OOW0qkuR5j2RwC
- pGJU6UTkpoNgwCkLIcbZRaHfbJow5fTwAVy0H66OEPijjQTDMnn79eNuDlphqIFWpNTT
- zTGiU6C40p6x21p2D+ZfAGtDAbSZBHRrow/H/SSUdYHVm/+H7AJU6GHL0u4IbQiOMyqQ
- QiuPWkvFSmjmfLDtZH09M95D0UQmqLwOcs2UxQ6zmSMJh+qeYi32BVqI7E6LsQduu84j
- xlKQ==
+ bh=xAxZP4cDmwm3gAmYsQnKjRm1DhwRX8zav53uytdrTSc=;
+ b=jVRJ1T0RY2FeqS09kHSVTOe9z/FLDn0BG2A21GzsxX1Pe+dgV20bpT1J+l0UgtK6vA
+ cgTFp7dny5oMn44l5XH+4Pkzz1ZKgUfDhdW77/BJ9ibKknskmVT4Yhdo9x5zT6irJxzc
+ +ZHFKa3/HICmyaQLODAoN5XAuuo0fl9OOFdw1ByjtuFPTnk67D2c2buKjrp53Sk7Emdd
+ s5VBMC6U9bUop1r+1cF4/3htYSdi+D87xaaiL9uYCaSvxETYFU0r0lLG79dGHJaeVbYM
+ RFNQNMR8BGQka6BHWEL3WDcK7urmKVb2HQAd7JqR/aFATKm5WfQjgEkDg1JCSgEzJTtt
+ SYNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=lEB/A2SoRm+y5iXKM6XwC3nIzJSlLQlWwL3XmBm82+o=;
- b=YqiTKB2asAGv1mvOWzkoFhAVmdW/gTurpgTI1dl3AaQcIznD86CwPW82eAn4wzI4e4
- ylC5C25qLGrlifpHzZ+x3wiKqkuSPedVZKmTGwLLtUVJZ7kZulDjxquxfVlqeaX1I2HZ
- ObR1V7TMTeEv77HP1mN2bkS33XE3G010pdZ+tZn47Hlulaco4oYQwLdz6l72WJD28+uv
- Cu0sTHY2nqvEFtxrcO8+WasLIYsyC3ULPxfh3ba8WIKFhEKg+sRmeBodahyUsxLCf57P
- 8rxIIdiWb18GUzSRPEThllgDxeZNWG9C5KMLZdnb+qYVfYHrJlaSU1A8aLRpcfDUpWZC
- 1Zkg==
-X-Gm-Message-State: AOAM530vufqDf6KqqJ32CAzfh+vqyyV+/u82Msyh6sZVeGOCGEjrY+EP
- YKzqjAdoj5IdcFfDOn7NJkh+g1q9gTIBAA==
-X-Google-Smtp-Source: ABdhPJyYyeL/BoKNYupNr4ydbO47s+o8T1m2aNjKixbAqNGHSIkE2HeBtFI/9NvGMjyTeb3T5wmksA==
-X-Received: by 2002:a05:6000:1449:: with SMTP id
- v9mr16775710wrx.49.1640703025604; 
- Tue, 28 Dec 2021 06:50:25 -0800 (PST)
+ bh=xAxZP4cDmwm3gAmYsQnKjRm1DhwRX8zav53uytdrTSc=;
+ b=oBRo48NMR61Z0qzv3H5YY7pDj8cGzXq2LgMLIPI+6onXHpiM3g6Z3VuHa+5PbVP2Mo
+ +g+3Y3WuZ16keTTfE47iHe8FFDSWhbZiqx5v+w17LlFcRD8rr1RpXUafU/wUNBf9yu/A
+ Y7gwzntLMDd4jyHZpbalaqfm+utWqYVs/ZlwwOcDDrG95EBBXzHU32XnYQoBVV32sYft
+ VZYG7v81McCuhlWkOsOP8qqN71Q2PtMs5x4u7CV25f1QRI5mkpbfWAPZBHebudOZaN9P
+ NIB3x5/pAvXnJ51x6JBy7fFpngvtvUyetKJ9FvGdyeFRtWu4SIvkfBphvAmFaJMKbxQ8
+ mTEQ==
+X-Gm-Message-State: AOAM5314MpWWMKIXyfCmut/m+9lBNTVSl5h/P4l2DVkYA2jFuQCKkYY9
+ wRpTUzEuQETtOTY7EgNhC0JYySLq1tjMJQ==
+X-Google-Smtp-Source: ABdhPJw7Z8kwPC0zu8LkGk6yss/EA7hKnnsdFAEdJu3Tl0GV6EkVmwrDs33JjGVfkvSFrv5yWIHfzg==
+X-Received: by 2002:a05:6000:18a5:: with SMTP id
+ b5mr16559680wri.24.1640703303892; 
+ Tue, 28 Dec 2021 06:55:03 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id u12sm18036920wrf.60.2021.12.28.06.50.24
+ by smtp.gmail.com with ESMTPSA id 9sm22781729wrz.90.2021.12.28.06.55.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Dec 2021 06:50:25 -0800 (PST)
+ Tue, 28 Dec 2021 06:55:03 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 15:49:35 +0100
-Message-Id: <20211228144935.4060468-1-fontaine.fabrice@gmail.com>
+Date: Tue, 28 Dec 2021 15:54:23 +0100
+Message-Id: <20211228145423.4063094-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libxmlpp: bump to version 5.0.1
+Subject: [Buildroot] [PATCH 1/1] package/atkmm: bump to version 2.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,7 +85,8 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ James Knight <james.knight@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -95,57 +94,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Switch to meson-package as configure is not shipped anymore
 
-This bump will fix the following build failure raised since bump of
-glibmm to version 2.68.2 in commit
-dddb65efbdf2c7952f22a1e51009f17f1676db4a:
+This will fix the following build failure raised since bump of glibmm to
+version 2.68.2 in commit dddb65efbdf2c7952f22a1e51009f17f1676db4a:
 
 Package 'glibmm-2.4', required by 'virtual:world', not found
 
-https://github.com/libxmlplusplus/libxmlplusplus/blob/5.0.1/NEWS
+https://gitlab.gnome.org/GNOME/atkmm/-/blob/2.36.1/NEWS
 
 Fixes:
- - http://autobuild.buildroot.org/results/ab3c3ace6d9409a70a4a8c1e27dfa9b915be10fd
+ - http://autobuild.buildroot.org/results/0c4932738aa509f582074f399dfbe1c70ac74070
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxmlpp/libxmlpp.hash |  4 ++--
- package/libxmlpp/libxmlpp.mk   | 10 +++++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/atkmm/atkmm.hash | 4 ++--
+ package/atkmm/atkmm.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxmlpp/libxmlpp.hash b/package/libxmlpp/libxmlpp.hash
-index 7a59880e7e..50238eff00 100644
---- a/package/libxmlpp/libxmlpp.hash
-+++ b/package/libxmlpp/libxmlpp.hash
+diff --git a/package/atkmm/atkmm.hash b/package/atkmm/atkmm.hash
+index 42cc2d7221..f965ad29cb 100644
+--- a/package/atkmm/atkmm.hash
++++ b/package/atkmm/atkmm.hash
 @@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/3.2/libxml++-3.2.0.sha256sum
--sha256  b786fae7fd7820d356698069a787d107995c3efcbef50d8f4efd3766ab768e4f  libxml++-3.2.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libxml++/5.0/libxml++-5.0.1.sha256sum
-+sha256  15c38307a964fa6199f4da6683a599eb7e63cc89198545b36349b87cf9aa0098  libxml++-5.0.1.tar.xz
- 
- # Hash for license file
- sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/libxmlpp/libxmlpp.mk b/package/libxmlpp/libxmlpp.mk
-index 98cba2a5a2..874577eb1f 100644
---- a/package/libxmlpp/libxmlpp.mk
-+++ b/package/libxmlpp/libxmlpp.mk
-@@ -4,13 +4,17 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.24/atkmm-2.24.2.sha256sum
+-sha256  ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd  atkmm-2.24.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atkmm/2.36/atkmm-2.36.1.sha256sum
++sha256  e11324bfed1b6e330a02db25cecc145dca03fb0dff47f0710c85e317687da458  atkmm-2.36.1.tar.xz
+ # locally computed
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/atkmm/atkmm.mk b/package/atkmm/atkmm.mk
+index 234a937bba..3bcb941c9f 100644
+--- a/package/atkmm/atkmm.mk
++++ b/package/atkmm/atkmm.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBXMLPP_VERSION_MAJOR = 3.2
--LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).0
-+LIBXMLPP_VERSION_MAJOR = 5.0
-+LIBXMLPP_VERSION = $(LIBXMLPP_VERSION_MAJOR).1
- LIBXMLPP_LICENSE = LGPL-2.1 (library), LGPL-2.0+ (examples)
- LIBXMLPP_LICENSE_FILES = COPYING
- LIBXMLPP_SOURCE = libxml++-$(LIBXMLPP_VERSION).tar.xz
- LIBXMLPP_SITE = http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(LIBXMLPP_VERSION_MAJOR)
- LIBXMLPP_INSTALL_STAGING = YES
- LIBXMLPP_DEPENDENCIES = libxml2 glibmm host-pkgconf
-+LIBXMLPP_CONF_OPTS = \
-+	-Dbuild-examples=false \
-+	-Dbuild-tests=false \
-+	-Dvalidation=false
+-ATKMM_VERSION_MAJOR = 2.24
+-ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).2
++ATKMM_VERSION_MAJOR = 2.36
++ATKMM_VERSION = $(ATKMM_VERSION_MAJOR).1
+ ATKMM_SOURCE = atkmm-$(ATKMM_VERSION).tar.xz
+ ATKMM_SITE = http://ftp.gnome.org/pub/gnome/sources/atkmm/$(ATKMM_VERSION_MAJOR)
+ ATKMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+@@ -13,4 +13,4 @@ ATKMM_LICENSE_FILES = COPYING COPYING.tools
+ ATKMM_INSTALL_STAGING = YES
+ ATKMM_DEPENDENCIES = atk glibmm libsigc host-pkgconf
  
 -$(eval $(autotools-package))
 +$(eval $(meson-package))
