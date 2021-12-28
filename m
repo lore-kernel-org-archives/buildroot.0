@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF7AC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 13:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE2CDC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 13:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32EEE8190B;
-	Tue, 28 Dec 2021 13:14:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5429840574;
+	Tue, 28 Dec 2021 13:14:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8auzHPRjHnKX; Tue, 28 Dec 2021 13:14:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z7K5DIyMbDLA; Tue, 28 Dec 2021 13:14:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93E94818EC;
-	Tue, 28 Dec 2021 13:14:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A90081BF363
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8958E4067C;
+	Tue, 28 Dec 2021 13:14:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C1C241BF9AF
  for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A582C81310
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF69E404D5
  for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 13:13:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5LP2FRlg5Rj0 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dsvQ2qj5dEEJ for <buildroot@lists.busybox.net>;
  Tue, 28 Dec 2021 13:13:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF8D9818C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEF8D4024B
  for <buildroot@buildroot.org>; Tue, 28 Dec 2021 13:13:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8476982BA6; Tue, 28 Dec 2021 13:08:05 +0000 (UTC)
+ id 710B082B94; Tue, 28 Dec 2021 13:08:05 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Dec 2021 14:13:38 +0100
+Date: Tue, 28 Dec 2021 14:13:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d097a59417399b01e4bcd406395a7a5c76686ae
-X-Git-Newrev: 2cecfe94f889165f3a5169598ed7e0388941a6cd
+X-Git-Oldrev: a952b016263cb9ae5f116dac0b3da4ad93a4c55f
+X-Git-Newrev: f14f1f0dac5f58416057a62527c7c1d66450a43a
 X-Patchwork-Hint: ignore
-Message-Id: <20211228130805.8476982BA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
- version 1.2.15
+Message-Id: <20211228130805.710B082B94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-parso: bump to version 0.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +58,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cecfe94f889165f3a5169598ed7e0388941a6cd
+commit: https://git.buildroot.net/buildroot/commit/?id=f14f1f0dac5f58416057a62527c7c1d66450a43a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/arvidn/libtorrent/blob/v1.2.15/ChangeLog
+https://github.com/davidhalter/parso/blob/v0.8.3/CHANGELOG.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-parso/python-parso.hash | 4 ++--
+ package/python-parso/python-parso.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 8198a1ff9d..3f59642b72 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c3744ac9fa41f6e6ebf79538a2ea678df76a2cbbaf3ac6ae2c05455314e5cce8  libtorrent-rasterbar-1.2.12.tar.gz
-+sha256  c8ad8638684c0a903ebabc30490079e31b1a6a638da2adec5a8bef6a0e62214b  libtorrent-rasterbar-1.2.15.tar.gz
- sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 7f60252e9b..914e0cbca3 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
+index 538ffccf37..67e77a162e 100644
+--- a/package/python-parso/python-parso.hash
++++ b/package/python-parso/python-parso.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/parso/json
+-md5  dd8fed40ceb890d3e277ad44a678c1f1  parso-0.8.2.tar.gz
+-sha256  12b83492c6239ce32ff5eed6d3639d6a536170723c6f3f1506869f1ace413398  parso-0.8.2.tar.gz
++md5  7ee251113f31f8d851c4a5d9e98977cb  parso-0.8.3.tar.gz
++sha256  8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0  parso-0.8.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
+ sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+index 6862a7e97d..ce1d3401ff 100644
+--- a/package/python-parso/python-parso.mk
++++ b/package/python-parso/python-parso.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBTORRENT_RASTERBAR_VERSION = 1.2.12
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.15
- LIBTORRENT_RASTERBAR_SITE = \
- 	https://github.com/arvidn/libtorrent/releases/download/v$(LIBTORRENT_RASTERBAR_VERSION)
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+-PYTHON_PARSO_VERSION = 0.8.2
++PYTHON_PARSO_VERSION = 0.8.3
+ PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
+-PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/5e/61/d119e2683138a934550e47fc8ec023eb7f11b194883e9085dca3af5d4951
++PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/a2/0e/41f0cca4b85a6ea74d66d2226a7cda8e41206a624f5b330b958ef48e2e52
+ PYTHON_PARSO_SETUP_TYPE = setuptools
+ PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+ PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
