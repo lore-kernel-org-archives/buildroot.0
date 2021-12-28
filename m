@@ -4,48 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9095CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62595C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 28 Dec 2021 21:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33E2440586;
-	Tue, 28 Dec 2021 21:14:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0AB8340253;
+	Tue, 28 Dec 2021 21:15:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hp2uFaOMuKSw; Tue, 28 Dec 2021 21:14:39 +0000 (UTC)
+	with ESMTP id xh7XMDDRxg9N; Tue, 28 Dec 2021 21:15:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5075240253;
-	Tue, 28 Dec 2021 21:14:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25678403AC;
+	Tue, 28 Dec 2021 21:15:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A3931BF39D
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:14:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A105D1BF39D
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67A294030F
- for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:14:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90E2A4030F
+ for <buildroot@lists.busybox.net>; Tue, 28 Dec 2021 21:15:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KCInFbTm6OBf for <buildroot@lists.busybox.net>;
- Tue, 28 Dec 2021 21:14:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51C8D40287
- for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:14:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 91BC440003;
- Tue, 28 Dec 2021 21:14:31 +0000 (UTC)
-Date: Tue, 28 Dec 2021 22:14:30 +0100
+ with ESMTP id eYvqeMqA_rMX for <buildroot@lists.busybox.net>;
+ Tue, 28 Dec 2021 21:15:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9F7B40287
+ for <buildroot@buildroot.org>; Tue, 28 Dec 2021 21:15:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B9FDF81273; Tue, 28 Dec 2021 21:09:14 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>
-Message-ID: <20211228221430.7e8cb844@windsurf>
-In-Reply-To: <20211112160413.2736382-1-clg@kaod.org>
-References: <20211112160413.2736382-1-clg@kaod.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] configs/qemu: Add a ppc64le-powernv
- configuration
+To: buildroot@buildroot.org
+Date: Tue, 28 Dec 2021 22:14:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f60e1d125d4223355d4a790fbdded92c90a73e01
+X-Git-Newrev: 35ef82fe3bd866227eab11cc3f72a414f614cca6
+X-Patchwork-Hint: ignore
+Message-Id: <20211228210914.B9FDF81273@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_ppc64_e5500: enable dhcp on
+ network interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,42 +53,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>,
- Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4202732184908844829=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQ8OpZHJpYywKCk9uIEZyaSwgMTIgTm92IDIwMjEgMTc6MDQ6MTEgKzAxMDAKQ8OpZHJp
-YyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4gd3JvdGU6Cgo+IFBvd2VyTlYgKGFzIE5vbi1WaXJ0
-dWFsaXplZCkgaXMgdGhlICJiYXJlbWV0YWwiIHBsYXRmb3JtIHVzaW5nIHRoZQo+IE9QQUwgWzFd
-IGZpcm13YXJlLiBJdCBydW5zIExpbnV4IG9uIElCTSBhbmQgT3BlblBPV0VSIHN5c3RlbXMgYW5k
-IGNhbgo+IGJlIHVzZWQgYXMgYW4gaHlwZXJ2aXNvciBPUywgcnVubmluZyBLVk0gZ3Vlc3RzLCBv
-ciBzaW1wbHkgYXMgYSBob3N0Cj4gT1MuIE9QQUwgaW5jbHVkZXMgYSBMaW51eCBrZXJuZWwgYW5k
-IGEgYnVpbGRyb290IHJvb3RmcyB3aGljaCBhY3RzIGFzCj4gYSBib290bG9hZGVyIFsyXSBmb3Ig
-dGhlIHZhcmlvdXMgc3lzdGVtcyBpbnN0YWxsZWQgb24gZGlza3MuCgpGb3IgdGhlIHBlcnNvbiBu
-b3QgZmFtaWxpYXIgd2l0aCBhbGwgdGhpcyBPcGVuUE9XRVIgc3R1ZmYsIGl0J3MgdmVyeQpjb21w
-bGV4IHRvIHVuZGVyc3RhbmQgYWxsIHRoZXNlIGZpcm13YXJlLCB2aXJ0dWFsaXplZCBzdHVmZiwK
-aHlwZXJ2aXNvciwgZXRjLgoKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvcWVtdS9wcGM2NGxlLXBvd2Vy
-bnYvcmVhZG1lLnR4dCBiL2JvYXJkL3FlbXUvcHBjNjRsZS1wb3dlcm52L3JlYWRtZS50eHQKPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uZWUxMDJhM2Q2ODQ2Cj4g
-LS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3FlbXUvcHBjNjRsZS1wb3dlcm52L3JlYWRtZS50
-eHQKPiBAQCAtMCwwICsxLDUgQEAKPiArUnVuIHRoZSBlbXVsYXRpb24gd2l0aDoKPiArCj4gK3Fl
-bXUtc3lzdGVtLXBwYzY0IC1NIHBvd2VybnY5IC1rZXJuZWwgdm1saW51eCAtYXBwZW5kICJjb25z
-b2xlPWh2YzAgcm9vdHdhaXQgcm9vdD0vZGV2L252bWUwbjEiIC1kZXZpY2UgbnZtZSxidXM9cGNp
-ZS4zLGFkZHI9MHgwLGRyaXZlPWRyaXZlMCxzZXJpYWw9MTIzNCAtZHJpdmUgZmlsZT0uL3Jvb3Rm
-cy5leHQyLGlmPW5vbmUsaWQ9ZHJpdmUwLGZvcm1hdD1yYXcsY2FjaGU9bm9uZSAtZGV2aWNlIGUx
-MDAwZSxuZXRkZXY9bmV0MCxtYWM9QzA6RkY6RUU6MDA6MDE6MDMsYnVzPXBjaWUuMSxhZGRyPTB4
-MCAgLW5ldGRldiB1c2VyLGlkPW5ldDAgLXNlcmlhbCBtb246c3RkaW8gLW5vZ3JhcGhpYyAjIHFl
-bXVfcHBjNjRsZV9wb3dlcm52X2RlZmNvbmZpZwoKWW91J3JlIGVtdWxhdGluZyBhIHBvd2VybnY5
-LCBzbyB3ZSBhc3N1bWUgYmFzZWQgb24gdGhlIFBvd2VyOSBwcm9jZXNzb3IuCgo+IEBAIC0wLDAg
-KzEsMjkgQEAKPiArIyBBcmNoaXRlY3R1cmUKPiArQlIyX3Bvd2VycGM2NGxlPXkKPiArQlIyX3Bv
-d2VycGNfcG93ZXI4PXkKCkJ1dCB5b3UncmUgdGFyZ2V0aW5nIFBvd2VyOC4KCkNvdWxkIHlvdSBj
-bGFyaWZ5PwoKVGhhbmtzIQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBh
-bmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5k
-IHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+--===============4202732184908844829==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=35ef82fe3bd866227eab11cc3f72a414f614cca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add a virtio-net-pci device with a user mode host network backend
+
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/ppc64-e5500/readme.txt  | 2 +-
+ configs/qemu_ppc64_e5500_defconfig | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/board/qemu/ppc64-e5500/readme.txt b/board/qemu/ppc64-e5500/readme.txt
+index 61d51f7f4d..7c8c80af44 100644
+--- a/board/qemu/ppc64-e5500/readme.txt
++++ b/board/qemu/ppc64-e5500/readme.txt
+@@ -1,5 +1,5 @@
+ Run the emulation with:
+ 
+- qemu-system-ppc64 -M ppce500 -cpu e5500 -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc64_e5500_defconfig
++ qemu-system-ppc64 -M ppce500 -cpu e5500 -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -net nic,model=virtio-net-pci -net user -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc64_e5500_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index 286d79a26b..09aac50252 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -2,7 +2,8 @@
+ BR2_powerpc64=y
+ BR2_powerpc_e5500=y
+ 
+-# Serial port config
++# System
++BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
+ # Image
+
+--===============4202732184908844829==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4202732184908844829==--
