@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F97C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 09:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEAB8C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 09:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60A0840147;
-	Wed, 29 Dec 2021 09:12:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 684D94089F;
+	Wed, 29 Dec 2021 09:13:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id prrOB8H-S7QQ; Wed, 29 Dec 2021 09:12:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PVJew03Ijls9; Wed, 29 Dec 2021 09:13:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 985F8400C7;
-	Wed, 29 Dec 2021 09:12:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A448C1BF4E7
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:12:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE977408B9;
+	Wed, 29 Dec 2021 09:13:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 914D51BF4E7
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1AED81313
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:12:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AF984089F
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:13:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F50iZFOYs9RQ for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 09:12:27 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A35581310
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 09:12:27 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id AC3F1240006;
- Wed, 29 Dec 2021 09:12:24 +0000 (UTC)
-Date: Wed, 29 Dec 2021 10:12:23 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cbWZx-Da2XAz for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 09:13:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBBC94067C
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 09:13:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9E4B682A06; Wed, 29 Dec 2021 09:07:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Markus Mayer <mmayer@broadcom.com>
-Message-ID: <20211229101223.50fe1f67@windsurf>
-In-Reply-To: <20210928195533.1736944-2-mmayer@broadcom.com>
-References: <20210928195533.1736944-1-mmayer@broadcom.com>
- <20210928195533.1736944-2-mmayer@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] Makefile: set HOST*_NOCCACHE variables
- only if unset
+To: buildroot@buildroot.org
+Date: Wed, 29 Dec 2021 10:12:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c5912e7db37cc0a04696cf081410ec007f8f0be9
+X-Git-Newrev: 661032e32c28976b3abb58fe88f8f0e75d3d2dde
+X-Patchwork-Hint: ignore
+Message-Id: <20211229090749.9E4B682A06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: add optional zchunk
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,43 +53,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Markus Mayer via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Markus,
+commit: https://git.buildroot.net/buildroot/commit/?id=661032e32c28976b3abb58fe88f8f0e75d3d2dde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Sep 2021 12:55:33 -0700
-Markus Mayer via buildroot <buildroot@buildroot.org> wrote:
+This is required for delta update handler support.
 
-> Set HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE only if they are not set. This
-> allows recursive calls to "make" to work as intended in the presence of
-> ccache.
-> 
-> Without guarding these variables, a recursive invocation of make would
-> re-define
->     HOSTCC_NOCCACHE := $(HOSTCC)
-> and
->     HOSTCXX_NOCCACHE := $(HOSTCXX)
-> at a point in time when HOSTCC and HOSTCXX already point to ccache.
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swupdate/swupdate.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I have extended the commit log somewhat to give more details, and
-applied!
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index e16060f5cb..065ae772ba 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -172,6 +172,13 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_WOLFSSL=n
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZCHUNK),y)
++SWUPDATE_DEPENDENCIES += zchunk
++SWUPDATE_MAKE_ENV += HAVE_ZCK=y
++else
++SWUPDATE_MAKE_ENV += HAVE_ZCK=n
++endif
++
+ ifeq ($(BR2_PACKAGE_ZEROMQ),y)
+ SWUPDATE_DEPENDENCIES += zeromq
+ SWUPDATE_MAKE_ENV += HAVE_LIBZEROMQ=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
