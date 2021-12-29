@@ -1,82 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04180C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 08:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE103C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 08:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A42DD4089A;
-	Wed, 29 Dec 2021 08:43:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35A2540022;
+	Wed, 29 Dec 2021 08:48:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ne1QNrLZ6_6G; Wed, 29 Dec 2021 08:43:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09C244087A;
-	Wed, 29 Dec 2021 08:43:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 169471BF293
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:42:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3C7740022
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:42:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ithryeU9OhEv for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 08:42:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EE72C400F5
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 08:42:35 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id u8so25268724iol.5
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 00:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=SRN+asXo2brTccQTRAM1NcGIE8LRFm5IToXH/oTwtnk=;
- b=Sj04Q3aDiGvwsEFt1jREjAO0e9ZWVBK8AObdHLCXvxLkhShMwyhG6Qm8f7F23xVwMK
- BC97QrTl6lyHTOU+HBFNjyOpbOelVBrnhE/ir8IhNHDYVpmbfnMRfvFiPRBwehhcaAcu
- aT3vZ0dVDfqMtVnRrtqk4nQ4+47HNNYeK9sPgPUVg6mEnzY8qlt9LhU66tM4j6f5679H
- rMQikt7EGTKUg0lh8X62om3gkLxFXY4Cb9NEgO42f5Mdiiw00siSiYFUmMoNh2YrNDXn
- QZlA+rFVGa+Nwg2A5ufQclN1s3ria1Ht86KVyng2Di3fQTS9rtJ72MxHJBzqQG6cwOIl
- NE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=SRN+asXo2brTccQTRAM1NcGIE8LRFm5IToXH/oTwtnk=;
- b=YFurGNUawdyiHfmgeU7V37Np8asOSI+HeQEWjvs6hi9tTt15/MvNL4rtxhX94wTRM3
- +byO/VfC1mZRVFAaSbXX+NRGK5vJAGiyj3mD7zuK4R2RqUYJzR3LPDcSbNXl7PpKno96
- I5npFCNU84tV6eh1wlXKTrtFCEWF8Itl2bhNkTt9XV96Y541h7hBDEHIkk2m6w2kRw3W
- id5bCpX7IOw97oq6nmHBa9tXFCnG1IBd/rGhrLFzjKOD0VBKje5WDlXsy3VFs83+oTsZ
- 5XAM3Q7k7xDSQdrDgI5IDo3JTDdB5pcVad1ty/JiAiTFzhLpLibzxVy7OZWQXgGjpehP
- mErA==
-X-Gm-Message-State: AOAM531pYXbYJZIcf5PVMUtprFtcRFnHX4QOvDiVD+e2Di6IN4fivH0k
- l4iqQEguXcHddjt5hPR547ZRgDwr8EU3Hg==
-X-Google-Smtp-Source: ABdhPJx31X1pUfU0gEpsftrZtZw/m+5YKxH/qmbx311vQFbD7CerzV+TFklYLCnBn4+DPmQ0PV/uJQ==
-X-Received: by 2002:a05:6602:3409:: with SMTP id
- n9mr11275431ioz.148.1640767354807; 
- Wed, 29 Dec 2021 00:42:34 -0800 (PST)
-Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
- [71.218.242.12])
- by smtp.gmail.com with ESMTPSA id p15sm12166788ilo.83.2021.12.29.00.42.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Dec 2021 00:42:34 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 Dec 2021 01:42:23 -0700
-Message-Id: <20211229084223.521362-7-james.hilliard1@gmail.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zcyefK1YAP6y; Wed, 29 Dec 2021 08:48:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80188400C7;
+	Wed, 29 Dec 2021 08:48:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DEDE81BF293
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:48:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB1F781D3D
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:48:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=microchip.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7PTomVg8gVFm for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 08:48:32 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.154.123])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0ABF8188A
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 08:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1640767712; x=1672303712;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=WCYmdsiyi4IqgTpchiyWlRvVpuRK3OLwyFTpmpozwEU=;
+ b=dqmjFgReLqPeTrwEvkaB+CSjDJsSDUDgSaLBVHW79fan1wgwasmytGZe
+ Fzx4zwRnM0YK8NjyUuK5aaEnAKk/o6lpN1CxS393jIE+vA0xJbe6PJQ/t
+ 8p0Vetl4EPCQS9SFa5M3SVVw4pZ4hpLwI7mGChkV7m0ii07qzwup/uiST
+ YTvTt98CdLdgwt+ifMeUEEmDA7qROk8jzGeXzPlgra826bn+mdTt/9tmE
+ b2xPz+LfG4dJKCY/KKFlauz8gf/2ArQ/6R5mkqQWirNUBjwS81qSwt33t
+ V2agFtS8brD1nrDWepjbhInAfmnTiGzx4YyDfhHjPKiDjln3zjrzrvPSj g==;
+IronPort-SDR: M4h7oFyHtFFbDxPKkAQsopTc49Lhnj1zvGiVg9Xi2YkfC8mr9ftZKmgtqIEelFqUVPOFKG9k2Q
+ yFI5sW6q+8ZTiNPKk3+KDJbLin0fp+JUdBZDXNNXKEcSfRTtCr4s4T3Ws/EB4w28VO7qrI6sBJ
+ 91SYibIsRnrCHd/UIon2nMjN/HzekuQ3rzXdjxq3cIJq7eFocvhnyqUgMmhDhL3vLFxX1mJ2kk
+ fXS/pjEpiwU/MxMvPspaCWVLJMmPSp0A9sQqKU3BHIWkUVogOsV4fpAhDNXLjeuKp+mZ8C2oUC
+ LOq+0JxEKmpIfxOPvDFHoTm5
+X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; d="scan'208";a="143788803"
+Received: from smtpout.microchip.com (HELO email.microchip.com)
+ ([198.175.253.82])
+ by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
+ 29 Dec 2021 01:48:16 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 29 Dec 2021 01:48:16 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 29 Dec 2021 01:48:14 -0700
+To: <buildroot@buildroot.org>
+Date: Wed, 29 Dec 2021 10:48:09 +0200
+Message-ID: <20211229084809.39991-1-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211229084223.521362-1-james.hilliard1@gmail.com>
-References: <20211229084223.521362-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 6/6] package/python-installer: new package
+Subject: [Buildroot] [PATCH] configs/microchip,
+ atmel: update Linux kernel to linux4microchip 5.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,55 +81,383 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Eugen Hristev via buildroot <buildroot@buildroot.org>
+Reply-To: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-installer/python-installer.hash |  5 +++++
- package/python-installer/python-installer.mk   | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/python-installer/python-installer.hash
- create mode 100644 package/python-installer/python-installer.mk
+Linux4sam has moved to linux4microchip.
+First linux4microchip release for the SAMA & SAM9X60 boards is
+linux4microchip 2021.10.
+Bump all boards to use this kernel version.
 
-diff --git a/package/python-installer/python-installer.hash b/package/python-installer/python-installer.hash
-new file mode 100644
-index 0000000000..68af457664
---- /dev/null
-+++ b/package/python-installer/python-installer.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/installer/json
-+md5  cf7b8f470620c54f2d28167fc80542a7  installer-0.4.0.tar.gz
-+sha256  17d7ca174039fbd85f268e16042e3132ebb03d91e1bbe0f63b9ec6b40619414a  installer-0.4.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  37b8b9f2569892fa54406383d431169dbb2115980d78b7efba6eeae5664c484f  LICENSE
-diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
-new file mode 100644
-index 0000000000..2c1d371dab
---- /dev/null
-+++ b/package/python-installer/python-installer.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-installer
-+#
-+################################################################################
-+
-+PYTHON_INSTALLER_VERSION = 0.4.0
-+PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
-+PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/71/9a/8d7c724b0d51336453e75f76b32de86b336ef26755c64119204f1f5b4388
-+PYTHON_INSTALLER_LICENSE = MIT
-+PYTHON_INSTALLER_LICENSE_FILES = LICENSE
-+PYTHON_INSTALLER_SETUP_TYPE = distutils
-+HOST_PYTHON_INSTALLER_NEEDS_HOST_PYTHON = python3
-+
-+$(eval $(host-python-package))
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig       | 4 ++--
+ configs/atmel_sama5d2_xplained_mmc_defconfig           | 4 ++--
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig       | 4 ++--
+ configs/atmel_sama5d3_xplained_defconfig               | 4 ++--
+ configs/atmel_sama5d3_xplained_dev_defconfig           | 4 ++--
+ configs/atmel_sama5d3_xplained_mmc_defconfig           | 4 ++--
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig       | 4 ++--
+ configs/atmel_sama5d4_xplained_defconfig               | 4 ++--
+ configs/atmel_sama5d4_xplained_dev_defconfig           | 4 ++--
+ configs/atmel_sama5d4_xplained_mmc_defconfig           | 4 ++--
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig       | 4 ++--
+ configs/microchip_sam9x60ek_mmc_defconfig              | 4 ++--
+ configs/microchip_sam9x60ek_mmc_dev_defconfig          | 4 ++--
+ configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig     | 4 ++--
+ configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 4 ++--
+ configs/microchip_sama5d2_icp_mmc_defconfig            | 4 ++--
+ configs/microchip_sama5d2_icp_mmc_dev_defconfig        | 4 ++--
+ 17 files changed, 34 insertions(+), 34 deletions(-)
+
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index a4cabfa37f..ba2fa46790 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
+index d5cbacd14f..5b63812606 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
+@@ -3,12 +3,12 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained"
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 39e8721dbe..a8b68ca0a2 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d2_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained"
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+index d5a3b1951f..7ef45db469 100644
+--- a/configs/atmel_sama5d3_xplained_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
+@@ -2,10 +2,10 @@ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index a9e62c465f..cdfd9de17e 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+@@ -20,7 +20,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+index e551bf225e..1b7d269887 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
+@@ -2,12 +2,12 @@ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index f71aa49361..a2205aeefa 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d3_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+index 6e4d3c60f3..c0b606bc9a 100644
+--- a/configs/atmel_sama5d4_xplained_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
+@@ -3,10 +3,10 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 47f77c25cc..f8783f5652 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+@@ -21,7 +21,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
+index b5030ae5cc..ff01073205 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
+@@ -3,12 +3,12 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 8e3a0da600..b4e99f658a 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -6,7 +6,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
+ # Toolchain
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+@@ -24,7 +24,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d4_xplained_mmc/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
+diff --git a/configs/microchip_sam9x60ek_mmc_defconfig b/configs/microchip_sam9x60ek_mmc_defconfig
+index 21c5b2b77e..7a1a699d2e 100644
+--- a/configs/microchip_sam9x60ek_mmc_defconfig
++++ b/configs/microchip_sam9x60ek_mmc_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sam9x60ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-linux4sam-2020.04.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sam9x60ek"
+diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+index dba703809d..da1bd33dd3 100644
+--- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
++++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+@@ -1,5 +1,5 @@
+ BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sam9x60ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-linux4sam-2020.04.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sam9x60ek"
+diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
+index d0115bb78e..024e8a1465 100644
+--- a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
++++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
+@@ -3,12 +3,12 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_wlsom1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_wlsom1_ek"
+diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+index 298b6b5289..3bcd5f0200 100644
+--- a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
++++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_wlsom1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_wlsom1_ek"
+diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
+index fbb0cb8be0..4bb3625f83 100644
+--- a/configs/microchip_sama5d2_icp_mmc_defconfig
++++ b/configs/microchip_sama5d2_icp_mmc_defconfig
+@@ -3,12 +3,12 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
+diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+index 7f594fd45e..052d9e032c 100644
+--- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
++++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/microchip/sama5d2_icp/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.10)/linux-linux4sam-2020.10.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip-2021.10)/linux-linux4microchip-2021.10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_icp"
 -- 
 2.25.1
 
