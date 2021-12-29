@@ -1,75 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF20FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 07:42:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62024C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 08:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CA9D40193;
-	Wed, 29 Dec 2021 07:42:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF98740158;
+	Wed, 29 Dec 2021 08:42:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gqf8I9qa8pWf; Wed, 29 Dec 2021 07:42:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b45BUnpW4Mhd; Wed, 29 Dec 2021 08:42:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC5CE4017B;
-	Wed, 29 Dec 2021 07:42:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DAE240022;
+	Wed, 29 Dec 2021 08:42:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B11E1BF8A8
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 07:42:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED3BB1BF293
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28ADF400C7
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 07:42:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8263400C7
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:42:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=microchip.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c9fVsyhWjDeV for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 07:41:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.153.233])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 535AB40022
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 07:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1640763718; x=1672299718;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=yblJ4bmMnljnwTt+F7yDP/3tiqX1u/a071+OzrZBmW8=;
- b=v+P2zPRwSDeNdPHknEvH7kgamPYGdM/6c+yu/GZyx8BUWb486TGEzM8Q
- QAgoX41YiPjTZOjc736byoNf2kLwqE+o+hjIm+SYZR4WJqLbCAkF2JVHs
- 3WxiLn4SfQ7qnkd69Tj+4ts5UfYw7E9/TIIfHBBBwtdDfRnd0m6ncnk9w
- 0f1+ocezgZlgZBu9u+38ME9lqWBP724y3F36SBq5W+mI7SIWTCveMNyoM
- D5Y6X6ZVcghJs56ZyoEZC4dOU6MP0l0pWPntGZppuSZEwHqfXeiF72uGL
- 5Uj0iKGnPFK0CDgIdvrl82nJAPSk4mWoZUGrg86dy1njDCV+raDSGyqwQ w==;
-IronPort-SDR: 7E/kY3UNEca7ydT0aRSquCGUxTYUVppL4Nj9k3TARLPhsdwZ0MuVXYyr1Y8HBRsEDq8T2QiuMy
- 2J2KqlaIm6IMLspEzvRiy7XrT3OGNunOSXuR09nlKAbfAQUN9TQVfDLRNOB3upeCB5EMiEiLP6
- T0AUCirikV0GQ6+WItedvZr2cWGnXjKEkQ77r69bhnGEPPRuYLh2/9ZiRXEVe2E9+6DQy/rLjt
- vxY7skGgqkBQFHeJNzAfzJk8t0Il3mcaFFinxeeWjK84L7V6MfCG304Mbi7aRy2n7E8h63mx5z
- nS4BWMrzoNT+37LBJZrUMNMT
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; d="scan'208";a="156952826"
-Received: from smtpout.microchip.com (HELO email.microchip.com)
- ([198.175.253.82])
- by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 29 Dec 2021 00:41:57 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 29 Dec 2021 00:41:57 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 29 Dec 2021 00:41:55 -0700
-To: <buildroot@buildroot.org>
-Date: Wed, 29 Dec 2021 09:41:47 +0200
-Message-ID: <20211229074147.38135-1-eugen.hristev@microchip.com>
+ with ESMTP id wPSNQBxmZ3na for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 08:42:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D13B740022
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 08:42:31 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id d14so16056461ila.1
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 00:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=o1TM2hGLksZnd5NL9abPmO6OjXLaEBGbZDj9PED6rf4=;
+ b=Av0egmNEEX/UxcJXgr8RM00TVVtntwEcJdWsH42TA/QTTTWkApAJv6eOdA6FE2BoW+
+ CPSTd935koJnahtxatBWjXy0Igu+qzIGe+WOYb0r5b0+Oo178nmT3ozn8dgv3loPEE+t
+ OafiCTpCRbDrd551h61SaCT881H9CBk06M9pLiGQeI4y9y0BLblZ7xnMfJnlecIByo+r
+ +Bbka3Glzo8MnOL/wGR+KSvdohNBWvCWEB1/IZx4qR/1B3ZMPi1MIkVinmiOxlGp88GO
+ qaIpAZUANko8wKR5YE3sofqgr/K8cwSxGnAWWOOwWKZleg3oFzXsu67tTAgP8mg2O4IO
+ 2SfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=o1TM2hGLksZnd5NL9abPmO6OjXLaEBGbZDj9PED6rf4=;
+ b=lw+YRAB974TIqUev5VotqLLRFJgnBPR0uJm50TJgjkQ7SQYsXiFgFJM/FXdddf/zji
+ f3Xvkm5TtpVgr5frbrPAEVnlItx+DpcstMqxohwN+KHg+rzzrqdbBvRnZm/YI2BlAQu8
+ 2ISl3cI86u8Fk/pVYuIOFqK9lIBKRzRlThouES6Fp9sTpG77ga064gx2rjr+7jH9PcVJ
+ bA01a88M/N2aih31SZiCKLY1VPuRagYZTUjAHbCs0f2fX3rhSuVJ6n3Adqcdq8oPQDRO
+ yK/J39TFneEVTbW35jlDCr/0ZWHUd0Lx1q9ZcadzdJkQvgduOIP/8mCFMSLNr0po1Fe/
+ Y1Kw==
+X-Gm-Message-State: AOAM531oJmaqTON932wEuXDick/6Q9KxEUZcKKEXTkqzG0voYR3pYcs7
+ ZyE2aqfj+R9cx8iC9jOqB0H5SB27g1g=
+X-Google-Smtp-Source: ABdhPJy/eIHewsfMki4hXqiRQs6a9Og0JtpWPev+2NR1XIx6VUxfMg/PGVOgqx2N+SFbBBAXdQ7WcA==
+X-Received: by 2002:a05:6e02:1a2f:: with SMTP id
+ g15mr9501436ile.268.1640767350761; 
+ Wed, 29 Dec 2021 00:42:30 -0800 (PST)
+Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
+ [71.218.242.12])
+ by smtp.gmail.com with ESMTPSA id p15sm12166788ilo.83.2021.12.29.00.42.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Dec 2021 00:42:30 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 29 Dec 2021 01:42:17 -0700
+Message-Id: <20211229084223.521362-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/microchip,
- atmel: bump at91bootstrap to 4.0.1
+Subject: [Buildroot] [PATCH v2 0/6] PEP517 host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,287 +84,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Eugen Hristev via buildroot <buildroot@buildroot.org>
-Reply-To: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the AT91BOOTSTRAP bootloader package to new released version 4.0.1
-for all the supported boards (SAMA boards + SAM9X60).
+This series adds host packages that will be used for PEP517 based
+python-package infrastructure in a future series.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig       | 2 +-
- configs/atmel_sama5d2_xplained_mmc_defconfig           | 2 +-
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig       | 2 +-
- configs/atmel_sama5d3_xplained_defconfig               | 2 +-
- configs/atmel_sama5d3_xplained_dev_defconfig           | 2 +-
- configs/atmel_sama5d3_xplained_mmc_defconfig           | 2 +-
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig       | 2 +-
- configs/atmel_sama5d4_xplained_defconfig               | 2 +-
- configs/atmel_sama5d4_xplained_dev_defconfig           | 2 +-
- configs/atmel_sama5d4_xplained_mmc_defconfig           | 2 +-
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig       | 2 +-
- configs/microchip_sam9x60ek_mmc_defconfig              | 2 +-
- configs/microchip_sam9x60ek_mmc_dev_defconfig          | 2 +-
- configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig     | 2 +-
- configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 2 +-
- configs/microchip_sama5d2_icp_mmc_defconfig            | 2 +-
- configs/microchip_sama5d2_icp_mmc_dev_defconfig        | 2 +-
- configs/microchip_sama7g5ek_mmc_defconfig              | 2 +-
- configs/microchip_sama7g5ek_mmc_dev_defconfig          | 2 +-
- 19 files changed, 19 insertions(+), 19 deletions(-)
+See:
+https://www.python.org/dev/peps/pep-0517/
 
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index e85c38af50..a4cabfa37f 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -71,7 +71,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-index 32e9f582e6..d5cbacd14f 100644
---- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index f71e284ff5..39e8721dbe 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -88,7 +88,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index b03c0db2c5..d5a3b1951f 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_UBI=y
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index 89c273da33..a9e62c465f 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -85,7 +85,7 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 8256a5e199..e551bf225e 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index 7c39a5a2d4..f71aa49361 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -87,7 +87,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index 2a3e91954d..6e4d3c60f3 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 6779c04d47..47f77c25cc 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -89,7 +89,7 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index e0b1e5147f..b5030ae5cc 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index e638e6758a..8e3a0da600 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -88,7 +88,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap3-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sam9x60ek_mmc_defconfig b/configs/microchip_sam9x60ek_mmc_defconfig
-index 081aa16e24..21c5b2b77e 100644
---- a/configs/microchip_sam9x60ek_mmc_defconfig
-+++ b/configs/microchip_sam9x60ek_mmc_defconfig
-@@ -14,7 +14,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sam9x60eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-index a2c4e29822..dba703809d 100644
---- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
-+++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-@@ -68,7 +68,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sam9x60eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-index cebebaaea6..d0115bb78e 100644
---- a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-+++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_wlsom1_eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-index f6895dd83b..298b6b5289 100644
---- a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-@@ -72,7 +72,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap-v3.10.3.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_wlsom1_eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_defconfig b/configs/microchip_sama5d2_icp_mmc_defconfig
-index 5d0eac3250..fbb0cb8be0 100644
---- a/configs/microchip_sama5d2_icp_mmc_defconfig
-+++ b/configs/microchip_sama5d2_icp_mmc_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-index 46e802f67b..7f594fd45e 100644
---- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -60,7 +60,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_icpsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama7g5ek_mmc_defconfig b/configs/microchip_sama7g5ek_mmc_defconfig
-index 940b658c7d..b1cd193829 100644
---- a/configs/microchip_sama7g5ek_mmc_defconfig
-+++ b/configs/microchip_sama7g5ek_mmc_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-index e7f2f9ca83..3253bce401 100644
---- a/configs/microchip_sama7g5ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-@@ -55,7 +55,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.0)/at91bootstrap-v4.0.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v4.0.1)/at91bootstrap-v4.0.1.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama7g5eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+James Hilliard (6):
+  package/python-tomli: new package
+  package/python-pep517: new package
+  package/python-pyparsing: enable host build
+  package/python-packaging: enable host build
+  package/python-pypa-build: new package
+  package/python-installer: new package
+
+ package/Config.in                             |  1 +
+ .../python-installer/python-installer.hash    |  5 +++++
+ package/python-installer/python-installer.mk  | 15 +++++++++++++++
+ package/python-packaging/python-packaging.mk  |  3 +++
+ package/python-pep517/python-pep517.hash      |  5 +++++
+ package/python-pep517/python-pep517.mk        | 16 ++++++++++++++++
+ .../python-pypa-build/python-pypa-build.hash  |  5 +++++
+ .../python-pypa-build/python-pypa-build.mk    | 19 +++++++++++++++++++
+ package/python-pyparsing/python-pyparsing.mk  |  2 ++
+ package/python-tomli/Config.in                |  7 +++++++
+ package/python-tomli/python-tomli.hash        |  5 +++++
+ package/python-tomli/python-tomli.mk          | 16 ++++++++++++++++
+ 12 files changed, 99 insertions(+)
+ create mode 100644 package/python-installer/python-installer.hash
+ create mode 100644 package/python-installer/python-installer.mk
+ create mode 100644 package/python-pep517/python-pep517.hash
+ create mode 100644 package/python-pep517/python-pep517.mk
+ create mode 100644 package/python-pypa-build/python-pypa-build.hash
+ create mode 100644 package/python-pypa-build/python-pypa-build.mk
+ create mode 100644 package/python-tomli/Config.in
+ create mode 100644 package/python-tomli/python-tomli.hash
+ create mode 100644 package/python-tomli/python-tomli.mk
+
 -- 
 2.25.1
 
