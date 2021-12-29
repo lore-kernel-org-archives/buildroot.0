@@ -1,58 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A21C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 09:56:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A3DC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 09:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1485940183;
-	Wed, 29 Dec 2021 09:56:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6280C60B08;
+	Wed, 29 Dec 2021 09:59:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T33jdJkpiqI5; Wed, 29 Dec 2021 09:56:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ohzHbFAQNIIe; Wed, 29 Dec 2021 09:59:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 274534012E;
-	Wed, 29 Dec 2021 09:56:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 556E11BF4E7
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:56:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B87EE60ABE;
+	Wed, 29 Dec 2021 09:59:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E070D1BF20F
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D4AC4012E
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:56:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAE8860ABE
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:59:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kcdfr8kChrX7 for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 09:56:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EWbU8W95ay-c for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 09:59:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4755440022
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 09:56:03 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.138.59])
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A97560A9B
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 09:59:18 +0000 (UTC)
+Received: from [192.168.50.18] ([146.241.138.59])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 2VgfnzT5xR1a12VgfnUmp4; Wed, 29 Dec 2021 10:56:01 +0100
+ id 2VjonK2P3Zs8s2VjonBcRX; Wed, 29 Dec 2021 10:59:16 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1640771761; bh=/mTOdg5Gl3ubV6xxEz6NpOBnZcX52JmST6wdsSH3XGE=;
- h=From:To:Subject:Date:MIME-Version;
- b=Jat6RwihP3ZMh8d6WqfQBvWvKY/rrpAk6xNz0nTb92AxRSplkUYgQPvt7NpPPszP4
- NW87VsFs9rYi7ZMRvsrR7JGVrrmE6B2xf8Jzvtri5BWXkS6qOI3GNhO+CAHOSC6/97
- p1oZSvjNiexW/rjVin40zBlEhvd22Q5nijp3Avwt7H4Pq4vrJ7ILVaZhEchSj3nd6e
- NvfS+wu4PUHxXP6Z8yOoSDFU67cGrcy0eg3TS3Ih+E3QfWlWP0revPARObW81ZUSJ4
- xTR688Y040/2NKb+41b5Va1vt5vgJszZyPFrY5zNX8p6AMBh1BljT3TXXinBzULXiq
- esdmGQtFue9SQ==
+ t=1640771956; bh=4ulmS7CGtGtkdNuIitzc9UbBObM5wg3pvQDHb270SUY=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=RnYvys482WSsZRYiL3wokrgQZHxz5uMxSxEMdTm1YAHaPEPduZmFgaoHTWMF/bjwf
+ Seylz4X+gP/IlUBpsyDFm5uTb97b4nLP0Sd4MlMObGtTyCc+jBHgJNDunIwm6F24Hx
+ Tva+VzvAEHBSKbCLGN0+FyVW/O0OLT4RGY0hngqp1uVEXJcKmnmpkBfAU6blmSYluU
+ y7zb494fCtgCSqvQfjninuBBA6KIWRaYbhOGgalWaLKAoi8zzmC9ZFyVLrK0sEmbam
+ zCI2OpRO+HoGN/QC5ADz9NebUWTlBIUgE7JEySF2ktEYQRDUg2FhlX/bIAwH38HxOd
+ FU3Wx3sLHwtHQ==
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20211229094225.512279-1-fontaine.fabrice@gmail.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 Dec 2021 10:56:00 +0100
-Message-Id: <20211229095600.212449-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Message-ID: <d5242043-76c4-1e06-56e6-af419bb07f40@benettiengineering.com>
+Date: Wed, 29 Dec 2021 10:59:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfPPFYaHkxtC2PqwGhyvHKZDCmylObE1kDJv8ZOoN2Hu34dFeKH/4FNS+jKnLaW1659Ed8eBziatmtyL7KFBRehTtXlwx/mnKu+6SWa4j9kLiFkGCD/wX
- rpgB8V6t94g7FLtdh5Q7bLc4YBA2tQizi8FtD6sqIDCEr6svkLCwt8KEMG9Zx4f566AQxJiwMXFmtieGsXIXKJJ+LLJpazY52wVPoIKCLpvVyNB0iwQ1lQPr
- X2IfqGScIiUp0g/PoRg8H0zmjVSjiyWwnNJwdZxM8AZ5FxkDXn+dgCIROvBUurbl4EhjLFLk+6j4gH4BcI/Wfw==
-Subject: [Buildroot] [PATCH] package/glibmm: needs BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20211229094225.512279-1-fontaine.fabrice@gmail.com>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfEblpQ8AOZ80U15XsSjBFA6n84tORUUepXAzdBNJp6ZiKL/d+ilfQoQP6nzA5XG9IX8UCbcWQo9lkhF/Byjo4nSfG+mq8JNFrCWgp5NGRXNdG6y3Dfzl
+ deTzHPEWl9LRflIYSnCRDnO5vEd8cLVc5PgcJ6SguLb5euUiyHYMQhS+lF5xhDUUI2KS4H8AB9Jf67UZ+a3VZ4H2VFZo6y2vR+uKIOfX2sO8oQfqHjPubAoN
+ RglqBrDiO84qDAoEhdb/G8aRcEhi+nsoT/HhZVkwF/81IemTCJzLTubGEtPuMOkU
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibmm: link with -latomic if
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +69,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- James Knight <james.knight@collins.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: James Knight <james.knight@collins.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add BR2_TOOLCHAIN_HAS_SYNC_4 and restyle the with "|| \" form.
+Hi Fabrice, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/6a2/6a2709956fbb16ac3cbf676acb242c88f83fcdae/
+I've just sent a worse patch for this:
+https://patchwork.ozlabs.org/project/buildroot/patch/20211229095600.212449-1-giulio.benetti@benettiengineering.com/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/glibmm/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+So please drop that and keep this one.
 
-diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
-index 2dfc861817..1b27f8cbb1 100644
---- a/package/glibmm/Config.in
-+++ b/package/glibmm/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBMM
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU # libglib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBSIGC
-@@ -14,5 +15,6 @@ config BR2_PACKAGE_GLIBMM
- 
- comment "glibmm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_SYNC_4
+Best regards
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
+
+On 29/12/21 10:42, Fabrice Fontaine wrote:
+> Link with -latomic if needed to avoid the following build failure since
+> bump to version 2.68.2 in commit
+> dddb65efbdf2c7952f22a1e51009f17f1676db4a:
+> 
+> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: glib/glibmm/libglibmm-2.68.so.1.3.0.p/main.cc.o: in function `Glib::Source::reference() const':
+> main.cc:(.text+0xd40): undefined reference to `__atomic_fetch_add_4'
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/6a2709956fbb16ac3cbf676acb242c88f83fcdae
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   package/glibmm/glibmm.mk | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+> index 578267c75e..525da6b618 100644
+> --- a/package/glibmm/glibmm.mk
+> +++ b/package/glibmm/glibmm.mk
+> @@ -15,9 +15,15 @@ GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
+>   GLIBMM_CONF_OPTS = -Dbuild-examples=false
+>   
+>   GLIBMM_CXXFLAGS = $(TARGET_CXXFLAGS)
+> +GLIBMM_LDFLAGS = $(TARGET_LDFLAGS)
+>   
+>   ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+>   GLIBMM_CXXFLAGS += -O0
+>   endif
+>   
+> +# Uses __atomic_fetch_add_4
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +GLIBMM_LDFLAGS += -latomic
+> +endif
+> +
+>   $(eval $(meson-package))
+> 
 
 _______________________________________________
 buildroot mailing list
