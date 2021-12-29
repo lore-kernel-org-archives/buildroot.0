@@ -4,68 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7FAC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 16:27:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ED0FC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 17:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98CD240241;
-	Wed, 29 Dec 2021 16:27:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 708644010C;
+	Wed, 29 Dec 2021 17:32:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KwzOoD7pjfc2; Wed, 29 Dec 2021 16:27:26 +0000 (UTC)
+	with ESMTP id OjWcpA1o8tmv; Wed, 29 Dec 2021 17:32:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C93A54021C;
-	Wed, 29 Dec 2021 16:27:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 02E711BF373
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 16:27:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 622A740168;
+	Wed, 29 Dec 2021 17:32:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 359FA1BF36C
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E43D64021C
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 16:27:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2468060A4F
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:32:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PP_9kF7HdlxP for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 16:27:23 +0000 (UTC)
-X-Greylist: delayed 02:25:48 by SQLgrey-1.8.0
-Received: from 8.mo548.mail-out.ovh.net (8.mo548.mail-out.ovh.net
- [46.105.45.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 86675400C1
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 16:27:23 +0000 (UTC)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.146.15])
- by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 4B6B420DB6;
- Wed, 29 Dec 2021 14:01:32 +0000 (UTC)
-Received: from kaod.org (37.59.142.98) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 29 Dec
- 2021 15:01:31 +0100
-Authentication-Results: garm.ovh; auth=pass
- (GARM-98R0026df9a7c9-ebba-4820-8a41-03aa205d804b,
- 6404A340A715A174C0D1142DC6E97647B5DF2CAE) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <ac4e193e-3fcb-80df-a433-70664e5fb850@kaod.org>
-Date: Wed, 29 Dec 2021 15:01:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211112160413.2736382-1-clg@kaod.org>
- <20211228221430.7e8cb844@windsurf>
- <f7dc4424-a38a-c448-4436-f1e06b86ffb9@kaod.org>
- <20211229095040.43a2bb32@windsurf>
-From: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20211229095040.43a2bb32@windsurf>
-X-Originating-IP: [37.59.142.98]
-X-ClientProxiedBy: DAG3EX1.mxp5.local (172.16.2.21) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 8cbdf10d-c004-4b86-a009-0444a42c7ef5
-X-Ovh-Tracer-Id: 7654993470347709222
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddruddvuddgiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhephffhleegueektdetffdvffeuieeugfekkeelheelteeftdfgtefffeehueegleehnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehmrghtthhhvgifrdifvggsvghrsegtohhllhhinhhsrdgtohhm
-Subject: Re: [Buildroot] [PATCH 1/3] configs/qemu: Add a ppc64le-powernv
- configuration
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id naW1HKCEzDDq for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 17:32:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78313607B5
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:32:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 7312F82DA5; Wed, 29 Dec 2021 17:26:20 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Wed, 29 Dec 2021 18:31:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f5ec93be3c1d9deda2a7ad516c258128561f62e9
+X-Git-Newrev: 87a9e75b79a28548bfee97156b5ab5b7544282e0
+X-Patchwork-Hint: ignore
+Message-Id: <20211229172620.7312F82DA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cycler: bump to version
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +53,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>,
- Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=87a9e75b79a28548bfee97156b5ab5b7544282e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> because the same image can be used for the QEMU machine implementing
->> the POWER8 processor, which also works for POWER9 and Power10.
-> 
-> So why don't we test it with -M powernv8 ?
+- python 2 support has been dropped since
+  https://github.com/matplotlib/cycler/commit/2a8831489b8ea05614459afb3135db3248890268
+- Update indentation in hash file (two spaces)
 
-Sure. Would you rather have a ppc64le-powernv8 and a ppc64le-powernv9
-config instead ?
+https://github.com/matplotlib/cycler/releases/tag/v0.11.0
 
-I have a few other patches adding similar boards for 44x CPUs. I can
-resend a v2 for the whole.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-cycler/Config.in          | 1 +
+ package/python-cycler/python-cycler.hash | 7 ++++---
+ package/python-cycler/python-cycler.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-What's the process to bump the QEMU version ?
-
-Thanks,
-
-C.
-
+diff --git a/package/python-cycler/Config.in b/package/python-cycler/Config.in
+index 813bc69dd4..39ff23e45f 100644
+--- a/package/python-cycler/Config.in
++++ b/package/python-cycler/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CYCLER
+ 	bool "python-cycler"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Creates a Cycler objects much like cycler, but
+ 	  includes input validation.
+diff --git a/package/python-cycler/python-cycler.hash b/package/python-cycler/python-cycler.hash
+index 8255458b26..cef416a86d 100644
+--- a/package/python-cycler/python-cycler.hash
++++ b/package/python-cycler/python-cycler.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/project/cyclic/#files
+-sha256	cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8  cycler-0.10.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/cycler/json
++md5  4d0c25f418956e91c47163179682e0ef  cycler-0.11.0.tar.gz
++sha256  9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f  cycler-0.11.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	f1218143d766da3fea66f13396b7f15df46a83303f29bf96ba6e98eb4d42f408  LICENSE
++sha256  f1218143d766da3fea66f13396b7f15df46a83303f29bf96ba6e98eb4d42f408  LICENSE
+diff --git a/package/python-cycler/python-cycler.mk b/package/python-cycler/python-cycler.mk
+index fcdcb148a1..03155d7241 100644
+--- a/package/python-cycler/python-cycler.mk
++++ b/package/python-cycler/python-cycler.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CYCLER_VERSION = 0.10.0
++PYTHON_CYCLER_VERSION = 0.11.0
+ PYTHON_CYCLER_SOURCE = cycler-$(PYTHON_CYCLER_VERSION).tar.gz
+-PYTHON_CYCLER_SITE = https://files.pythonhosted.org/packages/c2/4b/137dea450d6e1e3d474e1d873cd1d4f7d3beed7e0dc973b06e8e10d32488
++PYTHON_CYCLER_SITE = https://files.pythonhosted.org/packages/34/45/a7caaacbfc2fa60bee42effc4bcc7d7c6dbe9c349500e04f65a861c15eb9
+ PYTHON_CYCLER_LICENSE = BSD-3-Clause
+ PYTHON_CYCLER_LICENSE_FILES = LICENSE
+ PYTHON_CYCLER_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
