@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8990C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 20:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 789AEC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 22:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C7D260B38;
-	Wed, 29 Dec 2021 20:40:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D602D826C8;
+	Wed, 29 Dec 2021 22:25:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Kfe3EJPWUus; Wed, 29 Dec 2021 20:40:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qEvAsfcZJo1x; Wed, 29 Dec 2021 22:25:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E1AA606F2;
-	Wed, 29 Dec 2021 20:40:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 222B31BF331
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 20:40:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45DA08269C;
+	Wed, 29 Dec 2021 22:25:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 402EE1BF30B
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 22:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EF24606F2
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 20:40:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D03E40908
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 22:25:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qhz0DK5zUsZD for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 20:40:45 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z4KD343FAJWO for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 22:25:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com
- [IPv6:2607:f8b0:4864:20::72b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41BF660615
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 20:40:45 +0000 (UTC)
-Received: by mail-qk1-x72b.google.com with SMTP id w27so14811591qkj.7
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 12:40:45 -0800 (PST)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B681408EE
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 22:25:09 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id e5so14073784wmq.1
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 14:25:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sd6JryqVepLyyQei1jJBZtSDLSQxT4l11de0oAh2WoI=;
- b=pQ2qVW5stxMHWaL6iXRt+Kb9dNtbEECLqjMCyH2LET2Ui3LGMAneqUAyFgC6u/302V
- p25dhx1OJNAffzTXS8n6sExOADHDPOr4IX4CgdTgRiv6cLYE7wpVT3c7YHJHD/sx1EI2
- z4OlJWkbaunk6lZGvSx74D/+rTae90JWgQ61pIG1xfnpVX6jK44BKKwj451F6emcD3ds
- wKFlK+fr9Xwf9MxV19lHdldrXQ0mEYOScDxV+I9SOYqs9G1RX/S/So6qtciz5Gay4f8e
- a/cQKHrzZ1P3m0JWW62HW0i186IITP57yN9V7zOpDsM4Lr+Oec/RcgfKtFrCg9NE4qA6
- aDnQ==
+ bh=pX2z5UybchIWpNT8J0SjrPVyk+F6S9DxGhM48Z8GfSo=;
+ b=SoLqxc47DHiv/vMrgvlsdzNVZHPVv0TgNuS+JiBqulTORUv5MrlEXPi++Z5+xMJ79c
+ LsMefdWHF2Qj1MoZFN5JTVfZtxCis73jsaAtS1qgisfQt1lkpL63JALRnNvTo1+2Q1fD
+ IrSC5kNu0vLN5xYOOYNkhT+INHDJOiCqs8Umc69s/6CGxG5FIxHFSIzV1S+de2qe6xKY
+ MsRxZBGfJaDmYVa6x1GnNAa0LKP0tXELxMeMvVfwKhlpl/3C9dieVFcmRheMKnKAIah5
+ LLyDVjmjvbfQwnsg7FPiyEqR+oLrrYeMfhtIJgLNFgFYA8cPnKbN3XwGvhBSSZGAYK+v
+ ZvPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=sd6JryqVepLyyQei1jJBZtSDLSQxT4l11de0oAh2WoI=;
- b=okU8OAyFsRs9YiNw1OB1ONl1mvCpRnh9DT5BmDM5Je81mVj/AWvx9HXNyN/nRVXiTp
- o1ZO/ATEkdo9fHbtCqMSYk1stoX/HIYkqSW7KUh0tCuGpoP9OLzk6dR6HX9+M6X2GTFj
- X+8D7wTGn3CG5qXdZVSrcHRamPJdsYlQk7KUGDRsa1PHBoEod2tNS/ByfZkUnt68i5WU
- 3BUkTCyYjQkMWi+ny+Nzp+CL+qRfdMRV0JfFRv3vWsA7fluhEEyvGJLF5iO4+lu3EB5R
- 79QvMr8Rr3GLea8+Z5lO0fVhkGWfNL1Qg1cKBPGfNKzO3xiue0Dxv++5hrhTqmAePn5r
- PQig==
-X-Gm-Message-State: AOAM532H88gL/PhUMSuy4dVjfiAXecEViImV4R4DVUumhHImK1YwKC8S
- vE77oYKL17ip15peyYqd7UckwbWdRi8=
-X-Google-Smtp-Source: ABdhPJyllDUFBFs9cCLb2WrVEq2HroQ3u4GquIxAVFtYBo+32PtjBqAnfXtUFgV4XmOx06tY+gftbQ==
-X-Received: by 2002:a05:620a:bc7:: with SMTP id
- s7mr20203233qki.334.1640810443734; 
- Wed, 29 Dec 2021 12:40:43 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:485:504a:c4ce:8129:9976:888d])
- by smtp.gmail.com with ESMTPSA id
- a16sm19037619qta.94.2021.12.29.12.40.42
+ bh=pX2z5UybchIWpNT8J0SjrPVyk+F6S9DxGhM48Z8GfSo=;
+ b=YgeYiLFJeBvIYdy4+Q7TnSFK6M4Aj54nh9Vf7HHayf5XsYisla+8qSim2j2BOI0uLa
+ 5Yd3zrJ6gwOanwIWacyVzOx1rOAp5xbZclYIq8B2TkYv/Iv92xoXjIHTiWEIXjvJsuhg
+ CCjJmS6RYbJyMq8RgPC3LU9f2IFQuR6J2KOxJJ/0t6+OGmXzSzxF+4ExwtLQpfAhvHD7
+ Nn1MAhalXMl2HfN+WsKzOGbtI5fCH719kbexx0tDyEF+FUqBOWaT+LMqD4zVqjAtxU9U
+ WHaozzza5sLpGBTYs9AvwGjaWAhkS3C9yxIY+F4U8UzEPe6ejwUv50QsPUHEl/h86UfH
+ VBQw==
+X-Gm-Message-State: AOAM530AX90q8502Ars12JKdujNoy0rGywbJc2LvN+a1ZHiFpQ/lmDmy
+ bh0XSw4bzYXtxy9xGT81ZaHnIJWL8xM=
+X-Google-Smtp-Source: ABdhPJzeOlSviYCW2GlQ9g/MU8BIl9QZwxj/zGRpcuAcTugZkun2PdPIXtV7PK2pScwyXt9Lw68knw==
+X-Received: by 2002:a1c:1bd8:: with SMTP id
+ b207mr23988858wmb.114.1640816707252; 
+ Wed, 29 Dec 2021 14:25:07 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id y11sm25911135wry.70.2021.12.29.14.25.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Dec 2021 12:40:43 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
+ Wed, 29 Dec 2021 14:25:06 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Dec 2021 17:40:36 -0300
-Message-Id: <20211229204036.705008-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 29 Dec 2021 23:23:44 +0100
+Message-Id: <20211229222344.604311-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] configs/imx6ulpico: Bump U-Boot and kernel
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: requires RC4 support in
+ openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,91 +87,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Current U-Boot is an old version and fails to build:
+Fix the following build failure raised since bump to version 10.5.0 in
+commit b5352c2177011ca389cbb7c68e78447549cbdaaa:
 
-/usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-
-Bump U-Boot to fix the problem.
-
-Latest U-Boot has switched to distro boot and SPL, so make the necessary
-changes to support it. Other advantage of bumping U-Boot is that
-it also supports the other imx6ul-pico variants.
-
-While at it, also bump U-Boot to the 5.15 LTS.
+libqpdf/QPDFCrypto_openssl.cc: In constructor 'QPDFCrypto_openssl::QPDFCrypto_openssl()':
+libqpdf/QPDFCrypto_openssl.cc:46:9: error: 'EVP_rc4' was not declared in this scope
+   46 |     rc4(EVP_rc4()),
+      |         ^~~~~~~
 
 Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006192
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- .../rootfs_overlay/boot/extlinux/extlinux.conf   |  4 ++++
- configs/imx6ulpico_defconfig                     | 16 ++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
- create mode 100644 board/technexion/imx6ulpico/rootfs_overlay/boot/extlinux/extlinux.conf
+ - http://autobuild.buildroot.org/results/3b7f19ecb3303c9c9eb89c493c7e0d8a47b4be95
 
-diff --git a/board/technexion/imx6ulpico/rootfs_overlay/boot/extlinux/extlinux.conf b/board/technexion/imx6ulpico/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 000000000000..9e6099f33237
---- /dev/null
-+++ b/board/technexion/imx6ulpico/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx6ul-pico-buildroot
-+	kernel ../zImage
-+	fdtdir ../
-+  	append root=PARTUUID=${uuid} rootwait rw console=${console},${baudrate}
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 56ae58875274..e406d9938bdb 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
-@@ -15,11 +15,12 @@ BR2_ROOTFS_OVERLAY="board/technexion/imx6ulpico/rootfs_overlay"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-pico-hobbit"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-pico-pi imx6ul-pico-hobbit imx6ul-pico-dwarf"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # wifi firmware for brcm4339
- BR2_PACKAGE_LINUX_FIRMWARE=y
-@@ -35,10 +36,13 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
--BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- 
- # required tools to create the eMMC image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qpdf/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
+index eadfc5ea92..047c4c8a75 100644
+--- a/package/qpdf/Config.in
++++ b/package/qpdf/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_QPDF
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  QPDF is a command-line program that does structural,
+ 	  content- preserving transformations on PDF files. It could
 -- 
-2.25.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
