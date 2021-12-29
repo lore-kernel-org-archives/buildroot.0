@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A912C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 23:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C30EC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 23:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B41C740448;
-	Wed, 29 Dec 2021 23:07:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 065CA40447;
+	Wed, 29 Dec 2021 23:13:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S8jzBez4jq7t; Wed, 29 Dec 2021 23:07:37 +0000 (UTC)
+	with ESMTP id MXUo9d_puqbi; Wed, 29 Dec 2021 23:13:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCB0A403FD;
-	Wed, 29 Dec 2021 23:07:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 531441BF280
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:07:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32257403F9;
+	Wed, 29 Dec 2021 23:13:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 486A31BF280
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41BA760B54
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:07:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 354534091E
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:13:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ciFR7piPMN_f for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 23:07:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id A895jKiKdr2V for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 23:13:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4279860B50
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 23:07:30 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 21314408E2
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 23:13:42 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 44CAB200004;
- Wed, 29 Dec 2021 23:07:28 +0000 (UTC)
-Date: Thu, 30 Dec 2021 00:07:27 +0100
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id EBC45FF808;
+ Wed, 29 Dec 2021 23:13:40 +0000 (UTC)
+Date: Thu, 30 Dec 2021 00:13:39 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20211230000727.6f59f153@windsurf>
-In-Reply-To: <20211014225849.832479-8-aduskett@gmail.com>
+Message-ID: <20211230001339.52bf757d@windsurf>
+In-Reply-To: <20211014225849.832479-9-aduskett@gmail.com>
 References: <20211014225849.832479-1-aduskett@gmail.com>
- <20211014225849.832479-8-aduskett@gmail.com>
+ <20211014225849.832479-9-aduskett@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 07/11] package/python-numpy: bump to
- version 1.21.2
+Subject: Re: [Buildroot] [PATCH v2 08/11] package/python-pyalsa: add
+ 0001-fix-pytuple-set-item-usage-no-return-value.patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,18 +67,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 14 Oct 2021 15:58:45 -0700
+Hello Adam,
+
+On Thu, 14 Oct 2021 15:58:46 -0700
 Adam Duskett <aduskett@gmail.com> wrote:
 
-> Update license file information as well.
+> This patch is a backport of commit 5ea2f8709b4d091700750661231f8a3ddce0fc7c and
+> fixes compatibility with python 3.10.
 > 
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  package/python-numpy/python-numpy.hash | 11 +++++------
->  package/python-numpy/python-numpy.mk   | 16 +++++++++-------
->  2 files changed, 14 insertions(+), 13 deletions(-)
+>  ...tuple-set-item-usage-no-return-value.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
 
-Applied to master, thanks.
+This patch is no longer needed: commit
+1055ae6c6b307331ff50d9e3dfaa82a37c8f9038 has updated python-pyalsa to
+version 1.2.6, which includes the fix for Python 3.10 build.
+
+Thanks!
 
 Thomas
 -- 
