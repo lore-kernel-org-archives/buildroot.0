@@ -1,52 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C30EC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 23:13:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0B7BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 23:14:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 065CA40447;
-	Wed, 29 Dec 2021 23:13:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99B7481471;
+	Wed, 29 Dec 2021 23:14:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MXUo9d_puqbi; Wed, 29 Dec 2021 23:13:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WUBq-qS2NVc7; Wed, 29 Dec 2021 23:14:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32257403F9;
-	Wed, 29 Dec 2021 23:13:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED4468143C;
+	Wed, 29 Dec 2021 23:14:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 486A31BF280
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:13:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EAD4A1BF280
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 354534091E
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:13:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA6724091E
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:14:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A895jKiKdr2V for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 23:13:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 21314408E2
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 23:13:42 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id EBC45FF808;
- Wed, 29 Dec 2021 23:13:40 +0000 (UTC)
-Date: Thu, 30 Dec 2021 00:13:39 +0100
+ with ESMTP id Kfmp4cd27Tah for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 23:14:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30EAE408E2
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 23:14:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9B30782C83; Wed, 29 Dec 2021 23:08:17 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20211230001339.52bf757d@windsurf>
-In-Reply-To: <20211014225849.832479-9-aduskett@gmail.com>
-References: <20211014225849.832479-1-aduskett@gmail.com>
- <20211014225849.832479-9-aduskett@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 08/11] package/python-pyalsa: add
- 0001-fix-pytuple-set-item-usage-no-return-value.patch
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 00:14:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b59c4c1658c5d864ea0e77f62141980a3eab6a87
+X-Git-Newrev: bcb85b2e59902c1f570fb0545b38a677d088841f
+X-Patchwork-Hint: ignore
+Message-Id: <20211229230817.9B30782C83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django-enumfields: bump to
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Samuel Martin <s.martin49@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org,
- Oli Vogt <oli.vogt.pub01@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=bcb85b2e59902c1f570fb0545b38a677d088841f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Oct 2021 15:58:46 -0700
-Adam Duskett <aduskett@gmail.com> wrote:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-django-enumfields/python-django-enumfields.hash | 6 +++---
+ package/python-django-enumfields/python-django-enumfields.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> This patch is a backport of commit 5ea2f8709b4d091700750661231f8a3ddce0fc7c and
-> fixes compatibility with python 3.10.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  ...tuple-set-item-usage-no-return-value.patch | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/python-pyalsa/0001-fix-pytuple-set-item-usage-no-return-value.patch
-
-This patch is no longer needed: commit
-1055ae6c6b307331ff50d9e3dfaa82a37c8f9038 has updated python-pyalsa to
-version 1.2.6, which includes the fix for Python 3.10 build.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-django-enumfields/python-django-enumfields.hash b/package/python-django-enumfields/python-django-enumfields.hash
+index 84eb028e65..352fa8d907 100644
+--- a/package/python-django-enumfields/python-django-enumfields.hash
++++ b/package/python-django-enumfields/python-django-enumfields.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django-enumfields/json
+-md5	c9725a2c31ca2949d111815742335279  django-enumfields-1.0.0.tar.gz
+-sha256	5b0e2dd5973337717ca6bd5a7d9e167e6ae01203c160d4761b88837c4678f219  django-enumfields-1.0.0.tar.gz
++md5	 e06bcaecd583ee40e30d556bfcbf0d66  django-enumfields-2.1.1.tar.gz
++sha256  f64841732a9c343f5071220e0abcf5f51c9472c06e3c33d7c6a7ec27b6087561  django-enumfields-2.1.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	5548de8c163dc57bd0a4f5772f1509f2c04f1390251c98ebf060c9d52a223f57  LICENSE
++sha256  75b9c8c2514f22d66070ffc975c4d3132de01e0cc7b3a9662731bcb46cd2a042  LICENSE
+diff --git a/package/python-django-enumfields/python-django-enumfields.mk b/package/python-django-enumfields/python-django-enumfields.mk
+index 0121bd1173..20abb5bf6a 100644
+--- a/package/python-django-enumfields/python-django-enumfields.mk
++++ b/package/python-django-enumfields/python-django-enumfields.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_ENUMFIELDS_VERSION = 1.0.0
++PYTHON_DJANGO_ENUMFIELDS_VERSION = 2.1.1
+ PYTHON_DJANGO_ENUMFIELDS_SOURCE = django-enumfields-$(PYTHON_DJANGO_ENUMFIELDS_VERSION).tar.gz
+-PYTHON_DJANGO_ENUMFIELDS_SITE = https://files.pythonhosted.org/packages/b7/56/3f4e8d8ef6d5577a1b75b3cfae6dff819afd030e3a519a326ec7a7a0b74f
++PYTHON_DJANGO_ENUMFIELDS_SITE = https://files.pythonhosted.org/packages/24/a8/aaf2b5ddb697c9bcab53c32cfebe11e536502e07c30646b4756e7214b685
+ PYTHON_DJANGO_ENUMFIELDS_SETUP_TYPE = setuptools
+ PYTHON_DJANGO_ENUMFIELDS_LICENSE = MIT
+ PYTHON_DJANGO_ENUMFIELDS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
