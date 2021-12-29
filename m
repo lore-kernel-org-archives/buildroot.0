@@ -1,53 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D1CC433FE
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 08:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB02AC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 09:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0213B40897;
-	Wed, 29 Dec 2021 08:50:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 976CB40022;
+	Wed, 29 Dec 2021 09:00:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5KzxCOR5BB2L; Wed, 29 Dec 2021 08:50:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1NRVL_Ctznk2; Wed, 29 Dec 2021 09:00:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0064089F;
-	Wed, 29 Dec 2021 08:50:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8401400C7;
+	Wed, 29 Dec 2021 09:00:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 878CC1BF293
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:50:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 865F41BF293
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83388400C7
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 08:50:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 742B2400C7
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 09:00:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rApOTjEIJAu7 for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 08:50:53 +0000 (UTC)
+ with ESMTP id L12XD_Pt9aSO for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 09:00:27 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2572940022
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 08:50:52 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AE8940022
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 09:00:26 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7DF6940005;
- Wed, 29 Dec 2021 08:50:49 +0000 (UTC)
-Date: Wed, 29 Dec 2021 09:50:40 +0100
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 2A2911C0009;
+ Wed, 29 Dec 2021 09:00:24 +0000 (UTC)
+Date: Wed, 29 Dec 2021 10:00:23 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>
-Message-ID: <20211229095040.43a2bb32@windsurf>
-In-Reply-To: <f7dc4424-a38a-c448-4436-f1e06b86ffb9@kaod.org>
-References: <20211112160413.2736382-1-clg@kaod.org>
- <20211228221430.7e8cb844@windsurf>
- <f7dc4424-a38a-c448-4436-f1e06b86ffb9@kaod.org>
+To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Message-ID: <20211229100023.5e672b23@windsurf>
+In-Reply-To: <3e2a86be-e5d5-a4e4-1be8-e263c20b0a5f@green-communications.fr>
+References: <20210928195533.1736944-1-mmayer@broadcom.com>
+ <20210928195533.1736944-2-mmayer@broadcom.com>
+ <20211228221804.6b965558@windsurf>
+ <3e2a86be-e5d5-a4e4-1be8-e263c20b0a5f@green-communications.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] configs/qemu: Add a ppc64le-powernv
- configuration
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: set HOST*_NOCCACHE variables
+ only if unset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +60,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>,
- Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Markus Mayer <mmayer@broadcom.com>,
+ Markus Mayer via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQ8OpZHJpYywKCk9uIFR1ZSwgMjggRGVjIDIwMjEgMjM6NTA6MjkgKzAxMDAKQ8OpZHJp
-YyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4gd3JvdGU6Cgo+IExldCdzIHRyeSBkaWZmZXJlbnRs
-eSwKPiAKPiBPbiB0aGVzZSBzeXN0ZW1zLCB0aGUgRlcgaXMgY29tcGFyYWJsZSB0byBVLUJvb3Qg
-YXMgaXQgbG9hZHMga2VybmVsIGFuZAo+IGluaXRyYW1mcyBpbWFnZXMgZnJvbSBmbGFzaC4gVGhl
-IGluaXRyYW1mcyBpcyBhIGJ1aWxkcm9vdCBlbnZpcm9ubWVudAo+IHdoaWNoIGluY2x1ZGVzIHRo
-ZSBwZXRpdGJvb3QgWypdIGJvb3QgbG9hZGVyLiBUaGlzIHNlY29uZCBib290IGxvYWRlcgo+IGRv
-ZXMgdGhlIGRldmljZSBkaXNjb3ZlcnkgYW5kIGtleGVjcyBhIG5ldyBMaW51eCBpbWFnZSBmcm9t
-IGRpc2sgb3IKPiBuZXR3b3JrLgo+IAo+IFdoYXQgd2UgY2FyZSBhYm91dCBoZXJlIGlzIG9ubHkg
-dGhlIGZpcnN0IGxldmVsIHdoaWNoIHVzZXMgdGhlIGJ1aWxkcm9vdAo+IGltYWdlLiBwZXRpdGJv
-b3QgaXMgYW5vdGhlciB0b3BpYy4KPiAKPiBBcyBmb3IgUUVNVSwgaXQgaW1wbGVtZW50cyAzIG1h
-Y2hpbmVzIFBPV0VSOCwgUE9XRVI5IGFuZCBQb3dlcjEwCj4gcHJvY2Vzc29ycyB0aGF0IHdlIHVz
-ZSBmb3IgZGV2IGFuZCB0ZXN0cy4gSSBoYXZlIGNob3NlbiBpbiB0aGUgUUVNVQo+IHNjcmlwdCB0
-byBib290IGRpcmVjdGx5IGZyb20gYSBudm1lIGRpc2sgYmVjYXVzZSBpdCBpcyBzaW1wbGUgZW5v
-dWdoCj4gYnV0IHVzaW5nIGEgcmFtZnMgd291bGQgYmUgY2xvc2VyIHRvIHJlYWxpdHkuCj4gCj4g
-VGhlIGh5cGVydmlzb3IgcGFydCBpcyBzaW1wbHkgYSBmZWF0dXJlIG9mIHRoaXMgTGludXggUFBD
-IHBsYXRmb3JtLAo+IHRoYXQgaXMgY2FsbGVkIFBvd2VyTlYuCj4gCj4gWypdIGh0dHBzOi8vZ2l0
-aHViLmNvbS9vcGVuLXBvd2VyL3BldGl0Ym9vdC8KClRoYW5rcyBmb3IgdGhlIGFkZGl0aW9uYWwg
-ZXhwbGFuYXRpb25zIQoKPiA+IENvdWxkIHlvdSBjbGFyaWZ5PyAgCj4gCj4gYmVjYXVzZSB0aGUg
-c2FtZSBpbWFnZSBjYW4gYmUgdXNlZCBmb3IgdGhlIFFFTVUgbWFjaGluZSBpbXBsZW1lbnRpbmcK
-PiB0aGUgUE9XRVI4IHByb2Nlc3Nvciwgd2hpY2ggYWxzbyB3b3JrcyBmb3IgUE9XRVI5IGFuZCBQ
-b3dlcjEwLgoKU28gd2h5IGRvbid0IHdlIHRlc3QgaXQgd2l0aCAtTSBwb3dlcm52OCA/CgpCZXN0
-IHJlZ2FyZHMsCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8s
-IEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5p
-bmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+On Tue, 28 Dec 2021 22:26:35 +0100
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+
+> The cover text mentions it: calling make legal-info inside a post-build 
+> script (or package, actually) to somehow include the result in the image.
+
+Many thanks for pointing it out, because the cover letter obviously
+contains all the details.
+
+I am looking at patches through patchwork, so I tend to only see the
+patches themselves and not necessarily an associated cover letter.
+Especially for single patches, where a cover letter is rarely present,
+and therefore I rarely tend to search for such a cover letter in the
+mailing list.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
