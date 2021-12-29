@@ -1,50 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A02C7C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 17:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E6DEC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 17:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43A2140231;
-	Wed, 29 Dec 2021 17:36:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02FEA81445;
+	Wed, 29 Dec 2021 17:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xBm_IH4mtG0J; Wed, 29 Dec 2021 17:36:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E54HlpGfLS4U; Wed, 29 Dec 2021 17:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E35140168;
-	Wed, 29 Dec 2021 17:36:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9DECD1BF36C
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:36:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6103581405;
+	Wed, 29 Dec 2021 17:37:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 689681BF36C
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 990BC40168
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:36:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 57AF081405
+ for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 17:37:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gi6ZPOB3wrgy for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 17:36:35 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65F054010C
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:36:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 87EEEE0006;
- Wed, 29 Dec 2021 17:36:33 +0000 (UTC)
-Date: Wed, 29 Dec 2021 18:36:32 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6LipF_HN3Zs5 for <buildroot@lists.busybox.net>;
+ Wed, 29 Dec 2021 17:37:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AA7A813FD
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:37:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9441782BDF; Wed, 29 Dec 2021 17:31:45 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211229183632.7ad17962@windsurf>
-In-Reply-To: <20211229104149.560018-1-fontaine.fabrice@gmail.com>
-References: <20211229104149.560018-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/qpdf: bump to version 10.5.0
+To: buildroot@buildroot.org
+Date: Wed, 29 Dec 2021 18:37:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5352c2177011ca389cbb7c68e78447549cbdaaa
+X-Git-Newrev: b537fe14339592023221a7c200257eb3a923c0be
+X-Patchwork-Hint: ignore
+Message-Id: <20211229173145.9441782BDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptsetup: bump to version 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,47 +52,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 29 Dec 2021 11:41:49 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b537fe14339592023221a7c200257eb3a923c0be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop patches (already in version and C++14 now required)
-> - openssl is an optional dependency since version 10.0.0 and
->   https://github.com/qpdf/qpdf/commit/0f2507234fbe3bd305404b1267607b9900857523
-> - wchar is not mandatory since version 10.0.0 and
->   https://github.com/qpdf/qpdf/commit/2100b4ce152e9c70b3ce8760112d5a24ead4e52d
-> - atomic is needed since version 10.0.0 and
->   https://github.com/qpdf/qpdf/commit/c5c1a028cdd3cf345046c46963fb0fdacfb2c33c
-> - C++14 is required since version 10.2.0 and
->   https://github.com/qpdf/qpdf/commit/1b3f84f967daf9a668a5b1f5337d5d3d96e9112b
-> 
-> http://qpdf.sourceforge.net/files/qpdf-manual.html#ref.release-notes
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/cups-filters/Config.in                |  8 +-
->  ...ests-cxx11.cc-fix-build-with-gcc-4.8.patch | 38 --------
->  ...to-be-safe-if-downstream-write-fails.patch | 86 -------------------
->  package/qpdf/Config.in                        |  9 +-
->  package/qpdf/qpdf.hash                        |  4 +-
->  package/qpdf/qpdf.mk                          | 14 ++-
->  6 files changed, 21 insertions(+), 138 deletions(-)
->  delete mode 100644 package/qpdf/0001-libtests-cxx11.cc-fix-build-with-gcc-4.8.patch
->  delete mode 100644 package/qpdf/0002-Fix-some-pipelines-to-be-safe-if-downstream-write-fails.patch
+Enable optional ssh-token support when available.
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Remove-json_object-typedef.patch          | 48 ----------------------
+ package/cryptsetup/cryptsetup.hash                 |  4 +-
+ package/cryptsetup/cryptsetup.mk                   | 12 +++++-
+ 3 files changed, 12 insertions(+), 52 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+deleted file mode 100644
+index bbfd1aa075..0000000000
+--- a/package/cryptsetup/0001-Remove-json_object-typedef.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 15 Aug 2018 14:13:46 +0300
+-Subject: [PATCH] Remove json_object typedef
+-
+-The json-c header already defines the same typedef. While C11 allows
+-typedef redefinition to the same type, older versions of gcc disallow
+-that.
+-
+-In file included from lib/luks2/luks2_internal.h:32,
+-                 from lib/luks2/luks2_disk_metadata.c:24:
+-lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Upstream status:
+-https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/91]
+----
+- lib/luks2/luks2.h | 1 -
+- lib/setup.c       | 1 +
+- 2 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
+-index ee57b41ba974..25e36190da45 100644
+---- a/lib/luks2/luks2.h
+-+++ b/lib/luks2/luks2.h
+-@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
+- /*
+-  * LUKS2 header in-memory.
+-  */
+--typedef struct json_object json_object;
+- struct luks2_hdr {
+- 	size_t		hdr_size;
+- 	uint64_t	seqid;
+-diff --git a/lib/setup.c b/lib/setup.c
+-index fddbe7ef7897..856f6e80f465 100644
+---- a/lib/setup.c
+-+++ b/lib/setup.c
+-@@ -28,6 +28,7 @@
+- #include <sys/utsname.h>
+- #include <fcntl.h>
+- #include <errno.h>
+-+#include <json-c/json.h>
+- 
+- #include "libcryptsetup.h"
+- #include "luks.h"
+--- 
+-2.18.0
+-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 0aa3f79df7..b3bb859bdc 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
+-sha256  b296b7a21ea576c2b180611ccb19d06aec8dddaedf7c704b0c6a81210c25635f  cryptsetup-2.3.6.tar.xz
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.4/sha256sums.asc
++sha256  170cc2326a9daeeeb578579176bd10d4a60ee5c4fc5bc69018ce67dafc540b9c  cryptsetup-2.4.2.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 3cf6c8a301..980a36faa8 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CRYPTSETUP_VERSION_MAJOR = 2.3
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
++CRYPTSETUP_VERSION_MAJOR = 2.4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
+@@ -33,6 +33,13 @@ else
+ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSSH),y)
++CRYPTSETUP_DEPENDENCIES += libssh
++CRYPTSETUP_CONF_OPTS += --enable-ssh-token
++else
++CRYPTSETUP_CONF_OPTS += --disable-ssh-token
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
+ CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=/usr/lib/tmpfiles.d
+ else
+@@ -49,6 +56,7 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 
+ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+ 	--disable-kernel_crypto \
++	--disable-ssh-token \
+ 	--enable-blkid \
+ 	--with-tmpfilesdir=no
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
