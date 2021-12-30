@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36272C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28527C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE0E2409BB;
-	Thu, 30 Dec 2021 22:02:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD0E460C0F;
+	Thu, 30 Dec 2021 22:20:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E8pIhz0fDeJY; Thu, 30 Dec 2021 22:02:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6f87WJAMhwHr; Thu, 30 Dec 2021 22:20:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D53A4409AB;
-	Thu, 30 Dec 2021 22:02:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB3DD60AC5;
+	Thu, 30 Dec 2021 22:20:07 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89C3D1BF3C4
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:02:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 302651BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78406812ED
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:02:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EE17827C5
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:20:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IiFPfB7whtku for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 22:02:23 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DE1D3812EA
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:02:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D8817240002;
- Thu, 30 Dec 2021 22:02:19 +0000 (UTC)
-Date: Thu, 30 Dec 2021 23:02:19 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20211230230219.1288bb21@windsurf>
-In-Reply-To: <20211230204103.282138-2-aduskett@gmail.com>
-References: <20211230204103.282138-1-aduskett@gmail.com>
- <20211230204103.282138-2-aduskett@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+ with ESMTP id ELvQUswGADUJ for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 22:20:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C732D827AA
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:20:04 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id d9so52974296wrb.0
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 14:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sf9XIiMZmcOgM+eSn6+uPcPbUnfqiln4O/SSv3QW1KQ=;
+ b=TOotYekUVcoEWj6gQm1j080rDlkU1eubWuOB3q7SsTCmSlekZ2XDOelT4CQeMrQWnL
+ 2r9vGjK/rfHhP8Df6qAuX+UdRz+D02EmqMH7mp3Zk9hTrfbAeA84QyQfUfq7Ps1XErxl
+ jUt178XFzW3JXxndVgZSbxG+szZcLPrUCZ/9lM8t1+0uB/eYhZxBks4fmaNeFHS2h7xj
+ D18niR3YbdtHeWxPnYBCfasXzxSHw98a32FvKUecwtDLMvfYMTOZMYhJ2hPVE8YAMqi8
+ unQ5BvBjAJ58a8Gt51HfKAXuRRxk1D6apZX0BY8ttHENsyJZH98svXJYb/Ch5zOunofQ
+ cZ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=sf9XIiMZmcOgM+eSn6+uPcPbUnfqiln4O/SSv3QW1KQ=;
+ b=z3C7beLBtNInU+V1mnlHvRLN+LAgzTEazvJJnDRzUzemlBn7N+VzAapVqlA02ocy1o
+ hS6mZW57x2K5nDH/dnkNMhfKaLkKSUwVf+OeyH1EVQ9Wof2NhHxeutMppk7QghOZlOGr
+ BHVgoScQkY0ds1u3mxKp6iM7IyfX2ntAvYKrWDCH8dvUsZCHKS+/KlIzkgOlvGQQzFYq
+ q03tCqIc37+BODpRlDdVmUwM6QHZGInXCT0z9OHGv6ORLNvG3xNduh8MxknUYLS6Vbcw
+ 02JKeTis1H2FVcW0uauPsb4R5XjeBkdGTbk42Hv/0ikz+G+X10HT2RS0HIryyD5qronT
+ U6mQ==
+X-Gm-Message-State: AOAM533ZaXJY6ziyXURjqjtMj2GkxZoNCys62NCR7dvGszbHRPwcKu11
+ ZNx7dUFlRDbHQbeVZkfGQE9kWQ2ULVI=
+X-Google-Smtp-Source: ABdhPJzj5KvzJWkwHJpGdhtuygM8GUgLa4UXlouEwcQorNLFTVho9DJ/kQJP21SE4lIKOjrRG8Ku9Q==
+X-Received: by 2002:a5d:47aa:: with SMTP id 10mr23812867wrb.640.1640902802932; 
+ Thu, 30 Dec 2021 14:20:02 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id i8sm31270497wry.108.2021.12.30.14.20.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 30 Dec 2021 14:20:02 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 23:19:04 +0100
+Message-Id: <20211230221904.3064022-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/python3: bump to version
- 3.10.1
+Subject: [Buildroot] [PATCH 1/1] package/efl: handle input option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,90 +85,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 30 Dec 2021 12:41:02 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
+option on target which was added (and enabled by default) by
+https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
+resulting in the following build failure when eeze is disabled:
 
-> - Remove 0013-Add-an-option-to-disable-installation-of-test-module.patch as
->   it is now upstreamed.
-> 
-> - Refactor and rename all other patches as necessary.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  ...e-the-build-of-pyc-files-conditional.patch |  14 +--
->  ...taddrinfo-configure-test-when-cross-.patch |   8 +-
->  ...re-to-disable-the-build-of-certain-e.patch |  26 ++--
->  ...y-header-paths-for-cross-compilation.patch |  54 ++++----
->  ...ook-in-usr-lib-termcap-for-libraries.patch |   8 +-
->  .../0006-Don-t-add-multiarch-paths.patch      |   8 +-
->  .../0007-Abort-on-failed-module-build.patch   |   8 +-
->  .../0008-Serial-ioctl-workaround.patch        |   4 +-
->  ...e-shebang-of-Python-scripts-for-cros.patch |   4 +-
->  ...ig.sh.in-ensure-sed-invocations-only.patch |   4 +-
->  ...locale-and-set-to-default-when-addin.patch |  12 +-
->  ...Add-importlib-fix-for-PEP-3147-issue.patch |  12 +-
->  ...-disable-installation-of-test-module.patch | 117 ------------------
->  ...0013-Add-an-option-to-disable-pydoc.patch} |  51 ++++----
->  ...14-Add-an-option-to-disable-lib2to3.patch} |  85 +++++++------
->  ...ption-to-disable-the-sqlite3-module.patch} |  48 +++----
->  ...d-an-option-to-disable-the-tk-module.patch |  74 +++++++++++
->  ...option-to-disable-the-curses-module.patch} |  39 +++---
->  ...d-an-option-to-disable-the-tk-module.patch |  73 -----------
->  ...0018-Add-an-option-to-disable-expat.patch} |  45 +++----
->  ...Add-an-option-to-disable-CJK-codecs.patch} |   8 +-
->  ...> 0020-Add-an-option-to-disable-NIS.patch} |   8 +-  
->  ...dd-an-option-to-disable-unicodedata.patch} |   8 +-
->  ... 0022-Add-an-option-to-disable-IDLE.patch} |  53 ++++----
->  ...23-Add-an-option-to-disable-decimal.patch} |  14 +--
->  ...n-to-disable-the-ossaudiodev-module.patch} |   8 +-
->  ...n-option-to-disable-openssl-support.patch} |   8 +-
->  ...tion-to-disable-the-readline-module.patch} |   8 +-
->  ...o-disable-zlib-bzip2-and-xz-modules.patch} |   8 +-
->  ...hon-config.sh-don-t-reassign-prefix.patch} |   6 +-
->  ...-Fix-cross-compiling-the-uuid-module.patch |  43 +++++++
->  ...Add-an-option-to-disable-uuid-module.patch |   8 +-
->  ...-fix-building-on-older-distributions.patch |   4 +-
->  ...up-CC-print-multiarch-output-for-mus.patch |   9 +-
->  ...ion-to-disable-the-berkeleydb-module.patch |   8 +-
->  ...-ng-doesn-t-set-errno-when-encryptio.patch |   4 +-
->  ...teration-error-in-_ExecutorManagerTh.patch |  29 -----
->  package/python3/python3.hash                  |   8 +-
->  package/python3/python3.mk                    |   4 +-
->  39 files changed, 425 insertions(+), 515 deletions(-)
->  delete mode 100644 package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
->  rename package/python3/{0014-Add-an-option-to-disable-pydoc.patch => 0013-Add-an-option-to-disable-pydoc.patch} (72%)
->  rename package/python3/{0015-Add-an-option-to-disable-lib2to3.patch => 0014-Add-an-option-to-disable-lib2to3.patch} (65%)
->  rename package/python3/{0016-Add-option-to-disable-the-sqlite3-module.patch => 0015-Add-option-to-disable-the-sqlite3-module.patch} (60%)
->  create mode 100644 package/python3/0016-Add-an-option-to-disable-the-tk-module.patch
->  rename package/python3/{0018-Add-an-option-to-disable-the-curses-module.patch => 0017-Add-an-option-to-disable-the-curses-module.patch} (60%)
->  delete mode 100644 package/python3/0017-Add-an-option-to-disable-the-tk-module.patch
->  rename package/python3/{0019-Add-an-option-to-disable-expat.patch => 0018-Add-an-option-to-disable-expat.patch} (74%)
->  rename package/python3/{0020-Add-an-option-to-disable-CJK-codecs.patch => 0019-Add-an-option-to-disable-CJK-codecs.patch} (82%)
->  rename package/python3/{0021-Add-an-option-to-disable-NIS.patch => 0020-Add-an-option-to-disable-NIS.patch} (84%)
->  rename package/python3/{0022-Add-an-option-to-disable-unicodedata.patch => 0021-Add-an-option-to-disable-unicodedata.patch} (83%)
->  rename package/python3/{0023-Add-an-option-to-disable-IDLE.patch => 0022-Add-an-option-to-disable-IDLE.patch} (67%)
->  rename package/python3/{0024-Add-an-option-to-disable-decimal.patch => 0023-Add-an-option-to-disable-decimal.patch} (89%)
->  rename package/python3/{0025-Add-an-option-to-disable-the-ossaudiodev-module.patch => 0024-Add-an-option-to-disable-the-ossaudiodev-module.patch} (85%)
->  rename package/python3/{0026-Add-an-option-to-disable-openssl-support.patch => 0025-Add-an-option-to-disable-openssl-support.patch} (83%)
->  rename package/python3/{0027-Add-an-option-to-disable-the-readline-module.patch => 0026-Add-an-option-to-disable-the-readline-module.patch} (82%)
->  rename package/python3/{0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch => 0027-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch} (87%)
->  rename package/python3/{0029-python-config.sh-don-t-reassign-prefix.patch => 0028-python-config.sh-don-t-reassign-prefix.patch} (94%)
->  create mode 100644 package/python3/0029-Fix-cross-compiling-the-uuid-module.patch
->  delete mode 100644 package/python3/0035-Fix-dictionary-iteration-error-in-_ExecutorManagerTh.patch
+../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
 
-Thomas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/efl/Config.in | 13 +++++++++++++
+ package/efl/efl.mk    |  7 +++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 05ded72cf7..d873c77ac6 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -85,6 +85,19 @@ config BR2_PACKAGE_EFL_LIBFRIBIDI
+ 	  so you may also trigger code paths with bugs that are never
+ 	  normally used.
+ 
++config BR2_PACKAGE_EFL_LIBINPUT
++	bool "Enable libinput support (recommended)"
++	default y
++	depends on BR2_PACKAGE_HAS_UDEV # libinput
++	select BR2_PACKAGE_EFL_EEZE
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Libinput is used to support gesture recognition.
++
++comment "libinput needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ config BR2_PACKAGE_EFL_LIBSNDFILE
+ 	bool "Enable libsndfile support (recommended)"
+ 	default y
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 46bce29305..642b37a434 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -67,6 +67,13 @@ else
+ EFL_CONF_OPTS += -Deeze=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EFL_LIBINPUT),y)
++EFL_DEPENDENCIES += libinput libxkbcommon
++EFL_CONF_OPTS += -Dinput=true
++else
++EFL_CONF_OPTS += -Dinput=false
++endif
++
+ ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
+ EFL_DEPENDENCIES += util-linux
+ EFL_CONF_OPTS += -Dlibmount=true
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
