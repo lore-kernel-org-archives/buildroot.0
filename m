@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D0BAC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 14:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15C03C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 14:08:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDCC1828C5;
-	Thu, 30 Dec 2021 14:08:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B644660BFE;
+	Thu, 30 Dec 2021 14:08:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2HE2LrlFTGBy; Thu, 30 Dec 2021 14:08:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OpNNVAHh6Jc0; Thu, 30 Dec 2021 14:08:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2CEC828AA;
-	Thu, 30 Dec 2021 14:08:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20E9260BD8;
+	Thu, 30 Dec 2021 14:08:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9C8A01BF2BC
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:07:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 40C141BF2BC
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26920400F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC19840494
  for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TFrjbXqWYC5p for <buildroot@lists.busybox.net>;
+ with ESMTP id 8gRDl5MWwjFj for <buildroot@lists.busybox.net>;
  Thu, 30 Dec 2021 14:07:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 813334015E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0AC94022C
  for <buildroot@buildroot.org>; Thu, 30 Dec 2021 14:07:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 895CE82DB5; Thu, 30 Dec 2021 14:01:24 +0000 (UTC)
+ id AD46082DD8; Thu, 30 Dec 2021 14:01:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 15:04:40 +0100
+Date: Thu, 30 Dec 2021 15:06:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cea2b082eb35d9fd466833098463e2adcbb40022
-X-Git-Newrev: 7ad423ab5135e6641461520fdafef34ce5b7498b
+X-Git-Oldrev: 7f02cdc1917abd99016fbc4d1a26ee825d117321
+X-Git-Newrev: 76c251e943092000fb317997ac83878784c58d09
 X-Patchwork-Hint: ignore
-Message-Id: <20211230140124.895CE82DB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/supertux: bump to version 0.6.3
+Message-Id: <20211230140124.AD46082DD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minetest: add missing header
+ "memory" required since gcc 11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,143 +54,80 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3453267590197215704=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ad423ab5135e6641461520fdafef34ce5b7498b
+--===============3453267590197215704==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=76c251e943092000fb317997ac83878784c58d09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstream patch 0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+Backport from upstream.
 
-Add new glm dependency added by:
+Fixes:
 
-https://github.com/SuperTux/supertux/commit/7187e3f6d7ce2ccc25bcc96e9bee25c24416d545
-
-Add new zlib dependency added by:
-
-https://github.com/SuperTux/supertux/commit/100bc052bc693c2e4978fffe34c9aa4376f8f8c6
-
-Update data/AUTHORS hash since several new assets has been added since
-version 0.6.2:
-
-https://github.com/SuperTux/supertux/commit/ec5e2f52137bba2ea7533e020cd8bf4b85e6b904
-https://github.com/SuperTux/supertux/commit/1ff490d32206289c72d31c7f78bfeca2956e136b
-https://github.com/SuperTux/supertux/commit/14ac958c711837c6cbd1e9362768ababc38effc5
-https://github.com/SuperTux/supertux/commit/392320b79006ad1fb99b3f5dd9e771d9ba6a4668
-https://github.com/SuperTux/supertux/commit/2fd5ed445c8b00e4c50d0da456543d64015a4681
-https://github.com/SuperTux/supertux/commit/e45b5f7f8635e1749eee7a74a9fc9fde13d8344e
-
-See:
-https://www.supertux.org/news/2021/12/23/0.6.3
+minetest-5.4.1/src/clientiface.h:444:36: error: ‘shared_ptr’ in namespace ‘std’ does not name a template type
+  444 |         ClientInterface(const std::shared_ptr<con::Connection> &con);
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...CMakeLists.txt-compile-squirrel-with-fPIC.patch | 35 ----------------------
- package/supertux/Config.in                         |  2 ++
- package/supertux/supertux.hash                     |  4 +--
- package/supertux/supertux.mk                       |  6 ++--
- 4 files changed, 7 insertions(+), 40 deletions(-)
+ ...Fix-build-for-newer-versions-of-GCC-11246.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-deleted file mode 100644
-index 9fac20a3f8..0000000000
---- a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 23d0bb0ef0fde52d1cffe235edead09287326fb4 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 4 Oct 2020 01:11:30 +0200
--Subject: [PATCH] CMakeLists.txt: compile squirrel with -fPIC
--
--Ensure that squirrel is compiled with -fPIC to allow linking the static
--libraries with dynamically linked programs. This is not a requirement
--for most architectures but is mandatory for ARM.
--
--Fixes:
--x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
--x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- CMakeLists.txt | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 8b1dafa1e..07c603cce 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -412,7 +412,8 @@ ExternalProject_Add(squirrel
--   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
--   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
--   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
---  -DINSTALL_INC_DIR=include)
--+  -DINSTALL_INC_DIR=include
--+  -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
-- 
-- if(WIN32)
--   add_library(squirrel_lib SHARED IMPORTED)
---- 
--2.25.4
--
-diff --git a/package/supertux/Config.in b/package/supertux/Config.in
-index 285f19694b..e8e96a3ae5 100644
---- a/package/supertux/Config.in
-+++ b/package/supertux/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_BOOST_LOCALE
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_GLM
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLEW
- 	select BR2_PACKAGE_LIBOGG
-@@ -26,6 +27,7 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_IMAGE
- 	select BR2_PACKAGE_SDL2_OPENGL
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  SuperTux is a free classic 2D jump'n run sidescroller game in
- 	  a style similar to the original Super Mario games covered
-diff --git a/package/supertux/supertux.hash b/package/supertux/supertux.hash
-index a6a515f912..f28c06b5e7 100644
---- a/package/supertux/supertux.hash
-+++ b/package/supertux/supertux.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  26a9e56ea2d284148849f3239177d777dda5b675a10ab2d76ee65854c91ff598  SuperTux-v0.6.2-Source.tar.gz
-+sha256  f7940e6009c40226eb34ebab8ffb0e3a894892d891a07b35d0e5762dd41c79f6  SuperTux-v0.6.3-Source.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
--sha256  09645215102c1013a1ef8c16a30bacdb9a78924ca064372290405fabd3e7074d  data/AUTHORS
-+sha256  a000d91146a61b44bdb79c3d2737e82d488b6cd65a23e0415e56915233def0a0  data/AUTHORS
-diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
-index 3587aefe3a..3941632f51 100644
---- a/package/supertux/supertux.mk
-+++ b/package/supertux/supertux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUPERTUX_VERSION = 0.6.2
-+SUPERTUX_VERSION = 0.6.3
- SUPERTUX_SITE = https://github.com/SuperTux/supertux/releases/download/v$(SUPERTUX_VERSION)
- SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
- 
-@@ -15,8 +15,8 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
- 
- # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
- # the CMake build system.
--SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
--	libogg libpng libvorbis openal physfs sdl2 sdl2_image
-+SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype glm libcurl libgl libglew \
-+	libogg libpng libvorbis openal physfs sdl2 sdl2_image zlib
- 
- # CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
- # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+diff --git a/package/minetest/0001-Fix-build-for-newer-versions-of-GCC-11246.patch b/package/minetest/0001-Fix-build-for-newer-versions-of-GCC-11246.patch
+new file mode 100644
+index 0000000000..35102a077b
+--- /dev/null
++++ b/package/minetest/0001-Fix-build-for-newer-versions-of-GCC-11246.patch
+@@ -0,0 +1,35 @@
++From a327c06f5dee9f432666b503203fd15e4ccafc1b Mon Sep 17 00:00:00 2001
++From: lhofhansl <larsh@apache.org>
++Date: Thu, 6 May 2021 10:24:30 -0700
++Subject: [PATCH] Fix build for newer versions of GCC (#11246)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++(cherry picked from commit 7c2826cbc0f36027d4a9781f433150d1c5d0d03f)
++
++Fixes:
++
++minetest-5.4.1/src/clientiface.h:444:36: error: ‘shared_ptr’ in namespace ‘std’ does not name a template type
++  444 |         ClientInterface(const std::shared_ptr<con::Connection> &con);
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/clientiface.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/clientiface.h b/src/clientiface.h
++index cc5292b71..dfd976741 100644
++--- a/src/clientiface.h
+++++ b/src/clientiface.h
++@@ -31,6 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
++ #include <list>
++ #include <vector>
++ #include <set>
+++#include <memory>
++ #include <mutex>
++ 
++ class MapBlock;
++-- 
++2.31.1
++
+
+--===============3453267590197215704==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3453267590197215704==--
