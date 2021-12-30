@@ -1,47 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D79BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6914C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD2C48130D;
-	Thu, 30 Dec 2021 22:42:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8730960C28;
+	Thu, 30 Dec 2021 22:49:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mj1JCfI93PvS; Thu, 30 Dec 2021 22:42:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Pdl4tLKVIpS; Thu, 30 Dec 2021 22:49:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19F4380F10;
-	Thu, 30 Dec 2021 22:42:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 552471BF3C2
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:42:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06ECC60C25;
+	Thu, 30 Dec 2021 22:49:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 069721BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 449D9410A9
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:42:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2E8560C25
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:49:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7S7kwyAvVjuA for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 22:42:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30573409A1
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:42:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6AF8982DE0; Thu, 30 Dec 2021 22:36:28 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H289K_nQ1rBQ for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 22:49:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 46D4260C24
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:49:21 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id s1so52962455wra.6
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 14:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=c4n2lN8b9r/JhQ5Oj4SkOYRDcpjWHQJoC2KP5pLE08o=;
+ b=En09iOOYsD6EJTmQN4VghroPFnbB8CYkQIyympNbcwn5SkVTahoDfrN7uwrOsUJf8N
+ STr1DX9FYa1yaXgOpgdV5Gge1mp1n2dMgCUyYeKYxy0FY04zm1np+IfeJ0DAqaYWvugn
+ hzFx/3pvtGxrFBGGLSq7Xm9WjfyEeBYqoI8nJT4/+Rp998QGB+sFpbzfkv8uvLbl0+Bb
+ ZwOHnwM/wqji9p9Kpx0c5Umx9izAPk83bcZZfEsStPVghUCb5HKySA94L1liGpRkgMOQ
+ e1pbwSTmAfAhbz1pj4r4sU/G4T/iHibkMb8Zz+rS+ByN9tNBcREjCAuMKGHEaRTPS7Lo
+ apBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=c4n2lN8b9r/JhQ5Oj4SkOYRDcpjWHQJoC2KP5pLE08o=;
+ b=xUwnTtqy+XnE6vyhh85ibHlGuuOTlC8R8wxgazViJbfyPKdmR9vGXatkFIyFwTTGIo
+ +43jdvh3rtIC8+7CeDagqU+MOszLizQBkbDzLlOrh5kyesG6Bc/sMZQ4HNTuRHGKaESA
+ rGRtmD9vc0FMEFrE0baJEvrmtAGbW71cZm3S+aGhxOTprygzbnDX+QVKSf3RcM7myLcf
+ rs4mVFNh93KfWDEyJPNkIrpXtaziiuP2U+xmz54dR8mj4VzvsFWKv9pBpCf6tO+ooje0
+ jENmpHA1FQuN8fYm+WL2av29cKaCN02fBiYd/pNJi/hDlCcMU/B1uTnIIRFO6j6WQRI2
+ E1qQ==
+X-Gm-Message-State: AOAM532xSGPH/tUcvlXcpjK7mJ3AUVUJL6o9f0mo9Do6Mixyo67w4/jS
+ s2mw/rNMXes2BDvXACil7OfaAmVHN4U=
+X-Google-Smtp-Source: ABdhPJyB5P8T6MBLrmhR06U+sz1np/gbZEaRhXYUyBbiFhyUYWQHDwlmNx+BjzcXoN3DjtGZUntx7w==
+X-Received: by 2002:a5d:5746:: with SMTP id q6mr27022777wrw.163.1640904559520; 
+ Thu, 30 Dec 2021 14:49:19 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id g187sm23679760wmg.40.2021.12.30.14.49.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 30 Dec 2021 14:49:19 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 23:42:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eea8ba446c10701a273432552108d80fb2224ef4
-X-Git-Newrev: cd5191efd97e814099d211288a9956e88677ff75
-X-Patchwork-Hint: ignore
-Message-Id: <20211230223628.6AF8982DE0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tcpreplay: security bump to
- version 4.3.4
+Date: Thu, 30 Dec 2021 23:48:20 +0100
+Message-Id: <20211230224820.3080102-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/libtasn1: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,150 +83,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd5191efd97e814099d211288a9956e88677ff75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- heap buffer overflow in tcpreplay fast_edit_packet
-- heap buffer overflow in tcpreplay get_next_packet
-- CVE-2020-24266 heap buffer overflow in tcpprep get_l2len
-- CVE-2020-24265 heap buffer overflow in tcpprep
-- Drop patch (already in version) and so autoreconf
-- Update hash of license file (http -> https with
-  https://github.com/appneta/tcpreplay/commit/ad8a18005347b3cef84a9b478d56de96d1ad254f)
-
-https://github.com/appneta/tcpreplay/releases/tag/v4.3.4
+Fix typo added by commit 30ac432b419599a8744238fdea65cf08c0765b63
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-configure-ac-fix-without-libdnet.patch    | 76 ----------------------
- package/tcpreplay/tcpreplay.hash                   |  6 +-
- package/tcpreplay/tcpreplay.mk                     |  4 +-
- 3 files changed, 4 insertions(+), 82 deletions(-)
+ package/libtasn1/libtasn1.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch b/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-deleted file mode 100644
-index 75ed4f94de..0000000000
---- a/package/tcpreplay/0001-configure-ac-fix-without-libdnet.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--From acee9c0c46f71f1f4c33c2dadf69d19e24b90f27 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 13 Aug 2019 20:19:23 +0200
--Subject: [PATCH] configure.ac: fix --without-libdnet
--
--Allow the user to disable libdnet check through --without-libdnet.
--This option is useful to cross-compile tcpreplay to avoid build failures
--if libdnet is installed on host but not on target, see
--https://bugs.buildroot.org/show_bug.cgi?id=12096
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/appneta/tcpreplay/pull/567]
-----
-- configure.ac | 48 +++++++++++++++++++++++++-----------------------
-- 1 file changed, 25 insertions(+), 23 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 39ba58b7..5de3dcb5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1464,30 +1464,32 @@ if test $have_cygwin = no ; then
--         AC_HELP_STRING([--with-libdnet=DIR], [Use libdnet in DIR]),
--         [trydnetdir=$withval])
-- 
---    case "$build_os" in
---    linux*)
---        dnl # Debian/Ubuntu already have a package called libdnet
---        dnl # so you the package you want to install libdumbnet-dev
---        for testdir in $trydnetdir /usr/local /opt/local /usr ; do
---            if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
---                LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
---                LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
---                libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
---                founddnet=$testdir
---            fi
---        done
---        ;;
---    esac
--+    if test $trydnetdir != no; then
--+        case "$build_os" in
--+        linux*)
--+            dnl # Debian/Ubuntu already have a package called libdnet
--+            dnl # so you the package you want to install libdumbnet-dev
--+            for testdir in $trydnetdir /usr/local /opt/local /usr ; do
--+                if test -x ${testdir}/bin/dumbnet-config -a $founddnet = no ; then
--+                    LDNETINC="$($testdir/bin/dumbnet-config --cflags)"
--+                    LDNETLIB="$($testdir/bin/dumbnet-config --libs)"
--+                    libdnet_version="$($testdir/bin/dumbnet-config --version) (libdumbnet)"
--+                    founddnet=$testdir
--+                fi
--+            done
--+            ;;
--+        esac
-- 
---    if test $founddnet = no ; then
---        for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
---            if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
---                LDNETINC="$($testdir/bin/dnet-config --cflags)"
---                LDNETLIB="$($testdir/bin/dnet-config --libs)"
---                libdnet_version="$($testdir/bin/dnet-config --version)"
---                founddnet=$testdir
---            fi
---        done
--+        if test $founddnet = no ; then
--+            for testdir in $trydnetdir /usr/local /opt/local $MACOSX_SDK_PATH/usr /usr ; do
--+                if test -x ${testdir}/bin/dnet-config -a $founddnet = no ; then
--+                    LDNETINC="$($testdir/bin/dnet-config --cflags)"
--+                    LDNETLIB="$($testdir/bin/dnet-config --libs)"
--+                    libdnet_version="$($testdir/bin/dnet-config --version)"
--+                    founddnet=$testdir
--+                fi
--+            done
--+        fi
--     fi
-- 
--     if test $founddnet = no ; then
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index e83efd78b1..8bcdae958c 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.3.3/tcpreplay-4.3.3.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.3.4/tcpreplay-4.3.4.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  5e960e2a4432f583adbd11fa0855d17b73d9e0f2d6453b749f27aacaee53bab5  tcpreplay-4.3.3.tar.xz
--sha256  5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-+sha256  42c055106e55852c29d94bb6e1b9e001a0723349f2985eb893a47d384c85002b  tcpreplay-4.3.4.tar.xz
-+sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 9208cb8176..ef65403974 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index ecca00e79e..65b0868b79 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -20,7 +20,7 @@ LIBTASN1_CONF_ENV = MAKEINFO="true"
  
--TCPREPLAY_VERSION = 4.3.3
-+TCPREPLAY_VERSION = 4.3.4
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
-@@ -15,8 +15,6 @@ TCPREPLAY_CONF_ENV = \
- TCPREPLAY_CONF_OPTS = --with-libpcap=$(STAGING_DIR)/usr \
- 	--enable-pcapconfig
- TCPREPLAY_DEPENDENCIES = libpcap
--# We're patching configure.ac
--TCPREPLAY_AUTORECONF = YES
+ LIBTASN1_CONF_OPTS = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
  
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
+-LIBTANS1_PROGS = asn1Coding asn1Decoding asn1Parser
++LIBTASN1_PROGS = asn1Coding asn1Decoding asn1Parser
+ 
+ # We only need the library
+ define LIBTASN1_REMOVE_PROGS
+-- 
+2.33.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
