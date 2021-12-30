@@ -1,50 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E52C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D90CC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 022F760C26;
-	Thu, 30 Dec 2021 22:39:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E629812A8;
+	Thu, 30 Dec 2021 22:41:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LI06Mv7l0d-L; Thu, 30 Dec 2021 22:39:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oL4K1bCCL5a6; Thu, 30 Dec 2021 22:41:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69E2A60C24;
-	Thu, 30 Dec 2021 22:39:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84BB38125D;
+	Thu, 30 Dec 2021 22:41:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 368FB1BF3C2
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:39:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 170B51BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25E7E60C24
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:39:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1355360C24
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:41:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tbsujUUxG9pq for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 22:39:22 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F1F860C1C
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:39:21 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id DE5B01BF203;
- Thu, 30 Dec 2021 22:39:18 +0000 (UTC)
-Date: Thu, 30 Dec 2021 23:39:17 +0100
+ with ESMTP id U0lWnVWpD3Tw for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 22:41:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47CE660C1C
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:41:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 7F01F82DE0; Thu, 30 Dec 2021 22:35:32 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20211230233917.0d4e7fd6@windsurf>
-In-Reply-To: <20211230221904.3064022-1-fontaine.fabrice@gmail.com>
-References: <20211230221904.3064022-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/efl: handle input option
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 23:37:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bb77dc0917e5da87be66e059b9ba3fd3f32779ea
+X-Git-Newrev: 52bba69dc930033e702201e691267f14b802980b
+X-Patchwork-Hint: ignore
+Message-Id: <20211230223532.7F01F82DE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vdr: bump version to 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,40 +52,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 30 Dec 2021 23:19:04 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=52bba69dc930033e702201e691267f14b802980b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 2d7a3e48c574c05346b66f79cdb75ecdfa7f074e forgot to manage input
-> option on target which was added (and enabled by default) by
-> https://git.enlightenment.org/core/efl.git/commit/?id=0c2cf7e1bf7ca547655d25aaea30d081101b42be
-> resulting in the following build failure when eeze is disabled:
-> 
-> ../output-1/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable "eeze".
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4a840c54bad9748b5748738378a0352d02de1f7e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/efl/Config.in | 13 +++++++++++++
->  package/efl/efl.mk    |  7 +++++++
->  2 files changed, 20 insertions(+)
+Changelog: http://www.tvdr.de/changelog.htm
 
-This looks good to me, I'll wait for a Review/Ack from Romain to be sure.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vdr/vdr.hash | 2 +-
+ package/vdr/vdr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vdr/vdr.hash b/package/vdr/vdr.hash
+index 3776296aa5..d8f1cb192e 100644
+--- a/package/vdr/vdr.hash
++++ b/package/vdr/vdr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  27026b78a663758211d15c83a21555e28d91ab640c6d4f6cdd860f2abf1cae84  vdr-2.5.6.tar.gz
++sha256  a8e9940d593c41a42eb69db56d1a659e15deb31e131090d8c146a6e25501825a  vdr-2.6.0.tar.gz
+ sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
+diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
+index 251ffb9f04..51affe5a7b 100644
+--- a/package/vdr/vdr.mk
++++ b/package/vdr/vdr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VDR_VERSION = 2.5.6
++VDR_VERSION = 2.6.0
+ VDR_SITE = $(call github,vdr-projects,vdr,$(VDR_VERSION))
+ VDR_LICENSE = GPL-2.0+
+ VDR_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
