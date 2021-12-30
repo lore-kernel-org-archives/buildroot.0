@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67F74C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 01:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C986C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 01:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA3F5605DB;
-	Thu, 30 Dec 2021 01:28:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B572F40896;
+	Thu, 30 Dec 2021 01:29:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nN7GtOGcfGCR; Thu, 30 Dec 2021 01:28:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qEYl11DAkZxY; Thu, 30 Dec 2021 01:29:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE94F60B51;
-	Thu, 30 Dec 2021 01:28:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E1911BF300
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E679B40940;
+	Thu, 30 Dec 2021 01:28:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F60F1BF300
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C4A78175C
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EE0560B51
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5DNXKkiyJrJY for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 01:28:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qQs_dVSdjebi for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
- [IPv6:2607:f8b0:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 778F381405
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:28:45 +0000 (UTC)
-Received: by mail-pl1-x62d.google.com with SMTP id z3so17048256plg.8
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:28:45 -0800 (PST)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
+ [IPv6:2607:f8b0:4864:20::1033])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FD08605DB
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
+Received: by mail-pj1-x1033.google.com with SMTP id
+ lr15-20020a17090b4b8f00b001b19671cbebso21553370pjb.1
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:28:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BCniAOqialbz6JYyXChWJ8rpr9dmb7edKMdcFuo7bJY=;
- b=deuNsV9LGLqt9D9p3jzy0h2qwujHHXT2art1kpNLev/CzRUoS6pn+yILPTFC81Jpc5
- R3a1Y4VsPyQo5Jqv5Ml/QbEr9bAKOQZDR7aK8tl0qSCm6tEYuqBIZ4aJEKlK7VWh+jq9
- k0gYF3/PGK4zhQIg8FSQoTs9jrwuFx6u8lrtJuX5IWGTZje99MjcbFFh0exsspKaTIUB
- 9mA4JOZUmAyeaBmRl6NWoTlSHnRHuhAVgurCTSNSaeXOrxm/ZNeJTdXuqQQi3PatnT4E
- 0zpUHZTaxu1/Wr2ZtDRZBR0/sByP1aoAponBn6xpqfwcM5pPaiqPYEZMvW74L3c18eQz
- TVBg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=9uHifneh/r/ljY6LQd5r9hLw+nfpalQY3tsXtBqghDQ=;
+ b=XpjYm6nZs060iPChmQxL4ehqJEnLG691IzxHARsf9OfXFvbfFt1vZ/L+0m22ab2W11
+ NbzQ3LTDG3Ec3qh8Qm6DfHhSqAKY5qqdZ3D74d8K60YMLqSWMbJFUiOK1Oea8iJrfBlf
+ v9wv4hiPtzeIxQwy1R1oVnJusYC+OdXs9xXVPX1bt0SOfFCmjgnv5mJkjokxZVrn7yl9
+ vtsqLuZHxOWfDjqFzwqHKntwfzXAg7BwCgOlRkMCV09ijy7dNNF4ur5iM5EwQAbD6bAm
+ gMltkMn+eI4Lx/Vr5ifnNbLhef0V9fYt3U+WZeIaOMn7EPrmA+SLbjcqvUibs/kjwDp3
+ YamA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=BCniAOqialbz6JYyXChWJ8rpr9dmb7edKMdcFuo7bJY=;
- b=lKWSbL4Rl3ERGQuSsuID5lYsSGGbbQusxMaQD+l0UR5VWqUjun6hac+mpsjjeYT5yg
- gdkATnQcy185Nu+Xp2vhz+Lczkv4ScGEjyXuuKX6bvSguJf63kGRrNMqVoHcI/rogDg+
- AQQIjq/TJRmcUT8CcknplZCe7q2oxTncVNtSSQAUm/ZpgNoGH2Vz4nFEsB7XIqwBvuYF
- RPqMErGb0jXZBgrttJfZ64BHdY8+D3h4+780bvQhD8CRvoYwkGwx1+m11M+k/ZzX8KzP
- kwo4a86519Paq1eh45MOAtRNDP//TKjusHDDApKrrcqHxN0wzNfR0ppnsQOargV2aKzr
- wJJQ==
-X-Gm-Message-State: AOAM532sXrRDZMi242F6KTTk9GKssxpRXdn1DaNDh11u4TfWvX6VTOxx
- QLlLRuqGpTMp9MP+dnlWelGnwYFlpNk=
-X-Google-Smtp-Source: ABdhPJxW+Ds9ibVOstwwb6pDVxabtYXWGm4Fifhgy/zHYNeoSd4MTzo19YQdnT9GIXDnbb1cZ3K13Q==
-X-Received: by 2002:a17:90a:d911:: with SMTP id
- c17mr32917115pjv.67.1640827724771; 
- Wed, 29 Dec 2021 17:28:44 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=9uHifneh/r/ljY6LQd5r9hLw+nfpalQY3tsXtBqghDQ=;
+ b=o8bIWmo0y5ye+zVCvsWHvFveOQOKq5YIWBf2zJituBwFIDZxOIjD+31UCkyDGCPYSJ
+ qr8h5Z4t14gQwkfaAdLFFXKd4AyrlgnZ6lR8RU0sO2SbQ0hiCP1vRpF25wNk+m69L5bZ
+ yGUfbVbnKhT4+czdhjusmnQWQnrSZKu7mTM+A4oHsCeW/gQXWvqQNpGvMFBm1jSQvBYn
+ 7wFT9GAms9hOyHm5R33vPS5NmM/65me5BDSNu+paQXD6bHO664L1BtRFaGaFUWlKm2q7
+ dwxVQBTzjhUxBrlX9p/v+DyiYrosubz/D1pRYcn6oDnN7wMG98GX6AP7X0YhGQPiKWFu
+ tcaw==
+X-Gm-Message-State: AOAM530NW3fwJFx70QkLPPemO1J0I/+/AQx1Cf/vCJr77gqpUUPlUiAh
+ 53219SSAUt5aUL6Iw6TL9sT6LMj7ESA=
+X-Google-Smtp-Source: ABdhPJyGHVl9KZ23kAz7iNb3o1RURJHEXJArc5twdoCq5NbfGbTTtFSJrlgUBjka9dl9XgYVCH1TCQ==
+X-Received: by 2002:a17:90b:3509:: with SMTP id
+ ls9mr35331621pjb.233.1640827725597; 
+ Wed, 29 Dec 2021 17:28:45 -0800 (PST)
 Received: from localhost.localdomain ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id h191sm21348724pge.55.2021.12.29.17.28.43
+ by smtp.gmail.com with ESMTPSA id h191sm21348724pge.55.2021.12.29.17.28.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Dec 2021 17:28:44 -0800 (PST)
+ Wed, 29 Dec 2021 17:28:45 -0800 (PST)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Dec 2021 17:28:34 -0800
-Message-Id: <20211230012836.3350448-1-aduskett@gmail.com>
+Date: Wed, 29 Dec 2021 17:28:35 -0800
+Message-Id: <20211230012836.3350448-2-aduskett@gmail.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211230012836.3350448-1-aduskett@gmail.com>
+References: <20211230012836.3350448-1-aduskett@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] package/python-setuptools: bump to version
- 60.2.0 and split python2 version
+Subject: [Buildroot] [PATCH 2/3] package/alsa-lib: bump to version 1.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,183 +91,214 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Adam Duskett <aduskett@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UHl0aG9uIHNldHVwdG9vbHMgNDQuMCBpcyBub3QgY29tcGF0aWJsZSB3aXRoIHB5dGhvbiAzLjEw
-LiBVbmZvcnR1bmF0ZWx5LApweXRob24tc2V0dXB0b29scyA2MC4yLjAgaXMgbm90IGNvbXBhdGli
-bGUgd2l0aCBweXRob24yLiBBcyBCdWlsZHJvb3QgaXMgbm90CnJlYWR5IHRvIGVuZCBweXRob24y
-IHN1cHBvcnQsIHRoZSBweXRob24tc2V0dXB0b29scyBwYWNrYWdlIG11c3QgYWNjb21tb2RhdGUK
-Ym90aCB0aGUgb2xkIHZlcnNpb24gZm9yIHB5dGhvbjIgYW5kIHRoZSBuZXcgdmVyc2lvbiBmb3Ig
-cHl0aG9uMy4xMC4KCkNoYW5nZXMgaW5jbHVkZToKIC0gQWRkIHR3byBuZXcgZGlyZWN0b3JpZXM6
-IHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wIGFuZAogICBwYWNrYWdlL3B5dGhvbi1z
-ZXR1cHRvb2xzLzYwLjIuMAogLSBBZGQgdGhlIGFwcHJvcHJpYXRlIHBhdGNoIGFuZCBoYXNoIGZp
-bGVzIHRvIGVhY2ggZGlyZWN0b3J5LgogLSBNb2RpZnkgcHl0aG9uLXNldHVwdG9vbHMubWsgdG8g
-c3VwcG9ydCBib3RoIHNldHVwdG9vbHMgNDQuMCBhbmQgNjAuMi4wCiAgIChzZXR1cHRvb2xzIDYw
-LjIuMCBkb2VzIG5vdCBoYXZlIGEgLnppcCBvbiBweXBpIGFueW1vcmUsIG9ubHkgYSB0YXIuZ3op
-CiAtIFBvaW50IHRoZSBzeW1saW5rcyBpbiBwYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scyB0byB0
-aGUgZmlsZXMgaW4KICAgcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvCgpTaWduZWQt
-b2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkdXNrZXR0QGdtYWlsLmNvbT4KLS0tCiAuLi4veyA9PiA0
-NC4wLjB9LzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2ggICAgfCAgMAogLi4uL3sgPT4gNDQuMC4w
-fS9weXRob24tc2V0dXB0b29scy5oYXNoICAgICAgIHwgIDAKIC4uLi82MC4yLjAvMDAwMS1hZGQt
-ZXhlY3V0YWJsZS5wYXRjaCAgICAgICAgICB8IDcyICsrKysrKysrKysrKysrKysrKysKIC4uLi82
-MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaCAgICAgICAgICAgICB8ICA0ICsrCiAuLi4vcHl0
-aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsgICAgfCAxMSArKy0KIC4uLi8wMDAx
-LWFkZC1leGVjdXRhYmxlLnBhdGNoICAgICAgICAgICAgICAgICB8ICAyICstCiAuLi4vcHl0aG9u
-My1zZXR1cHRvb2xzLmhhc2ggICAgICAgICAgICAgICAgICAgfCAgMiArLQogLi4uL3B5dGhvbjMt
-c2V0dXB0b29scy9weXRob24zLXNldHVwdG9vbHMubWsgIHwgMTQgKystLQogOCBmaWxlcyBjaGFu
-Z2VkLCA5MSBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKIHJlbmFtZSBwYWNrYWdlL3B5
-dGhvbi1zZXR1cHRvb2xzL3sgPT4gNDQuMC4wfS8wMDAxLWFkZC1leGVjdXRhYmxlLnBhdGNoICgx
-MDAlKQogcmVuYW1lIHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMveyA9PiA0NC4wLjB9L3B5dGhv
-bi1zZXR1cHRvb2xzLmhhc2ggKDEwMCUpCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRo
-b24tc2V0dXB0b29scy82MC4yLjAvMDAwMS1hZGQtZXhlY3V0YWJsZS5wYXRjaAogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wL3B5dGhvbi1zZXR1cHRv
-b2xzLmhhc2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRk
-LWV4ZWN1dGFibGUucGF0Y2ggYi9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzQ0LjAuMC8wMDAx
-LWFkZC1leGVjdXRhYmxlLnBhdGNoCnNpbWlsYXJpdHkgaW5kZXggMTAwJQpyZW5hbWUgZnJvbSBw
-YWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKcmVuYW1l
-IHRvIHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wLzAwMDEtYWRkLWV4ZWN1dGFibGUu
-cGF0Y2gKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVw
-dG9vbHMuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wL3B5dGhvbi1zZXR1
-cHRvb2xzLmhhc2gKc2ltaWxhcml0eSBpbmRleCAxMDAlCnJlbmFtZSBmcm9tIHBhY2thZ2UvcHl0
-aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApyZW5hbWUgdG8gcGFja2FnZS9w
-eXRob24tc2V0dXB0b29scy80NC4wLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvMDAwMS1hZGQtZXhlY3V0YWJsZS5w
-YXRjaCBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wLzAwMDEtYWRkLWV4ZWN1dGFi
-bGUucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYjY4ODc0NWNl
-NAotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wLzAw
-MDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKQEAgLTAsMCArMSw3MiBAQAorRnJvbSA5YjNkMzA3Zjhm
-NmExYWY4OGYzZjgxMGY1YTZjZjA4MzU4MzBlMWU4IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQor
-RnJvbTogPT9VVEYtOD9xP0o9QzM9QjZyZz0yMEtyYXVzZT89IDxqb2VyZy5rcmF1c2VAZW1iZWRk
-ZWQucm9ja3M+CitEYXRlOiBNb24sIDcgRGVjIDIwMTUgMDE6MTQ6MzMgKzAxMDAKK1N1YmplY3Q6
-IFtQQVRDSF0gYWRkIGV4ZWN1dGFibGUKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6
-IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
-aXQKKworQWRkIGEgbmV3IC0tZXhlY3V0YWJsZSBvcHRpb24gdG8gZGlzdHJpYnV0ZSBzbyB0aGF0
-IHdlIGNhbgorZm9yY2UgdGhlIHNoZWJhbmcgbGluZSBpbiBpbnN0YWxsZWQgcHl0aG9uIHNjcmlw
-dHMuCisKK1tUaG9tYXM6IHJlZnJlc2ggZm9yIHNldHVwdG9vbHMgNS44Ll0KK1tKw7ZyZzogcmVm
-cmVzaCBmb3Igc2V0dXB0b29scyAxOC43LjFdCisKK1NpZ25lZC1vZmYtYnk6IEd1c3Rhdm8gWmFj
-YXJpYXMgPGd1c3Rhdm9AemFjYXJpYXMuY29tLmFyPgorU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBl
-dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+CitTaWduZWQtb2Zm
-LWJ5OiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nrcz4KKy0tLQorIHNl
-dHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5ICAgICAgICAgfCAyICsrCisgc2V0dXB0b29scy9j
-b21tYW5kL2luc3RhbGxfc2NyaXB0cy5weSB8IDkgKysrKysrKysrCisgMiBmaWxlcyBjaGFuZ2Vk
-LCAxMSBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1naXQgYS9zZXR1cHRvb2xzL2NvbW1hbmQvaW5z
-dGFsbC5weSBiL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5CitpbmRleCA3MmI5YTNlLi42
-NzgxZDJiIDEwMDY0NAorLS0tIGEvc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGwucHkKKysrKyBi
-L3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5CitAQCAtMTYsNiArMTYsNyBAQCBjbGFzcyBp
-bnN0YWxsKG9yaWcuaW5zdGFsbCk6CisgICAgICIiIlVzZSBlYXN5X2luc3RhbGwgdG8gaW5zdGFs
-bCB0aGUgcGFja2FnZSwgdy9kZXBlbmRlbmNpZXMiIiIKKyAKKyAgICAgdXNlcl9vcHRpb25zID0g
-b3JpZy5pbnN0YWxsLnVzZXJfb3B0aW9ucyArIFsKKysgICAgICAgICgnZXhlY3V0YWJsZT0nLCAn
-ZScsICJzcGVjaWZ5IGZpbmFsIGRlc3RpbmF0aW9uIGludGVycHJldGVyIHBhdGgiKSwKKyAgICAg
-ICAgICgnb2xkLWFuZC11bm1hbmFnZWFibGUnLCBOb25lLCAiVHJ5IG5vdCB0byB1c2UgdGhpcyEi
-KSwKKyAgICAgICAgICgnc2luZ2xlLXZlcnNpb24tZXh0ZXJuYWxseS1tYW5hZ2VkJywgTm9uZSwK
-KyAgICAgICAgICAidXNlZCBieSBzeXN0ZW0gcGFja2FnZSBidWlsZGVycyB0byBjcmVhdGUgJ2Zs
-YXQnIGVnZ3MiKSwKK0BAIC0zOCw2ICszOSw3IEBAIGNsYXNzIGluc3RhbGwob3JpZy5pbnN0YWxs
-KToKKyAgICAgICAgICkKKyAKKyAgICAgICAgIG9yaWcuaW5zdGFsbC5pbml0aWFsaXplX29wdGlv
-bnMoc2VsZikKKysgICAgICAgIHNlbGYuZXhlY3V0YWJsZSA9IE5vbmUKKyAgICAgICAgIHNlbGYu
-b2xkX2FuZF91bm1hbmFnZWFibGUgPSBOb25lCisgICAgICAgICBzZWxmLnNpbmdsZV92ZXJzaW9u
-X2V4dGVybmFsbHlfbWFuYWdlZCA9IE5vbmUKKyAKK2RpZmYgLS1naXQgYS9zZXR1cHRvb2xzL2Nv
-bW1hbmQvaW5zdGFsbF9zY3JpcHRzLnB5IGIvc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGxfc2Ny
-aXB0cy5weQoraW5kZXggOWNkOGViMC4uNzc4NjE1MCAxMDA2NDQKKy0tLSBhL3NldHVwdG9vbHMv
-Y29tbWFuZC9pbnN0YWxsX3NjcmlwdHMucHkKKysrKyBiL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0
-YWxsX3NjcmlwdHMucHkKK0BAIC0xMyw2ICsxMywxMyBAQCBjbGFzcyBpbnN0YWxsX3NjcmlwdHMo
-b3JpZy5pbnN0YWxsX3NjcmlwdHMpOgorICAgICBkZWYgaW5pdGlhbGl6ZV9vcHRpb25zKHNlbGYp
-OgorICAgICAgICAgb3JpZy5pbnN0YWxsX3NjcmlwdHMuaW5pdGlhbGl6ZV9vcHRpb25zKHNlbGYp
-CisgICAgICAgICBzZWxmLm5vX2VwID0gRmFsc2UKKysgICAgICAgIHNlbGYuZXhlY3V0YWJsZSA9
-IE5vbmUKKysKKysgICAgZGVmIGZpbmFsaXplX29wdGlvbnMoc2VsZik6CisrICAgICAgICBvcmln
-Lmluc3RhbGxfc2NyaXB0cy5maW5hbGl6ZV9vcHRpb25zKHNlbGYpCisrICAgICAgICBzZWxmLnNl
-dF91bmRlZmluZWRfb3B0aW9ucygnaW5zdGFsbCcsCisrICAgICAgICAgICAgICAgICgnZXhlY3V0
-YWJsZScsJ2V4ZWN1dGFibGUnKQorKyAgICAgICAgKQorIAorICAgICBkZWYgcnVuKHNlbGYpOgor
-ICAgICAgICAgaW1wb3J0IHNldHVwdG9vbHMuY29tbWFuZC5lYXN5X2luc3RhbGwgYXMgZWkKK0BA
-IC0zMyw2ICs0MCw4IEBAIGNsYXNzIGluc3RhbGxfc2NyaXB0cyhvcmlnLmluc3RhbGxfc2NyaXB0
-cyk6CisgICAgICAgICApCisgICAgICAgICBic19jbWQgPSBzZWxmLmdldF9maW5hbGl6ZWRfY29t
-bWFuZCgnYnVpbGRfc2NyaXB0cycpCisgICAgICAgICBleGVjX3BhcmFtID0gZ2V0YXR0cihic19j
-bWQsICdleGVjdXRhYmxlJywgTm9uZSkKKysgICAgICAgIGlmIHNlbGYuZXhlY3V0YWJsZSBpcyBu
-b3QgTm9uZToKKysgICAgICAgICAgICBleGVjX3BhcmFtID0gc2VsZi5leGVjdXRhYmxlCisgICAg
-ICAgICB0cnk6CisgICAgICAgICAgICAgYndfY21kID0gc2VsZi5nZXRfZmluYWxpemVkX2NvbW1h
-bmQoImJkaXN0X3dpbmluc3QiKQorICAgICAgICAgICAgIGlzX3dpbmluc3QgPSBnZXRhdHRyKGJ3
-X2NtZCwgJ19pc19ydW5uaW5nJywgRmFsc2UpCistLSAKKzIuMzAuMgorCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzYwLjIuMC9weXRob24tc2V0dXB0b29scy5oYXNoIGIv
-cGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4yYzhmYjk2YmI3Ci0tLSAvZGV2
-L251bGwKKysrIGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVw
-dG9vbHMuaGFzaApAQCAtMCwwICsxLDQgQEAKKyMgRnJvbSBodHRwczovL3B5cGkub3JnL3B5cGkv
-c2V0dXB0b29scy9qc29uCittZDUgIDM2MzhjMzZlYWY2N2YyNGJhY2IxNDdjMDExZmU2ZDMwICBz
-ZXR1cHRvb2xzLTYwLjIuMC50YXIuZ3oKK3NoYTI1NiAgNjc1ZmNlYmVjYjQzYzMyZWI5MzA0ODFh
-YmY5MDc2MTkxMzc1NDdmNDMzNjIwNmU0ZDY3MzE4MDI0MmUxYTI3OCAgc2V0dXB0b29scy02MC4y
-LjAudGFyLmd6CitzaGEyNTYgIGRiM2YwMjQ2YjFmOTI3OGYxNTg0NWI5OWZlYzQ3OGI4YjUwNmVi
-NzY0ODc5OTM3MjJmOGM2ZTI1NDI4NWZhZjggIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-cHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsgYi9wYWNrYWdlL3B5dGhvbi1z
-ZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rCmluZGV4IDA4YTE4MGNlMGMuLjczOGQ1OGMx
-OTUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9v
-bHMubWsKKysrIGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5t
-awpAQCAtNCwxNiArNCwyMiBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotIyBQbGVh
-c2Uga2VlcCBpbiBzeW5jIHdpdGgKLSMgcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9u
-My1zZXR1cHRvb2xzLm1rCitpZmVxICgkKEJSMl9QQUNLQUdFX1BZVEhPTikseSkKIFBZVEhPTl9T
-RVRVUFRPT0xTX1ZFUlNJT04gPSA0NC4wLjAKIFBZVEhPTl9TRVRVUFRPT0xTX1NPVVJDRSA9IHNl
-dHVwdG9vbHMtJChQWVRIT05fU0VUVVBUT09MU19WRVJTSU9OKS56aXAKIFBZVEhPTl9TRVRVUFRP
-T0xTX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvYjAvZjMv
-NDRkYTc0ODJhYzZkYTNmMzZmNjhlMjUzY2IwNGRlMzczNjViM2RiYTkwMzZhM2M3MDc3M2I3Nzhi
-NDg1CitlbHNlICMgUHl0aG9uMworUFlUSE9OX1NFVFVQVE9PTFNfVkVSU0lPTiA9IDYwLjIuMAor
-UFlUSE9OX1NFVFVQVE9PTFNfU09VUkNFID0gc2V0dXB0b29scy0kKFBZVEhPTjNfU0VUVVBUT09M
-U19WRVJTSU9OKS50YXIuZ3oKK1BZVEhPTl9TRVRVUFRPT0xTX1NJVEUgPSBodHRwczovL2ZpbGVz
-LnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvZTYvZTIvZjJiZmRmMzY0ZTAxNmY3YTQ2NGRiNzA5
-ZWE0MGQxMTAxYzRjNWE0NjNkZDcwMTlkYWUwYTQyZGJkMWM2CitlbmRpZgogUFlUSE9OX1NFVFVQ
-VE9PTFNfTElDRU5TRSA9IE1JVAogUFlUSE9OX1NFVFVQVE9PTFNfTElDRU5TRV9GSUxFUyA9IExJ
-Q0VOU0UKIFBZVEhPTl9TRVRVUFRPT0xTX0NQRV9JRF9WRU5ET1IgPSBweXRob24KIFBZVEhPTl9T
-RVRVUFRPT0xTX0NQRV9JRF9QUk9EVUNUID0gc2V0dXB0b29scwogUFlUSE9OX1NFVFVQVE9PTFNf
-U0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKKworaWZlcSAoJChCUjJfUEFDS0FHRV9QWVRIT04pLHkp
-CiBIT1NUX1BZVEhPTl9TRVRVUFRPT0xTX05FRURTX0hPU1RfUFlUSE9OID0gcHl0aG9uMgogCiBk
-ZWZpbmUgUFlUSE9OX1NFVFVQVE9PTFNfRVhUUkFDVF9DTURTCkBAIC0yNyw2ICszMyw3IEBAIGRl
-ZmluZSBIT1NUX1BZVEhPTl9TRVRVUFRPT0xTX0VYVFJBQ1RfQ01EUwogCW12ICQoQEQpL3NldHVw
-dG9vbHMtJChQWVRIT05fU0VUVVBUT09MU19WRVJTSU9OKS8qICQoQEQpCiAJJChSTSkgLXIgJChA
-RCkvc2V0dXB0b29scy0kKFBZVEhPTl9TRVRVUFRPT0xTX1ZFUlNJT04pCiBlbmRlZgorZW5kaWYK
-IAogJChldmFsICQocHl0aG9uLXBhY2thZ2UpKQogJChldmFsICQoaG9zdC1weXRob24tcGFja2Fn
-ZSkpCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scy8wMDAxLWFkZC1leGVj
-dXRhYmxlLnBhdGNoIGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvMDAwMS1hZGQtZXhlY3V0
-YWJsZS5wYXRjaAppbmRleCA1YmFiM2Q5NmExLi40NDJhM2JkYTJlIDEyMDAwMAotLS0gYS9wYWNr
-YWdlL3B5dGhvbjMtc2V0dXB0b29scy8wMDAxLWFkZC1leGVjdXRhYmxlLnBhdGNoCisrKyBiL3Bh
-Y2thZ2UvcHl0aG9uMy1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKQEAgLTEg
-KzEgQEAKLS4uL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKXCBO
-byBuZXdsaW5lIGF0IGVuZCBvZiBmaWxlCisuLi9weXRob24tc2V0dXB0b29scy82MC4yLjAvMDAw
-MS1hZGQtZXhlY3V0YWJsZS5wYXRjaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvcHl0aG9uMy1zZXR1cHRvb2xzL3B5dGhvbjMtc2V0dXB0b29scy5oYXNo
-IGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKaW5k
-ZXggYTNhZjdmMGZiMS4uZmE0YjBiZDIzZiAxMjAwMDAKLS0tIGEvcGFja2FnZS9weXRob24zLXNl
-dHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKKysrIGIvcGFja2FnZS9weXRob24zLXNl
-dHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKQEAgLTEgKzEgQEAKLS4uL3B5dGhvbi1z
-ZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLmhhc2gKXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBm
-aWxlCisuLi9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApc
-IE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uMy1z
-ZXR1cHRvb2xzL3B5dGhvbjMtc2V0dXB0b29scy5tayBiL3BhY2thZ2UvcHl0aG9uMy1zZXR1cHRv
-b2xzL3B5dGhvbjMtc2V0dXB0b29scy5tawppbmRleCAzNGQ1OTkzMTIwLi5lY2Y4Mjk0NTBkIDEw
-MDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scy9weXRob24zLXNldHVwdG9vbHMu
-bWsKKysrIGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLm1r
-CkBAIC02LDIxICs2LDE1IEBACiAKICMgUGxlYXNlIGtlZXAgaW4gc3luYyB3aXRoCiAjIHBhY2th
-Z2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsKLVBZVEhPTjNfU0VUVVBU
-T09MU19WRVJTSU9OID0gNDQuMC4wCi1QWVRIT04zX1NFVFVQVE9PTFNfU09VUkNFID0gc2V0dXB0
-b29scy0kKFBZVEhPTjNfU0VUVVBUT09MU19WRVJTSU9OKS56aXAKLVBZVEhPTjNfU0VUVVBUT09M
-U19TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzL2IwL2YzLzQ0
-ZGE3NDgyYWM2ZGEzZjM2ZjY4ZTI1M2NiMDRkZTM3MzY1YjNkYmE5MDM2YTNjNzA3NzNiNzc4YjQ4
-NQorUFlUSE9OM19TRVRVUFRPT0xTX1ZFUlNJT04gPSA2MC4yLjAKK1BZVEhPTjNfU0VUVVBUT09M
-U19TT1VSQ0UgPSBzZXR1cHRvb2xzLSQoUFlUSE9OM19TRVRVUFRPT0xTX1ZFUlNJT04pLnRhci5n
-egorUFlUSE9OM19TRVRVUFRPT0xTX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5v
-cmcvcGFja2FnZXMvOWIvYmUvMTNmNTQzMzVjN2RiYTcxM2IwZTk3ZTExZTdhNDFkYjNkZjRhODUw
-NzNkNmM1YTZlN2Y2NDY4YjIyZWUyCiBQWVRIT04zX1NFVFVQVE9PTFNfTElDRU5TRSA9IE1JVAog
-UFlUSE9OM19TRVRVUFRPT0xTX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCiBQWVRIT04zX1NFVFVQ
-VE9PTFNfQ1BFX0lEX1ZFTkRPUiA9IHB5dGhvbgogUFlUSE9OM19TRVRVUFRPT0xTX0NQRV9JRF9Q
-Uk9EVUNUID0gc2V0dXB0b29scwogUFlUSE9OM19TRVRVUFRPT0xTX1NFVFVQX1RZUEUgPSBzZXR1
-cHRvb2xzCi1IT1NUX1BZVEhPTjNfU0VUVVBUT09MU19ETF9TVUJESVIgPSBweXRob24tc2V0dXB0
-b29scwogSE9TVF9QWVRIT04zX1NFVFVQVE9PTFNfTkVFRFNfSE9TVF9QWVRIT04gPSBweXRob24z
-Ci0KLWRlZmluZSBIT1NUX1BZVEhPTjNfU0VUVVBUT09MU19FWFRSQUNUX0NNRFMKLQkkKFVOWklQ
-KSAtZCAkKEBEKSAkKEhPU1RfUFlUSE9OM19TRVRVUFRPT0xTX0RMX0RJUikvJChQWVRIT04zX1NF
-VFVQVE9PTFNfU09VUkNFKQotCW12ICQoQEQpL3NldHVwdG9vbHMtJChQWVRIT04zX1NFVFVQVE9P
-TFNfVkVSU0lPTikvKiAkKEBEKQotCSQoUk0pIC1yICQoQEQpL3NldHVwdG9vbHMtJChQWVRIT04z
-X1NFVFVQVE9PTFNfVkVSU0lPTikKLWVuZGVmCitIT1NUX1BZVEhPTjNfU0VUVVBUT09MU19ETF9T
-VUJESVIgPSBweXRob24tc2V0dXB0b29scwogCiAkKGV2YWwgJChob3N0LXB5dGhvbi1wYWNrYWdl
-KSkKLS0gCjIuMzMuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Drop upstream patches
+- Add a new patch: 0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch which
+  fixes python 3.10 compatibility.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ ...Tuple_SET_ITEM-usage-no-return-value.patch | 70 +++++++++++++++++++
+ .../0002-fix-build-with-disable-ucm.patch     | 43 ------------
+ ...3-control-empty-fix-the-static-build.patch | 29 --------
+ package/alsa-lib/alsa-lib.hash                |  2 +-
+ package/alsa-lib/alsa-lib.mk                  |  2 +-
+ 5 files changed, 72 insertions(+), 74 deletions(-)
+ create mode 100644 package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch
+ delete mode 100644 package/alsa-lib/0002-fix-build-with-disable-ucm.patch
+ delete mode 100644 package/alsa-lib/0003-control-empty-fix-the-static-build.patch
+
+diff --git a/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch b/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch
+new file mode 100644
+index 0000000000..a1c9f3b80d
+--- /dev/null
++++ b/package/alsa-lib/0002-fix-PyTuple_SET_ITEM-usage-no-return-value.patch
+@@ -0,0 +1,70 @@
++From 1da2ede2d8b01a8851648e774a4c3c5779c0bafa Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@rivian.com>
++Date: Tue, 7 Dec 2021 13:55:54 -0800
++Subject: [PATCH] Fix PyTuple_SET_ITEM() usage - no return value
++
++As noted in bpo-30459 (link bellow) the PyTuple_SET_ITEM() macro
++has not a return value. Make the code compatible with python 3.10.
++
++Link: https://bugs.python.org/issue30459
++Signed-off-by: Adam Duskett <aduskett@rivian.com>
++---
++ modules/mixer/simple/python.c | 20 ++++++++++----------
++ 1 file changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/modules/mixer/simple/python.c b/modules/mixer/simple/python.c
++index 8a7264d..c7c1ce7 100644
++--- a/modules/mixer/simple/python.c
+++++ b/modules/mixer/simple/python.c
++@@ -775,8 +775,8 @@ pymixer_melement_new(struct pymixer *pymixer, PyObject *args)
++ 	obj = PyDict_GetItemString(pymixer->mdict, class);
++ 	if (obj) {
++ 		obj1 = PyTuple_New(4);
++-		if (PyTuple_SET_ITEM(obj1, 0, (PyObject *)pymixer))
++-			Py_INCREF((PyObject *)pymixer);
+++		PyTuple_SET_ITEM(obj1, 0, (PyObject *)pymixer);
+++		Py_INCREF((PyObject *)pymixer);
++ 		PyTuple_SET_ITEM(obj1, 1, PyUnicode_FromString(name));
++ 		PyTuple_SET_ITEM(obj1, 2, PyInt_FromLong(index));
++ 		PyTuple_SET_ITEM(obj1, 3, PyInt_FromLong(weight));
++@@ -920,8 +920,8 @@ static PyObject *new_helem(struct python_priv *priv, snd_hctl_elem_t *helem)
++ 	obj = PyDict_GetItemString(priv->py_mdict, "HElement");
++ 	if (obj) {
++ 		obj1 = PyTuple_New(3);
++-		if (PyTuple_SET_ITEM(obj1, 0, py_hctl))
++-			Py_INCREF(py_hctl);
+++		PyTuple_SET_ITEM(obj1, 0, py_hctl);
+++		Py_INCREF(py_hctl);
++ 		PyTuple_SET_ITEM(obj1, 1, PyFloat_FromDouble(1));
++ 		PyTuple_SET_ITEM(obj1, 2, PyInt_FromLong((long)helem));
++ 		obj2 = PyObject_CallObject(obj, obj1);
++@@ -995,11 +995,11 @@ int alsa_mixer_simple_event(snd_mixer_class_t *class, unsigned int mask,
++ 		}
++         	if (o == NULL)
++         		return 0;
++-        	if (PyTuple_SET_ITEM(t, 1, o))
++-        		Py_INCREF(o);
+++        	PyTuple_SET_ITEM(t, 1, o);
+++        	Py_INCREF(o);
++         	o = melem ? find_melem(priv, melem) : Py_None;
++-        	if (PyTuple_SET_ITEM(t, 2, o))
++-        		Py_INCREF(o);
+++        	PyTuple_SET_ITEM(t, 2, o);
+++        	Py_INCREF(o);
++ 		r = PyObject_CallObject(priv->py_event_func, t);
++ 		Py_DECREF(t);
++ 		if (r) {
++@@ -1066,8 +1066,8 @@ static int alsa_mixer_simple_pyinit(struct python_priv *priv,
++ 		obj1 = PyTuple_New(3);
++ 		PyTuple_SET_ITEM(obj1, 0, PyInt_FromLong((long)class));
++ 		PyTuple_SET_ITEM(obj1, 1, PyInt_FromLong((long)mixer));
++-		if (PyTuple_SET_ITEM(obj1, 2, mdict))
++-			Py_INCREF(mdict);
+++		PyTuple_SET_ITEM(obj1, 2, mdict);
+++		Py_INCREF(mdict);
++ 		obj2 = PyObject_CallObject(obj, obj1);
++ 		Py_XDECREF(obj1);
++ 		PyDict_SetItemString(mdict, "mixer", obj2);
++-- 
++2.33.1
++
+diff --git a/package/alsa-lib/0002-fix-build-with-disable-ucm.patch b/package/alsa-lib/0002-fix-build-with-disable-ucm.patch
+deleted file mode 100644
+index 144c8e3fbd..0000000000
+--- a/package/alsa-lib/0002-fix-build-with-disable-ucm.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 3fbaea3ff390d4c09adbf5d6ae62fb7b5f3f24f5 Mon Sep 17 00:00:00 2001
+-From: Jaroslav Kysela <perex@perex.cz>
+-Date: Mon, 28 Jun 2021 12:08:53 +0200
+-Subject: [PATCH] fix build with --disable-ucm
+-
+-Link: https://mailman.alsa-project.org/pipermail/alsa-devel/2021-June/186729.html
+-Reported-by: Michael Forney <mforney@mforney.org>
+-Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+-Upstream: f4f29d42be8b8ad60ea4c5697374adad4bfe6868
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- include/local.h | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/include/local.h b/include/local.h
+-index 4e7d88a0..7cfcec53 100644
+---- a/include/local.h
+-+++ b/include/local.h
+-@@ -374,6 +374,8 @@ int _snd_config_load_with_include(snd_config_t *config, snd_input_t *in,
+- void *INTERNAL(snd_dlopen)(const char *name, int mode, char *errbuf, size_t errbuflen);
+- #endif
+- 
+-+#ifdef BUILD_UCM
+-+
+- const char *uc_mgr_alibcfg_by_device(snd_config_t **config, const char *name);
+- 
+- static inline int _snd_is_ucm_device(const char *name)
+-@@ -381,4 +383,12 @@ static inline int _snd_is_ucm_device(const char *name)
+- 	return name && name[0] == '_' && name[1] == 'u' && name[2] == 'c' && name[3] == 'm';
+- }
+- 
+-+#else
+-+
+-+static inline const char *uc_mgr_alibcfg_by_device(snd_config_t **config, const char *name) { return NULL; }
+-+static inline int _snd_is_ucm_device(const char *name) { return 0; }
+-+
+-+
+-+#endif
+-+
+- #endif
+--- 
+-2.31.1
+-
+diff --git a/package/alsa-lib/0003-control-empty-fix-the-static-build.patch b/package/alsa-lib/0003-control-empty-fix-the-static-build.patch
+deleted file mode 100644
+index 3f5013af3a..0000000000
+--- a/package/alsa-lib/0003-control-empty-fix-the-static-build.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 81e7923fbfad45b2f353a4d6e3053af51f5f7d0b Mon Sep 17 00:00:00 2001
+-From: Jaroslav Kysela <perex@perex.cz>
+-Date: Tue, 15 Jun 2021 23:21:42 +0200
+-Subject: [PATCH] control: empty - fix the static build
+-
+-Reported-by: Jan Palus <atler@pld-linux.org>
+-Fixes: https://github.com/alsa-project/alsa-lib/issues/157
+-Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+-
+-[Retrieved from:
+-https://github.com/alsa-project/alsa-lib/commit/81e7923fbfad45b2f353a4d6e3053af51f5f7d0b]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/control/control_empty.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/control/control_empty.c b/src/control/control_empty.c
+-index 49d1026c..c9b048c1 100644
+---- a/src/control/control_empty.c
+-+++ b/src/control/control_empty.c
+-@@ -30,7 +30,7 @@
+- 
+- #ifndef PIC
+- /* entry for static linking */
+--const char *_snd_module_ctl_empty = "";
+-+const char *_snd_module_control_empty = "";
+- #endif
+- 
+- /*! \page control_plugins
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 6660c8a104..97bcd87141 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  628421d950cecaf234de3f899d520c0a6923313c964ad751ffac081df331438e  alsa-lib-1.2.5.1.tar.bz2
++sha256  7fe3057894ec319118abfd042ef84632a1dcd911806ec9fff6daaa68d15a8c52  alsa-lib-1.2.6.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 3bdde217ce..c43803f607 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.2.5.1
++ALSA_LIB_VERSION = 1.2.6
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-- 
+2.33.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
