@@ -1,56 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8C64C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED759C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2892540191;
-	Thu, 30 Dec 2021 09:11:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E2FE82438;
+	Thu, 30 Dec 2021 09:14:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZcLKRXTZeSh5; Thu, 30 Dec 2021 09:11:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pzsn-N_9KJ4V; Thu, 30 Dec 2021 09:14:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A01E4011F;
-	Thu, 30 Dec 2021 09:11:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EFFA1BF346
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8F9A81B71;
+	Thu, 30 Dec 2021 09:14:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 613551BF346
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:14:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C7EC60BA1
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:11:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FBF540241
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:14:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1JSYyGBaqHXY for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 09:11:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E79AD60B95
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:11:41 +0000 (UTC)
-Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
- by mailout03.t-online.de (Postfix) with SMTP id F0D962135;
- Thu, 30 Dec 2021 10:11:27 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.202.128]) by fwd74.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n2rT5-1V0vgX0; Thu, 30 Dec 2021 10:11:27 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43648)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n2rT5-0007xM-8o;
- Thu, 30 Dec 2021 10:11:27 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uc-x5An6f6jS for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 09:14:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E7D56401DC
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:14:15 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id w20so40232541wra.9
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:14:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rgI6QDYdt1UIhdVfDT/MfUu3BMtYWltmKRf+BdGFKOg=;
+ b=WkNt6Rw0D94CvElX725g2EIryJedCEWN76LlvFq2JvSvzMQ+DTI/rEPZwvlfufTFOE
+ ssp3nHd2S24B3x5nkpGoOxTDTxASu0tou5x9p9TIQYHx/s+CLVNTRtplF4Ib9IezA3t/
+ axpr+kIErXcDMGAnFBym+H5zAynvio/cv7KkxhfdojsMkRJC78IRoFIH722qgqA6bI1a
+ llOhlxDPRV2mGuUL7yQADHay/rySVJAwOTS7ubqljZfvJT4C3SWguHkDMjITSJVg0Bxp
+ xDvzJH8BpmdyQ7zU5fNynroQTbV8TWvKFjkn38hSZrZMVt6j7wd0oVvVGqVCwn/QK9SI
+ 01zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=rgI6QDYdt1UIhdVfDT/MfUu3BMtYWltmKRf+BdGFKOg=;
+ b=XSRy+j5qCgddotxcqAh9tkZ2igCJKJFAzOGdOmzWjhz+ltWQZoKWnwfNnn9pT8alKT
+ 2GMXYJmfNmJ3kHfL9nsJxRsdOzQs2yED0w3wJEbAX0tVxXrLw4tY3vZmyMO5zWr8tru6
+ cqGHe+X/MiWjriXKEuGWRSveXUFFYOsOYsZdxo2diw5RxBTTo+/Fb/N/h9+NvY06UcEM
+ sPOuN8n3P3hu+HGC5mBmEUokx1MY/J/EFPLAskuKjzGYX5+rlvLj3WRy2GlPuJiR/fWp
+ UpIJUGy9gpAtvoydCS6AApwH2MqGT7Y1+vd5eCSEmz6/xEsb+J4QMtcOKgxgbI4VbbtG
+ KqdQ==
+X-Gm-Message-State: AOAM530Bn6QP9f9Vff2BeLD9eoFRFm9hIdSCfoIlwcWiDFTN1vVY3zY2
+ j1xi48wpycRPyQVCt6ti4lBdRl+NxCg=
+X-Google-Smtp-Source: ABdhPJygmOsULIvu9AnzNPed5ZEVR4ANcuw0CbqYl1Rv8grba/RJG3NR8h4X3UhSyCIAZviB98NHUg==
+X-Received: by 2002:adf:e109:: with SMTP id t9mr23691035wrz.387.1640855654201; 
+ Thu, 30 Dec 2021 01:14:14 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id z11sm29538228wmf.9.2021.12.30.01.14.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 30 Dec 2021 01:14:14 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 10:11:27 +0100
-Message-Id: <20211230091127.164951-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 30 Dec 2021 10:13:30 +0100
+Message-Id: <20211230091330.1445939-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1640855487-00012DCC-B737940A/0/0 CLEAN NORMAL
-X-TOI-MSGID: ee819e74-08a6-4fc9-a98f-7fb4133040b1
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 21.3.3
+Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: argp is needed for SSH
+ plugin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,65 +86,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Martin Hicks <mort@bork.org>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2021-December/000658.html
+argp is needed for SSH plugin to avoid the following build failure
+raised since bump to version 2.4.2 in commit
+b537fe14339592023221a7c200257eb3a923c0be:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+configure: error: You need argp library.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6740792920a28c91f4f82a8f8c2fb525ed80410a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/cryptsetup/Config.in     | 2 ++
+ package/cryptsetup/cryptsetup.mk | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 811e4b8204..1cdfff50c9 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index d9c9d4d4f4..f36883ea47 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	depends on BR2_USE_MMU # lvm2, libargon2
+ 	depends on !BR2_STATIC_LIBS # lvm2, libargon2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_PACKAGE_LIBSSH && \
++		(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL)
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 980a36faa8..676cd25be4 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -34,7 +34,9 @@ CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
+ endif
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 21.3.2
-+MESA3D_HEADERS_VERSION = 21.3.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 822e3e63c6..235a1b55bb 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
--sha256  e2e7bafb8307e7abc3bf982f39382fae3619c84b45504920a21504be52f126bd  mesa-21.3.2.tar.xz
--sha512  35c510cbab70be43bc207720a12fe85b0c010fafa147238f2c22dd873967278f187ee7675a662882ead3598305f1f37804567deb93022a692ca259f563abfdac  mesa-21.3.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000658.html
-+sha256  ad7f4613ea7c5d08d9fcb5025270199e6ceb9aa99fd72ee572b70342240a8121  mesa-21.3.3.tar.xz
-+sha512  0263d75435f8c16d40eba3eae29bf372e8994816718deec153c582a17c4dd6ef1c67b3236ed31e63f98bf4e1089fac5cfafae9fb84d3e1fa919b274f43e7e673  mesa-21.3.3.tar.xz
- 
- # License
- sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 2805bbea3f..ac368292e0 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 21.3.2
-+MESA3D_VERSION = 21.3.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ ifeq ($(BR2_PACKAGE_LIBSSH),y)
+-CRYPTSETUP_DEPENDENCIES += libssh
++CRYPTSETUP_DEPENDENCIES += \
++	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone) \
++	libssh
+ CRYPTSETUP_CONF_OPTS += --enable-ssh-token
+ else
+ CRYPTSETUP_CONF_OPTS += --disable-ssh-token
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
