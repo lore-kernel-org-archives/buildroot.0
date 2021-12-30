@@ -4,78 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C9EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 08:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6689C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:09:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE88440935;
-	Thu, 30 Dec 2021 08:52:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 469D8410AE;
+	Thu, 30 Dec 2021 09:09:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0iTcP65ORB_r; Thu, 30 Dec 2021 08:52:34 +0000 (UTC)
+	with ESMTP id eqI7fMHC-6x4; Thu, 30 Dec 2021 09:09:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32A9A401B6;
-	Thu, 30 Dec 2021 08:52:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 820481BF33B
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 08:52:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD273410CB;
+	Thu, 30 Dec 2021 09:09:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 76D7B1BF346
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 694864041C
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 08:52:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6545360586
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:09:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6BdWAJ-T-d2g for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 08:52:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gkN-uitT7Imi for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 09:09:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DBDE40297
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 08:52:31 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id s1so49224507wrg.1
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 00:52:31 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27F9C606E7
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:09:36 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id s1so49211778wra.6
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=aYRNbgmoL085vrJbbdmS1gs9qpsGZH9So0ydvJsHAy0=;
- b=JMOJt4cLWgTQPo7Xh3S9AI1FV234Zr+dl3wy2L7c1aYCr1UmJUb10ZXEphL2fm3rSK
- WsJ0IJqP+3F/tPN5GmiMiZMXBbOzN/aDga/vGe0Wm00ZbzS2MSBYFbRRGTEcXjS9u9Kl
- z/32LmtSMMmf3bRWyBRhrTe5miUpl8/YWzZ8jEGzH1TxeTHMtgwaxnNzwYjBK0ezmXBE
- PVXYI8LdvIoOcVH3sGmRL1XMjE4mVRdw5j+At7E9+H8es7WwpoOOFMfuOHOVSJEwKbCR
- pxQI41R+6a4//l0q7UCFJEFoWNrKgv3gLxQTlEGEkw2ZG4mi6JPoXlmckILe6TozJAzY
- tHHg==
+ bh=yiGY+FzxSF37amlNy7vZ95CcFO9ZxRiwBRrcYyc1Aqk=;
+ b=MyNtdWNTmqPRU+/QmJ2D1+eX0jGT3TuHDjo+WMZEAY35iNc4OuHxqIV8AU68Rwsk2U
+ uR9AkH0LPDVwBTqt/q+qLSXcEMID+C57q9xdRg1O9Eu4GuXAk0hYnhP0NnWx59YJsXnN
+ fW2K4IdFgkmdpCaiIGiYmfFzs5ZkUZ6D6I5Qx+VPix9C8pQ77DNi94zqwMD2YGUjJ+XX
+ Ws8Ts0r4SAbNb5nxvqRpI7IgAFD5Ih9aQQJNs4feAe0bPbJhyTeOyp7ucKSvkjPXKWWn
+ YSDvhwDRaW24Iy638HbBL3iibPkFR1FHQDLzlm702Pc1hWNTz+YV1b5Cy5inBHWDB2P/
+ Us1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=aYRNbgmoL085vrJbbdmS1gs9qpsGZH9So0ydvJsHAy0=;
- b=HaBaMUv5p9Pm+SJQcTO6Yr7aenjvBRjv1f1DscGMlq1WsSZhpvlvrkexjJaUzSpHPK
- 3XSGnnsJcc5EcJmObcZgd4GR7lTS2wiPcjSQ8Utw96IRSTypU0Bz7jW6wCkeg3nOLCJ4
- R+9OJ3MxiPhctmygMD43TkYk4m1TIAqLB5AtrxffCjAA9vP386MyFvDHU2IZJY+W/bqE
- vFMylS1iiFi1NEGJKI65cCg2JR8C8YJF1cRjxaRD/lBMNDFqWDzoUtPbtD0YeuQndnhp
- yY5ge7bE1CkbJp/ij3PfxV2w71HDJZ2XudMvHAbdd4ajqF6lMp8o58rm8r5W5VVTPgCo
- pYBA==
-X-Gm-Message-State: AOAM531bWHAJwBR2FCZLKSbfkLER4W4PmsBk+iK6v87YUs3EMMByeRdd
- wZEoUdQcMurqLAHb1+kaM+mELtA7r84=
-X-Google-Smtp-Source: ABdhPJx4Jlot1RdQXDG7NDbEbegO4qkZ1hdpCo8dJE4ZXFlRgkj53LRSdKQzxmOMzt8X7X65TNgDCg==
-X-Received: by 2002:a05:6000:15cd:: with SMTP id
- y13mr24467122wry.28.1640854349331; 
- Thu, 30 Dec 2021 00:52:29 -0800 (PST)
+ bh=yiGY+FzxSF37amlNy7vZ95CcFO9ZxRiwBRrcYyc1Aqk=;
+ b=KBIhQyWd07hiHUGG2ih59zhw/rReAg5inLGxzf4oVuq/xnpyCbKigL0Vi8HwyVbQ5a
+ z/yVrpUDqmvrLeRa9Qm9fpewItUKWvbc1iW3T6Zbvf0+kd/RgTiDVyPq3QL1kAe9rOlb
+ PobUfsGBcjNqRIEEV2z/q0mA3F0fSJ1ucOYkaLkFdt8NgQ6p1fYp/+8FVELdN9ABawxP
+ sE9/JgaK0+dhdeea6gi9xo+w0ISZHhW0Ftt7y1ZfuP+/YTh3B33HZBJnsK6p+/AO7YJ3
+ O/TfWjylK51OVPSuuG2NlecycMewz9AcHpaTa0I/pwY2TPnBMWcnCFUhmlkLuXjMQkXV
+ VTVg==
+X-Gm-Message-State: AOAM5333UC7zKxwfSo8BJAtako4I+NX2pUmgJjpapFOfBwIUTQpSzMlC
+ Cwt7NTGxSUQkhyPVqSH0fDnegUoaWP4=
+X-Google-Smtp-Source: ABdhPJwvDmgBLkqFKA7zI7E20EPyazejwBf+hfcesqXKrNEpT2RsGD26YerdSCHd19QGXUEyvOvIdg==
+X-Received: by 2002:a5d:5088:: with SMTP id a8mr24090290wrt.649.1640855374315; 
+ Thu, 30 Dec 2021 01:09:34 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id t12sm26393848wrs.72.2021.12.30.00.52.28
+ by smtp.gmail.com with ESMTPSA id c7sm27207806wrq.81.2021.12.30.01.09.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 00:52:29 -0800 (PST)
+ Thu, 30 Dec 2021 01:09:34 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 09:51:44 +0100
-Message-Id: <20211230085144.1210474-1-fontaine.fabrice@gmail.com>
+Date: Thu, 30 Dec 2021 10:08:22 +0100
+Message-Id: <20211230090822.1332429-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-django-enumfields: needs
- python3
+Subject: [Buildroot] [PATCH 1/1] package/rt-tests: needs kernel >= 4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,42 +86,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python2 support has been dropped since version 2.0.0 and
-https://github.com/hzdg/django-enumfields/commit/3a9f92d67b15d1ae57ef7fb087858b5597413f30
-resulting in the following build failure since bump to version 2.1.1 in
-commit bcb85b2e59902c1f570fb0545b38a677d088841f:
+rt-tests unconditionally uses CGROUP2_SUPER_MAGIC since
+https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/?id=47e857d4bf77440cb59d17c6ed7882a48514f18d
+which is only available since kernel 4.5 and
+https://github.com/torvalds/linux/commit/67e9c74b8a873408c27ac9a8e4c1d1c8d72c93ff
+resulting in the following build failure since bump to version 2.3 in
+commit a952b016263cb9ae5f116dac0b3da4ad93a4c55f:
 
-error:   File "/usr/lib/python2.7/site-packages/enumfields/fields.py", line 134
-    *super().check(**kwargs),
-    ^
-SyntaxError: invalid syntax
+src/sched_deadline/cyclicdeadline.c:381:29: error: 'CGROUP2_SUPER_MAGIC' undeclared (first use in this function)
+  ret = mounted(CGROUP_PATH, CGROUP2_SUPER_MAGIC);
+                             ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/3fd79ed7bbcad202fc7ac07252cdf57c599dac30
+ - http://autobuild.buildroot.org/results/74766c215a6cc19cd02faec6181ccd5de49c15cf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-django-enumfields/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rt-tests/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-django-enumfields/Config.in b/package/python-django-enumfields/Config.in
-index 58dea365ee..51efbcbf53 100644
---- a/package/python-django-enumfields/Config.in
-+++ b/package/python-django-enumfields/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_DJANGO_ENUMFIELDS
- 	bool "python-django-enumfields"
--	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  Real Python Enums for Django.
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 477fa288d7..47fa7cd840 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	depends on BR2_USE_MMU # fork(), numactl
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+@@ -29,7 +29,7 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
  
+-comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dynamic library"
++comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 4.5, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+-		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	depends on BR2_USE_MMU
 -- 
 2.33.0
 
