@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D9EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 23:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0769C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 23:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DCFC82741;
-	Thu, 30 Dec 2021 23:07:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BF6C40178;
+	Thu, 30 Dec 2021 23:14:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yyn8O_gVTza2; Thu, 30 Dec 2021 23:07:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9205828D1;
-	Thu, 30 Dec 2021 23:07:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB64D1BF35B
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:07:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A899A40178
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:07:52 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B-JdfzQIRr4F for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 23:07:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6133F40438
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 23:07:48 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id v7so52929647wrv.12
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:07:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+8rVWCsWFMZPZAJsULnJLcDT20q5nisYw5zPQL7CenU=;
- b=Ofk/XG9ggroW+mqMKBxmau8qgIMvlMNxD8ZCYGhS98ZTNxySTCUuH7c0s+jGoAF50J
- boZ/kihf4uJtvlO4Pba8HBnNQ/J9WjyFr+K4DzTfarPuiLunf9OzxTsV1qbiZRBn8f0r
- d6KHRAMNv/JXjccBboDh6jezvxJ8z/FzwhIGxCPe1Bp+yewFduI2QevVqi7PsPe0DGQX
- nYDdw9oI2nBcrodNgo7UWuMbej81gsOuKJAtKHZD6oOM9xbbHoLvscONhjn8ZiCme6mT
- 6G/pSQBgZOlvfsLUc7tLYm+fDWiT6rXjxKgxZ52uMUq/7JXA89sikqzBniHm/ZIPxKpS
- btcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+8rVWCsWFMZPZAJsULnJLcDT20q5nisYw5zPQL7CenU=;
- b=tG7jCLh1NJEqgx/mJxf5x+5Fq4sKwnIO9KA7V6wRuqyoAf1oH1gyTJAIyj6WNZDa8E
- yI7luBnMZ7BwdRQQX4CsB2EDk1Y5rzGUPAFU4zuXBeBFoGmkrJ8dR2k0aaSXG1D+mWSb
- P5Wqqty9+vLQnQbUdKHy2he04YQQzRR5ht+3V/zmmKXUccY5hXuPvfHyJQx6j/CmyKQm
- AGXiu+TI1xQRZKTfqiPRnfn0ABp6S0ZUfQjZv1HjB45zSsY7g7xiXedzndQbplaw87zG
- fZiHu5Uo/UFLPRlkV+6GpV/nQ7v8CSHmJU2/q3Sm5LSmY+pCWkPMmF/6dDwiIOqsxG8G
- fXgA==
-X-Gm-Message-State: AOAM530+mNtbgNdW0YNQn/fTX+ZjCUgSw8uIglancVDDhgzOpcsy6R5h
- 2LYhtNjL1sWZB7NBEz+HXVazM6nfWLk=
-X-Google-Smtp-Source: ABdhPJxJGffOhuJXTQdVoRJz+QHwGuMD13nKmhAMR0lVgKRFz4es3b1ZmOWYSOMdgKWCrkWAKtcUxA==
-X-Received: by 2002:a5d:6d49:: with SMTP id k9mr18766770wri.530.1640905666622; 
- Thu, 30 Dec 2021 15:07:46 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id c13sm24534717wrt.114.2021.12.30.15.07.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 15:07:46 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 31 Dec 2021 00:07:01 +0100
-Message-Id: <20211230230701.3177447-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l9cS0A5RV5CQ; Thu, 30 Dec 2021 23:14:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7777F4038E;
+	Thu, 30 Dec 2021 23:14:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C61DF1BF35B
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:14:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABDDD82741
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:14:20 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kdbb4b-BahXo for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 23:14:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5905782733
+ for <buildroot@busybox.net>; Thu, 30 Dec 2021 23:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1640906055;
+ bh=OA1rcXgydgxSIrHRezwieAi/gWCN8Dkny+lN9QJotak=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=N5BQ0Dt05YYh5znj37bX/0BZDIk57nKDiBI1YNnziF5brHBwypPzAxjVyEawVDs6r
+ RZNLMW+EDEwQPEkxB+yGYifFTo3YNMg0Nide2XkgUlQ0Ipcu9q9o74mLyWf0FwQUOS
+ yRFcnwprq7SVIeJpvQmMKGSEvMilJycENqiMP18E=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.96]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M4JmT-1n3Lbb3qkb-000LO7; Fri, 31
+ Dec 2021 00:14:15 +0100
+Date: Fri, 31 Dec 2021 00:14:13 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20211231001413.26ef092b@gmx.net>
+In-Reply-To: <20211230161150.7b073fc6@windsurf>
+References: <20200306201022.22382-1-ps.report@gmx.net>
+ <20211230161150.7b073fc6@windsurf>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
- 3.3.9
+X-Provags-ID: V03:K1:x4e27T7Gse0xGrrsQM7UcJbdkELzszoTzjUPikQyFaKNRaZBesQ
+ VouFdKdHOQK7N593xtoR6dQwIbTMu2sQ3T6c294VPf8jlt0fLrrNzlm+QUpfo9CLN2slwu6
+ 89CLq5U9V33qU205Jlaqvn/wH3B8OlpQd4MSxNGKZZgAaBRQ3Dx+s+i5fsDIzACtwc+fM7B
+ fcHojNw39pqUlae9QlXrg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lT4N0pzEoWw=:8Y7kQMBo1RXtSzAjWo5bek
+ vxEeQ3gGOy2PVfGqQHtO6gBxtXwXn9AJBT5jWDp8dDgEccIOkgTgVJ5ng13eEiGF5iRKzwt5F
+ Stg/V50Sq87S3x6SjmRoSa10EISRMOBqTVA8pIQMQNGpuwdvEf57IAi3KPV6tyZ9hn+fEG7Gi
+ Y6rtH4DhsuiSjsMxCvAiB3H7zl1dAgucI54qtmfsQHXd7zBKm7j40Ejb1TRVNvTiWxqZsoRoM
+ p+E4F9m+cPWShAy52HzjVt5XTsW2aRrUFLhavgeeJAmBwCEYieI+VsT+HR3QHn0D2KT4zBdri
+ UD8P3qprclSltX3sj4by31ftQfl67dTtBuY2nBMOQlaBJTtDycdAqRt7DT66AbxzMrJeJlUUg
+ OJ59R+yhLViCUbOXfpBg1VBzA+18/A9Y7PN/6kPE59y3UchudVVMtDxGiYbm9L6I41vLLNif/
+ Vfjz1so8kKjBe+8diPH5g3gHier5loJCCuLpU4pT50RcbGGFDnD8Lzes/Ri0VYBPWcnDSD0jG
+ ymSX8kLoZYenL97/8UeoHMMUHf3dTSlCZNUFupSKb8WzZx5QDAoVJrOmdweHvFpGP2vn07Tay
+ LcKcqD7b69D1sfrZbj8juGJsux/qzlUeig9SxUZfcpbCAyjhmmRLky0mORHVMB79pSFGzL4rZ
+ vKQuM4HjS8u+abPai1fC+wuLRrQL4kO3OXva1Dn1uJY+P/qq9v2UwAg2kGo/VGPBBuR5lk3x6
+ Ue6FoCB+LuB/vjWlNnB7lk8UQk1fVMZqvPVYp9X6qfXUbzQ4Fphr/9ZCiN9dJb1spmhUVU6N6
+ 2eZJyfdij1UF3pSfaJorRYPl+1GxKvvHjyrbJTx33YGsxWp/e8liXIsl8RIbzEUL7MBPdKB2E
+ 9bowtS3lhQMNWFGNaaOxbXeLm7mr/5yOY3pIQjKL6oIREapQMvXYeKW/Yh14gPtzGsQgtBfd0
+ qGbboxc767mA0GoPGnNnHNevllpIQdE3ONDQkFg1P+aTvARDkja7rTdgCIRAwELfjtevjVt3/
+ bnmRyWIPQz/0XtOMuKFvqcmG77QFvIma8PUUTJGBldX6Rc6JIH1ZauuelHecnUVBgA24uLkcS
+ DGir611yKNpVN8=
+Subject: Re: [Buildroot] [PATCH v1 1/3] package/liboping: add patch to fix
+ gcc-8/gcc-9 snprintf truncation compile failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,105 +87,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Maik Brenke <Maik.Brenke@continental-corporation.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop second patch (already in version)
-
-https://github.com/mikebrady/shairport-sync/releases/tag/3.3.9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...re.ac-fix-build-with-automake-1.16.5.patch | 48 -------------------
- package/shairport-sync/shairport-sync.hash    |  2 +-
- package/shairport-sync/shairport-sync.mk      |  2 +-
- 3 files changed, 2 insertions(+), 50 deletions(-)
- delete mode 100644 package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
-
-diff --git a/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch b/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
-deleted file mode 100644
-index 2ee8f59fee..0000000000
---- a/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From ad22edb303a470b6f9eda9fd9d3f588bb2eff8cb Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 15 Oct 2021 08:02:23 +0200
--Subject: [PATCH] configure.ac: fix build with automake 1.16.5
--
--Fix the following build failure with convolution raised since automake
--1.16.5 and
--https://git.savannah.gnu.org/cgit/automake.git/commit/?id=f4a3a70f69e1dbccb6578f39ef47835098a04624:
--
--configure.ac:305: error: AM_INIT_AUTOMAKE expanded multiple times
--/home/giuliobenetti/autobuild/run/instance-1/output-1/host/share/aclocal-1.16/init.m4:29: AM_INIT_AUTOMAKE is expanded from...
--configure.ac:6: the top level
--/home/giuliobenetti/autobuild/run/instance-1/output-1/host/share/aclocal-1.16/init.m4:29: AM_INIT_AUTOMAKE is expanded from...
--configure.ac:305: the top level
--
--Fixes:
-- - http://autobuild.buildroot.org/results/464148bdccb705d8992dc860262bfdeb01b7e2a1
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/mikebrady/shairport-sync/pull/1314]
-----
-- configure.ac | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index f77087c5..aa533a2d 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3,7 +3,7 @@
-- 
-- AC_PREREQ([2.50])
-- AC_INIT([shairport-sync], [3.3.8], [4265913+mikebrady@users.noreply.github.com])
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([subdir-objects])
-- AC_CONFIG_SRCDIR([shairport.c])
-- AC_CONFIG_HEADERS([config.h])
-- AC_PROG_RANLIB
--@@ -302,7 +302,6 @@ AM_CONDITIONAL([USE_PA], [test "x$with_pa" = "xyes"])
-- # Look for Convolution flag
-- AC_ARG_WITH(convolution, [AS_HELP_STRING([--with-convolution],[choose audio DSP convolution support])])
-- if test "x$with_convolution" = "xyes" ; then
---  AM_INIT_AUTOMAKE([subdir-objects])
--   AC_DEFINE([CONFIG_CONVOLUTION], 1, [Include audio DSP convolution support.])
--   AC_CHECK_LIB([sndfile], [sf_open], , AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
-- fi
---- 
--2.33.0
--
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index ebc81dedc1..331866a379 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c92f9a2d86dd1138673abc66e0010c94412ad6a46da8f36c3d538f4fa6b9faca  shairport-sync-3.3.8.tar.gz
-+sha256  17990cb2620551caa07a1c3b371889e55803071eaada04e958c356547a7e1795  shairport-sync-3.3.9.tar.gz
- sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index ba8b44a621..cf49f2b2ed 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.3.8
-+SHAIRPORT_SYNC_VERSION = 3.3.9
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKT24gVGh1LCAzMCBEZWMgMjAyMSAxNjoxMTo1MCArMDEwMCwgVGhvbWFz
+IFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6Cgo+IEhlbGxv
+IFBldGVyLAo+IAo+IE9uIEZyaSwgIDYgTWFyIDIwMjAgMjE6MTA6MjAgKzAxMDAKPiBQZXRlciBT
+ZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+IHdyb3RlOgo+IAo+ID4gQWRkIHBhdGNoIGZyb20g
+dXBzdHJlYW0gbWVyZ2UgcmVxdWVzdCAoWzFdKSB0byBmaXggZml4IGdjYy04L2djYy05IHNucHJp
+bnRmCj4gPiB0cnVuY2F0aW9uIHJlbGF0ZWQgY29tcGlsZSBmYWlsdXJlICgtV2FsbC8tV2Vycm9y
+KSwgcmVwb3J0ZWQgb24gdGhlCj4gPiBtYWlsaW5nIGxpc3QgKFsyXSkuCj4gPiAKPiA+IEZpeGVz
+Ogo+ID4gCj4gPiAgIGxpYm9waW5nLmM6IEluIGZ1bmN0aW9uIOKAmHBpbmdfc2V0X3R0bOKAmToK
+PiA+ICAgbGlib3BpbmcuYzoyMDc6OTogZXJyb3I6IOKAmCVz4oCZIGRpcmVjdGl2ZSBvdXRwdXQg
+bWF5IGJlIHRydW5jYXRlZCB3cml0aW5nIHVwIHRvIDI1NSBieXRlcyBpbnRvIGEgcmVnaW9uIG9m
+IHNpemUgMjQyIFstV2Vycm9yPWZvcm1hdC10cnVuY2F0aW9uPV0KPiA+ICAgICAyMDcgfCAgICAi
+JXM6ICVzIiwgZnVuY3Rpb24sIG1lc3NhZ2UpOwo+ID4gICAgICAgICB8ICAgICAgICAgXn4KPiA+
+IAo+ID4gWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9vY3RvL2xpYm9waW5nL3B1bGwvNTAKPiA+IFsy
+XSBodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvcGlwZXJtYWlsL2J1aWxkcm9vdC8yMDIwLU1hcmNo
+LzI3NTg2MS5odG1sCj4gPiAKPiA+IFJlcG9ydGVkLWJ5OiBNYWlrIEJyZW5rZSA8TWFpay5CcmVu
+a2VAY29udGluZW50YWwtY29ycG9yYXRpb24uY29tPgo+ID4gU2lnbmVkLW9mZi1ieTogUGV0ZXIg
+U2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+ID4gLS0tCj4gPiAgLi4uZC1zbnByaW50Zi10
+cnVuY2F0aW9uLXdhcm5pbmctd0Vycm9yLnBhdGNoIHwgMzEgKysrKysrKysrKysrKysrKysrKwo+
+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAw
+NjQ0IHBhY2thZ2UvbGlib3BpbmcvMDAwMi1NaXRpZ2F0ZWQtc25wcmludGYtdHJ1bmNhdGlvbi13
+YXJuaW5nLXdFcnJvci5wYXRjaCAgCj4gCj4gU28gSSdtIHNvcnJ5LCBidXQgdGhlIHByb2JsZW0g
+c3RpbGwgZGlkbid0IG9jY3VyLiBJJ3ZlIHRyaWVkIHVzaW5nIGdjYwo+IDgueCBhbmQgOS54IHRv
+b2xjaGFpbnMsIGhhdmVuJ3QgYmVlbiBhYmxlIHRvIHNlZSwgYW5kIG5laXRoZXIgd2VyZSB0aGUK
+PiBhdXRvYnVpbGRlcnMuCj4gCj4gU28gZm9yIG5vdywgSSdsbCBtYXJrIHRoaXMgcGF0Y2ggYXMg
+UmVqZWN0ZWQsIGJ1dCBpZiB5b3UgaGF2ZSBhCj4gcmVwcm9kdWNlciwgd2UgY2FuIGNlcnRhaW5s
+eSByZWNvbnNpZGVyIHRoaXMuCgpTdGlsbCByZXByb2R1Y2libGUgd2l0aCB0aGUgZm9sbG93aW5n
+IGRlZmNvbmZpZzoKCkJSMl9hcm09eQpCUjJfYXJtMTE3Nmp6Zl9zPXkKQlIyX09QVElNSVpFXzM9
+eQpCUjJfRk9SVElGWV9TT1VSQ0VfTk9ORT15CkJSMl9UT09MQ0hBSU5fQlVJTERST09UX0dMSUJD
+PXkKQlIyX0dDQ19WRVJTSU9OXzlfWD15CkJSMl9UT09MQ0hBSU5fQlVJTERST09UX0NYWD15CkJS
+Ml9QQUNLQUdFX0xJQk9QSU5HPXkKClJlZ2FyZHMsClBldGVyCgo+IAo+IEJlc3QgcmVnYXJkcywK
+PiAKPiBUaG9tYXMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
