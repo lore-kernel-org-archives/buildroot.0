@@ -1,58 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85442C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C77C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 302E6402B2;
-	Thu, 30 Dec 2021 15:35:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A80860D6A;
+	Thu, 30 Dec 2021 15:36:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jY14Mm1B6AAa; Thu, 30 Dec 2021 15:35:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ejOWm3WWeSX0; Thu, 30 Dec 2021 15:36:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D14E641514;
-	Thu, 30 Dec 2021 15:35:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BA49C1BF403
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:35:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63E6B60D53;
+	Thu, 30 Dec 2021 15:36:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECCEB1BF403
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6FD440530
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:35:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC25A4151B
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:36:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q73oS6JLu-ix for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 15:35:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 075EA40166
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:35:40 +0000 (UTC)
-Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
- by mailout02.t-online.de (Postfix) with SMTP id A49FE13E7;
- Thu, 30 Dec 2021 16:34:31 +0100 (CET)
-Received: from fli4l.lan.fli4l ([79.214.202.128]) by fwd76.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n2xRm-1JWRxx0; Thu, 30 Dec 2021 16:34:30 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43652)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n2xRl-00078U-Oh;
- Thu, 30 Dec 2021 16:34:30 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 16:34:28 +0100
-Message-Id: <20211230153429.2038516-3-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211230153429.2038516-1-bernd.kuhls@t-online.de>
-References: <20211230153429.2038516-1-bernd.kuhls@t-online.de>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FNl0OZILVXdH for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 15:36:03 +0000 (UTC)
+X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 615A141514
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:36:03 +0000 (UTC)
+Received: from [192.168.50.18] ([146.241.138.59])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 2xMPnJLV9LDgd2xMPnppSg; Thu, 30 Dec 2021 16:28:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1640878138; bh=SSEc26X0XDrfbphJKeeZK1oDFOlplZtxYwqcnvLIK+A=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=HeMNvV9cJ+yyHFhvE8FhiGUquyz720GHsx8iZD9nR3aSkP0EmUHMw9kW7cj3ydhvR
+ keLHRm0ngGAQw4xg4rArsFq8AxTZOuVM6oEnRxyZKviFoNcSZz6xbyCT1kg7trFCW2
+ vG2XBOQ9pTBEpwCkip3WhKU56dlaVd75YTZ6sV9ehAOoNp6kNWIiwp+txTv7IdkWPE
+ r022y9IWIYg7Z2jRL0niqGvYEFDqF9ncDB8SJXPwDli3tAkEzmUJ361XWLJxDoP/i6
+ aTNQEncrI15kSLg/oXZk27DhMU72ACFA9pGkyn29MxcOO4NDoV7FhNXtWkQaTNxgBq
+ Viiewq/qzfX2w==
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
+ <20200306071440.30433-5-miquel.raynal@bootlin.com>
+ <20211230151428.1a49b1bf@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <a9bed606-385d-137d-134f-71bdf9d20222@benettiengineering.com>
+Date: Thu, 30 Dec 2021 16:28:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1640878470-0001619A-1276AAC0/0/0 CLEAN NORMAL
-X-TOI-MSGID: cc23f2c2-ed34-4d10-9b6d-91afc7a83b92
-Subject: [Buildroot] [PATCH 3/4] package/intel-mediadriver: bump version to
- 22.1.0
+In-Reply-To: <20211230151428.1a49b1bf@windsurf>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfIa9Tf5ujxkjlQQ6vT9BwZLjRqFjmWts/74h5Zr6+5p8NvlgiRxiSGvEMrMBtkCNgYGJAmOZsJ0pmJ4Aq1R8sdlioTUqgso0YXAKrGF1ZK61bfOEzf3l
+ JmiqGmt5k8lT3LFrhqCsLgX7hQCRGZTsX9LqXWakpykfgQ5Gqml0UEb8H4UZOtwwj5h5/FvSZTAoYOwuCf7bNhafn0prfuRngTVEQegUsKYGQ0DW3ViRzW/G
+ eHKl3i9RjGHVwvZYf7LJHEmg/lIL1tcuvECKhcrIT+M9Q4bQMWiKR3OMCVE9W331TYt1ix109baHfF9WVK+RMIk/IhwhVDI8UPYpEbY8+WlfVo5clS3bgxGB
+ YXxhv/hgj7C03PEpdCpXGPYsC6GMN53faBi87HLJ//Apz/b3Q7+Vv2Q90z/y1BAxM91lHzGFg+31tG12mPh34Ur6CXzOCu80k9YwL+90pkaDUVgFifTNGrfF
+ gP4y/KTTwDQKycWJpYGOIx4B3NzLTp+kfeV0PMY2BMXLDfuqHpa1BiGM/fk=
+Subject: Re: [Buildroot] [PATCH 4/7] package/mali-bifrost-driver: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,555 +75,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch 0002 which was applied upstream:
-https://github.com/intel/media-driver/commit/42ffd7983a32b75cf8403c235d8d0f727191390c
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...-GMM-Multi-Adapter-Interface-Changes.patch | 500 ------------------
- .../intel-mediadriver/intel-mediadriver.hash  |   2 +-
- .../intel-mediadriver/intel-mediadriver.mk    |   2 +-
- 3 files changed, 2 insertions(+), 502 deletions(-)
- delete mode 100644 package/intel-mediadriver/0002-GMM-Multi-Adapter-Interface-Changes.patch
-
-diff --git a/package/intel-mediadriver/0002-GMM-Multi-Adapter-Interface-Changes.patch b/package/intel-mediadriver/0002-GMM-Multi-Adapter-Interface-Changes.patch
-deleted file mode 100644
-index 6544724a20..0000000000
---- a/package/intel-mediadriver/0002-GMM-Multi-Adapter-Interface-Changes.patch
-+++ /dev/null
-@@ -1,500 +0,0 @@
--From 42ffd7983a32b75cf8403c235d8d0f727191390c Mon Sep 17 00:00:00 2001
--From: kankanzh <kankan.zheng@intel.com>
--Date: Mon, 29 Nov 2021 14:16:42 +0800
--Subject: [PATCH] [Media Common] GMM Multi-Adapter Interface Changes
--
--* [Media Common] GMM Multi-Adapter Interface Changes
--
--Gmm change interface to support Multi-Adapter, media UMD need change the corresponding interface.
--
--Downloaded from upstream commit
--https://github.com/intel/media-driver/commit/42ffd7983a32b75cf8403c235d8d0f727191390c
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- .../linux/common/os/media_skuwa_specific.h    |  1 +
-- .../linux/common/os/mos_os_specific.h         |  1 -
-- media_driver/linux/common/ddi/media_libva.cpp | 70 +++++++++++--------
-- .../linux/common/ddi/media_libva_common.h     |  2 -
-- .../linux/common/os/linux_shadow_skuwa.h      |  1 +
-- .../linux/common/os/mos_auxtable_mgr.cpp      | 21 ++----
-- .../linux/common/os/mos_auxtable_mgr.h        |  4 +-
-- .../linux/common/os/mos_interface.cpp         | 31 +++++---
-- .../linux/common/os/mos_os_specific.c         | 14 +---
-- media_driver/media_top_cmake.cmake            |  2 +-
-- .../agnostic/common/os/mos_interface.h        | 16 +++++
-- .../common/os/mos_context_specific_next.cpp   | 59 ++++++++--------
-- 12 files changed, 118 insertions(+), 104 deletions(-)
--
--diff --git a/media_common/linux/common/os/media_skuwa_specific.h b/media_common/linux/common/os/media_skuwa_specific.h
--index 7f8f4fe317..7c046bc44c 100644
----- a/media_common/linux/common/os/media_skuwa_specific.h
--+++ b/media_common/linux/common/os/media_skuwa_specific.h
--@@ -40,5 +40,6 @@ using MEDIA_ENGINE_INFO   = MEDIA_GT_SYSTEM_INFO;
-- using GMM_SKU_FEATURE_TABLE   = SHADOW_MEDIA_FEATURE_TABLE;
-- using GMM_WA_TABLE            = SHADOW_MEDIA_WA_TABLE;
-- using GMM_GT_SYSTEM_INFO      = MEDIA_GT_SYSTEM_INFO;
--+using GMM_ADAPTER_BDF         = MEDIA_ADAPTER_BDF;
-- 
-- #endif // __MEDIA_SKUWA_H__
--diff --git a/media_common/linux/common/os/mos_os_specific.h b/media_common/linux/common/os/mos_os_specific.h
--index 3c33196447..ce881c0912 100644
----- a/media_common/linux/common/os/mos_os_specific.h
--+++ b/media_common/linux/common/os/mos_os_specific.h
--@@ -582,7 +582,6 @@ struct _MOS_OS_CONTEXT
--     void                *pLibdrmHandle;
-- 
--     GMM_CLIENT_CONTEXT  *pGmmClientContext;   //UMD specific ClientContext object in GMM
---    GmmExportEntries    GmmFuncs;
--     AuxTableMgr         *m_auxTableMgr;
--    
--     // GPU Status Buffer
--diff --git a/media_driver/linux/common/ddi/media_libva.cpp b/media_driver/linux/common/ddi/media_libva.cpp
--index 36f5f1889d..6202af5f2d 100755
----- a/media_driver/linux/common/ddi/media_libva.cpp
--+++ b/media_driver/linux/common/ddi/media_libva.cpp
--@@ -1857,6 +1857,9 @@ VAStatus DdiMedia_InitMediaContext (
--         GMM_GT_SYSTEM_INFO gmmGtInfo;
--         memset(&gmmGtInfo, 0, sizeof(gmmGtInfo));
-- 
--+        GMM_ADAPTER_BDF gmmAdapterBDF;
--+        memset(&gmmAdapterBDF, 0, sizeof(gmmAdapterBDF));
--+
--         eStatus = HWInfo_GetGmmInfo(mediaCtx->fd, &gmmSkuTable, &gmmWaTable, &gmmGtInfo);
--         if (MOS_STATUS_SUCCESS != eStatus)
--         {
--@@ -1881,32 +1884,50 @@ VAStatus DdiMedia_InitMediaContext (
--             return VA_STATUS_ERROR_OPERATION_FAILED;
--         }
-- 
---        GMM_STATUS gmmStatus = OpenGmm(&mediaCtx->GmmFuncs);
---        if (gmmStatus != GMM_SUCCESS)
--+        // fill in the mos context struct as input to initialize m_osContext
--+        MOS_CONTEXT mosCtx           = {};
--+        mosCtx.bufmgr                = mediaCtx->pDrmBufMgr;
--+        mosCtx.fd                    = mediaCtx->fd;
--+        mosCtx.iDeviceId             = mediaCtx->iDeviceId;
--+        mosCtx.SkuTable              = mediaCtx->SkuTable;
--+        mosCtx.WaTable               = mediaCtx->WaTable;
--+        mosCtx.gtSystemInfo          = *mediaCtx->pGtSystemInfo;
--+        mosCtx.platform              = mediaCtx->platform;
--+        mosCtx.ppMediaMemDecompState = &mediaCtx->pMediaMemDecompState;
--+        mosCtx.pfnMemoryDecompress   = mediaCtx->pfnMemoryDecompress;
--+        mosCtx.pfnMediaMemoryCopy    = mediaCtx->pfnMediaMemoryCopy;
--+        mosCtx.pfnMediaMemoryCopy2D  = mediaCtx->pfnMediaMemoryCopy2D;
--+        mosCtx.ppMediaCopyState      = &mediaCtx->pMediaCopyState;
--+
--+        eStatus = MosInterface::GetAdapterBDF(&mosCtx, &gmmAdapterBDF);
--+        if (MOS_STATUS_SUCCESS != eStatus)
--         {
---            DDI_ASSERTMESSAGE("gmm init failed.");
--+            DDI_ASSERTMESSAGE("Fatal error - unsuccesfull Gmm Adapter BDF initialization");
--             FreeForMediaContext(mediaCtx);
--             return VA_STATUS_ERROR_OPERATION_FAILED;
--         }
-- 
---        // init GMM context
---        gmmStatus = mediaCtx->GmmFuncs.pfnCreateSingletonContext(mediaCtx->platform,
---            &gmmSkuTable,
---            &gmmWaTable,
---            &gmmGtInfo);
---
---        if (gmmStatus != GMM_SUCCESS)
--+        // Initialize Gmm context
--+        GMM_INIT_IN_ARGS  gmmInitAgrs = {};
--+        GMM_INIT_OUT_ARGS gmmOutArgs  = {};
--+        gmmInitAgrs.Platform          = mediaCtx->platform;
--+        gmmInitAgrs.pSkuTable         = &gmmSkuTable;
--+        gmmInitAgrs.pWaTable          = &gmmWaTable;
--+        gmmInitAgrs.pGtSysInfo        = &gmmGtInfo;
--+        gmmInitAgrs.FileDescriptor    = gmmAdapterBDF.Data;
--+        gmmInitAgrs.ClientType        = (GMM_CLIENT)GMM_LIBVA_LINUX;
--+
--+        GMM_STATUS status = InitializeGmm(&gmmInitAgrs, &gmmOutArgs);
--+        if (status != GMM_SUCCESS)
--         {
---            DDI_ASSERTMESSAGE("gmm init failed.");
--+            DDI_ASSERTMESSAGE("InitializeGmm fail.");
--             FreeForMediaContext(mediaCtx);
--             return VA_STATUS_ERROR_OPERATION_FAILED;
--         }
---
---        // Create GMM Client Context
---        mediaCtx->pGmmClientContext = mediaCtx->GmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+        mediaCtx->pGmmClientContext = gmmOutArgs.pGmmClientContext;
-- 
--         // Create GMM page table manager
---        mediaCtx->m_auxTableMgr = AuxTableMgr::CreateAuxTableMgr(mediaCtx->pDrmBufMgr, &mediaCtx->SkuTable);
--+        mediaCtx->m_auxTableMgr = AuxTableMgr::CreateAuxTableMgr(mediaCtx->pDrmBufMgr, &mediaCtx->SkuTable, mediaCtx->pGmmClientContext);
-- 
--         MOS_USER_FEATURE_VALUE_DATA UserFeatureData;
--         MOS_ZeroMemory(&UserFeatureData, sizeof(UserFeatureData));
--@@ -1929,19 +1950,6 @@ VAStatus DdiMedia_InitMediaContext (
--             return VA_STATUS_ERROR_OPERATION_FAILED;
--         }
-- 
---        // fill in the mos context struct as input to initialize m_osContext
---        mosCtx.bufmgr                = mediaCtx->pDrmBufMgr;
---        mosCtx.fd                    = mediaCtx->fd;
---        mosCtx.iDeviceId             = mediaCtx->iDeviceId;
---        mosCtx.SkuTable              = mediaCtx->SkuTable;
---        mosCtx.WaTable               = mediaCtx->WaTable;
---        mosCtx.gtSystemInfo          = *mediaCtx->pGtSystemInfo;
---        mosCtx.platform              = mediaCtx->platform;
---        mosCtx.ppMediaMemDecompState = &mediaCtx->pMediaMemDecompState;
---        mosCtx.pfnMemoryDecompress   = mediaCtx->pfnMemoryDecompress;
---        mosCtx.pfnMediaMemoryCopy    = mediaCtx->pfnMediaMemoryCopy;
---        mosCtx.pfnMediaMemoryCopy2D  = mediaCtx->pfnMediaMemoryCopy2D;
---        mosCtx.ppMediaCopyState      = &mediaCtx->pMediaCopyState;
--         mosCtx.m_auxTableMgr         = mediaCtx->m_auxTableMgr;
--         mosCtx.pGmmClientContext     = mediaCtx->pGmmClientContext;
-- 
--@@ -2262,8 +2270,10 @@ VAStatus DdiMedia_Terminate (
--         // Destroy memory allocated to store Media System Info
--         MOS_FreeMemory(mediaCtx->pGtSystemInfo);
--         // Free GMM memory.
---        mediaCtx->GmmFuncs.pfnDeleteClientContext(mediaCtx->pGmmClientContext);
---        mediaCtx->GmmFuncs.pfnDestroySingletonContext();
--+        GMM_INIT_OUT_ARGS gmmOutArgs = {};
--+        gmmOutArgs.pGmmClientContext = mediaCtx->pGmmClientContext;
--+        GmmAdapterDestroy(&gmmOutArgs);
--+        mediaCtx->pGmmClientContext = nullptr;
--         MosUtilities::MosUtilitiesClose(nullptr);
--     }
-- 
--diff --git a/media_driver/linux/common/ddi/media_libva_common.h b/media_driver/linux/common/ddi/media_libva_common.h
--index e967d49f5a..74ce820346 100644
----- a/media_driver/linux/common/ddi/media_libva_common.h
--+++ b/media_driver/linux/common/ddi/media_libva_common.h
--@@ -536,8 +536,6 @@ struct DDI_MEDIA_CONTEXT
-- 
--     GMM_CLIENT_CONTEXT  *pGmmClientContext;
-- 
---    GmmExportEntries   GmmFuncs;
---
--     // Aux Table Manager
--     AuxTableMgr         *m_auxTableMgr;
-- 
--diff --git a/media_driver/linux/common/os/linux_shadow_skuwa.h b/media_driver/linux/common/os/linux_shadow_skuwa.h
--index 529fa05a1b..30321c9563 100644
----- a/media_driver/linux/common/os/linux_shadow_skuwa.h
--+++ b/media_driver/linux/common/os/linux_shadow_skuwa.h
--@@ -33,5 +33,6 @@
-- using SHADOW_MEDIA_FEATURE_TABLE = SKU_FEATURE_TABLE;
-- using SHADOW_MEDIA_WA_TABLE      = WA_TABLE;
-- using MEDIA_GT_SYSTEM_INFO       = GT_SYSTEM_INFO;
--+using MEDIA_ADAPTER_BDF          = ADAPTER_BDF;
-- 
-- #endif //__SKU_WA_H__
--diff --git a/media_driver/linux/common/os/mos_auxtable_mgr.cpp b/media_driver/linux/common/os/mos_auxtable_mgr.cpp
--index fdab2b4c07..292dde020a 100644
----- a/media_driver/linux/common/os/mos_auxtable_mgr.cpp
--+++ b/media_driver/linux/common/os/mos_auxtable_mgr.cpp
--@@ -118,19 +118,13 @@ static void WaitFromCpuCb(void *bo)
--     }
-- }
-- 
---AuxTableMgr::AuxTableMgr(MOS_BUFMGR *bufMgr)
--+AuxTableMgr::AuxTableMgr(MOS_BUFMGR *bufMgr, GMM_CLIENT_CONTEXT *gmmClientContext)
-- {
--     if (bufMgr)
--     {
--         GMM_DEVICE_CALLBACKS_INT deviceCb = {0};
-- 
---        GmmExportEntries GmmFuncs;
---        GMM_STATUS gmmStatus = OpenGmm(&GmmFuncs);
---        if(gmmStatus != GMM_SUCCESS)
---        {
---            MOS_OS_ASSERTMESSAGE("gmm init failed.");
---        }
---        m_gmmClientContext = GmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+        m_gmmClientContext = gmmClientContext;
--         if (m_gmmClientContext == nullptr)
--         {
--             MOS_OS_ASSERTMESSAGE(" nullptr returned by GmmCreateClientContext");
--@@ -160,22 +154,15 @@ AuxTableMgr::~AuxTableMgr()
--     }
--     if (m_gmmClientContext != nullptr)
--     {
---        GmmExportEntries GmmFuncs;
---        GMM_STATUS gmmStatus = OpenGmm(&GmmFuncs);
---        if(gmmStatus != GMM_SUCCESS)
---        {
---            MOS_OS_ASSERTMESSAGE("gmm init failed.");
---        }
---        GmmFuncs.pfnDeleteClientContext((GMM_CLIENT_CONTEXT *)m_gmmClientContext);
--         m_gmmClientContext = nullptr;
--     }
-- }
-- 
---AuxTableMgr * AuxTableMgr::CreateAuxTableMgr(MOS_BUFMGR *bufMgr, MEDIA_FEATURE_TABLE *sku)
--+AuxTableMgr * AuxTableMgr::CreateAuxTableMgr(MOS_BUFMGR *bufMgr, MEDIA_FEATURE_TABLE *sku, GMM_CLIENT_CONTEXT *gmmClientContext)
-- {
--     if (MEDIA_IS_SKU(sku, FtrE2ECompression) && !MEDIA_IS_SKU(sku, FtrFlatPhysCCS))
--     {
---        AuxTableMgr *auxTableMgr = MOS_New(AuxTableMgr, bufMgr);
--+        AuxTableMgr *auxTableMgr = MOS_New(AuxTableMgr, bufMgr, gmmClientContext);
--         if (auxTableMgr == nullptr)
--         {
--             MOS_OS_ASSERTMESSAGE(" nullptr returned by creating AuxTableMgr");
--diff --git a/media_driver/linux/common/os/mos_auxtable_mgr.h b/media_driver/linux/common/os/mos_auxtable_mgr.h
--index 8fbf59da91..421d2293d6 100644
----- a/media_driver/linux/common/os/mos_auxtable_mgr.h
--+++ b/media_driver/linux/common/os/mos_auxtable_mgr.h
--@@ -43,7 +43,7 @@ class AuxTableMgr
--     //!
--     //! \brief  Constructor
--     //!
---    AuxTableMgr(MOS_BUFMGR *bufMgr);
--+    AuxTableMgr(MOS_BUFMGR *bufMgr, GMM_CLIENT_CONTEXT *gmmClientContext);
-- 
--     //!
--     //! \brief  Destructor
--@@ -62,7 +62,7 @@ class AuxTableMgr
--     //! \return   Object pointer to AuxTableMgr
--     //!           Return object pointer if success or return nullptr if failed
--     //!
---    static AuxTableMgr * CreateAuxTableMgr(MOS_BUFMGR *bufMgr, MEDIA_FEATURE_TABLE *sku);
--+    static AuxTableMgr * CreateAuxTableMgr(MOS_BUFMGR *bufMgr, MEDIA_FEATURE_TABLE *sku, GMM_CLIENT_CONTEXT *gmmClientContext);
-- 
--     //!
--     //! \brief    Map resource to aux table
--diff --git a/media_driver/linux/common/os/mos_interface.cpp b/media_driver/linux/common/os/mos_interface.cpp
--index 3b841bd586..caf4916ba9 100644
----- a/media_driver/linux/common/os/mos_interface.cpp
--+++ b/media_driver/linux/common/os/mos_interface.cpp
--@@ -367,17 +367,9 @@ MOS_STATUS MosInterface::InitStreamParameters(
--     context->m_osDeviceContext  = streamState->osDeviceContext;
--     context->bSimIsActive       = streamState->simIsActive;
-- 
---    if (GMM_SUCCESS != OpenGmm(&context->GmmFuncs))
---    {
---        MOS_FreeMemAndSetNull(context);
---
---        MOS_OS_ASSERTMESSAGE("Unable to open gmm");
---        return MOS_STATUS_INVALID_PARAMETER;
---    }
---
--     streamState->perStreamParameters = (OS_PER_STREAM_PARAMETERS)context;
-- 
---    context->pGmmClientContext  = context->GmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+    context->pGmmClientContext  = streamState->osDeviceContext->GetGmmClientContext();;
-- 
--     context->bufmgr             = bufMgr;
--     context->m_gpuContextMgr    = osDeviceContext->GetGpuContextMgr();
--@@ -608,6 +600,27 @@ MOS_STATUS MosInterface::CreateGpuContext(
--     return MOS_STATUS_SUCCESS;
-- }
-- 
--+MOS_STATUS MosInterface::GetAdapterBDF(PMOS_CONTEXT mosCtx, ADAPTER_BDF *adapterBDF)
--+{
--+    MOS_OS_FUNCTION_ENTER;
--+
--+    drmDevicePtr device;
--+    
--+    MOS_OS_CHK_NULL_RETURN(mosCtx);
--+    if (drmGetDevice(mosCtx->fd, &device) == 0)
--+    {
--+        adapterBDF->Bus      = device->businfo.pci->bus;
--+        adapterBDF->Device   = device->businfo.pci->dev;
--+        adapterBDF->Function = device->businfo.pci->func;
--+    }
--+    else
--+    {
--+        adapterBDF->Data = 0;
--+    }
--+
--+    return MOS_STATUS_SUCCESS;
--+}
--+
-- MOS_STATUS MosInterface::DestroyGpuContext(
--     MOS_STREAM_HANDLE  streamState,
--     GPU_CONTEXT_HANDLE gpuContext)
--diff --git a/media_driver/linux/common/os/mos_os_specific.c b/media_driver/linux/common/os/mos_os_specific.c
--index 7b7f57747b..e433c6fe61 100644
----- a/media_driver/linux/common/os/mos_os_specific.c
--+++ b/media_driver/linux/common/os/mos_os_specific.c
--@@ -1190,8 +1190,6 @@ void Linux_Destroy(
--         mos_gem_context_destroy(pOsContext->intel_context);
--     }
-- 
---    pOsContext->GmmFuncs.pfnDeleteClientContext(pOsContext->pGmmClientContext);
---
--     MOS_FreeMemAndSetNull(pOsContext);
-- }
-- 
--@@ -1931,7 +1929,6 @@ MOS_STATUS Mos_DestroyInterface(PMOS_INTERFACE pOsInterface)
--             mos_gem_context_destroy(perStreamParameters->intel_context);
--             perStreamParameters->intel_context = nullptr;
--         }
---        perStreamParameters->GmmFuncs.pfnDeleteClientContext(perStreamParameters->pGmmClientContext);
--         MOS_FreeMemAndSetNull(perStreamParameters);
--         streamState->perStreamParameters = nullptr;
--     }
--@@ -7476,13 +7473,6 @@ MOS_STATUS Mos_Specific_InitInterface(
--         // Create Linux OS Context
--         pOsContext = (PMOS_OS_CONTEXT)MOS_AllocAndZeroMemory(sizeof(MOS_OS_CONTEXT));
--         MOS_OS_CHK_NULL_RETURN(pOsContext);
---
---        if (GMM_SUCCESS != OpenGmm(&pOsContext->GmmFuncs))
---        {
---            MOS_OS_ASSERTMESSAGE("Unable to open gmm");
---            eStatus = MOS_STATUS_INVALID_PARAMETER;
---            goto finish;
---        }
--     }
-- 
--     if (pOsInterface->modulizedMosEnabled && !Mos_Solo_IsEnabled(nullptr))
--@@ -7513,12 +7503,12 @@ MOS_STATUS Mos_Specific_InitInterface(
--         {
--             OsContextSpecific *pOsContextSpecific = static_cast<OsContextSpecific *>(pOsInterface->osContextPtr);
--             pOsContext->intel_context             = pOsContextSpecific->GetDrmContext();
---            pOsContext->pGmmClientContext         = pOsContext->GmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+            pOsContext->pGmmClientContext         = pOsDriverContext->pGmmClientContext;
--         }
--     }
--     else
--     {
---        pOsContext->pGmmClientContext = pOsContext->GmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+        pOsContext->pGmmClientContext = pOsDriverContext->pGmmClientContext;
--     }
-- 
--     MOS_ZeroMemory(&UserFeatureData, sizeof(UserFeatureData));
--diff --git a/media_driver/media_top_cmake.cmake b/media_driver/media_top_cmake.cmake
--index d0d8cb5244..426728e16d 100755
----- a/media_driver/media_top_cmake.cmake
--+++ b/media_driver/media_top_cmake.cmake
--@@ -142,7 +142,7 @@ if (NOT DEFINED INCLUDED_LIBS OR "${INCLUDED_LIBS}" STREQUAL "")
--     endif()
-- 
--     target_compile_options( ${LIB_NAME} PUBLIC ${LIBGMM_CFLAGS_OTHER})
---    target_link_libraries ( ${LIB_NAME} ${LIBGMM_LIBRARIES})
--+    target_link_libraries ( ${LIB_NAME} ${LIBGMM_LIBRARIES} drm)
-- 
--     include(${MEDIA_EXT_CMAKE}/ext/media_feature_include_ext.cmake OPTIONAL)
-- 
--diff --git a/media_softlet/agnostic/common/os/mos_interface.h b/media_softlet/agnostic/common/os/mos_interface.h
--index 42e4acc6f6..6ae60d8e49 100644
----- a/media_softlet/agnostic/common/os/mos_interface.h
--+++ b/media_softlet/agnostic/common/os/mos_interface.h
--@@ -1815,6 +1815,22 @@ class MosInterface
--         COMMAND_BUFFER_HANDLE cmdBuf,
--         MOS_SUBMISSION_TYPE   type);
-- 
--+    //!
--+    //! \brief    Get Adapter BDF
--+    //! \details  [System info Interface] Get Adapter BDF
--+    //! \details  Caller: DDI & HAL
--+    //! \details  This func is called to differentiate the behavior according to Adapter BDF.
--+    //!
--+    //! \param    [in] mosCtx
--+    //!           Pointer of Mos context
--+    //! \param    [out] adapterBDF
--+    //!           Adapter BDF info
--+    //!
--+    //! \return   MOS_STATUS
--+    //!           MOS_STATUS_SUCCESS if success, else fail reason
--+    //!
--+    static MOS_STATUS GetAdapterBDF(PMOS_CONTEXT mosCtx, ADAPTER_BDF *adapterBDF);
--+
-- #if _DEBUG || _RELEASE_INTERNAL
--     //!
--     //! \brief    Get engine count
--diff --git a/media_softlet/linux/common/os/mos_context_specific_next.cpp b/media_softlet/linux/common/os/mos_context_specific_next.cpp
--index bd331fba31..6842cc6872 100644
----- a/media_softlet/linux/common/os/mos_context_specific_next.cpp
--+++ b/media_softlet/linux/common/os/mos_context_specific_next.cpp
--@@ -30,6 +30,7 @@
-- #include <unistd.h>
-- #include <dlfcn.h>
-- #include "hwinfo_linux.h"
--+#include "mos_interface.h"
-- #include <stdlib.h>
-- 
-- #include <sys/ipc.h>
--@@ -144,9 +145,10 @@ MOS_STATUS OsContextSpecificNext::Init(DDI_DEVICE_CONTEXT ddiDriverContext)
--             m_platformInfo.eRenderCoreFamily,
--             (m_platformInfo.usRevId << 16) | m_platformInfo.usDeviceID);
-- 
---        GMM_SKU_FEATURE_TABLE   gmmSkuTable = {};
---        GMM_WA_TABLE            gmmWaTable  = {};
---        GMM_GT_SYSTEM_INFO      gmmGtInfo   = {};
--+        GMM_SKU_FEATURE_TABLE   gmmSkuTable   = {};
--+        GMM_WA_TABLE            gmmWaTable    = {};
--+        GMM_GT_SYSTEM_INFO      gmmGtInfo     = {};
--+        GMM_ADAPTER_BDF         gmmAdapterBDF = {};
--         eStatus = HWInfo_GetGmmInfo(m_fd, &gmmSkuTable, &gmmWaTable, &gmmGtInfo);
--         if (MOS_STATUS_SUCCESS != eStatus)
--         {
--@@ -154,28 +156,32 @@ MOS_STATUS OsContextSpecificNext::Init(DDI_DEVICE_CONTEXT ddiDriverContext)
--             return eStatus;
--         }
-- 
---        GmmExportEntries gmmFuncs  = {};
---        GMM_STATUS       gmmStatus = OpenGmm(&gmmFuncs);
---        if (gmmStatus != GMM_SUCCESS)
--+        eStatus = MosInterface::GetAdapterBDF(osDriverContext, &gmmAdapterBDF);
--+        if (MOS_STATUS_SUCCESS != eStatus)
--         {
---            MOS_OS_ASSERTMESSAGE("Fatal error - gmm init failed.");
---            return MOS_STATUS_INVALID_PARAMETER;
--+            MOS_OS_ASSERTMESSAGE("Fatal error - unsuccesfull Gmm Adapter BDF initialization");
--+            return eStatus;
--         }
-- 
---        // init GMM context
---        gmmStatus = gmmFuncs.pfnCreateSingletonContext(m_platformInfo,
---            &gmmSkuTable,
---            &gmmWaTable,
---            &gmmGtInfo);
---
---        if (gmmStatus != GMM_SUCCESS)
--+        // Initialize Gmm context
--+        GMM_INIT_IN_ARGS  gmmInitAgrs = {};
--+        GMM_INIT_OUT_ARGS gmmOutArgs  = {};
--+        gmmInitAgrs.Platform          = m_platformInfo;
--+        gmmInitAgrs.pSkuTable         = &gmmSkuTable;
--+        gmmInitAgrs.pWaTable          = &gmmWaTable;
--+        gmmInitAgrs.pGtSysInfo        = &gmmGtInfo;
--+        gmmInitAgrs.FileDescriptor    = gmmAdapterBDF.Data;
--+        gmmInitAgrs.ClientType        = (GMM_CLIENT)GMM_LIBVA_LINUX;
--+
--+        GMM_STATUS status = InitializeGmm(&gmmInitAgrs, &gmmOutArgs);
--+        if (status != GMM_SUCCESS)
--         {
---            MOS_OS_ASSERTMESSAGE("Fatal error - gmm CreateSingletonContext failed.");
--+            MOS_OS_ASSERTMESSAGE("Fatal error - InitializeGmm fail.");
--             return MOS_STATUS_INVALID_PARAMETER;
--         }
---        m_gmmClientContext = gmmFuncs.pfnCreateClientContext((GMM_CLIENT)GMM_LIBVA_LINUX);
--+        m_gmmClientContext = gmmOutArgs.pGmmClientContext;
-- 
---        m_auxTableMgr = AuxTableMgr::CreateAuxTableMgr(m_bufmgr, &m_skuTable);
--+        m_auxTableMgr = AuxTableMgr::CreateAuxTableMgr(m_bufmgr, &m_skuTable, m_gmmClientContext);
-- 
--         MOS_ZeroMemory(&UserFeatureData, sizeof(UserFeatureData));
-- #if (_DEBUG || _RELEASE_INTERNAL)
--@@ -266,18 +272,11 @@ void OsContextSpecificNext::Destroy()
-- 
--         mos_bufmgr_destroy(m_bufmgr);
-- 
---        GmmExportEntries GmmFuncs;
---        GMM_STATUS       gmmStatus = OpenGmm(&GmmFuncs);
---        if (gmmStatus == GMM_SUCCESS)
---        {
---            GmmFuncs.pfnDeleteClientContext((GMM_CLIENT_CONTEXT *)m_gmmClientContext);
---            m_gmmClientContext = nullptr;
---            GmmFuncs.pfnDestroySingletonContext();
---        }
---        else
---        {
---            MOS_OS_ASSERTMESSAGE("gmm init failed.");
---        }
--+        // Delete Gmm context
--+        GMM_INIT_OUT_ARGS gmmOutArgs = {};
--+        gmmOutArgs.pGmmClientContext = m_gmmClientContext;
--+        GmmAdapterDestroy(&gmmOutArgs);
--+        m_gmmClientContext = nullptr;
-- 
--         SetOsContextValid(false);
--     }
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index c2a8e2a240..38121da036 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9b5ef7716c5d8199229512020c18dce5cabee25fbf3f1912179502bedb655919  intel-media-21.4.3.tar.gz
-+sha256  6c1cd5c4c1b7bd1c7785ed4d553b76b17dd7e673619a39e0c3070246aa671024  intel-media-22.1.0.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 7e949b5e7a..6cadc3612c 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 21.4.3
-+INTEL_MEDIADRIVER_VERSION = 22.1.0
- INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLCBNaXF1w6hsLAoKT24gMzAvMTIvMjEgMTU6MTQsIFRob21hcyBQZXRhenpvbmkg
+d3JvdGU6Cj4gSGVsbG8gTWlxdcOobCwKPiAKPiBPbiBGcmksICA2IE1hciAyMDIwIDA4OjE0OjM3
+ICswMTAwCj4gTWlxdWVsIFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4gd3JvdGU6
+Cj4gCj4+ICtNQUxJX0JJRlJPU1RfRFJJVkVSX1ZFUlNJT04gPSB2MC4xCj4+ICtNQUxJX0JJRlJP
+U1RfRFJJVkVSX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGJvb3RsaW4sbWFsaS1iaWZyb3N0LCQoTUFM
+SV9CSUZST1NUX0RSSVZFUl9WRVJTSU9OKSkKPj4gK01BTElfQklGUk9TVF9EUklWRVJfREVQRU5E
+RU5DSUVTID0gbGludXgKPj4gK01BTElfQklGUk9TVF9EUklWRVJfTElDRU5TRSA9IEdQTC0yLjAK
+Pj4gK01BTElfQklGUk9TVF9EUklWRVJfTElDRU5TRV9GSUxFID0gTElDRU5TRQo+PiArTUFMSV9C
+SUZST1NUX0RSSVZFUl9NT0RVTEVfU1VCRElSUyA9IHI4cDAvZHJpdmVycy9ncHUvYXJtL21pZGdh
+cmQKPiAKPiBUaGVyZSBpcyBzb21ldGhpbmcgcmVhbGx5IG9kZCBoZXJlOiB3aHkgaXMgdGhpcyBw
+YWNrYWdlIG5hbWVkCj4gbWFsaS1iaXRmcm9zdC1kcml2ZXIgaWYgdGhlIHN1YmRpcmVjdG9yeSB5
+b3UncmUgYnVpbGRpbmcgaXMKPiByOHAwL2RyaXZlcnMvZ3B1L2FybS9taWRnYXJkID8gYml0ZnJv
+c3QgYW5kIG1pZGdhcmQgYXJlIHR3byBkaWZmZXJlbnQKPiBnZW5lcmF0aW9ucyBvZiB0aGUgQVJN
+IE1hbGkgR1BVLCBhdCBsZWFzdCBhY2NvcmRpbmcgdG8KPiBodHRwczovL2VuLndpa2lwZWRpYS5v
+cmcvd2lraS9NYWxpXyhHUFUpLgo+IAo+IENvdWxkIHlvdSBjbGFyaWZ5ICh5b3Ugb3Igc29tZWJv
+ZHkgZWxzZSwgZm9yIHRoYXQgbWF0dGVyKSA/CgpJJ20gaW50ZXJlc3RlZCB0b28gdG8gdGhpcyBe
+Xl4KCkkgaGFkIG5vIGNoYW5jZSB0byB0ZXN0IGl0IG9uIHJlYWwgaGFyZHdhcmUgZm9yIGxhY2sg
+b2YgdGltZSA6LS8gc28gSSAKZG9uJ3Qga25vdyBpZiBpdCB3b3JrcywgYW5kIGl0IHNob3VsZCBu
+b3QgYmUgZXhwZWN0ZWQgdG8gd29yay4gSSd2ZSAKY29tcGFyZWQgcjggdmVyc2lvbiBvZiBtaWRn
+YXJkIGFnYWluc3QgYmlmcm9zdCBhbmQgdGhleSBhcmUgcHJldHR5IApkaWZmZXJlbnQuCgpJJ20g
+d29ya2luZyBvbiB0aGlzIHBhdGNoc2V0IGluIHNwYXJlIHRpbWVbMV0gd2l0aCB0aGUgZ29hbCB0
+byBjcmVhdGUgYSAKc2luZ2xlIG1hbGktZHJpdmVyIHBhY2thZ2UgdG8gZGVhbCB3aXRoIFV0Z2Fy
+ZCwgTWlkZ2FyZCBhbmQgQmlmcm9zdC4KSSd2ZSBhbHJlYWR5IHJlcXVlc3RlZCB0byBjaGFuZ2Ug
+cmVwb3NpdG9yeSBuYW1lIGZyb20gCm1hbGktYmlmcm9zdC1kcml2ZXIgdG8gbWFsaS1kcml2ZXIg
+YW5kIGl0J3MgYmVlbiBkb25lIHBsdXMgbWVyZ2luZyAKcGF0Y2hlcyB0byBhbGxvdyBidWlsZGlu
+ZyB3aXRoIHVwIHRvIExpbnV4IDUuMTVbMl0uCgpUaG9tYXMsIGRvIHlvdSB3YW50IG1lIHRvIHNl
+bmQgdGhlIHYyIHBhdGNoc2V0IGluWzFdIHRvIEJ1aWxkcm9vdCAKbWFpbGluZyBsaXN0PyBJdCdz
+IG5vdCBjb21wbGV0ZSBhdCBhbGwsIGJ1dCBpdCdzIHNvbWUgc3RlcCBmb3J3YXJkLgoKWzFdOiBo
+dHRwczovL2dpdGh1Yi5jb20vZ2l1bGlvYmVuZXR0aS9idWlsZHJvb3QvY29tbWl0cy9kZXYvbWFs
+aS1yZWJhc2UKWzJdOiBodHRwczovL2dpdGh1Yi5jb20vYm9vdGxpbi9tYWxpLWRyaXZlcgoKQmVz
+dCByZWdhcmRzCi0tIApHaXVsaW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
