@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42786C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 21:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81858C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 21:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF94F4099E;
-	Thu, 30 Dec 2021 21:51:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EFABB40385;
+	Thu, 30 Dec 2021 21:51:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vT5AC4G02KfE; Thu, 30 Dec 2021 21:51:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9mB73FPVcn0f; Thu, 30 Dec 2021 21:51:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FFB840988;
-	Thu, 30 Dec 2021 21:51:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E49FD1BF3C4
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:51:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F420C40373;
+	Thu, 30 Dec 2021 21:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DD671BF3C4
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D30D86080A
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:51:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A19440374
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:51:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4MeJTvxancBt for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 21:51:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TlVOpLxWEwzL for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 21:51:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A831060590
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 21:51:20 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id AF07120005;
- Thu, 30 Dec 2021 21:51:17 +0000 (UTC)
-Date: Thu, 30 Dec 2021 22:51:16 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20211230225116.4c94c814@windsurf>
-In-Reply-To: <20211230204103.282138-1-aduskett@gmail.com>
-References: <20211230204103.282138-1-aduskett@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 23D91401F1
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 21:51:52 +0000 (UTC)
+Received: from fwd81.dcpf.telekom.de (fwd81.aul.t-online.de [10.223.144.107])
+ by mailout07.t-online.de (Postfix) with SMTP id 78D766566;
+ Thu, 30 Dec 2021 22:51:50 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.202.128]) by fwd81.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n33Kw-1TjjbF0; Thu, 30 Dec 2021 22:51:50 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43670)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n33Kv-0005DK-U2;
+ Thu, 30 Dec 2021 22:51:50 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 22:51:48 +0100
+Message-Id: <20211230215149.12357-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211230215149.12357-1-bernd.kuhls@t-online.de>
+References: <20211230215149.12357-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/python-setuptools: bump to
- version 59.8.0 and split python2 version
+X-TOI-EXPURGATEID: 150726::1640901110-0000BD0E-088CAFA0/0/0 CLEAN NORMAL
+X-TOI-MSGID: 8e913380-428b-490d-9939-cf97d8117e47
+Subject: [Buildroot] [PATCH v2 2/3] package/libexecinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,76 +63,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+Provides execinfo.h for non-glibc toolchains.
 
-On Thu, 30 Dec 2021 12:41:01 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-> -# Please keep in sync with
-> -# package/python3-setuptools/python3-setuptools.mk
+ package/Config.in                    |  1 +
+ package/libexecinfo/Config.in        |  7 +++++++
+ package/libexecinfo/libexecinfo.hash |  3 +++
+ package/libexecinfo/libexecinfo.mk   | 30 ++++++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
+ create mode 100644 package/libexecinfo/Config.in
+ create mode 100644 package/libexecinfo/libexecinfo.hash
+ create mode 100644 package/libexecinfo/libexecinfo.mk
 
-I kept this comment, inside the ifeq ($(BR2_PACKAGE_PYTHON3),y) condition.
-
-> +# For the target variant, we adapt the version depending on whether
-> +# Python 3.x or 2.x is selected for the target.
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +PYTHON_SETUPTOOLS_VERSION = 59.8.0
-> +PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
-> +PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
-> +else # Python
->  PYTHON_SETUPTOOLS_VERSION = 44.0.0
->  PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
->  PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-> +endif
-> +
-> +# The host variant is only for Python 2.x, so we need to use 44.0.0.
-> +HOST_PYTHON_SETUPTOOLS_VERSION = 44.0.0
-> +HOST_PYTHON_SETUPTOOLS_SOURCE = setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION).zip
-> +HOST_PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-> +HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
-> +
->  PYTHON_SETUPTOOLS_LICENSE = MIT
->  PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
->  PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
->  PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
->  PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-> -HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
-
-This was still needed.
-
-
->  # Please keep in sync with
->  # package/python-setuptools/python-setuptools.mk
-> -PYTHON3_SETUPTOOLS_VERSION = 44.0.0
-> -PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
-> -PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-> +PYTHON3_SETUPTOOLS_VERSION = 59.8.0
-> +PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
-> +PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
->  PYTHON3_SETUPTOOLS_LICENSE = MIT
->  PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
->  PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
->  PYTHON3_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
->  PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
-> -HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
->  HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
-
-The re-ordering of options here caused some useless noise in the patch,
-so I put them back in the original order.
-
-With that, all my test cases passed, so I pushed to master, thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 8c336ba85a..fb56c9ce75 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1966,6 +1966,7 @@ menu "Other"
+ 	source "package/libev/Config.in"
+ 	source "package/libevdev/Config.in"
+ 	source "package/libevent/Config.in"
++	source "package/libexecinfo/Config.in"
+ 	source "package/libffi/Config.in"
+ 	source "package/libgee/Config.in"
+ 	source "package/libgeos/Config.in"
+diff --git a/package/libexecinfo/Config.in b/package/libexecinfo/Config.in
+new file mode 100644
+index 0000000000..473a4f7181
+--- /dev/null
++++ b/package/libexecinfo/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBEXECINFO
++	bool "libexecinfo"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  Library for inspecting program's backtrace
++
++	  https://github.com/mikroskeem/libexecinfo
+diff --git a/package/libexecinfo/libexecinfo.hash b/package/libexecinfo/libexecinfo.hash
+new file mode 100644
+index 0000000000..4719b7699e
+--- /dev/null
++++ b/package/libexecinfo/libexecinfo.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  0462304192fab38c39a376594db1c8bdab4ebda2736bf54f01715917f430611e  libexecinfo-1.1-3.tar.gz
++sha256  46fbc8e6849a164c4ba8fd5875748bde302bf3cd713622af0e51b4e10344f516  execinfo.h
+diff --git a/package/libexecinfo/libexecinfo.mk b/package/libexecinfo/libexecinfo.mk
+new file mode 100644
+index 0000000000..85f4fd8c10
+--- /dev/null
++++ b/package/libexecinfo/libexecinfo.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# libexecinfo
++#
++################################################################################
++
++LIBEXECINFO_VERSION = 1.1-3
++LIBEXECINFO_SITE = $(call github,mikroskeem,libexecinfo,$(LIBEXECINFO_VERSION))
++LIBEXECINFO_LICENSE = BSD-2-Clause
++LIBEXECINFO_LICENSE_FILES = execinfo.h
++LIBEXECINFO_INSTALL_STAGING = YES
++
++define LIBEXECINFO_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		EXECINFO_CFLAGS="$(TARGET_CFLAGS) -c"
++endef
++
++define LIBEXECINFO_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		EXECINFO_CFLAGS="$(TARGET_CFLAGS) -c" \
++		DESTDIR="$(STAGING_DIR)" PREFIX=/usr install
++endef
++
++define LIBEXECINFO_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		EXECINFO_CFLAGS="$(TARGET_CFLAGS) -c" \
++		DESTDIR="$(TARGET_DIR)" PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
