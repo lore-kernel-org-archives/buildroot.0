@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC987C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:14:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E6FC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F46660BD9;
-	Thu, 30 Dec 2021 15:14:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0zrkCkW6QVHb; Thu, 30 Dec 2021 15:14:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4FEF60773;
-	Thu, 30 Dec 2021 15:14:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 919811BF403
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:14:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81205410E1
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:14:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69E5C4148D;
+	Thu, 30 Dec 2021 15:14:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zuYwnxR5g7vD for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C65Dxv_rLcix; Thu, 30 Dec 2021 15:14:53 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF55E410E1;
+	Thu, 30 Dec 2021 15:14:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C75141C1135
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:14:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4805401C5
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:14:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rzAQY5sbRqZp for <buildroot@lists.busybox.net>;
  Thu, 30 Dec 2021 15:14:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4A89410BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD82240166
  for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:14:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B523282DDD; Thu, 30 Dec 2021 15:08:46 +0000 (UTC)
+ id AAE9C82DD7; Thu, 30 Dec 2021 15:08:46 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 16:14:00 +0100
+Date: Thu, 30 Dec 2021 16:13:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 810afe6bf7bf5c5150a3efca433b3233403f8397
-X-Git-Newrev: 5a171e82058d3d40649daf88226ce04caf2d5a32
+X-Git-Oldrev: 5521539eb124c0550bf012dd24074ce039da83e6
+X-Git-Newrev: 810afe6bf7bf5c5150a3efca433b3233403f8397
 X-Patchwork-Hint: ignore
-Message-Id: <20211230150846.B523282DDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liboping: add patch to fix suid
- root feature
+Message-Id: <20211230150846.AAE9C82DD7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/liboping: add patch to fix utf8
+ ncurses support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,113 +59,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a171e82058d3d40649daf88226ce04caf2d5a32
+commit: https://git.buildroot.net/buildroot/commit/?id=810afe6bf7bf5c5150a3efca433b3233403f8397
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch from upstream merge quest [1] to fix suid root feature.
+Add patch from upstream merge request [1] to fix fix utf8 ncurses
+support.
 
-[1] https://github.com/octo/liboping/pull/35
+[1] https://github.com/octo/liboping/issues/36
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ckets-when-adding-hosts-not-when-doing-th.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
+ package/liboping/0002-fix-utf8-support.patch | 35 ++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/liboping/0003-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch b/package/liboping/0003-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+diff --git a/package/liboping/0002-fix-utf8-support.patch b/package/liboping/0002-fix-utf8-support.patch
 new file mode 100644
-index 0000000000..4f3eea6274
+index 0000000000..0697ad5ca4
 --- /dev/null
-+++ b/package/liboping/0003-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
-@@ -0,0 +1,91 @@
-+From ac878566eb935fd3ebfb804e6bd9e1690d4a65e3 Mon Sep 17 00:00:00 2001
-+From: Tollef Fog Heen <tfheen@err.no>
-+Date: Tue, 20 Mar 2018 22:40:32 +0100
-+Subject: [PATCH] Open raw sockets when adding hosts, not when doing the
-+ pinging
++++ b/package/liboping/0002-fix-utf8-support.patch
+@@ -0,0 +1,35 @@
++From dfbdd324769f542b6b89499c1b7f0f4322100bc6 Mon Sep 17 00:00:00 2001
++From: wfaulk <wfaulk@users.noreply.github.com>
++Date: Wed, 7 Aug 2019 18:57:43 -0400
++Subject: [PATCH] fix utf8 support
 +
-+This allows this to run as non-root again, without this, oping will
-+have dropped privileges before trying to ping, which then fails to
-+open the necessary raw sockets.
++in oping.c:923 in has_utf8() the #if HAVE_NCURSESW_NCURSES_H is
++wrong. in consequence of this hist_symbols_utf8 is not used and the
++the graph type prettyping is not realy pretty. the name of the header
++file is curses.h see also oping.c:85 or the third changelog entry from
++1997/05/31
 +
-+Fixes: #34
++https://github.com/octo/liboping/issues/36
 +
-+[Upstream: https://github.com/octo/liboping/pull/35/commits/a88c51f38dafa1fba9118045176754bec05d3c94]
++[Upstream: https://github.com/octo/liboping/pull/49/commits/a313923ec12d11daa8e70497c6b7b5d50965821b]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ src/liboping.c | 48 +++++++++++++++++-------------------------------
-+ 1 file changed, 17 insertions(+), 31 deletions(-)
++ src/oping.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/liboping.c b/src/liboping.c
-+index 39b0041..f98e810 100644
-+--- a/src/liboping.c
-++++ b/src/liboping.c
-+@@ -1344,41 +1344,10 @@ int ping_send (pingobj_t *obj)
-+ 	struct timeval nowtime;
-+ 	struct timeval timeout;
-+ 
-+-	_Bool need_ipv4_socket = 0;
-+-	_Bool need_ipv6_socket = 0;
-+-
-+ 	for (ptr = obj->head; ptr != NULL; ptr = ptr->next)
++diff --git a/src/oping.c b/src/oping.c
++index 87ca81a..62dbb67 100644
++--- a/src/oping.c
+++++ b/src/oping.c
++@@ -903,7 +903,7 @@ static void time_calc (struct timespec *ts_dest, /* {{{ */
++ #if USE_NCURSES
++ static _Bool has_utf8() /* {{{ */
++ {
++-# if HAVE_NCURSESW_NCURSES_H
+++# if HAVE_NCURSESW_CURSES_H
++ 	if (!opt_utf8)
 + 	{
-+ 		ptr->latency  = -1.0;
-+ 		ptr->recv_ttl = -1;
-+-
-+-		if (ptr->addrfamily == AF_INET)
-+-			need_ipv4_socket = 1;
-+-		else if (ptr->addrfamily == AF_INET6)
-+-			need_ipv6_socket = 1;
-+-	}
-+-
-+-	if (!need_ipv4_socket && !need_ipv6_socket)
-+-	{
-+-		ping_set_error (obj, "ping_send", "No hosts to ping");
-+-		return (-1);
-+-	}
-+-
-+-	if (need_ipv4_socket && obj->fd4 == -1)
-+-	{
-+-		obj->fd4 = ping_open_socket(obj, AF_INET);
-+-		if (obj->fd4 == -1)
-+-			return (-1);
-+-		ping_set_ttl (obj, obj->ttl);
-+-		ping_set_qos (obj, obj->qos);
-+-	}
-+-	if (need_ipv6_socket && obj->fd6 == -1)
-+-	{
-+-		obj->fd6 = ping_open_socket(obj, AF_INET6);
-+-		if (obj->fd6 == -1)
-+-			return (-1);
-+-		ping_set_ttl (obj, obj->ttl);
-+-		ping_set_qos (obj, obj->qos);
-+ 	}
-+ 
-+ 	if (gettimeofday (&nowtime, NULL) == -1)
-+@@ -1698,6 +1667,23 @@ int ping_host_add (pingobj_t *obj, const char *host)
-+ 	ph->table_next = obj->table[ph->ident % PING_TABLE_LEN];
-+ 	obj->table[ph->ident % PING_TABLE_LEN] = ph;
-+ 
-++	if (ph->addrfamily == AF_INET && obj->fd4 == -1)
-++	{
-++		obj->fd4 = ping_open_socket(obj, AF_INET);
-++		if (obj->fd4 == -1)
-++			return (-1);
-++		ping_set_ttl (obj, obj->ttl);
-++		ping_set_qos (obj, obj->qos);
-++	}
-++	if (ph->addrfamily == AF_INET6 && obj->fd6 == -1)
-++	{
-++		obj->fd6 = ping_open_socket(obj, AF_INET6);
-++		if (obj->fd6 == -1)
-++			return (-1);
-++		ping_set_ttl (obj, obj->ttl);
-++		ping_set_qos (obj, obj->qos);
-++	}
-++
-+ 	return (0);
-+ } /* int ping_host_add */
-+ 
++ 		/* Automatically determine */
 +-- 
 +2.25.1
 +
