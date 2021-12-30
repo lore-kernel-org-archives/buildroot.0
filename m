@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4A93C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E18C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D74C80C00;
-	Thu, 30 Dec 2021 13:56:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4278540155;
+	Thu, 30 Dec 2021 13:56:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZVy9-3nHpaJu; Thu, 30 Dec 2021 13:56:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kJz-w-o8Tr8f; Thu, 30 Dec 2021 13:56:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80B0280C02;
-	Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 135061BF408
+	by smtp4.osuosl.org (Postfix) with ESMTP id 978B04013D;
+	Thu, 30 Dec 2021 13:56:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DBB8E1BF408
  for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E5A580BF9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D908D40641
  for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ploTQxkNABmS for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 13:56:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zABKduhjV3Wr for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C153580BD1
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:38 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id s1so50699513wrg.1
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:38 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE43E405AE
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:39 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id t26so50593437wrb.4
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=F6zM65KEUZM4TgbCkD0HyUjz0WxPfWt/XeNUFefB/vY=;
- b=dWu/OhOciMpHUY351i+hnEpT5qXuzk3TLrR6wVpXFvr4WJCqZSqGUPemevfPXaMOwP
- GYE27ps9p7pjHGOb2hFPx0LXzSexE8snsEISJPx121HnsTHBXsR6MIla5UG0Vnifnhl8
- eLsH/8C+1alrMJHwm/nOnxzuc1+6/BT+b8Ubd885UtodZ/Ad/zQxFt6Y2AhgsuQgIGC7
- HgI1IHoGcDBshsX9Kov8S5L3Z2on8pKuzIyvgdQLOvkVnPmPXSiYGIA+39AAZzqN6hTk
- VM+mVnkc7K9RZXkvKd5WhtrqeASYb0TmbJHl9gdps1HPYIJFZx1uK25fzqUErmawjBqy
- m79w==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Su71JalmvWJuFZmz5dpZ35sto7PU56QtAae/vfhp7g8=;
+ b=WDPUb2mD+pk2haQOBJZM3w8m6ZTILlX6GXquIr1XlkRYFHbGzWihcykuS6HxCYn3pq
+ O4R2rQXxABMlebaSI4gwByYOSA/yhp3dbNW1pQSxqrEx4iOQzXlCoxS3asJ7IHSHdor7
+ l7NAC4TwHjYzdvOaeZgU1u2Ib/GNQQ5JqD5R1gLJxAdal0whDU/rHE106c90pzceP9/K
+ uEV/ZZ5SepCfjPCAVQfJm1XmVvk4mbML8tHpTdEXeS+1AgvksYisHBGBztc95tbTSv4x
+ iBywQHvOSZOX7Sq4DI+00VDveBXUP1ofL4qB2grmKMEjja9UFGtPKWn1RBRVPSnNclCV
+ Qmcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=F6zM65KEUZM4TgbCkD0HyUjz0WxPfWt/XeNUFefB/vY=;
- b=as18AnFApgtBnlp70rDCfWxjrAxzEknuR7jhHYqVlvgIByhwyRSzEDXLOa1zgZ96eQ
- wcoLc/yXTFNwUTQohmMlMAUR3sz3ibDXwazQ8F2RZSx5NAjYkKpeFmB8o/IHqqL4c8jc
- /OaTvn4SC1ALFBDsMOgOmTHxdWVm+D7/YBUxffMIfVA7VUPxmWlxQSKSoPfh6x23GvDX
- n6ryyILiMAgm+JlS2bwjwNzL0nRKdQux+m+myJAkroQbrk42vfFeyXF+WmsUiSP0L/vv
- Apx4yxDDNt+HFUXAB9mfNjo0Vy/1u4LTe75nOr0NA52SwuplK4dReN9cpLiKl0x2MtNS
- HySA==
-X-Gm-Message-State: AOAM531M5H4H3pa/7LDr9kuONjtE9Gq7tjcIxFV23b8DZOagDZrm8END
- VcFo/squojvz1bDy0gECY+1D0Wdmw4Q=
-X-Google-Smtp-Source: ABdhPJy+C03OKwDuQtx+qUtvfJeCWJ+GuoKlbTD5FjnCj44HCxvSyUZC1txA9/dDcPHYZsIX+iJUew==
-X-Received: by 2002:adf:fa87:: with SMTP id h7mr24429764wrr.561.1640872597112; 
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=Su71JalmvWJuFZmz5dpZ35sto7PU56QtAae/vfhp7g8=;
+ b=n2iQc+gDdF8KkNHOarWH0RaAKs5rJ8qQHon54oZBQSzpSgVKIc08EUMnVrQlFv2M3/
+ PAu0D+jzFWEsPrDZL7KUXSYA2xItHG1Yhk5L9R1PfB8RlAYuDWb28pyIf9aEA2u+tvwf
+ 2VKQZc4HwfcdkiWo/tTiF5s38Dz1PQj6miijxi94ufZswGT0rEo5VMmPu2lu5OmKKnf3
+ KFTN8yz8WQwV2dovfH6kpukOLy+dxLtFdsUrhoSrlLdG00ylxxBOBvhqydhpriW4OJXW
+ YDN7ORrqtqoafVKFgXL4O4h/IUTR6B9FXw9OD+K/rZ50SmpedRqp3bJe1oLLvVZZg2lK
+ KyOg==
+X-Gm-Message-State: AOAM531+IhSEQapy/h0DS0tJ4pWXRWpV9v4g8tWTx2npItDPRZY181Pt
+ GabW4YUSUPDIfsO+hiZVDDXjYjnfPk0=
+X-Google-Smtp-Source: ABdhPJwNNNLgMwO6xuFO7nNVnwsowQId7OoOslmU6Dnb/97y311kuMHdHSLWVGDePr4XLdFQlpxuBQ==
+X-Received: by 2002:a05:6000:104c:: with SMTP id
+ c12mr24424687wrx.419.1640872597887; 
  Thu, 30 Dec 2021 05:56:37 -0800 (PST)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id l7sm24353765wms.1.2021.12.30.05.56.36
+ by smtp.gmail.com with ESMTPSA id l7sm24353765wms.1.2021.12.30.05.56.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 05:56:36 -0800 (PST)
+ Thu, 30 Dec 2021 05:56:37 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 14:56:15 +0100
-Message-Id: <20211230135621.2255847-1-romain.naour@gmail.com>
+Date: Thu, 30 Dec 2021 14:56:16 +0100
+Message-Id: <20211230135621.2255847-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211230135621.2255847-1-romain.naour@gmail.com>
+References: <20211230135621.2255847-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/7] package/supertux: bump to version 0.6.3
+Subject: [Buildroot] [PATCH 2/7] package/supertuxkart: bump to version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,134 +93,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove upstream patch 0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+Switch to github to download the release archive.
 
-Add new glm dependency added by:
+Add sdl2 dependency added by [1].
 
-https://github.com/SuperTux/supertux/commit/7187e3f6d7ce2ccc25bcc96e9bee25c24416d545
+Remove FriBidi dependency replaced by SheenBidi library (bundled) for
+better unicode support [2] [3].
 
-Add new zlib dependency added by:
+Remove libglew removed by [4].
 
-https://github.com/SuperTux/supertux/commit/100bc052bc693c2e4978fffe34c9aa4376f8f8c6
+Replace MbedTLS instead of Nettle [5].
 
-Update data/AUTHORS hash since several new assets has been added since
-version 0.6.2:
-
-https://github.com/SuperTux/supertux/commit/ec5e2f52137bba2ea7533e020cd8bf4b85e6b904
-https://github.com/SuperTux/supertux/commit/1ff490d32206289c72d31c7f78bfeca2956e136b
-https://github.com/SuperTux/supertux/commit/14ac958c711837c6cbd1e9362768ababc38effc5
-https://github.com/SuperTux/supertux/commit/392320b79006ad1fb99b3f5dd9e771d9ba6a4668
-https://github.com/SuperTux/supertux/commit/2fd5ed445c8b00e4c50d0da456543d64015a4681
-https://github.com/SuperTux/supertux/commit/e45b5f7f8635e1749eee7a74a9fc9fde13d8344e
-
-See:
-https://www.supertux.org/news/2021/12/23/0.6.3
+[1] https://github.com/supertuxkart/stk-code/commit/00cb6c2d480d99785f52e0352bc3a21a803a467d
+[2] https://github.com/supertuxkart/stk-code/commit/13db1b83c1e7160276c87b1faa8b573bb390cce3
+[3] https://github.com/supertuxkart/stk-code/commit/dc0a5a9c661a676941d202500713a7d736071838
+[4] https://github.com/supertuxkart/stk-code/commit/3f0eb215f73e4edf8a91309e6de6db926f8dfa54
+[5] https://github.com/supertuxkart/stk-code/commit/d753393f4dcec79f2bd5a60a853247b9d854e240
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...Lists.txt-compile-squirrel-with-fPIC.patch | 35 -------------------
- package/supertux/Config.in                    |  2 ++
- package/supertux/supertux.hash                |  4 +--
- package/supertux/supertux.mk                  |  6 ++--
- 4 files changed, 7 insertions(+), 40 deletions(-)
- delete mode 100644 package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+ package/supertuxkart/Config.in         |  5 ++---
+ package/supertuxkart/supertuxkart.hash |  7 +------
+ package/supertuxkart/supertuxkart.mk   | 16 ++++++++--------
+ 3 files changed, 11 insertions(+), 17 deletions(-)
 
-diff --git a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-deleted file mode 100644
-index 9fac20a3f8..0000000000
---- a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 23d0bb0ef0fde52d1cffe235edead09287326fb4 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 4 Oct 2020 01:11:30 +0200
--Subject: [PATCH] CMakeLists.txt: compile squirrel with -fPIC
--
--Ensure that squirrel is compiled with -fPIC to allow linking the static
--libraries with dynamically linked programs. This is not a requirement
--for most architectures but is mandatory for ARM.
--
--Fixes:
--x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
--x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- CMakeLists.txt | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 8b1dafa1e..07c603cce 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -412,7 +412,8 @@ ExternalProject_Add(squirrel
--   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
--   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
--   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
---  -DINSTALL_INC_DIR=include)
--+  -DINSTALL_INC_DIR=include
--+  -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
-- 
-- if(WIN32)
--   add_library(squirrel_lib SHARED IMPORTED)
---- 
--2.25.4
--
-diff --git a/package/supertux/Config.in b/package/supertux/Config.in
-index 285f19694b..e8e96a3ae5 100644
---- a/package/supertux/Config.in
-+++ b/package/supertux/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_BOOST_LOCALE
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_GLM
+diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+index a18b9c1a0a..8e8eafb51c 100644
+--- a/package/supertuxkart/Config.in
++++ b/package/supertuxkart/Config.in
+@@ -15,14 +15,13 @@ config BR2_PACKAGE_SUPERTUXKART
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_JPEG
  	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLEW
+-	select BR2_PACKAGE_LIBFRIBIDI
+-	select BR2_PACKAGE_LIBGLEW
  	select BR2_PACKAGE_LIBOGG
-@@ -26,6 +27,7 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_IMAGE
- 	select BR2_PACKAGE_SDL2_OPENGL
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  SuperTux is a free classic 2D jump'n run sidescroller game in
- 	  a style similar to the original Super Mario games covered
-diff --git a/package/supertux/supertux.hash b/package/supertux/supertux.hash
-index a6a515f912..f28c06b5e7 100644
---- a/package/supertux/supertux.hash
-+++ b/package/supertux/supertux.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  26a9e56ea2d284148849f3239177d777dda5b675a10ab2d76ee65854c91ff598  SuperTux-v0.6.2-Source.tar.gz
-+sha256  f7940e6009c40226eb34ebab8ffb0e3a894892d891a07b35d0e5762dd41c79f6  SuperTux-v0.6.3-Source.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.txt
--sha256  09645215102c1013a1ef8c16a30bacdb9a78924ca064372290405fabd3e7074d  data/AUTHORS
-+sha256  a000d91146a61b44bdb79c3d2737e82d488b6cd65a23e0415e56915233def0a0  data/AUTHORS
-diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
-index 3587aefe3a..3941632f51 100644
---- a/package/supertux/supertux.mk
-+++ b/package/supertux/supertux.mk
-@@ -4,7 +4,7 @@
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_LIBSQUISH
+ 	select BR2_PACKAGE_LIBVORBIS
+-	select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENAL
++	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
+diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
+index 9654ad24a2..306634d28e 100644
+--- a/package/supertuxkart/supertuxkart.hash
++++ b/package/supertuxkart/supertuxkart.hash
+@@ -1,8 +1,3 @@
+ # Locally computed
+-sha256	e9b02b0b11ab68aacaec38306903feffe59a501224805cd3645cebf10e880ae8  supertuxkart-1.1-src.tar.xz
+-# From https://sourceforge.net/projects/supertuxkart/files/SuperTuxKart/1.1/
+-sha1	68be26f4b15d30dede26563cbcc6de999036c5e0  supertuxkart-1.1-src.tar.xz
+-md5	731569c58428f32a0e46943fad7ba1e3  supertuxkart-1.1-src.tar.xz
+-
+-# Locally computed
++sha256	eeabeb0d9801688a218f6f0a76ea3546a46a322ccaca9a258148ecacfe083ffd  SuperTuxKart-1.3-src.tar.xz
+ sha256	d27207a5213f746aac53893e9ecc18456e9595d3ffa662bd1ec9eb10787c214a  COPYING
+diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
+index 97cd2a40b8..8ec366f792 100644
+--- a/package/supertuxkart/supertuxkart.mk
++++ b/package/supertuxkart/supertuxkart.mk
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
--SUPERTUX_VERSION = 0.6.2
-+SUPERTUX_VERSION = 0.6.3
- SUPERTUX_SITE = https://github.com/SuperTux/supertux/releases/download/v$(SUPERTUX_VERSION)
- SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
+-SUPERTUXKART_VERSION = 1.1
+-SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
+-SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
++SUPERTUXKART_VERSION = 1.3
++SUPERTUXKART_SOURCE = SuperTuxKart-$(SUPERTUXKART_VERSION)-src.tar.xz
++# Do not use the github helper here, the generated tarball is *NOT*
++# the same as the one uploaded by upstream for the release.
++SUPERTUXKART_SITE = https://github.com/supertuxkart/stk-code/releases/download/$(SUPERTUXKART_VERSION)
  
-@@ -15,8 +15,8 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+ # Supertuxkart itself is GPL-3.0+, but it bundles a few libraries with different
+ # licenses. Irrlicht, bullet and angelscript have Zlib license, while glew is
+@@ -21,14 +23,13 @@ SUPERTUXKART_DEPENDENCIES = \
+ 	harfbuzz \
+ 	jpeg \
+ 	libcurl \
+-	libfribidi \
+ 	libgl \
+-	libglew \
+ 	libogg \
+ 	libpng \
+ 	libsquish \
+ 	libvorbis \
+ 	openal \
++	sdl2 \
+ 	xlib_libXrandr \
+ 	zlib
  
- # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
- # the CMake build system.
--SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
--	libogg libpng libvorbis openal physfs sdl2 sdl2_image
-+SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype glm libcurl libgl libglew \
-+	libogg libpng libvorbis openal physfs sdl2 sdl2_image zlib
+@@ -37,7 +38,6 @@ SUPERTUXKART_DEPENDENCIES = \
+ # Disable In-game recorder (there is no libopenglrecorder package)
+ SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF \
+ 	-DBUILD_RECORDER=OFF \
+-	-DUSE_SYSTEM_GLEW=ON \
+ 	-DUSE_SYSTEM_ENET=ON \
+ 	-DUSE_SYSTEM_SQUISH=ON
  
- # CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
- # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+@@ -49,12 +49,12 @@ else
+ SUPERTUXKART_CONF_OPTS += -DUSE_WIIUSE=OFF
+ endif
+ 
+-# Prefer openssl (the default) over nettle.
++# Prefer openssl (the default) over mbedtls
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SUPERTUXKART_DEPENDENCIES += openssl
+ SUPERTUXKART_CONF_OPTS += -DUSE_CRYPTO_OPENSSL=ON
+ else
+-SUPERTUXKART_DEPENDENCIES += nettle
++SUPERTUXKART_DEPENDENCIES += mbedtls
+ SUPERTUXKART_CONF_OPTS += -DUSE_CRYPTO_OPENSSL=OFF
+ endif
+ 
 -- 
 2.31.1
 
