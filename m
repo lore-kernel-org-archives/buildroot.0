@@ -4,76 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6689C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8C64C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 469D8410AE;
-	Thu, 30 Dec 2021 09:09:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2892540191;
+	Thu, 30 Dec 2021 09:11:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eqI7fMHC-6x4; Thu, 30 Dec 2021 09:09:39 +0000 (UTC)
+	with ESMTP id ZcLKRXTZeSh5; Thu, 30 Dec 2021 09:11:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD273410CB;
-	Thu, 30 Dec 2021 09:09:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A01E4011F;
+	Thu, 30 Dec 2021 09:11:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 76D7B1BF346
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:09:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EFFA1BF346
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6545360586
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:09:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C7EC60BA1
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:11:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gkN-uitT7Imi for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 09:09:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 27F9C606E7
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:09:36 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id s1so49211778wra.6
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:09:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yiGY+FzxSF37amlNy7vZ95CcFO9ZxRiwBRrcYyc1Aqk=;
- b=MyNtdWNTmqPRU+/QmJ2D1+eX0jGT3TuHDjo+WMZEAY35iNc4OuHxqIV8AU68Rwsk2U
- uR9AkH0LPDVwBTqt/q+qLSXcEMID+C57q9xdRg1O9Eu4GuXAk0hYnhP0NnWx59YJsXnN
- fW2K4IdFgkmdpCaiIGiYmfFzs5ZkUZ6D6I5Qx+VPix9C8pQ77DNi94zqwMD2YGUjJ+XX
- Ws8Ts0r4SAbNb5nxvqRpI7IgAFD5Ih9aQQJNs4feAe0bPbJhyTeOyp7ucKSvkjPXKWWn
- YSDvhwDRaW24Iy638HbBL3iibPkFR1FHQDLzlm702Pc1hWNTz+YV1b5Cy5inBHWDB2P/
- Us1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yiGY+FzxSF37amlNy7vZ95CcFO9ZxRiwBRrcYyc1Aqk=;
- b=KBIhQyWd07hiHUGG2ih59zhw/rReAg5inLGxzf4oVuq/xnpyCbKigL0Vi8HwyVbQ5a
- z/yVrpUDqmvrLeRa9Qm9fpewItUKWvbc1iW3T6Zbvf0+kd/RgTiDVyPq3QL1kAe9rOlb
- PobUfsGBcjNqRIEEV2z/q0mA3F0fSJ1ucOYkaLkFdt8NgQ6p1fYp/+8FVELdN9ABawxP
- sE9/JgaK0+dhdeea6gi9xo+w0ISZHhW0Ftt7y1ZfuP+/YTh3B33HZBJnsK6p+/AO7YJ3
- O/TfWjylK51OVPSuuG2NlecycMewz9AcHpaTa0I/pwY2TPnBMWcnCFUhmlkLuXjMQkXV
- VTVg==
-X-Gm-Message-State: AOAM5333UC7zKxwfSo8BJAtako4I+NX2pUmgJjpapFOfBwIUTQpSzMlC
- Cwt7NTGxSUQkhyPVqSH0fDnegUoaWP4=
-X-Google-Smtp-Source: ABdhPJwvDmgBLkqFKA7zI7E20EPyazejwBf+hfcesqXKrNEpT2RsGD26YerdSCHd19QGXUEyvOvIdg==
-X-Received: by 2002:a5d:5088:: with SMTP id a8mr24090290wrt.649.1640855374315; 
- Thu, 30 Dec 2021 01:09:34 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id c7sm27207806wrq.81.2021.12.30.01.09.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 01:09:34 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 1JSYyGBaqHXY for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 09:11:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E79AD60B95
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:11:41 +0000 (UTC)
+Received: from fwd74.dcpf.telekom.de (fwd74.aul.t-online.de [10.223.144.100])
+ by mailout03.t-online.de (Postfix) with SMTP id F0D962135;
+ Thu, 30 Dec 2021 10:11:27 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.202.128]) by fwd74.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n2rT5-1V0vgX0; Thu, 30 Dec 2021 10:11:27 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43648)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n2rT5-0007xM-8o;
+ Thu, 30 Dec 2021 10:11:27 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 10:08:22 +0100
-Message-Id: <20211230090822.1332429-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Date: Thu, 30 Dec 2021 10:11:27 +0100
+Message-Id: <20211230091127.164951-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rt-tests: needs kernel >= 4.5
+X-TOI-EXPURGATEID: 150726::1640855487-00012DCC-B737940A/0/0 CLEAN NORMAL
+X-TOI-MSGID: ee819e74-08a6-4fc9-a98f-7fb4133040b1
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,57 +62,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-rt-tests unconditionally uses CGROUP2_SUPER_MAGIC since
-https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/?id=47e857d4bf77440cb59d17c6ed7882a48514f18d
-which is only available since kernel 4.5 and
-https://github.com/torvalds/linux/commit/67e9c74b8a873408c27ac9a8e4c1d1c8d72c93ff
-resulting in the following build failure since bump to version 2.3 in
-commit a952b016263cb9ae5f116dac0b3da4ad93a4c55f:
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2021-December/000658.html
 
-src/sched_deadline/cyclicdeadline.c:381:29: error: 'CGROUP2_SUPER_MAGIC' undeclared (first use in this function)
-  ret = mounted(CGROUP_PATH, CGROUP2_SUPER_MAGIC);
-                             ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/74766c215a6cc19cd02faec6181ccd5de49c15cf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rt-tests/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 477fa288d7..47fa7cd840 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # deadline scheduler syscall
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	depends on BR2_USE_MMU # fork(), numactl
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
-@@ -29,7 +29,7 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 811e4b8204..1cdfff50c9 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
--comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dynamic library"
-+comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 4.5, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
--		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	depends on BR2_USE_MMU
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 21.3.2
++MESA3D_HEADERS_VERSION = 21.3.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 822e3e63c6..235a1b55bb 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000657.html
+-sha256  e2e7bafb8307e7abc3bf982f39382fae3619c84b45504920a21504be52f126bd  mesa-21.3.2.tar.xz
+-sha512  35c510cbab70be43bc207720a12fe85b0c010fafa147238f2c22dd873967278f187ee7675a662882ead3598305f1f37804567deb93022a692ca259f563abfdac  mesa-21.3.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-December/000658.html
++sha256  ad7f4613ea7c5d08d9fcb5025270199e6ceb9aa99fd72ee572b70342240a8121  mesa-21.3.3.tar.xz
++sha512  0263d75435f8c16d40eba3eae29bf372e8994816718deec153c582a17c4dd6ef1c67b3236ed31e63f98bf4e1089fac5cfafae9fb84d3e1fa919b274f43e7e673  mesa-21.3.3.tar.xz
+ 
+ # License
+ sha256  998437f3f75f0c542046f83c1cb349408122268168fb13eb4ae6967aa18b7d98  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 2805bbea3f..ac368292e0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 21.3.2
++MESA3D_VERSION = 21.3.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.33.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
