@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40A6FC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 502E5C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 22:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D728F81337;
-	Thu, 30 Dec 2021 22:21:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF55060C1C;
+	Thu, 30 Dec 2021 22:30:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QuvKxGplzGbB; Thu, 30 Dec 2021 22:21:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ykBl9H54vBKt; Thu, 30 Dec 2021 22:30:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30005812F3;
-	Thu, 30 Dec 2021 22:21:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE2F01BF3C2
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:21:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B8B860AC5;
+	Thu, 30 Dec 2021 22:30:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BEE4D1BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:30:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBE2D812F3
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:21:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD84760AC5
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 22:30:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o4-6yWizvinN for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 22:21:42 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11551812E9
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:21:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 5578DFF80A;
- Thu, 30 Dec 2021 22:21:40 +0000 (UTC)
-Date: Thu, 30 Dec 2021 23:21:39 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yaFlR_HuqPiC for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 22:30:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1131960A94
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 22:30:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 4E5FA82D9E; Thu, 30 Dec 2021 22:24:41 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20211230232139.720a6ff1@windsurf>
-In-Reply-To: <20211230215149.12357-3-bernd.kuhls@t-online.de>
-References: <20211230215149.12357-1-bernd.kuhls@t-online.de>
- <20211230215149.12357-3-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 3/3] package/vdr: enable musl/uclibc build
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 23:28:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 25b1fc2898d68ddf2674b14c738045875fc5a2dc
+X-Git-Newrev: b328a6a852abfb1ec713292e0ea0fd8f887b3461
+X-Patchwork-Hint: ignore
+Message-Id: <20211230222441.4E5FA82D9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-setuptools: drop duplicate
+ variable definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,42 +53,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=b328a6a852abfb1ec713292e0ea0fd8f887b3461
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Dec 2021 22:51:49 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+As part of commit
+4d2ca2be49fecb68a988662a27d31278408614d2 ("package/python-setuptools:
+bump to version 59.8.0 and split python2 version"), the
+HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON was moved next to the other
+HOST_* variables, but it was also re-added at the original location
+during an (incorrect) review process. Fix that up by dropping the
+duplicate definition.
 
-> diff --git a/package/vdr/Config.in b/package/vdr/Config.in
-> index df602f26d6..1119892d8b 100644
-> --- a/package/vdr/Config.in
-> +++ b/package/vdr/Config.in
-> @@ -2,15 +2,17 @@ config BR2_PACKAGE_VDR
->  	bool "vdr"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_SYSTEM_ENABLE_NLS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_FONTCONFIG
->  	select BR2_PACKAGE_FREETYPE
-> +	select BR2_PACKAGE_GETTEXT if !BR2_TOOLCHAIN_USES_GLIBC
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-setuptools/python-setuptools.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Could you provide a bit more explanation about the gettext/nls stuff here?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 30f0f255ed..d83336b909 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -29,7 +29,6 @@ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+ PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
+ PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+-HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_SETUPTOOLS_EXTRACT_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
