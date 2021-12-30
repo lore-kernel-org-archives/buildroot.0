@@ -4,47 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64FECC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 14:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BE25C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 14:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AAFD41515;
-	Thu, 30 Dec 2021 14:14:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15EE44151B;
+	Thu, 30 Dec 2021 14:20:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y0vdXPUbT1QG; Thu, 30 Dec 2021 14:14:37 +0000 (UTC)
+	with ESMTP id aI_ZgchNUiWF; Thu, 30 Dec 2021 14:20:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8058041505;
-	Thu, 30 Dec 2021 14:14:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 892DA1BF2BC
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:14:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FEF141521;
+	Thu, 30 Dec 2021 14:20:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B633C1BF2BC
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77FDB81831
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:14:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A506460BF9
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 14:20:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CNqYabtkKLzI for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 14:14:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31356813E9
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 14:14:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 767AF240009;
- Thu, 30 Dec 2021 14:14:29 +0000 (UTC)
-Date: Thu, 30 Dec 2021 15:14:28 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PkqEWmN_G8f1 for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 14:20:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C531607DE
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 14:20:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 212EC82AE0; Thu, 30 Dec 2021 14:14:15 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Message-ID: <20211230151428.1a49b1bf@windsurf>
-In-Reply-To: <20200306071440.30433-5-miquel.raynal@bootlin.com>
-References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
- <20200306071440.30433-5-miquel.raynal@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/7] package/mali-bifrost-driver: new package
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 15:19:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d12925603417c99bbeab693734b208a8dfbff26b
+X-Git-Newrev: 0979a9e13c45afa20d60122747409cf82164147c
+X-Patchwork-Hint: ignore
+Message-Id: <20211230141415.212EC82AE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/font-awesome: make it visible by
+ fontconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,33 +53,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gTWlxdcOobCwKCk9uIEZyaSwgIDYgTWFyIDIwMjAgMDg6MTQ6MzcgKzAxMDAKTWlxdWVs
-IFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4gd3JvdGU6Cgo+ICtNQUxJX0JJRlJP
-U1RfRFJJVkVSX1ZFUlNJT04gPSB2MC4xCj4gK01BTElfQklGUk9TVF9EUklWRVJfU0lURSA9ICQo
-Y2FsbCBnaXRodWIsYm9vdGxpbixtYWxpLWJpZnJvc3QsJChNQUxJX0JJRlJPU1RfRFJJVkVSX1ZF
-UlNJT04pKQo+ICtNQUxJX0JJRlJPU1RfRFJJVkVSX0RFUEVOREVOQ0lFUyA9IGxpbnV4Cj4gK01B
-TElfQklGUk9TVF9EUklWRVJfTElDRU5TRSA9IEdQTC0yLjAKPiArTUFMSV9CSUZST1NUX0RSSVZF
-Ul9MSUNFTlNFX0ZJTEUgPSBMSUNFTlNFCj4gK01BTElfQklGUk9TVF9EUklWRVJfTU9EVUxFX1NV
-QkRJUlMgPSByOHAwL2RyaXZlcnMvZ3B1L2FybS9taWRnYXJkCgpUaGVyZSBpcyBzb21ldGhpbmcg
-cmVhbGx5IG9kZCBoZXJlOiB3aHkgaXMgdGhpcyBwYWNrYWdlIG5hbWVkCm1hbGktYml0ZnJvc3Qt
-ZHJpdmVyIGlmIHRoZSBzdWJkaXJlY3RvcnkgeW91J3JlIGJ1aWxkaW5nIGlzCnI4cDAvZHJpdmVy
-cy9ncHUvYXJtL21pZGdhcmQgPyBiaXRmcm9zdCBhbmQgbWlkZ2FyZCBhcmUgdHdvIGRpZmZlcmVu
-dApnZW5lcmF0aW9ucyBvZiB0aGUgQVJNIE1hbGkgR1BVLCBhdCBsZWFzdCBhY2NvcmRpbmcgdG8K
-aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTWFsaV8oR1BVKS4KCkNvdWxkIHlvdSBjbGFy
-aWZ5ICh5b3Ugb3Igc29tZWJvZHkgZWxzZSwgZm9yIHRoYXQgbWF0dGVyKSA/CgpUaGFua3MhCgpU
-aG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1i
-ZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9i
-b290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=0979a9e13c45afa20d60122747409cf82164147c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This commit creates a symlink that ensures fontconfig will find the
+fonts installed by the font-awesome package.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/font-awesome/font-awesome.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+index 666346be0e..5211ac22a5 100644
+--- a/package/font-awesome/font-awesome.mk
++++ b/package/font-awesome/font-awesome.mk
+@@ -13,6 +13,8 @@ define FONT_AWESOME_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
+ 	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
+ 		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
++	mkdir -p $(TARGET_DIR)/usr/share/fonts/
++	ln -sf ../font-awesome $(TARGET_DIR)/usr/share/fonts/font-awesome
+ endef
+ 
+ $(eval $(generic-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
