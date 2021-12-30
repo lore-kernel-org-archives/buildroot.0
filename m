@@ -1,50 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C35D3C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 289B8C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:16:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A0AA414A2;
-	Thu, 30 Dec 2021 15:15:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D102740550;
+	Thu, 30 Dec 2021 15:16:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nCwZFl64u1T5; Thu, 30 Dec 2021 15:15:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1xNo5wJtS3Dt; Thu, 30 Dec 2021 15:16:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB394410E1;
-	Thu, 30 Dec 2021 15:15:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 85ACD1BF403
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:15:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDEB6401C5;
+	Thu, 30 Dec 2021 15:16:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CD911BF403
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82FC98284B
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:15:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A58F401C5
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:16:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7LPJnhvp0-pm for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 15:15:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7A88E82668
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:15:18 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id A9D89E0003;
- Thu, 30 Dec 2021 15:15:15 +0000 (UTC)
-Date: Thu, 30 Dec 2021 16:15:14 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LaKK5AtUkUPx for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 15:16:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E8BB40166
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:16:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 7043481484; Thu, 30 Dec 2021 15:10:09 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20211230161514.54b87c2c@windsurf>
-In-Reply-To: <20211230144911.2258576-1-romain.naour@gmail.com>
-References: <20211230144911.2258576-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/supertuxkart: fix kconfig dependency
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 16:15:32 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4ac1d1a133b68babb6911dcd9299640ed5efbf25
+X-Git-Newrev: 383f73289ce6b0eaba9e8f2c611f0493959b69fe
+X-Patchwork-Hint: ignore
+Message-Id: <20211230151009.7043481484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pru-software-support: bump to
+ latest version 6.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,36 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 30 Dec 2021 15:49:11 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=383f73289ce6b0eaba9e8f2c611f0493959b69fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 4ac4d6879b30bc267af1f1b382d9ac93f5aa1c28 (package/supertuxkart: bump to version 1.3)
-> introduced a circular dependency chain in Kconfig:
-> 
-> package/openssl/Config.in:4:error: recursive dependency detected!
-> package/openssl/Config.in:4:	symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_MBEDTLS
-> package/mbedtls/Config.in:1:	symbol BR2_PACKAGE_MBEDTLS is selected by BR2_PACKAGE_OPENSSL
-> 
-> Fix by selecting openssl if mbedtls is not enabled.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/supertuxkart/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Update to that latest version of the PRU software support [1]. Since
+v5.9.0, the examples have been updated, kernel header references have
+been bumped to v5.10, and some minor bug fixes added.
 
-Applied to master, thanks.
+[1]
+https://git.ti.com/cgit/pru-softward-support-package/pru-software-support-package
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pru-software-support/pru-software-support.hash | 2 +-
+ package/pru-software-support/pru-software-support.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+index a2c78e7a1a..e8ccc93a2c 100644
+--- a/package/pru-software-support/pru-software-support.hash
++++ b/package/pru-software-support/pru-software-support.hash
+@@ -1,3 +1,3 @@
+ # Locally-calculated hash
+-sha256  4a6b1b2b8ca892c442fd7fce7ddbf6b74e0619def2bb19f3ad67c94720b7ca3a pru-software-support-package-v5.9.0.tar.gz
++sha256  cba9e0bca3abc0041cf7ce6a30af9de440b325cf8c9bcc826485d2f837cb4cf2 pru-software-support-package-v6.0.1.tar.gz
+ sha256  62a2f56498cd1bac2d4ea6ea1c941affba1e4bb65bfdf2dcffd8e5079fa34399  PRU-Package-v6.1-Manifest.html
+diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+index 87a382948b..d0259c5f80 100644
+--- a/package/pru-software-support/pru-software-support.mk
++++ b/package/pru-software-support/pru-software-support.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRU_SOFTWARE_SUPPORT_VERSION = 5.9.0
++PRU_SOFTWARE_SUPPORT_VERSION = 6.0.1
+ PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
+ PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
+ PRU_SOFTWARE_SUPPORT_LICENSE = BSD-3-Clause, Public Domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
