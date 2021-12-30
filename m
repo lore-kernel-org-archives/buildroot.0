@@ -1,80 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D98C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C03CC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 09:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AFEF813BD;
-	Thu, 30 Dec 2021 09:46:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2750660BC2;
+	Thu, 30 Dec 2021 09:46:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id olf3MpvWjn21; Thu, 30 Dec 2021 09:46:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cwjX2iMNzc7f; Thu, 30 Dec 2021 09:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 522678138A;
-	Thu, 30 Dec 2021 09:46:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89D121BF346
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:46:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86D8C60B95;
+	Thu, 30 Dec 2021 09:46:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 647DB1BF346
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 795F7410C3
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:46:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 612CB60B95
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 09:46:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sFnp2BrE6bJ0 for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 09:46:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m6g7Bxi932Gh for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 09:46:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87A95410C2
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:46:01 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id k18so12644897wrg.11
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:46:01 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7357F60B6D
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 09:46:49 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v11so49394254wrw.10
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:46:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EZdg7NP4L67lRPopkGf2QDJNS7XPq9kPIWbAYIVgPLc=;
- b=T3yKJU4dCY0D5MeEel+v39n+ffAK3tGCbvIx74u1BopZnPmJJUn+X5QM1XcFRrWllv
- Gewetm2/5k+BUJ1ahIi/DskBHaK4ZkH/RGIRiwRjuZnxdZl8SQNRgr4Urmth3mODpkUR
- oA0eI1fCE0y/5AS/BzV6D9rWRZmhsxzkDTY81lL0psF+ArobXnZQFxyNSwZs2lPEHxom
- M4qWTZqyUcPzvECKzdWA0wuxFneqkZdePKsnVJzxSNRJA6QLc3gySs6bjjfjeSnp1MFS
- KxG+TjiL4ZIHDo9s6nIvY/7PRKuCrlbkf0ttC3PWP5rBOLIoLmuhMQdaeHg54KmcNGzN
- Bp/g==
+ bh=CR1WuyY5Shudi5MxIU3iUU7AXFBLaX+haOvxsq7+EKI=;
+ b=a58ZAUO72oUBJGKEqN3gQ8H2PXgIHalQ4s32GpEXnWS+zNGb834n8rV3THjCiANHRK
+ yXYurCQYovYBICFL7fhY/uFtaOhmPrmqVOsBpHplW6rJA+4XwO7UrpaBzKRx23XvLtlj
+ k8GTHvGkkRak9zwLKcQ4G4crdI5vLOS9YIV6xpLD9apmHor2eB04BuJImpnuTQvkIxpO
+ 7ErsTj/VNLtkKWkQF1Lfr6iE1rbTU8v6/5xrSWukJ0PY2xQE2MOkO9lYiYqvwWYNOu81
+ eIHZusQgTe+Yu+PcjikAvMG0DaXqoO10nryI/efcXJGcnJIWOV7yUMrTwoVM4FbnuS9e
+ hOGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=EZdg7NP4L67lRPopkGf2QDJNS7XPq9kPIWbAYIVgPLc=;
- b=QeD0pLQCweeBNc4Ydg9SO6uEMS6BfbgEqVnFpNzAyuFgRHxFUEM15qHzmRkWlvn6V5
- aNxH6TY8QK/8Qqzq4hFcJP1ONQSKkQPnAoUVr+HtQO8B5dG7eGhjzoFmyh4uvTTPk45Y
- PK94zOJwvIc2/cuKxORKJ4fT7TC8Ou/C5Q08TKX1Qfu3YHoskKQMjZgYRuP85lfPKa24
- drveMmMMgZhe2esfnS9ZCLafydHK6hr30os7kMLTxRpnG5NUWFRLJAe30t5mGPxQu40o
- LGka0HxLuFXbfBsjWUszCHCfdkuW82T7Pr3IeZiYrQnubw3W5kd5Tt481tbOItaEIIAc
- 58QQ==
-X-Gm-Message-State: AOAM533InvtS76xEMlVpjv14A1VmMAvurSL7d5+w/KQVQiXjonOCYdqf
- 0H9h1ZwdSZlQH92hWvCe3Xm7DXkDGsQ=
-X-Google-Smtp-Source: ABdhPJw2PSgnzi4N+EcAZg1N61+FjtBGXFJW5ds0Bt9wJV9Z1dv2ui8a6rLwxkeoE3H6htRVbBP6Mg==
-X-Received: by 2002:adf:b608:: with SMTP id f8mr23328668wre.628.1640857559864; 
- Thu, 30 Dec 2021 01:45:59 -0800 (PST)
+ bh=CR1WuyY5Shudi5MxIU3iUU7AXFBLaX+haOvxsq7+EKI=;
+ b=49fo2QC4nlfpxpUODrygo6YzLfZy3l4Bfnz7F/8g9jZnxGcQk5VH1dHhTlmo+l086o
+ vokWFNIrZwKmJQruTurlibi8fsfrAR2l0YFaRdlwO7ORGqh8/8VpNaAYGY3SSGN/rBaN
+ QAcQA7Xx2P0r3kov+nQGez5Grg+X7PVrCzuBepfFHH69xDEOYfJ4hJQ47h1yBxq8sek0
+ a+vtxHawZfR8+bxp+WgngOLB0FUa9FTivOykPs+AoiM3foNm2fqmy8gd6xrruAqrxwRT
+ BoM40+56KODpKKNRiT7EdE/UJPt7/FuUOD3jRoTfgA3dDulP5fErgd7YYheA/AF2GJoV
+ ldtA==
+X-Gm-Message-State: AOAM533sO2sxUQdiKs7v9r0fW2RTtnS4hEoMB7Gud/Bh7/SNK06fE0mS
+ 2p5hlOeqPFYH6OIy3dMWb7j0JydrBf0=
+X-Google-Smtp-Source: ABdhPJySljySQcMEXQOB8ims6Jy5lyeuw+R+s76bY8fM1QxAMJ6Uoz0lcBEZd8buI8dpoSRmYWqLkA==
+X-Received: by 2002:adf:dc92:: with SMTP id r18mr24214838wrj.584.1640857607433; 
+ Thu, 30 Dec 2021 01:46:47 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id h19sm22569246wmm.13.2021.12.30.01.45.59
+ by smtp.gmail.com with ESMTPSA id r20sm22232317wmd.37.2021.12.30.01.46.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 01:45:59 -0800 (PST)
+ Thu, 30 Dec 2021 01:46:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 10:44:43 +0100
-Message-Id: <20211230094443.1727912-1-fontaine.fabrice@gmail.com>
+Date: Thu, 30 Dec 2021 10:46:02 +0100
+Message-Id: <20211230094602.1746612-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with openssl and
- gnutls
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: bump to version 2.86
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,95 +83,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Combination of cryptolib=openssl and dns-over-tls=gnutls is disallowed
-since version 250 and
-https://github.com/systemd/systemd/commit/e37ad765c86d2a763a2d655068dfe59789f18e3e
-resulting in the following build failure since commit
-e9fb26cbb8dafd28f50a912bcaddb1056769ec17:
-
-../output-1/build/systemd-250/meson.build:1482:16: ERROR: Problem encountered: Sorry, -Ddns-over-tls=gnutls is not supported when openssl is used as the cryptolib
-
-Fixes:
- - http://autobuild.buildroot.org/results/2fcd4ad64b32cc4835866c9d99e05ab8c9bc794a
+https://thekelleys.org.uk/dnsmasq/CHANGELOG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/systemd/systemd.mk | 38 ++++++++++++++++++--------------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 3b0356ac9a..0b52cc47d1 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -115,13 +115,6 @@ else
- SYSTEMD_CONF_OPTS += -Delfutils=false
- endif
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 2a7cda4a04..804012821e 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.85.tar.xz.asc
+-sha256  ad98d3803df687e5b938080f3d25c628fe41c878752d03fbc6199787fee312fa  dnsmasq-2.85.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.86.tar.xz.asc
++sha256  28d52cfc9e2004ac4f85274f52b32e1647b4dbc9761b82e7de1e41c49907eb08  dnsmasq-2.86.tar.xz
+ # Locally calculated
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 972be10935..0569475fc4 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
--SYSTEMD_DEPENDENCIES += gnutls
--SYSTEMD_CONF_OPTS += -Dgnutls=true
--else
--SYSTEMD_CONF_OPTS += -Dgnutls=false
--endif
--
- ifeq ($(BR2_PACKAGE_IPTABLES),y)
- SYSTEMD_DEPENDENCIES += iptables
- SYSTEMD_CONF_OPTS += -Dlibiptc=true
-@@ -230,13 +223,6 @@ else
- SYSTEMD_CONF_OPTS += -Dp11kit=false
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SYSTEMD_DEPENDENCIES += openssl
--SYSTEMD_CONF_OPTS += -Dopenssl=true
--else
--SYSTEMD_CONF_OPTS += -Dopenssl=false
--endif
--
- ifeq ($(BR2_PACKAGE_PCRE2),y)
- SYSTEMD_DEPENDENCIES += pcre2
- SYSTEMD_CONF_OPTS += -Dpcre2=true
-@@ -491,14 +477,26 @@ else
- SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
- endif
- 
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
--SYSTEMD_CONF_OPTS += -Ddns-over-tls=gnutls -Ddefault-dns-over-tls=opportunistic
--SYSTEMD_DEPENDENCIES += gnutls
--else ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SYSTEMD_CONF_OPTS += -Ddns-over-tls=openssl -Ddefault-dns-over-tls=opportunistic
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+SYSTEMD_CONF_OPTS += \
-+	-Dgnutls=false \
-+	-Dopenssl=true \
-+	-Ddns-over-tls=openssl \
-+	-Ddefault-dns-over-tls=opportunistic
- SYSTEMD_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+SYSTEMD_CONF_OPTS += \
-+	-Dgnutls=true \
-+	-Dopenssl=false \
-+	-Ddns-over-tls=gnutls \
-+	-Ddefault-dns-over-tls=opportunistic
-+SYSTEMD_DEPENDENCIES += gnutls
- else
--SYSTEMD_CONF_OPTS += -Ddns-over-tls=false -Ddefault-dns-over-tls=no
-+SYSTEMD_CONF_OPTS += \
-+	-Dgnutls=false \
-+	-Dopenssl=false \
-+	-Ddns-over-tls=false \
-+	-Ddefault-dns-over-tls=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+-DNSMASQ_VERSION = 2.85
++DNSMASQ_VERSION = 2.86
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 -- 
 2.33.0
 
