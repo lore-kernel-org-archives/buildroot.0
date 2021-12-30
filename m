@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91734C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A904C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C31D41523;
-	Thu, 30 Dec 2021 15:20:28 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ElPG_PP68NSA; Thu, 30 Dec 2021 15:20:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E7D4414A2;
-	Thu, 30 Dec 2021 15:20:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 047581BF403
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:20:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E382740550
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:20:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCA6540573;
+	Thu, 30 Dec 2021 15:34:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Zc0hRiSgJk5 for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 15:20:23 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YBehL4ZHlZau; Thu, 30 Dec 2021 15:34:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D9EE440495;
+	Thu, 30 Dec 2021 15:34:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 746421BF403
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:34:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 637B9813E9
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:34:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3oV3E_pDu97p for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 15:34:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9F15040530
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:20:23 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 165A840002;
- Thu, 30 Dec 2021 15:20:19 +0000 (UTC)
-Date: Thu, 30 Dec 2021 16:20:19 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Ash Charles <ashcharles@gmail.com>
-Message-ID: <20211230162019.1eba8269@windsurf>
-In-Reply-To: <20211229155211.122190-1-ashcharles@gmail.com>
-References: <20211229155211.122190-1-ashcharles@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3AA15813E2
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:34:32 +0000 (UTC)
+Received: from fwd80.dcpf.telekom.de (fwd80.aul.t-online.de [10.223.144.106])
+ by mailout01.t-online.de (Postfix) with SMTP id 47DFA7464;
+ Thu, 30 Dec 2021 16:34:30 +0100 (CET)
+Received: from fli4l.lan.fli4l ([79.214.202.128]) by fwd80.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n2xRm-4VkEmf0; Thu, 30 Dec 2021 16:34:30 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43652)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n2xRl-00078U-LX;
+ Thu, 30 Dec 2021 16:34:29 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 16:34:27 +0100
+Message-Id: <20211230153429.2038516-2-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211230153429.2038516-1-bernd.kuhls@t-online.de>
+References: <20211230153429.2038516-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] pru-software-support: bump to latest
- version 6.0.1
+X-TOI-EXPURGATEID: 150726::1640878470-00001C4D-157C35C1/0/0 CLEAN NORMAL
+X-TOI-MSGID: 581f352a-1632-4d66-82a3-b60473f19239
+Subject: [Buildroot] [PATCH 2/4] package/intel-mediasdk: bump version to
+ 22.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,35 +64,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Louis-Paul Cordier <lpdev@cordier.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 29 Dec 2021 10:52:11 -0500
-Ash Charles <ashcharles@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Update to that latest version of the PRU software support [1]. Since
-> v5.9.0, the examples have been updated, kernel header references have
-> been bumped to v5.10, and some minor bug fixes added.
-> 
-> [1]
-> https://git.ti.com/cgit/pru-softward-support-package/pru-software-support-package
-> 
-> Signed-off-by: Ash Charles <ashcharles@gmail.com>
-> ---
->  package/pru-software-support/pru-software-support.hash | 2 +-
->  package/pru-software-support/pru-software-support.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index 83c52fa271..7cd61fe9b8 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2bcf0bfc2cc4f6a0b865d50c08a327d5bca81738b31a40c8f0e4eba12689d63d  intel-mediasdk-21.4.3.tar.gz
++sha256  5ed1d22b5c5a05d3e848e43caa2b3966dbfb7f74281a646e6d0774a0621a9b8b  intel-mediasdk-22.1.0.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 9f082bfa90..7d57e0e928 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MEDIASDK_VERSION = 21.4.3
++INTEL_MEDIASDK_VERSION = 22.1.0
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
