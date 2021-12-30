@@ -4,49 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94772C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 20:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2375C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 20:17:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 322C5827E0;
-	Thu, 30 Dec 2021 20:15:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FDFD814A0;
+	Thu, 30 Dec 2021 20:17:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RgCgejHDDaC5; Thu, 30 Dec 2021 20:15:06 +0000 (UTC)
+	with ESMTP id wGiE2lv5qtRN; Thu, 30 Dec 2021 20:17:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE67827C6;
-	Thu, 30 Dec 2021 20:15:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0220813C9;
+	Thu, 30 Dec 2021 20:17:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FBD71BF361
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:15:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 848051BF361
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24E13827C5
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:15:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F362813C9
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:17:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u8z-fCTLyyKN for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 20:15:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26851827C6
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 20:15:01 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id CB64D20004;
- Thu, 30 Dec 2021 20:14:59 +0000 (UTC)
-Date: Thu, 30 Dec 2021 21:14:58 +0100
+ with ESMTP id iAHGg0nDFOns for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 20:17:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C23208136A
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 20:17:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 41A2F82DDE; Thu, 30 Dec 2021 20:11:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Message-ID: <20211230211458.4449d869@windsurf>
-In-Reply-To: <20211021115915.32447-1-abrodkin@synopsys.com>
-References: <20211021115915.32447-1-abrodkin@synopsys.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH,
- RE-SEND] openjdk: Add ARC HS3x/4x support via "Zero Assembly
- Project"
+To: buildroot@buildroot.org
+Date: Thu, 30 Dec 2021 21:15:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f2ff09f5f9223150249ef2b4cbb2bb7a20c36bb9
+X-Git-Newrev: 1b7017c62c7da42cb4123327ee93ce3ae1d92ec2
+X-Patchwork-Hint: ignore
+Message-Id: <20211230201108.41A2F82DDE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/protobuf: drop dependency on
+ binutils bug 21464
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,76 +53,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E .
- MORIN" <yann.morin.1998@free.fr>, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Adam Duskett <aduskett@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b7017c62c7da42cb4123327ee93ce3ae1d92ec2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 21 Oct 2021 04:59:15 -0700
-Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+This package build failure has been fixed by using -mcmodel=large that is
+now available in external toolchains as well as buildroot toolchains. So
+we can drop its dependency on binutils 21464.
 
-> This allows building and running a full-scale JVM in purely
-> interpretive mode on ARCv2 processors.
-> 
-> Once JIT'ed version is available for ARC we'll obviously switch
-> to it to gain a faster execution.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/protobuf/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-I have applied your patch (finally you could say!) but there was a
-mistake in it: you've added your patch in package/openjdk/, but we
-support two versions of OpenJDK (11 and 17), and your patch only
-applies to version 17. So I moved it to a sub-folder + ensured that
-version 11 couldn't be selected for ARC. This also raised the issue
-that version 17 has an additional requirement on host gcc >= 4.9, so if
-a package ever did "select BR2_PACKAGE_OPENJDK", they would have to be
-careful that specifically on ARC, it's only available if host gcc >=
-4.9. To avoid this, I've moved the host gcc >= 4.9 dependency to
-BR2_PACKAGE_OPENJDK itself, even if not strictly required for OpenJDK
-11.
-
-However, there is one thing I didn't address as I wasn't sure: do you
-support only the "zero" variant on ARC? If so, doesn't this:
-
-config BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT
-        bool "client"
-        depends on !BR2_powerpc
-        help
-          Quick loading, but slower run-time performance.
-
-config BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER
-        bool "server"
-        depends on !BR2_powerpc
-        help
-          Slower loading, but faster run-time performance.
-
-config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
-        bool "zero"
-        select BR2_PACKAGE_LIBFFI
-        help
-          A non-assembler variant with wide arch support, however
-          performance is less then client/server.
-
-          http://openjdk.java.net/projects/zero
-
-also needs some depends on !BR2_arc for the client and server variants?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 30050950aa..46c820b9cf 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -24,7 +24,6 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 
+ config BR2_PACKAGE_PROTOBUF
+ 	bool "protobuf"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
