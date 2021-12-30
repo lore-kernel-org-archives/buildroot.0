@@ -4,43 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E09CDC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A3DC433EF
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 15:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84A3F82786;
-	Thu, 30 Dec 2021 15:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E0C282786;
+	Thu, 30 Dec 2021 15:59:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5RRc_jiHKSfy; Thu, 30 Dec 2021 15:58:36 +0000 (UTC)
+	with ESMTP id cfyVZpxI78TV; Thu, 30 Dec 2021 15:59:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D276581AAC;
-	Thu, 30 Dec 2021 15:58:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 298571BF403
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:58:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E710681A24;
+	Thu, 30 Dec 2021 15:59:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B4B2E1BF263
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10DBA40574
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:58:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2FC481A24
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 15:59:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Glb1JiHxtYg for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 15:58:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2875640166
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:58:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 074CF82DDC; Thu, 30 Dec 2021 15:52:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wvenl5wICgXS for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 15:59:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 903FC8129F
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:59:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E7D4BE0007;
+ Thu, 30 Dec 2021 15:59:23 +0000 (UTC)
+Date: Thu, 30 Dec 2021 16:59:23 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 16:58:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 383f73289ce6b0eaba9e8f2c611f0493959b69fe
-X-Git-Newrev: 6dad41b9f47df5226acde820c7d9ad5e28ffeef4
-X-Patchwork-Hint: ignore
-Message-Id: <20211230155241.074CF82DDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/arm-gnu-a-toolchain: bump to
+To: Kory Maincent <kory.maincent@bootlin.com>
+Message-ID: <20211230165923.6a6be968@windsurf>
+In-Reply-To: <20210908081630.3404221-1-kory.maincent@bootlin.com>
+References: <20210908081630.3404221-1-kory.maincent@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/arm-gnu-a-toolchain: bump to
  version 10.3-2021.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -53,44 +57,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dad41b9f47df5226acde820c7d9ad5e28ffeef4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash | 2 +-
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-index b18e56c151..73c2708fea 100644
---- a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-+++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ac952d89ae0fc3543e81099e7d34917efc621f5def112eee843fd1ce755eca8c  gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
-+sha256 45225813f74e0c3f76af2715d30d1fbebb873c1abe7098f9c694e5567cc2279c  gcc-arm-10.3-2021.07-x86_64-arm-none-eabi.tar.xz
-diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-index d7088892ca..97ab89c9eb 100644
---- a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-+++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
-+ARM_GNU_A_TOOLCHAIN_VERSION = 10.3-2021.07
- ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/$(ARM_GNU_A_TOOLCHAIN_VERSION)/binrel
- ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
- ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gS8O2cnksCgpPbiBXZWQsICA4IFNlcCAyMDIxIDEwOjE2OjMwICswMjAwCktvcnkgTWFp
+bmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+IHdyb3RlOgoKPiBVcGRhdGUgdG8gdmVy
+c2lvbiAxMC4zLTIwMjEuMDcuCj4gVGhlIG9sZCB2ZXJzaW9uIGNvbnRhaW5lZCBhIG5hc3R5IG5h
+bm8uc3BlYy4gVGhlIG5hbm8uc3BlYyBmaWxlIHdhcyBhZGRpbmcKPiAtbGNfbmFubyBvcHRpb24g
+YnV0IHRoZSBjX25hbm8uYSBsaWJyYXJ5IHdhcyBub3QgZGVsaXZlcmVkIGluIHRoZQo+IHRvb2xj
+aGFpbiBhcmNoaXZlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEtvcnkgTWFpbmNlbnQgPGtvcnkubWFp
+bmNlbnRAYm9vdGxpbi5jb20+Cj4gLS0tCj4gIHBhY2thZ2UvYXJtLWdudS1hLXRvb2xjaGFpbi9h
+cm0tZ251LWEtdG9vbGNoYWluLmhhc2ggfCAyICstCj4gIHBhY2thZ2UvYXJtLWdudS1hLXRvb2xj
+aGFpbi9hcm0tZ251LWEtdG9vbGNoYWluLm1rICAgfCA2ICsrKy0tLQo+ICAyIGZpbGVzIGNoYW5n
+ZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKClNvLCBJIGhhdmUgYXBwbGllZCwg
+YnV0IHdpdGggYSB2ZXJ5IGltcG9ydGFudCBjaGFuZ2U6IEkgcmVhbGx5IGJ1bXAgdGhlCmdudS1h
+IHRvb2xjaGFpbiwgSSBkb24ndCBzd2l0Y2ggdG8gdGhlIGdudS1ybSB0b29sY2hhaW4sIHdoaWNo
+IHNob3VsZApiZSBhZGRlZCBhcyBhIHNlcGFyYXRlIHBhY2thZ2UsIGJlY2F1c2UgaXQncyBkaWZm
+ZXJlbnQuCgpCZXN0IHJlZ2FyZHMsCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywg
+Qm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9v
+dGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
