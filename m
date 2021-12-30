@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E18C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA8A2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4278540155;
-	Thu, 30 Dec 2021 13:56:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B03B80C02;
+	Thu, 30 Dec 2021 13:57:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kJz-w-o8Tr8f; Thu, 30 Dec 2021 13:56:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g08WP30FNylX; Thu, 30 Dec 2021 13:57:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 978B04013D;
-	Thu, 30 Dec 2021 13:56:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DBB8E1BF408
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DAB480C39;
+	Thu, 30 Dec 2021 13:57:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DCE81BF408
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D908D40641
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D3F980C00
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zABKduhjV3Wr for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fC89ZHE7B3zu for <buildroot@lists.busybox.net>;
  Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE43E405AE
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:39 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id t26so50593437wrb.4
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:39 -0800 (PST)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F44880BD1
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id e5so50591335wrc.5
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=Su71JalmvWJuFZmz5dpZ35sto7PU56QtAae/vfhp7g8=;
- b=WDPUb2mD+pk2haQOBJZM3w8m6ZTILlX6GXquIr1XlkRYFHbGzWihcykuS6HxCYn3pq
- O4R2rQXxABMlebaSI4gwByYOSA/yhp3dbNW1pQSxqrEx4iOQzXlCoxS3asJ7IHSHdor7
- l7NAC4TwHjYzdvOaeZgU1u2Ib/GNQQ5JqD5R1gLJxAdal0whDU/rHE106c90pzceP9/K
- uEV/ZZ5SepCfjPCAVQfJm1XmVvk4mbML8tHpTdEXeS+1AgvksYisHBGBztc95tbTSv4x
- iBywQHvOSZOX7Sq4DI+00VDveBXUP1ofL4qB2grmKMEjja9UFGtPKWn1RBRVPSnNclCV
- Qmcg==
+ bh=nY4ylFzSN/uAhf5AeKPMWimTb3eKYqlamUazD1FMoyI=;
+ b=AXY3Tz52x0iKlCpsgkpX12LIpeyfYPgx3LX4DBaD5riH55rEk9RM7wvZyGx9wqhT1/
+ maTWyV3dmLvsVV1jo9B5o72tG+euaPxVj9kCvy2UopRnfsfW7EhDUytAPLuZ+5XkBimy
+ fNdiymd4+JUf8h+VhzbJIlYndSCMg1X0xvX8v3byCHDFlTq9TwEOTGWEWCtRFEMVG3qF
+ 6MSxYvd9+OpeO5j2E3IfmIVxTWoZGowSV/E3IyRdNAyJLjIxDyvpKSg5NRNKbPamEFZK
+ woxPVm1rGaaEyVzzVdSvKovmbOoebA7z+8nc/dBbHTMvOfeDVUQ/d4GJEOwdZ+O6ROcI
+ fLZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=Su71JalmvWJuFZmz5dpZ35sto7PU56QtAae/vfhp7g8=;
- b=n2iQc+gDdF8KkNHOarWH0RaAKs5rJ8qQHon54oZBQSzpSgVKIc08EUMnVrQlFv2M3/
- PAu0D+jzFWEsPrDZL7KUXSYA2xItHG1Yhk5L9R1PfB8RlAYuDWb28pyIf9aEA2u+tvwf
- 2VKQZc4HwfcdkiWo/tTiF5s38Dz1PQj6miijxi94ufZswGT0rEo5VMmPu2lu5OmKKnf3
- KFTN8yz8WQwV2dovfH6kpukOLy+dxLtFdsUrhoSrlLdG00ylxxBOBvhqydhpriW4OJXW
- YDN7ORrqtqoafVKFgXL4O4h/IUTR6B9FXw9OD+K/rZ50SmpedRqp3bJe1oLLvVZZg2lK
- KyOg==
-X-Gm-Message-State: AOAM531+IhSEQapy/h0DS0tJ4pWXRWpV9v4g8tWTx2npItDPRZY181Pt
- GabW4YUSUPDIfsO+hiZVDDXjYjnfPk0=
-X-Google-Smtp-Source: ABdhPJwNNNLgMwO6xuFO7nNVnwsowQId7OoOslmU6Dnb/97y311kuMHdHSLWVGDePr4XLdFQlpxuBQ==
-X-Received: by 2002:a05:6000:104c:: with SMTP id
- c12mr24424687wrx.419.1640872597887; 
- Thu, 30 Dec 2021 05:56:37 -0800 (PST)
+ bh=nY4ylFzSN/uAhf5AeKPMWimTb3eKYqlamUazD1FMoyI=;
+ b=xZpZRMMFVJdsIL9sTXiKUXXJiK3FbER/BwbsuvrvSIEEf4K2P1UrB2Yusb6X02IFyL
+ +qZre/kk9yPEoDibQlmMKgn4biqH4quyWjf1tO7HxiQHOJBqMR930nIfMSCVOrTkrrfI
+ /Q82Mr2pdNnOz+bMS4+fwmnT6gG66qaZGiRI+YdygwbE6IKs1jzv+CJRhEinFr/VvhqA
+ wtzk8278bWqnKArWkadF6ZDO2WcLfFs2oadjI5SpcpukIaU26AVjBxqqdihwlredGKaj
+ V/M09SvomYW8hOCnubFNFkRsThkJ+8+v+PHAE1uBrqO1PBcT2IV4WCUyaxTkq+pwqISR
+ vwRg==
+X-Gm-Message-State: AOAM533PvSrBDc8nJDZnbE+1/AID+Yr+pzYqDGkHpdiCCzMdlZCOR21+
+ pITryxlCLRzs8s7acwBLntE9CUfxPdg=
+X-Google-Smtp-Source: ABdhPJxQ26nEx/t1KFgsD7yyeHPoSLD9WhbwJGFjhNuMfmxsAP5Cy5VFF+qnGIeQtR1mcegeVCGMQQ==
+X-Received: by 2002:a5d:698f:: with SMTP id g15mr26230059wru.256.1640872598675; 
+ Thu, 30 Dec 2021 05:56:38 -0800 (PST)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id l7sm24353765wms.1.2021.12.30.05.56.37
+ by smtp.gmail.com with ESMTPSA id l7sm24353765wms.1.2021.12.30.05.56.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 05:56:37 -0800 (PST)
+ Thu, 30 Dec 2021 05:56:38 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 14:56:16 +0100
-Message-Id: <20211230135621.2255847-2-romain.naour@gmail.com>
+Date: Thu, 30 Dec 2021 14:56:17 +0100
+Message-Id: <20211230135621.2255847-3-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211230135621.2255847-1-romain.naour@gmail.com>
 References: <20211230135621.2255847-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/7] package/supertuxkart: bump to version 1.3
+Subject: [Buildroot] [PATCH 3/7] package/efl: bump to version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,123 +92,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to github to download the release archive.
+efl disable libinput
+efl disable heif (there is no libheif package in Buildroot)
 
-Add sdl2 dependency added by [1].
-
-Remove FriBidi dependency replaced by SheenBidi library (bundled) for
-better unicode support [2] [3].
-
-Remove libglew removed by [4].
-
-Replace MbedTLS instead of Nettle [5].
-
-[1] https://github.com/supertuxkart/stk-code/commit/00cb6c2d480d99785f52e0352bc3a21a803a467d
-[2] https://github.com/supertuxkart/stk-code/commit/13db1b83c1e7160276c87b1faa8b573bb390cce3
-[3] https://github.com/supertuxkart/stk-code/commit/dc0a5a9c661a676941d202500713a7d736071838
-[4] https://github.com/supertuxkart/stk-code/commit/3f0eb215f73e4edf8a91309e6de6db926f8dfa54
-[5] https://github.com/supertuxkart/stk-code/commit/d753393f4dcec79f2bd5a60a853247b9d854e240
+See:
+https://www.enlightenment.org/news/2021-12-26-efl-1.26.0
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/supertuxkart/Config.in         |  5 ++---
- package/supertuxkart/supertuxkart.hash |  7 +------
- package/supertuxkart/supertuxkart.mk   | 16 ++++++++--------
- 3 files changed, 11 insertions(+), 17 deletions(-)
+ ...e_evas-engines-drm-meson.build-use-gl_deps-as-en.patch | 4 ++--
+ ...e_evas-engines-drm-meson.build-fix-gl_drm-includ.patch | 4 ++--
+ package/efl/0003-ecore_fb-fix-build-with-tslib.patch      | 4 ++--
+ package/efl/efl.hash                                      | 4 ++--
+ package/efl/efl.mk                                        | 8 +++++---
+ 5 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index a18b9c1a0a..8e8eafb51c 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -15,14 +15,13 @@ config BR2_PACKAGE_SUPERTUXKART
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBFRIBIDI
--	select BR2_PACKAGE_LIBGLEW
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBSQUISH
- 	select BR2_PACKAGE_LIBVORBIS
--	select BR2_PACKAGE_NETTLE if !BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENAL
-+	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS # runtime
-diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
-index 9654ad24a2..306634d28e 100644
---- a/package/supertuxkart/supertuxkart.hash
-+++ b/package/supertuxkart/supertuxkart.hash
-@@ -1,8 +1,3 @@
- # Locally computed
--sha256	e9b02b0b11ab68aacaec38306903feffe59a501224805cd3645cebf10e880ae8  supertuxkart-1.1-src.tar.xz
--# From https://sourceforge.net/projects/supertuxkart/files/SuperTuxKart/1.1/
--sha1	68be26f4b15d30dede26563cbcc6de999036c5e0  supertuxkart-1.1-src.tar.xz
--md5	731569c58428f32a0e46943fad7ba1e3  supertuxkart-1.1-src.tar.xz
--
--# Locally computed
-+sha256	eeabeb0d9801688a218f6f0a76ea3546a46a322ccaca9a258148ecacfe083ffd  SuperTuxKart-1.3-src.tar.xz
- sha256	d27207a5213f746aac53893e9ecc18456e9595d3ffa662bd1ec9eb10787c214a  COPYING
-diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
-index 97cd2a40b8..8ec366f792 100644
---- a/package/supertuxkart/supertuxkart.mk
-+++ b/package/supertuxkart/supertuxkart.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch b/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+index 185926ac46..8fa4658f06 100644
+--- a/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
++++ b/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+@@ -1,4 +1,4 @@
+-From 51dfe1863ddc8c5dd576405a9bbb8bca875c1142 Mon Sep 17 00:00:00 2001
++From 00833baac6935bd1e3e9856211bc165c5b02a7bd Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Sat, 1 Aug 2020 02:25:47 +0200
+ Subject: [PATCH] ecore_evas/engines/drm/meson.build: use "gl_deps" as engine
+@@ -32,5 +32,5 @@ index 58071010d0..0741d7fccd 100644
+  
+  engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
+ -- 
+-2.25.4
++2.31.1
+ 
+diff --git a/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch b/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+index 89ec838a72..3465fc50aa 100644
+--- a/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
++++ b/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+@@ -1,4 +1,4 @@
+-From 8548b02c487ba7e9d78489c6db58812ee5cfb197 Mon Sep 17 00:00:00 2001
++From a21e71cc2284a19a34c913aff757e656e3a8c14a Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Sat, 1 Aug 2020 01:01:00 +0200
+ Subject: [PATCH] ecore_evas/engines/drm/meson.build: fix "gl_drm" include
+@@ -33,5 +33,5 @@ index 0741d7fccd..edda1abd71 100644
+  shared_module(mod_full_name, engine_src,
+    include_directories : config_dir + [engine_include_dir],
+ -- 
+-2.25.4
++2.31.1
+ 
+diff --git a/package/efl/0003-ecore_fb-fix-build-with-tslib.patch b/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
+index 8eb159505f..2756e0932d 100644
+--- a/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
++++ b/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
+@@ -1,4 +1,4 @@
+-From 9a785396a7940ec541cf4793f9c9f92548c99d4c Mon Sep 17 00:00:00 2001
++From 836b13de08980d89fc13690284efd355c1b43218 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 10 Jul 2021 22:38:03 +0200
+ Subject: [PATCH] ecore_fb: fix build with tslib
+@@ -31,5 +31,5 @@ index 6d50e0f146..7c7f6786c3 100644
+      install: true,
+      version : meson.project_version()
+ -- 
+-2.30.2
++2.31.1
+ 
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 69008cde23..6364d276c0 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.25.1.tar.xz.sha256sum
+-sha256  351ca0211ca000234527a503585f039f985607ec9439e34b49d8b8bbf35a7e6b  efl-1.25.1.tar.xz
++# From https://www.enlightenment.org/news/2021-12-26-efl-1.26.0
++sha256  a4a9bce45fd27f8541874e44a130f64550bee1f2f72feaa6c8a758d92eaf204c  efl-1.26.0.tar.xz
+ 
+ sha256  d666b6b2df9f5b791f85c299c65516cb55528b02a807603de246f65f4918ae22  COMPLIANCE
+ sha256  5bceb52d65debe420bc520f2992807740dc928b7fdc3c2e9a74b5889177ddf4c  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index cdb05aa551..46bce29305 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUPERTUXKART_VERSION = 1.1
--SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
--SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
-+SUPERTUXKART_VERSION = 1.3
-+SUPERTUXKART_SOURCE = SuperTuxKart-$(SUPERTUXKART_VERSION)-src.tar.xz
-+# Do not use the github helper here, the generated tarball is *NOT*
-+# the same as the one uploaded by upstream for the release.
-+SUPERTUXKART_SITE = https://github.com/supertuxkart/stk-code/releases/download/$(SUPERTUXKART_VERSION)
+-EFL_VERSION = 1.25.1
++EFL_VERSION = 1.26.0
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
+@@ -209,7 +209,7 @@ EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
+ # json evas loader is disabled by default by upstream.
+ # Disable libspectre (ps).
+ # Keep all other evas loader enabled or handled below.
+-EFL_EVAS_LOADERS_DISABLER = avif gst json ps
++EFL_EVAS_LOADERS_DISABLER = avif gst heif json ps
  
- # Supertuxkart itself is GPL-3.0+, but it bundles a few libraries with different
- # licenses. Irrlicht, bullet and angelscript have Zlib license, while glew is
-@@ -21,14 +23,13 @@ SUPERTUXKART_DEPENDENCIES = \
- 	harfbuzz \
- 	jpeg \
- 	libcurl \
--	libfribidi \
- 	libgl \
--	libglew \
- 	libogg \
- 	libpng \
- 	libsquish \
- 	libvorbis \
- 	openal \
-+	sdl2 \
- 	xlib_libXrandr \
- 	zlib
+ # efl already depends on jpeg.
+ ifeq ($(BR2_PACKAGE_EFL_JPEG),y)
+@@ -302,6 +302,7 @@ HOST_EFL_DEPENDENCIES = \
+ # Configure options:
+ # audio=false: remove libsndfile dependency.
+ # eeze=false: remove libudev dependency.
++# input=false: remove libinput dependency.
+ # libmount=false: remove dependency on host-util-linux libmount.
+ # elua=true: build elua for the host.
+ # physics=false: remove Bullet dependency.
+@@ -324,6 +325,7 @@ HOST_EFL_CONF_OPTS += \
+ 	-Dglib=true \
+ 	-Dgstreamer=false \
+ 	-Dharfbuzz=false \
++	-Dinput=false \
+ 	-Dlibmount=false \
+ 	-Dlua-interpreter=luajit \
+ 	-Dnetwork-backend=none \
+@@ -340,7 +342,7 @@ HOST_EFL_CONF_OPTS += \
+ 	-Dxinput22=false
  
-@@ -37,7 +38,6 @@ SUPERTUXKART_DEPENDENCIES = \
- # Disable In-game recorder (there is no libopenglrecorder package)
- SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF \
- 	-DBUILD_RECORDER=OFF \
--	-DUSE_SYSTEM_GLEW=ON \
- 	-DUSE_SYSTEM_ENET=ON \
- 	-DUSE_SYSTEM_SQUISH=ON
+ # List of modular image/vector loaders to disable in efl
+-HOST_EFL_EVAS_LOADERS_DISABLER = avif bmp dds eet generic gst ico json \
++HOST_EFL_EVAS_LOADERS_DISABLER = avif bmp dds eet generic gst heif ico json \
+ 	jp2k pdf pmaps ps psd raw rsvg tga tgv tiff wbmp webp xcf xpm
  
-@@ -49,12 +49,12 @@ else
- SUPERTUXKART_CONF_OPTS += -DUSE_WIIUSE=OFF
- endif
- 
--# Prefer openssl (the default) over nettle.
-+# Prefer openssl (the default) over mbedtls
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SUPERTUXKART_DEPENDENCIES += openssl
- SUPERTUXKART_CONF_OPTS += -DUSE_CRYPTO_OPENSSL=ON
- else
--SUPERTUXKART_DEPENDENCIES += nettle
-+SUPERTUXKART_DEPENDENCIES += mbedtls
- SUPERTUXKART_CONF_OPTS += -DUSE_CRYPTO_OPENSSL=OFF
- endif
- 
+ HOST_EFL_CONF_OPTS += -Devas-loaders-disabler=$(subst $(space),$(comma),$(HOST_EFL_EVAS_LOADERS_DISABLER))
 -- 
 2.31.1
 
