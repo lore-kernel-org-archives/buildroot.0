@@ -1,80 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA8A2C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29672C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 13:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B03B80C02;
-	Thu, 30 Dec 2021 13:57:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7AFF400A8;
+	Thu, 30 Dec 2021 13:57:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g08WP30FNylX; Thu, 30 Dec 2021 13:57:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nww5B61cEKaI; Thu, 30 Dec 2021 13:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DAB480C39;
-	Thu, 30 Dec 2021 13:57:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9DCE81BF408
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC934400F6;
+	Thu, 30 Dec 2021 13:57:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 312591BF408
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D3F980C00
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E63A400E6
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 13:56:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fC89ZHE7B3zu for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cuYPLLY7Y6rv for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F44880BD1
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:40 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id e5so50591335wrc.5
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:40 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2CBDB40024
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 13:56:41 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id w20so41609321wra.9
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 05:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=nY4ylFzSN/uAhf5AeKPMWimTb3eKYqlamUazD1FMoyI=;
- b=AXY3Tz52x0iKlCpsgkpX12LIpeyfYPgx3LX4DBaD5riH55rEk9RM7wvZyGx9wqhT1/
- maTWyV3dmLvsVV1jo9B5o72tG+euaPxVj9kCvy2UopRnfsfW7EhDUytAPLuZ+5XkBimy
- fNdiymd4+JUf8h+VhzbJIlYndSCMg1X0xvX8v3byCHDFlTq9TwEOTGWEWCtRFEMVG3qF
- 6MSxYvd9+OpeO5j2E3IfmIVxTWoZGowSV/E3IyRdNAyJLjIxDyvpKSg5NRNKbPamEFZK
- woxPVm1rGaaEyVzzVdSvKovmbOoebA7z+8nc/dBbHTMvOfeDVUQ/d4GJEOwdZ+O6ROcI
- fLZA==
+ bh=ltSOsGHOQIQ1VwsQezG7SfJrtTmzp6m1+SSnNrzbZnw=;
+ b=iQLoBVwuSB+tp3VjxG6+nfSYdmtNPGM1h4KQjjFPsdpPySoqL7Z9xKSw3EWRiPbats
+ nAQ+hRa7FXacRXCh+i7JuVMZ5rBhFKFaOFoc5j0nIoE2uYqmP6DFNeQjV1hLmetssnw1
+ aRBa8ahzxpfoxXpII9Hu/4O9qw39WpY4nEeiHQUStVZoE9X6TLk/VwRHG+BhLuHaz35A
+ QcUzZoyP747wciSvE6BIMuurdIuxLUvBI1BPjQqFmaP7Zei6XETNCvOTNMJJXZwpgLP1
+ jS5ibgeaU1jn4ifWcPKq6nPwub01ZUDkVx9Yd1Gjr3Qq95JcE49RE2n5BQGMJZL/dPLE
+ 2ihA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=nY4ylFzSN/uAhf5AeKPMWimTb3eKYqlamUazD1FMoyI=;
- b=xZpZRMMFVJdsIL9sTXiKUXXJiK3FbER/BwbsuvrvSIEEf4K2P1UrB2Yusb6X02IFyL
- +qZre/kk9yPEoDibQlmMKgn4biqH4quyWjf1tO7HxiQHOJBqMR930nIfMSCVOrTkrrfI
- /Q82Mr2pdNnOz+bMS4+fwmnT6gG66qaZGiRI+YdygwbE6IKs1jzv+CJRhEinFr/VvhqA
- wtzk8278bWqnKArWkadF6ZDO2WcLfFs2oadjI5SpcpukIaU26AVjBxqqdihwlredGKaj
- V/M09SvomYW8hOCnubFNFkRsThkJ+8+v+PHAE1uBrqO1PBcT2IV4WCUyaxTkq+pwqISR
- vwRg==
-X-Gm-Message-State: AOAM533PvSrBDc8nJDZnbE+1/AID+Yr+pzYqDGkHpdiCCzMdlZCOR21+
- pITryxlCLRzs8s7acwBLntE9CUfxPdg=
-X-Google-Smtp-Source: ABdhPJxQ26nEx/t1KFgsD7yyeHPoSLD9WhbwJGFjhNuMfmxsAP5Cy5VFF+qnGIeQtR1mcegeVCGMQQ==
-X-Received: by 2002:a5d:698f:: with SMTP id g15mr26230059wru.256.1640872598675; 
- Thu, 30 Dec 2021 05:56:38 -0800 (PST)
+ bh=ltSOsGHOQIQ1VwsQezG7SfJrtTmzp6m1+SSnNrzbZnw=;
+ b=e9CXy2tqDWSQl33L16Xo9mnce7nBoe/uL9Rb3CABJnfR/kAKJ0C+m4Ktmr053MFMA5
+ G7jrxt2xpsD7SCcHCtkdQaT8CnZXU+U2NaDY3BrV+tdvZmmaBv1bB/+v8WUNKNR0AyT8
+ xOGxhj7g5KBiNCngcOWnhnm6aB3h2J+XXWt1aLEBGV9RPitPdUay9HheOinb6Yio1JH7
+ dPn+UODum3whVf3Z5ZZzpZsMrDwOWGEVtMMvCnJPqq93JSG7jxAO+k1B1zujDVpPx+Gd
+ gVTsj7bT8SiEXKmBEHX+7xs1dC8qiLdAZKmFmweGmAaiXvg1EXko8GAHUE40FsjeGrYV
+ TawA==
+X-Gm-Message-State: AOAM533KacR0icRYff9iM8LmAim06GtCAKi8WrBFrwky7dTO0ee0F5KQ
+ 5F/wNy2jNRd6lIy6D7UXnap9SWFVnKI=
+X-Google-Smtp-Source: ABdhPJwqG1vX85+OIDOFK36gKKT+JpX+FsBmFr76EfkbTbkJVkmzX+uRIcAAbjnSdQ9Ktl2q9EjAJg==
+X-Received: by 2002:a5d:64ef:: with SMTP id g15mr25511907wri.297.1640872599484; 
+ Thu, 30 Dec 2021 05:56:39 -0800 (PST)
 Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
  by smtp.gmail.com with ESMTPSA id l7sm24353765wms.1.2021.12.30.05.56.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 05:56:38 -0800 (PST)
+ Thu, 30 Dec 2021 05:56:39 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 14:56:17 +0100
-Message-Id: <20211230135621.2255847-3-romain.naour@gmail.com>
+Date: Thu, 30 Dec 2021 14:56:18 +0100
+Message-Id: <20211230135621.2255847-4-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211230135621.2255847-1-romain.naour@gmail.com>
 References: <20211230135621.2255847-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/7] package/efl: bump to version 1.26.0
+Subject: [Buildroot] [PATCH 4/7] package/enlightenment: bump to version
+ 0.25.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,131 +95,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-efl disable libinput
-efl disable heif (there is no libheif package in Buildroot)
+Update license file hash due to a tree-wide trailing whitespace removal [1].
+
+Disable optional dependency on libexif [2].
 
 See:
-https://www.enlightenment.org/news/2021-12-26-efl-1.26.0
+https://www.enlightenment.org/news/2021-12-26-enlightenment-0.25.0
+
+[1] https://git.enlightenment.org/core/enlightenment.git/commit/?id=01fd3da2a33c411b41eea3b175c496c14777b358
+[2] https://git.enlightenment.org/core/enlightenment.git/commit/?id=10ac9fb3277e599d1ac4d54c0d59faebc064b186
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...e_evas-engines-drm-meson.build-use-gl_deps-as-en.patch | 4 ++--
- ...e_evas-engines-drm-meson.build-fix-gl_drm-includ.patch | 4 ++--
- package/efl/0003-ecore_fb-fix-build-with-tslib.patch      | 4 ++--
- package/efl/efl.hash                                      | 4 ++--
- package/efl/efl.mk                                        | 8 +++++---
- 5 files changed, 13 insertions(+), 11 deletions(-)
+ package/enlightenment/enlightenment.hash | 8 ++++----
+ package/enlightenment/enlightenment.mk   | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch b/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
-index 185926ac46..8fa4658f06 100644
---- a/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
-+++ b/package/efl/0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 7f0f3f3e7b..dd4c4d78c0 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
 @@ -1,4 +1,4 @@
--From 51dfe1863ddc8c5dd576405a9bbb8bca875c1142 Mon Sep 17 00:00:00 2001
-+From 00833baac6935bd1e3e9856211bc165c5b02a7bd Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Sat, 1 Aug 2020 02:25:47 +0200
- Subject: [PATCH] ecore_evas/engines/drm/meson.build: use "gl_deps" as engine
-@@ -32,5 +32,5 @@ index 58071010d0..0741d7fccd 100644
-  
-  engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
- -- 
--2.25.4
-+2.31.1
- 
-diff --git a/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch b/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
-index 89ec838a72..3465fc50aa 100644
---- a/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
-+++ b/package/efl/0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
-@@ -1,4 +1,4 @@
--From 8548b02c487ba7e9d78489c6db58812ee5cfb197 Mon Sep 17 00:00:00 2001
-+From a21e71cc2284a19a34c913aff757e656e3a8c14a Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Sat, 1 Aug 2020 01:01:00 +0200
- Subject: [PATCH] ecore_evas/engines/drm/meson.build: fix "gl_drm" include
-@@ -33,5 +33,5 @@ index 0741d7fccd..edda1abd71 100644
-  shared_module(mod_full_name, engine_src,
-    include_directories : config_dir + [engine_include_dir],
- -- 
--2.25.4
-+2.31.1
- 
-diff --git a/package/efl/0003-ecore_fb-fix-build-with-tslib.patch b/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
-index 8eb159505f..2756e0932d 100644
---- a/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
-+++ b/package/efl/0003-ecore_fb-fix-build-with-tslib.patch
-@@ -1,4 +1,4 @@
--From 9a785396a7940ec541cf4793f9c9f92548c99d4c Mon Sep 17 00:00:00 2001
-+From 836b13de08980d89fc13690284efd355c1b43218 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 10 Jul 2021 22:38:03 +0200
- Subject: [PATCH] ecore_fb: fix build with tslib
-@@ -31,5 +31,5 @@ index 6d50e0f146..7c7f6786c3 100644
-      install: true,
-      version : meson.project_version()
- -- 
--2.30.2
-+2.31.1
- 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 69008cde23..6364d276c0 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,5 +1,5 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.25.1.tar.xz.sha256sum
--sha256  351ca0211ca000234527a503585f039f985607ec9439e34b49d8b8bbf35a7e6b  efl-1.25.1.tar.xz
-+# From https://www.enlightenment.org/news/2021-12-26-efl-1.26.0
-+sha256  a4a9bce45fd27f8541874e44a130f64550bee1f2f72feaa6c8a758d92eaf204c  efl-1.26.0.tar.xz
- 
- sha256  d666b6b2df9f5b791f85c299c65516cb55528b02a807603de246f65f4918ae22  COMPLIANCE
- sha256  5bceb52d65debe420bc520f2992807740dc928b7fdc3c2e9a74b5889177ddf4c  COPYING
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index cdb05aa551..46bce29305 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+-# From https://www.enlightenment.org/news/e24.2
+-sha256  be18e2f18d6c0b058f633e769863d3cbc4c07b629058ae670dec74cd7906dff1  enlightenment-0.24.2.tar.xz
+-sha256  17dda7902d3e1a743f91cf2545f474be93f612768a9e9022593d788ecc83935a  COPYING
+-sha256  f4ba47ef8f4ff588202e721ab10f0208a3fa678147e7f928e6b2820f2e646e13  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
++# From https://www.enlightenment.org/news/2021-12-26-enlightenment-0.25.0
++sha256  7d6e72ceed5aca135b7a49c2a1c1eb9d8fde1318613517401d0418e0e5f6df06  enlightenment-0.25.0.tar.xz
++sha256  8d2fbc393e967cd6f5b8559d1744881a6a1ceb3ec6e1c2368c3916809ffccb8d  COPYING
++sha256  cdc77ee1732455b203610f923fe4196046b3f7509038c48dc0b0c7e3492c23f3  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 969b391cdc..640d5a62bb 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.25.1
-+EFL_VERSION = 1.26.0
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
-@@ -209,7 +209,7 @@ EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
- # json evas loader is disabled by default by upstream.
- # Disable libspectre (ps).
- # Keep all other evas loader enabled or handled below.
--EFL_EVAS_LOADERS_DISABLER = avif gst json ps
-+EFL_EVAS_LOADERS_DISABLER = avif gst heif json ps
+-ENLIGHTENMENT_VERSION = 0.24.2
++ENLIGHTENMENT_VERSION = 0.25.0
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
+@@ -22,6 +22,7 @@ ENLIGHTENMENT_CONF_OPTS = \
+ 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
+ 	-Deet=$(HOST_DIR)/bin/eet \
+ 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
++	-Dlibexif=false \
+ 	-Dpam=false \
+ 	-Dpolkit=false
  
- # efl already depends on jpeg.
- ifeq ($(BR2_PACKAGE_EFL_JPEG),y)
-@@ -302,6 +302,7 @@ HOST_EFL_DEPENDENCIES = \
- # Configure options:
- # audio=false: remove libsndfile dependency.
- # eeze=false: remove libudev dependency.
-+# input=false: remove libinput dependency.
- # libmount=false: remove dependency on host-util-linux libmount.
- # elua=true: build elua for the host.
- # physics=false: remove Bullet dependency.
-@@ -324,6 +325,7 @@ HOST_EFL_CONF_OPTS += \
- 	-Dglib=true \
- 	-Dgstreamer=false \
- 	-Dharfbuzz=false \
-+	-Dinput=false \
- 	-Dlibmount=false \
- 	-Dlua-interpreter=luajit \
- 	-Dnetwork-backend=none \
-@@ -340,7 +342,7 @@ HOST_EFL_CONF_OPTS += \
- 	-Dxinput22=false
- 
- # List of modular image/vector loaders to disable in efl
--HOST_EFL_EVAS_LOADERS_DISABLER = avif bmp dds eet generic gst ico json \
-+HOST_EFL_EVAS_LOADERS_DISABLER = avif bmp dds eet generic gst heif ico json \
- 	jp2k pdf pmaps ps psd raw rsvg tga tgv tiff wbmp webp xcf xpm
- 
- HOST_EFL_CONF_OPTS += -Devas-loaders-disabler=$(subst $(space),$(comma),$(HOST_EFL_EVAS_LOADERS_DISABLER))
 -- 
 2.31.1
 
