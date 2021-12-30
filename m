@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4DD9C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 29 Dec 2021 23:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67F74C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 01:28:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CCBE81320;
-	Wed, 29 Dec 2021 23:45:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA3F5605DB;
+	Thu, 30 Dec 2021 01:28:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vT91xaR0NQKk; Wed, 29 Dec 2021 23:45:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nN7GtOGcfGCR; Thu, 30 Dec 2021 01:28:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D686681328;
-	Wed, 29 Dec 2021 23:45:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58CDB1BF280
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:45:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE94F60B51;
+	Thu, 30 Dec 2021 01:28:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E1911BF300
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4668A402DC
- for <buildroot@lists.busybox.net>; Wed, 29 Dec 2021 23:45:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C4A78175C
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 01:28:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b6OailkfngWl for <buildroot@lists.busybox.net>;
- Wed, 29 Dec 2021 23:45:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5DNXKkiyJrJY for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 01:28:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
  [IPv6:2607:f8b0:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9969D402A8
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 23:45:24 +0000 (UTC)
-Received: by mail-pl1-x62d.google.com with SMTP id z3so16813339plg.8
- for <buildroot@buildroot.org>; Wed, 29 Dec 2021 15:45:24 -0800 (PST)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 778F381405
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 01:28:45 +0000 (UTC)
+Received: by mail-pl1-x62d.google.com with SMTP id z3so17048256plg.8
+ for <buildroot@buildroot.org>; Wed, 29 Dec 2021 17:28:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IX6BoH7xSipIe4KRSXY2UZoJ70z5kYv9G0v7sKk98zI=;
- b=PbpW+9o4zEc1YuD3nqPhXESkDw4+Xk3dU6ZEmwE+cHXUW+UKW3HyiIjJhgljuIk/Gu
- gQimUQuJ6P7+l7a1dzNT3Too0K54AMS56VLVA95Gci6tAMdKxa9iM27ikGP4t9ndQAcr
- jsLmK7VMRocJaTLf7rV4Y7iNb8gEm/teJv+FPjtP7GNzwanLB6IdkHYWmZM6kseXdNuL
- T8ZO8eMneS4X9E9/SirIvaS2UWtxFTQ6dS4ZMpiGkf4wYG2+0mNShOpLEiHsoFjiI5Ai
- 9EvCSJ1Y2AMwpmnqVvTkGb2uiKxkOrxpu4bcarIMLe5W76GRfxqFobzwfvdOkXtHPk7N
- fNJw==
+ bh=BCniAOqialbz6JYyXChWJ8rpr9dmb7edKMdcFuo7bJY=;
+ b=deuNsV9LGLqt9D9p3jzy0h2qwujHHXT2art1kpNLev/CzRUoS6pn+yILPTFC81Jpc5
+ R3a1Y4VsPyQo5Jqv5Ml/QbEr9bAKOQZDR7aK8tl0qSCm6tEYuqBIZ4aJEKlK7VWh+jq9
+ k0gYF3/PGK4zhQIg8FSQoTs9jrwuFx6u8lrtJuX5IWGTZje99MjcbFFh0exsspKaTIUB
+ 9mA4JOZUmAyeaBmRl6NWoTlSHnRHuhAVgurCTSNSaeXOrxm/ZNeJTdXuqQQi3PatnT4E
+ 0zpUHZTaxu1/Wr2ZtDRZBR0/sByP1aoAponBn6xpqfwcM5pPaiqPYEZMvW74L3c18eQz
+ TVBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=IX6BoH7xSipIe4KRSXY2UZoJ70z5kYv9G0v7sKk98zI=;
- b=SuDs1AX02gf2CZaV3YsZvIsv5p0ZykRNByvNcNoaCA1BItrdxhDNFbWTkvEB3r35Rl
- bsFAJfikgXLhKW1j2qAFKqsFEosayH21H3URoYqAg92x3iFqtqHpSdr3TUD7hjniW+zP
- 6x3z2C91anKdHssj0qc8ABgtpprGNJDWlGYX+DzDAaarlJdMyVER2fp6UrktDnvXky+j
- VI0QU1Bqyf08R8OE2KyNKNF/HajN4oRet+sHjd2H3RDl4dyB1sN2GlBeMyPrH3JPkjzw
- cySGDrcQQ8QnCedXu4RDa8c0c+PtdOoa+7Ua+fSiqDyfmvoiWkv0ND2i0Kb5iO07PTJr
- ulSA==
-X-Gm-Message-State: AOAM531aMaTy69wf1E8oZOHmMZenzmwm1KetE9mfDWErLntZu+BeUmW4
- ZtPMQYN2akLPua3G8XVNkM7dqz/hX6U=
-X-Google-Smtp-Source: ABdhPJwWjz0ys4AFj//x+2UFtBW+2v5Tq1yyhGgrjcLCjG9I2thUvoFfh23gT8tSMT6mJ+sUNKvUjA==
-X-Received: by 2002:a17:902:b58d:b0:149:9c02:6345 with SMTP id
- a13-20020a170902b58d00b001499c026345mr5758468pls.21.1640821523625; 
- Wed, 29 Dec 2021 15:45:23 -0800 (PST)
-Received: from adam-workstation.rai.com ([47.149.13.137])
- by smtp.gmail.com with ESMTPSA id b4sm23482281pjm.17.2021.12.29.15.45.22
+ bh=BCniAOqialbz6JYyXChWJ8rpr9dmb7edKMdcFuo7bJY=;
+ b=lKWSbL4Rl3ERGQuSsuID5lYsSGGbbQusxMaQD+l0UR5VWqUjun6hac+mpsjjeYT5yg
+ gdkATnQcy185Nu+Xp2vhz+Lczkv4ScGEjyXuuKX6bvSguJf63kGRrNMqVoHcI/rogDg+
+ AQQIjq/TJRmcUT8CcknplZCe7q2oxTncVNtSSQAUm/ZpgNoGH2Vz4nFEsB7XIqwBvuYF
+ RPqMErGb0jXZBgrttJfZ64BHdY8+D3h4+780bvQhD8CRvoYwkGwx1+m11M+k/ZzX8KzP
+ kwo4a86519Paq1eh45MOAtRNDP//TKjusHDDApKrrcqHxN0wzNfR0ppnsQOargV2aKzr
+ wJJQ==
+X-Gm-Message-State: AOAM532sXrRDZMi242F6KTTk9GKssxpRXdn1DaNDh11u4TfWvX6VTOxx
+ QLlLRuqGpTMp9MP+dnlWelGnwYFlpNk=
+X-Google-Smtp-Source: ABdhPJxW+Ds9ibVOstwwb6pDVxabtYXWGm4Fifhgy/zHYNeoSd4MTzo19YQdnT9GIXDnbb1cZ3K13Q==
+X-Received: by 2002:a17:90a:d911:: with SMTP id
+ c17mr32917115pjv.67.1640827724771; 
+ Wed, 29 Dec 2021 17:28:44 -0800 (PST)
+Received: from localhost.localdomain ([47.149.13.137])
+ by smtp.gmail.com with ESMTPSA id h191sm21348724pge.55.2021.12.29.17.28.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Dec 2021 15:45:23 -0800 (PST)
+ Wed, 29 Dec 2021 17:28:44 -0800 (PST)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Dec 2021 15:45:20 -0800
-Message-Id: <20211229234520.2957740-1-aduskett@gmail.com>
+Date: Wed, 29 Dec 2021 17:28:34 -0800
+Message-Id: <20211230012836.3350448-1-aduskett@gmail.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5location: Fix build failures
- without opengl
+Subject: [Buildroot] [PATCH 1/3] package/python-setuptools: bump to version
+ 60.2.0 and split python2 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,564 +86,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- Adam Duskett <aduskett@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Adam Duskett <aduskett@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport a patch that fixes several "const marked override but does not
-override" compilation errors when openGL is not enabled.
-
-Patch fetched from: https://codereview.qt-project.org/c/qt/qtlocation/+/340353
-
-Fixes:
-http://autobuild.buildroot.net/results/6378e43d50dfad13a45522492f14c9df7acd64e4
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- ...fix-compilation-for-no-opengl-builds.patch | 528 ++++++++++++++++++
- 1 file changed, 528 insertions(+)
- create mode 100644 package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
-
-diff --git a/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch b/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
-new file mode 100644
-index 0000000000..98e65df202
---- /dev/null
-+++ b/package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
-@@ -0,0 +1,528 @@
-+From 4bcacd0dc8f73de7b9e5e5f5fa2129fd88bdff3b Mon Sep 17 00:00:00 2001
-+From: Michal Klocek <michal.klocek@qt.io>
-+Date: Mon, 11 Jan 2021 16:02:14 +0100
-+Subject: [PATCH] Fix compilation for no opengl builds
-+
-+Disables experimental labs qml plugin, which
-+since a4469cad40 depends heavily on opengl backend.
-+
-+Fix warnings with msvc when compiling without experimental
-+plugin.
-+
-+Task-number: QTBUG-91623
-+Fixes: QTBUG-88017
-+Change-Id: I53c5da915981bd05f39134ba57f585d0a0786aa8
-+
-+Signed-off-by: Michal Klocek <michal.klocek@qt.io>
-+Signed-off-by: Alex Blasche <alexander.blasche@qt.io>
-+
-+[Retrieved from: https://codereview.qt-project.org/c/qt/qtlocation/+/340353]
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/location/configure.json                   |  1 +
-+ .../qdeclarativecirclemapitem.cpp             | 20 +++++++++++--
-+ .../qdeclarativecirclemapitem_p_p.h           |  2 ++
-+ .../qdeclarativepolygonmapitem.cpp            | 27 +++++++++++++----
-+ .../qdeclarativepolygonmapitem_p_p.h          |  6 ++++
-+ .../qdeclarativepolylinemapitem.cpp           | 30 +++++++++++++++----
-+ .../qdeclarativepolylinemapitem_p.h           |  2 ++
-+ .../qdeclarativepolylinemapitem_p_p.h         |  5 +++-
-+ .../qdeclarativerectanglemapitem.cpp          | 17 +++++++++--
-+ .../qdeclarativerectanglemapitem_p_p.h        |  2 ++
-+ src/location/location.pro                     |  9 +++++-
-+ .../itemsoverlay/qgeomapitemsoverlay.cpp      |  9 +++++-
-+ 12 files changed, 109 insertions(+), 21 deletions(-)
-+
-+diff --git a/src/location/configure.json b/src/location/configure.json
-+index 62ab029..6d01a9a 100644
-+--- a/src/location/configure.json
-++++ b/src/location/configure.json
-+@@ -9,6 +9,7 @@
-+             "label": "Qt.labs.location experimental QML plugin",
-+             "purpose": "Provides experimental QtLocation QML types",
-+             "section": "Location",
-++            "condition": "config.opengl",
-+             "output": [ "privateFeature" ]
-+         },
-+         "geoservices_osm": {
-+diff --git a/src/location/declarativemaps/qdeclarativecirclemapitem.cpp b/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-+index 841c29a..955de2c 100644
-+--- a/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativecirclemapitem.cpp
-+@@ -446,6 +446,7 @@ void QDeclarativeCircleMapItem::updatePolish()
-+ */
-+ void QDeclarativeCircleMapItem::possiblySwitchBackend(const QGeoCoordinate &oldCenter, qreal oldRadius, const QGeoCoordinate &newCenter, qreal newRadius)
-+ {
-++#if QT_CONFIG(opengl)
-+     if (m_backend != QDeclarativeCircleMapItem::OpenGL)
-+         return;
-+ 
-+@@ -459,6 +460,9 @@ void QDeclarativeCircleMapItem::possiblySwitchBackend(const QGeoCoordinate &oldC
-+         QScopedPointer<QDeclarativeCircleMapItemPrivate> d(static_cast<QDeclarativeCircleMapItemPrivate *>(new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-+         m_d.swap(d);
-+     }
-++#else
-++    return;
-++#endif
-+ }
-+ 
-+ /*!
-+@@ -534,9 +538,17 @@ void QDeclarativeCircleMapItem::setBackend(QDeclarativeCircleMapItem::Backend b)
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativeCircleMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativeCircleMapItemPrivate *>(new QDeclarativeCircleMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativeCircleMapItemPrivate * >(new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativeCircleMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativeCircleMapItemPrivate *>(
-++                    new QDeclarativeCircleMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativeCircleMapItemPrivate *>(
-++                                            new QDeclarativeCircleMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -565,7 +577,9 @@ QDeclarativeCircleMapItemPrivate::~QDeclarativeCircleMapItemPrivate() {}
-+ 
-+ QDeclarativeCircleMapItemPrivateCPU::~QDeclarativeCircleMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativeCircleMapItemPrivateOpenGL::~QDeclarativeCircleMapItemPrivateOpenGL() {}
-++#endif
-+ 
-+ bool QDeclarativeCircleMapItemPrivate::preserveCircleGeometry (QList<QDoubleVector2D> &path,
-+                                     const QGeoCoordinate &center, qreal distance, const QGeoProjectionWebMercator &p)
-+diff --git a/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h b/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-+index 4cf4217..dbe6c8b 100644
-+--- a/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativecirclemapitem_p_p.h
-+@@ -275,6 +275,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativeCircleMapItemPrivateOpenGL: public QDeclarativeCircleMapItemPrivate
-+ {
-+ public:
-+@@ -443,6 +444,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp b/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-+index fa6ee17..af4f55e 100644
-+--- a/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativepolygonmapitem.cpp
-+@@ -334,6 +334,7 @@ void QGeoMapPolygonGeometry::updateScreenPoints(const QGeoMap &map, qreal stroke
-+         this->translate(QPointF(strokeWidth, strokeWidth));
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ QGeoMapPolygonGeometryOpenGL::QGeoMapPolygonGeometryOpenGL(){
-+ }
-+ 
-+@@ -344,6 +345,7 @@ void QGeoMapPolygonGeometryOpenGL::updateSourcePoints(const QGeoMap &map, const
-+         geopath.append(QWebMercator::mercatorToCoord(c));
-+     updateSourcePoints(map, geopath);
-+ }
-++#endif
-+ 
-+ // wrapPath always preserves the geometry
-+ // This one handles holes
-+@@ -452,6 +454,7 @@ static void cutPathEars(const QList<QDoubleVector2D> &wrappedPath,
-+         screenIndices << quint32(i);
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ /*!
-+     \internal
-+ */
-+@@ -594,7 +597,7 @@ void QGeoMapPolygonGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebMe
-+     sourceBounds_.setWidth(brect.width());
-+     sourceBounds_.setHeight(brect.height());
-+ }
-+-
-++#endif // QT_CONFIG(opengl)
-+ /*
-+  * QDeclarativePolygonMapItem Private Implementations
-+  */
-+@@ -603,8 +606,9 @@ QDeclarativePolygonMapItemPrivate::~QDeclarativePolygonMapItemPrivate() {}
-+ 
-+ QDeclarativePolygonMapItemPrivateCPU::~QDeclarativePolygonMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativePolygonMapItemPrivateOpenGL::~QDeclarativePolygonMapItemPrivateOpenGL() {}
-+-
-++#endif
-+ /*
-+  * QDeclarativePolygonMapItem Implementation
-+  */
-+@@ -689,9 +693,17 @@ void QDeclarativePolygonMapItem::setBackend(QDeclarativePolygonMapItem::Backend
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativePolygonMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativePolygonMapItemPrivate *>(new QDeclarativePolygonMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativePolygonMapItemPrivate * >(new QDeclarativePolygonMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativePolygonMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativePolygonMapItemPrivate *>(
-++                    new QDeclarativePolygonMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativePolygonMapItemPrivate *>(
-++                                            new QDeclarativePolygonMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -898,6 +910,7 @@ void QDeclarativePolygonMapItem::geometryChanged(const QRectF &newGeometry, cons
-+ 
-+ //////////////////////////////////////////////////////////////////////
-+ 
-++#if QT_CONFIG(opengl)
-+ QSGMaterialShader *MapPolygonMaterial::createShader() const
-+ {
-+     return new MapPolygonShader();
-+@@ -916,6 +929,7 @@ QSGMaterialType *MapPolygonMaterial::type() const
-+     static QSGMaterialType type;
-+     return &type;
-+ }
-++#endif
-+ 
-+ MapPolygonNode::MapPolygonNode() :
-+     border_(new MapPolylineNode()),
-+@@ -967,6 +981,7 @@ void MapPolygonNode::update(const QColor &fillColor, const QColor &borderColor,
-+     }
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ MapPolygonNodeGL::MapPolygonNodeGL() :
-+     //fill_material_(this),
-+     fill_material_(),
-+@@ -1052,5 +1067,5 @@ void MapPolygonShader::updateState(const QSGMaterialShader::RenderState &state,
-+     program()->setUniformValue(m_center_lowpart_id, vecCenter_lowpart);
-+     program()->setUniformValue(m_wrapOffset_id, float(newMaterial->wrapOffset()));
-+ }
-+-
-++#endif // QT_CONFIG(opengl)
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h b/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-+index 8d566e6..5e75deb 100644
-+--- a/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolygonmapitem_p_p.h
-+@@ -89,6 +89,7 @@ protected:
-+     bool assumeSimple_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QGeoMapPolygonGeometryOpenGL : public QGeoMapItemGeometry
-+ {
-+ public:
-+@@ -197,6 +198,7 @@ private:
-+     int m_color_id;
-+     int m_wrapOffset_id;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT MapPolygonMaterial : public QSGFlatColorMaterial
-+ {
-+@@ -269,6 +271,7 @@ private:
-+     QSGGeometry geometry_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT MapPolygonNodeGL : public MapItemGeometryNode
-+ {
-+ 
-+@@ -284,6 +287,7 @@ public:
-+     MapPolygonMaterial fill_material_;
-+     QSGGeometry geometry_;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolygonMapItemPrivate
-+ {
-+@@ -479,6 +483,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolygonMapItemPrivateOpenGL: public QDeclarativePolygonMapItemPrivate
-+ {
-+ public:
-+@@ -662,6 +667,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp b/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-+index d59704d..83d253f 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem.cpp
-+@@ -769,6 +769,7 @@ bool QGeoMapPolylineGeometry::contains(const QPointF &point) const
-+     return false;
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ void QGeoMapPolylineGeometryOpenGL::updateSourcePoints(const QGeoMap &map, const QGeoPolygon &poly)
-+ {
-+     if (!sourceDirty_)
-+@@ -921,6 +922,7 @@ void QGeoMapPolylineGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebM
-+     sourceBounds_.setWidth(brect.width() + strokeWidth);
-+     sourceBounds_.setHeight(brect.height() + strokeWidth);
-+ }
-++#endif // QT_CONFIG(opengl)
-+ 
-+ /*
-+  * QDeclarativePolygonMapItem Private Implementations
-+@@ -928,12 +930,13 @@ void QGeoMapPolylineGeometryOpenGL::updateQuickGeometry(const QGeoProjectionWebM
-+ 
-+ QDeclarativePolylineMapItemPrivate::~QDeclarativePolylineMapItemPrivate() {}
-+ 
-+-
-+ QDeclarativePolylineMapItemPrivateCPU::~QDeclarativePolylineMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativePolylineMapItemPrivateOpenGLLineStrip::~QDeclarativePolylineMapItemPrivateOpenGLLineStrip() {}
-+ 
-+ QDeclarativePolylineMapItemPrivateOpenGLExtruded::~QDeclarativePolylineMapItemPrivateOpenGLExtruded() {}
-++#endif
-+ 
-+ /*
-+  * QDeclarativePolygonMapItem Implementation
-+@@ -941,10 +944,12 @@ QDeclarativePolylineMapItemPrivateOpenGLExtruded::~QDeclarativePolylineMapItemPr
-+ 
-+ struct PolylineBackendSelector
-+ {
-++#if QT_CONFIG(opengl)
-+     PolylineBackendSelector()
-+     {
-+         backend = (qgetenv("QTLOCATION_OPENGL_ITEMS").toInt()) ? QDeclarativePolylineMapItem::OpenGLExtruded : QDeclarativePolylineMapItem::Software;
-+     }
-++#endif
-+     QDeclarativePolylineMapItem::Backend backend = QDeclarativePolylineMapItem::Software;
-+ };
-+ 
-+@@ -1236,11 +1241,22 @@ void QDeclarativePolylineMapItem::setBackend(QDeclarativePolylineMapItem::Backen
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativePolylineMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativePolylineMapItemPrivate *>(new QDeclarativePolylineMapItemPrivateCPU(*this))
-+-                                                        : ((m_backend == OpenGLExtruded)
-+-                                                           ? static_cast<QDeclarativePolylineMapItemPrivate * >(new QDeclarativePolylineMapItemPrivateOpenGLExtruded(*this))
-+-                                                           : static_cast<QDeclarativePolylineMapItemPrivate * >(new QDeclarativePolylineMapItemPrivateOpenGLLineStrip(*this))));
-++    QScopedPointer<QDeclarativePolylineMapItemPrivate> d(
-++            (m_backend == Software)
-++                    ? static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                            new QDeclarativePolylineMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                    : ((m_backend == OpenGLExtruded)
-++                               ? static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                                       new QDeclarativePolylineMapItemPrivateOpenGLExtruded(*this))
-++                               : static_cast<QDeclarativePolylineMapItemPrivate *>(
-++                                       new QDeclarativePolylineMapItemPrivateOpenGLLineStrip(
-++                                               *this))));
-++#else
-++                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -1477,6 +1493,7 @@ void MapPolylineNode::update(const QColor &fillColor,
-+     }
-+ }
-+ 
-++#if QT_CONFIG(opengl)
-+ MapPolylineNodeOpenGLLineStrip::MapPolylineNodeOpenGLLineStrip()
-+ : geometry_(QSGGeometry::defaultAttributes_Point2D(), 0)
-+ {
-+@@ -2080,5 +2097,6 @@ unsigned int QGeoMapItemLODGeometry::zoomForLOD(unsigned int zoom)
-+         return res;
-+     return res + 1; // give more resolution when closing in
-+ }
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h b/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-+index 9cd20ea..d3d0ebd 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem_p.h
-+@@ -97,8 +97,10 @@ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItem : public QDeclarativ
-+ public:
-+     enum Backend {
-+         Software = 0,
-++#if QT_CONFIG(opengl)
-+         OpenGLLineStrip = 1,
-+         OpenGLExtruded = 2,
-++#endif
-+     };
-+ 
-+     explicit QDeclarativePolylineMapItem(QQuickItem *parent = 0);
-+diff --git a/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h b/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-+index 2a921e2..e184391 100644
-+--- a/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativepolylinemapitem_p_p.h
-+@@ -213,6 +213,7 @@ protected:
-+     QSGGeometry geometry_;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QGeoMapItemLODGeometry
-+ {
-+ public:
-+@@ -566,6 +567,7 @@ protected:
-+     MapPolylineMaterialExtruded fill_material_;
-+     QSGGeometry m_geometryTriangulating;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItemPrivate
-+ {
-+@@ -720,6 +722,7 @@ public:
-+     MapPolylineNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativePolylineMapItemPrivateOpenGLLineStrip: public QDeclarativePolylineMapItemPrivate
-+ {
-+ public:
-+@@ -884,7 +887,7 @@ public:
-+ 
-+     MapPolylineNodeOpenGLExtruded *m_nodeTri = nullptr;
-+ };
-+-
-++#endif // QT_CONFIG(opengl)
-+ QT_END_NAMESPACE
-+ 
-+ #endif // QDECLARATIVEPOLYLINEMAPITEM_P_P_H
-+diff --git a/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp b/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-+index 74d2cc1..6192be0 100644
-+--- a/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-++++ b/src/location/declarativemaps/qdeclarativerectanglemapitem.cpp
-+@@ -185,9 +185,18 @@ void QDeclarativeRectangleMapItem::setBackend(QDeclarativeRectangleMapItem::Back
-+     if (b == m_backend)
-+         return;
-+     m_backend = b;
-+-    QScopedPointer<QDeclarativeRectangleMapItemPrivate> d((m_backend == Software)
-+-                                                        ? static_cast<QDeclarativeRectangleMapItemPrivate *>(new QDeclarativeRectangleMapItemPrivateCPU(*this))
-+-                                                        : static_cast<QDeclarativeRectangleMapItemPrivate * >(new QDeclarativeRectangleMapItemPrivateOpenGL(*this)));
-++    QScopedPointer<QDeclarativeRectangleMapItemPrivate> d(
-++            (m_backend == Software) ? static_cast<QDeclarativeRectangleMapItemPrivate *>(
-++                    new QDeclarativeRectangleMapItemPrivateCPU(*this))
-++#if QT_CONFIG(opengl)
-++                                    : static_cast<QDeclarativeRectangleMapItemPrivate *>(
-++                                            new QDeclarativeRectangleMapItemPrivateOpenGL(*this)));
-++#else
-++                                    : nullptr);
-++    qFatal("Requested non software rendering backend, but source code is compiled wihtout opengl "
-++           "support");
-++#endif
-++
-+     m_d.swap(d);
-+     m_d->onGeoGeometryChanged();
-+     emit backendChanged();
-+@@ -397,6 +406,8 @@ QDeclarativeRectangleMapItemPrivate::~QDeclarativeRectangleMapItemPrivate() {}
-+ 
-+ QDeclarativeRectangleMapItemPrivateCPU::~QDeclarativeRectangleMapItemPrivateCPU() {}
-+ 
-++#if QT_CONFIG(opengl)
-+ QDeclarativeRectangleMapItemPrivateOpenGL::~QDeclarativeRectangleMapItemPrivateOpenGL() {}
-++#endif
-+ 
-+ QT_END_NAMESPACE
-+diff --git a/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h b/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-+index 65d2f61..f7ecd2a 100644
-+--- a/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-++++ b/src/location/declarativemaps/qdeclarativerectanglemapitem_p_p.h
-+@@ -244,6 +244,7 @@ public:
-+     MapPolygonNode *m_node = nullptr;
-+ };
-+ 
-++#if QT_CONFIG(opengl)
-+ class Q_LOCATION_PRIVATE_EXPORT QDeclarativeRectangleMapItemPrivateOpenGL: public QDeclarativeRectangleMapItemPrivate
-+ {
-+ public:
-+@@ -410,6 +411,7 @@ public:
-+     MapPolygonNodeGL *m_node = nullptr;
-+     MapPolylineNodeOpenGLExtruded *m_polylinenode = nullptr;
-+ };
-++#endif // QT_CONFIG(opengl)
-+ 
-+ QT_END_NAMESPACE
-+ 
-+diff --git a/src/location/location.pro b/src/location/location.pro
-+index b0e2c3f..ae20271 100644
-+--- a/src/location/location.pro
-++++ b/src/location/location.pro
-+@@ -39,7 +39,14 @@ include(maps/maps.pri)
-+ include(places/places.pri)
-+ include(declarativemaps/declarativemaps.pri)
-+ include(declarativeplaces/declarativeplaces.pri)
-+-qtConfig(location-labs-plugin):include(labs/labs.pri)
-++qtConfig(location-labs-plugin) {
-++   include(labs/labs.pri)
-++} else {
-++  # FIXME: this should be moved out of plugin source code, geojson is referenced from other places
-++  # within codebase,however compilation of location-labs-plugin is optional
-++  PRIVATE_HEADERS += labs/qgeojson_p.h
-++  SOURCES += labs/qgeojson.cpp
-++}
-+ 
-+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
-+ 
-+diff --git a/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp b/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-+index 1ebad08..a764438 100644
-+--- a/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-++++ b/src/plugins/geoservices/itemsoverlay/qgeomapitemsoverlay.cpp
-+@@ -103,6 +103,7 @@ QGeoMap::Capabilities QGeoMapItemsOverlay::capabilities() const
-+ bool QGeoMapItemsOverlay::createMapObjectImplementation(QGeoMapObject *obj)
-+ {
-+ #ifndef LOCATIONLABS
-++    Q_UNUSED(obj);
-+     return false;
-+ #else
-+     Q_D(QGeoMapItemsOverlay);
-+@@ -132,7 +133,9 @@ QSGNode *QGeoMapItemsOverlay::updateSceneGraph(QSGNode *node, QQuickWindow *wind
-+ 
-+ void QGeoMapItemsOverlay::removeMapObject(QGeoMapObject *obj)
-+ {
-+-#ifdef LOCATIONLABS
-++#ifndef LOCATIONLABS
-++    Q_UNUSED(obj);
-++#else
-+     Q_D(QGeoMapItemsOverlay);
-+     d->removeMapObject(obj);
-+ #endif
-+@@ -169,7 +172,11 @@ QRectF QGeoMapItemsOverlayPrivate::visibleArea() const
-+ QGeoMapItemsOverlayPrivate::QGeoMapItemsOverlayPrivate(QGeoMappingManagerEngineItemsOverlay *engine, QGeoMapItemsOverlay *map)
-+     : QGeoMapPrivate(engine, new QGeoProjectionWebMercator)
-+ {
-++#ifndef LOCATIONLABS
-++    Q_UNUSED(map);
-++#else
-+     m_qsgSupport.m_map = map;
-++#endif
-+ }
-+ 
-+ QGeoMapItemsOverlayPrivate::~QGeoMapItemsOverlayPrivate()
-+-- 
-+2.33.1
-+
--- 
-2.33.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UHl0aG9uIHNldHVwdG9vbHMgNDQuMCBpcyBub3QgY29tcGF0aWJsZSB3aXRoIHB5dGhvbiAzLjEw
+LiBVbmZvcnR1bmF0ZWx5LApweXRob24tc2V0dXB0b29scyA2MC4yLjAgaXMgbm90IGNvbXBhdGli
+bGUgd2l0aCBweXRob24yLiBBcyBCdWlsZHJvb3QgaXMgbm90CnJlYWR5IHRvIGVuZCBweXRob24y
+IHN1cHBvcnQsIHRoZSBweXRob24tc2V0dXB0b29scyBwYWNrYWdlIG11c3QgYWNjb21tb2RhdGUK
+Ym90aCB0aGUgb2xkIHZlcnNpb24gZm9yIHB5dGhvbjIgYW5kIHRoZSBuZXcgdmVyc2lvbiBmb3Ig
+cHl0aG9uMy4xMC4KCkNoYW5nZXMgaW5jbHVkZToKIC0gQWRkIHR3byBuZXcgZGlyZWN0b3JpZXM6
+IHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wIGFuZAogICBwYWNrYWdlL3B5dGhvbi1z
+ZXR1cHRvb2xzLzYwLjIuMAogLSBBZGQgdGhlIGFwcHJvcHJpYXRlIHBhdGNoIGFuZCBoYXNoIGZp
+bGVzIHRvIGVhY2ggZGlyZWN0b3J5LgogLSBNb2RpZnkgcHl0aG9uLXNldHVwdG9vbHMubWsgdG8g
+c3VwcG9ydCBib3RoIHNldHVwdG9vbHMgNDQuMCBhbmQgNjAuMi4wCiAgIChzZXR1cHRvb2xzIDYw
+LjIuMCBkb2VzIG5vdCBoYXZlIGEgLnppcCBvbiBweXBpIGFueW1vcmUsIG9ubHkgYSB0YXIuZ3op
+CiAtIFBvaW50IHRoZSBzeW1saW5rcyBpbiBwYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scyB0byB0
+aGUgZmlsZXMgaW4KICAgcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvCgpTaWduZWQt
+b2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkdXNrZXR0QGdtYWlsLmNvbT4KLS0tCiAuLi4veyA9PiA0
+NC4wLjB9LzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2ggICAgfCAgMAogLi4uL3sgPT4gNDQuMC4w
+fS9weXRob24tc2V0dXB0b29scy5oYXNoICAgICAgIHwgIDAKIC4uLi82MC4yLjAvMDAwMS1hZGQt
+ZXhlY3V0YWJsZS5wYXRjaCAgICAgICAgICB8IDcyICsrKysrKysrKysrKysrKysrKysKIC4uLi82
+MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaCAgICAgICAgICAgICB8ICA0ICsrCiAuLi4vcHl0
+aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsgICAgfCAxMSArKy0KIC4uLi8wMDAx
+LWFkZC1leGVjdXRhYmxlLnBhdGNoICAgICAgICAgICAgICAgICB8ICAyICstCiAuLi4vcHl0aG9u
+My1zZXR1cHRvb2xzLmhhc2ggICAgICAgICAgICAgICAgICAgfCAgMiArLQogLi4uL3B5dGhvbjMt
+c2V0dXB0b29scy9weXRob24zLXNldHVwdG9vbHMubWsgIHwgMTQgKystLQogOCBmaWxlcyBjaGFu
+Z2VkLCA5MSBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKIHJlbmFtZSBwYWNrYWdlL3B5
+dGhvbi1zZXR1cHRvb2xzL3sgPT4gNDQuMC4wfS8wMDAxLWFkZC1leGVjdXRhYmxlLnBhdGNoICgx
+MDAlKQogcmVuYW1lIHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMveyA9PiA0NC4wLjB9L3B5dGhv
+bi1zZXR1cHRvb2xzLmhhc2ggKDEwMCUpCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRo
+b24tc2V0dXB0b29scy82MC4yLjAvMDAwMS1hZGQtZXhlY3V0YWJsZS5wYXRjaAogY3JlYXRlIG1v
+ZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wL3B5dGhvbi1zZXR1cHRv
+b2xzLmhhc2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRk
+LWV4ZWN1dGFibGUucGF0Y2ggYi9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzQ0LjAuMC8wMDAx
+LWFkZC1leGVjdXRhYmxlLnBhdGNoCnNpbWlsYXJpdHkgaW5kZXggMTAwJQpyZW5hbWUgZnJvbSBw
+YWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKcmVuYW1l
+IHRvIHBhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wLzAwMDEtYWRkLWV4ZWN1dGFibGUu
+cGF0Y2gKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVw
+dG9vbHMuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNDQuMC4wL3B5dGhvbi1zZXR1
+cHRvb2xzLmhhc2gKc2ltaWxhcml0eSBpbmRleCAxMDAlCnJlbmFtZSBmcm9tIHBhY2thZ2UvcHl0
+aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApyZW5hbWUgdG8gcGFja2FnZS9w
+eXRob24tc2V0dXB0b29scy80NC4wLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvMDAwMS1hZGQtZXhlY3V0YWJsZS5w
+YXRjaCBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wLzAwMDEtYWRkLWV4ZWN1dGFi
+bGUucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYjY4ODc0NWNl
+NAotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvNjAuMi4wLzAw
+MDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKQEAgLTAsMCArMSw3MiBAQAorRnJvbSA5YjNkMzA3Zjhm
+NmExYWY4OGYzZjgxMGY1YTZjZjA4MzU4MzBlMWU4IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQor
+RnJvbTogPT9VVEYtOD9xP0o9QzM9QjZyZz0yMEtyYXVzZT89IDxqb2VyZy5rcmF1c2VAZW1iZWRk
+ZWQucm9ja3M+CitEYXRlOiBNb24sIDcgRGVjIDIwMTUgMDE6MTQ6MzMgKzAxMDAKK1N1YmplY3Q6
+IFtQQVRDSF0gYWRkIGV4ZWN1dGFibGUKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6
+IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhi
+aXQKKworQWRkIGEgbmV3IC0tZXhlY3V0YWJsZSBvcHRpb24gdG8gZGlzdHJpYnV0ZSBzbyB0aGF0
+IHdlIGNhbgorZm9yY2UgdGhlIHNoZWJhbmcgbGluZSBpbiBpbnN0YWxsZWQgcHl0aG9uIHNjcmlw
+dHMuCisKK1tUaG9tYXM6IHJlZnJlc2ggZm9yIHNldHVwdG9vbHMgNS44Ll0KK1tKw7ZyZzogcmVm
+cmVzaCBmb3Igc2V0dXB0b29scyAxOC43LjFdCisKK1NpZ25lZC1vZmYtYnk6IEd1c3Rhdm8gWmFj
+YXJpYXMgPGd1c3Rhdm9AemFjYXJpYXMuY29tLmFyPgorU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBl
+dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+CitTaWduZWQtb2Zm
+LWJ5OiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmtyYXVzZUBlbWJlZGRlZC5yb2Nrcz4KKy0tLQorIHNl
+dHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5ICAgICAgICAgfCAyICsrCisgc2V0dXB0b29scy9j
+b21tYW5kL2luc3RhbGxfc2NyaXB0cy5weSB8IDkgKysrKysrKysrCisgMiBmaWxlcyBjaGFuZ2Vk
+LCAxMSBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1naXQgYS9zZXR1cHRvb2xzL2NvbW1hbmQvaW5z
+dGFsbC5weSBiL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5CitpbmRleCA3MmI5YTNlLi42
+NzgxZDJiIDEwMDY0NAorLS0tIGEvc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGwucHkKKysrKyBi
+L3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5CitAQCAtMTYsNiArMTYsNyBAQCBjbGFzcyBp
+bnN0YWxsKG9yaWcuaW5zdGFsbCk6CisgICAgICIiIlVzZSBlYXN5X2luc3RhbGwgdG8gaW5zdGFs
+bCB0aGUgcGFja2FnZSwgdy9kZXBlbmRlbmNpZXMiIiIKKyAKKyAgICAgdXNlcl9vcHRpb25zID0g
+b3JpZy5pbnN0YWxsLnVzZXJfb3B0aW9ucyArIFsKKysgICAgICAgICgnZXhlY3V0YWJsZT0nLCAn
+ZScsICJzcGVjaWZ5IGZpbmFsIGRlc3RpbmF0aW9uIGludGVycHJldGVyIHBhdGgiKSwKKyAgICAg
+ICAgICgnb2xkLWFuZC11bm1hbmFnZWFibGUnLCBOb25lLCAiVHJ5IG5vdCB0byB1c2UgdGhpcyEi
+KSwKKyAgICAgICAgICgnc2luZ2xlLXZlcnNpb24tZXh0ZXJuYWxseS1tYW5hZ2VkJywgTm9uZSwK
+KyAgICAgICAgICAidXNlZCBieSBzeXN0ZW0gcGFja2FnZSBidWlsZGVycyB0byBjcmVhdGUgJ2Zs
+YXQnIGVnZ3MiKSwKK0BAIC0zOCw2ICszOSw3IEBAIGNsYXNzIGluc3RhbGwob3JpZy5pbnN0YWxs
+KToKKyAgICAgICAgICkKKyAKKyAgICAgICAgIG9yaWcuaW5zdGFsbC5pbml0aWFsaXplX29wdGlv
+bnMoc2VsZikKKysgICAgICAgIHNlbGYuZXhlY3V0YWJsZSA9IE5vbmUKKyAgICAgICAgIHNlbGYu
+b2xkX2FuZF91bm1hbmFnZWFibGUgPSBOb25lCisgICAgICAgICBzZWxmLnNpbmdsZV92ZXJzaW9u
+X2V4dGVybmFsbHlfbWFuYWdlZCA9IE5vbmUKKyAKK2RpZmYgLS1naXQgYS9zZXR1cHRvb2xzL2Nv
+bW1hbmQvaW5zdGFsbF9zY3JpcHRzLnB5IGIvc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGxfc2Ny
+aXB0cy5weQoraW5kZXggOWNkOGViMC4uNzc4NjE1MCAxMDA2NDQKKy0tLSBhL3NldHVwdG9vbHMv
+Y29tbWFuZC9pbnN0YWxsX3NjcmlwdHMucHkKKysrKyBiL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0
+YWxsX3NjcmlwdHMucHkKK0BAIC0xMyw2ICsxMywxMyBAQCBjbGFzcyBpbnN0YWxsX3NjcmlwdHMo
+b3JpZy5pbnN0YWxsX3NjcmlwdHMpOgorICAgICBkZWYgaW5pdGlhbGl6ZV9vcHRpb25zKHNlbGYp
+OgorICAgICAgICAgb3JpZy5pbnN0YWxsX3NjcmlwdHMuaW5pdGlhbGl6ZV9vcHRpb25zKHNlbGYp
+CisgICAgICAgICBzZWxmLm5vX2VwID0gRmFsc2UKKysgICAgICAgIHNlbGYuZXhlY3V0YWJsZSA9
+IE5vbmUKKysKKysgICAgZGVmIGZpbmFsaXplX29wdGlvbnMoc2VsZik6CisrICAgICAgICBvcmln
+Lmluc3RhbGxfc2NyaXB0cy5maW5hbGl6ZV9vcHRpb25zKHNlbGYpCisrICAgICAgICBzZWxmLnNl
+dF91bmRlZmluZWRfb3B0aW9ucygnaW5zdGFsbCcsCisrICAgICAgICAgICAgICAgICgnZXhlY3V0
+YWJsZScsJ2V4ZWN1dGFibGUnKQorKyAgICAgICAgKQorIAorICAgICBkZWYgcnVuKHNlbGYpOgor
+ICAgICAgICAgaW1wb3J0IHNldHVwdG9vbHMuY29tbWFuZC5lYXN5X2luc3RhbGwgYXMgZWkKK0BA
+IC0zMyw2ICs0MCw4IEBAIGNsYXNzIGluc3RhbGxfc2NyaXB0cyhvcmlnLmluc3RhbGxfc2NyaXB0
+cyk6CisgICAgICAgICApCisgICAgICAgICBic19jbWQgPSBzZWxmLmdldF9maW5hbGl6ZWRfY29t
+bWFuZCgnYnVpbGRfc2NyaXB0cycpCisgICAgICAgICBleGVjX3BhcmFtID0gZ2V0YXR0cihic19j
+bWQsICdleGVjdXRhYmxlJywgTm9uZSkKKysgICAgICAgIGlmIHNlbGYuZXhlY3V0YWJsZSBpcyBu
+b3QgTm9uZToKKysgICAgICAgICAgICBleGVjX3BhcmFtID0gc2VsZi5leGVjdXRhYmxlCisgICAg
+ICAgICB0cnk6CisgICAgICAgICAgICAgYndfY21kID0gc2VsZi5nZXRfZmluYWxpemVkX2NvbW1h
+bmQoImJkaXN0X3dpbmluc3QiKQorICAgICAgICAgICAgIGlzX3dpbmluc3QgPSBnZXRhdHRyKGJ3
+X2NtZCwgJ19pc19ydW5uaW5nJywgRmFsc2UpCistLSAKKzIuMzAuMgorCmRpZmYgLS1naXQgYS9w
+YWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzLzYwLjIuMC9weXRob24tc2V0dXB0b29scy5oYXNoIGIv
+cGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApu
+ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4yYzhmYjk2YmI3Ci0tLSAvZGV2
+L251bGwKKysrIGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVw
+dG9vbHMuaGFzaApAQCAtMCwwICsxLDQgQEAKKyMgRnJvbSBodHRwczovL3B5cGkub3JnL3B5cGkv
+c2V0dXB0b29scy9qc29uCittZDUgIDM2MzhjMzZlYWY2N2YyNGJhY2IxNDdjMDExZmU2ZDMwICBz
+ZXR1cHRvb2xzLTYwLjIuMC50YXIuZ3oKK3NoYTI1NiAgNjc1ZmNlYmVjYjQzYzMyZWI5MzA0ODFh
+YmY5MDc2MTkxMzc1NDdmNDMzNjIwNmU0ZDY3MzE4MDI0MmUxYTI3OCAgc2V0dXB0b29scy02MC4y
+LjAudGFyLmd6CitzaGEyNTYgIGRiM2YwMjQ2YjFmOTI3OGYxNTg0NWI5OWZlYzQ3OGI4YjUwNmVi
+NzY0ODc5OTM3MjJmOGM2ZTI1NDI4NWZhZjggIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+cHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsgYi9wYWNrYWdlL3B5dGhvbi1z
+ZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rCmluZGV4IDA4YTE4MGNlMGMuLjczOGQ1OGMx
+OTUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9v
+bHMubWsKKysrIGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5t
+awpAQCAtNCwxNiArNCwyMiBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotIyBQbGVh
+c2Uga2VlcCBpbiBzeW5jIHdpdGgKLSMgcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9u
+My1zZXR1cHRvb2xzLm1rCitpZmVxICgkKEJSMl9QQUNLQUdFX1BZVEhPTikseSkKIFBZVEhPTl9T
+RVRVUFRPT0xTX1ZFUlNJT04gPSA0NC4wLjAKIFBZVEhPTl9TRVRVUFRPT0xTX1NPVVJDRSA9IHNl
+dHVwdG9vbHMtJChQWVRIT05fU0VUVVBUT09MU19WRVJTSU9OKS56aXAKIFBZVEhPTl9TRVRVUFRP
+T0xTX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvYjAvZjMv
+NDRkYTc0ODJhYzZkYTNmMzZmNjhlMjUzY2IwNGRlMzczNjViM2RiYTkwMzZhM2M3MDc3M2I3Nzhi
+NDg1CitlbHNlICMgUHl0aG9uMworUFlUSE9OX1NFVFVQVE9PTFNfVkVSU0lPTiA9IDYwLjIuMAor
+UFlUSE9OX1NFVFVQVE9PTFNfU09VUkNFID0gc2V0dXB0b29scy0kKFBZVEhPTjNfU0VUVVBUT09M
+U19WRVJTSU9OKS50YXIuZ3oKK1BZVEhPTl9TRVRVUFRPT0xTX1NJVEUgPSBodHRwczovL2ZpbGVz
+LnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvZTYvZTIvZjJiZmRmMzY0ZTAxNmY3YTQ2NGRiNzA5
+ZWE0MGQxMTAxYzRjNWE0NjNkZDcwMTlkYWUwYTQyZGJkMWM2CitlbmRpZgogUFlUSE9OX1NFVFVQ
+VE9PTFNfTElDRU5TRSA9IE1JVAogUFlUSE9OX1NFVFVQVE9PTFNfTElDRU5TRV9GSUxFUyA9IExJ
+Q0VOU0UKIFBZVEhPTl9TRVRVUFRPT0xTX0NQRV9JRF9WRU5ET1IgPSBweXRob24KIFBZVEhPTl9T
+RVRVUFRPT0xTX0NQRV9JRF9QUk9EVUNUID0gc2V0dXB0b29scwogUFlUSE9OX1NFVFVQVE9PTFNf
+U0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKKworaWZlcSAoJChCUjJfUEFDS0FHRV9QWVRIT04pLHkp
+CiBIT1NUX1BZVEhPTl9TRVRVUFRPT0xTX05FRURTX0hPU1RfUFlUSE9OID0gcHl0aG9uMgogCiBk
+ZWZpbmUgUFlUSE9OX1NFVFVQVE9PTFNfRVhUUkFDVF9DTURTCkBAIC0yNyw2ICszMyw3IEBAIGRl
+ZmluZSBIT1NUX1BZVEhPTl9TRVRVUFRPT0xTX0VYVFJBQ1RfQ01EUwogCW12ICQoQEQpL3NldHVw
+dG9vbHMtJChQWVRIT05fU0VUVVBUT09MU19WRVJTSU9OKS8qICQoQEQpCiAJJChSTSkgLXIgJChA
+RCkvc2V0dXB0b29scy0kKFBZVEhPTl9TRVRVUFRPT0xTX1ZFUlNJT04pCiBlbmRlZgorZW5kaWYK
+IAogJChldmFsICQocHl0aG9uLXBhY2thZ2UpKQogJChldmFsICQoaG9zdC1weXRob24tcGFja2Fn
+ZSkpCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scy8wMDAxLWFkZC1leGVj
+dXRhYmxlLnBhdGNoIGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvMDAwMS1hZGQtZXhlY3V0
+YWJsZS5wYXRjaAppbmRleCA1YmFiM2Q5NmExLi40NDJhM2JkYTJlIDEyMDAwMAotLS0gYS9wYWNr
+YWdlL3B5dGhvbjMtc2V0dXB0b29scy8wMDAxLWFkZC1leGVjdXRhYmxlLnBhdGNoCisrKyBiL3Bh
+Y2thZ2UvcHl0aG9uMy1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKQEAgLTEg
+KzEgQEAKLS4uL3B5dGhvbi1zZXR1cHRvb2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKXCBO
+byBuZXdsaW5lIGF0IGVuZCBvZiBmaWxlCisuLi9weXRob24tc2V0dXB0b29scy82MC4yLjAvMDAw
+MS1hZGQtZXhlY3V0YWJsZS5wYXRjaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvcHl0aG9uMy1zZXR1cHRvb2xzL3B5dGhvbjMtc2V0dXB0b29scy5oYXNo
+IGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKaW5k
+ZXggYTNhZjdmMGZiMS4uZmE0YjBiZDIzZiAxMjAwMDAKLS0tIGEvcGFja2FnZS9weXRob24zLXNl
+dHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKKysrIGIvcGFja2FnZS9weXRob24zLXNl
+dHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLmhhc2gKQEAgLTEgKzEgQEAKLS4uL3B5dGhvbi1z
+ZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLmhhc2gKXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBm
+aWxlCisuLi9weXRob24tc2V0dXB0b29scy82MC4yLjAvcHl0aG9uLXNldHVwdG9vbHMuaGFzaApc
+IE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uMy1z
+ZXR1cHRvb2xzL3B5dGhvbjMtc2V0dXB0b29scy5tayBiL3BhY2thZ2UvcHl0aG9uMy1zZXR1cHRv
+b2xzL3B5dGhvbjMtc2V0dXB0b29scy5tawppbmRleCAzNGQ1OTkzMTIwLi5lY2Y4Mjk0NTBkIDEw
+MDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbjMtc2V0dXB0b29scy9weXRob24zLXNldHVwdG9vbHMu
+bWsKKysrIGIvcGFja2FnZS9weXRob24zLXNldHVwdG9vbHMvcHl0aG9uMy1zZXR1cHRvb2xzLm1r
+CkBAIC02LDIxICs2LDE1IEBACiAKICMgUGxlYXNlIGtlZXAgaW4gc3luYyB3aXRoCiAjIHBhY2th
+Z2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsKLVBZVEhPTjNfU0VUVVBU
+T09MU19WRVJTSU9OID0gNDQuMC4wCi1QWVRIT04zX1NFVFVQVE9PTFNfU09VUkNFID0gc2V0dXB0
+b29scy0kKFBZVEhPTjNfU0VUVVBUT09MU19WRVJTSU9OKS56aXAKLVBZVEhPTjNfU0VUVVBUT09M
+U19TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzL2IwL2YzLzQ0
+ZGE3NDgyYWM2ZGEzZjM2ZjY4ZTI1M2NiMDRkZTM3MzY1YjNkYmE5MDM2YTNjNzA3NzNiNzc4YjQ4
+NQorUFlUSE9OM19TRVRVUFRPT0xTX1ZFUlNJT04gPSA2MC4yLjAKK1BZVEhPTjNfU0VUVVBUT09M
+U19TT1VSQ0UgPSBzZXR1cHRvb2xzLSQoUFlUSE9OM19TRVRVUFRPT0xTX1ZFUlNJT04pLnRhci5n
+egorUFlUSE9OM19TRVRVUFRPT0xTX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5v
+cmcvcGFja2FnZXMvOWIvYmUvMTNmNTQzMzVjN2RiYTcxM2IwZTk3ZTExZTdhNDFkYjNkZjRhODUw
+NzNkNmM1YTZlN2Y2NDY4YjIyZWUyCiBQWVRIT04zX1NFVFVQVE9PTFNfTElDRU5TRSA9IE1JVAog
+UFlUSE9OM19TRVRVUFRPT0xTX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCiBQWVRIT04zX1NFVFVQ
+VE9PTFNfQ1BFX0lEX1ZFTkRPUiA9IHB5dGhvbgogUFlUSE9OM19TRVRVUFRPT0xTX0NQRV9JRF9Q
+Uk9EVUNUID0gc2V0dXB0b29scwogUFlUSE9OM19TRVRVUFRPT0xTX1NFVFVQX1RZUEUgPSBzZXR1
+cHRvb2xzCi1IT1NUX1BZVEhPTjNfU0VUVVBUT09MU19ETF9TVUJESVIgPSBweXRob24tc2V0dXB0
+b29scwogSE9TVF9QWVRIT04zX1NFVFVQVE9PTFNfTkVFRFNfSE9TVF9QWVRIT04gPSBweXRob24z
+Ci0KLWRlZmluZSBIT1NUX1BZVEhPTjNfU0VUVVBUT09MU19FWFRSQUNUX0NNRFMKLQkkKFVOWklQ
+KSAtZCAkKEBEKSAkKEhPU1RfUFlUSE9OM19TRVRVUFRPT0xTX0RMX0RJUikvJChQWVRIT04zX1NF
+VFVQVE9PTFNfU09VUkNFKQotCW12ICQoQEQpL3NldHVwdG9vbHMtJChQWVRIT04zX1NFVFVQVE9P
+TFNfVkVSU0lPTikvKiAkKEBEKQotCSQoUk0pIC1yICQoQEQpL3NldHVwdG9vbHMtJChQWVRIT04z
+X1NFVFVQVE9PTFNfVkVSU0lPTikKLWVuZGVmCitIT1NUX1BZVEhPTjNfU0VUVVBUT09MU19ETF9T
+VUJESVIgPSBweXRob24tc2V0dXB0b29scwogCiAkKGV2YWwgJChob3N0LXB5dGhvbi1wYWNrYWdl
+KSkKLS0gCjIuMzMuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
