@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 008C4C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 20:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C88C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 20:18:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A485E60E00;
-	Thu, 30 Dec 2021 20:18:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB6C8402D0;
+	Thu, 30 Dec 2021 20:18:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id un7u_WuuWPpj; Thu, 30 Dec 2021 20:18:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gHtFYt-Vvrs8; Thu, 30 Dec 2021 20:18:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0287E60DF0;
-	Thu, 30 Dec 2021 20:18:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 087151BF361
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA0C6405C1;
+	Thu, 30 Dec 2021 20:18:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BCFB1BF361
  for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAF1660C0F
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 595B1408C8
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 20:18:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZUTY3GKaVFgV for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 20:18:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mvHnHvRciLmR for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 20:18:17 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0466F606A0
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 70C3240219
  for <buildroot@buildroot.org>; Thu, 30 Dec 2021 20:18:17 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5521DE0003;
- Thu, 30 Dec 2021 20:18:16 +0000 (UTC)
-Date: Thu, 30 Dec 2021 21:18:05 +0100
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9CEE4E0008;
+ Thu, 30 Dec 2021 20:18:15 +0000 (UTC)
+Date: Thu, 30 Dec 2021 21:17:57 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20211230211805.6550df6b@windsurf>
-In-Reply-To: <20211230172544.30558-1-ps.report@gmx.net>
-References: <20211230172544.30558-1-ps.report@gmx.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20211230211757.2b4056f0@windsurf>
+In-Reply-To: <20211230165351.2747283-1-fontaine.fabrice@gmail.com>
+References: <20211230165351.2747283-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] package/assimp: bump version to 5.1.4
+Subject: Re: [Buildroot] [PATCH 1/1] package/neard: fix autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,24 +56,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 30 Dec 2021 18:25:44 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu, 30 Dec 2021 17:53:51 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> For details see [1].
+> Fix the following build failure raised since bump to version 0.18 in
+> commit 81d14a86258592b66b3cb170cda554a1eabf2c3f:
 > 
-> [1] https://github.com/assimp/assimp/releases/tag/v5.1.4
+> aclocal: error: couldn't open directory 'm4': No such file or directory
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f8e26416e38c83e27e7945343f497a6c9310bfcf
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/assimp/assimp.hash | 2 +-
->  package/assimp/assimp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/neard/neard.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
 Applied to master, thanks.
 
