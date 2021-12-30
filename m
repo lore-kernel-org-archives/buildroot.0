@@ -1,47 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBBB1C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 21:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51E25C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 21:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56A7560BDE;
-	Thu, 30 Dec 2021 21:46:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9985813D2;
+	Thu, 30 Dec 2021 21:47:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DhnPUP6znw5x; Thu, 30 Dec 2021 21:46:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3O5Zf6lWLUgR; Thu, 30 Dec 2021 21:47:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 290DE60A94;
-	Thu, 30 Dec 2021 21:46:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98E718136C;
+	Thu, 30 Dec 2021 21:47:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B3FB01BF3C4
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:46:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AEC3B1BF3C4
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0D9D80C00
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:46:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D2938136C
+ for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 21:47:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TrrWMUOu7JMt for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 21:46:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B6B0380BED
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 21:46:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1017182D9E; Thu, 30 Dec 2021 21:40:38 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 30 Dec 2021 22:35:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: da4cb17aa165a5c4b41efc09a6e7c606186d038f
-X-Git-Newrev: 4d2ca2be49fecb68a988662a27d31278408614d2
-X-Patchwork-Hint: ignore
-Message-Id: <20211230214038.1017182D9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: bump to version
- 59.8.0 and split python2 version
+ with ESMTP id ob_pt0audzzD for <buildroot@lists.busybox.net>;
+ Thu, 30 Dec 2021 21:47:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7498E81305
+ for <buildroot@buildroot.org>; Thu, 30 Dec 2021 21:47:29 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:14b5:310a:ddef:6cec])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A288813F7E7;
+ Thu, 30 Dec 2021 22:47:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1640900847;
+ bh=sB+R/fj7jqw2wNJOMLtWFIvJTDYMpOlGMzeRZeeeBnI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=hwxo12z9dGxua4lTn0W8BdF0XDobAGbiF6Mb1088tKHzEANyVodFxZfEFynId+aIN
+ 3pqM12HuLQRQUQmvZQwmh2B/jrDGhtRJgQAOkIaNHIzvtWjZvfHpRQBbR5zfgALyIP
+ 2Z3yjTRK0AQDsGBPydntzVxnAaIR5JvE+Atj/r6cMr9aF26HRH9Zw5TVrMjdj1T6Ry
+ +/M38rmgaqhAARh3S3Xr9ZHh1qKhFIm4AifcEMjiSoP1dcAEBSbsWtCuW5StYc/s9Y
+ Bd9dD9aZ7S19pHkwmuRr2VlTaN0gSV6hbGHS4uMibrx6Qr1ykJF2HXqo1WVCCOPt0j
+ y5zJd8zcf/Qpw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 30 Dec 2021 22:47:22 +0100
+Date: Thu, 30 Dec 2021 22:47:22 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Andrey Nechypurenko <andreynech@gmail.com>
+Message-ID: <20211230214722.GJ3390456@scaer>
+References: <20211214125510.13654-1-andreynech@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20211214125510.13654-1-andreynech@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/: remove -E flag from
+ patch call
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,232 +70,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0310189961315662753=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0310189961315662753==
-Content-Type: text/plain
+Andrey, All,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d2ca2be49fecb68a988662a27d31278408614d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2021-12-14 13:55 +0100, Andrey Nechypurenko spake thusly:
+> -E flag instructs patch to remove empty files. However, in some cases
+> empty files are essential. If they are missing, build could be broken
+> or other bad things can happen.
 
-Python setuptools 44.0 is not compatible with python 3.10. Unfortunately,
-python-setuptools 59.8.0 is not compatible with python2. As Buildroot is not
-ready to end python2 support, the python-setuptools package must accommodate
-both the old version for python2 and the new version for python3.10.
+Do you have an example of a publicly accessible package that has this
+issue?
 
-Changes include:
- - Add two new directories: package/python-setuptools/44.0.0 and
-   package/python-setuptools/59.8.0
- - Add the appropriate patch and hash files to each directory.
- - Modify python-setuptools.mk to support both setuptools 44.0 and 59.8.0
-   (setuptools 59.8.0 does not have a .zip on pypi anymore, only a tar.gz)
- - Point the symlinks in package/python3-setuptools to the files in
-   package/python-setuptools/59.8.0/
+> Signed-off-by: Andrey Nechypurenko <andreynech@gmail.com>
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../{ => 44.0.0}/0001-add-executable.patch         |  0
- .../{ => 44.0.0}/python-setuptools.hash            |  0
- .../{ => 59.8.0}/0001-add-executable.patch         | 20 +++++++++----------
- .../59.8.0/python-setuptools.hash                  |  4 ++++
- package/python-setuptools/python-setuptools.mk     | 23 +++++++++++++++++++---
- .../python3-setuptools/0001-add-executable.patch   |  2 +-
- package/python3-setuptools/python3-setuptools.hash |  2 +-
- package/python3-setuptools/python3-setuptools.mk   | 12 +++--------
- 8 files changed, 39 insertions(+), 24 deletions(-)
+I was going to apply this, but then I was wondering; what about patches
+that actually *want* to remove files?
 
-diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/44.0.0/0001-add-executable.patch
-similarity index 100%
-copy from package/python-setuptools/0001-add-executable.patch
-copy to package/python-setuptools/44.0.0/0001-add-executable.patch
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/44.0.0/python-setuptools.hash
-similarity index 100%
-rename from package/python-setuptools/python-setuptools.hash
-rename to package/python-setuptools/44.0.0/python-setuptools.hash
-diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/59.8.0/0001-add-executable.patch
-similarity index 84%
-rename from package/python-setuptools/0001-add-executable.patch
-rename to package/python-setuptools/59.8.0/0001-add-executable.patch
-index 8a59f5a4d8..b688745ce4 100644
---- a/package/python-setuptools/0001-add-executable.patch
-+++ b/package/python-setuptools/59.8.0/0001-add-executable.patch
-@@ -21,7 +21,7 @@ Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
-  2 files changed, 11 insertions(+)
- 
- diff --git a/setuptools/command/install.py b/setuptools/command/install.py
--index d2bca2e..b60ef19 100644
-+index 72b9a3e..6781d2b 100644
- --- a/setuptools/command/install.py
- +++ b/setuptools/command/install.py
- @@ -16,6 +16,7 @@ class install(orig.install):
-@@ -32,19 +32,19 @@ index d2bca2e..b60ef19 100644
-          ('old-and-unmanageable', None, "Try not to use this!"),
-          ('single-version-externally-managed', None,
-           "used by system package builders to create 'flat' eggs"),
--@@ -31,6 +32,7 @@ class install(orig.install):
-+@@ -38,6 +39,7 @@ class install(orig.install):
-+         )
-  
--     def initialize_options(self):
-          orig.install.initialize_options(self)
- +        self.executable = None
-          self.old_and_unmanageable = None
-          self.single_version_externally_managed = None
-  
- diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
--index be66cb2..07afaf8 100755
-+index 9cd8eb0..7786150 100644
- --- a/setuptools/command/install_scripts.py
- +++ b/setuptools/command/install_scripts.py
--@@ -11,6 +11,13 @@ class install_scripts(orig.install_scripts):
-+@@ -13,6 +13,13 @@ class install_scripts(orig.install_scripts):
-      def initialize_options(self):
-          orig.install_scripts.initialize_options(self)
-          self.no_ep = False
-@@ -58,15 +58,15 @@ index be66cb2..07afaf8 100755
-  
-      def run(self):
-          import setuptools.command.easy_install as ei
--@@ -31,6 +38,8 @@ class install_scripts(orig.install_scripts):
-+@@ -33,6 +40,8 @@ class install_scripts(orig.install_scripts):
-          )
-          bs_cmd = self.get_finalized_command('build_scripts')
-          exec_param = getattr(bs_cmd, 'executable', None)
- +        if self.executable is not None:
- +            exec_param = self.executable
--         bw_cmd = self.get_finalized_command("bdist_wininst")
--         is_wininst = getattr(bw_cmd, '_is_running', False)
--         writer = ei.ScriptWriter
-+         try:
-+             bw_cmd = self.get_finalized_command("bdist_wininst")
-+             is_wininst = getattr(bw_cmd, '_is_running', False)
- -- 
--2.6.3
-+2.30.2
- 
-diff --git a/package/python-setuptools/59.8.0/python-setuptools.hash b/package/python-setuptools/59.8.0/python-setuptools.hash
-new file mode 100644
-index 0000000000..285919639d
---- /dev/null
-+++ b/package/python-setuptools/59.8.0/python-setuptools.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.org/pypi/setuptools/json
-+md5  675f2089d970bf0bbfc3f49c80e4c7c3  setuptools-59.8.0.tar.gz
-+sha256  09980778aa734c3037a47997f28d6db5ab18bdf2af0e49f719bfc53967fd2e82  setuptools-59.8.0.tar.gz
-+sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 08a180ce0c..30f0f255ed 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,11 +4,26 @@
- #
- ################################################################################
- 
-+# For the target variant, we adapt the version depending on whether
-+# Python 3.x or 2.x is selected for the target.
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
-+PYTHON_SETUPTOOLS_VERSION = 59.8.0
-+PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
-+else # Python
- PYTHON_SETUPTOOLS_VERSION = 44.0.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
- PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+endif
-+
-+# The host variant is only for Python 2.x, so we need to use 44.0.0.
-+HOST_PYTHON_SETUPTOOLS_VERSION = 44.0.0
-+HOST_PYTHON_SETUPTOOLS_SOURCE = setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION).zip
-+HOST_PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
-+
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
-@@ -16,16 +31,18 @@ PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
- HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
- 
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
- define PYTHON_SETUPTOOLS_EXTRACT_CMDS
- 	$(UNZIP) -d $(@D) $(PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
- 	mv $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)/* $(@D)
- 	$(RM) -r $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)
- endef
-+endif
- 
- define HOST_PYTHON_SETUPTOOLS_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(HOST_PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
--	mv $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)/* $(@D)
--	$(RM) -r $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)
-+	$(UNZIP) -d $(@D) $(HOST_PYTHON_SETUPTOOLS_DL_DIR)/$(HOST_PYTHON_SETUPTOOLS_SOURCE)
-+	mv $(@D)/setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION)
- endef
- 
- $(eval $(python-package))
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-index 5bab3d96a1..6fc7595a8d 120000
---- a/package/python3-setuptools/0001-add-executable.patch
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -1 +1 @@
--../python-setuptools/0001-add-executable.patch
-\ No newline at end of file
-+../python-setuptools/59.8.0/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-index a3af7f0fb1..91d8bc0887 120000
---- a/package/python3-setuptools/python3-setuptools.hash
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -1 +1 @@
--../python-setuptools/python-setuptools.hash
-\ No newline at end of file
-+../python-setuptools/59.8.0/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 34d5993120..f4dae2d15d 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 44.0.0
--PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+PYTHON3_SETUPTOOLS_VERSION = 59.8.0
-+PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/ef/75/2bc7bef4d668f9caa9c6ed3f3187989922765403198243040d08d2a52725
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_CPE_ID_VENDOR = python
-@@ -17,10 +17,4 @@ PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
- HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
- HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
- 
--define HOST_PYTHON3_SETUPTOOLS_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
--	mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
--	$(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
--endef
--
- $(eval $(host-python-package))
+It turns out that we do have a few patches that remove files:
 
---===============0310189961315662753==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+    $ git grep -E '\+\+\+ /dev/null'
+    board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+    board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+    board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+    boot/grub2/0033-verifiers-Move-verifiers-API-to-kernel-image.patch:+++ /dev/null
+    boot/grub2/0034-efi-Move-the-shim_lock-verifier-to-the-GRUB-core.patch:+++ /dev/null
+    boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
+    boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
+    package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+    package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+    package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+    package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+    package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+    package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+    package/gcc/9.4.0/0003-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+    package/openpgm/0001-Rename-openpgm-5.2.pc.in.patch:+++ /dev/null
+    package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch:+++ /dev/null
+    package/screen/0005-rename-sched_h.patch:+++ /dev/null
 
+While a few of them could be rewriten so that the are actual renames
+(now that we require a patch version that supports renames), some really
+do want to remove files; that's notably the case with the uboot patch
+for the roseapplepi board, or the babeltrace2 patch, as well as the gcc
+patches...
+
+Furthermore, some users may have alaready relied on this behaviour, that
+empty files get removed, for their packages in theor br2-external
+trees...
+
+So we have an antagonist situation: some patches will want to rem ove
+files, and some patches will want to not remove files. We can't satisfy
+both, obviously.
+
+So, unfortunately, it is not possible to apply your patch.
+
+If your package really requires that the files be present and empty, you
+should then use a post-patch hook to touch those files.
+
+Unless someone comes up with a better idea...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/scripts/apply-patches.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index e5a2fdd09e..6da83f6826 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -114,7 +114,7 @@ function apply_patch {
+>          exit 1
+>      fi
+>      echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+> -    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+> +    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+>      if [ $? != 0 ] ; then
+>          echo "Patch failed!  Please fix ${patch}!"
+>          exit 1
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0310189961315662753==--
