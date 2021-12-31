@@ -1,75 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B74C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 21:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F7CFC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 23:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E61A160BF6;
-	Fri, 31 Dec 2021 21:48:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC26740393;
+	Fri, 31 Dec 2021 23:04:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RgCQWvEHLSP2; Fri, 31 Dec 2021 21:48:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RG2iobcyHhzv; Fri, 31 Dec 2021 23:04:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4DBB60C1F;
-	Fri, 31 Dec 2021 21:48:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6BF1E1BF30D
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 21:48:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7966400C7;
+	Fri, 31 Dec 2021 23:04:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 862BC1BF37F
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 23:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6801D60C1F
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 21:48:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73C1F400C7
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 23:04:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PzC0xjGEjjTZ for <buildroot@lists.busybox.net>;
- Fri, 31 Dec 2021 21:48:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NV6YxVx2fxVR for <buildroot@lists.busybox.net>;
+ Fri, 31 Dec 2021 23:04:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com
- [IPv6:2607:f8b0:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EAF4160BF6
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 21:48:47 +0000 (UTC)
-Received: by mail-ot1-x330.google.com with SMTP id
- v15-20020a9d604f000000b0056cdb373b82so36760711otj.7
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 13:48:47 -0800 (PST)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59E4140017
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 23:04:33 +0000 (UTC)
+Received: by mail-pj1-x102b.google.com with SMTP id
+ a11-20020a17090a854b00b001b11aae38d6so26836080pjw.2
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 15:04:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=S/9saQl3e6k5OLmosM8or2af4AjTGSuKstw4+ZMwdF0=;
- b=XYnI1kbISAltjQXWNnu8atW5N0z6ai79aM97bhKKsCtD3DVfknzaWjiZ9axTpdC3zl
- hXFZ/LIB5VPG17QHAXqSJJyo/5By/HvYZi0G5QQo4Mlra6XPcYUWFTOdL7TIMG+U3sY3
- tE4tdbKSDZJ6iOXC/NubSV9qOetTlBjgzLHP649XbPl8z0a2h7AsM3u6e06ZYyZWozm6
- 0wncBywsu0eC4hJnX6nHHqs9KGNzeRtTFEJmMY+VhTg4JtBnB36EEOGMT9s1tJZeec/B
- wrnIUjDS+j8ltwGZYEdp4nFJi7t8ha9bHNkzyg+mRNqPwxbu31DmqSIgH68pr36JUrPK
- Kg4w==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Nfs7QjrIvcLNPVDIfEyDysALJ3+3NMN+LW7BbnIhlPY=;
+ b=MNn4AdD86MlruW02iI99sBORFreLQYdKYmRRA3+yWl24XQVdKSg+GaihOhl+iRyJtZ
+ pWrHmC+8JyFPeF2BezxK8VG3fOsuokgL73EQymE+/2vMDkqpoHZR2KZ3G8LcmWAyiIxh
+ DO/Jr2Ua14wH23qScludvRqJHYP7B4w3zqHj/dNMTb7Thnf0XWZ4IW4itWEmFwO3Z9Uk
+ ISulEislW+EvhtLZYWAeUSr5jIvqRBo7eVJ4SfHp53Vy1/pzWvptB8WkKT5JV/fzShRg
+ jEdaFFDzWYG1izlaeqC4JpDmaUSz/VlZf1OStovHHfGalofIB/das2A0S9aL0zsPjMxF
+ iYxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=S/9saQl3e6k5OLmosM8or2af4AjTGSuKstw4+ZMwdF0=;
- b=a7pNtN7Nz7rgpGM/djBeR3S3+8Y7KGQ0N8t0LwDsUSxKtx2IOekCyDoMKvFVyQaFaB
- pvQP8DsQ28pdGnws+89dPHgWxkdqjCJpUL8wHeo6BhDTk/R+tYYJ7r7xtpjnE1JrEU55
- k138ihi7+zFdwLdK9hfuzOIkCyMTvyeDpCmrHBJgC0C1ZgCe++/cKiu5DBU7S7Fkctzc
- NSz65CVAHc+Gs90u/u3jtA93Qlo2TT2or6JgBEl2KOBHPQl2DTA2SRtsADEpxFn0xWue
- /0RCWC56BPXETKO+Ux9I0ZK1l0tqxdqe7okEaRzYksc8fxKPGPkmHcj7IaLE9P+9G3uc
- ujGQ==
-X-Gm-Message-State: AOAM533/notgPsYfGMDkRQuNSMwHwuEfdXnGoARUVNFTvbVhU7IDz1jd
- 2UBcl/wyDsX8krFd1ny0bhBJxBoE77xHTcl8xLY=
-X-Google-Smtp-Source: ABdhPJwRlLmiv87TfvCWkhX85bwI/R72zjzsqQOGV/EhLmc2xllmgd3VNqyHxu+IRUsQ9BMcpjnErENKfTwXDesCcSQ=
-X-Received: by 2002:a9d:7855:: with SMTP id c21mr26817711otm.167.1640987326828; 
- Fri, 31 Dec 2021 13:48:46 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Nfs7QjrIvcLNPVDIfEyDysALJ3+3NMN+LW7BbnIhlPY=;
+ b=dJXPaqBvYg9CS5wswvir3iMMUGbHKBVlWLsLMEfPnAP+TsZ23+n+zpuQ5EQPuobLmB
+ NB5bfA7EW3ScejGpgC6WlRq1Dzl12M8zBTKRUTVkORh+Fqnx7p4+xl9e/QTVvko6d/2q
+ nnSXXh1DelkAu30YrxcnDTJyAG0CCLYkwlynK4Ij7QKiWL/D5+V4SY37sM4xjY1iE7NZ
+ oNYblVIWigR6UH+FcusNzDaFBmoY9qoE0FG9vL8ZnezSRsM+xoH4/mHPVPoOUlH+vxJD
+ vbDMcC78GTk+gVT3t6PQXN/IkMivMzn7nOCmP+TrGgDTfXvT8sgwps7s2wfrxNgbE11s
+ +Cgw==
+X-Gm-Message-State: AOAM532mG8g3TIZoF2ktnReEWnW0zBLBNyaqUIWXShCmXQJhOnACn4eH
+ nYP1zwEF4JJadNiWvfDw9ZXOixt1UTo=
+X-Google-Smtp-Source: ABdhPJwIecPEN+bLcn66PWU5RX8mOKUDZMhvcQuv07eFH31LEoB/oJBY9EzsnROip2M2JF5/b9qt2A==
+X-Received: by 2002:a17:90b:4b4a:: with SMTP id
+ mi10mr45559086pjb.55.1640991872599; 
+ Fri, 31 Dec 2021 15:04:32 -0800 (PST)
+Received: from localhost.localdomain ([47.149.13.137])
+ by smtp.gmail.com with ESMTPSA id f16sm33462369pfj.6.2021.12.31.15.04.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 31 Dec 2021 15:04:32 -0800 (PST)
+From: Adam Duskett <aduskett@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 31 Dec 2021 15:04:22 -0800
+Message-Id: <20211231230422.955804-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211231202620.3521230-1-james.hilliard1@gmail.com>
- <20211231212856.GO3390456@scaer>
-In-Reply-To: <20211231212856.GO3390456@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 31 Dec 2021 15:48:35 -0600
-Message-ID: <CADvTj4pqjjm7hOY99TEMAXwiHb=bRMMzB5neUbqdEV31W0mcxg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/zynq-boot-bin: port to python3
- and move to support/scripts
+Subject: [Buildroot] [PATCH 1/1] package/libimxvpuapi: depend on host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,352 +84,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Gary Bisson <bisson.gary@gmail.com>, Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Dec 31, 2021 at 3:29 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2021-12-31 13:26 -0700, James Hilliard spake thusly:
-> > The zynq-boot-bin.py script is no longer maintained upstream, so move
-> > it to support/scripts/zynq-boot-bin.py and port to python3.
->
-> And what do they provide as a replacement?
+This package builds just fine with python3.
 
-From what I can tell there isn't a direct replacement for this tool in-tree.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libimxvpuapi/libimxvpuapi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> I mean, rather than carry a copy in our tree, can't we just switch over
-> to the new tools provided by Xilinx?
->
-> Regards,
-> Yann E. MORIN.
->
-> > The python3 version produces the same output as the original python2
-> > version.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >  boot/uboot/uboot.mk                      |   6 +-
-> >  package/zynq-boot-bin/zynq-boot-bin.hash |   2 -
-> >  package/zynq-boot-bin/zynq-boot-bin.mk   |  22 ---
-> >  support/scripts/zynq-boot-bin.py         | 230 +++++++++++++++++++++++
-> >  4 files changed, 233 insertions(+), 27 deletions(-)
-> >  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.hash
-> >  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
-> >  create mode 100755 support/scripts/zynq-boot-bin.py
-> >
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index 574fc7089a..9ff2ccda68 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -434,12 +434,12 @@ endif
-> >
-> >  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
-> >  define UBOOT_GENERATE_ZYNQ_IMAGE
-> > -     $(HOST_DIR)/bin/python2 \
-> > -             $(HOST_DIR)/bin/zynq-boot-bin.py \
-> > +     $(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
-> > +             $(TOPDIR)/support/scripts/zynq-boot-bin.py \
-> >               -u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))) \
-> >               -o $(BINARIES_DIR)/BOOT.BIN
-> >  endef
-> > -UBOOT_DEPENDENCIES += host-zynq-boot-bin
-> > +UBOOT_DEPENDENCIES += host-python3
-> >  UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
-> >  endif
-> >
-> > diff --git a/package/zynq-boot-bin/zynq-boot-bin.hash b/package/zynq-boot-bin/zynq-boot-bin.hash
-> > deleted file mode 100644
-> > index 0bc23de197..0000000000
-> > --- a/package/zynq-boot-bin/zynq-boot-bin.hash
-> > +++ /dev/null
-> > @@ -1,2 +0,0 @@
-> > -# From https://raw.githubusercontent.com/Xilinx/u-boot-xlnx
-> > -sha1 940331ee02b0007099effa61e382fe7ea4174054        zynq-boot-bin.py
-> > diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
-> > deleted file mode 100644
-> > index deba5f4096..0000000000
-> > --- a/package/zynq-boot-bin/zynq-boot-bin.mk
-> > +++ /dev/null
-> > @@ -1,22 +0,0 @@
-> > -################################################################################
-> > -#
-> > -# zynq-boot-bin
-> > -#
-> > -################################################################################
-> > -
-> > -ZYNQ_BOOT_BIN_VERSION = 2015.1
-> > -ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
-> > -ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/xilinx-v$(ZYNQ_BOOT_BIN_VERSION)/tools
-> > -ZYNQ_BOOT_BIN_LICENSE = GPL-3.0+
-> > -
-> > -HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
-> > -
-> > -define HOST_ZYNQ_BOOT_BIN_EXTRACT_CMDS
-> > -     cp $(HOST_ZYNQ_BOOT_BIN_DL_DIR)/$(ZYNQ_BOOT_BIN_SOURCE) $(@D)
-> > -endef
-> > -
-> > -define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
-> > -     $(INSTALL) -D -m 0755 $(@D)/$(ZYNQ_BOOT_BIN_SOURCE) $(HOST_DIR)/bin/$(ZYNQ_BOOT_BIN_SOURCE)
-> > -endef
-> > -
-> > -$(eval $(host-generic-package))
-> > diff --git a/support/scripts/zynq-boot-bin.py b/support/scripts/zynq-boot-bin.py
-> > new file mode 100755
-> > index 0000000000..f7fb18225d
-> > --- /dev/null
-> > +++ b/support/scripts/zynq-boot-bin.py
-> > @@ -0,0 +1,230 @@
-> > +#!/usr/bin/env python3
-> > +# -*- coding: utf-8 -*-
-> > +# Copyright (C) 2014, Xilinx.inc.
-> > +#
-> > +# Hack origin version and just take the part which generate boot.bin
-> > +# for U-BOOT SPL.
-> > +#
-> > +# Copyright (C) 2013, Elphel.inc.
-> > +# pre-u-boot configuration of the Xilinx Zynq(R) SoC
-> > +# This program is free software: you can redistribute it and/or modify
-> > +# it under the terms of the GNU General Public License as published by
-> > +# the Free Software Foundation, either version 3 of the License, or
-> > +# (at your option) any later version.
-> > +#
-> > +# This program is distributed in the hope that it will be useful,
-> > +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> > +# GNU General Public License for more details.
-> > +#
-> > +# You should have received a copy of the GNU General Public License
-> > +# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-> > +
-> > +__author__ = "Andrey Filippov"
-> > +__copyright__ = "Copyright 2013, Elphel, Inc."
-> > +__license__ = "GPL"
-> > +__version__ = "3.0+"
-> > +__maintainer__ = "Andrey Filippov"
-> > +__email__ = "andrey@elphel.com"
-> > +__status__ = "Development"
-> > +import os
-> > +import struct
-> > +import sys, getopt
-> > +from functools import reduce
-> > +
-> > +inputfile = ''
-> > +outputfile = ''
-> > +argv = sys.argv[1:]
-> > +try:
-> > +  opts, args = getopt.getopt(argv,"hu:o:",["uboot=","outfile="])
-> > +except getopt.GetoptError:
-> > +  print('test.py -u <inputfile> -o <outputfile>')
-> > +  sys.exit(2)
-> > +
-> > +if len(argv) == 0:
-> > +  print('test.py -u <inputfile> -o <outputfile>')
-> > +  sys.exit()
-> > +
-> > +for opt, arg in opts:
-> > +  if opt == '-h':
-> > +      print('test.py -u <inputfile> -o <outputfile>')
-> > +      sys.exit()
-> > +  elif opt in ("-u", "--uboot"):
-> > +      inputfile = arg
-> > +  elif opt in ("-o", "--outfile"):
-> > +      outputfile = arg
-> > +print('Input file is:', inputfile)
-> > +print('Output file is:', outputfile)
-> > +
-> > +exit
-> > +
-> > +ACCESSIBLE_REGISTERS=((0xe0001000,0xe0001fff), # UART1 controller registers
-> > +                      (0xe000d000,0xe000efff), # QUAD SPI controller registers
-> > +                      (0xe0100004,0xe0100057), # SDIO 0 controller registers
-> > +                      (0xe0100059,0xe0100fff), # SDIO 0 controller registers
-> > +                      (0xe000e000,0xe000efff), # SMC controller
-> > +                      (0xf8006000,0xf8006fff), # DDR controller
-> > +                      # SLCR_LOCK disables all (0xf8000000,0xf8000b74), but it is locked at reset seems to be unlocked, http://www.xilinx.com/support/answers/47570.html
-> > +                      #prohibited: SLCR_SCL, SLCR_LOCK, SLCR_UNLOCK, SLCR_STA
-> > +                      (0xf8000100,0xf80001b0), # SLCR registers
-> > +                      #DOes not seem to be any gap between 0xf80001b0 and 0xf80001b4
-> > +                      (0xf80001b4,0xf80001ff), # SLCR registers
-> > +                      #prohibited SLCR_PSS_RST_CTRL 0xf8000200
-> > +                      (0xf8000204,0xf8000234), # SLCR registers - is  SLCR_SMC_RST_CTRL 0xf8000234 also prohibited?
-> > +                      #prohibited? SLCR_OCM_RST_CTRL 0xf8000238 SLCR_FPGA_RST_CTRL 0xf8000240
-> > +                      (0xf800024c,0xf800024c), # SLCR registers SLCR_AWDT_CTRL - watchdog timer reset control
-> > +                      #prohibited SLSR_REBOOT_STATUS 0xf8000258, SLCR_BOOT_MODE 0xf800025c, SLCR_APU_CTRL 0xf8000300,
-> > +                      (0xf8000304,0xf8000834), # SLCR registers SLCR_AWDT_CLK_SEL,  DDR, MIO
-> > +                      #prohibited SLCR_LVL_SHFTR_ON 0xf8000900, SLCR_OCM_CFG 0xf8000910,
-> > +                      (0xf8000a00,0xf8000a8c), # SLCR registers All shown "reserved" ???
-> > +                      (0xf8000ab0,0xf8000b74)) # SLCR registers iostd, voltages,  - more DDR stuff
-> > +
-> > +def verify_register_accessible(address):
-> > +    for interval in ACCESSIBLE_REGISTERS:
-> > +        if (address >= interval[0]) and (address <= interval[1]):
-> > +            print('Register accessible:' , hex(interval[0]),'<=', hex(address), '<=', hex(interval[1]))
-> > +            return True
-> > +    else:
-> > +        return False
-> > +
-> > +def image_generator (image,
-> > +                       reg_sets, # registers,
-> > +                       options,
-> > +                       user_def,
-> > +                       ocm_offset,
-> > +                       ocm_len,
-> > +                       start_exec):
-> > +    reserved0044=0;
-> > +
-> > +    rfi_word=0xeafffffe #from actual image
-> > +    waddr=0
-> > +    for _ in range (0x20//4):
-> > +        image[waddr]=rfi_word # fill reserved for interrupts fields
-> > +        waddr+=1
-> > +    #width detection
-> > +    image[waddr]=0xaa995566 # offset 0x20
-> > +    waddr+=1
-> > +
-> > +    #image identification
-> > +    image[waddr]=0x584c4e58 # offset 0x24, XLNX
-> > +    waddr+=1
-> > +
-> > +    #encryption status
-> > +    image[waddr]=0x0 # offset 0x28, no encryption
-> > +    waddr+=1
-> > +
-> > +    #User defined word
-> > +    image[waddr]=user_def # offset 0x2c
-> > +    waddr+=1
-> > +
-> > +    #ocm_offset
-> > +    if ocm_offset<0x8c0:
-> > +        print('Start offset should be >= 0x8c0, specified', hex(ocm_offset))
-> > +        exit (ERROR_DEFS['HEAD'])
-> > +    elif (ocm_offset & 0x3f) != 0:
-> > +        print('Start offset should be 64-bytes aligned, specified', hex(ocm_offset))
-> > +        exit (ERROR_DEFS['HEAD'])
-> > +    image[waddr]=ocm_offset # offset 0x30
-> > +    waddr+=1
-> > +
-> > +    #ocm_len
-> > +    if ocm_len>0x30000:
-> > +        print('Loaded to the OCM image should fit into 3 mapped pages of OCM - 192K (0x30000), specified ',hex(ocm_len))
-> > +        exit (ERROR_DEFS['HEAD'])
-> > +    image[waddr]=ocm_len # offset 0x34
-> > +    waddr+=1
-> > +
-> > +    #reserved 0
-> > +    image[waddr]=0 # offset 0x38
-> > +    waddr+=1
-> > +
-> > +    #start_exec
-> > +    if (start_exec>0x30000) or (start_exec<0):
-> > +        print('Start address is relative to  OCM and should fit there - in 192K (0x30000), specified ',hex(start_exec))
-> > +        exit (ERROR_DEFS['HEAD'])
-> > +    image[waddr]=start_exec # offset 0x3c
-> > +    waddr+=1
-> > +
-> > +    #img_len == ocm_len for unsecure images
-> > +    img_len = ocm_len
-> > +    image[waddr]=img_len # offset 0x40
-> > +    waddr+=1
-> > +
-> > +    #reserved 0
-> > +    image[waddr]=reserved0044 #0  # offset 0x44
-> > +    waddr+=1
-> > +
-> > +    #calculate image checksum
-> > +    def add (x,y): return x+y
-> > +    checksum=(reduce(add,image[0x20//4:0x48//4]) ^ 0xffffffff) & 0xffffffff
-> > +    image[waddr]=checksum # offset 0x48
-> > +    waddr+=1
-> > +    print('After checksum waddr=',hex(waddr),' byte addr=',hex(4*waddr))
-> > +
-> > +
-> > +    #initialize registers
-> > +    print('Number of registers to initialize',len(reg_sets))
-> > +    if len (reg_sets)>256:
-> > +        print('Too many registers to initialize, only 256 allowed,',len(reg_sets),'> 256')
-> > +    waddr=0xa0//4
-> > +    # new_sets.append((addr,data,mask,self.module_name,register_name,self.defs[register_name]))
-> > +
-> > +    for register in reg_sets:
-> > +        op=register[0]
-> > +        addr=register[1]
-> > +        data=register[2]
-> > +        if (op != 's'):
-> > +            raise Exception ('Can not test registers (0x%08x) in RBL, it should be done in user code'%addr)
-> > +        if not verify_register_accessible (addr):
-> > +            print('Tried to set non-accessible register', hex(addr),' with data ', hex(data))
-> > +            exit (ERROR_DEFS['NONACCESSIBLE_REGISTER'])
-> > +        image[waddr]=addr
-> > +        waddr+=1
-> > +        image[waddr]=data
-> > +        waddr+=1
-> > +    #Fill in FFs for unused registers
-> > +    while waddr < (0x8c0//4):
-> > +        image[waddr]=0xffffffff
-> > +        waddr+=1
-> > +        image[waddr]=0
-> > +        waddr+=1
-> > +
-> > +if (inputfile):
-> > +    try:
-> > +        uboot_image_len=os.path.getsize(inputfile)
-> > +        print('Using %s to get image length - it is %i (0x%x) bytes'%(os.path.abspath(inputfile),uboot_image_len,uboot_image_len))
-> > +    except:
-> > +        print('Specified u-boot.bin file: %s (%s) not found'%(inputfile,os.path.abspath(inputfile)))
-> > +        sys.exit()
-> > +else:
-> > +    uboot_image_len=int(raw_options['CONFIG_EZYNQ_BOOT_OCM_IMAGE_LENGTH'],0)
-> > +    print('No u-boot.bin path specified, using provided CONFIG_EZYNQ_BOOT_OCM_IMAGE_LENGTH as image size of %i (0x%x) bytes for the RBL header'%(uboot_image_len,uboot_image_len))
-> > +
-> > +image =[ 0 for k in range (0x8c0//4)]
-> > +reg_sets=[]
-> > +num_rbl_regs=0
-> > +
-> > +raw_configs=""
-> > +raw_options={}
-> > +
-> > +
-> > +image_generator (image,
-> > +                 reg_sets[:num_rbl_regs], #
-> > +                 #registers,
-> > +                 raw_options,
-> > +                 0x1010000, # user_def
-> > +                 0x8c0, # ocm_offset,
-> > +                 uboot_image_len, #ocm_len,
-> > +                 0) #start_exec)
-> > +
-> > +if outputfile:
-> > +    print('Generating binary output ',os.path.abspath(outputfile))
-> > +    bf=open(outputfile,'wb')
-> > +    data=struct.pack('I' * len(image), *image)
-> > +    bf.write(data)
-> > +
-> > +    spl=open(inputfile,'rb')
-> > +    bf.write(spl.read())
-> > +
-> > +    bf.close()
-> > +    spl.close()
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index a2a3b21105..d8f214b9e0 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -8,7 +8,7 @@ LIBIMXVPUAPI_VERSION = 0.10.3
+ LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+ LIBIMXVPUAPI_LICENSE = LGPL-2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+-LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
++LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python3 imx-vpu
+ LIBIMXVPUAPI_INSTALL_STAGING = YES
+ LIBIMXVPUAPI_NEEDS_EXTERNAL_WAF = YES
+ 
+-- 
+2.33.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
