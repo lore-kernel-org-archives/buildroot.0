@@ -1,86 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF606C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 11:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CFDBC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 12:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65E7E409C3;
-	Fri, 31 Dec 2021 11:42:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0BD981439;
+	Fri, 31 Dec 2021 12:47:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9oXt_lhv8pTC; Fri, 31 Dec 2021 11:42:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B08C4409AB;
-	Fri, 31 Dec 2021 11:42:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DE231BF33C
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 11:42:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C1A98195C
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 11:42:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oOcHv0D2n1zM for <buildroot@lists.busybox.net>;
- Fri, 31 Dec 2021 11:42:46 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l-N8yn6rTXRx; Fri, 31 Dec 2021 12:47:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2056C813FD;
+	Fri, 31 Dec 2021 12:47:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A8041BF2F3
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 12:47:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19B5540293
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 12:47:37 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0eclWl1vVDQF for <buildroot@lists.busybox.net>;
+ Fri, 31 Dec 2021 12:47:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD67B81947
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 11:42:45 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id b73so17230016wmd.0
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 03:42:45 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E2914027E
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 12:47:35 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id l4so17294890wmq.3
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 04:47:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:in-reply-to:content-transfer-encoding;
- bh=GF9BRrkjUs3BaxgOL08biadFY5ljRSZLBLJyRsF7QjA=;
- b=CFm9odW7Cia5r9z1LQygJ35/s2rLDCbO3iBhYB+TnZL9EqpNCuJSmEimixY5+9BS7L
- moTWlJ6QVCq1xf4vf6zAo2FtoZTOgGTWVhHiNJynkw33nshEH5Q+lEnenWWnZztkmIHZ
- pWuSkgc5pgJlUvPWOltAFfAef5hWOLAlAO/7kxKIc2l0dKgs70DUmcfuB3OxS96YkCNz
- rzOrFYIgnHTeZ+azztcayTVs1JcqqZNqaTxovj++w7pqvB/4AN9CirI5mFXEOcHZbgIh
- 0jbk7cIwhX+67x2LdFHh+hhA6kcmo/Jo+5p4Pz/KZA74lb6a5OYzhV8H0B28c0B1mLBe
- rkqg==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=Ys9VsqvpMQug3J/DGA+Gm7PjQ0bw66cfefENX6HWT8Q=;
+ b=hHC+qF10z3ZH9bl6d5KPpVQS1zp5FTOK6hgbrsVh+Mnoy+5QKnTTB+vQ+vJgp1Y6/K
+ BICRrc3P3DVg7301l3yXB6JlRdlAHRxrMzR2CQ34sc2H2vCSAqvJh4ZUD+cDsIQMxg3P
+ oDYbBU5Y7KiKM8nX5U9Hci7x4Z/OKE1zxuD3wz8VEfvJJ3ltxa6i/4y784PaNiEqpnr7
+ kZ0a6dFstWpnVTeiBynv82ayepeB/m0UW4RxEELRLn8GFZ1GMvmo/PegQPU6VvEeMeyu
+ FV70fd1dnQ+IEYNxU0EE9eSIVvr/TezZ1lmjPqrGXRBc35PC5hnNxUdBpmx3rFGvcpNU
+ bFTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=GF9BRrkjUs3BaxgOL08biadFY5ljRSZLBLJyRsF7QjA=;
- b=GcDTXVhqLrxVpoppIbdIp+vtZ/AQMrNAH8rDoXG4gDosBxlrPxm7cYWJ0u3FhHy57n
- +nRexz7hAG7DG4KToAIb/EGuMpunZXIKA34uLYA50M9ks114REixV0hVL4n1mxz1I1Ju
- NkgmvN1zLelPVPxvkrXzGzSEdzlvVatVYr5etby5GrVd1hXF9xHqvY2LLnm6AWhqRtxo
- CEStr6Pr5eNka5mk9dkClqcd1KEYPw0+Er7C3A5X3yU51ustpHG8dNVyvdMTTad8ylDh
- N1C6NyorcxZXoL2qfUegELogaoW9CyM9oCet4oF4w07PBydtr4Hkr8MIHUex1z+ig1oJ
- wAbA==
-X-Gm-Message-State: AOAM531mPa57y8HUEWiEd/IQHSQit6aBpYV8+Yy6mxqLh6qWjEg9m7Hi
- U4Ln6jv99mPFKA5ZGUvarIjYQR+Cmtc=
-X-Google-Smtp-Source: ABdhPJxBainjtZ81hwlmh/LShifTyhHD+WJpnh9LMHfLF6uP6tMwo/dTejgExGIWXONNGJazb42OSg==
-X-Received: by 2002:a05:600c:2242:: with SMTP id
- a2mr29274810wmm.63.1640950963901; 
- Fri, 31 Dec 2021 03:42:43 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ bh=Ys9VsqvpMQug3J/DGA+Gm7PjQ0bw66cfefENX6HWT8Q=;
+ b=oltq/Vj5mcvAOwrsAc55XW3+iM2fN6Oz6IyOmgw2J1gOCqTuiYTYyzDArIZ2WaOpR+
+ DdR1MWHckJx/Dq2y8aWuWeZrZfwK6my9umHTHkZ4tCpPPli5dA4tfJUH02h06xNykBc7
+ gHxHOke0U2Ofmp5V2TDQPQbuUD+Z77NYxeIL5zmgGGcJ88S11kv4aXT9xHH0p7FakeA7
+ N4wzdlq+qmYtqDH+iH6ONfdiSybYgQL4Za+SMwrGzcI81RbSDiGhlW0m6e0xybBk3Oq2
+ YBF+7vvDdn9m3opjTEhP7tlhcCV816U8021l4sWdGwR4LMw2SSH4ETeAp6ffUzVowxqy
+ APlA==
+X-Gm-Message-State: AOAM533KrDGB7WGeHEiiac8HSh85OzLrjSQQodRmFWgCmvKOWf+ge0q4
+ zBigQgtJKN7REuzcnvamoqzDmx7RZA0=
+X-Google-Smtp-Source: ABdhPJwgOWiqXwdVurK9n1ulxaNLWaTlpW/f3Z8ataomImkr8uEstXmfCBYyt6xHL1nFWibWVLHZOA==
+X-Received: by 2002:a1c:1bd8:: with SMTP id
+ b207mr30365966wmb.114.1640954854156; 
+ Fri, 31 Dec 2021 04:47:34 -0800 (PST)
+Received: from atlas.home
  (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
  [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id a24sm10642235wmj.8.2021.12.31.03.42.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 31 Dec 2021 03:42:43 -0800 (PST)
-Message-ID: <813b2250-89c2-59ba-44c7-6cae63f4c9de@gmail.com>
-Date: Fri, 31 Dec 2021 12:42:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20211231090030.3437133-1-fontaine.fabrice@gmail.com>
+ by smtp.gmail.com with ESMTPSA id b13sm27405653wrh.32.2021.12.31.04.47.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 31 Dec 2021 04:47:33 -0800 (PST)
 From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20211231090030.3437133-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/ogre: disable csharp
+To: buildroot@buildroot.org
+Date: Fri, 31 Dec 2021 13:47:26 +0100
+Message-Id: <20211231124728.1692301-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/3] package/flare-engine: enable ogg support in
+ SDL2-mixer via Tremor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,32 +88,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMzEvMTIvMjAyMSDDoCAxMDowMCwgRmFicmljZSBGb250YWluZSBhIMOpY3JpdMKgOgo+IERp
-c2FibGUgY3NoYXJwIHRvIGF2b2lkIHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSB3aXRoIHB5
-dGhvbiBzaW5jZQo+IGJ1bXAgdG8gdmVyc2lvbiAxLjEyLjEyIGluIGNvbW1pdAo+IDRlODE0MjI3
-Y2FhMGE1ZDE5MGUzNmNkNTE3NDIzOWZlNWM2MjcyNzkgYW5kCj4gaHR0cHM6Ly9naXRodWIuY29t
-L09HUkVDYXZlL29ncmUvY29tbWl0LzNmZDgzOWM3NmExNTNlNjE0YzllMzEzMWZmOTk1OTIzNDA5
-OWU3NDk6Cj4gCj4gL2Jpbi9zaDogMTogbWNzOiBub3QgZm91bmQKPiAKPiBGaXhlczoKPiAgLSBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy81ZjM4NGRiZWQ4ZTUyNDFmOTEw
-NzJiZmZmYTU0YmE2YjljNTA5NzUxCj4gCj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWlu
-ZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+CgpBY2tlZC1ieTogUm9tYWluIE5hb3VyIDxy
-b21haW4ubmFvdXJAZ21haWwuY29tPgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gLS0tCj4gIHBh
-Y2thZ2Uvb2dyZS9vZ3JlLm1rIHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL29ncmUvb2dyZS5tayBiL3BhY2thZ2Uvb2dyZS9v
-Z3JlLm1rCj4gaW5kZXggNzJjOTZjYjMzYS4uNzJmZDYxNmMwYyAxMDA2NDQKPiAtLS0gYS9wYWNr
-YWdlL29ncmUvb2dyZS5tawo+ICsrKyBiL3BhY2thZ2Uvb2dyZS9vZ3JlLm1rCj4gQEAgLTMzLDYg
-KzMzLDcgQEAgT0dSRV9DWFhGTEFHUyA9ICQoVEFSR0VUX0NYWEZMQUdTKSAtREdMRVdfTk9fR0xV
-Cj4gICMgRGlzYWJsZSBqYXZhIGFuZCBudmlkaWEgY2cgc3VwcG9ydC4KPiAgIyBEaXNhYmxlIGlt
-Z3VpIG92ZXJsYXkgdG8gYXZvaWQgZXh0cmEgZG93bmxvYWQgZnJvbSBDTWFrZS4KPiAgT0dSRV9D
-T05GX09QVFMgPSAtRE9HUkVfQlVJTERfREVQRU5ERU5DSUVTPU9GRiBcCj4gKwktRE9HUkVfQlVJ
-TERfQ09NUE9ORU5UX0NTSEFSUD1PRkYgXAo+ICAJLURPR1JFX0JVSUxEX0NPTVBPTkVOVF9KQVZB
-PU9GRiBcCj4gIAktRE9HUkVfQlVJTERfUExVR0lOX0NHPU9GRiBcCj4gIAktRE9HUkVfQlVJTERf
-Q09NUE9ORU5UX09WRVJMQVlfSU1HVUk9T0ZGIFwKPiAKCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+Flare games use OGG audio file format througt SDL2-mixer.
+
+Without OGG support, flare-engine trigger a lot of errors in its
+log and fail to start the game.
+
+ERROR: SoundManager: ItemManager: Loading sound /usr/share/flare/mods/fantasycore/soundfx/inventory/inventory_gem.ogg (soundfx/inventory/inventory_gem.ogg) failed: Unrecognized audio format
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/flare-engine/Config.in       | 1 +
+ package/flare-engine/flare-engine.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
+index d08b740af3..9c997c2b9a 100644
+--- a/package/flare-engine/Config.in
++++ b/package/flare-engine/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_FLARE_ENGINE
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_MIXER
+ 	select BR2_PACKAGE_SDL2_TTF
++	select BR2_PACKAGE_TREMOR # for SDL2_mixer ogg support
+ 	help
+ 	  Flare (Free Libre Action Roleplaying Engine) is a simple game
+ 	  engine built to handle a very specific kind of game:
+diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
+index 14d2681fda..d722a42208 100644
+--- a/package/flare-engine/flare-engine.mk
++++ b/package/flare-engine/flare-engine.mk
+@@ -9,7 +9,7 @@ FLARE_ENGINE_SITE = $(call github,flareteam,flare-engine,v$(FLARE_ENGINE_VERSION
+ FLARE_ENGINE_LICENSE = GPL-3.0+
+ FLARE_ENGINE_LICENSE_FILES = COPYING
+ 
+-FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
++FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf tremor
+ 
+ # Don't use /usr/games and /usr/share/games
+ FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
+-- 
+2.31.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
