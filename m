@@ -1,81 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7131FC433EF
-	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 08:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B58C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 08:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B638C408CB;
-	Fri, 31 Dec 2021 08:18:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BDF260AA6;
+	Fri, 31 Dec 2021 08:26:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jha4qa-msh5U; Fri, 31 Dec 2021 08:18:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iL6b3Q_BikMj; Fri, 31 Dec 2021 08:26:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 195544050F;
-	Fri, 31 Dec 2021 08:18:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8A8D60C29;
+	Fri, 31 Dec 2021 08:26:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 576BA1BF297
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 08:18:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9565A1BF297
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 08:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3805E8131D
- for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 08:18:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F32582695
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 08:26:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id md4IOT5snM7F for <buildroot@lists.busybox.net>;
- Fri, 31 Dec 2021 08:18:06 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 956E98130E
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 08:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1640938682;
- bh=BTdMfDYZ3sNW3iA8Q0RW3hDYjrY7+RVngFvSML5/QNs=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=CUVHz/lc+yshwF5SDqFtBLjhHAupubj4MeKnOH5XrqIKmAgDUNd+1bS9z+G+iVzyH
- TuzdxIxcCyjeM1qloJVHSPlqLXV9OI1YgNtf4vznFeW4Kx+Ra5XvfzwE+9W5TKhfdO
- Ug1qOaTL2RstCwN++IuoXcW7Nwgc1189aMf/1ci0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.96]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuUnK-1mBnTf3WYU-00rc16; Fri, 31
- Dec 2021 09:18:01 +0100
-Date: Fri, 31 Dec 2021 09:18:00 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20211231091800.629b2ad3@gmx.net>
-In-Reply-To: <20211230211120.031434c7@windsurf>
-References: <20211230172507.30212-1-ps.report@gmx.net>
- <20211230211120.031434c7@windsurf>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+ with ESMTP id H3L61KiSt1HQ for <buildroot@lists.busybox.net>;
+ Fri, 31 Dec 2021 08:26:13 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7762081A5F
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 08:26:13 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id by39so44238528ljb.2
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 00:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=to:cc:references:from:subject:message-id:date:user-agent
+ :mime-version:in-reply-to:content-language:content-transfer-encoding;
+ bh=mBnMzzEmO98Xi9VVe8WVOLPcazJH6tfyAfZz30zasGU=;
+ b=RqEwX7rqrvcV3D2pezqnpBLwtS91JkdxsH58ntn9qT02JaS3tYfpKv3Bj0aHBspl43
+ 3ddvLC0/A9i/aUGgfT+cmuSmhH9VKhk862s68pLF+ukkU5YHAQJ29+K81zidoRX5FOy+
+ gUzp0lYtFgGoI+88cUdweNBm5hkW32xCX9RKVeWimnqqq5rK9jwsNEVu1TclcF+LNAu/
+ R8DuVhyZaSOHSLhMLSr0Z1D68EPj/ZVqo31luD5Ode4r+FAQq60QnzHT7KnRqir4Y41F
+ pdXo7demgkyQHD6ewaQdY3I4HagZtzP7jcbB9k6MTlvGwIuhQBpCPWzzKbNgNN7+pL9W
+ saOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language
+ :content-transfer-encoding;
+ bh=mBnMzzEmO98Xi9VVe8WVOLPcazJH6tfyAfZz30zasGU=;
+ b=FShWZIWbhQ9zlgRrmGFenlS3Ow/Zo5+eqOdhsefNrN7dVvO70+cYrSh5iVhP/73kAR
+ tjFyFNG2o5YjbaIirXtoGatZwnuELEkN3mWdyQkR2ErQjSMTun29t+X2ugY9AuGkG9IJ
+ KtvhZ3X9JoJJm939cYKAVwwfoTkAY6dpT0zP7tZ5Ms0R+g5rhQSf538qeF1rhE2OiRUq
+ clcASoVYohKCv5Uy4IrRzrZjJdG0DstS74v00sIwmbhwwNBFHJ3EyFIi07JzDgXMMUUF
+ flTYEnBCLpFX9c0heZ235D5bC/YLqVCtdUV3VRVS086NwDnIDXoq/HnOyquzUE388OI3
+ sYHg==
+X-Gm-Message-State: AOAM533vMkD27FnaW4DN/X1gl8FyfWJkiJv4aXeH6C1OntGHtHQjzFMb
+ BUR2w52DFJrP0VIqPDDBz6sZuAg/cxY=
+X-Google-Smtp-Source: ABdhPJyKUWWiNIhfqoi+GrSKyngP7FIw+2qEHQePXSgRffBFzpgB+TsWvVaGN7YEa1EmbGMZh9nY9w==
+X-Received: by 2002:a05:651c:2106:: with SMTP id
+ a6mr22037289ljq.285.1640939170850; 
+ Fri, 31 Dec 2021 00:26:10 -0800 (PST)
+Received: from [10.0.196.136] ([176.10.248.201])
+ by smtp.googlemail.com with ESMTPSA id u6sm1786685ljl.55.2021.12.31.00.26.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 31 Dec 2021 00:26:10 -0800 (PST)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211228153345.4087026-1-fontaine.fabrice@gmail.com>
+ <20211228164916.2beec0d6@windsurf>
+ <CAPi7W80OfGF3AhM2h6mjtsUjLEnYEV4gteJ12GFq4edNysEV5A@mail.gmail.com>
+ <20211228181447.2a42dc86@windsurf>
+From: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <ed10db1b-6b39-344d-8c4b-aa0a6d085d40@gmail.com>
+Date: Fri, 31 Dec 2021 09:26:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:lA95fIFATPXelSGwqtiI/eyKZoaOguszFdrwKsfLAXNTpV+gUAI
- 0VG4isSbsG6syYY6vlrnHityoaA4zE+v8s5eSSXO8tRZIoBfqT5ZOI/eILqCZ2cKA5U/q/I
- biLGIJFiBMzH1pUBEczN1R/67+Uufd9uBKIWihxXkfvHwmffQX2oAuhfiJ0tDE1ypgmyy3n
- dxzOf7LRJ1yoK7K5OdlzA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:345LRyc3aSg=:4yu6m2e5IV+iAHMTM/r7bt
- TccncD013gF0KTXA0W/amvnG+nr10bFPU3zEX63/CNNoTH3UXOqmGNoqdzqg+n1sxCVjZBQHj
- m7Qee9uvLzyEgSWsr3bN6wuEWKBdHuoqCQBZgYHqw4pLahqVw4A0s8sOYU1dLRCp6dSmukXUC
- YRlr3wf455dy3SVtBdNAZW21NTWgjMS0fNsoI6xbtTkdGydIn8tkGU5opKeAswcjtqh8UBCKN
- cphBHlZ7Gk79TiZM8tHctu/2tcuUGgdUk+HhXSmRtA/atDZnlzzQr8vdEZVtHctKNgiWUuvdd
- ORMG5BcNxn6FAZm0EK2B0wYA4/cAKs8bGHvQ09X4bBCD8GJRC1QxQQRLPl15uH0eb1VsJTlFP
- GeL9KM50GBUDxISwuzua8Aw/BaU/wqXbofUSybAR0gnuQ+Isw28I0EOLlMA5whCr5Rk+anZ0B
- 3tTxLP+lroLEA4TE3tqiK8WxFs05XEuY6teVqAIwFMqOki4k07/GrLEMpHhP98DdzEwSnn8iT
- JOqwsDl70DM6eqIE3WZ/geSi8w6NMUznfFOvvOEZpCrVJfP4T11H2LJBuKXBrdw/teGdx6fI8
- EdkvZxIHhaFGS+KJeBEiSaTrH+nFXBGJtSK9Dlsqvu/sWps2fTph0+K+J3Tj23Af8+ejqD7/C
- oCk9ogUZ/4XMcEWAkrE/IUU8ZajZouu6xO9zosvYn/+2DuKvTV/j6nqYNl4KSadX8NUZj/5Cv
- Ia2S+ooWEra3KpB1ya3/htaNOTM7BOO9oC+IJ5Kz1Yp9FuuG4QE2GvN8Ca09yvojOTjE2L2hU
- k6WeO9/vBLxbnuRIA2RQXJGz8Lb+mmJwyzERwP3vfF3114DabGtw3R1XA62a8rBUEuxRXwqva
- g0fSMi9II8qCkrwZnpMQCK6CdkyINeATLIpn/unhLjHRvtchgr6TBGEhmYi4EyJrvF7tHf4EF
- 9d8L/Q+1CmW3RKgJkEazUkkw5u9yR34wkqcvuGk/YyECdRGMo/9j9LZBCO8fMVMobUu1MhRd3
- g/qKkeuUQhWKsYNm0vkn4ez6BIpqInpf8MYFR7lz+aNhpqGxFNp1yEdWK94HD5Y5Hakp8loww
- xOnSVh1KhpoFkc=
-Subject: Re: [Buildroot] [RFC v1] package/assimp: fix namespace related
- compile failure
+In-Reply-To: <20211228181447.2a42dc86@windsurf>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH 1/2] package/mbedtls3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,47 +94,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Hi everyone!
 
-On Thu, 30 Dec 2021 21:11:20 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On 12/28/21 6:14 PM, Thomas Petazzoni wrote:
+> On Tue, 28 Dec 2021 18:07:03 +0100 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>> An important (and unfortunate point) is that apparently mbedtls3 cannot
+>>> be installed side-by-side with mbedtls. At least that's what your
+>>> "depends on !BR2_PACKAGE_MBEDTLS" seems to hint.  
+>> Indeed, both versions install their headers in include/mbedtls.
+>>> This is a major annoyance, and I'm not sure how Linux distributions
+>>> will handle this migration if they cannot have mbedtls 2.x and mbedtls
+>>> 3.x installed side by side.  
+>> 3.0 was released in July.
+>> To my knowledge, hiawatha is one of the first package that uses this
+>> new API and buildroot will probably be one of the first build system
+>> that will provide mbedts3.
+>> IMHO, being unable to install both versions side by side is pretty
+>> common: we had the same issue with libupnp 1.6.x and libupnp 1.8.x.
+>> Concerning libupnp, we even had to revert the possibility to install
+>> both versions side by side because it was a "burden to programs
+>> linking against libupnp":
+>> https://github.com/pupnp/pupnp/commit/07f504c61bd9e4d93eb3d373ffc8527cafe0b9af
+> I'm not sure to follow you here. The fact that it's pretty common
+> doesn't make it a good solution. It makes the transition period
+> absolutely awful.
+> With the currently proposed approach, someone who today has a working
+> configuration that has hiawatha and belle-sip can conveniently build
+> both in the same image. With your patch applied, this is no longer
+> possible, due to hiawatha now using mbedtls3, which cannot be installed
+> side-by-side with mbedtls.
+> This doesn't seem very acceptable for us, and probably is even less
+> acceptable for major Linux distributions.
 
-> On Thu, 30 Dec 2021 18:25:07 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Note:
-> >   - patch fixes the compile failure but did not find the root cause
-> >     and/or a good explanation why the template spezialisation failes
-> >     for Structure::Convert<CollectionObject> and
-> >     Structure::Convert<CollectionChild> (but not the other ones) and
-> >     why it is fixed by the patch...
->
-> I see in the pull request you've submitted upstream that the issue
-> appears with g++ Sourcery CodeBench Lite 2014.05-29 - 4.8.3 20140320,
-> which is really a super-old toolchain. Could it be that g++ 4.8 has a
-> bug? It clearly is possible, on tricky/modern C++ stuff.
+I looked into this, ever so briefly, and without checking with any of
+the packages that select BR2_PACKAGE_MBEDTLS.
 
-Same failure today (see [1]) with:
+However, seeing as it is only Hiawatha that requires a version >= 3.0,
+for a transition period, we could change it to -DUSE_SYSTEM_MBEDTLS=OFF
+and let Hiawatha use its bundled mbedtls instead.
 
-	$ ./host/bin/mips-linux-gnu-g++ --version
-mips-linux-gnu-g++ (Sourcery CodeBench Lite 2016.05-8) 5.3.0
 
-And merge request accepted upstream, see [2]...
-
-Regards,
-Peter
-
-[1] http://autobuild.buildroot.net/results/4ed8516cb03a6447b44f2c3731b2197fd6eea9d9
-[2] https://github.com/assimp/assimp/commit/a099fe7cd331a839137115db5df1733c4c1c8070
-
->
-> Thomas
-
+Best regards
+ /Joachim
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
