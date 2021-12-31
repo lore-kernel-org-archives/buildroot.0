@@ -1,79 +1,162 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6AB9C433EF
-	for <buildroot@archiver.kernel.org>; Thu, 30 Dec 2021 23:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E9B9C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 31 Dec 2021 00:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50FBA40373;
-	Thu, 30 Dec 2021 23:40:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE013409A1;
+	Fri, 31 Dec 2021 00:46:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bZu06d_cNbv1; Thu, 30 Dec 2021 23:40:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 284D840438;
-	Thu, 30 Dec 2021 23:40:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC4231BF35B
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:40:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AACFD404A6
- for <buildroot@lists.busybox.net>; Thu, 30 Dec 2021 23:40:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X-TiykSquJpj for <buildroot@lists.busybox.net>;
- Thu, 30 Dec 2021 23:40:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AE5C40495
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 23:40:23 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id t26so53106367wrb.4
- for <buildroot@buildroot.org>; Thu, 30 Dec 2021 15:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=u85rhX67Pjhut+Wt1p6XpbP2lHe7a29VXBp+S3PA7/s=;
- b=GXzHFMVNJpflz9ODOgtktNKrRggOhDNbbjvOEiV1y2xkWmI3mIDWjaGz3z0La1irxZ
- AvyKuWiuI7dOUnWNlaBtUCxs83WFLq2txEvI0IMpaWsse/6/HC2MEP6Bmjtll+0eNO5b
- aZ21RFBN1XbnxFCU7i2v43OOWKbsz1WTGlZA8/eox0tDGFIblnF8RvXwyCtsk/W+Zk0e
- iitTzVQbXzluk08t6/SK65yPfZW1FR6DSL3OmOiW5Ys21NkE+g9aq+l2MBzAg7L9046o
- Sxo/KLB9TWkkGWOjoSiwkIKVSmlf2emSunaNEKYMvmwIroRSp419uzehmiIBMN2B9GGU
- wbhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=u85rhX67Pjhut+Wt1p6XpbP2lHe7a29VXBp+S3PA7/s=;
- b=Y2niMUcD6ri7y0cjL4ncVLlFWDJdgKiUrvO+JvOjsHNHRSifdgEEbyAoBEyaZLzME/
- DmrLvSACxraLE22ZFXQDPV8O1j1w3LpXb/p+KqrCVhpNBZbQphR6KhPl2CdCNxhskwGT
- YcQ/q9CLPOogNI5DGBpA3r22Xf5H4y9+sUqGHYMGCqTmpRiyU2wqUBA9pRPv+vvV6kq2
- xoFpUR1ye6PCvCJ9SbudPnS0fPU8oSN7juPA9kXuEH2RsV/GezesT0Q8dA66ZtWtAWeR
- xX7fslCPuyD+rO+ePaYSsnuQIf42b+CaELdkm3TvEAs/BJMbFHYjUg01IW2rdWwjnO8q
- qrEg==
-X-Gm-Message-State: AOAM5303ZESuxVGA0OkjgRvfsN85Bs1G98rCXBohdJL2WKCA+T0i+bXu
- 83nMi1jSg41z+GU3Pee0/MaL2ki5Yqk=
-X-Google-Smtp-Source: ABdhPJxAllJusfrxgRSvAhzcwsXL82eJbNWWNlboF8lEUWJQAYR+4UuYc3xE7kbgiTvNAmLt7chKww==
-X-Received: by 2002:a5d:64c3:: with SMTP id f3mr26530751wri.155.1640907621754; 
- Thu, 30 Dec 2021 15:40:21 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id bg19sm3645662wmb.47.2021.12.30.15.40.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Dec 2021 15:40:21 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 31 Dec 2021 00:39:20 +0100
-Message-Id: <20211230233920.3207191-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wlsy9WbqDIzj; Fri, 31 Dec 2021 00:46:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25D00402D7;
+	Fri, 31 Dec 2021 00:46:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D9FFB1BF3B9
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 00:46:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEDA6401C2
+ for <buildroot@lists.busybox.net>; Fri, 31 Dec 2021 00:46:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=wdc.com header.b="rkOsQnms";
+ dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com
+ header.b="EbITCJAP"
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BJYrVQ5o_XyW for <buildroot@lists.busybox.net>;
+ Fri, 31 Dec 2021 00:46:23 +0000 (UTC)
+X-Greylist: delayed 00:07:06 by SQLgrey-1.8.0
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 811D140178
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 00:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1640911583; x=1672447583;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-id:content-transfer-encoding: mime-version;
+ bh=h8nrc3mzxywOEYKXzyRqCdHTlfQnyELeJw3x6/kftVM=;
+ b=rkOsQnmsqidAiai6QZ6w8egwI4W28fs21YWzczTqucZk6k8FrC13KlPt
+ WZb+wfcZwjZQalcSLQe2NZEtr12fN+8rYCUr/N/5+sito/ZHnodBrH643
+ Q3l3xYc8whqD7zKkFb2kBpEYx+CrVO68npb9OJowv5f5b8gavO80ZdQmO
+ NdYi6NTSurMyqmv7C4h+b/azAY9ILVbnc6dR9LvVsXwqDZ/O4ZnnKur0m
+ XjBb40HU9HNUk+mDZQA67Ud3qSfeKpeOkzeM+wAsHm9fwqLMO3d1dTim7
+ wPVJm21mvgN3HLrLt3+7iyevIaXXDQ24XWMfLWPDqpdhQibzBFsUy3Ccw w==;
+X-IronPort-AV: E=Sophos;i="5.88,248,1635177600"; d="scan'208";a="301282792"
+Received: from mail-mw2nam12lp2045.outbound.protection.outlook.com (HELO
+ NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.45])
+ by ob1.hgst.iphmx.com with ESMTP; 31 Dec 2021 08:39:15 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gXyVDrCo5BIiE/H7bsX4tgEqYkBZPHtPrdcKLCuihX1hEyCAOiq9/5SQFOuSd/ukj8Y/UuCJTa+xFotjznNuQdX+RDSxKLVafGngwa0H5dtmuSOZyhnbjPW3E0rgt9DZQM3OtPyM2Qyyf2C1Tqj7vjRJ/hcMAzVzM1Zi03+Crwxl8TERT030KbX9m4a46BHwbiZ5EqliNqG2C4F5+aflPX6GRdVRdBR+LnSgEGSMHFeXOfn4tIOH1pnZW4oigBLa34xZ4i2+HgPitniF9hn2aeoKMAwpFHM+7uYqmjaLjRauZwwfpFNGI4ewSQ15eN1z0kQC1tf//qTza/Kezu/+pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h8nrc3mzxywOEYKXzyRqCdHTlfQnyELeJw3x6/kftVM=;
+ b=e6K02ywFgD+sLATeJJoNrb9VRVHxPPrDCuqGkbvkOjxXwaoZ4P50l/HJonUZ3AMKRFimuYY/SRP6aEaakxDnoi4vyTcEznBFa8HQvp2fqU0AG0Ez1lamSvRmRwrXHLx5RjuQnk12bs84EsgxDJ6WjDLmRdA48kMXkOD0RnNYqNhk2GzHbkBjMHbwgM6FzVDQ3xknE8WF//8kyCs7x/yopj58+n28g5AG5+RsHIGBzaZw29IKmsp4CQpux0s0mth+AO7eQ4JwbHFGuUhsMMJy+rRU+EbE/P/DfpKXW6Ri+ro7RPpJJO5GLaasl7FPiONxO0QUbAyTHLimo1k2FRluPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h8nrc3mzxywOEYKXzyRqCdHTlfQnyELeJw3x6/kftVM=;
+ b=EbITCJAPJ1S6xcWx9OEHT+cnhsAHbYyoigCl57eMu1vJKYdg9fTSKH0bR2zZsVSpZoPyXwNCkdW+Y7HmJCOR89oiyEUoqO7sUf/4zyXfVSTWj/512yYF3I5SyvoA5cn0xTE6JWOsV6eDRzfJ/WagK/OFUEgDl+L8JXHyy+5ju0I=
+Received: from DM6PR04MB7081.namprd04.prod.outlook.com (2603:10b6:5:244::21)
+ by DM6PR04MB6859.namprd04.prod.outlook.com (2603:10b6:5:244::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Fri, 31 Dec
+ 2021 00:39:15 +0000
+Received: from DM6PR04MB7081.namprd04.prod.outlook.com
+ ([fe80::e58a:8ae5:2f73:35ea]) by DM6PR04MB7081.namprd04.prod.outlook.com
+ ([fe80::e58a:8ae5:2f73:35ea%8]) with mapi id 15.20.4844.013; Fri, 31 Dec 2021
+ 00:39:14 +0000
+From: Damien Le Moal <Damien.LeMoal@wdc.com>
+To: "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [PATCH v5 05/10] board: Add Sipeed MAIX-bit support
+Thread-Index: AQHXyjmPBFf6vXtxHU6uYcYx520GSKxL4vEAgABGRoA=
+Date: Fri, 31 Dec 2021 00:39:14 +0000
+Message-ID: <ba60fa7b8380ce6c817bb5bb2ada0283752efdfe.camel@wdc.com>
+References: <20211026071728.954356-1-damien.lemoal@wdc.com>
+ <20211026071728.954356-6-damien.lemoal@wdc.com>
+ <20211230212742.030be8c5@windsurf>
+In-Reply-To: <20211230212742.030be8c5@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 75611d4a-6984-475e-ce38-08d9cbf5f8ad
+x-ms-traffictypediagnostic: DM6PR04MB6859:EE_
+x-microsoft-antispam-prvs: <DM6PR04MB6859E8BB8C9EA294AC40E91BE7469@DM6PR04MB6859.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dC8qAxFXLj3SqC+OX8Fu0SwomjOrmVYrhpiB2TU87yKO14LpekrUn8W4ZjQz+JQgT/KvB4BvkUf6396TMmF4XXwQyFQgPPodsP0JC2uk/z59R0+2D2c4w8oaVqpifoaDDob06DZ2alW+K7Q5zbAfdnN4orf13vw+UvhDjLkzJc67YxKAQoq5kKGfhBS2G9NkgmVX4VozNh+VLBAbnbmB46t/l1uf9lwwonrxUq4GqCBXWFaiKbxqZqoQN4c+0s5oYUm72THOPm9kILvtcBgA8fAHvE7QupMNrCLH+YOGNq1fIgMlSHELKK4uS94IR0l7bnLQuoLmjD8VF9t+k5iYPhXUGZwdHn1z1wlV5dI0m7hk8lSmrBTbuRXoKS5J51alX/lmjyegtuVly8jIth8QgpRHXuFS6bG/IL3r8At82wnOlS20WaNEmb0Hyp0LWNi0Rx0FCyV4p0wtS3iCEzb13s+j4kjpxWAj8AWlEAFhCqzxX+6/jOsWtSc3KhK+463i7keCmwZKoKN+iPcFr6M3NdVd4R87GEK1O4ds/F/Ddu4iYZA4rNupkUplTnSfK0Q+DgaF96t6zASk801Uv659Shq1Tz/II4YyU4fYCEVS8hTN0YmhEvkXz0GqxOnkhTLRRpCfC8ErdVMUoSPd/Lgyof1O21f52IWC2eJB+i+iwX/jDDRYAxfti45yJJqBC3p1bH/Lv9/b0KAq3u00GGL4kg==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DM6PR04MB7081.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(366004)(8936002)(4326008)(38070700005)(508600001)(26005)(83380400001)(122000001)(186003)(36756003)(38100700002)(86362001)(6512007)(5660300002)(2906002)(6486002)(76116006)(4001150100001)(2616005)(66476007)(66446008)(91956017)(6506007)(6916009)(66946007)(66556008)(71200400001)(82960400001)(316002)(8676002)(64756008)(54906003);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWxCWUZJRDBibHVMNE93Y3l6b3BnbDhsOUtpZ2lPK28rN2x5VGp0Z1M3Q0Vh?=
+ =?utf-8?B?YWFkZVVkeHJCbUpyUzIvMzNNRldlZEFKYUJCbUdZQ3RRUUpHZmZiSDRWTlFz?=
+ =?utf-8?B?SFJWVXBPelplV3MzRk1BUyt5dzk3Y0labmN4OUVXdklWbmFzd1NZeG9mWHgy?=
+ =?utf-8?B?SGg3MXhQaFJDQWQ2Y3dQcWh0WXhKd2wxQnE3Q29URnJOQSszRHFab016WWoz?=
+ =?utf-8?B?Z3BvYnFReEVDOTVMeGpJV0NRRTNUSFhLQjNkWkFWSFFTazZYMGVmVU5hbWR6?=
+ =?utf-8?B?ZG1EUE5JVHJHaUZyWUFnR0lhTTRmTk9WM0pZTzlCcGlmT3JuckFzdDFyeVd4?=
+ =?utf-8?B?TjdabVFrbXhzT0laZjBPMmJpRklveW1xUG5YNk1TK3Z4OVEvYWdicVBkZmpS?=
+ =?utf-8?B?SlQ3VHVlTHhRT1cwM2hwc0htb1NrWmFoNFZPMmV3ejd5RGdRcTBKamZVc2l3?=
+ =?utf-8?B?M2d3ME5pMStpT1kwRjZxbDcvQUE2cUFNMzVxc2NzTG15dEpiQW1rajZ1encw?=
+ =?utf-8?B?TkVpbERzaDJxYUNnbExmOGZqU3FOZ2tVV0tXVnhTQW9hQmdxay9XdzJUQ1pU?=
+ =?utf-8?B?UnpqbXQzUVdnMWtGb2VpUzBZSVEydElJLzJGTmViQnpkL3pjeS9LQzlKVHRH?=
+ =?utf-8?B?b0xFOWw1QXFmMWI1Q1hwVTNUQWZBbGtpRUtsUmhtczBJcE9DQnpsOWtXRFc1?=
+ =?utf-8?B?MURvbDdNYkhHdzBBRHlkWUl6R3hvRm9OM1crOFpUZEpqcmtwRm9TTzNpLzNV?=
+ =?utf-8?B?OThzWDQ1L3RML2hiTDdsa2FndVZtT2VnWHEvVkhaRFBnZExGSzFBOEgwNFJX?=
+ =?utf-8?B?cGtremwzNFpVK09qbDRtL0xxL3pNMC9lNWZjM0ZZK09NWlBUOW83UUZJS2tJ?=
+ =?utf-8?B?VGN0c3BmbDFvRXUrQVlKckkwNVZOY3RzODdsdjNzOGVZZno1TWdCQ3RNcVZH?=
+ =?utf-8?B?cktONkhJQmt3Tk1TS3czQ1gvODB2bGJMZ0gvMU9OaGVKdHF0cVJ0U3RFZ3RY?=
+ =?utf-8?B?UGlyYnZsanpJV1o4Vm90Qm5KR3FLOXp3WEVaVE1QY01zajZCeWxCdzZQYTk4?=
+ =?utf-8?B?ditKdFREZ1RsM0daMmJEalpYNHEzS2FETjlLY21KWUFZMkdmTHJkV1pXYUcr?=
+ =?utf-8?B?OUdnMHUxcTJmMmhWM0J3QUZzR3dRNzlMb0F2bHBMaSt6WW5iOTlLbmkyOWpD?=
+ =?utf-8?B?NXFQcVBMeWFiOGw1bi9WVHVuaHk3djFwTkU0NWpYUjVFSkRkUC94aWhtWG9h?=
+ =?utf-8?B?RzRlNytxclhvS25qRG1OdDNtYWF6K050Z1ZZdkR6anB2aUZBM1VOTzN6TTJQ?=
+ =?utf-8?B?STlaZkhqZTZsNkhhQ2tOclkrVWNqV0hhRkVGVDBkZTloSEhBbXZxVEFLK0cz?=
+ =?utf-8?B?aUMyNUsrODNEcUJtUEdTM3lJc3haUVhKV3EwaVRUeVNNbmJ4UVZPNE9LMVI4?=
+ =?utf-8?B?R0Jwc0JuYXRDU1p0bVprZkNZK2dsNm9Pa2Z1Y0R3TzlWcm11SkYvako1MVJG?=
+ =?utf-8?B?Z2pWTnJMb1VWTThtc0hQeityZFhWTTBHN1MvcWZWSkhzcWRNR1hXU2gvbXZl?=
+ =?utf-8?B?QW5wU3ZpZG93TldnOG12RXYwM05EaTUzMzZsbU1MUDBTRmpQUW45KzVtRVRM?=
+ =?utf-8?B?OHNvdThsdS9pbVJCaUZOWmZKM2JlSnZTdloxVktOY05nRFM5MXNpTzJqSm40?=
+ =?utf-8?B?dGZJUTd3dFgzb29wdDZxVW1sRFIveTNMdUVHVkdGOFQ4S3VLT2hLbllLMHV0?=
+ =?utf-8?B?QkN5RDRMMGRUSCtXVHFlWmtnbks1TzVHUnZ2VDhEeTFoWVZMVEt6YzVaMkhx?=
+ =?utf-8?B?MkdKZjhwdms2TmJ6UmYrOEp2SHpPQlV2NHJ2NnU5VElHNEY4OUYxMVdnRUE1?=
+ =?utf-8?B?aDZiZGRHWHFWdW1xOUorK1I0TnlJcm92b1hmT0h0UVp3YUZnSlJGRHlyR2g5?=
+ =?utf-8?B?ZGVPU25oUFZmNXZiVk1MaFRFV1kxZERabGRHQnl4U3pRa2RMQW9mOHVDcEhm?=
+ =?utf-8?B?dG52cml0SWtXdlphdTJJaGJNUVdZT2twQzd3TXBHVHZxMWprWTZ4ZnN6SExF?=
+ =?utf-8?B?VmcyT04vNXV0K2l5S1hqTkFpcG4zK2RsMVUxWHNqd2lqdWZDTjJNZFh6dmlw?=
+ =?utf-8?B?d2VycjdOaDYyVmVVTC9NL1BSbHgyWlFqdFBzZGhUSUltdUJ4TnJJSFk2ZVF3?=
+ =?utf-8?Q?vfqbz0MItyZm83b/j5whjiw=3D?=
+Content-ID: <6B1FCA4E0ACCCA4BB2C51AC063D893B2@namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libzip: bump to version 1.8.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB7081.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75611d4a-6984-475e-ce38-08d9cbf5f8ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Dec 2021 00:39:14.7795 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fV5JM3SgwTSKn+ilRqi2JWwYsruWlPqYdyO7wAxAB0yQduZeEOTC3aWy4efrzsQvk3VAc8oFwzAK80qimLQp8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB6859
+Subject: Re: [Buildroot] [PATCH v5 05/10] board: Add Sipeed MAIX-bit support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,207 +168,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: "alistair@alistair23.me" <alistair@alistair23.me>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patches (already in version)
-- Add zstd optional dependency
+On Thu, 2021-12-30 at 21:27 +0100, Thomas Petazzoni wrote:
+> Hello Damien,
+> 
+> On Tue, 26 Oct 2021 16:17:23 +0900
+> Damien Le Moal <damien.lemoal@wdc.com> wrote:
+> 
+> > Add two configuration files to support the dual-core RV64 Canaan K210
+> > SoC based Sipeed MAIX-bit board.
+> 
+> You had lots of feedback from Peter Korsgaard on your Buildroot
+> defconfigs. Do you think you will have the chance to post an updated
+> version? I will mark patches 5/10 to 10/10 as Superseded. This means
+> that if you don't get back to us with an updated version, we will
+> forget about those patches.
 
-https://libzip.org/news/release-1.8.0.html
+My apologies about the delay. I have been swamped with the kernel and other
+projects. I kept at this a little though, mainly trying to address the elf2flt
+issue which seems to generate unworkable binaries for Peter, while it is always
+working for me... Really no clue what is going on so I am a little stuck with
+that. I will work on updates addressing all of Peter's comments and see how
+that work.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...001-Add-FindGnuTLS-cmake-from-3-17-3.patch | 103 ------------------
- .../0002-Include-limits.h-for-INT_MAX.patch   |  27 -----
- package/libzip/libzip.hash                    |   2 +-
- package/libzip/libzip.mk                      |   9 +-
- 4 files changed, 9 insertions(+), 132 deletions(-)
- delete mode 100644 package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
- delete mode 100644 package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+> Just two additional notes:
+> 
+>  - The readme files should be readme.txt (not README.md), as we don't
+>    use markdown for now in our readme files.
 
-diff --git a/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch b/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
-deleted file mode 100644
-index 30bc201048..0000000000
---- a/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
-+++ /dev/null
-@@ -1,103 +0,0 @@
--From 73f6f8ebff678a0847e6b197b574082cc285b528 Mon Sep 17 00:00:00 2001
--From: Thomas Klausner <tk@giga.or.at>
--Date: Sat, 25 Jul 2020 12:03:29 +0200
--Subject: [PATCH] Add FindGnuTLS.cmake from 3.17.3.
--
--Addresses #199
--
--[Retrieved from:
--https://github.com/nih-at/libzip/commit/73f6f8ebff678a0847e6b197b574082cc285b528]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- cmake-compat/FindGnuTLS.cmake | 82 +++++++++++++++++++++++++++++++++++
-- 1 file changed, 82 insertions(+)
-- create mode 100644 cmake-compat/FindGnuTLS.cmake
--
--diff --git a/cmake-compat/FindGnuTLS.cmake b/cmake-compat/FindGnuTLS.cmake
--new file mode 100644
--index 00000000..819f0001
----- /dev/null
--+++ b/cmake-compat/FindGnuTLS.cmake
--@@ -0,0 +1,82 @@
--+# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
--+# file Copyright.txt or https://cmake.org/licensing for details.
--+
--+#[=======================================================================[.rst:
--+FindGnuTLS
--+----------
--+
--+Find the GNU Transport Layer Security library (gnutls)
--+
--+IMPORTED Targets
--+^^^^^^^^^^^^^^^^
--+
--+This module defines :prop_tgt:`IMPORTED` target ``GnuTLS::GnuTLS``, if
--+gnutls has been found.
--+
--+Result Variables
--+^^^^^^^^^^^^^^^^
--+
--+``GNUTLS_FOUND``
--+  System has gnutls
--+``GNUTLS_INCLUDE_DIR``
--+  The gnutls include directory
--+``GNUTLS_LIBRARIES``
--+  The libraries needed to use gnutls
--+``GNUTLS_DEFINITIONS``
--+  Compiler switches required for using gnutls
--+``GNUTLS_VERSION``
--+  version of gnutls.
--+#]=======================================================================]
--+
--+# Note that this doesn't try to find the gnutls-extra package.
--+
--+
--+if (GNUTLS_INCLUDE_DIR AND GNUTLS_LIBRARY)
--+  # in cache already
--+  set(gnutls_FIND_QUIETLY TRUE)
--+endif ()
--+
--+if (NOT WIN32)
--+  # try using pkg-config to get the directories and then use these values
--+  # in the find_path() and find_library() calls
--+  # also fills in GNUTLS_DEFINITIONS, although that isn't normally useful
--+  find_package(PkgConfig QUIET)
--+  PKG_CHECK_MODULES(PC_GNUTLS QUIET gnutls)
--+  set(GNUTLS_DEFINITIONS ${PC_GNUTLS_CFLAGS_OTHER})
--+  set(GNUTLS_VERSION ${PC_GNUTLS_VERSION})
--+  # keep for backward compatibility
--+  set(GNUTLS_VERSION_STRING ${PC_GNUTLS_VERSION})
--+endif ()
--+
--+find_path(GNUTLS_INCLUDE_DIR gnutls/gnutls.h
--+  HINTS
--+    ${PC_GNUTLS_INCLUDEDIR}
--+    ${PC_GNUTLS_INCLUDE_DIRS}
--+  )
--+
--+find_library(GNUTLS_LIBRARY NAMES gnutls libgnutls
--+  HINTS
--+    ${PC_GNUTLS_LIBDIR}
--+    ${PC_GNUTLS_LIBRARY_DIRS}
--+  )
--+
--+mark_as_advanced(GNUTLS_INCLUDE_DIR GNUTLS_LIBRARY)
--+
--+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
--+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GnuTLS
--+                                  REQUIRED_VARS GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR
--+                                  VERSION_VAR GNUTLS_VERSION_STRING)
--+
--+if(GNUTLS_FOUND)
--+  set(GNUTLS_LIBRARIES    ${GNUTLS_LIBRARY})
--+  set(GNUTLS_INCLUDE_DIRS ${GNUTLS_INCLUDE_DIR})
--+
--+  if(NOT TARGET GnuTLS::GnuTLS)
--+    add_library(GnuTLS::GnuTLS UNKNOWN IMPORTED)
--+    set_target_properties(GnuTLS::GnuTLS PROPERTIES
--+      INTERFACE_INCLUDE_DIRECTORIES "${GNUTLS_INCLUDE_DIRS}"
--+      INTERFACE_COMPILE_DEFINITIONS "${GNUTLS_DEFINITIONS}"
--+      IMPORTED_LINK_INTERFACE_LANGUAGES "C"
--+      IMPORTED_LOCATION "${GNUTLS_LIBRARIES}")
--+  endif()
--+endif()
-diff --git a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
-deleted file mode 100644
-index c488f05289..0000000000
---- a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From fd89e242d16128dedef08f47d99ae56aa19b0591 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?=C3=98rjan=20Malde?= <red@foxi.me>
--Date: Wed, 15 Jul 2020 12:16:16 +0200
--Subject: [PATCH] Include limits.h for INT_MAX
--
--[Retrieved from:
--https://github.com/nih-at/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591]
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-----
-- lib/zip_crypto_openssl.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/lib/zip_crypto_openssl.c b/lib/zip_crypto_openssl.c
--index 1cb00479..60f92758 100644
----- a/lib/zip_crypto_openssl.c
--+++ b/lib/zip_crypto_openssl.c
--@@ -38,6 +38,7 @@
-- #include "zip_crypto.h"
-- 
-- #include <openssl/rand.h>
--+#include <limits.h>
-- 
-- #if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-- #define USE_OPENSSL_1_0_API
---- 
--2.28.0
--
-diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
-index a298b9aba9..5afdfd7cb8 100644
---- a/package/libzip/libzip.hash
-+++ b/package/libzip/libzip.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a60473ffdb7b4260c08bfa19c2ccea0438edac11193c3afbbb1f17fbcf6c6132  libzip-1.7.3.tar.xz
-+sha256  f0763bda24ba947e80430be787c4b068d8b6aa6027a26a19923f0acfa3dac97e  libzip-1.8.0.tar.xz
- sha256  deae392de70503672793ee784d603bfa8069dcd5974a325dfbf91160f3a147d6  LICENSE
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-index 4a028f970a..6bc5c5c193 100644
---- a/package/libzip/libzip.mk
-+++ b/package/libzip/libzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBZIP_VERSION = 1.7.3
-+LIBZIP_VERSION = 1.8.0
- LIBZIP_SITE = https://libzip.org/download
- LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
- LIBZIP_LICENSE = BSD-3-Clause
-@@ -54,5 +54,12 @@ else
- LIBZIP_CONF_OPTS += -DENABLE_LZMA=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+LIBZIP_DEPENDENCIES += zstd
-+LIBZIP_CONF_OPTS += -DENABLE_ZSTD=ON
-+else
-+LIBZIP_CONF_OPTS += -DENABLE_ZSTD=OFF
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+OK.
+
+>  - The readme.txt file for each defconfig should be added in the patch
+>    adding the defconfig
+
+Hmm... It is the same procedure for all boards, only the defconfig name
+differs. Hence I added this README file last with all board defconfigs
+mentioned. I can add the README file with the first board and update it with
+each patch adding a board ?
+
+>  - The DEVELOPERS file should be updated, in each patch, to add a
+>    reference to you as a maintainer for these defconfigs and board/
+>    files.
+
+OK.
+
+> 
+> Thanks a lot!
+> 
+> Thomas
+
+Happy new year to all !
+
+
 -- 
-2.33.0
+Damien Le Moal
+Western Digital Research
 
 _______________________________________________
 buildroot mailing list
