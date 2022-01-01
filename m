@@ -1,61 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB6BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 21:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0C9CC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 21:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 649B9813FD;
-	Sat,  1 Jan 2022 21:40:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 556EA60B95;
+	Sat,  1 Jan 2022 21:40:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XgPIMoHt7dir; Sat,  1 Jan 2022 21:40:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RiY3Y--o-NfI; Sat,  1 Jan 2022 21:40:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB6A4813FB;
-	Sat,  1 Jan 2022 21:40:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 703401BF376
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 21:40:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEE7960595;
+	Sat,  1 Jan 2022 21:40:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E45A1BF376
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 21:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D8A640186
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 21:40:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C65960595
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 21:40:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LRFCqGKyuZP4 for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 21:40:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF2AC40184
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 21:40:37 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 3m79nJpFONi3c3m79n5QIb; Sat, 01 Jan 2022 22:40:36 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1641073236; bh=cdZOBYSMBJ5PpG4v25APQ4hezWLQ3k+GbMgF2futHcY=;
- h=From:To:Subject:Date:MIME-Version;
- b=SZI2RGFCFUznWJCST6Oao5ZG5WEl9woW9mpda9xOpYKC5omn0/VSC6GyjKg2oFMnN
- aPlgYhsqNUR8mE397C+aLYRHnOv2r+RjanKCWVUhsfi+VXdeQUXZ3etLXbF6UP6kxF
- 1c0jYs2WcpcQ0iIsa428zN7wmpU3CjMMv4ENNP9R+YKYpKKZMM7nZWqATLACYDY05Y
- ys7g1n5Rfmogk1hjw4SUQMAyI12Uh+1YlNOjGbWT9imn2qVd0+OZNzsJTeBWKLrfHc
- 6uoqB441eHOx9rJba7nOE+SA6aeohtQHp9XFFKYxDhq/QWX0YMOqyxkSMq/61SzXpy
- IMdc0lQxZi0HQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jafGH2sOWuXs for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 21:40:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1519A60594
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 21:40:44 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.198.196])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id DD234B0056A;
+ Sat,  1 Jan 2022 22:40:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641073242;
+ bh=Ifolw+Z72pVSnN+bTjKFeoXGV2xw+ZAstnP2tUKICyA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GUK/Rg3sAT5ijW1rcadcfmljgJz87K9Tu8LcCdVacNPiijIH6LddnCtWo3Nly7juH
+ M0kw2kDXnX9/tzulGURfxS3EDu04rrvcz/rmiPuTSOMl5h7SzIvt0DrFgR4oWbN14P
+ gve4veloIFKig8oLFhsZ+1qHghDD4jW8CEq9FwXp/P2x2o85fhqgBq7gsJiQyopsk/
+ 89DAJMYsFnqFQee/Zb9bgMmrxne0VsozjEDSL85POSM2FYwNA2YfN4vWh/8EkXeZBC
+ wDbdD/jsz70kXf4ggBlr05eTQi6NQg96b05iGuPfewK2JfFMB7ldKfMNGsqI/dCRup
+ Db0OSFXzhqIvQ==
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 22:40:34 +0100
-Message-Id: <20220101214034.2152144-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sat,  1 Jan 2022 22:39:48 +0100
+Message-Id: <20220101213948.265173-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfBpJ6/oWi5YUZ5FYSAYsXYDcGZrlC7V7XFuyRBstI8YWYSiUcpqB46Z1SEVDzr2an/cWcQX9KG07M75RlR0pafj/4r9lykarp2RpapYXQ+pEq9/I6XJv
- NFbDkWTBunUYWKQTqIJ8zbhSkaQnu+fdKXAKz6bRos3O0+/Z+TETMbozh6/qp8TN/bqqx7Adek9iVqt61Bgr/uA5d7q4qpXKSXHs2A7BtGP6HfeDcq9HHFmo
- Jr5ymOkpR9IToZmU7Mji7uWxDMhQFfmbF6DM5vGHCQuGvJtpZJtiDQeLKQW8UbD5uwOP1AVtlMCAlTqEVZYa5Q==
-Subject: [Buildroot] [PATCH] Makefile: disable 'printvars' and 'show-vars'
- recipes for Make 4.3
+Subject: [Buildroot] [PATCH 1/1] support/config-fragments/autobuild: fix
+ riscv64 toolchain configs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,60 +64,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Make 4.3 is buggy and leads to a "Segmentation fault (core dumped)" when
-calling 'make printvars' or 'make show-vars', so let's refuse to execute
-those recipes if Make 4.3 by adding 'check-make-version' recipe as
-depedendency of 'printvars' and 'show-vars' as suggested by Yann E. Morin.
+commit b3c66481e1f1503fcbf193d0c780271e880ad500 replaced RISC-V LP64
+toolchains by RISC-V LP64D. The config symbols
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE and
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_STABLE were marked as legacy.
+Those changes were not reflected in the autobuild toolchain configs in
+support/config-fragments/autobuild/bootlin-riscv64-{glibc,musl}.config
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+When testing a package with the command:
+
+    ./utils/test-pkg --all --package somepackage
+
+bootlin-riscv64-{glibc,musl} toolchain are always skipped. The build
+logfile contains:
+
+    [...]
+    Value requested for BR2_TOOLCHAIN_EXTERNAL_BOOTLIN not in final .config
+    Requested value:  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+    Actual value:
+
+    Value requested for BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE not in final .config
+    Requested value:  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE=y
+    Actual value:     # BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE is not set
+
+This commit update the autobuild config fragments for RISC-V 64bit
+toolchains so they can be used by test-pkg.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Makefile | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../config-fragments/autobuild/bootlin-riscv64-glibc.config   | 4 ++--
+ .../config-fragments/autobuild/bootlin-riscv64-musl.config    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0b8c7b2867..ac98b84425 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1058,13 +1058,20 @@ ifeq ($(NEED_WRAPPER),y)
- 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
- endif
- 
-+.PHONY: check-make-version
-+check-make-version:
-+ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
-+	@echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
-+	@exit 1
-+endif
-+
- # printvars prints all the variables currently defined in our
- # Makefiles. Alternatively, if a non-empty VARS variable is passed,
- # only the variables matching the make pattern passed in VARS are
- # displayed.
- # show-vars does the same, but as a JSON dictionnary.
- .PHONY: printvars
--printvars:
-+printvars: check-make-version
- 	@:
- 	$(foreach V, \
- 		$(sort $(filter $(VARS),$(.VARIABLES))), \
-@@ -1077,7 +1084,7 @@ printvars:
- 
- .PHONY: show-vars
- show-vars: VARS?=%
--show-vars:
-+show-vars: check-make-version
- 	@:
- 	$(info $(call clean-json, { \
- 			$(foreach V, \
+diff --git a/support/config-fragments/autobuild/bootlin-riscv64-glibc.config b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
+index f6c6fcaa36..433a6e89f7 100644
+--- a/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
++++ b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
+@@ -1,5 +1,5 @@
+ BR2_riscv=y
+-BR2_RISCV_ABI_LP64=y
++BR2_RISCV_ABI_LP64D=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_GLIBC_BLEEDING_EDGE=y
+diff --git a/support/config-fragments/autobuild/bootlin-riscv64-musl.config b/support/config-fragments/autobuild/bootlin-riscv64-musl.config
+index 2b6a6e56da..fee1f29f4a 100644
+--- a/support/config-fragments/autobuild/bootlin-riscv64-musl.config
++++ b/support/config-fragments/autobuild/bootlin-riscv64-musl.config
+@@ -1,4 +1,4 @@
+ BR2_riscv=y
+-BR2_RISCV_ABI_LP64=y
++BR2_RISCV_ABI_LP64D=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_MUSL_BLEEDING_EDGE=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_MUSL_STABLE=y
 -- 
-2.25.1
+2.33.1
 
 _______________________________________________
 buildroot mailing list
