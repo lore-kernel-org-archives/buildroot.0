@@ -4,44 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83382C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BCBDC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C33060596;
-	Sat,  1 Jan 2022 14:01:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC29C605EE;
+	Sat,  1 Jan 2022 14:01:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7aw6PGtQ3kjv; Sat,  1 Jan 2022 14:01:27 +0000 (UTC)
+	with ESMTP id 0QLFQYXJSZcU; Sat,  1 Jan 2022 14:01:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07E9E605EE;
-	Sat,  1 Jan 2022 14:01:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16D191BF39A
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD22D60D78;
+	Sat,  1 Jan 2022 14:01:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB9611BF39A
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 121F2605EE
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA20C80B92
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6poV1a-fMesl for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 14:01:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAA6460596
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:01:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 56A88829F7; Sat,  1 Jan 2022 13:55:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 1 Jan 2022 15:01:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e745c0b92db3db7008d066813e2529d2032986c4
-X-Git-Newrev: 8fddaf36edc449c1239b75468cfe75be4cd5132f
-X-Patchwork-Hint: ignore
-Message-Id: <20220101135527.56A88829F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] .clang-format: initial import from Linux
- 5.15.6
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PnJFbtrYT02z for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 14:01:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98A1780B87
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:01:26 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id r22so48655725ljk.11
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 06:01:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:in-reply-to:references:date:message-id
+ :mime-version; bh=9XLc9hev/YqNxetQ2HbcURXWhV5uKSI7rbb3VQm/Zo8=;
+ b=FiFYki8sCqmmdASDSNh6SM6xTzvYOXSsFIUU8C4EspjZ1pNZhAcZSD67RvNKsP8pJo
+ T0Jne6m2KHmyOsmwh4xYGvbeXyx4smsuqi0lAvmXdFQ0jncsBxfdALL8RLdODPkuc+Lr
+ XyJK6VJrJMpAQlCjVqG2yHVO0mZzEFrLUKEtdFrdPNSjCcbkD3Uc4JWbu0ak9dZj2qIY
+ V8CX8C/Y+9s0PEDIM7gwkWIPAdhBZjzyJqDtvrX2AHlnYn5Tp3o580qEUQY8fN1MkeYx
+ FXpIHis2N70s3qcE6E4H/JsGtt6uEWBPMrIIoKUEF/Y8cwmyawcypQPcW4FLUyiz+zSR
+ W0bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+ :message-id:mime-version;
+ bh=9XLc9hev/YqNxetQ2HbcURXWhV5uKSI7rbb3VQm/Zo8=;
+ b=8Lg++NCnL+PVlIWU3kBZNFKq7tQ3+DWmV+noThz74h6kHIbCCx9+/SimwnwMmtCuUc
+ qnXW6WpoGs772bIQFKsU1LI1Ij3Bn0c3dXiHvFvzItqgPOtEB84f5uzst0lt5Y6n8e8T
+ ZTlddIIQouEKMjGM5wqOanGqXg/meZsjQJK99HuFIw08ags9k/ktkF4xM4XvONfsotfS
+ H6k2jz/9SlS5LcLY9JSfVg95WHHnOM7FM0IE8lLZdBBCuI8crInfaN9TmPcBS9BJq7rU
+ lXu9pa85ohT/1lhdL20Gcp0b290rzGvwYCOvuNq0UtbpqtmIsBfA0ZJv4GVDZJwi1iJj
+ sH+Q==
+X-Gm-Message-State: AOAM530Gk+tz344gq1a9/tNJuicICTtInBqeCZBXjFxK4HoRDQfJ1pBy
+ y4Vo7dnHPrzL9s8QUlhs8oI=
+X-Google-Smtp-Source: ABdhPJybwAPbEZReal4oW6iTQ43OEDzqjVqAWa3r4C8wYAxtgP0g8rIYuxqdLIlF9VgoVXc4Pusi9g==
+X-Received: by 2002:a2e:8849:: with SMTP id z9mr10297776ljj.399.1641045684339; 
+ Sat, 01 Jan 2022 06:01:24 -0800 (PST)
+Received: from luthien ([176.10.248.201])
+ by smtp.gmail.com with ESMTPSA id n14sm1244082lfu.28.2022.01.01.06.01.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 01 Jan 2022 06:01:23 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Matt Weber <matt@thewebers.ws>, buildroot@buildroot.org
+In-Reply-To: <20210215053258.3323654-1-matt@thewebers.ws>
+References: <20210215053258.3323654-1-matt@thewebers.ws>
+Date: Sat, 01 Jan 2022 15:01:23 +0100
+Message-ID: <87ee5r1rnw.fsf@gmail.com>
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [[Next]RFC] sdk-docker: new make target using
+ Dockcross
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,603 +85,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matt@thewebers.ws>, konrad.schwarz@siemens.com,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ angelo@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fddaf36edc449c1239b75468cfe75be4cd5132f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Intended as an aid when working with in-tree C files, like makdevs.c.
+Hi,
 
-Unlike for the kernel, which still has an 80-char limit line (but they
-decided not to enforce it [0]), we set the limit to 132-char for us,
-like we do for the python code (see ./.flake8).
+sorry for the late review:
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
+On Sun, Feb 14, 2021 at 23:32, Matt Weber <matt@thewebers.ws> wrote:
+> This patch adds a new make target for building a Docker with
+> an SDK installed. This patch has not been broken up and is for
+> RFC only to get feedback on the technical approach.
+>
+>  - `make sdk-docker` first sets up the dockcross package and
+>    the environment-setup script to stage the environment.
+>
+>  - The dockcross package in Buildroot includes a folder with
+>    a custom Dockerfile and pre-exec setup scripts which are
+>    copied into the dockcross build folder at configure time.
+>    This Dockerfile uses the Buildroot base and sets up other
+>    tools to allow a project to completely execute a build flow
+>    with make / cmake / meson / scons.
+>
+>  - Within the Dockcross package, the entrypoint and sudo
+>    scripting are reused but a new standard image/custom image
+>    is not defined.  Instead this patchset duplicates the
+>    docker build step in the Buildroot top-level Makefile.
+>    The entrypoint / sudo scripting were reused because it
+>    handles seamless mapping of the calling user into the
+>    container for the build and back with all the files uid/gid
+>    intacted.
+>
+>  - One of the best advantages of this environment is the
+>    fact it resets on each new lauch and is clean for a new
+>    build.  I.e. just the PWD which is mapped as /work inside
+>    is maintained after the container tears down.
+>
+>  - I'm unsure if it makes sense to use dockcross or just pull
+>    over the concepts they use into Buildroot directly....
+>    I think I found a good balance considering each Buildroot
+>    defconfig build is unique so it doesn't seem like there is
+>    a chance to upstream a Buildroot configuration to dockcross.
+>
+>  - TODO: Add a manual section that includes usage notes
+>
+>  - How to test
+>    make qemu_aarch64_virt_defconfig
+>    make sdk-docker
+>    # Usage from https://github.com/dockcross/dockcross
+>    # Setup container launch script
+>    docker run --rm dockcross/buildroot-sdk-aarch64-buildroot-linux-gnu  > ./dockcross
+>    # This dockcross script maps the pwd into the container as /work
+>    # as well as the current users $HOME as $HOME inside.
+>    # Executing the script to dump the env, should list all the
+>    # environment-setup exported values for use
+>    ./dockcross bash -c 'export'
+>    # Check that the cross toolchain executes
+>    ./dockcross bash -c '$CC -version'
+>
+> Signed-off-by: Matt Weber <matt@thewebers.ws>
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[yann.morin.1998@free.fr: use and explain the 132-char limit)
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .clang-format | 567 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 567 insertions(+)
+This looks *really* interesting!  At $DAYJOB we currently have locally
+maintained docker containers to get reproducible build environments on
+developer laptops.  Having it integrated in Buildroot would be great!
 
-diff --git a/.clang-format b/.clang-format
-new file mode 100644
-index 0000000000..1758a23f32
---- /dev/null
-+++ b/.clang-format
-@@ -0,0 +1,567 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# clang-format configuration file. Intended for clang-format >= 4.
-+#
-+# For more information, see:
-+#
-+#   Documentation/process/clang-format.rst
-+#   https://clang.llvm.org/docs/ClangFormat.html
-+#   https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-+#
-+
-+# Buildroot: imported from Linux 5.15.6, with minimal modifications.
-+#            Please note, this is not enforced at the moment. Intended
-+#            as an aid when working with in-tree C files, like
-+#            makedevs.c
-+#
-+---
-+AccessModifierOffset: -4
-+AlignAfterOpenBracket: Align
-+AlignConsecutiveAssignments: false
-+AlignConsecutiveDeclarations: false
-+#AlignEscapedNewlines: Left # Unknown to clang-format-4.0
-+AlignOperands: true
-+AlignTrailingComments: false
-+AllowAllParametersOfDeclarationOnNextLine: false
-+AllowShortBlocksOnASingleLine: false
-+AllowShortCaseLabelsOnASingleLine: false
-+AllowShortFunctionsOnASingleLine: None
-+AllowShortIfStatementsOnASingleLine: false
-+AllowShortLoopsOnASingleLine: false
-+AlwaysBreakAfterDefinitionReturnType: None
-+AlwaysBreakAfterReturnType: None
-+AlwaysBreakBeforeMultilineStrings: false
-+AlwaysBreakTemplateDeclarations: false
-+BinPackArguments: true
-+BinPackParameters: true
-+BraceWrapping:
-+  AfterClass: false
-+  AfterControlStatement: false
-+  AfterEnum: false
-+  AfterFunction: true
-+  AfterNamespace: true
-+  AfterObjCDeclaration: false
-+  AfterStruct: false
-+  AfterUnion: false
-+  #AfterExternBlock: false # Unknown to clang-format-5.0
-+  BeforeCatch: false
-+  BeforeElse: false
-+  IndentBraces: false
-+  #SplitEmptyFunction: true # Unknown to clang-format-4.0
-+  #SplitEmptyRecord: true # Unknown to clang-format-4.0
-+  #SplitEmptyNamespace: true # Unknown to clang-format-4.0
-+BreakBeforeBinaryOperators: None
-+BreakBeforeBraces: Custom
-+#BreakBeforeInheritanceComma: false # Unknown to clang-format-4.0
-+BreakBeforeTernaryOperators: false
-+BreakConstructorInitializersBeforeComma: false
-+#BreakConstructorInitializers: BeforeComma # Unknown to clang-format-4.0
-+BreakAfterJavaFieldAnnotations: false
-+BreakStringLiterals: false
-+ColumnLimit: 132 # Specially for Buildroot
-+CommentPragmas: '^ IWYU pragma:'
-+#CompactNamespaces: false # Unknown to clang-format-4.0
-+ConstructorInitializerAllOnOneLineOrOnePerLine: false
-+ConstructorInitializerIndentWidth: 8
-+ContinuationIndentWidth: 8
-+Cpp11BracedListStyle: false
-+DerivePointerAlignment: false
-+DisableFormat: false
-+ExperimentalAutoDetectBinPacking: false
-+#FixNamespaceComments: false # Unknown to clang-format-4.0
-+
-+# Taken from:
-+#   git grep -h '^#define [^[:space:]]*for_each[^[:space:]]*(' include/ \
-+#   | sed "s,^#define \([^[:space:]]*for_each[^[:space:]]*\)(.*$,  - '\1'," \
-+#   | sort | uniq
-+ForEachMacros:
-+  - 'apei_estatus_for_each_section'
-+  - 'ata_for_each_dev'
-+  - 'ata_for_each_link'
-+  - '__ata_qc_for_each'
-+  - 'ata_qc_for_each'
-+  - 'ata_qc_for_each_raw'
-+  - 'ata_qc_for_each_with_internal'
-+  - 'ax25_for_each'
-+  - 'ax25_uid_for_each'
-+  - '__bio_for_each_bvec'
-+  - 'bio_for_each_bvec'
-+  - 'bio_for_each_bvec_all'
-+  - 'bio_for_each_integrity_vec'
-+  - '__bio_for_each_segment'
-+  - 'bio_for_each_segment'
-+  - 'bio_for_each_segment_all'
-+  - 'bio_list_for_each'
-+  - 'bip_for_each_vec'
-+  - 'bitmap_for_each_clear_region'
-+  - 'bitmap_for_each_set_region'
-+  - 'blkg_for_each_descendant_post'
-+  - 'blkg_for_each_descendant_pre'
-+  - 'blk_queue_for_each_rl'
-+  - 'bond_for_each_slave'
-+  - 'bond_for_each_slave_rcu'
-+  - 'bpf_for_each_spilled_reg'
-+  - 'btree_for_each_safe128'
-+  - 'btree_for_each_safe32'
-+  - 'btree_for_each_safe64'
-+  - 'btree_for_each_safel'
-+  - 'card_for_each_dev'
-+  - 'cgroup_taskset_for_each'
-+  - 'cgroup_taskset_for_each_leader'
-+  - 'cpufreq_for_each_entry'
-+  - 'cpufreq_for_each_entry_idx'
-+  - 'cpufreq_for_each_valid_entry'
-+  - 'cpufreq_for_each_valid_entry_idx'
-+  - 'css_for_each_child'
-+  - 'css_for_each_descendant_post'
-+  - 'css_for_each_descendant_pre'
-+  - 'device_for_each_child_node'
-+  - 'displayid_iter_for_each'
-+  - 'dma_fence_chain_for_each'
-+  - 'do_for_each_ftrace_op'
-+  - 'drm_atomic_crtc_for_each_plane'
-+  - 'drm_atomic_crtc_state_for_each_plane'
-+  - 'drm_atomic_crtc_state_for_each_plane_state'
-+  - 'drm_atomic_for_each_plane_damage'
-+  - 'drm_client_for_each_connector_iter'
-+  - 'drm_client_for_each_modeset'
-+  - 'drm_connector_for_each_possible_encoder'
-+  - 'drm_for_each_bridge_in_chain'
-+  - 'drm_for_each_connector_iter'
-+  - 'drm_for_each_crtc'
-+  - 'drm_for_each_crtc_reverse'
-+  - 'drm_for_each_encoder'
-+  - 'drm_for_each_encoder_mask'
-+  - 'drm_for_each_fb'
-+  - 'drm_for_each_legacy_plane'
-+  - 'drm_for_each_plane'
-+  - 'drm_for_each_plane_mask'
-+  - 'drm_for_each_privobj'
-+  - 'drm_mm_for_each_hole'
-+  - 'drm_mm_for_each_node'
-+  - 'drm_mm_for_each_node_in_range'
-+  - 'drm_mm_for_each_node_safe'
-+  - 'flow_action_for_each'
-+  - 'for_each_acpi_dev_match'
-+  - 'for_each_active_dev_scope'
-+  - 'for_each_active_drhd_unit'
-+  - 'for_each_active_iommu'
-+  - 'for_each_aggr_pgid'
-+  - 'for_each_available_child_of_node'
-+  - 'for_each_bio'
-+  - 'for_each_board_func_rsrc'
-+  - 'for_each_bvec'
-+  - 'for_each_card_auxs'
-+  - 'for_each_card_auxs_safe'
-+  - 'for_each_card_components'
-+  - 'for_each_card_dapms'
-+  - 'for_each_card_pre_auxs'
-+  - 'for_each_card_prelinks'
-+  - 'for_each_card_rtds'
-+  - 'for_each_card_rtds_safe'
-+  - 'for_each_card_widgets'
-+  - 'for_each_card_widgets_safe'
-+  - 'for_each_cgroup_storage_type'
-+  - 'for_each_child_of_node'
-+  - 'for_each_clear_bit'
-+  - 'for_each_clear_bit_from'
-+  - 'for_each_cmsghdr'
-+  - 'for_each_compatible_node'
-+  - 'for_each_component_dais'
-+  - 'for_each_component_dais_safe'
-+  - 'for_each_comp_order'
-+  - 'for_each_console'
-+  - 'for_each_cpu'
-+  - 'for_each_cpu_and'
-+  - 'for_each_cpu_not'
-+  - 'for_each_cpu_wrap'
-+  - 'for_each_dapm_widgets'
-+  - 'for_each_dev_addr'
-+  - 'for_each_dev_scope'
-+  - 'for_each_dma_cap_mask'
-+  - 'for_each_dpcm_be'
-+  - 'for_each_dpcm_be_rollback'
-+  - 'for_each_dpcm_be_safe'
-+  - 'for_each_dpcm_fe'
-+  - 'for_each_drhd_unit'
-+  - 'for_each_dss_dev'
-+  - 'for_each_dtpm_table'
-+  - 'for_each_efi_memory_desc'
-+  - 'for_each_efi_memory_desc_in_map'
-+  - 'for_each_element'
-+  - 'for_each_element_extid'
-+  - 'for_each_element_id'
-+  - 'for_each_endpoint_of_node'
-+  - 'for_each_evictable_lru'
-+  - 'for_each_fib6_node_rt_rcu'
-+  - 'for_each_fib6_walker_rt'
-+  - 'for_each_free_mem_pfn_range_in_zone'
-+  - 'for_each_free_mem_pfn_range_in_zone_from'
-+  - 'for_each_free_mem_range'
-+  - 'for_each_free_mem_range_reverse'
-+  - 'for_each_func_rsrc'
-+  - 'for_each_hstate'
-+  - 'for_each_if'
-+  - 'for_each_iommu'
-+  - 'for_each_ip_tunnel_rcu'
-+  - 'for_each_irq_nr'
-+  - 'for_each_link_codecs'
-+  - 'for_each_link_cpus'
-+  - 'for_each_link_platforms'
-+  - 'for_each_lru'
-+  - 'for_each_matching_node'
-+  - 'for_each_matching_node_and_match'
-+  - 'for_each_member'
-+  - 'for_each_memcg_cache_index'
-+  - 'for_each_mem_pfn_range'
-+  - '__for_each_mem_range'
-+  - 'for_each_mem_range'
-+  - '__for_each_mem_range_rev'
-+  - 'for_each_mem_range_rev'
-+  - 'for_each_mem_region'
-+  - 'for_each_migratetype_order'
-+  - 'for_each_msi_entry'
-+  - 'for_each_msi_entry_safe'
-+  - 'for_each_msi_vector'
-+  - 'for_each_net'
-+  - 'for_each_net_continue_reverse'
-+  - 'for_each_netdev'
-+  - 'for_each_netdev_continue'
-+  - 'for_each_netdev_continue_rcu'
-+  - 'for_each_netdev_continue_reverse'
-+  - 'for_each_netdev_feature'
-+  - 'for_each_netdev_in_bond_rcu'
-+  - 'for_each_netdev_rcu'
-+  - 'for_each_netdev_reverse'
-+  - 'for_each_netdev_safe'
-+  - 'for_each_net_rcu'
-+  - 'for_each_new_connector_in_state'
-+  - 'for_each_new_crtc_in_state'
-+  - 'for_each_new_mst_mgr_in_state'
-+  - 'for_each_new_plane_in_state'
-+  - 'for_each_new_private_obj_in_state'
-+  - 'for_each_node'
-+  - 'for_each_node_by_name'
-+  - 'for_each_node_by_type'
-+  - 'for_each_node_mask'
-+  - 'for_each_node_state'
-+  - 'for_each_node_with_cpus'
-+  - 'for_each_node_with_property'
-+  - 'for_each_nonreserved_multicast_dest_pgid'
-+  - 'for_each_of_allnodes'
-+  - 'for_each_of_allnodes_from'
-+  - 'for_each_of_cpu_node'
-+  - 'for_each_of_pci_range'
-+  - 'for_each_old_connector_in_state'
-+  - 'for_each_old_crtc_in_state'
-+  - 'for_each_old_mst_mgr_in_state'
-+  - 'for_each_oldnew_connector_in_state'
-+  - 'for_each_oldnew_crtc_in_state'
-+  - 'for_each_oldnew_mst_mgr_in_state'
-+  - 'for_each_oldnew_plane_in_state'
-+  - 'for_each_oldnew_plane_in_state_reverse'
-+  - 'for_each_oldnew_private_obj_in_state'
-+  - 'for_each_old_plane_in_state'
-+  - 'for_each_old_private_obj_in_state'
-+  - 'for_each_online_cpu'
-+  - 'for_each_online_node'
-+  - 'for_each_online_pgdat'
-+  - 'for_each_pci_bridge'
-+  - 'for_each_pci_dev'
-+  - 'for_each_pci_msi_entry'
-+  - 'for_each_pcm_streams'
-+  - 'for_each_physmem_range'
-+  - 'for_each_populated_zone'
-+  - 'for_each_possible_cpu'
-+  - 'for_each_present_cpu'
-+  - 'for_each_prime_number'
-+  - 'for_each_prime_number_from'
-+  - 'for_each_process'
-+  - 'for_each_process_thread'
-+  - 'for_each_prop_codec_conf'
-+  - 'for_each_prop_dai_codec'
-+  - 'for_each_prop_dai_cpu'
-+  - 'for_each_prop_dlc_codecs'
-+  - 'for_each_prop_dlc_cpus'
-+  - 'for_each_prop_dlc_platforms'
-+  - 'for_each_property_of_node'
-+  - 'for_each_registered_fb'
-+  - 'for_each_requested_gpio'
-+  - 'for_each_requested_gpio_in_range'
-+  - 'for_each_reserved_mem_range'
-+  - 'for_each_reserved_mem_region'
-+  - 'for_each_rtd_codec_dais'
-+  - 'for_each_rtd_components'
-+  - 'for_each_rtd_cpu_dais'
-+  - 'for_each_rtd_dais'
-+  - 'for_each_set_bit'
-+  - 'for_each_set_bit_from'
-+  - 'for_each_set_clump8'
-+  - 'for_each_sg'
-+  - 'for_each_sg_dma_page'
-+  - 'for_each_sg_page'
-+  - 'for_each_sgtable_dma_page'
-+  - 'for_each_sgtable_dma_sg'
-+  - 'for_each_sgtable_page'
-+  - 'for_each_sgtable_sg'
-+  - 'for_each_sibling_event'
-+  - 'for_each_subelement'
-+  - 'for_each_subelement_extid'
-+  - 'for_each_subelement_id'
-+  - '__for_each_thread'
-+  - 'for_each_thread'
-+  - 'for_each_unicast_dest_pgid'
-+  - 'for_each_vsi'
-+  - 'for_each_wakeup_source'
-+  - 'for_each_zone'
-+  - 'for_each_zone_zonelist'
-+  - 'for_each_zone_zonelist_nodemask'
-+  - 'fwnode_for_each_available_child_node'
-+  - 'fwnode_for_each_child_node'
-+  - 'fwnode_graph_for_each_endpoint'
-+  - 'gadget_for_each_ep'
-+  - 'genradix_for_each'
-+  - 'genradix_for_each_from'
-+  - 'hash_for_each'
-+  - 'hash_for_each_possible'
-+  - 'hash_for_each_possible_rcu'
-+  - 'hash_for_each_possible_rcu_notrace'
-+  - 'hash_for_each_possible_safe'
-+  - 'hash_for_each_rcu'
-+  - 'hash_for_each_safe'
-+  - 'hctx_for_each_ctx'
-+  - 'hlist_bl_for_each_entry'
-+  - 'hlist_bl_for_each_entry_rcu'
-+  - 'hlist_bl_for_each_entry_safe'
-+  - 'hlist_for_each'
-+  - 'hlist_for_each_entry'
-+  - 'hlist_for_each_entry_continue'
-+  - 'hlist_for_each_entry_continue_rcu'
-+  - 'hlist_for_each_entry_continue_rcu_bh'
-+  - 'hlist_for_each_entry_from'
-+  - 'hlist_for_each_entry_from_rcu'
-+  - 'hlist_for_each_entry_rcu'
-+  - 'hlist_for_each_entry_rcu_bh'
-+  - 'hlist_for_each_entry_rcu_notrace'
-+  - 'hlist_for_each_entry_safe'
-+  - 'hlist_for_each_entry_srcu'
-+  - '__hlist_for_each_rcu'
-+  - 'hlist_for_each_safe'
-+  - 'hlist_nulls_for_each_entry'
-+  - 'hlist_nulls_for_each_entry_from'
-+  - 'hlist_nulls_for_each_entry_rcu'
-+  - 'hlist_nulls_for_each_entry_safe'
-+  - 'i3c_bus_for_each_i2cdev'
-+  - 'i3c_bus_for_each_i3cdev'
-+  - 'ide_host_for_each_port'
-+  - 'ide_port_for_each_dev'
-+  - 'ide_port_for_each_present_dev'
-+  - 'idr_for_each_entry'
-+  - 'idr_for_each_entry_continue'
-+  - 'idr_for_each_entry_continue_ul'
-+  - 'idr_for_each_entry_ul'
-+  - 'in_dev_for_each_ifa_rcu'
-+  - 'in_dev_for_each_ifa_rtnl'
-+  - 'inet_bind_bucket_for_each'
-+  - 'inet_lhash2_for_each_icsk_rcu'
-+  - 'key_for_each'
-+  - 'key_for_each_safe'
-+  - 'klp_for_each_func'
-+  - 'klp_for_each_func_safe'
-+  - 'klp_for_each_func_static'
-+  - 'klp_for_each_object'
-+  - 'klp_for_each_object_safe'
-+  - 'klp_for_each_object_static'
-+  - 'kunit_suite_for_each_test_case'
-+  - 'kvm_for_each_memslot'
-+  - 'kvm_for_each_vcpu'
-+  - 'list_for_each'
-+  - 'list_for_each_codec'
-+  - 'list_for_each_codec_safe'
-+  - 'list_for_each_continue'
-+  - 'list_for_each_entry'
-+  - 'list_for_each_entry_continue'
-+  - 'list_for_each_entry_continue_rcu'
-+  - 'list_for_each_entry_continue_reverse'
-+  - 'list_for_each_entry_from'
-+  - 'list_for_each_entry_from_rcu'
-+  - 'list_for_each_entry_from_reverse'
-+  - 'list_for_each_entry_lockless'
-+  - 'list_for_each_entry_rcu'
-+  - 'list_for_each_entry_reverse'
-+  - 'list_for_each_entry_safe'
-+  - 'list_for_each_entry_safe_continue'
-+  - 'list_for_each_entry_safe_from'
-+  - 'list_for_each_entry_safe_reverse'
-+  - 'list_for_each_entry_srcu'
-+  - 'list_for_each_prev'
-+  - 'list_for_each_prev_safe'
-+  - 'list_for_each_safe'
-+  - 'llist_for_each'
-+  - 'llist_for_each_entry'
-+  - 'llist_for_each_entry_safe'
-+  - 'llist_for_each_safe'
-+  - 'mci_for_each_dimm'
-+  - 'media_device_for_each_entity'
-+  - 'media_device_for_each_intf'
-+  - 'media_device_for_each_link'
-+  - 'media_device_for_each_pad'
-+  - 'nanddev_io_for_each_page'
-+  - 'netdev_for_each_lower_dev'
-+  - 'netdev_for_each_lower_private'
-+  - 'netdev_for_each_lower_private_rcu'
-+  - 'netdev_for_each_mc_addr'
-+  - 'netdev_for_each_uc_addr'
-+  - 'netdev_for_each_upper_dev_rcu'
-+  - 'netdev_hw_addr_list_for_each'
-+  - 'nft_rule_for_each_expr'
-+  - 'nla_for_each_attr'
-+  - 'nla_for_each_nested'
-+  - 'nlmsg_for_each_attr'
-+  - 'nlmsg_for_each_msg'
-+  - 'nr_neigh_for_each'
-+  - 'nr_neigh_for_each_safe'
-+  - 'nr_node_for_each'
-+  - 'nr_node_for_each_safe'
-+  - 'of_for_each_phandle'
-+  - 'of_property_for_each_string'
-+  - 'of_property_for_each_u32'
-+  - 'pci_bus_for_each_resource'
-+  - 'pcl_for_each_chunk'
-+  - 'pcl_for_each_segment'
-+  - 'pcm_for_each_format'
-+  - 'ping_portaddr_for_each_entry'
-+  - 'plist_for_each'
-+  - 'plist_for_each_continue'
-+  - 'plist_for_each_entry'
-+  - 'plist_for_each_entry_continue'
-+  - 'plist_for_each_entry_safe'
-+  - 'plist_for_each_safe'
-+  - 'pnp_for_each_card'
-+  - 'pnp_for_each_dev'
-+  - 'protocol_for_each_card'
-+  - 'protocol_for_each_dev'
-+  - 'queue_for_each_hw_ctx'
-+  - 'radix_tree_for_each_slot'
-+  - 'radix_tree_for_each_tagged'
-+  - 'rb_for_each'
-+  - 'rbtree_postorder_for_each_entry_safe'
-+  - 'rdma_for_each_block'
-+  - 'rdma_for_each_port'
-+  - 'rdma_umem_for_each_dma_block'
-+  - 'resource_list_for_each_entry'
-+  - 'resource_list_for_each_entry_safe'
-+  - 'rhl_for_each_entry_rcu'
-+  - 'rhl_for_each_rcu'
-+  - 'rht_for_each'
-+  - 'rht_for_each_entry'
-+  - 'rht_for_each_entry_from'
-+  - 'rht_for_each_entry_rcu'
-+  - 'rht_for_each_entry_rcu_from'
-+  - 'rht_for_each_entry_safe'
-+  - 'rht_for_each_from'
-+  - 'rht_for_each_rcu'
-+  - 'rht_for_each_rcu_from'
-+  - '__rq_for_each_bio'
-+  - 'rq_for_each_bvec'
-+  - 'rq_for_each_segment'
-+  - 'scsi_for_each_prot_sg'
-+  - 'scsi_for_each_sg'
-+  - 'sctp_for_each_hentry'
-+  - 'sctp_skb_for_each'
-+  - 'shdma_for_each_chan'
-+  - '__shost_for_each_device'
-+  - 'shost_for_each_device'
-+  - 'sk_for_each'
-+  - 'sk_for_each_bound'
-+  - 'sk_for_each_entry_offset_rcu'
-+  - 'sk_for_each_from'
-+  - 'sk_for_each_rcu'
-+  - 'sk_for_each_safe'
-+  - 'sk_nulls_for_each'
-+  - 'sk_nulls_for_each_from'
-+  - 'sk_nulls_for_each_rcu'
-+  - 'snd_array_for_each'
-+  - 'snd_pcm_group_for_each_entry'
-+  - 'snd_soc_dapm_widget_for_each_path'
-+  - 'snd_soc_dapm_widget_for_each_path_safe'
-+  - 'snd_soc_dapm_widget_for_each_sink_path'
-+  - 'snd_soc_dapm_widget_for_each_source_path'
-+  - 'tb_property_for_each'
-+  - 'tcf_exts_for_each_action'
-+  - 'udp_portaddr_for_each_entry'
-+  - 'udp_portaddr_for_each_entry_rcu'
-+  - 'usb_hub_for_each_child'
-+  - 'v4l2_device_for_each_subdev'
-+  - 'v4l2_m2m_for_each_dst_buf'
-+  - 'v4l2_m2m_for_each_dst_buf_safe'
-+  - 'v4l2_m2m_for_each_src_buf'
-+  - 'v4l2_m2m_for_each_src_buf_safe'
-+  - 'virtio_device_for_each_vq'
-+  - 'while_for_each_ftrace_op'
-+  - 'xa_for_each'
-+  - 'xa_for_each_marked'
-+  - 'xa_for_each_range'
-+  - 'xa_for_each_start'
-+  - 'xas_for_each'
-+  - 'xas_for_each_conflict'
-+  - 'xas_for_each_marked'
-+  - 'xbc_array_for_each_value'
-+  - 'xbc_for_each_key_value'
-+  - 'xbc_node_for_each_array_value'
-+  - 'xbc_node_for_each_child'
-+  - 'xbc_node_for_each_key_value'
-+  - 'zorro_for_each_dev'
-+
-+#IncludeBlocks: Preserve # Unknown to clang-format-5.0
-+IncludeCategories:
-+  - Regex: '.*'
-+    Priority: 1
-+IncludeIsMainRegex: '(Test)?$'
-+IndentCaseLabels: false
-+#IndentPPDirectives: None # Unknown to clang-format-5.0
-+IndentWidth: 8
-+IndentWrappedFunctionNames: false
-+JavaScriptQuotes: Leave
-+JavaScriptWrapImports: true
-+KeepEmptyLinesAtTheStartOfBlocks: false
-+MacroBlockBegin: ''
-+MacroBlockEnd: ''
-+MaxEmptyLinesToKeep: 1
-+NamespaceIndentation: None
-+#ObjCBinPackProtocolList: Auto # Unknown to clang-format-5.0
-+ObjCBlockIndentWidth: 8
-+ObjCSpaceAfterProperty: true
-+ObjCSpaceBeforeProtocolList: true
-+
-+# Taken from git's rules
-+#PenaltyBreakAssignment: 10 # Unknown to clang-format-4.0
-+PenaltyBreakBeforeFirstCallParameter: 30
-+PenaltyBreakComment: 10
-+PenaltyBreakFirstLessLess: 0
-+PenaltyBreakString: 10
-+PenaltyExcessCharacter: 100
-+PenaltyReturnTypeOnItsOwnLine: 60
-+
-+PointerAlignment: Right
-+ReflowComments: false
-+SortIncludes: false
-+#SortUsingDeclarations: false # Unknown to clang-format-4.0
-+SpaceAfterCStyleCast: false
-+SpaceAfterTemplateKeyword: true
-+SpaceBeforeAssignmentOperators: true
-+#SpaceBeforeCtorInitializerColon: true # Unknown to clang-format-5.0
-+#SpaceBeforeInheritanceColon: true # Unknown to clang-format-5.0
-+SpaceBeforeParens: ControlStatements
-+#SpaceBeforeRangeBasedForLoopColon: true # Unknown to clang-format-5.0
-+SpaceInEmptyParentheses: false
-+SpacesBeforeTrailingComments: 1
-+SpacesInAngles: false
-+SpacesInContainerLiterals: false
-+SpacesInCStyleCastParentheses: false
-+SpacesInParentheses: false
-+SpacesInSquareBrackets: false
-+Standard: Cpp03
-+TabWidth: 8
-+UseTab: Always
-+...
+I've tested your patch using latest Buildroot and qemu_x86_64_defconfig
+but it failed with the following, which turned out to be a too old
+buildroot/base.  When I bumped to 20211120.1925 it worked fine.  Turns
+out GitHub dropped insecure cryptos last summer and the old Debian base
+had a bit too old curl:
+
+Downloading https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64
+######################################################################## 100.0%
+curl: (35) Unknown SSL protocol error in connection to objects.githubusercontent.com:443 
+The command '/bin/sh -c set -x &&   /buildscripts/install-gosu-binary.sh &&   /buildscripts/install-gosu-binary-wrapper.sh &&   rm -rf /buildscripts' returned a non-zero code: 35
+make[1]: *** [Makefile:629: sdk-docker] Error 35
+
+Only two things that stick out to me are:
+
+ 1. might need to have some small check in the top Makefile to verify
+    that 'docker' is available on the host system -- maybe obvious to
+    experienced users, but it would help reduce the support burden for
+    the mailing list, I think
+ 2. the dockcross project apparently doesn't do releases, or even tags,
+    so it might be a bit of a hassle to track changes and do updates?
+    Maybe we could reach out to them and ask for tags, at least
+
+Can't give better technical feedback than that, maybe Mr Petazzoni can
+chime in here wrt the actual integration.
+
+Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
