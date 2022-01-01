@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14EEC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22228C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:57:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B87605A7;
-	Sat,  1 Jan 2022 14:49:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4110812F0;
+	Sat,  1 Jan 2022 14:57:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hB3Fu5Oq4RIw; Sat,  1 Jan 2022 14:49:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xO3_o84qEono; Sat,  1 Jan 2022 14:57:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C3B5605B3;
-	Sat,  1 Jan 2022 14:49:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5D7101BF59D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:49:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F124812ED;
+	Sat,  1 Jan 2022 14:57:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 526191BF59D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4964840189
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:49:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E31E60625
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:57:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EZoyR6bvz1Un for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 14:49:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vmqySOC4Jg9T for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 14:57:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 727F440181
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:49:42 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id l4so18811684wmq.3
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 06:49:42 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59B09605A6
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:57:22 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id i22so60865632wrb.13
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 06:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=B5pYJlxzVY1lXOfQjEyEXoiS2yre0wnNK7Q7oh48jBc=;
- b=ePLkSg73Yo/DPQKZ/EcJOIdJhRWaNJ5uG7FRQeRwatMK/hKoD6lAtjj1XFJ9k06x8q
- LPnl7+SyumM5G+o58W2UvDbozg3JdkZW40dUUeG+GeDN1peeYtPcnjKRLLQZ/A+Yz3di
- zHDMnw0TtZWSEtsF9xuNfbCuSSVYnRMd33o1UgL6HStleBdyi+2nnexrsSlPzcnbx338
- UsNkR7CAYaVPGw0c1vbvxQReA0NRK7saEeY79Bpq0KN6JO35Z4orVB3nC0HcDuBuCq5d
- juB4O9C2Q0DA48tKZb1I8AY3Vni52FnCvm3zIS9/lLfEPxWUQvWLvTsX7lAlsSjJjN2r
- E0/g==
+ bh=2TMC/R5Hx8QdEQvxBeNeNXVWEZSm2oKB3GfhrIhMyP4=;
+ b=h8Nm2YKUdt2a3bBjnDLOur+iorTHZiKI7UmAq5Ee6Ll3yD4dl5OTZP5y+r765j2rXA
+ 7Nl7iks/ENb5zwXrwePJ6CBhvXGdxFH6KNxkAC+fIMpu2VFNG2qO74cAsOfj0gbZjRWi
+ LnKzdbXzXLEDSUIkvJHPSoFffy6g3GVHgSHgDwFRfjnSvbz8fjT3D0QNcGAUKDTGovCN
+ a97ZNvTwcTiPXgcNHShwZdOAfQadtYuy7rMdVb1in/2FAFfpUKqZSU3MD5UW7cWWeHu0
+ LDKGgOKrSlqFOPZNrVJqzvZJN9dy3LIHIKkH4DdeSVcHxYphF5vhd3OWjq0lR0DBWLQ6
+ VL5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=B5pYJlxzVY1lXOfQjEyEXoiS2yre0wnNK7Q7oh48jBc=;
- b=V1sVHzAmlHzKzq5u/o5p0uMmq1+hLrr4g4rWCtSto9RIDohDzXftI9ciZs/D34Vk8v
- Vt+bUF/44pnn7REpRs09lHnONQ9KIpaHUwJXXc+5vn0g53Wak41aZP17psOr3kXIkq2a
- KeAz1T2JCZXUG3a+LjmaI1Ux+CO0HqX5bhFLB80jIwUgBqBVBNpMc6Zj9Dg6xuuBSPyK
- tlPyuVxyDajQdVZ+s4wznEoKhSgGYQRRFzqTlWPFbeC8qTMfWF7GPp+ouaGYIyfBt4vG
- RhqGCFr1m1Cq6StggKbtICyoexHv2RuXYvGUMb3C61Zi2PIEjW4U2lCUN6BcSyHOqvH5
- E2/Q==
-X-Gm-Message-State: AOAM532HxV87rEY2CTtkyVoMDXFfsrX27WupWaG5T5Ef7tEbu4U7Yqzp
- rq/x+u9RsnHBF6QqnPajDu6+C8z5SfM=
-X-Google-Smtp-Source: ABdhPJydUZgxGtQUhK7lJFBI7kHTzlYBLbEv6OmU35hP0q41CcBfGboKjGdbMv0Ro7xkr/R9K5Rv4w==
-X-Received: by 2002:a05:600c:3582:: with SMTP id
- p2mr32595137wmq.34.1641048580316; 
- Sat, 01 Jan 2022 06:49:40 -0800 (PST)
+ bh=2TMC/R5Hx8QdEQvxBeNeNXVWEZSm2oKB3GfhrIhMyP4=;
+ b=e7SzzjVCrmF0XylpV/lIpSxcfIXWAWPuDAz8BVJZkbKvEg3xgdw+e2Bj8P5l6KqpUY
+ pQaJuG3S8V9ewSm7z669Zg7iVgN6JG9jvcs+hdjiON1yZekrRYjG42rTBSTYsDPhezjH
+ ojlaPL6o1DRBQ0TwB0StZj8reiuCWTeQY+dP1GeNPzsJR+DkiYv0A9iPFntSnRDU8cE4
+ m9zM+C7XU/uq7Bs9K6nXd3g3NdOTIRL6IfVbFhEqTSIrgyLPfLlvvUv2kGAaT5mizi+v
+ qiWDJtLceahDTIfVb93uOCJJDyFK0NKdxs/7G1saiAiho8PMB+LIIACMQXXKDCoPgWKL
+ ed4Q==
+X-Gm-Message-State: AOAM531Th4G3zRQ0UkpDwONnMtD14Dt4pSyUMZBwu/2CzB36sGWi5wxl
+ gKQvN3LrdxjLI7tiD2j7d3kZMWw5k8Q=
+X-Google-Smtp-Source: ABdhPJz9Ka2oIpbFTgHTXwIFE1oU+P0u7RHc4bFTkGn7pO0JiEYRo94koHQA5Kiude3ssSJs1usBnw==
+X-Received: by 2002:adf:fbc1:: with SMTP id d1mr33121089wrs.648.1641049040454; 
+ Sat, 01 Jan 2022 06:57:20 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id bd8sm28431546wmb.44.2022.01.01.06.49.39
+ by smtp.gmail.com with ESMTPSA id o14sm28834199wms.4.2022.01.01.06.57.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 06:49:40 -0800 (PST)
+ Sat, 01 Jan 2022 06:57:20 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 15:48:40 +0100
-Message-Id: <20220101144840.1387059-1-fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jan 2022 15:56:32 +0100
+Message-Id: <20220101145632.1393642-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libapparmor: fix build with python
- 3.10
+Subject: [Buildroot] [PATCH 1/1] package/fail2ban: fix build with python 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,283 +95,90 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Fix the following build failure raised since bump of python3 to version
 3.10.1 in commit 25b1fc2898d68ddf2674b14c738045875fc5a2dc:
 
-configure: error: cannot import Python module "distutils".
-Please check your Python installation. The error was:
-<string>:1: DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12. Use setuptools or check PEP 632 for potential alternatives
+error in fail2ban setup command: use_2to3 is invalid.
 
 Fixes:
- - http://autobuild.buildroot.org/results//f3e400cbb5b00fbd7f0cb421c993e46b64ec5ac5
+ - http://autobuild.buildroot.org/results/6a5e91f9912f869b2b07b10b576457b432066393
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...deprecated-distutils-with-setuptools.patch | 244 ++++++++++++++++++
- package/libapparmor/libapparmor.mk            |   2 +-
- 2 files changed, 245 insertions(+), 1 deletion(-)
- create mode 100644 package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
+ ...with-error-in-fail2ban-setup-command.patch | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
 
-diff --git a/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch b/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
+diff --git a/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch b/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
 new file mode 100644
-index 0000000000..5aed31d0b5
+index 0000000000..8cb097dc38
 --- /dev/null
-+++ b/package/libapparmor/0001-replace-deprecated-distutils-with-setuptools.patch
-@@ -0,0 +1,244 @@
-+From 21e5a721ab2abe26bb12b9da7accc39d4fff9804 Mon Sep 17 00:00:00 2001
-+From: Georgia Garcia <georgia.garcia@canonical.com>
-+Date: Wed, 10 Nov 2021 19:50:35 +0000
-+Subject: [PATCH] replace deprecated distutils with setuptools
++++ b/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
+@@ -0,0 +1,67 @@
++From 5ac303df8a171f748330d4c645ccbf1c2c7f3497 Mon Sep 17 00:00:00 2001
++From: sebres <info@sebres.de>
++Date: Sun, 19 Sep 2021 18:49:18 +0200
++Subject: [PATCH] fix gh-3098: build fails with error in fail2ban setup
++ command: use_2to3 is invalid (setuptools 58+)
 +
-+Adds python3 setuptools as a build dependency for libapparmor
-+
-+Fixes: https://gitlab.com/apparmor/apparmor/-/issues/202
-+MR: https://gitlab.com/apparmor/apparmor/-/merge_requests/813
-+Signed-off-by: Georgia Garcia <georgia.garcia@canonical.com>
-+Acked-by: Christian Boltz <apparmor@cboltz.de>
-+
-+[Retrieved (and updated to remove changes on .gitlab-ci.yml and
-+README.md) from:
-+https://gitlab.com/apparmor/apparmor/-/commit/21e5a721ab2abe26bb12b9da7accc39d4fff9804]
++[Retrieved from:
++https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ .gitignore                                    |  3 ++
-+ .gitlab-ci.yml                                |  2 +-
-+ libraries/libapparmor/m4/ac_python_devel.m4   | 36 +++++++++----------
-+ libraries/libapparmor/swig/python/Makefile.am |  2 +-
-+ libraries/libapparmor/swig/python/setup.py.in |  2 +-
-+ .../libapparmor/swig/python/test/Makefile.am  |  2 +-
-+ profiles/Makefile                             |  2 +-
-+ utils/Makefile                                |  1 +
-+ utils/python-tools-setup.py                   |  6 ++--
-+ utils/test/Makefile                           |  2 +-
-+ utils/test/README.md                          |  2 +-
-+ 11 files changed, 32 insertions(+), 28 deletions(-)
++ setup.py | 16 +---------------
++ 1 file changed, 1 insertion(+), 15 deletions(-)
 +
-+diff --git a/.gitignore b/.gitignore
-+index 78a06fdf9..4782a351a 100644
-+--- a/.gitignore
-++++ b/.gitignore
-+@@ -160,6 +160,7 @@ libraries/libapparmor/swig/perl/libapparmor_wrap.c
-+ libraries/libapparmor/swig/perl/libapparmor_wrap.o
-+ libraries/libapparmor/swig/perl/pm_to_blib
-+ libraries/libapparmor/swig/python/LibAppArmor.py
-++libraries/libapparmor/swig/python/LibAppArmor.egg-info/
-+ libraries/libapparmor/swig/python/build/
-+ libraries/libapparmor/swig/python/libapparmor_wrap.c
-+ libraries/libapparmor/swig/python/Makefile
-+@@ -204,6 +205,8 @@ utils/*.tmp
-+ utils/po/*.mo
-+ utils/apparmor/*.pyc
-+ utils/apparmor/rule/*.pyc
-++utils/apparmor.egg-info/
-++utils/build/
-+ utils/htmlcov/
-+ utils/test/common_test.pyc
-+ utils/test/.coverage
-+diff --git a/libraries/libapparmor/m4/ac_python_devel.m4 b/libraries/libapparmor/m4/ac_python_devel.m4
-+index 1da29d873..f21f70ce7 100644
-+--- a/libraries/libapparmor/m4/ac_python_devel.m4
-++++ b/libraries/libapparmor/m4/ac_python_devel.m4
-+@@ -66,17 +66,17 @@ variable to configure. See ``configure --help'' for reference.
-+         fi
++diff --git a/setup.py b/setup.py
++index f4c2550f6..98413273c 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -48,7 +48,7 @@
++ from glob import glob
 + 
-+         #
-+-        # Check if you have distutils, else fail
-++        # Check if you have setuptools, else fail
-+         #
-+-        AC_MSG_CHECKING([for the distutils Python package])
-+-        ac_distutils_result=`$PYTHON -c "import distutils" 2>&1`
-+-        if test -z "$ac_distutils_result"; then
-++        AC_MSG_CHECKING([for the setuptools Python package])
-++        ac_setuptools_result=`$PYTHON -c "import setuptools" 2>&1`
-++        if test -z "$ac_setuptools_result"; then
-+                 AC_MSG_RESULT([yes])
-+         else
-+                 AC_MSG_RESULT([no])
-+-                AC_MSG_ERROR([cannot import Python module "distutils".
-++                AC_MSG_ERROR([cannot import Python module "setuptools".
-+ Please check your Python installation. The error was:
-+-$ac_distutils_result])
-++$ac_setuptools_result])
-+                 PYTHON_VERSION=""
-+         fi
++ from fail2ban.setup import updatePyExec
++-
+++from fail2ban.version import version
 + 
-+@@ -88,8 +88,8 @@ $ac_distutils_result])
-+                 PYTHON_CPPFLAGS=`$PYTHON_CONFIG --includes`
-+         fi
-+         if test -z "$PYTHON_CPPFLAGS"; then
-+-                python_path=`$PYTHON -c "import sys; import distutils.sysconfig;\
-+-sys.stdout.write('%s\n' % distutils.sysconfig.get_python_inc());"`
-++                python_path=`$PYTHON -c "import sys; import sysconfig;\
-++sys.stdout.write('%s\n' % sysconfig.get_path('include'));"`
-+                 if test -n "${python_path}"; then
-+                         python_path="-I$python_path"
-+                 fi
-+@@ -108,8 +108,8 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_inc());"`
-+         if test -z "$PYTHON_LDFLAGS"; then
-+                 # (makes two attempts to ensure we've got a version number
-+                 # from the interpreter)
-+-                py_version=`$PYTHON -c "import sys; from distutils.sysconfig import *; \
-+-sys.stdout.write('%s\n' % ''.join(get_config_vars('VERSION')))"`
-++                py_version=`$PYTHON -c "import sys; import sysconfig; \
-++sys.stdout.write('%s\n' % ''.join(sysconfig.get_config_vars('VERSION')))"`
-+                 if test "$py_version" == "[None]"; then
-+                         if test -n "$PYTHON_VERSION"; then
-+                                 py_version=$PYTHON_VERSION
-+@@ -119,8 +119,8 @@ sys.stdout.write("%s\n" % sys.version[[:3]])"`
-+                         fi
-+                 fi
++ source_dir = os.path.realpath(os.path.dirname(
++ 	# __file__ seems to be overwritten sometimes on some python versions (e.g. bug of 2.6 by running under cProfile, etc.):
++@@ -112,22 +112,12 @@ def update_scripts(self, dry_run=False):
++ # Wrapper to specify fail2ban own options:
++ class install_command_f2b(install):
++ 	user_options = install.user_options + [
++-		('disable-2to3', None, 'Specify to deactivate 2to3, e.g. if the install runs from fail2ban test-cases.'),
++ 		('without-tests', None, 'without tests files installation'),
++ 	]
++ 	def initialize_options(self):
++-		self.disable_2to3 = None
++ 		self.without_tests = not with_tests
++ 		install.initialize_options(self)
++ 	def finalize_options(self):
++-		global _2to3
++-		## in the test cases 2to3 should be already done (fail2ban-2to3):
++-		if self.disable_2to3:
++-			_2to3 = False
++-		if _2to3:
++-			cmdclass = self.distribution.cmdclass
++-			cmdclass['build_py'] = build_py_2to3
++-			cmdclass['build_scripts'] = build_scripts_2to3
++ 		if self.without_tests:
++ 			self.distribution.scripts.remove('bin/fail2ban-testcases')
 + 
-+-                PYTHON_LDFLAGS=`$PYTHON -c "import sys; from distutils.sysconfig import *; \
-+-sys.stdout.write('-L' + get_python_lib(0,1) + ' -lpython\n')"`$py_version`$PYTHON -c \
-++                PYTHON_LDFLAGS=`$PYTHON -c "import sys; import sysconfig; \
-++sys.stdout.write('-L' + sysconfig.get_path('stdlib') + ' -lpython\n')"`$py_version`$PYTHON -c \
-+ "import sys; sys.stdout.write('%s' % getattr(sys,'abiflags',''))"`
-+         fi
-+         AC_MSG_RESULT([$PYTHON_LDFLAGS])
-+@@ -131,8 +131,8 @@ sys.stdout.write('-L' + get_python_lib(0,1) + ' -lpython\n')"`$py_version`$PYTHO
-+         #
-+         AC_MSG_CHECKING([for Python site-packages path])
-+         if test -z "$PYTHON_SITE_PKG"; then
-+-                PYTHON_SITE_PKG=`$PYTHON -c "import sys; import distutils.sysconfig; \
-+-sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-++                PYTHON_SITE_PKG=`$PYTHON -c "import sys; import sysconfig; \
-++sys.stdout.write('%s\n' % sysconfig.get_path('purelib'));"`
-+         fi
-+         AC_MSG_RESULT([$PYTHON_SITE_PKG])
-+         AC_SUBST([PYTHON_SITE_PKG])
-+@@ -146,8 +146,8 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-+                         PYTHON_EXTRA_LIBS=''
-+         fi
-+         if test -z "$PYTHON_EXTRA_LIBS"; then
-+-           PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-+-conf = distutils.sysconfig.get_config_var; \
-++           PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import sysconfig; \
-++conf = sysconfig.get_config_var; \
-+ sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf('LIBS')))"`
-+         fi
-+         AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
-+@@ -162,8 +162,8 @@ sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf(
-+                         PYTHON_EXTRA_LDFLAGS=''
-+         fi
-+         if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-+-                PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-+-conf = distutils.sysconfig.get_config_var; \
-++                PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import sys; import sysconfig; \
-++conf = sysconfig.get_config_var; \
-+ sys.stdout.write('%s\n' % conf('LINKFORSHARED'))"`
-+         fi
-+         AC_MSG_RESULT([$PYTHON_EXTRA_LDFLAGS])
-+diff --git a/libraries/libapparmor/swig/python/Makefile.am b/libraries/libapparmor/swig/python/Makefile.am
-+index 04edff003..bf05fe0fc 100644
-+--- a/libraries/libapparmor/swig/python/Makefile.am
-++++ b/libraries/libapparmor/swig/python/Makefile.am
-+@@ -21,7 +21,7 @@ install-exec-local:
++@@ -178,7 +168,6 @@ def run(self):
++ if setuptools:
++ 	setup_extra = {
++ 		'test_suite': "fail2ban.tests.utils.gatherTests",
++-		'use_2to3': True,
++ 	}
++ else:
++ 	setup_extra = {}
++@@ -202,9 +191,6 @@ def run(self):
++ 		('/usr/share/doc/fail2ban', doc_files)
++ 	)
 + 
-+ clean-local:
-+ 	if test -x "$(PYTHON)"; then $(PYTHON) setup.py clean; fi
-+-	rm -rf build
-++	rm -rf build LibAppArmor.egg-info
-+ 	if test $(top_srcdir) != $(top_builddir) ; then rm -f libapparmor_wrap.c ; fi
++-# Get version number, avoiding importing fail2ban.
++-# This is due to tests not functioning for python3 as 2to3 takes place later
++-exec(open(join("fail2ban", "version.py")).read())
 + 
-+ endif
-+diff --git a/libraries/libapparmor/swig/python/setup.py.in b/libraries/libapparmor/swig/python/setup.py.in
-+index 32abd46b2..b23e40746 100644
-+--- a/libraries/libapparmor/swig/python/setup.py.in
-++++ b/libraries/libapparmor/swig/python/setup.py.in
-+@@ -1,4 +1,4 @@
-+-from distutils.core import setup, Extension
-++from setuptools import setup, Extension
-+ import string
-+ 
-+ setup(name          = 'LibAppArmor',
-+diff --git a/libraries/libapparmor/swig/python/test/Makefile.am b/libraries/libapparmor/swig/python/test/Makefile.am
-+index 7287819c9..9dccfdef6 100644
-+--- a/libraries/libapparmor/swig/python/test/Makefile.am
-++++ b/libraries/libapparmor/swig/python/test/Makefile.am
-+@@ -11,7 +11,7 @@ test_python.py: test_python.py.in $(top_builddir)/config.status
-+ CLEANFILES = test_python.py
-+ 
-+ # bah, how brittle is this?
-+-PYTHON_DIST_BUILD_PATH = '$(builddir)/../build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")'
-++PYTHON_DIST_BUILD_PATH = '$(builddir)/../build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")'
-+ 
-+ TESTS	= test_python.py
-+ TESTS_ENVIRONMENT = \
-+diff --git a/profiles/Makefile b/profiles/Makefile
-+index c471e58e8..0b7f2655d 100644
-+--- a/profiles/Makefile
-++++ b/profiles/Makefile
-+@@ -41,7 +41,7 @@ ifdef USE_SYSTEM
-+     LOGPROF?=aa-logprof
-+ else
-+     # PYTHON_DIST_BUILD_PATH based on libapparmor/swig/python/test/Makefile.am
-+-    PYTHON_DIST_BUILD_PATH = ../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")
-++    PYTHON_DIST_BUILD_PATH = ../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")
-+     LIBAPPARMOR_PATH=../libraries/libapparmor/src/.libs/
-+     LD_LIBRARY_PATH=$(LIBAPPARMOR_PATH):$(PYTHON_DIST_BUILD_PATH)
-+     PYTHONPATH=../utils/:$(PYTHON_DIST_BUILD_PATH)
-+diff --git a/utils/Makefile b/utils/Makefile
-+index 1f08f259a..91a15107b 100644
-+--- a/utils/Makefile
-++++ b/utils/Makefile
-+@@ -72,6 +72,7 @@ clean: pod_clean
-+ 	rm -rf staging/ build/
-+ 	rm -f apparmor/*.pyc apparmor/rule/*.pyc
-+ 	rm -rf apparmor/__pycache__/ apparmor/rule/__pycache__/
-++	rm -rf apparmor.egg-info/
-+ 
-+ # ${CAPABILITIES} is defined in common/Make.rules
-+ .PHONY: check_severity_db
-+diff --git a/utils/python-tools-setup.py b/utils/python-tools-setup.py
-+index 30ce0cb05..2cbde8fc1 100644
-+--- a/utils/python-tools-setup.py
-++++ b/utils/python-tools-setup.py
-+@@ -20,14 +20,14 @@
-+ # Note: --version=... must be the last argument to this script
-+ #
-+ 
-+-from distutils.command.install import install as _install
-+-from distutils.core import setup
-++from setuptools.command.install import install as _install
-++from setuptools import setup
-+ import os
-+ import shutil
-+ import sys
-+ 
-+ class Install(_install, object):
-+-    '''Override distutils to install the files where we want them.'''
-++    '''Override setuptools to install the files where we want them.'''
-+     def run(self):
-+         # Now byte-compile everything
-+         super(Install, self).run()
-+diff --git a/utils/test/Makefile b/utils/test/Makefile
-+index 90354aa50..9126bdd71 100644
-+--- a/utils/test/Makefile
-++++ b/utils/test/Makefile
-+@@ -32,7 +32,7 @@ ifdef USE_SYSTEM
-+     PARSER=
-+ else
-+     # PYTHON_DIST_BUILD_PATH based on libapparmor/swig/python/test/Makefile.am
-+-    PYTHON_DIST_BUILD_PATH = ../../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import distutils.util; import platform; print(\"lib.%s-%s\" %(distutils.util.get_platform(), platform.python_version()[:3]))")
-++    PYTHON_DIST_BUILD_PATH = ../../libraries/libapparmor/swig/python/build/$$($(PYTHON) -c "import sysconfig; print(\"lib.%s-%s\" %(sysconfig.get_platform(), sysconfig.get_python_version()))")
-+     LIBAPPARMOR_PATH=../../libraries/libapparmor/src/.libs/
-+     LD_LIBRARY_PATH=$(LIBAPPARMOR_PATH):$(PYTHON_DIST_BUILD_PATH)
-+     PYTHONPATH=..:$(PYTHON_DIST_BUILD_PATH)
-+-- 
-+GitLab
-+
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index 0d5822a56d..b21a841f3f 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -28,7 +28,7 @@ LIBAPPARMOR_CONF_OPTS = \
- 	--disable-man-pages
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
--LIBAPPARMOR_DEPENDENCIES += host-python3 host-swig python3
-+LIBAPPARMOR_DEPENDENCIES += host-python3 host-python3-setuptools host-swig python3
- LIBAPPARMOR_CONF_OPTS += \
- 	--with-python \
- 	PYTHON=$(HOST_DIR)/usr/bin/python3 \
++ setup(
++ 	name = "fail2ban",
 -- 
 2.33.0
 
