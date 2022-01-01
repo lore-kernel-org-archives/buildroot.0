@@ -1,67 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106C6C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 13:32:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893F2C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 13:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3F4A81A5F;
-	Sat,  1 Jan 2022 13:32:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDEE840133;
+	Sat,  1 Jan 2022 13:58:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b0EbJlhPDfmQ; Sat,  1 Jan 2022 13:32:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pGgC-fG8vCUT; Sat,  1 Jan 2022 13:58:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0723A81991;
-	Sat,  1 Jan 2022 13:32:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 72CBF1BF31D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:32:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E6524016D;
+	Sat,  1 Jan 2022 13:58:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11EEC1BF399
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EBDF60B93
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:32:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECC2A4016D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:58:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id npKO_Eq6YsIg for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 13:32:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UJJOsSeI5vS5 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 13:58:40 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 700CC605EE
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 13:32:27 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 87E3F40133
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 13:58:40 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b440:9a6c:7abd:86f8])
+ [IPv6:2a01:cb19:8b51:cb00:6c59:844e:fd99:5f73])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9D1105FE03;
- Sat,  1 Jan 2022 14:32:18 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id C10F22003BE;
+ Sat,  1 Jan 2022 14:58:30 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641043944;
- bh=7UhzWUugU08EYjSIBnClfUwJo2gpjEsdKzZft3OStl8=;
+ s=smtp-20201208; t=1641045517;
+ bh=6YH+BMvDcco1quP31LjX2A3sHAKvod406Ukodjy7CJs=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mHLJdrN4hOxAsj9S4jsif/ihN3MyVDMj0ZD9uMENtLj1SYfPDEF/Mp/lj8fQa6JLO
- oYuXnY6t4tphP09OZlNfKIi92vd6PG7XuFTg7tje0cWkby3QTpE0kZgNwFadxmgFF1
- ITxLbN24UilwmLrdijI0KiMRO59go8/l9YcPY3uNhqUYTARypa5FMdlR1ZlvuknOwP
- LfkAxXDHBvNihmBGdDWkzI+9PplnMo1MEGTIXIcDnc3UYErq059vlAwNJtMnn3x9Cj
- 3lqFtK+kDzMNvg9rMUJlBugU/fMSqPQ+JE1g8aHCl/LSRoG3HTjvLMg0YDKqhrs/ri
- 6T3DBhy2ICAFQ==
+ b=aI08YlvwhrbpZIHn0GsNqqAJF2TfD/5U8V6wg1SOvGQBBTAghZaqiMoD9wRvfgj4u
+ vxUKZWvOcAjXJuicdQfSIKlyqZCKnef1OgZZd/mELuBBdNPVbbdxd3duD4WrJ+/ynm
+ Ci958FOtdXjgkebDHgI3+ZSCuOA5KWgo1g6DIiFVb9pLXLDPNONkLK160Lg21rWS3u
+ sl397eBbRGcTCrkx8xXlJRbza++gOX2ks6rz9HJetG7X8Dpm9o0+2baOhv4IEGWVjl
+ bSiOLZE50AmZRzJ2yNfCvsZrCj1ezbUwZ7Wh6ZllmChCoS1G9/zsEfhV6K+44AJRSx
+ CNfzFTY6FlUdQ==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Jan 2022 14:32:18 +0100
-Date: Sat, 1 Jan 2022 14:32:18 +0100
+ Sat, 01 Jan 2022 14:58:30 +0100
+Date: Sat, 1 Jan 2022 14:58:30 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20220101133218.GI3390456@scaer>
+Message-ID: <20220101135830.GA2777@scaer>
 References: <20211223090800.1716321-1-troglobit@gmail.com>
- <20211223090800.1716321-2-troglobit@gmail.com>
+ <20211223090800.1716321-3-troglobit@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211223090800.1716321-2-troglobit@gmail.com>
+In-Reply-To: <20211223090800.1716321-3-troglobit@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/makedevs: allow recursive on
- directory with dangling symlinks
+Subject: Re: [Buildroot] [PATCH v3 2/3] .clang-format: initial import from
+ Linux 5.15.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,66 +80,604 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Joachim, All,
 
 On 2021-12-23 10:07 +0100, Joachim Wiberg spake thusly:
-> When using BR2_ROOTFS_DEVICE_TABLE to change ownership of /etc, like so:
+> Intended as an aid when working with in-tree C files, like makdevs.c
 > 
->   /etc        r  -1 root     wheel     - - - - -
-> 
-> makdevs fails due to it trying to chown() a dangling symlink:
+> Notice max number of columns is set to 80, despite the LKML discussion
+> to not enforce this limit in checkpatch.pl, see [1] for details, hence
+> use with care and perhaps try to avoid unnecessary line breaks.
 
-*makedevs   *its (really "its", and really not "it's")
+In Buldroot, we have already settled down for 132 columns:
 
-Applied to master, thanks.
+    # grep max .flake8
+    max-line-length=132
+
+so I would say that we would want to use 132 for C-style code too.
+
+Applied to master with the above change, thanks.
 
 Regards,
 Yann E. MORIN.
 
->   makedevs: chown failed for /src/myLinux/output/build/buildroot-fs/ext2/target/etc/mtab: No such file or directory
->   makedevs: line 25: recursive failed for /src/myLinux/output/build/buildroot-fs/ext2/target/etc: No such file or directory
->   make[2]: *** [fs/ext2/ext2.mk:63: /src/myLinux/output/images/rootfs.ext2] Error 1
->   make[1]: *** [Makefile:84: _all] Error 2
->   make[1]: Leaving directory '/src/myLinux/buildroot'
-> 
-> This patch changes chown() to lchown() in two cases in makedevs.c when
-> the argument can be a symlink, dangling or not.
-> 
-> In case the recursive operation includes a chmod() as well, explicitly
-> exclude symlinks that are dangling, because chmod() always operates on
-> the link target.
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
 > 
 > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 > ---
->  package/makedevs/makedevs.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  .clang-format | 566 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 566 insertions(+)
+>  create mode 100644 .clang-format
 > 
-> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-> index c57b964f5c..2796cd5e78 100644
-> --- a/package/makedevs/makedevs.c
-> +++ b/package/makedevs/makedevs.c
-> @@ -440,11 +440,13 @@ void bb_show_usage(void)
->  int bb_recursive(const char *fpath, const struct stat *sb,
->  		int tflag, struct FTW *ftwbuf){
->  
-> -	if (chown(fpath, recursive_uid, recursive_gid) == -1) {
-> +	if (lchown(fpath, recursive_uid, recursive_gid) == -1) {
->  		bb_perror_msg("chown failed for %s", fpath);
->  		return -1;
->  	}
-> -	if (recursive_mode != -1) {
+> diff --git a/.clang-format b/.clang-format
+> new file mode 100644
+> index 0000000000..91b92e97e5
+> --- /dev/null
+> +++ b/.clang-format
+> @@ -0,0 +1,566 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# clang-format configuration file. Intended for clang-format >= 4.
+> +#
+> +# For more information, see:
+> +#
+> +#   Documentation/process/clang-format.rst
+> +#   https://clang.llvm.org/docs/ClangFormat.html
+> +#   https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+> +#
 > +
-> +	/* chmod() is optional, also skip if dangling symlink */
-> +	if (recursive_mode != -1 && tflag == FTW_SL && access(fpath, F_OK)) {
->  		if (chmod(fpath, recursive_mode) < 0) {
->  			bb_perror_msg("chmod failed for %s", fpath);
->  			return -1;
-> @@ -628,7 +630,7 @@ int main(int argc, char **argv)
->  				if (mknod(full_name_inc, mode, rdev) < 0) {
->  					bb_perror_msg("line %d: can't create node %s", linenum, full_name_inc);
->  					ret = EXIT_FAILURE;
-> -				} else if (chown(full_name_inc, uid, gid) < 0) {
-> +				} else if (lchown(full_name_inc, uid, gid) < 0) {
->  					bb_perror_msg("line %d: can't chown %s", linenum, full_name_inc);
->  					ret = EXIT_FAILURE;
->  				} else if (chmod(full_name_inc, mode) < 0) {
+> +# Buildroot: imported unmodified from Linux 5.15.6 -- please note,
+> +#            this is not enforced at the moment.  Intended as an aid
+> +#            when working with in-tree C files, like makedevs.c
+> +#
+> +---
+> +AccessModifierOffset: -4
+> +AlignAfterOpenBracket: Align
+> +AlignConsecutiveAssignments: false
+> +AlignConsecutiveDeclarations: false
+> +#AlignEscapedNewlines: Left # Unknown to clang-format-4.0
+> +AlignOperands: true
+> +AlignTrailingComments: false
+> +AllowAllParametersOfDeclarationOnNextLine: false
+> +AllowShortBlocksOnASingleLine: false
+> +AllowShortCaseLabelsOnASingleLine: false
+> +AllowShortFunctionsOnASingleLine: None
+> +AllowShortIfStatementsOnASingleLine: false
+> +AllowShortLoopsOnASingleLine: false
+> +AlwaysBreakAfterDefinitionReturnType: None
+> +AlwaysBreakAfterReturnType: None
+> +AlwaysBreakBeforeMultilineStrings: false
+> +AlwaysBreakTemplateDeclarations: false
+> +BinPackArguments: true
+> +BinPackParameters: true
+> +BraceWrapping:
+> +  AfterClass: false
+> +  AfterControlStatement: false
+> +  AfterEnum: false
+> +  AfterFunction: true
+> +  AfterNamespace: true
+> +  AfterObjCDeclaration: false
+> +  AfterStruct: false
+> +  AfterUnion: false
+> +  #AfterExternBlock: false # Unknown to clang-format-5.0
+> +  BeforeCatch: false
+> +  BeforeElse: false
+> +  IndentBraces: false
+> +  #SplitEmptyFunction: true # Unknown to clang-format-4.0
+> +  #SplitEmptyRecord: true # Unknown to clang-format-4.0
+> +  #SplitEmptyNamespace: true # Unknown to clang-format-4.0
+> +BreakBeforeBinaryOperators: None
+> +BreakBeforeBraces: Custom
+> +#BreakBeforeInheritanceComma: false # Unknown to clang-format-4.0
+> +BreakBeforeTernaryOperators: false
+> +BreakConstructorInitializersBeforeComma: false
+> +#BreakConstructorInitializers: BeforeComma # Unknown to clang-format-4.0
+> +BreakAfterJavaFieldAnnotations: false
+> +BreakStringLiterals: false
+> +ColumnLimit: 80
+> +CommentPragmas: '^ IWYU pragma:'
+> +#CompactNamespaces: false # Unknown to clang-format-4.0
+> +ConstructorInitializerAllOnOneLineOrOnePerLine: false
+> +ConstructorInitializerIndentWidth: 8
+> +ContinuationIndentWidth: 8
+> +Cpp11BracedListStyle: false
+> +DerivePointerAlignment: false
+> +DisableFormat: false
+> +ExperimentalAutoDetectBinPacking: false
+> +#FixNamespaceComments: false # Unknown to clang-format-4.0
+> +
+> +# Taken from:
+> +#   git grep -h '^#define [^[:space:]]*for_each[^[:space:]]*(' include/ \
+> +#   | sed "s,^#define \([^[:space:]]*for_each[^[:space:]]*\)(.*$,  - '\1'," \
+> +#   | sort | uniq
+> +ForEachMacros:
+> +  - 'apei_estatus_for_each_section'
+> +  - 'ata_for_each_dev'
+> +  - 'ata_for_each_link'
+> +  - '__ata_qc_for_each'
+> +  - 'ata_qc_for_each'
+> +  - 'ata_qc_for_each_raw'
+> +  - 'ata_qc_for_each_with_internal'
+> +  - 'ax25_for_each'
+> +  - 'ax25_uid_for_each'
+> +  - '__bio_for_each_bvec'
+> +  - 'bio_for_each_bvec'
+> +  - 'bio_for_each_bvec_all'
+> +  - 'bio_for_each_integrity_vec'
+> +  - '__bio_for_each_segment'
+> +  - 'bio_for_each_segment'
+> +  - 'bio_for_each_segment_all'
+> +  - 'bio_list_for_each'
+> +  - 'bip_for_each_vec'
+> +  - 'bitmap_for_each_clear_region'
+> +  - 'bitmap_for_each_set_region'
+> +  - 'blkg_for_each_descendant_post'
+> +  - 'blkg_for_each_descendant_pre'
+> +  - 'blk_queue_for_each_rl'
+> +  - 'bond_for_each_slave'
+> +  - 'bond_for_each_slave_rcu'
+> +  - 'bpf_for_each_spilled_reg'
+> +  - 'btree_for_each_safe128'
+> +  - 'btree_for_each_safe32'
+> +  - 'btree_for_each_safe64'
+> +  - 'btree_for_each_safel'
+> +  - 'card_for_each_dev'
+> +  - 'cgroup_taskset_for_each'
+> +  - 'cgroup_taskset_for_each_leader'
+> +  - 'cpufreq_for_each_entry'
+> +  - 'cpufreq_for_each_entry_idx'
+> +  - 'cpufreq_for_each_valid_entry'
+> +  - 'cpufreq_for_each_valid_entry_idx'
+> +  - 'css_for_each_child'
+> +  - 'css_for_each_descendant_post'
+> +  - 'css_for_each_descendant_pre'
+> +  - 'device_for_each_child_node'
+> +  - 'displayid_iter_for_each'
+> +  - 'dma_fence_chain_for_each'
+> +  - 'do_for_each_ftrace_op'
+> +  - 'drm_atomic_crtc_for_each_plane'
+> +  - 'drm_atomic_crtc_state_for_each_plane'
+> +  - 'drm_atomic_crtc_state_for_each_plane_state'
+> +  - 'drm_atomic_for_each_plane_damage'
+> +  - 'drm_client_for_each_connector_iter'
+> +  - 'drm_client_for_each_modeset'
+> +  - 'drm_connector_for_each_possible_encoder'
+> +  - 'drm_for_each_bridge_in_chain'
+> +  - 'drm_for_each_connector_iter'
+> +  - 'drm_for_each_crtc'
+> +  - 'drm_for_each_crtc_reverse'
+> +  - 'drm_for_each_encoder'
+> +  - 'drm_for_each_encoder_mask'
+> +  - 'drm_for_each_fb'
+> +  - 'drm_for_each_legacy_plane'
+> +  - 'drm_for_each_plane'
+> +  - 'drm_for_each_plane_mask'
+> +  - 'drm_for_each_privobj'
+> +  - 'drm_mm_for_each_hole'
+> +  - 'drm_mm_for_each_node'
+> +  - 'drm_mm_for_each_node_in_range'
+> +  - 'drm_mm_for_each_node_safe'
+> +  - 'flow_action_for_each'
+> +  - 'for_each_acpi_dev_match'
+> +  - 'for_each_active_dev_scope'
+> +  - 'for_each_active_drhd_unit'
+> +  - 'for_each_active_iommu'
+> +  - 'for_each_aggr_pgid'
+> +  - 'for_each_available_child_of_node'
+> +  - 'for_each_bio'
+> +  - 'for_each_board_func_rsrc'
+> +  - 'for_each_bvec'
+> +  - 'for_each_card_auxs'
+> +  - 'for_each_card_auxs_safe'
+> +  - 'for_each_card_components'
+> +  - 'for_each_card_dapms'
+> +  - 'for_each_card_pre_auxs'
+> +  - 'for_each_card_prelinks'
+> +  - 'for_each_card_rtds'
+> +  - 'for_each_card_rtds_safe'
+> +  - 'for_each_card_widgets'
+> +  - 'for_each_card_widgets_safe'
+> +  - 'for_each_cgroup_storage_type'
+> +  - 'for_each_child_of_node'
+> +  - 'for_each_clear_bit'
+> +  - 'for_each_clear_bit_from'
+> +  - 'for_each_cmsghdr'
+> +  - 'for_each_compatible_node'
+> +  - 'for_each_component_dais'
+> +  - 'for_each_component_dais_safe'
+> +  - 'for_each_comp_order'
+> +  - 'for_each_console'
+> +  - 'for_each_cpu'
+> +  - 'for_each_cpu_and'
+> +  - 'for_each_cpu_not'
+> +  - 'for_each_cpu_wrap'
+> +  - 'for_each_dapm_widgets'
+> +  - 'for_each_dev_addr'
+> +  - 'for_each_dev_scope'
+> +  - 'for_each_dma_cap_mask'
+> +  - 'for_each_dpcm_be'
+> +  - 'for_each_dpcm_be_rollback'
+> +  - 'for_each_dpcm_be_safe'
+> +  - 'for_each_dpcm_fe'
+> +  - 'for_each_drhd_unit'
+> +  - 'for_each_dss_dev'
+> +  - 'for_each_dtpm_table'
+> +  - 'for_each_efi_memory_desc'
+> +  - 'for_each_efi_memory_desc_in_map'
+> +  - 'for_each_element'
+> +  - 'for_each_element_extid'
+> +  - 'for_each_element_id'
+> +  - 'for_each_endpoint_of_node'
+> +  - 'for_each_evictable_lru'
+> +  - 'for_each_fib6_node_rt_rcu'
+> +  - 'for_each_fib6_walker_rt'
+> +  - 'for_each_free_mem_pfn_range_in_zone'
+> +  - 'for_each_free_mem_pfn_range_in_zone_from'
+> +  - 'for_each_free_mem_range'
+> +  - 'for_each_free_mem_range_reverse'
+> +  - 'for_each_func_rsrc'
+> +  - 'for_each_hstate'
+> +  - 'for_each_if'
+> +  - 'for_each_iommu'
+> +  - 'for_each_ip_tunnel_rcu'
+> +  - 'for_each_irq_nr'
+> +  - 'for_each_link_codecs'
+> +  - 'for_each_link_cpus'
+> +  - 'for_each_link_platforms'
+> +  - 'for_each_lru'
+> +  - 'for_each_matching_node'
+> +  - 'for_each_matching_node_and_match'
+> +  - 'for_each_member'
+> +  - 'for_each_memcg_cache_index'
+> +  - 'for_each_mem_pfn_range'
+> +  - '__for_each_mem_range'
+> +  - 'for_each_mem_range'
+> +  - '__for_each_mem_range_rev'
+> +  - 'for_each_mem_range_rev'
+> +  - 'for_each_mem_region'
+> +  - 'for_each_migratetype_order'
+> +  - 'for_each_msi_entry'
+> +  - 'for_each_msi_entry_safe'
+> +  - 'for_each_msi_vector'
+> +  - 'for_each_net'
+> +  - 'for_each_net_continue_reverse'
+> +  - 'for_each_netdev'
+> +  - 'for_each_netdev_continue'
+> +  - 'for_each_netdev_continue_rcu'
+> +  - 'for_each_netdev_continue_reverse'
+> +  - 'for_each_netdev_feature'
+> +  - 'for_each_netdev_in_bond_rcu'
+> +  - 'for_each_netdev_rcu'
+> +  - 'for_each_netdev_reverse'
+> +  - 'for_each_netdev_safe'
+> +  - 'for_each_net_rcu'
+> +  - 'for_each_new_connector_in_state'
+> +  - 'for_each_new_crtc_in_state'
+> +  - 'for_each_new_mst_mgr_in_state'
+> +  - 'for_each_new_plane_in_state'
+> +  - 'for_each_new_private_obj_in_state'
+> +  - 'for_each_node'
+> +  - 'for_each_node_by_name'
+> +  - 'for_each_node_by_type'
+> +  - 'for_each_node_mask'
+> +  - 'for_each_node_state'
+> +  - 'for_each_node_with_cpus'
+> +  - 'for_each_node_with_property'
+> +  - 'for_each_nonreserved_multicast_dest_pgid'
+> +  - 'for_each_of_allnodes'
+> +  - 'for_each_of_allnodes_from'
+> +  - 'for_each_of_cpu_node'
+> +  - 'for_each_of_pci_range'
+> +  - 'for_each_old_connector_in_state'
+> +  - 'for_each_old_crtc_in_state'
+> +  - 'for_each_old_mst_mgr_in_state'
+> +  - 'for_each_oldnew_connector_in_state'
+> +  - 'for_each_oldnew_crtc_in_state'
+> +  - 'for_each_oldnew_mst_mgr_in_state'
+> +  - 'for_each_oldnew_plane_in_state'
+> +  - 'for_each_oldnew_plane_in_state_reverse'
+> +  - 'for_each_oldnew_private_obj_in_state'
+> +  - 'for_each_old_plane_in_state'
+> +  - 'for_each_old_private_obj_in_state'
+> +  - 'for_each_online_cpu'
+> +  - 'for_each_online_node'
+> +  - 'for_each_online_pgdat'
+> +  - 'for_each_pci_bridge'
+> +  - 'for_each_pci_dev'
+> +  - 'for_each_pci_msi_entry'
+> +  - 'for_each_pcm_streams'
+> +  - 'for_each_physmem_range'
+> +  - 'for_each_populated_zone'
+> +  - 'for_each_possible_cpu'
+> +  - 'for_each_present_cpu'
+> +  - 'for_each_prime_number'
+> +  - 'for_each_prime_number_from'
+> +  - 'for_each_process'
+> +  - 'for_each_process_thread'
+> +  - 'for_each_prop_codec_conf'
+> +  - 'for_each_prop_dai_codec'
+> +  - 'for_each_prop_dai_cpu'
+> +  - 'for_each_prop_dlc_codecs'
+> +  - 'for_each_prop_dlc_cpus'
+> +  - 'for_each_prop_dlc_platforms'
+> +  - 'for_each_property_of_node'
+> +  - 'for_each_registered_fb'
+> +  - 'for_each_requested_gpio'
+> +  - 'for_each_requested_gpio_in_range'
+> +  - 'for_each_reserved_mem_range'
+> +  - 'for_each_reserved_mem_region'
+> +  - 'for_each_rtd_codec_dais'
+> +  - 'for_each_rtd_components'
+> +  - 'for_each_rtd_cpu_dais'
+> +  - 'for_each_rtd_dais'
+> +  - 'for_each_set_bit'
+> +  - 'for_each_set_bit_from'
+> +  - 'for_each_set_clump8'
+> +  - 'for_each_sg'
+> +  - 'for_each_sg_dma_page'
+> +  - 'for_each_sg_page'
+> +  - 'for_each_sgtable_dma_page'
+> +  - 'for_each_sgtable_dma_sg'
+> +  - 'for_each_sgtable_page'
+> +  - 'for_each_sgtable_sg'
+> +  - 'for_each_sibling_event'
+> +  - 'for_each_subelement'
+> +  - 'for_each_subelement_extid'
+> +  - 'for_each_subelement_id'
+> +  - '__for_each_thread'
+> +  - 'for_each_thread'
+> +  - 'for_each_unicast_dest_pgid'
+> +  - 'for_each_vsi'
+> +  - 'for_each_wakeup_source'
+> +  - 'for_each_zone'
+> +  - 'for_each_zone_zonelist'
+> +  - 'for_each_zone_zonelist_nodemask'
+> +  - 'fwnode_for_each_available_child_node'
+> +  - 'fwnode_for_each_child_node'
+> +  - 'fwnode_graph_for_each_endpoint'
+> +  - 'gadget_for_each_ep'
+> +  - 'genradix_for_each'
+> +  - 'genradix_for_each_from'
+> +  - 'hash_for_each'
+> +  - 'hash_for_each_possible'
+> +  - 'hash_for_each_possible_rcu'
+> +  - 'hash_for_each_possible_rcu_notrace'
+> +  - 'hash_for_each_possible_safe'
+> +  - 'hash_for_each_rcu'
+> +  - 'hash_for_each_safe'
+> +  - 'hctx_for_each_ctx'
+> +  - 'hlist_bl_for_each_entry'
+> +  - 'hlist_bl_for_each_entry_rcu'
+> +  - 'hlist_bl_for_each_entry_safe'
+> +  - 'hlist_for_each'
+> +  - 'hlist_for_each_entry'
+> +  - 'hlist_for_each_entry_continue'
+> +  - 'hlist_for_each_entry_continue_rcu'
+> +  - 'hlist_for_each_entry_continue_rcu_bh'
+> +  - 'hlist_for_each_entry_from'
+> +  - 'hlist_for_each_entry_from_rcu'
+> +  - 'hlist_for_each_entry_rcu'
+> +  - 'hlist_for_each_entry_rcu_bh'
+> +  - 'hlist_for_each_entry_rcu_notrace'
+> +  - 'hlist_for_each_entry_safe'
+> +  - 'hlist_for_each_entry_srcu'
+> +  - '__hlist_for_each_rcu'
+> +  - 'hlist_for_each_safe'
+> +  - 'hlist_nulls_for_each_entry'
+> +  - 'hlist_nulls_for_each_entry_from'
+> +  - 'hlist_nulls_for_each_entry_rcu'
+> +  - 'hlist_nulls_for_each_entry_safe'
+> +  - 'i3c_bus_for_each_i2cdev'
+> +  - 'i3c_bus_for_each_i3cdev'
+> +  - 'ide_host_for_each_port'
+> +  - 'ide_port_for_each_dev'
+> +  - 'ide_port_for_each_present_dev'
+> +  - 'idr_for_each_entry'
+> +  - 'idr_for_each_entry_continue'
+> +  - 'idr_for_each_entry_continue_ul'
+> +  - 'idr_for_each_entry_ul'
+> +  - 'in_dev_for_each_ifa_rcu'
+> +  - 'in_dev_for_each_ifa_rtnl'
+> +  - 'inet_bind_bucket_for_each'
+> +  - 'inet_lhash2_for_each_icsk_rcu'
+> +  - 'key_for_each'
+> +  - 'key_for_each_safe'
+> +  - 'klp_for_each_func'
+> +  - 'klp_for_each_func_safe'
+> +  - 'klp_for_each_func_static'
+> +  - 'klp_for_each_object'
+> +  - 'klp_for_each_object_safe'
+> +  - 'klp_for_each_object_static'
+> +  - 'kunit_suite_for_each_test_case'
+> +  - 'kvm_for_each_memslot'
+> +  - 'kvm_for_each_vcpu'
+> +  - 'list_for_each'
+> +  - 'list_for_each_codec'
+> +  - 'list_for_each_codec_safe'
+> +  - 'list_for_each_continue'
+> +  - 'list_for_each_entry'
+> +  - 'list_for_each_entry_continue'
+> +  - 'list_for_each_entry_continue_rcu'
+> +  - 'list_for_each_entry_continue_reverse'
+> +  - 'list_for_each_entry_from'
+> +  - 'list_for_each_entry_from_rcu'
+> +  - 'list_for_each_entry_from_reverse'
+> +  - 'list_for_each_entry_lockless'
+> +  - 'list_for_each_entry_rcu'
+> +  - 'list_for_each_entry_reverse'
+> +  - 'list_for_each_entry_safe'
+> +  - 'list_for_each_entry_safe_continue'
+> +  - 'list_for_each_entry_safe_from'
+> +  - 'list_for_each_entry_safe_reverse'
+> +  - 'list_for_each_entry_srcu'
+> +  - 'list_for_each_prev'
+> +  - 'list_for_each_prev_safe'
+> +  - 'list_for_each_safe'
+> +  - 'llist_for_each'
+> +  - 'llist_for_each_entry'
+> +  - 'llist_for_each_entry_safe'
+> +  - 'llist_for_each_safe'
+> +  - 'mci_for_each_dimm'
+> +  - 'media_device_for_each_entity'
+> +  - 'media_device_for_each_intf'
+> +  - 'media_device_for_each_link'
+> +  - 'media_device_for_each_pad'
+> +  - 'nanddev_io_for_each_page'
+> +  - 'netdev_for_each_lower_dev'
+> +  - 'netdev_for_each_lower_private'
+> +  - 'netdev_for_each_lower_private_rcu'
+> +  - 'netdev_for_each_mc_addr'
+> +  - 'netdev_for_each_uc_addr'
+> +  - 'netdev_for_each_upper_dev_rcu'
+> +  - 'netdev_hw_addr_list_for_each'
+> +  - 'nft_rule_for_each_expr'
+> +  - 'nla_for_each_attr'
+> +  - 'nla_for_each_nested'
+> +  - 'nlmsg_for_each_attr'
+> +  - 'nlmsg_for_each_msg'
+> +  - 'nr_neigh_for_each'
+> +  - 'nr_neigh_for_each_safe'
+> +  - 'nr_node_for_each'
+> +  - 'nr_node_for_each_safe'
+> +  - 'of_for_each_phandle'
+> +  - 'of_property_for_each_string'
+> +  - 'of_property_for_each_u32'
+> +  - 'pci_bus_for_each_resource'
+> +  - 'pcl_for_each_chunk'
+> +  - 'pcl_for_each_segment'
+> +  - 'pcm_for_each_format'
+> +  - 'ping_portaddr_for_each_entry'
+> +  - 'plist_for_each'
+> +  - 'plist_for_each_continue'
+> +  - 'plist_for_each_entry'
+> +  - 'plist_for_each_entry_continue'
+> +  - 'plist_for_each_entry_safe'
+> +  - 'plist_for_each_safe'
+> +  - 'pnp_for_each_card'
+> +  - 'pnp_for_each_dev'
+> +  - 'protocol_for_each_card'
+> +  - 'protocol_for_each_dev'
+> +  - 'queue_for_each_hw_ctx'
+> +  - 'radix_tree_for_each_slot'
+> +  - 'radix_tree_for_each_tagged'
+> +  - 'rb_for_each'
+> +  - 'rbtree_postorder_for_each_entry_safe'
+> +  - 'rdma_for_each_block'
+> +  - 'rdma_for_each_port'
+> +  - 'rdma_umem_for_each_dma_block'
+> +  - 'resource_list_for_each_entry'
+> +  - 'resource_list_for_each_entry_safe'
+> +  - 'rhl_for_each_entry_rcu'
+> +  - 'rhl_for_each_rcu'
+> +  - 'rht_for_each'
+> +  - 'rht_for_each_entry'
+> +  - 'rht_for_each_entry_from'
+> +  - 'rht_for_each_entry_rcu'
+> +  - 'rht_for_each_entry_rcu_from'
+> +  - 'rht_for_each_entry_safe'
+> +  - 'rht_for_each_from'
+> +  - 'rht_for_each_rcu'
+> +  - 'rht_for_each_rcu_from'
+> +  - '__rq_for_each_bio'
+> +  - 'rq_for_each_bvec'
+> +  - 'rq_for_each_segment'
+> +  - 'scsi_for_each_prot_sg'
+> +  - 'scsi_for_each_sg'
+> +  - 'sctp_for_each_hentry'
+> +  - 'sctp_skb_for_each'
+> +  - 'shdma_for_each_chan'
+> +  - '__shost_for_each_device'
+> +  - 'shost_for_each_device'
+> +  - 'sk_for_each'
+> +  - 'sk_for_each_bound'
+> +  - 'sk_for_each_entry_offset_rcu'
+> +  - 'sk_for_each_from'
+> +  - 'sk_for_each_rcu'
+> +  - 'sk_for_each_safe'
+> +  - 'sk_nulls_for_each'
+> +  - 'sk_nulls_for_each_from'
+> +  - 'sk_nulls_for_each_rcu'
+> +  - 'snd_array_for_each'
+> +  - 'snd_pcm_group_for_each_entry'
+> +  - 'snd_soc_dapm_widget_for_each_path'
+> +  - 'snd_soc_dapm_widget_for_each_path_safe'
+> +  - 'snd_soc_dapm_widget_for_each_sink_path'
+> +  - 'snd_soc_dapm_widget_for_each_source_path'
+> +  - 'tb_property_for_each'
+> +  - 'tcf_exts_for_each_action'
+> +  - 'udp_portaddr_for_each_entry'
+> +  - 'udp_portaddr_for_each_entry_rcu'
+> +  - 'usb_hub_for_each_child'
+> +  - 'v4l2_device_for_each_subdev'
+> +  - 'v4l2_m2m_for_each_dst_buf'
+> +  - 'v4l2_m2m_for_each_dst_buf_safe'
+> +  - 'v4l2_m2m_for_each_src_buf'
+> +  - 'v4l2_m2m_for_each_src_buf_safe'
+> +  - 'virtio_device_for_each_vq'
+> +  - 'while_for_each_ftrace_op'
+> +  - 'xa_for_each'
+> +  - 'xa_for_each_marked'
+> +  - 'xa_for_each_range'
+> +  - 'xa_for_each_start'
+> +  - 'xas_for_each'
+> +  - 'xas_for_each_conflict'
+> +  - 'xas_for_each_marked'
+> +  - 'xbc_array_for_each_value'
+> +  - 'xbc_for_each_key_value'
+> +  - 'xbc_node_for_each_array_value'
+> +  - 'xbc_node_for_each_child'
+> +  - 'xbc_node_for_each_key_value'
+> +  - 'zorro_for_each_dev'
+> +
+> +#IncludeBlocks: Preserve # Unknown to clang-format-5.0
+> +IncludeCategories:
+> +  - Regex: '.*'
+> +    Priority: 1
+> +IncludeIsMainRegex: '(Test)?$'
+> +IndentCaseLabels: false
+> +#IndentPPDirectives: None # Unknown to clang-format-5.0
+> +IndentWidth: 8
+> +IndentWrappedFunctionNames: false
+> +JavaScriptQuotes: Leave
+> +JavaScriptWrapImports: true
+> +KeepEmptyLinesAtTheStartOfBlocks: false
+> +MacroBlockBegin: ''
+> +MacroBlockEnd: ''
+> +MaxEmptyLinesToKeep: 1
+> +NamespaceIndentation: None
+> +#ObjCBinPackProtocolList: Auto # Unknown to clang-format-5.0
+> +ObjCBlockIndentWidth: 8
+> +ObjCSpaceAfterProperty: true
+> +ObjCSpaceBeforeProtocolList: true
+> +
+> +# Taken from git's rules
+> +#PenaltyBreakAssignment: 10 # Unknown to clang-format-4.0
+> +PenaltyBreakBeforeFirstCallParameter: 30
+> +PenaltyBreakComment: 10
+> +PenaltyBreakFirstLessLess: 0
+> +PenaltyBreakString: 10
+> +PenaltyExcessCharacter: 100
+> +PenaltyReturnTypeOnItsOwnLine: 60
+> +
+> +PointerAlignment: Right
+> +ReflowComments: false
+> +SortIncludes: false
+> +#SortUsingDeclarations: false # Unknown to clang-format-4.0
+> +SpaceAfterCStyleCast: false
+> +SpaceAfterTemplateKeyword: true
+> +SpaceBeforeAssignmentOperators: true
+> +#SpaceBeforeCtorInitializerColon: true # Unknown to clang-format-5.0
+> +#SpaceBeforeInheritanceColon: true # Unknown to clang-format-5.0
+> +SpaceBeforeParens: ControlStatements
+> +#SpaceBeforeRangeBasedForLoopColon: true # Unknown to clang-format-5.0
+> +SpaceInEmptyParentheses: false
+> +SpacesBeforeTrailingComments: 1
+> +SpacesInAngles: false
+> +SpacesInContainerLiterals: false
+> +SpacesInCStyleCastParentheses: false
+> +SpacesInParentheses: false
+> +SpacesInSquareBrackets: false
+> +Standard: Cpp03
+> +TabWidth: 8
+> +UseTab: Always
+> +...
 > -- 
 > 2.25.1
 > 
