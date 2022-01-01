@@ -1,77 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD860C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 13:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83382C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FDD481392;
-	Sat,  1 Jan 2022 13:59:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C33060596;
+	Sat,  1 Jan 2022 14:01:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tuyRLGu_2SJy; Sat,  1 Jan 2022 13:59:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7aw6PGtQ3kjv; Sat,  1 Jan 2022 14:01:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0B981370;
-	Sat,  1 Jan 2022 13:59:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EDB061BF399
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:59:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07E9E605EE;
+	Sat,  1 Jan 2022 14:01:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16D191BF39A
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBE1881370
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:59:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 121F2605EE
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:01:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iKq5eqK-BErE for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 13:59:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EA38D81357
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 13:59:10 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id t26so60667990wrb.4
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 05:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6UmWgx4fiK4pBDE4pAxziqfdgXCFJjODDXys68USmpw=;
- b=GDso+Po2e5KQvPAnKsTIMyiPkfYY2M/AqacTb4GnGtMU6bEq9iv+wYG3pOYOXuxe9m
- NPlCU1dXep9AhnM6Xt9+iHmLXhdO0/o2efP8hwAdS/YhciS+4jgFqSt3bcbRq7XeQboJ
- ppsS6JT2dFF/hIYb0DzQx6iqjY/1+YnHXjjJ1R0T49E6JNYxW0jlCQYAkwZNbG0mUeA8
- i8WX+Q+KLst10p/xKXfyX5OnNVMs4Gj8Z7vwAJo14cgUN1kaoUXiqqP4VagHgyBm/nJ7
- nvK+MJOsxhXSGPqEFyzDSG8Ad8ZfKbFU/vnnIrE9a1I48Ub3gx8I47dunTtJx0pfmzOz
- CmCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=6UmWgx4fiK4pBDE4pAxziqfdgXCFJjODDXys68USmpw=;
- b=7l4c0RR50kL/a5e+O5qFQBsNwAGS2vjSZpony+FroZeKT3L+rOlpXyZUmpmo5JX7PE
- KO98A5xemPIVrii17gPHKQ7BY+caNuL1GpCLLeNgNAUC0h9OsnpKyi5KsVL9TQaVHceF
- fm52/hs7+kLY+zNWrg6zhVQVWjwElBfHJtmhKBf3t4v5Wl6Bk699VKwepoL2TqRUxKH4
- uUTgKRVnZbhJMMbBsp2Kh6zliZ0puj6Jg6/ieBkIlIjD6U1OnAZHK7xLCV0pdae5KI9b
- eLUk7C0OwfGody809uUhtUOgrtNuKieH6Xp2cvbsds48fdYtqegsa2kbwLNe+Abr9fAX
- spVA==
-X-Gm-Message-State: AOAM531nFNuscV3HNagZIPGszWqlNV4GMdKRt8FBg3g8SFDQIBC2GbQ9
- N/Ox9GqAfTeis7atGI+i65IwNaot72Y=
-X-Google-Smtp-Source: ABdhPJzjjft6TwVd+qJRqs5M4+ehhyRFgcz5btQVZqA+tSHKa3FOBcp88hklSlp1jmggcShJFkPHFA==
-X-Received: by 2002:a5d:62cf:: with SMTP id o15mr32856664wrv.651.1641045548964; 
- Sat, 01 Jan 2022 05:59:08 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id i8sm20993663wmq.36.2022.01.01.05.59.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 05:59:08 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6poV1a-fMesl for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 14:01:23 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAA6460596
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:01:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 56A88829F7; Sat,  1 Jan 2022 13:55:27 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 14:57:37 +0100
-Message-Id: <20220101135737.956301-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/ksmbd-tools: new package
+Date: Sat, 1 Jan 2022 15:01:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e745c0b92db3db7008d066813e2529d2032986c4
+X-Git-Newrev: 8fddaf36edc449c1239b75468cfe75be4cd5132f
+X-Patchwork-Hint: ignore
+Message-Id: <20220101135527.56A88829F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .clang-format: initial import from Linux
+ 5.15.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,112 +53,603 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ksmbd kernel server userspace utilities.
+commit: https://git.buildroot.net/buildroot/commit/?id=8fddaf36edc449c1239b75468cfe75be4cd5132f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/cifsd-team/ksmbd-tools
+Intended as an aid when working with in-tree C files, like makdevs.c.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Unlike for the kernel, which still has an 80-char limit line (but they
+decided not to enforce it [0]), we set the limit to 132-char for us,
+like we do for the python code (see ./.flake8).
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+[yann.morin.1998@free.fr: use and explain the 132-char limit)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/ksmbd-tools/Config.in        | 15 +++++++++++++++
- package/ksmbd-tools/ksmbd-tools.hash |  3 +++
- package/ksmbd-tools/ksmbd-tools.mk   | 20 ++++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/ksmbd-tools/Config.in
- create mode 100644 package/ksmbd-tools/ksmbd-tools.hash
- create mode 100644 package/ksmbd-tools/ksmbd-tools.mk
+ .clang-format | 567 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 567 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 98ff2372cc..cf0e6fe0fc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -870,6 +870,7 @@ F:	package/hiredis/
- F:	package/i2pd/
- F:	package/igd2-for-linux/
- F:	package/json-c/
-+F:	package/ksmbd-tools/
- F:	package/lcms2/
- F:	package/lftp/
- F:	package/libcap-ng/
-diff --git a/package/Config.in b/package/Config.in
-index 4185675e4c..1e25ccd964 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2235,6 +2235,7 @@ endif
- 	source "package/keepalived/Config.in"
- 	source "package/kismet/Config.in"
- 	source "package/knock/Config.in"
-+	source "package/ksmbd-tools/Config.in"
- 	source "package/leafnode2/Config.in"
- 	source "package/lft/Config.in"
- 	source "package/lftp/Config.in"
-diff --git a/package/ksmbd-tools/Config.in b/package/ksmbd-tools/Config.in
+diff --git a/.clang-format b/.clang-format
 new file mode 100644
-index 0000000000..ce1850e016
+index 0000000000..1758a23f32
 --- /dev/null
-+++ b/package/ksmbd-tools/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_KSMBD_TOOLS
-+	bool "ksmbd-tools"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libnl
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  ksmbd kernel server userspace utilities.
-+
-+	  https://github.com/cifsd-team/ksmbd-tools
-+
-+comment "ksmbd-tools needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ksmbd-tools/ksmbd-tools.hash b/package/ksmbd-tools/ksmbd-tools.hash
-new file mode 100644
-index 0000000000..ad507bfdb2
---- /dev/null
-+++ b/package/ksmbd-tools/ksmbd-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  bd7218ebfeaa0d6a73c0a4beb9ea506228cd5695c1f8d3f9a9064e2346d52f0a  ksmbd-tools-3.4.3.tar.gz
-+sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/ksmbd-tools/ksmbd-tools.mk b/package/ksmbd-tools/ksmbd-tools.mk
-new file mode 100644
-index 0000000000..b3ffc3e768
---- /dev/null
-+++ b/package/ksmbd-tools/ksmbd-tools.mk
-@@ -0,0 +1,20 @@
-+################################################################################
++++ b/.clang-format
+@@ -0,0 +1,567 @@
++# SPDX-License-Identifier: GPL-2.0
 +#
-+# ksmbd-tools
++# clang-format configuration file. Intended for clang-format >= 4.
 +#
-+################################################################################
++# For more information, see:
++#
++#   Documentation/process/clang-format.rst
++#   https://clang.llvm.org/docs/ClangFormat.html
++#   https://clang.llvm.org/docs/ClangFormatStyleOptions.html
++#
 +
-+KSMBD_TOOLS_VERSION = 3.4.3
-+KSMBD_TOOLS_SITE = https://github.com/cifsd-team/ksmbd-tools/releases/download/$(KSMBD_TOOLS_VERSION)
-+KSMBD_TOOLS_LICENSE = GPL-2.0+
-+KSMBD_TOOLS_LICENSE_FILES = COPYING
-+KSMBD_TOOLS_DEPENDENCIES = host-pkgconf libglib2 libnl
++# Buildroot: imported from Linux 5.15.6, with minimal modifications.
++#            Please note, this is not enforced at the moment. Intended
++#            as an aid when working with in-tree C files, like
++#            makedevs.c
++#
++---
++AccessModifierOffset: -4
++AlignAfterOpenBracket: Align
++AlignConsecutiveAssignments: false
++AlignConsecutiveDeclarations: false
++#AlignEscapedNewlines: Left # Unknown to clang-format-4.0
++AlignOperands: true
++AlignTrailingComments: false
++AllowAllParametersOfDeclarationOnNextLine: false
++AllowShortBlocksOnASingleLine: false
++AllowShortCaseLabelsOnASingleLine: false
++AllowShortFunctionsOnASingleLine: None
++AllowShortIfStatementsOnASingleLine: false
++AllowShortLoopsOnASingleLine: false
++AlwaysBreakAfterDefinitionReturnType: None
++AlwaysBreakAfterReturnType: None
++AlwaysBreakBeforeMultilineStrings: false
++AlwaysBreakTemplateDeclarations: false
++BinPackArguments: true
++BinPackParameters: true
++BraceWrapping:
++  AfterClass: false
++  AfterControlStatement: false
++  AfterEnum: false
++  AfterFunction: true
++  AfterNamespace: true
++  AfterObjCDeclaration: false
++  AfterStruct: false
++  AfterUnion: false
++  #AfterExternBlock: false # Unknown to clang-format-5.0
++  BeforeCatch: false
++  BeforeElse: false
++  IndentBraces: false
++  #SplitEmptyFunction: true # Unknown to clang-format-4.0
++  #SplitEmptyRecord: true # Unknown to clang-format-4.0
++  #SplitEmptyNamespace: true # Unknown to clang-format-4.0
++BreakBeforeBinaryOperators: None
++BreakBeforeBraces: Custom
++#BreakBeforeInheritanceComma: false # Unknown to clang-format-4.0
++BreakBeforeTernaryOperators: false
++BreakConstructorInitializersBeforeComma: false
++#BreakConstructorInitializers: BeforeComma # Unknown to clang-format-4.0
++BreakAfterJavaFieldAnnotations: false
++BreakStringLiterals: false
++ColumnLimit: 132 # Specially for Buildroot
++CommentPragmas: '^ IWYU pragma:'
++#CompactNamespaces: false # Unknown to clang-format-4.0
++ConstructorInitializerAllOnOneLineOrOnePerLine: false
++ConstructorInitializerIndentWidth: 8
++ContinuationIndentWidth: 8
++Cpp11BracedListStyle: false
++DerivePointerAlignment: false
++DisableFormat: false
++ExperimentalAutoDetectBinPacking: false
++#FixNamespaceComments: false # Unknown to clang-format-4.0
 +
-+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-+KSMBD_TOOLS_CONF_OPTS += --enable-krb5
-+KSMBD_TOOLS_DEPENDENCIES += libkrb5
-+else
-+KSMBD_TOOLS_CONF_OPTS += --disable-krb5
-+endif
++# Taken from:
++#   git grep -h '^#define [^[:space:]]*for_each[^[:space:]]*(' include/ \
++#   | sed "s,^#define \([^[:space:]]*for_each[^[:space:]]*\)(.*$,  - '\1'," \
++#   | sort | uniq
++ForEachMacros:
++  - 'apei_estatus_for_each_section'
++  - 'ata_for_each_dev'
++  - 'ata_for_each_link'
++  - '__ata_qc_for_each'
++  - 'ata_qc_for_each'
++  - 'ata_qc_for_each_raw'
++  - 'ata_qc_for_each_with_internal'
++  - 'ax25_for_each'
++  - 'ax25_uid_for_each'
++  - '__bio_for_each_bvec'
++  - 'bio_for_each_bvec'
++  - 'bio_for_each_bvec_all'
++  - 'bio_for_each_integrity_vec'
++  - '__bio_for_each_segment'
++  - 'bio_for_each_segment'
++  - 'bio_for_each_segment_all'
++  - 'bio_list_for_each'
++  - 'bip_for_each_vec'
++  - 'bitmap_for_each_clear_region'
++  - 'bitmap_for_each_set_region'
++  - 'blkg_for_each_descendant_post'
++  - 'blkg_for_each_descendant_pre'
++  - 'blk_queue_for_each_rl'
++  - 'bond_for_each_slave'
++  - 'bond_for_each_slave_rcu'
++  - 'bpf_for_each_spilled_reg'
++  - 'btree_for_each_safe128'
++  - 'btree_for_each_safe32'
++  - 'btree_for_each_safe64'
++  - 'btree_for_each_safel'
++  - 'card_for_each_dev'
++  - 'cgroup_taskset_for_each'
++  - 'cgroup_taskset_for_each_leader'
++  - 'cpufreq_for_each_entry'
++  - 'cpufreq_for_each_entry_idx'
++  - 'cpufreq_for_each_valid_entry'
++  - 'cpufreq_for_each_valid_entry_idx'
++  - 'css_for_each_child'
++  - 'css_for_each_descendant_post'
++  - 'css_for_each_descendant_pre'
++  - 'device_for_each_child_node'
++  - 'displayid_iter_for_each'
++  - 'dma_fence_chain_for_each'
++  - 'do_for_each_ftrace_op'
++  - 'drm_atomic_crtc_for_each_plane'
++  - 'drm_atomic_crtc_state_for_each_plane'
++  - 'drm_atomic_crtc_state_for_each_plane_state'
++  - 'drm_atomic_for_each_plane_damage'
++  - 'drm_client_for_each_connector_iter'
++  - 'drm_client_for_each_modeset'
++  - 'drm_connector_for_each_possible_encoder'
++  - 'drm_for_each_bridge_in_chain'
++  - 'drm_for_each_connector_iter'
++  - 'drm_for_each_crtc'
++  - 'drm_for_each_crtc_reverse'
++  - 'drm_for_each_encoder'
++  - 'drm_for_each_encoder_mask'
++  - 'drm_for_each_fb'
++  - 'drm_for_each_legacy_plane'
++  - 'drm_for_each_plane'
++  - 'drm_for_each_plane_mask'
++  - 'drm_for_each_privobj'
++  - 'drm_mm_for_each_hole'
++  - 'drm_mm_for_each_node'
++  - 'drm_mm_for_each_node_in_range'
++  - 'drm_mm_for_each_node_safe'
++  - 'flow_action_for_each'
++  - 'for_each_acpi_dev_match'
++  - 'for_each_active_dev_scope'
++  - 'for_each_active_drhd_unit'
++  - 'for_each_active_iommu'
++  - 'for_each_aggr_pgid'
++  - 'for_each_available_child_of_node'
++  - 'for_each_bio'
++  - 'for_each_board_func_rsrc'
++  - 'for_each_bvec'
++  - 'for_each_card_auxs'
++  - 'for_each_card_auxs_safe'
++  - 'for_each_card_components'
++  - 'for_each_card_dapms'
++  - 'for_each_card_pre_auxs'
++  - 'for_each_card_prelinks'
++  - 'for_each_card_rtds'
++  - 'for_each_card_rtds_safe'
++  - 'for_each_card_widgets'
++  - 'for_each_card_widgets_safe'
++  - 'for_each_cgroup_storage_type'
++  - 'for_each_child_of_node'
++  - 'for_each_clear_bit'
++  - 'for_each_clear_bit_from'
++  - 'for_each_cmsghdr'
++  - 'for_each_compatible_node'
++  - 'for_each_component_dais'
++  - 'for_each_component_dais_safe'
++  - 'for_each_comp_order'
++  - 'for_each_console'
++  - 'for_each_cpu'
++  - 'for_each_cpu_and'
++  - 'for_each_cpu_not'
++  - 'for_each_cpu_wrap'
++  - 'for_each_dapm_widgets'
++  - 'for_each_dev_addr'
++  - 'for_each_dev_scope'
++  - 'for_each_dma_cap_mask'
++  - 'for_each_dpcm_be'
++  - 'for_each_dpcm_be_rollback'
++  - 'for_each_dpcm_be_safe'
++  - 'for_each_dpcm_fe'
++  - 'for_each_drhd_unit'
++  - 'for_each_dss_dev'
++  - 'for_each_dtpm_table'
++  - 'for_each_efi_memory_desc'
++  - 'for_each_efi_memory_desc_in_map'
++  - 'for_each_element'
++  - 'for_each_element_extid'
++  - 'for_each_element_id'
++  - 'for_each_endpoint_of_node'
++  - 'for_each_evictable_lru'
++  - 'for_each_fib6_node_rt_rcu'
++  - 'for_each_fib6_walker_rt'
++  - 'for_each_free_mem_pfn_range_in_zone'
++  - 'for_each_free_mem_pfn_range_in_zone_from'
++  - 'for_each_free_mem_range'
++  - 'for_each_free_mem_range_reverse'
++  - 'for_each_func_rsrc'
++  - 'for_each_hstate'
++  - 'for_each_if'
++  - 'for_each_iommu'
++  - 'for_each_ip_tunnel_rcu'
++  - 'for_each_irq_nr'
++  - 'for_each_link_codecs'
++  - 'for_each_link_cpus'
++  - 'for_each_link_platforms'
++  - 'for_each_lru'
++  - 'for_each_matching_node'
++  - 'for_each_matching_node_and_match'
++  - 'for_each_member'
++  - 'for_each_memcg_cache_index'
++  - 'for_each_mem_pfn_range'
++  - '__for_each_mem_range'
++  - 'for_each_mem_range'
++  - '__for_each_mem_range_rev'
++  - 'for_each_mem_range_rev'
++  - 'for_each_mem_region'
++  - 'for_each_migratetype_order'
++  - 'for_each_msi_entry'
++  - 'for_each_msi_entry_safe'
++  - 'for_each_msi_vector'
++  - 'for_each_net'
++  - 'for_each_net_continue_reverse'
++  - 'for_each_netdev'
++  - 'for_each_netdev_continue'
++  - 'for_each_netdev_continue_rcu'
++  - 'for_each_netdev_continue_reverse'
++  - 'for_each_netdev_feature'
++  - 'for_each_netdev_in_bond_rcu'
++  - 'for_each_netdev_rcu'
++  - 'for_each_netdev_reverse'
++  - 'for_each_netdev_safe'
++  - 'for_each_net_rcu'
++  - 'for_each_new_connector_in_state'
++  - 'for_each_new_crtc_in_state'
++  - 'for_each_new_mst_mgr_in_state'
++  - 'for_each_new_plane_in_state'
++  - 'for_each_new_private_obj_in_state'
++  - 'for_each_node'
++  - 'for_each_node_by_name'
++  - 'for_each_node_by_type'
++  - 'for_each_node_mask'
++  - 'for_each_node_state'
++  - 'for_each_node_with_cpus'
++  - 'for_each_node_with_property'
++  - 'for_each_nonreserved_multicast_dest_pgid'
++  - 'for_each_of_allnodes'
++  - 'for_each_of_allnodes_from'
++  - 'for_each_of_cpu_node'
++  - 'for_each_of_pci_range'
++  - 'for_each_old_connector_in_state'
++  - 'for_each_old_crtc_in_state'
++  - 'for_each_old_mst_mgr_in_state'
++  - 'for_each_oldnew_connector_in_state'
++  - 'for_each_oldnew_crtc_in_state'
++  - 'for_each_oldnew_mst_mgr_in_state'
++  - 'for_each_oldnew_plane_in_state'
++  - 'for_each_oldnew_plane_in_state_reverse'
++  - 'for_each_oldnew_private_obj_in_state'
++  - 'for_each_old_plane_in_state'
++  - 'for_each_old_private_obj_in_state'
++  - 'for_each_online_cpu'
++  - 'for_each_online_node'
++  - 'for_each_online_pgdat'
++  - 'for_each_pci_bridge'
++  - 'for_each_pci_dev'
++  - 'for_each_pci_msi_entry'
++  - 'for_each_pcm_streams'
++  - 'for_each_physmem_range'
++  - 'for_each_populated_zone'
++  - 'for_each_possible_cpu'
++  - 'for_each_present_cpu'
++  - 'for_each_prime_number'
++  - 'for_each_prime_number_from'
++  - 'for_each_process'
++  - 'for_each_process_thread'
++  - 'for_each_prop_codec_conf'
++  - 'for_each_prop_dai_codec'
++  - 'for_each_prop_dai_cpu'
++  - 'for_each_prop_dlc_codecs'
++  - 'for_each_prop_dlc_cpus'
++  - 'for_each_prop_dlc_platforms'
++  - 'for_each_property_of_node'
++  - 'for_each_registered_fb'
++  - 'for_each_requested_gpio'
++  - 'for_each_requested_gpio_in_range'
++  - 'for_each_reserved_mem_range'
++  - 'for_each_reserved_mem_region'
++  - 'for_each_rtd_codec_dais'
++  - 'for_each_rtd_components'
++  - 'for_each_rtd_cpu_dais'
++  - 'for_each_rtd_dais'
++  - 'for_each_set_bit'
++  - 'for_each_set_bit_from'
++  - 'for_each_set_clump8'
++  - 'for_each_sg'
++  - 'for_each_sg_dma_page'
++  - 'for_each_sg_page'
++  - 'for_each_sgtable_dma_page'
++  - 'for_each_sgtable_dma_sg'
++  - 'for_each_sgtable_page'
++  - 'for_each_sgtable_sg'
++  - 'for_each_sibling_event'
++  - 'for_each_subelement'
++  - 'for_each_subelement_extid'
++  - 'for_each_subelement_id'
++  - '__for_each_thread'
++  - 'for_each_thread'
++  - 'for_each_unicast_dest_pgid'
++  - 'for_each_vsi'
++  - 'for_each_wakeup_source'
++  - 'for_each_zone'
++  - 'for_each_zone_zonelist'
++  - 'for_each_zone_zonelist_nodemask'
++  - 'fwnode_for_each_available_child_node'
++  - 'fwnode_for_each_child_node'
++  - 'fwnode_graph_for_each_endpoint'
++  - 'gadget_for_each_ep'
++  - 'genradix_for_each'
++  - 'genradix_for_each_from'
++  - 'hash_for_each'
++  - 'hash_for_each_possible'
++  - 'hash_for_each_possible_rcu'
++  - 'hash_for_each_possible_rcu_notrace'
++  - 'hash_for_each_possible_safe'
++  - 'hash_for_each_rcu'
++  - 'hash_for_each_safe'
++  - 'hctx_for_each_ctx'
++  - 'hlist_bl_for_each_entry'
++  - 'hlist_bl_for_each_entry_rcu'
++  - 'hlist_bl_for_each_entry_safe'
++  - 'hlist_for_each'
++  - 'hlist_for_each_entry'
++  - 'hlist_for_each_entry_continue'
++  - 'hlist_for_each_entry_continue_rcu'
++  - 'hlist_for_each_entry_continue_rcu_bh'
++  - 'hlist_for_each_entry_from'
++  - 'hlist_for_each_entry_from_rcu'
++  - 'hlist_for_each_entry_rcu'
++  - 'hlist_for_each_entry_rcu_bh'
++  - 'hlist_for_each_entry_rcu_notrace'
++  - 'hlist_for_each_entry_safe'
++  - 'hlist_for_each_entry_srcu'
++  - '__hlist_for_each_rcu'
++  - 'hlist_for_each_safe'
++  - 'hlist_nulls_for_each_entry'
++  - 'hlist_nulls_for_each_entry_from'
++  - 'hlist_nulls_for_each_entry_rcu'
++  - 'hlist_nulls_for_each_entry_safe'
++  - 'i3c_bus_for_each_i2cdev'
++  - 'i3c_bus_for_each_i3cdev'
++  - 'ide_host_for_each_port'
++  - 'ide_port_for_each_dev'
++  - 'ide_port_for_each_present_dev'
++  - 'idr_for_each_entry'
++  - 'idr_for_each_entry_continue'
++  - 'idr_for_each_entry_continue_ul'
++  - 'idr_for_each_entry_ul'
++  - 'in_dev_for_each_ifa_rcu'
++  - 'in_dev_for_each_ifa_rtnl'
++  - 'inet_bind_bucket_for_each'
++  - 'inet_lhash2_for_each_icsk_rcu'
++  - 'key_for_each'
++  - 'key_for_each_safe'
++  - 'klp_for_each_func'
++  - 'klp_for_each_func_safe'
++  - 'klp_for_each_func_static'
++  - 'klp_for_each_object'
++  - 'klp_for_each_object_safe'
++  - 'klp_for_each_object_static'
++  - 'kunit_suite_for_each_test_case'
++  - 'kvm_for_each_memslot'
++  - 'kvm_for_each_vcpu'
++  - 'list_for_each'
++  - 'list_for_each_codec'
++  - 'list_for_each_codec_safe'
++  - 'list_for_each_continue'
++  - 'list_for_each_entry'
++  - 'list_for_each_entry_continue'
++  - 'list_for_each_entry_continue_rcu'
++  - 'list_for_each_entry_continue_reverse'
++  - 'list_for_each_entry_from'
++  - 'list_for_each_entry_from_rcu'
++  - 'list_for_each_entry_from_reverse'
++  - 'list_for_each_entry_lockless'
++  - 'list_for_each_entry_rcu'
++  - 'list_for_each_entry_reverse'
++  - 'list_for_each_entry_safe'
++  - 'list_for_each_entry_safe_continue'
++  - 'list_for_each_entry_safe_from'
++  - 'list_for_each_entry_safe_reverse'
++  - 'list_for_each_entry_srcu'
++  - 'list_for_each_prev'
++  - 'list_for_each_prev_safe'
++  - 'list_for_each_safe'
++  - 'llist_for_each'
++  - 'llist_for_each_entry'
++  - 'llist_for_each_entry_safe'
++  - 'llist_for_each_safe'
++  - 'mci_for_each_dimm'
++  - 'media_device_for_each_entity'
++  - 'media_device_for_each_intf'
++  - 'media_device_for_each_link'
++  - 'media_device_for_each_pad'
++  - 'nanddev_io_for_each_page'
++  - 'netdev_for_each_lower_dev'
++  - 'netdev_for_each_lower_private'
++  - 'netdev_for_each_lower_private_rcu'
++  - 'netdev_for_each_mc_addr'
++  - 'netdev_for_each_uc_addr'
++  - 'netdev_for_each_upper_dev_rcu'
++  - 'netdev_hw_addr_list_for_each'
++  - 'nft_rule_for_each_expr'
++  - 'nla_for_each_attr'
++  - 'nla_for_each_nested'
++  - 'nlmsg_for_each_attr'
++  - 'nlmsg_for_each_msg'
++  - 'nr_neigh_for_each'
++  - 'nr_neigh_for_each_safe'
++  - 'nr_node_for_each'
++  - 'nr_node_for_each_safe'
++  - 'of_for_each_phandle'
++  - 'of_property_for_each_string'
++  - 'of_property_for_each_u32'
++  - 'pci_bus_for_each_resource'
++  - 'pcl_for_each_chunk'
++  - 'pcl_for_each_segment'
++  - 'pcm_for_each_format'
++  - 'ping_portaddr_for_each_entry'
++  - 'plist_for_each'
++  - 'plist_for_each_continue'
++  - 'plist_for_each_entry'
++  - 'plist_for_each_entry_continue'
++  - 'plist_for_each_entry_safe'
++  - 'plist_for_each_safe'
++  - 'pnp_for_each_card'
++  - 'pnp_for_each_dev'
++  - 'protocol_for_each_card'
++  - 'protocol_for_each_dev'
++  - 'queue_for_each_hw_ctx'
++  - 'radix_tree_for_each_slot'
++  - 'radix_tree_for_each_tagged'
++  - 'rb_for_each'
++  - 'rbtree_postorder_for_each_entry_safe'
++  - 'rdma_for_each_block'
++  - 'rdma_for_each_port'
++  - 'rdma_umem_for_each_dma_block'
++  - 'resource_list_for_each_entry'
++  - 'resource_list_for_each_entry_safe'
++  - 'rhl_for_each_entry_rcu'
++  - 'rhl_for_each_rcu'
++  - 'rht_for_each'
++  - 'rht_for_each_entry'
++  - 'rht_for_each_entry_from'
++  - 'rht_for_each_entry_rcu'
++  - 'rht_for_each_entry_rcu_from'
++  - 'rht_for_each_entry_safe'
++  - 'rht_for_each_from'
++  - 'rht_for_each_rcu'
++  - 'rht_for_each_rcu_from'
++  - '__rq_for_each_bio'
++  - 'rq_for_each_bvec'
++  - 'rq_for_each_segment'
++  - 'scsi_for_each_prot_sg'
++  - 'scsi_for_each_sg'
++  - 'sctp_for_each_hentry'
++  - 'sctp_skb_for_each'
++  - 'shdma_for_each_chan'
++  - '__shost_for_each_device'
++  - 'shost_for_each_device'
++  - 'sk_for_each'
++  - 'sk_for_each_bound'
++  - 'sk_for_each_entry_offset_rcu'
++  - 'sk_for_each_from'
++  - 'sk_for_each_rcu'
++  - 'sk_for_each_safe'
++  - 'sk_nulls_for_each'
++  - 'sk_nulls_for_each_from'
++  - 'sk_nulls_for_each_rcu'
++  - 'snd_array_for_each'
++  - 'snd_pcm_group_for_each_entry'
++  - 'snd_soc_dapm_widget_for_each_path'
++  - 'snd_soc_dapm_widget_for_each_path_safe'
++  - 'snd_soc_dapm_widget_for_each_sink_path'
++  - 'snd_soc_dapm_widget_for_each_source_path'
++  - 'tb_property_for_each'
++  - 'tcf_exts_for_each_action'
++  - 'udp_portaddr_for_each_entry'
++  - 'udp_portaddr_for_each_entry_rcu'
++  - 'usb_hub_for_each_child'
++  - 'v4l2_device_for_each_subdev'
++  - 'v4l2_m2m_for_each_dst_buf'
++  - 'v4l2_m2m_for_each_dst_buf_safe'
++  - 'v4l2_m2m_for_each_src_buf'
++  - 'v4l2_m2m_for_each_src_buf_safe'
++  - 'virtio_device_for_each_vq'
++  - 'while_for_each_ftrace_op'
++  - 'xa_for_each'
++  - 'xa_for_each_marked'
++  - 'xa_for_each_range'
++  - 'xa_for_each_start'
++  - 'xas_for_each'
++  - 'xas_for_each_conflict'
++  - 'xas_for_each_marked'
++  - 'xbc_array_for_each_value'
++  - 'xbc_for_each_key_value'
++  - 'xbc_node_for_each_array_value'
++  - 'xbc_node_for_each_child'
++  - 'xbc_node_for_each_key_value'
++  - 'zorro_for_each_dev'
 +
-+$(eval $(autotools-package))
--- 
-2.33.0
-
++#IncludeBlocks: Preserve # Unknown to clang-format-5.0
++IncludeCategories:
++  - Regex: '.*'
++    Priority: 1
++IncludeIsMainRegex: '(Test)?$'
++IndentCaseLabels: false
++#IndentPPDirectives: None # Unknown to clang-format-5.0
++IndentWidth: 8
++IndentWrappedFunctionNames: false
++JavaScriptQuotes: Leave
++JavaScriptWrapImports: true
++KeepEmptyLinesAtTheStartOfBlocks: false
++MacroBlockBegin: ''
++MacroBlockEnd: ''
++MaxEmptyLinesToKeep: 1
++NamespaceIndentation: None
++#ObjCBinPackProtocolList: Auto # Unknown to clang-format-5.0
++ObjCBlockIndentWidth: 8
++ObjCSpaceAfterProperty: true
++ObjCSpaceBeforeProtocolList: true
++
++# Taken from git's rules
++#PenaltyBreakAssignment: 10 # Unknown to clang-format-4.0
++PenaltyBreakBeforeFirstCallParameter: 30
++PenaltyBreakComment: 10
++PenaltyBreakFirstLessLess: 0
++PenaltyBreakString: 10
++PenaltyExcessCharacter: 100
++PenaltyReturnTypeOnItsOwnLine: 60
++
++PointerAlignment: Right
++ReflowComments: false
++SortIncludes: false
++#SortUsingDeclarations: false # Unknown to clang-format-4.0
++SpaceAfterCStyleCast: false
++SpaceAfterTemplateKeyword: true
++SpaceBeforeAssignmentOperators: true
++#SpaceBeforeCtorInitializerColon: true # Unknown to clang-format-5.0
++#SpaceBeforeInheritanceColon: true # Unknown to clang-format-5.0
++SpaceBeforeParens: ControlStatements
++#SpaceBeforeRangeBasedForLoopColon: true # Unknown to clang-format-5.0
++SpaceInEmptyParentheses: false
++SpacesBeforeTrailingComments: 1
++SpacesInAngles: false
++SpacesInContainerLiterals: false
++SpacesInCStyleCastParentheses: false
++SpacesInParentheses: false
++SpacesInSquareBrackets: false
++Standard: Cpp03
++TabWidth: 8
++UseTab: Always
++...
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
