@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41594C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBD06C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA9DC60A76;
-	Sat,  1 Jan 2022 22:06:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4576840184;
+	Sat,  1 Jan 2022 22:15:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MIzl6zA139cg; Sat,  1 Jan 2022 22:06:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8vnaVXQAS6y2; Sat,  1 Jan 2022 22:15:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F1C660A9C;
-	Sat,  1 Jan 2022 22:06:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6C34A1BF32D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:06:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A3BE40186;
+	Sat,  1 Jan 2022 22:15:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A7901BF32D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 456B240240
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:06:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0597F81358
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:15:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 601Zoeu1Tmsb for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 22:06:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WHjxtBVXMH3s for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 22:15:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5BCA740235
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:06:26 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id r17so62232350wrc.3
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 14:06:26 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25EE28134C
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:15:49 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ g7-20020a7bc4c7000000b00345c4bb365aso16423671wmk.4
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 14:15:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Jk4gm0xBLtfGoCyXfnIZpah8esvdWT2F/H+vBUfqnrU=;
- b=Yzmh94vluADm7BAfrjA2euuCn/u1B3e5NA5bLGOmt1HLaXzqF8CrI9fHZZZobCwxt4
- Qfnplj4GK4DJ3piE6vg7phDNjW1P6t2B34IiYrUqsowdYEWzGKKCOKCcYzMna8d+IvB1
- /QQpHJqVX2gQgPpCcuAkD5YaFu6ehOzveI+bmRYWdYcZBxK9VqqAkvs+wSlvO6vpW7F4
- p7KihPBcGBxnQrAPYRRSBiK4MzBJ1JFt64vlcDH+15NpR7upyMw3bPl7aMPjf5BFcpYx
- VW3RC5mJApM/rY7ehKHBw+bStX2/gsxsHuatmnthbuyMF/WRiya0DJtxIOhz8YizYZCC
- SECA==
+ bh=+XWMzq3JMOo3+ogwDVbkir1NGpqTH6eUvv8FLEyUIzI=;
+ b=aLcZNltAdvcR9IJ5hBf8Y5Bfak7rtQxs4ZJsRFK8TBV1KAq8C0bUhcA3cxTVr2B4Rm
+ UFR4JuEWVt3WcYtyKy6U+LmBYX0NW8hQDG6tKmn6ZOPE6uYVAR6pp4qJ1cJGCmomXUDo
+ h8yYE33D3KX4pKEYN3o9kOrs2zOAfFgS4+bc2wLSn3bqziPUxw54lGLnZMSuecwDW2pr
+ PES1+FdZLqo2oCnCmKtJNsgHsC2uYPAppf8lCk4sjYBFNsjCcr3S4e4MLvLdO3BXFf3c
+ /c0str1pGLzl39+Rnrl/zeWKXv3EQFvL+Ifo0G06UB5uaK49rxxqF2bkh5L+t5pIneWP
+ 1fsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Jk4gm0xBLtfGoCyXfnIZpah8esvdWT2F/H+vBUfqnrU=;
- b=rUpOeA6MHWwYgQouTYhPxI+x9qR783Dbzh8BbCkocqSwo7kmZ9sZMBc50+/O2hT428
- AXUK01t7jo1pNLW1+EBzrm3hAFPN2BA8kioKeQDhXTXjkRJU+zATRC7jsFvcqrEZHYSy
- vQ72oxGtw2tQpEHeTIan2gfLwzxV8VgF1o7pwYVPhD26v3tUSaPEIMgWTsmyshI69cQg
- UtUdIYVgDX9e6xQsOnGU7vg7gUnIU7CO3nEr5GjHeDiMdTx+dGT1KWoTJ5spmw+DJGgu
- zKDgq1EXoOJJxhC8UAGeyh5V7um1KFljXHt0QEemrHESvHCx068vo3kjRXMTZJKpoVPn
- BcBQ==
-X-Gm-Message-State: AOAM531VFd1uMhgFOZa1D110KvMcRXo52yFktyyI+x4/dWHHXHsMxmCb
- 9HPyI+xCq2apN4aBscTFw2lh6TZiFMo=
-X-Google-Smtp-Source: ABdhPJzo1lfR1qfpdiv2/34mn7W3ChBokbaz1ew97Pm3l7SR6gpnzaKOyZSkNIZ9h4Z6869/gZc8Fg==
-X-Received: by 2002:a05:6000:1d1:: with SMTP id
- t17mr32896330wrx.569.1641074784374; 
- Sat, 01 Jan 2022 14:06:24 -0800 (PST)
+ bh=+XWMzq3JMOo3+ogwDVbkir1NGpqTH6eUvv8FLEyUIzI=;
+ b=ONJDqCvvrUWnzELU/xUjDKyToxQ8uhRzFxvChNwAi1oxzp78D9A9pY/Cs6tRQvvkpm
+ R/C2MQVWBKRghJNuX//nLhcqgwcK9rsvmIS67X+IgzoAOBmgIVMHIxeN5A0a7nhIo+T3
+ yIEKKVgSnAeTVKYJNDy49gqIx/c7doTDtZVBclS4YTu9KMYbNDeMp92NMQ0YeUAih5Xh
+ 0lHQp/5O2XbmUi0jUijXf/loKcAGqJqAaFriEXH8UcW4AgMMYrFmaH5HCzilYW2xQKAQ
+ NAkj4gwqjKhy/t4hr3Xnm1bNfwYCiuYLph7s4BXocv3lUDMyl9lPFNUMqWyjyi2NiYM3
+ MVSw==
+X-Gm-Message-State: AOAM531hlrBQzNL3pAjy6UQsj98GDGeSSeLHKx2LWLbmjWYgDgpeEFW3
+ UcS+ByCupWQ3A7pGky7rS6pHTRoSTM8=
+X-Google-Smtp-Source: ABdhPJxuPwTmNXazaZblotZsEjxIfDbENs4QTY1//VcHbj6svTASZHzcFlo6cju2P6IMLQELwVHKGw==
+X-Received: by 2002:a7b:c448:: with SMTP id l8mr33656852wmi.173.1641075347162; 
+ Sat, 01 Jan 2022 14:15:47 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id n17sm29327285wmc.32.2022.01.01.14.06.23
+ by smtp.gmail.com with ESMTPSA id s1sm30298853wrr.8.2022.01.01.14.15.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 14:06:24 -0800 (PST)
+ Sat, 01 Jan 2022 14:15:46 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 23:05:32 +0100
-Message-Id: <20220101220532.2057125-1-fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jan 2022 23:14:25 +0100
+Message-Id: <20220101221425.2059395-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/usbredir: bump to version 0.12.0
+Subject: [Buildroot] [PATCH 1/1] package/xxhash: bump to version 0.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,217 +86,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop all patches (already in version)
+- Drop first patch (already in version)
+- Refresh upstream status of latest patch
+- Update hash of LICENSE and add cli/COPYING:
+  https://github.com/Cyan4973/xxHash/commit/85e1ea2ab0d90463b804f4a65b0f67d99718c6f8
 
-https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.12.0/ChangeLog.md
+https://github.com/Cyan4973/xxHash/releases/tag/v0.8.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-meson-add-tests-option.patch         | 46 --------------
- ...002-meson-add-stack_protector-option.patch | 60 -------------------
- .../0003-meson.build-make-C-optional.patch    | 39 ------------
- package/usbredir/usbredir.hash                |  4 +-
- package/usbredir/usbredir.mk                  |  2 +-
- 5 files changed, 3 insertions(+), 148 deletions(-)
- delete mode 100644 package/usbredir/0001-meson-add-tests-option.patch
- delete mode 100644 package/usbredir/0002-meson-add-stack_protector-option.patch
- delete mode 100644 package/usbredir/0003-meson.build-make-C-optional.patch
+ ...h => 0001-fix-man-page-installation.patch} |  0
+ .../0001-fixed-man-page-installation.patch    | 31 -------------------
+ ...efile-add-dedicated-install-targets.patch} |  8 ++---
+ package/xxhash/xxhash.hash                    |  5 +--
+ package/xxhash/xxhash.mk                      |  4 +--
+ 5 files changed, 8 insertions(+), 40 deletions(-)
+ rename package/xxhash/{0002-fix-man-page-installation.patch => 0001-fix-man-page-installation.patch} (100%)
+ delete mode 100644 package/xxhash/0001-fixed-man-page-installation.patch
+ rename package/xxhash/{0003-Makefile-add-dedicated-install-targets.patch => 0002-Makefile-add-dedicated-install-targets.patch} (94%)
 
-diff --git a/package/usbredir/0001-meson-add-tests-option.patch b/package/usbredir/0001-meson-add-tests-option.patch
+diff --git a/package/xxhash/0002-fix-man-page-installation.patch b/package/xxhash/0001-fix-man-page-installation.patch
+similarity index 100%
+rename from package/xxhash/0002-fix-man-page-installation.patch
+rename to package/xxhash/0001-fix-man-page-installation.patch
+diff --git a/package/xxhash/0001-fixed-man-page-installation.patch b/package/xxhash/0001-fixed-man-page-installation.patch
 deleted file mode 100644
-index b2df1587b1..0000000000
---- a/package/usbredir/0001-meson-add-tests-option.patch
+index a9f68db4b4..0000000000
+--- a/package/xxhash/0001-fixed-man-page-installation.patch
 +++ /dev/null
-@@ -1,46 +0,0 @@
--From 8490a7ac101d4ee0a78c44b252d3b7a6c2508c74 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 21 Aug 2021 11:55:48 +0200
--Subject: [PATCH] meson: add tests option
+@@ -1,31 +0,0 @@
+-From e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6 Mon Sep 17 00:00:00 2001
+-From: Yann Collet <cyan@fb.com>
+-Date: Fri, 6 Aug 2021 15:29:32 -0700
+-Subject: [PATCH] fixed man page installation
 -
--Add tests option to allow the user to disable them
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 -[Retrieved from:
--https://gitlab.freedesktop.org/spice/usbredir/-/commit/8490a7ac101d4ee0a78c44b252d3b7a6c2508c74]
-----
-- meson.build       | 4 +++-
-- meson_options.txt | 5 +++++
-- 2 files changed, 8 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 6e773a7..a6d21b8 100644
----- a/meson.build
--+++ b/meson.build
--@@ -106,7 +106,9 @@ if host_machine.system() != 'windows'
--         subdir('fuzzing')
--     endif
-- endif
---subdir('tests')
--+if get_option('tests').enabled()
--+    subdir('tests')
--+endif
-- subdir('data')
-- 
-- summary(summary_info, bool_yn: true)
--diff --git a/meson_options.txt b/meson_options.txt
--index b35732b..63e8c85 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -21,3 +21,8 @@ option('tools',
--     type : 'feature',
--     value : 'enabled',
--     description : 'Build usbredir\'s tools such as usbredirect')
--+
--+option('tests',
--+    type : 'feature',
--+    value : 'enabled',
--+    description : 'Build usbredir\'s tests such as filter')
---- 
--GitLab
--
-diff --git a/package/usbredir/0002-meson-add-stack_protector-option.patch b/package/usbredir/0002-meson-add-stack_protector-option.patch
-deleted file mode 100644
-index 613e2714e3..0000000000
---- a/package/usbredir/0002-meson-add-stack_protector-option.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 54cf1897ef3aa4d0a35b5f4eb1f5c6928b033af5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 24 Sep 2021 17:24:43 +0200
--Subject: [PATCH] meson: add stack_protector option
--
--Add stack_protector option to allow the user to disable it as some
--embedded toolchains don't support it which will result in the following
--build failure:
--
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: usbredirparser/libusbredirparser.so.1.1.0.p/usbredirparser.c.o: in function `va_log':
--usbredirparser.c:(.text+0x1c4): undefined reference to `__stack_chk_guard'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/40de5443e98157ad50c6841ea70a835cd5ad4fe9
--
+-https://github.com/Cyan4973/xxHash/commit/e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/spice/usbredir/-/merge_requests/53]
 ----
-- meson.build       | 6 +++++-
-- meson_options.txt | 5 +++++
-- 2 files changed, 10 insertions(+), 1 deletion(-)
+- Makefile | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
 -
--diff --git a/meson.build b/meson.build
--index a6d21b8..4350f53 100644
----- a/meson.build
--+++ b/meson.build
--@@ -17,8 +17,12 @@ cc_flags = [
-- if host_machine.system() != 'windows'
--     cc_flags += [
-- 	'-Wp,-D_FORTIFY_SOURCE=2',
---	'-fstack-protector',
--     ]
--+    if get_option('stack_protector').enabled()
--+        cc_flags += [
--+	    '-fstack-protector',
--+        ]
--+    endif
-- endif
+-diff --git a/Makefile b/Makefile
+-index b8552a9f..556a32a0 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -498,10 +498,10 @@ endif
+- 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh64sum
+- 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh128sum
+- 	@echo Installing man pages
+--	$(Q)$(INSTALL_DATA) xxhsum.1 $(DESTDIR)$(MANDIR)/xxhsum.1
+--	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh32sum.1
+--	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh64sum.1
+--	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh128sum.1
+-+	$(Q)$(INSTALL_DATA) $(MAN) $(DESTDIR)$(MANDIR)/xxhsum.1
+-+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh32sum.1
+-+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh64sum.1
+-+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh128sum.1
+- 	@echo xxhash installation completed
 - 
-- # Check if we are building from .git
--diff --git a/meson_options.txt b/meson_options.txt
--index 63e8c85..34dd392 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -17,6 +17,11 @@ option('fuzzing-install-dir',
--     type : 'string',
--     description : 'Installation directory for fuzzing binaries')
-- 
--+option('stack_protector',
--+    type : 'feature',
--+    value : 'enabled',
--+    description : 'Build usbredir\'s with stack-protector')
--+
-- option('tools',
--     type : 'feature',
--     value : 'enabled',
---- 
--2.33.0
--
-diff --git a/package/usbredir/0003-meson.build-make-C-optional.patch b/package/usbredir/0003-meson.build-make-C-optional.patch
-deleted file mode 100644
-index fe1ed3f698..0000000000
---- a/package/usbredir/0003-meson.build-make-C-optional.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 55fc307d23d657b52433d1c8508467d0589754d5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 16 Oct 2021 15:45:57 +0200
--Subject: [PATCH] meson.build: make C++ optional
--
--Remove cpp from meson project statement to make C++ optional and avoid
--the following build failure when the toolchain does not provide a C++
--compiler:
--
--../output-1/build/usbredir-0.11.0/meson.build:1:0: ERROR: Unknown compiler(s): [['/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++']]
--The following exception(s) were encountered:
--Running "/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++ --version" gave "[Errno 2] No such file or directory: '/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++'"
--
--Indeed C++ is only required for fuzzing which is already handled by
--meson through add_languages('cpp', required: true)
--
--Fixes:
-- - http://autobuild.buildroot.org/results/eca1d8a2b73a769354ab1d24c7996be30f152138
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/spice/usbredir/-/merge_requests/55]
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 49dbce4..ca19f22 100644
----- a/meson.build
--+++ b/meson.build
--@@ -1,4 +1,4 @@
---project('usbredir', 'c', 'cpp',
--+project('usbredir', 'c',
--     version: '0.11.0',
--     license: 'LGPLv2.1+',
--     meson_version : '>= 0.53',
---- 
--2.33.0
--
-diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
-index e11d4aa720..f738c36690 100644
---- a/package/usbredir/usbredir.hash
-+++ b/package/usbredir/usbredir.hash
-@@ -1,5 +1,5 @@
--# https://spice-space.org/download/usbredir/usbredir-0.11.0.tar.xz.sha256sum
--sha256  72dd5f3aa90dfbc0510b5149bb5b1654c8f21fdc405dfce7b5dc163dcff19cba  usbredir-0.11.0.tar.xz
-+# https://spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz.sha256sum
-+sha256  fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d  usbredir-0.12.0.tar.xz
+- .PHONY: uninstall
+diff --git a/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch b/package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
+similarity index 94%
+rename from package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
+rename to package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
+index 0607c8ee82..17d34a0823 100644
+--- a/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
++++ b/package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
+@@ -10,13 +10,14 @@ This is especially useful on embedded systems where dynamic library is
+ not always supported by toolchains
  
- # Hash for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-index 0a8dbf012d..6792a3e758 100644
---- a/package/usbredir/usbredir.mk
-+++ b/package/usbredir/usbredir.mk
-@@ -4,7 +4,7 @@
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/Cyan4973/xxHash/pull/665]
++[Retrieved from:
++https://github.com/Cyan4973/xxHash/commit/db9c199e99f7b4d419647b1ef49c547fc2547516]
+ ---
+  Makefile | 18 +++++++++++++++---
+  1 file changed, 15 insertions(+), 3 deletions(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index 8d4fcd2..5fe7297 100644
++index 8d4fcd21..5fe72972 100644
+ --- a/Makefile
+ +++ b/Makefile
+ @@ -505,11 +505,14 @@ libxxhash.pc: libxxhash.pc.in
+@@ -68,6 +69,3 @@ index 8d4fcd2..5fe7297 100644
+  	@echo xxhash installation completed
+  
+  .PHONY: uninstall
+--- 
+-2.33.0
+-
+diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
+index feb5000808..2c99236a45 100644
+--- a/package/xxhash/xxhash.hash
++++ b/package/xxhash/xxhash.hash
+@@ -1,3 +1,4 @@
+ # locally computed
+-sha256  7054c3ebd169c97b64a92d7b994ab63c70dd53a06974f1f630ab782c28db0f4f  xxhash-0.8.0.tar.gz
+-sha256  9da63520e9293d82c4b1613be5c84058cadb82b02f5972179bad13731d589910  LICENSE
++sha256  3bb6b7d6f30c591dd65aaaff1c8b7a5b94d81687998ca9400082c739a690436c  xxhash-0.8.1.tar.gz
++sha256  553d0035773ddd1590045f8fdc3a4c6ead31e36336721aeca8421e88ed1c9f80  LICENSE
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  cli/COPYING
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index 3e7f3244b3..a8f8d1d179 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--USBREDIR_VERSION = 0.11.0
-+USBREDIR_VERSION = 0.12.0
- USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
- USBREDIR_SITE = http://spice-space.org/download/usbredir
- USBREDIR_LICENSE = LGPL-2.1+ (libraries)
+-XXHASH_VERSION = 0.8.0
++XXHASH_VERSION = 0.8.1
+ XXHASH_SITE = $(call github,Cyan4973,xxHash,v$(XXHASH_VERSION))
+ XXHASH_LICENSE = BSD-2-Clause (library), GPL-2.0+ (xxhsum)
+-XXHASH_LICENSE_FILES = LICENSE
++XXHASH_LICENSE_FILES = LICENSE cli/COPYING
+ XXHASH_INSTALL_STAGING = YES
+ 
+ XXHASH_TARGETS = xxhsum
 -- 
 2.33.0
 
