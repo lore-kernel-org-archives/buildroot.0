@@ -4,52 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D19AC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 12:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD245C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 12:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63D304012F;
-	Sat,  1 Jan 2022 12:10:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26FB04019D;
+	Sat,  1 Jan 2022 12:20:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NPx2aPoQ0EVP; Sat,  1 Jan 2022 12:10:16 +0000 (UTC)
+	with ESMTP id w3sX82ccNqsX; Sat,  1 Jan 2022 12:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2CCE40133;
-	Sat,  1 Jan 2022 12:10:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29AA51BF39A
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:10:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4AB1A40133;
+	Sat,  1 Jan 2022 12:19:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F58B1BF39A
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1201D40133
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:10:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D76F82881
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:19:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ufqbeVppVW6j for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 12:10:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout11.t-online.de (mailout11.t-online.de [194.25.134.85])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 263BC4012F
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 12:10:11 +0000 (UTC)
-Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
- by mailout11.t-online.de (Postfix) with SMTP id E276472C5
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 13:09:21 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.179.119]) by fwd76.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n3dCL-2oFEQL0; Sat, 1 Jan 2022 13:09:21 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57888)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n3dCK-0003OG-Ua
- for buildroot@buildroot.org; Sat, 01 Jan 2022 13:09:21 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 13:09:20 +0100
-Message-Id: <20220101120920.2809336-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b72l2XJDi1_H for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 12:19:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98B5A827C5
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 12:19:57 +0000 (UTC)
+Received: by mail-lf1-x12e.google.com with SMTP id x6so12095826lfa.5
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 04:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:in-reply-to:references:date:message-id
+ :mime-version; bh=alm7PPrVc5PoXo+3xCq2KwRBb6Q/2xA6XSD3iCzrNlg=;
+ b=UKiIJVSKGBjoHWTkTwjfOvrt8N6nEiUva6LVLwse4UvdNY6aP3PGe6MHNYIAXd11cr
+ 1y+0LUyAfe2fwxzxpQQV9HMMmQTqdW6+0gUKBqZbwtB86Tmvg9Mkb4AaFtsM+KXHsY1/
+ r36iZ+6RvM2QwSHcv8cixYxv3/X/01TvGAJWcJLQ1OPQz++ELEfnbdKLqhpb0FujiJvr
+ chmI7aNhygiAP3ErsPU1oC10NpZLBzAdMGwnL2HznfMCo7Sre3rxxW94a9tC0mgb+XVz
+ 3LEFEqnNMSYzwFKbrOAPrRQ5OAPr/3288aqjugJ5gGt+uEFMj5IIcz80UTH+aMbJmf59
+ o8mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+ :message-id:mime-version;
+ bh=alm7PPrVc5PoXo+3xCq2KwRBb6Q/2xA6XSD3iCzrNlg=;
+ b=h1j7K8WD/Wev8IXZxwS/cyBELfd2j/qpAFZyjnE68KJwm0qIlTWBz48RtmyuXa5R41
+ gIBGYtZDbHMcmB/9WgmCJWL5doHLyr1Zg+iVeiqrZH8yu44TZMOMnrbkiXCEoojjpB6u
+ yTpLnEDzcmZU9sMjIVpShaAqVXYfavKvwziXWw5pzSsIK1Bz1eDftmQhmQpQEkBVkQzW
+ 6XQqwKiuLXgp8/u4I/zcGPFS0CZhA4PkJmRkGK4ARA4Ltg8ibPK3yhC0EnIktdI4z8TO
+ 3GE1HjSRSRSoD+VdspNCeIVZLoRVVIr5k6I3BrOgwkk0WoKlqJEV3/dQNMuxF7DVGaIy
+ vg3A==
+X-Gm-Message-State: AOAM532u5hD2hwVuEYf8xm+ta/D1gjwgsMhDs0kJZhBTj18THZqDoiL2
+ JYn4sl6T9DkIyExbyAf//yK5AO22c/k=
+X-Google-Smtp-Source: ABdhPJxL8ld+wc/YWL/zzhi2Mg7R7EGm2/KKUiBuuCRfjBUyX2b+EJQsOj4HS623GIh1K3w6zhJKBw==
+X-Received: by 2002:a05:6512:12d5:: with SMTP id
+ p21mr27057959lfg.569.1641039595487; 
+ Sat, 01 Jan 2022 04:19:55 -0800 (PST)
+Received: from luthien ([176.10.248.201])
+ by smtp.gmail.com with ESMTPSA id d5sm3057726lfv.83.2022.01.01.04.19.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 01 Jan 2022 04:19:55 -0800 (PST)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+In-Reply-To: <20210305111048.1902558-1-fontaine.fabrice@gmail.com>
+References: <20210305111048.1902558-1-fontaine.fabrice@gmail.com>
+Date: Sat, 01 Jan 2022 13:19:54 +0100
+Message-ID: <87mtkf1wd1.fsf@gmail.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1641038961-0001619A-9B8BC683/0/0 CLEAN NORMAL
-X-TOI-MSGID: a439691c-010d-4322-ac36-7e6542d9dbc5
-Subject: [Buildroot] [PATCH v3 1/1] package/vdr: enable musl/uclibc build
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcpcd: add
+ BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,331 +86,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: John Stile <johns@msli.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Re-add patch 0001 to fix uClibc build, this patch was removed 2019:
-https://git.buildroot.net/buildroot/commit/?id=573d15b0790cfd2838cf0544ded79b415e20f5a7
+On Fri, Mar 05, 2021 at 12:10, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Add BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP following Arnout feedback:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20210303091904.467706-1-fontaine.fabrice@gmail.com
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Add two more patches from Alpine Linux to fix musl build.
+Looks good to me, much cleaner than what we have now.
 
-Add optional dependency to libexecinfo to provide execinfo.h.
-
-Depend on BR2_SYSTEM_ENABLE_NLS to have gettext being added as
-dependency to provide _nl_msg_cat_cntr() needed by i18n.c.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: rework nls/gettext dependencies (Thomas)
-v2: no changes
-
- package/vdr/0001-getloadavg.patch             |  55 +++++++
- package/vdr/0002-musl-compat.patch            | 140 ++++++++++++++++++
- package/vdr/0003-include-missing-limits.patch |  30 ++++
- package/vdr/Config.in                         |   8 +-
- package/vdr/vdr.mk                            |   5 +
- 5 files changed, 234 insertions(+), 4 deletions(-)
- create mode 100644 package/vdr/0001-getloadavg.patch
- create mode 100644 package/vdr/0002-musl-compat.patch
- create mode 100644 package/vdr/0003-include-missing-limits.patch
-
-diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
-new file mode 100644
-index 0000000000..9e6316e284
---- /dev/null
-+++ b/package/vdr/0001-getloadavg.patch
-@@ -0,0 +1,55 @@
-+Fix compilation with uClibc
-+
-+Ported from
-+https://github.com/stschake/buildroot-grasshopper/blob/master/package/torsmo/torsmo-0.18-uclibc-getloadavg.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
-+--- vdr-2.3.1.org/skinlcars.c	2015-09-01 12:07:07.000000000 +0200
-++++ vdr-2.3.1/skinlcars.c	2016-07-31 21:00:11.000000000 +0200
-+@@ -1100,6 +1100,44 @@
-+      }
-+ }
-+ 
-++/* uclibc and dietlibc do not have this junk -ReneR */
-++#if defined (__UCLIBC__) || defined (__dietlibc__)
-++static int getloadavg (double loadavg[], int nelem)
-++{
-++  int fd;
-++
-++  fd = open ("/proc/loadavg", O_RDONLY);
-++  if (fd < 0)
-++    return -1;
-++  else
-++    {
-++      char buf[65], *p;
-++      ssize_t nread;
-++      int i;
-++
-++      nread = read (fd, buf, sizeof buf - 1);
-++      close (fd);
-++      if (nread <= 0)
-++	return -1;
-++      buf[nread - 1] = '\0';
-++
-++      if (nelem > 3)
-++	nelem = 3;
-++      p = buf;
-++      for (i = 0; i < nelem; ++i)
-++	{
-++	  char *endp;
-++	  loadavg[i] = strtod (p, &endp);
-++	  if (endp == p)
-++	    return -1;
-++	  p = endp;
-++	}
-++
-++      return i;
-++    }
-++}
-++#endif
-++
-+ void cSkinLCARSDisplayMenu::DrawLoad(void)
-+ {
-+   if (yb04) {
-diff --git a/package/vdr/0002-musl-compat.patch b/package/vdr/0002-musl-compat.patch
-new file mode 100644
-index 0000000000..b6f8f414a9
---- /dev/null
-+++ b/package/vdr/0002-musl-compat.patch
-@@ -0,0 +1,140 @@
-+Fix musl build
-+
-+Downloaded from
-+https://git.alpinelinux.org/aports/tree/community/vdr/musl-compat.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff --git a/i18n.h b/i18n.h
-+index f8ad9de..b002bbf 100644
-+--- a/i18n.h
-++++ b/i18n.h
-+@@ -46,7 +46,7 @@ const cStringList *I18nLanguages(void);
-+    ///< have an actual locale installed. The rest are just dummy entries
-+    ///< to allow having three letter language codes for other languages
-+    ///< that have no actual locale on this system.
-+-const char *I18nTranslate(const char *s, const char *Plugin = NULL) __attribute_format_arg__(1);
-++const char *I18nTranslate(const char *s, const char *Plugin = NULL)  __attribute__((__format_arg__ (1)));
-+    ///< Translates the given string (with optional Plugin context) into
-+    ///< the current language. If no translation is available, the original
-+    ///< string will be returned.
-+diff --git a/osd.c b/osd.c
-+index 524700a..ef975f5 100644
-+--- a/osd.c
-++++ b/osd.c
-+@@ -12,7 +12,7 @@
-+ #include <stdlib.h>
-+ #include <sys/ioctl.h>
-+ #include <sys/stat.h>
-+-#include <sys/unistd.h>
-++#include <unistd.h>
-+ #include "device.h"
-+ #include "tools.h"
-+ 
-+diff --git a/thread.c b/thread.c
-+index 47eb977..58dba43 100644
-+--- a/thread.c
-++++ b/thread.c
-+@@ -155,7 +155,9 @@ cRwLock::cRwLock(bool PreferWriter)
-+   writeLockThreadId = 0;
-+   pthread_rwlockattr_t attr;
-+   pthread_rwlockattr_init(&attr);
-++#if defined(__GLIBC__)
-+   pthread_rwlockattr_setkind_np(&attr, PreferWriter ? PTHREAD_RWLOCK_PREFER_WRITER_NP : PTHREAD_RWLOCK_PREFER_READER_NP);
-++#endif
-+   pthread_rwlock_init(&rwlock, &attr);
-+ }
-+ 
-+@@ -205,7 +207,7 @@ cMutex::cMutex(void)
-+   locked = 0;
-+   pthread_mutexattr_t attr;
-+   pthread_mutexattr_init(&attr);
-+-  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
-++  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-+   pthread_mutex_init(&mutex, &attr);
-+ }
-+ 
-+diff --git a/tools.c b/tools.c
-+index 754673d..fef9d2d 100644
-+--- a/tools.c
-++++ b/tools.c
-+@@ -640,7 +640,7 @@ char *ReadLink(const char *FileName)
-+ {
-+   if (!FileName)
-+      return NULL;
-+-  char *TargetName = canonicalize_file_name(FileName);
-++  char *TargetName = realpath(FileName, NULL);
-+   if (!TargetName) {
-+      if (errno == ENOENT) // file doesn't exist
-+         TargetName = strdup(FileName);
-+@@ -1528,7 +1528,7 @@
-+ struct dirent *cReadDir::Next(void)
-+ {
-+   if (directory) {
-+-#if !__GLIBC_PREREQ(2, 24) // readdir_r() is deprecated as of GLIBC 2.24
-++#if __GLIBC__
-+      while (readdir_r(directory, &u.d, &result) == 0 && result) {
-+ #else
-+      while ((result = readdir(directory)) != NULL) {
-+diff --git a/tools.h b/tools.h
-+index 73cca5a..03f5fd1 100644
-+--- a/tools.h
-++++ b/tools.h
-+@@ -28,6 +28,16 @@
-+ #include <sys/types.h>
-+ #include "thread.h"
-+ 
-++#ifndef ACCESSPERMS
-++# define ACCESSPERMS (S_IRWXU|S_IRWXG|S_IRWXO) /* 0777 */
-++#endif
-++#ifndef ALLPERMS
-++# define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
-++#endif
-++#ifndef DEFFILEMODE
-++# define DEFFILEMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)/* 0666*/
-++#endif
-++
-+ typedef unsigned char uchar;
-+ 
-+ extern int SysLogLevel;
-+@@ -400,7 +410,7 @@
-+ private:
-+   DIR *directory;
-+   struct dirent *result;
-+-#if !__GLIBC_PREREQ(2, 24) // readdir_r() is deprecated as of GLIBC 2.24
-++#if __GLIBC__
-+   union { // according to "The GNU C Library Reference Manual"
-+     struct dirent d;
-+     char b[offsetof(struct dirent, d_name) + NAME_MAX + 1];
-+@@ -738,7 +748,7 @@ public:
-+         data[i] = T(0);
-+     size = 0;
-+   }
-+-  void Sort(__compar_fn_t Compare)
-++  void Sort(int (*Compare)(const void *, const void *))
-+   {
-+     qsort(data, size, sizeof(T), Compare);
-+   }
-+diff --git a/vdr.c b/vdr.c
-+index 8a49471..c2a82aa 100644
-+--- a/vdr.c
-++++ b/vdr.c
-+@@ -670,12 +670,18 @@ int main(int argc, char *argv[])
-+         }
-+      }
-+   else if (Terminal) {
-++#ifdef __GLIBC__
-+      // Claim new controlling terminal
-+      stdin  = freopen(Terminal, "r", stdin);
-+      stdout = freopen(Terminal, "w", stdout);
-+      stderr = freopen(Terminal, "w", stderr);
-+      HasStdin = true;
-+      tcgetattr(STDIN_FILENO, &savedTm);
-++#else
-++     // stdin, stdout, stderr are declared FILE const* by musl C library
-++     fprintf(stderr, "Option '-t' is only supported if VDR has been built against glibc.\n");
-++     return 2;
-++#endif
-+      }
-+ 
-+   isyslog("VDR version %s started", VDRVERSION);
-diff --git a/package/vdr/0003-include-missing-limits.patch b/package/vdr/0003-include-missing-limits.patch
-new file mode 100644
-index 0000000000..c2efe291e6
---- /dev/null
-+++ b/package/vdr/0003-include-missing-limits.patch
-@@ -0,0 +1,30 @@
-+vdr package uses some macros like HOST_NAME_MAX, NAME_MAX, which are defined
-+in limits.h.
-+Needs to be explicitly included on ppc64le and for all archs for debug build.
-+
-+Downloaded from
-+https://git.alpinelinux.org/aports/tree/community/vdr/include-missing-limits.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+----
-+
-+--- a/config.h
-++++ b/config.h
-+@@ -19,6 +19,7 @@
-+ #include "i18n.h"
-+ #include "font.h"
-+ #include "tools.h"
-++#include <limits.h>
-+ 
-+ // VDR's own version number:
-+ 
-+--- a/tools.c
-++++ b/tools.c
-+@@ -27,6 +27,7 @@
-+ #include <utime.h>
-+ #include "i18n.h"
-+ #include "thread.h"
-++#include <limits.h>
-+ 
-+ int SysLogLevel = 3;
-+ 
-diff --git a/package/vdr/Config.in b/package/vdr/Config.in
-index df602f26d6..1f9187ce6c 100644
---- a/package/vdr/Config.in
-+++ b/package/vdr/Config.in
-@@ -2,25 +2,25 @@ config BR2_PACKAGE_VDR
- 	bool "vdr"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_SYSTEM_ENABLE_NLS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
--	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBCAP
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  This project describes how to build your own digital
- 	  satellite receiver and Video Disk Recorder.
- 
- 	  http://www.tvdr.de
- 
--comment "vdr needs a glibc toolchain w/ C++, dynamic library, NPTL, wchar, headers >= 3.9"
-+comment "vdr needs a toolchain w/ C++, dynamic library, NLS, NPTL, wchar, headers >= 3.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_USE_WCHAR || \
-+		!BR2_SYSTEM_ENABLE_NLS || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
-index 51affe5a7b..bb7b1e22c0 100644
---- a/package/vdr/vdr.mk
-+++ b/package/vdr/vdr.mk
-@@ -26,6 +26,11 @@ VDR_MAKE_FLAGS = \
- 	VIDEODIR=/var/lib/vdr
- VDR_LDFLAGS = $(TARGET_NLS_LIBS)
- 
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+VDR_DEPENDENCIES += libexecinfo
-+VDR_LDFLAGS += -lexecinfo
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
- VDR_DEPENDENCIES += libfribidi
- VDR_MAKE_FLAGS += BIDI=1
--- 
-2.30.2
+Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
 
 _______________________________________________
 buildroot mailing list
