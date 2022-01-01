@@ -4,63 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3EF3C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 10:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68DFCC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 10:14:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 85342400D9;
-	Sat,  1 Jan 2022 10:13:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2932F4012F;
+	Sat,  1 Jan 2022 10:14:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HQKjMxFo0eai; Sat,  1 Jan 2022 10:13:51 +0000 (UTC)
+	with ESMTP id y8ThsNFgM8NK; Sat,  1 Jan 2022 10:14:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5706A4012F;
-	Sat,  1 Jan 2022 10:13:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 826FC1BF5A4
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:13:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6799404BB;
+	Sat,  1 Jan 2022 10:14:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F3F211BF5A4
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F51660E1B
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:13:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E122C4012F
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:13:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qjU8a2-QVN7H for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 10:13:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66DC460E25
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 10:13:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p91Clf6a-B5W for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 10:13:37 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47CFC400D9
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 10:13:37 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:b440:9a6c:7abd:86f8])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 28A045FF7A;
- Sat,  1 Jan 2022 11:13:19 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id B750E5FFAB;
+ Sat,  1 Jan 2022 11:13:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641032005;
- bh=U1+5AeG58NjgVQf9z541rDflqiqVbazJsZmGBQbg00M=;
+ s=smtp-20201208; t=1641032015;
+ bh=DWxx9dQmB6KWhUtRa8dhUHvqRLvD4Zu2bc581HaM8pk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=HzstNM6RixCGpLVidm4Wo9b78l8SbOxfApMeqp1v/UisMxe8v2fpea1nafmpWErN5
- 2kNsdFYxBSXlz5dzBe8S9v3PGe7f/oysWpAWQEvLKfbpsQfhONGuFZpafl/GF6PeT1
- 5Zs4xyJd7wkhv9j2LDknPv843CDRVf5Tx7GPrpIuGJgB0gflFfVesxoz1spBuP9bfA
- fiF6D1y9t9Y5gZQfGvblS1pNmLNzJcP3KSm5UwR45q6TrSphW6KVqRkrvA76L47Sin
- HwhbtGyFsio+BAXknJjjbx8Oh+woxp0UHDZobYLLCbeweGmrsqE+gjZynldnxIpUIr
- F8BsWcNZNJeWA==
+ b=LQeVAvs+aKttAikE3Rmm3oMURubGhfnQpCZml9zmCoFP4nkAsNmtL1++qijK69m1d
+ +zqW05erUyapp0qZv6LoFefGkQpHAa+pcW/QpVYefi16tFZqbvhBQf3lqJpfI2DDGc
+ QuWyCfd1c6c11R2n6ii2COKxpJh08fXBC0ajnIi/1d3myg+zUTx7w225YkqSLT01Dd
+ zvRP31/Ax6eVL+faW5pgFsD63dgCLLvQ9sQ9uRBu9/pUqAbysvU3V9bT7359IYE6Rm
+ 2I3RlYL7mDZ1l5n3oGUUzoHPoNzTeuQRoz91gMqtGoQo72aeqQ8IsDaB2bjy7G/BPe
+ IygVG4t9Jd4Bw==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Jan 2022 11:13:18 +0100
-Date: Sat, 1 Jan 2022 11:13:18 +0100
+ Sat, 01 Jan 2022 11:13:31 +0100
+Date: Sat, 1 Jan 2022 11:13:31 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220101101318.GY3390456@scaer>
-References: <20211230230701.3177447-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220101101331.GZ3390456@scaer>
+References: <20211230231836.3197707-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20211230230701.3177447-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20211230231836.3197707-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
- 3.3.9
+Subject: Re: [Buildroot] [PATCH 1/1] package/file: bump to version 5.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,8 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsO2cmc=?= Krause <joerg.krause@embedded.rocks>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -81,10 +77,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2021-12-31 00:07 +0100, Fabrice Fontaine spake thusly:
-> Drop second patch (already in version)
+On 2021-12-31 00:18 +0100, Fabrice Fontaine spake thusly:
+> - Drop patch (already in version) and so autoreconf
+> - Update hash of vasprintf.c (changes not related to license:
+>   https://github.com/file/file/commit/80816651588efb79a5d054e13703bf2a3378d024
+>   https://github.com/file/file/commit/43f7989076aa3731f3558c6954780bc7b2734b64)
 > 
-> https://github.com/mikebrady/shairport-sync/releases/tag/3.3.9
+> https://github.com/file/file/blob/FILE5_41/ChangeLog
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -94,88 +93,133 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...re.ac-fix-build-with-automake-1.16.5.patch | 48 -------------------
->  package/shairport-sync/shairport-sync.hash    |  2 +-
->  package/shairport-sync/shairport-sync.mk      |  2 +-
->  3 files changed, 2 insertions(+), 50 deletions(-)
->  delete mode 100644 package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
+>  package/file/0001-Add-libmagic.pc.patch | 76 -------------------------
+>  package/file/file.hash                  | 10 ++--
+>  package/file/file.mk                    |  4 +-
+>  3 files changed, 6 insertions(+), 84 deletions(-)
+>  delete mode 100644 package/file/0001-Add-libmagic.pc.patch
 > 
-> diff --git a/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch b/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
+> diff --git a/package/file/0001-Add-libmagic.pc.patch b/package/file/0001-Add-libmagic.pc.patch
 > deleted file mode 100644
-> index 2ee8f59fee..0000000000
-> --- a/package/shairport-sync/0002-configure.ac-fix-build-with-automake-1.16.5.patch
+> index b26d16224d..0000000000
+> --- a/package/file/0001-Add-libmagic.pc.patch
 > +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -From ad22edb303a470b6f9eda9fd9d3f588bb2eff8cb Mon Sep 17 00:00:00 2001
+> @@ -1,76 +0,0 @@
+> -From d079cac1110cc2761417f0dcb0a142b217eb1eda Mon Sep 17 00:00:00 2001
 > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Fri, 15 Oct 2021 08:02:23 +0200
-> -Subject: [PATCH] configure.ac: fix build with automake 1.16.5
+> -Date: Fri, 31 Jan 2020 20:26:29 +0100
+> -Subject: [PATCH] Add libmagic.pc
 > -
-> -Fix the following build failure with convolution raised since automake
-> -1.16.5 and
-> -https://git.savannah.gnu.org/cgit/automake.git/commit/?id=f4a3a70f69e1dbccb6578f39ef47835098a04624:
+> -libmagic can optionally depends on xz (for lzma) or bzip2 since version
+> -5.38 and
+> -https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
+> -so add libmagic.pc so package (such as gerbera) that links with libmagic
+> -will be able to use pkg-config to retrieve those static dependencies
+> -For example, this will avoid the following build failure:
 > -
-> -configure.ac:305: error: AM_INIT_AUTOMAKE expanded multiple times
-> -/home/giuliobenetti/autobuild/run/instance-1/output-1/host/share/aclocal-1.16/init.m4:29: AM_INIT_AUTOMAKE is expanded from...
-> -configure.ac:6: the top level
-> -/home/giuliobenetti/autobuild/run/instance-1/output-1/host/share/aclocal-1.16/init.m4:29: AM_INIT_AUTOMAKE is expanded from...
-> -configure.ac:305: the top level
+> -[100%] Linking CXX executable gerbera
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/br-user/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
+> -compress.c:(.text+0x69c): undefined reference to `BZ2_bzDecompressInit'
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x710): undefined reference to `BZ2_bzDecompress'
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x730): undefined reference to `BZ2_bzDecompressEnd'
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x828): undefined reference to `lzma_code'
+> -/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x848): undefined reference to `lzma_end'
 > -
 > -Fixes:
-> - - http://autobuild.buildroot.org/results/464148bdccb705d8992dc860262bfdeb01b7e2a1
+> - - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
 > -
 > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/mikebrady/shairport-sync/pull/1314]
+> -[Upstream status: https://bugs.astron.com/view.php?id=136]
 > ----
-> - configure.ac | 3 +--
-> - 1 file changed, 1 insertion(+), 2 deletions(-)
+> - Makefile.am    |  5 +++++
+> - configure.ac   |  2 +-
+> - libmagic.pc.in | 10 ++++++++++
+> - 3 files changed, 16 insertions(+), 1 deletion(-)
+> - create mode 100644 libmagic.pc.in
 > -
+> -diff --git a/Makefile.am b/Makefile.am
+> -index 8bd927d9..2ab67ed7 100644
+> ---- a/Makefile.am
+> -+++ b/Makefile.am
+> -@@ -3,3 +3,8 @@ ACLOCAL_AMFLAGS = -I m4
+> - EXTRA_DIST = MAINT
+> - 
+> - SUBDIRS = src magic tests doc python
+> -+
+> -+# This variable must have 'exec' in its name, in order to be installed
+> -+# by 'install-exec' target (instead of default 'install-data')
+> -+pkgconfigexecdir = $(libdir)/pkgconfig
+> -+pkgconfigexec_DATA = libmagic.pc
 > -diff --git a/configure.ac b/configure.ac
-> -index f77087c5..aa533a2d 100644
+> -index ac37fccd..b2e2e5b8 100644
 > ---- a/configure.ac
 > -+++ b/configure.ac
-> -@@ -3,7 +3,7 @@
-> - 
-> - AC_PREREQ([2.50])
-> - AC_INIT([shairport-sync], [3.3.8], [4265913+mikebrady@users.noreply.github.com])
-> --AM_INIT_AUTOMAKE
-> -+AM_INIT_AUTOMAKE([subdir-objects])
-> - AC_CONFIG_SRCDIR([shairport.c])
-> - AC_CONFIG_HEADERS([config.h])
-> - AC_PROG_RANLIB
-> -@@ -302,7 +302,6 @@ AM_CONDITIONAL([USE_PA], [test "x$with_pa" = "xyes"])
-> - # Look for Convolution flag
-> - AC_ARG_WITH(convolution, [AS_HELP_STRING([--with-convolution],[choose audio DSP convolution support])])
-> - if test "x$with_convolution" = "xyes" ; then
-> --  AM_INIT_AUTOMAKE([subdir-objects])
-> -   AC_DEFINE([CONFIG_CONVOLUTION], 1, [Include audio DSP convolution support.])
-> -   AC_CHECK_LIB([sndfile], [sf_open], , AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
+> -@@ -217,5 +217,5 @@ if  test "$ac_cv_header_lzma_h$ac_cv_lib_lzma_lzma_stream_decoder" = "yesyes"; t
+> -   AC_DEFINE([XZLIBSUPPORT], 1, [Enable xzlib compression support])
 > - fi
+> - 
+> --AC_CONFIG_FILES([Makefile src/Makefile magic/Makefile tests/Makefile doc/Makefile python/Makefile])
+> -+AC_CONFIG_FILES([Makefile src/Makefile magic/Makefile tests/Makefile doc/Makefile python/Makefile libmagic.pc])
+> - AC_OUTPUT
+> -diff --git a/libmagic.pc.in b/libmagic.pc.in
+> -new file mode 100644
+> -index 00000000..3ad1290b
+> ---- /dev/null
+> -+++ b/libmagic.pc.in
+> -@@ -0,0 +1,10 @@
+> -+prefix=@prefix@
+> -+exec_prefix=@exec_prefix@
+> -+libdir=@libdir@
+> -+includedir=@includedir@
+> -+
+> -+Name: libmagic
+> -+Description: Magic number recognition library
+> -+Version: @VERSION@
+> -+Libs: -L${libdir} -lmagic
+> -+Libs.private: @LIBS@
 > --- 
-> -2.33.0
+> -2.24.1
 > -
-> diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-> index ebc81dedc1..331866a379 100644
-> --- a/package/shairport-sync/shairport-sync.hash
-> +++ b/package/shairport-sync/shairport-sync.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  c92f9a2d86dd1138673abc66e0010c94412ad6a46da8f36c3d538f4fa6b9faca  shairport-sync-3.3.8.tar.gz
-> +sha256  17990cb2620551caa07a1c3b371889e55803071eaada04e958c356547a7e1795  shairport-sync-3.3.9.tar.gz
->  sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
-> diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-> index ba8b44a621..cf49f2b2ed 100644
-> --- a/package/shairport-sync/shairport-sync.mk
-> +++ b/package/shairport-sync/shairport-sync.mk
+> diff --git a/package/file/file.hash b/package/file/file.hash
+> index 96efaf8483..33875776eb 100644
+> --- a/package/file/file.hash
+> +++ b/package/file/file.hash
+> @@ -1,7 +1,7 @@
+>  # Locally calculated after verifying signature
+> -# ftp://ftp.astron.com/pub/file/file-5.38.tar.gz.asc
+> +# ftp://ftp.astron.com/pub/file/file-5.41.tar.gz.asc
+>  # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
+> -sha256 593c2ffc2ab349c5aea0f55fedfe4d681737b6b62376a9b3ad1e77b2cc19fa34  file-5.38.tar.gz
+> -sha256 0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
+> -sha256 4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
+> -sha256 58b5932aca6c10f2194290a3b26088ec9ba07ef6b52cc9bb2dd638cc634db6f1  src/vasprintf.c
+> +sha256  13e532c7b364f7d57e23dfeea3147103150cb90593a57af86c10e4f6e411603f  file-5.41.tar.gz
+> +sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
+> +sha256  4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
+> +sha256  c4fa92d6504b88484a12140fe3e24b9b29b0112717f94b1ff4205d54828b1c70  src/vasprintf.c
+> diff --git a/package/file/file.mk b/package/file/file.mk
+> index c41a8eb3a4..12647af8bb 100644
+> --- a/package/file/file.mk
+> +++ b/package/file/file.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -SHAIRPORT_SYNC_VERSION = 3.3.8
-> +SHAIRPORT_SYNC_VERSION = 3.3.9
->  SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+> -FILE_VERSION = 5.38
+> +FILE_VERSION = 5.41
+>  FILE_SITE = ftp://ftp.astron.com/pub/file
+>  FILE_DEPENDENCIES = host-file
+>  HOST_FILE_DEPENDENCIES = host-zlib
+> @@ -13,8 +13,6 @@ FILE_INSTALL_STAGING = YES
+>  FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+>  FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+>  FILE_CPE_ID_VENDOR = file_project
+> -# We're patching configure.ac
+> -FILE_AUTORECONF = YES
+>  HOST_FILE_CONF_OPTS = --disable-libseccomp
 >  
->  SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+>  ifeq ($(BR2_PACKAGE_BZIP2),y)
 > -- 
 > 2.33.0
 > 
