@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17526C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 05:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD466C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 05:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AA8740613;
-	Sat,  1 Jan 2022 05:02:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23F4A80B4D;
+	Sat,  1 Jan 2022 05:16:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ls0P671o6bIU; Sat,  1 Jan 2022 05:02:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P6QEkbZqtiTS; Sat,  1 Jan 2022 05:16:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 708124098B;
-	Sat,  1 Jan 2022 05:02:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DC5A81296;
+	Sat,  1 Jan 2022 05:16:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3704E1BF28D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:02:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 948C81BF5D7
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D20940A51
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:02:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E514401AD
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:16:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GL4I2wkF7AkX for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 05:02:15 +0000 (UTC)
+ with ESMTP id Gf8qp8D_z1uf for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 05:16:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C61FB40A23
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 05:02:09 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id u8so22240624ilk.0
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 21:02:09 -0800 (PST)
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C01B400C7
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 05:16:19 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id e8so22202475ilm.13
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 21:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=PM7UtK6XRMhzbZYKtTFENq5xn1KlKKcTVXt//jFfDMg=;
- b=LvPkXaOBfxY7aWNHEXmCfIKQzPFPJ+TKqgvqDUlHs7JyqzTQdVJv26PHisy5sQOWpO
- 3u+Y3l2uSdv8xRMV6gAy5uEDdMZIxpCR2CDGGDHYtRTs+cwmdnV1tS0pghOGe0DnQYVH
- RaNMZ04vkO0NbxTgpryWJTTo5FA7yecC9oyfmLcRCDGYNMe4IoH0BTBFFYI3TjMRf2Tp
- FmvFAF5mzdpPi2EIF0Z9T/UHua9/QgF/Kpo1mefDTXWOuWX6IwbiZ+0bjt+1lC57TLyj
- u+Iw5AbzWv/qrYUMYU4E9lcosENalBEPJ0ND8WrRVscKJiBPS2T6BDyUvlcTdF4+DEyL
- PtRg==
+ bh=5YkP0Xlw3bhPLjtNBwfGVes182C35xi5xRAtkCom/UA=;
+ b=VPhmLMhqeOHVWG6in5mnFYAtDXlQQEFPecHFUBsgtGWwLnEtxKEiLUDykyybB5X2Mc
+ Dj6+g94WUu3ICjroYAckl5VbgIXU2mibXjT8sLcVRshlIeVjeVSGxVWr6lECFnSiMzI9
+ Of93fEl/6dF0KFgLUKIxfHeN+BIo1kmaXaL0FJlxRFIHZjYGIfVEpjR95sSJAbKUYemt
+ qumbZQwNTnsrFMYPSz4qNw2VEr3vuallU+QgKtbZeLGKnKN2Qr8rA/qq9bI8iejYhsTj
+ 9/Xudc0tJeIHP8wp9EI3cobDzeS2KzbbTG731ORFN9v2H/ouGL9DRVBPYSVzBxWMrXLK
+ h3dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=PM7UtK6XRMhzbZYKtTFENq5xn1KlKKcTVXt//jFfDMg=;
- b=x2zGmf+z/tVIrAQsKU1Vm2+E5M46Dkh0tlVFlSC3lwF5OPfuvqfwHN8Og1SB2vlAgP
- BvM2nXx/REaqPxjToH3ePlbpJP3AAlIJ1z4vhXgOyG7l+uHjnS4OYdQa0sM/T/kI86sb
- w1GD6rOf41kvlssnFSSLt5p4p/vJ9YUiM3ImM9ZrI0gDJ7jR1w9Oz4BvPPSOEDJdN7oh
- rpoSIyirbl2qvKIKRe4HkYfYtUIW9nsLzPFENlTZc6l+u0nDvdivxu4gWq1DK2/xj7t5
- DxzGso8qNTAomyQ07Fv4mGREV7NGRjSbgOMNmoOaXTX6lvY0VVY0gX+/iyAETFctp+Z0
- nPDQ==
-X-Gm-Message-State: AOAM530jdDnLfYlt1z1LjczT3mvDkAyY9RGspsiGMVWeQsi0brtjmj5S
- I3VB3KCpsbdtFk4RQDwXAtPgFJVVqyY=
-X-Google-Smtp-Source: ABdhPJyVBph6OigEq4uKe/ZmFxDN12dJaIFwMg5MkI08lwrTJtOqAjeGbY7coyJWLyifWO0TpcH2vg==
-X-Received: by 2002:a05:6e02:1908:: with SMTP id
- w8mr13909719ilu.148.1641013328666; 
- Fri, 31 Dec 2021 21:02:08 -0800 (PST)
+ bh=5YkP0Xlw3bhPLjtNBwfGVes182C35xi5xRAtkCom/UA=;
+ b=I1FCo/Ic7/6tMAYYWv5/eTIYtJVDrUgXtvq2+THsHRtaa36DGGPz3OJWyHLUrGAbJO
+ +fXtSJ+3EwpWhK9DMsjbqdx7BgX7LVnN8N1iK5i1r8dTkrpUiN43FVZdbwlplPqQ/rQa
+ oqYGrsT0nlecds6Xa761XqfVCwoSU775a3hfI+JrPjn2+nE3t9mBddEFLO7iX0gMT5tg
+ MEL3iAqdwCGR61POLwbqBc7W7Yq/nijBj1bjqS9whB7372BZTEymW5qnLEy8sDJqAdq/
+ tNyMKKZ3mxOAufBjhPX4/eYguVSmckE+blIEe0IGF82kvOR2Bb2pesNn4drNOGPsJKGg
+ j93g==
+X-Gm-Message-State: AOAM530624HyXnxGMTB7K3KV6N4c7DE0aOJljHIgU6bJq3igOJE5w5ar
+ b0xejGm88eJQmAfFWZAojIKUznqmQWY=
+X-Google-Smtp-Source: ABdhPJxuhEhCzjK4uIBZaRQxiDi7Prwi7bV9r0noNVg+zmHI/yh/jcbiAA2NhfidwUkDu47BBHrUjQ==
+X-Received: by 2002:a05:6e02:1486:: with SMTP id
+ n6mr17598717ilk.271.1641014178346; 
+ Fri, 31 Dec 2021 21:16:18 -0800 (PST)
 Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
  [71.218.242.12])
- by smtp.gmail.com with ESMTPSA id b24sm20481338ioc.18.2021.12.31.21.02.08
+ by smtp.gmail.com with ESMTPSA id s12sm18388411ilv.88.2021.12.31.21.16.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Dec 2021 21:02:08 -0800 (PST)
+ Fri, 31 Dec 2021 21:16:18 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Dec 2021 22:01:52 -0700
-Message-Id: <20220101050152.1991600-1-james.hilliard1@gmail.com>
+Date: Fri, 31 Dec 2021 22:16:08 -0700
+Message-Id: <20220101051608.1993550-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-aiosignal: bump to version
- 1.2.0
+Subject: [Buildroot] [PATCH 1/1] package/python-async-timeout: bump to
+ version 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,47 +93,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License file renamed in:
-https://github.com/aio-libs/aiosignal/commit/98b25a33d08821a2948d334b223e2874979f5bd4
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiosignal/python-aiosignal.hash | 6 +++---
- package/python-aiosignal/python-aiosignal.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-async-timeout/python-async-timeout.hash | 4 ++--
+ package/python-async-timeout/python-async-timeout.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiosignal/python-aiosignal.hash b/package/python-aiosignal/python-aiosignal.hash
-index 3fdd459502..f2a09749b8 100644
---- a/package/python-aiosignal/python-aiosignal.hash
-+++ b/package/python-aiosignal/python-aiosignal.hash
+diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
+index 1a64c3a77d..0ecf1ef5ae 100644
+--- a/package/python-async-timeout/python-async-timeout.hash
++++ b/package/python-async-timeout/python-async-timeout.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiosignal/json
--md5  f3edf1b700b4fee6ea6ed375c3f6555c  aiosignal-1.1.2.tar.gz
--sha256  15605698a0401075a03d36cea979e3c0e6cf8467a9e3b9047040514dd9e6f43b  aiosignal-1.1.2.tar.gz
-+md5  011700c3acc576a3a38deade6a4860cb  aiosignal-1.2.0.tar.gz
-+sha256  78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2  aiosignal-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/async-timeout/json
+-md5  2871f3853060ac7e76e6278b85dfb3c9  async-timeout-4.0.0.tar.gz
+-sha256  7d87a4e8adba8ededb52e579ce6bc8276985888913620c935094c2276fd83382  async-timeout-4.0.0.tar.gz
++md5  10571272b2e0fab839ec23f8293bf482  async-timeout-4.0.2.tar.gz
++sha256  2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15  async-timeout-4.0.2.tar.gz
  # Locally computed sha256 checksums
--sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-+sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
-diff --git a/package/python-aiosignal/python-aiosignal.mk b/package/python-aiosignal/python-aiosignal.mk
-index ea11d97060..e0436e973e 100644
---- a/package/python-aiosignal/python-aiosignal.mk
-+++ b/package/python-aiosignal/python-aiosignal.mk
-@@ -4,11 +4,11 @@
+ sha256  e18d7bb8f513e2c46bb585c94b585bd30720dd3ccb21ddb0786f72d16658f92c  LICENSE
+diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
+index 1d2c716fa9..b3c5f79e45 100644
+--- a/package/python-async-timeout/python-async-timeout.mk
++++ b/package/python-async-timeout/python-async-timeout.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOSIGNAL_VERSION = 1.1.2
-+PYTHON_AIOSIGNAL_VERSION = 1.2.0
- PYTHON_AIOSIGNAL_SOURCE = aiosignal-$(PYTHON_AIOSIGNAL_VERSION).tar.gz
--PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ac/f7/c3df3b7eac6ea96175e0817b272b43b398d5ba589be09a50d1b758d5b852
-+PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/27/6b/a89fbcfae70cf53f066ec22591938296889d3cc58fec1e1c393b10e8d71d
- PYTHON_AIOSIGNAL_SETUP_TYPE = setuptools
- PYTHON_AIOSIGNAL_LICENSE = Apache-2.0
--PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE.txt
-+PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.0
++PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.2
+ PYTHON_ASYNC_TIMEOUT_SOURCE = async-timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
+-PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/28/0c/1cd218ea84964f0740a3ab6152dfa99661174abdd8e4053e06c0285ac42a
++PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/54/6e/9678f7b2993537452710ffb1750c62d2c26df438aa621ad5fa9d1507a43a
+ PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
+ PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
+ PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 -- 
 2.25.1
 
