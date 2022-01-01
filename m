@@ -4,42 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7580C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C50DC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F43B40291;
-	Sat,  1 Jan 2022 22:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E79EB40288;
+	Sat,  1 Jan 2022 22:40:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bTKKeX9TvAnK; Sat,  1 Jan 2022 22:40:02 +0000 (UTC)
+	with ESMTP id agm2pCWkWrMC; Sat,  1 Jan 2022 22:40:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9C4440271;
-	Sat,  1 Jan 2022 22:40:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 55B811BF957
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:40:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F6F6402C4;
+	Sat,  1 Jan 2022 22:40:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D877D1BF32D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52FF840200
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:40:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4EDF60DA5
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:40:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YikBSYxzsZ1M for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 22:39:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zDKdMIpPMjQ1 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 22:40:10 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from majs.cnackers.org (vps-1525-1.tilaa.nl [46.19.33.97])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90E73401FB
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:39:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B13260D9D
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:40:10 +0000 (UTC)
 Received: from majs.cnackers.org (localhost [127.0.0.1]) by majs.cnackers.org
- (Postfix) with ESMTPA id DD2E8FEC5
+ (Postfix) with ESMTPA id 73D0D10253
 From: Erik Larsson <who+buildroot@cnackers.org>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 23:38:58 +0100
-Message-Id: <20220101223900.2970405-1-who+buildroot@cnackers.org>
+Date: Sat,  1 Jan 2022 23:39:00 +0100
+Message-Id: <20220101223900.2970405-3-who+buildroot@cnackers.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220101223900.2970405-1-who+buildroot@cnackers.org>
+References: <20220101223900.2970405-1-who+buildroot@cnackers.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] package/tpm2-tss: remove unused dependency
+Subject: [Buildroot] [PATCH 3/3] package/tpm2-tools: add option for enabling
+ FAPI tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,27 +60,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The last reference of uriparser was removed in:
-https://github.com/tpm2-software/tpm2-tss/commit/17a670dd4c0e4effc2ac3cdf021c299fa92df70e
-
 Signed-off-by: Erik Larsson <who+buildroot@cnackers.org>
 ---
- package/tpm2-tss/tpm2-tss.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tpm2-tools/Config.in     | 11 +++++++++++
+ package/tpm2-tools/tpm2-tools.mk |  6 ++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 71aa3feb96..060883c377 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -11,7 +11,7 @@ TPM2_TSS_LICENSE_FILES = LICENSE
- TPM2_TSS_CPE_ID_VENDOR = tpm2_software_stack_project
- TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
--TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
-+TPM2_TSS_DEPENDENCIES = openssl host-pkgconf
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index 1a6698570a..cb3eb2b0a5 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -21,6 +21,17 @@ config BR2_PACKAGE_TPM2_TOOLS
  
- # 0001-configure-Only-use-CXX-when-fuzzing.patch
- TPM2_TSS_AUTORECONF = YES
+ 	  https://github.com/tpm2-software/tpm2-tools
+ 
++if BR2_PACKAGE_TPM2_TOOLS
++
++config BR2_PACKAGE_TPM2_TOOLS_FAPI
++	bool "tpm2-tools fapi support"
++	select BR2_PACKAGE_TPM2_TSS_FAPI
++	help
++	  This option enables Feature API (FAPI) support in tpm2-tools.
++	  The FAPI tools are prefixed with tss2_.
++
++endif
++
+ comment "tpm2-tools needs a glibc or musl toolchain w/ dynamic library, wchar"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index df5fbbfff4..6894be195f 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -22,4 +22,10 @@ TPM2_TOOLS_CONF_OPTS = --disable-hardening
+ # do not build man pages
+ TPM2_TOOLS_CONF_ENV += ac_cv_prog_PANDOC=''
+ 
++ifeq ($(BR2_PACKAGE_TPM2_TOOLS_FAPI),y)
++TPM2_TOOLS_CONF_OPTS += --enable-fapi
++else
++TPM2_TOOLS_CONF_OPTS += --disable-fapi
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.34.1
 
