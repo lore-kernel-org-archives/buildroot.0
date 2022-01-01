@@ -4,75 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4F2C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 04:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17526C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 05:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BBDD40242;
-	Sat,  1 Jan 2022 04:49:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AA8740613;
+	Sat,  1 Jan 2022 05:02:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TotCxssJT94I; Sat,  1 Jan 2022 04:49:27 +0000 (UTC)
+	with ESMTP id ls0P671o6bIU; Sat,  1 Jan 2022 05:02:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D950401AD;
-	Sat,  1 Jan 2022 04:49:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 708124098B;
+	Sat,  1 Jan 2022 05:02:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 091661BF28D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 04:49:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3704E1BF28D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F10B0401AD
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 04:49:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D20940A51
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 05:02:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j8n2RntsSETX for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 04:49:23 +0000 (UTC)
+ with ESMTP id GL4I2wkF7AkX for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 05:02:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E2381400C7
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 04:49:22 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id q5so34584346ioj.7
- for <buildroot@buildroot.org>; Fri, 31 Dec 2021 20:49:22 -0800 (PST)
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C61FB40A23
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 05:02:09 +0000 (UTC)
+Received: by mail-il1-x12b.google.com with SMTP id u8so22240624ilk.0
+ for <buildroot@buildroot.org>; Fri, 31 Dec 2021 21:02:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=whzkQB51KfCWM2/k6Cbxerj4COTyOxogCOMeqI7AzG8=;
- b=HdTeH2gvkoNwlduXauZxv3io0EvM8rjI0D9qpKeFsMdhlcsPzuthk6Krs4guYiLbUH
- LzxULmHjMtK2gUth/EJgpjaurDFwLYSd9kw2alKg+fHEgIOJTHnlFW4nWo7GzTawSF7R
- NGcBxj3+gItN6YK/FjAvgTtSgIyPCjwO7HWgvdHayeYfSRqqiLxgi9PUaenLUmcUfd1D
- MB3JArtyE3gdvWBKdqomxlE4QxzJisS2xHjrKKVRxYhS8X7BkQ/N6nMQRglaUKEHcdpw
- 65mZ1giz6GDxrXHuOGkwoReKyBIXk/+OXKRd3rQuRWR/mwTb4G0/03at/qPm1mta/y0i
- IzPQ==
+ bh=PM7UtK6XRMhzbZYKtTFENq5xn1KlKKcTVXt//jFfDMg=;
+ b=LvPkXaOBfxY7aWNHEXmCfIKQzPFPJ+TKqgvqDUlHs7JyqzTQdVJv26PHisy5sQOWpO
+ 3u+Y3l2uSdv8xRMV6gAy5uEDdMZIxpCR2CDGGDHYtRTs+cwmdnV1tS0pghOGe0DnQYVH
+ RaNMZ04vkO0NbxTgpryWJTTo5FA7yecC9oyfmLcRCDGYNMe4IoH0BTBFFYI3TjMRf2Tp
+ FmvFAF5mzdpPi2EIF0Z9T/UHua9/QgF/Kpo1mefDTXWOuWX6IwbiZ+0bjt+1lC57TLyj
+ u+Iw5AbzWv/qrYUMYU4E9lcosENalBEPJ0ND8WrRVscKJiBPS2T6BDyUvlcTdF4+DEyL
+ PtRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=whzkQB51KfCWM2/k6Cbxerj4COTyOxogCOMeqI7AzG8=;
- b=KCcmPUVKjQPX3r5zy/05J9N6ZbaqlSJR0K6JNrbg0k3a/wDq4YocqiK7//v+YN5RNM
- LkutlgKUnsnZ87VCrezDwTEbsV7g3bcVZjtdODemywDrumT4uXXpug1S5o1dAAP4oGsS
- PkzacIrC2cKWeBM+NyAbTseAQ+gxUi66fsoqi5eEFMkIQehcnWDQpHXFMDvuDD8e++DJ
- 8dS/12dQ7f6BiReW4hlvuRD6Dx/HdjaDUra3mYOX/fFOn9bVe6mLqH3pwMHONOAJz6xe
- PMX1GA/c7g04U3o0XitTKkmUmUeWzjpum2tpmv1AJE/+jrx8YVX83gl6PYjZhVlquUGB
- hN4w==
-X-Gm-Message-State: AOAM533wBKcng2Resq3RVY5SURx+29Xs22sIk/nxsI3Zii6gitn/Mogu
- B2ttn8QaDTnS2JsR8ntRvPa0V9JtSks=
-X-Google-Smtp-Source: ABdhPJzWY0N7DJ/k+rph2gsLg+S3j8dyzV0PbW6e9CGcLkkbhak/dwqlOZnMp83KvR3UG39+JqdHdA==
-X-Received: by 2002:a6b:3bcc:: with SMTP id i195mr16461955ioa.28.1641012561815; 
- Fri, 31 Dec 2021 20:49:21 -0800 (PST)
+ bh=PM7UtK6XRMhzbZYKtTFENq5xn1KlKKcTVXt//jFfDMg=;
+ b=x2zGmf+z/tVIrAQsKU1Vm2+E5M46Dkh0tlVFlSC3lwF5OPfuvqfwHN8Og1SB2vlAgP
+ BvM2nXx/REaqPxjToH3ePlbpJP3AAlIJ1z4vhXgOyG7l+uHjnS4OYdQa0sM/T/kI86sb
+ w1GD6rOf41kvlssnFSSLt5p4p/vJ9YUiM3ImM9ZrI0gDJ7jR1w9Oz4BvPPSOEDJdN7oh
+ rpoSIyirbl2qvKIKRe4HkYfYtUIW9nsLzPFENlTZc6l+u0nDvdivxu4gWq1DK2/xj7t5
+ DxzGso8qNTAomyQ07Fv4mGREV7NGRjSbgOMNmoOaXTX6lvY0VVY0gX+/iyAETFctp+Z0
+ nPDQ==
+X-Gm-Message-State: AOAM530jdDnLfYlt1z1LjczT3mvDkAyY9RGspsiGMVWeQsi0brtjmj5S
+ I3VB3KCpsbdtFk4RQDwXAtPgFJVVqyY=
+X-Google-Smtp-Source: ABdhPJyVBph6OigEq4uKe/ZmFxDN12dJaIFwMg5MkI08lwrTJtOqAjeGbY7coyJWLyifWO0TpcH2vg==
+X-Received: by 2002:a05:6e02:1908:: with SMTP id
+ w8mr13909719ilu.148.1641013328666; 
+ Fri, 31 Dec 2021 21:02:08 -0800 (PST)
 Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
  [71.218.242.12])
- by smtp.gmail.com with ESMTPSA id o14sm16789664ioo.36.2021.12.31.20.49.20
+ by smtp.gmail.com with ESMTPSA id b24sm20481338ioc.18.2021.12.31.21.02.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 Dec 2021 20:49:21 -0800 (PST)
+ Fri, 31 Dec 2021 21:02:08 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Dec 2021 21:49:13 -0700
-Message-Id: <20220101044913.1990522-1-james.hilliard1@gmail.com>
+Date: Fri, 31 Dec 2021 22:01:52 -0700
+Message-Id: <20220101050152.1991600-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-remotes: bump to
- version 1.1.0
+Subject: [Buildroot] [PATCH 1/1] package/python-aiosignal: bump to version
+ 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,40 +91,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License file renamed in:
+https://github.com/aio-libs/aiosignal/commit/98b25a33d08821a2948d334b223e2874979f5bd4
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiohttp-remotes/python-aiohttp-remotes.hash | 4 ++--
- package/python-aiohttp-remotes/python-aiohttp-remotes.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-aiosignal/python-aiosignal.hash | 6 +++---
+ package/python-aiosignal/python-aiosignal.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
-index a9a6cad2df..595340d5d8 100644
---- a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
-+++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
+diff --git a/package/python-aiosignal/python-aiosignal.hash b/package/python-aiosignal/python-aiosignal.hash
+index 3fdd459502..f2a09749b8 100644
+--- a/package/python-aiosignal/python-aiosignal.hash
++++ b/package/python-aiosignal/python-aiosignal.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-remotes/json
--md5  e90fad4b7aa088207f831698fddd9eea  aiohttp_remotes-1.0.0.tar.gz
--sha256  caec1681de70bac82daa676078d9b125758fb3952fdaa893a6b42bdd995562ef  aiohttp_remotes-1.0.0.tar.gz
-+md5  da13880f25ec3b9cf98c7baff92835a2  aiohttp_remotes-1.1.0.tar.gz
-+sha256  e44f2c5fd5fc3305477c89bb25f14570589100cc58c48b36745d4239839d3174  aiohttp_remotes-1.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiosignal/json
+-md5  f3edf1b700b4fee6ea6ed375c3f6555c  aiosignal-1.1.2.tar.gz
+-sha256  15605698a0401075a03d36cea979e3c0e6cf8467a9e3b9047040514dd9e6f43b  aiosignal-1.1.2.tar.gz
++md5  011700c3acc576a3a38deade6a4860cb  aiosignal-1.2.0.tar.gz
++sha256  78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2  aiosignal-1.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4e7d0edf250abe2a28027788b8c55a53d1b5c9ff961b8a00643c76aed637ba13  LICENSE
-diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-index f04cecd89d..e2bc3e1c18 100644
---- a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-+++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
-@@ -4,9 +4,9 @@
+-sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
++sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
+diff --git a/package/python-aiosignal/python-aiosignal.mk b/package/python-aiosignal/python-aiosignal.mk
+index ea11d97060..e0436e973e 100644
+--- a/package/python-aiosignal/python-aiosignal.mk
++++ b/package/python-aiosignal/python-aiosignal.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_REMOTES_VERSION = 1.0.0
-+PYTHON_AIOHTTP_REMOTES_VERSION = 1.1.0
- PYTHON_AIOHTTP_REMOTES_SOURCE = aiohttp_remotes-$(PYTHON_AIOHTTP_REMOTES_VERSION).tar.gz
--PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/40/b6/1178bd1e26e88f9f29b7d1bbfae7b38d39ec9cf787d4685f83ade2e7aa7f
-+PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/e3/fc/5523010172e2d8685a8934fbb49d564118c9ebc1e4233a62b77310f979db
- PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = distutils
- PYTHON_AIOHTTP_REMOTES_LICENSE = MIT
- PYTHON_AIOHTTP_REMOTES_LICENSE_FILES = LICENSE
+-PYTHON_AIOSIGNAL_VERSION = 1.1.2
++PYTHON_AIOSIGNAL_VERSION = 1.2.0
+ PYTHON_AIOSIGNAL_SOURCE = aiosignal-$(PYTHON_AIOSIGNAL_VERSION).tar.gz
+-PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/ac/f7/c3df3b7eac6ea96175e0817b272b43b398d5ba589be09a50d1b758d5b852
++PYTHON_AIOSIGNAL_SITE = https://files.pythonhosted.org/packages/27/6b/a89fbcfae70cf53f066ec22591938296889d3cc58fec1e1c393b10e8d71d
+ PYTHON_AIOSIGNAL_SETUP_TYPE = setuptools
+ PYTHON_AIOSIGNAL_LICENSE = Apache-2.0
+-PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE.txt
++PYTHON_AIOSIGNAL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.25.1
 
