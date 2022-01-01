@@ -4,76 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE4D3C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 12:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2D0C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 13:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59F6360DC2;
-	Sat,  1 Jan 2022 12:28:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B153560D90;
+	Sat,  1 Jan 2022 13:04:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 47HyryHrj6_y; Sat,  1 Jan 2022 12:28:21 +0000 (UTC)
+	with ESMTP id OIX6uDA9ANwG; Sat,  1 Jan 2022 13:04:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD70C60D9D;
-	Sat,  1 Jan 2022 12:28:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 424701BF39A
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:28:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 010A960D79;
+	Sat,  1 Jan 2022 13:04:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B7F591BF31D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F735401F6
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 12:28:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1B3A81430
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 13:04:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A1h82xEM-z85 for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 12:28:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 60000401ED
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 12:28:18 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id s4so30483119ljd.5
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 04:28:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:in-reply-to:references:date:message-id
- :mime-version; bh=bz5kbjPl/YnD65hDlruIEmGcMT7N7GUY7/sVQcYDK7s=;
- b=NlscBWgMgxTHx9S5vy+gfcCrbYVA+FNkCcRDdOxKPdEmxkDsZQ4rpwSLbT9Klw49+i
- IA/jjkgszzNaTLFhoNhMVcCOyL9hgyqSVBMFhiT4bUIPwV8XmGLEiIr9RqVwC7x3N5Dk
- 6LrtczssYoOmhk+BtJts1YxQ/TB5e1ayme9oNtbatsuFGGS2gb8YkbVuICl5DuvGtab+
- yTHmCRcUuj62mAumvXfTqkvZf/9eh/I+9EA7Tq6HYzA39g9uZWzbbQY8TMS/YiSd1RkY
- SEovBv8dBYPIstLkRDcXoyh5DUbRn+/v0issX71NH0SIJHQBPF4OoPPslfdYJKyUBL7Q
- DFBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
- :message-id:mime-version;
- bh=bz5kbjPl/YnD65hDlruIEmGcMT7N7GUY7/sVQcYDK7s=;
- b=jDocW9YzJzlT35dcnXy5n5WseqsASsUG0gPbnm0bwguizoQSWU/lRmn1M3VPmxvK22
- I29mMALT6uCk7SX55Dbc+wyJ4nVuh9eN6iZGklrnO5B7MrE5R0Rv+rudWy9pom7ZegUL
- 2GFzKt18cdZBq68lxOLJaSv7mZtYPzYpM9Natbnba30bwIY8/St8NxV1m9y1wz9uK34g
- MxlIaEsopBySm1+78sT5gtu7a88fVGBRrZXnY+fDqk8KfGv+ChqlbDmx1ayhRfc40qR1
- ogJRjE8qBLxmNTwpIXOJupyBbrZx5LYgYALAJyV+1ityx+LnOLPsDn+mnOCqD5aptI2q
- C13A==
-X-Gm-Message-State: AOAM532Fbq4W+C1EpNtxSFdU1L0Pb0ZSt5d/WuzS83zLUrzbCZbhCXyn
- wSzc7H8J6ppUM+ic04KpbKRoVUW/Nh0=
-X-Google-Smtp-Source: ABdhPJzfKgAWRiuLUdCW38fzaOgsC0zwyijW9TSNKa8dOfsshTKlhHqBdxS3Qplfwk0G9bs1Bqhs8Q==
-X-Received: by 2002:a2e:a26d:: with SMTP id k13mr32457063ljm.229.1641040096216; 
- Sat, 01 Jan 2022 04:28:16 -0800 (PST)
-Received: from luthien ([176.10.248.201])
- by smtp.gmail.com with ESMTPSA id 8sm2911097ljf.123.2022.01.01.04.28.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 04:28:15 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-In-Reply-To: <20210321135842.1165539-1-fontaine.fabrice@gmail.com>
-References: <20210321135842.1165539-1-fontaine.fabrice@gmail.com>
-Date: Sat, 01 Jan 2022 13:28:15 +0100
-Message-ID: <87k0fj1vz4.fsf@gmail.com>
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3,
- 1/1] package/rsyslog: enable options when libcurl is enabled
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CMKOvYCyln1M for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 13:04:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19D9B8142E
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 13:04:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id B0DFC82901; Sat,  1 Jan 2022 12:58:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 1 Jan 2022 14:02:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b9c58531e97b012a8a11c6ae5145b16dcfb8f74
+X-Git-Newrev: 20dd9453f32c9898ae4a0dc482bbb0a21853090c
+X-Patchwork-Hint: ignore
+Message-Id: <20220101125821.B0DFC82901@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhcpcd: add
+ BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,27 +53,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Mar 21, 2021 at 14:58, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> Following the bump to 8.1910.0, items requiring libcurl were
-> disabled by default. This patch selectively enables options
-> which depend on libcurl when that package is enabled in the
-> build.
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> [Fabrice: Disable mmkubernetes which also depends on lognorm and while
-> at it also disable mmnormalize which is available since version 6.1.2
-> (from 2010) and
-> https://github.com/rsyslog/rsyslog/commit/b9d3cdceabf91bc28f8f6d31cfe9332724e37bbf]
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=20dd9453f32c9898ae4a0dc482bbb0a21853090c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP following Arnout feedback:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210303091904.467706-1-fontaine.fabrice@gmail.com
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/dhcpcd/Config.in | 19 +++++++++++++++++++
+ package/dhcpcd/dhcpcd.mk | 22 ++++------------------
+ 2 files changed, 23 insertions(+), 18 deletions(-)
+
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index ece08d2c96..3ebacb3ba2 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -8,3 +8,22 @@ config BR2_PACKAGE_DHCPCD
+ 	  An RFC2131 compliant DHCP client
+ 
+ 	  http://roy.marples.name/projects/dhcpcd/
++
++if BR2_PACKAGE_DHCPCD
++
++config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
++	bool
++	default y
++	depends on BR2_USE_MMU
++	# Audit headers were only added in recent kernels for some arches
++	depends on !(BR2_arceb || BR2_arcle) || \
++		BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !(BR2_microblazeel || BR2_microblazebe) || \
++		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++	depends on !BR2_nds32 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !BR2_nios2 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on !BR2_xtensa || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++
++endif
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index ebe6941646..922d289b26 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -17,23 +17,9 @@ DHCPCD_CONFIG_OPTS = \
+ 	--os=linux \
+ 	--privsepuser=dhcpcd
+ 
+-# AUDIT_ARCH_{OPENRISC,SH,SHEL,SH64,SHEL64} are only available with kernel >= 3.7
+-ifeq ($(BR2_or1k)$(BR2_sh):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_MICROBLAZE is only available with kernel >= 3.18
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_XTENSA is only available with kernel >= 5.0
+-ifeq ($(BR2_xtensa):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_{ARCOMPACT,ARCV2,NDS32,NIOS2} are only available with kernel >= 5.2
+-ifeq ($(BR2_arceb)$(BR2_arcle)$(BR2_nds32)$(BR2_nios2):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
++ifeq ($(BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP),y)
++DHCPCD_CONFIG_OPTS += --enable-privsep
++else
+ DHCPCD_CONFIG_OPTS += --disable-privsep
+ endif
+ 
+@@ -49,7 +35,7 @@ DHCPCD_CONFIG_OPTS += --enable-static
+ endif
+ 
+ ifeq ($(BR2_USE_MMU),)
+-DHCPCD_CONFIG_OPTS += --disable-fork --disable-privsep
++DHCPCD_CONFIG_OPTS += --disable-fork
+ endif
+ 
+ define DHCPCD_CONFIGURE_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
