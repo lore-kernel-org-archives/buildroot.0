@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B90E2C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 09:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2DA6C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 09:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B51460E05;
-	Sat,  1 Jan 2022 09:54:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 932AD404BB;
+	Sat,  1 Jan 2022 09:54:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CW0Fk_dQyeO6; Sat,  1 Jan 2022 09:54:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cpkyvQ5MmFgc; Sat,  1 Jan 2022 09:54:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FAD860DE5;
-	Sat,  1 Jan 2022 09:54:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 01B431BF957
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB08E4012F;
+	Sat,  1 Jan 2022 09:54:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 255DA1BF95C
  for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 09:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E47A581438
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 09:54:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 227B2401D1
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 09:54:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M9jN1Fu_SPrr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oj_aBwB3VPyh for <buildroot@lists.busybox.net>;
  Sat,  1 Jan 2022 09:54:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42F9981374
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F793401C6
  for <buildroot@buildroot.org>; Sat,  1 Jan 2022 09:54:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2E2FD813B8; Sat,  1 Jan 2022 09:48:28 +0000 (UTC)
+ id 6D032813B7; Sat,  1 Jan 2022 09:48:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Jan 2022 10:50:29 +0100
+Date: Sat, 1 Jan 2022 10:50:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 393614da509c0ce5984b75b943bb7284454fb96c
-X-Git-Newrev: cc5b783b191adb1bc6a0714a06b247d2433535fe
+X-Git-Oldrev: cc5b783b191adb1bc6a0714a06b247d2433535fe
+X-Git-Newrev: f6d2ad9b359c8fe786efb0f6d224fc203d46b94b
 X-Patchwork-Hint: ignore
-Message-Id: <20220101094828.2E2FD813B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiohttp-sse: bump to
- version 2.1.0
+Message-Id: <20220101094828.6D032813B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
+ 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +59,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc5b783b191adb1bc6a0714a06b247d2433535fe
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d2ad9b359c8fe786efb0f6d224fc203d46b94b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash change due to full text removal:
-https://github.com/aio-libs/aiohttp-sse/commit/307fd35a84a66b7fb5adfd70cd5b7d709fa8508c
-
-Fixes(python 3.10 compatibility):
-  File "/usr/lib/python3.10/site-packages/aiohttp_sse/__init__.py", line 107, in wait
-  File "/usr/lib/python3.10/site-packages/aiohttp_sse/__init__.py", line 144, in _ping
-TypeError: sleep() got an unexpected keyword argument 'loop'
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-aiohttp-sse/python-aiohttp-sse.hash | 6 +++---
- package/python-aiohttp-sse/python-aiohttp-sse.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.hash b/package/python-aiohttp-sse/python-aiohttp-sse.hash
-index 2f21da462e..224601450c 100644
---- a/package/python-aiohttp-sse/python-aiohttp-sse.hash
-+++ b/package/python-aiohttp-sse/python-aiohttp-sse.hash
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index 90dbd75994..b2b0f8c937 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-sse/json
--md5	d2f394fb75f591045b2c94fc17c8533d  aiohttp-sse-2.0.0.tar.gz
--sha256	547e1eaa129749f090d02b31956215edbcde74ce99721f5f0ac902a9ccb1202e  aiohttp-sse-2.0.0.tar.gz
-+md5  822cd0c30325e8a711101c1a1ede4058  aiohttp-sse-2.1.0.tar.gz
-+sha256  dfe8f7271ab4470891fa1bfa1913d6889b3d19015dd3d3a4cab949e66971bbca  aiohttp-sse-2.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  4743950052dbaf5ce5c3622754ebceae  aiohttp-3.8.0.tar.gz
+-sha256  d3b19d8d183bcfd68b25beebab8dc3308282fe2ca3d6ea3cb4cd101b3c279f8d  aiohttp-3.8.0.tar.gz
++md5  faf7726dc65a940272874c0f441e8ec6  aiohttp-3.8.1.tar.gz
++sha256  fc5471e1a54de15ef71c1bc6ebe80d4dc681ea600e68bfd1cbce40427f0b7578  aiohttp-3.8.1.tar.gz
  # Locally computed sha256 checksums
--sha256	cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-+sha256  5585eb91ec607b4fdbe97d44a61146a9cc27bb703336628bc3c6a1eaffe60307  LICENSE
-diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.mk b/package/python-aiohttp-sse/python-aiohttp-sse.mk
-index 7a7a0d0a70..2aef1579f5 100644
---- a/package/python-aiohttp-sse/python-aiohttp-sse.mk
-+++ b/package/python-aiohttp-sse/python-aiohttp-sse.mk
+ sha256  383c70c090b60ae81e035fe4fafed689b45c4421cd3bc355f1bd41ac208ccf3f  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index 03501a7527..5a2d306438 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_SSE_VERSION = 2.0.0
-+PYTHON_AIOHTTP_SSE_VERSION = 2.1.0
- PYTHON_AIOHTTP_SSE_SOURCE = aiohttp-sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
--PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/2b/50/e127729f7df53c32c96b5c71932a7262cad40c83f1e19c218b068c816d51
-+PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/2f/3f/cc4f5a3fe6cb50ad5b9d26bb7738c5da1f61645b517d4230df2fc32d89f0
- PYTHON_AIOHTTP_SSE_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_SSE_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_SSE_LICENSE_FILES = LICENSE
+-PYTHON_AIOHTTP_VERSION = 3.8.0
++PYTHON_AIOHTTP_VERSION = 3.8.1
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/48/1a/ba9542a545aed4b0b6ef128561f68dd3c2812ff5abfa9ed5b96547a728ea
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/5a/86/5f63de7a202550269a617a5d57859a2961f3396ecd1739a70b92224766bc
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
