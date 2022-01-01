@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4485CC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 17:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33AFAC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 18:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B893260C14;
-	Sat,  1 Jan 2022 17:37:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91A2840132;
+	Sat,  1 Jan 2022 18:00:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2hFVqqrDEkDJ; Sat,  1 Jan 2022 17:37:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DbPqfF9PmXEd; Sat,  1 Jan 2022 18:00:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B62360C2F;
-	Sat,  1 Jan 2022 17:37:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C47A1BF2F5
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 17:37:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70F83401F6;
+	Sat,  1 Jan 2022 18:00:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 78A3F1BF399
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 18:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94B8960C2F
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 17:37:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 620788140B
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 18:00:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KHOWfZqSkzqt for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 17:37:09 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2U3R2vRi7qvo for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 18:00:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8FB5460C20
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 17:37:09 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id o3so3275365wrh.10
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 09:37:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=sender:date:from:to:cc:subject:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=8NTBMCLd0BKm5VUS9UKwWvPsko9tUYKV4kK4t83gYYM=;
- b=DHmuuU3BtmGeISDidm3+r6KofM7giTBquKNzl/Ego6wz0ZsNKCEkcBCgTyheF7BURt
- hJiKegDspZ6hbzzqyNvnNrSe7nrsDK5MVW8rMb0ZvmSzz5Bgz1GgneOdkBKNFjFs1ScL
- /gi4zNVIC7njzqUj70tFtcEz8eUEdAnGH0K82mOy1TF27SYUG7d7+/iG6itxmLoM0PsI
- AdJhIiG8njazzeJ5TCEWOIn4UjkPd10cT30xsUeNw5dusbqT8ypej7Eq0qFTsNWxVba7
- 0RxtH01q5uWnKaUlU8xNlTtVVnr/dQfCBhC89jwWXBEv0cAhZ1aaxbS0Ld8Ea73ToBVu
- nfYA==
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7CF03813E6
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 18:00:10 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id q6so23051692ilt.6
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 10:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jbDgAv188APT3D8nYfX8UgT8+uTKXfj/GpnmP8u43YY=;
+ b=VKprVQOaiQAddVPMDRleHqF3tw3v8SF02hA9ptrnFUD0Xw666FEccLnooUvBOFe8Sj
+ W5mcaa4Ew8z2NHfI1K/Zj8bV4xVPAg8LUKW6uVSERlmY61ZmqDoQy/y86ICoarSsyVlM
+ 6YwgCMZ11FRzOc0Jg+64mM6SxHvvNwi3Sf8VhImkjVOYhOAWoLIjNe+3m3ol5szhomGb
+ s2XyCRmTx1M8ChhaqS99SN9JHc9oX1pHmOmClRmB7LbKUw2KfV9XtDA/vxY+ql+V2JSw
+ BnZFGvFviym/IeoQ3kSKHKqm1Sq2wHQ0wD08aC0elrX7SDGRPJ7A3q9IsirHwEemtzZ0
+ iDaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
- :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=8NTBMCLd0BKm5VUS9UKwWvPsko9tUYKV4kK4t83gYYM=;
- b=3aFwz2RS7ZiRbEtMJNEpBhsnHVsVlAI2ZeujCUOiyf8ojXbkA+4Q+mF2xO4URuPiIP
- bCs6CoDT8ci9SyCjwcwqKUk/8In86w742Xq8fNI0tiLoLBvSWVhm/dBcCMD8nc1ADiNZ
- wlStsmW4Rw3kAk0LlRsUOnRKBJJ8HhsiHPhc/livQilvlpJn9PnqWDWrMDUK7W92SAUw
- hKvrwylsOCP5SmZCq8JoBMy1ewOFultu6YL68yGNWta8B8o3yrw8giT1DHsoTJXZBIBm
- o087lxSWgSo5aA31XoeSRPc7LILd5Jbk0+hxXFol3H54xZanHoCy6m5/bzHkQYMzjqlA
- L/uA==
-X-Gm-Message-State: AOAM532Fzaew0hj/YN1nv1ffPlTqAC+6bwJu0tDenZctwdCHRBFY/xUp
- 79W069iWE15j1Q==
-X-Google-Smtp-Source: ABdhPJwxy88Fh6TkH43WzHXTsSi+iusS0snjxQ4EqL97nUFuAurh8J0Z0Skjp7tOK1GAQ31xNg0X8g==
-X-Received: by 2002:a5d:47cb:: with SMTP id o11mr32881679wrc.686.1641058627699; 
- Sat, 01 Jan 2022 09:37:07 -0800 (PST)
-Received: from localhost (cpc155795-brmb11-2-0-cust469.1-3.cable.virginm.net.
- [80.6.125.214])
- by smtp.gmail.com with ESMTPSA id r9sm31284036wmq.18.2022.01.01.09.37.06
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=jbDgAv188APT3D8nYfX8UgT8+uTKXfj/GpnmP8u43YY=;
+ b=NVws1IDu3t5cV184z6s4AfBDqjlF1a6PivxAKydwRIubxcmX/6sQGa2VGOWASi0/36
+ ZB1gsXwccnTPVEEyur5YCIKbsnDsNmB9WK50wdgLG+t3H0pl/QDWMjbgKmekHDyaivcK
+ 9uVR2hKaIicDaTNh5QrPFhgphIhKqac4yYV8Z6vGpRkfixHccs8KLGrjrpba8ROigY8R
+ o5OArae2h3QpnZ9BngKSBMW6v73bdn7/ZoUOQdMKdDo1oarWt736daKeBQ/ZpQ6zM7Iw
+ RjuEtOBr8JNAw1jHVotK19I/0JwVCbgBvXwXtHZJyzpic2zUNFQ/b35FP6YuWegxCGNU
+ XZrQ==
+X-Gm-Message-State: AOAM531JZxEOAn0mEcJAt7vvgWHjyBzVdmPQPGoqyW6uOWTS3cMgZgK9
+ A0njIJFtC3FMA6xNCGNLnV2b55/Fqxg=
+X-Google-Smtp-Source: ABdhPJwfWFVctpYJpE4MJY3CScLZfHzsnPeiy21kiyj1wU4vlTaj17lWd9lN424ViIEC2wscVFSMcg==
+X-Received: by 2002:a05:6e02:184f:: with SMTP id
+ b15mr17682233ilv.56.1641060009361; 
+ Sat, 01 Jan 2022 10:00:09 -0800 (PST)
+Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
+ [71.218.242.12])
+ by smtp.gmail.com with ESMTPSA id e2sm18497073ili.45.2022.01.01.10.00.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 09:37:07 -0800 (PST)
-Date: Sat, 1 Jan 2022 17:37:05 +0000
-From: Richard Ash <richard@audacityteam.org>
-To: Jacques Samoun <jacques.samoun33@gmail.com>
-Message-ID: <20220101173705.142a0496@audacityteam.org>
-In-Reply-To: <CACaKL1yLOT159yE2Kptoay7Ng+1+vb+tCUxJoVqr9gLha660jw@mail.gmail.com>
-References: <CACaKL1yLOT159yE2Kptoay7Ng+1+vb+tCUxJoVqr9gLha660jw@mail.gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-X-Clacks-Overhead: GNU Terry Pratchett
+ Sat, 01 Jan 2022 10:00:08 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  1 Jan 2022 11:00:04 -0700
+Message-Id: <20220101180004.2499189-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] Patching a BR package makefile
+Subject: [Buildroot] [PATCH 1/1] package/python{3}-cffi: bump to version
+ 1.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,53 +87,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 29 Dec 2021 14:57:54 +0200
-Jacques Samoun <jacques.samoun33@gmail.com> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
+ package/python3-cffi/python3-cffi.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-> I had to modify a OPENSSH_CONF_OPTS of the openssh.mk package
-> makefile to solve a known interoperability issue (openssh vs
-> libopenssl). Now the fix is verified, i would like to create a patch
-> to be applied to this openssh.mk .
-> 
-> However, while I already did a couple of patches to other packages,
-> they were always so far applied to the course code of the packages. In
-> this specific case, I do not know how to make this on the
-> buildroot/package/<package>.mk file.
-> 
-> Is there a preferred way to do so ?
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index 8ab672a56f..41565f9a62 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/cffi/json
+-md5  5c118a18ea897df164dbff67a32876fc  cffi-1.14.6.tar.gz
+-sha256  c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd  cffi-1.14.6.tar.gz
++md5  f3a3f26cd3335fc597479c9475da0a0b  cffi-1.15.0.tar.gz
++sha256  920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954  cffi-1.15.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  04b80f5b077bbed68808cfebadeb5e3523f2a8c9a96495c587bd96df1eac2a33  LICENSE
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 2504cf18f4..b14dce8225 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python3-cffi/python3-cffi.mk
+-PYTHON_CFFI_VERSION = 1.14.6
++PYTHON_CFFI_VERSION = 1.15.0
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/2e/92/87bb61538d7e60da8a7ec247dc048f7671afe17016cd0008b3b710012804
++PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/00/9e/92de7e1217ccc3d5f352ba21e52398372525765b2e0c4530e6eb2ba9282a
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
+diff --git a/package/python3-cffi/python3-cffi.mk b/package/python3-cffi/python3-cffi.mk
+index 52ea3b3fbf..2770eda93e 100644
+--- a/package/python3-cffi/python3-cffi.mk
++++ b/package/python3-cffi/python3-cffi.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python-cffi/python-cffi.mk
+-PYTHON3_CFFI_VERSION = 1.14.6
++PYTHON3_CFFI_VERSION = 1.15.0
+ PYTHON3_CFFI_SOURCE = cffi-$(PYTHON3_CFFI_VERSION).tar.gz
+-PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/2e/92/87bb61538d7e60da8a7ec247dc048f7671afe17016cd0008b3b710012804
++PYTHON3_CFFI_SITE = https://files.pythonhosted.org/packages/00/9e/92de7e1217ccc3d5f352ba21e52398372525765b2e0c4530e6eb2ba9282a
+ PYTHON3_CFFI_SETUP_TYPE = setuptools
+ PYTHON3_CFFI_LICENSE = MIT
+ PYTHON3_CFFI_LICENSE_FILES = LICENSE
+-- 
+2.25.1
 
-As far as I know, there isn't a way to do this within buildroot,
-because the buildroot tree is (has to be) immutable by the time
-buildroot runs. Put another way you can't patch what effectively
-becomes one vast Makefile from within that Makefile without badly
-upsetting make!
-
-The only options I have found are:
-1. Write a wrapper script to unpack the buildroot tarball and apply
-your patches (note you may have problems if your patches change over
-time).
-2. Have your own fork of buildroot git, and then your own branch from
-the relevant release tag with your changes on top. This means you can
-rebase your changes with git's help when you want to move to a newer
-buildroot. Convenient if the rest of your build is in git and you can
-use a git submodule to fetch your forked git automatically.
-3. Don't try to modify the buildroot package, create your own
-custom-ssh package (copy of buildroot plus your patch) and maintain it
-in a buildroot external (see the manual). Could be a pain to keep up to
-date in the longer term.
-
-I'm not in any way a buildroot maintainer however!
-
-All of these are good reasons to get patches upstreamed (if possible)
-into buildroot!
-
-Richard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
