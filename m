@@ -1,66 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6751AC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 15:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C893C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 16:00:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCA196076C;
-	Sat,  1 Jan 2022 15:50:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA26981465;
+	Sat,  1 Jan 2022 16:00:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XOiCGl8O0nKY; Sat,  1 Jan 2022 15:50:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cP_nxP4KLP4p; Sat,  1 Jan 2022 16:00:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AD6360706;
-	Sat,  1 Jan 2022 15:50:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F139881462;
+	Sat,  1 Jan 2022 16:00:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E3021BF59B
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 15:50:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 148AA1BF59B
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 16:00:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AD438135A
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 15:50:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02EA381462
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 16:00:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EkxdQGq8WZzR for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 15:50:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76FC481353
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 15:50:32 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:6c59:844e:fd99:5f73])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 69A2D2003A4;
- Sat,  1 Jan 2022 16:50:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641052228;
- bh=ytNYn64FZJg+iwgYRWQP35ZInv5wD8vFv5xA820OYsY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=J8da7xVtVCM6a97XqC5bS/t2bfpBXp5aIQM3PHruwTWHesASG7dFeNlhkFDU7GzEq
- OlwZHfYkIObqALsZHP1ItwmVZkAcfc2Vm2G0YOVu/+0oxBM7D00aWx2OMBp/1UDmvF
- xnGyyCGVXiUeM96NaL7jY/UUwEkwvyxajA8qjeApIiVniE62bpfr6eTb4SntRdypcF
- 9Rb5We6p0rNah4yo1TzjwgaASjGu1gG17aka+2NaAbXYuIXsJESBFpCACTvI+yh10J
- j2dQC2R/4uqcjQdu1LOvWIOexahXeZIcRMlVkydinOQjvR2+QxGO1yicOQ8fsnAGTz
- 9cIKCLjaNoOXA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Jan 2022 16:50:22 +0100
-Date: Sat, 1 Jan 2022 16:50:22 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Herve Codina <herve.codina@bootlin.com>
-Message-ID: <20220101155022.GD2777@scaer>
-References: <20211112131258.2671293-1-herve.codina@bootlin.com>
- <20211112131258.2671293-2-herve.codina@bootlin.com>
+ with ESMTP id ifnRTuSDClf7 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 16:00:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B54281461
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 16:00:54 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ k66-20020a1ca145000000b00345fa984108so10348279wme.2
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 08:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=E5TQFGRD73+THIcSZVEsTY51Eka90NMiqVOhD7lShhI=;
+ b=mEIm6Uum0Fk1VMbxPRFLzLAYu5EEgJ+V0tvGBvySkex3Y1ut9oIlyozzPI6Iqi3K6G
+ gNvG7FEGUX2nNOlf70tM/vSkZ/KT0Jk83muDtZz7+ZsLJfvAro8YFBi+svKCThMeEgcc
+ O21tYNJ3Pu1kZxxsjp+3R65+Bz9bi0bvbPmAaJSATn2FtILAFjVQQec9y38srSK9e+Ej
+ xh+ZgNmK5qr1v+wBGyyvHgOhpnEakOS7qlcXljB/i4UW6ZkYxT1cOWvy0u/hJ4TTwk9T
+ XV/fkrWTErgd1Rwsjw8qOeM12lNZSWO7S1pV/GSTIXEXWy7gQQWD5T6LCBE1LEHAhFMe
+ F/rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=E5TQFGRD73+THIcSZVEsTY51Eka90NMiqVOhD7lShhI=;
+ b=21Gs2t0GcUoM7w0J/X7sNkuLPIlCJvPutyQEIR8F5XaXft0+cMSnfErEcHA0FzLW7+
+ QI/oHfyG70i72Y4HEQZnqLP16WBbM4rKr66Tt1CYVl+hCtFlW/aKrYedEl/oNMuggdht
+ ynrUIVYx2qerdtc6Hn/3TYT7pEiDpDOAezMPgjM9zs5Npe0vkuiP/iBWwFr0lgnv2hKz
+ XINYUiqG9fateC7bgyy8Kv3y+h+b9DsZoqawEPG7PCFeuaPwgJSyf9d/P3DNmsS9yxP7
+ +Pk1J0vmtsuK6ncnJXCVEvuFivTznexOcg0kTlNLlQxzJv5N1eOroR4Jy396P4JZtPAK
+ EiKg==
+X-Gm-Message-State: AOAM532t36sihH/GciGVmZYd6lM69b+R+2pTuAPhxjpc6okF6rDIHKp/
+ 8LXNwcuqzzmStvC8Pg2hkkwH+n8/IX0=
+X-Google-Smtp-Source: ABdhPJy8+j89XgYTv0dBxLHrA+c5KFFr0O8BXm1XVJk8Dn3QDZfkqfS5idxQjwNAYmujwqDKihYu2Q==
+X-Received: by 2002:a7b:c40f:: with SMTP id k15mr33315759wmi.74.1641052853242; 
+ Sat, 01 Jan 2022 08:00:53 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id m35sm61633030wms.1.2022.01.01.08.00.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 01 Jan 2022 08:00:52 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  1 Jan 2022 16:59:50 +0100
+Message-Id: <20220101155950.1784485-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211112131258.2671293-2-herve.codina@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2 1/5] package/alchemy: new host package
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: disable execinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,77 +84,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVydsOpLCBBbGwsCgpPbiAyMDIxLTExLTEyIDE0OjEyICswMTAwLCBIZXJ2ZSBDb2RpbmEgc3Bh
-a2UgdGh1c2x5Ogo+IEFsY2hlbXkgaXMgYSBidWlsZCBzeXN0ZW0gZGV2ZWxvcGVkIGJ5IFBhcnJv
-dC4KPiAKPiBJdCBpcyBhIG5ldyBidWlsZCBzeXN0ZW0gYmFzZWQgb24gdGhlIG9uZSB1c2VkIGlu
-IEFuZHJvaWQuCj4gQSBjZW50cmFsIG1ha2VmaWxlIGluc3RhbmNlIHNjYW5zIGEgd29ya3NwYWNl
-IHRvIGZpbmQgdXNlcgo+IG1ha2VmaWxlcywgaW5jbHVkZXMgdGhlbSBhbmQgcmVnaXN0ZXIgbW9k
-dWxlcyB0byBiZSBidWlsdC4KPiAKPiBodHRwczovL2dpdGh1Yi5jb20vUGFycm90LURldmVsb3Bl
-cnMvYWxjaGVteQo+IAo+IFNpZ25lZC1vZmYtYnk6IEhlcnZlIENvZGluYSA8aGVydmUuY29kaW5h
-QGJvb3RsaW4uY29tPgoKSSB3YXMgYWJvdXQgdG8gcHVzaCB0aGlzLCB3aXRoIGEgZmV3IGNoYW5n
-ZXMsIGJ1dCBJIGhhdmUgc29tZSBxdWVzdGlvbnMKYWJvdXQgdGhlIHBhY2thZ2VzLCBzbyBoZXJl
-J3MgdGhlIHBhdGNoIG9mIHRoZSBjaGFuZ2VzIEkgZGlkOgoKICAgIFt5YW5uLm1vcmluLjE5OThA
-ZnJlZS5mcjoKICAgICAgLSB1c2UgQUxDSEVNWV9IT01FIGV2ZXJ5d2hlcmUgcmF0aGVyIHRoYW4g
-cmVwZWF0aW5nIHRoZSBsb2NhdGlvbiBpbgogICAgICAgIHRoZSBpbnN0YWxsIG1hY3JvCiAgICAg
-IC0gZG9uJ3QgcmVtb3ZlIGluc3RhbGwgZGlyIGJlZm9yZSBpbnN0YWxsaW5nCiAgICAgIC0gdXNl
-IGEgdGVtcGxhdGUgZm9yIGF0b20ubWssIG5vdCBpbi1saW5lIGluIGFsY2hlbXkubWsKICAgIF0K
-CiAgICBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbGNoZW15L2FsY2hlbXkubWsgYi9wYWNrYWdlL2Fs
-Y2hlbXkvYWxjaGVteS5tawogICAgaW5kZXggNjNkNWE5NDFjNS4uZjgwMmM2MjQyNSAxMDA2NDQK
-ICAgIC0tLSBhL3BhY2thZ2UvYWxjaGVteS9hbGNoZW15Lm1rCiAgICArKysgYi9wYWNrYWdlL2Fs
-Y2hlbXkvYWxjaGVteS5tawogICAgQEAgLTEwLDE5ICsxMCwxOSBAQCBBTENIRU1ZX0xJQ0VOU0Ug
-PSBCU0QtMy1DbGF1c2UgKEFsY2hlbXkpLCBHUEwtMi4wIChrY29uZmlnKQogICAgIEFMQ0hFTVlf
-TElDRU5TRV9GSUxFUyA9IENPUFlJTkcgUkVBRE1FCiAgICAgSE9TVF9BTENIRU1ZX0RFUEVOREVO
-Q0lFUyA9IGhvc3QtcHl0aG9uMwogICAgIAogICAgK0FMQ0hFTVlfSE9NRSA9ICQoSE9TVF9ESVIp
-L29wdC9hbGNoZW15CiAgICAgQUxDSEVNWV9TREtfQkFTRURJUiA9ICQoU1RBR0lOR19ESVIpL3Vz
-ci9saWIvYWxjaGVteS9zZGsKICAgICAKICAgICBkZWZpbmUgSE9TVF9BTENIRU1ZX0lOU1RBTExf
-Q01EUwogICAgLQlybSAtcmYgJChIT1NUX0RJUikvb3B0L2FsY2hlbXkKICAgIC0JbWtkaXIgLXAg
-JChIT1NUX0RJUikvb3B0L2FsY2hlbXkKICAgIC0JY3AgLXJmICQoQEQpLyogJChIT1NUX0RJUikv
-b3B0L2FsY2hlbXkvCiAgICArCW1rZGlyIC1wICQoQUxDSEVNWV9IT01FKQogICAgKwljcCAtcmYg
-JChARCkvKiAkKEFMQ0hFTVlfSE9NRSkKICAgICsJY3AgJChBTENIRU1ZX1BLR0RJUikvYXRvbS5t
-ay5pbiAkKEFMQ0hFTVlfSE9NCUUpL2F0b20ubWsuaW4KICAgICBlbmRlZgogICAgIAogICAgICQo
-ZXZhbCAkKGhvc3QtZ2VuZXJpYy1wYWNrYWdlKSkKICAgICAKICAgICAjIFZhcmlhYmxlcyB1c2Vk
-IGJ5IG90aGVyIHBhY2thZ2VzCiAgICAgCiAgICAtQUxDSEVNWV9IT01FID0gJChIT1NUX0RJUikv
-b3B0L2FsY2hlbXkKICAgICBBTENIRU1ZX01BS0UgPSAkKEFMQ0hFTVlfSE9NRSkvc2NyaXB0cy9h
-bGNoZW1ha2UKICAgICAKICAgICAjIFRBUkdFVF9BUkNIIGlzIHNldCB0byAneHh4JyB0byBhdm9p
-ZCBBbGNoZW15IG1hbmFnaW5nIHRoZSBhcmNoaXRlY3R1cmUuCiAgICBAQCAtNTksMTQgKzU5LDEx
-IEBAIGVuZGlmCiAgICAgIyAkMjogQWxjaGVteSBtb2R1bGUgbmFtZQogICAgICMgJDM6IEFsY2hl
-bXkgbW9kdWxlIGZpbGUgbmFtZQogICAgIGRlZmluZSBBTENIRU1ZX0lOU1RBTExfTElCX1NES19G
-SUxFCiAgICAtCW1rZGlyIC1wICQoQUxDSEVNWV9TREtfQkFTRURJUikvJChzdHJpcCAkKDEpKQog
-ICAgLQkoIFwKICAgIC0JCWVjaG8gJ0xPQ0FMX1BBVEggOj0gJCQoY2FsbCBteS1kaXIpJzsgXAog
-ICAgLQkJZWNobyAnaW5jbHVkZSAkJChDTEVBUl9WQVJTKSc7IFwKICAgIC0JCWVjaG8gJ0xPQ0FM
-X01PRFVMRSA6PSAkKHN0cmlwICQoMikpJzsgXAogICAgLQkJZWNobyAnTE9DQUxfU0RLIDo9ICQo
-U1RBR0lOR19ESVIpJzsgXAogICAgLQkJZWNobyAnTE9DQUxfREVTVERJUiA6PSB1c3IvbGliJzsg
-XAogICAgLQkJZWNobyAnTE9DQUxfTU9EVUxFX0ZJTEVOQU1FIDo9ICQoc3RyaXAgJCgzKSknOyBc
-CiAgICAtCQllY2hvICdpbmNsdWRlICQkKEJVSUxEX0xJQlJBUlkpJzsgXAogICAgLQkpID4gJChB
-TENIRU1ZX1NES19CQVNFRElSKS8kKHN0cmlwICQoMSkpL2F0b20ubWsKICAgICsJJChJTlNUQUxM
-KSAtbSAwNjQ0IC1EIFwKICAgICsJCSQoQUxDSEVNWV9IT01FKS9hdG9tLm1rLmluIFwKICAgICsJ
-CSQoQUxDSEVNWV9TREtfQkFTRURJUikvJChzdHJpcCAkKDEpKS9hdG9tLm1rCiAgICArCSQoU0VE
-KSAncyNAU1RBR0lOR19ESVJAIyQoU1RBR0lOR19ESVIpIycgXAogICAgKwkJLWUgJ3MjQE1PRFVM
-RUAjJChzdHJpcCAkKDIpKSMnIFwKICAgICsJCS1lICdzI0BNT0RVTEVfRklMRU5BTUVAIyQoc3Ry
-aXAgJCgzKSkjJyBcCiAgICArCQkkKEFMQ0hFTVlfU0RLX0JBU0VESVIpLyQoc3RyaXAgJCgxKSkv
-YXRvbS5tawogICAgIGVuZGVmCiAgICBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbGNoZW15L2F0b20u
-bWsuaW4gYi9wYWNrYWdlL2FsY2hlbXkvYXRvbS5tay5pbgogICAgbmV3IGZpbGUgbW9kZSAxMDA2
-NDQKICAgIGluZGV4IDAwMDAwMDAwMDAuLjMwZWI2ZDVlMjMKICAgIC0tLSAvZGV2L251bGwKICAg
-ICsrKyBiL3BhY2thZ2UvYWxjaGVteS9hdG9tLm1rLmluCiAgICBAQCAtMCwwICsxLDcgQEAKICAg
-ICtMT0NBTF9QQVRIIDo9ICQoY2FsbCBteS1kaXIpCiAgICAraW5jbHVkZSAkKENMRUFSX1ZBUlMp
-CiAgICArTE9DQUxfTU9EVUxFIDo9IEBNT0RVTEVACiAgICArTE9DQUxfU0RLIDo9IEBTVEFHSU5H
-X0RJUkAKICAgICtMT0NBTF9ERVNURElSIDo9IHVzci9saWIKICAgICtMT0NBTF9NT0RVTEVfRklM
-RU5BTUUgOj0gQE1PRFVMRV9GSUxFTkFNRUAKICAgICtpbmNsdWRlICQoQlVJTERfTElCUkFSWSkK
-ClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAg
-WWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwg
-RXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWdu
-ZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5
-OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhl
-cmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwg
-SFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0t
-LScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Disable execinfo to avoid the following build failure if libexecinfo is
+built before tvheadend since the addition of the package in commit
+eea8ba446c10701a273432552108d80fb2224ef4:
+
+/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: /home/peko/autobuild/instance-0/output-1/build/tvheadend-b8710206eb073c72b142bce95846b77a0ffa34a6/build.linux/src/tvhlog.o: in function `tvhlog_backtrace_printf':
+/home/peko/autobuild/instance-0/output-1/build/tvheadend-b8710206eb073c72b142bce95846b77a0ffa34a6/src/tvhlog.c:522: undefined reference to `backtrace'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ee9ad2c999b622097fe0f1522e7e32184722e548
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-configure-add-execinfo-option.patch  | 55 +++++++++++++++++++
+ package/tvheadend/tvheadend.mk                |  1 +
+ 2 files changed, 56 insertions(+)
+ create mode 100644 package/tvheadend/0002-configure-add-execinfo-option.patch
+
+diff --git a/package/tvheadend/0002-configure-add-execinfo-option.patch b/package/tvheadend/0002-configure-add-execinfo-option.patch
+new file mode 100644
+index 0000000000..c55d127d58
+--- /dev/null
++++ b/package/tvheadend/0002-configure-add-execinfo-option.patch
+@@ -0,0 +1,55 @@
++From 04c01e631cb1bf47dd50b1ef92a086308e380eff Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 1 Jan 2022 16:53:29 +0100
++Subject: [PATCH] configure: add execinfo option
++
++Add execinfo option to allow the user to disable the feature even if
++execinfo.h is found on the system
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upsteam status: https://github.com/tvheadend/tvheadend/pull/1431]
++---
++ configure | 17 +++++++++++++++--
++ 1 file changed, 15 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 4dad024c4..c087502bf 100755
++--- a/configure
+++++ b/configure
++@@ -75,6 +75,7 @@ OPTIONS=(
++   "ddci:yes"
++   "cclang_threadsan:no"
++   "gperftools:no"
+++  "execinfo:auto"
++ )
++ 
++ #
++@@ -150,11 +151,23 @@ if [ ${PLATFORM} = "freebsd" ]; then
++     # If we don't have libunwind then fallback to execinfo.
++     if ! enabled libunwind
++     then
++-        check_cc_header execinfo
+++        if enabled_or_auto execinfo; then
+++            if check_cc_header execinfo; then
+++                enable execinfo
+++            else
+++                die "execinfo.h not found (use --disable-execinfo)"
+++           fi
+++        fi
++     fi
++ 
++ else
++-    check_cc_header execinfo
+++    if enabled_or_auto execinfo; then
+++        if check_cc_header execinfo; then
+++            enable execinfo
+++        else
+++            die "execinfo.h not found (use --disable-execinfo)"
+++        fi
+++    fi
++ fi
++ check_cc_option mmx
++ check_cc_option sse2
++-- 
++2.33.0
++
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 4e84e496bf..58ebdcb054 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -161,6 +161,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--enable-dvbscan \
+ 			--enable-bundle \
+ 			--enable-pngquant \
++			--disable-execinfo \
+ 			--disable-ffmpeg_static \
+ 			--disable-hdhomerun_static \
+ 			$(TVHEADEND_CONF_OPTS) \
+-- 
+2.33.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
