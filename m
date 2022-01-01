@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBD06C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16EE4C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 22:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4576840184;
-	Sat,  1 Jan 2022 22:15:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 990BE401FB;
+	Sat,  1 Jan 2022 22:36:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8vnaVXQAS6y2; Sat,  1 Jan 2022 22:15:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EOJhwggj7N0f; Sat,  1 Jan 2022 22:36:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A3BE40186;
-	Sat,  1 Jan 2022 22:15:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAD0140200;
+	Sat,  1 Jan 2022 22:36:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A7901BF32D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:15:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 456331BF32D
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0597F81358
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:15:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3427D80B53
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 22:36:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WHjxtBVXMH3s for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 22:15:49 +0000 (UTC)
+ with ESMTP id 0beUFuNBoas5 for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 22:36:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 25EE28134C
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:15:49 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- g7-20020a7bc4c7000000b00345c4bb365aso16423671wmk.4
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 14:15:48 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0265980B44
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 22:36:27 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id v6so616059wra.8
+ for <buildroot@buildroot.org>; Sat, 01 Jan 2022 14:36:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+XWMzq3JMOo3+ogwDVbkir1NGpqTH6eUvv8FLEyUIzI=;
- b=aLcZNltAdvcR9IJ5hBf8Y5Bfak7rtQxs4ZJsRFK8TBV1KAq8C0bUhcA3cxTVr2B4Rm
- UFR4JuEWVt3WcYtyKy6U+LmBYX0NW8hQDG6tKmn6ZOPE6uYVAR6pp4qJ1cJGCmomXUDo
- h8yYE33D3KX4pKEYN3o9kOrs2zOAfFgS4+bc2wLSn3bqziPUxw54lGLnZMSuecwDW2pr
- PES1+FdZLqo2oCnCmKtJNsgHsC2uYPAppf8lCk4sjYBFNsjCcr3S4e4MLvLdO3BXFf3c
- /c0str1pGLzl39+Rnrl/zeWKXv3EQFvL+Ifo0G06UB5uaK49rxxqF2bkh5L+t5pIneWP
- 1fsQ==
+ bh=fhReL0qnKWFUUWoLTMTxHR9Axh4VooJkD8Ge+ML8uO0=;
+ b=jomY+ZOXZzsc4veX0G4mZIcHddu3/GYiLMJHVcvwKc6XvbIqqskqQmCVSbnwN+P0p5
+ yum34Z5nCDICglqc9X2tTSWWU7gb0AU1GjLcwlg1I+3SwB1NYAQx47KH3yirc/Q6SMKN
+ 1ZXv8nn2+DN0MBD8583Ac2v8uKBIH3dPjkWYr9iWKCoFEWsYdZlt0NCeNVD+ofiyJTh5
+ 3CW+6HkPFtzs0d/0gSIwECjguRKxELO+PGx6PXcEV1ILLXfszjDnnmIHvePaBqJOy1ar
+ IRG2/JHD4sY1LDk4OnF2IOmWgZ19RjD0UCuAtEwcTNw6A3N6qJKtbzdZ7if40Gs00qq4
+ 63RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=+XWMzq3JMOo3+ogwDVbkir1NGpqTH6eUvv8FLEyUIzI=;
- b=ONJDqCvvrUWnzELU/xUjDKyToxQ8uhRzFxvChNwAi1oxzp78D9A9pY/Cs6tRQvvkpm
- R/C2MQVWBKRghJNuX//nLhcqgwcK9rsvmIS67X+IgzoAOBmgIVMHIxeN5A0a7nhIo+T3
- yIEKKVgSnAeTVKYJNDy49gqIx/c7doTDtZVBclS4YTu9KMYbNDeMp92NMQ0YeUAih5Xh
- 0lHQp/5O2XbmUi0jUijXf/loKcAGqJqAaFriEXH8UcW4AgMMYrFmaH5HCzilYW2xQKAQ
- NAkj4gwqjKhy/t4hr3Xnm1bNfwYCiuYLph7s4BXocv3lUDMyl9lPFNUMqWyjyi2NiYM3
- MVSw==
-X-Gm-Message-State: AOAM531hlrBQzNL3pAjy6UQsj98GDGeSSeLHKx2LWLbmjWYgDgpeEFW3
- UcS+ByCupWQ3A7pGky7rS6pHTRoSTM8=
-X-Google-Smtp-Source: ABdhPJxuPwTmNXazaZblotZsEjxIfDbENs4QTY1//VcHbj6svTASZHzcFlo6cju2P6IMLQELwVHKGw==
-X-Received: by 2002:a7b:c448:: with SMTP id l8mr33656852wmi.173.1641075347162; 
- Sat, 01 Jan 2022 14:15:47 -0800 (PST)
+ bh=fhReL0qnKWFUUWoLTMTxHR9Axh4VooJkD8Ge+ML8uO0=;
+ b=C8KlRMe+GUXRradgkDHEelyFX62UsaLM21feZmTbqmhQUyCAOUT+hUi9MYZhwFzy1m
+ 5vsD49t+DbzcfRKU7JnyqVCTH0d8d8yu5gzaPOKtqqs4RkzGFhDPKqy47ncjqv4Atq5z
+ ipaU8LhqaPSB4CmgjSFNUxT2J4ZqbSV53Jk7oHQIieIa6/KpoxiQw1goZddWxHnPxzqM
+ CkTsnrymcB1fvgvi00062kMvv3ypDnM2p/NVFnHZmuadwaZapItaDUCjCpZJ4n0kje9o
+ /C2Oca2Qffjp1mu6c+ZSPOT47/WV9L6brBF2scsOvWkcktLHnjRzoIdaygxa94r1OfRF
+ hdxQ==
+X-Gm-Message-State: AOAM530fjvtkR83zSZGaq79CN/ZuCNy3avSxadN77N/xhA6mpzX5rOkx
+ lBwEAadP+V+vYIVwfhlzrxgr5WqtOTk=
+X-Google-Smtp-Source: ABdhPJxo5beDjiAJMNejbmh6Rp4zQ+7qbU+fxFQ+2ammBtn0umL71JFcBlIsIzKBmRlvknmXr1qZhg==
+X-Received: by 2002:a5d:4706:: with SMTP id y6mr34738798wrq.435.1641076585822; 
+ Sat, 01 Jan 2022 14:36:25 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id s1sm30298853wrr.8.2022.01.01.14.15.46
+ by smtp.gmail.com with ESMTPSA id b6sm28879786wri.56.2022.01.01.14.36.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 14:15:46 -0800 (PST)
+ Sat, 01 Jan 2022 14:36:25 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 23:14:25 +0100
-Message-Id: <20220101221425.2059395-1-fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jan 2022 23:35:29 +0100
+Message-Id: <20220101223529.2111756-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/xxhash: bump to version 0.8.1
+Subject: [Buildroot] [PATCH 1/1] package/tinyalsa: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,131 +85,163 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop first patch (already in version)
-- Refresh upstream status of latest patch
-- Update hash of LICENSE and add cli/COPYING:
-  https://github.com/Cyan4973/xxHash/commit/85e1ea2ab0d90463b804f4a65b0f67d99718c6f8
+- Switch to meson-package to drop first patch and disable examples and
+  utils
+- Drop second patch (already in version)
+- Update hash of NOTICE (empty new lines added with
+  https://github.com/tinyalsa/tinyalsa/commit/902b8c8f9fa5a2e1937007d7d5ee90f01790808b)
 
-https://github.com/Cyan4973/xxHash/releases/tag/v0.8.1
+https://github.com/tinyalsa/tinyalsa/releases/tag/v2.0.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...h => 0001-fix-man-page-installation.patch} |  0
- .../0001-fixed-man-page-installation.patch    | 31 -------------------
- ...efile-add-dedicated-install-targets.patch} |  8 ++---
- package/xxhash/xxhash.hash                    |  5 +--
- package/xxhash/xxhash.mk                      |  4 +--
- 5 files changed, 8 insertions(+), 40 deletions(-)
- rename package/xxhash/{0002-fix-man-page-installation.patch => 0001-fix-man-page-installation.patch} (100%)
- delete mode 100644 package/xxhash/0001-fixed-man-page-installation.patch
- rename package/xxhash/{0003-Makefile-add-dedicated-install-targets.patch => 0002-Makefile-add-dedicated-install-targets.patch} (94%)
+ .../tinyalsa/0001-disable-doxygen-usage.patch | 35 ------------------
+ .../0002-interval.h-add-missing-header.patch  | 36 -------------------
+ package/tinyalsa/tinyalsa.hash                |  4 +--
+ package/tinyalsa/tinyalsa.mk                  | 27 +++-----------
+ 4 files changed, 6 insertions(+), 96 deletions(-)
+ delete mode 100644 package/tinyalsa/0001-disable-doxygen-usage.patch
+ delete mode 100644 package/tinyalsa/0002-interval.h-add-missing-header.patch
 
-diff --git a/package/xxhash/0002-fix-man-page-installation.patch b/package/xxhash/0001-fix-man-page-installation.patch
-similarity index 100%
-rename from package/xxhash/0002-fix-man-page-installation.patch
-rename to package/xxhash/0001-fix-man-page-installation.patch
-diff --git a/package/xxhash/0001-fixed-man-page-installation.patch b/package/xxhash/0001-fixed-man-page-installation.patch
+diff --git a/package/tinyalsa/0001-disable-doxygen-usage.patch b/package/tinyalsa/0001-disable-doxygen-usage.patch
 deleted file mode 100644
-index a9f68db4b4..0000000000
---- a/package/xxhash/0001-fixed-man-page-installation.patch
+index ed939fb9bf..0000000000
+--- a/package/tinyalsa/0001-disable-doxygen-usage.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6 Mon Sep 17 00:00:00 2001
--From: Yann Collet <cyan@fb.com>
--Date: Fri, 6 Aug 2021 15:29:32 -0700
--Subject: [PATCH] fixed man page installation
+@@ -1,35 +0,0 @@
+-Disable doxygen usage
 -
--[Retrieved from:
--https://github.com/Cyan4973/xxHash/commit/e345ccaf4daa8c35698ab02c0de346fcc0ca9ef6]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
+-In order to avoid a dependency on doxygen on the build machine, this
+-patch adjusts the main Makefile to not build and install the
+-documentation.
 -
--diff --git a/Makefile b/Makefile
--index b8552a9f..556a32a0 100644
----- a/Makefile
--+++ b/Makefile
--@@ -498,10 +498,10 @@ endif
-- 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh64sum
-- 	$(Q)ln -sf xxhsum $(DESTDIR)$(BINDIR)/xxh128sum
-- 	@echo Installing man pages
---	$(Q)$(INSTALL_DATA) xxhsum.1 $(DESTDIR)$(MANDIR)/xxhsum.1
---	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh32sum.1
---	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh64sum.1
---	$(Q)ln -sf xxhsum.1 $(DESTDIR)$(MANDIR)/xxh128sum.1
--+	$(Q)$(INSTALL_DATA) $(MAN) $(DESTDIR)$(MANDIR)/xxhsum.1
--+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh32sum.1
--+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh64sum.1
--+	$(Q)ln -sf $(MAN) $(DESTDIR)$(MANDIR)/xxh128sum.1
-- 	@echo xxhash installation completed
+-[Vincent: tweak patch for 1.1.1 version]
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/Makefile b/Makefile
+---- a/Makefile	2017-05-24 05:23:57.000000000 +0100
+-+++ b/Makefile	2017-05-25 10:35:20.781747053 +0100
+-@@ -11,14 +11,12 @@ export MANDIR ?= $(PREFIX)/share/man
+- all:
+- 	$(MAKE) -C src
+- 	$(MAKE) -C utils
+--	$(MAKE) -C doxygen
+- 	$(MAKE) -C examples
 - 
-- .PHONY: uninstall
-diff --git a/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch b/package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
-similarity index 94%
-rename from package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
-rename to package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
-index 0607c8ee82..17d34a0823 100644
---- a/package/xxhash/0003-Makefile-add-dedicated-install-targets.patch
-+++ b/package/xxhash/0002-Makefile-add-dedicated-install-targets.patch
-@@ -10,13 +10,14 @@ This is especially useful on embedded systems where dynamic library is
- not always supported by toolchains
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/Cyan4973/xxHash/pull/665]
-+[Retrieved from:
-+https://github.com/Cyan4973/xxHash/commit/db9c199e99f7b4d419647b1ef49c547fc2547516]
- ---
-  Makefile | 18 +++++++++++++++---
-  1 file changed, 15 insertions(+), 3 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index 8d4fcd2..5fe7297 100644
-+index 8d4fcd21..5fe72972 100644
- --- a/Makefile
- +++ b/Makefile
- @@ -505,11 +505,14 @@ libxxhash.pc: libxxhash.pc.in
-@@ -68,6 +69,3 @@ index 8d4fcd2..5fe7297 100644
-  	@echo xxhash installation completed
-  
-  .PHONY: uninstall
---- 
--2.33.0
+- .PHONY: clean
+- clean:
+- 	$(MAKE) -C src clean
+- 	$(MAKE) -C utils clean
+--	$(MAKE) -C doxygen clean
+- 	$(MAKE) -C examples clean
+- 
+- .PHONY: install
+-@@ -30,5 +28,4 @@ install:
+- 	install include/tinyalsa/version.h $(DESTDIR)$(INCDIR)/
+- 	$(MAKE) -C src install
+- 	$(MAKE) -C utils install
+--	$(MAKE) -C doxygen install
+- 
+diff --git a/package/tinyalsa/0002-interval.h-add-missing-header.patch b/package/tinyalsa/0002-interval.h-add-missing-header.patch
+deleted file mode 100644
+index c043145b55..0000000000
+--- a/package/tinyalsa/0002-interval.h-add-missing-header.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 685e530d8a0063134642371eaacd01fee2f62d85 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 2 Jun 2017 12:19:03 +0300
+-Subject: [PATCH] interval.h: add missing header
 -
-diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
-index feb5000808..2c99236a45 100644
---- a/package/xxhash/xxhash.hash
-+++ b/package/xxhash/xxhash.hash
-@@ -1,3 +1,4 @@
+-The ssize_t type requires the unistd.h header. This fixes build with musl
+-libc:
+-
+-In file included from ../include/tinyalsa/limits.h:32:0,
+-                 from limits.c:1:
+-../include/tinyalsa/interval.h:38:2: error: unknown type name 'ssize_t'
+-  ssize_t max;
+-  ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/tinyalsa/tinyalsa/pull/98
+-
+- include/tinyalsa/interval.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/include/tinyalsa/interval.h b/include/tinyalsa/interval.h
+-index 3f6f3dce5d90..068571df5a63 100644
+---- a/include/tinyalsa/interval.h
+-+++ b/include/tinyalsa/interval.h
+-@@ -30,6 +30,7 @@
+- #define TINYALSA_INTERVAL_H
+- 
+- #include <stdlib.h>
+-+#include <unistd.h>
+- 
+- /** A closed range signed interval. */
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/tinyalsa/tinyalsa.hash b/package/tinyalsa/tinyalsa.hash
+index d078bab597..f7673b1769 100644
+--- a/package/tinyalsa/tinyalsa.hash
++++ b/package/tinyalsa/tinyalsa.hash
+@@ -1,3 +1,3 @@
  # locally computed
--sha256  7054c3ebd169c97b64a92d7b994ab63c70dd53a06974f1f630ab782c28db0f4f  xxhash-0.8.0.tar.gz
--sha256  9da63520e9293d82c4b1613be5c84058cadb82b02f5972179bad13731d589910  LICENSE
-+sha256  3bb6b7d6f30c591dd65aaaff1c8b7a5b94d81687998ca9400082c739a690436c  xxhash-0.8.1.tar.gz
-+sha256  553d0035773ddd1590045f8fdc3a4c6ead31e36336721aeca8421e88ed1c9f80  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  cli/COPYING
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 3e7f3244b3..a8f8d1d179 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -4,10 +4,10 @@
+-sha256  d92b438cea348ae316c4b2cbf367b4f01ed821a947e6a34d813624e9e3c936c1  tinyalsa-1.1.1.tar.gz
+-sha256  ca2b89a68c33fba3c8bcaec96f32907e2ede0eb33688ae61d29ec49732158f6d  NOTICE
++sha256  573ae0b2d3480851c1d2a12503ead2beea27f92d44ed47b74b553ba947994ef1  tinyalsa-2.0.0.tar.gz
++sha256  ea22a4711f5250f88a4d7011fbc65367d1b02ac954dcc49f5b6d7c135e6537c4  NOTICE
+diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
+index bd9d9a00d0..b5c39e35d6 100644
+--- a/package/tinyalsa/tinyalsa.mk
++++ b/package/tinyalsa/tinyalsa.mk
+@@ -4,30 +4,11 @@
  #
  ################################################################################
  
--XXHASH_VERSION = 0.8.0
-+XXHASH_VERSION = 0.8.1
- XXHASH_SITE = $(call github,Cyan4973,xxHash,v$(XXHASH_VERSION))
- XXHASH_LICENSE = BSD-2-Clause (library), GPL-2.0+ (xxhsum)
--XXHASH_LICENSE_FILES = LICENSE
-+XXHASH_LICENSE_FILES = LICENSE cli/COPYING
- XXHASH_INSTALL_STAGING = YES
+-TINYALSA_VERSION = 1.1.1
+-TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
++TINYALSA_VERSION = 2.0.0
++TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,v$(TINYALSA_VERSION))
+ TINYALSA_LICENSE = BSD-3-Clause
+ TINYALSA_LICENSE_FILES = NOTICE
+ TINYALSA_INSTALL_STAGING = YES
++TINYALSA_CONF_OPTS = -Ddocs=disabled -Dexamples=disabled -Dutils=disabled
  
- XXHASH_TARGETS = xxhsum
+-define TINYALSA_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
+-endef
+-
+-define TINYALSA_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) \
+-		PREFIX="/usr" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		DESTDIR="$(STAGING_DIR)" install
+-endef
+-
+-define TINYALSA_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) \
+-		PREFIX="/usr" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		DESTDIR="$(TARGET_DIR)" install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
 -- 
 2.33.0
 
