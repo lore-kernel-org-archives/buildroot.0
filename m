@@ -4,76 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22228C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 14:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC9FBC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 15:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4110812F0;
-	Sat,  1 Jan 2022 14:57:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62BDA813EA;
+	Sat,  1 Jan 2022 15:10:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xO3_o84qEono; Sat,  1 Jan 2022 14:57:25 +0000 (UTC)
+	with ESMTP id 3Ta21Mb_6Ns4; Sat,  1 Jan 2022 15:10:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F124812ED;
-	Sat,  1 Jan 2022 14:57:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 526191BF59D
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:57:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4CC1813C4;
+	Sat,  1 Jan 2022 15:10:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 560401BF59B
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 15:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E31E60625
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 14:57:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4297140181
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 15:10:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vmqySOC4Jg9T for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 14:57:22 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 59B09605A6
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 14:57:22 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id i22so60865632wrb.13
- for <buildroot@buildroot.org>; Sat, 01 Jan 2022 06:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2TMC/R5Hx8QdEQvxBeNeNXVWEZSm2oKB3GfhrIhMyP4=;
- b=h8Nm2YKUdt2a3bBjnDLOur+iorTHZiKI7UmAq5Ee6Ll3yD4dl5OTZP5y+r765j2rXA
- 7Nl7iks/ENb5zwXrwePJ6CBhvXGdxFH6KNxkAC+fIMpu2VFNG2qO74cAsOfj0gbZjRWi
- LnKzdbXzXLEDSUIkvJHPSoFffy6g3GVHgSHgDwFRfjnSvbz8fjT3D0QNcGAUKDTGovCN
- a97ZNvTwcTiPXgcNHShwZdOAfQadtYuy7rMdVb1in/2FAFfpUKqZSU3MD5UW7cWWeHu0
- LDKGgOKrSlqFOPZNrVJqzvZJN9dy3LIHIKkH4DdeSVcHxYphF5vhd3OWjq0lR0DBWLQ6
- VL5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=2TMC/R5Hx8QdEQvxBeNeNXVWEZSm2oKB3GfhrIhMyP4=;
- b=e7SzzjVCrmF0XylpV/lIpSxcfIXWAWPuDAz8BVJZkbKvEg3xgdw+e2Bj8P5l6KqpUY
- pQaJuG3S8V9ewSm7z669Zg7iVgN6JG9jvcs+hdjiON1yZekrRYjG42rTBSTYsDPhezjH
- ojlaPL6o1DRBQ0TwB0StZj8reiuCWTeQY+dP1GeNPzsJR+DkiYv0A9iPFntSnRDU8cE4
- m9zM+C7XU/uq7Bs9K6nXd3g3NdOTIRL6IfVbFhEqTSIrgyLPfLlvvUv2kGAaT5mizi+v
- qiWDJtLceahDTIfVb93uOCJJDyFK0NKdxs/7G1saiAiho8PMB+LIIACMQXXKDCoPgWKL
- ed4Q==
-X-Gm-Message-State: AOAM531Th4G3zRQ0UkpDwONnMtD14Dt4pSyUMZBwu/2CzB36sGWi5wxl
- gKQvN3LrdxjLI7tiD2j7d3kZMWw5k8Q=
-X-Google-Smtp-Source: ABdhPJz9Ka2oIpbFTgHTXwIFE1oU+P0u7RHc4bFTkGn7pO0JiEYRo94koHQA5Kiude3ssSJs1usBnw==
-X-Received: by 2002:adf:fbc1:: with SMTP id d1mr33121089wrs.648.1641049040454; 
- Sat, 01 Jan 2022 06:57:20 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id o14sm28834199wms.4.2022.01.01.06.57.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jan 2022 06:57:20 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  1 Jan 2022 15:56:32 +0100
-Message-Id: <20220101145632.1393642-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PxkN3zzhjU7a for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 15:10:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65F3B400D9
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 15:10:12 +0000 (UTC)
+Received: from [192.168.50.18] ([146.241.138.59])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 3g1JnSPJpVJjR3g1Jnlcfh; Sat, 01 Jan 2022 16:10:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1641049810; bh=mie5gcvV0PjsNzcLPLUGITvqKwivADlsWGkgQGpqLcQ=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=F7TXZE4YOawqE6t/i6IwoORcMl77rYh66rT1OJdq11hmRotkt+EGxUfQ40J+CC1rg
+ 85CvM4igcjUfDvMvF2LcWP4HJ0dRyzvI5PTRPSwuLNKv72zx+gvn1NUYyciniXCu2r
+ P+1Fj0zeNCFWii86ugEB791KhUObhW9+NE5xJh9mgYelY9tlFc2/RvfOh0UNfkRJrs
+ q5yd4WFO95IyOaKMt8jgx4Q5C5SkerMkkYRWSOsOUvYQkGhBh5MsGe3wTqikHcKq/6
+ UqEfZVst6rm+rpIUJ0pSutiObLFgI7p+xS7BYY0Bg9NPfIjlnTggBTya0AAb0n5cC0
+ UHdI3/r0NkTTA==
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210930231424.249681-1-giulio.benetti@benettiengineering.com>
+ <20220101115058.0515c8d9@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <9c4d8993-46b2-8f1a-6aa3-bdd9957b783c@benettiengineering.com>
+Date: Sat, 1 Jan 2022 16:10:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/fail2ban: fix build with python 3.10
+In-Reply-To: <20220101115058.0515c8d9@windsurf>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfE8QBVuFEEC4U5QkzQBal/ySbmO0RrVHXby+HmKMGSgsj1QXUS0w9B2+JygcBlMx6OgY33GERPQao1TnF0O7I9wrIwvP5IJ1HJbKUc8KXXe8kKrvOtnX
+ WPX7Yj28MDoflwmyHxuwz1Xu8WewUZYAsL4XIi5/Z0r5FucaA4Vm/jzqkHu/gYAEhI80t29D/90QYlpxX2iw1BDsnhv7SE7S9I61M83gEKkaeblPasDrVCKD
+ xOF+DtilTt6mzYdz2Ah/aA==
+Subject: Re: [Buildroot] [buildroot-test] scripts/autobuild-run: extend
+ timeout from 120 to 180 minutes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,103 +72,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of python3 to version
-3.10.1 in commit 25b1fc2898d68ddf2674b14c738045875fc5a2dc:
+Hi Thomas,
 
-error in fail2ban setup command: use_2to3 is invalid.
+On 01/01/22 11:50, Thomas Petazzoni wrote:
+> Hello Giulio,
+> 
+> On Fri,  1 Oct 2021 01:14:24 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> During the last months some package started to timeout, but this is not due
+>> to toolchain infinite loop. I think it's due to the increase of the source
+>> code files' length and to complexity of toolchains or even slow compiling
+>> time. For example python-uvloop and python-lxml only take long time to
+>> build with -Os optimization and this makes it seem a TIMEOUT but it's not.
+>> So let's extend timeout setting from 120 to 180 minutes to avoid false
+>> TIMEOUTs.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Do you have a specific example where you have seen a failure?
 
-Fixes:
- - http://autobuild.buildroot.org/results/6a5e91f9912f869b2b07b10b576457b432066393
+Not anymore, it's been only in September. 2 days ago I was right 
+thinking about dropping this patch when checking patchwork.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...with-error-in-fail2ban-setup-command.patch | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
+> Please
+> note that this HUNG_BUILD_TIMEOUT value is the per-step timeout: it
+> verifies that one step of one particular package doesn't take more than
+> 120 minutes.
 
-diff --git a/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch b/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
-new file mode 100644
-index 0000000000..8cb097dc38
---- /dev/null
-+++ b/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
-@@ -0,0 +1,67 @@
-+From 5ac303df8a171f748330d4c645ccbf1c2c7f3497 Mon Sep 17 00:00:00 2001
-+From: sebres <info@sebres.de>
-+Date: Sun, 19 Sep 2021 18:49:18 +0200
-+Subject: [PATCH] fix gh-3098: build fails with error in fail2ban setup
-+ command: use_2to3 is invalid (setuptools 58+)
-+
-+[Retrieved from:
-+https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ setup.py | 16 +---------------
-+ 1 file changed, 1 insertion(+), 15 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index f4c2550f6..98413273c 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -48,7 +48,7 @@
-+ from glob import glob
-+ 
-+ from fail2ban.setup import updatePyExec
-+-
-++from fail2ban.version import version
-+ 
-+ source_dir = os.path.realpath(os.path.dirname(
-+ 	# __file__ seems to be overwritten sometimes on some python versions (e.g. bug of 2.6 by running under cProfile, etc.):
-+@@ -112,22 +112,12 @@ def update_scripts(self, dry_run=False):
-+ # Wrapper to specify fail2ban own options:
-+ class install_command_f2b(install):
-+ 	user_options = install.user_options + [
-+-		('disable-2to3', None, 'Specify to deactivate 2to3, e.g. if the install runs from fail2ban test-cases.'),
-+ 		('without-tests', None, 'without tests files installation'),
-+ 	]
-+ 	def initialize_options(self):
-+-		self.disable_2to3 = None
-+ 		self.without_tests = not with_tests
-+ 		install.initialize_options(self)
-+ 	def finalize_options(self):
-+-		global _2to3
-+-		## in the test cases 2to3 should be already done (fail2ban-2to3):
-+-		if self.disable_2to3:
-+-			_2to3 = False
-+-		if _2to3:
-+-			cmdclass = self.distribution.cmdclass
-+-			cmdclass['build_py'] = build_py_2to3
-+-			cmdclass['build_scripts'] = build_scripts_2to3
-+ 		if self.without_tests:
-+ 			self.distribution.scripts.remove('bin/fail2ban-testcases')
-+ 
-+@@ -178,7 +168,6 @@ def run(self):
-+ if setuptools:
-+ 	setup_extra = {
-+ 		'test_suite': "fail2ban.tests.utils.gatherTests",
-+-		'use_2to3': True,
-+ 	}
-+ else:
-+ 	setup_extra = {}
-+@@ -202,9 +191,6 @@ def run(self):
-+ 		('/usr/share/doc/fail2ban', doc_files)
-+ 	)
-+ 
-+-# Get version number, avoiding importing fail2ban.
-+-# This is due to tests not functioning for python3 as 2to3 takes place later
-+-exec(open(join("fail2ban", "version.py")).read())
-+ 
-+ setup(
-+ 	name = "fail2ban",
+Ah, I thought the entire build, but that makes no sense since some build 
+can take way more than 2 hours.
+
+> Unless you have a specific example where you have seen this timeout
+> causing false positives, I'm not really keen on applying such a patch
+> as it would cause situations where the build is really stuck to be
+> stuck for 3 hours instead of 2.
+
+Yes, I see you've already marked it as rejected.
+
+> Did you identify that the python-uvloop and python-lxml packages really
+> took more than 2 hours to build? I did see at
+> http://autobuild.buildroot.net/?status=TIMEOUT those timeouts dating
+> back from ~November. Did you reproduce the issue, and verified that the
+> build indeed completes at some point? In general, if a simple package
+> such as python-uvloop or python-lxml takes more than 2 hours to build,
+> it means that the compiler (or linker) has gone crazy in an infinite
+> loop, and the build will in fact never finish.
+
+It was only my suspicious as specified in commit log. I couldn't 
+reproduce it and I thought it was due to the autobuilder's host.
+
+And yes, now that I know it's a per-step timeout it doesn't make sense 
+at all for such little packages.
+
+Thank you
+Best regards
 -- 
-2.33.0
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
