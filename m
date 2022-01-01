@@ -1,64 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAF9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 10:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D56C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jan 2022 10:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 906C760D93;
-	Sat,  1 Jan 2022 10:43:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 228534037C;
+	Sat,  1 Jan 2022 10:51:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9N6gzhe434Yh; Sat,  1 Jan 2022 10:43:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sBmdQV-GfsvO; Sat,  1 Jan 2022 10:51:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C712360D6A;
-	Sat,  1 Jan 2022 10:43:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C74411BF5A4
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:43:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FC5D4012F;
+	Sat,  1 Jan 2022 10:51:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 687331BF5A4
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B56A960D6A
- for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:43:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 611FB401F9
+ for <buildroot@lists.busybox.net>; Sat,  1 Jan 2022 10:51:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ns70aZazGaqe for <buildroot@lists.busybox.net>;
- Sat,  1 Jan 2022 10:43:18 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A3B6660BCB
- for <buildroot@buildroot.org>; Sat,  1 Jan 2022 10:43:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b440:9a6c:7abd:86f8])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C16255FFAE;
- Sat,  1 Jan 2022 11:43:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641033796;
- bh=ruw6F2zvLiwK2m1o57pksrpHD2owlOSNIIvmQ7tIuhk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=tvdOZN0wt1mkZWS2ZVHiFdP1H24Bww/XiyfY1Shq4pRyKgAlBB91Sq2sjR23j90Xq
- Qxyt59Ol9iolGhd+0vS90cEtuw+8RvcNDr4T4XmsEqM+TDyxvAJGRkHuT+aYJ/djvo
- BBq9ExBkhXwY4YGjxRwRGBo5XIEmHM2LHK1i6Zt6xuXgu8Dd8YzkV3gWYONzodnFZY
- LCYbc2CqXKJ2WBa+8Bt9pUQqC+5IZBC4GmFHEVYlP+ZkeCu08ga2rYS+YQsCxlyD43
- LHd+g2pK+h0X4PrtnqVi+S8KbaRvfGm9vCak6LbRwRVkdzAhfcS2itD/fzLWN3D/c8
- oDF0ao5XlXtbw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Jan 2022 11:43:11 +0100
-Date: Sat, 1 Jan 2022 11:43:11 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20220101104311.GD3390456@scaer>
-References: <20211230172507.30212-1-ps.report@gmx.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lpdmQvzN453p for <buildroot@lists.busybox.net>;
+ Sat,  1 Jan 2022 10:51:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32997401F4
+ for <buildroot@buildroot.org>; Sat,  1 Jan 2022 10:51:02 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id CD40B20000A;
+ Sat,  1 Jan 2022 10:50:59 +0000 (UTC)
+Date: Sat, 1 Jan 2022 11:50:58 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20220101115058.0515c8d9@windsurf>
+In-Reply-To: <20210930231424.249681-1-giulio.benetti@benettiengineering.com>
+References: <20210930231424.249681-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20211230172507.30212-1-ps.report@gmx.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [RFC v1] package/assimp: fix namespace related
- compile failure
+Subject: Re: [Buildroot] [buildroot-test] scripts/autobuild-run: extend
+ timeout from 120 to 180 minutes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,126 +62,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Hello Giulio,
 
-On 2021-12-30 18:25 +0100, Peter Seiderer spake thusly:
-> Fixes:
-> 
->   - http://autobuild.buildroot.net/results/0861c66ec02a55e984577094e28b65c78b95a330
-> 
->   .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:101:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
->            const FileDatabase &db) const {
->                                    ^
->  In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
->                    from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
->   .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
->        void Convert(T &dest, const FileDatabase &db) const;
->             ^
->   .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:121:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
->            const FileDatabase &db) const {
->                                    ^
->   In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
->                    from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
->   .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
->        void Convert(T &dest, const FileDatabase &db) const;
->             ^
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Note:
->   - patch fixes the compile failure but did not find the root cause
->     and/or a good explanation why the template spezialisation failes
->     for Structure::Convert<CollectionObject> and
->     Structure::Convert<CollectionChild> (but not the other ones) and
->     why it is fixed by the patch...
+On Fri,  1 Oct 2021 01:14:24 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Since this is now an upstream commit, I've applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-explicit-namespace-instead-of-using.patch | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
+> During the last months some package started to timeout, but this is not due
+> to toolchain infinite loop. I think it's due to the increase of the source
+> code files' length and to complexity of toolchains or even slow compiling
+> time. For example python-uvloop and python-lxml only take long time to
+> build with -Os optimization and this makes it seem a TIMEOUT but it's not.
+> So let's extend timeout setting from 120 to 180 minutes to avoid false
+> TIMEOUTs.
 > 
-> diff --git a/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch b/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-> new file mode 100644
-> index 0000000000..b498c3be3f
-> --- /dev/null
-> +++ b/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-> @@ -0,0 +1,56 @@
-> +From a099fe7cd331a839137115db5df1733c4c1c8070 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Thu, 30 Dec 2021 18:01:54 +0100
-> +Subject: [PATCH] BlenderScene: use explicit namespace instead of using
-> + namespace
-> +
-> +Fixes (using g++ Sourcery CodeBench Lite 2014.05-29 - 4.8.3 20140320):
-> +
-> +  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:101:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
-> +           const FileDatabase &db) const {
-> +                                   ^
-> + In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
-> +                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
-> +  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
-> +       void Convert(T &dest, const FileDatabase &db) const;
-> +            ^
-> +  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:121:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
-> +           const FileDatabase &db) const {
-> +                                   ^
-> +  In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
-> +                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
-> +  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
-> +       void Convert(T &dest, const FileDatabase &db) const;
-> +            ^
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + code/AssetLib/Blender/BlenderScene.cpp | 7 +++++--
-> + 1 file changed, 5 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/code/AssetLib/Blender/BlenderScene.cpp b/code/AssetLib/Blender/BlenderScene.cpp
-> +index c93d913fc..9ad086fe6 100644
-> +--- a/code/AssetLib/Blender/BlenderScene.cpp
-> ++++ b/code/AssetLib/Blender/BlenderScene.cpp
-> +@@ -49,8 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-> + #include "BlenderDNA.h"
-> + #include "BlenderSceneGen.h"
-> + 
-> +-using namespace Assimp;
-> +-using namespace Assimp::Blender;
-> ++namespace Assimp {
-> ++namespace Blender {
-> + 
-> + //--------------------------------------------------------------------------------
-> + template <>
-> +@@ -885,4 +885,7 @@ void DNA::RegisterConverters() {
-> +     converters["CollectionObject"] = DNA::FactoryPair(&Structure::Allocate<CollectionObject>, &Structure::Convert<CollectionObject>);
-> + }
-> + 
-> ++} // namespace Blender
-> ++} //namespace Assimp
-> ++
-> + #endif // ASSIMP_BUILD_NO_BLEND_IMPORTER
-> +-- 
-> +2.34.1
-> +
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
+Do you have a specific example where you have seen a failure? Please
+note that this HUNG_BUILD_TIMEOUT value is the per-step timeout: it
+verifies that one step of one particular package doesn't take more than
+120 minutes.
+
+Unless you have a specific example where you have seen this timeout
+causing false positives, I'm not really keen on applying such a patch
+as it would cause situations where the build is really stuck to be
+stuck for 3 hours instead of 2.
+
+Did you identify that the python-uvloop and python-lxml packages really
+took more than 2 hours to build? I did see at
+http://autobuild.buildroot.net/?status=TIMEOUT those timeouts dating
+back from ~November. Did you reproduce the issue, and verified that the
+build indeed completes at some point? In general, if a simple package
+such as python-uvloop or python-lxml takes more than 2 hours to build,
+it means that the compiler (or linker) has gone crazy in an infinite
+loop, and the build will in fact never finish.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
