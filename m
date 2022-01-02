@@ -4,55 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ADE5C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 19:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB556C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 19:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2A840289;
-	Sun,  2 Jan 2022 19:14:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60C39402BA;
+	Sun,  2 Jan 2022 19:14:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FE6o9Q6uRzNk; Sun,  2 Jan 2022 19:14:15 +0000 (UTC)
+	with ESMTP id 7X7i5YVpw9YV; Sun,  2 Jan 2022 19:14:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8960440297;
-	Sun,  2 Jan 2022 19:14:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C36C11BF3F4
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:11:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FAF6402C3;
+	Sun,  2 Jan 2022 19:14:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 622901BF3F4
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B226D60B10
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:11:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 514E2400D6
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:12:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X0BR8zewzOKX for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 19:11:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DEE8B607E1
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 19:11:16 +0000 (UTC)
-Received: from fwd83.dcpf.telekom.de (fwd83.aul.t-online.de [10.223.144.109])
- by mailout05.t-online.de (Postfix) with SMTP id F166F1C4D4
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 20:10:26 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.179.119]) by fwd83.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n46FO-3un5Hv0; Sun, 2 Jan 2022 20:10:26 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46198)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n46FO-0006Wg-M2
- for buildroot@buildroot.org; Sun, 02 Jan 2022 20:10:26 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uXjgnYYP4LZc for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 19:11:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C502A400D5
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 19:11:56 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id q16so66117394wrg.7
+ for <buildroot@buildroot.org>; Sun, 02 Jan 2022 11:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=W6Yysi/4i12aa7MQJmeAsfOAAT3lPIza6T6CZV7o8Io=;
+ b=DRawiPQAe/FE6eG0/cESQsjnoYRQ/9AFP58vHk+4/+GXyqk8olVA17l2Dynlp32KyD
+ vs4CHVZnCE3UAcHzgXI7SARLVV7uzDeppM1e8BYr0Ey++LVkuhd/ZfADJMCxa91pCcjN
+ 9pGvihabUp8KeVNbVU76trP/fkEDe1OYix0ZqjoR/Whqx0vC2aDhG5LNPe3kqjxnopTV
+ /2mah8yR8+ovmO/SN3UspVBb91pi2mzNT+PqKUGaymtXe9mLAZbKWPovlxWi2PpWrSyj
+ lM3MIx5v2lcVJeK8MFioVhAVF6+qsnkqqjTPFn1IAObrDaGzAdXu9EZC7JVVRvI39OV8
+ +0eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=W6Yysi/4i12aa7MQJmeAsfOAAT3lPIza6T6CZV7o8Io=;
+ b=knDRLqi6HzgXcNFVQo5FJYPMMPbdCZY+3X5Uo1mcbS5aDVleCTDB3eBKuNs3QS/7EQ
+ 1oO7jP/5rIvBu/jIkFCoLszLGZ1jijK5OCGcmcgGu8SKAcul54lQyGLdrB2bVvlSGMN8
+ Xck0djtcC87gYoe3TlVp5UHN+AFAuTV/ljAdfqtXuQ4LIpNuXpXfcL32MI+87pJYdSYH
+ bzUfdrQew1CsG7Txtwq15Y4QizFxzqbe4jEYeFUsgz/I4VCqpTtJbzu/gW/oZemMNJP5
+ kTwxASN1aOdUlco0qI1KgRZuII6k99FOPqFzy94KrvldYUMt/DE3q2T79dt9UEg4nkSb
+ WZ7Q==
+X-Gm-Message-State: AOAM532PJhm/b/QlaBRUt4aoddvnIYkuXwXKK4NeIW59LnHDLjPdkhuY
+ 4+CAvqf0XLXExfxCNztudJrrRuh8Y9c=
+X-Google-Smtp-Source: ABdhPJwiQnNGiGKpCOiHinxV+LT2cXaZ09Q++EseCrE47NMSAKGcgoYITjYTbsEn2rk32jCKGJV/QA==
+X-Received: by 2002:a5d:4b0a:: with SMTP id v10mr35509582wrq.294.1641150714772; 
+ Sun, 02 Jan 2022 11:11:54 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id p23sm31661527wms.3.2022.01.02.11.11.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 02 Jan 2022 11:11:54 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 20:10:21 +0100
-Message-Id: <20220102191025.259154-15-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220102191025.259154-1-bernd.kuhls@t-online.de>
-References: <20220102191025.259154-1-bernd.kuhls@t-online.de>
+Date: Sun,  2 Jan 2022 20:10:26 +0100
+Message-Id: <20220102191027.3219775-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1641150626-0000EDC4-6904B683/0/0 CLEAN NORMAL
-X-TOI-MSGID: df39bf50-7160-437f-9864-a0653279ead4
-Subject: [Buildroot] [PATCH 15/19] package/kodi-vfs-libarchive: bump version
- to 19.0.1-Matrix
+Subject: [Buildroot] [PATCH 1/1] package/libsigrokdecode: fix build with
+ python 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +84,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure with sigrok-cli raised since bump of
+python3 to version 3.10.1 in commit
+25b1fc2898d68ddf2674b14c738045875fc5a2dc:
 
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-index feda0ee6b2..f3a2c8fcef 100644
---- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  941dd675e84c2a6e964622fcc36664f011304d2b2e207196aad298167c713715  kodi-vfs-libarchive-19.0.0-Matrix.tar.gz
-+sha256  1360154d86bc73fc6f01f546d7b09a92968653cf05b037b0cd80a825d95a9187  kodi-vfs-libarchive-19.0.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-index 91191ab636..eac02d7442 100644
---- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VFS_LIBARCHIVE_VERSION = 19.0.0-Matrix
-+KODI_VFS_LIBARCHIVE_VERSION = 19.0.1-Matrix
- KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
- KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
- KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/10.3.1/../../../../aarch64-none-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libsigrokdecode.so: undefined reference to `PyTuple_SetItem'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e2f33366803b18aff29086007610fa0a264f90d6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...02-configure-Add-python-3-10-support.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
+
+diff --git a/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch b/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
+new file mode 100644
+index 0000000000..e3148dcde8
+--- /dev/null
++++ b/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
+@@ -0,0 +1,28 @@
++From c4c10b89396fe21a622b8c38dd5815a496b007bf Mon Sep 17 00:00:00 2001
++From: Soeren Apel <soeren@apelpie.net>
++Date: Mon, 20 Dec 2021 19:36:39 +0100
++Subject: [PATCH] configure: Add python 3.10 support
++
++[Retrieved from:
++https://sigrok.org/gitweb/?p=libsigrokdecode.git;a=commit;h=c4c10b89396fe21a622b8c38dd5815a496b007bf]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 2917cb3..b8841f8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -100,7 +100,7 @@ SR_PKG_CHECK_SUMMARY([srd_pkglibs_summary])
++ # first, since usually only that variant will add "-lpython3.8".
++ # https://docs.python.org/3/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
++ SR_PKG_CHECK([python3], [SRD_PKGLIBS],
++-	[python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
+++	[python-3.10-embed], [python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
++ AS_IF([test "x$sr_have_python3" = xno],
++ 	[AC_MSG_ERROR([Cannot find Python 3 development headers.])])
++ 
++-- 
++2.24.0.rc2
++
 -- 
-2.30.2
+2.33.0
 
 _______________________________________________
 buildroot mailing list
