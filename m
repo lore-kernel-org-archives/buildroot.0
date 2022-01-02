@@ -1,79 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D332C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 18:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 840E5C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 19:10:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E674181493;
-	Sun,  2 Jan 2022 18:15:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E148560B10;
+	Sun,  2 Jan 2022 19:10:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Ba-QanBbl9V; Sun,  2 Jan 2022 18:15:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pUrBIw6PnEeo; Sun,  2 Jan 2022 19:10:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5500F813DC;
-	Sun,  2 Jan 2022 18:15:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EEEA1BF2B8
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 18:15:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48579607E1;
+	Sun,  2 Jan 2022 19:10:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 76A701BF3F4
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D03840141
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 18:15:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 735C2607E1
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 19:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CRhMV-5mKbeB for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 18:15:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B7B9C400A4
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 18:15:34 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id u25so6756741edf.1
- for <buildroot@buildroot.org>; Sun, 02 Jan 2022 10:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references;
- bh=edPZ48JsDMi8+aWBDswjLi2LTxVY1Nsyk5MBkcsP1no=;
- b=oD6j8GUoDESvJD5RrQU9ifGGjxZoW1LIAH9QumxMX+OtoFj9jIHybWYcDPYVrbCBts
- XjAmvHe1digDBFaK5z2zQNWJ1yk+/BwTYNQqnwN8g/1XHOw2wzWiHz2vjPRXhCDPliyx
- 63rsKCnIggSPA2/UA98W7uAycYw9maQApjZGWRse8xbV04hfgLpZftahknTbzfGb+mj4
- ensfWHrBPLlEdCVGmjFPf4pWA9nKC/mvrZQXB34TphEHD+RvP/LuuULxjN9B/XTsg/pZ
- CMdWN778mq634W6HGGHfX9aRQMpQUHI3SzheHCQLYiAjxmXPBoT6+h1kJbQUP8NY13+z
- wqpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references;
- bh=edPZ48JsDMi8+aWBDswjLi2LTxVY1Nsyk5MBkcsP1no=;
- b=rEQb/En74/jMopiY7TZdKz3kU2k1Fzzv4YNISNsCo65OKLFzvEyAi+cu+LqoizLar8
- 9/7lzJxqcWVrDPw4YbIaGoiSEOK/wsxW2+JoPHlP3MzmrbS6fTH3SEJpbOFMnNCg/SFI
- bVFX2lTzvZdKotNDVHVhKWtFkfR2oRZ2vPDdsNvMMLxLRZ+BvDVVFo+jw948UNZJ97P6
- I1THfsBuJbrk8gqm1SGqn/mp8ysIdV1+LxzKbYR/XnTugauwtQ9KNH8dPktqYgknaaOG
- xlAHyEGnqAKcAq/kZPVHXeF41wO/qV7oXV8w+DOOiSUxzKbMhzzHq2VpGTnXo0gARFyV
- 9omQ==
-X-Gm-Message-State: AOAM5318ZhlC9Bo96zP6Qb6ZleCdiY0dDMALsdqPANcXREZpMRar22cP
- HFU+VKpPc5yNG7w0D7kO36kw8WfTFNBZ1Q==
-X-Google-Smtp-Source: ABdhPJzGaqCFAXm/hG96afRdIm+X2hXS3Xq05xU/my2jW118svAJTdGwxadeh2lkvSP/qxQGF2zvbQ==
-X-Received: by 2002:a05:6402:34c6:: with SMTP id
- w6mr42662430edc.284.1641147332609; 
- Sun, 02 Jan 2022 10:15:32 -0800 (PST)
-Received: from localhost.localdomain ([156.196.164.230])
- by smtp.gmail.com with ESMTPSA id u21sm12831445eds.8.2022.01.02.10.15.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Jan 2022 10:15:32 -0800 (PST)
-From: azxxza22 <amrtmoh2006@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IrXF6pl_Kwh4 for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 19:10:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 631E0605A6
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 19:10:29 +0000 (UTC)
+Received: from fwd82.dcpf.telekom.de (fwd82.aul.t-online.de [10.223.144.108])
+ by mailout01.t-online.de (Postfix) with SMTP id D45FB9826
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 20:10:26 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.179.119]) by fwd82.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n46FO-28iqYN0; Sun, 2 Jan 2022 20:10:26 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46198)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n46FO-0006Wg-HA
+ for buildroot@buildroot.org; Sun, 02 Jan 2022 20:10:26 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 20:15:25 +0200
-Message-Id: <20220102181525.9494-2-amrtmoh2006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220102181525.9494-1-amrtmoh2006@gmail.com>
-References: <20220102181525.9494-1-amrtmoh2006@gmail.com>
-Subject: [Buildroot] [PATCH 2/2] hash file added
+Date: Sun,  2 Jan 2022 20:10:18 +0100
+Message-Id: <20220102191025.259154-12-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220102191025.259154-1-bernd.kuhls@t-online.de>
+References: <20220102191025.259154-1-bernd.kuhls@t-online.de>
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1641150626-0000B8A1-C7B408CF/0/0 CLEAN NORMAL
+X-TOI-MSGID: 60516ffb-c875-459e-abce-51f0b13bb0d5
+Subject: [Buildroot] [PATCH 12/19] package/kodi-pvr-stalker: bump version to
+ 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,30 +64,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: azxxza22 <amrtmoh2006@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: azxxza22 <amrtmoh2006@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nodogsplash/nodogsplash.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/nodogsplash/nodogsplash.hash
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodogsplash/nodogsplash.hash b/package/nodogsplash/nodogsplash.hash
-new file mode 100644
-index 0000000000..da059a854d
---- /dev/null
-+++ b/package/nodogsplash/nodogsplash.hash
-@@ -0,0 +1,2 @@
-+md5 edafdd4ef89218261f29a9074891cf7a nodogsplash-v4.5.1-br1.tar.gz
-+md5 cbbd794e2a0a289b9dfcc9f513d1996e COPYING
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index 66d587b19d..90e74d451a 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6161f0593feb67865e78f9aecc8c59019933ddda273e495ffadb0bdb42dde2a3  kodi-pvr-stalker-19.0.0-Matrix.tar.gz
++sha256  84a92c298ddda8d72072aafe2a62c5c6b48b60b3b85408ce7ca4f96e42965541  kodi-pvr-stalker-19.0.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index d0ffebb063..a0d5f4356d 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_STALKER_VERSION = 19.0.0-Matrix
++KODI_PVR_STALKER_VERSION = 19.0.1-Matrix
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+ KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
 -- 
-2.17.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
