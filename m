@@ -1,60 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 180F3C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 21:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30A92C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 21:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7D9C81419;
-	Sun,  2 Jan 2022 21:04:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB608400A6;
+	Sun,  2 Jan 2022 21:27:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mHP5Q_basDLm; Sun,  2 Jan 2022 21:04:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zSY4XFimBd3t; Sun,  2 Jan 2022 21:27:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B026F81440;
-	Sun,  2 Jan 2022 21:04:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A390F400AB;
+	Sun,  2 Jan 2022 21:27:11 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E23D61BF977
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 21:04:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9E5E61BF3DD
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 21:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFEF881440
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 21:04:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99E05812D5
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 21:27:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rwyi3lZhDIXU for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 21:04:12 +0000 (UTC)
+ with ESMTP id 3zEQCdeGrmMG for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 21:27:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB7C281419
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 21:04:11 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.138.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 481RnpR0TVJjR481RnuFeK; Sun, 02 Jan 2022 22:04:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1641157450; bh=lPFzFg0Jq5e6X5Bms4I4T0RS85W1EiABgOHhsAsLrqY=;
- h=From:To:Subject:Date:MIME-Version;
- b=dT0dfu1a9WP9bUjrmhZMlV3DmgfrqGoOFE3u4p/Qc7cCVecM/rDIKiaObAEjquE8U
- aCK2C9PjBROVnKxn76NmXpMg89TZtClxXgOcXtppDbQBspntb0RSJ0DVhnZymmy895
- 8qMdpmsbdTorWcxIJUyMEusqlAzAROo+dhGzpLiwiHfjSxE/piwtiElxVBZFYSszoe
- 5JxC9Kue9MRcALIXybqL13SSx8D0vbprvW/CzYrPy3Ev3baTNTa6ZEVndIgizkCPaK
- peNzR2f6wHaEl/S9ZAhSq8ReTprN9yMa65ANN6TayIQxd+vM5LQ4FKHHnen7F2ZI+z
- vkPHX+YJA0LIw==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from majs.cnackers.org (vps-1525-1.tilaa.nl [46.19.33.97])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 206E4812D1
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 21:27:06 +0000 (UTC)
+Received: from majs.cnackers.org (localhost [127.0.0.1]) by majs.cnackers.org
+ (Postfix) with ESMTPA id E146DFF50
+From: Erik Larsson <who+buildroot@cnackers.org>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 22:04:07 +0100
-Message-Id: <20220102210408.221439-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun,  2 Jan 2022 22:25:59 +0100
+Message-Id: <20220102212559.43475-1-who+buildroot@cnackers.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220101223900.2970405-2-who+buildroot@cnackers.org>
+References: <20220101223900.2970405-2-who+buildroot@cnackers.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfNj4EHr0vxuQ7ekO66WWqVv3hOH/j2VUrotJkrpE/WdBfxSzGtVt31wl6a7XTbeeWJ+IRekyTz+d076XZUnjLXrTEuXUHWxbMpCnMNnFxwYoxbhWZff/
- +AVACUYq0ynCDIgku5WRrxCp42mquBPXmK0oTsiCw4jVBlSTUEaokW1iaz9om5sVQ+PrtKV2PhrL4VO7VH5aRDYNJYB18ptnozvHa34w7sl0vtXyFXcjsAsx
- FEXzZq+Y36LoRJiCMQaWYS5UxLCXz+nKZCotfgL6G/4eaP9YOYv9BK53vHPo+gjyVPaJ5CYRhoSgoDlIWo0AIBxP9rt8ERJ5iNL7nwHdrjLENO/bwpb+fm/x
- p+T/5j4z0aip3CNVwCIy8rKFhfEzEGHyNAX+Nuzd6qlSnKFLXoDTKXgoeOcyoUXBNGrmMqIU
-Subject: [Buildroot] [PATCH 1/2] package/binutils: add patches to fix
- binutils bug 28735(or1k)
+Subject: [Buildroot] [PATCH 2/3] package/tpm2-tools: bump version to 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,364 +53,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Erik Larsson <who+buildroot@cnackers.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-After fixing binutils bug 21464, bug 28735 showed up. It got fixed very
-soon after my request:
-https://sourceware.org/pipermail/binutils/2022-January/119078.html
+Depedency on libuuid was removed in:
+https://github.com/tpm2-software/tpm2-tools/commit/210b2d639c216df7fa68e38427b13b96edbf78fd
 
-So let's add patch and backported patches to all binutils versions to make
-Buildroot free from bug 28735. Unfortunately Bootlin toolchains have just
-been rebuilt and will fail for this bug. This happened because libgeos
-has been bumped few time ago and was masked by bug 21464 dependency that
-prevented to build.
+Drop 0001-configure-make-build-gnu99.patch as it is in 5.2
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Erik Larsson <who+buildroot@cnackers.org>
 ---
- ...K_GOT16-signed-overflow-by-using-spe.patch | 75 +++++++++++++++++++
- ...K_GOT16-signed-overflow-by-using-spe.patch | 75 +++++++++++++++++++
- ...K_GOT16-signed-overflow-by-using-spe.patch | 75 +++++++++++++++++++
- ...K_GOT16-signed-overflow-by-using-spe.patch | 75 +++++++++++++++++++
- 4 files changed, 300 insertions(+)
- create mode 100644 package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
- create mode 100644 package/binutils/2.35.2/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
- create mode 100644 package/binutils/2.36.1/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
- create mode 100644 package/binutils/2.37/0005-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
+ .../0001-configure-make-build-gnu99.patch     | 30 -------------------
+ package/tpm2-tools/Config.in                  |  2 --
+ package/tpm2-tools/tpm2-tools.hash            |  2 +-
+ package/tpm2-tools/tpm2-tools.mk              |  6 ++--
+ 4 files changed, 3 insertions(+), 37 deletions(-)
+ delete mode 100644 package/tpm2-tools/0001-configure-make-build-gnu99.patch
 
-diff --git a/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch b/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-new file mode 100644
-index 0000000000..7e92e2bfd8
---- /dev/null
-+++ b/package/binutils/2.32/0016-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-@@ -0,0 +1,75 @@
-+From 51def3dc6a168d03d28e0d4e2935d9ddb2929192 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Sun, 2 Jan 2022 09:03:28 +0900
-+Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 signed overflow by using special
-+ howto
-+
-+Previously when fixing PR 21464 we masked out upper bits of the
-+relocation value in order to avoid overflow complaints when acceptable.
-+It turns out this does not work when the relocation value ends up being
-+signed.
-+
-+To fix this this patch introduces a special howto with
-+complain_on_overflow set to complain_overflow_dont.  This is used in
-+place of the normal R_OR1K_GOT16 howto when we detect R_OR1K_GOT_AHI16
-+relocations.
-+
-+bfd/ChangeLog:
-+
-+	PR 28735
-+	* elf32-or1k.c (or1k_elf_got16_no_overflow_howto): Define.
-+	(or1k_elf_relocate_section): Use new howto instead of trying to
-+	mask out relocation bits.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 24 ++++++++++++++++++++----
-+ 1 file changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index cfa292f0032..ecb70753b6a 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -828,6 +828,23 @@ static reloc_howto_type or1k_elf_howto_table[] =
-+ 	FALSE),                /* pcrel_offset */
-+ };
-+ 
-++/* A copy of the R_OR1K_GOT16 used in the presense of R_OR1K_GOT_AHI16
-++   relocations when we know we can ignore overflows.  */
-++static reloc_howto_type or1k_elf_got16_no_overflow_howto =
-++  HOWTO (R_OR1K_GOT16,		/* type */
-++	 0,			/* rightshift */
-++	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-++	 16,			/* bitsize */
-++	 FALSE,			/* pc_relative */
-++	 0,			/* bitpos */
-++	 complain_overflow_dont, /* complain_on_overflow */
-++	 bfd_elf_generic_reloc, /* special_function */
-++	 "R_OR1K_GOT16",	/* name */
-++	 FALSE,			/* partial_inplace */
-++	 0,			/* src_mask */
-++	 0xffff,		/* dst_mask */
-++	 FALSE);		/* pcrel_offset */
-++
-+ /* Map BFD reloc types to Or1k ELF reloc types.  */
-+ 
-+ struct or1k_reloc_map
-+@@ -1477,12 +1494,11 @@ or1k_elf_relocate_section (bfd *output_bfd,
-+ 	    if (r_type == R_OR1K_GOT_AHI16)
-+ 	      saw_gotha = TRUE;
-+ 
-+-	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
-++	    /* If we have a R_OR1K_GOT16 following a R_OR1K_GOT_AHI16
-+ 	       relocation we assume the code is doing the right thing to avoid
-+-	       overflows.  Here we mask the lower 16-bit of the relocation to
-+-	       avoid overflow validation failures.  */
-++	       overflows.  */
-+ 	    if (r_type == R_OR1K_GOT16 && saw_gotha)
-+-	      relocation &= 0xffff;
-++	      howto = &or1k_elf_got16_no_overflow_howto;
-+ 
-+ 	  /* Addend should be zero.  */
-+ 	  if (rel->r_addend != 0)
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch b/package/binutils/2.35.2/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-new file mode 100644
-index 0000000000..e96d49122a
---- /dev/null
-+++ b/package/binutils/2.35.2/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-@@ -0,0 +1,75 @@
-+From fbab8933bca6b7dba2aa19190a71f799a370c3d4 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Sun, 2 Jan 2022 09:03:28 +0900
-+Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 signed overflow by using special
-+ howto
-+
-+Previously when fixing PR 21464 we masked out upper bits of the
-+relocation value in order to avoid overflow complaints when acceptable.
-+It turns out this does not work when the relocation value ends up being
-+signed.
-+
-+To fix this this patch introduces a special howto with
-+complain_on_overflow set to complain_overflow_dont.  This is used in
-+place of the normal R_OR1K_GOT16 howto when we detect R_OR1K_GOT_AHI16
-+relocations.
-+
-+bfd/ChangeLog:
-+
-+	PR 28735
-+	* elf32-or1k.c (or1k_elf_got16_no_overflow_howto): Define.
-+	(or1k_elf_relocate_section): Use new howto instead of trying to
-+	mask out relocation bits.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 24 ++++++++++++++++++++----
-+ 1 file changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 2ff998066a8..3df31172fcb 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -828,6 +828,23 @@ static reloc_howto_type or1k_elf_howto_table[] =
-+ 	FALSE),                /* pcrel_offset */
-+ };
-+ 
-++/* A copy of the R_OR1K_GOT16 used in the presense of R_OR1K_GOT_AHI16
-++   relocations when we know we can ignore overflows.  */
-++static reloc_howto_type or1k_elf_got16_no_overflow_howto =
-++  HOWTO (R_OR1K_GOT16,		/* type */
-++	 0,			/* rightshift */
-++	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-++	 16,			/* bitsize */
-++	 FALSE,			/* pc_relative */
-++	 0,			/* bitpos */
-++	 complain_overflow_dont, /* complain_on_overflow */
-++	 bfd_elf_generic_reloc, /* special_function */
-++	 "R_OR1K_GOT16",	/* name */
-++	 FALSE,			/* partial_inplace */
-++	 0,			/* src_mask */
-++	 0xffff,		/* dst_mask */
-++	 FALSE);		/* pcrel_offset */
-++
-+ /* Map BFD reloc types to Or1k ELF reloc types.  */
-+ 
-+ struct or1k_reloc_map
-+@@ -1508,12 +1525,11 @@ or1k_elf_relocate_section (bfd *output_bfd,
-+ 	    if (r_type == R_OR1K_GOT_AHI16)
-+ 	      saw_gotha = TRUE;
-+ 
-+-	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
-++	    /* If we have a R_OR1K_GOT16 following a R_OR1K_GOT_AHI16
-+ 	       relocation we assume the code is doing the right thing to avoid
-+-	       overflows.  Here we mask the lower 16-bit of the relocation to
-+-	       avoid overflow validation failures.  */
-++	       overflows.  */
-+ 	    if (r_type == R_OR1K_GOT16 && saw_gotha)
-+-	      relocation &= 0xffff;
-++	      howto = &or1k_elf_got16_no_overflow_howto;
-+ 
-+ 	  /* Addend should be zero.  */
-+ 	  if (rel->r_addend != 0)
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch b/package/binutils/2.36.1/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-new file mode 100644
-index 0000000000..c4fedb719a
---- /dev/null
-+++ b/package/binutils/2.36.1/0009-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-@@ -0,0 +1,75 @@
-+From 190091f9c1ec4cb80f8106e45ab4125eefa4114b Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Sun, 2 Jan 2022 09:03:28 +0900
-+Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 signed overflow by using special
-+ howto
-+
-+Previously when fixing PR 21464 we masked out upper bits of the
-+relocation value in order to avoid overflow complaints when acceptable.
-+It turns out this does not work when the relocation value ends up being
-+signed.
-+
-+To fix this this patch introduces a special howto with
-+complain_on_overflow set to complain_overflow_dont.  This is used in
-+place of the normal R_OR1K_GOT16 howto when we detect R_OR1K_GOT_AHI16
-+relocations.
-+
-+bfd/ChangeLog:
-+
-+	PR 28735
-+	* elf32-or1k.c (or1k_elf_got16_no_overflow_howto): Define.
-+	(or1k_elf_relocate_section): Use new howto instead of trying to
-+	mask out relocation bits.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 24 ++++++++++++++++++++----
-+ 1 file changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 431a8ee479f..ea26cdf1033 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -828,6 +828,23 @@ static reloc_howto_type or1k_elf_howto_table[] =
-+ 	FALSE),                /* pcrel_offset */
-+ };
-+ 
-++/* A copy of the R_OR1K_GOT16 used in the presense of R_OR1K_GOT_AHI16
-++   relocations when we know we can ignore overflows.  */
-++static reloc_howto_type or1k_elf_got16_no_overflow_howto =
-++  HOWTO (R_OR1K_GOT16,		/* type */
-++	 0,			/* rightshift */
-++	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-++	 16,			/* bitsize */
-++	 FALSE,			/* pc_relative */
-++	 0,			/* bitpos */
-++	 complain_overflow_dont, /* complain_on_overflow */
-++	 bfd_elf_generic_reloc, /* special_function */
-++	 "R_OR1K_GOT16",	/* name */
-++	 FALSE,			/* partial_inplace */
-++	 0,			/* src_mask */
-++	 0xffff,		/* dst_mask */
-++	 FALSE);		/* pcrel_offset */
-++
-+ /* Map BFD reloc types to Or1k ELF reloc types.  */
-+ 
-+ struct or1k_reloc_map
-+@@ -1506,12 +1523,11 @@ or1k_elf_relocate_section (bfd *output_bfd,
-+ 	    if (r_type == R_OR1K_GOT_AHI16)
-+ 	      saw_gotha = TRUE;
-+ 
-+-	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
-++	    /* If we have a R_OR1K_GOT16 following a R_OR1K_GOT_AHI16
-+ 	       relocation we assume the code is doing the right thing to avoid
-+-	       overflows.  Here we mask the lower 16-bit of the relocation to
-+-	       avoid overflow validation failures.  */
-++	       overflows.  */
-+ 	    if (r_type == R_OR1K_GOT16 && saw_gotha)
-+-	      relocation &= 0xffff;
-++	      howto = &or1k_elf_got16_no_overflow_howto;
-+ 
-+ 	  /* Addend should be zero.  */
-+ 	  if (rel->r_addend != 0)
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.37/0005-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch b/package/binutils/2.37/0005-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-new file mode 100644
-index 0000000000..8609db95b7
---- /dev/null
-+++ b/package/binutils/2.37/0005-or1k-Avoid-R_OR1K_GOT16-signed-overflow-by-using-spe.patch
-@@ -0,0 +1,75 @@
-+From 362a20108782b87cd780a989c0dbd014fc2def8b Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Sun, 2 Jan 2022 09:03:28 +0900
-+Subject: [PATCH] or1k: Avoid R_OR1K_GOT16 signed overflow by using special
-+ howto
-+
-+Previously when fixing PR 21464 we masked out upper bits of the
-+relocation value in order to avoid overflow complaints when acceptable.
-+It turns out this does not work when the relocation value ends up being
-+signed.
-+
-+To fix this this patch introduces a special howto with
-+complain_on_overflow set to complain_overflow_dont.  This is used in
-+place of the normal R_OR1K_GOT16 howto when we detect R_OR1K_GOT_AHI16
-+relocations.
-+
-+bfd/ChangeLog:
-+
-+	PR 28735
-+	* elf32-or1k.c (or1k_elf_got16_no_overflow_howto): Define.
-+	(or1k_elf_relocate_section): Use new howto instead of trying to
-+	mask out relocation bits.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 24 ++++++++++++++++++++----
-+ 1 file changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 4ae7f324d33..7fd88d72442 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -828,6 +828,23 @@ static reloc_howto_type or1k_elf_howto_table[] =
-+ 	 false),		/* pcrel_offset */
-+ };
-+ 
-++/* A copy of the R_OR1K_GOT16 used in the presense of R_OR1K_GOT_AHI16
-++   relocations when we know we can ignore overflows.  */
-++static reloc_howto_type or1k_elf_got16_no_overflow_howto =
-++  HOWTO (R_OR1K_GOT16,		/* type */
-++	 0,			/* rightshift */
-++	 2,			/* size (0 = byte, 1 = short, 2 = long) */
-++	 16,			/* bitsize */
-++	 false,			/* pc_relative */
-++	 0,			/* bitpos */
-++	 complain_overflow_dont, /* complain_on_overflow */
-++	 bfd_elf_generic_reloc, /* special_function */
-++	 "R_OR1K_GOT16",	/* name */
-++	 false,			/* partial_inplace */
-++	 0,			/* src_mask */
-++	 0xffff,		/* dst_mask */
-++	 false);		/* pcrel_offset */
-++
-+ /* Map BFD reloc types to Or1k ELF reloc types.  */
-+ 
-+ struct or1k_reloc_map
-+@@ -1506,12 +1523,11 @@ or1k_elf_relocate_section (bfd *output_bfd,
-+ 	    if (r_type == R_OR1K_GOT_AHI16)
-+ 	      saw_gotha = true;
-+ 
-+-	    /* If we have a R_OR1K_GOT16 followed by a R_OR1K_GOT_AHI16
-++	    /* If we have a R_OR1K_GOT16 following a R_OR1K_GOT_AHI16
-+ 	       relocation we assume the code is doing the right thing to avoid
-+-	       overflows.  Here we mask the lower 16-bit of the relocation to
-+-	       avoid overflow validation failures.  */
-++	       overflows.  */
-+ 	    if (r_type == R_OR1K_GOT16 && saw_gotha)
-+-	      relocation &= 0xffff;
-++	      howto = &or1k_elf_got16_no_overflow_howto;
-+ 
-+ 	  /* Addend should be zero.  */
-+ 	  if (rel->r_addend != 0)
-+-- 
-+2.25.1
-+
+diff --git a/package/tpm2-tools/0001-configure-make-build-gnu99.patch b/package/tpm2-tools/0001-configure-make-build-gnu99.patch
+deleted file mode 100644
+index 37ca6c5873..0000000000
+--- a/package/tpm2-tools/0001-configure-make-build-gnu99.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 521c3cc506b18c5c84d86e1e90d1daee39849b0c Mon Sep 17 00:00:00 2001
+-From: William Roberts <william.c.roberts@intel.com>
+-Date: Mon, 8 Feb 2021 11:57:28 -0600
+-Subject: [PATCH] configure: make build gnu99
+-
+-Signed-off-by: William Roberts <william.c.roberts@intel.com>
+-
+-[Retrieved from:
+-https://github.com/tpm2-software/tpm2-tools/commit/521c3cc506b18c5c84d86e1e90d1daee39849b0c
+-and updated to set gnu99 instead of c99 as done by
+-https://github.com/tpm2-software/tpm2-tools/commit/5d0267428e96989afce406d096994ec5091ee107]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index dc15b5595..25039a0d9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -287,6 +287,9 @@ AC_DEFUN([add_c_flag], [
+- # -D_GNU_SOURCE is required for execvpe() in options.c
+- add_c_flag([-D_GNU_SOURCE], [AC_MSG_ERROR([Cannot enable -D_GNU_SOURCE])])
+- 
+-+# Enable gnu99 mode, since we use some of these features.
+-+add_c_flag([-std=gnu99], [AC_MSG_ERROR([Cannot enable -std=gnu99])])
+-+
+- # Best attempt compiler options that are on newer versions of GCC that
+- # we can't widely enforce without killing other peoples builds.
+- # Works with gcc only. Needs to be disabled on BSD and clang
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index 3be947648f..1a6698570a 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -7,8 +7,6 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_TPM2_TSS
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
+ 	  API of TPM2-TSS. These tools can be used to manage keys,
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
+index bfb7e9b220..f50a896363 100644
+--- a/package/tpm2-tools/tpm2-tools.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e2802d4093a24b2c65b1f913d0f4c68eadde9b8fd8a9b7a3b17a6e50765e8350  tpm2-tools-4.3.2.tar.gz
++sha256  c0b402f6a7b3456e8eb2445211e2d41c46c7e769e05fe4d8909ff64119f7a630  tpm2-tools-5.2.tar.gz
+ sha256  f6995d52c8b8e4d2c3bace7fc9c330a77a90d808166fbad4d7ead7e8ba2fc66c  doc/LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 41f5bcf201..8675344805 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-TPM2_TOOLS_VERSION = 4.3.2
++TPM2_TOOLS_VERSION = 5.2
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-3-Clause
+ TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
+ TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
+ TPM2_TOOLS_SELINUX_MODULES = tpm2
+-TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
+-# We're patching configure.ac
+-TPM2_TOOLS_AUTORECONF = YES
++TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
+ 
+ # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
+ # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
