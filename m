@@ -4,76 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA976C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 17:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E93FCC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 17:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11DB060601;
-	Sun,  2 Jan 2022 17:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DBC060AF7;
+	Sun,  2 Jan 2022 17:46:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BHGXUF7e5iAf; Sun,  2 Jan 2022 17:44:30 +0000 (UTC)
+	with ESMTP id 8gB3OywC8Hts; Sun,  2 Jan 2022 17:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75D1960AEA;
-	Sun,  2 Jan 2022 17:44:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9FB181BF3FF
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 17:44:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B40D360601;
+	Sun,  2 Jan 2022 17:46:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DBB71BF3FF
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 17:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B99F40175
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 17:44:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2CDB560601
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 17:46:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fvsRRVRkg7ec for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 17:44:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JyC3HxVqWoCx for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 17:46:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A40754016D
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 17:44:27 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id r17so65815433wrc.3
- for <buildroot@buildroot.org>; Sun, 02 Jan 2022 09:44:27 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 19C4160594
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 17:46:48 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id i22so65814941wrb.13
+ for <buildroot@buildroot.org>; Sun, 02 Jan 2022 09:46:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Mmik4TpBNqeXVeCZ7/g+2D+ca2BgkACl9PbSequLl7A=;
- b=HtM6xHx/hJbx7Y2TjEe4GX4ZYyQWsaATqCKI9d1252JhU5LwBlAUQcRJWsGo3yl+RG
- a535U8mk0TFZIYEuazw/TBRauvNZjPqK3gdkC+6+K/kalZgdKvPnjUG8XFSCSd02a7gR
- eJ5sjgOa1MYauKtDyPdyin55EGfHCbNBow6Tg26Eg3jEypfq+sR3InYO5Fo47kHs+cNd
- Rv7Db1JvCxKIrlX3srFA8SjlZmEqDAiOgV13E//O9YkMIQE+B2MyI4y4v9StsAkDHbqw
- fsa1SnYmTtHktvoVORt7Z/BHZcsJzGurnV7hSU0lgJjkWnYhNt2uEF0kN9qrqnPfaqCv
- Gzqw==
+ bh=u8cU2q6Zkin+zfGeMrSe3l9+7aF5hPp2QuobvLUba3M=;
+ b=gt4c4xZVcTz8QgHW0IhZQj/BUgPEtoSDNnNd1+wY5YD3IpXcxrTFz4VUDONm5zGs1J
+ t1Q3Jf5ZIQxrrQguT/sHVd5u1XonLrCgpWrUU807v9Md4YLsGlqIJWUqWTvv+U4YxPVc
+ PBxE760zZQBf4CDc6Hq9h8lV6dokZE0tfPG/z43cBK8fhNF/3yv0wDGJCtr8BhJIellq
+ fgbdxggaSbxuPCCGU9rBwRGi//F3kjxpoOGuzvwmOjFoEGiXp+h9naKxeBUy8PzyduDe
+ QocfL9U46Mt1Jc40QxXTeA04tdmVb7DfFh5ZeWYzTG25TOHn4bggDFWaHwN4MUapDhIi
+ G3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Mmik4TpBNqeXVeCZ7/g+2D+ca2BgkACl9PbSequLl7A=;
- b=GbW6az6n7judHwse//QTekfSMc7qmpHIv4VePC1oKqMnV8qxCIiwrrNnrQSTVsogR3
- CwQ1vA1I3cexA4Qw+isnZYCIZWyMaLBPNnSZOitxCFOO869T1l/sjrQF8/XnXNvGw/z+
- ipoYPj2KGljEIBil79bTt1H9wooV+oItgLC+f/QhTG0dQH+/VknKp9rtoEjvGqItkstL
- ieATxHKVmkkIu37px9caWXL++8gxagjOuxGiJ4s6FhvSwTeSw6oZJca6Cn3VHWk8Qc3U
- NdPxYweCcc9gjWHL+PBQprMCkEfhhhl9t9T3uqkKjTk2QcC5CTCeXSDPEGrXBB6XWUOo
- Dumw==
-X-Gm-Message-State: AOAM5316GhTS9smQyu+RgOMSumM7w/F5ymV1rO5BCXDgCaRRpxR6PCHT
- L/9Ui3rmXB5BWvYKmDYAhGdR2WzHHD8=
-X-Google-Smtp-Source: ABdhPJwk8G8Zi04+tbnAI5gHHIn8pmd26Q4Zh7NtYM2coPnw5dgDawiWIv+8GltgUTKOyK3PGdFr+A==
-X-Received: by 2002:a5d:69ca:: with SMTP id s10mr36229825wrw.218.1641145465833; 
- Sun, 02 Jan 2022 09:44:25 -0800 (PST)
+ bh=u8cU2q6Zkin+zfGeMrSe3l9+7aF5hPp2QuobvLUba3M=;
+ b=PT0Y18KHxrRH8TduCzwRUWMqvuSaL46pbzXUaOkhVHUvo2hqopOQd/1DqJVyvcwf2V
+ l2vKy31MYWzT/lTQG+4PFs47aA9DoC/OFyzuC/rGLv5deuU++48NA7inUmXlN2w+5w0N
+ KX+MYIoQTo3slvl/5iA3LoBnAsaL194qNTWmMxluM7T20B9T5LHFBbGi8qiHG/8BnqSP
+ VDPQ8pnARO6NrWLsoNLzJReaJCm2h4oDuBfxxYtp1P7XZdx5/Z0jtHHAYVxwqkkscScE
+ +ZH2HPbv2KSLXuLT02ov1aesaNVHNLRO4WIrxL42lksp/PHgvSy7mavkkEXC4ZQufSu3
+ ME5g==
+X-Gm-Message-State: AOAM533D5TADOb1r5MLg+TFXvC+EUNEC0P8aF1xYjpF8hBa6gDG/VqoB
+ M/5YjdK70Mxx49uYWaAjegdjcrXLX8Q=
+X-Google-Smtp-Source: ABdhPJzwrUfiZH++eCDMMbaefUI6Ipo3bZlllbXubZdCe4wUaY3UnKMJQfjfdpb7ULZXZyNOZLmgLA==
+X-Received: by 2002:a5d:54d2:: with SMTP id x18mr35640498wrv.701.1641145607203; 
+ Sun, 02 Jan 2022 09:46:47 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id n4sm33129564wrc.1.2022.01.02.09.44.25
+ by smtp.gmail.com with ESMTPSA id w9sm1636668wrq.70.2022.01.02.09.46.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Jan 2022 09:44:25 -0800 (PST)
+ Sun, 02 Jan 2022 09:46:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 18:43:29 +0100
-Message-Id: <20220102174329.2823931-1-fontaine.fabrice@gmail.com>
+Date: Sun,  2 Jan 2022 18:45:56 +0100
+Message-Id: <20220102174556.2824179-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libiio: set PYTHON_EXECUTABLE
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,51 +83,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>,
+Cc: Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set PYTHON_EXECUTABLE to avoid the following build failure when
-BR2_PACKAGE_PYTHON is enabled but libiio finds python3 without
-setuptools on host:
+Fix the following build failure with gcc 4.8 raised since bump to
+version 2.86 in commit 5b29096f8fcb0acd8890073a56ba9d620b1f911c:
 
--- Found Python: /usr/bin/python3.5 (found version "3.5.3") found components: Interpreter
--- new
--- Python_EXECUTABLE /usr/bin/python3.5
-
-[...]
-
-Traceback (most recent call last):
-  File "/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.23/bindings/python/setup.py", line 15, in <module>
-    from setuptools import setup
-ImportError: No module named 'setuptools'
+option.c: In function 'one_opt':
+option.c:2445:11: error: 'for' loop initial declarations are only allowed in C99 mode
+           for (char *p = arg; *p; p++) {
+           ^
+option.c:2445:11: note: use option -std=c99 or -std=gnu99 to compile your code
+option.c:2453:11: error: 'for' loop initial declarations are only allowed in C99 mode
+           for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
+           ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/d80e56e4ad84c8e7f244cf6d1cb96c116e8eb734
+ - http://autobuild.buildroot.org/results/39b34a4e69fc10f4bd9d4ddb0ed8c0aae5741c84
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libiio/libiio.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...-src-option.c-fix-build-with-gcc-4.8.patch | 52 +++++++++++++++++++
+ ...9080ff8743133fbd52427b4b2213171-typo.patch | 36 +++++++++++++
+ 2 files changed, 88 insertions(+)
+ create mode 100644 package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
+ create mode 100644 package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
 
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index f706298c22..38b2f83e6e 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -76,8 +76,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON),y)
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- LIBIIO_DEPENDENCIES += host-python-setuptools python
-+LIBIIO_CONF_OPTS += -DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- LIBIIO_DEPENDENCIES += host-python3-setuptools python3
-+LIBIIO_CONF_OPTS += -DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3
- endif
- LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=ON
- else
+diff --git a/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch b/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..50ecf2f18a
+--- /dev/null
++++ b/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,52 @@
++From 46312909d9080ff8743133fbd52427b4b2213171 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 31 Dec 2021 17:29:44 +0100
++Subject: [PATCH] src/option.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 raised since version 2.86:
++
++option.c: In function 'one_opt':
++option.c:2445:11: error: 'for' loop initial declarations are only allowed in C99 mode
++           for (char *p = arg; *p; p++) {
++           ^
++option.c:2445:11: note: use option -std=c99 or -std=gnu99 to compile your code
++option.c:2453:11: error: 'for' loop initial declarations are only allowed in C99 mode
++           for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
++           ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/39b34a4e69fc10f4bd9d4ddb0ed8c0aae5741c84
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream commit 46312909d9080ff8743133fbd52427b4b2213171]
++---
++ src/option.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/src/option.c b/src/option.c
++index ff54def..c57f6d8 100644
++--- a/src/option.c
+++++ b/src/option.c
++@@ -2525,7 +2525,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
++           arg += 9;
++           if (strlen(arg) != 16)
++               ret_err(gen_err);
++-          for (char *p = arg; *p; p++) {
+++          char *p;
+++          for (*p = arg; *p; p++) {
++             if (!isxdigit((int)*p))
++               ret_err(gen_err);
++           }
++@@ -2533,7 +2534,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
++ 
++           u8 *u = daemon->umbrella_device;
++           char word[3];
++-          for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
+++          u8 i;
+++          for (i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
++             memcpy(word, &(arg[0]), 2);
++             *u++ = strtoul(word, NULL, 16);
++           }
++-- 
++2.33.0
++
+diff --git a/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch b/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
+new file mode 100644
+index 0000000000..8cdf5b3f1b
+--- /dev/null
++++ b/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
+@@ -0,0 +1,36 @@
++From 2748fb81e23b71e2c44956e99321816aca91905d Mon Sep 17 00:00:00 2001
++From: Simon Kelley <simon@thekelleys.org.uk>
++Date: Sat, 1 Jan 2022 23:03:26 +0000
++Subject: [PATCH] Fix 46312909d9080ff8743133fbd52427b4b2213171 typo.
++
++[Upstream commit 2748fb81e23b71e2c44956e99321816aca91905d]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com> 
++---
++ src/option.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/option.c b/src/option.c
++index c57f6d8..6f56ce8 100644
++--- a/src/option.c
+++++ b/src/option.c
++@@ -357,7 +357,7 @@ static const struct myoption opts[] =
++     { "dhcp-ignore-clid", 0, 0,  LOPT_IGNORE_CLID },
++     { "dynamic-host", 1, 0, LOPT_DYNHOST },
++     { "log-debug", 0, 0, LOPT_LOG_DEBUG },
++-	{ "umbrella", 2, 0, LOPT_UMBRELLA },
+++    { "umbrella", 2, 0, LOPT_UMBRELLA },
++     { "quiet-tftp", 0, 0, LOPT_QUIET_TFTP },
++     { NULL, 0, 0, 0 }
++   };
++@@ -2526,7 +2526,7 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
++           if (strlen(arg) != 16)
++               ret_err(gen_err);
++           char *p;
++-          for (*p = arg; *p; p++) {
+++          for (p = arg; *p; p++) {
++             if (!isxdigit((int)*p))
++               ret_err(gen_err);
++           }
++-- 
++2.33.0
++
 -- 
 2.33.0
 
