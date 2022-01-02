@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14774C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 20:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30667C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 20:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63A8740010;
-	Sun,  2 Jan 2022 20:04:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B71381379;
+	Sun,  2 Jan 2022 20:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a9lA_T2mX8jA; Sun,  2 Jan 2022 20:04:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IvXvosPp0hZ8; Sun,  2 Jan 2022 20:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 439B740223;
-	Sun,  2 Jan 2022 20:04:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5184D1BF3E8
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 20:04:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2D2C81363;
+	Sun,  2 Jan 2022 20:37:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 407DA1BF3E8
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 20:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B1AD60AB1
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 20:04:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 235F081363
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 20:37:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hCo4NCtSymmt for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 20:04:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8fx9VzOSCbFh for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 20:37:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A158600C9
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 20:04:37 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id i22so66227884wrb.13
- for <buildroot@buildroot.org>; Sun, 02 Jan 2022 12:04:37 -0800 (PST)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C84E281359
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 20:37:35 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id o6so128903458edc.4
+ for <buildroot@buildroot.org>; Sun, 02 Jan 2022 12:37:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=J1gHvsoMvhFSGuhUf1+/bYw5yvyIBT9y42wt74cOjKw=;
- b=K7qiYrxX7KMA8gofZGhFrxcsCEy/j/t3CWRJWZ5J9DOIeie9qz9gwbHqgDxRnp+amr
- y6guypSYv91ShkyQRPYWg56GRF6A93iZZtaAcsECexjpHgPiZlkxExwMbYJc8NniDX3c
- RbbP2NaFla0hHzySl5hL9lUL71AcDNDp+MS5QGIBGnPf35DMf0glCZ5VpXkp4oFuq/vO
- 21quwx/JyT9yeOvEP6j/rmpaY56UJITIB6si/96shc9vqFr9QwYxSQbpjyYCGDUhZbLL
- qEvk/kP51c1bG7D10nKrtI0CUekcziUGDwUWt3eJQCOtDGPba0MaYiEWdqkLtFaKT63s
- w7NA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=8OhJ/La0q7vhpYM9Qcu2ipGD0qDVTySHD5EHpEDqqfE=;
+ b=Q5chAs8M6ryN1mZPnxae5G0uoUv6m1xf5C31gQzLWLrBC1DFAemZUnScJSrwnJejyW
+ Lga8oQLywwiKRNORTA78kPDlylk/YLf2rJDtEGs0F13pBzM7ZrLGs+5U++Vu60p6OrhM
+ H43ViDgoJECvRsB/4sXridNaruhiDUCC56Yzz0AgI2fW81Y44ABgPMLmksTE4QtBpuWb
+ MwH0RdXGAuMZ561hy5ba7gJL2ALCILpZ4St4W3CybiKlPIAtgfl5X4L63G9ZJLdSVX28
+ 2YEQ7iGgOm/+5h2SY2hyQHcdG/GdfrMIvcl630g/LtLnrPPsOQkJi22+Jpg9YnldZcvb
+ 5Udg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=J1gHvsoMvhFSGuhUf1+/bYw5yvyIBT9y42wt74cOjKw=;
- b=XVFczi4aCGj314MNbUqT1Mu5+hJXQeda+0lqauleu4Y30gr47CK5ZQkwPHPmdDo7Mb
- TynzR16AqpX6LneYoLQiTcEqPmbtoi36ccPihYQMFRv6a+l6kMVxDmA9JD8KCKWHL4tl
- aCagSj9mkB6hg6bmR4mA7rd3sGyHhdbt/NYLiDoJeeO3yYwXnNpFf0gA839QSq4oTE+T
- DS5sV+m9zFOTmiFvg+SHYZ9KvSSGp22nOvD0sIAiy829fTe+q+Kvp06ceD/y1Rxf9DXG
- TWDiRpZYbnLocADJ7X78/akxy93RnG8RVpkPReJrwQB8YieiDrAeNuPFL0PMOMnFMCua
- EEpQ==
-X-Gm-Message-State: AOAM5339R/tperLdbcNiAKeM8fhM1WxzYyzFKlgp+qvMTjJ4SgNWdkCM
- RERh4R71pCbq2WK4sgD5/Ee11QOcKOM=
-X-Google-Smtp-Source: ABdhPJxpc2Edr6dtv2YtlSmJDfmCUMQcZ8w3TcdrUnF43REX+u3r0tA1isyJd6lk6rO9QDL759ndTA==
-X-Received: by 2002:adf:a386:: with SMTP id l6mr35634222wrb.505.1641153875219; 
- Sun, 02 Jan 2022 12:04:35 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id p13sm32867584wrr.37.2022.01.02.12.04.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Jan 2022 12:04:34 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 21:03:37 +0100
-Message-Id: <20220102200337.3271548-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=8OhJ/La0q7vhpYM9Qcu2ipGD0qDVTySHD5EHpEDqqfE=;
+ b=yJTZ7Do/f8wNGMEw+0JDLL57fJWNtbU9LQbtUC7F2GI6uvnttn2z5qlgmPAOIwWNUz
+ EbcqW+NgqpikHOCdcSLuzRqQshc8KwCTxunsfSd1/PjuXknYVis8ndSeqgXa8uEj0dda
+ 4TdVlErVdsyhsbKlPN8fkq7uYRGqrl7ZThqkwHU+R8zAG6EdXyDYmCiQJ0Co86Xmiwvg
+ lfjDxNPsZLcKDHf1wm0IWwqi/HuZvzICji0ooYceN4Wrf1JmBibQ3GpcZBZr1tooy5nE
+ PaQaIi2MB+ZJFeGqaVkkiXFteleLiOfZDhgIwHPtrU6P+doE/zKPzIKAMLjpT1wGkUbY
+ BVmw==
+X-Gm-Message-State: AOAM533miI9/r9MJ4QLKPhf6LtuVAuouFg/PmO7tKP/g+vUf2M+daBwJ
+ Eb6oikzEzTtceZ8NyBGkQeGaaZPyssus5m9aIIQ=
+X-Google-Smtp-Source: ABdhPJyR7U2vhm8K62VMWMeEbbOqRSBF/Ac5XKq6D0oZgxv6rwKfIroiefQihGNav8s9YMlt1ryMUpbcL+zfHKPBmDw=
+X-Received: by 2002:a05:6402:2682:: with SMTP id
+ w2mr41571243edd.393.1641155853861; 
+ Sun, 02 Jan 2022 12:37:33 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/file: fix build with gcc 4.8
+References: <20211228153345.4087026-1-fontaine.fabrice@gmail.com>
+ <20211228164916.2beec0d6@windsurf>
+ <CAPi7W80OfGF3AhM2h6mjtsUjLEnYEV4gteJ12GFq4edNysEV5A@mail.gmail.com>
+ <20211228181447.2a42dc86@windsurf>
+ <ed10db1b-6b39-344d-8c4b-aa0a6d085d40@gmail.com>
+In-Reply-To: <ed10db1b-6b39-344d-8c4b-aa0a6d085d40@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 2 Jan 2022 21:36:34 +0100
+Message-ID: <CAPi7W8094+7P-RRPafDfRgSCe94aqQUfoQ7z=WvGRFsj_wdpww@mail.gmail.com>
+To: Joachim Wiberg <troglobit@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] package/mbedtls3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,136 +84,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump to version 5.41 in
-commit d38b72bcd75392a88b5100839ac410859d0a6a79:
-
-readelf.c: In function 'do_auxv_note':
-readelf.c:1046:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (size_t off = 0; off + elsize <= descsz; off += elsize) {
-  ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/31cbc313fceb84c0cbb1969fca5ac44244871dbc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../file/0001-fix-build-with-gcc-4.8.patch    | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 package/file/0001-fix-build-with-gcc-4.8.patch
-
-diff --git a/package/file/0001-fix-build-with-gcc-4.8.patch b/package/file/0001-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..2494c6a7c0
---- /dev/null
-+++ b/package/file/0001-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,97 @@
-+From e36455301a3757618381cb83bf17115dd386131e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 2 Jan 2022 20:41:31 +0100
-+Subject: [PATCH] fix build with gcc 4.8
-+
-+Fix the following build failure with gcc 4.8
-+
-+readelf.c: In function 'do_auxv_note':
-+readelf.c:1046:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (size_t off = 0; off + elsize <= descsz; off += elsize) {
-+  ^
-+
-+funcs.c:93:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (const char *p = fmt; *p; p++) {
-+  ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/31cbc313fceb84c0cbb1969fca5ac44244871dbc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugs.astron.com/view.php?id=307]
-+---
-+ src/der.c     | 6 ++++--
-+ src/funcs.c   | 3 ++-
-+ src/readelf.c | 4 ++--
-+ 3 files changed, 8 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/der.c b/src/der.c
-+index 4bee9f16..23b9a574 100644
-+--- a/src/der.c
-++++ b/src/der.c
-+@@ -235,6 +235,7 @@ der_tag(char *buf, size_t len, uint32_t tag)
-+ static int
-+ der_data(char *buf, size_t blen, uint32_t tag, const void *q, uint32_t len)
-+ {
-++	uint32_t i;
-+ 	const uint8_t *d = CAST(const uint8_t *, q);
-+ 	switch (tag) {
-+ 	case DER_TAG_PRINTABLE_STRING:
-+@@ -251,7 +252,7 @@ der_data(char *buf, size_t blen, uint32_t tag, const void *q, uint32_t len)
-+ 		break;
-+ 	}
-+ 
-+-	for (uint32_t i = 0; i < len; i++) {
-++	for (i = 0; i < len; i++) {
-+ 		uint32_t z = i << 1;
-+ 		if (z < blen - 2)
-+ 			snprintf(buf + z, blen - z, "%.2x", d[i]);
-+@@ -283,7 +284,8 @@ der_offs(struct magic_set *ms, struct magic *m, size_t nbytes)
-+ 	offs += ms->offset + m->offset;
-+ 	DPRINTF(("cont_level = %d\n", m->cont_level));
-+ #ifdef DEBUG_DER
-+-	for (size_t i = 0; i < m->cont_level; i++)
-++	size_t i;
-++	for (i = 0; i < m->cont_level; i++)
-+ 		printf("cont_level[%" SIZE_T_FORMAT "u] = %u\n", i,
-+ 		    ms->c.li[i].off);
-+ #endif
-+diff --git a/src/funcs.c b/src/funcs.c
-+index d968873d..08b565fb 100644
-+--- a/src/funcs.c
-++++ b/src/funcs.c
-+@@ -90,7 +90,8 @@ file_checkfield(char *msg, size_t mlen, const char *what, const char **pp)
-+ protected int
-+ file_checkfmt(char *msg, size_t mlen, const char *fmt)
-+ {
-+-	for (const char *p = fmt; *p; p++) {
-++	const char *p;
-++	for (p = fmt; *p; p++) {
-+ 		if (*p != '%')
-+ 			continue;
-+ 		if (*++p == '%')
-+diff --git a/src/readelf.c b/src/readelf.c
-+index 01c60fe9..46421a2e 100644
-+--- a/src/readelf.c
-++++ b/src/readelf.c
-+@@ -1015,7 +1015,7 @@ do_auxv_note(struct magic_set *ms, unsigned char *nbuf, uint32_t type,
-+ 	size_t elsize = xauxv_sizeof;
-+ 	const char *tag;
-+ 	int is_string;
-+-	size_t nval;
-++	size_t nval, off;
-+ 
-+ 	if ((*flags & (FLAGS_IS_CORE|FLAGS_DID_CORE_STYLE)) !=
-+ 	    (FLAGS_IS_CORE|FLAGS_DID_CORE_STYLE))
-+@@ -1043,7 +1043,7 @@ do_auxv_note(struct magic_set *ms, unsigned char *nbuf, uint32_t type,
-+ 	*flags |= FLAGS_DID_AUXV;
-+ 
-+ 	nval = 0;
-+-	for (size_t off = 0; off + elsize <= descsz; off += elsize) {
-++	for (off = 0; off + elsize <= descsz; off += elsize) {
-+ 		memcpy(xauxv_addr, &nbuf[doff + off], xauxv_sizeof);
-+ 		/* Limit processing to 50 vector entries to prevent DoS */
-+ 		if (nval++ >= 50) {
-+-- 
-+2.33.0
-+
--- 
-2.33.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpMZSB2ZW4uIDMxIGTDqWMuIDIwMjEgw6AgMDk6MjYsIEpvYWNoaW0gV2liZXJnIDx0cm9n
+bG9iaXRAZ21haWwuY29tPiBhIMOpY3JpdCA6Cj4KPiBIaSBldmVyeW9uZSEKPgo+IE9uIDEyLzI4
+LzIxIDY6MTQgUE0sIFRob21hcyBQZXRhenpvbmkgd3JvdGU6Cj4gPiBPbiBUdWUsIDI4IERlYyAy
+MDIxIDE4OjA3OjAzICswMTAwIEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cm90ZToKPiA+Pj4gQW4gaW1wb3J0YW50IChhbmQgdW5mb3J0dW5hdGUgcG9pbnQp
+IGlzIHRoYXQgYXBwYXJlbnRseSBtYmVkdGxzMyBjYW5ub3QKPiA+Pj4gYmUgaW5zdGFsbGVkIHNp
+ZGUtYnktc2lkZSB3aXRoIG1iZWR0bHMuIEF0IGxlYXN0IHRoYXQncyB3aGF0IHlvdXIKPiA+Pj4g
+ImRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX01CRURUTFMiIHNlZW1zIHRvIGhpbnQuCj4gPj4gSW5k
+ZWVkLCBib3RoIHZlcnNpb25zIGluc3RhbGwgdGhlaXIgaGVhZGVycyBpbiBpbmNsdWRlL21iZWR0
+bHMuCj4gPj4+IFRoaXMgaXMgYSBtYWpvciBhbm5veWFuY2UsIGFuZCBJJ20gbm90IHN1cmUgaG93
+IExpbnV4IGRpc3RyaWJ1dGlvbnMKPiA+Pj4gd2lsbCBoYW5kbGUgdGhpcyBtaWdyYXRpb24gaWYg
+dGhleSBjYW5ub3QgaGF2ZSBtYmVkdGxzIDIueCBhbmQgbWJlZHRscwo+ID4+PiAzLnggaW5zdGFs
+bGVkIHNpZGUgYnkgc2lkZS4KPiA+PiAzLjAgd2FzIHJlbGVhc2VkIGluIEp1bHkuCj4gPj4gVG8g
+bXkga25vd2xlZGdlLCBoaWF3YXRoYSBpcyBvbmUgb2YgdGhlIGZpcnN0IHBhY2thZ2UgdGhhdCB1
+c2VzIHRoaXMKPiA+PiBuZXcgQVBJIGFuZCBidWlsZHJvb3Qgd2lsbCBwcm9iYWJseSBiZSBvbmUg
+b2YgdGhlIGZpcnN0IGJ1aWxkIHN5c3RlbQo+ID4+IHRoYXQgd2lsbCBwcm92aWRlIG1iZWR0czMu
+Cj4gPj4gSU1ITywgYmVpbmcgdW5hYmxlIHRvIGluc3RhbGwgYm90aCB2ZXJzaW9ucyBzaWRlIGJ5
+IHNpZGUgaXMgcHJldHR5Cj4gPj4gY29tbW9uOiB3ZSBoYWQgdGhlIHNhbWUgaXNzdWUgd2l0aCBs
+aWJ1cG5wIDEuNi54IGFuZCBsaWJ1cG5wIDEuOC54Lgo+ID4+IENvbmNlcm5pbmcgbGlidXBucCwg
+d2UgZXZlbiBoYWQgdG8gcmV2ZXJ0IHRoZSBwb3NzaWJpbGl0eSB0byBpbnN0YWxsCj4gPj4gYm90
+aCB2ZXJzaW9ucyBzaWRlIGJ5IHNpZGUgYmVjYXVzZSBpdCB3YXMgYSAiYnVyZGVuIHRvIHByb2dy
+YW1zCj4gPj4gbGlua2luZyBhZ2FpbnN0IGxpYnVwbnAiOgo+ID4+IGh0dHBzOi8vZ2l0aHViLmNv
+bS9wdXBucC9wdXBucC9jb21taXQvMDdmNTA0YzYxYmQ5ZTRkOTNlYjNkMzczZmZjODUyN2NhZmUw
+YjlhZgo+ID4gSSdtIG5vdCBzdXJlIHRvIGZvbGxvdyB5b3UgaGVyZS4gVGhlIGZhY3QgdGhhdCBp
+dCdzIHByZXR0eSBjb21tb24KPiA+IGRvZXNuJ3QgbWFrZSBpdCBhIGdvb2Qgc29sdXRpb24uIEl0
+IG1ha2VzIHRoZSB0cmFuc2l0aW9uIHBlcmlvZAo+ID4gYWJzb2x1dGVseSBhd2Z1bC4KPiA+IFdp
+dGggdGhlIGN1cnJlbnRseSBwcm9wb3NlZCBhcHByb2FjaCwgc29tZW9uZSB3aG8gdG9kYXkgaGFz
+IGEgd29ya2luZwo+ID4gY29uZmlndXJhdGlvbiB0aGF0IGhhcyBoaWF3YXRoYSBhbmQgYmVsbGUt
+c2lwIGNhbiBjb252ZW5pZW50bHkgYnVpbGQKPiA+IGJvdGggaW4gdGhlIHNhbWUgaW1hZ2UuIFdp
+dGggeW91ciBwYXRjaCBhcHBsaWVkLCB0aGlzIGlzIG5vIGxvbmdlcgo+ID4gcG9zc2libGUsIGR1
+ZSB0byBoaWF3YXRoYSBub3cgdXNpbmcgbWJlZHRsczMsIHdoaWNoIGNhbm5vdCBiZSBpbnN0YWxs
+ZWQKPiA+IHNpZGUtYnktc2lkZSB3aXRoIG1iZWR0bHMuCj4gPiBUaGlzIGRvZXNuJ3Qgc2VlbSB2
+ZXJ5IGFjY2VwdGFibGUgZm9yIHVzLCBhbmQgcHJvYmFibHkgaXMgZXZlbiBsZXNzCj4gPiBhY2Nl
+cHRhYmxlIGZvciBtYWpvciBMaW51eCBkaXN0cmlidXRpb25zLgo+Cj4gSSBsb29rZWQgaW50byB0
+aGlzLCBldmVyIHNvIGJyaWVmbHksIGFuZCB3aXRob3V0IGNoZWNraW5nIHdpdGggYW55IG9mCj4g
+dGhlIHBhY2thZ2VzIHRoYXQgc2VsZWN0IEJSMl9QQUNLQUdFX01CRURUTFMuCj4KPiBIb3dldmVy
+LCBzZWVpbmcgYXMgaXQgaXMgb25seSBIaWF3YXRoYSB0aGF0IHJlcXVpcmVzIGEgdmVyc2lvbiA+
+PSAzLjAsCj4gZm9yIGEgdHJhbnNpdGlvbiBwZXJpb2QsIHdlIGNvdWxkIGNoYW5nZSBpdCB0byAt
+RFVTRV9TWVNURU1fTUJFRFRMUz1PRkYKPiBhbmQgbGV0IEhpYXdhdGhhIHVzZSBpdHMgYnVuZGxl
+ZCBtYmVkdGxzIGluc3RlYWQuCkluZGVlZCwgdGhpcyBpcyBhbHNvIGFuIGFsdGVybmF0aXZlLCBl
+dmVuIGlmIEkgdGhpbmsgdGhhdCBhZGRpbmcKbWJlZHRsczMgd291bGQgYmUgYSBncmVhdCBhZGRp
+dGlvbi4KRm9yIGV4YW1wbGUsIGxpYmN1cmwgc3VwcG9ydHMgbWJlZHRzIDMuMCBzaW5jZSBpdHMg
+dmVyc2lvbiA3Ljc5IGFuZApodHRwczovL2dpdGh1Yi5jb20vY3VybC9jdXJsL2NvbW1pdC8zZjEy
+NjEzOGJlM2M0NTlhMjc5NGQzNWY4MTcwZTkyZTY1YTUwZGFkLgoKT3RoZXJ3aXNlLCBhcyByZXF1
+ZXN0ZWQgYnkgVGhvbWFzLCBJIHNlbnQgYW4gZW1haWwgdG8gbWJlZHRscyBtYWlsaW5nCmxpc3Q6
+IGh0dHBzOi8vbGlzdHMudHJ1c3RlZGZpcm13YXJlLm9yZy9hcmNoaXZlcy9saXN0L21iZWQtdGxz
+QGxpc3RzLnRydXN0ZWRmaXJtd2FyZS5vcmcvdGhyZWFkL0hFSENOUVpUQk9aVjU2UlRHUlRHU1FR
+Uk1FV1lKUEdJLwpIZXJlIGlzIGFuIGV4dHJhY3Qgb2YgdGhlaXIgYW5zd2VyOiAieW91IG5lZWQg
+dG8gaW5zdGFsbCB0aGUgaGVhZGVyCmZpbGVzIGFuZCB0aGUgbGlicmFyaWVzIHVuZGVyIGRpZmZl
+cmVudCBwYXRocy4gQXQgbW9zdCBvbmUgY2FuIGJlIGluCnRoZSBkZWZhdWx0IGluY2x1ZGUgYW5k
+IGxpYiBkaXJlY3Rvcmllcy4gU2luY2UgZWFjaCBwcm9ncmFtIGNhbiBvbmx5CnVzZSBvbmUgdmVy
+c2lvbiwgeW91IG5lZWQgdG8gcGljayB0aGUgZGVzaXJlZCAtSS8tTCBwYXRocyBhdApjb21waWxl
+L2xpbmsgdGltZXMuIgpTbyBiYXNpY2FsbHksIHdlIGNhbid0IHJlYWxseSBpbnN0YWxsIHRoZW0g
+c2lkZSBieSBzaWRlIGluIHRoZSBjb250ZXh0Cm9mIGJ1aWxkcm9vdCBleGNlcHQgaWYgeW91IHdh
+bnQgdG8gcGF0Y2ggZXZlcnkgc2luZ2xlIG1iZWR0bHMgcGFja2FnZQp3aXRoIGN1c3RvbSBDRkxB
+R1MgYW5kIExERkxBR1MgLi4uCklmIG9uZSBvZiB5b3Ugd2FudHMgdG8gZGViYXRlIHdpdGggdGhl
+bSwgZmVlbCBmcmVlIHRvIGRvIGl0Lgo+Cj4KPiBCZXN0IHJlZ2FyZHMKPiAgL0pvYWNoaW0KQmVz
+dCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
