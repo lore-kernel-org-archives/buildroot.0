@@ -4,77 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E9AFC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 16:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2A1DC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jan 2022 16:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AE73813DB;
-	Sun,  2 Jan 2022 16:55:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7272D81419;
+	Sun,  2 Jan 2022 16:59:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I6Uoojr02EQd; Sun,  2 Jan 2022 16:55:01 +0000 (UTC)
+	with ESMTP id ENRXnnY1Wz-x; Sun,  2 Jan 2022 16:59:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBFCF813D0;
-	Sun,  2 Jan 2022 16:55:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2901813FA;
+	Sun,  2 Jan 2022 16:59:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D6CF1BF3FC
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 16:54:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E1CFE1BF28F
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 16:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75BF4813D0
- for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 16:54:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFF84813FA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jan 2022 16:59:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EvI0F6Fy-llG for <buildroot@lists.busybox.net>;
- Sun,  2 Jan 2022 16:54:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB21A813C4
- for <buildroot@buildroot.org>; Sun,  2 Jan 2022 16:54:57 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id k18so28939365wrg.11
- for <buildroot@buildroot.org>; Sun, 02 Jan 2022 08:54:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xalovlNbSY4ispK+mqdIpX4ciowY9xzYQBJO8QvHPmo=;
- b=MDOOiL+9sp+Gg3O9z3AkR1Pih+4dx4xxabw/79aErkurffqmXJaD9mYAvZBAGNmWAs
- z0o7V87p75xcCsxH90NgL6X/9nGVNpu2/u7ulpDd+kbZ7zRG0+zJGvD0ikOY0Pk5aYQ4
- yW009u6RgZXoosTJ3UgrJPyG1B2R+D6LImX1vsy7qm63nyFHw+a/QB0G93OifSTkgsf5
- eKd3ECpjIS2aPajwQm4NHvqVwf2UWqdDw5jIp4x1unVXUy+LsF9ybDzRdgQG5SyoXkl0
- iXbtcp0u9Cmow9j8+fx2DWS4HMbpcUvbT9/nCc0UxHFDKetiMZ66YH/XsQpLf3Gg4ivr
- 7NzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xalovlNbSY4ispK+mqdIpX4ciowY9xzYQBJO8QvHPmo=;
- b=P92hiL9DWru0j3Hv3cW86pzfCEF9OmMILxaBDd26a/cmuTnyjMpDYB/PuwQp14wei+
- W5qgy8TovV1d8ap+AiPdF/BPoXA+Yo03Eu4kimatIR+bHD03Qh2i3HIWEfQ0YqdxU9aC
- APWREwbLzZoZmwLw45faeInVQ4LSZmgW7RuwGK7Tso5C0FaEG8hFVGpWLfXXyP+bxm9J
- eqUyX2g/fSiCqxidmxRH2Ti0lYCnuXd2Mo1qld8AufZYqpFFjewDPaxX1CUtKDOjHyBi
- 2hba/IXY325g7KurXtMXbmF2dULttcZSCnspQyAnMIyVfgSGpbkuKi5Ekz5HvSDRJSut
- 2kYQ==
-X-Gm-Message-State: AOAM531x6c0jYNGeVrVO9UlryvEUC3XAPc3kTu7fZasKiFdK4/+SSon2
- sDpVZQWE3TJGR6/UyrgvT2dRZ63ShlM=
-X-Google-Smtp-Source: ABdhPJwbt8qibHQUTGwdqz0ZxM9qV9ZWVIO3GWdg0cQDT+V+yNYfV++6ejXLLSTTJiZR/7povyAKew==
-X-Received: by 2002:a05:6000:1ac9:: with SMTP id
- i9mr34934330wry.531.1641142496126; 
- Sun, 02 Jan 2022 08:54:56 -0800 (PST)
-Received: from atlas.home
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id c8sm32298946wrp.40.2022.01.02.08.54.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Jan 2022 08:54:55 -0800 (PST)
-From: Romain Naour <romain.naour@gmail.com>
+ with ESMTP id P1RlcPhIAo1c for <buildroot@lists.busybox.net>;
+ Sun,  2 Jan 2022 16:59:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from libero.it (smtp-32.italiaonline.it [213.209.10.32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B528813F4
+ for <buildroot@buildroot.org>; Sun,  2 Jan 2022 16:59:13 +0000 (UTC)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ ([95.244.92.231]) by smtp-32.iol.local with ESMTPA
+ id 44CMndfRO7xUJ44CMnjJca; Sun, 02 Jan 2022 17:59:10 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+ t=1641142750; bh=rmokAWmJKXKrz+CUD1c7XNTHCUX5Z3+HqswhLz8j6Js=;
+ h=From;
+ b=jcMz/R3dYniIE0mwzaQpca7MQDzyTrvy5AmlrtW49AcTB4FoQieQHHFm9ONrfm6+W
+ U8DBwjvOxdq1sclS/3xLcYv2ZR5bpNmduG/25RAWSOl/4WKKh3tK24cNTWov/zxMEF
+ z3p9tCMVmRV2aYniO21Fepqp8uO3D0tj5WeReVnmWDGh8gkDxee8mdTb5GenfYMYH8
+ I1BEpEbzvYMdzVnlTtnSVVT8JD8nuB0wWlNBUOZMhcU5ABK7m7jebjnKprSe98StXB
+ N0mEXlMggG/qP+n5VKx/+JWZVZRs4xaTSzslemNX/HX5goFVDZkwDf8dF0pK62Ks9q
+ e4FZNeNpfKnEA==
+X-CNFS-Analysis: v=2.4 cv=cLAlDnSN c=1 sm=1 tr=0 ts=61d1d9de cx=a_exe
+ a=9deUd2gvNmZYn0kptk1X4w==:117 a=9deUd2gvNmZYn0kptk1X4w==:17
+ a=wxuGSOuLWNGsfMj8k8YA:9
 To: buildroot@buildroot.org
-Date: Sun,  2 Jan 2022 17:54:31 +0100
-Message-Id: <20220102165431.3551867-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.31.1
+Date: Sun,  2 Jan 2022 17:58:49 +0100
+Message-Id: <20220102165849.1653228-2-dariobin@libero.it>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220102165849.1653228-1-dariobin@libero.it>
+References: <20220102165849.1653228-1-dariobin@libero.it>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] board/qemu/aarch64-sbsa: use
- partition-type-uuid for genimage-15
+X-CMAE-Envelope: MS4xfIvSCBLUPoTqMNM5mDyE8CvMvw1dg1GMG454WWGUHpVnRjsdM4jJFdLcIzfoyGMFrWVW3NsR/xjWNqXa5tX3naCxQlHuUGZ4Lex1Eq46MvWQrBWQ9msh
+ zNiq8BZUjSYubuWJ8c2zWYuxzSPS3oNNtprjKwi09hdNqiwCXeHR7UPbdPvWJmd6MKoZ5YCHVwiia3uCaY2cTpxpvJFVfdH7IL4cqenG19GGUkbL/uPVqHSL
+ 7OvqQ0Wzmjm+1CTVakTmStOQ9Xi6nWUS+0a98rcObZZuSwcoa7h6c9U21UwmNOliPd4BCVmPmRMX5q/edSyCjnhCPwMweK/HuqcBti4O8fI=
+Subject: [Buildroot] [PATCH 2/2] configs/stm32f469_disco_xip: explicitly set
+ the kernel version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,56 +70,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
+From: Dario Binacchi via buildroot <buildroot@buildroot.org>
+Reply-To: Dario Binacchi <dariobin@libero.it>
+Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ Dario Binacchi <dariobin@libero.it>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Genimage 15 restricted the partition-type option to mbr and hybrid
-partition-table-type and now prints a warning when it is used [1]:
+The version of the kernel and its headers must be explicitly set because
+if you keep the default setting, the kernel is continuously updated in
+buildroot with the risk that its image + dtb grow so much that it again
+exceeds the 2 MByte of the flash module.
 
-ERROR: hdimage(disk.img): part boot: 'partition-type' is only valid for mbr and hybrid partition-table-type
-
-[1] https://github.com/pengutronix/genimage/commit/1d72d8091f83790a0a35a1ea7dc25d46adba8876
-
-Sync the genimage.cfg with the one used for aarch64_efi_defconfig
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1929717179
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1921792262
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
 ---
- board/qemu/aarch64-sbsa/genimage.cfg | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ configs/stm32f469_disco_xip_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/board/qemu/aarch64-sbsa/genimage.cfg b/board/qemu/aarch64-sbsa/genimage.cfg
-index 121ae9f37b..bdf8a89d75 100644
---- a/board/qemu/aarch64-sbsa/genimage.cfg
-+++ b/board/qemu/aarch64-sbsa/genimage.cfg
-@@ -18,12 +18,14 @@ image disk.img {
- 	}
- 
- 	partition boot {
--		partition-type = 0xEF
- 		image = "efi-part.vfat"
-+		partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-+		offset = 32K
-+		bootable = true
- 	}
- 
- 	partition root {
--		partition-type = 0x83
-+		partition-type-uuid = b921b045-1df0-41c3-af44-4c6f280d3fae
- 		image = "rootfs.ext2"
- 	}
- }
+diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
+index 6c4f227f582d..d95b7759f31a 100644
+--- a/configs/stm32f469_disco_xip_defconfig
++++ b/configs/stm32f469_disco_xip_defconfig
+@@ -1,9 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
++BR2_KERNEL_HEADERS_5_15=y
+ # BR2_UCLIBC_INSTALL_UTILS is not set
+ BR2_GCC_ENABLE_LTO=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux-xip.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 -- 
-2.31.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
