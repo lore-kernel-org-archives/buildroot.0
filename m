@@ -4,95 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194EFC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 17:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAF6BC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 20:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B05FA81352;
-	Mon,  3 Jan 2022 17:17:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 167FD817BD;
+	Mon,  3 Jan 2022 20:09:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iN_5EF7OfRP4; Mon,  3 Jan 2022 17:17:38 +0000 (UTC)
+	with ESMTP id VzIDTnyYgHed; Mon,  3 Jan 2022 20:09:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9F2E81353;
-	Mon,  3 Jan 2022 17:17:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CB90817AA;
+	Mon,  3 Jan 2022 20:09:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 297E01BF289
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:17:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4729E1BF302
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25F0A81352
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:17:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3983B817AA
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:09:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ht8dmV1CGvAs for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 17:17:34 +0000 (UTC)
-X-Greylist: delayed 00:19:19 by SQLgrey-1.8.0
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BBE8181353
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 17:17:34 +0000 (UTC)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
- by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 203GFClU032572; 
- Mon, 3 Jan 2022 16:58:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
- by mx0b-001b2d01.pphosted.com with ESMTP id 3dc4g90ksp-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 03 Jan 2022 16:58:13 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
- by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 203GtEtc006380;
- Mon, 3 Jan 2022 16:58:12 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com
- [159.122.73.70])
- by mx0b-001b2d01.pphosted.com with ESMTP id 3dc4g90kry-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 03 Jan 2022 16:58:12 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
- by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 203Gvxmj004649;
- Mon, 3 Jan 2022 16:58:10 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
- (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
- by ppma01fra.de.ibm.com with ESMTP id 3daek93b94-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 03 Jan 2022 16:58:10 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com
- [9.149.105.62])
- by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 203Gw8d143712920
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 3 Jan 2022 16:58:08 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 307B9AE055;
- Mon,  3 Jan 2022 16:58:08 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 02319AE045;
- Mon,  3 Jan 2022 16:58:08 +0000 (GMT)
-Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
- by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
- Mon,  3 Jan 2022 16:58:07 +0000 (GMT)
-Received: from yukon.ibmuc.com (unknown [9.171.33.19])
- by smtp.tlslab.ibm.com (Postfix) with ESMTP id 2EF2622011D;
- Mon,  3 Jan 2022 17:58:07 +0100 (CET)
-From: =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+ with ESMTP id tYl04tHvijJR for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 20:09:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AA92817A5
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 20:09:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 8277D82B2E; Mon,  3 Jan 2022 20:03:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jan 2022 17:58:05 +0100
-Message-Id: <20220103165805.3697636-1-clg@kaod.org>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JUh2MB-SjMkO9K2Z77melI8mnOd2YC_G
-X-Proofpoint-GUID: NWiuAkLeKhDp50McIUgpD1s4cy2Fcmas
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-03_06,2022-01-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1034 mlxscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201030112
-Subject: [Buildroot] [PATCH] package/qemu: bump to version 6.2.0
+Date: Mon, 3 Jan 2022 20:49:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 779501290f7205de2dcb7a7eadff9e456b0e2d3e
+X-Git-Newrev: 85c7bd0602715dc6a148cc79db8910dca27c4e76
+X-Patchwork-Hint: ignore
+Message-Id: <20220103200326.8277D82B2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: bump to version 6.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,152 +52,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8723297361752368128=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVtb3ZlIHVjbGliYyB3b3JrYXJvdW5kIHdoaWNoIHdhcyBkZXByZWNhdGVkIGJ5IHVwc3RyZWFt
-IDoKICBjb21taXQgYTMwYmZhYTdiZDFmICgibGludXgtdXNlci9ob3N0L2FybTogUG9wdWxhdGUg
-aG9zdF9zaWduYWwuaCIpCgpSZW1vdmUgdXBzdHJlYW0gcGF0Y2hlcyA6CiAgY29tbWl0IDMwNDMz
-MjAzOTAxNCAoImJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBtdXNsIGJ1aWxkIikKICBjb21taXQg
-MjgwMzFkNWM3NDI3ICgiYmxvY2svZXhwb3J0L2Z1c2UuYzogZml4IGZ1c2UtbHNlZWsgb24gdWNs
-aWJjIG9yIG11c2wiKQoKU2lnbmVkLW9mZi1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9k
-Lm9yZz4KLS0tCiAuLi5hZ2Utb2YtbWNvbnRleHQtc3RydWN0dXJlLW9uLUFSTS11Q2wucGF0Y2gg
-fCAzNSAtLS0tLS0tLS0tLS0tCiAuLi5lLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11
-c2wucGF0Y2ggfCA0NCAtLS0tLS0tLS0tLS0tLS0tLQogLi4uNC1ibG9jay1leHBvcnQtZnVzZS5j
-LWZpeC1tdXNsLWJ1aWxkLnBhdGNoIHwgNDkgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9x
-ZW11L3FlbXUuaGFzaCAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcWVt
-dS9xZW11Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiA1IGZpbGVzIGNoYW5n
-ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMTMwIGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvcWVtdS8wMDAxLXVzZXItZXhlYy1maXgtdXNhZ2Utb2YtbWNvbnRleHQtc3RydWN0
-dXJlLW9uLUFSTS11Q2wucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3FlbXUvMDAw
-My1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1mdXNlLWxzZWVrLW9uLXVjbGliYy1vci1tdXNsLnBh
-dGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9xZW11LzAwMDQtYmxvY2stZXhwb3J0LWZ1
-c2UuYy1maXgtbXVzbC1idWlsZC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8wMDAx
-LXVzZXItZXhlYy1maXgtdXNhZ2Utb2YtbWNvbnRleHQtc3RydWN0dXJlLW9uLUFSTS11Q2wucGF0
-Y2ggYi9wYWNrYWdlL3FlbXUvMDAwMS11c2VyLWV4ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0
-cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA2
-ZGI0ZThiYzkyM2UuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3FlbXUvMDAwMS11c2VyLWV4
-ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoCisrKyAv
-ZGV2L251bGwKQEAgLTEsMzUgKzAsMCBAQAotRnJvbSA5MjNkMjUzNjVmYmRmZjE3ZmE0YzhjMjg4
-Mzk2MGJlMDdjM2RhZDU2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogVGhvbWFzIFBl
-dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+Ci1EYXRlOiBGcmks
-IDUgTWF5IDIwMTcgMDk6MDc6MTUgKzAyMDAKLVN1YmplY3Q6IFtQQVRDSF0gdXNlci1leGVjOiBm
-aXggdXNhZ2Ugb2YgbWNvbnRleHQgc3RydWN0dXJlIG9uIEFSTS91Q2xpYmMKLQotdXNlci1leGVj
-LmMgaGFzIHNvbWUgY29uZGl0aW9uYWwgY29kZSB0byBkZWNpZGUgaG93IHRvIHVzZSB0aGUKLW1j
-b250ZXh0IHN0cnVjdHVyZS4gVW5mb3J0dW5hdGVseSwgc2luY2UgdUNsaWJjIGRlZmluZXMgX19H
-TElCQ19fLCBidXQKLXdpdGggb2xkIHZlcnNpb25zIG9mIF9fR0xJQkNfXyBhbmQgX19HTElCQ19N
-SU5PUl9fLCBhbiBvbGQgY29kZSBwYXRoCi1nZXRzIHVzZWQsIHdoaWNoIGRvZXNuJ3QgYXBwbHkg
-dG8gdUNsaWJjLgotCi1GaXggdGhpcyBieSBleGNsdWRpbmcgX19VQ0xJQkNfXywgd2hpY2ggZW5z
-dXJlcyB3ZSBmYWxsIGJhY2sgdG8gdGhlCi1nZW5lcmFsIGNhc2Ugb2YgdXNpbmcgdWNfbWNvbnRl
-eHQuYXJtX3BjLCB3aGljaCB3b3JrcyBmaW5lIHdpdGgKLXVDbGliYy4KLQotU2lnbmVkLW9mZi1i
-eTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+
-Ci0tLS0KLSBhY2NlbC90Y2cvdXNlci1leGVjLmMgfCAyICstCi0gMSBmaWxlIGNoYW5nZWQsIDEg
-aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCi0KLWRpZmYgLS1naXQgYS9hY2NlbC90Y2cvdXNl
-ci1leGVjLmMgYi9hY2NlbC90Y2cvdXNlci1leGVjLmMKLWluZGV4IDRlYmUyNTQ2MWEuLjA0OTY2
-NzRmYmQgMTAwNjQ0Ci0tLS0gYS9hY2NlbC90Y2cvdXNlci1leGVjLmMKLSsrKyBiL2FjY2VsL3Rj
-Zy91c2VyLWV4ZWMuYwotQEAgLTU0MCw3ICs1NDAsNyBAQCBpbnQgY3B1X3NpZ25hbF9oYW5kbGVy
-KGludCBob3N0X3NpZ251bSwgdm9pZCAqcGluZm8sCi0gCi0gI2lmIGRlZmluZWQoX19OZXRCU0Rf
-XykKLSAgICAgcGMgPSB1Yy0+dWNfbWNvbnRleHQuX19ncmVnc1tfUkVHX1IxNV07Ci0tI2VsaWYg
-ZGVmaW5lZChfX0dMSUJDX18pICYmIChfX0dMSUJDX18gPCAyIHx8IChfX0dMSUJDX18gPT0gMiAm
-JiBfX0dMSUJDX01JTk9SX18gPD0gMykpCi0rI2VsaWYgZGVmaW5lZChfX0dMSUJDX18pICYmICFk
-ZWZpbmVkKF9fVUNMSUJDX18pICYmIChfX0dMSUJDX18gPCAyIHx8IChfX0dMSUJDX18gPT0gMiAm
-JiBfX0dMSUJDX01JTk9SX18gPD0gMykpCi0gICAgIHBjID0gdWMtPnVjX21jb250ZXh0LmdyZWdz
-W1IxNV07Ci0gI2Vsc2UKLSAgICAgcGMgPSB1Yy0+dWNfbWNvbnRleHQuYXJtX3BjOwotLS0gCi0y
-LjI1LjMKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9xZW11LzAwMDMtYmxvY2stZXhwb3J0LWZ1c2Uu
-Yy1maXgtZnVzZS1sc2Vlay1vbi11Y2xpYmMtb3ItbXVzbC5wYXRjaCBiL3BhY2thZ2UvcWVtdS8w
-MDAzLWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wu
-cGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDUwNzYyMDU1YmYxOC4uMDAwMDAw
-MDAwMDAwCi0tLSBhL3BhY2thZ2UvcWVtdS8wMDAzLWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LWZ1
-c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw0NCAr
-MCwwIEBACi1Gcm9tIDhjM2ZjYmYyM2ZlMzFjZjU2ZjIxY2UxNzM3YmYyMmZlNjVmYzU1M2IgTW9u
-IFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5m
-YWJyaWNlQGdtYWlsLmNvbT4KLURhdGU6IEZyaSwgMjcgQXVnIDIwMjEgMjM6NDA6MDEgKzAyMDAK
-LVN1YmplY3Q6IFtQQVRDSF0gYmxvY2svZXhwb3J0L2Z1c2UuYzogZml4IGZ1c2UtbHNlZWsgb24g
-dWNsaWJjIG9yIG11c2wKLQotSW5jbHVkZSBsaW51eC9mcy5oIHRvIGF2b2lkIHRoZSBmb2xsb3dp
-bmcgYnVpbGQgZmFpbHVyZSBvbiB1Y2xpYmMgb3IKLW11c2wgcmFpc2VkIHNpbmNlIHZlcnNpb24g
-Ni4wLjA6Ci0KLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6IEluIGZ1bmN0aW9uICdmdXNlX2xzZWVr
-JzoKLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6NjQxOjE5OiBlcnJvcjogJ1NFRUtfSE9MRScgdW5k
-ZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pCi0gIDY0MSB8ICAgICBpZiAod2hl
-bmNlICE9IFNFRUtfSE9MRSAmJiB3aGVuY2UgIT0gU0VFS19EQVRBKSB7Ci0gICAgICB8ICAgICAg
-ICAgICAgICAgICAgIF5+fn5+fn5+fgotLi4vYmxvY2svZXhwb3J0L2Z1c2UuYzo2NDE6MTk6IG5v
-dGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkgb25jZSBmb3Ig
-ZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCi0uLi9ibG9jay9leHBvcnQvZnVzZS5jOjY0MTo0
-MjogZXJyb3I6ICdTRUVLX0RBVEEnIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0
-aW9uKTsgZGlkIHlvdSBtZWFuICdTRUVLX1NFVCc/Ci0gIDY0MSB8ICAgICBpZiAod2hlbmNlICE9
-IFNFRUtfSE9MRSAmJiB3aGVuY2UgIT0gU0VFS19EQVRBKSB7Ci0gICAgICB8ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+Ci0gICAgICB8ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VFS19TRVQKLQotRml4ZXM6Ci0gLSBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8zM2M5MGViZjA0OTk3ZjRkMzU1
-N2NmYTY2YWJjOWNmOWEzMDc2MTM3Ci0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotW1Vwc3RyZWFtIHN0YXR1czogaHR0cHM6Ly9w
-YXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L3FlbXUtZGV2ZWwvcGF0Y2gvMjAyMTA4MjcyMjAz
-MDEuMjcyODg3LTEtZm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20vXQotLS0tCi0gYmxvY2svZXhw
-b3J0L2Z1c2UuYyB8IDMgKysrCi0gMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQotCi1k
-aWZmIC0tZ2l0IGEvYmxvY2svZXhwb3J0L2Z1c2UuYyBiL2Jsb2NrL2V4cG9ydC9mdXNlLmMKLWlu
-ZGV4IGZjN2IwN2QyYjUuLjJlM2JmODI3MGIgMTAwNjQ0Ci0tLS0gYS9ibG9jay9leHBvcnQvZnVz
-ZS5jCi0rKysgYi9ibG9jay9leHBvcnQvZnVzZS5jCi1AQCAtMzEsNiArMzEsOSBAQAotICNpbmNs
-dWRlIDxmdXNlLmg+Ci0gI2luY2x1ZGUgPGZ1c2VfbG93bGV2ZWwuaD4KLSAKLSsjaWZkZWYgX19s
-aW51eF9fCi0rI2luY2x1ZGUgPGxpbnV4L2ZzLmg+Ci0rI2VuZGlmCi0gCi0gLyogUHJldmVudCBv
-dmVybHkgbG9uZyBib3VuY2UgYnVmZmVyIGFsbG9jYXRpb25zICovCi0gI2RlZmluZSBGVVNFX01B
-WF9CT1VOQ0VfQllURVMgKE1JTihCRFJWX1JFUVVFU1RfTUFYX0JZVEVTLCA2NCAqIDEwMjQgKiAx
-MDI0KSkKLS0tIAotMi4zMi4wCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8wMDA0LWJsb2Nr
-LWV4cG9ydC1mdXNlLmMtZml4LW11c2wtYnVpbGQucGF0Y2ggYi9wYWNrYWdlL3FlbXUvMDAwNC1i
-bG9jay1leHBvcnQtZnVzZS5jLWZpeC1tdXNsLWJ1aWxkLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2Rl
-IDEwMDY0NAppbmRleCA0ODU2ODIxODQzZmMuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3Fl
-bXUvMDAwNC1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1tdXNsLWJ1aWxkLnBhdGNoCisrKyAvZGV2
-L251bGwKQEAgLTEsNDkgKzAsMCBAQAotRnJvbSAzMDQzMzIwMzkwMTQ2NzliODA5ZjYwNmUyZjIy
-N2VlMGZjNDNhNDUxIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogRmFicmljZSBGb250
-YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci1EYXRlOiBGcmksIDIyIE9jdCAyMDIx
-IDExOjUyOjA5ICswMjAwCi1TdWJqZWN0OiBbUEFUQ0hdIGJsb2NrL2V4cG9ydC9mdXNlLmM6IGZp
-eCBtdXNsIGJ1aWxkCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0ZXh0L3BsYWlu
-OyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0KLUluY2x1
-ZGUgbGludXgvZmFsbG9jLmggaWYgQ09ORklHX0ZBTExPQ0FURV9aRVJPX1JBTkdFIGlzIGRlZmlu
-ZWQgdG8gZml4Ci1odHRwczovL2dpdGxhYi5jb20vcWVtdS1wcm9qZWN0L3FlbXUvLS9jb21taXQv
-NTA0ODJmZGE5OGJkNjJlMDcyYzMwYjdlYTczYzk4NWM0ZTlkOWJiYgotYW5kIGF2b2lkIHRoZSBm
-b2xsb3dpbmcgYnVpbGQgZmFpbHVyZSBvbiBtdXNsOgotCi0uLi9ibG9jay9leHBvcnQvZnVzZS5j
-OiBJbiBmdW5jdGlvbiAnZnVzZV9mYWxsb2NhdGUnOgotLi4vYmxvY2svZXhwb3J0L2Z1c2UuYzo2
-NDM6MjE6IGVycm9yOiAnRkFMTE9DX0ZMX1pFUk9fUkFOR0UnIHVuZGVjbGFyZWQgKGZpcnN0IHVz
-ZSBpbiB0aGlzIGZ1bmN0aW9uKQotICA2NDMgfCAgICAgZWxzZSBpZiAobW9kZSAmIEZBTExPQ19G
-TF9aRVJPX1JBTkdFKSB7Ci0gICAgICB8ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+
-fn5+fn5+fn4KLQotRml4ZXM6Ci0gLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
-dWx0cy9iZTI0NDMzYTQyOWZkYTY4MWZiNjY2OTgxNjAxMzJjMWM5OWJjNTNiCi0KLUZpeGVzOiA1
-MDQ4MmZkYTk4YiAoImJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBtdXNsIGJ1aWxkIikKLVNpZ25l
-ZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgot
-TWVzc2FnZS1JZDogPDIwMjExMDIyMDk1MjA5LjEzMTk2NzEtMS1mb250YWluZS5mYWJyaWNlQGdt
-YWlsLmNvbT4KLVJldmlld2VkLWJ5OiBQaGlsaXBwZSBNYXRoaWV1LURhdWTDqSA8cGhpbG1kQHJl
-ZGhhdC5jb20+Ci1TaWduZWQtb2ZmLWJ5OiBLZXZpbiBXb2xmIDxrd29sZkByZWRoYXQuY29tPgot
-W1JldHJpZXZlZCBmcm9tOgotaHR0cHM6Ly9naXRsYWIuY29tL3FlbXUtcHJvamVjdC9xZW11Ly0v
-Y29tbWl0LzMwNDMzMjAzOTAxNDY3OWI4MDlmNjA2ZTJmMjI3ZWUwZmM0M2E0NTFdCi0tLS0KLSBi
-bG9jay9leHBvcnQvZnVzZS5jIHwgNCArKysrCi0gMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
-cygrKQotCi1kaWZmIC0tZ2l0IGEvYmxvY2svZXhwb3J0L2Z1c2UuYyBiL2Jsb2NrL2V4cG9ydC9m
-dXNlLmMKLWluZGV4IDJlM2JmODI3MGIuLjgyM2MxMjZkMjMgMTAwNjQ0Ci0tLS0gYS9ibG9jay9l
-eHBvcnQvZnVzZS5jCi0rKysgYi9ibG9jay9leHBvcnQvZnVzZS5jCi1AQCAtMzEsNiArMzEsMTAg
-QEAKLSAjaW5jbHVkZSA8ZnVzZS5oPgotICNpbmNsdWRlIDxmdXNlX2xvd2xldmVsLmg+Ci0gCi0r
-I2lmIGRlZmluZWQoQ09ORklHX0ZBTExPQ0FURV9aRVJPX1JBTkdFKQotKyNpbmNsdWRlIDxsaW51
-eC9mYWxsb2MuaD4KLSsjZW5kaWYKLSsKLSAjaWZkZWYgX19saW51eF9fCi0gI2luY2x1ZGUgPGxp
-bnV4L2ZzLmg+Ci0gI2VuZGlmCi0tLSAKLUdpdExhYgotCmRpZmYgLS1naXQgYS9wYWNrYWdlL3Fl
-bXUvcWVtdS5oYXNoIGIvcGFja2FnZS9xZW11L3FlbXUuaGFzaAppbmRleCAwNjEzZmNlNDkzNjcu
-Ljk0MTE4MzIzODRiYSAxMDA2NDQKLS0tIGEvcGFja2FnZS9xZW11L3FlbXUuaGFzaAorKysgYi9w
-YWNrYWdlL3FlbXUvcWVtdS5oYXNoCkBAIC0xLDQgKzEsNCBAQAogIyBMb2NhbGx5IGNvbXB1dGVk
-LCB0YXJiYWxsIHZlcmlmaWVkIHdpdGggR1BHIHNpZ25hdHVyZQotc2hhMjU2ICBlZWJjMDg5ZGIz
-NDE0YmJlZWRmMWU0NjRiZWRhMGE3NTE1YWFkMzBmNzMyNjFhYmMyNDZjOWIyNzUwM2EzYzk2ICBx
-ZW11LTYuMS4wLnRhci54egorc2hhMjU2ICA2OGUxNWQ4ZTQ1YWM1NjMyNmUwYjlhNGFmYThiNDlh
-M2RmZThhYmEzNDg4MjIxZDA5OGM4NDY5OGJjYTY1YjQ1ICBxZW11LTYuMi4wLnRhci54egogc2hh
-MjU2ICA2ZjA0YWU4MzY0ZDAwNzlhMTkyYjE0NjM1ZjRiMWRhMjk0Y2UxODcyNGMwMzRjMzlhNmE0
-MWQxYjA5ZGY2MTAwICBDT1BZSU5HCiBzaGEyNTYgIGRjNjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0
-MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlkOGFiMDMyZmU1NTEgIENPUFlJTkcuTElCCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL3FlbXUvcWVtdS5tayBiL3BhY2thZ2UvcWVtdS9xZW11Lm1rCmluZGV4
-IDkxOWFlZjY1OTlmMS4uOTdmOWY4ODVhMThhIDEwMDY0NAotLS0gYS9wYWNrYWdlL3FlbXUvcWVt
-dS5taworKysgYi9wYWNrYWdlL3FlbXUvcWVtdS5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjCiAKLVFFTVVfVkVSU0lPTiA9IDYuMS4wCitRRU1VX1ZFUlNJT04g
-PSA2LjIuMAogUUVNVV9TT1VSQ0UgPSBxZW11LSQoUUVNVV9WRVJTSU9OKS50YXIueHoKIFFFTVVf
-U0lURSA9IGh0dHA6Ly9kb3dubG9hZC5xZW11Lm9yZwogUUVNVV9MSUNFTlNFID0gR1BMLTIuMCwg
-TEdQTC0yLjEsIE1JVCwgQlNELTMtQ2xhdXNlLCBCU0QtMi1DbGF1c2UsIE90aGVycy9CU0QtMWMK
-LS0gCjIuMzEuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============8723297361752368128==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=85c7bd0602715dc6a148cc79db8910dca27c4e76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Remove uclibc workaround which was deprecated by upstream :
+  commit a30bfaa7bd1f ("linux-user/host/arm: Populate host_signal.h")
+
+Remove upstream patches :
+  commit 304332039014 ("block/export/fuse.c: fix musl build")
+  commit 28031d5c7427 ("block/export/fuse.c: fix fuse-lseek on uclibc or musl")
+
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 ----------------
+ ...t-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch | 44 -------------------
+ .../0004-block-export-fuse.c-fix-musl-build.patch  | 49 ----------------------
+ package/qemu/qemu.hash                             |  2 +-
+ package/qemu/qemu.mk                               |  2 +-
+ 5 files changed, 2 insertions(+), 130 deletions(-)
+
+diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+deleted file mode 100644
+index 6db4e8bc92..0000000000
+--- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 923d25365fbdff17fa4c8c2883960be07c3dad56 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 5 May 2017 09:07:15 +0200
+-Subject: [PATCH] user-exec: fix usage of mcontext structure on ARM/uClibc
+-
+-user-exec.c has some conditional code to decide how to use the
+-mcontext structure. Unfortunately, since uClibc defines __GLIBC__, but
+-with old versions of __GLIBC__ and __GLIBC_MINOR__, an old code path
+-gets used, which doesn't apply to uClibc.
+-
+-Fix this by excluding __UCLIBC__, which ensures we fall back to the
+-general case of using uc_mcontext.arm_pc, which works fine with
+-uClibc.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- accel/tcg/user-exec.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
+-index 4ebe25461a..0496674fbd 100644
+---- a/accel/tcg/user-exec.c
+-+++ b/accel/tcg/user-exec.c
+-@@ -540,7 +540,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+- 
+- #if defined(__NetBSD__)
+-     pc = uc->uc_mcontext.__gregs[_REG_R15];
+--#elif defined(__GLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
+-+#elif defined(__GLIBC__) && !defined(__UCLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
+-     pc = uc->uc_mcontext.gregs[R15];
+- #else
+-     pc = uc->uc_mcontext.arm_pc;
+--- 
+-2.25.3
+-
+diff --git a/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch b/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
+deleted file mode 100644
+index 50762055bf..0000000000
+--- a/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 8c3fcbf23fe31cf56f21ce1737bf22fe65fc553b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 27 Aug 2021 23:40:01 +0200
+-Subject: [PATCH] block/export/fuse.c: fix fuse-lseek on uclibc or musl
+-
+-Include linux/fs.h to avoid the following build failure on uclibc or
+-musl raised since version 6.0.0:
+-
+-../block/export/fuse.c: In function 'fuse_lseek':
+-../block/export/fuse.c:641:19: error: 'SEEK_HOLE' undeclared (first use in this function)
+-  641 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
+-      |                   ^~~~~~~~~
+-../block/export/fuse.c:641:19: note: each undeclared identifier is reported only once for each function it appears in
+-../block/export/fuse.c:641:42: error: 'SEEK_DATA' undeclared (first use in this function); did you mean 'SEEK_SET'?
+-  641 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
+-      |                                          ^~~~~~~~~
+-      |                                          SEEK_SET
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/33c90ebf04997f4d3557cfa66abc9cf9a3076137
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://patchwork.ozlabs.org/project/qemu-devel/patch/20210827220301.272887-1-fontaine.fabrice@gmail.com/]
+----
+- block/export/fuse.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/block/export/fuse.c b/block/export/fuse.c
+-index fc7b07d2b5..2e3bf8270b 100644
+---- a/block/export/fuse.c
+-+++ b/block/export/fuse.c
+-@@ -31,6 +31,9 @@
+- #include <fuse.h>
+- #include <fuse_lowlevel.h>
+- 
+-+#ifdef __linux__
+-+#include <linux/fs.h>
+-+#endif
+- 
+- /* Prevent overly long bounce buffer allocations */
+- #define FUSE_MAX_BOUNCE_BYTES (MIN(BDRV_REQUEST_MAX_BYTES, 64 * 1024 * 1024))
+--- 
+-2.32.0
+-
+diff --git a/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch b/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch
+deleted file mode 100644
+index 4856821843..0000000000
+--- a/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 304332039014679b809f606e2f227ee0fc43a451 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 22 Oct 2021 11:52:09 +0200
+-Subject: [PATCH] block/export/fuse.c: fix musl build
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Include linux/falloc.h if CONFIG_FALLOCATE_ZERO_RANGE is defined to fix
+-https://gitlab.com/qemu-project/qemu/-/commit/50482fda98bd62e072c30b7ea73c985c4e9d9bbb
+-and avoid the following build failure on musl:
+-
+-../block/export/fuse.c: In function 'fuse_fallocate':
+-../block/export/fuse.c:643:21: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
+-  643 |     else if (mode & FALLOC_FL_ZERO_RANGE) {
+-      |                     ^~~~~~~~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/be24433a429fda681fb66698160132c1c99bc53b
+-
+-Fixes: 50482fda98b ("block/export/fuse.c: fix musl build")
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Message-Id: <20211022095209.1319671-1-fontaine.fabrice@gmail.com>
+-Reviewed-by: Philippe Mathieu-Daudé <philmd@redhat.com>
+-Signed-off-by: Kevin Wolf <kwolf@redhat.com>
+-[Retrieved from:
+-https://gitlab.com/qemu-project/qemu/-/commit/304332039014679b809f606e2f227ee0fc43a451]
+----
+- block/export/fuse.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/block/export/fuse.c b/block/export/fuse.c
+-index 2e3bf8270b..823c126d23 100644
+---- a/block/export/fuse.c
+-+++ b/block/export/fuse.c
+-@@ -31,6 +31,10 @@
+- #include <fuse.h>
+- #include <fuse_lowlevel.h>
+- 
+-+#if defined(CONFIG_FALLOCATE_ZERO_RANGE)
+-+#include <linux/falloc.h>
+-+#endif
+-+
+- #ifdef __linux__
+- #include <linux/fs.h>
+- #endif
+--- 
+-GitLab
+-
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 0613fce493..9411832384 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  eebc089db3414bbeedf1e464beda0a7515aad30f73261abc246c9b27503a3c96  qemu-6.1.0.tar.xz
++sha256  68e15d8e45ac56326e0b9a4afa8b49a3dfe8aba3488221d098c84698bca65b45  qemu-6.2.0.tar.xz
+ sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 919aef6599..97f9f885a1 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 6.1.0
++QEMU_VERSION = 6.2.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+
+--===============8723297361752368128==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8723297361752368128==--
