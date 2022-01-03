@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93342C433F5
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 09:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B21C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 09:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38C7B812ED;
-	Mon,  3 Jan 2022 09:07:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61DFA8132A;
+	Mon,  3 Jan 2022 09:07:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0i2GNUv1pQXy; Mon,  3 Jan 2022 09:07:33 +0000 (UTC)
+	with ESMTP id W7UFa9nilmOB; Mon,  3 Jan 2022 09:07:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98CED812F3;
-	Mon,  3 Jan 2022 09:07:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61D201BF360
+	by smtp1.osuosl.org (Postfix) with ESMTP id 978B58133A;
+	Mon,  3 Jan 2022 09:07:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 644061BF983
  for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E4B860E37
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50F4D8131F
  for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:07:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id odNP8JxbHnw9 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hx5Ab4F4ZFOM for <buildroot@lists.busybox.net>;
  Mon,  3 Jan 2022 09:07:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A86B660B87
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A3CD812E6
  for <buildroot@buildroot.org>; Mon,  3 Jan 2022 09:07:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 396C982BCC; Mon,  3 Jan 2022 09:01:29 +0000 (UTC)
+ id 0876082BCC; Mon,  3 Jan 2022 09:01:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jan 2022 10:04:14 +0100
+Date: Mon, 3 Jan 2022 10:04:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b0921cf401c16c64202db24484a585ba5c652a04
-X-Git-Newrev: 0ac5273f8571f53966ca1beb382f573712d8a2e4
+X-Git-Oldrev: 0629443499230b1dd4ab77c3e469d778ad1b2a66
+X-Git-Newrev: deec3a88876cdb1454cb550ea57d4b3692d54cea
 X-Patchwork-Hint: ignore
-Message-Id: <20220103090129.396C982BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
- version to 19.0.1-Matrix
+Message-Id: <20220103090129.0876082BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-audiodecoder-modplug: bump
+ version to 19.0.2-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ac5273f8571f53966ca1beb382f573712d8a2e4
+commit: https://git.buildroot.net/buildroot/commit/?id=deec3a88876cdb1454cb550ea57d4b3692d54cea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash | 2 +-
+ package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 8cc09e9774..c43d5d8628 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+index 7bab017241..e2bfe09928 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  85452cab5aa6e6dd426ca5df76c0832e1c9fa2d464973a16ad5e8c52d4533cc9  kodi-peripheral-joystick-19.0.0-Matrix.tar.gz
-+sha256  65efcfb8b0ed6595082d8d7298ec25b5c31d0189bb8e09ae1bc10989b9655204  kodi-peripheral-joystick-19.0.1-Matrix.tar.gz
+-sha256  4c422cacf456ab9eda5e2836d2789c3756bfbae03265a01647dd8f935261d9ec  kodi-audiodecoder-modplug-19.0.1-Matrix.tar.gz
++sha256  6e1b1910e799ea8c5ab11428084feb8f6a0a9b1b0d4b5760033545fe765a59e9  kodi-audiodecoder-modplug-19.0.2-Matrix.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index b753e689e8..b823550751 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+index 9b2cf98dbc..f5736e7db7 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.0-Matrix
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.1-Matrix
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+-KODI_AUDIODECODER_MODPLUG_VERSION = 19.0.1-Matrix
++KODI_AUDIODECODER_MODPLUG_VERSION = 19.0.2-Matrix
+ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
+ KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
