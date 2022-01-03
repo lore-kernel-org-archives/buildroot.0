@@ -1,80 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44D35C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 10:44:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E909C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 10:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A11F34033B;
-	Mon,  3 Jan 2022 10:44:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05AA260E3E;
+	Mon,  3 Jan 2022 10:53:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8rrrnTQ6CE22; Mon,  3 Jan 2022 10:44:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wDdqgYcHpOFB; Mon,  3 Jan 2022 10:53:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBBA64031F;
-	Mon,  3 Jan 2022 10:44:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51BFD1BF95E
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0D4F60AFB;
+	Mon,  3 Jan 2022 10:53:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A2AB1BF95E
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EBCA81315
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FF9560601
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:53:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PYstHtKCAxgs for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 10:44:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B69381313
- for <buildroot@busybox.net>; Mon,  3 Jan 2022 10:44:16 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id n30so22201730eda.13
- for <buildroot@busybox.net>; Mon, 03 Jan 2022 02:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QZu/jwSXAd2GBx6boYiihaWWGlj6T13IfEHr15PqNm0=;
- b=QLk48bGKyArElwDbC3uyuotuC4OYzdAMdCON1NQnCwwD1twDo1l4UxXDGcWg9x2kD5
- ys80Oo8q22CCo9CxxxoTAo8ozgbhazx54I2Jrtip3PRGbSUQdJxobO6Pp0uSsUf9pHjL
- OwUnaugE+FNl8RpUWnh3mlbfdft/xBoo3G0NARG7qulfWh6LV1NnvPc4kTqmsrjb4jzt
- siAxMgupqpd5g8nnQj6Fq6nG2FOV45WxjQh2jdNfxVzi/o77mDotLpvpz5lcazc2W4DW
- QvYYYaPtNkZDdXHEUbfbXNf0+be5gWn393jWMfA5ppT/qMkBnXERb70cQbyzvuTbmLIC
- v+tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QZu/jwSXAd2GBx6boYiihaWWGlj6T13IfEHr15PqNm0=;
- b=byPSbZCp0yk34bRcgFmhIfYDkK+hHN8nhuHDleSxuuyN+e9wnTHc1U8e7EW6iiuYqR
- hJGrqNBR7i6OyMacs12qbqeAfG1zFq+9AuFadT0e9SEfVqnI5+vuFeUBG3KbqthL2VSx
- k2bKWRynzZ2ScJiuj1PTugrgcIKcdbhrCj9EUodE76/USNvrCRLVwKFp87szIFQnSX4w
- f4WHE1wsjhjH1rPtkxMOH+lSFE5auJTf1/ejVWx442WS5p0/yguwrKZMK2BFwpPvMsPu
- /ZsGuv1T06kEJoNwuQw9w8sDa5GXN1LVjQvU3e4ZuAC6F1PVM0WamBqYIEkhiKzBY9Iu
- UmXA==
-X-Gm-Message-State: AOAM531LxUeOn+GFgZAPlRBsXulgC7NpCwXHcEJBhPTWZJd6IcHhEfrk
- /6VUHKafPVYfvurBWke+axS8yofOmO0=
-X-Google-Smtp-Source: ABdhPJxx4L39vWI3Kgd2wKIkqMqlJw8IcXh9BMEaI3s6BfcbtaHgkbZBUnafxUWTONjykAjVXgc3+A==
-X-Received: by 2002:a17:907:3f8d:: with SMTP id
- hr13mr34949161ejc.397.1641206654664; 
- Mon, 03 Jan 2022 02:44:14 -0800 (PST)
-Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id t20sm13361575edv.81.2022.01.03.02.44.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jan 2022 02:44:14 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon,  3 Jan 2022 11:44:07 +0100
-Message-Id: <20220103104407.16085-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.32.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9vX_hDVI-GTF for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 10:53:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2195E60A9B
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 10:53:06 +0000 (UTC)
+Date: Mon, 03 Jan 2022 10:52:53 +0000
+From: Paul Cercueil <paul@crapouillou.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-Id: <5KR45R.7T4EYI3OTWEG1@crapouillou.net>
+In-Reply-To: <20220102174329.2823931-1-fontaine.fabrice@gmail.com>
+References: <20220102174329.2823931-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/sqlite: bump to version 3.37.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/libiio: set PYTHON_EXECUTABLE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,43 +50,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Fabrice,
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 94f0127d1..604275ebf 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  731a4651d4d4b36fc7d21db586b2de4dd00af31fd54fb5a9a4b7f492057479f7  sqlite-autoconf-3370000.tar.gz
-+sha256  40f22a13bf38bbcd4c7ac79bcfb42a72d5aa40930c1f3f822e30ccce295f0f2e  sqlite-autoconf-3370100.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index be060c311..59b76ce16 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3.37.0
--SQLITE_TAR_VERSION = 3370000
-+SQLITE_VERSION = 3.37.1
-+SQLITE_TAR_VERSION = 3370100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2021
- SQLITE_LICENSE = Public domain
--- 
-2.32.0
+Le dim., janv. 2 2022 at 18:43:29 +0100, Fabrice Fontaine =
+
+<fontaine.fabrice@gmail.com> a =E9crit :
+> Set PYTHON_EXECUTABLE to avoid the following build failure when
+> BR2_PACKAGE_PYTHON is enabled but libiio finds python3 without
+> setuptools on host:
+> =
+
+> -- Found Python: /usr/bin/python3.5 (found version "3.5.3") found =
+
+> components: Interpreter
+> -- new
+> -- Python_EXECUTABLE /usr/bin/python3.5
+> =
+
+> [...]
+> =
+
+> Traceback (most recent call last):
+>   File =
+
+> "/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.23/bindings=
+/python/setup.py", =
+
+> line 15, in <module>
+>     from setuptools import setup
+> ImportError: No module named 'setuptools'
+> =
+
+> Fixes:
+>  - =
+
+> http://autobuild.buildroot.org/results/d80e56e4ad84c8e7f244cf6d1cb96c116e=
+8eb734
+> =
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+>  package/libiio/libiio.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> =
+
+> diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+> index f706298c22..38b2f83e6e 100644
+> --- a/package/libiio/libiio.mk
+> +++ b/package/libiio/libiio.mk
+> @@ -76,8 +76,10 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON),y)
+>  ifeq ($(BR2_PACKAGE_PYTHON),y)
+>  LIBIIO_DEPENDENCIES +=3D host-python-setuptools python
+> +LIBIIO_CONF_OPTS +=3D -DPYTHON_EXECUTABLE=3D$(HOST_DIR)/bin/python
+>  else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>  LIBIIO_DEPENDENCIES +=3D host-python3-setuptools python3
+> +LIBIIO_CONF_OPTS +=3D -DPYTHON_EXECUTABLE=3D$(HOST_DIR)/bin/python3
+>  endif
+>  LIBIIO_CONF_OPTS +=3D -DPYTHON_BINDINGS=3DON
+>  else
+> --
+> 2.33.0
+> =
+
+
 
 _______________________________________________
 buildroot mailing list
