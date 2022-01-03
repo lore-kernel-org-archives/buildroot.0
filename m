@@ -4,75 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E56C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 08:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93342C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 09:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BF24813C6;
-	Mon,  3 Jan 2022 08:42:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38C7B812ED;
+	Mon,  3 Jan 2022 09:07:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4QkDXBBZEgG7; Mon,  3 Jan 2022 08:42:17 +0000 (UTC)
+	with ESMTP id 0i2GNUv1pQXy; Mon,  3 Jan 2022 09:07:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9F3881392;
-	Mon,  3 Jan 2022 08:42:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9686E1BF384
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 08:42:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98CED812F3;
+	Mon,  3 Jan 2022 09:07:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 61D201BF360
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82D6740194
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 08:42:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E4B860E37
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:07:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JrdAyFC1cdGJ for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 08:42:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7B0B6400E3
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 08:42:13 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id by39so54803817ljb.2
- for <buildroot@buildroot.org>; Mon, 03 Jan 2022 00:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:in-reply-to:references:date:message-id
- :mime-version; bh=RAdagnoDhGYza9TSS+3JhDpLbXAhcBG6qQwkvYC9ors=;
- b=SQK/8zPZNENs98Fg5elPlwp3DYYtVS8NBy4QS6O+Y5KgGIKySiDer0VeEff0RyNCbV
- +QQopHNNxtEx+qMKJ1FaHlZFucBNnbhm9HHzg2XzcQrr8qBUiTocKCc0z2LqFYE4lAXc
- CEMWm14LoqbzemLurz08f2HrW9VJy3XV3kCxSTa7RNMAHX2lBJ1QdmGqw9aebexQyhgy
- rOwWpHn8oOwJ+cVTlusdNXdc/6DLY3NF0s/JI0pTI0MCfthDU8EZuHvyN3WKNEASg3/Y
- QNO8kqfGeubdHWqweW03UHUreOEPy4qrzTI17/dX81C1aF7aZmWeK98TevKQj89wnanI
- zlCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
- :message-id:mime-version;
- bh=RAdagnoDhGYza9TSS+3JhDpLbXAhcBG6qQwkvYC9ors=;
- b=VYrUU0Tv4wEFJC6fZexvmL9nPRWrNZUABEo2+/3SBXIzxCL8e4CarnRGpYKL/phCwe
- ruVRl9dH8DraN+DqgSrG+xrw+iLnMBkKn7ZgC7gkVN4urDpjiZY9ONrymyfAEkV/H4ua
- 7HownzIWsbw9AnbEh/wshZnbomSsgNpiQJOERiYrSpZGIiwVLBz/pMMAw2cFzaPzJJT2
- +bcKnrDgtvMjufDrHQsxynGbWlD1OffK7V8V7QwZSvM3t/oKKcFmKnRjFVQFw+naYoQt
- NnoMpayCS/01pXdDgEm/8ZN5V0ysgiY2t4DYqOCJy3+FDf/eGJBMyTdlKPdyTnfuK2e6
- jO9A==
-X-Gm-Message-State: AOAM5338aNT7obufpqNd7Glw61x3bF1Jcl6rijHCnOUhBuYhOsoqb8m+
- YnDnKwtLKoKQzRAKxuaAU88=
-X-Google-Smtp-Source: ABdhPJylrqiBKbNTE/WHp2r4WOBDaY/xFl5ik2h4CrmJylo9J6Slz5IQlmRIT5NdEOI9aCpCmA5Hdw==
-X-Received: by 2002:a2e:3313:: with SMTP id d19mr22210886ljc.436.1641199331380; 
- Mon, 03 Jan 2022 00:42:11 -0800 (PST)
-Received: from luthien ([176.10.248.201])
- by smtp.gmail.com with ESMTPSA id g19sm3483128lfr.269.2022.01.03.00.42.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jan 2022 00:42:11 -0800 (PST)
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-In-Reply-To: <20220101135737.956301-1-fontaine.fabrice@gmail.com>
-References: <20220101135737.956301-1-fontaine.fabrice@gmail.com>
-Date: Mon, 03 Jan 2022 09:42:10 +0100
-Message-ID: <878rvx1a8t.fsf@gmail.com>
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/ksmbd-tools: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id odNP8JxbHnw9 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 09:07:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A86B660B87
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 09:07:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 396C982BCC; Mon,  3 Jan 2022 09:01:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 3 Jan 2022 10:04:14 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b0921cf401c16c64202db24484a585ba5c652a04
+X-Git-Newrev: 0ac5273f8571f53966ca1beb382f573712d8a2e4
+X-Patchwork-Hint: ignore
+Message-Id: <20220103090129.396C982BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
+ version to 19.0.1-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,21 +53,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Jan 01, 2022 at 14:57, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> ksmbd kernel server userspace utilities.
->
-> https://github.com/cifsd-team/ksmbd-tools
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0ac5273f8571f53966ca1beb382f573712d8a2e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 8cc09e9774..c43d5d8628 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  85452cab5aa6e6dd426ca5df76c0832e1c9fa2d464973a16ad5e8c52d4533cc9  kodi-peripheral-joystick-19.0.0-Matrix.tar.gz
++sha256  65efcfb8b0ed6595082d8d7298ec25b5c31d0189bb8e09ae1bc10989b9655204  kodi-peripheral-joystick-19.0.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index b753e689e8..b823550751 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.0-Matrix
++KODI_PERIPHERAL_JOYSTICK_VERSION = 19.0.1-Matrix
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
