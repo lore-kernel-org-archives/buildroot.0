@@ -1,89 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0127C43219
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 17:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194EFC433EF
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 17:17:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D65D400CD;
-	Mon,  3 Jan 2022 17:11:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B05FA81352;
+	Mon,  3 Jan 2022 17:17:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VQ-FMg_4jMVg; Mon,  3 Jan 2022 17:11:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iN_5EF7OfRP4; Mon,  3 Jan 2022 17:17:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 130E3400E3;
-	Mon,  3 Jan 2022 17:11:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A7C271BF289
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:11:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9F2E81353;
+	Mon,  3 Jan 2022 17:17:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 297E01BF289
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94CBB400E3
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:11:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25F0A81352
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:17:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sdPRtB_kZUsx for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 17:11:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 09E43400CD
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 17:11:52 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so138339191edq.6
- for <buildroot@buildroot.org>; Mon, 03 Jan 2022 09:11:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=MdmNaJkgH8rben9pQJ8MnUtjwXts2Jd/Y4pwmhcFdBA=;
- b=Q+gG4knfx9i7n2CCRoQU/7CsTJlHPtiQmCXS2wy4+M9mn2ZjNHO987QWnjbSNQKNNR
- 1dSy9Ca/DNbcnP/f8qe0FXdO2qbaxVQ9SLDC9Wmnu54q+PF7l7VTag83wlXZCzvUMUp+
- qJ30yuZKTm1hLzVVj7/xymzRAB6lICYXHuAU/JfW2eLpnSqxyAaQpPgrCJ3dpmDr0BW6
- XSjJlY2dw9FEC9aLog1zhjMndWhhvsA7NM6zTlC4Kj8tkmfo0Hd+GZJAf+0kS/Th2Uia
- LnHcmxhxR8Qp/6Y0088yeluEsBngMzU8sU2lwE+jvrtFqzipQDBNptb7PsWHyIrv3+Ha
- +AkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=MdmNaJkgH8rben9pQJ8MnUtjwXts2Jd/Y4pwmhcFdBA=;
- b=M72Ys/m2f/v+CeOoKDgJJQEmH6j1R5Tb2LoTLB/bJaMeQB6+ua0ofVIacG1r9tTxUq
- nnPFvfoMIIKj5qUpJtdtDwXo+iVjnRQ4okfGBqil5W+6fb2EwjUiG3R1QUfv2MH7VLCH
- ND0IWDQi6t0E+ISZt3sC1agJ9gyM3LC7CFZo0i6Xep13R+kZv8zi+tjDdLFlErie/9zE
- qt0bRzkGanuIc2uNPRpvYjcwbmsnhL+oyQWR74PeXsxg0BBwKYhI08YyuWKnp7edWPyU
- Ja2wX3qU4vtPewU4LKPMoUHFBQzMt/EtPIVfMuCH8yjMR7s+lG53HqnP9VxwMUhI6kry
- 9ghA==
-X-Gm-Message-State: AOAM5311Au+EUo0Nj3uBufPq68Q/jgWlDe9d373GlQ2FtZtO/8pHP8N9
- xKud6TvqfRs/y+sRkhd30Tdf2A==
-X-Google-Smtp-Source: ABdhPJwF7dwG6N9roax2o9g0jjq4HCMT3lxk7T9Id+NSuJv97DcLEXN09pLJi5LMYKIbX2d3+w2HyA==
-X-Received: by 2002:a17:906:af82:: with SMTP id
- mj2mr35549910ejb.33.1641229911028; 
- Mon, 03 Jan 2022 09:11:51 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id qw4sm10845828ejc.55.2022.01.03.09.11.50
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 03 Jan 2022 09:11:50 -0800 (PST)
-Message-ID: <63439c64-530d-4d2f-67e5-91a854501a5c@mind.be>
-Date: Mon, 3 Jan 2022 18:11:49 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ht8dmV1CGvAs for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 17:17:34 +0000 (UTC)
+X-Greylist: delayed 00:19:19 by SQLgrey-1.8.0
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
+ [148.163.158.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBE8181353
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 17:17:34 +0000 (UTC)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+ by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 203GFClU032572; 
+ Mon, 3 Jan 2022 16:58:13 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+ by mx0b-001b2d01.pphosted.com with ESMTP id 3dc4g90ksp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 03 Jan 2022 16:58:13 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+ by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 203GtEtc006380;
+ Mon, 3 Jan 2022 16:58:12 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com
+ [159.122.73.70])
+ by mx0b-001b2d01.pphosted.com with ESMTP id 3dc4g90kry-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 03 Jan 2022 16:58:12 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+ by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 203Gvxmj004649;
+ Mon, 3 Jan 2022 16:58:10 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com
+ (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+ by ppma01fra.de.ibm.com with ESMTP id 3daek93b94-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 03 Jan 2022 16:58:10 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com
+ [9.149.105.62])
+ by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 203Gw8d143712920
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 3 Jan 2022 16:58:08 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 307B9AE055;
+ Mon,  3 Jan 2022 16:58:08 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 02319AE045;
+ Mon,  3 Jan 2022 16:58:08 +0000 (GMT)
+Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
+ by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+ Mon,  3 Jan 2022 16:58:07 +0000 (GMT)
+Received: from yukon.ibmuc.com (unknown [9.171.33.19])
+ by smtp.tlslab.ibm.com (Postfix) with ESMTP id 2EF2622011D;
+ Mon,  3 Jan 2022 17:58:07 +0100 (CET)
+From: =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To: buildroot@buildroot.org
+Date: Mon,  3 Jan 2022 17:58:05 +0100
+Message-Id: <20220103165805.3697636-1-clg@kaod.org>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JUh2MB-SjMkO9K2Z77melI8mnOd2YC_G
+X-Proofpoint-GUID: NWiuAkLeKhDp50McIUgpD1s4cy2Fcmas
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Andrey Nechypurenko <andreynech@gmail.com>
-References: <20211214125510.13654-1-andreynech@gmail.com>
- <20211230214722.GJ3390456@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20211230214722.GJ3390456@scaer>
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/: remove -E flag from
- patch call
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-03_06,2022-01-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1034 mlxscore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201030112
+Subject: [Buildroot] [PATCH] package/qemu: bump to version 6.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,126 +104,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 30/12/2021 22:47, Yann E. MORIN wrote:
-> Andrey, All,
-> 
-> On 2021-12-14 13:55 +0100, Andrey Nechypurenko spake thusly:
->> -E flag instructs patch to remove empty files. However, in some cases
->> empty files are essential. If they are missing, build could be broken
->> or other bad things can happen.
-> 
-> Do you have an example of a publicly accessible package that has this
-> issue?
-> 
->> Signed-off-by: Andrey Nechypurenko <andreynech@gmail.com>
-> 
-> I was going to apply this, but then I was wondering; what about patches
-> that actually *want* to remove files?
-> 
-> It turns out that we do have a few patches that remove files:
-> 
->      $ git grep -E '\+\+\+ /dev/null'
->      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
->      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
->      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
->      boot/grub2/0033-verifiers-Move-verifiers-API-to-kernel-image.patch:+++ /dev/null
->      boot/grub2/0034-efi-Move-the-shim_lock-verifier-to-the-GRUB-core.patch:+++ /dev/null
->      boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
->      boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
->      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
->      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
->      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
->      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
-
-  Have you actually tested this? With modern patch, the /dev/null indicates 
-exactly what we want: that the file must be removed. So even without -E, the 
-file gets removed.
-
-  What -E does is remove a file in the following case:
-
---- a/foo
-+++ a/foo
-@@ -1,1 +0,0 @@
-- foo
-
-
-git grep -B1 '+0,0 @@' only yields /dev/null cases, so I think it's OK.
-
-
-  So I think the only real concern is: will a patch version that supports 
-renames always behave like this? I *think* the answer is yes, but it's hard to 
-be sure of course.
-
-  Regards,
-  Arnout
-
-
-
->      package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
->      package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
->      package/gcc/9.4.0/0003-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
->      package/openpgm/0001-Rename-openpgm-5.2.pc.in.patch:+++ /dev/null
->      package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch:+++ /dev/null
->      package/screen/0005-rename-sched_h.patch:+++ /dev/null
-> 
-> While a few of them could be rewriten so that the are actual renames
-> (now that we require a patch version that supports renames), some really
-> do want to remove files; that's notably the case with the uboot patch
-> for the roseapplepi board, or the babeltrace2 patch, as well as the gcc
-> patches...
-> 
-> Furthermore, some users may have alaready relied on this behaviour, that
-> empty files get removed, for their packages in theor br2-external
-> trees...
-> 
-> So we have an antagonist situation: some patches will want to rem ove
-> files, and some patches will want to not remove files. We can't satisfy
-> both, obviously.
-> 
-> So, unfortunately, it is not possible to apply your patch.
-> 
-> If your package really requires that the files be present and empty, you
-> should then use a post-patch hook to touch those files.
-> 
-> Unless someone comes up with a better idea...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>   support/scripts/apply-patches.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
->> index e5a2fdd09e..6da83f6826 100755
->> --- a/support/scripts/apply-patches.sh
->> +++ b/support/scripts/apply-patches.sh
->> @@ -114,7 +114,7 @@ function apply_patch {
->>           exit 1
->>       fi
->>       echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
->> -    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
->> +    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
->>       if [ $? != 0 ] ; then
->>           echo "Patch failed!  Please fix ${patch}!"
->>           exit 1
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmVtb3ZlIHVjbGliYyB3b3JrYXJvdW5kIHdoaWNoIHdhcyBkZXByZWNhdGVkIGJ5IHVwc3RyZWFt
+IDoKICBjb21taXQgYTMwYmZhYTdiZDFmICgibGludXgtdXNlci9ob3N0L2FybTogUG9wdWxhdGUg
+aG9zdF9zaWduYWwuaCIpCgpSZW1vdmUgdXBzdHJlYW0gcGF0Y2hlcyA6CiAgY29tbWl0IDMwNDMz
+MjAzOTAxNCAoImJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBtdXNsIGJ1aWxkIikKICBjb21taXQg
+MjgwMzFkNWM3NDI3ICgiYmxvY2svZXhwb3J0L2Z1c2UuYzogZml4IGZ1c2UtbHNlZWsgb24gdWNs
+aWJjIG9yIG11c2wiKQoKU2lnbmVkLW9mZi1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9k
+Lm9yZz4KLS0tCiAuLi5hZ2Utb2YtbWNvbnRleHQtc3RydWN0dXJlLW9uLUFSTS11Q2wucGF0Y2gg
+fCAzNSAtLS0tLS0tLS0tLS0tCiAuLi5lLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11
+c2wucGF0Y2ggfCA0NCAtLS0tLS0tLS0tLS0tLS0tLQogLi4uNC1ibG9jay1leHBvcnQtZnVzZS5j
+LWZpeC1tdXNsLWJ1aWxkLnBhdGNoIHwgNDkgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9x
+ZW11L3FlbXUuaGFzaCAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvcWVt
+dS9xZW11Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiA1IGZpbGVzIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMTMwIGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvcWVtdS8wMDAxLXVzZXItZXhlYy1maXgtdXNhZ2Utb2YtbWNvbnRleHQtc3RydWN0
+dXJlLW9uLUFSTS11Q2wucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3FlbXUvMDAw
+My1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1mdXNlLWxzZWVrLW9uLXVjbGliYy1vci1tdXNsLnBh
+dGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9xZW11LzAwMDQtYmxvY2stZXhwb3J0LWZ1
+c2UuYy1maXgtbXVzbC1idWlsZC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8wMDAx
+LXVzZXItZXhlYy1maXgtdXNhZ2Utb2YtbWNvbnRleHQtc3RydWN0dXJlLW9uLUFSTS11Q2wucGF0
+Y2ggYi9wYWNrYWdlL3FlbXUvMDAwMS11c2VyLWV4ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0
+cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA2
+ZGI0ZThiYzkyM2UuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3FlbXUvMDAwMS11c2VyLWV4
+ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoCisrKyAv
+ZGV2L251bGwKQEAgLTEsMzUgKzAsMCBAQAotRnJvbSA5MjNkMjUzNjVmYmRmZjE3ZmE0YzhjMjg4
+Mzk2MGJlMDdjM2RhZDU2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogVGhvbWFzIFBl
+dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+Ci1EYXRlOiBGcmks
+IDUgTWF5IDIwMTcgMDk6MDc6MTUgKzAyMDAKLVN1YmplY3Q6IFtQQVRDSF0gdXNlci1leGVjOiBm
+aXggdXNhZ2Ugb2YgbWNvbnRleHQgc3RydWN0dXJlIG9uIEFSTS91Q2xpYmMKLQotdXNlci1leGVj
+LmMgaGFzIHNvbWUgY29uZGl0aW9uYWwgY29kZSB0byBkZWNpZGUgaG93IHRvIHVzZSB0aGUKLW1j
+b250ZXh0IHN0cnVjdHVyZS4gVW5mb3J0dW5hdGVseSwgc2luY2UgdUNsaWJjIGRlZmluZXMgX19H
+TElCQ19fLCBidXQKLXdpdGggb2xkIHZlcnNpb25zIG9mIF9fR0xJQkNfXyBhbmQgX19HTElCQ19N
+SU5PUl9fLCBhbiBvbGQgY29kZSBwYXRoCi1nZXRzIHVzZWQsIHdoaWNoIGRvZXNuJ3QgYXBwbHkg
+dG8gdUNsaWJjLgotCi1GaXggdGhpcyBieSBleGNsdWRpbmcgX19VQ0xJQkNfXywgd2hpY2ggZW5z
+dXJlcyB3ZSBmYWxsIGJhY2sgdG8gdGhlCi1nZW5lcmFsIGNhc2Ugb2YgdXNpbmcgdWNfbWNvbnRl
+eHQuYXJtX3BjLCB3aGljaCB3b3JrcyBmaW5lIHdpdGgKLXVDbGliYy4KLQotU2lnbmVkLW9mZi1i
+eTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBmcmVlLWVsZWN0cm9ucy5jb20+
+Ci0tLS0KLSBhY2NlbC90Y2cvdXNlci1leGVjLmMgfCAyICstCi0gMSBmaWxlIGNoYW5nZWQsIDEg
+aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCi0KLWRpZmYgLS1naXQgYS9hY2NlbC90Y2cvdXNl
+ci1leGVjLmMgYi9hY2NlbC90Y2cvdXNlci1leGVjLmMKLWluZGV4IDRlYmUyNTQ2MWEuLjA0OTY2
+NzRmYmQgMTAwNjQ0Ci0tLS0gYS9hY2NlbC90Y2cvdXNlci1leGVjLmMKLSsrKyBiL2FjY2VsL3Rj
+Zy91c2VyLWV4ZWMuYwotQEAgLTU0MCw3ICs1NDAsNyBAQCBpbnQgY3B1X3NpZ25hbF9oYW5kbGVy
+KGludCBob3N0X3NpZ251bSwgdm9pZCAqcGluZm8sCi0gCi0gI2lmIGRlZmluZWQoX19OZXRCU0Rf
+XykKLSAgICAgcGMgPSB1Yy0+dWNfbWNvbnRleHQuX19ncmVnc1tfUkVHX1IxNV07Ci0tI2VsaWYg
+ZGVmaW5lZChfX0dMSUJDX18pICYmIChfX0dMSUJDX18gPCAyIHx8IChfX0dMSUJDX18gPT0gMiAm
+JiBfX0dMSUJDX01JTk9SX18gPD0gMykpCi0rI2VsaWYgZGVmaW5lZChfX0dMSUJDX18pICYmICFk
+ZWZpbmVkKF9fVUNMSUJDX18pICYmIChfX0dMSUJDX18gPCAyIHx8IChfX0dMSUJDX18gPT0gMiAm
+JiBfX0dMSUJDX01JTk9SX18gPD0gMykpCi0gICAgIHBjID0gdWMtPnVjX21jb250ZXh0LmdyZWdz
+W1IxNV07Ci0gI2Vsc2UKLSAgICAgcGMgPSB1Yy0+dWNfbWNvbnRleHQuYXJtX3BjOwotLS0gCi0y
+LjI1LjMKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9xZW11LzAwMDMtYmxvY2stZXhwb3J0LWZ1c2Uu
+Yy1maXgtZnVzZS1sc2Vlay1vbi11Y2xpYmMtb3ItbXVzbC5wYXRjaCBiL3BhY2thZ2UvcWVtdS8w
+MDAzLWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wu
+cGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDUwNzYyMDU1YmYxOC4uMDAwMDAw
+MDAwMDAwCi0tLSBhL3BhY2thZ2UvcWVtdS8wMDAzLWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LWZ1
+c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw0NCAr
+MCwwIEBACi1Gcm9tIDhjM2ZjYmYyM2ZlMzFjZjU2ZjIxY2UxNzM3YmYyMmZlNjVmYzU1M2IgTW9u
+IFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5m
+YWJyaWNlQGdtYWlsLmNvbT4KLURhdGU6IEZyaSwgMjcgQXVnIDIwMjEgMjM6NDA6MDEgKzAyMDAK
+LVN1YmplY3Q6IFtQQVRDSF0gYmxvY2svZXhwb3J0L2Z1c2UuYzogZml4IGZ1c2UtbHNlZWsgb24g
+dWNsaWJjIG9yIG11c2wKLQotSW5jbHVkZSBsaW51eC9mcy5oIHRvIGF2b2lkIHRoZSBmb2xsb3dp
+bmcgYnVpbGQgZmFpbHVyZSBvbiB1Y2xpYmMgb3IKLW11c2wgcmFpc2VkIHNpbmNlIHZlcnNpb24g
+Ni4wLjA6Ci0KLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6IEluIGZ1bmN0aW9uICdmdXNlX2xzZWVr
+JzoKLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6NjQxOjE5OiBlcnJvcjogJ1NFRUtfSE9MRScgdW5k
+ZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pCi0gIDY0MSB8ICAgICBpZiAod2hl
+bmNlICE9IFNFRUtfSE9MRSAmJiB3aGVuY2UgIT0gU0VFS19EQVRBKSB7Ci0gICAgICB8ICAgICAg
+ICAgICAgICAgICAgIF5+fn5+fn5+fgotLi4vYmxvY2svZXhwb3J0L2Z1c2UuYzo2NDE6MTk6IG5v
+dGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVkIG9ubHkgb25jZSBmb3Ig
+ZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCi0uLi9ibG9jay9leHBvcnQvZnVzZS5jOjY0MTo0
+MjogZXJyb3I6ICdTRUVLX0RBVEEnIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0
+aW9uKTsgZGlkIHlvdSBtZWFuICdTRUVLX1NFVCc/Ci0gIDY0MSB8ICAgICBpZiAod2hlbmNlICE9
+IFNFRUtfSE9MRSAmJiB3aGVuY2UgIT0gU0VFS19EQVRBKSB7Ci0gICAgICB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+Ci0gICAgICB8ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VFS19TRVQKLQotRml4ZXM6Ci0gLSBo
+dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8zM2M5MGViZjA0OTk3ZjRkMzU1
+N2NmYTY2YWJjOWNmOWEzMDc2MTM3Ci0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
+PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotW1Vwc3RyZWFtIHN0YXR1czogaHR0cHM6Ly9w
+YXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L3FlbXUtZGV2ZWwvcGF0Y2gvMjAyMTA4MjcyMjAz
+MDEuMjcyODg3LTEtZm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20vXQotLS0tCi0gYmxvY2svZXhw
+b3J0L2Z1c2UuYyB8IDMgKysrCi0gMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQotCi1k
+aWZmIC0tZ2l0IGEvYmxvY2svZXhwb3J0L2Z1c2UuYyBiL2Jsb2NrL2V4cG9ydC9mdXNlLmMKLWlu
+ZGV4IGZjN2IwN2QyYjUuLjJlM2JmODI3MGIgMTAwNjQ0Ci0tLS0gYS9ibG9jay9leHBvcnQvZnVz
+ZS5jCi0rKysgYi9ibG9jay9leHBvcnQvZnVzZS5jCi1AQCAtMzEsNiArMzEsOSBAQAotICNpbmNs
+dWRlIDxmdXNlLmg+Ci0gI2luY2x1ZGUgPGZ1c2VfbG93bGV2ZWwuaD4KLSAKLSsjaWZkZWYgX19s
+aW51eF9fCi0rI2luY2x1ZGUgPGxpbnV4L2ZzLmg+Ci0rI2VuZGlmCi0gCi0gLyogUHJldmVudCBv
+dmVybHkgbG9uZyBib3VuY2UgYnVmZmVyIGFsbG9jYXRpb25zICovCi0gI2RlZmluZSBGVVNFX01B
+WF9CT1VOQ0VfQllURVMgKE1JTihCRFJWX1JFUVVFU1RfTUFYX0JZVEVTLCA2NCAqIDEwMjQgKiAx
+MDI0KSkKLS0tIAotMi4zMi4wCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8wMDA0LWJsb2Nr
+LWV4cG9ydC1mdXNlLmMtZml4LW11c2wtYnVpbGQucGF0Y2ggYi9wYWNrYWdlL3FlbXUvMDAwNC1i
+bG9jay1leHBvcnQtZnVzZS5jLWZpeC1tdXNsLWJ1aWxkLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2Rl
+IDEwMDY0NAppbmRleCA0ODU2ODIxODQzZmMuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3Fl
+bXUvMDAwNC1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1tdXNsLWJ1aWxkLnBhdGNoCisrKyAvZGV2
+L251bGwKQEAgLTEsNDkgKzAsMCBAQAotRnJvbSAzMDQzMzIwMzkwMTQ2NzliODA5ZjYwNmUyZjIy
+N2VlMGZjNDNhNDUxIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogRmFicmljZSBGb250
+YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci1EYXRlOiBGcmksIDIyIE9jdCAyMDIx
+IDExOjUyOjA5ICswMjAwCi1TdWJqZWN0OiBbUEFUQ0hdIGJsb2NrL2V4cG9ydC9mdXNlLmM6IGZp
+eCBtdXNsIGJ1aWxkCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0ZXh0L3BsYWlu
+OyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0KLUluY2x1
+ZGUgbGludXgvZmFsbG9jLmggaWYgQ09ORklHX0ZBTExPQ0FURV9aRVJPX1JBTkdFIGlzIGRlZmlu
+ZWQgdG8gZml4Ci1odHRwczovL2dpdGxhYi5jb20vcWVtdS1wcm9qZWN0L3FlbXUvLS9jb21taXQv
+NTA0ODJmZGE5OGJkNjJlMDcyYzMwYjdlYTczYzk4NWM0ZTlkOWJiYgotYW5kIGF2b2lkIHRoZSBm
+b2xsb3dpbmcgYnVpbGQgZmFpbHVyZSBvbiBtdXNsOgotCi0uLi9ibG9jay9leHBvcnQvZnVzZS5j
+OiBJbiBmdW5jdGlvbiAnZnVzZV9mYWxsb2NhdGUnOgotLi4vYmxvY2svZXhwb3J0L2Z1c2UuYzo2
+NDM6MjE6IGVycm9yOiAnRkFMTE9DX0ZMX1pFUk9fUkFOR0UnIHVuZGVjbGFyZWQgKGZpcnN0IHVz
+ZSBpbiB0aGlzIGZ1bmN0aW9uKQotICA2NDMgfCAgICAgZWxzZSBpZiAobW9kZSAmIEZBTExPQ19G
+TF9aRVJPX1JBTkdFKSB7Ci0gICAgICB8ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+
+fn5+fn5+fn4KLQotRml4ZXM6Ci0gLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
+dWx0cy9iZTI0NDMzYTQyOWZkYTY4MWZiNjY2OTgxNjAxMzJjMWM5OWJjNTNiCi0KLUZpeGVzOiA1
+MDQ4MmZkYTk4YiAoImJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBtdXNsIGJ1aWxkIikKLVNpZ25l
+ZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgot
+TWVzc2FnZS1JZDogPDIwMjExMDIyMDk1MjA5LjEzMTk2NzEtMS1mb250YWluZS5mYWJyaWNlQGdt
+YWlsLmNvbT4KLVJldmlld2VkLWJ5OiBQaGlsaXBwZSBNYXRoaWV1LURhdWTDqSA8cGhpbG1kQHJl
+ZGhhdC5jb20+Ci1TaWduZWQtb2ZmLWJ5OiBLZXZpbiBXb2xmIDxrd29sZkByZWRoYXQuY29tPgot
+W1JldHJpZXZlZCBmcm9tOgotaHR0cHM6Ly9naXRsYWIuY29tL3FlbXUtcHJvamVjdC9xZW11Ly0v
+Y29tbWl0LzMwNDMzMjAzOTAxNDY3OWI4MDlmNjA2ZTJmMjI3ZWUwZmM0M2E0NTFdCi0tLS0KLSBi
+bG9jay9leHBvcnQvZnVzZS5jIHwgNCArKysrCi0gMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
+cygrKQotCi1kaWZmIC0tZ2l0IGEvYmxvY2svZXhwb3J0L2Z1c2UuYyBiL2Jsb2NrL2V4cG9ydC9m
+dXNlLmMKLWluZGV4IDJlM2JmODI3MGIuLjgyM2MxMjZkMjMgMTAwNjQ0Ci0tLS0gYS9ibG9jay9l
+eHBvcnQvZnVzZS5jCi0rKysgYi9ibG9jay9leHBvcnQvZnVzZS5jCi1AQCAtMzEsNiArMzEsMTAg
+QEAKLSAjaW5jbHVkZSA8ZnVzZS5oPgotICNpbmNsdWRlIDxmdXNlX2xvd2xldmVsLmg+Ci0gCi0r
+I2lmIGRlZmluZWQoQ09ORklHX0ZBTExPQ0FURV9aRVJPX1JBTkdFKQotKyNpbmNsdWRlIDxsaW51
+eC9mYWxsb2MuaD4KLSsjZW5kaWYKLSsKLSAjaWZkZWYgX19saW51eF9fCi0gI2luY2x1ZGUgPGxp
+bnV4L2ZzLmg+Ci0gI2VuZGlmCi0tLSAKLUdpdExhYgotCmRpZmYgLS1naXQgYS9wYWNrYWdlL3Fl
+bXUvcWVtdS5oYXNoIGIvcGFja2FnZS9xZW11L3FlbXUuaGFzaAppbmRleCAwNjEzZmNlNDkzNjcu
+Ljk0MTE4MzIzODRiYSAxMDA2NDQKLS0tIGEvcGFja2FnZS9xZW11L3FlbXUuaGFzaAorKysgYi9w
+YWNrYWdlL3FlbXUvcWVtdS5oYXNoCkBAIC0xLDQgKzEsNCBAQAogIyBMb2NhbGx5IGNvbXB1dGVk
+LCB0YXJiYWxsIHZlcmlmaWVkIHdpdGggR1BHIHNpZ25hdHVyZQotc2hhMjU2ICBlZWJjMDg5ZGIz
+NDE0YmJlZWRmMWU0NjRiZWRhMGE3NTE1YWFkMzBmNzMyNjFhYmMyNDZjOWIyNzUwM2EzYzk2ICBx
+ZW11LTYuMS4wLnRhci54egorc2hhMjU2ICA2OGUxNWQ4ZTQ1YWM1NjMyNmUwYjlhNGFmYThiNDlh
+M2RmZThhYmEzNDg4MjIxZDA5OGM4NDY5OGJjYTY1YjQ1ICBxZW11LTYuMi4wLnRhci54egogc2hh
+MjU2ICA2ZjA0YWU4MzY0ZDAwNzlhMTkyYjE0NjM1ZjRiMWRhMjk0Y2UxODcyNGMwMzRjMzlhNmE0
+MWQxYjA5ZGY2MTAwICBDT1BZSU5HCiBzaGEyNTYgIGRjNjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0
+MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlkOGFiMDMyZmU1NTEgIENPUFlJTkcuTElCCmRpZmYg
+LS1naXQgYS9wYWNrYWdlL3FlbXUvcWVtdS5tayBiL3BhY2thZ2UvcWVtdS9xZW11Lm1rCmluZGV4
+IDkxOWFlZjY1OTlmMS4uOTdmOWY4ODVhMThhIDEwMDY0NAotLS0gYS9wYWNrYWdlL3FlbXUvcWVt
+dS5taworKysgYi9wYWNrYWdlL3FlbXUvcWVtdS5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjCiAKLVFFTVVfVkVSU0lPTiA9IDYuMS4wCitRRU1VX1ZFUlNJT04g
+PSA2LjIuMAogUUVNVV9TT1VSQ0UgPSBxZW11LSQoUUVNVV9WRVJTSU9OKS50YXIueHoKIFFFTVVf
+U0lURSA9IGh0dHA6Ly9kb3dubG9hZC5xZW11Lm9yZwogUUVNVV9MSUNFTlNFID0gR1BMLTIuMCwg
+TEdQTC0yLjEsIE1JVCwgQlNELTMtQ2xhdXNlLCBCU0QtMi1DbGF1c2UsIE90aGVycy9CU0QtMWMK
+LS0gCjIuMzEuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
