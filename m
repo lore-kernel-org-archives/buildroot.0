@@ -1,71 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F19C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 16:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0127C43219
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 17:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC9A781BA9;
-	Mon,  3 Jan 2022 16:55:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D65D400CD;
+	Mon,  3 Jan 2022 17:11:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x7WIMAbNvIui; Mon,  3 Jan 2022 16:55:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VQ-FMg_4jMVg; Mon,  3 Jan 2022 17:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A01F81B70;
-	Mon,  3 Jan 2022 16:55:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 130E3400E3;
+	Mon,  3 Jan 2022 17:11:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C32E71BF2B5
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 16:55:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A7C271BF289
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA14E40370
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 16:55:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94CBB400E3
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 17:11:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7pkgHRr_S8KN for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 16:55:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1.ex10.biz (smtp1.ex10.biz [178.170.74.44])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0FC6D4025F
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 16:55:24 +0000 (UTC)
-Received: from [185.183.66.253] (port=2442 helo=UC681.Mediane.local)
- by smtp1.ex10.biz with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <florent.aumaitre@medianesysteme.com>)
- id 1n4QcB-0004lG-0v; Mon, 03 Jan 2022 17:55:19 +0100
-X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000, BODY_SIZE_1100_1199 0.000000, 
- BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_5000_LESS 0.000000,
- BODY_SIZE_7000_LESS 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
- LEGITIMATE_SIGNS 0.000000, MULTIPLE_RCPTS 0.100000,
- MULTIPLE_REAL_RCPTS 0.000000, NO_CTA_URI_FOUND 0.000000,
- NO_FUR_HEADER 0.000000, NO_URI_HTTPS 0.000000, OUTBOUND 0.000000,
- OUTBOUND_SOPHOS 0.000000, SENDER_NO_AUTH 0.000000, __ANY_URI 0.000000,
- __BODY_NO_MAILTO 0.000000, __CC_NAME 0.000000,
- __CC_NAME_DIFF_FROM_ACC 0.000000, __CC_REAL_NAMES 0.000000,
- __COURIER_PHRASE 0.000000, __DQ_NEG_HEUR 0.000000, __DQ_NEG_IP 0.000000,
- __FRAUD_MONEY_CURRENCY 0.000000, __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000,
- __FROM_DOMAIN_IN_ANY_CC1 0.000000, __FROM_DOMAIN_IN_RCPT 0.000000,
- __FUR_RDNS_SOPHOS 0.000000, __HAS_CC_HDR 0.000000, __HAS_FROM 0.000000,
- __HAS_MSGID 0.000000, __HAS_X_MAILER 0.000000, __LINES_OF_YELLING 0.000000,
- __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000,
- __MULTIPLE_RCPTS_CC_X2 0.000000, __NO_HTML_TAG_RAW 0.000000,
- __OUTBOUND_SOPHOS_FUR 0.000000, __OUTBOUND_SOPHOS_FUR_IP 0.000000,
- __OUTBOUND_SOPHOS_FUR_RDNS 0.000000, __SANE_MSGID 0.000000,
- __SUBJ_ALPHA_END 0.000000, __SUBJ_STARTS_S_BRACKETS 0.000000,
- __TO_MALFORMED_2 0.000000, __TO_NO_NAME 0.000000, __URI_MAILTO 0.000000,
- __URI_NO_WWW 0.000000, __URI_NS 0.000000
-X-SASI-Probability: 8%
-X-SASI-RCODE: 200
-X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2022.1.3.162117
-From: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
-To: buildroot@buildroot.org
-Date: Mon,  3 Jan 2022 17:54:51 +0100
-Message-Id: <20220103165451.2769-1-florent.aumaitre@medianesysteme.com>
-X-Mailer: git-send-email 2.17.1
-Subject: [Buildroot] [PATCH v2 1/1] package/python-pyqt5: Fix parallel build
+ with ESMTP id sdPRtB_kZUsx for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 17:11:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 09E43400CD
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 17:11:52 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id f5so138339191edq.6
+ for <buildroot@buildroot.org>; Mon, 03 Jan 2022 09:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MdmNaJkgH8rben9pQJ8MnUtjwXts2Jd/Y4pwmhcFdBA=;
+ b=Q+gG4knfx9i7n2CCRoQU/7CsTJlHPtiQmCXS2wy4+M9mn2ZjNHO987QWnjbSNQKNNR
+ 1dSy9Ca/DNbcnP/f8qe0FXdO2qbaxVQ9SLDC9Wmnu54q+PF7l7VTag83wlXZCzvUMUp+
+ qJ30yuZKTm1hLzVVj7/xymzRAB6lICYXHuAU/JfW2eLpnSqxyAaQpPgrCJ3dpmDr0BW6
+ XSjJlY2dw9FEC9aLog1zhjMndWhhvsA7NM6zTlC4Kj8tkmfo0Hd+GZJAf+0kS/Th2Uia
+ LnHcmxhxR8Qp/6Y0088yeluEsBngMzU8sU2lwE+jvrtFqzipQDBNptb7PsWHyIrv3+Ha
+ +AkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MdmNaJkgH8rben9pQJ8MnUtjwXts2Jd/Y4pwmhcFdBA=;
+ b=M72Ys/m2f/v+CeOoKDgJJQEmH6j1R5Tb2LoTLB/bJaMeQB6+ua0ofVIacG1r9tTxUq
+ nnPFvfoMIIKj5qUpJtdtDwXo+iVjnRQ4okfGBqil5W+6fb2EwjUiG3R1QUfv2MH7VLCH
+ ND0IWDQi6t0E+ISZt3sC1agJ9gyM3LC7CFZo0i6Xep13R+kZv8zi+tjDdLFlErie/9zE
+ qt0bRzkGanuIc2uNPRpvYjcwbmsnhL+oyQWR74PeXsxg0BBwKYhI08YyuWKnp7edWPyU
+ Ja2wX3qU4vtPewU4LKPMoUHFBQzMt/EtPIVfMuCH8yjMR7s+lG53HqnP9VxwMUhI6kry
+ 9ghA==
+X-Gm-Message-State: AOAM5311Au+EUo0Nj3uBufPq68Q/jgWlDe9d373GlQ2FtZtO/8pHP8N9
+ xKud6TvqfRs/y+sRkhd30Tdf2A==
+X-Google-Smtp-Source: ABdhPJwF7dwG6N9roax2o9g0jjq4HCMT3lxk7T9Id+NSuJv97DcLEXN09pLJi5LMYKIbX2d3+w2HyA==
+X-Received: by 2002:a17:906:af82:: with SMTP id
+ mj2mr35549910ejb.33.1641229911028; 
+ Mon, 03 Jan 2022 09:11:51 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id qw4sm10845828ejc.55.2022.01.03.09.11.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 03 Jan 2022 09:11:50 -0800 (PST)
+Message-ID: <63439c64-530d-4d2f-67e5-91a854501a5c@mind.be>
+Date: Mon, 3 Jan 2022 18:11:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Andrey Nechypurenko <andreynech@gmail.com>
+References: <20211214125510.13654-1-andreynech@gmail.com>
+ <20211230214722.GJ3390456@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211230214722.GJ3390456@scaer>
+Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/: remove -E flag from
+ patch call
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,46 +95,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Manuel=20V=C3=B6gele?= <develop@manuel-voegele.de>,
- Florent AUMAITRE <florent.aumaitre@medianesysteme.com>,
- Asaf Kahlon <asafka7@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch fix build of python-pyqt5 package when parallel build is used
 
-Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
 
-Changes v1 -> v2:
-  - Re-use the existing QT5_INSTALL_QT_CONF macro from package/qt5/qt5.mk  (suggested by Thomas Petazzoni)
+On 30/12/2021 22:47, Yann E. MORIN wrote:
+> Andrey, All,
+> 
+> On 2021-12-14 13:55 +0100, Andrey Nechypurenko spake thusly:
+>> -E flag instructs patch to remove empty files. However, in some cases
+>> empty files are essential. If they are missing, build could be broken
+>> or other bad things can happen.
+> 
+> Do you have an example of a publicly accessible package that has this
+> issue?
+> 
+>> Signed-off-by: Andrey Nechypurenko <andreynech@gmail.com>
+> 
+> I was going to apply this, but then I was wondering; what about patches
+> that actually *want* to remove files?
+> 
+> It turns out that we do have a few patches that remove files:
+> 
+>      $ git grep -E '\+\+\+ /dev/null'
+>      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+>      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+>      board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch:+++ /dev/null
+>      boot/grub2/0033-verifiers-Move-verifiers-API-to-kernel-image.patch:+++ /dev/null
+>      boot/grub2/0034-efi-Move-the-shim_lock-verifier-to-the-GRUB-core.patch:+++ /dev/null
+>      boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
+>      boot/lpc32xxcdl/0002-delete_redundant_files.patch:+++ /dev/null2012-01-01 16:39:47.918907000 +0100
+>      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+>      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+>      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
+>      package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch:+++ /dev/null
 
-Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
----
- package/python-pyqt5/python-pyqt5.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+  Have you actually tested this? With modern patch, the /dev/null indicates 
+exactly what we want: that the file must be removed. So even without -E, the 
+file gets removed.
 
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-index 8f28c90d15..b05043563e 100644
---- a/package/python-pyqt5/python-pyqt5.mk
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -152,6 +152,11 @@ define PYTHON_PYQT5_GENERATE_QTDETAIL
- 	)
- endef
- 
-+# The file "qt.conf" can be used to override the hard-coded paths that are
-+# compiled into the Qt library. We need it to make "qmake" relocatable and
-+# tweak the per-package install pathes
-+PYTHON_PYQT5_PRE_CONFIGURE_HOOKS += QT5_QT_CONF_FIXUP
-+
- PYTHON_PYQT5_CONF_OPTS = \
- 	--bindir $(TARGET_DIR)/usr/bin \
- 	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages \
--- 
-2.17.1
+  What -E does is remove a file in the following case:
 
+--- a/foo
++++ a/foo
+@@ -1,1 +0,0 @@
+- foo
+
+
+git grep -B1 '+0,0 @@' only yields /dev/null cases, so I think it's OK.
+
+
+  So I think the only real concern is: will a patch version that supports 
+renames always behave like this? I *think* the answer is yes, but it's hard to 
+be sure of course.
+
+  Regards,
+  Arnout
+
+
+
+>      package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+>      package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+>      package/gcc/9.4.0/0003-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch:+++ /dev/null
+>      package/openpgm/0001-Rename-openpgm-5.2.pc.in.patch:+++ /dev/null
+>      package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch:+++ /dev/null
+>      package/screen/0005-rename-sched_h.patch:+++ /dev/null
+> 
+> While a few of them could be rewriten so that the are actual renames
+> (now that we require a patch version that supports renames), some really
+> do want to remove files; that's notably the case with the uboot patch
+> for the roseapplepi board, or the babeltrace2 patch, as well as the gcc
+> patches...
+> 
+> Furthermore, some users may have alaready relied on this behaviour, that
+> empty files get removed, for their packages in theor br2-external
+> trees...
+> 
+> So we have an antagonist situation: some patches will want to rem ove
+> files, and some patches will want to not remove files. We can't satisfy
+> both, obviously.
+> 
+> So, unfortunately, it is not possible to apply your patch.
+> 
+> If your package really requires that the files be present and empty, you
+> should then use a post-patch hook to touch those files.
+> 
+> Unless someone comes up with a better idea...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>>   support/scripts/apply-patches.sh | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+>> index e5a2fdd09e..6da83f6826 100755
+>> --- a/support/scripts/apply-patches.sh
+>> +++ b/support/scripts/apply-patches.sh
+>> @@ -114,7 +114,7 @@ function apply_patch {
+>>           exit 1
+>>       fi
+>>       echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+>> -    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+>> +    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+>>       if [ $? != 0 ] ; then
+>>           echo "Patch failed!  Please fix ${patch}!"
+>>           exit 1
+>> -- 
+>> 2.25.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
