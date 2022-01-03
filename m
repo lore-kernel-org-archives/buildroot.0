@@ -4,61 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C7A4C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 09:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64FA8C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 10:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58DCE4033F;
-	Mon,  3 Jan 2022 09:21:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8375404F9;
+	Mon,  3 Jan 2022 10:43:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P3ovkDkXyxPY; Mon,  3 Jan 2022 09:21:21 +0000 (UTC)
+	with ESMTP id T7m4SaWDaQ7C; Mon,  3 Jan 2022 10:43:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54036400F5;
-	Mon,  3 Jan 2022 09:21:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E560B1BF360
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:21:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E81B340128;
+	Mon,  3 Jan 2022 10:43:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E60D1BF95E
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:43:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1FFE400F5
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 09:21:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CD1F8130D
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:43:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rdFyYdqfDzC4 for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 09:21:17 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZhNVRZckdGia for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 10:43:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A3AC9400BA
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 09:21:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c1c4:dbff:d80e:9740])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id F127F200390;
- Mon,  3 Jan 2022 10:21:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641201675;
- bh=QGmmhIRk4blJxVTs2Bbans4YoGm3jzyvjlyVF05IYWk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qjL6C9OLsTXcHDC4dsUL1V1JbxM4eaE8bSSevMKSLjyLRkRL7i9+j5/NQexbOGfwl
- YJyX1SX6hIueQ9MCqORppCZ2vDZnjQilwjMxsqQeYBCqNu/45iYfpg1SQnm7S0YaOR
- KFBig7iNIwnS6HTV+39CAdqvkPWORMHMh1A/6US/5My7qXb30AxZY2fEVByvxI5vog
- 7UVCCIc6HRuRn6VIjwt+CYeX8vHsPcQJleZQWeFRW7iIpVFFPU9DHvQas/yUlM4gsw
- IKTsfaPxQI2s0+Ja7FT7vvShjrulDGT2539BJHUGD2D9J+myBSBk2htNeoT9lik1oV
- pXlU2Zg9qTsXA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 03 Jan 2022 10:21:08 +0100
-Date: Mon, 3 Jan 2022 10:21:08 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220103092108.GG69135@scaer>
-References: <20220102191027.3219775-1-fontaine.fabrice@gmail.com>
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 464D381310
+ for <buildroot@busybox.net>; Mon,  3 Jan 2022 10:43:52 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id y22so134331499edq.2
+ for <buildroot@busybox.net>; Mon, 03 Jan 2022 02:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IdsKxxol6CTcpM0iA6s00BCSXrrlgDQkCQG9yMBtJrY=;
+ b=nzCBc6RTOmzvToLsrak/CXnF7M2CJm80543NM/c6JJa88VSZkeWFdQuRKkSanm1cpM
+ m5SIi1VIVtacauiIVZFsfOKJM4u7SiMLtvO4D54Y/MhZYjaFOpmv8KTDL4GFQ/TjGoYn
+ H0LX4xxki54pK8baTkwhEEL3en/1p4VOVWWBGSA4rzlJde4QZAYqZkEBp4c52NPJk9VW
+ bSXmsgbg/hT6FFg4tYCqqhjHPfrnqiWlekWvF5e3JBPaD6YXdKJkF/TYp9F8YZJvybSh
+ krt1x+67XPkK+jwW1RNqK9QJO/hv5C4aBvbgAEBIse1QWFhncKEhHgoRPKvPuK7kSL+N
+ /pqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IdsKxxol6CTcpM0iA6s00BCSXrrlgDQkCQG9yMBtJrY=;
+ b=gQZHMqknj0YSxTL/GyS28Uxr9Qkj7HNxFJ3qsS4Cc44QuQnMnUPUV6VUFtUz3GKjOF
+ q61LUOB7BINYRh4Tra4Ukjk7ocYhifVLwxflTFAZL0HTB/kxHP6FRdoIApMLuOtEsgBU
+ y/nLjkdBArJBsc2DRBMIA8l97OuCuKAFWlomA1Z4WWfBtz9GA4qWawbVofX6q+za9vdE
+ RT2DBieyi598t5PXr4zZc9lWrpH3K3guE2KwfQSrLWiMKHLaRUK2QC80AjFn5R3bSbwc
+ rVrv9+7ewQbSBxYvyubCgNtbnwo0JN6M2uAH9Ixrj36aiYLXBF8If2NMCrz4f8tWfYfA
+ XwpA==
+X-Gm-Message-State: AOAM532+ipSKWngmyppU4MQp3XlVZzVY6S/t8bZu21jHNPlQIDYRBOyw
+ +3KcZxgARgwFanmqhedjGKqSdkYZZxA=
+X-Google-Smtp-Source: ABdhPJxo6XoERYMW2NYy7RKP8g5nVW5m5an6AhMZSXWvHIDvwo5kivi9o4S9hy5tiD/6v5ZEpckajg==
+X-Received: by 2002:a05:6402:50ca:: with SMTP id
+ h10mr33689206edb.331.1641206631333; 
+ Mon, 03 Jan 2022 02:43:51 -0800 (PST)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id gs14sm10524155ejc.183.2022.01.03.02.43.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 03 Jan 2022 02:43:50 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  3 Jan 2022 11:43:43 +0100
+Message-Id: <20220103104343.15975-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220102191027.3219775-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libsigrokdecode: fix build with
- python 3.10
+Subject: [Buildroot] [PATCH] package/ethtool: bump to version 5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,86 +86,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2022-01-02 20:10 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure with sigrok-cli raised since bump of
-> python3 to version 3.10.1 in commit
-> 25b1fc2898d68ddf2674b14c738045875fc5a2dc:
-> 
-> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/10.3.1/../../../../aarch64-none-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/libsigrokdecode.so: undefined reference to `PyTuple_SetItem'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e2f33366803b18aff29086007610fa0a264f90d6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...02-configure-Add-python-3-10-support.patch | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
-> 
-> diff --git a/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch b/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
-> new file mode 100644
-> index 0000000000..e3148dcde8
-> --- /dev/null
-> +++ b/package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch
-> @@ -0,0 +1,28 @@
-> +From c4c10b89396fe21a622b8c38dd5815a496b007bf Mon Sep 17 00:00:00 2001
-> +From: Soeren Apel <soeren@apelpie.net>
-> +Date: Mon, 20 Dec 2021 19:36:39 +0100
-> +Subject: [PATCH] configure: Add python 3.10 support
-> +
-> +[Retrieved from:
-> +https://sigrok.org/gitweb/?p=libsigrokdecode.git;a=commit;h=c4c10b89396fe21a622b8c38dd5815a496b007bf]
-
-I've changed that to point to the commit-diff (not just the commit log),
-and applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 2917cb3..b8841f8 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -100,7 +100,7 @@ SR_PKG_CHECK_SUMMARY([srd_pkglibs_summary])
-> + # first, since usually only that variant will add "-lpython3.8".
-> + # https://docs.python.org/3/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
-> + SR_PKG_CHECK([python3], [SRD_PKGLIBS],
-> +-	[python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-> ++	[python-3.10-embed], [python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-> + AS_IF([test "x$sr_have_python3" = xno],
-> + 	[AC_MSG_ERROR([Cannot find Python 3 development headers.])])
-> + 
-> +-- 
-> +2.24.0.rc2
-> +
-> -- 
-> 2.33.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 536579670..59c657e86 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  f5ddfa9c75053d8011b8c8c99ec4e2d3c83cd1972f638692d62e37fa3ef36f07  ethtool-5.12.tar.xz
++sha256  686fd6110389d49c2a120f00c3cd5dfe43debada8e021e4270d74bbe452a116d  ethtool-5.15.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index f3e950f21..c4bb9bdd9 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 5.12
++ETHTOOL_VERSION = 5.15
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
