@@ -4,43 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAF6BC433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 20:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D82E9C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 20:10:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 167FD817BD;
-	Mon,  3 Jan 2022 20:09:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F684817AD;
+	Mon,  3 Jan 2022 20:10:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VzIDTnyYgHed; Mon,  3 Jan 2022 20:09:33 +0000 (UTC)
+	with ESMTP id J4mFIdnqArxF; Mon,  3 Jan 2022 20:10:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CB90817AA;
-	Mon,  3 Jan 2022 20:09:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4729E1BF302
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:09:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 690FA819D1;
+	Mon,  3 Jan 2022 20:10:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E25631BF302
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3983B817AA
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:09:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DEC03605D8
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 20:10:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tYl04tHvijJR for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 20:09:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AA92817A5
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 20:09:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 8277D82B2E; Mon,  3 Jan 2022 20:03:26 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 3 Jan 2022 20:49:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 779501290f7205de2dcb7a7eadff9e456b0e2d3e
-X-Git-Newrev: 85c7bd0602715dc6a148cc79db8910dca27c4e76
-X-Patchwork-Hint: ignore
-Message-Id: <20220103200326.8277D82B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: bump to version 6.2.0
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d-aFRRQpOCrM for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 20:10:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 38007600B5
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 20:10:29 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:6d4f:8674:7dd0:6c06])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3428513F88D;
+ Mon,  3 Jan 2022 21:10:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641240626;
+ bh=fX6Wv15CXDXXCkSZzWxZavFqKb3OoP0W1kDX+qOVKyk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=T/PhAmjCcGEy6cTQBg3UxwsGlvX78GLq0vnq116vpr2xTtpo49qC+jX4wkmmwyIo9
+ 6HWOLKqP0RmGQhjfqccfYmmbOWm1FHe17L27qti15j2LO590Bd8XOvF+0k1UPhM2pk
+ DSkylgaehR9ycYIvh958V8hKK5F4WTYAGT/zFyMqoht+Hqdpjnip9mK7u/DwSj2QxL
+ gBfteT7NguLFIzD85XKDgp5tiJwbJqhJOykvj7IA15uwGa0zAJ0HMOBu2A+D7NPh8G
+ TGez9MSs3+XZCCALj47ABWQuEkbovVrUACfo4lQv56SmwEUucPcBZknXwDfxv5M/jO
+ uHLWSabQCOBrg==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 03 Jan 2022 21:10:19 +0100
+Date: Mon, 3 Jan 2022 21:10:19 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+Message-ID: <20220103201019.GH69135@scaer>
+References: <20220103165805.3697636-1-clg@kaod.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220103165805.3697636-1-clg@kaod.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH] package/qemu: bump to version 6.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,213 +71,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8723297361752368128=="
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8723297361752368128==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=85c7bd0602715dc6a148cc79db8910dca27c4e76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Remove uclibc workaround which was deprecated by upstream :
-  commit a30bfaa7bd1f ("linux-user/host/arm: Populate host_signal.h")
-
-Remove upstream patches :
-  commit 304332039014 ("block/export/fuse.c: fix musl build")
-  commit 28031d5c7427 ("block/export/fuse.c: fix fuse-lseek on uclibc or musl")
-
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 ----------------
- ...t-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch | 44 -------------------
- .../0004-block-export-fuse.c-fix-musl-build.patch  | 49 ----------------------
- package/qemu/qemu.hash                             |  2 +-
- package/qemu/qemu.mk                               |  2 +-
- 5 files changed, 2 insertions(+), 130 deletions(-)
-
-diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-deleted file mode 100644
-index 6db4e8bc92..0000000000
---- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 923d25365fbdff17fa4c8c2883960be07c3dad56 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 5 May 2017 09:07:15 +0200
--Subject: [PATCH] user-exec: fix usage of mcontext structure on ARM/uClibc
--
--user-exec.c has some conditional code to decide how to use the
--mcontext structure. Unfortunately, since uClibc defines __GLIBC__, but
--with old versions of __GLIBC__ and __GLIBC_MINOR__, an old code path
--gets used, which doesn't apply to uClibc.
--
--Fix this by excluding __UCLIBC__, which ensures we fall back to the
--general case of using uc_mcontext.arm_pc, which works fine with
--uClibc.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- accel/tcg/user-exec.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
--index 4ebe25461a..0496674fbd 100644
----- a/accel/tcg/user-exec.c
--+++ b/accel/tcg/user-exec.c
--@@ -540,7 +540,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-- 
-- #if defined(__NetBSD__)
--     pc = uc->uc_mcontext.__gregs[_REG_R15];
---#elif defined(__GLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
--+#elif defined(__GLIBC__) && !defined(__UCLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
--     pc = uc->uc_mcontext.gregs[R15];
-- #else
--     pc = uc->uc_mcontext.arm_pc;
---- 
--2.25.3
--
-diff --git a/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch b/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
-deleted file mode 100644
-index 50762055bf..0000000000
---- a/package/qemu/0003-block-export-fuse.c-fix-fuse-lseek-on-uclibc-or-musl.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 8c3fcbf23fe31cf56f21ce1737bf22fe65fc553b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 27 Aug 2021 23:40:01 +0200
--Subject: [PATCH] block/export/fuse.c: fix fuse-lseek on uclibc or musl
--
--Include linux/fs.h to avoid the following build failure on uclibc or
--musl raised since version 6.0.0:
--
--../block/export/fuse.c: In function 'fuse_lseek':
--../block/export/fuse.c:641:19: error: 'SEEK_HOLE' undeclared (first use in this function)
--  641 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
--      |                   ^~~~~~~~~
--../block/export/fuse.c:641:19: note: each undeclared identifier is reported only once for each function it appears in
--../block/export/fuse.c:641:42: error: 'SEEK_DATA' undeclared (first use in this function); did you mean 'SEEK_SET'?
--  641 |     if (whence != SEEK_HOLE && whence != SEEK_DATA) {
--      |                                          ^~~~~~~~~
--      |                                          SEEK_SET
--
--Fixes:
-- - http://autobuild.buildroot.org/results/33c90ebf04997f4d3557cfa66abc9cf9a3076137
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://patchwork.ozlabs.org/project/qemu-devel/patch/20210827220301.272887-1-fontaine.fabrice@gmail.com/]
-----
-- block/export/fuse.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/block/export/fuse.c b/block/export/fuse.c
--index fc7b07d2b5..2e3bf8270b 100644
----- a/block/export/fuse.c
--+++ b/block/export/fuse.c
--@@ -31,6 +31,9 @@
-- #include <fuse.h>
-- #include <fuse_lowlevel.h>
-- 
--+#ifdef __linux__
--+#include <linux/fs.h>
--+#endif
-- 
-- /* Prevent overly long bounce buffer allocations */
-- #define FUSE_MAX_BOUNCE_BYTES (MIN(BDRV_REQUEST_MAX_BYTES, 64 * 1024 * 1024))
---- 
--2.32.0
--
-diff --git a/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch b/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch
-deleted file mode 100644
-index 4856821843..0000000000
---- a/package/qemu/0004-block-export-fuse.c-fix-musl-build.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 304332039014679b809f606e2f227ee0fc43a451 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 22 Oct 2021 11:52:09 +0200
--Subject: [PATCH] block/export/fuse.c: fix musl build
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Include linux/falloc.h if CONFIG_FALLOCATE_ZERO_RANGE is defined to fix
--https://gitlab.com/qemu-project/qemu/-/commit/50482fda98bd62e072c30b7ea73c985c4e9d9bbb
--and avoid the following build failure on musl:
--
--../block/export/fuse.c: In function 'fuse_fallocate':
--../block/export/fuse.c:643:21: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
--  643 |     else if (mode & FALLOC_FL_ZERO_RANGE) {
--      |                     ^~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/be24433a429fda681fb66698160132c1c99bc53b
--
--Fixes: 50482fda98b ("block/export/fuse.c: fix musl build")
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Message-Id: <20211022095209.1319671-1-fontaine.fabrice@gmail.com>
--Reviewed-by: Philippe Mathieu-Daudé <philmd@redhat.com>
--Signed-off-by: Kevin Wolf <kwolf@redhat.com>
--[Retrieved from:
--https://gitlab.com/qemu-project/qemu/-/commit/304332039014679b809f606e2f227ee0fc43a451]
-----
-- block/export/fuse.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/block/export/fuse.c b/block/export/fuse.c
--index 2e3bf8270b..823c126d23 100644
----- a/block/export/fuse.c
--+++ b/block/export/fuse.c
--@@ -31,6 +31,10 @@
-- #include <fuse.h>
-- #include <fuse_lowlevel.h>
-- 
--+#if defined(CONFIG_FALLOCATE_ZERO_RANGE)
--+#include <linux/falloc.h>
--+#endif
--+
-- #ifdef __linux__
-- #include <linux/fs.h>
-- #endif
---- 
--GitLab
--
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 0613fce493..9411832384 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  eebc089db3414bbeedf1e464beda0a7515aad30f73261abc246c9b27503a3c96  qemu-6.1.0.tar.xz
-+sha256  68e15d8e45ac56326e0b9a4afa8b49a3dfe8aba3488221d098c84698bca65b45  qemu-6.2.0.tar.xz
- sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 919aef6599..97f9f885a1 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 6.1.0
-+QEMU_VERSION = 6.2.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-
---===============8723297361752368128==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8723297361752368128==--
+Q8OpZHJpYywgQWxsLAoKT24gMjAyMi0wMS0wMyAxNzo1OCArMDEwMCwgQ8OpZHJpYyBMZSBHb2F0
+ZXIgc3Bha2UgdGh1c2x5Ogo+IFJlbW92ZSB1Y2xpYmMgd29ya2Fyb3VuZCB3aGljaCB3YXMgZGVw
+cmVjYXRlZCBieSB1cHN0cmVhbSA6Cj4gICBjb21taXQgYTMwYmZhYTdiZDFmICgibGludXgtdXNl
+ci9ob3N0L2FybTogUG9wdWxhdGUgaG9zdF9zaWduYWwuaCIpCj4gCj4gUmVtb3ZlIHVwc3RyZWFt
+IHBhdGNoZXMgOgo+ICAgY29tbWl0IDMwNDMzMjAzOTAxNCAoImJsb2NrL2V4cG9ydC9mdXNlLmM6
+IGZpeCBtdXNsIGJ1aWxkIikKPiAgIGNvbW1pdCAyODAzMWQ1Yzc0MjcgKCJibG9jay9leHBvcnQv
+ZnVzZS5jOiBmaXggZnVzZS1sc2VlayBvbiB1Y2xpYmMgb3IgbXVzbCIpCj4gCj4gU2lnbmVkLW9m
+Zi1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4KCkFwcGxpZWQgdG8gbWFzdGVy
+LCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0KPiAgLi4uYWdlLW9mLW1j
+b250ZXh0LXN0cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoIHwgMzUgLS0tLS0tLS0tLS0tLQo+ICAu
+Li5lLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wucGF0Y2ggfCA0NCAtLS0tLS0t
+LS0tLS0tLS0tLQo+ICAuLi40LWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LW11c2wtYnVpbGQucGF0
+Y2ggfCA0OSAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2thZ2UvcWVtdS9xZW11Lmhhc2ggICAg
+ICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4gIHBhY2thZ2UvcWVtdS9xZW11Lm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4gIDUgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspLCAxMzAgZGVsZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Fl
+bXUvMDAwMS11c2VyLWV4ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0cnVjdHVyZS1vbi1BUk0t
+dUNsLnBhdGNoCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3FlbXUvMDAwMy1ibG9jay1l
+eHBvcnQtZnVzZS5jLWZpeC1mdXNlLWxzZWVrLW9uLXVjbGliYy1vci1tdXNsLnBhdGNoCj4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3FlbXUvMDAwNC1ibG9jay1leHBvcnQtZnVzZS5jLWZp
+eC1tdXNsLWJ1aWxkLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8wMDAxLXVz
+ZXItZXhlYy1maXgtdXNhZ2Utb2YtbWNvbnRleHQtc3RydWN0dXJlLW9uLUFSTS11Q2wucGF0Y2gg
+Yi9wYWNrYWdlL3FlbXUvMDAwMS11c2VyLWV4ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0cnVj
+dHVyZS1vbi1BUk0tdUNsLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
+NmRiNGU4YmM5MjNlLi4wMDAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL3FlbXUvMDAwMS11c2Vy
+LWV4ZWMtZml4LXVzYWdlLW9mLW1jb250ZXh0LXN0cnVjdHVyZS1vbi1BUk0tdUNsLnBhdGNoCj4g
+KysrIC9kZXYvbnVsbAo+IEBAIC0xLDM1ICswLDAgQEAKPiAtRnJvbSA5MjNkMjUzNjVmYmRmZjE3
+ZmE0YzhjMjg4Mzk2MGJlMDdjM2RhZDU2IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9t
+OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGZyZWUtZWxlY3Ryb25zLmNvbT4K
+PiAtRGF0ZTogRnJpLCA1IE1heSAyMDE3IDA5OjA3OjE1ICswMjAwCj4gLVN1YmplY3Q6IFtQQVRD
+SF0gdXNlci1leGVjOiBmaXggdXNhZ2Ugb2YgbWNvbnRleHQgc3RydWN0dXJlIG9uIEFSTS91Q2xp
+YmMKPiAtCj4gLXVzZXItZXhlYy5jIGhhcyBzb21lIGNvbmRpdGlvbmFsIGNvZGUgdG8gZGVjaWRl
+IGhvdyB0byB1c2UgdGhlCj4gLW1jb250ZXh0IHN0cnVjdHVyZS4gVW5mb3J0dW5hdGVseSwgc2lu
+Y2UgdUNsaWJjIGRlZmluZXMgX19HTElCQ19fLCBidXQKPiAtd2l0aCBvbGQgdmVyc2lvbnMgb2Yg
+X19HTElCQ19fIGFuZCBfX0dMSUJDX01JTk9SX18sIGFuIG9sZCBjb2RlIHBhdGgKPiAtZ2V0cyB1
+c2VkLCB3aGljaCBkb2Vzbid0IGFwcGx5IHRvIHVDbGliYy4KPiAtCj4gLUZpeCB0aGlzIGJ5IGV4
+Y2x1ZGluZyBfX1VDTElCQ19fLCB3aGljaCBlbnN1cmVzIHdlIGZhbGwgYmFjayB0byB0aGUKPiAt
+Z2VuZXJhbCBjYXNlIG9mIHVzaW5nIHVjX21jb250ZXh0LmFybV9wYywgd2hpY2ggd29ya3MgZmlu
+ZSB3aXRoCj4gLXVDbGliYy4KPiAtCj4gLVNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkg
+PHRob21hcy5wZXRhenpvbmlAZnJlZS1lbGVjdHJvbnMuY29tPgo+IC0tLS0KPiAtIGFjY2VsL3Rj
+Zy91c2VyLWV4ZWMuYyB8IDIgKy0KPiAtIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MSBkZWxldGlvbigtKQo+IC0KPiAtZGlmZiAtLWdpdCBhL2FjY2VsL3RjZy91c2VyLWV4ZWMuYyBi
+L2FjY2VsL3RjZy91c2VyLWV4ZWMuYwo+IC1pbmRleCA0ZWJlMjU0NjFhLi4wNDk2Njc0ZmJkIDEw
+MDY0NAo+IC0tLS0gYS9hY2NlbC90Y2cvdXNlci1leGVjLmMKPiAtKysrIGIvYWNjZWwvdGNnL3Vz
+ZXItZXhlYy5jCj4gLUBAIC01NDAsNyArNTQwLDcgQEAgaW50IGNwdV9zaWduYWxfaGFuZGxlcihp
+bnQgaG9zdF9zaWdudW0sIHZvaWQgKnBpbmZvLAo+IC0gCj4gLSAjaWYgZGVmaW5lZChfX05ldEJT
+RF9fKQo+IC0gICAgIHBjID0gdWMtPnVjX21jb250ZXh0Ll9fZ3JlZ3NbX1JFR19SMTVdOwo+IC0t
+I2VsaWYgZGVmaW5lZChfX0dMSUJDX18pICYmIChfX0dMSUJDX18gPCAyIHx8IChfX0dMSUJDX18g
+PT0gMiAmJiBfX0dMSUJDX01JTk9SX18gPD0gMykpCj4gLSsjZWxpZiBkZWZpbmVkKF9fR0xJQkNf
+XykgJiYgIWRlZmluZWQoX19VQ0xJQkNfXykgJiYgKF9fR0xJQkNfXyA8IDIgfHwgKF9fR0xJQkNf
+XyA9PSAyICYmIF9fR0xJQkNfTUlOT1JfXyA8PSAzKSkKPiAtICAgICBwYyA9IHVjLT51Y19tY29u
+dGV4dC5ncmVnc1tSMTVdOwo+IC0gI2Vsc2UKPiAtICAgICBwYyA9IHVjLT51Y19tY29udGV4dC5h
+cm1fcGM7Cj4gLS0tIAo+IC0yLjI1LjMKPiAtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVtdS8w
+MDAzLWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LWZ1c2UtbHNlZWstb24tdWNsaWJjLW9yLW11c2wu
+cGF0Y2ggYi9wYWNrYWdlL3FlbXUvMDAwMy1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1mdXNlLWxz
+ZWVrLW9uLXVjbGliYy1vci1tdXNsLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4g
+aW5kZXggNTA3NjIwNTViZjE4Li4wMDAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL3FlbXUvMDAw
+My1ibG9jay1leHBvcnQtZnVzZS5jLWZpeC1mdXNlLWxzZWVrLW9uLXVjbGliYy1vci1tdXNsLnBh
+dGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDQ0ICswLDAgQEAKPiAtRnJvbSA4YzNmY2JmMjNm
+ZTMxY2Y1NmYyMWNlMTczN2JmMjJmZTY1ZmM1NTNiIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+
+IC1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAt
+RGF0ZTogRnJpLCAyNyBBdWcgMjAyMSAyMzo0MDowMSArMDIwMAo+IC1TdWJqZWN0OiBbUEFUQ0hd
+IGJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBmdXNlLWxzZWVrIG9uIHVjbGliYyBvciBtdXNsCj4g
+LQo+IC1JbmNsdWRlIGxpbnV4L2ZzLmggdG8gYXZvaWQgdGhlIGZvbGxvd2luZyBidWlsZCBmYWls
+dXJlIG9uIHVjbGliYyBvcgo+IC1tdXNsIHJhaXNlZCBzaW5jZSB2ZXJzaW9uIDYuMC4wOgo+IC0K
+PiAtLi4vYmxvY2svZXhwb3J0L2Z1c2UuYzogSW4gZnVuY3Rpb24gJ2Z1c2VfbHNlZWsnOgo+IC0u
+Li9ibG9jay9leHBvcnQvZnVzZS5jOjY0MToxOTogZXJyb3I6ICdTRUVLX0hPTEUnIHVuZGVjbGFy
+ZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+IC0gIDY0MSB8ICAgICBpZiAod2hlbmNl
+ICE9IFNFRUtfSE9MRSAmJiB3aGVuY2UgIT0gU0VFS19EQVRBKSB7Cj4gLSAgICAgIHwgICAgICAg
+ICAgICAgICAgICAgXn5+fn5+fn5+Cj4gLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6NjQxOjE5OiBu
+b3RlOiBlYWNoIHVuZGVjbGFyZWQgaWRlbnRpZmllciBpcyByZXBvcnRlZCBvbmx5IG9uY2UgZm9y
+IGVhY2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbgo+IC0uLi9ibG9jay9leHBvcnQvZnVzZS5jOjY0
+MTo0MjogZXJyb3I6ICdTRUVLX0RBVEEnIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1
+bmN0aW9uKTsgZGlkIHlvdSBtZWFuICdTRUVLX1NFVCc/Cj4gLSAgNjQxIHwgICAgIGlmICh3aGVu
+Y2UgIT0gU0VFS19IT0xFICYmIHdoZW5jZSAhPSBTRUVLX0RBVEEpIHsKPiAtICAgICAgfCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fgo+IC0gICAgICB8
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VFS19TRVQKPiAtCj4g
+LUZpeGVzOgo+IC0gLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8zM2M5
+MGViZjA0OTk3ZjRkMzU1N2NmYTY2YWJjOWNmOWEzMDc2MTM3Cj4gLQo+IC1TaWduZWQtb2ZmLWJ5
+OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiAtW1Vwc3Ry
+ZWFtIHN0YXR1czogaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L3FlbXUtZGV2
+ZWwvcGF0Y2gvMjAyMTA4MjcyMjAzMDEuMjcyODg3LTEtZm9udGFpbmUuZmFicmljZUBnbWFpbC5j
+b20vXQo+IC0tLS0KPiAtIGJsb2NrL2V4cG9ydC9mdXNlLmMgfCAzICsrKwo+IC0gMSBmaWxlIGNo
+YW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+IC0KPiAtZGlmZiAtLWdpdCBhL2Jsb2NrL2V4cG9ydC9m
+dXNlLmMgYi9ibG9jay9leHBvcnQvZnVzZS5jCj4gLWluZGV4IGZjN2IwN2QyYjUuLjJlM2JmODI3
+MGIgMTAwNjQ0Cj4gLS0tLSBhL2Jsb2NrL2V4cG9ydC9mdXNlLmMKPiAtKysrIGIvYmxvY2svZXhw
+b3J0L2Z1c2UuYwo+IC1AQCAtMzEsNiArMzEsOSBAQAo+IC0gI2luY2x1ZGUgPGZ1c2UuaD4KPiAt
+ICNpbmNsdWRlIDxmdXNlX2xvd2xldmVsLmg+Cj4gLSAKPiAtKyNpZmRlZiBfX2xpbnV4X18KPiAt
+KyNpbmNsdWRlIDxsaW51eC9mcy5oPgo+IC0rI2VuZGlmCj4gLSAKPiAtIC8qIFByZXZlbnQgb3Zl
+cmx5IGxvbmcgYm91bmNlIGJ1ZmZlciBhbGxvY2F0aW9ucyAqLwo+IC0gI2RlZmluZSBGVVNFX01B
+WF9CT1VOQ0VfQllURVMgKE1JTihCRFJWX1JFUVVFU1RfTUFYX0JZVEVTLCA2NCAqIDEwMjQgKiAx
+MDI0KSkKPiAtLS0gCj4gLTIuMzIuMAo+IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xZW11LzAw
+MDQtYmxvY2stZXhwb3J0LWZ1c2UuYy1maXgtbXVzbC1idWlsZC5wYXRjaCBiL3BhY2thZ2UvcWVt
+dS8wMDA0LWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LW11c2wtYnVpbGQucGF0Y2gKPiBkZWxldGVk
+IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCA0ODU2ODIxODQzZmMuLjAwMDAwMDAwMDAwMAo+IC0t
+LSBhL3BhY2thZ2UvcWVtdS8wMDA0LWJsb2NrLWV4cG9ydC1mdXNlLmMtZml4LW11c2wtYnVpbGQu
+cGF0Y2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsNDkgKzAsMCBAQAo+IC1Gcm9tIDMwNDMzMjAz
+OTAxNDY3OWI4MDlmNjA2ZTJmMjI3ZWUwZmM0M2E0NTEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAx
+Cj4gLUZyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+
+IC1EYXRlOiBGcmksIDIyIE9jdCAyMDIxIDExOjUyOjA5ICswMjAwCj4gLVN1YmplY3Q6IFtQQVRD
+SF0gYmxvY2svZXhwb3J0L2Z1c2UuYzogZml4IG11c2wgYnVpbGQKPiAtTUlNRS1WZXJzaW9uOiAx
+LjAKPiAtQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gLUNvbnRlbnQt
+VHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiAtCj4gLUluY2x1ZGUgbGludXgvZmFsbG9jLmggaWYg
+Q09ORklHX0ZBTExPQ0FURV9aRVJPX1JBTkdFIGlzIGRlZmluZWQgdG8gZml4Cj4gLWh0dHBzOi8v
+Z2l0bGFiLmNvbS9xZW11LXByb2plY3QvcWVtdS8tL2NvbW1pdC81MDQ4MmZkYTk4YmQ2MmUwNzJj
+MzBiN2VhNzNjOTg1YzRlOWQ5YmJiCj4gLWFuZCBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZh
+aWx1cmUgb24gbXVzbDoKPiAtCj4gLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6IEluIGZ1bmN0aW9u
+ICdmdXNlX2ZhbGxvY2F0ZSc6Cj4gLS4uL2Jsb2NrL2V4cG9ydC9mdXNlLmM6NjQzOjIxOiBlcnJv
+cjogJ0ZBTExPQ19GTF9aRVJPX1JBTkdFJyB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBm
+dW5jdGlvbikKPiAtICA2NDMgfCAgICAgZWxzZSBpZiAobW9kZSAmIEZBTExPQ19GTF9aRVJPX1JB
+TkdFKSB7Cj4gLSAgICAgIHwgICAgICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+
+fgo+IC0KPiAtRml4ZXM6Cj4gLSAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1
+bHRzL2JlMjQ0MzNhNDI5ZmRhNjgxZmI2NjY5ODE2MDEzMmMxYzk5YmM1M2IKPiAtCj4gLUZpeGVz
+OiA1MDQ4MmZkYTk4YiAoImJsb2NrL2V4cG9ydC9mdXNlLmM6IGZpeCBtdXNsIGJ1aWxkIikKPiAt
+U2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5j
+b20+Cj4gLU1lc3NhZ2UtSWQ6IDwyMDIxMTAyMjA5NTIwOS4xMzE5NjcxLTEtZm9udGFpbmUuZmFi
+cmljZUBnbWFpbC5jb20+Cj4gLVJldmlld2VkLWJ5OiBQaGlsaXBwZSBNYXRoaWV1LURhdWTDqSA8
+cGhpbG1kQHJlZGhhdC5jb20+Cj4gLVNpZ25lZC1vZmYtYnk6IEtldmluIFdvbGYgPGt3b2xmQHJl
+ZGhhdC5jb20+Cj4gLVtSZXRyaWV2ZWQgZnJvbToKPiAtaHR0cHM6Ly9naXRsYWIuY29tL3FlbXUt
+cHJvamVjdC9xZW11Ly0vY29tbWl0LzMwNDMzMjAzOTAxNDY3OWI4MDlmNjA2ZTJmMjI3ZWUwZmM0
+M2E0NTFdCj4gLS0tLQo+IC0gYmxvY2svZXhwb3J0L2Z1c2UuYyB8IDQgKysrKwo+IC0gMSBmaWxl
+IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQo+IC0KPiAtZGlmZiAtLWdpdCBhL2Jsb2NrL2V4cG9y
+dC9mdXNlLmMgYi9ibG9jay9leHBvcnQvZnVzZS5jCj4gLWluZGV4IDJlM2JmODI3MGIuLjgyM2Mx
+MjZkMjMgMTAwNjQ0Cj4gLS0tLSBhL2Jsb2NrL2V4cG9ydC9mdXNlLmMKPiAtKysrIGIvYmxvY2sv
+ZXhwb3J0L2Z1c2UuYwo+IC1AQCAtMzEsNiArMzEsMTAgQEAKPiAtICNpbmNsdWRlIDxmdXNlLmg+
+Cj4gLSAjaW5jbHVkZSA8ZnVzZV9sb3dsZXZlbC5oPgo+IC0gCj4gLSsjaWYgZGVmaW5lZChDT05G
+SUdfRkFMTE9DQVRFX1pFUk9fUkFOR0UpCj4gLSsjaW5jbHVkZSA8bGludXgvZmFsbG9jLmg+Cj4g
+LSsjZW5kaWYKPiAtKwo+IC0gI2lmZGVmIF9fbGludXhfXwo+IC0gI2luY2x1ZGUgPGxpbnV4L2Zz
+Lmg+Cj4gLSAjZW5kaWYKPiAtLS0gCj4gLUdpdExhYgo+IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9xZW11L3FlbXUuaGFzaCBiL3BhY2thZ2UvcWVtdS9xZW11Lmhhc2gKPiBpbmRleCAwNjEzZmNl
+NDkzNjcuLjk0MTE4MzIzODRiYSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3FlbXUvcWVtdS5oYXNo
+Cj4gKysrIGIvcGFja2FnZS9xZW11L3FlbXUuaGFzaAo+IEBAIC0xLDQgKzEsNCBAQAo+ICAjIExv
+Y2FsbHkgY29tcHV0ZWQsIHRhcmJhbGwgdmVyaWZpZWQgd2l0aCBHUEcgc2lnbmF0dXJlCj4gLXNo
+YTI1NiAgZWViYzA4OWRiMzQxNGJiZWVkZjFlNDY0YmVkYTBhNzUxNWFhZDMwZjczMjYxYWJjMjQ2
+YzliMjc1MDNhM2M5NiAgcWVtdS02LjEuMC50YXIueHoKPiArc2hhMjU2ICA2OGUxNWQ4ZTQ1YWM1
+NjMyNmUwYjlhNGFmYThiNDlhM2RmZThhYmEzNDg4MjIxZDA5OGM4NDY5OGJjYTY1YjQ1ICBxZW11
+LTYuMi4wLnRhci54ego+ICBzaGEyNTYgIDZmMDRhZTgzNjRkMDA3OWExOTJiMTQ2MzVmNGIxZGEy
+OTRjZTE4NzI0YzAzNGMzOWE2YTQxZDFiMDlkZjYxMDAgIENPUFlJTkcKPiAgc2hhMjU2ICBkYzYy
+NjUyMGRjZDUzYTIyZjcyN2FmM2VlNDJjNzcwZTU2Yzk3YTY0ZmUzYWRiMDYzNzk5ZDhhYjAzMmZl
+NTUxICBDT1BZSU5HLkxJQgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FlbXUvcWVtdS5tayBiL3Bh
+Y2thZ2UvcWVtdS9xZW11Lm1rCj4gaW5kZXggOTE5YWVmNjU5OWYxLi45N2Y5Zjg4NWExOGEgMTAw
+NjQ0Cj4gLS0tIGEvcGFja2FnZS9xZW11L3FlbXUubWsKPiArKysgYi9wYWNrYWdlL3FlbXUvcWVt
+dS5tawo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4g
+IAo+IC1RRU1VX1ZFUlNJT04gPSA2LjEuMAo+ICtRRU1VX1ZFUlNJT04gPSA2LjIuMAo+ICBRRU1V
+X1NPVVJDRSA9IHFlbXUtJChRRU1VX1ZFUlNJT04pLnRhci54ego+ICBRRU1VX1NJVEUgPSBodHRw
+Oi8vZG93bmxvYWQucWVtdS5vcmcKPiAgUUVNVV9MSUNFTlNFID0gR1BMLTIuMCwgTEdQTC0yLjEs
+IE1JVCwgQlNELTMtQ2xhdXNlLCBCU0QtMi1DbGF1c2UsIE90aGVycy9CU0QtMWMKPiAtLSAKPiAy
+LjMxLjEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0g
+Ci4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
+LS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVt
+YmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2
+MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18g
+ICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTog
+IFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5p
+cy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJh
+Y3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0t
+LS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
