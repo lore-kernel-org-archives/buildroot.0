@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5321C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 10:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44D35C433EF
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 10:44:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64CB281322;
-	Mon,  3 Jan 2022 10:44:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A11F34033B;
+	Mon,  3 Jan 2022 10:44:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fLG9KmJUXlhl; Mon,  3 Jan 2022 10:44:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8rrrnTQ6CE22; Mon,  3 Jan 2022 10:44:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B179B81315;
-	Mon,  3 Jan 2022 10:44:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBBA64031F;
+	Mon,  3 Jan 2022 10:44:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A6001BF95E
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 51BFD1BF95E
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58F5081313
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EBCA81315
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 10:44:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5q9iPPQFN2QU for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 10:44:05 +0000 (UTC)
+ with ESMTP id PYstHtKCAxgs for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 10:44:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C55281315
- for <buildroot@busybox.net>; Mon,  3 Jan 2022 10:44:04 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id bm14so134292902edb.5
- for <buildroot@busybox.net>; Mon, 03 Jan 2022 02:44:04 -0800 (PST)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6B69381313
+ for <buildroot@busybox.net>; Mon,  3 Jan 2022 10:44:16 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id n30so22201730eda.13
+ for <buildroot@busybox.net>; Mon, 03 Jan 2022 02:44:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9xWqdCf8jaX0zJ/yiaEtUD4xqZh8KxGI/ojHElo+R5A=;
- b=db0C/7f7lWcp8XP9YCaBBAS/b968ZJ+In3+zY/HAPLXQXYFsM0XEgQIAxW5LfdKnX3
- 6BGD6SpmTy/ROfD1mdAjroOVeektZo4E2vAm36LTkP7hh2/ZKEKKXkqsVflGqqpwiDcj
- EAhbMAv+C1aCulBET3yL3LvI8sMQf8+3M55qVnmiqRd0mn46wEoqIf1I+IBHVC2BC2fM
- 4mpaWNYB8dZ+2F68CsH035c0rFFwq1XNLrC5J3B+hIvcz9IuVtulIJwG/bJ8wWHTgE/Y
- PPQOa0+1A06GbLiz+2bfLhl31Z2c3dfnTY28GCWUf2DWjozql4vVettO1G5MhkrdEpn3
- wvwA==
+ bh=QZu/jwSXAd2GBx6boYiihaWWGlj6T13IfEHr15PqNm0=;
+ b=QLk48bGKyArElwDbC3uyuotuC4OYzdAMdCON1NQnCwwD1twDo1l4UxXDGcWg9x2kD5
+ ys80Oo8q22CCo9CxxxoTAo8ozgbhazx54I2Jrtip3PRGbSUQdJxobO6Pp0uSsUf9pHjL
+ OwUnaugE+FNl8RpUWnh3mlbfdft/xBoo3G0NARG7qulfWh6LV1NnvPc4kTqmsrjb4jzt
+ siAxMgupqpd5g8nnQj6Fq6nG2FOV45WxjQh2jdNfxVzi/o77mDotLpvpz5lcazc2W4DW
+ QvYYYaPtNkZDdXHEUbfbXNf0+be5gWn393jWMfA5ppT/qMkBnXERb70cQbyzvuTbmLIC
+ v+tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=9xWqdCf8jaX0zJ/yiaEtUD4xqZh8KxGI/ojHElo+R5A=;
- b=Yejlzi9CBW1IGRzdQJJMTBGoVuv01464KIIV+9vChhFTzuR8UokU6IrbQPF8hFct93
- eKbLooC8qYIg01d7FZxtLt8Anm80VrBE+9PXiQcROchIeGQ4IQiEniaXpEuv7oQ/pljF
- JoEgNEq4KRL+3cH8arLl9CC4wVHGD4ao0/GdOr6wZPgzhsUm9zQJwIir+v2q3GyZO5hD
- gH6wHrREHKbpPCGSZjz+LnkViNyB5O18fVwZzDK6XU+akW/CmIGsKiNpD/HBbitAQHIF
- S9L3PIZgcVOBFp7KYCqY4dffcDzukrQ/yvoKOobqs6ch+y2uWVd+uWi2Di7kExzOg+VS
- W+rw==
-X-Gm-Message-State: AOAM530yIIcQmQHFV1/IPPoqv6zSaO4NsJ7tRwJ+Oho08Rr3JfybNAg6
- hXKJQnm4BBxJ9+Ovucd91Z923at+Qzc=
-X-Google-Smtp-Source: ABdhPJwwirRNqHdl7XRTUtuYrKstbPHcxVZkY1HEcsWNvH0NYBbGTb015ajV/4D8Dn4qET56DEqUtA==
-X-Received: by 2002:aa7:d55a:: with SMTP id u26mr43434480edr.265.1641206643178; 
- Mon, 03 Jan 2022 02:44:03 -0800 (PST)
+ bh=QZu/jwSXAd2GBx6boYiihaWWGlj6T13IfEHr15PqNm0=;
+ b=byPSbZCp0yk34bRcgFmhIfYDkK+hHN8nhuHDleSxuuyN+e9wnTHc1U8e7EW6iiuYqR
+ hJGrqNBR7i6OyMacs12qbqeAfG1zFq+9AuFadT0e9SEfVqnI5+vuFeUBG3KbqthL2VSx
+ k2bKWRynzZ2ScJiuj1PTugrgcIKcdbhrCj9EUodE76/USNvrCRLVwKFp87szIFQnSX4w
+ f4WHE1wsjhjH1rPtkxMOH+lSFE5auJTf1/ejVWx442WS5p0/yguwrKZMK2BFwpPvMsPu
+ /ZsGuv1T06kEJoNwuQw9w8sDa5GXN1LVjQvU3e4ZuAC6F1PVM0WamBqYIEkhiKzBY9Iu
+ UmXA==
+X-Gm-Message-State: AOAM531LxUeOn+GFgZAPlRBsXulgC7NpCwXHcEJBhPTWZJd6IcHhEfrk
+ /6VUHKafPVYfvurBWke+axS8yofOmO0=
+X-Google-Smtp-Source: ABdhPJxx4L39vWI3Kgd2wKIkqMqlJw8IcXh9BMEaI3s6BfcbtaHgkbZBUnafxUWTONjykAjVXgc3+A==
+X-Received: by 2002:a17:907:3f8d:: with SMTP id
+ hr13mr34949161ejc.397.1641206654664; 
+ Mon, 03 Jan 2022 02:44:14 -0800 (PST)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id d17sm10517866ejd.217.2022.01.03.02.44.02
+ by smtp.gmail.com with ESMTPSA id t20sm13361575edv.81.2022.01.03.02.44.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jan 2022 02:44:02 -0800 (PST)
+ Mon, 03 Jan 2022 02:44:14 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon,  3 Jan 2022 11:43:55 +0100
-Message-Id: <20220103104355.16030-1-francois.perrad@gadz.org>
+Date: Mon,  3 Jan 2022 11:44:07 +0100
+Message-Id: <20220103104407.16085-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/spi-tools: bump to version 1.0.1
+Subject: [Buildroot] [PATCH] package/sqlite: bump to version 3.37.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,32 +93,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/spi-tools/spi-tools.hash | 2 +-
- package/spi-tools/spi-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
-index a1ef4c2b9..1595cd3d2 100644
---- a/package/spi-tools/spi-tools.hash
-+++ b/package/spi-tools/spi-tools.hash
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 94f0127d1..604275ebf 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
 @@ -1,3 +1,3 @@
- # locally computed hash
--sha256  5eb24670461dcf2c58471114dc69b5204dab1c0cc5053878f6de79503bd8cc9f  spi-tools-1.0.0.tar.gz
-+sha256  81bb9f7218123f86c3644d92ad2c427343758df2143ee5da38e6f743f18714fd  spi-tools-1.0.1.tar.gz
- sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
-diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
-index 26d0dcf54..d623babf4 100644
---- a/package/spi-tools/spi-tools.mk
-+++ b/package/spi-tools/spi-tools.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256  731a4651d4d4b36fc7d21db586b2de4dd00af31fd54fb5a9a4b7f492057479f7  sqlite-autoconf-3370000.tar.gz
++sha256  40f22a13bf38bbcd4c7ac79bcfb42a72d5aa40930c1f3f822e30ccce295f0f2e  sqlite-autoconf-3370100.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index be060c311..59b76ce16 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SPI_TOOLS_VERSION = 1.0.0
-+SPI_TOOLS_VERSION = 1.0.1
- SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
- # autoreconf must be run as specified in package documentation
- SPI_TOOLS_AUTORECONF = YES
+-SQLITE_VERSION = 3.37.0
+-SQLITE_TAR_VERSION = 3370000
++SQLITE_VERSION = 3.37.1
++SQLITE_TAR_VERSION = 3370100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2021
+ SQLITE_LICENSE = Public domain
 -- 
 2.32.0
 
