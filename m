@@ -1,78 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9C8C433EF
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 21:08:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D348C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 21:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 512ED60ADC;
-	Mon,  3 Jan 2022 21:08:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF2DE40116;
+	Mon,  3 Jan 2022 21:20:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ovSj0Eowsazz; Mon,  3 Jan 2022 21:08:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LUW201U5ZBJ4; Mon,  3 Jan 2022 21:20:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D6E760B3A;
-	Mon,  3 Jan 2022 21:08:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C2AF71BF285
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 21:08:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCEED403E9;
+	Mon,  3 Jan 2022 21:20:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F12E61BF285
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 21:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF9B8401BA
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 21:08:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFF1D60B49
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 21:20:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SiIpQ5ms0lL0 for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 21:08:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 543BC401A2
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 21:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1641244096;
- bh=+JSxwPKuDg1cYKKn8H7hVCmPOaWbDDJOki8gI1V8DYk=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=Vnit1F8s8PHxXNAJbGXALhbM2Ue1lepjEt+wNn/1Jx2rXcEWAWyOYwGux9E+cxBW0
- sd+JIjya/W+uXyDbleznflUYbVQGzDCvNDsZPPrjswmVyc8oTQc7TKkd2VmeDZ3fwS
- LJZm+G2zPzOBy5LZkBAUfhE6wnNmJ+KzlPl7il6I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.fritz.box ([62.216.209.105]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mulm5-1mCwJ12Rgx-00rsL2 for <buildroot@buildroot.org>; Mon, 03 Jan 2022
- 22:08:16 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Mon,  3 Jan 2022 22:08:16 +0100
-Message-Id: <20220103210816.26410-1-ps.report@gmx.net>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Eo2iVgdtWTCd for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 21:20:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBC6F60B3A
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 21:20:48 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id q16so72169271wrg.7
+ for <buildroot@buildroot.org>; Mon, 03 Jan 2022 13:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=ocUE7iszKLoOJ1QCohSvWBbG2FHxvQ1FQVcbqb4KVKs=;
+ b=RWn/W4MJuVo9ktINNZhV/C6/w7uF2fDGwha8dU1LGWqvlcXVR2R64I3/OP3f0isHUY
+ TGpWYtDWvHLbUntFBJ6pAUc8ErD19UB05KKkrLpgnwe5nA57xBRHP8rAmcwHNoaspSU3
+ w9KqaHMray9YVcMSICC2yvklHV7nEJoVkw6H1y7CZazVMVdbQkzthGl/Zd1UbUPN2Lf/
+ bK0Up/wZY1j4xJNwCnVot5YMLYNbN8xE17ns8KW7E02wTisxzHTB4BaXsPqkEDye+0wi
+ 6wbAciWslmy58P0L49IWr/Bpp02B/ucrmL+c3niupKykQ8MjGuhE5Vpfn0KUPc0AuNDz
+ uapg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=ocUE7iszKLoOJ1QCohSvWBbG2FHxvQ1FQVcbqb4KVKs=;
+ b=LGol5l26IyTtJD19YyzI1+Bl/0T1MgrtSPgekNM3Rt4byY0sqoB6XWoKlHUPprhzio
+ y7aUr5cXiaJksOw7zPxQhQjUap0DIPYBe3hjiYt6VAb9zWEBDDRQDTwawwuGP2P3kcZS
+ Cw66XVclq4tHV7gJOR5WD911tBwmiQ3mDzRR2VIISvpGiOk+gckSGSCCIs/7nqMjmauO
+ OcqdFuIalGn06rSjlhO4xQoHWSJB8cb+cBZFMkybnpWR183+TXmU0x1zn9TF5QCugk+C
+ NHcwNc32Spbk1yDmQyoojCXv8a9AlrmQooMLPY3n1YQLa4jpmxtRIsIX1RJHDVlvzPeE
+ Ua5Q==
+X-Gm-Message-State: AOAM533VRmxJMiamuA4ZUkqQA7VvHYk/z13qUHWC/hnbiWiYfuh4Fwnl
+ 81pbdb3wa+TjfmbwBCO7Vlo=
+X-Google-Smtp-Source: ABdhPJwJzJFBNQlYe8C8doveX2MWLZzK/EnBUZmKRGbfI0D2VifAUQu9XvnKOaE5iWu2Q93q7PbGrg==
+X-Received: by 2002:adf:fb90:: with SMTP id a16mr16686744wrr.283.1641244846962; 
+ Mon, 03 Jan 2022 13:20:46 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id 1sm29297314wrb.13.2022.01.03.13.20.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 03 Jan 2022 13:20:46 -0800 (PST)
+Message-ID: <85de806e-39a4-ce1b-fd07-2916443dfbbf@gmail.com>
+Date: Mon, 3 Jan 2022 22:20:45 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:h0p7qvdLXv8mw5lh1nEdmMe58S3SMigB8mdOOFldn+jsacZYPj+
- nv+GQ3nzIvd8kBwz7LGh77dSqJVI1xWPp7wxDTnWYZrURejDITkznOTVXmiyPZ++5z4iQ8w
- alM5A8vSnpz95LW1NT/J0ooH7+ZVAhhwdi68dyVelfTLdrR+gi0I5XjT1qyiLxjRFlMmXFx
- e0yx64Fu2/2eHdzZ+NEiQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6GJQw9M+5v0=:y9u2tIoIBaJ3wr0+Uj5RQF
- hjDAkjZPSfuZdXRKQU2UVkMp9bbgHng1v1bCOPFzjZ4r65U9UX+m8448HH4D9+lnw7Q5FMgTa
- iYURSqrF7S1Gdy9uPXcquiUSd1im8KsgwFeGQQlrGlICV6ZImiYubkWCSC031CT2eAMxPTy4X
- tQcJLorJj+hiTNOxfmp8IZpgPEvqdfzqQvwwjdfa0Q7U+Tex3pGV1jof0+y0mt7iygpmbRDJe
- guTtI8Mjg7+zNOBSrlQiUWCUJCWZWZNSJCQiWZfZdFzFgdbIFLpWr4MEBNIsUfU2zKZIQgVen
- jfz7M7hyoO9nBzOWqy0UKe2ksSwrovGZKUErwNp3SfMd9QDvXdWgmaX+6WtbPrCKN9MQiH5Ef
- gM1zW9VFiRHfOrrJuL1TjnfZZtdlC0v2sT9jbD3i5yD7a23EeWg/AJ/xkzeOEOFbo0n8stW8o
- ApejHCd/hbnFxxEXShcwx+bqdUKXnSoQOUHyjslLMBlRo4CR3lD9/9keof9j9dSDAktR7PmGG
- +KQOZQC+1wYcNQfbqgz9i7bfMB9KIxMXDbpgsJV61lYU+y2ZpGZEBgy+iiUHSDPnDQJQvziEc
- Ana5xat+G8+6txXge6D01Og7wnx2atSXFpcfbCAqFBC91zyhGqSCKX5qA/0EBBfLo9skO/AWZ
- LCKExraQb6RYdi2Ic9XwqJCUDzcrX7tcBfZurdDatasGOfHVy5zPzv8Cf9/gt/hC14Doy8xgJ
- qT51Pg6ud7sTaIdDPE1/mZ6OTEjglbCtdw+XAzKmBTpF15OabPpgTSUzOchU2nSrpF1LotowP
- KtP5KtJozBxuXtI6qPYDNEhVFRLVbZe5UrmRdVzbIc/FpyEhVTlktZgLLKMeFsvc2uhIxajGy
- 398XPqrZTJ61Kx+la4iMqInOt1u4rOXUguFaLC7/tOGVrWwYEeo5/QcXVNdOt1o+qqXS85z0a
- cyh0n3ai6iW59JZ44hS1JyPzNbzakzT4jPreuLnZh+L2+AFNAlRj2SV7/psSpbCPFhjQLX+q8
- OUbnMy/9UZGKD1CMNZu0fHle7fltzUtR9pzIpwSyrPVE5Si/onvo7n8MzwOIMuqEH5TkgQNk4
- 5HWXCvrfKq9k/o=
-Subject: [Buildroot] [PATCH v1] package/assimp: bump version to 5.1.5
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <cover.1595839612.git.yann.morin.1998@free.fr>
+ <c48baa11cd0c06ec5af3fd4989306c3ec581d0e9.1595839612.git.yann.morin.1998@free.fr>
+ <20200727173844.2ac2945f@windsurf.home> <20200727173524.GG19818@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20200727173524.GG19818@scaer>
+Subject: Re: [Buildroot] [PATCH 2/2 v4] package/mesa3d: make it aware of
+ libglvnd and support it when present
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,116 +95,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- remove 0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-  (upstream applied [1]).
-
-For details see [2].
-
-[1] https://github.com/assimp/assimp/commit/a099fe7cd331a839137115db5df1733c4c1c8070
-[2] https://github.com/assimp/assimp/releases/tag/v5.1.5
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...-explicit-namespace-instead-of-using.patch | 57 -------------------
- package/assimp/assimp.hash                    |  2 +-
- package/assimp/assimp.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 59 deletions(-)
- delete mode 100644 package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-
-diff --git a/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch b/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-deleted file mode 100644
-index c83e9c50a4..0000000000
---- a/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From a099fe7cd331a839137115db5df1733c4c1c8070 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Thu, 30 Dec 2021 18:01:54 +0100
--Subject: [PATCH] BlenderScene: use explicit namespace instead of using
-- namespace
--
--Fixes (using g++ Sourcery CodeBench Lite 2014.05-29 - 4.8.3 20140320):
--
--  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:101:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
--           const FileDatabase &db) const {
--                                   ^
-- In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
--                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
--  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
--       void Convert(T &dest, const FileDatabase &db) const;
--            ^
--  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:121:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
--           const FileDatabase &db) const {
--                                   ^
--  In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
--                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
--  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
--       void Convert(T &dest, const FileDatabase &db) const;
--            ^
--
--[backport from upstream commit a099fe7cd331]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- code/AssetLib/Blender/BlenderScene.cpp | 7 +++++--
-- 1 file changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/code/AssetLib/Blender/BlenderScene.cpp b/code/AssetLib/Blender/BlenderScene.cpp
--index c93d913fc..9ad086fe6 100644
----- a/code/AssetLib/Blender/BlenderScene.cpp
--+++ b/code/AssetLib/Blender/BlenderScene.cpp
--@@ -49,8 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- #include "BlenderDNA.h"
-- #include "BlenderSceneGen.h"
-- 
---using namespace Assimp;
---using namespace Assimp::Blender;
--+namespace Assimp {
--+namespace Blender {
-- 
-- //--------------------------------------------------------------------------------
-- template <>
--@@ -885,4 +885,7 @@ void DNA::RegisterConverters() {
--     converters["CollectionObject"] = DNA::FactoryPair(&Structure::Allocate<CollectionObject>, &Structure::Convert<CollectionObject>);
-- }
-- 
--+} // namespace Blender
--+} //namespace Assimp
--+
-- #endif // ASSIMP_BUILD_NO_BLEND_IMPORTER
---- 
--2.34.1
--
-diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
-index 89b8d168c2..8f6d613bb4 100644
---- a/package/assimp/assimp.hash
-+++ b/package/assimp/assimp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bd32cdc27e1f8b7ac09d914ab92dd81d799c97e9e47315c1f40dcb7c6f7938c6  assimp-5.1.4.tar.gz
-+sha256  d62b58ed3b35c20f89570863a5415df97cb1b301b444d39687140fc883717ced  assimp-5.1.5.tar.gz
- sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index ead5d73bca..b5f84ef56f 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASSIMP_VERSION = 5.1.4
-+ASSIMP_VERSION = 5.1.5
- ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
- ASSIMP_LICENSE = BSD-3-Clause
- ASSIMP_LICENSE_FILES = LICENSE
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gWWFubiwgVGhvbWFzLAoKTGUgMjcvMDcvMjAyMCDDoCAxOTozNSwgWWFubiBFLiBNT1JJ
+TiBhIMOpY3JpdMKgOgo+IFRob21hcywgQWxsLAo+IAo+IE9uIDIwMjAtMDctMjcgMTc6MzggKzAy
+MDAsIFRob21hcyBQZXRhenpvbmkgc3Bha2UgdGh1c2x5Ogo+PiBPbiBNb24sIDI3IEp1bCAyMDIw
+IDEwOjQ3OjAyICswMjAwCj4+ICJZYW5uIEUuIE1PUklOIiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUu
+ZnI+IHdyb3RlOgo+Pj4gRnJvbTogSmFrdWIgU2tyenlwbmlrIDxqc2tyenlwbmlrQG5vdm9tYXRp
+Yy10ZWNoLmNvbT4KPj4+Cj4+PiBXaGVuIGxpYmdsdm5kIGlzIGVuYWJsZWQsIG1lc2EzZCBtdXN0
+IGJlIHRvbGQgc28sIHNvIGFzIGl0IGluc3RhbGxzIGl0cwo+Pj4gbGlicmFyaWVzIHdpdGggdGhl
+IHZlbmRvciBzdWZmaXggKGUuZy4gbGliRUdMX21lc2Euc28gaW5zdGVhZCBvZgo+Pj4gbGliRUdM
+LnNvKS4KPj4+Cj4+PiBBZGRpdGlvbmFsbHksIHRoZSBwcm92aWRlciAoaW4gQnVpbGRyb290IHBh
+cmxhbmNlKSBpcyBsaWJnbHZuZCwgbm90IG1lc2EzZC4KPiBbLS1TTklQLS1dCj4+PiAgY29uZmln
+IEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfR0xYCj4+PiAgCWJvb2wgIk9wZW5HTCBHTFgiCj4+
+PiAgCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfWE9SRzcKPj4+IC0Jc2VsZWN0IEJSMl9QQUNLQUdF
+X0hBU19MSUJHTAo+Pj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfSEFTX0xJQkdMIGlmICFCUjJfUEFD
+S0FHRV9MSUJHTFZORAo+Pj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCR0xWTkRfRElTUEFUQ0hf
+R0wgaWYgQlIyX1BBQ0tBR0VfTElCR0xWTkQKPj4KPj4gSSBkb24ndCBpbW1lZGlhdGVseSBzZWUg
+YSBnb29kIHNvbHV0aW9uIGZvciB0aGlzLCBidXQgSSBmaW5kIHRoYXQKPj4gc29sdXRpb24gdG8g
+YmUgcXVpdGUgYW5ub3lpbmcgOi0vCj4gCj4gQXQgZmlyc3QsIEkgdGhvdWdoIHNvIHRvbywgYW5k
+IEkgYWxzbyBsb29rZWQgZm9yIGEgYmV0dGVyIGFwcHJvYWNoLAo+IGJ1dC4uLgo+IAo+PiBJbmRl
+ZWQsIEkgdW5kZXJzdGFuZCB0aGF0IG9uY2UgbGliZ2x2bmQgaXMgZW5hYmxlZCwgdGhlIEdMLXBy
+b3ZpZGVyIGlzCj4+IGxpYmdsdm5kLCB3aGljaCBpbiB0aGUgYmFja2dyb3VuZCBpcyB1c2luZyBt
+ZXNhM2QuIFRoZSBkYW5jZSB0byBoYW5kbGUKPj4gbGliZ2x2bmQgaW4gbWVzYTNkIGlzIGFscmVh
+ZHkgbm90IG5pY2UsIGFuZCB3ZSB3b3VsZCBoYXZlIHRvIGhhdmUgdGhlCj4+IHNhbWUgZGFuY2Ug
+aW4gb3RoZXIgR0wgcHJvdmlkZXJzIHRoYXQgc3VwcG9ydCBsaWJnbHZuZC4KPiAKPiBXZWxsLCBp
+dCBpcyBub3QgX3NvXyBiYWQuIFdlIGNvdWxkIG1heWJlIG1ha2UgaXQgYSBiaXQgc2ltcGxlciwg
+d2l0aDoKPiAKPiAgICAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfR0xYCj4gICAg
+ICAgICBib29sICJPcGVuR0wgR0xYIgo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0hBU19M
+SUJHTAo+IAo+IFdlIHN0aWxsIG5lZWQgdG8gZGVjbGFyZSBlbXNhM2QgYXMgcHJvdmlkaW5nIGxp
+YmdsIGRlcGVuZGluZyBvbiB3aGV0aGVyCj4gbGliZ2x2bmQgaXMgZW5hYmxlZCwgYnV0IHdlIGNh
+biBtYWtlIGl0IGEgYml0IG1vcmUgImNvbXBhY3QiOgo+IAo+ICAgICBpZiAhQlIyX1BBQ0tBR0Vf
+TElCR0xWTkQKPiAKPiAgICAgY29uZmlnIEJSMl9QQUNLQUdFX1BST1ZJREVTX0xJQkdMCj4gICAg
+ICAgICBkZWZhdWx0ICJtZXNhM2QiIGlmIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfR0xYCj4g
+Cj4gICAgIFtFR0wgYW5kIEdMRVMgdG9vIGhlcmVdCj4gCj4gICAgIGVuZGlmCj4gCj4gQW5kIGlu
+IG1lc2EzZC5tayB0b286Cj4gCj4gICAgIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5H
+TF9HTFgpLHkpCj4gICAgIE1FU0EzRF9QUk9WSURFUyArPSAkKGlmICQoQlIyX1BBQ0tBR0VfTElC
+R0xWTkQpLCxsaWJnbCkKPiAgICAgWy4uLl0KPiAgICAgZW5kaWYKPiAKPiBCdXQgbm93LCBpbiBs
+aWJnbHZuZCwgd2UgZG9uJ3QgbmVlZCBhbnkgZXh0cmEgc3ltYm9sLCB3ZSBjYW4ganVzdCByZS11
+c2UKPiBCUjJfUEFDS0FHRV9QUk9WSURFU19MSUJHTCBldCBhbC46Cj4gCj4gICAgIGNvbmZpZyBC
+UjJfUEFDS0FHRV9MSUJHTFZORAo+ICAgICAgICAgYm9vbCAibGliZ2x2bmQiCj4gICAgICAgICBz
+ZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYMTEgaWYgQlIyX1BBQ0tBR0VfUFJPVklERVNfTElC
+R0wKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9YTElCX0xJQlhFWFQgaWYgQlIyX1BBQ0tB
+R0VfUFJPVklERVNfTElCR0wKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9YTElCX1hPUkdQ
+Uk9UTyBpZiBCUjJfUEFDS0FHRV9QUk9WSURFU19MSUJHTAo+ICAgICAgICAgc2VsZWN0IEJSMl9Q
+QUNLQUdFX0hBU19MSUJHTCBpZiBCUjJfUEFDS0FHRV9QUk9WSURFU19MSUJHTAo+IAo+ICAgICBp
+ZiBCUjJfUEFDS0FHRV9MSUJHTFZORAo+IAo+ICAgICBjb25maWcgQlIyX1BBQ0tBR0VfUFJPVklE
+RVNfTElCR0wKPiAgICAgICAgIGRlZmF1bHQgImxpYmdsdm5kIiBpZiBCUjJfUEFDS0FHRV9IQVNf
+TElCR0wKPiAKPiAgICAgZW5kaWYKPiAKPiBhbmQgaW4gbGliZ2x2bmQubWs6Cj4gCj4gICAgIGlm
+ZXEgKCQoQlIyX1BBQ0tBR0VfUFJPVklERVNfTElCR0wpLHkpCj4gICAgIExJQkdMVk5EX0RFUEVO
+REVOQ0lFUyArPSB4bGliX2xpYlhleHQgeG9yZ3Byb3RvCj4gICAgIExJQkdMVk5EX0NPTkZfT1BU
+UyArPSAtRGdseD1lbmFibGVkCj4gICAgIExJQkdMVk5EX1BST1ZJREVTICs9IGxpYmdsCj4gICAg
+IGVsc2UKPiAgICAgTElCR0xWTkRfQ09ORl9PUFRTICs9IC1EZ2x4PWRpc2FibGVkCj4gICAgIGVu
+ZGlmCj4gCj4+IE9LLCBoZXJlIGlzIHNvbWUgdmFndWUgaWRlYSBmb3IgYSBwb3NzaWJsZSBzb2x1
+dGlvbjoKPj4gIC0gV2UgaW50cm9kdWNlIGFuIGludGVybWVkaWF0ZSAibGF5ZXIiIGJldHdlZW4g
+bGliZ2wgYW5kIEdMIHByb3ZpZGVycy4KPiBbLS1TTklQLS1dCj4+IEkgKnRoaW5rKiB0aGlzIHdv
+dWxkIHBlcmhhcHMgYXZvaWQgdGhhdCBjb21wbGV4aXR5IGluIG1lc2EzZC4uLgo+PiBvYnZpb3Vz
+bHkgZm9yIGFkZGl0aW9uYWwgY29tcGxleGl0eSBpbiB0ZXJtcyBvZiBob3cgdGhlIHZpcnR1YWwK
+Pj4gcGFja2FnZXMgaW4gR0wgd29ybGQgYWxsIHdvcmsgdG9nZXRoZXIuCj4gCj4gWW91IGFyZSBy
+ZWludmVudGluZyBsaWJnbHZuZCBpbiBiZXR3ZWVuIGxpYmdsdm5kIGFuZCBhY3R1YWwgcHJvdmlk
+ZXJzLCBubz8KPiAKPiBBbHNvLCByZW1lbWJlciB0aGF0IGluZGl2aWR1YWwgR0wgcHJvdmlkZXJz
+IHdpbGwgc3RpbGwgaGF2ZSB0byBmdW5jdGlvbgo+IGFzIHByb3ZpZGVycyB3aXRob3V0IGxpYmds
+dm5kLCB3aGljaCBpcyBub3QgcmVxdWlyZWQuCj4gCj4gQnV0IEkgd291bGQgbGlrZSB3ZSBwcm9n
+cmVzcyBvbiB0aGUgdG9waWMsIGFuZCB3aGVuIHdlIGhhdmUgYSBzZWNvbmQKPiBjYW5kaWRhdGUg
+Zm9yIGxpYmdsdm5kIHVzZSwgd2UgY2FuIHJldmlzaXQgdGhlIHRvcGljIGFuZCBzZWUgaWYgd2Ug
+Y2FuCj4gb3Zlci1lbmdpbmVlciB0aGUgdGhpbmcuCj4gCj4gVXN1YWxseSwgd2Ugd2FpdCBmb3Ig
+dGhyZWUgb3IgZm91ciBjYXNlcyBiZWZvcmUgdHJ5aW5nIHRvIHNvbHZlIHRoZQo+IHByb2JsZW0g
+aW4gYSBnZW5lcmljIGZhc2hpb24sIGFuZCBzbyBJJ2QgbGlrZSB0byBkbyBoZXJlIGFzIHdlbGwu
+Cj4gQmVjYXVzZSBzbyBmYXIsIG9ubHkgdHdvIHByb3ZpZGVycyBhcmUga25vd24gdG8gd29yayB3
+aXRoIGxpYmdsdm5kOgo+IG1ld3NhM2QgYW5kIG52aWRpYS4gQVRJIG1pZ2h0IGJlIGEgdGhpcmQg
+b25lLCBidXQgSSBoYXZlIG5vIGNsdWUgYWJvdXQKPiBpdC4gQW5kIGluIHRoZSBTb0MgbGFuZCwg
+dGhlcmUgaXMgbm90IG11Y2ggdGhhdCBpcyBsaWJnbHZuZCBjb21wYXRpYmxlCj4gc28gZmFyLCBp
+ZiBhdCBhbGwuCj4gCj4gU28sIGluIHRoZSBzaG9ydC10by1tZWRpdW0gdGVybSwgd2UnZCBhdCBi
+ZXN0IGhhdmUgdGhyZWUgcHJvdmlkZXJzLiBJcwo+IHRoYXQgZW5vdWdoIHRvIGRlbHZlIGludG8g
+YSBnZW5lcmljIGluZnJhIHNvIGZhcj8gTm90IHN1cmUuLi4KCkkgaGFkIGFuIGlzc3VlIHdpdGgg
+YSBwYWNrYWdlIChvZ3JlKSB0aGF0IG5vdyB1c2UgT1BFTkdMX2dseF9MSUJSQVJZIHRvIGZpbmQg
+dGhlCiJHTFZORCAnR0xYJyBsaWJyYXJ5IgoKaHR0cHM6Ly9naXRodWIuY29tL09HUkVDYXZlL29n
+cmUvY29tbWl0L2FhOWZmYTdhNTFlNTJjYjcxNGYxYmY1YTNhMDBiOWVmOWY1YTdkYzIKaHR0cHM6
+Ly9jbWFrZS5vcmcvY21ha2UvaGVscC9sYXRlc3QvbW9kdWxlL0ZpbmRPcGVuR0wuaHRtbAoKSSBn
+dWVzcyBsaWJnbHZuZCB3aWxsIGJlIHJlcXVpcmVkIGF0IHNvbWUgcG9pbnQuCgpCZXN0IHJlZ2Fy
+ZHMsClJvbWFpbgoKCj4gCj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklOLgo+IAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
