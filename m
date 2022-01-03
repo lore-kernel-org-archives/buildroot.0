@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E11C4C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 15:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F331C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jan 2022 15:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4873381916;
-	Mon,  3 Jan 2022 15:23:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F317B400E4;
+	Mon,  3 Jan 2022 15:25:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uolE6PZCqJQN; Mon,  3 Jan 2022 15:23:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id At0Uf5p1avUM; Mon,  3 Jan 2022 15:25:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A55BD81886;
-	Mon,  3 Jan 2022 15:23:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4BDA31BF2FF
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 15:23:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED3A04011B;
+	Mon,  3 Jan 2022 15:25:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5280B1BF2FF
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 15:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44CCB60A87
- for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 15:23:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41C714028D
+ for <buildroot@lists.busybox.net>; Mon,  3 Jan 2022 15:25:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0I0-qHHuzPQ4 for <buildroot@lists.busybox.net>;
- Mon,  3 Jan 2022 15:23:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PPvEPunoDrA6 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jan 2022 15:25:25 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CD11760A7F
- for <buildroot@buildroot.org>; Mon,  3 Jan 2022 15:23:45 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0A12F40275
+ for <buildroot@buildroot.org>; Mon,  3 Jan 2022 15:25:24 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 6927CFF80B;
- Mon,  3 Jan 2022 15:23:42 +0000 (UTC)
-Date: Mon, 3 Jan 2022 16:23:41 +0100
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id A13C460011;
+ Mon,  3 Jan 2022 15:25:21 +0000 (UTC)
+Date: Mon, 3 Jan 2022 16:25:20 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20220103162341.2c6f2a55@windsurf>
-In-Reply-To: <20211231091800.629b2ad3@gmx.net>
-References: <20211230172507.30212-1-ps.report@gmx.net>
- <20211230211120.031434c7@windsurf>
- <20211231091800.629b2ad3@gmx.net>
+To: Damien Le Moal <Damien.LeMoal@wdc.com>
+Message-ID: <20220103162520.07b40bf0@windsurf>
+In-Reply-To: <ba60fa7b8380ce6c817bb5bb2ada0283752efdfe.camel@wdc.com>
+References: <20211026071728.954356-1-damien.lemoal@wdc.com>
+ <20211026071728.954356-6-damien.lemoal@wdc.com>
+ <20211230212742.030be8c5@windsurf>
+ <ba60fa7b8380ce6c817bb5bb2ada0283752efdfe.camel@wdc.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [RFC v1] package/assimp: fix namespace related
- compile failure
+Subject: Re: [Buildroot] [PATCH v5 05/10] board: Add Sipeed MAIX-bit support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,28 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "alistair@alistair23.me" <alistair@alistair23.me>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Peter,
+Hello Damien,
 
-On Fri, 31 Dec 2021 09:18:00 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Fri, 31 Dec 2021 00:39:14 +0000
+Damien Le Moal <Damien.LeMoal@wdc.com> wrote:
 
-> Same failure today (see [1]) with:
+> My apologies about the delay. I have been swamped with the kernel and other
+> projects. I kept at this a little though, mainly trying to address the elf2flt
+> issue which seems to generate unworkable binaries for Peter, while it is always
+> working for me... Really no clue what is going on so I am a little stuck with
+> that. I will work on updates addressing all of Peter's comments and see how
+> that work.
+
+No worries about the delay. I took advantage of the Christmas/New Year
+quiet period to help catch up with our patch backlog, and stumbled
+across your patch series, which is why I asked.
+
+I also saw the on-going discussion with Peter who had issues with
+non-working binaries produced by elf2flt.
+
+> >  - The readme.txt file for each defconfig should be added in the patch
+> >    adding the defconfig  
 > 
-> 	$ ./host/bin/mips-linux-gnu-g++ --version
-> mips-linux-gnu-g++ (Sourcery CodeBench Lite 2016.05-8) 5.3.0
-> 
-> And merge request accepted upstream, see [2]...
+> Hmm... It is the same procedure for all boards, only the defconfig name
+> differs. Hence I added this README file last with all board defconfigs
+> mentioned. I can add the README file with the first board and update it with
+> each patch adding a board ?
 
-Thanks for the ping on this. In the mean time, Yann merged the patch,
-so we're good!
+Yes, that would work: add the README file with the first board, and
+update it progressively for each board.
 
-Thanks a lot,
+Thanks a lot!
 
 Thomas
 -- 
