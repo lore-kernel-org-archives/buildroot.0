@@ -1,90 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDD99C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0B34C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A7AD81D34;
-	Tue,  4 Jan 2022 18:13:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8364A60B6A;
+	Tue,  4 Jan 2022 18:13:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tIdFV5_MkTxd; Tue,  4 Jan 2022 18:13:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RaXG9IuR2edZ; Tue,  4 Jan 2022 18:13:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC2A2812C6;
-	Tue,  4 Jan 2022 18:13:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7EB160D6B;
+	Tue,  4 Jan 2022 18:13:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2837D1BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA3581BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1455B40491
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E77B0414C4
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:12:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kuq9yRxC8B_A for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:09:34 +0000 (UTC)
+ with ESMTP id oIrCrVP8rLM3 for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:12:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B0A040272
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:34 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id u25so30326215edf.1
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D62B140137
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:12:24 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id k18so41119119wrg.11
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4zJQkMNiwDXPGiKzVUh2tnU+f9zfNE0DyTaDe1byhEI=;
- b=QbT6eTNuPbwBXQ06UEq5qYGIYsgp48pK5xHtK5M7HXMXBK4hsfwd/ca/2MMl2H0UpB
- 5QcN8v6mCSwr0nrfbuv43lGgJLlP7u3VynAbuKNDqUgfnhcfH5m/gN5ETgXLtmrbxaf5
- hAE2MMjKWR5KtX7rXpAizI2PZXC3Gqm+S4ssBbdpGp5vebCR2v5EPhefF8aAdSDXNBdJ
- a/rJ74YUunPxhciWmwFG0TfBZqsPTNP5IVeSITfTC5w5sr5BzM6Pwft9BkwjGH0v7f2G
- +hvfa0tRDB8z5HrcQsWPreZU0C9k0Q30B+a6LmoAgVewHAYuT66o7bP20oMRi0BXUfwD
- dORQ==
+ bh=y+oMGjDoGXHUPvTpVV4F2bg9aJiogypwrEUXy06BXfs=;
+ b=EJ2f0qla4++6PLm1Gbd1B7XxMM6rVri6zGgSeVJBvM7S/UUx/spzflFG2bS70Z3Jod
+ 9jE184InxC8/rR7djmA6iOz8ntCVpdRod1Z9YPyn4FcIbFHCCz05+Y0+QZ1nvXOJN3wu
+ uKpUpupLTmqK6o1nYzyalH6RJKqVpryPlR9H4TE54rPu15Gtpe/CTYvAheippiHrsG3x
+ GpAr7iFotqkYXveTtbAPRfSteJ4CS6+wA06pJPJv7SQv5MMtSeXp/mZZLdEGego7wcGU
+ pyZx4Q11h+9HYZYHoGBwu4mpOr4vOMHHyEi8wRcMzPMpr9YUnDYeuDoXI4dJlC+BrcSm
+ X8cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=4zJQkMNiwDXPGiKzVUh2tnU+f9zfNE0DyTaDe1byhEI=;
- b=HQNtofIfFIy1JHViX28uns/mJwNrSrQfPasxE7JzauuT0GWbj6rXizpsuJru8Eo3OT
- T1QFa8ZgjkQWad2aVNLLDIUqVZ7psQIPKGsGPDN/tToARJKhj/fHy/rWwVnQdfgHtbDC
- ZQ5so8v6+wZCMNo4Y5r+NdDD29GsK7jH3i1eHwL9p77/+G9XwHW/3Hr/Ka0QgXm/i4Ye
- aF/hrRv3dznx3GD2yjqO4bf5d1k6V+LgcX3j4YNi6hFbfgp39Fp7PhicZ24VFYWdZHRp
- ato0874K6qV6iZVN2uTELp5LFpuLOHS0QEq9jdLsFpre4BHn7N9EYE6cS3Xp/EfpQmf2
- e35Q==
-X-Gm-Message-State: AOAM531HvU0h00RFaBnVJ4NqWeTjcwkUHymMo143tQoO0WiFy45ZPFnr
- +bKHqi8netDDlJKXCfx8MfvhDg==
-X-Google-Smtp-Source: ABdhPJyQsRun5S3rNL5duBxpTpr/a1Gp5a2YescVV60Z6OddDF5QJhLedJb2PM2qArO0TN9684sWRg==
-X-Received: by 2002:a05:6402:1778:: with SMTP id
- da24mr50535775edb.144.1641319772444; 
- Tue, 04 Jan 2022 10:09:32 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id c8sm14822891edu.60.2022.01.04.10.09.31
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jan 2022 10:09:32 -0800 (PST)
-Message-ID: <8481639d-e8cd-89d2-dbf6-8d2ae54cabef@mind.be>
-Date: Tue, 4 Jan 2022 19:09:31 +0100
+ bh=y+oMGjDoGXHUPvTpVV4F2bg9aJiogypwrEUXy06BXfs=;
+ b=BUtgmOgSmYyZkkW0vmQ4lUyY3meEJjbH9/HfacFKhZ/CmhYaUAyX1YnKHk74QlVpvt
+ yj0hdeAKgGFGfgy8u1U2fHN89CdKvc/I8dhvOwXKTQ1m5deiYeBdbEjEge+0p2zdWqQg
+ eOa+utSI4+yia+gFq3pkRxWdwoWrWtcP4zKQ+xRiqoiVMUUcypHKjbnLbmLI1YUGw1Ed
+ +3sIyTA4iEGm/fy5mIzCLpqFKImlTTrtYTEiBXW5nB9v1lqGMar9Ys0OwG7fZgWrQhnY
+ VBB4k0fF6VmaoVkJYgcpAuwUtcUZqtX6yEAW5GaE5h4MAOP7WClaFnZawkORQVJ6oXkA
+ TPjw==
+X-Gm-Message-State: AOAM532BgL/qXQrgSfaNAVDW4CLReQyWhvyFA1V+uoqKmiEOSBzovmaO
+ P3FUSFwPx/lYUWmyiw1v1H+w5KMiXNg=
+X-Google-Smtp-Source: ABdhPJz4lmdDsOh9bv5skNhKffozie3e1d5/poU98N9dUmhtWyXPAHHDewlHJIbPDMUdz/gK7Zf4lw==
+X-Received: by 2002:a5d:6f02:: with SMTP id ay2mr5986776wrb.269.1641319942906; 
+ Tue, 04 Jan 2022 10:12:22 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id r1sm44067491wrz.30.2022.01.04.10.12.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Jan 2022 10:12:22 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  4 Jan 2022 19:11:06 +0100
+Message-Id: <20220104181107.3171973-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>,
- buildroot@buildroot.org
-References: <20220103165451.2769-1-florent.aumaitre@medianesysteme.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220103165451.2769-1-florent.aumaitre@medianesysteme.com>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-pyqt5: Fix parallel
- build
+Subject: [Buildroot] [PATCH 1/2] package/liburing: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,73 +85,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>
+Cc: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This is the io_uring library, liburing. liburing provides helpers to
+setup and teardown io_uring instances, and also a simplified interface
+for applications that don't need (or want) to deal with the full kernel
+side implementation.
 
+https://git.kernel.dk/cgit/liburing
 
-On 03/01/2022 17:54, Florent AUMAITRE wrote:
-> This patch fix build of python-pyqt5 package when parallel build is used
-
-  This explanation was a bit too terse. I tried to invent something that is more 
-complete:
-
-     pyqt5 uses qmake internally, but is python package rather than a qmake
-     package. Therefore, we need to manually apply the same fixup as for
-     qmake packages.
-
-     Without this, top-level parallel build may fail because dependencies are
-     looked for in the qt5 per-package staging directory instead of the
-     python-pyqt5 one.
-
-Hopefully that's more or less correct :-)
-
-> 
-> Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
-> 
-> Changes v1 -> v2:
->    - Re-use the existing QT5_INSTALL_QT_CONF macro from package/qt5/qt5.mk  (suggested by Thomas Petazzoni)
-
-  This should go below a --- line, i.e.:
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/liburing/Config.in     | 13 ++++++++++++
+ package/liburing/liburing.hash |  8 ++++++++
+ package/liburing/liburing.mk   | 36 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 59 insertions(+)
+ create mode 100644 package/liburing/Config.in
+ create mode 100644 package/liburing/liburing.hash
+ create mode 100644 package/liburing/liburing.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 444e58714c..5017dde56e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -904,6 +904,7 @@ F:	package/librsync/
+ F:	package/libsoup/
+ F:	package/libsoxr/
+ F:	package/libupnp/
++F:	package/liburing/
+ F:	package/libv4l/
+ F:	package/libxslt/
+ F:	package/mbedtls/
+diff --git a/package/Config.in b/package/Config.in
+index e09e4aad3f..1f3ec9a334 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2001,6 +2001,7 @@ menu "Other"
+ 	source "package/libuci/Config.in"
+ 	source "package/libunwind/Config.in"
+ 	source "package/liburcu/Config.in"
++	source "package/liburing/Config.in"
+ 	source "package/libuv/Config.in"
+ 	source "package/lightning/Config.in"
+ 	source "package/linux-pam/Config.in"
+diff --git a/package/liburing/Config.in b/package/liburing/Config.in
+new file mode 100644
+index 0000000000..898d95cfa6
+--- /dev/null
++++ b/package/liburing/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBURING
++	bool "liburing"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
++	help
++	  This is the io_uring library, liburing. liburing provides
++	  helpers to setup and teardown io_uring instances, and also a
++	  simplified interface for applications that don't need (or
++	  want) to deal with the full kernel side implementation.
++
++	  https://git.kernel.dk/cgit/liburing
++
++comment "liburing needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/liburing/liburing.hash b/package/liburing/liburing.hash
+new file mode 100644
+index 0000000000..56e90d71cc
+--- /dev/null
++++ b/package/liburing/liburing.hash
+@@ -0,0 +1,8 @@
++# Locally calculated
++sha256  df7c8fd05fd39da622b2814e06f815f11f1beb429487a4330eed64bb7f353dbf  liburing-2.1.tar.bz2
++
++# Hash for license files
++sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
++sha256  d0b225f17ef2d05d5cda6b25b2dc334ef6f5f12537c20edf6e391852a095ec19  LICENSE
++sha256  97d62ff5d7cf0b1cef34c33a89877352911278ca4ac1c6c4f24a835baa5ea10b  README
+diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
+new file mode 100644
+index 0000000000..a977e74b4f
+--- /dev/null
++++ b/package/liburing/liburing.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# liburing
++#
++################################################################################
++
++LIBURING_VERSION = 2.1
++LIBURING_SOURCE = liburing-$(LIBURING_VERSION).tar.bz2
++LIBURING_SITE = https://git.kernel.dk/cgit/liburing/snapshot
++LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
++LIBURING_LICENSE_FILES = COPYING COPYING.GPL LICENSE README
++LIBURING_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBURING_MAKE_OPTS += ENABLE_SHARED=0
++else
++LIBURING_MAKE_OPTS += ENABLE_SHARED=1
++endif
++
++define LIBURING_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
++endef
++
++define LIBURING_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LIBURING_MAKE_OPTS) -C $(@D)/src
++endef
++
++define LIBURING_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++define LIBURING_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
+-- 
+2.34.1
 
-  That way, it is not part of the git history.
-
-  Applied to master with those things changed, thanks.
-
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
-> ---
->   package/python-pyqt5/python-pyqt5.mk | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-> index 8f28c90d15..b05043563e 100644
-> --- a/package/python-pyqt5/python-pyqt5.mk
-> +++ b/package/python-pyqt5/python-pyqt5.mk
-> @@ -152,6 +152,11 @@ define PYTHON_PYQT5_GENERATE_QTDETAIL
->   	)
->   endef
->   
-> +# The file "qt.conf" can be used to override the hard-coded paths that are
-> +# compiled into the Qt library. We need it to make "qmake" relocatable and
-> +# tweak the per-package install pathes
-> +PYTHON_PYQT5_PRE_CONFIGURE_HOOKS += QT5_QT_CONF_FIXUP
-> +
->   PYTHON_PYQT5_CONF_OPTS = \
->   	--bindir $(TARGET_DIR)/usr/bin \
->   	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages \
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
