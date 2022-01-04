@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D8F0C43219
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 22:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 358BBC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 22:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69B044098D;
-	Tue,  4 Jan 2022 22:04:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE2FC4152D;
+	Tue,  4 Jan 2022 22:04:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PkEGvBxtVs0G; Tue,  4 Jan 2022 22:04:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8kOskkLQyWln; Tue,  4 Jan 2022 22:04:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1169B405E7;
-	Tue,  4 Jan 2022 22:04:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B7A81BF855
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 22:03:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 433BD41528;
+	Tue,  4 Jan 2022 22:04:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9568F1BF855
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 22:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82EB04093B
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 22:03:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92EBD41524
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 22:03:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JImedQAQSSQz for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 22:03:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I2JFPGPyIPFb for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 22:03:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4C4A5405E7
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 22:03:50 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id e5so78894458wrc.5
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 14:03:50 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4EF3A410AC
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 22:03:51 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id k18so42179703wrg.11
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 14:03:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=yH3thwqTA5V04rxWsdk9FYFBQPgbKffyrYU3cIXwWtE=;
- b=SONJel82YNivgcvMsulJtXCPy3+ErerkNO8xkZjcZto3nQQEd2NI4wtiOgS3loHbez
- W2SbKZigFzw2bj/uGn1++eiYUyNkwbnjWTyEXFGZBxX+i/7wsNWMzlhHnYn04Nb/nApK
- k23uGecj6XU58cJijE6DdXr3nxebUisFQhOrhSvkvtBlHFBp3lVHTr758DsoOZ7J/Z4W
- MAuSH/EWBQcY3N+3kTUr8lSDKaSxZSuzM2Tn+lMThXkB/BCYiuGuzqkcYczibU3vgFwK
- IdTvbuHzsZSNCe2bjbeKGuCV8qCrvbU/skztZHOMUHPTUm1PSTKAynDrt4uE+YaB6cwv
- w5uw==
+ bh=cgQFN5C16bX1BKPB7yFfRb1YOOpS8Z8aTWqdIxfUSUE=;
+ b=BMZ7SXDjrjEPwBfVcPr20xDDRUn4IthB0vVbq1MHmB4fRuKjx9/z+Ha5JVrQb6Rq/X
+ HHJo+Z84s2RdUPA4h1rXXCMKOOFTzn+pyHfIXDAITrXnopG2k9vLNnnJTj2rb9y5d0v+
+ wpdh9zdS8i4Gaefc0PvPJpkPhQrimxuKT8F27HSnOsVZxub7kBwVwHOonTUDHKSoHnMJ
+ GNPzNu34zwwg3Q7BMB5/25Omlr2ALuRMZhQD2EvQe7aG63LnoouReRCEiQtCtiEZfRfS
+ SxfCl1rmlDd8nx+ie7+TdwhPwHk598zoELjqv0qxxI9Xb5EDIlm5HLdu86l6USKpaXO/
+ kHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=yH3thwqTA5V04rxWsdk9FYFBQPgbKffyrYU3cIXwWtE=;
- b=G59QuaiPeUCcaBzUxiXp/n0ll6uGUNyI6qj8/Df17FA7ocdJRm79grFPyskcxNX+VZ
- dTXSkD6rQhDyR1XiGv+QsbB5v7Iro9vz4sTNWlLFWuwo9KhET+dRoCPzXXLPpij1nBSU
- RHTfJUp1QPykYud+zJZPa1n8o7xyLCSP2OSPhGNbC+vGQ8sYptA2myqrdDEEh+Gd6M3e
- njB/M7NPozVLVSvzYUvQkOMOWfZ14CkBWlp8coDU+KeB+N36zpb4TzAR4tips8ZjyhZp
- eOJ6LsAM3O0Ntnt973fjKCMGoXQHQPNRHwPnsk4RMmI1ZXY5SxXPR5DgWwg6fdw+v1Gh
- DtAQ==
-X-Gm-Message-State: AOAM531t4ZA2cP5GHLO4cAjjGSlNQhYlojRwp7zhgDivAVdx//zGnlFs
- A2fAnO8yZsUETIwNpgcVtK+3QsY1SaM=
-X-Google-Smtp-Source: ABdhPJwS3r44ajMKEMp+jXI+tT7Iy+d9PscG05IVhXHeexflA1TmNpONsuARZ/g3UHci9N/bhWtozA==
-X-Received: by 2002:a5d:6088:: with SMTP id w8mr44968670wrt.85.1641333828214; 
- Tue, 04 Jan 2022 14:03:48 -0800 (PST)
+ bh=cgQFN5C16bX1BKPB7yFfRb1YOOpS8Z8aTWqdIxfUSUE=;
+ b=slyDT0ECRdyJYukAV7+tqnjiugWA1zH6RGnHoVvNqFY56QMEslsaOIDx6fEgLf7A0d
+ fwDCR5byAEzYic4B3imClj0/GbpEwOvam2dNUrirnnW3WI2Y6MnqeMG3FOVI64DnQhVF
+ YQDM4I9hAJc+MuKRfHP/qshTB58QSp9K50VmXieLStMNb4blOfpfwfV54CKszf+a60+S
+ GF4i/TGDXrGCRTzlKarkgODjqUUkxA4+ZVySEazLgEDffA/h0Buwl0JELsNMjLyxjFUY
+ oUwHA7hUK+qVr50wner9FxGwu0imRwGlebqvYfwrDE/UKDyvnYZmKjtxO9GR70EFUf3q
+ rBBA==
+X-Gm-Message-State: AOAM530KqUN4KaVKLj+AUOlEpTWFFBQXKc+MGxmn17/Fugq/id5GYP6q
+ QZoDF4gDNAe00yUl7U5baX8vq7wVX0Q=
+X-Google-Smtp-Source: ABdhPJxZBowrB4Tu4y3rq9PNPkNpOnZvnbcCOHnxQQeU/O5du0Pwde4S/mpsTtBmR75zytEHT0+CbA==
+X-Received: by 2002:a5d:588c:: with SMTP id n12mr44667204wrf.56.1641333829485; 
+ Tue, 04 Jan 2022 14:03:49 -0800 (PST)
 Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
  [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id m5sm647543wml.14.2022.01.04.14.03.47
+ by smtp.gmail.com with ESMTPSA id m5sm647543wml.14.2022.01.04.14.03.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Jan 2022 14:03:47 -0800 (PST)
+ Tue, 04 Jan 2022 14:03:49 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Jan 2022 23:02:41 +0100
-Message-Id: <20220104220245.3706221-2-fontaine.fabrice@gmail.com>
+Date: Tue,  4 Jan 2022 23:02:42 +0100
+Message-Id: <20220104220245.3706221-3-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220104220245.3706221-1-fontaine.fabrice@gmail.com>
 References: <20220104220245.3706221-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/6] package/libselinux: bump to version 3.3
+Subject: [Buildroot] [PATCH 3/6] package/libsemanage: bump to version 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,97 +95,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop third patch (already in version)
-- Update indentation in hash file (two spaces)
+Update indentation in hash file (two spaces)
 
 https://github.com/SELinuxProject/selinux/releases/tag/3.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...s-getseuser.c-fix-build-with-gcc-4.8.patch | 47 -------------------
- package/libselinux/libselinux.hash            |  4 +-
- package/libselinux/libselinux.mk              |  2 +-
- 3 files changed, 3 insertions(+), 50 deletions(-)
- delete mode 100644 package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
+ package/libsemanage/libsemanage.hash | 4 ++--
+ package/libsemanage/libsemanage.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch b/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 645e84b236..0000000000
---- a/package/libselinux/0003-libselinux-utils-getseuser.c-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 5c4ddfc88f0a7f10a5e9edddbdbe8e8ef1f9945e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 10 Jun 2021 07:38:02 +0200
--Subject: [PATCH] libselinux/utils/getseuser.c: fix build with gcc 4.8
--
--Fix the following build failure with gcc 4.8 which is raised since
--version 3.2 and
--https://github.com/SELinuxProject/selinux/commit/156dd0de5cad31e7d437c64e11a8aef027f0a691
--
--getseuser.c:53:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < n; i++)
--  ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/37eb0952a763256fbf6ef3c668f6c95fbdf2dd35
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/SELinuxProject/selinux/pull/289]
-----
-- libselinux/utils/getseuser.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/utils/getseuser.c b/utils/getseuser.c
--index ce1b7b27..34f2e887 100644
----- a/utils/getseuser.c
--+++ b/utils/getseuser.c
--@@ -9,7 +9,7 @@ int main(int argc, char **argv)
-- {
-- 	char *seuser = NULL, *level = NULL;
-- 	char **contextlist;
---	int rc, n;
--+	int rc, n, i;
-- 
-- 	if (argc != 3) {
-- 		fprintf(stderr, "usage:  %s linuxuser fromcon\n", argv[0]);
--@@ -50,7 +50,7 @@ int main(int argc, char **argv)
-- 	if (n == 0)
-- 		printf("no valid context found\n");
-- 
---	for (int i = 0; i < n; i++)
--+	for (i = 0; i < n; i++)
-- 		printf("Context %d\t%s\n", i, contextlist[i]);
-- 
-- 	freeconary(contextlist);
---- 
--2.30.2
--
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index 797b978ee1..a2e0083f7b 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 117fd40d6a..1f333aac30 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,5 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 df758ef1d9d4811051dd901ea6b029ae334ffd7c671c128beb16bce1e25ac161 libselinux-3.2.tar.gz
-+sha256  acfdee27633d2496508c28727c3d41d3748076f66d42fccde2e6b9f3463a7057  libselinux-3.3.tar.gz
+-sha256 d722a55ca4fe2d4e2b30527720db657e6238b28079e69e2e4affeb8e733ee511 libsemanage-3.2.tar.gz
++sha256  84d0ec5afa34bbbb471f602d8c1bf317d12443d07852a34b60741d428d597ce8  libsemanage-3.3.tar.gz
  
  # Hash for license file
--sha256 86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364 LICENSE
-+sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 0f36db1cfd..c1e90130d2 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index bbe976a2c9..db9f16bb6a 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSELINUX_VERSION = 3.2
-+LIBSELINUX_VERSION = 3.3
- LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
+-LIBSEMANAGE_VERSION = 3.2
++LIBSEMANAGE_VERSION = 3.3
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
