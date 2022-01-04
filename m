@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74C9C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDACC433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A5E860C00;
-	Tue,  4 Jan 2022 18:10:32 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bJUzkPDuyr9Y; Tue,  4 Jan 2022 18:10:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9ECB460B38;
-	Tue,  4 Jan 2022 18:10:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 80FD81BF9B2
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0638840963
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9029540955;
+	Tue,  4 Jan 2022 18:10:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZQyV6eesOyzq for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Di71I8f8f1m1; Tue,  4 Jan 2022 18:10:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A5B3B4093A;
+	Tue,  4 Jan 2022 18:10:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 29ADE1BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B172824DF
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:02 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hs7A5iYpDnmQ for <buildroot@lists.busybox.net>;
  Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FB704093A
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E196981D4F
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 78A3C8324A; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
+ id 5622482BA6; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Tue, 4 Jan 2022 18:49:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7f1acbea1dc7ad7c6cbb4dfc2aafd4bd428b416e
-X-Git-Newrev: 7c1f6a6a7ba24e883fe089cd09cbc61a88f8508d
+X-Git-Oldrev: 5ba47c2d4e8c84b57d52d12b60c9efa983eca98a
+X-Git-Newrev: 48f790099399e3f74e4487148de437881fee990c
 X-Patchwork-Hint: ignore
-Message-Id: <20220104180257.78A3C8324A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/alsa-utils: bump to version 1.2.6
+Message-Id: <20220104180257.5622482BA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zchunk: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c1f6a6a7ba24e883fe089cd09cbc61a88f8508d
+commit: https://git.buildroot.net/buildroot/commit/?id=48f790099399e3f74e4487148de437881fee990c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/alsa-project/alsa-utils/releases/tag/v1.2.6
-https://github.com/alsa-project/alsa-utils/releases/tag/v1.2.5.1
-https://github.com/alsa-project/alsa-utils/releases/tag/v1.2.5
+Fix the following build failure raised since the addition of the package
+in commit c618da772df32679fdd338b99f44133655c9113f:
+
+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: src/zck_gen_zdict.p/zck_gen_zdict.c.o: in function `main':
+zck_gen_zdict.c:(.text.startup+0x254): undefined reference to `fork'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/582b994372435b8c35a56345c15bd0ffc722af79
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/alsa-utils/alsa-utils.hash | 2 +-
- package/alsa-utils/alsa-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zchunk/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index dda009c1af..c2d3ee9bb5 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  98ffc2d599de0577d423a48fa5f20a992ca0b82d812ed1f2e58ade49ac6da426  alsa-utils-1.2.4.tar.bz2
-+sha256  6a1efd8a1f1d9d38e489633eaec1fffa5c315663b316cab804be486887e6145d  alsa-utils-1.2.6.tar.bz2
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 2603e52f18..c1478bf847 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_UTILS_VERSION = 1.2.4
-+ALSA_UTILS_VERSION = 1.2.6
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
- ALSA_UTILS_LICENSE = GPL-2.0
+diff --git a/package/zchunk/Config.in b/package/zchunk/Config.in
+index 2c8db434ce..2d2a78a210 100644
+--- a/package/zchunk/Config.in
++++ b/package/zchunk/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ZCHUNK
+ 	bool "zchunk"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LIBCURL
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
