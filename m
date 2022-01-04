@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3291C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:19:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591F5C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85E48813D5;
-	Tue,  4 Jan 2022 18:19:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1C1B40986;
+	Tue,  4 Jan 2022 18:21:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KEOiVN2PVyDB; Tue,  4 Jan 2022 18:19:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fB1BKUQCYEdd; Tue,  4 Jan 2022 18:21:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC8B58136B;
-	Tue,  4 Jan 2022 18:19:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E5EA1BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:18:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FB4A4098F;
+	Tue,  4 Jan 2022 18:21:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02F2D1BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:21:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BE3A60B6A
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:18:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E426E40547
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:21:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1uZ4nOmKhEbv for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:18:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bn8GKnBA_ahw for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:21:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5471460B38
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:18:55 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id v6so16159932wra.8
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:18:55 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7094440236
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:21:33 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id e5so77876231wrc.5
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:21:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KluYhwpt7v+mFzynCAChh8MDAZdLI5VmUVFFvlZuRPo=;
- b=LPeQQZhjj2UUgLw3Qn/378wCoH5+LX5uihw402FXSWFbDxCX1cgDQUO6Z4iXQCc57W
- UNsBAQ739Qvu6SCvH57g8/0bjIhyZaqDKvmJ1aab6pLw3SqTn11wOK12/gDvUoPFkNZS
- zsg5oB8XQ+BAtfQxm7DT+O2vEuijZIX9b/tLevmvlZKbGeBMtoXrcMXTFbAGB66msFWm
- JiPadzklhI7NTKVpTh0vYtJjDcdKsBVQLkcm4I2oBPxpLasDp2BTp+nb5mluRSVXQUq2
- w0U050dFvpoRE9VkXOe9HOSJzWUI/cAUra5kya1FlA7F0+ImntKrC4fcZQHM1PwSq8Ch
- lIRw==
+ bh=a0IN/QxrHhFOzI7N+MtdgF6a5eCWOO6MMScUsnSm4pM=;
+ b=pj3ybcel021tuyC5Yf+mfsAIS/OKLUFvL5Fh5fN+uUVcDLsoMfho2qGElupsbM6QOP
+ ouufWUfnLdzK+w5H6mMRK2O/Gi9Fdb5iEUFcLM+dzVsTR5YS4Ts5jNqHveZbowRaSZGU
+ yALK1+bHGmBrulk4OuoXd++TSMLYu0ql9pIe36te1v4zbuCZBkYbPx3WZ+6mIGdFOqgI
+ as2fDpkt3MBDWWiTEy11KvAFL9Vj1avYfLEtFRGwOpBE0d+h+Q6Max4qryLV2M8ymc3T
+ kWIkYBjDBS7K3DpBH95gKmUwRO7x97NliSU9rG3K+6MeLNpHhkxrnT1qtYSxucSi/fcr
+ 5bhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=KluYhwpt7v+mFzynCAChh8MDAZdLI5VmUVFFvlZuRPo=;
- b=EKn1Ij4qgbAyvk3H3wWoCAhooF6P2qAmkG1ufljcV/5vg4YJvpzveCVZd0fV5qPGiU
- 0N+XX8stfy16/ol6XuDqBx7TiLH4+Nf8ftS1nJEMLqxhsmImzA9ZUfEl4M9j9C/L/mPj
- THn2k4lnWnfkoERpruFPPc/yrai/4UsPwxGLBRtaqMYNvC+T1p6eODCH/cVKTJxs/rzd
- wsfMThCwrfWqW6Srx9tlHt7sR1rQ1Hp/fI6CM1SCMapLpwueeSU2nr3V7Qehmxo95t0o
- 0soGL5XzOXhSjbCitddM+iuG5yFWHKWjZk7zK00Xoy5OpG0K4t0s12jPN1+uJQv9oB1l
- 1vvA==
-X-Gm-Message-State: AOAM533nVSiColfw3yldm28wdye3VhyZ8S0K36ySceVkuOTBSTS4OJyr
- ish1BO29hg2D7ZJt2B3Qk2mbIkUTf4I=
-X-Google-Smtp-Source: ABdhPJwwr3Anw92+Ep+JkWq9wfK0MQ63Wk9hq5dJ1fsKf4kVzhvYBsotEn10VqIOcjJg2+7HiX0rzw==
-X-Received: by 2002:a5d:6d0a:: with SMTP id e10mr43564850wrq.65.1641320333470; 
- Tue, 04 Jan 2022 10:18:53 -0800 (PST)
+ bh=a0IN/QxrHhFOzI7N+MtdgF6a5eCWOO6MMScUsnSm4pM=;
+ b=DARitDEUI7xH9ikWVe6Icl9+sg4ghNJe7/YKvcF/Mt5HjK1Vl8gNroULLMToaLGeHQ
+ B7+vJMs/gJHab/MJiDiw3Vj1eUgnYA0UxqEJTwUlj1OxcP1lJTT829YlmGIatKNIKXKc
+ J41spP21dDj6h1U/9wYDWlm3zFfy8CtTFsFPBCNke3U29vowUGdFzvntPBwEKXws6naM
+ QTdyGQvcVEkHkCNx2glwSQAqAsmV/Jc6V0dpeAcTYVpLHaX67f7loSI7IhVMYfMq9tHh
+ LmS20mbPK1hVmVrhVF3GGahKTqiwyB4Ouv2Ye4SizuDX1aUhTr95nHEOzGXyzO4mBxuV
+ j6Xg==
+X-Gm-Message-State: AOAM532Kr1H+4OoAiGggKQ7G3+0wlLZbUcRWEJs/ZAednQ025Lqnkp85
+ iRKySSdcrf0nb7m6MT+6BUe4jwdO6AU=
+X-Google-Smtp-Source: ABdhPJzwXnAazfiqidYey8ulf3fLLoK78ecLvywabRubTjWdQfdWC1bbU0Uj/yBZ+elbhc6jZSzh4g==
+X-Received: by 2002:adf:dcc9:: with SMTP id x9mr42729848wrm.122.1641320492085; 
+ Tue, 04 Jan 2022 10:21:32 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id m17sm38200753wrz.91.2022.01.04.10.18.53
+ by smtp.gmail.com with ESMTPSA id a3sm3295329wri.89.2022.01.04.10.21.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Jan 2022 10:18:53 -0800 (PST)
+ Tue, 04 Jan 2022 10:21:31 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Jan 2022 19:17:57 +0100
-Message-Id: <20220104181757.3207568-1-fontaine.fabrice@gmail.com>
+Date: Tue,  4 Jan 2022 19:20:37 +0100
+Message-Id: <20220104182037.3292464-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/rpi-rgb-led-matrix: bump to version
- a56338db0f003d5236f2ce98c73a591d64a70852
+Subject: [Buildroot] [PATCH 1/1] package/openipmi: bump to version 2.0.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,109 +85,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- This bump will also fix the following build failure on musl raised
-  since the addition of the package in commit
-  e821078031e14df69e5142f23e9cb7b5a1ea0e77:
-
-text-scroller.cc: In function 'int main(int, char**)':
-text-scroller.cc:220:3: error: 'uint' was not declared in this scope; did you mean 'rint'?
-  220 |   uint frame_counter = 0;
-      |   ^~~~
-      |   rint
-
-Fixes:
- - http://autobuild.buildroot.org/results/1a230bd46eac35081bdb6fe9aaacbb7b62ea6b73
+- Refresh patch and send it upstream
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch  | 46 -------------------
- .../rpi-rgb-led-matrix.hash                   |  2 +-
- .../rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk  |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
- delete mode 100644 package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch
+ ...01-Avoid-searching-host-library-path.patch | 27 ++++++++++---------
+ package/openipmi/openipmi.hash                | 12 ++++-----
+ package/openipmi/openipmi.mk                  |  2 +-
+ 3 files changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch b/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch
-deleted file mode 100644
-index f7a92f5fb2..0000000000
---- a/package/rpi-rgb-led-matrix/0001-Rename-LDFLAGS-to-RGB_LDFLAGS.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 056a189836a82b832cd8e6f886cb2090344bfa08 Mon Sep 17 00:00:00 2001
--From: Grzegorz Blach <grzegorz@blach.pl>
--Date: Sat, 29 Aug 2020 20:48:57 +0200
--Subject: [PATCH] Rename LDFLAGS to RGB_LDFLAGS.
--
--This change allows additional flags to be added to the linker
--from the command line.
--
--Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-----
-- utils/Makefile | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/utils/Makefile b/utils/Makefile
--index e751adc..e704442 100644
----- a/utils/Makefile
--+++ b/utils/Makefile
--@@ -12,7 +12,7 @@ RGB_INCDIR=$(RGB_LIB_DISTRIBUTION)/include
-- RGB_LIBDIR=$(RGB_LIB_DISTRIBUTION)/lib
-- RGB_LIBRARY_NAME=rgbmatrix
-- RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
---LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
--+RGB_LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
-- 
-- # Imagemagic flags, only needed if actually compiled.
-- MAGICK_CXXFLAGS?=$(shell GraphicsMagick++-config --cppflags --cxxflags)
--@@ -28,13 +28,13 @@ $(RGB_LIBRARY): FORCE
-- 	$(MAKE) -C $(RGB_LIBDIR)
-- 
-- text-scroller: text-scroller.o $(RGB_LIBRARY)
---	$(CXX) $(CXXFLAGS) text-scroller.o -o $@ $(LDFLAGS)
--+	$(CXX) $(CXXFLAGS) text-scroller.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS)
-- 
-- led-image-viewer: led-image-viewer.o $(RGB_LIBRARY)
---	$(CXX) $(CXXFLAGS) led-image-viewer.o -o $@ $(LDFLAGS) $(MAGICK_LDFLAGS)
--+	$(CXX) $(CXXFLAGS) led-image-viewer.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS) $(MAGICK_LDFLAGS)
-- 
-- video-viewer: video-viewer.o $(RGB_LIBRARY)
---	$(CXX) $(CXXFLAGS) video-viewer.o -o $@ $(LDFLAGS) $(AV_LDFLAGS)
--+	$(CXX) $(CXXFLAGS) video-viewer.o -o $@ $(LDFLAGS) $(RGB_LDFLAGS) $(AV_LDFLAGS)
-- 
-- %.o : %.cc
-- 	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) -c -o $@ $<
---- 
--2.24.3 (Apple Git-128)
--
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-index 3b1cb5fd76..265e4c4249 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5efc0293bb180b958079910e968721ff2dac291c435d065ecec9ceba8589567d  rpi-rgb-led-matrix-63e3e7ffdbe88223cc80e1faa508bc4f3cf2bea4.tar.gz
-+sha256  490ca6fa0c81451f2472b4aa85796a876790f2e212bf0882e3bb7caf5c47e2c3  rpi-rgb-led-matrix-a56338db0f003d5236f2ce98c73a591d64a70852.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-index e436755121..499fb408c2 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
+diff --git a/package/openipmi/0001-Avoid-searching-host-library-path.patch b/package/openipmi/0001-Avoid-searching-host-library-path.patch
+index 44a57dcfb4..15b4510f67 100644
+--- a/package/openipmi/0001-Avoid-searching-host-library-path.patch
++++ b/package/openipmi/0001-Avoid-searching-host-library-path.patch
+@@ -10,6 +10,9 @@ $(libdir) in the library search path.
+ 
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ Signed-off-by: Joel Stanley <joel@jms.id.au>
++[Fabrice: refresh patch for 2.0.32]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/openipmi/patches/35]
+ ---
+  cmdlang/Makefile.am | 3 +--
+  unix/Makefile.am    | 6 ++----
+@@ -19,13 +22,12 @@ diff --git a/cmdlang/Makefile.am b/cmdlang/Makefile.am
+ index 264ee12be79f..0b3843784656 100644
+ --- a/cmdlang/Makefile.am
+ +++ b/cmdlang/Makefile.am
+-@@ -15,8 +15,7 @@ libOpenIPMIcmdlang_la_SOURCES = cmdlang.c cmd_domain.c cmd_entity.c cmd_mc.c \
+- libOpenIPMIcmdlang_la_LIBADD = -lm \
++@@ -15,7 +15,7 @@ libOpenIPMIcmdlang_la_SOURCES = cmdlang.c cmd_domain.c cmd_entity.c cmd_mc.c \
+  	$(top_builddir)/utils/libOpenIPMIutils.la \
+  	$(top_builddir)/lib/libOpenIPMI.la
+--libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir)
+-+libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION)
++ libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-L$(libdir) -no-undefined
+++	-no-undefined
+  
+  bin_PROGRAMS = openipmish
+  
+@@ -33,20 +35,19 @@ diff --git a/unix/Makefile.am b/unix/Makefile.am
+ index 5128839dad13..bd0f897ba8d6 100644
+ --- a/unix/Makefile.am
+ +++ b/unix/Makefile.am
+-@@ -10,14 +10,12 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
+- libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
++@@ -10,12 +10,12 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
+  libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
+  	$(top_builddir)/utils/libOpenIPMIutils.la $(RT_LIB)
+--libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir)
+-+libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION)
++ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-L$(libdir) -no-undefined
+++	-no-undefined
+  
+  libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
+  libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
+  	$(GDBM_LIB) $(RT_LIB)
+--libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
+--	-L$(libdir)
+-+libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION)
++ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-L$(libdir) -no-undefined
+++	-no-undefined
+  
+  noinst_HEADERS = heap.h
+  
+diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
+index 2ec9dd31af..eded076ade 100644
+--- a/package/openipmi/openipmi.hash
++++ b/package/openipmi/openipmi.hash
+@@ -1,8 +1,8 @@
+ # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
+-sha1 be0c87743a38e2fa00586df931f021c0b480385b OpenIPMI-2.0.28.tar.gz
+-md5 ba37f08e306062ec73c7ed2a2bd4d5f4 OpenIPMI-2.0.28.tar.gz
++sha1  73d7dce4312b006983b11367e4a43d4ec52cf888  OpenIPMI-2.0.32.tar.gz
++md5  532404c9df7d0e8bde975b95b9e6775b  OpenIPMI-2.0.32.tar.gz
+ # Locally computed
+-sha256	8e8b1de2a9a041b419133ecb21f956e999841cf2e759e973eeba9a36f8b40996	OpenIPMI-2.0.28.tar.gz
+-sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
+-sha256	185323a62589e7ee80f86bf2ea29caad9a09fdda0ea3f1c00db8b778c7edf60e	COPYING.BSD
+-sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING.LIB
++sha256  f6d0fd4c0a74b05f80907229d0b270f54ca23294bcc11979f8b8d12766786945  OpenIPMI-2.0.32.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  185323a62589e7ee80f86bf2ea29caad9a09fdda0ea3f1c00db8b778c7edf60e  COPYING.BSD
++sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING.LIB
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index 3240b89894..ad2f2d2f4f 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_RGB_LED_MATRIX_VERSION = 63e3e7ffdbe88223cc80e1faa508bc4f3cf2bea4
-+RPI_RGB_LED_MATRIX_VERSION = a56338db0f003d5236f2ce98c73a591d64a70852
- RPI_RGB_LED_MATRIX_SITE = $(call github,hzeller,rpi-rgb-led-matrix,$(RPI_RGB_LED_MATRIX_VERSION))
- RPI_RGB_LED_MATRIX_LICENSE = GPL-2.0
- RPI_RGB_LED_MATRIX_LICENSE_FILES = COPYING
+-OPENIPMI_VERSION = 2.0.28
++OPENIPMI_VERSION = 2.0.32
+ OPENIPMI_SITE = https://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
+ OPENIPMI_SOURCE = OpenIPMI-$(OPENIPMI_VERSION).tar.gz
+ OPENIPMI_LICENSE = LGPL-2.0+, GPL-2.0+, BSD-3-Clause
 -- 
 2.34.1
 
