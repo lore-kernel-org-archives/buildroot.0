@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 732B0C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 20:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D00C6C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 20:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA31381A3E;
-	Tue,  4 Jan 2022 20:42:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4581E60EAE;
+	Tue,  4 Jan 2022 20:49:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jRwYXb6YCGry; Tue,  4 Jan 2022 20:42:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y3uzAEBK6xL4; Tue,  4 Jan 2022 20:49:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45F80818E6;
-	Tue,  4 Jan 2022 20:42:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 36C581BF44A
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:42:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CFB560E47;
+	Tue,  4 Jan 2022 20:49:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FB3D1BF44A
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 241C1405BD
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:42:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A84040308
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:49:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 52MQctW_BCjK for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 20:42:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dWbestqyMtFQ for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 20:49:26 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 162884033A
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 20:42:47 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id s1so78668289wrg.1
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 12:42:47 -0800 (PST)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 354BB40201
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 20:49:26 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id h1so24635918pls.11
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 12:49:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2EFQE3CidPxpW1WfRImOckE2zX2cIpWNl2gBgKWnW8Y=;
- b=pTe5RhrQiO+1sD//yCv6XDqb1TkHRg1x6XDuXMn2miCE8BSzpJk+Ss7ApXNTtkhUBD
- jT6O94cjdxFlsMCWm9WaHQsTDc242d0uqKf8xR6h4lchiYyQgN3KRTNS/F70KdGn7YQ8
- Z7vrIftAUL6ptR4O+pEptLMmGw69uAOGFmO2GYz1aiGiQsZVllgQO7gVhW16rXubGcN4
- 4Bkfw9RVzHpO6DRSfYnRfThU9RI0Jlqp2COA7CDHQ5uWP/udixGRlEHomjuOcuJ2wR5h
- KWFzl6Yt1vXETb4RWc5iqDTLQBgCoPl0dsb+tsnICwwThCbvQ0+ry3F51eC/X1bWhr21
- EcKA==
+ bh=gEFgGzwb6rjmz3wNsbSdHwA4FmBLjB5MTG8g6jU8zm4=;
+ b=PNzb6PDbDIVzrtL9UeuX1NjxuHwsVFkP8EKI498OQQ01efuSpzX3L8cJt3eYPpMjch
+ 0rU4ReePvcnPYyt3YuesqHnoa70e+/kHS8jExH/bKKApAQxX8rZE7d//y7OLAfe4DN5A
+ L+podzgiIuq/U1EtzQL2l3tcWgUsLN0b9u11ijbfscyTu7jHzaLZBzoDm9zfrxOadGlR
+ fGJDjPizqKDXzivegrBP2ofFUyXF2DeHLyQGoJ+6Ho4Y8iLGf8x0a+/4U0mZD/iNaZ17
+ RNFhSgFe7bUPwmcfgyVafB7buqlwa7m3Ighsm0Pdpb3JdjqRXU1Haocm+GRidzDtoYtQ
+ e4cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=2EFQE3CidPxpW1WfRImOckE2zX2cIpWNl2gBgKWnW8Y=;
- b=uwKk1RONTJHp1a4AOQiNY/BXo3qQ0RknDC2jRmjcLmTwhFnoJYxDP8cj5M1nVhg74r
- PETyMF8NMCLqW536fmtcLPlWhFrPeapnB85ypPXeCVnNU5J9bzmddxMz9g8FHXni39kI
- 3ngp0fJtpQ0dh3P/ZFpvEZt6k0LqqT4O4RtyRBwITcht/7Ytawbk2ieClBd3LL9AclH+
- 5sB/mhsPf+V9f7XG3KqnfT15n0BhbQw7vl9ED9oIJxb4WOIEVxIoo6mgzE+6g1JVNAcn
- K5XZ6gheVoETvYc2z2vIZPNyYVH3se7t0YkRAFSOT7TzZzXxIeInTzovRDFIAoKcV15r
- LpYA==
-X-Gm-Message-State: AOAM530RFS8YviBvnslTc4sFezZbLeIOINvz5Uej9/zCnDWpdWcsai+F
- GWR+UZvM53E90spMe+B8C3xi+IiWGO0=
-X-Google-Smtp-Source: ABdhPJz84Kw1Hp/OAl53+UbvzlePDmyHa2YTLPbKEYg4GQ0h4WDw/J9stMYlH+pstsL3N+M838sQDg==
-X-Received: by 2002:a05:6000:1542:: with SMTP id
- 2mr43117739wry.308.1641328966016; 
- Tue, 04 Jan 2022 12:42:46 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id k6sm38298921wrc.38.2022.01.04.12.42.45
+ bh=gEFgGzwb6rjmz3wNsbSdHwA4FmBLjB5MTG8g6jU8zm4=;
+ b=rBaiwKBcWTvah3aM0GtXwSBF3ZDABmMrn0B76FUQoxTAyKWzoZ831E64sYkGMlQsCE
+ 98CrMTVj6PCUmyNBykuq9ZglWRr7LStdLAISIWH0MLkqCBcvkwcr772zqq96qqjjK9V7
+ n3yqxvJqJLkLcicl/bdiEA5KFBSp3tMrUsEHzu001+OjfHP6CYGVZ1VFV0oYaiMGvsrw
+ hKwSBodmYpAx7pyGpK+uMGZXoehXenNHp6DU7vjVT+NbwddnHQvjIFMUrto+8QJ4Al13
+ GdXD3M8+32Ysx0iKlvIRKugUzMt0Nq1+fpuL6EsYoCLRm3IaVzUtDeuolCmmgEG8r177
+ tTxQ==
+X-Gm-Message-State: AOAM533luXpJ6L2m36+DaaSRHhxCB+5UZIGxMtotmFrQeeULlBpMbS3x
+ Z4MktS4nLzEDWZE5GjxmPJDzdRIWfCM=
+X-Google-Smtp-Source: ABdhPJycw3xONuNIAkqkwkHsGg7DVGTy/14+PlHp/lgomqAYc8ALjxa4DUb2FSvjBz9SlRw26CEH6g==
+X-Received: by 2002:a17:90b:1082:: with SMTP id
+ gj2mr150482pjb.187.1641329365249; 
+ Tue, 04 Jan 2022 12:49:25 -0800 (PST)
+Received: from adam-workstation.rai.com ([47.149.13.137])
+ by smtp.gmail.com with ESMTPSA id i1sm16442031pgk.89.2022.01.04.12.49.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Jan 2022 12:42:45 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Tue, 04 Jan 2022 12:49:24 -0800 (PST)
+From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Jan 2022 21:41:26 +0100
-Message-Id: <20220104204126.3631293-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue,  4 Jan 2022 12:49:23 -0800
+Message-Id: <20220104204923.2124418-1-aduskett@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gensio: add avahi optional
- dependency
+Subject: [Buildroot] [PATCH v3 1/1] package/pkg-generic.mk: fix absolute
+ paths in per-package config files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,36 +86,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-avahi-client is an optional dependency which is enabled by default since
-version 2.2.0 and
-https://github.com/cminyard/gensio/commit/5ab117c9743fd4719f610cf9f1ba45023cc25d7c
+Some packages (notably qmake packages) generate .cmake, .pc, and .pri files
+with absolute paths. Unfortunately, doing so breaks per-package builds because
+the paths in those files point outside the per-package sysroot for packages
+that have rsynced those same files.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- Rename FIXUP_PYTHON_SYSCONFIGDATA to FIXUP_PER_PACKAGE_FILES in pkg-generic.mk
+  to avoid more calls to ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+
+- Add a new step which searches for .cmake, .pc, and .pri files in a
+  given per-package host and staging directory and replaces the old
+  $(PER_PACKAGE_DIR) directory with the correct directory for the given package.
+
+This simple fix allows qt5 submodule packages to build with per-package enabled.
+
+Based off of Louis-Paul's earlier work found here:
+https://lore.kernel.org/buildroot/a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org/
+
+And Yann Morin's feedback found here:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200217212350.29750-21-anaumann@ultratronik.de/
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/gensio/gensio.mk | 1 +
- 1 file changed, 1 insertion(+)
+changes v2 -> v3:
+  - Rename FIXUP_PYTHON_SYSCONFIGDATA to FIXUP_PER_PACKAGE_FILES in
+    pkg-generic.mk (Yann)
+  
+  - Combine FIXUP_CONFIG_FILES_ABSOLUTE_PATHS with FIXUP_PER_PACKAGE_FILES (Yann)
 
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 389de1e263..b4936d5f21 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -9,6 +9,7 @@ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
- GENSIO_INSTALL_STAGING = YES
-+GENSIO_DEPENDENCIES = $(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi)
- GENSIO_CONF_OPTS = \
- 	--without-openipmi \
- 	--without-swig \
+changes v1 -> v2
+  - Drop patches 2 and 3 and combine them into a single macro in pkg-generic.mk
+  - Move the PRE_CONFIGURE_HOOK to inner-generic-package so it actually runs
+  - Rename FIXUP_PC_FILES_ABSOLUTE_PATHS to FIXUP_CONFIG_FILES_ABSOLUTE_PATHS
+  - Use $(HOST_DIR) instead of $(STAGING_DIR) to cover both stagin and host
+    directories in a single step.
+
+ package/pkg-generic.mk | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5626af1d87..65fe9baced 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -113,8 +113,16 @@ endif
+ # fail.
+ # So we just use HOST_DIR as a starting point, and filter on the two directories
+ # of interest.
++#
++# When per-package is enabled, packages may generate files with absolute paths
++# that point to the packages per-package sysroot. However, this breaks
++# per-package isolation when the files are rsynced to a new package that depends
++# on the first package. because the hard-coded paths point to directories
++# outside the packages sysroot. Run sed on all .cmake, .pc, and .pri files in a
++# given packages sysroot containing the word "per-package" and replace the path
++# with the appropriate per-package directory.
+ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+-define FIXUP_PYTHON_SYSCONFIGDATA
++define FIXUP_PER_PACKAGE_FILES
+ 	$(Q)find $(HOST_DIR) \
+ 		\(    -path '$(HOST_DIR)/lib/python*' \
+ 		   -o -path '$(STAGING_DIR)/usr/lib/python*' \
+@@ -124,6 +132,11 @@ define FIXUP_PYTHON_SYSCONFIGDATA
+ 		\) \
+ 	| xargs -0 --no-run-if-empty \
+ 		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
++
++	$(Q)find $(HOST_DIR)/ -name "*.pc" -o -name "*.cmake" -o -name "*.pri" \
++		| xargs --no-run-if-empty \
++		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(NAME)/:g"
++
+ endef
+ endif
+ 
+@@ -836,7 +849,7 @@ $(2)_EXTRACT_CMDS ?= \
+ 		$$(TAR_OPTIONS) -)
+ 
+ # pre/post-steps hooks
+-$(2)_POST_PREPARE_HOOKS += FIXUP_PYTHON_SYSCONFIGDATA
++$(2)_POST_PREPARE_HOOKS += FIXUP_PER_PACKAGE_FILES
+ 
+ ifeq ($$($(2)_TYPE),target)
+ ifneq ($$(HOST_$(2)_KCONFIG_VAR),)
 -- 
-2.34.1
+2.33.1
 
 _______________________________________________
 buildroot mailing list
