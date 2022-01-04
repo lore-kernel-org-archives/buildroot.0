@@ -1,89 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58178C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 16:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77F30C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 17:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C49740118;
-	Tue,  4 Jan 2022 16:52:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09D9E4011F;
+	Tue,  4 Jan 2022 17:11:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8fOMtR9HP4Bd; Tue,  4 Jan 2022 16:52:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E02C040447;
-	Tue,  4 Jan 2022 16:52:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7E2561BF5EA
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 16:52:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6DF89408D0
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 16:52:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XFNnPRZpTmQf for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 16:52:29 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zj-ypRyrEAOS; Tue,  4 Jan 2022 17:11:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46B30414C8;
+	Tue,  4 Jan 2022 17:11:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A5BD61BF32A
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 17:11:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 926F340118
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 17:11:40 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ZiFdcgqISdl for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 17:11:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 708F2408CE
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 16:52:29 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id z29so150815649edl.7
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 08:52:29 -0800 (PST)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 242F940104
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 17:11:38 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id y22so151158294edq.2
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 09:11:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=RXJuRiAJFvlevm7fiTpXF3OjvmGTEsS8SUkXPJlfuTw=;
- b=BZIQY8hzIyGdmN4RWz49QdZvKw+q400rZ80+ulLjLGAo3wRPpII3B0VdWxgRYSpMzU
- OW/sw/KEpBV++f7kHwjtH7yuoYjYmMgvBUGWuzJCrtBougNXU9BPPmoQgltGKl5FdIuW
- QNnncaU/DigSfQJlN0izwhLpAUH19V15CYtRJDJM9khQUvX0jMt6aqVJQ1jc2aiSAwz9
- YBu3C3tDAOcr0x+NsoJPK2vQt9EVoIOxBDg8RP6PfrUnxXnnr/LT1lQn/Em0Lz0xK7Ve
- GgB7FJ4TNTg6TTmfc45jSVS1I3RRgkhzOjJz8B4on7886Mr2J3XOqL8OwbSIEM4B8nEf
- z9YQ==
+ bh=SJx+rj8T6EOh12cAy6++d/vX+LK/CljIySNiWsWV1qM=;
+ b=JJ396u3RtqdR+v23lm3ddM/X2XAf/2hGz7l05ybaQNhNChxUIUSK6gNRvVzjDzRzG1
+ P090GXGka2+cVJPen1CjRXOm+RZhv8syhU67oFGGkHjhaiUaLJKYMXhjp7zFS3j0TPTc
+ j12Wz6elkQ5hcL24tm8rMNhtgm6E/mFl8RxKorWEokbjLEanJzwL9UrwnqOMA7Gk4Kwx
+ E73X1+n/MPPMv4sPu0ltioO6sWjRH5K3fuQIoVVP/TsOvFMYU0kiGYMektkm6hs6v/Vn
+ LfWZq7GvJJ8f6COmXfnlpPp0upPd/l7KgV/bep+yPcCTiBNELDtrYB13h1kYEQEOqG8X
+ tWhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=RXJuRiAJFvlevm7fiTpXF3OjvmGTEsS8SUkXPJlfuTw=;
- b=zLVp+3th5gRLum+qjhbG6dCn5l392ZBweaS4uxbgLRqN+GWNWFsa0uMdu8ZHuELfRn
- +ECuQmGcjEoFFVadEzqnsSuYrkeOIf8xYr17nxh6Z1QTbHQDCTm+hUPjutvuuiWntpnx
- wsWQuVwKKHWM0HtzZYuQZnGBS8W51zESLAFMMW+7X2Y74xARh/NZKnifuTspmvjbWsgI
- DtSB9GzcbAc7TC9BQxRq99oe0c9Id7T50yHj1muQBBP84lKcYpvEP54Blk+Tt0lOFJsQ
- 9Whzi0W2rdvj2zGpdH8jVMLGVGtsqeEkhQ+JTmmTePEPMYB+08XZgzvMtCLSVGHvFh/z
- MtyA==
-X-Gm-Message-State: AOAM531MsCsXpVdRC+jtPAVlZKyfvugIWpAi46ase32919ULLldREBx4
- fWJi5k7agI6sCkIp2c4DOWzYnA==
-X-Google-Smtp-Source: ABdhPJynrUDvW+kroYRPt56BgUrchid+1F43GToFE+1TNo+M047+YB0FGMDUg9r1vlev4ErY3oO+wA==
-X-Received: by 2002:a05:6402:50cf:: with SMTP id
- h15mr48319486edb.318.1641315147719; 
- Tue, 04 Jan 2022 08:52:27 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ bh=SJx+rj8T6EOh12cAy6++d/vX+LK/CljIySNiWsWV1qM=;
+ b=rvYLxCYmFVkOqUVDq3jA/d42sTD26kwANtQJYKqRDAaUzof0GdyyMlWXQXq/F2w0tK
+ Xru2A0vc3RrPtkDn8OxKosoirh17cUbl2Fh5DFKorTyC0HndmG7On26jhsyxZVJUdt3z
+ Hl4p2H1NwVNCmB+GP835nme+EdF+7WC8dzfKoWI01/LDBThXl2gk66yI/vvcw6x2GtbJ
+ kPrjGiqWXMUdVjSIxoZ09SHiPdG3hNBa0/3RqsFwhccmGWrs0AZS/6h+dvKelu3v8112
+ fjRVpxp7XmwZnIrYRY9zUFscsT2NnIxHJR2VcmZlZWF6F1IoOiFrXQk2AKxOfNtXS36j
+ 8KSg==
+X-Gm-Message-State: AOAM5308qSVtLDIwM5ZX5Qljyw8qMOGF06o5ityNz+7MHlCcM4P0Aohh
+ XSU15XCbnjrW295/GA7+G2DxP62I7dW3Xg==
+X-Google-Smtp-Source: ABdhPJyMXTGjpTxLIje9tT4m2suBDw52HjL1DZWPCBW/1GOElGr/JOG4Iwj4Rzoy5c5KZiYZuBk7tA==
+X-Received: by 2002:a17:906:4a02:: with SMTP id
+ w2mr40137196eju.398.1641316297091; 
+ Tue, 04 Jan 2022 09:11:37 -0800 (PST)
+Received: from localhost.localdomain
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id qk6sm466991ejc.127.2022.01.04.08.52.27
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jan 2022 08:52:27 -0800 (PST)
-Message-ID: <9b3f060d-9671-e475-40f7-dbf46e5d480c@mind.be>
-Date: Tue, 4 Jan 2022 17:52:26 +0100
+ by smtp.gmail.com with ESMTPSA id x20sm13181152edd.28.2022.01.04.09.11.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Jan 2022 09:11:36 -0800 (PST)
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Tue,  4 Jan 2022 18:11:28 +0100
+Message-Id: <20220104171128.956397-1-arnout@mind.be>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220101151218.1620080-1-fontaine.fabrice@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220101151218.1620080-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: fix build
- with gcc 9
+Subject: [Buildroot] [PATCH] Config.in.legacy: fix removed bootlin riscv64
+ toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,53 +88,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philipp Richter <richterphilipp.pops@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit b3c66481e1f1503fcbf193d0c780271e880ad500 replaced RISC-V LP64
+bootlin toolchains by RISC-V LP64D. However, Config.in.legacy was added
+for BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_STABLE, which never
+existed (the stable version was only added after the switch to LP64D).
+Conversely, BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_MUSL_BLEEDING_EDGE,
+which was removed, was not mentioned in Config.in.legacy.
 
+Correct the symbol name and its comment in Config.in.legacy.
 
-On 01/01/2022 16:12, Fabrice Fontaine wrote:
-> Drop -std=c++11 to avoid the following build failure with gcc 9 raised
-> since bump to version 1.2.15 in commit
-> 2cecfe94f889165f3a5169598ed7e0388941a6cd and
-> https://github.com/arvidn/libtorrent/commit/b7e02cc700d884f87a18a3bc59f95a66a5cb0209:
-> 
-> configure: error: *** A compiler with support for C++14 language features is required.
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/905a51bee38e85a48aa170c15494f2798aa6afea
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->   package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-> index 914e0cbca3..cde010a4f7 100644
-> --- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-> +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-> @@ -16,7 +16,7 @@ LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
->   LIBTORRENT_RASTERBAR_CONF_OPTS = \
->   	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
->   	--disable-invariant-checks
-> -LIBTORRENT_RASTERBAR_CXXFLAGS = $(TARGET_CXXFLAGS) -std=c++11
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  If this was needed before, it sounds like we might now need -std=c++14 (for 
-GCC versions that default to an earlier standard, i.e. anything below 6 I think).
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5994d94487..e5349e58ac 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -153,8 +153,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE
+ 	  The RISC-V 64-bit LP64 Bootlin toolchains have been removed,
+ 	  in favor of RISC-V 64-bit LP64D toolchains.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_STABLE
+-	bool "Bootlin riscv64 glibc bleeding-edge toolchain removed"
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_MUSL_BLEEDING_EDGE
++	bool "Bootlin riscv64 musl bleeding-edge toolchain removed"
+ 	select BR2_LEGACY
+ 	help
+ 	  The RISC-V 64-bit LP64 Bootlin toolchains have been removed,
+-- 
+2.31.1
 
-  Have you tested with GCC 4.9?
-
-  Regards,
-  Arnout
-
-> +LIBTORRENT_RASTERBAR_CXXFLAGS = $(TARGET_CXXFLAGS)
->   
->   # Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
->   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
