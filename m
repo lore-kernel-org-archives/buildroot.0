@@ -1,81 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64293C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDD99C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD7654097E;
-	Tue,  4 Jan 2022 18:12:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A7AD81D34;
+	Tue,  4 Jan 2022 18:13:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8hag319dpx3q; Tue,  4 Jan 2022 18:12:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tIdFV5_MkTxd; Tue,  4 Jan 2022 18:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDC404151E;
-	Tue,  4 Jan 2022 18:12:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F3A71BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC2A2812C6;
+	Tue,  4 Jan 2022 18:13:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2837D1BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C42840937
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1455B40491
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZeHhIsY93eUw for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:09:25 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kuq9yRxC8B_A for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:09:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 90ED64063E
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:25 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- f134-20020a1c1f8c000000b00345c05bc12dso1888055wmf.3
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:09:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B0A040272
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:34 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id u25so30326215edf.1
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=uWVc05hwYJtjqcG6fO1hlmlX5RKQ2DdDj8wmrdghR+U=;
- b=bUtg4MYQplomlAC/9khMr5ImvROHRjdMquZii/BHf7GXd2BB8+bhJPgx6LsZsdwdBP
- ZvzCqwk6cLKvocrwqJdiSr5EvNsugq56KSgZYCRELJxXwrycJLUM8e4FRVRrW9bxFRDV
- JBOuvGKfV0AmTU7PlJomVPn0aZRJsQAEzv6I/OGzr/0eU/PO0jp/35fB1O9fWyUpzaPq
- 3eQgb7szQSQRrwjOZ4DSkpDIgk52k/zovMLDe9UVGCzrV0qIuHxiJtjzw7aC8wfbHsq8
- SRvjw+KhsAwzAgopY/6b8lFpbDZwlxvHZ5bq62NulafLGP+3ecIXlVAhouUhooV9Sa2s
- wDPg==
+ bh=4zJQkMNiwDXPGiKzVUh2tnU+f9zfNE0DyTaDe1byhEI=;
+ b=QbT6eTNuPbwBXQ06UEq5qYGIYsgp48pK5xHtK5M7HXMXBK4hsfwd/ca/2MMl2H0UpB
+ 5QcN8v6mCSwr0nrfbuv43lGgJLlP7u3VynAbuKNDqUgfnhcfH5m/gN5ETgXLtmrbxaf5
+ hAE2MMjKWR5KtX7rXpAizI2PZXC3Gqm+S4ssBbdpGp5vebCR2v5EPhefF8aAdSDXNBdJ
+ a/rJ74YUunPxhciWmwFG0TfBZqsPTNP5IVeSITfTC5w5sr5BzM6Pwft9BkwjGH0v7f2G
+ +hvfa0tRDB8z5HrcQsWPreZU0C9k0Q30B+a6LmoAgVewHAYuT66o7bP20oMRi0BXUfwD
+ dORQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=uWVc05hwYJtjqcG6fO1hlmlX5RKQ2DdDj8wmrdghR+U=;
- b=QKAO5JLGi3ZzJ/yJBYTNaZPffcHZ1Wv53RjLU+yO2hPy3sPeJbpDY5iymMXiFHEMXK
- g2mytf5+6psnXUoZI01ERmpm62a5qeSkBUK3D8P0b8ZztOCXRZpAqFD9IkPhd10DvKf/
- L6M5okEsWiOCp8zi8aadQXdggbXD4MRBwf2VLQa0mD5mtl0lbbvZlENByqkbwXJV/TsH
- XBGl1KRGIfbyg5tYSEcE1Bw7wp/2lpbis6xG9WlFfPWvYo8AHZjyGVbl7J78c1I4HyjP
- HXMmHmp6S8/trKeqfdJ17UvW1uYzEQw6vIaYlc6iFbSo3+Bg8MqAcjqcfXrl1gJY4ue7
- tYag==
-X-Gm-Message-State: AOAM532BHrNW4ajeAsfRXDaLMMsM9n7iqVYVA7nPi9Uv9MmHdAkPGJ3o
- v5GjMi83MYLTRiCINhYcbmXUt/7qz3A=
-X-Google-Smtp-Source: ABdhPJwl0hPtWzPF3aW+7AIlCtQpXYNAhHjrCsQG6txPMT1/d/W8f42QIe6wCZJCYJaWigiWjXcmmQ==
-X-Received: by 2002:a1c:20c2:: with SMTP id
- g185mr42981144wmg.115.1641319763535; 
- Tue, 04 Jan 2022 10:09:23 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id n17sm108576wmc.32.2022.01.04.10.09.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Jan 2022 10:09:23 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  4 Jan 2022 19:08:26 +0100
-Message-Id: <20220104180826.3171770-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=4zJQkMNiwDXPGiKzVUh2tnU+f9zfNE0DyTaDe1byhEI=;
+ b=HQNtofIfFIy1JHViX28uns/mJwNrSrQfPasxE7JzauuT0GWbj6rXizpsuJru8Eo3OT
+ T1QFa8ZgjkQWad2aVNLLDIUqVZ7psQIPKGsGPDN/tToARJKhj/fHy/rWwVnQdfgHtbDC
+ ZQ5so8v6+wZCMNo4Y5r+NdDD29GsK7jH3i1eHwL9p77/+G9XwHW/3Hr/Ka0QgXm/i4Ye
+ aF/hrRv3dznx3GD2yjqO4bf5d1k6V+LgcX3j4YNi6hFbfgp39Fp7PhicZ24VFYWdZHRp
+ ato0874K6qV6iZVN2uTELp5LFpuLOHS0QEq9jdLsFpre4BHn7N9EYE6cS3Xp/EfpQmf2
+ e35Q==
+X-Gm-Message-State: AOAM531HvU0h00RFaBnVJ4NqWeTjcwkUHymMo143tQoO0WiFy45ZPFnr
+ +bKHqi8netDDlJKXCfx8MfvhDg==
+X-Google-Smtp-Source: ABdhPJyQsRun5S3rNL5duBxpTpr/a1Gp5a2YescVV60Z6OddDF5QJhLedJb2PM2qArO0TN9684sWRg==
+X-Received: by 2002:a05:6402:1778:: with SMTP id
+ da24mr50535775edb.144.1641319772444; 
+ Tue, 04 Jan 2022 10:09:32 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id c8sm14822891edu.60.2022.01.04.10.09.31
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Jan 2022 10:09:32 -0800 (PST)
+Message-ID: <8481639d-e8cd-89d2-dbf6-8d2ae54cabef@mind.be>
+Date: Tue, 4 Jan 2022 19:09:31 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/pcm-tools: fix static build
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>,
+ buildroot@buildroot.org
+References: <20220103165451.2769-1-florent.aumaitre@medianesysteme.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220103165451.2769-1-florent.aumaitre@medianesysteme.com>
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-pyqt5: Fix parallel
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,44 +96,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ =?UTF-8?Q?Manuel_V=c3=b6gele?= <develop@manuel-voegele.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Don't build c_example which needs a dynamic library and so will raise
-the following static build failure since bump to version 2021.10 in
-commit d1d93d488c76d4bc2551270007096693d8194435 and
-https://github.com/opcm/pcm/commit/12647a6ee579c29bd306fd034470eb62dcb3156e:
 
-/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: cannot find -lpcm
 
-Fixes:
- - http://autobuild.buildroot.org/results/1276a3d49c8848039f034e7f03632df365097e94
+On 03/01/2022 17:54, Florent AUMAITRE wrote:
+> This patch fix build of python-pyqt5 package when parallel build is used
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  This explanation was a bit too terse. I tried to invent something that is more 
+complete:
+
+     pyqt5 uses qmake internally, but is python package rather than a qmake
+     package. Therefore, we need to manually apply the same fixup as for
+     qmake packages.
+
+     Without this, top-level parallel build may fail because dependencies are
+     looked for in the qt5 per-package staging directory instead of the
+     python-pyqt5 one.
+
+Hopefully that's more or less correct :-)
+
+> 
+> Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+> 
+> Changes v1 -> v2:
+>    - Re-use the existing QT5_INSTALL_QT_CONF macro from package/qt5/qt5.mk  (suggested by Thomas Petazzoni)
+
+  This should go below a --- line, i.e.:
+
 ---
- package/pcm-tools/pcm-tools.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
 
-diff --git a/package/pcm-tools/pcm-tools.mk b/package/pcm-tools/pcm-tools.mk
-index 8a58034232..d676df57f9 100644
---- a/package/pcm-tools/pcm-tools.mk
-+++ b/package/pcm-tools/pcm-tools.mk
-@@ -17,7 +17,8 @@ define PCM_TOOLS_BUILD_CMDS
- 	touch $(@D)/daemon-binaries
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC" \
--		UNAME=Linux HOST=_LINUX
-+		UNAME=Linux HOST=_LINUX \
-+		$(foreach f,$(PCM_TOOLS_EXE_FILES),$(f).x)
- endef
- 
- ifeq ($(BR2_PACKAGE_PCM_TOOLS_PMU_QUERY),y)
--- 
-2.34.1
 
+  That way, it is not part of the git history.
+
+  Applied to master with those things changed, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> Signed-off-by: Florent AUMAITRE <florent.aumaitre@medianesysteme.com>
+> ---
+>   package/python-pyqt5/python-pyqt5.mk | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+> index 8f28c90d15..b05043563e 100644
+> --- a/package/python-pyqt5/python-pyqt5.mk
+> +++ b/package/python-pyqt5/python-pyqt5.mk
+> @@ -152,6 +152,11 @@ define PYTHON_PYQT5_GENERATE_QTDETAIL
+>   	)
+>   endef
+>   
+> +# The file "qt.conf" can be used to override the hard-coded paths that are
+> +# compiled into the Qt library. We need it to make "qmake" relocatable and
+> +# tweak the per-package install pathes
+> +PYTHON_PYQT5_PRE_CONFIGURE_HOOKS += QT5_QT_CONF_FIXUP
+> +
+>   PYTHON_PYQT5_CONF_OPTS = \
+>   	--bindir $(TARGET_DIR)/usr/bin \
+>   	--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT5_PYTHON_DIR)/site-packages \
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
