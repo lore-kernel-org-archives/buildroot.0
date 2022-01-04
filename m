@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC20C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4185C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9699460B6A;
-	Tue,  4 Jan 2022 18:12:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA8A44098F;
+	Tue,  4 Jan 2022 18:12:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s0Vu87b6BXZU; Tue,  4 Jan 2022 18:11:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QwpmG76uASH7; Tue,  4 Jan 2022 18:12:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBF5C60B38;
-	Tue,  4 Jan 2022 18:11:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA9B1409D3;
+	Tue,  4 Jan 2022 18:12:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5646A1BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 59AF21BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A69A81D4F
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17695813CE
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nvfBiBlnfTuQ for <buildroot@lists.busybox.net>;
+ with ESMTP id QAVnmF8POQ-d for <buildroot@lists.busybox.net>;
  Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B07DD813CE
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE7DE81BF5
  for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 11C7483249; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
+ id 24DBE82BA6; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Tue, 4 Jan 2022 18:32:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97
-X-Git-Newrev: 3b9c8f8cb53e449e39899a40712703c272c5eeff
+X-Git-Oldrev: 593683b45f72169dd94ec14fa18720b3cec9dda4
+X-Git-Newrev: 5e39bd0439be9f65a7b03f4bcd86bf2fbb16b212
 X-Patchwork-Hint: ignore
-Message-Id: <20220104180257.11C7483249@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tinyalsa: bump to version 2.0.0
+Message-Id: <20220104180257.24DBE82BA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tpm2-tools: bump version to 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,158 +58,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b9c8f8cb53e449e39899a40712703c272c5eeff
+commit: https://git.buildroot.net/buildroot/commit/?id=5e39bd0439be9f65a7b03f4bcd86bf2fbb16b212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to meson-package to drop first patch and disable examples and
-  utils
-- Drop second patch (already in version)
-- Update hash of NOTICE (empty new lines added with
-  https://github.com/tinyalsa/tinyalsa/commit/902b8c8f9fa5a2e1937007d7d5ee90f01790808b)
+Depedency on libuuid was removed in:
+https://github.com/tpm2-software/tpm2-tools/commit/210b2d639c216df7fa68e38427b13b96edbf78fd
 
-https://github.com/tinyalsa/tinyalsa/releases/tag/v2.0.0
+Drop 0001-configure-make-build-gnu99.patch as it is in 5.2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Erik Larsson <who+buildroot@cnackers.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tinyalsa/0001-disable-doxygen-usage.patch  | 35 ---------------------
- .../0002-interval.h-add-missing-header.patch       | 36 ----------------------
- package/tinyalsa/tinyalsa.hash                     |  4 +--
- package/tinyalsa/tinyalsa.mk                       | 27 +++-------------
- 4 files changed, 6 insertions(+), 96 deletions(-)
+ .../0001-configure-make-build-gnu99.patch          | 30 ----------------------
+ package/tpm2-tools/Config.in                       |  2 --
+ package/tpm2-tools/tpm2-tools.hash                 |  2 +-
+ package/tpm2-tools/tpm2-tools.mk                   |  6 ++---
+ 4 files changed, 3 insertions(+), 37 deletions(-)
 
-diff --git a/package/tinyalsa/0001-disable-doxygen-usage.patch b/package/tinyalsa/0001-disable-doxygen-usage.patch
+diff --git a/package/tpm2-tools/0001-configure-make-build-gnu99.patch b/package/tpm2-tools/0001-configure-make-build-gnu99.patch
 deleted file mode 100644
-index ed939fb9bf..0000000000
---- a/package/tinyalsa/0001-disable-doxygen-usage.patch
+index 37ca6c5873..0000000000
+--- a/package/tpm2-tools/0001-configure-make-build-gnu99.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--Disable doxygen usage
+@@ -1,30 +0,0 @@
+-From 521c3cc506b18c5c84d86e1e90d1daee39849b0c Mon Sep 17 00:00:00 2001
+-From: William Roberts <william.c.roberts@intel.com>
+-Date: Mon, 8 Feb 2021 11:57:28 -0600
+-Subject: [PATCH] configure: make build gnu99
 -
--In order to avoid a dependency on doxygen on the build machine, this
--patch adjusts the main Makefile to not build and install the
--documentation.
+-Signed-off-by: William Roberts <william.c.roberts@intel.com>
 -
--[Vincent: tweak patch for 1.1.1 version]
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -rup a/Makefile b/Makefile
----- a/Makefile	2017-05-24 05:23:57.000000000 +0100
--+++ b/Makefile	2017-05-25 10:35:20.781747053 +0100
--@@ -11,14 +11,12 @@ export MANDIR ?= $(PREFIX)/share/man
-- all:
-- 	$(MAKE) -C src
-- 	$(MAKE) -C utils
---	$(MAKE) -C doxygen
-- 	$(MAKE) -C examples
-- 
-- .PHONY: clean
-- clean:
-- 	$(MAKE) -C src clean
-- 	$(MAKE) -C utils clean
---	$(MAKE) -C doxygen clean
-- 	$(MAKE) -C examples clean
-- 
-- .PHONY: install
--@@ -30,5 +28,4 @@ install:
-- 	install include/tinyalsa/version.h $(DESTDIR)$(INCDIR)/
-- 	$(MAKE) -C src install
-- 	$(MAKE) -C utils install
---	$(MAKE) -C doxygen install
-- 
-diff --git a/package/tinyalsa/0002-interval.h-add-missing-header.patch b/package/tinyalsa/0002-interval.h-add-missing-header.patch
-deleted file mode 100644
-index c043145b55..0000000000
---- a/package/tinyalsa/0002-interval.h-add-missing-header.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 685e530d8a0063134642371eaacd01fee2f62d85 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 2 Jun 2017 12:19:03 +0300
--Subject: [PATCH] interval.h: add missing header
--
--The ssize_t type requires the unistd.h header. This fixes build with musl
--libc:
--
--In file included from ../include/tinyalsa/limits.h:32:0,
--                 from limits.c:1:
--../include/tinyalsa/interval.h:38:2: error: unknown type name 'ssize_t'
--  ssize_t max;
--  ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Retrieved from:
+-https://github.com/tpm2-software/tpm2-tools/commit/521c3cc506b18c5c84d86e1e90d1daee39849b0c
+-and updated to set gnu99 instead of c99 as done by
+-https://github.com/tpm2-software/tpm2-tools/commit/5d0267428e96989afce406d096994ec5091ee107]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
--Upstream status: https://github.com/tinyalsa/tinyalsa/pull/98
+- configure.ac | 3 +++
+- 1 file changed, 3 insertions(+)
 -
-- include/tinyalsa/interval.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/include/tinyalsa/interval.h b/include/tinyalsa/interval.h
--index 3f6f3dce5d90..068571df5a63 100644
----- a/include/tinyalsa/interval.h
--+++ b/include/tinyalsa/interval.h
--@@ -30,6 +30,7 @@
-- #define TINYALSA_INTERVAL_H
+-diff --git a/configure.ac b/configure.ac
+-index dc15b5595..25039a0d9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -287,6 +287,9 @@ AC_DEFUN([add_c_flag], [
+- # -D_GNU_SOURCE is required for execvpe() in options.c
+- add_c_flag([-D_GNU_SOURCE], [AC_MSG_ERROR([Cannot enable -D_GNU_SOURCE])])
 - 
-- #include <stdlib.h>
--+#include <unistd.h>
-- 
-- /** A closed range signed interval. */
-- 
---- 
--2.11.0
--
-diff --git a/package/tinyalsa/tinyalsa.hash b/package/tinyalsa/tinyalsa.hash
-index d078bab597..f7673b1769 100644
---- a/package/tinyalsa/tinyalsa.hash
-+++ b/package/tinyalsa/tinyalsa.hash
+-+# Enable gnu99 mode, since we use some of these features.
+-+add_c_flag([-std=gnu99], [AC_MSG_ERROR([Cannot enable -std=gnu99])])
+-+
+- # Best attempt compiler options that are on newer versions of GCC that
+- # we can't widely enforce without killing other peoples builds.
+- # Works with gcc only. Needs to be disabled on BSD and clang
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index 3be947648f..1a6698570a 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -7,8 +7,6 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_TPM2_TSS
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
+ 	  API of TPM2-TSS. These tools can be used to manage keys,
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
+index bfb7e9b220..f50a896363 100644
+--- a/package/tpm2-tools/tpm2-tools.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  d92b438cea348ae316c4b2cbf367b4f01ed821a947e6a34d813624e9e3c936c1  tinyalsa-1.1.1.tar.gz
--sha256  ca2b89a68c33fba3c8bcaec96f32907e2ede0eb33688ae61d29ec49732158f6d  NOTICE
-+sha256  573ae0b2d3480851c1d2a12503ead2beea27f92d44ed47b74b553ba947994ef1  tinyalsa-2.0.0.tar.gz
-+sha256  ea22a4711f5250f88a4d7011fbc65367d1b02ac954dcc49f5b6d7c135e6537c4  NOTICE
-diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
-index bd9d9a00d0..b5c39e35d6 100644
---- a/package/tinyalsa/tinyalsa.mk
-+++ b/package/tinyalsa/tinyalsa.mk
-@@ -4,30 +4,11 @@
+ # Locally computed:
+-sha256  e2802d4093a24b2c65b1f913d0f4c68eadde9b8fd8a9b7a3b17a6e50765e8350  tpm2-tools-4.3.2.tar.gz
++sha256  c0b402f6a7b3456e8eb2445211e2d41c46c7e769e05fe4d8909ff64119f7a630  tpm2-tools-5.2.tar.gz
+ sha256  f6995d52c8b8e4d2c3bace7fc9c330a77a90d808166fbad4d7ead7e8ba2fc66c  doc/LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 41f5bcf201..8675344805 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--TINYALSA_VERSION = 1.1.1
--TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
-+TINYALSA_VERSION = 2.0.0
-+TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,v$(TINYALSA_VERSION))
- TINYALSA_LICENSE = BSD-3-Clause
- TINYALSA_LICENSE_FILES = NOTICE
- TINYALSA_INSTALL_STAGING = YES
-+TINYALSA_CONF_OPTS = -Ddocs=disabled -Dexamples=disabled -Dutils=disabled
+-TPM2_TOOLS_VERSION = 4.3.2
++TPM2_TOOLS_VERSION = 5.2
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+ TPM2_TOOLS_LICENSE = BSD-3-Clause
+ TPM2_TOOLS_LICENSE_FILES = doc/LICENSE
+ TPM2_TOOLS_CPE_ID_VENDOR = tpm2-tools_project
+ TPM2_TOOLS_SELINUX_MODULES = tpm2
+-TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf util-linux
+-# We're patching configure.ac
+-TPM2_TOOLS_AUTORECONF = YES
++TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
  
--define TINYALSA_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
--endef
--
--define TINYALSA_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) \
--		-C $(@D) \
--		PREFIX="/usr" \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		DESTDIR="$(STAGING_DIR)" install
--endef
--
--define TINYALSA_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) \
--		-C $(@D) \
--		PREFIX="/usr" \
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		DESTDIR="$(TARGET_DIR)" install
--endef
--
--$(eval $(generic-package))
-+$(eval $(meson-package))
+ # -fstack-protector-all and FORTIFY_SOURCE=2 is used by
+ # default. Disable that so the BR2_SSP_* / BR2_FORTIFY_SOURCE_* options
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
