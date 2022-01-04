@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC97EC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC20C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AF654097E;
-	Tue,  4 Jan 2022 18:11:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9699460B6A;
+	Tue,  4 Jan 2022 18:12:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1bnWg_E1qShk; Tue,  4 Jan 2022 18:11:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s0Vu87b6BXZU; Tue,  4 Jan 2022 18:11:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EAD140491;
-	Tue,  4 Jan 2022 18:11:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBF5C60B38;
+	Tue,  4 Jan 2022 18:11:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 37A8A1BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5646A1BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 867A881AEF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A69A81D4F
  for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FZvkXc9PE91b for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+ with ESMTP id nvfBiBlnfTuQ for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D2DB823F6
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B07DD813CE
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 67D5282BA6; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
+ id 11C7483249; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jan 2022 18:49:20 +0100
+Date: Tue, 4 Jan 2022 18:32:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f384de4f4ec646c28dab6c442dd6bb2f06628725
-X-Git-Newrev: 17aa836bd7a2c90da053398ce024b4113cf8b53c
+X-Git-Oldrev: 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97
+X-Git-Newrev: 3b9c8f8cb53e449e39899a40712703c272c5eeff
 X-Patchwork-Hint: ignore
-Message-Id: <20220104180257.67D5282BA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dnsmasq: fix build with gcc 4.8
+Message-Id: <20220104180257.11C7483249@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyalsa: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,131 +58,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17aa836bd7a2c90da053398ce024b4113cf8b53c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b9c8f8cb53e449e39899a40712703c272c5eeff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 2.86 in commit 5b29096f8fcb0acd8890073a56ba9d620b1f911c:
+- Switch to meson-package to drop first patch and disable examples and
+  utils
+- Drop second patch (already in version)
+- Update hash of NOTICE (empty new lines added with
+  https://github.com/tinyalsa/tinyalsa/commit/902b8c8f9fa5a2e1937007d7d5ee90f01790808b)
 
-option.c: In function 'one_opt':
-option.c:2445:11: error: 'for' loop initial declarations are only allowed in C99 mode
-           for (char *p = arg; *p; p++) {
-           ^
-option.c:2445:11: note: use option -std=c99 or -std=gnu99 to compile your code
-option.c:2453:11: error: 'for' loop initial declarations are only allowed in C99 mode
-           for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
-           ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/39b34a4e69fc10f4bd9d4ddb0ed8c0aae5741c84
+https://github.com/tinyalsa/tinyalsa/releases/tag/v2.0.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../0001-src-option.c-fix-build-with-gcc-4.8.patch | 52 ++++++++++++++++++++++
- ...2909d9080ff8743133fbd52427b4b2213171-typo.patch | 36 +++++++++++++++
- 2 files changed, 88 insertions(+)
+ package/tinyalsa/0001-disable-doxygen-usage.patch  | 35 ---------------------
+ .../0002-interval.h-add-missing-header.patch       | 36 ----------------------
+ package/tinyalsa/tinyalsa.hash                     |  4 +--
+ package/tinyalsa/tinyalsa.mk                       | 27 +++-------------
+ 4 files changed, 6 insertions(+), 96 deletions(-)
 
-diff --git a/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch b/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..50ecf2f18a
---- /dev/null
-+++ b/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,52 @@
-+From 46312909d9080ff8743133fbd52427b4b2213171 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 31 Dec 2021 17:29:44 +0100
-+Subject: [PATCH] src/option.c: fix build with gcc 4.8
-+
-+Fix the following build failure with gcc 4.8 raised since version 2.86:
-+
-+option.c: In function 'one_opt':
-+option.c:2445:11: error: 'for' loop initial declarations are only allowed in C99 mode
-+           for (char *p = arg; *p; p++) {
-+           ^
-+option.c:2445:11: note: use option -std=c99 or -std=gnu99 to compile your code
-+option.c:2453:11: error: 'for' loop initial declarations are only allowed in C99 mode
-+           for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
-+           ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/39b34a4e69fc10f4bd9d4ddb0ed8c0aae5741c84
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream commit 46312909d9080ff8743133fbd52427b4b2213171]
-+---
-+ src/option.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/option.c b/src/option.c
-+index ff54def..c57f6d8 100644
-+--- a/src/option.c
-++++ b/src/option.c
-+@@ -2525,7 +2525,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
-+           arg += 9;
-+           if (strlen(arg) != 16)
-+               ret_err(gen_err);
-+-          for (char *p = arg; *p; p++) {
-++          char *p;
-++          for (*p = arg; *p; p++) {
-+             if (!isxdigit((int)*p))
-+               ret_err(gen_err);
-+           }
-+@@ -2533,7 +2534,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
-+ 
-+           u8 *u = daemon->umbrella_device;
-+           char word[3];
-+-          for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
-++          u8 i;
-++          for (i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
-+             memcpy(word, &(arg[0]), 2);
-+             *u++ = strtoul(word, NULL, 16);
-+           }
-+-- 
-+2.33.0
-+
-diff --git a/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch b/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
-new file mode 100644
-index 0000000000..8cdf5b3f1b
---- /dev/null
-+++ b/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
-@@ -0,0 +1,36 @@
-+From 2748fb81e23b71e2c44956e99321816aca91905d Mon Sep 17 00:00:00 2001
-+From: Simon Kelley <simon@thekelleys.org.uk>
-+Date: Sat, 1 Jan 2022 23:03:26 +0000
-+Subject: [PATCH] Fix 46312909d9080ff8743133fbd52427b4b2213171 typo.
-+
-+[Upstream commit 2748fb81e23b71e2c44956e99321816aca91905d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com> 
-+---
-+ src/option.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/option.c b/src/option.c
-+index c57f6d8..6f56ce8 100644
-+--- a/src/option.c
-++++ b/src/option.c
-+@@ -357,7 +357,7 @@ static const struct myoption opts[] =
-+     { "dhcp-ignore-clid", 0, 0,  LOPT_IGNORE_CLID },
-+     { "dynamic-host", 1, 0, LOPT_DYNHOST },
-+     { "log-debug", 0, 0, LOPT_LOG_DEBUG },
-+-	{ "umbrella", 2, 0, LOPT_UMBRELLA },
-++    { "umbrella", 2, 0, LOPT_UMBRELLA },
-+     { "quiet-tftp", 0, 0, LOPT_QUIET_TFTP },
-+     { NULL, 0, 0, 0 }
-+   };
-+@@ -2526,7 +2526,7 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
-+           if (strlen(arg) != 16)
-+               ret_err(gen_err);
-+           char *p;
-+-          for (*p = arg; *p; p++) {
-++          for (p = arg; *p; p++) {
-+             if (!isxdigit((int)*p))
-+               ret_err(gen_err);
-+           }
-+-- 
-+2.33.0
-+
+diff --git a/package/tinyalsa/0001-disable-doxygen-usage.patch b/package/tinyalsa/0001-disable-doxygen-usage.patch
+deleted file mode 100644
+index ed939fb9bf..0000000000
+--- a/package/tinyalsa/0001-disable-doxygen-usage.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Disable doxygen usage
+-
+-In order to avoid a dependency on doxygen on the build machine, this
+-patch adjusts the main Makefile to not build and install the
+-documentation.
+-
+-[Vincent: tweak patch for 1.1.1 version]
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/Makefile b/Makefile
+---- a/Makefile	2017-05-24 05:23:57.000000000 +0100
+-+++ b/Makefile	2017-05-25 10:35:20.781747053 +0100
+-@@ -11,14 +11,12 @@ export MANDIR ?= $(PREFIX)/share/man
+- all:
+- 	$(MAKE) -C src
+- 	$(MAKE) -C utils
+--	$(MAKE) -C doxygen
+- 	$(MAKE) -C examples
+- 
+- .PHONY: clean
+- clean:
+- 	$(MAKE) -C src clean
+- 	$(MAKE) -C utils clean
+--	$(MAKE) -C doxygen clean
+- 	$(MAKE) -C examples clean
+- 
+- .PHONY: install
+-@@ -30,5 +28,4 @@ install:
+- 	install include/tinyalsa/version.h $(DESTDIR)$(INCDIR)/
+- 	$(MAKE) -C src install
+- 	$(MAKE) -C utils install
+--	$(MAKE) -C doxygen install
+- 
+diff --git a/package/tinyalsa/0002-interval.h-add-missing-header.patch b/package/tinyalsa/0002-interval.h-add-missing-header.patch
+deleted file mode 100644
+index c043145b55..0000000000
+--- a/package/tinyalsa/0002-interval.h-add-missing-header.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 685e530d8a0063134642371eaacd01fee2f62d85 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 2 Jun 2017 12:19:03 +0300
+-Subject: [PATCH] interval.h: add missing header
+-
+-The ssize_t type requires the unistd.h header. This fixes build with musl
+-libc:
+-
+-In file included from ../include/tinyalsa/limits.h:32:0,
+-                 from limits.c:1:
+-../include/tinyalsa/interval.h:38:2: error: unknown type name 'ssize_t'
+-  ssize_t max;
+-  ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/tinyalsa/tinyalsa/pull/98
+-
+- include/tinyalsa/interval.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/include/tinyalsa/interval.h b/include/tinyalsa/interval.h
+-index 3f6f3dce5d90..068571df5a63 100644
+---- a/include/tinyalsa/interval.h
+-+++ b/include/tinyalsa/interval.h
+-@@ -30,6 +30,7 @@
+- #define TINYALSA_INTERVAL_H
+- 
+- #include <stdlib.h>
+-+#include <unistd.h>
+- 
+- /** A closed range signed interval. */
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/tinyalsa/tinyalsa.hash b/package/tinyalsa/tinyalsa.hash
+index d078bab597..f7673b1769 100644
+--- a/package/tinyalsa/tinyalsa.hash
++++ b/package/tinyalsa/tinyalsa.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  d92b438cea348ae316c4b2cbf367b4f01ed821a947e6a34d813624e9e3c936c1  tinyalsa-1.1.1.tar.gz
+-sha256  ca2b89a68c33fba3c8bcaec96f32907e2ede0eb33688ae61d29ec49732158f6d  NOTICE
++sha256  573ae0b2d3480851c1d2a12503ead2beea27f92d44ed47b74b553ba947994ef1  tinyalsa-2.0.0.tar.gz
++sha256  ea22a4711f5250f88a4d7011fbc65367d1b02ac954dcc49f5b6d7c135e6537c4  NOTICE
+diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
+index bd9d9a00d0..b5c39e35d6 100644
+--- a/package/tinyalsa/tinyalsa.mk
++++ b/package/tinyalsa/tinyalsa.mk
+@@ -4,30 +4,11 @@
+ #
+ ################################################################################
+ 
+-TINYALSA_VERSION = 1.1.1
+-TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
++TINYALSA_VERSION = 2.0.0
++TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,v$(TINYALSA_VERSION))
+ TINYALSA_LICENSE = BSD-3-Clause
+ TINYALSA_LICENSE_FILES = NOTICE
+ TINYALSA_INSTALL_STAGING = YES
++TINYALSA_CONF_OPTS = -Ddocs=disabled -Dexamples=disabled -Dutils=disabled
+ 
+-define TINYALSA_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
+-endef
+-
+-define TINYALSA_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) \
+-		PREFIX="/usr" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		DESTDIR="$(STAGING_DIR)" install
+-endef
+-
+-define TINYALSA_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) \
+-		PREFIX="/usr" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		DESTDIR="$(TARGET_DIR)" install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
