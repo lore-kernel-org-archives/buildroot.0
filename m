@@ -1,89 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65A06C433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF70C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EECC7410B0;
-	Tue,  4 Jan 2022 18:34:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0587827C5;
+	Tue,  4 Jan 2022 18:34:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rS5JvuRBi2vN; Tue,  4 Jan 2022 18:34:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id US5uhynw4qOl; Tue,  4 Jan 2022 18:34:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42CF74095F;
-	Tue,  4 Jan 2022 18:34:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3215C1BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:34:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EA128278F;
+	Tue,  4 Jan 2022 18:34:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF621BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28B0B4092C
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:34:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1834A60B8F
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:34:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1rG-O6xZbK0m for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:34:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE3C44092B
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:33:59 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id w16so152050860edc.11
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=La6yhDAnLlCUbLoEXfnLDG6yrPmfVXs0Oa1W4eFHm8A=;
- b=X/3OtSJomrjASKwjuB/1Coc8woAn2V2JKqiG+tZErrQV4vm/TNXJupcN3N6Ws56SM2
- TjYIy3NevfW88c16F05QUfp/gn5uSMxDx9861j+TdnOtqWexGRchkfaGcw9vhXwtIUxk
- twHYmTyZUQcUvRskVpos9wW1HP1WOQIvdk8Lezlz7/pzNXMZYU7gTBufy7ZfZwBATsi8
- y46XalWKlI0gsPym7cU7Y9xN44wn5oaoShAzJkg7uLKaGusAxvmWX9KT3IgTDIPb2vrQ
- ozqwQPj5rt4pM/pAJCUGnw1pAdGRJcHd7cgu/eYnbX0d/O02me7eW2chwKF1TUAKFr2W
- glzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=La6yhDAnLlCUbLoEXfnLDG6yrPmfVXs0Oa1W4eFHm8A=;
- b=ixOTSbF1kT1OXj8+nOCpwmJr0pnO7NiCSADPNEIDCe2TD0qeGqz+ukifm4dgNri4fs
- x/X01uGULssgoYDJ2/vZcghwJ5jOhMdzTumcAjkynPc4MwWNLlLqSNX2xwmHt38dkccv
- J43ez6WBiMYuxAUEqw1dM1AdInpIltN+TyD0Kw4ajIq5wlAmWlBtr3u+MTzFeIttyqZ6
- 5l/VF6jUQEqaeVPSHRj8sEXWD3SdJF/Q4PxZbOHidgbEb/XjD7ydMZmD8xOrqDKfPzuB
- MYysyHRyv5RG2wL1vNo2fDnM4dl6SvT9SGw9WOmzchsA8vZ/g1D2c7QTmFpxHhP1CsaB
- VpeQ==
-X-Gm-Message-State: AOAM532O4muaJYhxj4GFr5oX3LhlJMGQ6Lnv1Jbhu2GSu7R0iF+88m7l
- 4ppFRhwlUXTYdcdpz98vBvsX8Bsa0aJbrA==
-X-Google-Smtp-Source: ABdhPJw9cUy1JZF5M31qCDItG1/Q7ZRlGkMdGRTV1R3FMbs1exHfwPkWw2lqZ0g9WQSIOv+rm6+PJA==
-X-Received: by 2002:a17:907:1b21:: with SMTP id
- mp33mr38806261ejc.580.1641321237972; 
- Tue, 04 Jan 2022 10:33:57 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id hr28sm11761799ejc.186.2022.01.04.10.33.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jan 2022 10:33:57 -0800 (PST)
-Message-ID: <c4cc70e9-9875-e929-8c10-c764ec0a4a94@mind.be>
-Date: Tue, 4 Jan 2022 19:33:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220104074821.1330228-1-james.hilliard1@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220104074821.1330228-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: bump to version
- 5.212.0-alpha4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VSj12ZFW7D9U for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:34:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E79B6077D
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:34:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 9D6D083249; Tue,  4 Jan 2022 18:28:11 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Tue, 4 Jan 2022 19:10:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a242529917cfa7025eb979a87b84b81b5ff25e1e
+X-Git-Newrev: 5390200a722132365c90e07790b9a24a06af7134
+X-Patchwork-Hint: ignore
+Message-Id: <20220104182811.9D6D083249@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/assimp: bump version to 5.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,110 +52,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Samuel Martin <s.martin49@gmail.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- =?UTF-8?Q?Ga=c3=abl_Portay?= <gael.portay@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5390200a722132365c90e07790b9a24a06af7134
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- remove 0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
+  (upstream applied [1]).
 
-On 04/01/2022 08:48, James Hilliard wrote:
-> Switch to latest release in new active upstream:
-> https://github.com/qtwebkit/qtwebkit
+For details see [2].
 
-  Perhaps you can push the remaining patch to upstream then?
+[1] https://github.com/assimp/assimp/commit/a099fe7cd331a839137115db5df1733c4c1c8070
+[2] https://github.com/assimp/assimp/releases/tag/v5.1.5
 
-> 
-> Migrate python2 build to python3.
-> 
-> Drop patches that are upstream/no longer needed.
-> 
-> Adapt/add patches to fix build issues.
-> 
-> Rework build system to use cmake instead of qmake(which does not
-> currently support cross compilation).
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...e-use-explicit-namespace-instead-of-using.patch | 57 ----------------------
+ package/assimp/assimp.hash                         |  2 +-
+ package/assimp/assimp.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 59 deletions(-)
 
-[snip]
-> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-> index dd99661be0..3af1918a46 100644
-> --- a/package/qt5/qt5webkit/qt5webkit.mk
-> +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> @@ -4,12 +4,13 @@
->   #
->   ################################################################################
->   
-> -QT5WEBKIT_VERSION = 5.9.1
-> -QT5WEBKIT_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
-> -QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
-> +QT5WEBKIT_VERSION = 5.212.0-alpha4
-> +QT5WEBKIT_SITE = https://github.com/qtwebkit/qtwebkit/releases/download/qtwebkit-$(QT5WEBKIT_VERSION)
-
-  Upstream README says:
-
-Use the following repository if you need to get latest snapshots of QtWebKit code:
-
-http://code.qt.io/cgit/qt/qtwebkit.git/
-
-  This repo aslo has a 5.212.0-alpha4 tag. Perhaps we should switch to that?
-
-  Anyway, I applied to master as is.
-
-  Regards,
-  Arnout
-
-> +QT5WEBKIT_SOURCE = qtwebkit-$(QT5WEBKIT_VERSION).tar.xz
->   QT5WEBKIT_DEPENDENCIES = \
-> -	host-bison host-flex host-gperf host-python host-ruby \
-> -	leveldb sqlite
-> +	host-bison host-flex host-gperf host-python3 host-ruby gstreamer1 \
-> +	gst1-plugins-base icu leveldb jpeg libpng libxml2 libxslt qt5location \
-> +	qt5sensors qt5webchannel sqlite webp woff2
->   QT5WEBKIT_INSTALL_STAGING = YES
->   
->   QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
-> @@ -20,30 +21,16 @@ QT5WEBKIT_LICENSE = LGPL-2.1+, BSD-3-Clause, BSD-2-Clause
->   QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21
->   
->   ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-> -QT5WEBKIT_DEPENDENCIES += xlib_libXext xlib_libXrender
-> +QT5WEBKIT_DEPENDENCIES += xlib_libXcomposite xlib_libXext xlib_libXrender
->   endif
->   
->   ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
->   QT5WEBKIT_DEPENDENCIES += qt5declarative
->   endif
->   
-> -# QtWebkit's build system uses python, but only supports python2. We work
-> -# around this by forcing python2 early in the PATH, via a python->python2
-> -# symlink.
-> -QT5WEBKIT_CONF_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-> -QT5WEBKIT_MAKE_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-> -define QT5WEBKIT_PYTHON2_SYMLINK
-> -	mkdir -p $(@D)/host-bin
-> -	ln -sf $(HOST_DIR)/bin/python2 $(@D)/host-bin/python
-> -endef
-> -QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
-> +QT5WEBKIT_CONF_OPTS += \
-> +	-DPORT=Qt \
-> +	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
-> +	-DUSE_LIBHYPHEN=OFF
->   
-> -QT5WEBKIT_CONF_OPTS = WEBKIT_CONFIG+=use_system_leveldb
-> -
-> -define QT5WEBKIT_INSTALL_TARGET_EXTRAS
-> -	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
-> -endef
-> -
-> -QT5WEBKIT_POST_INSTALL_TARGET_HOOKS += QT5WEBKIT_INSTALL_TARGET_EXTRAS
-> -
-> -$(eval $(qmake-package))
-> +$(eval $(cmake-package))
-> 
+diff --git a/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch b/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
+deleted file mode 100644
+index c83e9c50a4..0000000000
+--- a/package/assimp/0002-BlenderScene-use-explicit-namespace-instead-of-using.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From a099fe7cd331a839137115db5df1733c4c1c8070 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 30 Dec 2021 18:01:54 +0100
+-Subject: [PATCH] BlenderScene: use explicit namespace instead of using
+- namespace
+-
+-Fixes (using g++ Sourcery CodeBench Lite 2014.05-29 - 4.8.3 20140320):
+-
+-  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:101:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
+-           const FileDatabase &db) const {
+-                                   ^
+- In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
+-                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
+-  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
+-       void Convert(T &dest, const FileDatabase &db) const;
+-            ^
+-  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:121:33: error: specialization of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' in different namespace [-fpermissive]
+-           const FileDatabase &db) const {
+-                                   ^
+-  In file included from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.h:49:0,
+-                   from .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderScene.cpp:47:
+-  .../build/assimp-5.1.4/code/AssetLib/Blender/BlenderDNA.h:266:10: error:   from definition of 'template<class T> void Assimp::Blender::Structure::Convert(T&, const Assimp::Blender::FileDatabase&) const' [-fpermissive]
+-       void Convert(T &dest, const FileDatabase &db) const;
+-            ^
+-
+-[backport from upstream commit a099fe7cd331]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- code/AssetLib/Blender/BlenderScene.cpp | 7 +++++--
+- 1 file changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/code/AssetLib/Blender/BlenderScene.cpp b/code/AssetLib/Blender/BlenderScene.cpp
+-index c93d913fc..9ad086fe6 100644
+---- a/code/AssetLib/Blender/BlenderScene.cpp
+-+++ b/code/AssetLib/Blender/BlenderScene.cpp
+-@@ -49,8 +49,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include "BlenderDNA.h"
+- #include "BlenderSceneGen.h"
+- 
+--using namespace Assimp;
+--using namespace Assimp::Blender;
+-+namespace Assimp {
+-+namespace Blender {
+- 
+- //--------------------------------------------------------------------------------
+- template <>
+-@@ -885,4 +885,7 @@ void DNA::RegisterConverters() {
+-     converters["CollectionObject"] = DNA::FactoryPair(&Structure::Allocate<CollectionObject>, &Structure::Convert<CollectionObject>);
+- }
+- 
+-+} // namespace Blender
+-+} //namespace Assimp
+-+
+- #endif // ASSIMP_BUILD_NO_BLEND_IMPORTER
+--- 
+-2.34.1
+-
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index 89b8d168c2..8f6d613bb4 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bd32cdc27e1f8b7ac09d914ab92dd81d799c97e9e47315c1f40dcb7c6f7938c6  assimp-5.1.4.tar.gz
++sha256  d62b58ed3b35c20f89570863a5415df97cb1b301b444d39687140fc883717ced  assimp-5.1.5.tar.gz
+ sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index ead5d73bca..b5f84ef56f 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASSIMP_VERSION = 5.1.4
++ASSIMP_VERSION = 5.1.5
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
