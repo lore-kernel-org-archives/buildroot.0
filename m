@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEDACC433EF
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50719C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9029540955;
-	Tue,  4 Jan 2022 18:10:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EFF540969;
+	Tue,  4 Jan 2022 18:10:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Di71I8f8f1m1; Tue,  4 Jan 2022 18:10:43 +0000 (UTC)
+	with ESMTP id XGCxpKMFdpCc; Tue,  4 Jan 2022 18:10:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5B3B4093A;
-	Tue,  4 Jan 2022 18:10:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 29ADE1BF5DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D84A40937;
+	Tue,  4 Jan 2022 18:10:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 42EE51BF9B2
  for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B172824DF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 081B460BBE
  for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hs7A5iYpDnmQ for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N5-74Ie0dt2J for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E196981D4F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96E6E60BF4
  for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5622482BA6; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
+ id E939583249; Tue,  4 Jan 2022 18:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jan 2022 18:49:20 +0100
+Date: Tue, 4 Jan 2022 18:32:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ba47c2d4e8c84b57d52d12b60c9efa983eca98a
-X-Git-Newrev: 48f790099399e3f74e4487148de437881fee990c
+X-Git-Oldrev: b72b849ad597810823ecf9efe471a40e2427c8e8
+X-Git-Newrev: 5a30732769c0ca54c2a7e0eeca64f42d8479e7f1
 X-Patchwork-Hint: ignore
-Message-Id: <20220104180257.5622482BA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zchunk: needs MMU
+Message-Id: <20220104180256.E939583249@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mraa: bump to version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +58,266 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48f790099399e3f74e4487148de437881fee990c
+commit: https://git.buildroot.net/buildroot/commit/?id=5a30732769c0ca54c2a7e0eeca64f42d8479e7f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since the addition of the package
-in commit c618da772df32679fdd338b99f44133655c9113f:
+- Refresh upstream status of first patch
+- Drop second patch (already in version)
 
-/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: src/zck_gen_zdict.p/zck_gen_zdict.c.o: in function `main':
-zck_gen_zdict.c:(.text.startup+0x254): undefined reference to `fork'
-
-Fixes:
- - http://autobuild.buildroot.org/results/582b994372435b8c35a56345c15bd0ffc722af79
+https://github.com/eclipse/mraa/blob/v2.2.0/docs/changelog.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/zchunk/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...include-Declare-gVERSION-global-as-extern.patch |   7 +-
+ .../0002-CMakeLists.txt-add-BUILDCPP-option.patch  | 193 ---------------------
+ package/mraa/mraa.hash                             |   2 +-
+ package/mraa/mraa.mk                               |   2 +-
+ 4 files changed, 6 insertions(+), 198 deletions(-)
 
-diff --git a/package/zchunk/Config.in b/package/zchunk/Config.in
-index 2c8db434ce..2d2a78a210 100644
---- a/package/zchunk/Config.in
-+++ b/package/zchunk/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ZCHUNK
- 	bool "zchunk"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBCURL
- 	help
+diff --git a/package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch b/package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch
+index b3a1f5a03a..110c020a62 100644
+--- a/package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch
++++ b/package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch
+@@ -1,13 +1,14 @@
+-From dbb5961f106ec42cd70689d933674c9c37aedfe1 Mon Sep 17 00:00:00 2001
++From aaa0a5cd4e401bde4fb3691dd4e6c70a5c61e031 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
+ Date: Mon, 13 Apr 2020 20:12:11 +0200
+ Subject: [PATCH] include: Declare gVERSION global as 'extern'.
+ 
+ Fixes build with '-fno-common'.
+ 
++Signed-off-by: Thomas Ingleby <thomas.ingleby@intel.com>
+ [Retrieved from:
+-https://github.com/eclipse/mraa/pull/1012/commits/dbb5961f106ec42cd70689d933674c9c37aedfe1]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmaail.com>
++https://github.com/eclipse/mraa/commit/aaa0a5cd4e401bde4fb3691dd4e6c70a5c61e031]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  include/version.h | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
+deleted file mode 100644
+index fbadfe79ef..0000000000
+--- a/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
++++ /dev/null
+@@ -1,193 +0,0 @@
+-From cb88e4dd1fbbb9d24e625dba2768b88ed99da309 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 13 Jun 2020 22:51:37 +0200
+-Subject: [PATCH] CMakeLists.txt: add BUILDCPP option
+-
+-C++ is a mandatory dependency since version 1.4.0 and
+-https://github.com/eclipse/mraa/commit/122cab1f1e53b7c9c7cd82905b962071f9bad9dc
+-
+-As a result, build on embedded toolchains that do not support C++ fails
+-on:
+-
+-CMake Error at CMakeLists.txt:2 (project):
+-  The CMAKE_CXX_COMPILER:
+-
+-    /home/naourr/work/instance-1/output-1/per-package/mraa/host/bin/arm-linux-g++
+-
+-  is not a full path to an existing compiler tool.
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/31086422e03611c16ab59c4418e3669b580bc0c0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/eclipse/mraa/commit/cb88e4dd1fbbb9d24e625dba2768b88ed99da309]
+----
+- CMakeLists.txt                | 69 +++++++++++++++++++----------------
+- src/java/CMakeLists.txt       |  4 +-
+- src/javascript/CMakeLists.txt | 34 +++++++++--------
+- 3 files changed, 59 insertions(+), 48 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 250d9106e..90c0dc920 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required (VERSION 2.8.11)
+--project (mraa C CXX)
+-+project (mraa C)
+- 
+- FIND_PACKAGE (Threads REQUIRED)
+- 
+-@@ -11,6 +11,8 @@ else ()
+-   set (CMAKE_C_STANDARD 99)
+- endif ()
+- 
+-+option (BUILDCPP "Enable C++ (needed by FTDI4222 and tests)" ON)
+-+
+- ###############################################################################
+- # Detect supported warning flags
+- # Modified from work By Dan Liew (fpbench - MIT)
+-@@ -33,15 +35,18 @@ set (MRAA_C_WARNING_FLAGS
+-   -Werror=missing-parameter-type
+- )
+- 
+--# Warning flags for the C++ compiler only
+--set (MRAA_CXX_WARNING_FLAGS
+--  -Wnon-virtual-dtor
+--  -Woverloaded-virtual
+--  -Wreorder
+--)
+--
+- include (CheckCCompilerFlag)
+--include (CheckCXXCompilerFlag)
+-+if (BUILDCPP)
+-+  # Warning flags for the C++ compiler only
+-+  set (MRAA_CXX_WARNING_FLAGS
+-+    -Wnon-virtual-dtor
+-+    -Woverloaded-virtual
+-+    -Wreorder
+-+  )
+-+
+-+  enable_language (CXX)
+-+  include (CheckCXXCompilerFlag)
+-+endif ()
+- function (MRAA_SANITIZE_FLAG_NAME OUTPUT_VAR FLAG)
+-   string (REPLACE "-" "_" SANITIZED_FLAG_NAME "${FLAG}")
+-   string (REPLACE "/" "_" SANITIZED_FLAG_NAME "${SANITIZED_FLAG_NAME}")
+-@@ -62,28 +67,30 @@ foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_C_WARNING_FLAGS})
+-   endif ()
+- endforeach ()
+- 
+--# Globally set C++ compiler warning flags that are supported and emit
+--# a warning about unsupported flags
+--foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
+--  MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
+--  CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
+--  if (HAS_CXX_${SANITIZED_FLAG_NAME})
+--    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
+--  else ()
+--    message (WARNING "C++ compiler does not support flag \"${flag}\"")
+--  endif ()
+--endforeach ()
+--
+--# This function adds the c++11 flag to a c++ target (if supported)
+--function(use_cxx_11 targetname)
+--  include(CheckCXXCompilerFlag)
+--  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+--  if (COMPILER_SUPPORTS_CXX11)
+--    set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
+--  else()
+--    message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
+--  endif()
+--endfunction()
+-+if (BUILDCPP)
+-+  # Globally set C++ compiler warning flags that are supported and emit
+-+  # a warning about unsupported flags
+-+  foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
+-+    MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
+-+    CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
+-+    if (HAS_CXX_${SANITIZED_FLAG_NAME})
+-+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
+-+    else ()
+-+      message (WARNING "C++ compiler does not support flag \"${flag}\"")
+-+    endif ()
+-+  endforeach ()
+-+
+-+  # This function adds the c++11 flag to a c++ target (if supported)
+-+  function(use_cxx_11 targetname)
+-+    include(CheckCXXCompilerFlag)
+-+    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+-+    if (COMPILER_SUPPORTS_CXX11)
+-+      set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
+-+    else()
+-+      message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
+-+    endif()
+-+  endfunction()
+-+endif()
+- 
+- # Set CMAKE_INSTALL_LIBDIR if not defined
+- include(GNUInstallDirs)
+-diff --git a/src/java/CMakeLists.txt b/src/java/CMakeLists.txt
+-index 231c755fa..cfa72a0df 100644
+---- a/src/java/CMakeLists.txt
+-+++ b/src/java/CMakeLists.txt
+-@@ -16,7 +16,9 @@ include_directories (
+- set_source_files_properties (mraajava.i PROPERTIES SWIG_FLAGS ";-package;mraa;-I${CMAKE_BINARY_DIR}/src")
+- set_source_files_properties (mraajava.i PROPERTIES CPLUSPLUS ON)
+- 
+--set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
+-+if (BUILDCPP)
+-+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
+-+endif()
+- set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DJAVACALLBACK")
+- 
+- if (NOT DEFINED ENV{JAVA_HOME_NATIVE})
+-diff --git a/src/javascript/CMakeLists.txt b/src/javascript/CMakeLists.txt
+-index 25fd36275..99a96b49d 100644
+---- a/src/javascript/CMakeLists.txt
+-+++ b/src/javascript/CMakeLists.txt
+-@@ -36,25 +36,27 @@ set_target_properties (mraajs PROPERTIES
+- )
+- 
+- message (STATUS "INFO - swig Version ${SWIG_VERSION}")
+--message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+-+if (BUILDCPP)
+-+  message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+- 
+--if (${V8_VERSION_MAJOR} GREATER 3)
+--  message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
+--  # Node 0.12.x V8 engine major version is '3'.
+--  # Node 2.1.0  V8 engine major version is '4'.
+--  set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
+--  set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
+--  if (CMAKE_VERSION VERSION_LESS "3.1")
+--    message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
+--    if (CMAKE_COMPILER_IS_GNUCXX)
+--      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+--        message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
+-+  if (${V8_VERSION_MAJOR} GREATER 3)
+-+    message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
+-+    # Node 0.12.x V8 engine major version is '3'.
+-+    # Node 2.1.0  V8 engine major version is '4'.
+-+    set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
+-+    set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
+-+    if (CMAKE_VERSION VERSION_LESS "3.1")
+-+      message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
+-+      if (CMAKE_COMPILER_IS_GNUCXX)
+-+        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+-+          message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
+-+        endif ()
+-+        set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
+-+      else ()
+-+        set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
+-       endif ()
+--      set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
+--    else ()
+--      set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
+-+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
+-     endif ()
+--    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
+-   endif ()
+- endif ()
+- 
+diff --git a/package/mraa/mraa.hash b/package/mraa/mraa.hash
+index f29a5ce838..321b6409ed 100644
+--- a/package/mraa/mraa.hash
++++ b/package/mraa/mraa.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5351ce9eb654014d8ea7f43bdb2d17e6d1955536938a2ea0d467f4008e614345  mraa-2.1.0.tar.gz
++sha256  076669bee8423ffef3065735b293a329020be86630fea457174dbfcc67a0554a  mraa-2.2.0.tar.gz
+ sha256  fac52622ed3badd86b34857b21777ab90296d6ccbc2ac0fd457c09fdeefa9ef1  COPYING
+diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+index 910339b386..47178a423b 100644
+--- a/package/mraa/mraa.mk
++++ b/package/mraa/mraa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MRAA_VERSION = 2.1.0
++MRAA_VERSION = 2.2.0
+ MRAA_SITE = $(call github,eclipse,mraa,v$(MRAA_VERSION))
+ MRAA_LICENSE = MIT
+ MRAA_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
