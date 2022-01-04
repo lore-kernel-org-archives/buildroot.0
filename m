@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457DDC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 20:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3085C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 20:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E222E40474;
-	Tue,  4 Jan 2022 20:53:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DD5C4033A;
+	Tue,  4 Jan 2022 20:55:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPO7BthkN_6K; Tue,  4 Jan 2022 20:53:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7uJuV6wIxf6f; Tue,  4 Jan 2022 20:55:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F091440308;
-	Tue,  4 Jan 2022 20:53:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E05B1BF44A
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:53:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 791CA4063E;
+	Tue,  4 Jan 2022 20:55:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D7F301BF44A
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D42860E47
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:53:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C55144033A
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 20:55:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fOT3gWLzAHiT for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 20:53:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zVuT7Lw-2tuF for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 20:55:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
- [IPv6:2607:f8b0:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E89E360B8A
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 20:53:36 +0000 (UTC)
-Received: by mail-ot1-x329.google.com with SMTP id
- a23-20020a9d4717000000b0056c15d6d0caso48600228otf.12
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 12:53:36 -0800 (PST)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 38F43405BD
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 20:55:53 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ n14-20020a7bcbce000000b00332f4abf43fso1281202wmi.0
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 12:55:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=up1GOFba1sj9tYF6uMffd3mEWHR3lvmO9ia6ZogpwGY=;
- b=l2Z4061/voTjVw0WTGeUoVo7GjPs1z7+rI33GFkT7S5IZiGtWy0D78eQFCgh1GfOVv
- mA25FH5+SVxJ0CX8oI92T9Tl/oirO9+9tNSeyxaWeU/G8YPoW1JXZ4fINNdHCGOcEjR5
- 0PtCsHp58GVplxKohZari3A8GLpjC3jJRm5H+RoDYrrIk3HhSNzsQB5ER7TcX1G9hWDD
- xeG+t4AUINeoXQZBgeAFx0GrheNVVyvc5BzTz3I/rG44+hucgUg5CIjDfdj8VX7XSIGb
- nT1swH6crAQywts0r3oVDp8ECo96/a0KjHoHR6sW2BT2UHNOtN/Esw7LbL354xU4NC55
- dD2g==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IIHfLJRT0VRZ2anHEKT73fKXfD2ALdPF2uzGPBJORBA=;
+ b=lsC+dxMCg5iCnZ0MAzTD8CTGXsNlr0JJ3BtfvCvoYiNjdg00+DAqT+ohDLTIWmXQCM
+ ABN/Mr/4iAguEEQxiv+v93qBPreelm+LrXr99snr6yxu6CODnYMjfMFnlwQ8Js2c1rQw
+ XGYgf33PiO/TWzQVAKRqv599mRzQAjropo6kpYeCoiOf5yKt7g9EMcV8kGikJtkMS3oQ
+ gskeB6gh55NcjlS4PN3kXPf6D+1njjVfBzjz8Fa0t8Lk5+wXHaDj/Q31bJLFy3u8jutR
+ I/SwfrtkVRcKfcvbitx/dHrQSpuExJc+lesgscxlNIuCVH4jcrV244yRfdrahnagTAOK
+ YmUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=up1GOFba1sj9tYF6uMffd3mEWHR3lvmO9ia6ZogpwGY=;
- b=coH7VPcOGRz11ZKI5iEBNmiTbMwdLUrxnDXUVd6w0gT52EHw7wxXUivIoNkTT1+mKv
- wSF/4HeuOggX439lId5B70aivJol1GiGU/+ZOjCejfGfP6iLsUCzhaSsy8Bl9XX4uyiJ
- IKPLwkMefsulQI8HpHAMNjIxxniWhVi8a2TsFfLQE6ros2D8vobJuXslInfuyN4sH8cS
- n7jb/2/3ijqH5rWrZhf2LC7fBeY2G5etsV/9NZnYWUsUMEf5i8Hy7gB5RF2C0A/nERvQ
- y3RbL1Cc755qxyBGAduzW+/seKXugYR7k+mZiWNsYdxa73KIiWzC03cYkUeOol0M7FRF
- wyJQ==
-X-Gm-Message-State: AOAM530E/Ir15bq8ItE63dl1q0W85ot5iHhQ5CsD60LArGBCeBMBq87b
- LSh1qS9bsv6jpXqx7oFjUjT14MHow2U96Fc37N8=
-X-Google-Smtp-Source: ABdhPJyNniLIFEFMbzMsiOlXSfFNI88A2masEMpb0H9V3JOYNPiDTG4HoJNyYqFMYzq+DmPTZpzn6vh50VYcouOScOI=
-X-Received: by 2002:a05:6830:2aa7:: with SMTP id
- s39mr38058111otu.151.1641329615852; 
- Tue, 04 Jan 2022 12:53:35 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IIHfLJRT0VRZ2anHEKT73fKXfD2ALdPF2uzGPBJORBA=;
+ b=sxVJgUpYTUd4B2ZA+QhckoNGW1tqIJsM4fJNtGiaRSON7xPbIkDQdBXGskpsxprS+8
+ YL+oRhwQKdXSEqnV2CXuTn0ogKpC94v/+H/svjGXF1RhylL5OKjpHzyfIbmvnUNQ/qi/
+ Sj8/5sbay/Ksyb5mBisJdb6hws/f8gGvMI66vdZFitpRw2XJNBXRb4TmXzVRcl6LrpGf
+ /Q/p+KXOIAlUbvyS6PV/zUNKFN973iutYvTMv3m7BXK2uLJ3Ba4oux2q6kCwHyIN3aQK
+ 24oe/N4Hiyn6vBDzgWS9TgMKEpRlesazx3ag5eJM/WjNoOlks0Or/O5EKgNNtA+jj8AB
+ 3b7Q==
+X-Gm-Message-State: AOAM533j1vRiglPBg9DCtyCEIAGM8vjzleIbKZyjozMWAXOW+IPin1vk
+ H79tS0bMwgSqLU2QMGIks3l5ZhGpoqc=
+X-Google-Smtp-Source: ABdhPJz18DmeM/T7m3ilD92ihq2qJqV4fI+hy77QhPbN9nqGXdrtm/zxTLPQG39LAozCwPI4yPiGgw==
+X-Received: by 2002:a7b:c758:: with SMTP id w24mr138798wmk.30.1641329751161;
+ Tue, 04 Jan 2022 12:55:51 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id o1sm461069wmc.38.2022.01.04.12.55.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Jan 2022 12:55:50 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  4 Jan 2022 21:54:55 +0100
+Message-Id: <20220104205455.3632671-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220104074821.1330228-1-james.hilliard1@gmail.com>
- <c4cc70e9-9875-e929-8c10-c764ec0a4a94@mind.be>
-In-Reply-To: <c4cc70e9-9875-e929-8c10-c764ec0a4a94@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 4 Jan 2022 14:53:24 -0600
-Message-ID: <CADvTj4rS6b+J0bveOcAJ+Xii1fhK58+f8Gs+9UgwTPSQLBqM6g@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: bump to version
- 5.212.0-alpha4
+Subject: [Buildroot] [PATCH v2,1/1] package/file: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,124 +84,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Samuel Martin <s.martin49@gmail.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
- buildroot <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Jan 4, 2022 at 12:33 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 04/01/2022 08:48, James Hilliard wrote:
-> > Switch to latest release in new active upstream:
-> > https://github.com/qtwebkit/qtwebkit
->
->   Perhaps you can push the remaining patch to upstream then?
+Fix the following build failure raised since bump to version 5.41 in
+commit d38b72bcd75392a88b5100839ac410859d0a6a79:
 
-Oh, it's already upstream, switched to that version here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220104205213.1367539-1-james.hilliard1@gmail.com/
+readelf.c: In function 'do_auxv_note':
+readelf.c:1046:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t off = 0; off + elsize <= descsz; off += elsize) {
+  ^
 
->
-> >
-> > Migrate python2 build to python3.
-> >
-> > Drop patches that are upstream/no longer needed.
-> >
-> > Adapt/add patches to fix build issues.
-> >
-> > Rework build system to use cmake instead of qmake(which does not
-> > currently support cross compilation).
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->
-> [snip]
-> > diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-> > index dd99661be0..3af1918a46 100644
-> > --- a/package/qt5/qt5webkit/qt5webkit.mk
-> > +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> > @@ -4,12 +4,13 @@
-> >   #
-> >   ################################################################################
-> >
-> > -QT5WEBKIT_VERSION = 5.9.1
-> > -QT5WEBKIT_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
-> > -QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
-> > +QT5WEBKIT_VERSION = 5.212.0-alpha4
-> > +QT5WEBKIT_SITE = https://github.com/qtwebkit/qtwebkit/releases/download/qtwebkit-$(QT5WEBKIT_VERSION)
->
->   Upstream README says:
->
-> Use the following repository if you need to get latest snapshots of QtWebKit code:
->
-> http://code.qt.io/cgit/qt/qtwebkit.git/
->
->   This repo aslo has a 5.212.0-alpha4 tag. Perhaps we should switch to that?
+Fixes:
+ - http://autobuild.buildroot.org/results/31cbc313fceb84c0cbb1969fca5ac44244871dbc
 
-That repo has no recent activity and appears abandoned, the new
-upstream is a fork
-of that, also I didn't see a release tarball from qt
-organization(which seems to no longer
-maintain qtwebkit at all).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Set ac_cv_prog_c99 for host as already done for target instead of
+   adding an upstreamable patch
 
->
->   Anyway, I applied to master as is.
->
->   Regards,
->   Arnout
->
-> > +QT5WEBKIT_SOURCE = qtwebkit-$(QT5WEBKIT_VERSION).tar.xz
-> >   QT5WEBKIT_DEPENDENCIES = \
-> > -     host-bison host-flex host-gperf host-python host-ruby \
-> > -     leveldb sqlite
-> > +     host-bison host-flex host-gperf host-python3 host-ruby gstreamer1 \
-> > +     gst1-plugins-base icu leveldb jpeg libpng libxml2 libxslt qt5location \
-> > +     qt5sensors qt5webchannel sqlite webp woff2
-> >   QT5WEBKIT_INSTALL_STAGING = YES
-> >
-> >   QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
-> > @@ -20,30 +21,16 @@ QT5WEBKIT_LICENSE = LGPL-2.1+, BSD-3-Clause, BSD-2-Clause
-> >   QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21
-> >
-> >   ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-> > -QT5WEBKIT_DEPENDENCIES += xlib_libXext xlib_libXrender
-> > +QT5WEBKIT_DEPENDENCIES += xlib_libXcomposite xlib_libXext xlib_libXrender
-> >   endif
-> >
-> >   ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-> >   QT5WEBKIT_DEPENDENCIES += qt5declarative
-> >   endif
-> >
-> > -# QtWebkit's build system uses python, but only supports python2. We work
-> > -# around this by forcing python2 early in the PATH, via a python->python2
-> > -# symlink.
-> > -QT5WEBKIT_CONF_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-> > -QT5WEBKIT_MAKE_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
-> > -define QT5WEBKIT_PYTHON2_SYMLINK
-> > -     mkdir -p $(@D)/host-bin
-> > -     ln -sf $(HOST_DIR)/bin/python2 $(@D)/host-bin/python
-> > -endef
-> > -QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
-> > +QT5WEBKIT_CONF_OPTS += \
-> > +     -DPORT=Qt \
-> > +     -DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
-> > +     -DUSE_LIBHYPHEN=OFF
-> >
-> > -QT5WEBKIT_CONF_OPTS = WEBKIT_CONFIG+=use_system_leveldb
-> > -
-> > -define QT5WEBKIT_INSTALL_TARGET_EXTRAS
-> > -     cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
-> > -endef
-> > -
-> > -QT5WEBKIT_POST_INSTALL_TARGET_HOOKS += QT5WEBKIT_INSTALL_TARGET_EXTRAS
-> > -
-> > -$(eval $(qmake-package))
-> > +$(eval $(cmake-package))
-> >
+ package/file/file.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 12647af8bb..62cec4b2c9 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -9,6 +9,7 @@ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file
+ HOST_FILE_DEPENDENCIES = host-zlib
+ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++HOST_FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
