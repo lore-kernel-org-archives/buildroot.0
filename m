@@ -1,79 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3964C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89236C433EF
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4AB3840558;
-	Tue,  4 Jan 2022 18:26:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16402410B9;
+	Tue,  4 Jan 2022 18:30:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jeXSYGlSnPlG; Tue,  4 Jan 2022 18:26:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id INCJGMb5tU4u; Tue,  4 Jan 2022 18:30:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 856F4404D4;
-	Tue,  4 Jan 2022 18:26:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C3791BF5DB
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:26:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57E83410BB;
+	Tue,  4 Jan 2022 18:30:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 28D121BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:30:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78E1381D4F
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:26:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14CCE404D4
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:30:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KA3bl1s8LgBt for <buildroot@lists.busybox.net>;
- Tue,  4 Jan 2022 18:26:05 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AR3qpbhFodZ6 for <buildroot@lists.busybox.net>;
+ Tue,  4 Jan 2022 18:30:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 598A181BF5
- for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:26:05 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id j18so77892260wrd.2
- for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:26:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=8WBy8i1Ptx1QvE7IAO5it0MUXq1HfGCtrWKUdEjJaoM=;
- b=YnkKg6j1fp1UqtNKuM+HKZyD2bzUlOEJSDJuFuSVd8V0Ul+zwdDQXJZ/CQvIXeKBfG
- 6RvYV07ZBx28C4PqgvuwTLG/BXeEqwHVwK/f4eZkU0s/SD5t3prodaRFKP4+TMAKdkSi
- N6sUp6GV/sYJs/aZcy3oJmTwTzh/8XDUzJyaPk7KNnmYU/0UkH911PM73YRrgfZBK879
- RPwvZODhkKp8WGpB7v8IIBR8a3Pah2R2AwfpkFBHAyT020d0fdQuKmxXR3USR1rsDtz3
- HfwcjuW7LToiCyINMSqKCWKu5Z5i6WzjXO1O4swosnM6LBCXAPngrxowY8OzaCv8b/Cr
- 48tg==
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C4AD540236
+ for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:30:14 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id q14so144097688edi.3
+ for <buildroot@buildroot.org>; Tue, 04 Jan 2022 10:30:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=TKA2g/fMZFZrZ/QjojN4M7FCmcZlZ1VbO9gQ3GkgDI0=;
+ b=FWhFjO16BsjkQs6gK+JNssPJ0JghWmfmhq7atpDIIX/bJJ8XftWB9Dy/+E85+Yrx2u
+ bRCZYNACp20/ZwNfiId0VEBsVdPS3shIIKbGRHFD2b0Rg7NzPCF+1Xv+NPOoOaPWLRfa
+ sL4k15Fz0y68pMZpB9xAiFzul74VqixDPUMJLptoKdHHGUFiSStf4p1MTmgIUKQfSrWO
+ JtP6Yjt/Mpmo4REOscAb8NNEZOirwscOQJsYqXPeo8eyJJDf6r+6uvii000EJThInmXS
+ RhL69bRVNBDfiYOnVxUm+EB9oiGhlvysaMvKCp7XMwOpOG35YWUSovuYVJ5xgDeDBKCG
+ /YVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=8WBy8i1Ptx1QvE7IAO5it0MUXq1HfGCtrWKUdEjJaoM=;
- b=upf8lG9cGKTmX2d+FS3kGcaAlZEQMTVmHXtW1iicPBlURuvKO9LWy2eqBtKk3VPNFv
- r3cDN3JA69S+o7RE2WGKIhqB8U720K0lIzR2yONWQqqVua6L6Z5vo2Siqy2soTQRoAkD
- z/ALA5jwoF4wfd89AHRZl12gJdjyiJ8Lwtw1oie8PcVLo1n1Mi3UrrMup4bzwnW8xAhH
- 9yemqG9xy1OC46imONIIByfqOwxYIaZvJVqjXNsPQycKu2vakTm5+BWuCu0AdfnhXVPS
- v5LgT0NJt9tyjnbBQlR+pJarUTRznYO7PgO+fPtTdCbUm/VnwC1vSkPJxArjFtQZCrkf
- cAVw==
-X-Gm-Message-State: AOAM531vIxFM0Tpp97OWrWCd3RqrWJjK+ipZjn6eZ7ffnaEFyirVjbbH
- VAGtNDe+iPUy4ojjgSPZinyxhrvpSBE=
-X-Google-Smtp-Source: ABdhPJya3idsmA8ZUFUN0knssyFm8FtGFuZQ3kMUlnCem5K/LHwXq6ntT6xGLo12c7+4/BHvDTQjiA==
-X-Received: by 2002:a5d:5004:: with SMTP id e4mr10397100wrt.107.1641320763568; 
- Tue, 04 Jan 2022 10:26:03 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id l16sm43825408wrx.117.2022.01.04.10.26.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Jan 2022 10:26:03 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  4 Jan 2022 19:25:08 +0100
-Message-Id: <20220104182508.3375382-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=TKA2g/fMZFZrZ/QjojN4M7FCmcZlZ1VbO9gQ3GkgDI0=;
+ b=npkiG6dSJ6RQwwWp0im7Pr+5xqDmhaCR4rsVxI+4/xiWZUsk6zJ9TSJ3AGzS1v0b62
+ bmmRVWZUa1JVLF70K7LWSsopv46pjVGm086ACluHW2kZ2TxDdQsWLlLZ6VarD1HVt/pw
+ mOGYltjYhG/bS3NmCATUbQNKmbithafxVzQUEYkSp8k7EIQcaCQiw5X77/69FjWNfrnn
+ lyLZIHrckSXNvjDFZCIeKqNjWk3FxL4+hkbh8Kmz9ZRYV3EOc//EYSsoVckuOF2z8UpW
+ 4cNMCk/XJsQkFJkCvvyrmidCO8oI5dggnhSOL5tG5x/pX/Z7M9gNuLZj9IpyCEqkCBhI
+ CZkg==
+X-Gm-Message-State: AOAM533APrmyrmfrRAaE7TW/eFOOzqUpuSzUh3G9KXIEi1IaJRyc7VCB
+ al8iRLWm/bbqYawwljbkbLWkFA==
+X-Google-Smtp-Source: ABdhPJzrstSMBoKv3JYQS2fcG677JsfY12i3g6/LMb65YKzo5T5cTCsLQELjxgh0aM5HqCTVzGluWQ==
+X-Received: by 2002:aa7:d749:: with SMTP id a9mr48407264eds.232.1641321012741; 
+ Tue, 04 Jan 2022 10:30:12 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id a16sm11620425ejk.8.2022.01.04.10.30.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Jan 2022 10:30:12 -0800 (PST)
+Message-ID: <2386b29d-68b3-5ffa-8a0e-6dfd3de3b83d@mind.be>
+Date: Tue, 4 Jan 2022 19:30:11 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.1.5
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+References: <20220103210713.8642-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220103210713.8642-1-romain.naour@gmail.com>
+Subject: Re: [Buildroot] [PATCH] package/terminology: bump to version 1.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,49 +92,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Mutt 2.1.5 was released on December 30, 2021. This is a bug-fix release,
-fixing two SMTP authentication issues, a crash bug on NetBSD, and a
-couple other issues.
 
-https://gitlab.com/muttmua/mutt/-/blob/mutt-2-1-5-rel/ChangeLog
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 03/01/2022 22:07, Romain Naour wrote:
+> Requires efl 1.26.0 [1]
+> 
+> [1] https://git.enlightenment.org/apps/terminology.git/commit/?id=3e95d2ad9f59e01d498e90dcb4413dc886d49852
+> 
+> See:
+> https://www.enlightenment.org/news/2022-01-02-terminology-1.12.0
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index dceae57b65..d439b23aa3 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3361b682ea23df88961fa9835196698aefd2ebf0aba494599b29d1c4b1b4db79  mutt-2.1.4.tar.gz
-+sha256  92a309e47e363a97d62425bcb71adceae5ab5c4c413dbcac37fa98ed70c12be0  mutt-2.1.5.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 44d7864eb6..7e9046fe8a 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 2.1.4
-+MUTT_VERSION = 2.1.5
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
--- 
-2.34.1
+  Applied to master, thanks.
 
+  Regards,
+  Arnout
+
+> ---
+>   package/terminology/terminology.hash | 4 ++--
+>   package/terminology/terminology.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+> index be1d6f4269..7e9658482a 100644
+> --- a/package/terminology/terminology.hash
+> +++ b/package/terminology/terminology.hash
+> @@ -1,3 +1,3 @@
+> -# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.9.0.tar.xz.sha256sum
+> -sha256  3f3bc327da5cc239d468570afed29a17e2fda3b1fee02b28f02ee7ed5141e46c  terminology-1.9.0.tar.xz
+> +# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.12.0.tar.xz.sha256sum
+> +sha256  74d2d3b253a77bcb215fc36eedf0ccb59643452e2ef15c510430ffaa6034dcf0  terminology-1.12.0.tar.xz
+>   sha256  6863ee700fc82b9c3b82a1627136f6935a9eb68e6a64491f20e00b4023c33622  COPYING
+> diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+> index 29b59fb39e..787c9ad137 100644
+> --- a/package/terminology/terminology.mk
+> +++ b/package/terminology/terminology.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -TERMINOLOGY_VERSION = 1.9.0
+> +TERMINOLOGY_VERSION = 1.12.0
+>   TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+>   TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+>   TERMINOLOGY_LICENSE = BSD-2-Clause
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
