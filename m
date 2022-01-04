@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01ADCC433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABFC1C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jan 2022 18:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A623B40236;
-	Tue,  4 Jan 2022 18:09:05 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hqGGix8vROqR; Tue,  4 Jan 2022 18:09:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2BC74092B;
-	Tue,  4 Jan 2022 18:09:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C8241BF9B2
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9954B81AEF
- for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70C66812DB;
+	Tue,  4 Jan 2022 18:09:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YO-xf9pqOvpJ for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YPXW_qmPA_cU; Tue,  4 Jan 2022 18:09:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 907ED812E6;
+	Tue,  4 Jan 2022 18:09:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E59881BF5DB
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E391D40920
+ for <buildroot@lists.busybox.net>; Tue,  4 Jan 2022 18:09:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bkdJMVDuppY4 for <buildroot@lists.busybox.net>;
  Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6B8081D35
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B8A44030D
  for <buildroot@buildroot.org>; Tue,  4 Jan 2022 18:09:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2D83783249; Tue,  4 Jan 2022 18:02:57 +0000 (UTC)
+ id F2D248324A; Tue,  4 Jan 2022 18:02:56 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jan 2022 18:49:19 +0100
+Date: Tue, 4 Jan 2022 18:32:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5e39bd0439be9f65a7b03f4bcd86bf2fbb16b212
-X-Git-Newrev: 97a504ed30dbeaca4704cbac8699d98ce7f26102
+X-Git-Oldrev: 5a30732769c0ca54c2a7e0eeca64f42d8479e7f1
+X-Git-Newrev: 5f6f3b99fbac974e4b8d977810e97500126ef4d1
 X-Patchwork-Hint: ignore
-Message-Id: <20220104180257.2D83783249@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lxc: bump to version 4.0.11
+Message-Id: <20220104180256.F2D248324A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/usbredir: bump to version 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +58,211 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97a504ed30dbeaca4704cbac8699d98ce7f26102
+commit: https://git.buildroot.net/buildroot/commit/?id=5f6f3b99fbac974e4b8d977810e97500126ef4d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The LXC 4.0 branch is supported until June 2025.
-Only bugfixes and securitiy issues get included into the stable bugfix
-releases, so it's always safe and recommended to keep up and run the
-latest bugfix release.
+Drop all patches (already in version)
 
-https://discuss.linuxcontainers.org/t/lxc-4-0-11-has-been-released/12427
+https://gitlab.freedesktop.org/spice/usbredir/-/blob/usbredir-0.12.0/ChangeLog.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/usbredir/0001-meson-add-tests-option.patch | 46 -----------------
+ .../0002-meson-add-stack_protector-option.patch    | 60 ----------------------
+ .../0003-meson.build-make-C-optional.patch         | 39 --------------
+ package/usbredir/usbredir.hash                     |  4 +-
+ package/usbredir/usbredir.mk                       |  2 +-
+ 5 files changed, 3 insertions(+), 148 deletions(-)
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index efd7a8e42c..2b58df2f1d 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  a10c518056d2e497bd600e4ffac2853bdeab1e835bf455a6d87cc8df128bfae9  lxc-4.0.10.tar.gz
-+sha256  afa481e17ca9a9cf9fd3d2d7a04e42a8f6bfe60b323909326c968e852cd9f02c  lxc-4.0.11.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 93f6d2535f..4d63fc14cb 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
+diff --git a/package/usbredir/0001-meson-add-tests-option.patch b/package/usbredir/0001-meson-add-tests-option.patch
+deleted file mode 100644
+index b2df1587b1..0000000000
+--- a/package/usbredir/0001-meson-add-tests-option.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 8490a7ac101d4ee0a78c44b252d3b7a6c2508c74 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 21 Aug 2021 11:55:48 +0200
+-Subject: [PATCH] meson: add tests option
+-
+-Add tests option to allow the user to disable them
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://gitlab.freedesktop.org/spice/usbredir/-/commit/8490a7ac101d4ee0a78c44b252d3b7a6c2508c74]
+----
+- meson.build       | 4 +++-
+- meson_options.txt | 5 +++++
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 6e773a7..a6d21b8 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -106,7 +106,9 @@ if host_machine.system() != 'windows'
+-         subdir('fuzzing')
+-     endif
+- endif
+--subdir('tests')
+-+if get_option('tests').enabled()
+-+    subdir('tests')
+-+endif
+- subdir('data')
+- 
+- summary(summary_info, bool_yn: true)
+-diff --git a/meson_options.txt b/meson_options.txt
+-index b35732b..63e8c85 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -21,3 +21,8 @@ option('tools',
+-     type : 'feature',
+-     value : 'enabled',
+-     description : 'Build usbredir\'s tools such as usbredirect')
+-+
+-+option('tests',
+-+    type : 'feature',
+-+    value : 'enabled',
+-+    description : 'Build usbredir\'s tests such as filter')
+--- 
+-GitLab
+-
+diff --git a/package/usbredir/0002-meson-add-stack_protector-option.patch b/package/usbredir/0002-meson-add-stack_protector-option.patch
+deleted file mode 100644
+index 613e2714e3..0000000000
+--- a/package/usbredir/0002-meson-add-stack_protector-option.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 54cf1897ef3aa4d0a35b5f4eb1f5c6928b033af5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 24 Sep 2021 17:24:43 +0200
+-Subject: [PATCH] meson: add stack_protector option
+-
+-Add stack_protector option to allow the user to disable it as some
+-embedded toolchains don't support it which will result in the following
+-build failure:
+-
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: usbredirparser/libusbredirparser.so.1.1.0.p/usbredirparser.c.o: in function `va_log':
+-usbredirparser.c:(.text+0x1c4): undefined reference to `__stack_chk_guard'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/40de5443e98157ad50c6841ea70a835cd5ad4fe9
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/spice/usbredir/-/merge_requests/53]
+----
+- meson.build       | 6 +++++-
+- meson_options.txt | 5 +++++
+- 2 files changed, 10 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index a6d21b8..4350f53 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -17,8 +17,12 @@ cc_flags = [
+- if host_machine.system() != 'windows'
+-     cc_flags += [
+- 	'-Wp,-D_FORTIFY_SOURCE=2',
+--	'-fstack-protector',
+-     ]
+-+    if get_option('stack_protector').enabled()
+-+        cc_flags += [
+-+	    '-fstack-protector',
+-+        ]
+-+    endif
+- endif
+- 
+- # Check if we are building from .git
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 63e8c85..34dd392 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -17,6 +17,11 @@ option('fuzzing-install-dir',
+-     type : 'string',
+-     description : 'Installation directory for fuzzing binaries')
+- 
+-+option('stack_protector',
+-+    type : 'feature',
+-+    value : 'enabled',
+-+    description : 'Build usbredir\'s with stack-protector')
+-+
+- option('tools',
+-     type : 'feature',
+-     value : 'enabled',
+--- 
+-2.33.0
+-
+diff --git a/package/usbredir/0003-meson.build-make-C-optional.patch b/package/usbredir/0003-meson.build-make-C-optional.patch
+deleted file mode 100644
+index fe1ed3f698..0000000000
+--- a/package/usbredir/0003-meson.build-make-C-optional.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 55fc307d23d657b52433d1c8508467d0589754d5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 16 Oct 2021 15:45:57 +0200
+-Subject: [PATCH] meson.build: make C++ optional
+-
+-Remove cpp from meson project statement to make C++ optional and avoid
+-the following build failure when the toolchain does not provide a C++
+-compiler:
+-
+-../output-1/build/usbredir-0.11.0/meson.build:1:0: ERROR: Unknown compiler(s): [['/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++']]
+-The following exception(s) were encountered:
+-Running "/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++ --version" gave "[Errno 2] No such file or directory: '/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-g++'"
+-
+-Indeed C++ is only required for fuzzing which is already handled by
+-meson through add_languages('cpp', required: true)
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/eca1d8a2b73a769354ab1d24c7996be30f152138
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/spice/usbredir/-/merge_requests/55]
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 49dbce4..ca19f22 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1,4 +1,4 @@
+--project('usbredir', 'c', 'cpp',
+-+project('usbredir', 'c',
+-     version: '0.11.0',
+-     license: 'LGPLv2.1+',
+-     meson_version : '>= 0.53',
+--- 
+-2.33.0
+-
+diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+index e11d4aa720..f738c36690 100644
+--- a/package/usbredir/usbredir.hash
++++ b/package/usbredir/usbredir.hash
+@@ -1,5 +1,5 @@
+-# https://spice-space.org/download/usbredir/usbredir-0.11.0.tar.xz.sha256sum
+-sha256  72dd5f3aa90dfbc0510b5149bb5b1654c8f21fdc405dfce7b5dc163dcff19cba  usbredir-0.11.0.tar.xz
++# https://spice-space.org/download/usbredir/usbredir-0.12.0.tar.xz.sha256sum
++sha256  fbb44025bf55e1ce8d84afc7596bfa47c8a36cd603c6fa440f9102c1c9761e6d  usbredir-0.12.0.tar.xz
+ 
+ # Hash for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+index 0a8dbf012d..6792a3e758 100644
+--- a/package/usbredir/usbredir.mk
++++ b/package/usbredir/usbredir.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 4.0.10
-+LXC_VERSION = 4.0.11
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+-USBREDIR_VERSION = 0.11.0
++USBREDIR_VERSION = 0.12.0
+ USBREDIR_SOURCE = usbredir-$(USBREDIR_VERSION).tar.xz
+ USBREDIR_SITE = http://spice-space.org/download/usbredir
+ USBREDIR_LICENSE = LGPL-2.1+ (libraries)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
