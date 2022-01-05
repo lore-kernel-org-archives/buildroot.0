@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38557C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 21:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93DEBC433EF
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 21:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E58956FBC6;
-	Wed,  5 Jan 2022 21:01:03 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RrjEvabDkDD0; Wed,  5 Jan 2022 21:01:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 438426FBC3;
-	Wed,  5 Jan 2022 21:01:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F1911BF9CB
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 21:00:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 183B6409D2
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 21:00:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1837340A08;
+	Wed,  5 Jan 2022 21:01:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pPEoym20aLbE for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i2OMxTuefhjL; Wed,  5 Jan 2022 21:01:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29BA3409D2;
+	Wed,  5 Jan 2022 21:01:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 292691BF955
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 21:00:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16468428D1
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 21:00:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q9lLtDcm_wyW for <buildroot@lists.busybox.net>;
  Wed,  5 Jan 2022 21:00:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A71C409B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AFCA428CD
  for <buildroot@buildroot.org>; Wed,  5 Jan 2022 21:00:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 0D863832C5; Wed,  5 Jan 2022 20:54:28 +0000 (UTC)
+ id 1F557832DA; Wed,  5 Jan 2022 20:54:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Jan 2022 21:58:58 +0100
+Date: Wed, 5 Jan 2022 21:59:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd9c604c96480819c053811432b7c36073ad785e
-X-Git-Newrev: 2fb55340ef0781243b18a6f2519c02b5c1d7bf28
+X-Git-Oldrev: 1a087dd17fcfb7df2053cde6286803d6ae326c14
+X-Git-Newrev: 8c0b521987f929ce88ae97ee2bf6f923311061a7
 X-Patchwork-Hint: ignore
-Message-Id: <20220105205428.0D863832C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsemanage: add gcc >= 5
+Message-Id: <20220105205428.1F557832DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/checkpolicy: add host gcc >= 5
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,66 +59,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb55340ef0781243b18a6f2519c02b5c1d7bf28
+commit: https://git.buildroot.net/buildroot/commit/?id=8c0b521987f929ce88ae97ee2bf6f923311061a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 56d9b887685c86fd4fbadda247cdbe733d499e81 forgot to add gcc >= 5
-dependency
+Commit 56d9b887685c86fd4fbadda247cdbe733d499e81 forgot to add host
+gcc >= 5 dependency
 
 Fixes:
- - No autobuilder failures (yet)
+ - http://autobuild.buildroot.org/results/fc727efc0c658aaae55c83632a91af83701f0c49
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsemanage/Config.in     | 6 ++++--
- package/policycoreutils/Config.in | 8 +++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/checkpolicy/Config.in.host | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 3c7050ee51..5103df3f15 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libselinux -> libsepol
- 	select BR2_PACKAGE_AUDIT
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_BZIP2
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_LIBSEMANAGE
+diff --git a/package/checkpolicy/Config.in.host b/package/checkpolicy/Config.in.host
+index 240a5b6dc4..38e35e2fc1 100644
+--- a/package/checkpolicy/Config.in.host
++++ b/package/checkpolicy/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_CHECKPOLICY
+ 	bool "host checkpolicy"
++	depends on BR2_HOST_GCC_AT_LEAST_5 # host-libselinux -> host-libsepol
+ 	help
+ 	  checkpolicy is the SELinux policy compiler. It uses libsepol
+ 	  to generate the binary policy. checkpolicy uses the static
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_HOST_CHECKPOLICY
+ 	  shared library interface.
  
  	  http://selinuxproject.org/page/Main_Page
- 
--comment "libsemanage needs a toolchain w/ threads, dynamic library"
-+comment "libsemanage needs a toolchain w/ threads, dynamic library, gcc >= 5"
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-index 81900b4e41..3201c8fede 100644
---- a/package/policycoreutils/Config.in
-+++ b/package/policycoreutils/Config.in
-@@ -1,12 +1,14 @@
--comment "policycoreutils needs a toolchain w/ threads, dynamic library"
-+comment "policycoreutils needs a toolchain w/ threads, dynamic library, gcc >= 5"
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- config BR2_PACKAGE_POLICYCOREUTILS
- 	bool "policycoreutils"
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
--	depends on !BR2_STATIC_LIBS #libsemanage
-+	depends on !BR2_STATIC_LIBS # libsemanage
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
- 	select BR2_PACKAGE_LIBSEMANAGE
- 	select BR2_PACKAGE_LIBCAP_NG
- 	help
++
++comment "host checkpolicy needs a toolchain w/ host gcc >= 5"
++	depends on !BR2_HOST_GCC_AT_LEAST_5
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
