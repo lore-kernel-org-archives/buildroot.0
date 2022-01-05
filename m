@@ -4,76 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F79CC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 23:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DC9C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 23:17:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88C30428E8;
-	Wed,  5 Jan 2022 23:15:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C963240915;
+	Wed,  5 Jan 2022 23:17:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rh4cy7-G-EVi; Wed,  5 Jan 2022 23:15:49 +0000 (UTC)
+	with ESMTP id iDoIorYVJvgz; Wed,  5 Jan 2022 23:17:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF090428E4;
-	Wed,  5 Jan 2022 23:15:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 158401BF336
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 23:15:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D628E414C6;
+	Wed,  5 Jan 2022 23:17:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 555911BF336
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 23:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F22B6428DF
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 23:15:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E3B840361
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 23:17:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5FfiCAXJXiXp for <buildroot@lists.busybox.net>;
- Wed,  5 Jan 2022 23:15:46 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDFB4428E4
- for <buildroot@buildroot.org>; Wed,  5 Jan 2022 23:15:45 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- b186-20020a1c1bc3000000b00345734afe78so298769wmb.0
- for <buildroot@buildroot.org>; Wed, 05 Jan 2022 15:15:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=olEAVxAYVi2uGZlpL0gmpdKoTb20KFad50A2bF9NHjE=;
- b=XHO/HO1389HcfmN0uBGyYU25INqcxsfOsAqMaW5u2qLxAj6WtfMFmDTTUw9BsifoVE
- 6cUr9UEhbSknEbpwf2L8MAgwU2IJ/iuCpbryEvWke9GyQW8wgP5p4t0vntdnaS8GNpG7
- RGuzZP5anCOEdUH0yNfWAhj0/01DTv0t2fUqrFbeYlbtnXyDP1Kq9NK6PD5Ovg+Oqhd5
- dJUNGpmEMQkL9QSTVV1N2ZrnDIbkBYeJm7WMqXO+kaY0/1UGjr9CudVSeFUI7pXDUesM
- FzWRfxDateSBQwBZiaYFb3PB4d3T9MWLhJAa4/9dyppKLdQqFNi/fiCcR0XYg6bX57PJ
- Ys2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=olEAVxAYVi2uGZlpL0gmpdKoTb20KFad50A2bF9NHjE=;
- b=A1n/07/kezn/5NLoqVWK2gry9jvB/108e4QD1wZfhrSE6GwkAsPqR+M8+J2ziG4Qc4
- LVyuq6Ou4vPbSWRuG8koixNQnskctc+VY56+9YPbTTO1Z7Vn9BKi/UJeIFOVrdGH9SRP
- lGuz3BttGN5EoNWl5l0Ne5C24AlmwLtuzP7J1hjrtlGZ31J9gxAOFB0iHIXHqTtY/98C
- ijYcMSiBt0p14Qz95+g63QdKuvtEkkb0Fte2BKEtlh9q3FtD9LcZSFoKNXGoewXtay4U
- NCcgn0PRGSN8rZL3pUwEccSIdc09JLRSBrJrrxTDGnmlXqA9VtO4mcLjO7c+jVISxOTv
- 68pQ==
-X-Gm-Message-State: AOAM533ZOWnCRmLFb5vgtDnshrbp8XEDtwWDiLv8Dz35WuE/2sZIFEPj
- JqlHmmBhRrDHDm8hLPF0/hi+/SqcEQ0=
-X-Google-Smtp-Source: ABdhPJx5W5AdvtoY9+4zKo/Lo2E0SHew0gSbVkfUn2zF70DhgbLpze2iErUQYJbmmhQzos1RIdq7LQ==
-X-Received: by 2002:a05:600c:4e86:: with SMTP id
- f6mr4640389wmq.144.1641424543954; 
- Wed, 05 Jan 2022 15:15:43 -0800 (PST)
-Received: from home.localdomain ([178.124.208.44])
- by smtp.gmail.com with ESMTPSA id m12sm374998wrp.49.2022.01.05.15.15.42
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Jan 2022 15:15:43 -0800 (PST)
-From: Uladzimir Bely <wiselord1983@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  6 Jan 2022 02:15:43 +0300
-Message-Id: <20220105231543.22467-1-wiselord1983@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Y0OMG9byJIJ for <buildroot@lists.busybox.net>;
+ Wed,  5 Jan 2022 23:17:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 42330400B8
+ for <buildroot@buildroot.org>; Wed,  5 Jan 2022 23:17:11 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:91d2:d1c6:5626:51cd])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id E184E7802FE;
+ Thu,  6 Jan 2022 00:17:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641424627;
+ bh=qGqFexPlBoZBT9EjurRkBoXQNfOzfpKn1qiSr+4Qtx8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=D+eSR3VmfD3b68+MAQOHDz05Son/qqmTrdupCD7WXGalrnTQ4mQqi1VRCBYFyMK6a
+ lTCdeo6ZmPkn04viFoCwxygmiuOznulIGDRtXeM1zcd2yIFe/zFkd5XzDp+SynOWkO
+ 1AeOKJ596MLQNY0XpVfYFWAXMiuKQjsY9A1C2E0N5ig+b3nUYey85ejaD3mqV7H45Z
+ fqevWPM9NS6BoVi0M1MYtMjdrpJ53cCt3zmTYDMTQs7rauSkKMehUWyHCkLT2bZbdo
+ x0AFUgEsVo8C74vZe+QfXcY30Fk1If4UkbwkBI5mKo8W6Nqej+aQiknkwrDzJHHohE
+ ieJNw+FuiIdeQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 06 Jan 2022 00:16:54 +0100
+Date: Thu, 6 Jan 2022 00:16:54 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <20220105231654.GL614810@scaer>
+References: <20211223111348.3532601-1-thierry.bultel@linatsea.fr>
+ <20211223111348.3532601-2-thierry.bultel@linatsea.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-mpd2: new package
+Content-Disposition: inline
+In-Reply-To: <20211223111348.3532601-2-thierry.bultel@linatsea.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 2/3] package/dracut: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,83 +72,265 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-A client interface for the Music Player Daemon.
+Thierry, All,
 
-Signed-off-by: Uladzimir Bely <wiselord1983@gmail.com>
----
- package/Config.in                    |  1 +
- package/python-mpd2/Config.in        |  8 ++++++++
- package/python-mpd2/python-mpd2.hash |  5 +++++
- package/python-mpd2/python-mpd2.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-mpd2/Config.in
- create mode 100644 package/python-mpd2/python-mpd2.hash
- create mode 100644 package/python-mpd2/python-mpd2.mk
+On 2021-12-23 12:13 +0100, Thierry Bultel spake thusly:
+> dracut is the tool used by desktop distributions to
+> build initrds. In the embedded world, it can be
+> very usefull, too, for instance when wanting to
+> create an initramfs for a system recovery mode.
+> Whereas it is definitively possible to achieve
+> this with buildroot, the process is to have a
+> dedicated buildroot configuration for that,
+> and perform a full build. Instead of doing that,
+> the idea is to use dracut to pick the needed
+> binaries/shared libraries, configuration files,
+> or kernel modules from the 'target' directory.
+> The advantage is to save build time, and also
+> to have a consistency between the packages versions
+> taken for the recovery and the production filesystem.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7148639735..b9dc9b49e7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1091,6 +1091,7 @@ menu "External python modules"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-modbus-tk/Config.in"
- 	source "package/python-more-itertools/Config.in"
-+	source "package/python-mpd2/Config.in"
- 	source "package/python-msgfy/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-diff --git a/package/python-mpd2/Config.in b/package/python-mpd2/Config.in
-new file mode 100644
-index 0000000000..015ca47610
---- /dev/null
-+++ b/package/python-mpd2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_MPD2
-+	bool "python-mpd2"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_MPD # runtime
-+	help
-+	  A Python MPD client library.
-+
-+	  https://github.com/Mic92/python-mpd2
-diff --git a/package/python-mpd2/python-mpd2.hash b/package/python-mpd2/python-mpd2.hash
-new file mode 100644
-index 0000000000..83487257ee
---- /dev/null
-+++ b/package/python-mpd2/python-mpd2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/python-mpd2/json
-+md5  e31c6063e9c2e029a26b0815cd08b05e  python-mpd2-3.0.4.tar.gz
-+sha256  7a67834e22d97e7cd77f8951c8baf87c149285c67d67d73550ce034302561ae5  python-mpd2-3.0.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-mpd2/python-mpd2.mk b/package/python-mpd2/python-mpd2.mk
-new file mode 100644
-index 0000000000..6a7358e8cd
---- /dev/null
-+++ b/package/python-mpd2/python-mpd2.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-mpd2
-+#
-+################################################################################
-+
-+PYTHON_MPD2_VERSION = 3.0.4
-+PYTHON_MPD2_SITE = https://files.pythonhosted.org/packages/ad/92/bec26455a3a6d6146bcf2a974f5c3509d451306413b386fc12b037d9e3b0
-+PYTHON_MPD2_SETUP_TYPE = setuptools
-+PYTHON_MPD2_LICENSE = GNU Library or Lesser General Public License (LGPL)
-+PYTHON_MPD2_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+Please, wrap your commit log to ~72 chars.
+
+> Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+> ---
+[--SNIP--]
+> diff --git a/package/dracut/05busybox-buildroot/module-setup.sh b/package/dracut/05busybox-buildroot/module-setup.sh
+> new file mode 100755
+> index 0000000000..b227571db4
+> --- /dev/null
+> +++ b/package/dracut/05busybox-buildroot/module-setup.sh
+
+You will have to (briefly, maybe) explain how those 'modules' are meant
+to be used...
+
+> @@ -0,0 +1,69 @@
+> +#!/bin/bash
+
+... here you make it an executable (0755) shell script, but it only
+defines functions, it actually calls nothing. Are moduels supposed to be
+source-d from dracut itself?
+
+> +check() {
+> +	require_binaries \
+> +		busybox | return 1
+
+This can't possibly work: it will always fail (there is a single pipe,
+so the whole command will fail).
+
+Then what happens depends on whether the shell is set -e or not. If it
+is not set -e, the execution continues, and the check() function will
+always return 0 (success). If the shell is set -e, then execution of
+check() ends right there, and presumably check() is called as an
+if-block condition, and thus the condition will never be true.
+
+So, it was not tested? ;-)
+
+(also: commands that fit on a line should be on a single line, like so:
+    require_binaries busybox || return 1
+)
+
+> +	return 0
+> +}
+> +
+> +depends() {
+> +	return 0
+> +}
+> +
+> +
+> +install_busybox_links() {
+> +	dir=$1
+> +	linkname=$2
+> +
+> +	(cd "$dracutsysrootdir"$dir &&
+
+    $ shellcheck package/dracut/05busybox-buildroot/module-setup.sh
+        (cd "$dracutsysrootdir"$dir &&
+                               ^--^ SC2086: Double quote to prevent globbing and word splitting.
+
+Also, please do variable expansion with curly braces (everywhere):
+
+    "${dracutsysrootdir}${dir}"
+
+> +	for x in *; do
+> +	    if [ "$(readlink "$x")" = $linkname ]; then
+> +	    	ln -sf $linkname $initdir/$dir/$x
+> +	    fi
+> +	done
+> +	)
+> +
+> +}
+> +
+> +install() {
+> +
+
+No initial empty line at begining of function.
+
+[--SNIP--]
+> +#	mkdir -p $initdir/etc/init.d
+> +#	cp -a $dracutsysrootdir/etc/init.d/* $initdir/etc/init.d
+
+Commented-out debug code or non-function code should just be removed.
+
+> +	
+
+No empty line at the end of function.
+
+> +}
+> +
+> diff --git a/package/dracut/06uclibc/module-setup.sh b/package/dracut/06uclibc/module-setup.sh
+> new file mode 100644
+> index 0000000000..77e9bd864e
+> --- /dev/null
+> +++ b/package/dracut/06uclibc/module-setup.sh
+> @@ -0,0 +1,20 @@
+> +#!/bin/bash
+> +
+> +check() {
+> +	return 0
+> +}
+> +
+> +depends() {
+> +	return 0
+> +}
+> +
+> +
+> +
+> +install() {
+> +
+> +	# Despite of the fact that the listed dependency (reported by readelf -d)
+> +	# is purely ld-uClibc.so.1, the loader needs the ld-uClibc.so.0, too
+> +
+> +	ln -s ld-uClibc.so.1 $initdir/lib/ld-uClibc.so.0
+> +
+
+Extra empty lines...
+
+But still, a little explanations (in the commit log) on how those
+scripts are supposed to be used would help further review.
+
+[--SNIP--]
+> diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+> new file mode 100644
+> index 0000000000..6c82b4ba75
+> --- /dev/null
+> +++ b/package/dracut/dracut.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# dracut
+> +#
+> +################################################################################
+> +
+> +DRACUT_VERSION = 055
+> +DRACUT_SOURCE = dracut-$(DRACUT_VERSION).tar.xz
+> +DRACUT_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/boot/dracut
+> +DRACUT_LICENSE = GPL-2.0
+> +DRACUT_LICENSE_FILES = COPYING
+> +
+> +HOST_DRACUT_DEPENDENCIES += host-pkgconf host-kmod host-cross-ldd
+
+First assignment should not be +=, but just =.
+
+> +define HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
+> +	$(SED) '/unset LD_LIBRARY_PATH/d' $(HOST_DIR)/bin/dracut
+> +	$(SED) '/unset LD_PRELOAD/d' $(HOST_DIR)/bin/dracut
+
+As for cross-ldd, we prefer that patching be done with actual patches
+rather than sed expressions.
+
+> +endef
+> +
+> +define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+> +	$(INSTALL) -D -m 0755 package/dracut/dracut_wrapper.sh \
+> +		$(HOST_DIR)/usr/bin/dracut_wrapper.sh
+
+Your commit log does not explain the reason why we need to have a
+wrapper, or how it is going to be used...
+
+Usually, when we introduce a wrapper, it replace sthe original
+executable in name, and the original is renamed, with the wrapper
+eventually calling into the renamed original...
+
+So having a wrapper installed as you do it is slightly off-road...
+
+> +endef
+> +
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +define HOST_DRACUT_POST_INSTALL_UCLIBC_MODULE
+> +	$(INSTALL) -D -m 0755 package/dracut/06uclibc/module-setup.sh \
+> +		$(HOST_DIR)/lib/dracut/modules.d/06uclibc/module-setup.sh
+> +endef
+> +HOST_DRACUT_POST_INSTALL_HOOKS+=HOST_DRACUT_POST_INSTALL_UCLIBC_MODULE
+> +endif
+
+And what about glibc? musl?
+
+Can we unconditionally install the modules and change their check()
+functions to decide whther the moduels is usable or not? Or something
+else dynamic?
+
+> +ifeq ($(BR2_INIT_BUSYBOX),y)
+> +define HOST_DRACUT_POST_INSTALL_BUSYBOX_MODULE
+> +	$(INSTALL) -D -m 0755 package/dracut/05busybox-buildroot/module-setup.sh \
+> +		$(HOST_DIR)/lib/dracut/modules.d/05busybox-buildroot/module-setup.sh
+> +endef
+> +HOST_DRACUT_POST_INSTALL_HOOKS+=HOST_DRACUT_POST_INSTALL_BUSYBOX_MODULE
+
+And what about systemd as an init system? openrc? sysv-init? Others?
+
+> +endif
+> +
+> +HOST_DRACUT_POST_INSTALL_HOOKS+=HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
+> +HOST_DRACUT_POST_INSTALL_HOOKS+=HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+
+Spaces around the operator. Also, since this is the same hook, a single
+assignment is better:
+
+    HOST_DRACUT_POST_INSTALL_HOOKS += \
+        HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT \
+        HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+
+Note: we prefer to have uncondtional asignemnts come before the
+conditional ones, and we also prefer to have ythe hook assignment
+come right after the hook definitionm like so:
+
+
+    define HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
+        blabla
+    endef
+    HOST_DRACUT_POST_INSTALL_HOOKS = HOST_DRACUT_POST_INSTALL_ENABLE_FAKEROOT
+
+    define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+        blabla
+    endef
+    HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+
+    ifeq ($(BR2_INIT_BUSYBOX),y)
+    define HOST_DRACUT_POST_INSTALL_BUSYBOX_MODULE
+        blabla
+    endef
+    HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_BUSYBOX_MODULE
+    endif
+
+and so on...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
