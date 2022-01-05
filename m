@@ -4,62 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7F7FC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 09:33:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61FD4C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 09:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 974454162B;
-	Wed,  5 Jan 2022 09:33:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14223410D7;
+	Wed,  5 Jan 2022 09:34:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OKa_T1eyrES1; Wed,  5 Jan 2022 09:33:53 +0000 (UTC)
+	with ESMTP id rBJW5Xd-Ci62; Wed,  5 Jan 2022 09:34:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 931B441622;
-	Wed,  5 Jan 2022 09:33:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1339141622;
+	Wed,  5 Jan 2022 09:34:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3944F1BF390
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:33:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D2EA1BF390
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25813410D7
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:33:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C23C41603
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:33:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CD3I_wrtsVR6 for <buildroot@lists.busybox.net>;
- Wed,  5 Jan 2022 09:33:23 +0000 (UTC)
+ with ESMTP id 4dhBu9qlm--p for <buildroot@lists.busybox.net>;
+ Wed,  5 Jan 2022 09:33:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 37A86409F7
- for <buildroot@buildroot.org>; Wed,  5 Jan 2022 09:33:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E615B410D7
+ for <buildroot@buildroot.org>; Wed,  5 Jan 2022 09:33:42 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:dd8f:11a1:7592:f85e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 5530F2003C6;
- Wed,  5 Jan 2022 10:33:08 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id E11892003EE;
+ Wed,  5 Jan 2022 10:33:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641375200;
- bh=Pz74VXH5UfCFfytnqoV4GabueiH7nZTlbA9FSoXl5dg=;
+ s=smtp-20201208; t=1641375221;
+ bh=gpGTMydwAl5ztRfTzWnJXV5VojK9O5AHeq7EiDyg28M=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=eHq7nslWuCTTQafSyGBZAX6KjaDuBrhV4JD5zylF7o+HJ87iscLoCHeQpQ4SzQHrZ
- UhXe4OGSf0qlgmMuJJLJWtz8M7HnSLpx8/T3i/kwL16BRnuwN1Lvbv+lnU/eOw7ytU
- s7zJ0wru3hzrT+rFR0QNOzQeadK+V4a11n47fNOestrfeRsKcRHS85TcspRwE2G0P0
- PeJDiXcKppCiPuqvRSCydvgEAxs/9HP0hnPxF38MTweRa4Ixy7uXTTPaaSqVo+SVCE
- 3JVWJ4XD8YLAkKhkCPf/84W3XYy4H1SZiTPfxdJSOROw0KUdkK2YAIrNsNzqr8NRMa
- OR8xQIfB+kRdg==
+ b=jXR0nE6IVfuce+dCe/6dPMQo+lg5cpch7Pcw+NVH36FP48a+NX3zs23z4d5ZxjYGQ
+ rbWm4fVfqGOqPHYZ53kN5IkhKzD2gxSTCv1NbZ8hrhKRSxcYfEL771RzHTMJXNvd0p
+ 5Ipwo4LoUH+FS06Th/lpRssd9hwIYlIn1nv7HTpLZJefO/57MZ+tgD0MllL5FP3Z3W
+ J5ThkBoCRGbxRZz5kb0OOqFV4sjvovpwFkBq7Mvyc5uSmtAkPLYU5DiuumWVAw7Y1n
+ KlLKGTQlEwdbIYQeXlIVh5jLnqCJ7ckaOi8Ma0U2nZA3lUuc0v4+2xIPmQhcQ3UBpK
+ 9rlUUbk+gtwkA==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 05 Jan 2022 10:33:08 +0100
-Date: Wed, 5 Jan 2022 10:33:08 +0100
+ Wed, 05 Jan 2022 10:33:28 +0100
+Date: Wed, 5 Jan 2022 10:33:28 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220105093308.GF614810@scaer>
+Message-ID: <20220105093328.GG614810@scaer>
 References: <20220104220245.3706221-1-fontaine.fabrice@gmail.com>
- <20220104220245.3706221-6-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220104220245.3706221-6-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220104220245.3706221-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 6/6] package/selinux-python: bump to version
- 3.3
+Subject: Re: [Buildroot] [PATCH 1/6] package/libsepol: bump to version 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,48 +81,241 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Fabrice, All,
 
 On 2022-01-04 23:02 +0100, Fabrice Fontaine spake thusly:
-> Update indentation in hash file (two spaces)
+> Add gcc >= 5 dependency because __builtin_add_overflow is
+> unconditionally used since
+> https://github.com/SELinuxProject/selinux/commit/0744fa4f533c765d0a704fe8aa7174a0f93eb7bc
 > 
 > https://github.com/SELinuxProject/selinux/releases/tag/3.3
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/selinux-python/selinux-python.hash | 4 ++--
->  package/selinux-python/selinux-python.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/selinux-python/selinux-python.hash b/package/selinux-python/selinux-python.hash
-> index 00c28b722c..93a28becdd 100644
-> --- a/package/selinux-python/selinux-python.hash
-> +++ b/package/selinux-python/selinux-python.hash
-> @@ -1,5 +1,5 @@
->  # https://github.com/SELinuxProject/selinux/wiki/Releases
-> -sha256 770855ea8120ef23007fdb9db94b1ed6e8cd77917b584ed8877bbee9c16e74fb selinux-python-3.2.tar.gz
-> +sha256  8ad91061300387996ccb474962fb93dde263d924aa8f740618be16b22e2444ec  selinux-python-3.2.tar.gz
 
-You did update the hash, but forgot to update the version. ;-)
-
-Applied to master with the above fixed, thanks.
+Series of 6 patches applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/checkpolicy/Config.in    | 6 ++++--
+>  package/libselinux/Config.in     | 6 ++++--
+>  package/libsepol/Config.in       | 6 ++++--
+>  package/libsepol/libsepol.hash   | 2 +-
+>  package/libsepol/libsepol.mk     | 2 +-
+>  package/refpolicy/Config.in      | 6 ++++--
+>  package/restorecond/Config.in    | 5 +++--
+>  package/selinux-python/Config.in | 8 ++++++++
+>  package/semodule-utils/Config.in | 6 ++++--
+>  package/setools/Config.in        | 5 +++--
+>  10 files changed, 36 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
+> index ad769d22b7..6a1f22991d 100644
+> --- a/package/checkpolicy/Config.in
+> +++ b/package/checkpolicy/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_CHECKPOLICY
+>  	bool "checkpolicy"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
+>  	depends on !BR2_STATIC_LIBS # libselinux
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libselinux -> libsepol
+>  	select BR2_PACKAGE_LIBSELINUX
+>  	select BR2_PACKAGE_FLEX
+>  	help
+> @@ -13,5 +14,6 @@ config BR2_PACKAGE_CHECKPOLICY
+>  
+>  	  http://selinuxproject.org/page/Main_Page
+>  
+> -comment "checkpolicy needs a toolchain w/ threads, dynamic library"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +comment "checkpolicy needs a toolchain w/ threads, dynamic library, gcc >= 5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+> index 62070c8d59..348757abce 100644
+> --- a/package/libselinux/Config.in
+> +++ b/package/libselinux/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSELINUX
+>  	bool "libselinux"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
+>  	select BR2_PACKAGE_LIBSEPOL
+>  	select BR2_PACKAGE_PCRE
+>  	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+> @@ -16,5 +17,6 @@ config BR2_PACKAGE_LIBSELINUX
+>  
+>  	  http://selinuxproject.org/page/Main_Page
+>  
+> -comment "libselinux needs a toolchain w/ threads, dynamic library"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +comment "libselinux needs a toolchain w/ threads, dynamic library, gcc >= 5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+> index 04af880e67..7516076cd5 100644
+> --- a/package/libsepol/Config.in
+> +++ b/package/libsepol/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LIBSEPOL
+>  	bool "libsepol"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>  	help
+>  	  Libsepol is the binary policy manipulation library. It doesn't
+>  	  depend upon or use any of the other SELinux components.
+> @@ -35,5 +36,6 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+>  
+>  endif
+>  
+> -comment "libsepol needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "libsepol needs a toolchain w/ threads, gcc >= 5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+> index b273f982b6..039e4e3c7e 100644
+> --- a/package/libsepol/libsepol.hash
+> +++ b/package/libsepol/libsepol.hash
+> @@ -1,5 +1,5 @@
+>  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+> -sha256  dfc7f662af8000116e56a01de6a0394ed79be1b34b999e551346233c5dd19508  libsepol-3.2.tar.gz
+> +sha256  2d97df3eb8466169b389c3660acbb90c54200ac96e452eca9f41a9639f4f238b  libsepol-3.3.tar.gz
+>  
 >  # Hash for license file
-> -sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-> +sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-> diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
-> index 61ec7eb595..0cec602f3d 100644
-> --- a/package/selinux-python/selinux-python.mk
-> +++ b/package/selinux-python/selinux-python.mk
+>  sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+> diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+> index 55125f2203..8551a5de79 100644
+> --- a/package/libsepol/libsepol.mk
+> +++ b/package/libsepol/libsepol.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -SELINUX_PYTHON_VERSION = 3.2
-> +SELINUX_PYTHON_VERSION = 3.3
->  SELINUX_PYTHON_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SELINUX_PYTHON_VERSION)
->  SELINUX_PYTHON_LICENSE = GPL-2.0
->  SELINUX_PYTHON_LICENSE_FILES = COPYING
+> -LIBSEPOL_VERSION = 3.2
+> +LIBSEPOL_VERSION = 3.3
+>  LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
+>  LIBSEPOL_LICENSE = LGPL-2.1+
+>  LIBSEPOL_LICENSE_FILES = COPYING
+> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+> index c529b85e1d..043cc40a72 100644
+> --- a/package/refpolicy/Config.in
+> +++ b/package/refpolicy/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_REFPOLICY
+>  	bool "refpolicy"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
+>  	# Even though libsepol is not necessary for building, we get
+>  	# the policy version from libsepol, so we select it, and treat
+>  	# it like a runtime dependency.
+> @@ -113,5 +114,6 @@ endif
+>  
+>  endif
+>  
+> -comment "refpolicy needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "refpolicy needs a toolchain w/ threads, gcc >= 5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
+> index 31f85f2882..5e5567b213 100644
+> --- a/package/restorecond/Config.in
+> +++ b/package/restorecond/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_RESTORECOND
+>  	depends on BR2_USE_WCHAR # libglib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>  	depends on !BR2_STATIC_LIBS # libselinux
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_DBUS_GLIB
+>  	select BR2_PACKAGE_LIBGLIB2
+> @@ -15,7 +16,7 @@ config BR2_PACKAGE_RESTORECOND
+>  
+>  	  https://github.com/SELinuxProject/selinux/wiki/Releases
+>  
+> -comment "restorecond needs a toolchain w/ wchar, threads, dynamic library"
+> +comment "restorecond needs a toolchain w/ wchar, threads, dynamic library, gcc >= 5"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+> -		BR2_STATIC_LIBS
+> +		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+> index 0f1c281777..6a518f97d4 100644
+> --- a/package/selinux-python/Config.in
+> +++ b/package/selinux-python/Config.in
+> @@ -17,6 +17,7 @@ if BR2_PACKAGE_SELINUX_PYTHON
+>  
+>  config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+>  	bool "audit2allow"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # semodule-utils -> libsepol
+>  	select BR2_PACKAGE_CHECKPOLICY
+>  	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+>  	select BR2_PACKAGE_SEMODULE_UTILS
+> @@ -29,13 +30,20 @@ config BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+>  	  audit2why - translates SELinux audit messages into a
+>  	  description of why the access was denied (audit2allow -w)
+>  
+> +comment "audit2allow needs a toolchain w/ gcc 5"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> +
+>  config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+>  	bool "sepolgen"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # semodule-utils -> libsepol
+>  	select BR2_PACKAGE_SEMODULE_UTILS
+>  	help
+>  	  This package contains a Python module that allows you to
+>  	  generate an initial SELinux policy module template.
+>  
+> +comment "sepolgen needs a toolchain w/ gcc 5"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> +
+>  endif
+>  
+>  comment "selinux-python needs python3"
+> diff --git a/package/semodule-utils/Config.in b/package/semodule-utils/Config.in
+> index 38e043dc2c..5d98dc615f 100644
+> --- a/package/semodule-utils/Config.in
+> +++ b/package/semodule-utils/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_SEMODULE_UTILS
+>  	bool "semodule-utils"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
+>  	select BR2_PACKAGE_LIBSEPOL
+>  	help
+>  	  semodule-utils is a package that contains tools for handling
+> @@ -15,5 +16,6 @@ config BR2_PACKAGE_SEMODULE_UTILS
+>  
+>  	  https://github.com/SELinuxProject/selinux/wiki/Releases
+>  
+> -comment "semodule-utils needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "semodule-utils needs a toolchain w/ threads, gcc >= 5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> diff --git a/package/setools/Config.in b/package/setools/Config.in
+> index 3ab7f55948..5a71672bdf 100644
+> --- a/package/setools/Config.in
+> +++ b/package/setools/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_SETOOLS
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_PACKAGE_PYTHON3
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libselinux -> libsepol
+>  	select BR2_PACKAGE_PYTHON_NETWORKX # runtime
+>  	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>  	select BR2_PACKAGE_LIBSELINUX
+> @@ -19,10 +20,10 @@ config BR2_PACKAGE_SETOOLS
+>  
+>  	  https://github.com/SELinuxProject/setools/
+>  
+> -comment "setools needs a toolchain w/ threads, wchar, dynamic library"
+> +comment "setools needs a toolchain w/ threads, wchar, dynamic library, gcc >= 5"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> -		!BR2_USE_WCHAR
+> +		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>  
+>  comment "setools needs python3"
+>  	depends on BR2_USE_MMU
 > -- 
 > 2.34.1
 > 
