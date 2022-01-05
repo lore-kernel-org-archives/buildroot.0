@@ -1,90 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F6C6C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 19:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 791B6C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 20:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7F1A83112;
-	Wed,  5 Jan 2022 19:03:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED7796005E;
+	Wed,  5 Jan 2022 20:34:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UECbA87PeKbL; Wed,  5 Jan 2022 19:03:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VczF2-y_Q0dE; Wed,  5 Jan 2022 20:34:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DECA583103;
-	Wed,  5 Jan 2022 19:03:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 475D51BF47E
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 19:03:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB45F6FBB4;
+	Wed,  5 Jan 2022 20:34:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DAC2C1BF407
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 20:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36E9A4162D
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 19:03:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 970776FBB4
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 20:34:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=fastmail.com header.b="pnlr1xcI";
- dkim=pass (2048-bit key) header.d=messagingengine.com
- header.b="Ki868rZb"
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Opw10jF8API1 for <buildroot@lists.busybox.net>;
- Wed,  5 Jan 2022 19:03:32 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com
- [64.147.123.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6534241629
- for <buildroot@buildroot.org>; Wed,  5 Jan 2022 19:03:31 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
- by mailout.west.internal (Postfix) with ESMTP id 9AF9D3200C4A
- for <buildroot@buildroot.org>; Wed,  5 Jan 2022 14:03:30 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
- by compute3.internal (MEProxy); Wed, 05 Jan 2022 14:03:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
- mime-version:message-id:date:from:to:subject:content-type; s=
- fm1; bh=C7mViq6ZNZ7EOGULjQzEqg/QLF/PeyXddvDg7AGOjGQ=; b=pnlr1xcI
- 7pSwggOFWNDYsszuXCdeUtC6aehhRbOnD+5F50H05MKP4YmP6Fwy4431vOIxqM6T
- v6K//Ha7aZPcZkDjrbDUBoFrgEi5Kv36c3sudocAK6zQiXLqdBgwIk4UEKcnsvp3
- AhE/dDo/l8/l+bKI9O7o12qpnMhO0PlG8CkGySNB13GTe061wtvZrs4agaBOFLGl
- AmihhCtUBdWpaiR8jQ8u15/qEAfCLh+74zx34xmNo2KyMVsgy2y662pKDpbQxJVT
- m86Q/bjFy3c3qyt9iB19bYqC9A9JulDnO3FuYZKQ/OQUcI8yLnc2y+KYF062nX0H
- w7EhgddUU+QqeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=content-type:date:from:message-id
- :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
- :x-me-sender:x-sasl-enc; s=fm1; bh=C7mViq6ZNZ7EOGULjQzEqg/QLF/Pe
- yXddvDg7AGOjGQ=; b=Ki868rZb0Tj+jft4+J8CHvnmspnff1oNv9ZYtcpeCh9Nz
- tPCIMo0KpAkjB+jw8rEEXKaWX4yNvlzYbkGFQXNSDUYR7L+YEtiouvJgGXAsrGs+
- FJ7SnQKwhZtR6LbywcA5N0BQzMGFbbUcvJP/asdo+v1o3ji5z1p9qJwYPoZQcSbm
- jIiEEKnEPCN/KQLWygJPH/jqbGfZIZFSNXUxd1+SbRJ5ilEueUB6kRp98GtZspJR
- mFuc06ylTPKMzXeqnZxt1Vd3kRcgW0ev1HiNxgLjcr6RDumnlJ0h//1S6wDs3C6M
- Tww9DWzNDIgGx4siD2WXZg5aM6QEdIkQx2n0L2PKQ==
-X-ME-Sender: <xms:gevVYcEMjoCVzJC32U2m0Ebs8kDv3Pgt3MYnAUB2yRzNghociaepig>
- <xme:gevVYVXw0sN8SeuAdECCRX9mND3dW4JZu5tv3VgTHOF6XnEewoGlYwN5Z6H6bVFsR
- GkUQBW3VqJKEteEctU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefjedgfeehucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvufgtsegrtderre
- erreejnecuhfhrohhmpedflfgvshhsvgcuofhilhhlfihoohgufdcuoehjvghsshgvpggu
- vghvsehfrghsthhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepleeihffftddvke
- ffffdvueekheeuieetleffveeftdfhfeffjeejleeifedvvddvnecuvehluhhsthgvrhfu
- ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhgvshhsvggpuggvvhesfhgrsh
- htmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:gevVYWIKeSDJi0R-9l1oV2pOIcZFOLmbT9AZfM2GA5k0mhFSHJMe8A>
- <xmx:gevVYeHjGGZnNTDGrXLLz85tD2gzivGNUbIJCLoKWl7jWFV03tsang>
- <xmx:gevVYSXxBEMljqliCXrmorluUNP8ORnoMYFxijvQIVvkInBqxViEfA>
- <xmx:guvVYajucA934CpsZEG_G4cqomRH2tLIbYgAIfcTIsCM1EQN42fiRQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
- id E21D2FA0AA6; Wed,  5 Jan 2022 14:03:29 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4525-g8883000b21-fm-20211221.001-g8883000b
-Mime-Version: 1.0
-Message-Id: <37282adb-8559-4124-874d-c1729bd3ce01@www.fastmail.com>
-Date: Wed, 05 Jan 2022 14:03:09 -0500
-From: "Jesse Millwood" <jesse_dev@fastmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CYcyd-COJjIK for <buildroot@lists.busybox.net>;
+ Wed,  5 Jan 2022 20:34:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AD496005E
+ for <buildroot@buildroot.org>; Wed,  5 Jan 2022 20:34:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 3813D82C08; Wed,  5 Jan 2022 20:28:26 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Subject: [Buildroot] Overriding Kconfig Values from external br2
+Date: Wed, 5 Jan 2022 21:33:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a478b17ae4c67b7d9282daf3db3af6b7917587c
+X-Git-Newrev: 64843258ce59822ad8d52e75fd4d8fcf10c9b041
+X-Patchwork-Hint: ignore
+Message-Id: <20220105202826.3813D82C08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vdr: enable musl/uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,314 +52,370 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0274290102671465667=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0274290102671465667==
-Content-Type: multipart/alternative;
- boundary=ee66280776d64463b8b760ef47dbd890
+commit: https://git.buildroot.net/buildroot/commit/?id=64843258ce59822ad8d52e75fd4d8fcf10c9b041
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---ee66280776d64463b8b760ef47dbd890
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Re-add patch 0001 to fix uClibc build, this patch was removed 2019:
+https://git.buildroot.net/buildroot/commit/?id=573d15b0790cfd2838cf0544ded79b415e20f5a7
 
-Hello,=20
+Add two more patches from Alpine Linux to fix musl build.
 
-I have an external C/C++ toolchain that I've put together that uses MUSL=
-. I've also built an external Rust toolchain that uses my MUSL toolchain=
-.=20
+Add optional dependency to libexecinfo to provide execinfo.h.
 
-My issue is that there is a Rust Kconfig variable that specifies if a sp=
-ecific architecture supports Rust.=20
+Add a patch that ensures an internal gettext symbol doesn't get used
+except on glibc and uclibc toolchains. Indeed, both glibc and uclibc
+provide the _nl_msg_cat_cntr variable, but not the musl
+implementation.
 
-The Kconfig variable in question is BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_S=
-UPPORTS in package/rustc/Config.in.host.=20
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vdr/0001-getloadavg.patch                  |  55 ++++++++
+ package/vdr/0002-musl-compat.patch                 | 140 +++++++++++++++++++++
+ package/vdr/0003-include-missing-limits.patch      |  30 +++++
+ ...msg_cat_cntr-is-an-internal-symbol-of-som.patch |  35 ++++++
+ package/vdr/Config.in                              |   7 +-
+ package/vdr/vdr.mk                                 |   5 +
+ 6 files changed, 268 insertions(+), 4 deletions(-)
 
-In my br2 external project I have the following setup:=20
-
-
-
-My issue is that I can't seem to override the BR2_PACKAGE_HOST_RUSTC_TAR=
-GET_ARCH_SUPPORTS, which masks all other Rust packages.=20
-
-.
-=E2=94=9C=E2=94=80=E2=94=80 external.desc
-=E2=94=82       |name: MINE
-=E2=94=82       |desc: My BR2 External
-=E2=94=82       `----
-=E2=94=9C=E2=94=80=E2=94=80 external.mk
-=E2=94=82       |include $(sort $(wildcard $(BR2_EXTERNAL_MINE_PATH)/pac=
-kage/*/*.mk))
-=E2=94=82       |include $(sort $(wildcard $(BR2_EXTERNAL_MINE_PATH)/too=
-lchain/*/*.mk))
-=E2=94=82       `----
-=E2=94=9C=E2=94=80=E2=94=80 Config.in
-=E2=94=82       | source "$BR2_EXTERNAL_MINE_PATH/toolchain/my-external/=
-Config.in.options"
-=E2=94=82       | source "$BR2_EXTERNAL_MINE_PATH/package/rpkg/Config.in"
-=E2=94=82       `----
-=E2=94=9C=E2=94=80=E2=94=80 configs
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 my_gnu_defconfig
-=E2=94=82   =E2=94=94=E2=94=80=E2=94=80 my_musl_defconfig
-|
-=E2=94=9C=E2=94=80=E2=94=80 package
-=E2=94=82   =E2=94=94=E2=94=80=E2=94=80 rpkg
-=E2=94=82       =E2=94=9C=E2=94=80=E2=94=80 Config.in
-=E2=94=82       =E2=94=94=E2=94=80=E2=94=80 rpkg.mk
-=E2=94=9C=E2=94=80=E2=94=80 provides
-=E2=94=82   =E2=94=94=E2=94=80=E2=94=80 toolchains.in
-=E2=94=82          | config BR2_TOOLCHAIN_EXTERNAL_MY_MUSL
-=E2=94=82          | bool "My PowerPC MUSL Toolchain"
-=E2=94=82          | depends on BR2_powerpc
-=E2=94=82          |
-=E2=94=82          | config BR2_TOOLCHAIN_EXTERNAL_MY_GNU
-=E2=94=82          | bool "My PowerPC GNU Toolchain"
-=E2=94=82          |         depends on BR2_powerpc
-=E2=94=82          `----
-=E2=94=94=E2=94=80=E2=94=80 toolchain
-    =E2=94=94=E2=94=80=E2=94=80 my-external
-        =E2=94=94=E2=94=80=E2=94=80 Config.in.options
-                | if BR2_TOOLCHAIN_EXTERNAL_MY_MUSL
-                | config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-                | default "powerpc-my-linux-musl"
-                | config BR2_TOOLCHAIN_EXTERNAL_PATH
-                | default "${WORKSPACE_DIR}/toolchain/powerpc-my-linux-m=
-usl"
-                |
-                | config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-                | bool
-                | default y if BR2_i386
-                | default y if BR2_x86_64
-                | default y if BR2_aarch64
-                | default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM=
-_CPU_ARMV5 \
-                |         && !(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI)
-                | default y if BR2_powerpc || BR2_powerpc64 || BR2_power=
-pc64le
-                | default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU=
-_MIPS32R6
-                | default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS=
-_CPU_MIPS64R6 \
-                | && BR2_MIPS_NABI64
-                | depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_=
-USES_MUSL)
-                | depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-                |
-                | endif
-                |
-                | if BR2_TOOLCHAIN_EXTERNAL_MY_GNU
-                | config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-                | default "powerpc-my-linux-gnu"
-                | config BR2_TOOLCHAIN_EXTERNAL_PATH
-                | default "${WORKSPACE_DIR}/toolchain/powerpc-my-linux-g=
-nu"
-                | endif
-                `----
-
-You may notice that I changed the libc depends line to be or'd with BR2_=
-TOOLCHAIN_USES_MUSL. It seems that this does not get considered when I c=
-hoose my external musl toolchain option. In the menuconfig when I search=
- for the BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS variable with the "=
-/" key it looks like it is only getting it from the original file. Does =
-buildroot have a mechanism for overwriting this kind of setting and if n=
-ot, does anyone have an idea of how I would accomplish what I am trying =
-to do (make buildroot honor my external rust toolchain)?
-
-Thanks,=20
-Jesse
---ee66280776d64463b8b760ef47dbd890
-Content-Type: text/html;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html><html><head><title></title><style type=3D"text/css">p.Mso=
-Normal,p.MsoNoSpacing{margin:0}
-p.MsoNormal,p.MsoNoSpacing{margin:0}</style></head><body><div style=3D"f=
-ont-family:menlo, consolas, monospace;">Hello, <br></div><div style=3D"f=
-ont-family:menlo, consolas, monospace;"><br></div><div style=3D"font-fam=
-ily:menlo, consolas, monospace;">I have an external C/C++ toolchain that=
- I've put together that uses MUSL. I've also built an external Rust tool=
-chain that uses my MUSL toolchain. <br></div><div style=3D"font-family:m=
-enlo, consolas, monospace;"><br></div><div style=3D"font-family:menlo, c=
-onsolas, monospace;">My issue is that there is a Rust Kconfig variable t=
-hat specifies if a specific architecture supports Rust. <br></div><div s=
-tyle=3D"font-family:menlo, consolas, monospace;"><br></div><div style=3D=
-"font-family:menlo, consolas, monospace;">The Kconfig variable in questi=
-on is BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS in package/rustc/Confi=
-g.in.host. <br></div><div style=3D"font-family:menlo, consolas, monospac=
-e;"><br></div><div style=3D"font-family:menlo, consolas, monospace;">In =
-my br2 external project I have the following setup: <br></div><div style=
-=3D"font-family:menlo, consolas, monospace;"><br></div><div style=3D"fon=
-t-family:menlo, consolas, monospace;"><br></div><div style=3D"font-famil=
-y:menlo, consolas, monospace;"><br></div><div style=3D"font-family:menlo=
-, consolas, monospace;">My issue is that I can't seem to override the BR=
-2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS, which masks all other Rust pa=
-ckages. <br></div><div style=3D"font-family:menlo, consolas, monospace;"=
-><br></div><div style=3D"font-family:menlo, consolas, monospace;">.<br><=
-/div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=9C=E2=
-=94=80=E2=94=80 external.desc<br></div><div style=3D"font-family:menlo, =
-consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |nam=
-e: MINE<br></div><div style=3D"font-family:menlo, consolas, monospace;">=
-=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |desc: My BR2 External<br>=
-</div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `----<br></div><div style=3D"font-fam=
-ily:menlo, consolas, monospace;">=E2=94=9C=E2=94=80=E2=94=80 external.mk=
-<br></div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |include $(sort $(wildcard $(BR2_EX=
-TERNAL_MINE_PATH)/package/*/*.mk))<br></div><div style=3D"font-family:me=
-nlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- |include $(sort $(wildcard $(BR2_EXTERNAL_MINE_PATH)/toolchain/*/*.mk))=
-<br></div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `----<br></div><div style=3D"font-f=
-amily:menlo, consolas, monospace;">=E2=94=9C=E2=94=80=E2=94=80 Config.in=
-<br></div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | source "$BR2_EXTERNAL_MINE_PATH/t=
-oolchain/my-external/Config.in.options"<br></div><div style=3D"font-fami=
-ly:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp; | source "$BR2_EXTERNAL_MINE_PATH/package/rpkg/Config.in"<br></div=
-><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `----<br></div><div style=3D"font-family:m=
-enlo, consolas, monospace;">=E2=94=9C=E2=94=80=E2=94=80 configs<br></div=
-><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&=
-nbsp; =E2=94=9C=E2=94=80=E2=94=80 my_gnu_defconfig<br></div><div style=3D=
-"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp; =E2=94=94=
-=E2=94=80=E2=94=80 my_musl_defconfig<br></div><div style=3D"font-family:=
-menlo, consolas, monospace;">|<br></div><div style=3D"font-family:menlo,=
- consolas, monospace;">=E2=94=9C=E2=94=80=E2=94=80 package<br></div><div=
- style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;=
- =E2=94=94=E2=94=80=E2=94=80 rpkg<br></div><div style=3D"font-family:men=
-lo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
-=E2=94=9C=E2=94=80=E2=94=80 Config.in<br></div><div style=3D"font-family=
-:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp; =E2=94=94=E2=94=80=E2=94=80 rpkg.mk<br></div><div style=3D"font-fami=
-ly:menlo, consolas, monospace;">=E2=94=9C=E2=94=80=E2=94=80 provides<br>=
-</div><div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&n=
-bsp;&nbsp; =E2=94=94=E2=94=80=E2=94=80 toolchains.in<br></div><div style=
-=3D"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | config BR2_TOOLCHAIN_EXTERNAL_MY_=
-MUSL<br></div><div style=3D"font-family:menlo, consolas, monospace;">=E2=
-=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	bool "My=
- PowerPC MUSL Toolchain"<br></div><div style=3D"font-family:menlo, conso=
-las, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp; | 	depends on BR2_powerpc<br></div><div style=3D"font-family:me=
-nlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; |<br></div><div style=3D"font-family:menlo, consolas,=
- monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp; | config BR2_TOOLCHAIN_EXTERNAL_MY_GNU<br></div><div style=3D"font-=
-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp; | 	bool "My PowerPC GNU Toolchain"<br></div>=
-<div style=3D"font-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp; depends on BR2_powerpc<br></div><div style=3D"f=
-ont-family:menlo, consolas, monospace;">=E2=94=82&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `----<br></div><div style=3D"font-family=
-:menlo, consolas, monospace;">=E2=94=94=E2=94=80=E2=94=80 toolchain<br><=
-/div><div style=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;=
-&nbsp; =E2=94=94=E2=94=80=E2=94=80 my-external<br></div><div style=3D"fo=
-nt-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp; =E2=94=94=E2=94=80=E2=94=80 Config.in.options<br></div><div st=
-yle=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | if =
-BR2_TOOLCHAIN_EXTERNAL_MY_MUSL<br></div><div style=3D"font-family:menlo,=
- consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | config BR2_TOOLCHAIN_EXTERNA=
-L_PREFIX<br></div><div style=3D"font-family:menlo, consolas, monospace;"=
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp; | 	default "powerpc-my-linux-musl"<br></div><div sty=
-le=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | conf=
-ig BR2_TOOLCHAIN_EXTERNAL_PATH<br></div><div style=3D"font-family:menlo,=
- consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default "${WORKSPACE_DIR}/t=
-oolchain/powerpc-my-linux-musl"<br></div><div style=3D"font-family:menlo=
-, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br></div><div style=3D"font=
--family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | config BR2_PAC=
-KAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS<br></div><div style=3D"font-family:=
-menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	bool<br></div><div st=
-yle=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	de=
-fault y if BR2_i386<br></div><div style=3D"font-family:menlo, consolas, =
-monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default y if BR2_x86_64<br></div><div =
-style=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	=
-default y if BR2_aarch64<br></div><div style=3D"font-family:menlo, conso=
-las, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default y if BR2_arm &amp;&amp; !=
-BR2_ARM_CPU_ARMV4 &amp;&amp; !BR2_ARM_CPU_ARMV5 \<br></div><div style=3D=
-"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&amp; !(BR2_ARM_CPU_ARMV7A &amp;=
-&amp; BR2_ARM_EABI)<br></div><div style=3D"font-family:menlo, consolas, =
-monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default y if BR2_powerpc || BR2_powerp=
-c64 || BR2_powerpc64le<br></div><div style=3D"font-family:menlo, consola=
-s, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default y if (BR2_mips || BR2_mipse=
-l) &amp;&amp; !BR2_MIPS_CPU_MIPS32R6<br></div><div style=3D"font-family:=
-menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default y if (BR2_mip=
-s64 || BR2_mips64el) &amp;&amp; !BR2_MIPS_CPU_MIPS64R6 \<br></div><div s=
-tyle=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 		=
-&amp;&amp; BR2_MIPS_NABI64<br></div><div style=3D"font-family:menlo, con=
-solas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	depends on (BR2_TOOLCHAIN_USES_=
-GLIBC || BR2_TOOLCHAIN_USES_MUSL)<br></div><div style=3D"font-family:men=
-lo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	depends on BR2_PACKAGE_H=
-OST_RUSTC_ARCH_SUPPORTS<br></div><div style=3D"font-family:menlo, consol=
-as, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br></div><div style=3D"font-family:=
-menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | endif<br></div><div st=
-yle=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>=
-</div><div style=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp; | if BR2_TOOLCHAIN_EXTERNAL_MY_GNU<br></div><div style=3D"font-f=
-amily:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | config BR2_TOOLC=
-HAIN_EXTERNAL_PREFIX<br></div><div style=3D"font-family:menlo, consolas,=
- monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default "powerpc-my-linux-gnu"<br></d=
-iv><div style=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp; | config BR2_TOOLCHAIN_EXTERNAL_PATH<br></div><div style=3D"font-fa=
-mily:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 	default "${WORKS=
-PACE_DIR}/toolchain/powerpc-my-linux-gnu"<br></div><div style=3D"font-fa=
-mily:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | endif<br></div><d=
-iv style=3D"font-family:menlo, consolas, monospace;">&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
-`----<br></div><div style=3D"font-family:menlo, consolas, monospace;"><b=
-r></div><div style=3D"font-family:menlo, consolas, monospace;">You may n=
-otice that I changed the libc depends line to be or'd with BR2_TOOLCHAIN=
-_USES_MUSL. It seems that this does not get considered when I choose my =
-external musl toolchain option. In the menuconfig when I search for the =
-BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS variable with the "/" key it=
- looks like it is only getting it from the original file. Does buildroot=
- have a mechanism for overwriting this kind of setting and if not, does =
-anyone have an idea of how I would accomplish what I am trying to do (ma=
-ke buildroot honor my external rust toolchain)?<br></div><div style=3D"f=
-ont-family:menlo, consolas, monospace;"><br></div><div style=3D"font-fam=
-ily:menlo, consolas, monospace;">Thanks, <br></div><div style=3D"font-fa=
-mily:menlo, consolas, monospace;">Jesse<br></div></body></html>
---ee66280776d64463b8b760ef47dbd890--
-
---===============0274290102671465667==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
+new file mode 100644
+index 0000000000..9e6316e284
+--- /dev/null
++++ b/package/vdr/0001-getloadavg.patch
+@@ -0,0 +1,55 @@
++Fix compilation with uClibc
++
++Ported from
++https://github.com/stschake/buildroot-grasshopper/blob/master/package/torsmo/torsmo-0.18-uclibc-getloadavg.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
++--- vdr-2.3.1.org/skinlcars.c	2015-09-01 12:07:07.000000000 +0200
+++++ vdr-2.3.1/skinlcars.c	2016-07-31 21:00:11.000000000 +0200
++@@ -1100,6 +1100,44 @@
++      }
++ }
++ 
+++/* uclibc and dietlibc do not have this junk -ReneR */
+++#if defined (__UCLIBC__) || defined (__dietlibc__)
+++static int getloadavg (double loadavg[], int nelem)
+++{
+++  int fd;
+++
+++  fd = open ("/proc/loadavg", O_RDONLY);
+++  if (fd < 0)
+++    return -1;
+++  else
+++    {
+++      char buf[65], *p;
+++      ssize_t nread;
+++      int i;
+++
+++      nread = read (fd, buf, sizeof buf - 1);
+++      close (fd);
+++      if (nread <= 0)
+++	return -1;
+++      buf[nread - 1] = '\0';
+++
+++      if (nelem > 3)
+++	nelem = 3;
+++      p = buf;
+++      for (i = 0; i < nelem; ++i)
+++	{
+++	  char *endp;
+++	  loadavg[i] = strtod (p, &endp);
+++	  if (endp == p)
+++	    return -1;
+++	  p = endp;
+++	}
+++
+++      return i;
+++    }
+++}
+++#endif
+++
++ void cSkinLCARSDisplayMenu::DrawLoad(void)
++ {
++   if (yb04) {
+diff --git a/package/vdr/0002-musl-compat.patch b/package/vdr/0002-musl-compat.patch
+new file mode 100644
+index 0000000000..b6f8f414a9
+--- /dev/null
++++ b/package/vdr/0002-musl-compat.patch
+@@ -0,0 +1,140 @@
++Fix musl build
++
++Downloaded from
++https://git.alpinelinux.org/aports/tree/community/vdr/musl-compat.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/i18n.h b/i18n.h
++index f8ad9de..b002bbf 100644
++--- a/i18n.h
+++++ b/i18n.h
++@@ -46,7 +46,7 @@ const cStringList *I18nLanguages(void);
++    ///< have an actual locale installed. The rest are just dummy entries
++    ///< to allow having three letter language codes for other languages
++    ///< that have no actual locale on this system.
++-const char *I18nTranslate(const char *s, const char *Plugin = NULL) __attribute_format_arg__(1);
+++const char *I18nTranslate(const char *s, const char *Plugin = NULL)  __attribute__((__format_arg__ (1)));
++    ///< Translates the given string (with optional Plugin context) into
++    ///< the current language. If no translation is available, the original
++    ///< string will be returned.
++diff --git a/osd.c b/osd.c
++index 524700a..ef975f5 100644
++--- a/osd.c
+++++ b/osd.c
++@@ -12,7 +12,7 @@
++ #include <stdlib.h>
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ #include "device.h"
++ #include "tools.h"
++ 
++diff --git a/thread.c b/thread.c
++index 47eb977..58dba43 100644
++--- a/thread.c
+++++ b/thread.c
++@@ -155,7 +155,9 @@ cRwLock::cRwLock(bool PreferWriter)
++   writeLockThreadId = 0;
++   pthread_rwlockattr_t attr;
++   pthread_rwlockattr_init(&attr);
+++#if defined(__GLIBC__)
++   pthread_rwlockattr_setkind_np(&attr, PreferWriter ? PTHREAD_RWLOCK_PREFER_WRITER_NP : PTHREAD_RWLOCK_PREFER_READER_NP);
+++#endif
++   pthread_rwlock_init(&rwlock, &attr);
++ }
++ 
++@@ -205,7 +207,7 @@ cMutex::cMutex(void)
++   locked = 0;
++   pthread_mutexattr_t attr;
++   pthread_mutexattr_init(&attr);
++-  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK_NP);
+++  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
++   pthread_mutex_init(&mutex, &attr);
++ }
++ 
++diff --git a/tools.c b/tools.c
++index 754673d..fef9d2d 100644
++--- a/tools.c
+++++ b/tools.c
++@@ -640,7 +640,7 @@ char *ReadLink(const char *FileName)
++ {
++   if (!FileName)
++      return NULL;
++-  char *TargetName = canonicalize_file_name(FileName);
+++  char *TargetName = realpath(FileName, NULL);
++   if (!TargetName) {
++      if (errno == ENOENT) // file doesn't exist
++         TargetName = strdup(FileName);
++@@ -1528,7 +1528,7 @@
++ struct dirent *cReadDir::Next(void)
++ {
++   if (directory) {
++-#if !__GLIBC_PREREQ(2, 24) // readdir_r() is deprecated as of GLIBC 2.24
+++#if __GLIBC__
++      while (readdir_r(directory, &u.d, &result) == 0 && result) {
++ #else
++      while ((result = readdir(directory)) != NULL) {
++diff --git a/tools.h b/tools.h
++index 73cca5a..03f5fd1 100644
++--- a/tools.h
+++++ b/tools.h
++@@ -28,6 +28,16 @@
++ #include <sys/types.h>
++ #include "thread.h"
++ 
+++#ifndef ACCESSPERMS
+++# define ACCESSPERMS (S_IRWXU|S_IRWXG|S_IRWXO) /* 0777 */
+++#endif
+++#ifndef ALLPERMS
+++# define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
+++#endif
+++#ifndef DEFFILEMODE
+++# define DEFFILEMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)/* 0666*/
+++#endif
+++
++ typedef unsigned char uchar;
++ 
++ extern int SysLogLevel;
++@@ -400,7 +410,7 @@
++ private:
++   DIR *directory;
++   struct dirent *result;
++-#if !__GLIBC_PREREQ(2, 24) // readdir_r() is deprecated as of GLIBC 2.24
+++#if __GLIBC__
++   union { // according to "The GNU C Library Reference Manual"
++     struct dirent d;
++     char b[offsetof(struct dirent, d_name) + NAME_MAX + 1];
++@@ -738,7 +748,7 @@ public:
++         data[i] = T(0);
++     size = 0;
++   }
++-  void Sort(__compar_fn_t Compare)
+++  void Sort(int (*Compare)(const void *, const void *))
++   {
++     qsort(data, size, sizeof(T), Compare);
++   }
++diff --git a/vdr.c b/vdr.c
++index 8a49471..c2a82aa 100644
++--- a/vdr.c
+++++ b/vdr.c
++@@ -670,12 +670,18 @@ int main(int argc, char *argv[])
++         }
++      }
++   else if (Terminal) {
+++#ifdef __GLIBC__
++      // Claim new controlling terminal
++      stdin  = freopen(Terminal, "r", stdin);
++      stdout = freopen(Terminal, "w", stdout);
++      stderr = freopen(Terminal, "w", stderr);
++      HasStdin = true;
++      tcgetattr(STDIN_FILENO, &savedTm);
+++#else
+++     // stdin, stdout, stderr are declared FILE const* by musl C library
+++     fprintf(stderr, "Option '-t' is only supported if VDR has been built against glibc.\n");
+++     return 2;
+++#endif
++      }
++ 
++   isyslog("VDR version %s started", VDRVERSION);
+diff --git a/package/vdr/0003-include-missing-limits.patch b/package/vdr/0003-include-missing-limits.patch
+new file mode 100644
+index 0000000000..c2efe291e6
+--- /dev/null
++++ b/package/vdr/0003-include-missing-limits.patch
+@@ -0,0 +1,30 @@
++vdr package uses some macros like HOST_NAME_MAX, NAME_MAX, which are defined
++in limits.h.
++Needs to be explicitly included on ppc64le and for all archs for debug build.
++
++Downloaded from
++https://git.alpinelinux.org/aports/tree/community/vdr/include-missing-limits.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++----
++
++--- a/config.h
+++++ b/config.h
++@@ -19,6 +19,7 @@
++ #include "i18n.h"
++ #include "font.h"
++ #include "tools.h"
+++#include <limits.h>
++ 
++ // VDR's own version number:
++ 
++--- a/tools.c
+++++ b/tools.c
++@@ -27,6 +27,7 @@
++ #include <utime.h>
++ #include "i18n.h"
++ #include "thread.h"
+++#include <limits.h>
++ 
++ int SysLogLevel = 3;
++ 
+diff --git a/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch b/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch
+new file mode 100644
+index 0000000000..9cc45a96c1
+--- /dev/null
++++ b/package/vdr/0004-i18n.c-_nl_msg_cat_cntr-is-an-internal-symbol-of-som.patch
+@@ -0,0 +1,35 @@
++From 8711ce9c4ded311705f281c99e013a26987fbf1d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 1 Jan 2022 23:35:29 +0100
++Subject: [PATCH] i18n.c: _nl_msg_cat_cntr is an internal symbol of some intl
++ implementation
++
++It is supported by glibc and uClibc (which both define __GLIBC__) but
++not musl (which doesn't define __GLIBC__). On musl, it doesn't do
++anything because musl has a basic NLS implementation. Even
++gettext-tiny defines _nl_msg_cat_cntr as a dummy symbol in its stub
++libintl-musl implementation.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ i18n.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/i18n.c b/i18n.c
++index 0ef08fd4..da2a3ede 100644
++--- a/i18n.c
+++++ b/i18n.c
++@@ -123,8 +123,10 @@ static const char *SkipContext(const char *s)
++ static void SetEnvLanguage(const char *Locale)
++ {
++   setenv("LANGUAGE", Locale, 1);
+++#if defined(__GLIBC__)
++   extern int _nl_msg_cat_cntr;
++   ++_nl_msg_cat_cntr;
+++#endif
++ }
++ 
++ static void SetLanguageNames(void)
++-- 
++2.31.1
++
+diff --git a/package/vdr/Config.in b/package/vdr/Config.in
+index df602f26d6..38502729a7 100644
+--- a/package/vdr/Config.in
++++ b/package/vdr/Config.in
+@@ -4,23 +4,22 @@ config BR2_PACKAGE_VDR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBCAP
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  This project describes how to build your own digital
+ 	  satellite receiver and Video Disk Recorder.
+ 
+ 	  http://www.tvdr.de
+ 
+-comment "vdr needs a glibc toolchain w/ C++, dynamic library, NPTL, wchar, headers >= 3.9"
++comment "vdr needs a toolchain w/ C++, dynamic library, NPTL, wchar, headers >= 3.9"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_USE_WCHAR || \
++		!BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
+index 51affe5a7b..bb7b1e22c0 100644
+--- a/package/vdr/vdr.mk
++++ b/package/vdr/vdr.mk
+@@ -26,6 +26,11 @@ VDR_MAKE_FLAGS = \
+ 	VIDEODIR=/var/lib/vdr
+ VDR_LDFLAGS = $(TARGET_NLS_LIBS)
+ 
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++VDR_DEPENDENCIES += libexecinfo
++VDR_LDFLAGS += -lexecinfo
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
+ VDR_DEPENDENCIES += libfribidi
+ VDR_MAKE_FLAGS += BIDI=1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0274290102671465667==--
