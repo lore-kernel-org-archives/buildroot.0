@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87AA4C433F5
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 09:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CA7CC433F5
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 09:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA861408C8;
-	Wed,  5 Jan 2022 09:32:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05ECE6FB5F;
+	Wed,  5 Jan 2022 09:33:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qkw5Z8Mcuu1K; Wed,  5 Jan 2022 09:33:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 429396FB5D;
+	Wed,  5 Jan 2022 09:33:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 409131BF9CB
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:32:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D53A408C5
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:32:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8J0ya7ysrSJ6; Wed,  5 Jan 2022 09:32:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EFA7408C5;
-	Wed,  5 Jan 2022 09:32:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1AD971BF9C8
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:32:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 130544093F
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 09:32:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B9dBDdY_IbqD for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z2-Q7Tvk9roo for <buildroot@lists.busybox.net>;
  Wed,  5 Jan 2022 09:32:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E47E4093E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DD5A40278
  for <buildroot@buildroot.org>; Wed,  5 Jan 2022 09:32:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 47147832C8; Wed,  5 Jan 2022 09:26:30 +0000 (UTC)
+ id 5907083236; Wed,  5 Jan 2022 09:26:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Jan 2022 10:29:50 +0100
+Date: Wed, 5 Jan 2022 10:29:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 75a4ab2e8708e118576326c026a4f98a924f31ff
-X-Git-Newrev: 5d43956f91d875d671c2563ba143fe71dabdbbff
+X-Git-Oldrev: 75cfeb7c6fa80022ebb5ea332d7e466b3eb14e6c
+X-Git-Newrev: 6282553e764939bbe665fd0bafc46eca31dff51b
 X-Patchwork-Hint: ignore
-Message-Id: <20220105092630.47147832C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsemanage: bump to version 3.3
+Message-Id: <20220105092630.5907083236@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/restorecond: bump to version 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,7 +58,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d43956f91d875d671c2563ba143fe71dabdbbff
+commit: https://git.buildroot.net/buildroot/commit/?id=6282553e764939bbe665fd0bafc46eca31dff51b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update indentation in hash file (two spaces)
@@ -68,35 +68,35 @@ https://github.com/SELinuxProject/selinux/releases/tag/3.3
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsemanage/libsemanage.hash | 4 ++--
- package/libsemanage/libsemanage.mk   | 2 +-
+ package/restorecond/restorecond.hash | 4 ++--
+ package/restorecond/restorecond.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 117fd40d6a..1f333aac30 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
+diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
+index 1869100188..b38c6dcf14 100644
+--- a/package/restorecond/restorecond.hash
++++ b/package/restorecond/restorecond.hash
 @@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 d722a55ca4fe2d4e2b30527720db657e6238b28079e69e2e4affeb8e733ee511 libsemanage-3.2.tar.gz
-+sha256  84d0ec5afa34bbbb471f602d8c1bf317d12443d07852a34b60741d428d597ce8  libsemanage-3.3.tar.gz
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 471c17e64aa6d7226e861d4d0125d15fdf9b38892c542be32bd83d999e5e75f5 restorecond-3.2.tar.gz
++sha256  218c3d8873f31764e3c82d53ac713c0c9faaa07caf42ed7184e93ca2b27d8f27  restorecond-3.3.tar.gz
  
  # Hash for license file
--sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index bbe976a2c9..db9f16bb6a 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
+-sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
+index 671f071b1d..7d6ed86f08 100644
+--- a/package/restorecond/restorecond.mk
++++ b/package/restorecond/restorecond.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSEMANAGE_VERSION = 3.2
-+LIBSEMANAGE_VERSION = 3.3
- LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
+-RESTORECOND_VERSION = 3.2
++RESTORECOND_VERSION = 3.3
+ RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
+ RESTORECOND_LICENSE = GPL-2.0
+ RESTORECOND_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
