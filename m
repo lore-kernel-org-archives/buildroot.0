@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B7FC433F5
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 22:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 738A4C433EF
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 22:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 380A582C38;
-	Wed,  5 Jan 2022 22:39:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED9F060E49;
+	Wed,  5 Jan 2022 22:43:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CzbHq0qyxesy; Wed,  5 Jan 2022 22:39:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yXG7VcceD7td; Wed,  5 Jan 2022 22:43:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7125282BF5;
-	Wed,  5 Jan 2022 22:39:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43B7160E37;
+	Wed,  5 Jan 2022 22:43:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 49E8C1BF267
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 22:39:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F36C01BF267
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 22:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4148182BF5
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 22:39:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1629828E3
+ for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 22:43:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7exbHi9s7Tf7 for <buildroot@lists.busybox.net>;
- Wed,  5 Jan 2022 22:39:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B7C682BED
- for <buildroot@buildroot.org>; Wed,  5 Jan 2022 22:39:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 16076832CD; Wed,  5 Jan 2022 22:33:12 +0000 (UTC)
+ with ESMTP id B-95PA6HSL0h for <buildroot@lists.busybox.net>;
+ Wed,  5 Jan 2022 22:43:22 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 80879825DC
+ for <buildroot@buildroot.org>; Wed,  5 Jan 2022 22:43:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4C117200004;
+ Wed,  5 Jan 2022 22:43:14 +0000 (UTC)
+Date: Wed, 5 Jan 2022 23:43:03 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 5 Jan 2022 23:38:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e065065777e2955f385ae51b14c9f284b83e477
-X-Git-Newrev: b61366f3cc52ea54f9b5719d25ab09e595f53173
-X-Patchwork-Hint: ignore
-Message-Id: <20220105223312.16076832CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/alfred: new package
+To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
+Message-ID: <20220105234303.28cabcc2@windsurf>
+In-Reply-To: <20211210141209.1812043-4-jose.pekkarinen@unikie.com>
+References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
+ <20211210141209.1812043-4-jose.pekkarinen@unikie.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 4/7] package/alfred: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,129 +56,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5761122837759642806=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5761122837759642806==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b61366f3cc52ea54f9b5719d25ab09e595f53173
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: José Pekkarinen <jose.pekkarinen@unikie.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/alfred/Config.in   | 20 ++++++++++++++++++++
- package/alfred/alfred.hash |  5 +++++
- package/alfred/alfred.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4cb07b6d9a..4b04f90ccb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1485,6 +1485,7 @@ F:	package/zfs/
- F:	support/testing/tests/package/test_zfs.py
- 
- N:	José Pekkarinen <jose.pekkarinen@unikie.com>
-+F:	package/alfred/
- F:	package/bmx7/
- F:	package/softhsm2/
- 
-diff --git a/package/Config.in b/package/Config.in
-index d90fb5c450..9f4ab72a80 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2121,6 +2121,7 @@ endmenu
- 
- menu "Networking applications"
- 	source "package/aircrack-ng/Config.in"
-+	source "package/alfred/Config.in"
- 	source "package/aoetools/Config.in"
- 	source "package/apache/Config.in"
- if BR2_PACKAGE_APACHE
-diff --git a/package/alfred/Config.in b/package/alfred/Config.in
-new file mode 100644
-index 0000000000..bfcfef0d40
---- /dev/null
-+++ b/package/alfred/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_ALFRED
-+	bool "alfred"
-+	depends on !BR2_STATIC_LIBS # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  Alfred is a user space daemon for distributing arbitrary
-+	  local information over the mesh/network in a decentralized
-+	  fashion.
-+
-+	  This data can be anything which appears to be useful -
-+	  originally designed to replace the batman-adv visualization
-+	  (vis), you may distribute hostnames, phone books,
-+	  administration information, DNS information, the local
-+	  weather forecast ...
-+
-+	  https://www.open-mesh.org/projects/alfred/wiki
-+
-+comment "alfred needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/alfred/alfred.hash b/package/alfred/alfred.hash
-new file mode 100644
-index 0000000000..0799071231
---- /dev/null
-+++ b/package/alfred/alfred.hash
-@@ -0,0 +1,5 @@
-+# From https://downloads.open-mesh.org/batman/stable/sources/alfred/alfred-2021.4.tar.gz.sha1
-+sha1  be1e9c1317d40e46cfc881a31c632fec78c620a1 alfred-2021.4.tar.gz
-+# Locally computed
-+sha256  4c79b6c45de4bcc8cbfe64cba9a0f8b4ef304ca84c194622f2bfa41e01e2cb95  alfred-2021.4.tar.gz
-+sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
-diff --git a/package/alfred/alfred.mk b/package/alfred/alfred.mk
-new file mode 100644
-index 0000000000..ed59066393
---- /dev/null
-+++ b/package/alfred/alfred.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# alfred
-+#
-+################################################################################
-+
-+ALFRED_VERSION = 2021.4
-+ALFRED_SITE = https://downloads.open-mesh.org/batman/stable/sources/alfred
-+ALFRED_LICENSE = GPL-2.0
-+ALFRED_LICENSE_FILES = LICENSES/preferred/GPL-2.0
-+ALFRED_DEPENDENCIES = libnl
-+
-+define ALFRED_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) -C $(@D) \
-+		CONFIG_ALFRED_CAPABILITIES=n \
-+		CONFIG_ALFRED_GPSD=n
-+endef
-+
-+define ALFRED_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/alfred $(TARGET_DIR)/usr/bin/alfred
-+	$(INSTALL) -m 0755 -D $(@D)/vis/batadv-vis $(TARGET_DIR)/usr/bin/batadv-vis
-+endef
-+
-+$(eval $(generic-package))
-
---===============5761122837759642806==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5761122837759642806==--
+SGVsbG8gSm9zw6ksCgpPbiBGcmksIDEwIERlYyAyMDIxIDE2OjEyOjA2ICswMjAwCkpvc8OpIFBl
+a2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gVGhpcyAgcGF0
+Y2ggd2lsbCBwcm92aWRlIHRoZSBpbml0aWFsCj4gcGFja2FnZSBmb3IgYWxmcmVkIHByb2plY3Qu
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSm9zw6kgUGVra2FyaW5lbiA8am9zZS5wZWtrYXJpbmVuQHVu
+aWtpZS5jb20+CgpJIGhhdmUgYXBwbGllZCB5b3VyIHBhdGNoLCBidXQgYWZ0ZXIgZG9pbmcgYSBu
+dW1iZXIgb2YgY2hhbmdlcy4gU2VlIGJlbG93LgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hbGZy
+ZWQvQ29uZmlnLmluIGIvcGFja2FnZS9hbGZyZWQvQ29uZmlnLmluCj4gbmV3IGZpbGUgbW9kZSAx
+MDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi41ZjljNmYyYTZlCj4gLS0tIC9kZXYvbnVsbAo+ICsr
+KyBiL3BhY2thZ2UvYWxmcmVkL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMjAgQEAKPiArY29uZmln
+IEJSMl9QQUNLQUdFX0FMRlJFRAo+ICsJYm9vbCAiYWxmcmVkIgo+ICsJZGVwZW5kcyBvbiAhQlIy
+X1NUQVRJQ19MSUJTICMgZGxvcGVuKCkKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJOTAoKWW91
+IGhhdmUgZm9yZ290dGVuIHRvIGFjY291bnQgZm9yIHRoZSB0aHJlYWRzIGRlcGVuZGVuY3kgb2Yg
+bGlibmwsCndoaWNoIG11c3QgYmUgcmVwbGljYXRlZCBoZXJlOwoKPiArCXNlbGVjdCBCUjJfUEFD
+S0FHRV9MSUJDQVAKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9HUFNECgpOZWl0aGVyIGxpYmNhcCBh
+bmQgZ3BzZCBhcmUgbWFuZGF0b3J5IGRlcGVuZGVuY2llcyAoc2VlIHRoZSBSRUFETUUgZmlsZQpm
+cm9tIHRoZSBhbGZyZWQgY29kZSBiYXNlIGZvciBkZXRhaWxzKS4gU28gSSBkcm9wcGVkIHRoZXNl
+IGVudGlyZWx5LiBJZgp5b3Ugd2FudCB0byBoYXZlIHN1cHBvcnQgZm9yIGxpYmNhcCBhbmQgZ3Bz
+ZCwgeW91IG5lZWQgdG8gaGFuZGxlIHRoZW0KaW4gdGhlIC5tayBmaWxlIGxpa2UgdGhpczoKCmlm
+ZXEgKCQoQlIyX1BBQ0tBR0VfTElCQ0FQKSx5KQouLi4gZG8gc29tZXRoaW5nIC4uLgplbHNlCi4u
+LiBkbyBzb21ldGhpbmcgZWxzZSAuLi4KZW5kaWYKCj4gK2NvbW1lbnQgImFsZnJlZCBuZWVkcyBh
+IHRvb2xjaGFpbiB3aXRoIGR5bmFtaWMgbGlicmFyeSBzdXBwb3J0Igo+ICsJZGVwZW5kcyBvbiBC
+UjJfU1RBVElDX0xJQlMKCk1vZGlmaWVkIHRvIGFjY291bnQgZm9yIHRoZSB0aHJlYWRzIGRlcGVu
+ZGVuY3kuCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2FsZnJlZC9hbGZyZWQuaGFzaCBiL3BhY2th
+Z2UvYWxmcmVkL2FsZnJlZC5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwLi5hMmRkMDExNmQ3Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvYWxmcmVk
+L2FsZnJlZC5oYXNoCj4gQEAgLTAsMCArMSw0IEBACj4gKyMgRnJvbSBodHRwczovL2Rvd25sb2Fk
+cy5vcGVuLW1lc2gub3JnL2JhdG1hbi9zdGFibGUvc291cmNlcy9hbGZyZWQKCkFzIHBvaW50ZWQg
+b3V0IGJ5IEdpdWxpbywgdGhpcyBkaWRuJ3QgbWFrZSBzZW5zZSwgYXMgaXQgZG9lc24ndCBwb2lu
+dAp0byBhIGZpbGUgdGhhdCBjb250YWlucyB0aGUgc2hhMjU2LCBhbmQgYWN0dWFsbHkgbm8gZmls
+ZSB0aGVyZSBjb250YWlucwp0aGUgc2hhMjU2LiBTbyBpbnN0ZWFkIEkndmUgYWRkZWQgdGhlIHNo
+YTEgZnJvbSB0aGUgZmlsZSBwcm92aWRlZCBieQp1cHN0cmVhbSwgYW5kIHB1dCB0aGUgc2hhMjU2
+IGhhc2ggdW5kZXIgdGhlICJMb2NhbGx5IGNvbXB1dGVkIiBjb21tZW50LgoKPiArc2hhMjU2ICA0
+Yzc5YjZjNDVkZTRiY2M4Y2JmZTY0Y2JhOWEwZjhiNGVmMzA0Y2E4NGMxOTQ2MjJmMmJmYTQxZTAx
+ZTJjYjk1ICBhbGZyZWQtMjAyMS40LnRhci5nego+ICsjIExvY2FsbHkgY29tcHV0ZWQKPiArc2hh
+MjU2ICBjZWNiZjUzZDExNDhlMTMyNTZhYzI5ZjhiOTAwNjU1YjdmYzhkYzEyZDU5OTM5YTk1YmMy
+MzIzZWExNzQ3MDI1ICBMSUNFTlNFUy9wcmVmZXJyZWQvR1BMLTIuMAo+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL2FsZnJlZC9hbGZyZWQubWsgYi9wYWNrYWdlL2FsZnJlZC9hbGZyZWQubWsKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjRlMzhkZGFkOTIKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIGIvcGFja2FnZS9hbGZyZWQvYWxmcmVkLm1rCj4gQEAgLTAsMCArMSwyNSBA
+QAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgYWxmcmVkCj4gKyMKPiArIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK0FMRlJFRF9WRVJTSU9OID0gMjAyMS40Cj4gK0FM
+RlJFRF9TSVRFID0gaHR0cHM6Ly9kb3dubG9hZHMub3Blbi1tZXNoLm9yZy9iYXRtYW4vc3RhYmxl
+L3NvdXJjZXMvYWxmcmVkCj4gK0FMRlJFRF9MSUNFTlNFID0gR1BMLTIKCnVzZWQgR1BMLTIuMCBo
+ZXJlLCB3aGljaCBpcyB0aGUgY29ycmVjdCBTUERYIGNvZGUgZm9yIHRoZSBHUEx2Mi4KCj4gK0FM
+RlJFRF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRVMvcHJlZmVycmVkL0dQTC0yLjAKPiArQUxGUkVE
+X0RFUEVOREVOQ0lFUyA9IGxpYm5sIGxpYmNhcCBncHNkCgpEcm9wcGVkIGxpYmNhcCBhbmQgZ3Bz
+ZCBmcm9tIGhlcmUuCgo+ICsKPiArZGVmaW5lIEFMRlJFRF9CVUlMRF9DTURTCj4gKwkoY2QgJChA
+RCk7IFwKPiArCSQoVEFSR0VUX01BS0VfRU5WKSAkKE1BS0UpIC1DICQoQEQpLyQoZCkgQ0M9IiQo
+VEFSR0VUX0NDKSIpCgpTZXZlcmFsIHRoaW5ncyB3ZXJlIHdyb25nOgoKIC0gY2QgJChARCkgd2Fz
+IG5vdCBuZWVkZWQsIHNpbmNlIHlvdSdyZSBkb2luZyAtQyAkKEBEKQoKIC0gdGhlICQoZCkgd2Fz
+IHdyb25nLCBhcyAkKGQpIGlzIGFuIGVtcHR5IHZhcmlhYmxlCgogLSBkb2luZyB0aGF0IHdpdGhp
+biBhIHN1YnNoZWxsIGlzIG5vdCBuZWNlc3NhcnkKCiAtIHBhc3NpbmcgJChUQVJHRVRfQ09ORklH
+VVJFX09QVFMpIGlzIHByZWZlcnJlZCBvdmVyIHBhc3NpbmcganVzdCBDQy4KCkFwcGxpZWQgd2l0
+aCB0aG9zZSBjaGFuZ2VzLCB0aGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNv
+LW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVl
+cmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
