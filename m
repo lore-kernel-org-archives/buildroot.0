@@ -4,59 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB21C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 15:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68B50C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 15:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C2C84162E;
-	Thu,  6 Jan 2022 15:27:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C4FD4295C;
+	Thu,  6 Jan 2022 15:35:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WtfE4Nhplzfm; Thu,  6 Jan 2022 15:27:54 +0000 (UTC)
+	with ESMTP id XJQpgRUg2hoR; Thu,  6 Jan 2022 15:35:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47316408CB;
-	Thu,  6 Jan 2022 15:27:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F1AFA1BF3F6
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:27:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 841D442966;
+	Thu,  6 Jan 2022 15:35:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 140631BF3F6
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DED6F83294
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:27:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68C4C40A2E
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:35:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=metanate.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yOrFK7wE808t for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 15:27:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 488A18328E
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 15:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
- Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description; bh=4yK68QRA3XNqKJ/ANGFlu6trM7tz5rkOFHpzqzWVxl8=; b=eZoW3
- 3lv8lqYPOk7hUlJz7HhdbGS4H8y8xet//8upEYyf1AdG1Bxhbs/NlNx6QZONTNnAl45OX/7InpL0H
- V2O+G7h2pmfzcNqKvEm4DtYjrkyj9RZ9dxlTbiGgzPBbO8tyn1w5Bvwtqnid7vMw5zPUIfm7hc2rp
- sr0SQo85Msi4UhyYjDriv1YqxzACfWGecfLGlwxVtC+Mm853JUxyUIx83tdaMZKNNR3I0eZUJRPD1
- vJ3wvhO5lg02ruxREsktFs7/qQDzEFlBhyDkQ9fMywhCueJi4Zeph0CKjSpIkSJxpxDTbUthGU1ll
- Sj42tFEMenqiD3O2/Qqz3zlVMgAZg==;
-Received: from [81.174.171.191] (helo=donbot)
- by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.93) (envelope-from <john@metanate.com>)
- id 1n5UIx-00077W-JI; Thu, 06 Jan 2022 15:03:51 +0000
-Date: Thu, 6 Jan 2022 15:03:50 +0000
-From: John Keeping <john@metanate.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <YdcE1oBg+tvkNeXs@donbot>
-References: <20200121203337.30856-1-vfazio@xes-inc.com>
- <d28ff21d-c2bf-f489-2d09-9f01936f1337@mind.be>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GZ1zZxlmqBEG for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 15:35:50 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8BC940133
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 15:35:49 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ d187-20020a1c1dc4000000b003474b4b7ebcso724729wmd.5
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 07:35:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YzyAUf+Epr9onHRgkm14wg+C1QkDgBfJFOvr5/1MVTw=;
+ b=tZD7CHJ8Mo+CpzMC7+x+ccSch4A6nb6pGVxoZ3i7WtKMULB+5D4wFbe1jXBLOfmYLU
+ 1cNwyZfUr1pUyGSxGleD+QakSWvH/j4bNsOKISz/sBBe9myWgZrUzbpFz/rAkJXL7Saa
+ ifIy5et1+40mgo/4hR0YfTV6+1/844xFE4YQ28hFa43i/w+tdXexewD+PloNtwcsxhaC
+ SDy0YSayERbWKe1UP3KP4QbuOcDHvfhuTrKvW7qiGa7qH8BYtNRPmhEXEDCirsW3pBUb
+ cLu2ZOpZ6yAkIgJSuS+yROqgFtdnbqX66aaArKyV5i4Ras5D4f3lciH78UfL50xRRCCI
+ OLYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YzyAUf+Epr9onHRgkm14wg+C1QkDgBfJFOvr5/1MVTw=;
+ b=rEACddILXBvKGkNGx6P1xh0vmrNyLlfqxN687aRkcyTz119LQRy32iYt3Ugkg2c0p4
+ Q4z2PmOJhz5djxzWuqP6Sy5fCG6yHGjFEuTgcazJOJdEeRpev3jhUIb/2gl3Mbe9WblM
+ etSfc2vq+R6EZimjfpYH0bFDxd5bYgq3CPbXJgONwnVJ87oK4OGNYJ6DuECmXdssgQ7I
+ 7ukl5XXIlwb/ivm3LGP3UM/8G768BOm+iYS9QyQcl9KmOVkcF4ojC1zpXMYAmS9nb3ar
+ 5AZwvMGOUEsljgU5Lj0AxOFxJwQ9tePLB/2jDtYqMqehW7kjnGOCXgFXqf/ycQi8o8XM
+ tC7Q==
+X-Gm-Message-State: AOAM532AvUP9rm5eaE/LVyiWdaIAezrLNwYp4TcujPXNqRVPfUX+rLV/
+ qlJYNgscewYPquThdgn6P5ZJGpIE7kbfTg==
+X-Google-Smtp-Source: ABdhPJyAdNh+gYJr2k+tgia7bYnEbDRlkRML9xWex0xMmfNxF3KXhqKwJ/xJEQMxH6Ou0SRJf7UVFg==
+X-Received: by 2002:a05:600c:4153:: with SMTP id
+ h19mr7473619wmm.142.1641483348014; 
+ Thu, 06 Jan 2022 07:35:48 -0800 (PST)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id az15sm1967847wmb.47.2022.01.06.07.35.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Jan 2022 07:35:47 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Thu,  6 Jan 2022 16:35:41 +0100
+Message-Id: <20220106153542.1668688-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <d28ff21d-c2bf-f489-2d09-9f01936f1337@mind.be>
-X-Authenticated: YES
-Subject: Re: [Buildroot] [PATCH 1/1] download/git: support Git LFS
+Subject: [Buildroot] [PATCHv3 1/2] package/mender: remove single hyphen
+ command
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,87 +90,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Vincent Fazio <vfazio@xes-inc.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>, Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+Single hyphen commands has been removed since Mender 3.0.0 [1]
 
-On Thu, Jan 06, 2022 at 11:35:21AM +0100, Arnout Vandecappelle wrote:
->  I finally applied this to master, with a few minor changes.
+[1] https://github.com/mendersoftware/mender/commit/fd838ec1b08f3d429b1d81607e9c35a87a104ee6
 
-Thanks for merging this!
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ package/mender/S42mender             | 2 +-
+ package/mender/mender-client.service | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On 21/01/2020 21:33, Vincent Fazio wrote:
-> > From: John Keeping <john@metanate.com>
-> > 
-> > Git Large File Storage replaces large files with text pointers in the
-> > Git repository while storing the contents on a remote server.  If a
-> > repository is using this extension, then git-lfs must be used to
-> > checkout the large files before the source archive is generated.
-> > 
-> > Signed-off-by: John Keeping <john@metanate.com>
-> > [vfazio:
-> >    - add git-lfs to DL_TOOLS_DEPENDENCIES
-> >    - fixup for 5a0d6813948fea2cdb88a2e35984520eec856dec
-> >      ("infra/pkg-download: make the DOWNLOAD macro fully parameterised")
-> > ]
-> > Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> 
-> [snip]
-> 
-> > +# If there are large files then fetch them.
-> > +if [ ${large_file} -eq 1 ]; then
-> > +    _git lfs install
-> 
->  AFAICS an lfs install is not needed. IMHO it's pretty bad to do that
-> because it updates ~/.gitconfig, which Buildroot shouldn't do. We could do
-> lfs install --local, but even that is not needed. The lfs install just makes
-> sure that lfs is done automatically whenever you do commit or pull or
-> something like that, but in Buildroot we always do it explicitly so the
-> smudge filter isn't needed.
+diff --git a/package/mender/S42mender b/package/mender/S42mender
+index 108fecfea9..dc60f94f8b 100644
+--- a/package/mender/S42mender
++++ b/package/mender/S42mender
+@@ -25,7 +25,7 @@ start() {
+ 	umask 077
+ 
+ 	start-stop-daemon -S -q -b -m -p /var/run/mender.pid \
+-		--exec /usr/bin/mender -- -daemon
++		--exec /usr/bin/mender -- daemon
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
+diff --git a/package/mender/mender-client.service b/package/mender/mender-client.service
+index 2a5f476ee5..5539a56fd6 100644
+--- a/package/mender/mender-client.service
++++ b/package/mender/mender-client.service
+@@ -17,7 +17,7 @@ if [ -L /var/lib/mender \
+         mkdir -p "$(readlink /var/lib/mender)"; \
+     fi; \
+ fi'
+-ExecStart=/usr/bin/mender -daemon
++ExecStart=/usr/bin/mender daemon
+ Restart=on-abort
+ 
+ [Install]
+-- 
+2.31.1
 
-I had a local update with --local.  Unfortunately it seems that install
-is necessary as when testing the committed version (having removed the
-filter config from ~/.gitconfig) I get:
-
-	Cannot checkout LFS objects, Git LFS is not installed.
-
-I'll send a patch to do `git lfs install --local` here.
-
-> > +    _git lfs fetch
-> > +    _git lfs checkout
-> 
->  As already mentioned by Yann, this doesn't work when combined with
-> submodules. The solution is pretty trivial:
-> 
->     # If there are also submodules, recurse into them,
->     if [ ${recurse} -eq 1 ]; then
->         _git submodule foreach --recursive ${GIT} lfs fetch
->         _git submodule foreach --recursive ${GIT} lfs checkout
->     fi
-> 
->  I haven't actually tested this though.
-
-I have a test repo with LFS submodules and I can confirm this works
-(modulo the install concern above).
-
->  Vincent (or anybody), it would be nice to have a runtime test for this
-> feature. support/testing/tests/download/br2-external/git-refs/package/git-submodule-{enabled,disabled}
-> can be a good source of inspiration. Only I'm not sure if it's possible to
-> set up an LFS repository that is purely file-based.
-
-Yes, I think you're right that LFS requires HTTPS.  It's possible to
-combine that with any Git protocol, but the LFS transfer is always
-HTTPS, so any runtime tests would require a temporary server.
-
-
-John
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
