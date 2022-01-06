@@ -1,88 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E496C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD62C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 521FF6FC06;
-	Thu,  6 Jan 2022 21:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53ECB428C9;
+	Thu,  6 Jan 2022 21:20:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ciAqu2JCxr_u; Thu,  6 Jan 2022 21:10:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3EN_RPKQLHnd; Thu,  6 Jan 2022 21:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9098C6FB82;
-	Thu,  6 Jan 2022 21:10:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CEFC41BF38A
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC57B428B3;
+	Thu,  6 Jan 2022 21:20:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E0FB1BF38A
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:20:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB25040B9C
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:10:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BF85428B3
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:20:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JfF3cbh4M01P for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 21:10:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8DB7EaFirWVb for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 21:20:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63B81404BD
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:10:20 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- o203-20020a1ca5d4000000b003477d032384so251927wme.2
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 13:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:in-reply-to:content-transfer-encoding;
- bh=lr/2l7SvgZ7SVQcp+yDhy7NoRB3QqiDQ0g9bkudEJm8=;
- b=UNqd5m+Vq1VorJNvP0kc2+fpC0wN63+tgIQ8TEgSfM4ZW2AbR1xkLQdgSZB4WIO2kc
- H1p9hqYXgIw8AZ1H0vUa/MZIQu5eyFsUC29xKl7RwxmHCQvCZ4xaqpwuyI96BZx7PcmL
- Pnw8Xqfr71KzII11Lqlgplpnv8nBbG2pQcsC+bH4K1RxnIB80yHrJKWqGH8oxoYyzMd2
- z9vFMOUBJ8rjELv8oLwPeW2MN+eHJZqOfjMZD/S/A+EM9wyVYwlbrAoLTEblq3YEShII
- KW6m3fdsl8v7n0EcsRkRTo6SUZyAypl5ddbY1O1+d/RCZqg56hqKlsSTAIIBpxDlhvd6
- OiHw==
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com
+ [IPv6:2607:f8b0:4864:20::931])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2F4484162E
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:20:39 +0000 (UTC)
+Received: by mail-ua1-x931.google.com with SMTP id v12so6797367uar.7
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 13:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=NBBG0x1pSz5AGfQLSPh49JBGUWWlRiVDAy3HAfnjWSs=;
+ b=Or2nQru583KB5WnOpKuej0P5Bh4y9BHBssdDeRbwTsY1FI64Tgb6LadPA+qvphb0Ra
+ 8O20KsW5826lduAo0TWEaZYD+po4x3hN26czkLdl/vgg0FdwpiSojmPZUytqOG6nbS7U
+ YTe6QNTUWO6ryrBLJzd4CjQT27qFXzlFz4wKMPRFpm/M3XJLi6EV4X2UQD4dho39mBhf
+ uc1tnpOsb7/Da73pvXblfb2x/DJXai2dGkURXfiAExKZiUI5wWb9RuMGYr4ATTa9w8a8
+ WUctDHGeAPTWdKk3joEP1AiwJy/rPWK8v4mYx49hGrtMV0+tfzTnacUUxWnnuNKVVGiE
+ dzbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:in-reply-to
- :content-transfer-encoding;
- bh=lr/2l7SvgZ7SVQcp+yDhy7NoRB3QqiDQ0g9bkudEJm8=;
- b=dPvFw8Vr+g1bSrMZiyingk29et+RgtZH1cH0Hbdyu9BZX8uj1BlJb8iDTPuJVyYZsG
- NBxJsROdNeBLzueMcK3/9zkg6y32OAf7WC0YDXYd0e/mcZlMX9M+GT1lmbH0AnCJTVGF
- NxxNyZlCDLGH31i/YxKpUZ0VkYxoFrTzTtZ4Bp/5U7Hdel7rOBJKVhZa0Kpjx/7i+GnL
- z07lhBMiNY96K8X2Hmcq+q7eVW7WBJy9MbFfUbG1seQ5lUP3kiv44E9zFvvQcfjTKuy1
- K0oubPZkkCDrcxRyutpnWGbcwsiw9gbtDETU/yl9r3t0UuM/YPDgKQ1Ur3MLdTvCZt6m
- ifng==
-X-Gm-Message-State: AOAM533q61wCF0dIigALKA2cQfYw7sYcw+iJ1fGx9wGZkaFIC7tbS1Dt
- mrEAx/Du6th4mbQp+1wjQYJtBQ==
-X-Google-Smtp-Source: ABdhPJzCyg5sBB6Ul7a/o1MWO/mnvFanxjUJ6LnkbRwH1WaC2o46+z6YLSLDexh71eNvDHOVjyNHdA==
-X-Received: by 2002:a05:600c:3ac5:: with SMTP id
- d5mr8548518wms.32.1641503418910; 
- Thu, 06 Jan 2022 13:10:18 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
- (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
- by smtp.gmail.com with ESMTPSA id j13sm6840280wmq.11.2022.01.06.13.10.18
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=NBBG0x1pSz5AGfQLSPh49JBGUWWlRiVDAy3HAfnjWSs=;
+ b=hDfVUtVMo3BDUnIyqxANnro0bBT/BHcUCnbzArVFdCdUVqBPKsBfOept1DzwECXMRK
+ GGHY4D0c811XOqD7mtJquOjaxCMAt+q2f8qfNsIb3ZTJcCvdVFdwrKtGIRIxoeMBRsH4
+ 0CSrVLz08yH1sOYeX5MQHeoIp5mGFflaM8JGStMYtgvh4LAxqBq4HaS2kcZXYLdGT699
+ sLukcacS5JKsgnGI1NOIc2ncVK47yMTh2aMfsGPRMLS6pBt5hF3do4MFNgQ4a9TyLV6u
+ u+lZHtTvMJlOE9MCrNH6jCw5uxEK3GonjgRzFi3K4NrIG4NfNg+ZUBw7AXfPdNYFhuu2
+ lryQ==
+X-Gm-Message-State: AOAM532uv7jdaD1qBymvcev3JpYU334s8wa00+BXl4KSxZj0K4+oRKHV
+ qBUNitMqrA82vnSj3z20Qvyu2p7EKnoXGg==
+X-Google-Smtp-Source: ABdhPJzq6bXqPPtjGePF64yJgF+QJC5oU7r/xGIV7GL7KqDcNNriqRbBxpkEMMrFD9ueDAJsWsuevw==
+X-Received: by 2002:a05:6102:1092:: with SMTP id
+ s18mr18819626vsr.21.1641504037825; 
+ Thu, 06 Jan 2022 13:20:37 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com.
+ [209.85.222.47])
+ by smtp.gmail.com with ESMTPSA id u69sm1972348vke.30.2022.01.06.13.20.37
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 06 Jan 2022 13:10:18 -0800 (PST)
-Message-ID: <d88ad462-0e1e-be62-c0be-bbab22ed296d@smile.fr>
-Date: Thu, 6 Jan 2022 22:10:17 +0100
+ Thu, 06 Jan 2022 13:20:37 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id o63so6828388uao.5
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 13:20:37 -0800 (PST)
+X-Received: by 2002:a67:cb91:: with SMTP id h17mr20096902vsl.35.1641504037223; 
+ Thu, 06 Jan 2022 13:20:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-References: <20220104200904.1422985-1-aduskett@gmail.com>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20220104200904.1422985-1-aduskett@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/gdb: remove python2 support
+References: <20211010234655.585526-1-christian@paral.in>
+ <20211010234655.585526-4-christian@paral.in>
+ <20220106220824.31306aa6@windsurf>
+In-Reply-To: <20220106220824.31306aa6@windsurf>
+Date: Thu, 6 Jan 2022 13:20:26 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2osubHbw9jhui6hWqTLSOqUMTHeQBt6CFvhBPejgP=NDw@mail.gmail.com>
+Message-ID: <CA+h8R2osubHbw9jhui6hWqTLSOqUMTHeQBt6CFvhBPejgP=NDw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH-NEXT v3 4/6]
+ support/download/go-post-process: implement Go vendoring support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,78 +92,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Anisse Astier <anisse@astier.eu>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWRhbSwKCkxlIDA0LzAxLzIwMjIgw6AgMjE6MDksIEFkYW0gRHVza2V0dCBhIMOpY3Jp
-dMKgOgo+IEFjY29yZGluZyB0byB0aGUgR0RCIDkuMiBjaGFuZ2Vsb2csIHB5dGhvbjMgaGFzIGJl
-ZW4gc3VwcG9ydGVkIHNpbmNlIGF0IGxlYXN0Cj4gMjAxOS4KPiAKPiAtIFJlbW92ZSBCUjJfUEFD
-S0FHRV9IT1NUX0dEQl9QWVRIT04gaW4gcGFja2FnZS9nZGIvQ29uZmlnLmluLmhvc3QKPiAKPiAt
-IEFkZCBCUjJfUEFDS0FHRV9IT1NUX0dEQl9QWVRIT04gdG8gQ29uZmlnLmluLmxlZ2FjeQo+IAo+
-IC0gQ2hhbmdlIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfUFlUSE9OIHx8IEJSMl9QQUNLQUdFX1BZ
-VEhPTjMgdG8KPiAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfUFlUSE9OMyBpbiBwYWNrYWdlL2dk
-Yi9Db25maWcuaW4KCkFncmVlIG9uIHRoZSBwcmluY2lwbGUgYnV0IGl0IHNlZW1zIHRoYXQgdGhl
-IGdkYiBmb3IgY3NreSBpcyBzdGlsbCBiYXNlZCBvbiBnZGIKNy4xMi4KCmh0dHBzOi8vZ2l0aHVi
-LmNvbS9jLXNreS9iaW51dGlscy1nZGIvYmxvYi80ZWNiOThmYmMyZjk0ZGJlMDFiNjkzODRhZmJj
-NTE1MTA3ZGU3M2RmL2dkYi92ZXJzaW9uLmluCgpCdXQgc2luY2UgY3NreSB0b29sY2hhaW4gaGFz
-IGJlZW4gcmVtb3ZlZCByZWNlbnRseSwgSSBndWVzcyB3ZSBjYW4gcmVtb3ZlIHRoZQpiZWZvcmUg
-YXBwbHlpbmcgeW91ciBwYXRjaC4KCkZvciBBUkMsIGdkYiBpcyBiYXNlZCBvbiAxMC54CgpodHRw
-czovL2dpdGh1Yi5jb20vZm9zcy1mb3Itc3lub3BzeXMtZHdjLWFyYy1wcm9jZXNzb3JzL2JpbnV0
-aWxzLWdkYi9ibG9iL2FyYy0yMDIwLjA5LXJlbGVhc2UtZ2RiL2dkYi92ZXJzaW9uLmluCgpCZXN0
-IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkdXNr
-ZXR0QGdtYWlsLmNvbT4KPiAtLS0KPiAgQ29uZmlnLmluLmxlZ2FjeSAgICAgICAgICAgfCAgNyAr
-KysrKysrCj4gIHBhY2thZ2UvZ2RiL0NvbmZpZy5pbiAgICAgIHwgIDIgKy0KPiAgcGFja2FnZS9n
-ZGIvQ29uZmlnLmluLmhvc3QgfCAgNSAtLS0tLQo+ICBwYWNrYWdlL2dkYi9nZGIubWsgICAgICAg
-ICB8IDEwICstLS0tLS0tLS0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDE1
-IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9Db25maWcuaW4ubGVnYWN5IGIvQ29uZmln
-LmluLmxlZ2FjeQo+IGluZGV4IDU5OTRkOTQ0ODcuLmExMjZkNTYwNTIgMTAwNjQ0Cj4gLS0tIGEv
-Q29uZmlnLmluLmxlZ2FjeQo+ICsrKyBiL0NvbmZpZy5pbi5sZWdhY3kKPiBAQCAtMTQ2LDYgKzE0
-NiwxMyBAQCBlbmRpZgo+ICAKPiAgY29tbWVudCAiTGVnYWN5IG9wdGlvbnMgcmVtb3ZlZCBpbiAy
-MDIyLjAyIgo+ICAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfR0RCX1BZVEhPTgo+ICsJYm9v
-bCAiR0RCIFB5dGhvbjIgc3VwcG9ydCByZW1vdmVkIgo+ICsJc2VsZWN0IEJSMl9MRUdBQ1kKPiAr
-CWhlbHAKPiArCSAgUHl0aG9uMiBpcyBkZXByZWNhdGVkIGFuZCBubyBsb25nZXIgc3VwcG9ydGVk
-Lgo+ICsJICBQbGVhc2UgbWlncmF0ZSB0byBQeXRob24zLgo+ICsKPiAgY29uZmlnIEJSMl9UT09M
-Q0hBSU5fRVhURVJOQUxfQk9PVExJTl9SSVNDVjY0X0dMSUJDX0JMRUVESU5HX0VER0UKPiAgCWJv
-b2wgIkJvb3RsaW4gcmlzY3Y2NCBnbGliYyBibGVlZGluZy1lZGdlIHRvb2xjaGFpbiByZW1vdmVk
-Igo+ICAJc2VsZWN0IEJSMl9MRUdBQ1kKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9nZGIvQ29uZmln
-LmluIGIvcGFja2FnZS9nZGIvQ29uZmlnLmluCj4gaW5kZXggNmYxYTg4M2RlNy4uZGFhZDZjOTEw
-ZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dkYi9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2dk
-Yi9Db25maWcuaW4KPiBAQCAtNzcsNyArNzcsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfR0RCX1RV
-SQo+ICAKPiAgY29uZmlnIEJSMl9QQUNLQUdFX0dEQl9QWVRIT04KPiAgCWJvb2wgIlB5dGhvbiBz
-dXBwb3J0Igo+IC0JZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9QWVRIT04gfHwgQlIyX1BBQ0tBR0Vf
-UFlUSE9OMwo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9QWVRIT04zCj4gIAloZWxwCj4gIAkg
-IFRoaXMgb3B0aW9uIGVuYWJsZXMgUHl0aG9uIHN1cHBvcnQgaW4gdGhlIHRhcmdldCBnZGIuCj4g
-IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dkYi9Db25maWcuaW4uaG9zdCBiL3BhY2thZ2UvZ2Ri
-L0NvbmZpZy5pbi5ob3N0Cj4gaW5kZXggYTZlMWQ3ZjUzYy4uMmM2Yzc4ZjIwYSAxMDA2NDQKPiAt
-LS0gYS9wYWNrYWdlL2dkYi9Db25maWcuaW4uaG9zdAo+ICsrKyBiL3BhY2thZ2UvZ2RiL0NvbmZp
-Zy5pbi5ob3N0Cj4gQEAgLTQxLDExICs0MSw2IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9IT1NUX0dE
-Ql9OT1BZVEhPTgo+ICAJaGVscAo+ICAJICBUaGlzIG9wdGlvbiBkaXNhYmxlcyBQeXRob24gc3Vw
-cG9ydCBpbiB0aGUgY3Jvc3MgZ2RiLgo+ICAKPiAtY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfR0RC
-X1BZVEhPTgo+IC0JYm9vbCAiUHl0aG9uIDIiCj4gLQloZWxwCj4gLQkgIFRoaXMgb3B0aW9uIGVu
-YWJsZXMgdGhlIFB5dGhvbiAyIHN1cHBvcnQgaW4gdGhlIGNyb3NzIGdkYi4KPiAtCj4gIGNvbmZp
-ZyBCUjJfUEFDS0FHRV9IT1NUX0dEQl9QWVRIT04zCj4gIAlib29sICJQeXRob24gMyIKPiAgCWhl
-bHAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9nZGIvZ2RiLm1rIGIvcGFja2FnZS9nZGIvZ2RiLm1r
-Cj4gaW5kZXggNGZmNDk4MjMwYS4uMjkyOWVhZjA1OCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dk
-Yi9nZGIubWsKPiArKysgYi9wYWNrYWdlL2dkYi9nZGIubWsKPiBAQCAtMjA2LDExICsyMDYsNiBA
-QCBpZmVxICgkKEJSMl9QQUNLQUdFX1BZVEhPTjMpLHkpCj4gIEdEQl9DT05GX0VOViArPSBCUl9Q
-WVRIT05fVkVSU0lPTj0kKFBZVEhPTjNfVkVSU0lPTl9NQUpPUikKPiAgR0RCX01BS0VfRU5WICs9
-IEJSX1BZVEhPTl9WRVJTSU9OPSQoUFlUSE9OM19WRVJTSU9OX01BSk9SKQo+ICBHREJfREVQRU5E
-RU5DSUVTICs9IHB5dGhvbjMKPiAtZWxzZQo+IC0jIENPTkZfRU5WOiBmb3IgdG9wLWxldmVsIGNv
-bmZpZ3VyZTsgTUFLRV9FTlY6IGZvciBzdWItcHJvamVjdHMnIGNvbmZpZ3VyZS4KPiAtR0RCX0NP
-TkZfRU5WICs9IEJSX1BZVEhPTl9WRVJTSU9OPSQoUFlUSE9OX1ZFUlNJT05fTUFKT1IpCj4gLUdE
-Ql9NQUtFX0VOViArPSBCUl9QWVRIT05fVkVSU0lPTj0kKFBZVEhPTl9WRVJTSU9OX01BSk9SKQo+
-IC1HREJfREVQRU5ERU5DSUVTICs9IHB5dGhvbgo+ICBlbmRpZgo+ICBHREJfQ09ORl9PUFRTICs9
-IC0td2l0aC1weXRob249JChUT1BESVIpL3BhY2thZ2UvZ2RiL2dkYi1weXRob24tY29uZmlnCj4g
-IGVsc2UKPiBAQCAtMjg3LDEwICsyODIsNyBAQCBlbHNlCj4gIEhPU1RfR0RCX0NPTkZfT1BUUyAr
-PSAtLWRpc2FibGUtdHVpCj4gIGVuZGlmCj4gIAo+IC1pZmVxICgkKEJSMl9QQUNLQUdFX0hPU1Rf
-R0RCX1BZVEhPTikseSkKPiAtSE9TVF9HREJfQ09ORl9PUFRTICs9IC0td2l0aC1weXRob249JChI
-T1NUX0RJUikvYmluL3B5dGhvbjIKPiAtSE9TVF9HREJfREVQRU5ERU5DSUVTICs9IGhvc3QtcHl0
-aG9uCj4gLWVsc2UgaWZlcSAoJChCUjJfUEFDS0FHRV9IT1NUX0dEQl9QWVRIT04zKSx5KQo+ICtp
-ZmVxICgkKEJSMl9QQUNLQUdFX0hPU1RfR0RCX1BZVEhPTjMpLHkpCj4gIEhPU1RfR0RCX0NPTkZf
-T1BUUyArPSAtLXdpdGgtcHl0aG9uPSQoSE9TVF9ESVIpL2Jpbi9weXRob24zCj4gIEhPU1RfR0RC
-X0RFUEVOREVOQ0lFUyArPSBob3N0LXB5dGhvbjMKPiAgZWxzZQo+IAoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Thomas,
+
+The usage of "go mod init" converts package files from older package
+managers like Glide and vendor.conf into a go.mod and go.sum file with
+the checksums maintained.
+
+This is important for compatibility with some packages that don't have
+go.mod but use other approaches.
+
+On Thu, Jan 6, 2022 at 1:08 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> On Sun, 10 Oct 2021 16:46:53 -0700
+> Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+>
+> > +# Do the Go vendoring
+> > +pushd ${base_name} > /dev/null
+> > +# modcacherw option leaves directories in the module cache at their default
+> > +# permissions rather than making them read-only.
+> > +if [ ! -f go.mod ] && [ -n "${gomod_init}" ]; then
+> > +    go mod init -modcacherw ${gomod_init}
+>
+> So here you're using "go mod init" to create the go.mod file, but in
+> package/pkg-golang.mk, we're manually creating it.
+
+In this context it's OK to make network lookups and download things.
+GEN_GOMOD, it's not OK.
+
+> So for the sake of consistency, I tried using "go mod init" in
+> package/pkg-golang.mk as well, but running that on balena-engine caused
+> go mod init to start downloading stuff... which is wrong because
+> balena-engine already comes with its vendored dependencies.
+
+In this context we don't want downloads to occur, so generating
+manually makes sense.
+
+> So in the end, I ended up creating the go.mod manually (with the same
+> logic) in both pkg-golang.mk and in this download post-process script.
+> But if we find why "go mod init" didn't work in the context of
+> pkg-golang.mk, we could switch back to using that.
+
+I'd prefer to keep the "go mod init" in the download script for better
+compatibility with packages that don't yet use go.mod and go.sum. If
+you want to keep this in a separate patch & merge the manual-create in
+the meantime, that'd also work.
+
+Best regards,
+Christian
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
