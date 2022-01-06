@@ -1,85 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85B9C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A6D4C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 553DD60B95;
-	Thu,  6 Jan 2022 22:30:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5162E81911;
+	Thu,  6 Jan 2022 22:31:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KACvaFsh4CuM; Thu,  6 Jan 2022 22:30:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HpUIIlKOOn47; Thu,  6 Jan 2022 22:31:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACF6560A9C;
-	Thu,  6 Jan 2022 22:30:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8457B1BF378
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:30:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C04DC8144B;
+	Thu,  6 Jan 2022 22:31:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C1B0E1BF378
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7091640A4D
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:30:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B17C640108
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:31:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=paral.in
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ILw3GLlRrphN for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 22:30:21 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WKdpf02cvqIf for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 22:31:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com
- [IPv6:2607:f8b0:4864:20::934])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 84B2140131
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:30:21 +0000 (UTC)
-Received: by mail-ua1-x934.google.com with SMTP id x33so5722385uad.12
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=qOgAYOjecsRumbPYvPfYOw3FzGdupTTFLwDqvMZavUM=;
- b=QYV5+HfumOOtJ5XIoT0wLKP7PcInscLEkJgDxtjkqS5F4f+oe3XId7kECj6KO8Ypx2
- 5r85HaXFRG77qtOeRekklbV5ctu4tA/G0+L8AY6ujO4Pi3R9aRz58DSaz6enzQuPMoEk
- SdShvMedTGOQHyR/0gH6KBzBrinWTXxnC71eDq0eCt6C8eGTImp12sR2JmQJeUcdes4u
- 9BIumOWpho+zoSVPCywxq/yw9wqCUNaJWzBG0fmohq1jH3kps7Zvk796RnR3dFKTg2Y/
- ZjyjaSWVFzFJBZkO2l5CRDw2zBFJNbBLm79ydMVR6HjzCtXOYd6twb7eHSE/qgFkA05u
- AV0A==
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2E704297F
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:31:43 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ v10-20020a05600c214a00b00345e59928eeso4459484wml.0
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9HqTYLXWTklgnJeY0ZcT0I40Or5EKSoSV98+h050AqQ=;
+ b=lmkLOnh1AezCiG3RhD7997+wiBZhLtkvZZmcvIudEqiBU4pRCzMYrZD7uVBW8Z0Pqj
+ Por4HTvsZhZck9OXYAJOMhrdh+fToa8UbGcLNgqtOYJB5LywitmO+L9a7CglmP3yc/oe
+ tyiOgCIo+f+NFxQih0eu4OiN7Ihj6optQGIr9IfDV8udOJz0fxbaG4RcyMmbB6nsRxw+
+ 4JlNkdV/guTCB19xedovVI4UoyVW/FRVLcSIfg5iraZWtR+ZBQUrAGBm/CqGQVC2YThA
+ Ho/VD7HvI/FTL9r84l1KEh6u5AnnxwknQ5gKcpz4kjogOVTmSxRtXsp9D7BESNEfe9C6
+ Vpog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=qOgAYOjecsRumbPYvPfYOw3FzGdupTTFLwDqvMZavUM=;
- b=EqiO/o8O24UnCVFdSaOBtW9rdEabk/s5zrlpiJOt342NZ9cMZhl8cGQHuUOtAGAW7g
- hfd9iU3PKLv3vjGZ+lKdvGBEWf007/nZm4kYHMRLI7FCYTclkA/VyO3cP+Cyqh9KLArY
- XrYWtL1vYPZO3lazwm/MO8pN2HZkj9WOMUFsl/QQ5J7pZGDf3TfiCxbNJFRANtoF/7Au
- BRJ4pC4qTPEdO5K1lsPm1TXpGavK0BQBg0TuasgAiPpF7kdRGeKngUhA7iUNnUCpJ7mN
- x78vXrCDN+BILkgmrCcxya6H55+C2qq2/BbwRhAjqTxOUaAMlcOiqiEQKL+r+NZXiDfO
- kpBg==
-X-Gm-Message-State: AOAM533MjS+MBxqC16NIDaItk/QW35xOtqR0qhRxF6ckuxOC/vBfCxkt
- gXAzJrAt5S2m6vZJKpYXEzc52jIb5ZDlIDBr
-X-Google-Smtp-Source: ABdhPJwschZcHN/0Haymp1Dc/3c+jJqrsrJIlpSfN8TPzJEKQnFoEl04wPOd5DEMeOIS+wmGB8xbXQ==
-X-Received: by 2002:ab0:745a:: with SMTP id p26mr20222093uaq.53.1641508219839; 
- Thu, 06 Jan 2022 14:30:19 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com.
- [209.85.222.46])
- by smtp.gmail.com with ESMTPSA id h3sm2096142vkf.2.2022.01.06.14.30.19
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 06 Jan 2022 14:30:19 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id c36so7016445uae.13
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:30:19 -0800 (PST)
-X-Received: by 2002:a67:cb91:: with SMTP id h17mr20211196vsl.35.1641508218906; 
- Thu, 06 Jan 2022 14:30:18 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9HqTYLXWTklgnJeY0ZcT0I40Or5EKSoSV98+h050AqQ=;
+ b=Jh3elD2HyUp6YELNVXa1N3fqhublszR/A5cmJ2ZDV9Rhhw4gO9qoxV+GgNmDPv0HPQ
+ OOER0bVpaeE7fvhNP61piMybxE5BM4uE1t9OlPYbenF9nGlxK5p2WL/TgLfugSAI5DVF
+ orkw7RiRvvg3AU7qv/71QZb2PK0UvGVba8oR1If0xYVk7gd6FLdhhPuEK/gzP26U2z8G
+ +XQ1gIjzMKHEH6lYkq/NP3BI24e906FbC/adhG2BzhsXCF+OogI4ayb+QEz7J/AXgFoS
+ lSV3KtUmzNgP/bEz0drTYuQXrZ6d0ca2rcLpRN6H5qZyGyky7p5hzImk6onxzmLt6Mpq
+ ukLw==
+X-Gm-Message-State: AOAM533xo/KUOO7jtBaGejDFqL8fEob8g4F9iZFobtmOc4QmhDCS4Mhs
+ Gc8UalFbFm3Z9zaQKnnDyrB0+OW0tuA=
+X-Google-Smtp-Source: ABdhPJzfoB5pQAhvzsh/ZL7s5ZM3yjqYPZ2xdeGbbo91imQZoNa0BZo5UZZ0wko5lCV191K7j16z3A==
+X-Received: by 2002:a7b:c5ce:: with SMTP id n14mr8789738wmk.11.1641508301820; 
+ Thu, 06 Jan 2022 14:31:41 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id f6sm3092948wri.115.2022.01.06.14.31.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Jan 2022 14:31:41 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  6 Jan 2022 23:30:39 +0100
+Message-Id: <20220106223039.1065153-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
- <20220106210000.397694-10-thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220106210000.397694-10-thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Jan 2022 14:30:08 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2pDv2xL6Ghrqmy-j=Kw+EQRTmXr+sBmR8FbN9Eo8N3rBA@mail.gmail.com>
-Message-ID: <CA+h8R2pDv2xL6Ghrqmy-j=Kw+EQRTmXr+sBmR8FbN9Eo8N3rBA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 09/11] package/tinifier: new package
+Subject: [Buildroot] [PATCH 1/1] package/jitterentropy-library: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,38 +86,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- Matt Weber <Matthew.Weber@rockwellcollins.com>,
- Patrick Havelange <patrick.havelange@essensium.com>,
- Anisse Astier <anisse@astier.eu>, James Hilliard <james.hilliard1@gmail.com>,
- Buildroot List <buildroot@buildroot.org>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Fix the following build failure raised since bump to version 3.3.1 in
+commit 3965f09cb427af411055a783cd14b501b2b28285 and
+https://github.com/smuellerDD/jitterentropy-library/commit/1e94512db65450ffd950e04fac61408b5efb7e2d
 
-On Thu, Jan 6, 2022 at 1:00 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This is a Go package that needs vendor modules to be downloaded at
-> build time.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> +TINIFIER_VERSION = 3.4.0
-> +TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
+In file included from ./jitterentropy.h:98,
+                 from src/jitterentropy-gcd.c:22:
+./jitterentropy-base-user.h:74:10: fatal error: pthread.h: No such file or directory
+   74 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
-Build tested.
+Fixes:
+ - http://autobuild.buildroot.org/results/7b01eca8f1442318dd35282605fc8815e6afb0d0
 
-Reviewed-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jitterentropy-library/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Christian Stewart
+diff --git a/package/jitterentropy-library/Config.in b/package/jitterentropy-library/Config.in
+index 02f8ff6164..f9ae1bac5a 100644
+--- a/package/jitterentropy-library/Config.in
++++ b/package/jitterentropy-library/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_JITTERENTROPY_LIBRARY
+ 	bool "libjitterentropy"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Hardware RNG based on CPU timing jitter.
+ 
+ 	  https://github.com/smuellerDD/jitterentropy-library
++
++comment "libjitterentropy needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
