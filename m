@@ -1,40 +1,40 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A15DC433EF
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jan 2022 15:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203EBC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 08:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8AD582718;
-	Wed,  5 Jan 2022 15:58:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id drNV3FUdpeBM; Wed,  5 Jan 2022 15:58:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E8B2823C6;
-	Wed,  5 Jan 2022 15:58:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39B391BF48D
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 15:58:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 274FF4051B
- for <buildroot@lists.busybox.net>; Wed,  5 Jan 2022 15:58:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EE9040375;
+	Thu,  6 Jan 2022 08:00:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uJummX283yOb for <buildroot@lists.busybox.net>;
- Wed,  5 Jan 2022 15:58:41 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KVVwaJ1aFcCI; Thu,  6 Jan 2022 08:00:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9857040291;
+	Thu,  6 Jan 2022 08:00:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63B3B1BF215
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:00:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CFE040979
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:00:00 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H2tEYO3waPQx for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 07:59:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6847A40519
- for <buildroot@uclibc.org>; Wed,  5 Jan 2022 15:58:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4398040918
+ for <buildroot@uclibc.org>; Thu,  6 Jan 2022 07:59:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B01CF832B5; Wed,  5 Jan 2022 15:52:35 +0000 (UTC)
+ id 0AED88344A; Thu,  6 Jan 2022 07:53:52 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 05 Jan 2022 15:58:40 +0000
+Date: Thu, 06 Jan 2022 07:59:58 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -50,8 +50,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc attachments.created
-Message-ID: <bug-14501-163-Zj393BAtU3@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14501-163-ij7BumohYa@https.bugs.busybox.net/>
 In-Reply-To: <bug-14501-163@https.bugs.busybox.net/>
 References: <bug-14501-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -76,29 +76,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14501
 
-Sreedhar Mahadevan <sreedharmahadevan@gmail.com> changed:
+--- Comment #3 from Sreedhar Mahadevan <sreedharmahadevan@gmail.com> ---
+Would like to update one development from my end. I cloned the lttng-modules
+package directly from its Github repository:
+https://github.com/lttng/lttng-modules
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |sreedharmahadevan@gmail.com
+From this lttng-modules environment, I tried building lttng-modules v2.13.0
+based on the instructions in its README.md file by referencing the custom linux
+version that I was using (v5.10.x corresponding to Buildroot v2021.05) and it
+built successfully. When I tried building lttng-modules v2.12.0 and v2.11.0 and
+I got the exact error which I encountered in the Buildroot environment
+(reported earlier in this bug report). I see that buildroot v2021.08 and
+2021.11 all continue using lttng-modules v2.11.0 and all seem to have the same
+issue. 
 
---- Comment #2 from Sreedhar Mahadevan <sreedharmahadevan@gmail.com> ---
-Created attachment 9196
-  --> https://bugs.busybox.net/attachment.cgi?id=9196&action=edit
-Buildroot .config files
-
-Hi Thomas,
-
-I am attaching two .config files here. The reason is that I suspected the
-external tool chain option to create the issue, because of which I tried using
-buildroot's own tool chain. Unfortunately I encountered the same error using
-both configurations. 
-
-Request you to kindly use these configurations and check if you can reproduce
-the issue at your end.
-
-Thanks and regards,
-Sreedhar
+Is this possibly the reason for the issue? If yes, how do I solve it? I tried
+hacking into the buildroot/package/lttng-modules/lttng-modules.mk and
+lttng-modules.hash files but I still faced issues with the wrong sha256 hashes.
+Can you please help?
 
 -- 
 You are receiving this mail because:
