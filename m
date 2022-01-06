@@ -4,61 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 221EBC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 13:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36246C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 13:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5CC9428A1;
-	Thu,  6 Jan 2022 13:36:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94A4842930;
+	Thu,  6 Jan 2022 13:49:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HpNs-mKbX38G; Thu,  6 Jan 2022 13:36:23 +0000 (UTC)
+	with ESMTP id keCdDmL8oMID; Thu,  6 Jan 2022 13:48:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F31414287E;
-	Thu,  6 Jan 2022 13:36:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CBBB1BF409
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 13:36:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7C90428A8;
+	Thu,  6 Jan 2022 13:48:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 28CBF1BF329
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 13:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69C754287E
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 13:36:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1584640A2A
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 13:48:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LQHk0uF1UjJZ for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 13:36:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3BFB5408CD
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 13:36:21 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5148:b9c:d8ec:b3b5])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3613578035B;
- Thu,  6 Jan 2022 14:36:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641476178;
- bh=zbjby8yeGK6jpI4JmVf6/iJk3iGeYcio8RuBf3uvxBY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SCDwMCwGHVwXWB4JY9XC9lB0reMqJJU3mWLsnli6dkYkAEfpesvFALGxwuJagOebq
- qt82aj7NT1/iaoiubv2OUtDgCXnR7cy2mVV6K2Ni2u32/RSXDeo2OZRg6gDVKV7Dg9
- /Z8krYeXg7dQBLYw9b+3C1utg92piCRIlOsqAKQWvnqf9/6xp3IFLnfh3EZyj5QfgK
- k9iyPtV8IP15xLEVGFK9rWv24KxghTUUa3ywwFomPyGJdHd2bv8bkI77e3E9wRFOKF
- qKojoiGovEKCa1/2TFumKAEK9JawRnbvvBbv9swRCP3JVT9W8EbejNLGn+ellUxxWu
- s3EeCWbMaPAbA==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 06 Jan 2022 14:36:14 +0100
-Date: Thu, 6 Jan 2022 14:36:14 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20220106133614.GO614810@scaer>
-References: <20220106130714.347453-1-romain.naour@smile.fr>
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=linatsea.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wX7Jovagn7op for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 13:48:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D525741304
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 13:48:55 +0000 (UTC)
+Received: (Authenticated sender: thierry.bultel@linatsea.fr)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id BD8C3C0013;
+ Thu,  6 Jan 2022 13:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
+ t=1641476933;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=O0gOUFveorEqvKXgH8/q/oHqhgw3iTv+OOq8Jw1kwAE=;
+ b=S+PhYKEVx7ZxfsgE9n0mAN8RR/b9sHoh6I8Q+Hx2s4Mmwk2ZqTih64/elXRpDEdYxrfA0o
+ jdjQQVIRhB14ktvGpSIUkPr3emdJ0Kl0qeUWbLuQ7qW/3IOXCzRWkkF7uNHJJEOR5Rho3m
+ M6lVjvIhAsT0yLbJ+GGmckfKt+Ibu0VsCK790hcgPJX6Egnh5ioJP+G0Z/1zm/TrC1O/vL
+ YGa/Zz2EnLliYloN5rrQKJoA6g9uSNlPEe4dDW3M2+36RPL9BvlsQWq1BuPSZZWcQJo9NJ
+ h7PGtmDg021e6Ov2s0iTDGilp+k1La4bSwSBu4U59NPxzqUG00qNKingR8VkCg==
+To: buildroot@buildroot.org, yann.morin.1998@free.fr
+References: <20211223111348.3532601-1-thierry.bultel@linatsea.fr>
+ <20211223111348.3532601-3-thierry.bultel@linatsea.fr>
+ <20220106103149.GN614810@scaer>
+From: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <313f164a-4f58-3212-a75a-d64acbbc0168@linatsea.fr>
+Date: Thu, 6 Jan 2022 14:48:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220106130714.347453-1-romain.naour@smile.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/qt5: remove qt5webkit-examples from
- qt5/Config.in
+In-Reply-To: <20220106103149.GN614810@scaer>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH v3 3/3] fs/cpio: new option to use dracut
+ tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,59 +74,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
 
-On 2022-01-06 14:07 +0100, Romain Naour spake thusly:
-> qt5webkit-examples was removed by commit [1]
-> 
-> [1] b4841d722fb37f8c8c4715c7fe8b2502c9a3a9dd
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+>> +
+>> +show_modules=yes
+>> +i18n_install_all=no
+>> +lvmconf=no
+>> +mdadmconf=no
+>> +early_microcode=no
+>> +hostonly=no
+>> +hostonly_cmdline=no
+>> +use_fstab=no
+>> +kernel_cmdline="rd.break=initqueue"
+>> +do_strip=no
+>> +
+>> +# Dracut modules need
+>> +add_dracutmodules+=" \
+>> +busybox-buildroot \
+>> +bash
+>> +"
+>> +
+>> +# Modules to ignore
+>> +omit_dracutmodules+=" \
+> [--SNIP big list of stuff--]
+>> +"
+> Rather than remove select stuff, can't we just start from an empty set
+> and add just what is needed?
 
-Applied to master, thanks.
+Yann,
+
+Unfortunately, This is not that simple.
+Dracut will unconditionally source a lot of unwanted modules present in 
+host/usr/lib/modules.d
+(basically because it considers that the init system is systemd always) 
+unless you tell it not to do it.
+
+There is no option to specify another directory to look in, nor a way to 
+select the only needed modules.
+Only excluding them seems the way.
+
+Also, when you asked why I put the module-setup.sh as executable. You 
+are right, it is not mandatory to do
+so, because dracut just sources these files. The fact is that all the 
+ones that it provides are set
+as executables, with no real reason.
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  package/qt5/Config.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 6f2428d800..5751d6cb70 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -67,7 +67,6 @@ source "package/qt5/qt5virtualkeyboard/Config.in"
->  source "package/qt5/qt5wayland/Config.in"
->  source "package/qt5/qt5webchannel/Config.in"
->  source "package/qt5/qt5webkit/Config.in"
-> -source "package/qt5/qt5webkit-examples/Config.in"
->  source "package/qt5/qt5webengine/Config.in"
->  source "package/qt5/qt5websockets/Config.in"
->  source "package/qt5/qt5webview/Config.in"
-> -- 
-> 2.31.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thierry
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
