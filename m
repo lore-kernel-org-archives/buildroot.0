@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD8DC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EB5C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88C6D82ACD;
-	Thu,  6 Jan 2022 21:01:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E30CB8339C;
+	Thu,  6 Jan 2022 21:01:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cww-GYExajX7; Thu,  6 Jan 2022 21:01:08 +0000 (UTC)
+	with ESMTP id dno_Z0QdyYix; Thu,  6 Jan 2022 21:01:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A372D83323;
-	Thu,  6 Jan 2022 21:01:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 167541BF340
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C46AB83388;
+	Thu,  6 Jan 2022 21:01:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 055EA1BF340
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05F4942982
+ by smtp3.osuosl.org (Postfix) with ESMTP id E82F060E07
  for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AJfNkQHoL9kc for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 21:00:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Y3cP5rUR1Ya for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
  [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E4904297C
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8DE7F60D75
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D282440003;
- Thu,  6 Jan 2022 21:00:19 +0000 (UTC)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 749EC40004;
+ Thu,  6 Jan 2022 21:00:21 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>,
  Christian Stewart <christian@paral.in>,
  Buildroot List <buildroot@buildroot.org>,
  Matt Weber <Matthew.Weber@rockwellcollins.com>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Thu,  6 Jan 2022 21:59:53 +0100
-Message-Id: <20220106210000.397694-6-thomas.petazzoni@bootlin.com>
+Date: Thu,  6 Jan 2022 21:59:54 +0100
+Message-Id: <20220106210000.397694-7-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 05/11] package/pkg-cargo.mk: introduce the
- cargo package infrastructure
+Subject: [Buildroot] [PATCH v3 06/11] docs/manual/cargo: document the
+ cargo-package infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,6 +61,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Patrick Havelange <patrick.havelange@essensium.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -69,241 +70,177 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Patrick Havelange <patrick.havelange@essensium.com>
 
-In order to be package agnostic, the install phase is now using cargo
-instead of install. TARGET_CONFIGURE_OPTS is now also set when running
-cargo in order to support cross compiling C code within cargo.
-
-This commit also adds support/download/cargo-post-process to perform
-the vendoring on Cargo packages.
-
-The <pkg>_LICENSE variable of cargo packages is expanded with ",
-vendored dependencies licenses probably not listed" as currently for
-all packages, the licenses of the vendored dependencies are not taken
-into account.
+The Buildroot manual was already providing some details on how to
+integrate Cargo packages, and those details now need to be updated
+with a proper documentation for the cargo-package infrastructure, as
+well as updates related to vendoring support, which affects how
+dependencies are handled.
 
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-[Thomas: add support for host-cargo-package and vendoring]
+[Thomas: numerous updates and extensions.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+docs/manual/adding-packages-cargo.txt: rewrite explanation about dependency management
+
+Now that we have vendoring support for Cargo packages, let's rewrite
+the dependency management section in a more accurate way.
+
+We drop the part about the local cache of the registry, because
++CARGO_HOME+ in Buildroot points to $(HOST_DIR)/share/cargo, which is
+not shared between builds nor preserved accross builds, so its effect
+as a cache is limited.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Makefile.in                 |   1 +
- package/pkg-cargo.mk                | 153 ++++++++++++++++++++++++++++
- support/download/cargo-post-process |  38 +++++++
- 3 files changed, 192 insertions(+)
- create mode 100644 package/pkg-cargo.mk
- create mode 100755 support/download/cargo-post-process
+ docs/manual/adding-packages-cargo.txt | 106 ++++++++++++--------------
+ 1 file changed, 47 insertions(+), 59 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dae7a859fd..0ca2a5844e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -441,3 +441,4 @@ include package/pkg-waf.mk
- include package/pkg-golang.mk
- include package/pkg-meson.mk
- include package/pkg-qmake.mk
-+include package/pkg-cargo.mk
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-new file mode 100644
-index 0000000000..bf1436a86b
---- /dev/null
-+++ b/package/pkg-cargo.mk
-@@ -0,0 +1,153 @@
-+################################################################################
-+# Cargo package infrastructure
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for Cargo packages. It should be used for all packages that use
-+# Cargo as their build system.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this Cargo infrastructure requires the .mk file
-+# to only specify metadata information about the package: name, version,
-+# download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different steps
-+# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
-+# it is used as the list of commands to perform to build the package,
-+# instead of the default Cargo behaviour. The package can also define some
-+# post operation hooks.
-+#
-+################################################################################
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index 8fcc80bcc6..fb3e7d0780 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
+-=== Integration of Cargo-based packages
++=== Infrastructure for Cargo-based packages
+ 
+ Cargo is the package manager for the Rust programming language. It allows the
+ user to build programs or libraries written in Rust, but it also downloads and
+@@ -10,7 +10,7 @@ called "crates".
+ 
+ [[cargo-package-tutorial]]
+ 
+-==== Cargo-based package's +Config.in+ file
++==== +cargo-package+ tutorial
+ 
+ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ 
+@@ -25,11 +25,7 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ 08: 	  http://foosoftware.org/foo/
+ ---------------------------
+ 
+-==== Cargo-based package's +.mk+ file
+-
+-Buildroot does not (yet) provide a dedicated package infrastructure for
+-Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
+-package. Let's start with an example:
++And the +.mk+ file for this package should contain:
+ 
+ ------------------------------
+ 01: ################################################################################
+@@ -44,66 +40,58 @@ package. Let's start with an example:
+ 10: FOO_LICENSE = GPL-3.0+
+ 11: FOO_LICENSE_FILES = COPYING
+ 12:
+-13: FOO_DEPENDENCIES = host-rustc
+-14:
+-15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-16:
+-17: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
+-18:
+-19: FOO_CARGO_OPTS = \
+-20: 	$(if $(BR2_ENABLE_DEBUG),,--release) \
+-21: 	--target=$(RUSTC_TARGET_NAME) \
+-22: 	--manifest-path=$(@D)/Cargo.toml
+-23:
+-24: define FOO_BUILD_CMDS
+-25: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
+-26: 		cargo build $(FOO_CARGO_OPTS)
+-27: endef
+-28:
+-29: define FOO_INSTALL_TARGET_CMDS
+-30: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
+-31: 		$(TARGET_DIR)/usr/bin/foo
+-32: endef
+-33:
+-34: $(eval $(generic-package))
++13: $(eval $(cargo-package))
+ --------------------------------
+ 
+-The Makefile starts with the definition of the standard variables for package
+-declaration (lines 7 to 11).
++The Makefile starts with the definition of the standard variables for
++package declaration (lines 7 to 11).
+ 
+-As seen in line 34, it is based on the
+-xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
+-the variables required by this particular infrastructure, where Cargo is
+-invoked:
++As seen in line 13, it is based on the +cargo-package+
++infrastructure. Cargo will be invoked automatically by this
++infrastructure to build and install the package.
+ 
+-* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
+-  to configure the cross-compilation of the package are passed via
+-  +FOO_CONF_OPTS+.
++It is still possible to define custom build commands or install
++commands (i.e.  with FOO_BUILD_CMDS and FOO_INSTALL_TARGET_CMDS).
++Those will then replace the commands from the cargo infrastructure.
+ 
+-* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
+-  the target.
++==== +cargo-package+ reference
+ 
+-In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
+-contain +host-cargo+.
++The main macros for the Cargo package infrastructure are
+++cargo-package+ for target packages and +host-cargo-package+ for host
++packages.
+ 
+-To sum it up, to add a new Cargo-based package, the Makefile example can be
+-copied verbatim then edited to replace all occurences of +FOO+ with the
+-uppercase name of the new package and update the values of the standard
+-variables.
++Just like the generic infrastructure, the Cargo infrastructure works
++by defining a number of variables before calling the +cargo-package+
++or +host-cargo-package+ macros.
+ 
+-==== About Dependencies Management
++First, all the package metadata information variables that exist in
++the generic infrastructure also exist in the Cargo infrastructure:
+++FOO_VERSION+, +FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+,
+++FOO_DEPENDENCIES+, +FOO_LICENSE+, +FOO_LICENSE_FILES+, etc.
 +
-+################################################################################
-+# inner-cargo-package -- defines how the configuration, compilation and
-+# installation of a cargo package should be done, implements a few hooks
-+# to tune the build process for cargo specifities and calls the generic
-+# package infrastructure to generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++A few additional variables, specific to the Cargo infrastructure, can
++also be defined. Many of them are only useful in very specific cases,
++typical packages will therefore only use a few of them.
 +
-+define inner-cargo-package
++* +FOO_CARGO_ENV+ can be used to pass additional variables in the
++  environment of +cargo+ invocations. It used at both build and
++  installation time
+ 
+-A crate can depend on other libraries from crates.io or git repositories, listed
+-in its Cargo.toml file. Before starting a build, Cargo usually downloads
+-automatically them. This step can also be performed independently, via the
+-+cargo fetch+ command.
++* +FOO_CARGO_BUILD_OPTS+ can be used to pass additional options to
++  +cargo+ at build time.
 +
-+# We need host-rustc to run cargo
-+$(2)_DOWNLOAD_DEPENDENCIES += host-rustc
++* +FOO_CARGO_INSTALL_OPTS+ can be used to pass additional options to
++  +cargo+ at install time.
 +
-+$(2)_CARGO_ENV += \
-+	CARGO_HOME=$$(HOST_DIR)/share/cargo \
-+	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
-+	CARGO_TARGET_APPLIES_TO_HOST="false"
-+
-+$(2)_DOWNLOAD_POST_PROCESS = cargo
-+$(2)_DL_ENV = CARGO_HOME=$$(HOST_DIR)/share/cargo
-+
-+# Due to vendoring, it is pretty likely that not all licenses are
-+# listed in <pkg>_LICENSE.
-+$(2)_LICENSE += , vendored dependencies licenses probably not listed
-+
-+# Note: in all the steps below, we "cd" into the build directory to
-+# execute the "cargo" tool instead of passing $(@D)/Cargo.toml as the
-+# manifest-path. Indeed while the latter seems to work, it in fact
-+# breaks in subtle ways as the way cargo searches for its
-+# configuration file is based (among other rules) on the current
-+# directory. This means that if cargo is started outside of a package
-+# directory, its configuration file will not be taken into account.
-+#
-+# Also, we pass:
-+#  * --offline to prevent cargo from downloading anything: all
-+#    dependencies should have been built by the download post
-+#    process logic
-+#  * --locked to force cargo to use the Cargo.lock file, which ensures
-+#    that a fixed set of dependency versions is used
-+
-+#
-+# Build step. Only define it if not already defined by the package .mk
-+# file.
-+#
-+ifndef $(2)_BUILD_CMDS
-+ifeq ($(4),target)
-+define $(2)_BUILD_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_MAKE_ENV) \
-+		$$(TARGET_CONFIGURE_OPTS) \
-+		$$($(2)_CARGO_ENV) \
-+		cargo build \
-+			--offline \
-+			--target $$(RUSTC_TARGET_NAME) \
-+			$$(if $$(BR2_ENABLE_DEBUG),--debug,--release) \
-+			--manifest-path Cargo.toml \
-+			--locked \
-+			-Z target-applies-to-host \
-+			$$($(2)_CARGO_BUILD_OPTS)
-+endef
-+else # ifeq ($(4),target)
-+define $(2)_BUILD_CMDS
-+	cd $$(@D) && \
-+	$$(HOST_MAKE_ENV) \
-+		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
-+		$$($(2)_CARGO_ENV) \
-+		cargo build \
-+			--offline \
-+			--release \
-+			--manifest-path Cargo.toml \
-+			--locked \
-+			$$($(2)_CARGO_BUILD_OPTS)
-+endef
-+endif # ifeq ($(4),target)
-+endif # ifndef $(2)_BUILD_CMDS
-+
-+#
-+# Target installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	cd $$(@D) && \
-+	$$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
-+		cargo install \
-+			--target $$(RUSTC_TARGET_NAME) \
-+			--offline \
-+			--root $$(TARGET_DIR)/usr/ \
-+			--bins \
-+			--path ./ \
-+			--force \
-+			--locked \
-+			$$($(2)_CARGO_INSTALL_OPTS)
-+endef
-+endif
-+
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	cd $$(@D) && \
-+	$$(HOST_MAKE_ENV) \
-+		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
-+		$$($(2)_CARGO_ENV) \
-+		cargo install \
-+			--offline \
-+			--root $$(HOST_DIR) \
-+			--bins \
-+			--path ./ \
-+			--force \
-+			--locked \
-+			$$($(2)_CARGO_INSTALL_OPTS)
-+endef
-+endif
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef
-+
-+################################################################################
-+# cargo-package -- the target generator macro for Cargo packages
-+################################################################################
-+
-+cargo-package = $(call inner-cargo-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-cargo-package = $(call inner-cargo-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-new file mode 100755
-index 0000000000..25dbbedbfa
---- /dev/null
-+++ b/support/download/cargo-post-process
-@@ -0,0 +1,38 @@
-+#!/usr/bin/env bash
-+
-+set -e
-+
-+. "${0%/*}/helpers"
-+
-+while getopts "n:o:" OPT; do
-+    case "${OPT}" in
-+    o)  output="${OPTARG}";;
-+    n)  base_name="${OPTARG}";;
-+    :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-+    \?) error "unknown option '%s'\n" "${OPTARG}";;
-+    esac
-+done
-+
-+# Already vendored tarball, nothing to do
-+if tar tf ${output} | grep -q "^[^/]*/VENDOR" ; then
-+    exit 0
-+fi
-+
-+post_process_unpack ${base_name} ${output}
-+
-+# Do the Cargo vendoring
-+pushd ${base_name} > /dev/null
-+cargo vendor --locked VENDOR
-+
-+# Create the local .cargo/config with vendor info
-+mkdir -p .cargo/
-+cat <<EOF >.cargo/config
-+[source.crates-io]
-+replace-with = "vendored-sources"
-+
-+[source.vendored-sources]
-+directory = "VENDOR"
-+EOF
-+popd > /dev/null
-+
-+post_process_repack $(pwd) ${base_name} ${output}
++==== About Dependencies Management
+ 
+-Cargo maintains a local cache of the registry index and of git checkouts of the
+-crates, whose location is given by +$CARGO_HOME+. As seen in the package
+-Makefile example at line 15, this environment variable is set to
+-+$(HOST_DIR)/share/cargo+.
++A crate can depend on other libraries from crates.io or git
++repositories, listed in its Cargo.toml file. Buildroot automatically
++takes care of downloading such dependencies as part of the download
++step of packages that use the +cargo-package+ infrastructure. Such
++dependencies are then kept together with the package source code in
++the tarball cached in Buildroot's +DL_DIR+, and therefore the hash of
++the package's tarball includes such dependencies.
+ 
+-This dependency download mechanism is not convenient when performing an offline
+-build, as Cargo will fail to fetch the dependencies. In that case, it is advised
+-to generate a tarball of the dependencies using the +cargo vendor+ and add it to
+-+FOO_EXTRA_DOWNLOADS+.
++This mechanism ensures that any change in the dependencies will be
++detected, and allows the build to be performed completely offline.
 -- 
 2.33.1
 
