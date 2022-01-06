@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EB5C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 060FFC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E30CB8339C;
-	Thu,  6 Jan 2022 21:01:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC3A581318;
+	Thu,  6 Jan 2022 21:01:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dno_Z0QdyYix; Thu,  6 Jan 2022 21:01:20 +0000 (UTC)
+	with ESMTP id vuzT133qMhMk; Thu,  6 Jan 2022 21:01:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C46AB83388;
-	Thu,  6 Jan 2022 21:01:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 055EA1BF340
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 170BD81260;
+	Thu,  6 Jan 2022 21:01:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 760661BF340
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E82F060E07
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63A2C4018D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Y3cP5rUR1Ya for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N9ygXtRB_P4R for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 21:00:27 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8DE7F60D75
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 21AD8400E5
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:26 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 749EC40004;
- Thu,  6 Jan 2022 21:00:21 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 6480D6000F;
+ Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>,
  Christian Stewart <christian@paral.in>,
  Buildroot List <buildroot@buildroot.org>,
  Matt Weber <Matthew.Weber@rockwellcollins.com>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Thu,  6 Jan 2022 21:59:54 +0100
-Message-Id: <20220106210000.397694-7-thomas.petazzoni@bootlin.com>
+Date: Thu,  6 Jan 2022 21:59:55 +0100
+Message-Id: <20220106210000.397694-8-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 06/11] docs/manual/cargo: document the
- cargo-package infrastructure
+Subject: [Buildroot] [PATCH v3 07/11] package/ripgrep: convert to cargo
+ infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,8 +61,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Patrick Havelange <patrick.havelange@essensium.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Sam Voss <sam.voss@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -70,177 +69,81 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Patrick Havelange <patrick.havelange@essensium.com>
 
-The Buildroot manual was already providing some details on how to
-integrate Cargo packages, and those details now need to be updated
-with a proper documentation for the cargo-package infrastructure, as
-well as updates related to vendoring support, which affects how
-dependencies are handled.
+This commit converts the ripgrep package to the cargo
+infrastructure. This causes the vendoring mechanism to kick in, which
+changes the contents of the tarball. To avoid a clash on the hash, we
+change the version of ripgrep to the Git commit hash matching the
+13.0.0 tag, so there are no functional changes, but the tarball name
+is different.
 
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-[Thomas: numerous updates and extensions.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-docs/manual/adding-packages-cargo.txt: rewrite explanation about dependency management
-
-Now that we have vendoring support for Cargo packages, let's rewrite
-the dependency management section in a more accurate way.
-
-We drop the part about the local cache of the registry, because
-+CARGO_HOME+ in Buildroot points to $(HOST_DIR)/share/cargo, which is
-not shared between builds nor preserved accross builds, so its effect
-as a cache is limited.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-cargo.txt | 106 ++++++++++++--------------
- 1 file changed, 47 insertions(+), 59 deletions(-)
+ package/ripgrep/ripgrep.hash |  2 +-
+ package/ripgrep/ripgrep.mk   | 37 ++++++------------------------------
+ 2 files changed, 7 insertions(+), 32 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index 8fcc80bcc6..fb3e7d0780 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -1,7 +1,7 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index b2f03a95e6..cd2dbedfb4 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 0fb17aaf285b3eee8ddab17b833af1e190d73de317ff9648751ab0660d763ed2  ripgrep-13.0.0.tar.gz
++sha256 6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
+ sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 7c2b79a4a7..d587441cfa 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,7 +4,11 @@
+ #
+ ################################################################################
  
--=== Integration of Cargo-based packages
-+=== Infrastructure for Cargo-based packages
+-RIPGREP_VERSION = 13.0.0
++# Same as 13.0.0, we use a Git commit hash because the hash of this
++# tarball changed when moving to the cargo-package infrastructure, and
++# we can't change the hash of existing tarball. Please switch back to
++# a Git tag at the next version bump.
++RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
+@@ -13,33 +17,4 @@ RIPGREP_CPE_ID_VENDOR = ripgrep_project
+ # CVE only impacts ripgrep on Windows
+ RIPGREP_IGNORE_CVES += CVE-2021-3013
  
- Cargo is the package manager for the Rust programming language. It allows the
- user to build programs or libraries written in Rust, but it also downloads and
-@@ -10,7 +10,7 @@ called "crates".
- 
- [[cargo-package-tutorial]]
- 
--==== Cargo-based package's +Config.in+ file
-+==== +cargo-package+ tutorial
- 
- The +Config.in+ file of Cargo-based package 'foo' should contain:
- 
-@@ -25,11 +25,7 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
- 08: 	  http://foosoftware.org/foo/
- ---------------------------
- 
--==== Cargo-based package's +.mk+ file
+-RIPGREP_DEPENDENCIES = host-rustc
+-RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo \
+-	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
+-	CARGO_TARGET_APPLIES_TO_HOST="false"
 -
--Buildroot does not (yet) provide a dedicated package infrastructure for
--Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
--package. Let's start with an example:
-+And the +.mk+ file for this package should contain:
- 
- ------------------------------
- 01: ################################################################################
-@@ -44,66 +40,58 @@ package. Let's start with an example:
- 10: FOO_LICENSE = GPL-3.0+
- 11: FOO_LICENSE_FILES = COPYING
- 12:
--13: FOO_DEPENDENCIES = host-rustc
--14:
--15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
--16:
--17: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
--18:
--19: FOO_CARGO_OPTS = \
--20: 	$(if $(BR2_ENABLE_DEBUG),,--release) \
--21: 	--target=$(RUSTC_TARGET_NAME) \
--22: 	--manifest-path=$(@D)/Cargo.toml
--23:
--24: define FOO_BUILD_CMDS
--25: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
--26: 		cargo build $(FOO_CARGO_OPTS)
--27: endef
--28:
--29: define FOO_INSTALL_TARGET_CMDS
--30: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
--31: 		$(TARGET_DIR)/usr/bin/foo
--32: endef
--33:
--34: $(eval $(generic-package))
-+13: $(eval $(cargo-package))
- --------------------------------
- 
--The Makefile starts with the definition of the standard variables for package
--declaration (lines 7 to 11).
-+The Makefile starts with the definition of the standard variables for
-+package declaration (lines 7 to 11).
- 
--As seen in line 34, it is based on the
--xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
--the variables required by this particular infrastructure, where Cargo is
--invoked:
-+As seen in line 13, it is based on the +cargo-package+
-+infrastructure. Cargo will be invoked automatically by this
-+infrastructure to build and install the package.
- 
--* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
--  to configure the cross-compilation of the package are passed via
--  +FOO_CONF_OPTS+.
-+It is still possible to define custom build commands or install
-+commands (i.e.  with FOO_BUILD_CMDS and FOO_INSTALL_TARGET_CMDS).
-+Those will then replace the commands from the cargo infrastructure.
- 
--* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
--  the target.
-+==== +cargo-package+ reference
- 
--In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
--contain +host-cargo+.
-+The main macros for the Cargo package infrastructure are
-++cargo-package+ for target packages and +host-cargo-package+ for host
-+packages.
- 
--To sum it up, to add a new Cargo-based package, the Makefile example can be
--copied verbatim then edited to replace all occurences of +FOO+ with the
--uppercase name of the new package and update the values of the standard
--variables.
-+Just like the generic infrastructure, the Cargo infrastructure works
-+by defining a number of variables before calling the +cargo-package+
-+or +host-cargo-package+ macros.
- 
--==== About Dependencies Management
-+First, all the package metadata information variables that exist in
-+the generic infrastructure also exist in the Cargo infrastructure:
-++FOO_VERSION+, +FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+,
-++FOO_DEPENDENCIES+, +FOO_LICENSE+, +FOO_LICENSE_FILES+, etc.
-+
-+A few additional variables, specific to the Cargo infrastructure, can
-+also be defined. Many of them are only useful in very specific cases,
-+typical packages will therefore only use a few of them.
-+
-+* +FOO_CARGO_ENV+ can be used to pass additional variables in the
-+  environment of +cargo+ invocations. It used at both build and
-+  installation time
- 
--A crate can depend on other libraries from crates.io or git repositories, listed
--in its Cargo.toml file. Before starting a build, Cargo usually downloads
--automatically them. This step can also be performed independently, via the
--+cargo fetch+ command.
-+* +FOO_CARGO_BUILD_OPTS+ can be used to pass additional options to
-+  +cargo+ at build time.
-+
-+* +FOO_CARGO_INSTALL_OPTS+ can be used to pass additional options to
-+  +cargo+ at install time.
-+
-+==== About Dependencies Management
- 
--Cargo maintains a local cache of the registry index and of git checkouts of the
--crates, whose location is given by +$CARGO_HOME+. As seen in the package
--Makefile example at line 15, this environment variable is set to
--+$(HOST_DIR)/share/cargo+.
-+A crate can depend on other libraries from crates.io or git
-+repositories, listed in its Cargo.toml file. Buildroot automatically
-+takes care of downloading such dependencies as part of the download
-+step of packages that use the +cargo-package+ infrastructure. Such
-+dependencies are then kept together with the package source code in
-+the tarball cached in Buildroot's +DL_DIR+, and therefore the hash of
-+the package's tarball includes such dependencies.
- 
--This dependency download mechanism is not convenient when performing an offline
--build, as Cargo will fail to fetch the dependencies. In that case, it is advised
--to generate a tarball of the dependencies using the +cargo vendor+ and add it to
--+FOO_EXTRA_DOWNLOADS+.
-+This mechanism ensures that any change in the dependencies will be
-+detected, and allows the build to be performed completely offline.
+-RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
+-
+-RIPGREP_CARGO_OPTS = \
+-	-Z target-applies-to-host \
+-	--target=$(RUSTC_TARGET_NAME) \
+-	--manifest-path=$(@D)/Cargo.toml
+-
+-ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+-RIPGREP_CARGO_BIN_SUBDIR = debug
+-else
+-RIPGREP_CARGO_OPTS += --release
+-RIPGREP_CARGO_BIN_SUBDIR = release
+-endif
+-
+-define RIPGREP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
+-		cargo build $(RIPGREP_CARGO_OPTS)
+-endef
+-
+-define RIPGREP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/$(RIPGREP_BIN_DIR)/rg \
+-		$(TARGET_DIR)/usr/bin/rg
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cargo-package))
 -- 
 2.33.1
 
