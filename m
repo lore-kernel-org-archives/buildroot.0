@@ -1,47 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62379C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 09:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C834C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 10:31:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C70840139;
-	Thu,  6 Jan 2022 09:47:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10B8E81DA3;
+	Thu,  6 Jan 2022 10:31:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vx-IscrQG7hJ; Thu,  6 Jan 2022 09:47:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id n2teRgDVmTUr; Thu,  6 Jan 2022 10:31:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AF4C40339;
-	Thu,  6 Jan 2022 09:47:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42DF181DB2;
+	Thu,  6 Jan 2022 10:31:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E937E1BF868
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 09:47:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8CE6B1BF47D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6CA64027B
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 09:47:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7AAE1402E8
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:31:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4t80XNu0iyPH for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 09:47:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC2804026F
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 09:47:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 6C6478345E; Thu,  6 Jan 2022 09:40:59 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 6 Jan 2022 10:45:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 007b5b483f2505c7af1f8b466b0f1b96e41d21fb
-X-Git-Newrev: b4841d722fb37f8c8c4715c7fe8b2502c9a3a9dd
-X-Patchwork-Hint: ignore
-Message-Id: <20220106094059.6C6478345E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webkit-examples: remove
- package
+ with ESMTP id t0mxbIDuIFzI for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 10:31:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 64B15402D8
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 10:31:55 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:91d2:d1c6:5626:51cd])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 5C1C178032A;
+ Thu,  6 Jan 2022 11:31:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641465112;
+ bh=3r2lPoziqfvxilwebvTWp4vfLYdiBYfi3X55XI7FdlI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=vRB5OJIgtCHLOGW2CEyqneN+mLyID4b3OIvSGBiq3PJQk/D/b5GkpvgHNfZX3Ortr
+ slAMlNJkvQknTPcwKg7mp5lChIL0jThxa9DuXFVjIRW/TqXhCHviVtLezzu+RoEfB0
+ CW8ZehzbNfjiQ6gnCbaHiz5FdljVvPI99Q2UFWRSJYWkGQxkF96C7HEtB3+OzVNg37
+ IYax93BJpvxDvpIdBxPNWyc9UBOxsI2+zIO9rzp5FTMkRxU5z2mU1De/qc9lQ7LU5G
+ JvTzoRkKPI6dKYBViGA8AGFPkO7M6dBFRzoM8CWJDMOYHFPprpQFW76p6BQVmK/GV3
+ b63KHnD0rmDBA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 06 Jan 2022 11:31:49 +0100
+Date: Thu, 6 Jan 2022 11:31:49 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <20220106103149.GN614810@scaer>
+References: <20211223111348.3532601-1-thierry.bultel@linatsea.fr>
+ <20211223111348.3532601-3-thierry.bultel@linatsea.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20211223111348.3532601-3-thierry.bultel@linatsea.fr>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v3 3/3] fs/cpio: new option to use dracut
+ tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,302 +73,236 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7839431521108529841=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7839431521108529841==
-Content-Type: text/plain
+Thierry, All,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4841d722fb37f8c8c4715c7fe8b2502c9a3a9dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2021-12-23 12:13 +0100, Thierry Bultel spake thusly:
+> Adds an option to invoke the dracut host tool, providing
+> a configuration file, instead of having a full cpio archive
+> of the whole target directory.
+> 
+> Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+[--SNIP--]
+> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+> index c1151a2881..3d0f963a8d 100644
+> --- a/fs/cpio/Config.in
+> +++ b/fs/cpio/Config.in
+> @@ -7,6 +7,33 @@ config BR2_TARGET_ROOTFS_CPIO
+>  
+>  if BR2_TARGET_ROOTFS_CPIO
+>  
+> +choice
+> +	prompt "cpio type"
 
-This package seems to have issues building with the latest
-qt5webkit release, as it has not received updates upstream
-since 2017 remove it as it is unlikely to be fixed.
+Missing empty line between the choice prompt and the first choice entry.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Config.in.legacy                                   |  7 +++
- .../qt5webkit-examples/0001-Build-examples.patch   | 52 ---------------
- .../0002-Fix-QWebView-path.patch                   | 73 ----------------------
- .../0003-Fix-QPainterPath-include.patch            | 36 -----------
- package/qt5/qt5webkit-examples/Config.in           | 10 ---
- .../qt5/qt5webkit-examples/qt5webkit-examples.hash |  8 ---
- .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 26 --------
- 7 files changed, 7 insertions(+), 205 deletions(-)
+> +config BR2_TARGET_ROOTFS_CPIO_FULL
+> +	bool "cpio the whole root filesystem (ie the content of 'target')"
+> +	help
+> +	  Build a cpio archive containing the whole the root filesystem.
+> +
+> +config BR2_TARGET_ROOTFS_CPIO_DRACUT
+> +	bool "Invoke dracut to make an initramfs"
+> +	select BR2_PACKAGE_HOST_DRACUT
+> +	select BR2_PACKAGE_HOST_UBOOT_TOOLS
+> +	help
+> +	  Builds an additional initramfs using dracut.
+> +	  This can be useful to create a recovery system,
+> +	  for instance.
+> +
+> +if BR2_TARGET_ROOTFS_CPIO_DRACUT
+> +config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
+> +	string "configuration file"
+> +endif
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e5349e58ac..004506e4bb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
-+	bool "qt5webkit-examples removed"
-+	select BR2_LEGACY
-+	help
-+	  The qt5webkit-examples package is unmaintained and has been
-+	  removed.
-+
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE
- 	bool "Bootlin riscv64 glibc bleeding-edge toolchain removed"
- 	select BR2_LEGACY
-diff --git a/package/qt5/qt5webkit-examples/0001-Build-examples.patch b/package/qt5/qt5webkit-examples/0001-Build-examples.patch
-deleted file mode 100644
-index cd925e21c5..0000000000
---- a/package/qt5/qt5webkit-examples/0001-Build-examples.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 78f558df35860484711a600d155ae7a13ebf44b2 Mon Sep 17 00:00:00 2001
--From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
--Date: Tue, 28 Nov 2017 23:14:42 -0500
--Subject: [PATCH] Build examples
--MIME-Version: 1.0
--Content-Type: text/plain; charset=utf-8
--Content-Transfer-Encoding: 8bit
--
--This patch improves the qt5webkit examples build for 2 aspects:
--
--	- Allows to build even if qt5base examples are not enabled
--	- Builds xmlpatterns example only if the qt5xmlpattern package
--	has been built
--
--Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
--Signed-off-by: Gaël PORTAY <gael.portay@savoirfairelinux.com>
--[gportay: build imageanalyzer example if concurrent module is built]
-----
-- examples/webkitwidgets/webkitwidgets.pro | 7 ++++---
-- qtwebkit-examples.pro                    | 1 +
-- 2 files changed, 5 insertions(+), 3 deletions(-)
--
--diff --git a/examples/webkitwidgets/webkitwidgets.pro b/examples/webkitwidgets/webkitwidgets.pro
--index ab20df4..67f6785 100644
----- a/examples/webkitwidgets/webkitwidgets.pro
--+++ b/examples/webkitwidgets/webkitwidgets.pro
--@@ -4,9 +4,10 @@ SUBDIRS +=  domtraversal \
--             previewer \
--             fancybrowser \
--             simpleselector \
---            imageanalyzer \
--             framecapture \
--             browser \
--             embedded \
---            scroller \
---            xmlpatterns
--+            scroller
--+
--+qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
--+qtHaveModule(concurrent): SUBDIRS += imageanalyzer
--diff --git a/qtwebkit-examples.pro b/qtwebkit-examples.pro
--index 3fcecf1..2ade7ff 100644
----- a/qtwebkit-examples.pro
--+++ b/qtwebkit-examples.pro
--@@ -3,3 +3,4 @@ requires(qtHaveModule(webkit))
-- load(qt_parts)
-- 
-- SUBDIRS += doc
--+SUBDIRS += examples
---- 
--2.15.0
--
-diff --git a/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch b/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch
-deleted file mode 100644
-index 30aab30167..0000000000
---- a/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 9fa73707216bd55dff380031a33aca701a7d9c8b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 May 2019 23:29:05 +0200
--Subject: [PATCH] Fix QWebView path
--
--QWebView is installed under QtWebKitWidgets
--
--Fixes:
-- - http://autobuild.buildroot.org/results/68dd6f1ffed49f8e2570f7364e5e635573807d3e
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- examples/webkitwidgets/formextractor/formextractor.ui           | 2 +-
-- examples/webkitwidgets/previewer/previewer.ui                   | 2 +-
-- examples/webkitwidgets/simpleselector/window.ui                 | 2 +-
-- .../xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui             | 2 +-
-- 4 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/examples/webkitwidgets/formextractor/formextractor.ui b/examples/webkitwidgets/formextractor/formextractor.ui
--index 5c4afec..a38bdd5 100644
----- a/examples/webkitwidgets/formextractor/formextractor.ui
--+++ b/examples/webkitwidgets/formextractor/formextractor.ui
--@@ -151,7 +151,7 @@
--   <customwidget>
--    <class>QWebView</class>
--    <extends>QWidget</extends>
---   <header>QtWebKit/QWebView</header>
--+   <header>QtWebKitWidgets/QWebView</header>
--   </customwidget>
--  </customwidgets>
--  <resources/>
--diff --git a/examples/webkitwidgets/previewer/previewer.ui b/examples/webkitwidgets/previewer/previewer.ui
--index d4c9992..69adb2e 100644
----- a/examples/webkitwidgets/previewer/previewer.ui
--+++ b/examples/webkitwidgets/previewer/previewer.ui
--@@ -74,7 +74,7 @@
--   <customwidget>
--    <class>QWebView</class>
--    <extends>QWidget</extends>
---   <header>QtWebKit/QWebView</header>
--+   <header>QtWebKitWidgets/QWebView</header>
--   </customwidget>
--  </customwidgets>
--  <resources/>
--diff --git a/examples/webkitwidgets/simpleselector/window.ui b/examples/webkitwidgets/simpleselector/window.ui
--index aa824df..7906186 100644
----- a/examples/webkitwidgets/simpleselector/window.ui
--+++ b/examples/webkitwidgets/simpleselector/window.ui
--@@ -64,7 +64,7 @@
--   <customwidget>
--    <class>QWebView</class>
--    <extends>QWidget</extends>
---   <header>QtWebKit/QWebView</header>
--+   <header>QtWebKitWidgets/QWebView</header>
--   </customwidget>
--  </customwidgets>
--  <resources/>
--diff --git a/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui b/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
--index ad43284..000cae7 100644
----- a/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
--+++ b/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
--@@ -188,7 +188,7 @@ p, li { white-space: pre-wrap; }
--   <customwidget>
--    <class>QWebView</class>
--    <extends>QWidget</extends>
---   <header>QtWebKit/QWebView</header>
--+   <header>QtWebKitWidgets/QWebView</header>
--   </customwidget>
--  </customwidgets>
--  <resources/>
---- 
--2.20.1
--
-diff --git a/package/qt5/qt5webkit-examples/0003-Fix-QPainterPath-include.patch b/package/qt5/qt5webkit-examples/0003-Fix-QPainterPath-include.patch
-deleted file mode 100644
-index 2d5e8fae9a..0000000000
---- a/package/qt5/qt5webkit-examples/0003-Fix-QPainterPath-include.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 452123a4491b26c5b078934477bd5864f1d004e4 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Thu, 28 May 2020 20:58:26 +0200
--Subject: [PATCH] Fix QPainterPath include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Add missing QPainterPath (needed for Qt-5.15.0 compile).
--
--Fixes:
--
--  searchlineedit.cpp:121:18: error: aggregate ‘QPainterPath myPath’ has incomplete type and cannot be defined
--       QPainterPath myPath;
--                    ^~~~~~
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- examples/webkitwidgets/browser/searchlineedit.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/examples/webkitwidgets/browser/searchlineedit.cpp b/examples/webkitwidgets/browser/searchlineedit.cpp
--index fbd73cb..7462c82 100644
----- a/examples/webkitwidgets/browser/searchlineedit.cpp
--+++ b/examples/webkitwidgets/browser/searchlineedit.cpp
--@@ -34,6 +34,7 @@
-- #include "searchlineedit.h"
-- 
-- #include <QtGui/QPainter>
--+#include <QtGui/QPainterPath>
-- #include <QtGui/QMouseEvent>
-- #include <QtWidgets/QMenu>
-- #include <QtWidgets/QStyle>
---- 
--2.26.2
--
-diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
-deleted file mode 100644
-index 47bbcbaa68..0000000000
---- a/package/qt5/qt5webkit-examples/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
--	bool "qt5webkit-examples"
--	depends on BR2_PACKAGE_QT5WEBKIT
--	help
--	  Qt is a cross-platform application and UI framework for
--	  developers using C++.
--
--	  This package contains examples for the qt5webkit module.
--
--	  http://qt.io
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-deleted file mode 100644
-index ea64f6f14e..0000000000
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-+++ /dev/null
-@@ -1,8 +0,0 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
--sha256  e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0  qtwebkit-examples-opensource-src-5.9.1.tar.xz
--
--# Hashes for license files:
--sha256  a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c  LICENSE.LGPLv21
--sha256  04505ee290cbe7b29b3766e00ff81987e84658f620cb43bd6e7bb52ee4234e1b  LICENSE.LGPLv3
--sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
--sha256  d3d9052b838761dbe00067168ed9ebc437734d53ebf71dea1c8e9f7532a5333b  LICENSE.GPLv3
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-deleted file mode 100644
-index 84bc291739..0000000000
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-+++ /dev/null
-@@ -1,26 +0,0 @@
--################################################################################
--#
--# qt5webkit-examples
--#
--################################################################################
--
--QT5WEBKIT_EXAMPLES_VERSION = 5.9.1
--QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
--QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
--QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
--
--QT5WEBKIT_EXAMPLES_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2 LICENSE.GPLv3
--
--QT5WEBKIT_EXAMPLES_LICENSE = LGPL-2.1 with exception or LGPL-3 or GPL-2 or GPL-3
--# Source files contain references to LGPL_EXCEPTION.txt but it is not included
--# in the archive.
--
--ifeq ($(BR2_PACKAGE_QT5XMLPATTERNS),y)
--QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5xmlpatterns
--endif
--
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
--QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5declarative
--endif
--
--$(eval $(qmake-package))
+Don't add the option in the choice, but outside of it.
 
---===============7839431521108529841==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index 81f8c393d1..e0e0eb2b1e 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -29,6 +29,41 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+>  
+>  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
+> +
+> +export TARGET_CROSS
 
+Don't do such a global export. If you need it in the environment, then
+do so when calling the utility, like:
+
+    TARGET_CROSS="$(TARGET_CROSS)" \
+    $(HOST_DIR)/bin/dracut \
+        blabla other options...
+
+> +ROOTFS_CPIO_DEPENDENCIES += host-dracut
+> +
+> +ifeq ($(BR2_LINUX_KERNEL),y)
+> +ROOTFS_CPIO_DEPENDENCIES += linux
+> +endif
+> +
+> +ifeq ($(BR_BUILDING).$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE),y.)
+> +$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
+> +endif
+> +
+> +ifeq ($(BR2_LINUX_KERNEL),y)
+> +ROOTFS_CPIO_DRACUT_CMD_OPTS += --kver $(LINUX_VERSION_PROBED)
+> +else
+> +ROOTFS_CPIO_DRACUT_CMD_OPTS += --no-kernel
+> +endif
+> +
+> +define ROOTFS_CPIO_CMD
+> +	mkdir -p $(@D)/tmp
+> +	rm -rf $(@D)/tmp/*
+
+The $(@D) for ROOTFS_*_CMD is $(BINARIES_DIR), i.e. output/images/ and
+so creating a te,mporary directory in there is not so nice. You should
+use $(ROOTFS_CPIO_DIR)/tmp
+
+Also, if I understand correctly, you are doing this mkdir+rm trick to
+ensure you have an empty tmp directory to start with. By using
+$(ROOTFS_CPIO_DIR) as base, this will be guaranteed, because
+$(ROOTFS_CPIO_DIR) is removed and recreated before running the fs
+commands.
+
+> +	$(HOST_DIR)/usr/bin/dracut_wrapper.sh \
+> +		$(ROOTFS_CPIO_DRACUT_CMD_OPTS) \
+> +		-c $(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE) \
+> +		--tmpdir $(@D)/tmp \
+> +		-M \
+> +		--force \
+> +		--keep \
+> +		$@
+> +endef
+> +
+> +else ifeq ($(BR2_TARGET_ROOTFS_CPIO_FULL),y)
+
+Please, keep the original, plain cpio first in the code, and add the
+dracut specificities after.
+
+>  # --reproducible option was introduced in cpio v2.12, which may not be
+>  # available in some old distributions, so we build host-cpio
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+> @@ -53,4 +88,6 @@ endef
+>  ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
+>  endif
+>  
+> +endif #BR2_TARGET_ROOTFS_CPIO_DRACUT
+> +
+>  $(eval $(rootfs))
+> diff --git a/support/testing/conf/dracut.conf b/support/testing/conf/dracut.conf
+> new file mode 100644
+> index 0000000000..eb793a3562
+> --- /dev/null
+> +++ b/support/testing/conf/dracut.conf
+> @@ -0,0 +1,93 @@
+> +#Yuco dracut config
+
+"Yuco"?
+
+> +#Dracut configuration
+> +
+> +show_modules=yes
+> +i18n_install_all=no
+> +lvmconf=no
+> +mdadmconf=no
+> +early_microcode=no
+> +hostonly=no
+> +hostonly_cmdline=no
+> +use_fstab=no
+> +kernel_cmdline="rd.break=initqueue"
+> +do_strip=no
+> +
+> +# Dracut modules need
+> +add_dracutmodules+=" \
+> +busybox-buildroot \
+> +bash
+> +"
+> +
+> +# Modules to ignore
+> +omit_dracutmodules+=" \
+[--SNIP big list of stuff--]
+> +"
+
+Rather than remove select stuff, can't we just start from an empty set
+and add just what is needed?
+
+Regards,
+Yann E. MORIN.
+
+> +
+> diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
+> new file mode 100644
+> index 0000000000..5570693dc2
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_cpio.py
+> @@ -0,0 +1,44 @@
+> +import os
+> +import infra.basetest
+> +
+> +CHECK_FS_CMD = "mount | grep 'rootfs on / type rootfs'"
+> +
+> +def boot_img(emulator, builddir):
+> +    img = os.path.join(builddir, "images", "rootfs.cpio")
+> +    emulator.boot(arch="armv7",
+> +                  kernel="builtin",
+> +                  options=["-initrd", "{}".format(img)])
+> +    emulator.login()
+> +    _, exit_code = emulator.run(CHECK_FS_CMD)
+> +    return exit_code
+> +
+> +class TestCpioDracut(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        """
+> +        BR2_INIT_BUSYBOX=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_TARGET_ROOTFS_CPIO_DRACUT=y
+> +        BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE="{}"
+> +        """.format(infra.filepath("conf/dracut.conf"))
+> +
+> +    def test_run(self):
+> +
+> +        exit_code = boot_img(self.emulator,
+> +                             self.builddir)
+> +        self.assertEqual(exit_code, 0)
+> +
+> +class TestCpioFull(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        """
+> +        BR2_INIT_BUSYBOX=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_TARGET_ROOTFS_CPIO_FULL=y
+> +        """
+> +
+> +    def test_run(self):
+> +
+> +        exit_code = boot_img(self.emulator,
+> +                             self.builddir)
+> +        self.assertEqual(exit_code, 0)
+> +
+> +
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7839431521108529841==--
