@@ -1,79 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FCEC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8734FC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:59:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F2774297F;
-	Thu,  6 Jan 2022 22:58:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33E8160B95;
+	Thu,  6 Jan 2022 22:59:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id geq8D6vxzW4H; Thu,  6 Jan 2022 22:59:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9640D60625;
+	Thu,  6 Jan 2022 22:59:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CED741BF215
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:59:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD1F6408E7
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:59:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YJETmmnsbU_q; Thu,  6 Jan 2022 22:58:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 825304035E;
-	Thu,  6 Jan 2022 22:58:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 450741BF378
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:58:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 325F081407
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:58:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uvk5sq58IzE4 for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 22:58:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C4FB813DD
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:58:12 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id q8so7605010wra.12
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9HtiOPFI0w12G2GLL81jcljm8bzRMQrsAEymnMcRQx4=;
- b=o/8N4MV+upuRTJVabvYMB/ab8jJ+hPaGU1Oj4kxCr2MTX0RMXV1schj4paN3Ig6Wh3
- AN4nIStcyj8Q5aHOcj53XPTOS3jezMt+NkgdVe7VKGLCr6/cm0mDtNlpOWrpG7n2RgmC
- /qt/oiKMGOlRXJP2rzb3GSBAt+75zJCRUuOEQpA2Zw2g5gms/0yi5eRrU5kjI4GrZ4DI
- o/oyaKsq3atOLT1Ezn4wA2wfwFAPHCGro8kuY7gbaUYmSqaTxbxdTMO3Z7pkiMKfGkEa
- 9lbSOIiSKW0wwo7kFeDa12JZ953jl+L0c4uUkcbK38qJFmMHbEKC5RZ61pTYk2F9WF40
- NKIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=9HtiOPFI0w12G2GLL81jcljm8bzRMQrsAEymnMcRQx4=;
- b=5dd++4jGK0PNzS0DfY7NxjmGTv6mya7IrBvve7kEhhZZiyZogB2soJTfsVR9l01Y3n
- bVLbOZtbUj4drmCrBAycXdaCmPxhFfco4PgAx1vlCTcwCqrNDJBhq57DKkAHTGq7svF9
- NjHl04cuyT24AE3psaa7Di7VkgVQNplEJ8hHnnKHw+KyUErqBSCeASQmg8JXF1j1v6wJ
- oWKbrUFjaUidkS7ICv2dQLbCkOwEGrU+TO+JZ81GZdQUBs7yWVrQnuL1LrUIxc33Nxx1
- Ga/n1Js3ZeRpUF39BzdMcAcQj8fFLQHPWRq6G5E5kBAmnJWaax4nMRUbiqIQkVRhAch/
- TQmA==
-X-Gm-Message-State: AOAM530kuAq2SU5pHemOZFZNXzlM7x4QhevQIqpx694A3a17F94v9EFT
- HCD36DdNGO2zYhJWR8BPj3y4e7abSrs=
-X-Google-Smtp-Source: ABdhPJyL8Ks6M+kEIa+0Yfx3zYFGqUaVP61MaC+XUCfvo018a26CWZj2CttddTmU9vLW+5ZRtRNJHg==
-X-Received: by 2002:a5d:564f:: with SMTP id j15mr50855093wrw.366.1641509890485; 
- Thu, 06 Jan 2022 14:58:10 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id u10sm3286351wrs.28.2022.01.06.14.58.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 06 Jan 2022 14:58:10 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  6 Jan 2022 23:56:47 +0100
-Message-Id: <20220106225647.1162108-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R5sSHtLtJXwm for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 22:59:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A27E940493
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:59:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 549E4200003;
+ Thu,  6 Jan 2022 22:59:27 +0000 (UTC)
+Date: Thu, 6 Jan 2022 23:59:26 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Christian Stewart <christian@paral.in>
+Message-ID: <20220106235926.012b8ca8@windsurf>
+In-Reply-To: <CA+h8R2rnx_wLmqtetBofM=PcxAV2qiyWUug9gjWxwawJ8CtD3g@mail.gmail.com>
+References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
+ <20220106210000.397694-9-thomas.petazzoni@bootlin.com>
+ <CA+h8R2qv7gBPc2KcgT=5tjDr475haSYMZwLzu4RbYFO3xV4-HQ@mail.gmail.com>
+ <20220106232913.370ee876@windsurf>
+ <CA+h8R2rnx_wLmqtetBofM=PcxAV2qiyWUug9gjWxwawJ8CtD3g@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libvdpau: bump to version 1.4
+Subject: Re: [Buildroot] [PATCH v3 08/11] package/sentry-cli: re-add package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,52 +60,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Damien Lanson <damien@kal-host.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Matt Weber <Matthew.Weber@rockwellcollins.com>,
+ Patrick Havelange <patrick.havelange@essensium.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+Hello,
 
-https://gitlab.freedesktop.org/vdpau/libvdpau/-/tags/1.4
+On Thu, 6 Jan 2022 14:38:06 -0800
+Christian Stewart <christian@paral.in> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libvdpau/libvdpau.hash | 7 +++----
- package/libvdpau/libvdpau.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+> I'm running an up-to-date Gentoo system at version 2.33.
+> 
+> Currently 2.34 is masked:
+> 
+> https://packages.gentoo.org/packages/sys-libs/glibc
+> 
+> I guess the host-rust packages expect at least glibc 2.34.
 
-diff --git a/package/libvdpau/libvdpau.hash b/package/libvdpau/libvdpau.hash
-index 0833d41bf4..653657322a 100644
---- a/package/libvdpau/libvdpau.hash
-+++ b/package/libvdpau/libvdpau.hash
-@@ -1,5 +1,4 @@
--# From https://lists.x.org/archives/xorg-announce/2019-August/003021.html
--sha256 b5a52eeac9417edbc396f26c40591ba5df0cd18285f68d84614ef8f06196e50e  libvdpau-1.3.tar.bz2
--sha512 c06c23062816e8b207d38d9d53df43a1b193bb9836b48bd6d79a63d76522e87d383c446285b9877fe9c99faa0d290da8a49ccbb58eefa138cc38d0929a8e1330  libvdpau-1.3.tar.bz2
- # Locally computed
--sha256 ce4af7294872ff07f6e82ae5f1f5eba926215b1e2fb6d55d64759de082458d61  COPYING
-+sha256  4258824c5a4555ef31de0a7d82b3caf19e75a16a13949f1edafc5f6fb2d33f30  libvdpau-1.4.tar.bz2
-+# Locally computed
-+sha256  ce4af7294872ff07f6e82ae5f1f5eba926215b1e2fb6d55d64759de082458d61  COPYING
-diff --git a/package/libvdpau/libvdpau.mk b/package/libvdpau/libvdpau.mk
-index 63aecaf744..ae2f388855 100644
---- a/package/libvdpau/libvdpau.mk
-+++ b/package/libvdpau/libvdpau.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVDPAU_VERSION = 1.3
-+LIBVDPAU_VERSION = 1.4
- LIBVDPAU_SOURCE = libvdpau-$(LIBVDPAU_VERSION).tar.bz2
- LIBVDPAU_SITE = \
- 	https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/$(LIBVDPAU_VERSION)
+Seems unlikely, because I just built the following configuration in the
+buildroot/base:20200814.2228 container, which is very old Debian with
+glibc 2.24 (yes 2.24).
+
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_SENTRY_CLI=y
+
+$ dpkg -l | grep libc6
+ii  libc6:amd64                2.24-11+deb9u1                 amd64        GNU C Library: Shared libraries
+ii  libc6:i386                 2.24-11+deb9u1                 i386         GNU C Library: Shared libraries
+
+Best regards,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
