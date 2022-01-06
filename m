@@ -1,85 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D8DC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB4DC433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 22:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 432FC831A9;
-	Thu,  6 Jan 2022 22:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B07F42986;
+	Thu,  6 Jan 2022 22:40:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vR45gAyC8UQh; Thu,  6 Jan 2022 22:38:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ig85yef9wWO9; Thu,  6 Jan 2022 22:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A175381D4D;
-	Thu,  6 Jan 2022 22:38:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AB881BF378
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:38:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB98F42980;
+	Thu,  6 Jan 2022 22:40:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ADD4F1BF378
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56EDF81D4D
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:38:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C0A242980
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 22:40:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gio49pjFyJa2 for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 22:38:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5kkMHfmy_6-6 for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 22:40:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com
- [IPv6:2607:f8b0:4864:20::a29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80EF881A8E
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:38:19 +0000 (UTC)
-Received: by mail-vk1-xa29.google.com with SMTP id m200so2637938vka.6
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=RI/j5oDhbODz2vgKcgXSeuRKuzzcyvnES3ey5BqqtPw=;
- b=YqLlt7AcsdZ19kBqgsUT1xY16t7IZ2CBSD0RLZU3WEh63/DJhomIrJGYrdLJGKy8iO
- 2115GHq2twVfu8sQvACb7X2lBFpn66YIZf5ue3rUjD97DjK8e+8FR5/fEs9jfmo1yIcB
- D0oBWJX9dMWYAYNaxjXhmV0GlyKeY59bZWdvHQ5CmK/3xLfhboFzSpUupB0n3nPVYvLB
- Bc21/CLnZe8WSTNMnWq26zSVbK5/JSFMEdihqUVNurcOxLy3GTbEKjESMxb4Hahk2fp4
- /oHBndGx18HcIGimcYTt9/DJg7YumA2eLivgfFkWGLoiPm1HAIdK2+kC945MIqgGqmu/
- wStA==
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 936EB4297F
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 22:40:16 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id o3so7563861wrh.10
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=JQ88dZGlmBtBwPdOTSOcRfwZtS3dd5YTrM1nfqYfPLM=;
+ b=R1gRsUuWnpSSuYI9cJahJ5FUj0aYyO7d2+TGOSlLkMfqraemarywa6B2LF4Vr0YhIE
+ ff/CNmJ73np06KvBnwMLZYvOmh0eM6ew9Wgd704UwvmhZmrQkmm+1hVo31W2IIufIw5w
+ ZLgJ0RVlM80QfQrnrvFyk17hBCrIL3lqn5+eJ3WpoyHSEqneOIrBbTRbwk6xHe2Nkd0s
+ 8WG6wVQNrKWRWfZlpl0lcDABBmhRq+6joV+AJMYrt9CPbVhBQqQu/ljFdjbKV53ccghG
+ 6vpWEwI6x0ifZsi3n4+OFAXuUOoEYTEMgzI25pyXHClqPzsaoghG0YRATqnuUn8/I6rv
+ A7yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=RI/j5oDhbODz2vgKcgXSeuRKuzzcyvnES3ey5BqqtPw=;
- b=ASMSYGgKJlzIYd1Q0tW6w2smPq0bdzTBPNNbp8ht54jSZFJVZiDyQi86CgtqZLI4mh
- ZwoEotuVbGAmQ6U7tuRFeUJX4qeoULDVrGFPLph2lNTHZSUIOIZ8j5dBAz6WbBrVoiMJ
- ucTM7f3U1aCWJmtrfGa5TBsmUiVjG53JIwhiXjIsn335H1n/4s6/pcG2yHsR2DkfzFO+
- KOGpZ5wXYsLotSvNPijNXKoa1slUadwdDKaTlQRsARkqxNzo6eCgN8oaZs8M05DFcNmr
- qY8co95EcLSbQdnTuz2mDXue8JO3n0DKEnmTd71zG6mJkoHsFtgdF1I8jZrxB+n44VYl
- nh7Q==
-X-Gm-Message-State: AOAM530+biSCucmIicE2Bf/K1jEKGH4S5YwNdUPKSB2y8IDKrzsdIc6u
- Y9NIghUOi5+zdlXeclG+AfvW9rRoWUBClUZh
-X-Google-Smtp-Source: ABdhPJy4/ZkqrMdEqijNN8cd+6cKdnObhxbV2q6RQ1iMDKBTeYvlNfpsY9gNS8HXHUoK6Q6EVHz4XA==
-X-Received: by 2002:a05:6122:a07:: with SMTP id 7mr20826756vkn.8.1641508697813; 
- Thu, 06 Jan 2022 14:38:17 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com.
- [209.85.222.46])
- by smtp.gmail.com with ESMTPSA id x190sm2093859vkf.56.2022.01.06.14.38.17
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 06 Jan 2022 14:38:17 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id b26so7118405uap.6
- for <buildroot@buildroot.org>; Thu, 06 Jan 2022 14:38:17 -0800 (PST)
-X-Received: by 2002:ab0:1ec4:: with SMTP id p4mr1419371uak.57.1641508697046;
- Thu, 06 Jan 2022 14:38:17 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=JQ88dZGlmBtBwPdOTSOcRfwZtS3dd5YTrM1nfqYfPLM=;
+ b=ZUHKgnJlzwPhQP14lmpOC0HmFtEvJPNJlNmNwi797kXZAMxhEucUyll+N9JRU9qqiP
+ 7fV5Ku1FpKDRBupydWkvijt3gSTBcg8X5OFiyFlg7j3y19EYm9P4H/zjKaal2WhGmcX1
+ T7ePLFbG5YaysIksIQH1+V2rhVD8nCA4KHECrqvXYiLguX49Ew3kgw3VUIdkwg9oPjh7
+ 20ejO2QzNMZlwLvPrZujQRxwNe2Lw14FIUqaurjAb5f01x9jVFn16/oSvIksOCiqY+m5
+ k/6eKmNSAPtnbFDKPyiOMq2p/yqGnMx0dqo8eeiXGBBbQGXcKm2Xz1loQviYAslchgpc
+ HAiw==
+X-Gm-Message-State: AOAM533jYtY2tIy6RHR+jvD8Wc7vngPwQlugGzBBuH9Sq/gesGB6Vem2
+ WafVKOAT+oY5qf2wnz6erlbBxa+I0Gc=
+X-Google-Smtp-Source: ABdhPJyY5HQ1hLxqSbEn9+uVcBox7+OdNz+BfDm4Ft1JpGzM4gOXw142my8N3UXwtV6IsJthzVS54g==
+X-Received: by 2002:adf:fc02:: with SMTP id i2mr7625071wrr.330.1641508814268; 
+ Thu, 06 Jan 2022 14:40:14 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id d10sm3649780wri.57.2022.01.06.14.40.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Jan 2022 14:40:13 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  6 Jan 2022 23:39:05 +0100
+Message-Id: <20220106223905.1069334-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
- <20220106210000.397694-9-thomas.petazzoni@bootlin.com>
- <CA+h8R2qv7gBPc2KcgT=5tjDr475haSYMZwLzu4RbYFO3xV4-HQ@mail.gmail.com>
- <20220106232913.370ee876@windsurf>
-In-Reply-To: <20220106232913.370ee876@windsurf>
-Date: Thu, 6 Jan 2022 14:38:06 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2rnx_wLmqtetBofM=PcxAV2qiyWUug9gjWxwawJ8CtD3g@mail.gmail.com>
-Message-ID: <CA+h8R2rnx_wLmqtetBofM=PcxAV2qiyWUug9gjWxwawJ8CtD3g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 08/11] package/sentry-cli: re-add package
+Subject: [Buildroot] [PATCH 1/1] package/liburiparser: security bump to
+ version 0.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,47 +84,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Christian Stewart <christian@paral.in>,
- Matt Weber <Matthew.Weber@rockwellcollins.com>,
- Patrick Havelange <patrick.havelange@essensium.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Buildroot List <buildroot@buildroot.org>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+- Fixed: [CVE-2021-46141]
+  Fix a bug affecting both uriNormalizeSyntax* and uriMakeOwner*
+  functions where the text range in .hostText would not be duped using
+  malloc but remain unchanged (and hence "not owned") for URIs with
+  an IPv4 or IPv6 address hostname; depending on how an application
+  uses uriparser, this could lead the application into a use-after-free
+  situation.
+  As the second half, fix uriFreeUriMembers* functions that would not
+  free .hostText memory for URIs with an IPv4 or IPv6 address host;
+  also, calling uriFreeUriMembers* multiple times on a URI of this
+  very nature would result in trying to free pointers to stack
+  (rather than heap) memory.
+- Fixed: [CVE-2021-46142]
+  Fix functions uriNormalizeSyntax* for out-of-memory situations
+  (i.e. malloc returning NULL) for URIs containing empty segments
+  (any of user info, host text, query, or fragment) where previously
+  pointers to stack (rather than heap) memory were freed.
 
-On Thu, Jan 6, 2022 at 2:29 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> On Thu, 6 Jan 2022 14:04:56 -0800
-> Christian Stewart <christian@paral.in> wrote:
->
-> > I get a build error  with "make host-sentry-cli":
-> >
-> > error: failed to run custom build command for `libc v0.2.71`
+https://github.com/uriparser/uriparser/blob/uriparser-0.9.6/ChangeLog
 
-> > /lib64/libc.so.6: version `GLIBC_2.34' not found (required by
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/liburiparser/liburiparser.hash | 2 +-
+ package/liburiparser/liburiparser.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> It build fine on two machines here. Could you provide more details
-> about your host distribution? Perhaps provide a docker container that
-> reproduces this?
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index 60acca2215..8b40807541 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dd8061eba7f2e66c151722e6db0b27c972baa6215cf16f135dbe0f0a4bc6606c  uriparser-0.9.5.tar.bz2
++sha256  a288a06668528c19e85e38c508335938e1de6fdd4b8f2072401b4533fcebf644  uriparser-0.9.6.tar.xz
+ sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index c7bc604ece..c9903bd74f 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBURIPARSER_VERSION = 0.9.5
+-LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
++LIBURIPARSER_VERSION = 0.9.6
++LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
+ LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
+ LIBURIPARSER_LICENSE_FILES = COPYING
+-- 
+2.34.1
 
-I'm running an up-to-date Gentoo system at version 2.33.
-
-Currently 2.34 is masked:
-
-https://packages.gentoo.org/packages/sys-libs/glibc
-
-I guess the host-rust packages expect at least glibc 2.34.
-
-Best regards,
-Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
