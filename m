@@ -1,89 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65CB4C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 15:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9720C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 15:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAE3C6FC0B;
-	Thu,  6 Jan 2022 15:55:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F95040A40;
+	Thu,  6 Jan 2022 15:57:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WW-bFVTxYiGC; Thu,  6 Jan 2022 15:55:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3lOY3a3DhxRg; Thu,  6 Jan 2022 15:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B8B46FC08;
-	Thu,  6 Jan 2022 15:55:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9689B1BF3F6
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:55:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51EF640A2E;
+	Thu,  6 Jan 2022 15:57:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AA651BF3F6
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 674A7832D8
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:55:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9F2540A2E
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 15:56:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ATRX9VQHfZGR for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 15:55:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A5D782BED
- for <buildroot@busybox.net>; Thu,  6 Jan 2022 15:55:44 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id v123so2118534wme.2
- for <buildroot@busybox.net>; Thu, 06 Jan 2022 07:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=04FjJW2vqT9RWmNcIWR8bCNrl4V5XEt7VOMnDbloV+0=;
- b=VEhEA5LduHKZdlNamus6XMeFjHKGvOesj/9NxRtaMD9QHwrCU/eEh+2DHZIKky/AkT
- b3p0CrX0eUJT8jIblR0Eb+9QH8GcQDJYYszskeWVeVrmmxXRm3mzGbTn4qskLQ+8Ncn9
- g2H9KORZANP5b0SAKUk/jD1a73PQDdJQA2CW4WJh30wwtBpJL4qMI+Dp6b5Y3/I76PcL
- jMROkFZ/g9BnVUGDNq7a8aAplvgJroJXxqRXzmlaWK0PIJR9Zg0KU2bau0l9i6jZfPB3
- +fJpRvPxu2ppAAB4TSdq90gw/uWqai8qIUwh8SgpMe6r1To82uTUEg4koBz6elgwTiYb
- YXng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=04FjJW2vqT9RWmNcIWR8bCNrl4V5XEt7VOMnDbloV+0=;
- b=l8/lkYhnLX20JrqwkMXVt56iUkFvXQvs0Rm8CHZcE/L3OR0O7EopwtPuSHXaWWr2HH
- 3B8MLa8EzJqJWHkPNRuwZHew0YWSMrjj/YZVP+N2pQuqpSxansBljB50wsbeYKaoUaje
- AybvMjlQw6pH27+mKK6LekAmTpYtdh5eoGFuw2FsenlEJyi87PlmIPmuwpfi0BBr70y8
- M6Yhi/k/EIBAEZlp5vJ+LyY7GdeTJJt3iaOSdQOTlsSGzEjLOCG43XPTeJwKQHxeaIp3
- BqvZyoIQna8CZ18mPFrLzmhxQ+xau24Tz3usmjvAXPpa2LaEAxzOzMkXZgxlhBI00QgG
- aGqA==
-X-Gm-Message-State: AOAM5312hovHp5R17oWjf0b6EhA9an7MT4w86M7go4b3sf+sf4OLN9zZ
- qruTzfbveOWSwN4kQD5Brfs88A==
-X-Google-Smtp-Source: ABdhPJxbw5cuyz1x9q0yQ/g8o5eqITC67jXcT4RGtFJz7LerGlwShu0xVGyqbg3LSw8jiLHIFJvHEg==
-X-Received: by 2002:a05:600c:1e12:: with SMTP id
- ay18mr7599246wmb.14.1641484542805; 
- Thu, 06 Jan 2022 07:55:42 -0800 (PST)
-Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
- ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id e12sm2455332wrc.104.2022.01.06.07.55.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 06 Jan 2022 07:55:42 -0800 (PST)
-Message-ID: <62235760-30ce-66a6-fe64-1ab11d3604e3@mind.be>
-Date: Thu, 6 Jan 2022 16:55:41 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R7GuD9PGMRPd for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 15:56:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CAF2C40133
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 15:56:57 +0000 (UTC)
+Received: (Authenticated sender: thierry.bultel@linatsea.fr)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 133B424000B;
+ Thu,  6 Jan 2022 15:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
+ t=1641484613;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=g4M1MAeB3qVfVC1xiSyTvp9cP2MkWglEwKznlv+x5LI=;
+ b=OkpvMVPBxlNZkWMQaMNooCNinH6sDSUG4cuD7uRETRQuBkxTC1CnzG5ggJ9Wl9NvNqZvdb
+ UbaKgbKCpSXZwc9M/T+tUm1GddqZCAGb8DNoHQIwJUCx6GWd5xZyyar9wEMI6zzS05XFRa
+ mZSFC10xlTVxrux2f/oC7UIbP+DYzYY5XIcZnQJJL8J0gXq2hCviaw6zimHxB7gPXK3ZpS
+ NA+a3F3TkycUqnbHMD3h/FTqAABY++A9V3vvSfMOiO2nnGc3Vxl8mBTXxt1B0caXDFaJEN
+ bPG1xpSwkRqduQxl4zPUttlPxrwOBgC0U+0lT0aZXoh2gzGz/g/DkBA5/7wXJw==
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20211223111348.3532601-1-thierry.bultel@linatsea.fr>
+ <20211223111348.3532601-2-thierry.bultel@linatsea.fr>
+ <20220105231654.GL614810@scaer>
+ <365b8f6c-18b5-e30b-3c94-4dff3c51215f@linatsea.fr>
+ <20220106161347.014794a6@windsurf>
+From: Thierry Bultel <thierry.bultel@linatsea.fr>
+Message-ID: <a8d51eae-95d2-ee31-6622-4cde984f07ac@linatsea.fr>
+Date: Thu, 6 Jan 2022 16:56:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Changming Huang <jerry.huang@nxp.com>, buildroot@busybox.net
-References: <20200207083857.28058-1-jerry.huang@nxp.com>
- <20200207083857.28058-8-jerry.huang@nxp.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20200207083857.28058-8-jerry.huang@nxp.com>
-Subject: Re: [Buildroot] [PATCH v5 8/9] package/nxp/qoriq-rcw: introduce
- BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE for boot mode
+In-Reply-To: <20220106161347.014794a6@windsurf>
+Content-Language: en-US
+Subject: Re: [Buildroot] [PATCH v3 2/3] package/dracut: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,59 +72,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas.petazzoni@bootlin.com, heiko.thiery@gmail.com, michael@walle.cc,
- geomatsi@gmail.com, matthew.weber@collins.com
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 07/02/2020 09:38, Changming Huang wrote:
-> Introduce BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE for the boot mode.
-> Because the RCW binary can be stored in different media, for example:
-> sd - RCW locate in SD card, boot the board from SD card
-> emmc - RCW locate in eMMC chip, boot the board from eMMC chip
-> qspi - RCW locate in QSPI flash, boot the board from QSPI flash
-> flexspi_nor - RCW locate in flexSPI, boot the board from flexSPI Nor/Nand flash
-> 
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> ---
-> changes since v4:
-> no changes.
-> 
-> changes since v3:
-> 1. split this option from board patch.
-> ---
->   package/nxp/qoriq-rcw/Config.in.host | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/nxp/qoriq-rcw/Config.in.host b/package/nxp/qoriq-rcw/Config.in.host
-> index 9bf55894e8..7f5fbb3202 100644
-> --- a/package/nxp/qoriq-rcw/Config.in.host
-> +++ b/package/nxp/qoriq-rcw/Config.in.host
-> @@ -37,4 +37,10 @@ config BR2_PACKAGE_HOST_QORIQ_RCW_BIN
->   
->   	  If this option is empty, no rcw file is used.
->   
-> +config BR2_PACKAGE_HOST_QORIQ_RCW_BOOT_MODE
-
-  You introduce this symbol but it is not used anywhere. So what is the point?
-
-  I marked it as rejected.
-
-  Regards,
-  Arnout
-
-> +	string "QorIQ RCW Boot mode"
-> +	depends on !BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
-> +	help
-> +	  Specify the boot mode, for example, sd, emmc, flexspi_nor.
-> +
->   endif
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpMZSAwNi8wMS8yMDIyIMOgIDE2OjEzLCBUaG9tYXMgUGV0YXp6b25pIGEgw6ljcml0wqA6Cj4g
+T24gVGh1LCA2IEphbiAyMDIyIDE1OjU2OjMyICswMTAwCj4gVGhpZXJyeSBCdWx0ZWwgPHRoaWVy
+cnkuYnVsdGVsQGxpbmF0c2VhLmZyPiB3cm90ZToKPgo+PiBLZWVwaW5nIGluIG1pbmQgdGhhdCBz
+eXN0ZW1kIGlzIHRoZSBvZmZpY2lhbGx5IHN1cHBvcnRlZCBpbml0IHN5c3RlbSBieQo+PiBkcmFj
+dXQsIHRoZXJlIGlzIG5vIGV4dHJhIHdvcmsKPj4gZm9yIGl0LiBIb3dldmVyLCBJIGJyb3VnaHQg
+c3VwcG9ydCBmb3IgYnVzeWJveCBpbml0LCB0aHJvdWdoIHRoZSBhYm92ZQo+PiBkcmFjdXQgbW9k
+dWxlICgwNWJ1c3lib3gtYnVpbGRyb290KS4KPj4gQWRkaW5nIHN1cHBvcnQgZm9yIHRoZSBvdGhl
+ciBvbmVzIGNvdWxkIGJlIGRvbmUgbGF0ZXIsIHNvIEkgc3VnZ2VzdCB3ZQo+PiBzaW1wbHkgZGlz
+YWJsZSBkcmFjdXQgd2hlbiB0aGUKPj4gaW5pdCBzeXN0ZW0gaXMgbm90IHN1cHBvcnRlZDsgYnkg
+YWRkaW5nCj4+Cj4+ICAgwqDCoMKgIGRlcGVuZHMgb24gIUJSMl9JTklUX1NZU1YKPj4gICDCoMKg
+wqAgZGVwZW5kcyBvbiAhQlIyX0lOSVRfT1BFTlJDCj4+Cj4+IGluIENvbmZpZy5pbi5ob3N0OyB3
+aXRoIHRoZSBhcHByb3ByaWF0ZSBjb21tZW50LiBEb2VzIHRoYXQgc291bmQKPj4gYWNjZXB0YWJs
+ZSA/Cj4gQnV0IGlzIGl0IGp1c3QgdGhlIGluaXQgc3lzdGVtIHRoYXQgcmVxdWlyZXMgdGhvc2Ug
+c3BlY2lhbCBkcmFjdXQKPiAibW9kdWxlcyIgPyBPciBvdGhlciBhc3BlY3RzIG9mIHRoZSBzeXN0
+ZW0gd2lsbCBhbHNvIHJlcXVpcmUgc29tZQo+IHNwZWNpYWwgbW9kdWxlcyA/CgpUaGUgZHJhY3V0
+IG1vZHVsZXMgYXJlIHVzZWQgYXQgYnVpbGQgdGltZS4KVGhlIHJ1bGUgaXMgdGhhdCBhbnkgZmls
+ZSB0aGF0IGlzIGV4cGVjdGVkIGluIHRoZSBkcmFjdXQgaW1hZ2UgbXVzdCBiZSAKaGFuZGxlZApi
+eSBhIGRyYWN1dCBtb2R1bGUuIEZvciBpbnN0YW5jZSwKImhvc3QvbGliL2RyYWN1dC9tb2R1bGVz
+LmQvMDBiYXNoIgoiaG9zdC9saWIvZHJhY3V0L21vZHVsZXMuZC81MHNzaGQiIHdvcmsgb3V0IG9m
+IHRoZSBib3guCgpUaGUgaW1wbGljaXRlbHkgbG9hZGVkICI5MGtlcm5lbC1tb2R1bGVzIiAodGhh
+dCBjaGVjayBtb2R1bGVzIApkZXBlbmRlbmNpZXMgdG8gb25lIGFub3RoZXIsCmFuZCB0byBmaXJt
+d2FyZXMpIGFsc28gd29yayBmaW5lLgoKQnV0IG5vdGhpbmcgaGFuZGxlcyAvZXRjL2luaXQuZC9y
+Y1MsIHR5cGljYWxseS4KQW5kIGFsbCB0aGUgd2FudGVkIGluaXQgc2NyaXB0cyAoL2V0Yy9pbml0
+LmQvUzQwbmV0d29yayBpcyBhIGdvb2QgZXhhbXBsZSkKbXVzdCBiZSB0YWtlbiBpbmRpdmlkdWFs
+bHkuCkEgaHVnZSB3b3JrIHdvdWxkIGJlIHRvIGNvbnRyaWJ1dGUgdG8gZHJhY3V0IHRvIGJyaW5n
+IHdob2xlIHN1cHBvcnQgZm9yIAppbml0ZApzY3JpcHRzLCBidXQgSSB0aGluayBpdCBpcyBvdXQg
+b2YgdGhlIHNjb3BlLgoKQW5vdGhlciByZWFzb24gdG8gd3JpdGUgYSBtb2R1bGUgaXMgd2hlbiBk
+cmFjdXQgZG9lcyBub3Qgc3VwcG9ydCB0aGUgCmZlYXR1cmUsIHlldCwKZm9yIGluc3RhbmNlLCBJ
+IGhhZCB0byB3cml0ZSBvbmUgZm9yIGhvc3RhcGQuIEFwcGFyZW50bHkgaXQgaXMgbm90IGEgCmNv
+bW1vbiBjYXNlCnRvIGhhdmUgdGhlIHdpZmkgaW4gYW4gaW5pdHJhbWZzLCBidXQgZm9yIGEgcmVj
+b3Zlcnkgc3lzdGVtLCB0aGF0IG1ha2VzIAptb3JlIHNlbnNlLgoKQWRkaW5nIHN1cHBvcnQgZm9y
+IFNZU1Ygb3IgT1BFTlJDIGJhc2ljYWxseSBjb25zaXN0cyBpbiB3cml0aW5nIHRoZSAKYXBwcm9w
+cmlhdGUgcnVsZXMKaW4gbmV3IG1vZHVsZXMgdG8gYnJpbmcgdGhlIGV4cGVjdGVkIGZpbGVzIHRv
+IHRoZSBmaWxlc3lzdGVtLCBub3RoaW5nIG1vcmUuCgpCeSB0aGUgd2F5LCBteSBzdWdnZXN0aW9u
+IHRvIHVzZSAiZGVwZW5kcyBvbiAheHh4IiBkaXJlY3RpdmVzIGNhbm5vdAp3b3JrIGJlY2F1c2Ug
+aXQgZG9lcyBhbiAidW5tZXQgZGlyZWN0IGRlcGVuZGVuY3kgZGV0ZWN0ZWQiLCBzaW5jZQpCUjJf
+UEFDS0FHRV9IT1NUX0RSQUNVVCBpcyBzZWxlY3RlZCBieSBCUjJfVEFSR0VUX1JPT1RGU19DUElP
+X0RSQUNVVAoKSSBhbSBhIGxpdHRsZSBiaXQgY29uZnVzZWQgYWJvdXQgaG93IHRvIHNvbHZlIHRo
+YXQgcHJvcGVybHkuCgpUaGllcnJ5Cgo+IFRob21hcwoKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
