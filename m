@@ -4,54 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B43B7C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 10:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65948C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 10:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C4B96FBCA;
-	Thu,  6 Jan 2022 10:32:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0082F6FBE3;
+	Thu,  6 Jan 2022 10:33:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DRbkYtYUWE-v; Thu,  6 Jan 2022 10:32:38 +0000 (UTC)
+	with ESMTP id 7x48n3xwnu8S; Thu,  6 Jan 2022 10:33:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B7A06FBA7;
-	Thu,  6 Jan 2022 10:32:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A25301BF47D
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:32:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D0956FBDD;
+	Thu,  6 Jan 2022 10:33:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 52AD51BF47D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CD7240139
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:32:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41153415F8
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 10:33:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dP5RTznOLlki for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 10:32:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 849C7400C7
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 10:32:34 +0000 (UTC)
-Received: from mail.qult.net (unknown [78.193.33.39])
- by smtp6-g21.free.fr (Postfix) with ESMTPS id 5BDB678031A;
- Thu,  6 Jan 2022 11:32:31 +0100 (CET)
-Received: from zenon.in.qult.net ([192.168.64.1])
- by mail.qult.net with esmtp (Exim 4.90_1)
- (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1n5Q4N-0006eS-3D; Thu, 06 Jan 2022 11:32:31 +0100
-Received: from ig by zenon.in.qult.net with local (Exim 4.94.2)
- (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1n5Q4L-0068dh-Se; Thu, 06 Jan 2022 11:32:29 +0100
-Date: Thu, 6 Jan 2022 11:32:29 +0100
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220106103229.brnw22bg5xb6sqpu@zenon.in.qult.net>
-References: <20211215173432.r75invoe3ff6mthg@zenon.in.qult.net>
- <20220105203727.GH614810@scaer>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RnkAVzaDzKV8 for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 10:33:03 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 08EB4410E8
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 10:33:02 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id BB0F860013;
+ Thu,  6 Jan 2022 10:32:59 +0000 (UTC)
+Date: Thu, 6 Jan 2022 11:32:58 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220106113258.36ce7f11@windsurf>
+In-Reply-To: <20211010234655.585526-4-christian@paral.in>
+References: <20211010234655.585526-1-christian@paral.in>
+ <20211010234655.585526-4-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220105203727.GH614810@scaer>
-Subject: Re: [Buildroot] [PATCH] package/fakedate: fix finding the right
- date executable
+Subject: Re: [Buildroot] [PATCH-NEXT v3 4/6]
+ support/download/go-post-process: implement Go vendoring support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,114 +58,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+Cc: Anisse Astier <anisse@astier.eu>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 05, 2022 at 09:37:27PM +0100, thus spake Yann E. MORIN:
-> Ignacy, All,
-> =
+Hello Christian,
 
-> On 2021-12-15 18:34 +0100, Ignacy Gaw=EAdzki spake thusly:
-> > If the PATH initially contains host/bin, then the right date
-> > executable is to be found after the *first* occurrence of fakedate in
-> > normal (forward) PATH order.  Fix the wrapper so that that first
-> > occurrence is found indeed.
-> > =
+On Sun, 10 Oct 2021 16:46:53 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-> > Signed-off-by: Ignacy Gaw=EAdzki <ignacy.gawedzki@green-communications.=
-fr>
-> =
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> This commit introduces the download post-process script
+> support/download/go-post-process, and hooks it into the Go package
+> infrastructure.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> 
+> v1 -> v2:
+> 
+>  - re-submitting Thomas's series with adjustments:
+>  - run "go mod init" just before "go mod vendor"
+>  - this fixes the case when go.mod does not exist
+>  - use -modcacherw to fix "make clean" permissions errors
+>  - use the mk_tar_gz helper in the post-process step
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
-> After discussing this with Arnout and Thomas, we concluded that Arnout's
-> proposal, with my ltile amendment, was the proper solution. Except that
-> the loop had to be broken on first hit, of course, so I added the proper
-> break.
-> =
+I am a bit confused by the changes you introduced here. You're
+labelling this patch series v3, so I assume it comes after my v2:
 
-> I also added a test that we actually did find a date executable.
-> =
+  https://patchwork.ozlabs.org/project/buildroot/patch/20201219153525.1361175-6-thomas.petazzoni@bootlin.com/
 
-> Of course, if we missed something, then feel free to yel back! ;-)
+I'm particularly confused by the addition of the -g option to pass the
+argument of "go mod init" as opposed to using the BR_GOMOD environment
+variable.
 
-With this code, fakedate is not usable without having its path in
-PATH.  If that will never be a problem, then I have no reason to yell. =3D)
+In the patch I linked above, you reported that it was causing some hash
+issues, but I don't understand which of your changes fixed that
+problem. Could you clarify?
 
-> =
+Also, my patch dropped the creation of go.mod from
+package/pkg-golang.mk (macro $(2)_GEN_GOMOD), but I'm not sure why your
+patch doesn't drop that.
 
-> Applied to master, thanks.
-> =
-
-> Regards,
-> Yann E. MORIN.
-> =
-
-> > ---
-> >  package/fakedate/fakedate | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > =
-
-> > diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-> > index 9bef113357..03a4f04079 100755
-> > --- a/package/fakedate/fakedate
-> > +++ b/package/fakedate/fakedate
-> > @@ -21,13 +21,18 @@
-> >  DATE_BIN=3Dfalse
-> >  # Do not call any 'date' before us in the PATH, or that would create
-> >  # an infinite recursion.
-> > +last_date=3Dfalse
-> >  for date in $(which -a date |tac); do
-> >      if [ "${date}" -ef "$0" ]; then
-> > -        break
-> > +	DATE_BIN=3D$last_date
-> >      fi
-> > -    DATE_BIN=3D"${date}"
-> > +    last_date=3D"${date}"
-> >  done
-> >  =
-
-> > +if [ "$DATE_BIN" =3D false ]; then
-> > +    DATE_BIN=3D$last_date
-> > +fi
-> > +
-> >  if [ -n "$SOURCE_DATE_EPOCH" ]; then
-> >      FORCE_EPOCH=3D1
-> >      for i in "$@"; do
-> > -- =
-
-> > 2.32.0
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> =
-
-> -- =
-
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspi=
-racy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___         =
-      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspir=
-acy.  |
-> '------------------------------^-------^------------------^--------------=
-------'
-> =
-
-> =
-
-
--- =
-
-Ignacy Gaw=EAdzki
-R&D Engineer
-Green Communications
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
