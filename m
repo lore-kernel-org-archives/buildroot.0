@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5E7C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E21C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA17140A4D;
-	Thu,  6 Jan 2022 21:00:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3515F83281;
+	Thu,  6 Jan 2022 21:00:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0wI49U2jIDY2; Thu,  6 Jan 2022 21:00:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1264831C1;
+	Thu,  6 Jan 2022 21:00:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A8361BF340
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6802C4018D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G5b1JSnbWKLJ; Thu,  6 Jan 2022 21:00:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE96A4018D;
-	Thu,  6 Jan 2022 21:00:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ADA5A1BF340
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CA1860E07
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:19 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I6pJOMpxlfXB for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 21:00:18 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eHseFkuq-OGV for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 21:00:22 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6BE4D60D75
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:18 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 63819404BD
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:21 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 01D00FF80D;
- Thu,  6 Jan 2022 21:00:13 +0000 (UTC)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id E65CE100005;
+ Thu,  6 Jan 2022 21:00:15 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>,
  Christian Stewart <christian@paral.in>,
  Buildroot List <buildroot@buildroot.org>,
  Matt Weber <Matthew.Weber@rockwellcollins.com>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Thu,  6 Jan 2022 21:59:50 +0100
-Message-Id: <20220106210000.397694-3-thomas.petazzoni@bootlin.com>
+Date: Thu,  6 Jan 2022 21:59:51 +0100
+Message-Id: <20220106210000.397694-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 02/11] package/pkg-download.mk: add
- <pkg>_DOWNLOAD_POST_PROCESS variable
+Subject: [Buildroot] [PATCH v3 03/11] support/download/post-process-helpers:
+ add helper function for post process scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,28 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This will allow packages to register than a download post-processing
-is needed. Note that this variable is intentionally not documented: it
-is an internal variable meant to be set by package infrastructures,
-not directly by packages.
+download post process scripts will often need to unpack the source
+code tarball, do some operation, and then repack it. In order to help
+with this, post-process-helpers provide an unpack() function and a
+repack() function.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-download.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/download/helpers | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2527ba5c60..66a415cce0 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -117,6 +117,7 @@ define DOWNLOAD
- 		-n '$($(2)_BASENAME_RAW)' \
- 		-N '$($(2)_RAWNAME)' \
- 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
-+		$(if $($(2)_DOWNLOAD_POST_PROCESS),-p '$($(2)_DOWNLOAD_POST_PROCESS)') \
- 		$(if $($(2)_GIT_SUBMODULES),-r) \
- 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
- 		$(QUIET) \
+diff --git a/support/download/helpers b/support/download/helpers
+index 40d5eea591..4c5eb466cc 100755
+--- a/support/download/helpers
++++ b/support/download/helpers
+@@ -72,5 +72,27 @@ mk_tar_gz() {
+     popd >/dev/null
+ }
+ 
++post_process_unpack() {
++    local dest="${1}"
++    local tarball="${2}"
++    local one_file
++
++    mkdir "${dest}"
++    tar -C "${dest}" --strip-components=1 -xf "${tarball}"
++    one_file="$(find "${dest}" -type f -print0 |LC_ALL=C sort -z |head -z -n1 |tr -d "\0")"
++    touch -r "${one_file}" "${dest}.timestamp"
++}
++
++post_process_repack() {
++    local in_dir="${1}"
++    local base_dir="${2}"
++    local out="${3}"
++    local date
++
++    date="@$(stat -c '%Y' "${in_dir}/${base_dir}.timestamp")"
++
++    mk_tar_gz "${in_dir}/${base_dir}" "${base_dir}" "${date}" "${out}"
++}
++
+ # Keep this line and the following as last lines in this file.
+ # vim: ft=bash
 -- 
 2.33.1
 
