@@ -1,51 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E96AC433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 08:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A21FC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 08:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF8F54091A;
-	Thu,  6 Jan 2022 08:41:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00CFD6FBCA;
+	Thu,  6 Jan 2022 08:43:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j-005R7WX_4D; Thu,  6 Jan 2022 08:41:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id heQ12Z77V5HM; Thu,  6 Jan 2022 08:43:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0394840242;
-	Thu,  6 Jan 2022 08:41:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16FCE6FBA2;
+	Thu,  6 Jan 2022 08:43:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 21E351BF422
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:41:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 335AD1BF422
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09F4E40242
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:41:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DCF240242
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 08:43:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cjih0yHhVTPk for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 08:41:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC96140139
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 08:41:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 894E624000C;
- Thu,  6 Jan 2022 08:41:00 +0000 (UTC)
-Date: Thu, 6 Jan 2022 09:40:59 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: =?UTF-8?B?Sm9zw6k=?= Pekkarinen <jose.pekkarinen@unikie.com>
-Message-ID: <20220106094059.750a7141@windsurf>
-In-Reply-To: <20211210141209.1812043-5-jose.pekkarinen@unikie.com>
-References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
- <20211210141209.1812043-5-jose.pekkarinen@unikie.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+ with ESMTP id 4pDnZjVqcMU5 for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 08:43:09 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A58D040139
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 08:43:09 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id r9so1573381wrg.0
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 00:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=/xIfGuI4YKiuF8GgFsp7o16HTkgw2OhaJXaDPUW4EBQ=;
+ b=Mp1VswL3PmyLVsYhC2ngFwRCoOle4VT7rd++dEtMiRt520B9kN9hrsXitQa1vDOQ1O
+ lM6urYp/yk3LfgjGnWCUfEePfPqxYnDkpIMK9QECNOPZXjeNjgqkf+71MfLaGVwwxkJx
+ uZCpKpTTDMg2FGbwrkoACui/jJA2OCWKmRd77vd7eSSLaFP61Iwt7Qu/UzDsWEe3lmtX
+ dTqz4X8ldNtDPhg9nD8qDFXlaSCrQRfHSNOU3gPQIcjkWhiq+UWvI0vU4pDLRBBO4oFB
+ QOYG3YysNM97sWEc+yQIfMg7khjRBLpZj80Hkx4jm/+0LNXnAhmmGHmv32oCweraihOS
+ JI5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=/xIfGuI4YKiuF8GgFsp7o16HTkgw2OhaJXaDPUW4EBQ=;
+ b=sB1z0+DL7ceOP8DC4E2Nx7yVtWooV9Zkf66zgkISw5h75c+WNio/52zpAwt2XCUz9N
+ X70NlYgx2eL9yq0/Sfom3NJLsQMRKrMUBffiYkC3YIUrevN0pakqmfVeq2bq5kLZwp6T
+ DgCsIJOy4eVzrWldUT687tkiGMr6n1h005lPxe/8EhFo6B7pjsJ/dmiLATHDZsFjGeeJ
+ lnkLi+jePwLgfyhX4PT5BzS6mgYgDMxMZZx9YlOkdE3Ks2Qcor/Tq3YTMGXmPLIZt5qT
+ sQSfm5D1S0UCZ2iIbvIzVr0LUleNZC1GqlyKEZlIzfUa2D/odWx7UIgdjkHsbOOkTNwT
+ otew==
+X-Gm-Message-State: AOAM5315sJj2L/DaQ7IzwuFK1HKcuXEq+VbV5/805kJwpoQiw4h60LCj
+ ynOiUHoz9YJo2Mbi9xIQ+LVUUFY+EVQn7951
+X-Google-Smtp-Source: ABdhPJy/Aq/xZc/y87NiC65yG+lQWKD6rXI8L5Q8fQuQ+rAGNIW91hPvTxjBAIYtPx0ScL9kpQhsGQ==
+X-Received: by 2002:adf:e706:: with SMTP id c6mr886280wrm.116.1641458587435;
+ Thu, 06 Jan 2022 00:43:07 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id b14sm1490998wri.112.2022.01.06.00.43.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 06 Jan 2022 00:43:06 -0800 (PST)
+Message-ID: <0e32f7af-81fa-190f-1232-18940703f879@mind.be>
+Date: Thu, 6 Jan 2022 09:43:06 +0100
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 5/7] package/aexpect: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: buildroot@buildroot.org
+References: <20200415164846.122126-1-thomas.preston@codethink.co.uk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20200415164846.122126-1-thomas.preston@codethink.co.uk>
+Subject: Re: [Buildroot] [PATCH v2 0/5] download: Add SFTP support and tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,34 +92,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: michael.drake@codethink.co.uk, yann.morin.1998@free.fr
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zw6ksCgpPbiBGcmksIDEwIERlYyAyMDIxIDE2OjEyOjA3ICswMjAwCkpvc8OpIFBl
-a2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPiB3cm90ZToKCj4gQWRkIHBhY2th
-Z2UgdG8gYXZvY2FkbyBmcmFtZXdvcmsncyBhZXhwZWN0Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEpv
-c8OpIFBla2thcmluZW4gPGpvc2UucGVra2FyaW5lbkB1bmlraWUuY29tPgo+IC0tLQo+ICBERVZF
-TE9QRVJTICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAg
-ICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL2FleHBlY3QvQ29uZmlnLmluICAgIHwgMTIgKysrKysr
-KysrKysrCj4gIHBhY2thZ2UvYWV4cGVjdC9hZXhwZWN0Lmhhc2ggfCAgNCArKysrCj4gIHBhY2th
-Z2UvYWV4cGVjdC9hZXhwZWN0Lm1rICAgfCAxMyArKysrKysrKysrKysrCj4gIDUgZmlsZXMgY2hh
-bmdlZCwgMzEgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hZXhw
-ZWN0L0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hZXhwZWN0L2FleHBl
-Y3QuaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hZXhwZWN0L2FleHBlY3QubWsK
-ClNvIEkgaGF2ZSAiYXBwbGllZCIsIGJ1dCBJIHB1dCB0aGlzIGJldHdlZW4gcXVvdGVzIGJlY2F1
-c2UgSSd2ZQpiYXNpY2FsbHkgcmVkb25lIGl0IGVudGlyZWx5LiBGaXJzdCBJJ3ZlIG5hbWVkIHRo
-ZSBwYWNrYWdlCnB5dGhvbi1hZXhwZWN0IGJlY2F1c2UgcmVhbGx5IGFleHBlY3QgaXMgcHJpbWFy
-aWx5IGEgUHl0aG9uIG1vZHVsZS4KSSd2ZSB1c2VkIHNjYW5weXBpIHRvIGdlbmVyYXRlIHRoZSBw
-YWNrYWdlLiBBbHNvIGFkZGVkIGEgdGVzdCBjYXNlIGZvcgppdCwgbm90aWNlZCB0aGF0IHRoZSBw
-YWNrYWdlIGRvZXNuJ3Qgd29yayB3aXRoIFB5dGhvbiAyIChzeW50YXggZXJyb3IKd2hlbiBieXRl
-LWNvbXBpbGluZyksIHNvIEkgbWFkZSBpdCBQeXRob24gMyBvbmx5LgoKU2VlIHRoZSBmaW5hbCBj
-b21taXQ6CgogIGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5vcmcvYnVpbGRyb290L2NvbW1pdC8/aWQ9
-NjNiNzJhN2MxNWJjZDU2ZmUxNTcwZTNmN2VjZDQzOTkzYzBmZGU5MAoKQmVzdCByZWdhcmRzLAoK
-VGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXgg
-YW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+  Hi all,
+
+  I finally applied this series. Since Thomas is no longer with CodeThink this 
+is more for the others in Cc.
+
+On 15/04/2020 18:48, Thomas Preston wrote:
+> Hi,
+> Back in October 2019 I submitted a patch adding an SFTP download method
+> to Buildroot, however since there were no packages using SFTP the patch
+> was rejected.
+> 
+> Yann E. MORIN suggested that it was a valid change however it required
+> tests to avoid bitrot - since there was no way to verify the SFTP
+> download method did not break over time without any packages using it.
+> 
+> In this series I have re-added the SFTP download method and also some
+> test infrastructure which starts a local SSH server and uses SFTP to
+> download some test packages in a br2-external project. I've also added
+> tests for SCP! :D
+> 
+> For this, I had to update the Dockerfile from Debian Stretch to Buster
+> which I explain a bit further in the patch. I'm not sure how to test if
+> this breaks anything else. Will all the tests run in a clean container +
+> Buildroot project clone?
+> 
+> You can run the tests like so:
+> 
+> 	support/testing/run-tests -o output -d dl \
+> 		tests.download.test_ssh.TestSFTP \
+> 		tests.download.test_ssh.TestSCP
+> 
+> Thanks!
+> Thomas
+> 
+> Thomas Preston (5):
+>    support/docker: Update to debian:buster-20200327
+
+  I skipped this one because in the meanwhile we already updated to a more 
+recent Debian.
+
+>    support/docker: Add openssh-server
+>    testing/infra: Add docstrings to base test classes
+>    download: Add SFTP support (not FTPS)
+
+     [Arnout:
+      - update documentation with sftp everywhere scp is mentioned;
+      - rename "verbose" variable to "quiet";
+      - print the sftp command, similar to wget and scp helpers.
+     ]
+
+>    support/testing: Add download tests for SCP/SFTP
+
+     [Arnout:
+      - remove spurious end-of-line backslash;
+      - remove unnecessary executable bit;
+      - skip test instead of failing if sshd, ssh-keygen, scp or sftp are not
+        found;
+      - decode the output of subprocess;
+      - use subprocess.check_output instead of subprocess.get_output;
+      - use subprocess.check_call instead of manually checking return code;
+      - don't set always-overridden SSHD_PORT_NUMBER in .mk file;
+      - explicitly set sshd options on commandline instead of relying on host
+        /etc/sshd/sshd_config;
+      - let sshd listen only on localhost;
+      - user internal sftp server;
+      - disable BACKUP_SITE, no network is supposed to be accessed;
+      - remove the -bad and -nohash versions;
+      - rename {sftp,scp}-good to plain {sftp,scp};
+      - move the sftp and scp packages into a single "ssh" external.
+     ]
+
+> 
+>   .gitlab-ci.yml                                |   2 +
+>   Config.in                                     |   4 +
+>   package/pkg-download.mk                       |   1 +
+>   support/docker/Dockerfile                     |   3 +-
+>   support/docker/apt-sources.list               |   8 +-
+>   support/download/dl-wrapper                   |   2 +-
+>   support/download/sftp                         |  37 +++++
+>   support/testing/infra/basetest.py             |   2 +
+>   .../tests/download/br2-external/scp/Config.in |   0
+>   .../download/br2-external/scp/external.desc   |   1 +
+>   .../download/br2-external/scp/external.mk     |   4 +
+>   .../scp/package/scp-bad/scp-bad.hash          |   1 +
+>   .../scp/package/scp-bad/scp-bad.mk            |  17 +++
+>   .../scp/package/scp-good/scp-good.hash        |   1 +
+>   .../scp/package/scp-good/scp-good.mk          |  17 +++
+>   .../scp/package/scp-nohash/scp-nohash.mk      |  17 +++
+>   .../download/br2-external/sftp/Config.in      |   0
+>   .../download/br2-external/sftp/external.desc  |   1 +
+>   .../download/br2-external/sftp/external.mk    |   4 +
+>   .../sftp/package/sftp-bad/sftp-bad.hash       |   1 +
+>   .../sftp/package/sftp-bad/sftp-bad.mk         |  17 +++
+>   .../sftp/package/sftp-good/sftp-good.hash     |   1 +
+>   .../sftp/package/sftp-good/sftp-good.mk       |  17 +++
+>   .../sftp/package/sftp-nohash/sftp-nohash.mk   |  17 +++
+>   support/testing/tests/download/sshd.py        | 129 ++++++++++++++++++
+>   .../tests/download/sshd/ssh-test-1.0.tar.xz   | Bin 0 -> 232 bytes
+>   support/testing/tests/download/test_ssh.py    |  66 +++++++++
+>   27 files changed, 364 insertions(+), 6 deletions(-)
+>   create mode 100755 support/download/sftp
+>   create mode 100644 support/testing/tests/download/br2-external/scp/Config.in
+>   create mode 100644 support/testing/tests/download/br2-external/scp/external.desc
+>   create mode 100644 support/testing/tests/download/br2-external/scp/external.mk
+>   create mode 100644 support/testing/tests/download/br2-external/scp/package/scp-bad/scp-bad.hash
+>   create mode 100644 support/testing/tests/download/br2-external/scp/package/scp-bad/scp-bad.mk
+>   create mode 100644 support/testing/tests/download/br2-external/scp/package/scp-good/scp-good.hash
+>   create mode 100644 support/testing/tests/download/br2-external/scp/package/scp-good/scp-good.mk
+>   create mode 100644 support/testing/tests/download/br2-external/scp/package/scp-nohash/scp-nohash.mk
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/Config.in
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/external.desc
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/external.mk
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/package/sftp-bad/sftp-bad.hash
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/package/sftp-bad/sftp-bad.mk
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/package/sftp-good/sftp-good.hash
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/package/sftp-good/sftp-good.mk
+>   create mode 100644 support/testing/tests/download/br2-external/sftp/package/sftp-nohash/sftp-nohash.mk
+>   create mode 100644 support/testing/tests/download/sshd.py
+>   create mode 100644 support/testing/tests/download/sshd/ssh-test-1.0.tar.xz
+>   create mode 100755 support/testing/tests/download/test_ssh.py
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
