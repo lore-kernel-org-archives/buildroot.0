@@ -1,47 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A66C6C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 16:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08656C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 17:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 302EC82846;
-	Thu,  6 Jan 2022 16:30:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E011400D1;
+	Thu,  6 Jan 2022 17:09:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bal0i45GIbIY; Thu,  6 Jan 2022 16:30:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WqFyobljGzPq; Thu,  6 Jan 2022 17:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 782858239A;
-	Thu,  6 Jan 2022 16:30:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C01AB1C113E
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 16:30:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F2C8401A2;
+	Thu,  6 Jan 2022 17:09:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 412681BF2F9
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 17:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEC158239A
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 16:30:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 271364019D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 17:09:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aCG9JEYkVrZ6 for <buildroot@lists.busybox.net>;
- Thu,  6 Jan 2022 16:30:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C991381D5F
- for <buildroot@buildroot.org>; Thu,  6 Jan 2022 16:30:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id C1A9583470; Thu,  6 Jan 2022 16:24:35 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 6 Jan 2022 16:17:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d167f7006e724360994a88cb97ad65bec137db68
-X-Git-Newrev: d164df0aefc121d4954d74d68491968a43ff73d6
-X-Patchwork-Hint: ignore
-Message-Id: <20220106162435.C1A9583470@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-cadence-dp-firmware: new
- package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jwgOB_Q1HG_Z for <buildroot@lists.busybox.net>;
+ Thu,  6 Jan 2022 17:09:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C2598400D1
+ for <buildroot@buildroot.org>; Thu,  6 Jan 2022 17:09:50 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id k18so6050498wrg.11
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 09:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=99QGBtpgPzHNvp/KR8Olo4P72mzZ0cxYZfavmrElw9g=;
+ b=R6Wmwf83vzSgm48XYE3NQZbVnxHoYXOT9+miZ15iB4OhCgfY31+8MAaUH/KlB9Y5V7
+ q+6k/v6B+dYwehqjfrefacsQ3Vee08sBaDAAMB5cCmRPDgNY07pfkTPebwC1IpLhFXNr
+ I1xNY3x/a7NkVagD9UhN0GDRdyJ0ms/ou0KFlk56FzHbt0MptHgG6ytHGocqvCaOENGH
+ 0WB/ao8TS8LOXftydh17RfzmIwd2L+YlrrHT/WCiEMtjdCUqKUrAK7RNKR0/m4kdr8wD
+ VHkJhWisjKcX8XT40p94tGyzki3szRrk7NjgnHw3eFxUrggy4FdoN1Ug8d7zcbT45jua
+ j5Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=99QGBtpgPzHNvp/KR8Olo4P72mzZ0cxYZfavmrElw9g=;
+ b=F4pbqYPEqFJfDcCtLWSr6ZIZ4dGyR+TiVzN1MVP31tGOCElVvPpE+7BdEjTzF80Xa+
+ r2+6vBAmo6uyutsCgjHd425JaAmyRoDdxiMTyRqEqcCvJPCSACueODxZkF/v+pLGhbsu
+ vYfBgC7CIjz/7MI9OBWpgV7syTm7ndrQBEFZyWn3fHJnO6pUieEggH85NIm1BrDLeZWa
+ tlBdZYHtfak9L0DhVlItD5Ntgyj12JYQzlMWMNvXVQUUoP1XiOp/BFv2V/9GRNxPK9w2
+ 2UeQJM3CA56Uiz7nEeEfQthw4em1t4BKZEGo6Fo5tEEcpNxjI+YGPPGRAAuLxRsl1CiX
+ np8g==
+X-Gm-Message-State: AOAM53148bY/UiNvoo/jdiXv3m6Q3mjMYc7EasKV3sMCVn7PCjm9hqTl
+ s9n3joYPdlRbwBNb2F6tt6SLhw==
+X-Google-Smtp-Source: ABdhPJy734G93giRJZnvN8sNuO+uaVnkXwPtXaJBMxMMJdtf5s56eIJ1Loz8eXruYCMe2bOjGVC8xw==
+X-Received: by 2002:adf:e410:: with SMTP id g16mr4354902wrm.17.1641488988685; 
+ Thu, 06 Jan 2022 09:09:48 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id g1sm2370860wri.103.2022.01.06.09.09.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 06 Jan 2022 09:09:48 -0800 (PST)
+Message-ID: <4d73992c-3189-1989-525c-4506495c90ac@mind.be>
+Date: Thu, 6 Jan 2022 18:09:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Jesse Millwood <jesse_dev@fastmail.com>, buildroot@buildroot.org
+References: <37282adb-8559-4124-874d-c1729bd3ce01@www.fastmail.com>
+ <09340549-99c9-b79c-17db-3967b1ab6335@mind.be>
+ <fff7dc06ab8c676e28709d3782e57e90ae121095.camel@fastmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <fff7dc06ab8c676e28709d3782e57e90ae121095.camel@fastmail.com>
+Subject: Re: [Buildroot] Overriding Kconfig Values from external br2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,133 +91,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d164df0aefc121d4954d74d68491968a43ff73d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package provides the firmware for LS1028ARDB DP (display port).
-
-Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
-[Arnout:
- - move out of nxp directory;
- - add extraction helper;
- - set REDISTRIBUTE to NO.
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- package/qoriq-cadence-dp-firmware/Config.in        |  4 ++
- .../qoriq-cadence-dp-firmware.hash                 |  3 ++
- .../qoriq-cadence-dp-firmware.mk                   | 49 ++++++++++++++++++++++
- 5 files changed, 60 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a52a8cfa38..03918e4205 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -500,6 +500,9 @@ F:	package/znc/
- N:	Charles Hardin <ckhardin@gmail.com>
- F:	package/alsa-plugins/
- 
-+N:	Changming Huang <jerry.huang@nxp.com>
-+F:	package/qoriq-cadence-dp-firmware/
-+
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/coremark/
- F:	package/coremark-pro/
-diff --git a/package/Config.in b/package/Config.in
-index cb15574746..3c7340e27c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -544,6 +544,7 @@ endmenu
- 	source "package/pps-tools/Config.in"
- 	source "package/pru-software-support/Config.in"
- 	source "package/pulseview/Config.in"
-+	source "package/qoriq-cadence-dp-firmware/Config.in"
- 	source "package/raspi-gpio/Config.in"
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
-diff --git a/package/qoriq-cadence-dp-firmware/Config.in b/package/qoriq-cadence-dp-firmware/Config.in
-new file mode 100644
-index 0000000000..3f494bd3a3
---- /dev/null
-+++ b/package/qoriq-cadence-dp-firmware/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
-+	bool "qoriq-cadence-dp-firmware"
-+	help
-+	  NXP QorIQ cadence DP firmware, a resident EL3 firmware.
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-new file mode 100644
-index 0000000000..89aaf1d71b
---- /dev/null
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
-+sha256 d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-new file mode 100644
-index 0000000000..23643d24e0
---- /dev/null
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# qoriq-cadence-dp-firmware
-+#
-+################################################################################
-+
-+QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
-+QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
-+QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
-+QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
-+QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
-+QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
-+
-+# Helper for self-extracting binaries distributed by NXP.
-+#
-+# The --force option makes sure it doesn't fail if the source
-+# directory already exists. The --auto-accept skips the license check,
-+# as it is not needed in Buildroot because we have legal-info. Since
-+# there's a EULA in the binary file, we extract it in this macro, and
-+# it should therefore be added to the LICENSE_FILES variable of
-+# packages using this macro. Also, remember to set REDISTRIBUTE to
-+# "NO". Indeed, this is a legal minefield: the EULA specifies that the
-+# Board Support Package includes software and hardware (sic!) for
-+# which a separate license is needed...
-+#
-+# $(1): full path to the archive file
-+#
-+define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER
-+	awk 'BEGIN      { start = 0; } \
-+	     /^EOEULA/  { start = 0; } \
-+	                { if (start) print; } \
-+	     /<<EOEULA/ { start = 1; }' \
-+	    $(1) > $(@D)/EULA
-+	cd $(@D) && sh $(1) --force --auto-accept
-+	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-+	rmdir $(@D)/$(basename $(notdir $(1)))
-+endef
-+
-+define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
-+	$(call QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
-+endef
-+
-+define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
-+endef
-+
-+$(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwNi8wMS8yMDIyIDE2OjM3LCBKZXNzZSBNaWxsd29vZCB3cm90ZToKPiBPbiBUaHUsIDIw
+MjItMDEtMDYgYXQgMTA6NDUgKzAxMDAsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Pgo+
+Pgo+PiBPbiAwNS8wMS8yMDIyIDIwOjAzLCBKZXNzZSBNaWxsd29vZCB3cm90ZToKPj4+IEhlbGxv
+LAo+Pj4KPj4+IEkgaGF2ZSBhbiBleHRlcm5hbCBDL0MrKyB0b29sY2hhaW4gdGhhdCBJJ3ZlIHB1
+dCB0b2dldGhlciB0aGF0IHVzZXMKPj4+IE1VU0wuIEkndmUKPj4+IGFsc28gYnVpbHQgYW4gZXh0
+ZXJuYWwgUnVzdCB0b29sY2hhaW4gdGhhdCB1c2VzIG15IE1VU0wgdG9vbGNoYWluLgo+Pj4KPj4+
+IE15IGlzc3VlIGlzIHRoYXQgdGhlcmUgaXMgYSBSdXN0IEtjb25maWcgdmFyaWFibGUgdGhhdCBz
+cGVjaWZpZXMgaWYKPj4+IGEgc3BlY2lmaWMKPj4+IGFyY2hpdGVjdHVyZSBzdXBwb3J0cyBSdXN0
+Lgo+Pj4KPj4+IFRoZSBLY29uZmlnIHZhcmlhYmxlIGluIHF1ZXN0aW9uIGlzCj4+PiBCUjJfUEFD
+S0FHRV9IT1NUX1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTCj4+PiBpbiBwYWNrYWdlL3J1c3Rj
+L0NvbmZpZy5pbi5ob3N0Lgo+Pgo+PiBbc25pcF0KPj4KPj4+IFlvdSBtYXkgbm90aWNlIHRoYXQg
+SSBjaGFuZ2VkIHRoZSBsaWJjIGRlcGVuZHMgbGluZSB0byBiZSBvcidkIHdpdGgKPj4+IEJSMl9U
+T09MQ0hBSU5fVVNFU19NVVNMLiBJdCBzZWVtcyB0aGF0IHRoaXMgZG9lcyBub3QgZ2V0IGNvbnNp
+ZGVyZWQKPj4+IHdoZW4gSQo+Pj4gY2hvb3NlIG15IGV4dGVybmFsIG11c2wgdG9vbGNoYWluIG9w
+dGlvbi4gSW4gdGhlIG1lbnVjb25maWcgd2hlbiBJCj4+PiBzZWFyY2ggZm9yCj4+PiB0aGUgQlIy
+X1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUyB2YXJpYWJsZSB3aXRoIHRo
+ZQo+Pj4gIi8iIGtleSBpdAo+Pj4gbG9va3MgbGlrZSBpdCBpcyBvbmx5IGdldHRpbmcgaXQgZnJv
+bSB0aGUgb3JpZ2luYWwgZmlsZS4gRG9lcwo+Pj4gYnVpbGRyb290IGhhdmUgYQo+Pj4gbWVjaGFu
+aXNtIGZvciBvdmVyd3JpdGluZyB0aGlzIGtpbmQgb2Ygc2V0dGluZyBhbmQgaWYgbm90LCBkb2Vz
+Cj4+PiBhbnlvbmUgaGF2ZSBhbgo+Pj4gaWRlYSBvZiBob3cgSSB3b3VsZCBhY2NvbXBsaXNoIHdo
+YXQgSSBhbSB0cnlpbmcgdG8gZG8gKG1ha2UKPj4+IGJ1aWxkcm9vdCBob25vciBteQo+Pj4gZXh0
+ZXJuYWwgcnVzdCB0b29sY2hhaW4pPwo+Pgo+PiAgwqAgTm8sIHRoZXJlJ3Mgbm8gd2F5IHRvIG92
+ZXJyaWRlIHRoZSBkZXBlbmRlbmNpZXMgb2YgYW4gZXhpc3RpbmcKPj4gQ29uZmlnLmluCj4+IHN5
+bWJvbCBpbiBhbiBleHRlcm5hbC4KPj4KPj4gIMKgIEhvd2V2ZXIsIHRoaXMgd2FzIGNvcnJlY3Rl
+ZCBpbiB1cHN0cmVhbSBCdWlsZHJvb3QgaW4gY29tbWl0Cj4+IGQ2OWQ0MGMwMjlkYzdkODE5OWI3
+NDVlYWVlNzU5ZDkyYjY2YzVkMTcuIFNvIHlvdSBjYW4gdHJ5IHRvIGJhY2twb3J0Cj4+IHRoYXQg
+Y29tbWl0Cj4+IGluc3RlYWQsIG9yIGp1c3QgdXBkYXRlIEJ1aWxkcm9vdCB0byBzb21ldGhpbmcg
+bW9yZSByZWNlbnQuCj4gCj4gQXJub3V0LCB0aGFua3MgZm9yIHRoZSBwb2ludGVyIHRvIHRoZSBj
+b21taXQuIFRoYXQgaXMgYSBsb2dpY2FsIHdheSB0bwo+IHN1cHBvcnQgb3RoZXIgcGxhdGZvcm1z
+LiBIb3dldmVyLCBJIGhhdmUgYSBwb3dlcnBjIG11c2wgcnVzdCB0b29sY2hhaW4KPiB0aGF0IEkn
+dmUgYnVpbHQgZXh0ZXJuYWxseS4KPiAKPiBXaXRoIHRoZSBjaGFuZ2VzIGluIHRoYXQgY29tbWl0
+IGNhbiBJIHNldAo+IEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMg
+dG8gInkiIGluIG15IGV4dGVybmFsIG5vdwoKICBBaCwgbm8sIHlvdSdyZSByaWdodCwgcG93ZXJw
+Yy11bmtub3duLWxpbnV4LW11c2wgaXMgYSBUaWVyIDMgcGxhdGZvcm0gYW5kIHRoYXQgCnBhdGNo
+IG9ubHkgYWRkcyBUaWVyIDEgYW5kIDIuIFdlIGNvdWxkIGFkZCBhIFRpZXIgMyBvcHRpb24gYXMg
+d2VsbCAoYW5kIGRpc2FibGUgCnRoZSBydXN0LWJpbiBvcHRpb24gaW4gdGhhdCBjYXNlKS4KCiAg
+Tm90ZSBob3dldmVyIHRoYXQgdGhlIHN0ZGxpYiBzdGF0dXMgZm9yIHRoaXMgdGFyZ2V0IGlzIG1h
+cmtlZCBhcyAiPyIgb24gWzFdLCAKc28gSSdtIG5vdCBzdXJlIGl0J3MgZXZlciBnb2luZyB0byB3
+b3JrLi4uCgoKPiB0aGF0IHRoZXJlIGlzIG5vIGRlcGVuZHMgZXhwcmVzc2lvbnMgYW5kIGl0IGlz
+IGFsbCBkZWZhdWx0IGxvZ2ljPyBPcgo+IHdvdWxkIEkgaGF2ZSB0byBzdGlsbCBhZGQgYW5vdGhl
+ciBleHByZXNzaW9uIHRoYXQgbWF5YmUgZGVmYXVsdHMgdG8gInkiCj4gaWYgYSBuZXcgdmFyaWFi
+bGUgaXMgdHJ1ZSBsaWtlCj4gIkJSMl9FWFRFUk5BTF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JU
+UyIgdGhhdCBpcyBkZWZpbmVkIGluIG15Cj4gZXh0ZXJuYWw/CgogIE5vLCB0aGF0J3Mgbm90IGdv
+aW5nIHRvIHdvcmsuCgogIEkgdGhpbmsgeW91IGNhbiBtYWtlIGEgaGFjazogYWRkICJzZWxlY3Qg
+CkJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMiIHRvIHlvdXIgCkJS
+Ml9UT09MQ0hBSU5fRVhURVJOQUxfTVlfTVVTTCBkZWZpbml0aW9uLiBJIHRoaW5rIHRoYXQgd29y
+a3MuCgogIFJlZ2FyZHMsCiAgQXJub3V0CgoKPiAKPiBUaGFua3MsCj4gSmVzc2UKPiAKPj4KPj4g
+IMKgIFJlZ2FyZHMsCj4+ICDCoCBBcm5vdXQKPj4KPj4KPj4+Cj4+PiBUaGFua3MsCj4+PiBKZXNz
+ZQo+Pj4KPj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+
+Pj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cj4+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+IApf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
