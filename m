@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E21C433EF
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD8DC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 21:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3515F83281;
-	Thu,  6 Jan 2022 21:00:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88C6D82ACD;
+	Thu,  6 Jan 2022 21:01:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0wI49U2jIDY2; Thu,  6 Jan 2022 21:00:56 +0000 (UTC)
+	with ESMTP id cww-GYExajX7; Thu,  6 Jan 2022 21:01:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1264831C1;
-	Thu,  6 Jan 2022 21:00:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A8361BF340
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A372D83323;
+	Thu,  6 Jan 2022 21:01:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 167541BF340
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6802C4018D
- for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05F4942982
+ for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 21:00:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eHseFkuq-OGV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AJfNkQHoL9kc for <buildroot@lists.busybox.net>;
  Thu,  6 Jan 2022 21:00:22 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63819404BD
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E4904297C
  for <buildroot@buildroot.org>; Thu,  6 Jan 2022 21:00:21 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id E65CE100005;
- Thu,  6 Jan 2022 21:00:15 +0000 (UTC)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D282440003;
+ Thu,  6 Jan 2022 21:00:19 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>,
  Christian Stewart <christian@paral.in>,
  Buildroot List <buildroot@buildroot.org>,
  Matt Weber <Matthew.Weber@rockwellcollins.com>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Thu,  6 Jan 2022 21:59:51 +0100
-Message-Id: <20220106210000.397694-4-thomas.petazzoni@bootlin.com>
+Date: Thu,  6 Jan 2022 21:59:53 +0100
+Message-Id: <20220106210000.397694-6-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 03/11] support/download/post-process-helpers:
- add helper function for post process scripts
+Subject: [Buildroot] [PATCH v3 05/11] package/pkg-cargo.mk: introduce the
+ cargo package infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,48 +67,243 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-download post process scripts will often need to unpack the source
-code tarball, do some operation, and then repack it. In order to help
-with this, post-process-helpers provide an unpack() function and a
-repack() function.
+From: Patrick Havelange <patrick.havelange@essensium.com>
 
+In order to be package agnostic, the install phase is now using cargo
+instead of install. TARGET_CONFIGURE_OPTS is now also set when running
+cargo in order to support cross compiling C code within cargo.
+
+This commit also adds support/download/cargo-post-process to perform
+the vendoring on Cargo packages.
+
+The <pkg>_LICENSE variable of cargo packages is expanded with ",
+vendored dependencies licenses probably not listed" as currently for
+all packages, the licenses of the vendored dependencies are not taken
+into account.
+
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+[Thomas: add support for host-cargo-package and vendoring]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/helpers | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/Makefile.in                 |   1 +
+ package/pkg-cargo.mk                | 153 ++++++++++++++++++++++++++++
+ support/download/cargo-post-process |  38 +++++++
+ 3 files changed, 192 insertions(+)
+ create mode 100644 package/pkg-cargo.mk
+ create mode 100755 support/download/cargo-post-process
 
-diff --git a/support/download/helpers b/support/download/helpers
-index 40d5eea591..4c5eb466cc 100755
---- a/support/download/helpers
-+++ b/support/download/helpers
-@@ -72,5 +72,27 @@ mk_tar_gz() {
-     popd >/dev/null
- }
- 
-+post_process_unpack() {
-+    local dest="${1}"
-+    local tarball="${2}"
-+    local one_file
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dae7a859fd..0ca2a5844e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -441,3 +441,4 @@ include package/pkg-waf.mk
+ include package/pkg-golang.mk
+ include package/pkg-meson.mk
+ include package/pkg-qmake.mk
++include package/pkg-cargo.mk
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+new file mode 100644
+index 0000000000..bf1436a86b
+--- /dev/null
++++ b/package/pkg-cargo.mk
+@@ -0,0 +1,153 @@
++################################################################################
++# Cargo package infrastructure
++#
++# This file implements an infrastructure that eases development of package
++# .mk files for Cargo packages. It should be used for all packages that use
++# Cargo as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this Cargo infrastructure requires the .mk file
++# to only specify metadata information about the package: name, version,
++# download URL, etc.
++#
++# We still allow the package .mk file to override what the different steps
++# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
++# it is used as the list of commands to perform to build the package,
++# instead of the default Cargo behaviour. The package can also define some
++# post operation hooks.
++#
++################################################################################
 +
-+    mkdir "${dest}"
-+    tar -C "${dest}" --strip-components=1 -xf "${tarball}"
-+    one_file="$(find "${dest}" -type f -print0 |LC_ALL=C sort -z |head -z -n1 |tr -d "\0")"
-+    touch -r "${one_file}" "${dest}.timestamp"
-+}
++################################################################################
++# inner-cargo-package -- defines how the configuration, compilation and
++# installation of a cargo package should be done, implements a few hooks
++# to tune the build process for cargo specifities and calls the generic
++# package infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
 +
-+post_process_repack() {
-+    local in_dir="${1}"
-+    local base_dir="${2}"
-+    local out="${3}"
-+    local date
++define inner-cargo-package
 +
-+    date="@$(stat -c '%Y' "${in_dir}/${base_dir}.timestamp")"
++# We need host-rustc to run cargo
++$(2)_DOWNLOAD_DEPENDENCIES += host-rustc
 +
-+    mk_tar_gz "${in_dir}/${base_dir}" "${base_dir}" "${date}" "${out}"
-+}
++$(2)_CARGO_ENV += \
++	CARGO_HOME=$$(HOST_DIR)/share/cargo \
++	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
++	CARGO_TARGET_APPLIES_TO_HOST="false"
 +
- # Keep this line and the following as last lines in this file.
- # vim: ft=bash
++$(2)_DOWNLOAD_POST_PROCESS = cargo
++$(2)_DL_ENV = CARGO_HOME=$$(HOST_DIR)/share/cargo
++
++# Due to vendoring, it is pretty likely that not all licenses are
++# listed in <pkg>_LICENSE.
++$(2)_LICENSE += , vendored dependencies licenses probably not listed
++
++# Note: in all the steps below, we "cd" into the build directory to
++# execute the "cargo" tool instead of passing $(@D)/Cargo.toml as the
++# manifest-path. Indeed while the latter seems to work, it in fact
++# breaks in subtle ways as the way cargo searches for its
++# configuration file is based (among other rules) on the current
++# directory. This means that if cargo is started outside of a package
++# directory, its configuration file will not be taken into account.
++#
++# Also, we pass:
++#  * --offline to prevent cargo from downloading anything: all
++#    dependencies should have been built by the download post
++#    process logic
++#  * --locked to force cargo to use the Cargo.lock file, which ensures
++#    that a fixed set of dependency versions is used
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++define $(2)_BUILD_CMDS
++	cd $$(@D) && \
++	$$(TARGET_MAKE_ENV) \
++		$$(TARGET_CONFIGURE_OPTS) \
++		$$($(2)_CARGO_ENV) \
++		cargo build \
++			--offline \
++			--target $$(RUSTC_TARGET_NAME) \
++			$$(if $$(BR2_ENABLE_DEBUG),--debug,--release) \
++			--manifest-path Cargo.toml \
++			--locked \
++			-Z target-applies-to-host \
++			$$($(2)_CARGO_BUILD_OPTS)
++endef
++else # ifeq ($(4),target)
++define $(2)_BUILD_CMDS
++	cd $$(@D) && \
++	$$(HOST_MAKE_ENV) \
++		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
++		$$($(2)_CARGO_ENV) \
++		cargo build \
++			--offline \
++			--release \
++			--manifest-path Cargo.toml \
++			--locked \
++			$$($(2)_CARGO_BUILD_OPTS)
++endef
++endif # ifeq ($(4),target)
++endif # ifndef $(2)_BUILD_CMDS
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	cd $$(@D) && \
++	$$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
++		cargo install \
++			--target $$(RUSTC_TARGET_NAME) \
++			--offline \
++			--root $$(TARGET_DIR)/usr/ \
++			--bins \
++			--path ./ \
++			--force \
++			--locked \
++			$$($(2)_CARGO_INSTALL_OPTS)
++endef
++endif
++
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	cd $$(@D) && \
++	$$(HOST_MAKE_ENV) \
++		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
++		$$($(2)_CARGO_ENV) \
++		cargo install \
++			--offline \
++			--root $$(HOST_DIR) \
++			--bins \
++			--path ./ \
++			--force \
++			--locked \
++			$$($(2)_CARGO_INSTALL_OPTS)
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# cargo-package -- the target generator macro for Cargo packages
++################################################################################
++
++cargo-package = $(call inner-cargo-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-cargo-package = $(call inner-cargo-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+new file mode 100755
+index 0000000000..25dbbedbfa
+--- /dev/null
++++ b/support/download/cargo-post-process
+@@ -0,0 +1,38 @@
++#!/usr/bin/env bash
++
++set -e
++
++. "${0%/*}/helpers"
++
++while getopts "n:o:" OPT; do
++    case "${OPT}" in
++    o)  output="${OPTARG}";;
++    n)  base_name="${OPTARG}";;
++    :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
++    \?) error "unknown option '%s'\n" "${OPTARG}";;
++    esac
++done
++
++# Already vendored tarball, nothing to do
++if tar tf ${output} | grep -q "^[^/]*/VENDOR" ; then
++    exit 0
++fi
++
++post_process_unpack ${base_name} ${output}
++
++# Do the Cargo vendoring
++pushd ${base_name} > /dev/null
++cargo vendor --locked VENDOR
++
++# Create the local .cargo/config with vendor info
++mkdir -p .cargo/
++cat <<EOF >.cargo/config
++[source.crates-io]
++replace-with = "vendored-sources"
++
++[source.vendored-sources]
++directory = "VENDOR"
++EOF
++popd > /dev/null
++
++post_process_repack $(pwd) ${base_name} ${output}
 -- 
 2.33.1
 
