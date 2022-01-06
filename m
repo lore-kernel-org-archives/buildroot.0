@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 868D3C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 16:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A66C6C433EF
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jan 2022 16:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF7A6FC04;
-	Thu,  6 Jan 2022 16:30:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 302EC82846;
+	Thu,  6 Jan 2022 16:30:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2rmEbzXzvA9t; Thu,  6 Jan 2022 16:30:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bal0i45GIbIY; Thu,  6 Jan 2022 16:30:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6135860DB2;
-	Thu,  6 Jan 2022 16:30:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9449B1BF3D1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 782858239A;
+	Thu,  6 Jan 2022 16:30:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C01AB1C113E
  for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 16:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90E71428EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEC158239A
  for <buildroot@lists.busybox.net>; Thu,  6 Jan 2022 16:30:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fv5kGAzss7sm for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aCG9JEYkVrZ6 for <buildroot@lists.busybox.net>;
  Thu,  6 Jan 2022 16:30:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1DE9428EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id C991381D5F
  for <buildroot@buildroot.org>; Thu,  6 Jan 2022 16:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B616C83460; Thu,  6 Jan 2022 16:24:35 +0000 (UTC)
+ id C1A9583470; Thu,  6 Jan 2022 16:24:35 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jan 2022 15:35:28 +0100
+Date: Thu, 6 Jan 2022 16:17:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0dc59ef8dca1965b3ed5d7b90f615a415ecbc863
-X-Git-Newrev: d167f7006e724360994a88cb97ad65bec137db68
+X-Git-Oldrev: d167f7006e724360994a88cb97ad65bec137db68
+X-Git-Newrev: d164df0aefc121d4954d74d68491968a43ff73d6
 X-Patchwork-Hint: ignore
-Message-Id: <20220106162435.B616C83460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-rcw: add in-tree rcw source
- support
+Message-Id: <20220106162435.C1A9583470@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-cadence-dp-firmware: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,87 +59,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d167f7006e724360994a88cb97ad65bec137db68
+commit: https://git.buildroot.net/buildroot/commit/?id=d164df0aefc121d4954d74d68491968a43ff73d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qoriq-rcw repository contains the RCW source for a lot of
-development boards already. Add a new option
-BR2_PACKAGE_HOST_QORIQ_RCW_INTREE to use one of these rather than a
-custom one.
+This package provides the firmware for LS1028ARDB DP (display port).
 
 Signed-off-by: Jerry Huang <jerry.huang@nxp.com>
 [Arnout:
- - rename the option to _RCW_INTREE;
- - update commit message, documentation, and internal variables
-   accordingly;
- - reorganise condition tree so it becomes a little simpler;
- - add patsubst so the source can be specified as either %.rcw or %.bin;
- - always install it as PBL.bin, to be consistent with the custom
-   option.
+ - move out of nxp directory;
+ - add extraction helper;
+ - set REDISTRIBUTE to NO.
 ]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qoriq-rcw/Config.in.host | 12 ++++++++++++
- package/qoriq-rcw/qoriq-rcw.mk   | 16 ++++++++++++++++
- 2 files changed, 28 insertions(+)
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ package/qoriq-cadence-dp-firmware/Config.in        |  4 ++
+ .../qoriq-cadence-dp-firmware.hash                 |  3 ++
+ .../qoriq-cadence-dp-firmware.mk                   | 49 ++++++++++++++++++++++
+ 5 files changed, 60 insertions(+)
 
-diff --git a/package/qoriq-rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
-index 1f69c0389c..08fc83acd0 100644
---- a/package/qoriq-rcw/Config.in.host
-+++ b/package/qoriq-rcw/Config.in.host
-@@ -25,4 +25,16 @@ config BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
- 	  included for use in the SDK or with post scripts but no
- 	  RCW binary will not be generated.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a52a8cfa38..03918e4205 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -500,6 +500,9 @@ F:	package/znc/
+ N:	Charles Hardin <ckhardin@gmail.com>
+ F:	package/alsa-plugins/
  
-+config BR2_PACKAGE_HOST_QORIQ_RCW_INTREE
-+	string "In-tree RCW name"
-+	depends on !BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
++N:	Changming Huang <jerry.huang@nxp.com>
++F:	package/qoriq-cadence-dp-firmware/
++
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/coremark/
+ F:	package/coremark-pro/
+diff --git a/package/Config.in b/package/Config.in
+index cb15574746..3c7340e27c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -544,6 +544,7 @@ endmenu
+ 	source "package/pps-tools/Config.in"
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
++	source "package/qoriq-cadence-dp-firmware/Config.in"
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+diff --git a/package/qoriq-cadence-dp-firmware/Config.in b/package/qoriq-cadence-dp-firmware/Config.in
+new file mode 100644
+index 0000000000..3f494bd3a3
+--- /dev/null
++++ b/package/qoriq-cadence-dp-firmware/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE
++	bool "qoriq-cadence-dp-firmware"
 +	help
-+	  This option is used to specify the RCW binary file for board.
-+	  which is composed as platform/serdes_value/rcw_file: platform
-+	  is the platform name, serdes_value is the setting of the
-+	  Serdes, and rcw_file is the file name of RCW. For example:
-+	  "ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
++	  NXP QorIQ cadence DP firmware, a resident EL3 firmware.
+diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+new file mode 100644
+index 0000000000..89aaf1d71b
+--- /dev/null
++++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
++sha256 d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
+diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+new file mode 100644
+index 0000000000..23643d24e0
+--- /dev/null
++++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# qoriq-cadence-dp-firmware
++#
++################################################################################
 +
-+	  If this option is empty, no rcw file is used.
++QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
++QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
++QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
++QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
++QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
++QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
++QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
++QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
 +
- endif
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index bad4a451d3..93e660b1dd 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
-@@ -13,8 +13,10 @@ QORIQ_RCW_LICENSE_FILES = LICENSE
- HOST_QORIQ_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
- 
- QORIQ_RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH))
-+QORIQ_RCW_INTREE = $(call qstrip,$(BR2_PACKAGE_HOST_QORIQ_RCW_INTREE))
- 
- ifneq ($(QORIQ_RCW_FILES),)
-+
- QORIQ_RCW_INCLUDES = $(filter-out %.rcw,$(QORIQ_RCW_FILES))
- # Get the name of the custom rcw file from the custom list
- QORIQ_RCW_PROJECT = $(notdir $(filter %.rcw,$(QORIQ_RCW_FILES)))
-@@ -54,6 +56,20 @@ endef
- define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
- 	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
- endef
-+
-+else ifneq ($(QORIQ_RCW_INTREE),)
-+
-+QORIQ_RCW_PLATFORM = $(firstword $(subst /, ,$(QORIQ_RCW_INTREE)))
-+QORIQ_RCW_FILE_BIN = $(lastword $(subst /, ,$(QORIQ_RCW_INTREE)))
-+
-+define HOST_QORIQ_RCW_BUILD_CMDS
-+	$(MAKE) -C $(@D)/$(QORIQ_RCW_PLATFORM)
++# Helper for self-extracting binaries distributed by NXP.
++#
++# The --force option makes sure it doesn't fail if the source
++# directory already exists. The --auto-accept skips the license check,
++# as it is not needed in Buildroot because we have legal-info. Since
++# there's a EULA in the binary file, we extract it in this macro, and
++# it should therefore be added to the LICENSE_FILES variable of
++# packages using this macro. Also, remember to set REDISTRIBUTE to
++# "NO". Indeed, this is a legal minefield: the EULA specifies that the
++# Board Support Package includes software and hardware (sic!) for
++# which a separate license is needed...
++#
++# $(1): full path to the archive file
++#
++define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER
++	awk 'BEGIN      { start = 0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start = 1; }' \
++	    $(1) > $(@D)/EULA
++	cd $(@D) && sh $(1) --force --auto-accept
++	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
++	rmdir $(@D)/$(basename $(notdir $(1)))
 +endef
 +
-+define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
-+	$(INSTALL) -D -m 0644 $(@D)/$(patsubst %.rcw,%.bin,$(QORIQ_RCW_INTREE)) \
-+		$(BINARIES_DIR)/PBL.bin
++define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
++	$(call QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
 +endef
- endif
- 
- # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
++
++define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
