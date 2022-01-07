@@ -4,48 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 302D8C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FA3CC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E41074291F;
-	Fri,  7 Jan 2022 17:55:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 025B942954;
+	Fri,  7 Jan 2022 17:55:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uQzqfAIWxwB9; Fri,  7 Jan 2022 17:55:29 +0000 (UTC)
+	with ESMTP id ejj6EScbPtdG; Fri,  7 Jan 2022 17:55:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C3D942918;
-	Fri,  7 Jan 2022 17:55:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5337C1BF35F
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:55:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C5F44291E;
+	Fri,  7 Jan 2022 17:55:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DB961BF35F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:55:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D15181496
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:55:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28A98400E5
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:55:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uGPJxsXb_JPf for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 17:55:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D0F481490
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:55:25 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 270DC60009;
- Fri,  7 Jan 2022 17:55:20 +0000 (UTC)
-Date: Fri, 7 Jan 2022 18:55:19 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NVsZFN5wVEJJ for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 17:55:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3187740002
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:55:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B39B682B9C; Fri,  7 Jan 2022 17:49:43 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-Message-ID: <20220107185519.4f7336d7@windsurf>
-In-Reply-To: <20220106214411.2684476-1-bernd.kuhls@t-online.de>
-References: <20220106214411.2684476-1-bernd.kuhls@t-online.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
- to 19.0.3-Matrix
+To: buildroot@buildroot.org
+Date: Fri, 7 Jan 2022 18:55:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8604c57da7e54bfd55747ed161b5c51a870d3549
+X-Git-Newrev: b0cfb1b90c1bb41dc95d7d3ab9cef1ae358a067c
+X-Patchwork-Hint: ignore
+Message-Id: <20220107174943.B39B682B9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,28 +52,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  6 Jan 2022 22:44:11 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b0cfb1b90c1bb41dc95d7d3ab9cef1ae358a067c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
->  package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Add new meson configuration options and optional dependencies.
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 12 ++++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index c41c0a3686..8464a56338 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b6a2eab8bda2f3cb87c3a0a714839696831ad27b5786674c4bd6c3776b9ebc97  pipewire-0.3.40.tar.bz2
++sha256  2e91f228ffb93494f2423956b930014de20e15639a03f3df4fca4ebf4bc51fc0  pipewire-0.3.43.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 7043745cc1..604d08f90d 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.40
++PIPEWIRE_VERSION = 0.3.43
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -28,7 +28,8 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dvideoconvert=enabled \
+ 	-Dvideotestsrc=enabled \
+ 	-Dvolume=enabled \
+-	-Dsession-managers=[]
++	-Dsession-managers=[] \
++	-Dlv2=disabled
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ PIPEWIRE_CONF_OPTS += -Ddbus=enabled
+@@ -174,6 +175,13 @@ else
+ PIPEWIRE_CONF_OPTS += -Decho-cancel-webrtc=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PIPEWIRE_CONF_OPTS += -Draop=enabled
++PIPEWIRE_DEPENDENCIES += openssl
++else
++PIPEWIRE_CONF_OPTS += -Draop=disabled
++endif
++
+ define PIPEWIRE_USERS
+ 	pipewire -1 pipewire -1 * - - audio,video PipeWire System Daemon
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
