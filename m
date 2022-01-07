@@ -1,50 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB8E7C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 862B9C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:09:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22625429DC;
-	Fri,  7 Jan 2022 21:09:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D6B7824CB;
+	Fri,  7 Jan 2022 21:09:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1u3hhyVCOiiK; Fri,  7 Jan 2022 21:09:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gsAdTFiqrawO; Fri,  7 Jan 2022 21:09:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B253429E7;
-	Fri,  7 Jan 2022 21:09:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9EC8F1BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:09:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 989B382496;
+	Fri,  7 Jan 2022 21:09:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 00F581BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E8F4429C5
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:09:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F095E60AFA
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:09:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 79g5cflAKqPH for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:09:22 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 855A542986
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:09:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id 95DDB240002;
- Fri,  7 Jan 2022 21:09:20 +0000 (UTC)
-Date: Fri, 7 Jan 2022 22:09:19 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SYQrzXjEkq07 for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:09:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CB3A6070A
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:09:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 736A9834B1; Fri,  7 Jan 2022 21:03:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220107220919.74e9ab74@windsurf>
-In-Reply-To: <20220105180645.388855-1-fontaine.fabrice@gmail.com>
-References: <20220105180645.388855-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/rtorrent: disable execinfo
+To: buildroot@buildroot.org
+Date: Fri, 7 Jan 2022 22:09:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7fcfb71d7a2256a34554866e2b456a710b8ad0f
+X-Git-Newrev: 6e518c47dd6a16d0dee66b208d365728453cc655
+X-Patchwork-Hint: ignore
+Message-Id: <20220107210342.736A9834B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xxhash: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,39 +52,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  5 Jan 2022 19:06:45 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6e518c47dd6a16d0dee66b208d365728453cc655
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Disable execinfo to avoid the following build failure raised since the
-> addition of libexecinfo package in commit
-> eea8ba446c10701a273432552108d80fb2224ef4:
-> 
-> /home/giuliobenetti/autobuild/run/instance-0/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: main.o: in function `do_panic(int)':
-> /home/giuliobenetti/autobuild/run/instance-0/output-1/build/rtorrent-0.9.8/src/main.cc:606: undefined reference to `backtrace'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/10fc9016013931c58238240216c5950b23b56b30
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...disable-execinfo-option-to-configure.patch | 34 +++++++++++++++++++
->  package/rtorrent/rtorrent.mk                  |  3 ++
->  2 files changed, 37 insertions(+)
->  create mode 100644 package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch
+Fix the following uclibc build failure raised since bump to version
+0.8.1 in commit 5dbdb2535c649ee617595b8c4ae3cbba0ee37b97:
 
-Applied to master, thanks.
+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: xxhash.o: in function `XXH3_hashLong_128b_internal.constprop.0':
+(.text+0xcbc): undefined reference to `static_assert'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/559/5595b21a711b482b84e582fc9f56e5468c9eb6d6/build-end.log
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-depend-on-assert-h-for-XXH_STATIC_ASSERT.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/package/xxhash/0003-do-no-longer-depend-on-assert-h-for-XXH_STATIC_ASSERT.patch b/package/xxhash/0003-do-no-longer-depend-on-assert-h-for-XXH_STATIC_ASSERT.patch
+new file mode 100644
+index 0000000000..3b65ae1d6c
+--- /dev/null
++++ b/package/xxhash/0003-do-no-longer-depend-on-assert-h-for-XXH_STATIC_ASSERT.patch
+@@ -0,0 +1,29 @@
++From 6189ecd3d44a693460f86280ccf49d33cb4b18e1 Mon Sep 17 00:00:00 2001
++From: Yann Collet <cyan@fb.com>
++Date: Sun, 26 Dec 2021 15:15:26 -0800
++Subject: [PATCH] do no longer depend on `<assert.h>` for XXH_STATIC_ASSERT
++
++since some versions are buggy.
++
++Use `_Static_assert` instead, which is part of the C11 language.
++[Retrieved from:
++https://github.com/Cyan4973/xxHash/commit/6189ecd3d44a693460f86280ccf49d33cb4b18e1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ xxhash.h | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/xxhash.h b/xxhash.h
++index 311a69c7..5dfd5c45 100644
++--- a/xxhash.h
+++++ b/xxhash.h
++@@ -1749,8 +1749,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
++ /* note: use after variable declarations */
++ #ifndef XXH_STATIC_ASSERT
++ #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
++-#    include <assert.h>
++-#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
+++#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { _Static_assert((c),m); } while(0)
++ #  elif defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
++ #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
++ #  else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
