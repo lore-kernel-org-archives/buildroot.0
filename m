@@ -1,55 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B18C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 23:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7DD7C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 23:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BFEB424CD;
-	Fri,  7 Jan 2022 23:24:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D39782EC7;
+	Fri,  7 Jan 2022 23:26:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zYFgeVDkHT0k; Fri,  7 Jan 2022 23:24:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bl4bG_7DGUVD; Fri,  7 Jan 2022 23:26:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E1244034A;
-	Fri,  7 Jan 2022 23:24:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C52078188B;
+	Fri,  7 Jan 2022 23:26:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D2E31BF36E
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:24:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D71A71BF36E
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B6818188B
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:24:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1C328188B
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:26:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gcHKvHJFAyJL for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 23:24:44 +0000 (UTC)
+ with ESMTP id LEELJdk9kZqz for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 23:26:10 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2C64D8187F
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 23:24:43 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC3BE8187F
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 23:26:09 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A760F1BF209;
- Fri,  7 Jan 2022 23:24:40 +0000 (UTC)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E29A7C0006;
+ Fri,  7 Jan 2022 23:26:07 +0000 (UTC)
 Received: from peko by dell.home with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n5ybA-0005jw-18; Sat, 08 Jan 2022 00:24:40 +0100
+ id 1n5ycZ-0005lJ-95; Sat, 08 Jan 2022 00:26:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd.kuhls@t-online.de>
 References: <20211106111145.1648068-1-bernd.kuhls@t-online.de>
- <20211106111145.1648068-2-bernd.kuhls@t-online.de>
-Date: Sat, 08 Jan 2022 00:24:40 +0100
-In-Reply-To: <20211106111145.1648068-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 6 Nov 2021 12:11:44 +0100")
-Message-ID: <87fspzjfif.fsf@dell.be.48ers.dk>
+ <20211106111145.1648068-3-bernd.kuhls@t-online.de>
+Date: Sat, 08 Jan 2022 00:26:07 +0100
+In-Reply-To: <20211106111145.1648068-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 6 Nov 2021 12:11:45 +0100")
+Message-ID: <87bl0njfg0.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/sofia-sip: bump version to
- 1.13.6
+Subject: Re: [Buildroot] [PATCH v2 3/3] package/freeswitch: bump version to
+ 1.10.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,12 +69,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Needed to bump freeswitch to 1.10.7.
+ > Release notes:
+ > https://github.com/signalwire/freeswitch/releases/tag/v1.10.7
+
+ > Removed patch, upstream applied a different fix:
+ > https://github.com/signalwire/freeswitch/commit/e9fde845de5b8885282bf5e70f4be3645c5c3e9b
+
+ > Added optional dependency to libks, needed due to upstream commit
+ > https://github.com/signalwire/freeswitch/commit/ed9851666615d283effb76edc7028cc08b07eff9
+
+ > Added upstream patches to fix build errors.
+
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  > ---
  > v2: no changes, added libks to v2 of this patch series
 
-Committed, thanks.
+This series was marked as superseeded in patchwork, but I applied it
+anyway as freeswitch 1.10.7 fixes a number of fairly serious security
+issues. Was there any specific reason why this was marked as
+superseeded?
+
+Updated the commit message to mention the security fixes and applied,
+thanks.
 
 -- 
 Bye, Peter Korsgaard
