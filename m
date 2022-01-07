@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A72C8C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25C42C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39D99812B1;
-	Fri,  7 Jan 2022 17:11:53 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XtXESIe1omRa; Fri,  7 Jan 2022 17:11:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86DD881274;
-	Fri,  7 Jan 2022 17:11:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FC391BF35F
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:11:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ED8AA403E7
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:11:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B737240002;
+	Fri,  7 Jan 2022 17:13:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TOPkZ4iaH15O for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 17:11:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1663E40192
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:11:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A6369826D2; Fri,  7 Jan 2022 17:05:33 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 18:09:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e00379361e16f24a348c12bb26eab4dc0af94e84
-X-Git-Newrev: 211063b9534b498d581c0a1d6a0d4c2bb1bb0679
-X-Patchwork-Hint: ignore
-Message-Id: <20220107170533.A6369826D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libvdpau: bump to version 1.4
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o4GAcS81LZLe; Fri,  7 Jan 2022 17:13:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C175840192;
+	Fri,  7 Jan 2022 17:13:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C62AC1BF35F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B466E428AE
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9P4Abc12X2cJ for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 17:13:26 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8713C41553
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:13:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id B739B10000E;
+ Fri,  7 Jan 2022 17:13:23 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
+Date: Fri,  7 Jan 2022 18:13:11 +0100
+Message-Id: <20220107171318.1423075-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220107171318.1423075-1-thomas.petazzoni@bootlin.com>
+References: <20220107171318.1423075-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/7] package/ca-certificates: remove dependency
+ on host-python-cryptography
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,52 +56,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Martin Bark <martin@barkynet.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=211063b9534b498d581c0a1d6a0d4c2bb1bb0679
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The host-python-cryptography module is only used by ca-certificates
+for a check of the expiration date of certificates, which is only a
+warning not even causing the build to abort, i.e something that
+Buildroot users are most likely never going to see.
 
-Update indentation in hash file (two spaces)
+Since the host-python-cryptography dependency would soon require a
+dependency on rust, it's a lot simpler to just patch the
+certdata2pem.py script to no longer require cryptography, but only
+make use of it if available.
 
-https://gitlab.freedesktop.org/vdpau/libvdpau/-/tags/1.4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvdpau/libvdpau.hash | 7 +++----
- package/libvdpau/libvdpau.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ ...2pem.py-make-cryptography-module-opt.patch | 59 +++++++++++++++++++
+ package/ca-certificates/ca-certificates.mk    |  2 +-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
 
-diff --git a/package/libvdpau/libvdpau.hash b/package/libvdpau/libvdpau.hash
-index 0833d41bf4..653657322a 100644
---- a/package/libvdpau/libvdpau.hash
-+++ b/package/libvdpau/libvdpau.hash
-@@ -1,5 +1,4 @@
--# From https://lists.x.org/archives/xorg-announce/2019-August/003021.html
--sha256 b5a52eeac9417edbc396f26c40591ba5df0cd18285f68d84614ef8f06196e50e  libvdpau-1.3.tar.bz2
--sha512 c06c23062816e8b207d38d9d53df43a1b193bb9836b48bd6d79a63d76522e87d383c446285b9877fe9c99faa0d290da8a49ccbb58eefa138cc38d0929a8e1330  libvdpau-1.3.tar.bz2
- # Locally computed
--sha256 ce4af7294872ff07f6e82ae5f1f5eba926215b1e2fb6d55d64759de082458d61  COPYING
-+sha256  4258824c5a4555ef31de0a7d82b3caf19e75a16a13949f1edafc5f6fb2d33f30  libvdpau-1.4.tar.bz2
-+# Locally computed
-+sha256  ce4af7294872ff07f6e82ae5f1f5eba926215b1e2fb6d55d64759de082458d61  COPYING
-diff --git a/package/libvdpau/libvdpau.mk b/package/libvdpau/libvdpau.mk
-index 63aecaf744..ae2f388855 100644
---- a/package/libvdpau/libvdpau.mk
-+++ b/package/libvdpau/libvdpau.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+new file mode 100644
+index 0000000000..b76c1bfd7f
+--- /dev/null
++++ b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+@@ -0,0 +1,59 @@
++From bf18b564122e8f976681a2398862fde1eafd84ba Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 6 Jan 2022 23:15:00 +0100
++Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
++
++The Python cryptography module is only used to verify if trusted
++certificates have expired, but this is only a warning. For some build
++systems and distributions, providing Python cryptography is costly,
++especially since it's now partly written in Rust.
++
++As the check is only a warning, it's anyway going to be overlooked by
++most people. This commit changes the check to be optional: if the
++cryptography Python module is there, we perform the check, otherwise
++the check is skipped.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ mozilla/certdata2pem.py | 18 ++++++++++--------
++ 1 file changed, 10 insertions(+), 8 deletions(-)
++
++diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
++index ede23d4..a6261f8 100644
++--- a/mozilla/certdata2pem.py
+++++ b/mozilla/certdata2pem.py
++@@ -28,9 +28,6 @@ import sys
++ import textwrap
++ import io
++ 
++-from cryptography import x509
++-
++-
++ objects = []
++ 
++ # Dirty file parser.
++@@ -122,11 +119,16 @@ for obj in objects:
++         if not obj['CKA_LABEL'] in trust or not trust[obj['CKA_LABEL']]:
++             continue
++ 
++-        cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
++-        if cert.not_valid_after < datetime.datetime.now():
++-            print('!'*74)
++-            print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
++-            print('!'*74)
+++        try:
+++            from cryptography import x509
+++
+++            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+++            if cert.not_valid_after < datetime.datetime.now():
+++                print('!'*74)
+++                print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+++                print('!'*74)
+++        except ImportError:
+++            pass
++ 
++         bname = obj['CKA_LABEL'][1:-1].replace('/', '_')\
++                                       .replace(' ', '_')\
++-- 
++2.33.1
++
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 7084ab781e..0b6962ab7b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -7,7 +7,7 @@
+ CA_CERTIFICATES_VERSION = 20211016
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+ CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20211022T144903Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3 host-python-cryptography
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
  
--LIBVDPAU_VERSION = 1.3
-+LIBVDPAU_VERSION = 1.4
- LIBVDPAU_SOURCE = libvdpau-$(LIBVDPAU_VERSION).tar.bz2
- LIBVDPAU_SITE = \
- 	https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/$(LIBVDPAU_VERSION)
+-- 
+2.33.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
