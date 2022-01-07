@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EAC5C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDB9C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:57:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04D4160AD5;
-	Fri,  7 Jan 2022 17:56:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E550041551;
+	Fri,  7 Jan 2022 17:57:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9E_r0OnIpSf9; Fri,  7 Jan 2022 17:56:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HWKiGGo7MZU6; Fri,  7 Jan 2022 17:57:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E8E560AC4;
-	Fri,  7 Jan 2022 17:56:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E959410D1;
+	Fri,  7 Jan 2022 17:57:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A80BA1BF35F
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:56:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DBECA1BF35F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:57:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A530F42959
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:56:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8F25410D1
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:57:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J9qvpGhav4BX for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 17:56:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 058D24291F
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:56:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8501682B9C; Fri,  7 Jan 2022 17:50:01 +0000 (UTC)
+ with ESMTP id l1YVK1henaqn for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 17:57:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D46D1410C8
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:57:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 2071CC0004;
+ Fri,  7 Jan 2022 17:57:15 +0000 (UTC)
+Date: Fri, 7 Jan 2022 18:57:13 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 18:56:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b0cfb1b90c1bb41dc95d7d3ab9cef1ae358a067c
-X-Git-Newrev: 702ebf1704d8789a696fab25a518890f68720026
-X-Patchwork-Hint: ignore
-Message-Id: <20220107175001.8501682B9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openlayers: bump to version 6.10.0
+To: James Hilliard <james.hilliard1@gmail.com>, Buildroot List
+ <buildroot@buildroot.org>
+Message-ID: <20220107185713.7b1d5224@windsurf>
+In-Reply-To: <20220107171318.1423075-4-thomas.petazzoni@bootlin.com>
+References: <20220107171318.1423075-1-thomas.petazzoni@bootlin.com>
+ <20220107171318.1423075-4-thomas.petazzoni@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 3/7] package/rustc: fix
+ BR2_PACKAGE_HOST_RUSTC_ARCH for ARMv5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,43 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=702ebf1704d8789a696fab25a518890f68720026
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  7 Jan 2022 18:13:13 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> BR2_PACKAGE_HOST_RUSTC_ARCH only had a special value for
+> BR2_ARM_CPU_ARMV7A, but it also needs a special value for
+> BR2_ARM_CPU_ARMV5, as the pre-compiled Rust standard library for
+> ARMv5TE is identified with the "armv5te" architecture name, see
+> https://doc.rust-lang.org/nightly/rustc/platform-support.html.
+> 
+> We noticed this because Rust binaries wouldn't work on an ARMv5
+> platform (Illegal instruction). This was due to the usage of the
+> arm-unknown-linux-gnueabi variant of the Rust standard library, which
+> is for ARMv6. Thanks to this commit, we correctly use the
+> armv5te-unknown-linux-gnueabi variant, and Rust binaries work properly
+> on ARMv5TE.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/rustc/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+> index 90ea56f626..05324ad755 100644
+> --- a/package/rustc/Config.in.host
+> +++ b/package/rustc/Config.in.host
+> @@ -102,6 +102,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+>  
+>  config BR2_PACKAGE_HOST_RUSTC_ARCH
+>  	string
+> +	default "armv5te" if BR2_ARM_CPU_ARMV5
+>  	default "armv7"  if BR2_ARM_CPU_ARMV7A
+>  	default BR2_ARCH if !BR2_ARM_CPU_ARMV7A
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index e29365fc91..11eae3de36 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	35a0b37a5c1e7c48553215c6e8c24a12bac8e9048f008fc61c4b329cf6611b5c	v6.9.0-dist.zip
-+sha256	da3025279bbd6cfb0e82b7af95666bede8fd65e8c620a1bc54bba04cebb7e1d4	v6.10.0-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index b20ea9977c..781f9901ea 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLAYERS_VERSION = 6.9.0
-+OPENLAYERS_VERSION = 6.10.0
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+I need to drop the "if !BR2_ARM_CPU_ARMV7A" here. Will do in the next
+iteration, or can be done when applying if there are no other comments.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
