@@ -1,46 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 072AFC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 798CDC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE21060B09;
-	Fri,  7 Jan 2022 21:27:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2026E82A4E;
+	Fri,  7 Jan 2022 21:31:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id paYGxxKnT9KJ; Fri,  7 Jan 2022 21:27:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3C7S7JTmp07t; Fri,  7 Jan 2022 21:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6F5060806;
-	Fri,  7 Jan 2022 21:27:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9FBEE1BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E76981C0A;
+	Fri,  7 Jan 2022 21:31:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 667911BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:31:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AAE740010
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6190E81C0A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:31:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i8k0F220VRKl for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AB5E424B7
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 68E388177F; Fri,  7 Jan 2022 21:20:44 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 22:26:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a19b822239c36cb40a632899bb5c3e848a5fc81e
-X-Git-Newrev: 87f2b7004e6d40454d4b07bbe9b0058342c7767f
-X-Patchwork-Hint: ignore
-Message-Id: <20220107212044.68E388177F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add test for python-pybind
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pKQ_qkNXyUks for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:31:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 520F180BE3
+ for <buildroot@busybox.net>; Fri,  7 Jan 2022 21:31:19 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b97a:249a:cc8b:fe2e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9CEAD5FF93;
+ Fri,  7 Jan 2022 22:31:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641591076;
+ bh=a4sTMkq5uYNlIoT2kDLvm08zmABTOyW7ymLCnKdve+E=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=WD06w+ksUdd3jHqlPspAJt1OlMFiBT9Kubvqc4OQvYR+Gx4VlOyioT295F7xqrv10
+ YPpyzm4rMfpYhbTeL3pmeEhjho5CPJW7zR56pNSD9j6ilAy+EHaNzivaWlDedCg35H
+ ORD9nZNrx3J+diK6n17ilmDeH52TSmbParZrARdNC7YbuKzXeUw89fXZW9TYXnOSV8
+ fzBSxeLPhsn6wYqhFniGlWlEVv3fctcIFgbcjiFgmIfAQ4VEuyB8W/+mHELzYiZ1aj
+ KpCFlwuANKOgxIx/J1oME5aLo/Qi78ayrOIwxbgDpkaIpUJd6yKXuIYZpNTfuPPx/+
+ FlygCG4ArBBTA==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 07 Jan 2022 22:31:10 +0100
+Date: Fri, 7 Jan 2022 22:31:10 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Michael Drake <michael.drake@codethink.co.uk>,
+ Thomas Preston <thomas.preston@codethink.co.uk>
+Message-ID: <20220107213110.GA1881783@scaer>
+References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20191205171517.96639-1-michael.drake@codethink.co.uk>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v1 00/30] Add Chromium Embedded Framework
+ library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,192 +71,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87f2b7004e6d40454d4b07bbe9b0058342c7767f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Michael, Thomas, All,
 
-The way that python-pybind can be used is fairly complicated, so a
-runtime test for it is convenient. In addition, this test validates that
-the headers actually work at runtime.
+On 2019-12-05 17:14 +0000, Michael Drake spake thusly:
+> This patch series adds the Chromium Embedded Framework library to
+> Buildroot.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-[Arnout:
- - Retain python3 only.
- - python-pybind is a target package, not host.
- - Select python-pybind instead of depend.
- - Simplify python-pybind-example package.
- - Check in python-pybind-example build if pybind11.get_include()
-   produces output.
- - Don't use python3 -m pybind11 --includes: it includes the main python
-   includes, which are for the host, not for the target.
- - Use TestPythonPackageBase instead of open-coding something imported
-   with host python.
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                                         |  3 ++
- .../package/br2-external/python-pybind/Config.in   |  1 +
- .../br2-external/python-pybind/external.desc       |  1 +
- .../package/br2-external/python-pybind/external.mk |  1 +
- .../package/python-pybind-example/Config.in        |  6 ++++
- .../package/python-pybind-example/example.cpp      | 16 +++++++++
- .../python-pybind-example/python-pybind-example.mk | 41 ++++++++++++++++++++++
- .../testing/tests/package/sample_python_pybind.py  |  4 +++
- .../testing/tests/package/test_python_pybind.py    | 15 ++++++++
- 9 files changed, 88 insertions(+)
+We've discussed this series with the other maintainers today, and all
+we can say is that we are very sorry that we could not address it
+earlier.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d049b99b91..7874677f7e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1124,6 +1124,9 @@ F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/python-pybind/
- F:	package/reaver/
-+F:	support/testing/tests/package/br2-external/python-pybind
-+F:	support/testing/tests/package/sample_python_pybind.py
-+F:	support/testing/tests/package/test_python_pybind.py
- 
- N:	Guo Ren <ren_guo@c-sky.com>
- F:	arch/Config.in.csky
-diff --git a/support/testing/tests/package/br2-external/python-pybind/Config.in b/support/testing/tests/package/br2-external/python-pybind/Config.in
-new file mode 100644
-index 0000000000..70c77157b3
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_PYTHON_PYBIND_PATH/package/python-pybind-example/Config.in"
-diff --git a/support/testing/tests/package/br2-external/python-pybind/external.desc b/support/testing/tests/package/br2-external/python-pybind/external.desc
-new file mode 100644
-index 0000000000..eef5e0f5a0
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/external.desc
-@@ -0,0 +1 @@
-+name: PYTHON_PYBIND
-diff --git a/support/testing/tests/package/br2-external/python-pybind/external.mk b/support/testing/tests/package/br2-external/python-pybind/external.mk
-new file mode 100644
-index 0000000000..3501f3135e
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_PYTHON_PYBIND_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in
-new file mode 100644
-index 0000000000..1b4d1e0d2c
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYBIND_EXAMPLE
-+	bool "python-pybind-example"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_PYBIND
-+	help
-+	  This test creates a cpp macro later used on target in python
-diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp
-new file mode 100644
-index 0000000000..f2eea8e48d
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp
-@@ -0,0 +1,16 @@
-+#include <pybind11/pybind11.h>
-+namespace py = pybind11;
-+
-+int add (int i, int j) {
-+    return i + j;
-+}
-+
-+PYBIND11_MODULE (example, m) {
-+    // optional module description
-+    m.doc() = "pybind11 example plugin";
-+    // test a module method
-+    m.def("add", &add, "example::add adds two integer numbers");
-+    // test a module attribute
-+    py::object hello = py::cast("Hello World");
-+    m.attr("says") = hello;
-+}
-diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk
-new file mode 100644
-index 0000000000..a6d7e0daaf
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# python-pybind-example
-+#
-+################################################################################
-+
-+# this builds a C++ macro "add(a,b)"
-+# that we expose to host-python with a custom install
-+# and that the python test script will later use
-+PYTHON_PYBIND_EXAMPLE_DEPENDENCIES = python-pybind
-+
-+PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE = \
-+	$(shell $(HOST_DIR)/usr/bin/python3 -c 'import pybind11; print(pybind11.get_include())')
-+
-+PYTHON_PYBIND_EXAMPLE_CXX_FLAGS = \
-+	$(TARGET_CXXFLAGS) \
-+	-Wall -shared -std=c++11 -fPIC \
-+	-I$(PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE) \
-+	$(shell $(STAGING_DIR)/usr/bin/python3-config --includes --libs --ldflags)
-+
-+# .so to be installed must have exact suffix
-+# otherwise import() in python will not work
-+HOST_LIB_BINARY_SUFFIX = \
-+	$(shell $(STAGING_DIR)/usr/bin/python3-config --extension-suffix)
-+
-+define PYTHON_PYBIND_EXAMPLE_BUILD_CMDS
-+	if [ -z "$(PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE)" ]; then \
-+		echo "pybind11.get_include() returned empty"; \
-+		exit 1; \
-+	fi
-+	$(TARGET_CXX) $(PYTHON_PYBIND_EXAMPLE_CXX_FLAGS) \
-+		$(PYTHON_PYBIND_EXAMPLE_PKGDIR)/example.cpp \
-+		-o $(@D)/example$(HOST_LIB_BINARY_SUFFIX)
-+endef
-+
-+define PYTHON_PYBIND_EXAMPLE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/example$(HOST_LIB_BINARY_SUFFIX) \
-+		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/example$(HOST_LIB_BINARY_SUFFIX)
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/sample_python_pybind.py b/support/testing/tests/package/sample_python_pybind.py
-new file mode 100644
-index 0000000000..605c0bab15
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_pybind.py
-@@ -0,0 +1,4 @@
-+#!/usr/bin/env python
-+import example
-+print(example.add(1, 2))
-+print(example.says)
-diff --git a/support/testing/tests/package/test_python_pybind.py b/support/testing/tests/package/test_python_pybind.py
-new file mode 100644
-index 0000000000..5e3c3b9cc5
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pybind.py
-@@ -0,0 +1,15 @@
-+import os
-+import infra
-+import subprocess
-+from tests.package.test_python import TestPythonPackageBase
-+
-+class TestPythonPybind (TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYBIND_EXAMPLE=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_pybind.py"]
-+    # ship examples macro & installs it to host
-+    br2_external = [infra.filepath("tests/package/br2-external/python-pybind")]
+You are more than aware that this is a huge series, with a lot of
+complicated packages. I did not have the guts to delve into it
+initially, and as more time passed, I dreaded even more going back
+and look at it. The other maintainers also felt similarly...
+
+On the other hand, except for Romain who dared two comments, no one
+else ever replied or even pushed forward on that series; no one ever
+even sent a reply stating it was tested and worked for them..
+
+It would have been nice to have chromium in the tree, I agree, but
+this is so big a stack that it is very hard to grasp and understand
+all that is going on in there...
+
+As a consequence, we have marked this series as rejected in patchwork...
+
+Thank you for contribution.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
