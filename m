@@ -4,77 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88AA5C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 20:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7082EC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 20:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 427BE60AE8;
-	Fri,  7 Jan 2022 20:36:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27A5B60AFE;
+	Fri,  7 Jan 2022 20:37:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rc-TgNHQLHse; Fri,  7 Jan 2022 20:36:47 +0000 (UTC)
+	with ESMTP id FAsKviBaxXlt; Fri,  7 Jan 2022 20:36:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F34260AE4;
-	Fri,  7 Jan 2022 20:36:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 88FB61BF5DA
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:36:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72D2460AF6;
+	Fri,  7 Jan 2022 20:36:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E8E541BF5DA
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84EED40037
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:36:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D77DE80BFD
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:36:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2WFrNnykIPku for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 20:36:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8Xf-FyQBRjHj for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 20:36:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F375429A2
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 20:36:43 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id v6so13182417wra.8
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 12:36:43 -0800 (PST)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D83C780BFA
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 20:36:45 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ f189-20020a1c1fc6000000b00347ac5ccf6cso1504209wmf.3
+ for <buildroot@buildroot.org>; Fri, 07 Jan 2022 12:36:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1RkIaXXOrTKxfCvq6S+dmslmr91c3jc4T0s/26CqK4s=;
- b=jMRCExmJV4/vj0WQYhX7xnUyBFj3MpWQMjclzfXqf1u2BqJB/i9z5U8hvsokZwOW8+
- rNRuoRbYeQPWrt4WXegImGQnnVFCoFE/q7G/VLfjjuMQ0UljnsfDIvR9I4FKKbmDSxyF
- QMgh1zGcTD0a+mpGmDXe3CDD7qhMIqCFDXFttGlgCsDTUw0IkRYXgqseZAoYSJRTjk1f
- pvkK4Jnj9bUFAO4ZPy1LF1fyhTIisfix2tjzkkkh8fA6MFNz7o55mHYeHHKk/p1LeiTG
- n9EEZvZjGoZ9srFGWH1Sr7HmAds6nQGYJsgqxWbESIRbKbRUKggCnbpXUY3QAylhhYDy
- CBGQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=ROHOYfCrtePut6bruRW+7mT62xMpSVC6iSDpIeooQ2Q=;
+ b=bsanDuDcFPXoLzuHW3mm4287HZnZm1ZGGjItinStGqycwOwInPs5DkCCCk06FHoSrU
+ 6XNeP+AEtwZVD5lTHuG2dzn86T2U8MoPYqRWp3pi73qt08OgsAN7lMngNKH2ppJaovK6
+ 7rA0z9ktELtk9TWrY6fnXkVkioN3qjqwzM0ruAsJ5YoGOXH5k2QnJqlOTEVJI9kV6xkE
+ 8W+hTT2tW+7RRy92cCU/hN2ad3tQQw0N6tZHi6RMUM2ndl7XeqDAXjjTk2YJWy+cqJr/
+ /3u4R5UXKWhqXE0WgZBp92Mp4gMbit8DqJsBTCl2UDsDrzt/ukRqNoItTnABLxdV3hqN
+ 7wnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=1RkIaXXOrTKxfCvq6S+dmslmr91c3jc4T0s/26CqK4s=;
- b=eDBvaO79N91YFWkuFC2KTeg3aw9mmzm4rBHUriwlj3FLvrCy3ZaduoooMzWlYn50t5
- j8ztfV0UM9WX8ixLlCiIIxz17cNsS0badtS34G9uf+M6uJuKKtjdTFAp9mi/ZNmvGeu2
- LWPqwAyL/C0qR+SXmYnY5MuTgLo2luj6ORa8z9nBXqmwl/Rv1hfON5/zZZe71MOluFO5
- ZwBqCaDIliQ+Zt7X+xuq5JKuF3IDs2wybR/ovoM5DQuypEteKfNuZ+YH5BZVZWNCZ/jq
- DEc3OUR+cP2+MF+jDog3wK0B9y4o3u0t9dZXrn3rETPnpNmpfwLiEkxbwFX6Qb4FpeUk
- Ypzg==
-X-Gm-Message-State: AOAM5325Lz2F+8LuhuMfsKyBKNgr34CvpXpps/IeplRby+BV/kWGliUU
- roDmqEj5P8rUdjGwc/N7Tn+/Po43O14=
-X-Google-Smtp-Source: ABdhPJx0lnmv6kIBX82jnhKNauBcvBAD6u/j0OTDhzcLZ2y68dW8iY7jm0fC020k6GR/NBJmr0/JOw==
-X-Received: by 2002:a05:6000:1543:: with SMTP id
- 3mr56655629wry.140.1641587801761; 
- Fri, 07 Jan 2022 12:36:41 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=ROHOYfCrtePut6bruRW+7mT62xMpSVC6iSDpIeooQ2Q=;
+ b=KCqcpcsUpSh/21XZCcSQOqCpUOP2r6sc9htlYjuQDc2a9RE9cyyqes+ish493+LoAn
+ cN1GCk8Vmntn81SE9zWKyeg5IRlEDP2x5A+cFcEsLrDZYNx47HujWMd5OTNF2SzPW/Kc
+ cI3tQ95zqCKRwhx3qwXETZmp5heHitQzX4oh0D61xwLaXLO7OA4qLsTs4uLjolLjL9NS
+ rsep7vrfxXraRtyIEcX/lW2U6Hem1gDCTkQxn64md79uEt+BKqdm4Aq544240QmChcHl
+ PsaVFhZO27sK+cuZY3AQ8X9eQiBfv/YclAxe8sC57KYKWr+vXQb6HEcPCjHyJKp+Zp+H
+ JrZA==
+X-Gm-Message-State: AOAM532GOG9asnCr1yl05mXd9aULkWh4OfO5aI04DjMREqE+aXnfCpe5
+ 2rFhEIANsXBPRi/IIlYGaL261vSlf68=
+X-Google-Smtp-Source: ABdhPJyaWXGJq06EVnD4IpUSQmBr/BuslCEaB9s0F9ESsOOgmFp9E7NC0W+M9cAzzrDzjyXdqIMiww==
+X-Received: by 2002:a7b:c3d3:: with SMTP id t19mr2414750wmj.107.1641587804031; 
+ Fri, 07 Jan 2022 12:36:44 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id c16sm3331524wrp.109.2022.01.07.12.36.41
+ by smtp.gmail.com with ESMTPSA id c16sm3331524wrp.109.2022.01.07.12.36.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jan 2022 12:36:41 -0800 (PST)
+ Fri, 07 Jan 2022 12:36:43 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 21:35:33 +0100
-Message-Id: <20220107203534.1461378-1-fontaine.fabrice@gmail.com>
+Date: Fri,  7 Jan 2022 21:35:34 +0100
+Message-Id: <20220107203534.1461378-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220107203534.1461378-1-fontaine.fabrice@gmail.com>
+References: <20220107203534.1461378-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/libnftnl: bump to version 1.2.1
+Subject: [Buildroot] [PATCH 2/2] package/nftables: bump to version 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,36 +94,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.netfilter.org/projects/libnftnl/files/changes-libnftnl-1.2.1.txt
+Set --with-cli=readline to avoid a build failure since
+https://git.netfilter.org/nftables/commit/?id=b4dded0ca78df2a67245a3db1448a51207577ff1
+
+https://www.netfilter.org/projects/nftables/files/changes-nftables-1.0.1.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnftnl/libnftnl.hash | 2 +-
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nftables/nftables.hash | 2 +-
+ package/nftables/nftables.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 9737da1878..0a183eedcf 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index bbf7e5a2b1..53878abba9 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
 @@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256  90b01fddfe9be8c3245c3ba5ff5a4424a8df708828f92b2b361976b658c074f5  libnftnl-1.2.0.tar.bz2
-+sha256  7508a5c414fab13e3cb3ce8262d0ce4f02c1590a8e4f8628ab497b5b4585937c  libnftnl-1.2.1.tar.bz2
- sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index eff93b895f..616afa6307 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
+ # From https://netfilter.org/projects/nftables/downloads.html
+-sha256  58bf547daf967a2b88ecb4f425f126006ebde22711db806b25c1d6cf84fe45f4  nftables-1.0.0.tar.bz2
++sha256  3ceeba625818e81a0be293e9dd486c3ef799ebd92165270f1e57e9a201efa423  nftables-1.0.1.tar.bz2
+ sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 2409eb0571..d5c16ac2be 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.2.0
-+LIBNFTNL_VERSION = 1.2.1
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-NFTABLES_VERSION = 1.0.0
++NFTABLES_VERSION = 1.0.1
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+@@ -21,6 +21,7 @@ NFTABLES_CONF_OPTS += --with-mini-gmp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
++NFTABLES_CONF_OPTS += --with-cli=readline
+ NFTABLES_DEPENDENCIES += readline
+ NFTABLES_LIBS += -lncurses
+ else
 -- 
 2.34.1
 
