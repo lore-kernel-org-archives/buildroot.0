@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C0B5C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83467C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46EA760D91;
-	Fri,  7 Jan 2022 21:03:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C2D342906;
+	Fri,  7 Jan 2022 21:06:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T6KvzugFGgQr; Fri,  7 Jan 2022 21:03:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BEFsGayObr5w; Fri,  7 Jan 2022 21:06:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8198960AFE;
-	Fri,  7 Jan 2022 21:03:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B7931BF5DA
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:03:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B14D428AC;
+	Fri,  7 Jan 2022 21:06:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D611B1BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19EC560AF1
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:03:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1B4340010
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:06:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XH2j9nJzIQya for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:03:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iOWJahFJJx1p for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:05:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9A4B60AED
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:03:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1E77082B50; Fri,  7 Jan 2022 20:56:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5CCC424B3
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:05:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 26CA6826D2; Fri,  7 Jan 2022 20:59:49 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 22:01:46 +0100
+Date: Fri, 7 Jan 2022 22:05:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0fb16a85da1f5c1c34af0da4c247c79f8d76bcab
-X-Git-Newrev: bc1b52c53ec23ea10f5893914fb17339694b3c26
+X-Git-Oldrev: 10b8d6e512de293f60ccda989d593683b6ccc263
+X-Git-Newrev: ebce685e1d60b47b8fc5490a5820b79fc3a913ca
 X-Patchwork-Hint: ignore
-Message-Id: <20220107205655.1E77082B50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libedit: bump to version
- 20210910-3.1
+Message-Id: <20220107205949.26CA6826D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/avahi: add option to
+ enable/disable default services
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,64 +59,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc1b52c53ec23ea10f5893914fb17339694b3c26
+commit: https://git.buildroot.net/buildroot/commit/?id=ebce685e1d60b47b8fc5490a5820b79fc3a913ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Refresh patch
+By default, Avahi installs service definitions for SSH and SFTP, but
+those might not be present on all systems. This commit adds an option
+to control the installation of those Avahi services. Even though that
+potentially breaks backward compatibility with older configuration, we
+have chosen to make the option default to disable, which means that
+now the SSH and SFTP avahi services are no longer installed by
+default.
 
-https://www.thrysoee.dk/editline
+As there is no way to tell the Avahi package not to install the
+service files in the first place, we have to manually remove them from
+the target directory.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Florian Larysch <fl@n621.de>
+[Thomas: make the option default to disabled, fix small formatting issues.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libedit/0001-check-bsd-functions-in-libbsd.patch | 4 ++--
- package/libedit/libedit.hash                             | 2 +-
- package/libedit/libedit.mk                               | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/avahi/Config.in | 7 +++++++
+ package/avahi/avahi.mk  | 9 +++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/libedit/0001-check-bsd-functions-in-libbsd.patch b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-index 7438340d48..0af9472f17 100644
---- a/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-+++ b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-@@ -1,7 +1,7 @@
- configure: on Linux, the BSD functions require linking against libbsd
+diff --git a/package/avahi/Config.in b/package/avahi/Config.in
+index 5e303d044e..95b01bfe92 100644
+--- a/package/avahi/Config.in
++++ b/package/avahi/Config.in
+@@ -42,6 +42,13 @@ config BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
+ 	  Enable the libdns_sd (Bonjour) compatibility library support
+ 	  for legacy applications.
  
- Signed-off-by: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
--(Rebased against 20170329-3.1)
-+(Rebased against 20210910-3.1)
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- (Rebased against 20150325-3.1)
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-@@ -17,6 +17,6 @@ diff -durN libedit-20130712-3.1.orig/configure.ac libedit-20130712-3.1/configure
- +# Search for libbsd for *vis functions
- +AC_CHECK_LIB([bsd], [vis])
- +
-- AC_CHECK_FUNCS([endpwent isascii memchr memset re_comp regcomp strcasecmp strchr strcspn strdup strerror strrchr strstr strtol issetugid wcsdup strlcpy strlcat getline vis strvis strunvis __secure_getenv secure_getenv])
-+ AC_CHECK_FUNCS([endpwent isascii memchr memset re_comp regcomp strcasecmp strchr strcspn strdup strerror strrchr strstr strtol issetugid wcsdup strlcpy strlcat vis strvis strunvis __secure_getenv secure_getenv])
++config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
++	bool "install default service definitions"
++	depends on BR2_PACKAGE_AVAHI_DAEMON
++	help
++	  Install the SSH/SFTP service definitions included with the
++	  Avahi daemon by default.
++
+ endif
  
-  # strlcpy
-diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
-index d405e47b42..6d139730e8 100644
---- a/package/libedit/libedit.hash
-+++ b/package/libedit/libedit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dbb82cb7e116a5f8025d35ef5b4f7d4a3cdd0a3909a146a39112095a2d229071  libedit-20191231-3.1.tar.gz
-+sha256  6792a6a992050762edcca28ff3318cdb7de37dccf7bc30db59fcd7017eed13c5  libedit-20210910-3.1.tar.gz
- sha256  9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649  COPYING
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index cb18b97f6d..595a59f702 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "avahi needs a toolchain w/ threads"
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 9de6ebc4d2..13e2106014 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -193,4 +193,13 @@ endef
+ AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
+ endif
  
--LIBEDIT_VERSION = 20191231-3.1
-+LIBEDIT_VERSION = 20210910-3.1
- LIBEDIT_SITE = http://www.thrysoee.dk/editline
- LIBEDIT_INSTALL_STAGING = YES
- LIBEDIT_DEPENDENCIES = ncurses
++ifeq ($(BR2_PACKAGE_AVAHI_DEFAULT_SERVICES),)
++define AVAHI_REMOVE_DEFAULT_SERVICES
++	$(foreach service,ssh sftp-ssh, \
++		$(RM) -f $(TARGET_DIR)/etc/avahi/services/$(service).service
++	)
++endef
++AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_DEFAULT_SERVICES
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
