@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16048C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A9A1C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:14:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4F3D429B7;
-	Fri,  7 Jan 2022 17:14:33 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dtCb3Di1wTOR; Fri,  7 Jan 2022 17:14:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BF414299E;
-	Fri,  7 Jan 2022 17:14:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B9DEB1BF35F
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A17C74049E
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FE7040002;
+	Fri,  7 Jan 2022 17:14:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LgGRzdx-Be0J for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 17:13:33 +0000 (UTC)
-X-Greylist: delayed 20:13:13 by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C90AE40192
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:13:32 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id omri3J2ZoRDy; Fri,  7 Jan 2022 17:14:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3009E403E7;
+	Fri,  7 Jan 2022 17:14:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 456961BF35F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34AA7428AE
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:13:35 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v2XTMF0yKw5j for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 17:13:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E4BB41553
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:13:33 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 6E58E100010;
- Fri,  7 Jan 2022 17:13:30 +0000 (UTC)
+ by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id DEE7120002;
+ Fri,  7 Jan 2022 17:13:31 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>,
  Buildroot List <buildroot@buildroot.org>
-Date: Fri,  7 Jan 2022 18:13:15 +0100
-Message-Id: <20220107171318.1423075-6-thomas.petazzoni@bootlin.com>
+Date: Fri,  7 Jan 2022 18:13:16 +0100
+Message-Id: <20220107171318.1423075-7-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220107171318.1423075-1-thomas.petazzoni@bootlin.com>
 References: <20220107171318.1423075-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 5/7] support/download/cargo-post-process: make
- manifest path configurable
+Subject: [Buildroot] [PATCH 6/7] support/testing/tests: switch
+ python-cryptography related tests to glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +57,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In most pure Rust packages, the Cargo.toml manifest is at the root
-directory, which is why we could call "cargo vendor" without
-specifying the path of the manifest.
+In a follow-up commit, we are about to bump python-cryptography to a
+new version, which has the interesting charateristic of using Rust
+code. This means python-cryptography will now only be available on
+platforms supported by Rust, which for now excludes uclibc-based
+configurations (none of the Rust Tier1/Tier2 platforms use uClibc,
+there is some uClibc support in Tier3 platforms but they have not been
+added to Buildroot for now).
 
-However, other packages, such as python-cryptography, which have parts
-implemented in Rust, have their Cargo.toml located in a specific
-subdirectory.
-
-This commit extends the cargo-post-process download script to
-understand a BR_CARGO_MANIFEST_PATH environment variable, which allows
-a package to pass the location of the Cargo.toml file. If not passed,
-"Cargo.toml" is used, preserving the existing behavior for other
-packages.
+So in preparation for this bump, we switch the few test cases of
+Python packages that directly or indirectly use python-cryptography to
+use a glibc toolchain. Another impacted test case is the
+docker-compose test case, but it already uses a glibc toolchain;
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/cargo-post-process | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_python_autobahn.py  | 10 +++++++++-
+ support/testing/tests/package/test_python_crossbar.py  | 10 +++++++++-
+ .../testing/tests/package/test_python_cryptography.py  | 10 +++++++++-
+ .../tests/package/test_python_service_identity.py      | 10 +++++++++-
+ support/testing/tests/package/test_python_treq.py      | 10 +++++++++-
+ support/testing/tests/package/test_python_txtorcon.py  | 10 +++++++++-
+ 6 files changed, 54 insertions(+), 6 deletions(-)
 
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-index 25dbbedbfa..51d9dd24c1 100755
---- a/support/download/cargo-post-process
-+++ b/support/download/cargo-post-process
-@@ -22,7 +22,7 @@ post_process_unpack ${base_name} ${output}
+diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
+index a237ce465d..6c1678a615 100644
+--- a/support/testing/tests/package/test_python_autobahn.py
++++ b/support/testing/tests/package/test_python_autobahn.py
+@@ -3,9 +3,17 @@ from tests.package.test_python import TestPythonPackageBase
  
- # Do the Cargo vendoring
- pushd ${base_name} > /dev/null
--cargo vendor --locked VENDOR
-+cargo vendor --manifest-path ${BR_CARGO_MANIFEST_PATH-Cargo.toml} --locked VENDOR
+ class TestPythonPy3Autobahn(TestPythonPackageBase):
+     __test__ = True
+-    config = TestPythonPackageBase.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_AUTOBAHN=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     sample_scripts = ["tests/package/sample_python_autobahn.py"]
+diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
+index d7843ddd8b..83649aeec2 100644
+--- a/support/testing/tests/package/test_python_crossbar.py
++++ b/support/testing/tests/package/test_python_crossbar.py
+@@ -3,10 +3,18 @@ from tests.package.test_python import TestPythonPackageBase
  
- # Create the local .cargo/config with vendor info
- mkdir -p .cargo/
+ class TestPythonPy3Crossbar(TestPythonPackageBase):
+     __test__ = True
+-    config = TestPythonPackageBase.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_CROSSBAR=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     sample_scripts = ["tests/package/sample_python_crossbar.py"]
+     timeout = 60
+diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
+index 62f0ca0def..bf11c02e5c 100644
+--- a/support/testing/tests/package/test_python_cryptography.py
++++ b/support/testing/tests/package/test_python_cryptography.py
+@@ -3,10 +3,18 @@ from tests.package.test_python import TestPythonPackageBase
+ 
+ class TestPythonPy3Cryptography(TestPythonPackageBase):
+     __test__ = True
+-    config = TestPythonPackageBase.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     sample_scripts = ["tests/package/sample_python_cryptography.py"]
+     timeout = 40
+diff --git a/support/testing/tests/package/test_python_service_identity.py b/support/testing/tests/package/test_python_service_identity.py
+index 09cfbe0a26..dbad5f931f 100644
+--- a/support/testing/tests/package/test_python_service_identity.py
++++ b/support/testing/tests/package/test_python_service_identity.py
+@@ -3,10 +3,18 @@ from tests.package.test_python import TestPythonPackageBase
+ 
+ class TestPythonPy3ServiceIdentity(TestPythonPackageBase):
+     __test__ = True
+-    config = TestPythonPackageBase.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_SERVICE_IDENTITY=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     sample_scripts = ["tests/package/sample_python_service_identity.py"]
+     timeout = 30
+diff --git a/support/testing/tests/package/test_python_treq.py b/support/testing/tests/package/test_python_treq.py
+index 307c9932b2..515f1ea304 100644
+--- a/support/testing/tests/package/test_python_treq.py
++++ b/support/testing/tests/package/test_python_treq.py
+@@ -14,8 +14,16 @@ class TestPythonTreq(TestPythonPackageBase):
+ 
+ class TestPythonPy3Treq(TestPythonTreq):
+     __test__ = True
+-    config = TestPythonTreq.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_TREQ=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+diff --git a/support/testing/tests/package/test_python_txtorcon.py b/support/testing/tests/package/test_python_txtorcon.py
+index 8e74190ee1..6f0c4ca1ed 100644
+--- a/support/testing/tests/package/test_python_txtorcon.py
++++ b/support/testing/tests/package/test_python_txtorcon.py
+@@ -3,10 +3,18 @@ from tests.package.test_python import TestPythonPackageBase
+ 
+ class TestPythonPy3Txtorcon(TestPythonPackageBase):
+     __test__ = True
+-    config = TestPythonPackageBase.config + \
++    # Need to use a different toolchain than the default due to
++    # python-cryptography using Rust (not available with uclibc)
++    config = \
+         """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_TXTORCON=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
+         """
+     sample_scripts = ["tests/package/sample_python_txtorcon.py"]
+     timeout = 30
 -- 
 2.33.1
 
