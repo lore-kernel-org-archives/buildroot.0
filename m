@@ -1,56 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 789E4C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1B1C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F09942958;
-	Fri,  7 Jan 2022 21:33:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E69382A4E;
+	Fri,  7 Jan 2022 21:35:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VEZOFW_SnSpA; Fri,  7 Jan 2022 21:33:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UcvHhdbfCogY; Fri,  7 Jan 2022 21:35:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B89442932;
-	Fri,  7 Jan 2022 21:33:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B499D823C6;
+	Fri,  7 Jan 2022 21:35:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 394461BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:33:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 156BC1BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C73842932
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:33:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04B6540148
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:35:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kaGtrqHOV7Kq for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:33:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout08.t-online.de (mailout08.t-online.de [194.25.134.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32BF242929
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:33:30 +0000 (UTC)
-Received: from fwd88.dcpf.telekom.de (fwd88.aul.t-online.de [10.223.144.114])
- by mailout08.t-online.de (Postfix) with SMTP id 7C0F09FA9
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:32:54 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd88.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n5wqz-2z9Pgf0; Fri, 7 Jan 2022 22:32:53 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33016)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n5wqz-0005zd-A6
- for buildroot@buildroot.org; Fri, 07 Jan 2022 22:32:53 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 22:32:53 +0100
-Message-Id: <20220107213253.75709-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id suyBreSQZREY for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:35:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E78CC400B5
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:35:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.6])
+ by smtp3-g21.free.fr (Postfix) with ESMTP id CDE5B13F846;
+ Fri,  7 Jan 2022 22:35:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641591302;
+ bh=b7Va0TM8NV6UapPyrUKQpwrPr+lxIhsiHGLfp/foX0M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=p0DSOyaPoA4UggEVnss8RnY+ea+vgZC/DC0J+6nyErG9LjKiAuY9bqv7HDlCvPZ2F
+ /uuhQtfZXFrlum09ra/7iYjt3Mqkazr9v/Ib23RiG8GiXDqAb4p6fTLCBh0qdIEsk5
+ OCaI/ZgnoSlq1iOzZh0qGgycQeRGqCCgVhTC1ksplDIjqZkufJsnZK6PGQG6lIGfcQ
+ Su93VhDvVJlm3K8jaJ6dv9Iwt0a/4+lCOV7lzNg5WybHw4x4zmrpVJHcshlEwtuxaa
+ AdmUoZ/qRclFVC5Tl+8dKiITHyFYaMMAIzwQ/rHcky5TI3Z9RoU1mtDc5/M8O99AJx
+ i4M5ctcY2Pa7A==
+Received: from 37-165-29-190.coucou-networks.fr ([37.165.29.190])
+ by webmail.free.fr
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1641591173-00013579-0214D708/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0bf07dec-ecb4-4fa6-b588-7b1cbab20f7c
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-vdr-vnsi: bump version to
- 19.0.2-Matrix
+Date: Fri, 07 Jan 2022 22:35:01 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220105142924.4b11ed83@windsurf>
+References: <2209e11a-bda9-5193-9b4d-20a5f0fa34e3@linatsea.fr>
+ <20220105142924.4b11ed83@windsurf>
+Message-ID: <a8098a5d68bcf044356720ec3f7d2d9d@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+Subject: Re: [Buildroot] candidate packages : ros2 and wxwidgets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +70,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas, Thierry,
 
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index c6223fc8e4..4cd1f7ad6b 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  38a1c8662dda6eeb91a9924b7f5f9fef510c78f2faf8ae3248c10ec0885fe9f3  kodi-pvr-vdr-vnsi-19.0.1-Matrix.tar.gz
-+sha256  2471b4c0a22bd3382b7b7e68974d5b6c08a757737086faf82609ebe5dfb5625a  kodi-pvr-vdr-vnsi-19.0.2-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index b281f00f19..65e69d2b23 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VDR_VNSI_VERSION = 19.0.1-Matrix
-+KODI_PVR_VDR_VNSI_VERSION = 19.0.2-Matrix
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
--- 
-2.30.2
+I would like to share some info about ROS in Buildroot.
 
+On 05/01/2022 14:29, Thomas Petazzoni wrote:
+> Hello Thierry,
+> 
+> On Wed, 5 Jan 2022 10:46:46 +0100
+> Thierry Bultel <thierry.bultel@linatsea.fr> wrote:
+> 
+>> For a number of companies, I can see a growing interest in having ros2
+>> support in buildroot.
+>> Currently, people wanting to prototype (or make a product) a robotics
+>> applications, are stuck
+>> to either yocto, or, worse, to a desktop-like distribution.
+
+[...]
+
+>> What are your thought about these both packages ? Any ideas, or links 
+>> to
+>> some WIP stuff ?
+> 
+> These packages would certainly be very welcome. ROS2 especially makes a
+> lot of sense.
+> 
+> Some prior work:
+> 
+>   https://github.com/mchalain/br_ros
+>   http://lists.busybox.net/pipermail/buildroot/2019-March/246497.html
+> 
+> I'll be happy to help in the review of such packages.
+
+
+   In the context of the HoverGames https://www.hovergames.com/ drone
+challenge, I used ROS1 Noetic (last version for ROS1 series) with
+Buildroot on various boards (EMCraft NavQ, Technexion pico-pi, QEmu
+aarch64 and RV64). My actual need was the minimal dependencies to run
+"mavros" (at that time, mavros was not available for ROS2).
+
+I published my code here, for information:
+https://github.com/jolivain/buildroot/commits/navq
+
+See the demo defconfigs:
+https://github.com/jolivain/buildroot/commit/a50de54e721910a00ebe7192e37661cc0ad81b37
+
+ROS1 can be tested in qemu Aarch64 virt with:
+
+     make ros_defconfig
+     make
+     ./output/images/start-qemu.sh
+
+Login as root, then run a ros tutorial:
+
+     roslaunch roscpp_tutorials talker_listener.launch
+
+or launch mavros:
+
+     roslaunch mavros px4.launch fcu_url:=tcp-l://localhost
+
+While doing that, I did minor upstreaming work to let ROS play nicer
+with Buildroot, for example:
+https://github.com/ros-infrastructure/rospkg/commit/5ab4408e65f01bbb48971f6264f6c890b89cefa9
+and few other buildroot fixes or updates.
+
+Prior that work, I was aware of a previous integration, like this one:
+https://github.com/flatmax/buildroot.rk3399.external/tree/master/package/rockchip/ros
+It was a bit outdated for what I wanted to do.  I took some examples
+from it.
+
+While my Buildroot patches were sufficient to fulfill my needs, I
+don't think they were good enough to be upstreamed.  Moreover, ROS1
+Noetic is the last LTS version which will be EOL in 2025.  See:
+https://wiki.ros.org/Distributions#List_of_Distributions
+This is why I didn't submitted my patches to Buildroot.
+
+For the next 2022 edition of the HoverGames challenge, I would like
+to switch to ROS2 in Buildroot.  I'm currently exploring ways to
+regenerate ROS2 buildroot recipes automatically, using the ROS
+infrastructure packages.  I believe this is the way the Gentoo and
+Yocto/OpenEmbedded recipes are currently generated.
+
+See:
+https://github.com/ros-infrastructure/superflore
+https://github.com/ros-infrastructure/superflore/tree/master/superflore/generators
+
+My current idea would be to:
+- Add in Buildroot the minimum changes, if needed
+   (minimal infra things like pkg-catkin, other non-ROS package 
+dependencies)
+- Propose a "buildroot" generator in superflore upstream that create
+   an maintain some of the ROS2 recipes.
+
+Comments, ideas and suggestions are welcome!  Do not hesitate to
+contact me to discuss that topic.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
