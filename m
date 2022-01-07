@@ -1,78 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94026C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D37A3C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:26:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D781429BA;
-	Fri,  7 Jan 2022 22:26:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B44A400AB;
+	Fri,  7 Jan 2022 22:26:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bpzQLP5TX5so; Fri,  7 Jan 2022 22:26:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LrXQwF2rlsKb; Fri,  7 Jan 2022 22:26:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5387A429F7;
-	Fri,  7 Jan 2022 22:26:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32ABE1BF30A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:26:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A0E9424BD;
+	Fri,  7 Jan 2022 22:26:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C7BE1BF30A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20FA9429B7
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:26:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37925424C3
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:26:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NmC9J-15yrLl for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 22:26:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JlgAbpoUooW2 for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 22:26:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
  [IPv6:2607:f8b0:4864:20::135])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 40CCE429AD
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02C43400AB
  for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:26:20 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id 9so5699056ill.9
+Received: by mail-il1-x135.google.com with SMTP id d3so5678729ilr.10
  for <buildroot@buildroot.org>; Fri, 07 Jan 2022 14:26:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=h0kU0u5O3PAJ2cSBzGCWwZVj3+0bJOuBcS5snYR0PVU=;
- b=hK0fRkTBfo5XucRj/+wZKXV5aNWGBsIu+yujkHC0LRDJGjD345pQM7/Kz2XXkQSmFi
- joAVGytYS0T5fRVSytaaknE9L99JLfUUW/f0RxT6/+cU4+l3hmtwBhuXas9tuHH2Ihoe
- H4EL1OYnsIgKSM8WeemaXF0ch5Qs0zkK6VenWSRk0cqgrdmxshQUe7Na6sA5ZC5eOB2f
- yFOc1ycaHt5NTkpI5o0RDqKWLx9v9oqqfjnzvTpx2/XqMQwX1wIZGAp9wiOasNyqP0Jh
- L8TYE+wyKssYdn9HbLKuzL8NMBZuGUhpf90pWnG3DM2tRAWN9bI7WTB0KnD8sqB/JGpV
- TKAg==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=pev9TNydsd7pzQTo8KdbFshVV089g/qlRVa2luW0/hY=;
+ b=OsMXQK9Lsm7CeWW6IwWBjESR/Z4Ny35X1Dv73zJViToWuZ4Nr4nBhqxGNfrxyHpLPc
+ PqD5l80/RStnOKuG7XAdIS3DnlSOtqvyvOEqas4zBN/Gxe9wYxEG4ev4UAFMM5Pr2+Fp
+ 5cfddYeS69wHlcAbySuCk41CWMuXz1Z7ZMbH5wjLMxmfI59CZSd3Ecga8zGxzcG9qAOL
+ mpiFkmqVlOLohR0gwd2lO0LmFKbB8NA6J2EVMY4O6mshPsOeb9qlXle7nre3jdDL5Yqr
+ DfhewbSwQemLg27VDA1DThEO648F3lSAHxHE3oNZ4CACak9oX6dUvKwQKlIgWAd6kSju
+ +FsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=h0kU0u5O3PAJ2cSBzGCWwZVj3+0bJOuBcS5snYR0PVU=;
- b=jSAhzyXbd3DjiED5lBrm5cl4GNIZptmpjczQNFUK8RYnxmrkadytq7tKQvi5pO/QLa
- TPgJWwC2M6gcuIeuFDqb66BjaLRqEzDvk6YvJnH029qdJnIz+Jts0pNY0PQr1EkktEtE
- cRPv2eZXUIU2sBSbuQGkeWdcgWHWUV7mmw5tJHwV34Zt4pFvB7VyaFiA86244V+7rBuo
- 70C1WrUsxUt1T9MVBDNLsE9mI80p2dseUZxxq9QLDvzTRS6Asov/Cq2ybXXUnhoDLv+x
- lO8hGNjEMIVkZ5gyhmy9gMYEu5R6isZAquZmvspEcLP1/kKSBqPUJfltHjC/niiu5kWJ
- o4kw==
-X-Gm-Message-State: AOAM533K6T+LnIx2rMelFLf6nfpd0yxRDirCd2u+JeGLaAJHBt6wJ7SM
- WUrrry1lSSqaD/d6reRo48ZncmhNAvo=
-X-Google-Smtp-Source: ABdhPJwyiyMF1nWBPyHB2L1heOLevhFcc77RtCBknE9qhhA51uXaZZdtEqgYyWXoTbqMlULD0/OFPg==
-X-Received: by 2002:a05:6e02:18c5:: with SMTP id
- s5mr31878648ilu.101.1641594379108; 
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=pev9TNydsd7pzQTo8KdbFshVV089g/qlRVa2luW0/hY=;
+ b=3s5w1mMdzqH/pQvSvU6irVG2Mn2vY0jUYypgtCtrCo9eCioQxkbRm7ebsDkWVkFLct
+ yfbsEiCqQO5GCYvr1WQ83aK0zks1Exhl49AhlUEWsZY3CjXY98A1eKj7YBSpU0BdQdVi
+ yIc+qljshJvMwDvt6fb080FeZYPqwr6OoT+hE2B9JE+vijZIYKXob3KjwTb+JfiaC95C
+ Q/xNDbRv/eI3jvJc6wZgFbtyDj0ctkA/CQTOnJ44oXhUTPw7DWB0U7XmVzgJIl1cp8fw
+ mXTHuPN+d+RABDotG/9NiipwqwV4CoTY0opm+OqI7Fbs7IQPt7Eo2hiPZ2sNTeDYvU+D
+ i2Dg==
+X-Gm-Message-State: AOAM532LWIm3FkYUtclZE4ko51gr4OavoWiUHSEmDROaV8cKUf05V6AI
+ pu5/SBJHa5AMyXZNync3D6aOFBBm3zU=
+X-Google-Smtp-Source: ABdhPJyqYcVMAoVwWzt7/qyaaL0N40WtRrg2QMxyyZIAlx8GJRn7IdIEqvJ5wsxd6+jOTFB1SLYqzA==
+X-Received: by 2002:a05:6e02:1c4d:: with SMTP id
+ d13mr29405283ilg.117.1641594379906; 
  Fri, 07 Jan 2022 14:26:19 -0800 (PST)
 Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
  [71.218.242.12])
- by smtp.gmail.com with ESMTPSA id k12sm3596453ioc.50.2022.01.07.14.26.18
+ by smtp.gmail.com with ESMTPSA id k12sm3596453ioc.50.2022.01.07.14.26.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jan 2022 14:26:18 -0800 (PST)
+ Fri, 07 Jan 2022 14:26:19 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 15:26:09 -0700
-Message-Id: <20220107222613.4124764-1-james.hilliard1@gmail.com>
+Date: Fri,  7 Jan 2022 15:26:10 -0700
+Message-Id: <20220107222613.4124764-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220107222613.4124764-1-james.hilliard1@gmail.com>
+References: <20220107222613.4124764-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/5] package/serd: new package
+Subject: [Buildroot] [PATCH 2/5] package/sord: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,85 +97,90 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
  DEVELOPERS             |  1 +
  package/Config.in      |  1 +
- package/serd/Config.in |  8 ++++++++
- package/serd/serd.hash |  4 ++++
- package/serd/serd.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/serd/Config.in
- create mode 100644 package/serd/serd.hash
- create mode 100644 package/serd/serd.mk
+ package/sord/Config.in |  8 ++++++++
+ package/sord/sord.hash |  4 ++++
+ package/sord/sord.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/sord/Config.in
+ create mode 100644 package/sord/sord.hash
+ create mode 100644 package/sord/sord.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3d5c01f795..d99d7798db 100644
+index d99d7798db..bc54ab590c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1299,6 +1299,7 @@ F:	package/python-tinycss2/
- F:	package/python-weasyprint/
+@@ -1300,6 +1300,7 @@ F:	package/python-weasyprint/
  F:	package/python-yarl/
  F:	package/python-zopfli/
-+F:	package/serd/
+ F:	package/serd/
++F:	package/sord/
  F:	package/zchunk/
  
  N:	James Knight <james.knight@collins.com>
 diff --git a/package/Config.in b/package/Config.in
-index e9ee4d2ef1..18ae22f227 100644
+index 18ae22f227..6133d6ce32 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1704,6 +1704,7 @@ menu "JSON/XML"
- 	source "package/rapidjson/Config.in"
+@@ -1705,6 +1705,7 @@ menu "JSON/XML"
  	source "package/rapidxml/Config.in"
  	source "package/raptor/Config.in"
-+	source "package/serd/Config.in"
+ 	source "package/serd/Config.in"
++	source "package/sord/Config.in"
  	source "package/tinyxml/Config.in"
  	source "package/tinyxml2/Config.in"
  	source "package/valijson/Config.in"
-diff --git a/package/serd/Config.in b/package/serd/Config.in
+diff --git a/package/sord/Config.in b/package/sord/Config.in
 new file mode 100644
-index 0000000000..7633a979e2
+index 0000000000..91dfb41d0b
 --- /dev/null
-+++ b/package/serd/Config.in
++++ b/package/sord/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SERD
-+	bool "serd"
++config BR2_PACKAGE_SORD
++	bool "sord"
++	select BR2_PACKAGE_SERD
 +	help
-+	  Serd is a lightweight C library for RDF syntax which
-+	  supports reading and writing Turtle, TriG, NTriples, and
-+	  NQuads.
++	  Sord is a lightweight C library for storing RDF data in
++	  memory.
 +
-+	  https://drobilla.net/software/serd.html
-diff --git a/package/serd/serd.hash b/package/serd/serd.hash
++	  https://drobilla.net/software/sord.html
+diff --git a/package/sord/sord.hash b/package/sord/sord.hash
 new file mode 100644
-index 0000000000..d64a2aa271
+index 0000000000..af175f91f0
 --- /dev/null
-+++ b/package/serd/serd.hash
++++ b/package/sord/sord.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated after checking signature
-+# http://download.drobilla.net/serd-0.30.10.tar.bz2.sig
-+sha256  affa80deec78921f86335e6fc3f18b80aefecf424f6a5755e9f2fa0eb0710edf  serd-0.30.10.tar.bz2
++# https://download.drobilla.net/sord-0.16.8.tar.bz2.asc
++sha256  7c289d2eaabf82fa6ac219107ce632d704672dcfb966e1a7ff0bbc4ce93f5e14  sord-0.16.8.tar.bz2
 +sha256  e06562d6bcf0341b2ac2ad0f0ca36801d2ebf388d5ef297011625e4c36e963f0  COPYING
-diff --git a/package/serd/serd.mk b/package/serd/serd.mk
+diff --git a/package/sord/sord.mk b/package/sord/sord.mk
 new file mode 100644
-index 0000000000..85b16f6866
+index 0000000000..f805805e9d
 --- /dev/null
-+++ b/package/serd/serd.mk
-@@ -0,0 +1,20 @@
++++ b/package/sord/sord.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# serd
++# sord
 +#
 +################################################################################
 +
-+SERD_VERSION = 0.30.10
-+SERD_SITE = https://download.drobilla.net
-+SERD_SOURCE = serd-$(SERD_VERSION).tar.bz2
-+SERD_LICENSE = ISC
-+SERD_LICENSE_FILES = COPYING
-+SERD_INSTALL_STAGING = YES
++SORD_VERSION = 0.16.8
++SORD_SITE = https://download.drobilla.net
++SORD_SOURCE = sord-$(SORD_VERSION).tar.bz2
++SORD_LICENSE = ISC
++SORD_LICENSE_FILES = COPYING
++SORD_DEPENDENCIES = host-pkgconf serd
++SORD_INSTALL_STAGING = YES
 +
-+SERD_CONF_OPTS += --largefile --no-coverage
++ifeq ($(BR2_PACKAGE_PCRE),y)
++SORD_DEPENDENCIES += pcre
++endif
++
++SORD_CONF_OPTS += --no-coverage
 +
 +ifeq ($(BR2_STATIC_LIBS),y)
-+SERD_CONF_OPTS += --static --no-shared --static-progs
++SORD_CONF_OPTS += --static --no-shared --static-progs
 +endif
 +
 +$(eval $(waf-package))
