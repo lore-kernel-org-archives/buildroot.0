@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E95CC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A65FC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46CFF60B09;
-	Fri,  7 Jan 2022 22:30:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FA12424C3;
+	Fri,  7 Jan 2022 22:40:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SUAoq8wFZ1SX; Fri,  7 Jan 2022 22:30:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id erfhqWAMR36h; Fri,  7 Jan 2022 22:40:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC3460AFE;
-	Fri,  7 Jan 2022 22:30:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4C31424BD;
+	Fri,  7 Jan 2022 22:40:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 295091BF30A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:30:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 96B3D1BF30A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12EDF424C3
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:30:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D885424C3
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:40:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f6YedBsA1Ajb for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 22:30:25 +0000 (UTC)
+ with ESMTP id soMSCo3t8k6Z for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 22:39:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
- [IPv6:2607:f8b0:4864:20::233])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 061E7424BD
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:30:24 +0000 (UTC)
-Received: by mail-oi1-x233.google.com with SMTP id t23so10210599oiw.3
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 14:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=+hCOXz471xdJM7QLkNrrjuuuaV+GjdPaD0cTM9A8DLM=;
- b=d7p1yGZKLVshM917ZzAPz0/nc9KM8Y9r62vxx58yMOlopUoqJd8KM+4KtW2wQ9eyEI
- YGazoHw5Yzavpp9VrhzCn0B1/GeEpnC3cpj+KGYKB0masKr0bEXcL4eRznHXq7hmPxoL
- cUw9FYmSUCPPvzLGEqC8KnswQQK7/E5EPcxCM9wiWmzXbsHC7njhPwzrXuBKeGsNIlyZ
- v+yivN/Pe1419VdTvTuEesUkxv3csuBgaM3lTQP8volT9Y7qQnNH4H0d8ukhyKh+sJXS
- gFpeHl6fx0+ubcX938KZpHV3jvoWOdZIcFAPaMsPS6ZtWx1nxVUn8Gv7PcHcL/HLF9AC
- kIww==
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C1B9400AB
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:39:59 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id e9so12181515wra.2
+ for <buildroot@buildroot.org>; Fri, 07 Jan 2022 14:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CWhTfT3tFjyxv0DHzZ883bTpMEz7qvu9IoFaM1tUkPg=;
+ b=OABL/+gBxBLDFMpikk7FcdkpQPkv0Mz2luh0GYp70gyK0IC7CwroQFUySxFc2KethD
+ SSsjmU9H6M3PouTs22RXbVns1c9ZaRCmEO1K+GAWMuMX0uKmlkGNo5SkkPL1dzN4nyn9
+ 7ZyAeSBoo+yj1iAA2H14iszDwOhVLC2XW6WfpHopZks66SaAlhbMdnK06h6wXGAOfMl2
+ aJYhZLdp6pmd220mxcWz10s9GOFrwR6NRU9jl72CCvl2VjBGMDLvucmj3/b+tT7HmiiK
+ lyP4MKoAwjCpgG2pXwuu2THg1dqAnykArzICPN4FQl8TU01LkPB1aQfJVPOHyGVT+hOO
+ XIlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=+hCOXz471xdJM7QLkNrrjuuuaV+GjdPaD0cTM9A8DLM=;
- b=b9G/sgzALDOFneS/XNJlAoocswxxZwKqfbTJjXoSHUywedyRQXctQseVyyTiyUZKKe
- mEv9eIifhdn6WQ9n8OSP1nnj3vHwP6YksNDtZglxCzlAO30OSiMcpgftlwraQZXHTWqR
- xEdFkraG0sARCuQ9PyB/OgAobPP75RqfNfDwF0dy/91qc5MEnm6YKTBJmwf6c8GXMkPw
- xRDvpN9RlF3adYyaYZAtyoT2ULXYTffANKmRor0/4jAWxipNF3WkRBxFWVrQZpGV+M3x
- 7ByJaiKNQYtbeCMIbEGh57yrcJ1ssIx3gVxVOAI+mMA/mLtqrfG2zKeAdY/qn2F2+ZZq
- yqTg==
-X-Gm-Message-State: AOAM532SsQfRMDlMab7901VBZIalYBkjpCpGVHjl6ta0jkRdNaM6nR2H
- K08tou706QNBTycj4DT7YTz/h5Er9BDGl8qDCeY=
-X-Google-Smtp-Source: ABdhPJx/vP6+GzhmadA5BbJJ4SBaY4fvqdUYwPBRu412RJQPvE3UBk2Rv8zge04Wg18EMYrB4lmC0n55+jxk/QSl6KA=
-X-Received: by 2002:a05:6808:df1:: with SMTP id
- g49mr8450239oic.39.1641594624034; 
- Fri, 07 Jan 2022 14:30:24 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=CWhTfT3tFjyxv0DHzZ883bTpMEz7qvu9IoFaM1tUkPg=;
+ b=f9XmI2JPmNVIAuaPOSls/KigroLY9+O9eVJGTvr0s+TJofTI59oOKHaI2NFiuHJcjA
+ G5ZuzvwpoGl6BVtGWCWlvvb3HaUcH1EDaNY6wRy4lb3DuzlI95leVOElJYFSecpWp0Nf
+ CaBzp83S7y3AR0ZD6LTesziyCConbUYQkIKHwl/iMt6OgP3r3UX+JzhaUrFXI6UOEf0c
+ 6Tallvv/Vxk1tPbVQWxZok97gg2kdYirDupNyLTMpylIHHqpRiIqS5PMQq7rB6/k0vry
+ xMhv2MKw9vM3yoS2cn8RQ+wKY0KtPebdTQnjL03Oi437HopWl1HJb+97VAUyiYbN3ZMI
+ gYLg==
+X-Gm-Message-State: AOAM530DCg+wBoekZLyeydkOAtsXCg5w8CvmeDnrhclt4sYC+g93JBPD
+ 4wz8QoMWTQwDa3BjVme0nnlfMOqbwsILHw==
+X-Google-Smtp-Source: ABdhPJx5YWid2+Nuns/mrlRdu5u/rskeLA1RPs1X0GURTzJ8ex4tOq5cQgO457ZB9fSTfsvuGCGSJA==
+X-Received: by 2002:a5d:6389:: with SMTP id p9mr804810wru.125.1641595197535;
+ Fri, 07 Jan 2022 14:39:57 -0800 (PST)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id l10sm44560wmq.7.2022.01.07.14.39.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 07 Jan 2022 14:39:57 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Fri,  7 Jan 2022 23:39:55 +0100
+Message-Id: <20220107223955.148266-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
- <20220106210000.397694-6-thomas.petazzoni@bootlin.com>
- <CADvTj4rf+NisSUL7=Ee_=3bpDFCaxpsXmUzcOF=oUD5imqXbSQ@mail.gmail.com>
- <20220107105223.01912574@windsurf>
-In-Reply-To: <20220107105223.01912574@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 7 Jan 2022 16:30:12 -0600
-Message-ID: <CADvTj4q+Ha1qvJ7t6YRRcmu9E8y-J_sU8=i0ZhdTzc1x_ZW+0A@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 05/11] package/pkg-cargo.mk: introduce
- the cargo package infrastructure
+Subject: [Buildroot] [PATCH] support/scripts/generate-gitlab-ci-yml: ignore
+ branch name prefix <foo> containing a single hyphen
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,111 +86,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <Matthew.Weber@rockwellcollins.com>,
- Patrick Havelange <patrick.havelange@essensium.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Jan 7, 2022 at 3:52 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Thu, 6 Jan 2022 19:12:51 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > > +$(2)_CARGO_ENV += \
-> > > +       CARGO_HOME=$$(HOST_DIR)/share/cargo \
-> > > +       __CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
-> > > +       CARGO_TARGET_APPLIES_TO_HOST="false"
-> >
-> > Maybe want to set these additional options as well so that packages
-> > using cargo can
-> > build with only the env variables set(in some cases at least I think),
->
-> Thanks for the suggestion. However, could you be more specific than
-> "maybe" and "I think" ? The way you put it seems like we don't really
-> know why those variables would be useful and what they do.
->
-> > still probably
-> > need to pass some command line args but this should reduce the amount at least:
-> > RUSTC_TARGET_TRIPLE = $(subst -,_,$(call UPPERCASE,$(RUSTC_TARGET_NAME)))
->
-> Which command line arguments would be replaced by those variables?
->
-> > PKG_RUST_CARGO_ENV = \
-> >     CARGO_HOME=$(HOST_DIR)/share/cargo \
->
-> This one we already pass.
->
-> >     CARGO_BUILD_TARGET=$(RUSTC_TARGET_NAME) \
->
-> This one would replace the --target argument? Just to understand, what
-> would be the advantage of the variable compared to the comand line
-> argument?
+The commit [1] added a sed command used to retreive a pattern
+to keep only defconfigs whose name start with the pattern.
 
-Might be better for reusing this env for indirect cargo build
-invocations like those
-done by python-setuptools-rust.
+"<foo>-defconfigs-<pattern>"
 
->
-> >     CARGO_INSTALL_ROOT=$(TARGET_DIR)/usr \
->
-> This would replace --root $$(TARGET_DIR)/usr/ I suppose. Here as well,
-> any benefit/drawback of arguments vs. variables?
+The sed command doesn't work as expected if <foo> contains a
+single hyphen [2]:
 
-Yeah, mostly for indict invocations as well.
+"qemu-6.2.0-defconfigs-qemu"
 
->
-> >     CARGO_TARGET_$(RUSTC_TARGET_TRIPLE)_LINKER=$(notdir $(TARGET_CROSS))gcc
->
-> How come things are working today with this one?
+Update the sed command to ignore completely the part before
+"-defconfigs-".
 
-I think this is currently set in the cargo config file.
+[1] 65d2f04c012af492a9b9da04dfa3b3cbd20347f1
+[2] http://lists.busybox.net/pipermail/buildroot/2022-January/632507.html
 
->
-> >
-> > HOST_PKG_RUST_CARGO_ENV = \
-> >     CARGO_HOME=$(HOST_DIR)/share/cargo \
->
-> This one already passed.
->
-> >     CARGO_INSTALL_ROOT=$(HOST_DIR) \
->
-> This would replace --root $$(HOST_DIR) I suppose.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/generate-gitlab-ci-yml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yeah, sounds right.
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 3e0c68091b..bd79807914 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -66,8 +66,8 @@ gen_tests() {
+           (*-defconfigs)
+             do_defconfigs=base
+             ;;
+-	  (*-defconfigs-*)
+-            pattern=$(echo ${CI_COMMIT_REF_NAME} | sed 's%[^\-]*-defconfigs-\(.*\)%\1%')
++          (*-defconfigs-*)
++            pattern=$(echo ${CI_COMMIT_REF_NAME} | sed 's%^.*-defconfigs-\(.*\)%\1%')
+             defconfigs=( $(cd configs; LC_ALL=C ls -1 | grep ^${pattern}) )
+             do_defconfigs=base
+             ;;
+-- 
+2.31.1
 
->
-> >     RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
->
-> This is already passed, although replicated between the build and
-> install steps of the host variant.
->
-> So essentially the only questions is:
->
->  - Advantage of variables vs. command line options
-
-Makes setting cargo variables when cargo is not directly invoked simpler.
-
->
->  - Relevance of CARGO_TARGET_$(RUSTC_TARGET_TRIPLE)_LINKER=$(notdir $(TARGET_CROSS))gcc
-
-Set via CARGO_HOME currently, but I think may allow the cargo config to not
-be required.
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
