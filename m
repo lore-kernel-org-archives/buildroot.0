@@ -1,47 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09B6BC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04EABC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 22:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A65E140010;
-	Fri,  7 Jan 2022 22:10:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB49F60B4E;
+	Fri,  7 Jan 2022 22:10:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DzoLGPzp1HHK; Fri,  7 Jan 2022 22:10:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qMjp-jtwFCd1; Fri,  7 Jan 2022 22:10:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75447424C3;
-	Fri,  7 Jan 2022 22:10:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0710260745;
+	Fri,  7 Jan 2022 22:10:53 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D07571C115D
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:10:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 426211BF30A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBE8081775
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:10:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F53081775
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 22:10:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yHX5B8eizmVp for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 22:10:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8FDE81467
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:10:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 035CD834D2; Fri,  7 Jan 2022 22:04:15 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 23:03:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2426002d6fc81d0b023e3f3b3ee4e94ab29438cb
-X-Git-Newrev: 69255af2299cdde0a8d6276952a867a2cb58889a
-X-Patchwork-Hint: ignore
-Message-Id: <20220107220415.035CD834D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pybind: bump to version
- 2.9.0
+ with ESMTP id PQeB25xGsWzZ for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 22:10:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5521281467
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 22:10:28 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id l25so2730428wrb.13
+ for <buildroot@buildroot.org>; Fri, 07 Jan 2022 14:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=GJhX0zXsaoNaVz7SdoucIdrCjJjMnO+QHVGiOw+1l/k=;
+ b=FuVt4t9Kbm+coYIWoCrYXg1Zl5wks/BfTihone4svZOA/N1m27J/dB6SEONU9QvCNG
+ qVFPdkZGLihPtTUroKKgi421relDhH0bRWA07kAFyGvZfbPPC+wbYCeQbq5wNOmpW5QN
+ oY3wfT3rwy/mNfj+Vis3Kmm/WmxtVGYShs9w4AY+tPiXMiaHyDAIs4W6ZB2D6286by3G
+ BAAKvQdosNy8VweIls2XIPF04zJIF8TQNgKPg2PITj4l6k2SFe+wgMhVX88VEJ3QNAMk
+ 8yB3+jddWGBAQZjXXQ8s+74xkrPNo/5crZSh0IC7CoM0p+KNvdzcooGOzqpdOMElYIMU
+ yFxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=GJhX0zXsaoNaVz7SdoucIdrCjJjMnO+QHVGiOw+1l/k=;
+ b=oK2QrOjHkmgZ/FsaXrj3UOq70v12muSCH5+qt2411nxu1L/YKfFJ+cj2/NqHIQRz3A
+ frIzjNL/y9zBFCLsplwWZMNuaTi4cnELELDtawH8slKOSDTIfa/Umsw7Caz0Y1CNH70k
+ cOt20x7d6Zm2lJsiSOrGp64hV8w5j6UgkMMOoT0wdniYzh4DAjuVCNBdObGR6vJwMSZd
+ 4YL/7/PLvDaMz7Lj6RBevt7JnqTauMI7o06t6kxQTc3kl+vHTvxuOmtolvfHh84AgUzy
+ SRWWRBrUQBu7Txwxj6XF70LS3Cm0CPEAD9E2WyfuTjb1b7R5SooW5d4E3gDFvnNWMCjc
+ xsQQ==
+X-Gm-Message-State: AOAM531qOQ9eRwEWZZtThkltb5Ii4atoT2M18DeCLdCyNDHU3Nk9lZnj
+ lEyn4cWnyz19RCsOmDyJfWaTTw==
+X-Google-Smtp-Source: ABdhPJywWP8lMzyOqgTK8hpWj3gvRZmZf39CMwZ0yjjku4nG5vIhlAPGgf8d3knrPaq25mtFxRXaxw==
+X-Received: by 2002:a5d:6685:: with SMTP id l5mr7205236wru.588.1641593426547; 
+ Fri, 07 Jan 2022 14:10:26 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id g8sm5260586wmh.17.2022.01.07.14.10.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 07 Jan 2022 14:10:26 -0800 (PST)
+Message-ID: <219ad3fa-0ae0-c979-b9cb-879dddf3f7f4@mind.be>
+Date: Fri, 7 Jan 2022 23:10:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+References: <20200407111515.21131-1-jagan@amarulasolutions.com>
+ <20200407111515.21131-3-jagan@amarulasolutions.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20200407111515.21131-3-jagan@amarulasolutions.com>
+Subject: Re: [Buildroot] [PATCH v8 2/5] package/python-numpy: fixup
+ npymath.ini for numpy extensions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,80 +94,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Esben Haabendal <esben@geanix.com>,
+ Guillaume William Bres <guillaume.bressaix@gmail.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>, linux-amarula@amarulasolutions.com,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69255af2299cdde0a8d6276952a867a2cb58889a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-[Arnout: bump to 2.9.0, refresh patch]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../0001-pybind11-commands.py-support-STAGING_DIR.patch       | 11 +++++------
- package/python-pybind/python-pybind.hash                      |  2 +-
- package/python-pybind/python-pybind.mk                        |  2 +-
- 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
-index 981a387be4..021321a9b7 100644
---- a/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
-+++ b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
-@@ -1,4 +1,4 @@
--From 9feaba4792c1d0a28e560ae941fa9ebabbbe4013 Mon Sep 17 00:00:00 2001
-+From bf9f0d619e2e0a424e471a2f9235d26ece5b348c Mon Sep 17 00:00:00 2001
- From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Date: Fri, 7 Jan 2022 19:32:18 +0100
- Subject: [PATCH] pybind11/commands.py: support STAGING_DIR
-@@ -13,18 +13,17 @@ the current directory, if it is set.
- Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Upstream-Status: N/A, Buildroot specific
- ---
-- pybind11/commands.py | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
-+ pybind11/commands.py | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/pybind11/commands.py b/pybind11/commands.py
--index 34dbaf8..8c4876d 100644
-+index 11f81d2..8c4876d 100644
- --- a/pybind11/commands.py
- +++ b/pybind11/commands.py
--@@ -1,8 +1,8 @@
-+@@ -1,7 +1,8 @@
-  # -*- coding: utf-8 -*-
-  import os
-  
---
- -DIR = os.path.abspath(os.path.dirname(__file__))
- +DIR = os.environ.get('STAGING_DIR') or \
- +    os.path.abspath(os.path.dirname(__file__))
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
-index a68ac846e2..d5b4b4829e 100644
---- a/package/python-pybind/python-pybind.hash
-+++ b/package/python-pybind/python-pybind.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  cdbe326d357f18b83d10322ba202d69f11b2f49e2d87ade0dc2be0c5c34f8e2a  python-pybind-2.6.1.tar.gz
-+sha256  057fb68dafd972bc13afb855f3b0d8cf0fa1a78ef053e815d9af79be7ff567cb  python-pybind-2.9.0.tar.gz
- # License files, locally calculated
- sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 4dd52003ad..7448d246b2 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYBIND_VERSION = 2.6.1
-+PYTHON_PYBIND_VERSION = 2.9.0
- PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
- PYTHON_PYBIND_LICENSE = BSD-3-Clause
- PYTHON_PYBIND_LICENSE_FILES = LICENSE
+On 07/04/2020 13:15, Jagan Teki wrote:
+> From: Esben Haabendal <esben@geanix.com>
+> 
+> Inorder to build the numpy distutils extension packages like
+> python-scipy, python-numba, it require an explicit pkg-config
+> path fixup for npymath.ini.
+> 
+> This pkg-config path fixup would update the prefix path of
+> npymath.ini with actual target staging area where numpy core
+> was built, so-that numpy distutils extension packages would
+> explicitly link this config path for their package environment.
+> 
+> Without this extension packages cannot find -lnpymath since
+> it uses host libraries (like libnpymath.a).
+> 
+> So, attach the post install staging hook with pkg-config
+> path fixup for npymath.ini.
+> 
+> Signed-off-by: Esben Haabendal <esben@geanix.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+> Changes for v8:
+> - none
+> Changes for v7:
+> - rephrase commit and comments of fixup npymath.ini
+> 
+>   package/python-numpy/python-numpy.mk | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index 3f0df7a640..4d2e852b43 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -32,6 +32,21 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+>   	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+>   endef
+>   
+> +# Fixup the npymath.ini prefix path with actual target staging area where
+> +# numpy core was built. Without this, target builds using numpy distutils
+> +# extensions like python-scipy, python-numba cannot find -lnpymath since
+> +# it uses host libraries (like libnpymath.a).
+> +# So, the numpy distutils extension packages would explicitly link this
+> +# config path for their package environment.
+> +PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
+> +PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
+> +define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
+> +	sed -e '/^pkgdir=/d' \
+> +	    -e '/^prefix=/i pkgdir=$(PYTHON_NUMPY_STAGING_DIR)/core' \
+> +	    -i $(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
+> +endef
+> +PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
+> +
+>   # Some package may include few headers from NumPy, so let's install it
+>   # in the staging area.
+>   PYTHON_NUMPY_INSTALL_STAGING = YES
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
