@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46EACC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB081C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB5B040010;
-	Fri,  7 Jan 2022 21:50:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B523817AF;
+	Fri,  7 Jan 2022 21:53:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kXVpTKdyRzb2; Fri,  7 Jan 2022 21:50:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wRxLJMhMlJAl; Fri,  7 Jan 2022 21:53:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 799A9424C0;
-	Fri,  7 Jan 2022 21:50:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A6E51BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:50:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C64A28177A;
+	Fri,  7 Jan 2022 21:53:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B7911BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36E0B424C1
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:50:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA16660ADD
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:53:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xp8V50h7Z2yG for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:50:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1OPFmeSGYG_3 for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:53:27 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E23B3424C0
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:50:32 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E35C060A99
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:53:26 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 492251BF206;
- Fri,  7 Jan 2022 21:50:30 +0000 (UTC)
-Date: Fri, 7 Jan 2022 22:50:29 +0100
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id 09458240005;
+ Fri,  7 Jan 2022 21:53:23 +0000 (UTC)
+Date: Fri, 7 Jan 2022 22:53:22 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220107225029.1b8a5588@windsurf>
-In-Reply-To: <CAPi7W80Y2X0nXp8mGMEuQ6XG=5kO1U03=L-VwDmOpO_JOC2_NA@mail.gmail.com>
-References: <20220104210727.3634208-1-fontaine.fabrice@gmail.com>
- <20220107220857.63b9a0da@windsurf>
- <CAPi7W80Y2X0nXp8mGMEuQ6XG=5kO1U03=L-VwDmOpO_JOC2_NA@mail.gmail.com>
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20220107225322.43eb3e8b@windsurf>
+In-Reply-To: <310621ef-6a6e-f7e6-18d1-20ace14a81b7@smile.fr>
+References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
+ <20220106210000.397694-6-thomas.petazzoni@bootlin.com>
+ <310621ef-6a6e-f7e6-18d1-20ace14a81b7@smile.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/qpdf: needs atomic
+Subject: Re: [Buildroot] [PATCH v3 05/11] package/pkg-cargo.mk: introduce
+ the cargo package infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,21 +59,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+Cc: Matt Weber <Matthew.Weber@rockwellcollins.com>,
+ Patrick Havelange <patrick.havelange@essensium.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 7 Jan 2022 22:16:26 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello,
 
-> qpdf handles linking with atomic since version 10.0.2 and
-> https://github.com/qpdf/qpdf/commit/66198f447f45a87718b6457756976baa8defb2fd
+On Fri, 7 Jan 2022 22:07:26 +0100
+Romain Naour <romain.naour@smile.fr> wrote:
 
-Excellent, thanks for confirming!
+> > +endef
+> > +endif # ifeq ($(4),target)
+> > +endif # ifndef $(2)_BUILD_CMDS
+> > +  
+> 
+> is _INSTALL_STAGING_CMDS is missing here ?
+> 
+> Rust package may wand to install *.rlib files [1] (similar to .a)
+
+So far we haven't seen any package that needed staging installation, so
+I did not implement it (Yann asked a similar question today, live).
+
+> cargo install seems overingeneered and produce unwanted rebuild when packages
+> are using cargo features [2].
+
+Why do you say "over engineered" ? Buggy perhaps, over-engineered, I'm not sure.
+
+> meta-rust doesn't use cago install at all but use an cargo_do_install() function
+> that use manual install commandes [3].
+> 
+> [1] https://doc.rust-lang.org/reference/linkage.html
+> [2] https://github.com/rust-lang/cargo/issues/8703
+> [3] https://github.com/meta-rust/meta-rust/blob/master/classes/cargo.bbclass#L55
+
+I was wondering how they knew what to install and how/where, but that
+link explains it.
+
+It would a lot simpler to be able to use "cargo install", but I agree
+those rebuilds during the install step are not very nice (and they are
+time consuming).
 
 Thomas
 -- 
