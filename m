@@ -1,79 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A874AC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 19:57:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14123C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 20:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20C5C81A24;
-	Fri,  7 Jan 2022 19:57:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F6AD607F9;
+	Fri,  7 Jan 2022 20:29:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v-OBSpaWn-EU; Fri,  7 Jan 2022 19:57:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72FF9819F5;
-	Fri,  7 Jan 2022 19:57:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EAD8B1BF32A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:57:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7A5D60AAE
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:57:50 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00vYd1gxNVGM for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 19:57:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D99B260AAA
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 19:57:49 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id v6so13017361wra.8
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 11:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Xl8KDlls/Zm1P8Fel6GTf/DXTvx5F5M4bJY/lGMui6M=;
- b=kiK4tR9C6CpKMI8QLVmauYRCeOv3pCxh4E9/fStVcPKgWAKQspo+g9ws0MEdVEvT6P
- Fgfu5Z7QQNP6Po1XUJZIJkCU20s8scXpZg2M4+2LJjzokl/K3TanjNDB9tjPpRzx9btb
- r+8sLcL0ZJYj6JGWWWQXr6kJnmeeT9m6mMRFGot+I1Ugw1k4Ppj6fjJDH2ObktwlY7Us
- AIF+LB5XOcGMHp1IAn5Hj6BtG4annQOdNIiOPUCKmYDBjOwjmdXBGhdbXQ8G4K6beILX
- h07HPkCjChlJg4od9m0fRSIbS0AgiNgkS/C61ZCZbLY/27jR4PVHynWpNUI6HlMPLaUH
- BNwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=Xl8KDlls/Zm1P8Fel6GTf/DXTvx5F5M4bJY/lGMui6M=;
- b=etHLpVSwbLaUb9IydKNaqum4JeNpndV3ov3xpHQCHWLUQMGkaItjojMbRc7RKfyw0+
- HxPcsY4o0wns0mVDNT/IwABo11lK2j56msZUgeVxGur/kkreWOeCOLmZMIwDleQ+ZA4y
- jRCTiRbKLTOgZ6A5vG0q+0t1HtEn91Kx4Km7gkCPgrGeB1mA2l7wkWJGNWXtPDR4p1Ry
- GYyl9rEK1T0atrwIvNpelarCcn41VoJ8El4n7T60wNTKv/KNTAzaTVnOrYZeMYzAkHnv
- UFGzI6dRUu/Nsh1XdZXadbf8P00r9Mcya2UtXBWFs/boDXIkjD3xb732vlaeYx8rgFiG
- 3xNQ==
-X-Gm-Message-State: AOAM530BnKR7pFa1ZCVn70IRW+gJm/mdvzLa1u1RE/ENu99tBhWr+JWq
- MzP3dByzYmFDQUOwBodcPZhlbbVMMwE=
-X-Google-Smtp-Source: ABdhPJw9bYHS9Gr0w/lWOP3Zqz7poYr6+4yGSlNER4I2xcQ9vIb1P4GhPrTsb9r4Qpo0PC3XV0yRJA==
-X-Received: by 2002:a5d:6da2:: with SMTP id u2mr54174034wrs.633.1641585468019; 
- Fri, 07 Jan 2022 11:57:48 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id c11sm10393775wmq.48.2022.01.07.11.57.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jan 2022 11:57:47 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 20:56:05 +0100
-Message-Id: <20220107195605.1411244-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bw7FlT-eh6XT; Fri,  7 Jan 2022 20:29:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 528F460AE4;
+	Fri,  7 Jan 2022 20:29:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EB461BF5DA
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:29:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4990A8174D
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:29:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=mailoo.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mn4J2x2ywvZX for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 20:29:26 +0000 (UTC)
+X-Greylist: delayed 00:20:35 by SQLgrey-1.8.0
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C5BB814AB
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 20:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+ t=1641586127; bh=Lk88Z0xdYLBUlrzlKRp81Lq+2LgBH4IzTzjIe769YnQ=;
+ h=X-EA-Auth:From:To:Cc:Date:Subject:MIME-Version:X-Mailer:
+ Message-ID:In-Reply-To:Content-Type;
+ b=TmlS4zPt3TOAGPd4sKvWLwnMPdN2eDYF6GaqIOnwTW39hVdPOKaNhi1xY/tMCd+hg
+ Q7BmfGG6ezJQh71Z/IJivZD0O6voJ+e+0wVK5iKDQaNsiNBTHRW5Jv4kVuxdh6wlAf
+ MHUrkCiSCj0p07sDBqc08JcV2qtUa7dVTI8hT878=
+Received: by www-7.net-c.com with http webmail; Fri,  7 Jan 2022
+ 21:08:47 +0100 (CET)
+X-EA-Auth: qy0zHveZshb+APtxPFYQtmpBVVxJLMjGOP28p0XcEtmH6wk1747642SyYZLwk2BpJ88UFTwPcS3M8tSC9rE+v2tV+btx1+4q
+From: marc.chalain@mailoo.org
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+ "Romain Naour" <romain.naour@smile.fr>
+Date: Fri,  7 Jan 2022 21:08:47 +0100 (CET)
+X-Priority: 3
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump to version 2.0.6
+X-Mailer: COMS/EA21.01/r20211110
+Message-ID: <ea-mime-61d89dcf-4dd2-23b57646@www-7.net-c.com>
+In-Reply-To: <20220106103759.1166357c@windsurf>
+Subject: Re: [Buildroot] package/aravis: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,68 +64,248 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Marc Chalain <marc.chalain@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6692738860759897383=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RISC-V is supported since
-https://github.com/zlib-ng/zlib-ng/commit/81f1c8a41bd1427707f402450de8820816760fca
+--===============6692738860759897383==
+Content-Type: multipart/alternative;
+ boundary="----=_NextPart_001_61d89dcf_4dd2_164457e4"
 
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.6
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.5
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.4
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.3
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.2
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.1
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.0
+------=_NextPart_001_61d89dcf_4dd2_164457e4
+Content-Type: text/plain;
+ charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/zlib-ng/zlib-ng.hash | 2 +-
- package/zlib-ng/zlib-ng.mk   | 2 +-
- package/zlib/Config.in       | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+Thank for all,
 
-diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
-index 3e1dba35ba..a799cfe253 100644
---- a/package/zlib-ng/zlib-ng.hash
-+++ b/package/zlib-ng/zlib-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  379723c0c954679a50d1d7df43084e2194dc51ecbc9987c889cb129d1f6734bc  zlib-ng-1.9.9-b1.tar.gz
-+sha256  8258b75a72303b661a238047cb348203d88d9dddf85d480ed885f375916fcab6  zlib-ng-2.0.6.tar.gz
- sha256  d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436  LICENSE.md
-diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-index c56fa72d6f..fb497b8c11 100644
---- a/package/zlib-ng/zlib-ng.mk
-+++ b/package/zlib-ng/zlib-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZLIB_NG_VERSION = 1.9.9-b1
-+ZLIB_NG_VERSION = 2.0.6
- ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
- ZLIB_NG_LICENSE = Zlib
- ZLIB_NG_LICENSE_FILES = LICENSE.md
-diff --git a/package/zlib/Config.in b/package/zlib/Config.in
-index 550c2efa93..d6d94889a7 100644
---- a/package/zlib/Config.in
-+++ b/package/zlib/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_ZLIB_NG_ARCH_SUPPORTS
- 	default y if BR2_aarch64
- 	default y if BR2_i386
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_riscv
- 	default y if BR2_s390x
- 	default y if BR2_x86_64
- 
--- 
-2.34.1
+I will send a new version quickly, but some questions first:
+
+
+
+> +ARAVIS_VERSION =3D 0.8.16
+
+Aravis project is moving fast, there is a new version 0.8.20 already.
+I'm fine with this version since it was released recently:
+https://github.com/AravisProject/aravis/releases/tag/0.8.16
+
+
+The 0.8.16 is available from June 2021. I had clearly well tested this ver=
+sion with several kernel configuration. What is it better ? the last versio=
+n or the most tested version ?
+
+To send 0.8.20 I will need few weeks, to test.
+
+
+
+> +ARAVIS_SITE =3D $(call github,AravisProject,aravis,$(ARAVIS_VERSION))
+> +ARAVIS_DEPENDENCIES =3D \
+> +=C2=A0=C2=A0=C2=A0 host-pkgconf \
+> +=C2=A0=C2=A0=C2=A0 libglib2 \
+> +=C2=A0=C2=A0=C2=A0 libxml2
+
+There is a list of dependencies in the Readme:
+
+https://github.com/AravisProject/aravis/blob/main/README.md#install-depend=
+encies-on-ubuntu-2004
+
+especially gstreamer and plugins etc..
+
+
+This rules is just for GigE Camera and not USB3Vision. I haven't tested th=
+is feature. The gstreamer is not mandator, it is only for the viewer. I am =
+focused on Embeded system without any kind of display.
+
+If the gstreamer or libusb3 are availables, meson is able to detect and ad=
+d them during the configuration process.
+
+To add as dependencies, forces to build the optionals features.
+
+What's the best ?
+
+
+
+Thank you., best regards,
+
+Marc.
+
+
+
+
+
+
+
+De : Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+=C3=80 : Romain Naour <romain.naour@smile.fr>
+Sujet : Re: [Buildroot] package/aravis: new package
+Date : 06/01/2022 10:37:59 Europe/Paris
+Copie =C3=A0 : marc.chalain@mailoo.org;
+=C2=A0=C2=A0=C2=A0buildroot@buildroot.org;
+=C2=A0=C2=A0=C2=A0Eric Le Bihan <eric.le.bihan.dev@free.fr>;
+=C2=A0=C2=A0=C2=A0Marc Chalain <marc.chalain@gmail.com>
+
+Hello,
+
+On Thu, 6 Jan 2022 10:24:53 +0100
+Romain Naour <romain.naour@smile.fr> wrote:
+
+> > diff --git a/package/aravis/Config.in b/package/aravis/Config.in
+> > new file mode 100644
+> > index 0000000000..02c71c44da
+> > --- /dev/null
+> > +++ b/package/aravis/Config.in
+> > @@ -0,0 +1,16 @@
+> > +config BR2_PACKAGE_ARAVIS
+> > +=C2=A0=C2=A0=C2=A0 bool "aravis - GigE Camera"
+
+Just:
+
+bool "aravis"
+
+> > +=C2=A0=C2=A0=C2=A0 depends on BR2_USE_WCHAR
+> > +=C2=A0=C2=A0=C2=A0 depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> > +=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_PCRE_16
+> > +=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_PCRE_32
+
+Please use "select" for pcre.
+
+> > +ARAVIS_LICENSE_FILES =3D COPYING
+> > +ARAVIS_LDFLAGS =3D $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)=20
+>=20
+> Is gettext a mandatory dependency ?
+> At least gettext should be in ARAVIS_DEPENDENCIES when NLS support is en=
+abled.
+
+No, don't add gettext directly, use $(TARGET_NLS_DEPENDENCIES), which
+will automatically add (or not) host-gettext and/or gettext to the
+dependencies, depending on when it's needed or not.
+
+Thomas
+--=20
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+
+
+------=_NextPart_001_61d89dcf_4dd2_164457e4
+Content-Type: text/html;
+ charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div>Thank for all,</div><div>I will send a new version quickly, but some q=
+uestions first:<br></div><div dir=3D"ltr"><br></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+ 204, 204);padding-left:1ex;"><div dir=3D"ltr"><span class=3D"gmail-im">&gt=
+; +ARAVIS_VERSION =3D 0.8.16<br>
+<br></span>
+Aravis project is moving fast, there is a new version 0.8.20 already.<br>
+I'm fine with this version since it was released recently:<br>
+<a href=3D"https://github.com/AravisProject/aravis/releases/tag/0.8.16" re=
+l=3D"noreferrer noopener">https://github.com/AravisProje<wbr>ct/aravis/rele=
+ases/tag/0.8.16</a><span class=3D"gmail-im"><br>
+<br></span></div></blockquote><div>The 0.8.16 is available from June=20
+2021. I had clearly well tested this version with several kernel=20
+configuration. What is it better ? the last version or the most tested=20
+version ?</div><div>To send 0.8.20 I will need few weeks, to test.</div><d=
+iv><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px =
+0.8ex;border-left:1px solid rgb(204, 204, 204);padding-left:1ex;"><div dir=
+=3D"ltr"><span class=3D"gmail-im">
+&gt; +ARAVIS_SITE =3D $(call github,AravisProject,aravis,$(<wbr>ARAVIS_VER=
+SION))<br>
+&gt; +ARAVIS_DEPENDENCIES =3D \<br>
+&gt; +=C2=A0=C2=A0=C2=A0 host-pkgconf \<br>
+&gt; +=C2=A0=C2=A0=C2=A0 libglib2 \<br>
+&gt; +=C2=A0=C2=A0=C2=A0 libxml2<br>
+<br></span>
+There is a list of dependencies in the Readme:<br>
+<br>
+<a href=3D"https://github.com/AravisProject/aravis/blob/main/README.md#ins=
+tall-dependencies-on-ubuntu-2004" rel=3D"noreferrer noopener">https://githu=
+b.com/AravisProje<wbr>ct/aravis/blob/main/README.md#<wbr>install-dependenci=
+es-on-<wbr>ubuntu-2004</a><br>
+<br>
+especially gstreamer and plugins etc..<span class=3D"gmail-im"><br>
+<br>
+</span></div></blockquote><div>This rules is just for GigE Camera and=20
+not USB3Vision. I haven't tested this feature. The gstreamer is not=20
+mandator, it is only for the viewer. I am focused on Embeded system=20
+without any kind of display.</div><div>If the gstreamer or libusb3 are ava=
+ilables, meson is able to detect and add them during the configuration proc=
+ess.</div><div>To add as dependencies, forces to build the optionals featur=
+es.</div><div>What's the best ?</div><div><br></div><div>Thank you., best r=
+egards,</div><div>Marc.</div><div><br><br></div><br><br><br><blockquote typ=
+e=3D"cite" style=3D"margin:0 0 0 0.5em;border-left:1px #00f solid;padding-l=
+eft:1em;">De : Thomas Petazzoni &lt;thomas.petazzoni@bootlin.com&gt;<br>
+=C3=80 : Romain Naour &lt;romain.naour@smile.fr&gt;<br>
+Sujet : Re: [Buildroot] package/aravis: new package<br>
+Date : 06/01/2022 10:37:59 Europe/Paris<br>
+Copie =C3=A0 : marc.chalain@mailoo.org;<br>
+=C2=A0=C2=A0=C2=A0buildroot@buildroot.org;<br>
+=C2=A0=C2=A0=C2=A0Eric Le Bihan &lt;eric.le.bihan.dev@free.fr&gt;;<br>
+=C2=A0=C2=A0=C2=A0Marc Chalain &lt;marc.chalain@gmail.com&gt;<br>
+<br>
+Hello,<br>
+<br>
+On Thu, 6 Jan 2022 10:24:53 +0100<br>
+Romain Naour &lt;romain.naour@smile.fr&gt; wrote:<br>
+<br>
+&gt; &gt; diff --git a/package/aravis/Config.in b/package/aravis/Config.in=
+<br>
+&gt; &gt; new file mode 100644<br>
+&gt; &gt; index 0000000000..02c71c44da<br>
+&gt; &gt; --- /dev/null<br>
+&gt; &gt; +++ b/package/aravis/Config.in<br>
+&gt; &gt; @@ -0,0 +1,16 @@<br>
+&gt; &gt; +config BR2_PACKAGE_ARAVIS<br>
+&gt; &gt; +=C2=A0=C2=A0=C2=A0 bool &quot;aravis - GigE Camera&quot;<br>
+<br>
+Just:<br>
+<br>
+	 bool &quot;aravis&quot;<br>
+<br>
+&gt; &gt; +=C2=A0=C2=A0=C2=A0 depends on BR2_USE_WCHAR<br>
+&gt; &gt; +=C2=A0=C2=A0=C2=A0 depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL<br=
+>
+&gt; &gt; +=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_PCRE_16<br>
+&gt; &gt; +=C2=A0=C2=A0=C2=A0 depends on BR2_PACKAGE_PCRE_32<br>
+<br>
+Please use &quot;select&quot; for pcre.<br>
+<br>
+&gt; &gt; +ARAVIS_LICENSE_FILES =3D COPYING<br>
+&gt; &gt; +ARAVIS_LDFLAGS =3D $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)  <br>
+&gt; <br>
+&gt; Is gettext a mandatory dependency ?<br>
+&gt; At least gettext should be in ARAVIS_DEPENDENCIES when NLS support is=
+ enabled.<br>
+<br>
+No, don't add gettext directly, use $(TARGET_NLS_DEPENDENCIES), which<br>
+will automatically add (or not) host-gettext and/or gettext to the<br>
+dependencies, depending on when it's needed or not.<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noopener">https://bootli=
+n.com</a><br></blockquote>
+
+------=_NextPart_001_61d89dcf_4dd2_164457e4--
+
+
+
+--===============6692738860759897383==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6692738860759897383==--
+
+
