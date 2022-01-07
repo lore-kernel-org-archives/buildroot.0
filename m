@@ -1,77 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D79AC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 03:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F26AEC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 04:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 927536FC4C;
-	Fri,  7 Jan 2022 03:30:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54FBD42479;
+	Fri,  7 Jan 2022 04:56:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tAZpiVgPyQFY; Fri,  7 Jan 2022 03:30:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WPlqRxw52UlW; Fri,  7 Jan 2022 04:56:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD2C26FC46;
-	Fri,  7 Jan 2022 03:30:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF9BB1BF2AA
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 03:30:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DE6040283;
+	Fri,  7 Jan 2022 04:56:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 547421BF589
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 04:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7F83833C7
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 03:30:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40EE740283
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 04:56:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=sigma-star.at
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zZn2NCRxpGJX for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 03:30:44 +0000 (UTC)
-X-Greylist: delayed 00:05:23 by SQLgrey-1.8.0
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch
- [185.70.41.104])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7D1FB833C6
- for <buildroot@busybox.net>; Fri,  7 Jan 2022 03:30:44 +0000 (UTC)
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com
- [188.165.51.139])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits))
- (No client certificate requested)
- by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4JVTB70nC9z4wyY8
- for <buildroot@busybox.net>; Fri,  7 Jan 2022 03:25:18 +0000 (UTC)
-Authentication-Results: mail-41104.protonmail.ch;
- dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at
- header.b="nun/+Hr5"
-Date: Fri, 07 Jan 2022 03:24:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sigma-star.at;
- s=protonmail; t=1641525906;
- bh=Qy0eZiC9ju+6/DrEto3g5TXN27KUKHcJkM1Wm1L/UjA=;
- h=Date:To:From:Reply-To:Subject:Message-ID:From:To:Cc;
- b=nun/+Hr5i5PeLKnyyyasCq332My5Vt5002v8aZvG62xh7deM6TcMEjNF6irpQv7fp
- h/dlvy9Ly2ZkmDaHJZ9XwnTCv2yv+1A5IRSBXgRCY1xlVy+QFwyH/Wxw9FyDN+ySAu
- 9Vah1Ry7Gj6c3sPm6D+G3Rflz2oLWvz7E59CyKIjDvSS1cxYk7tT/8S0yxL7sa/Ujs
- Th3SHZpeqJ3kQ3bB53r/2vYgaek1D0Qu4Z8+NFyEVs7TfYR38+diQ9fzjqLBhJdhby
- ZlC69z2kGnzQ7UgKzkVofTCI86wzrzQ49aeXI+K0Pf4eyFfscRMaYFO6pTNSPuKw6r
- cXwSLSGz2p3Lw==
-To: MTD Mailing List <linux-mtd@lists.infradead.org>,
- Buildroot Mailing List <buildroot@busybox.net>,
- "Josh Boyer (Fedora)" <jwboyer@gmail.com>,
- "Riku Voipio (Debian)" <riku.voipio@linaro.org>,
- "Pascal Bleser (SUSE)" <pascal.bleser@opensuse.org>,
- "Levente Polyak (Arch)" <anthraxx@archlinux.org>,
- "Robbat (Gentoo)" <robbat2@gentoo.org>, embedded@gentoo.org,
- "Oliver Schinagl (Alpine)" <oliver@schinagl.nl>,
- "Pascal Bellard (SliTaz)" <pascal.bellard@slitaz.org>,
- =?utf-8?Q?Llu=C3=ADs_Batlle_i_Rossell_=28NixOS=29?= <shaba@altlinux.org>,
- "Sergey Bolshakov (ALT Linux)" <sbolshakov@altlinux.org>,
- "Orphaned (Void Linux)" <orphan@voidlinux.org>,
- Richard Weinberger <richard@nod.at>
-From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Message-ID: <c31dba4f-42a8-ba48-7df2-b56bf4699a4c@sigma-star.at>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CqwCwThLiOaW for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 04:56:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24D4F4014E
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 04:56:11 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id o7so5723784ioo.9
+ for <buildroot@buildroot.org>; Thu, 06 Jan 2022 20:56:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IuMzBfZKBM79zrSVVM+oc4XQDfS9+ma4cWBHQTipvuE=;
+ b=iM1z3hwlxYHerJyL+0UseshmWotfFaWJPuP33HsaX5Jskp7LtDaP8HSCyCWeoFjoEq
+ UXRQH6E/qrDLGN3ZVQsN85T2UGrKMal4WKC+OOY+n/9KNPaZgF69KcY1aihu7+hMp4bZ
+ RAhsqUKjdaz8aztQSrAwZzQ6zjK4DR6azkrf87iJqd9LfycJq5DLBZm3mixl03HjJT9W
+ zSMLNEL1QPhN1Y3FRUTzZ5irRarXXIecinipt5ZDG2kaNpelrCgKV9XqGwpfJfh5uyuE
+ bQ2U48qCFQ1wO8lELy5RRkuwsurI8kOxNX1QDWWKbagT/yli85P4rCFf88ZqV4qxOuRV
+ I5/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=IuMzBfZKBM79zrSVVM+oc4XQDfS9+ma4cWBHQTipvuE=;
+ b=mKMn75JgmS8d+L1tGqgM5Tqz7vKuC4t3WbZy2mPYuID+VrOhIJYbAMfhZ7Gi2CSg19
+ 4f3x9WyAAd8oe1vhlGCgcKoEe9UsE2eptyfP1HrgBlwDgJ5rw5mKHCOFJi3Z2rwRehKm
+ ZKwz//++klIdyZRqI0OmhP3FMrzaAIk+Yk+uZtfBokh7CuXtuC6uTuRtZu4FyUDNkxri
+ +wHSORn/q3ZBkkpdD0PRdrOtbjfBcG06Nn4dcOAjCak4BEckwyMZXLRpRQVZp5qqO5DC
+ goRkY8czSPy3RnOdWi/gpHRLgXMyuWMEj7CHAbpx2ZwlN1kdLq2TZaZpQfWxZ2uugebK
+ k1gw==
+X-Gm-Message-State: AOAM532B9zukAlPJUhQtejeOfRFj0jMzF/pi09tBJCYFex1IOn+ILcwW
+ YiueZJUxzUTTYP1FhjUrL5MC88HU2b9hrQ==
+X-Google-Smtp-Source: ABdhPJyehl1DT75ua2CIxXvqwlY+noYlb7lorRH3kd3ukd3G80/9BJKiSdU3nAGhwXkifbOQDmxR0w==
+X-Received: by 2002:a05:6638:2395:: with SMTP id
+ q21mr28831065jat.313.1641531370033; 
+ Thu, 06 Jan 2022 20:56:10 -0800 (PST)
+Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
+ [71.218.242.12])
+ by smtp.gmail.com with ESMTPSA id j3sm2310996ilu.64.2022.01.06.20.56.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Jan 2022 20:56:09 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  6 Jan 2022 21:55:29 -0700
+Message-Id: <20220107045531.3985241-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.1.4 is released
+Subject: [Buildroot] [PATCH v3 1/3]
+ package/qt5/qt5webengine-chromium-catapult: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,67 +85,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Cc: Naumann Andreas <ANaumann@ultratronik.de>,
+ Joshua Henderson <joshua.henderson@microchip.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?Ga=C3=ABl=20Portay?= <gael.portay@collabora.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+This version of catapult is python3 compatible and will be used to
+replace the python2 only version in qt5webengine-chromium.
 
-mtd-utils-2.1.4 is released.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - add kconfig entry
+---
+ package/qt5/Config.in                              |  1 +
+ .../qt5/qt5webengine-chromium-catapult/Config.in   |  4 ++++
+ .../qt5webengine-chromium-catapult.hash            |  3 +++
+ .../qt5webengine-chromium-catapult.mk              | 14 ++++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/qt5/qt5webengine-chromium-catapult/Config.in
+ create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash
+ create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk
 
-Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.4.tar.bz2
-Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.4.tar.bz2.asc
-Signed git tag:        git://git.infradead.org/mtd-utils.git v2.1.4
-
-Alternatively also mirrored here:
-
-Tarball:               https://infraroot.at/pub/mtd/mtd-utils-2.1.4.tar.bz2
-Tarball gpg signature: https://infraroot.at/pub/mtd/mtd-utils-2.1.4.tar.bz2.asc
-Signed git tag:        https://git.infraroot.at/mtd-utils.git v2.1.4
-
-
-Roughly half a year after the last release, this is a smaller, patch level
-release that primarily consists of a hand full of fixes that have accumulated
-since then.
-
-This includes some fixes regarding the user space ports of mtd-tests using the
-wrong page size, and most recently a fix regarding a missing jffs2 kernel header
-in the last release tarball, causing build failures on some systems.
-
-
-Changes from 2.1.3 to 2.1.4:
-
-Features:
-      - ubiscan debugging and statistics utility
-
-Fixes:
-      - Some mtd-tests erroneously using sub-pages instead of the full page size
-      - Buffer overrun in fectest
-      - Missing jffs2 kernel header in the last release, leading to build
-        failures on some systems.
-
-
-Raw short log since the 2.1.3 release:
-
-David Oberhollenzer (2):
-       Fix: add missing new-line-escape in jffsX-utils Makemodule.am
-
-Diego Ismirlian (1):
-       Add ubiscan utility
-
-Miquel Raynal (1):
-       mtd-tests: Read and write pages during speed tests
-
-Ralph Siemsen (2):
-       mtd-tests: use pages during readtest and stress
-       fectest.c: fix buffer overrun
-
-
-Regards,
-
-David
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 5751d6cb70..143926b743 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -68,6 +68,7 @@ source "package/qt5/qt5wayland/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5webengine/Config.in"
++source "package/qt5/qt5webengine-chromium-catapult/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5webview/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+diff --git a/package/qt5/qt5webengine-chromium-catapult/Config.in b/package/qt5/qt5webengine-chromium-catapult/Config.in
+new file mode 100644
+index 0000000000..471c2a2dbc
+--- /dev/null
++++ b/package/qt5/qt5webengine-chromium-catapult/Config.in
+@@ -0,0 +1,4 @@
++# Not user-selectable, it is only needed to be copied
++# into the chromium source tree.
++config BR2_PACKAGE_QT5WEBENGINE_CHROMIUM_CATAPULT
++	bool
+diff --git a/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash b/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash
+new file mode 100644
+index 0000000000..8190a6dd5d
+--- /dev/null
++++ b/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  66b8593e665c4236f7b1c487548d41d3826eddbf486ff985dbdfd01cddcaa1a8  qt5webengine-chromium-catapult-5eedfe23148a234211ba477f76fc2ea2e8529189-br1.tar.gz
++sha256  f0df289ba9d03d857ad1c2f5918861376b1510b71588ffc60eff5c7a7bfedb09  LICENSE
+diff --git a/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk b/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk
+new file mode 100644
+index 0000000000..5d0db1e790
+--- /dev/null
++++ b/package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# qt5webengine-chromium-catapult
++#
++################################################################################
++
++QT5WEBENGINE_CHROMIUM_CATAPULT_VERSION = 5eedfe23148a234211ba477f76fc2ea2e8529189
++QT5WEBENGINE_CHROMIUM_CATAPULT_SITE = https://chromium.googlesource.com/catapult.git
++QT5WEBENGINE_CHROMIUM_CATAPULT_SITE_METHOD = git
++QT5WEBENGINE_CHROMIUM_CATAPULT_LICENSE = BSD-3-Clause
++QT5WEBENGINE_CHROMIUM_CATAPULT_LICENSE_FILES = LICENSE
++QT5WEBENGINE_CHROMIUM_CATAPULT_INSTALL_TARGET = NO
++
++$(eval $(generic-package))
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
