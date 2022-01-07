@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D07C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 18:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D453AC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 18:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71BB6408D7;
-	Fri,  7 Jan 2022 18:28:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8475C4049E;
+	Fri,  7 Jan 2022 18:33:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KbdtHYtSyXr0; Fri,  7 Jan 2022 18:28:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dNhmR8IH1QfC; Fri,  7 Jan 2022 18:33:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9C2842986;
-	Fri,  7 Jan 2022 18:28:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 42AEC1C116E
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:27:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5045940144;
+	Fri,  7 Jan 2022 18:33:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E660C1BF5E9
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32516408D7
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:27:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E28F2607A4
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:33:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZQbXb4ajeU9l for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 18:27:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79148405AE
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 18:27:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC8C483493; Fri,  7 Jan 2022 18:21:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x8P9i15HoUWe for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 18:33:54 +0000 (UTC)
+X-Greylist: delayed 00:42:14 by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8C1AF605EA
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 18:33:54 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id C6C42200008;
+ Fri,  7 Jan 2022 18:33:52 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n5u3k-00053H-5t; Fri, 07 Jan 2022 19:33:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 19:23:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: beac3aef6cf5ce9d09e5ace631faa3a3a9e41900
-X-Git-Newrev: 981e7b245aba835919300bb089013d3efe7e65d4
-X-Patchwork-Hint: ignore
-Message-Id: <20220107182140.EC8C483493@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/collectd: add virt support
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220104180826.3171770-1-fontaine.fabrice@gmail.com>
+Date: Fri, 07 Jan 2022 19:33:52 +0100
+In-Reply-To: <20220104180826.3171770-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 4 Jan 2022 19:08:26 +0100")
+Message-ID: <87mtk7l7jj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/pcm-tools: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,80 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=981e7b245aba835919300bb089013d3efe7e65d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/collectd/Config.in   | 18 ++++++++++++++++++
- package/collectd/collectd.mk |  4 +++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ > Don't build c_example which needs a dynamic library and so will raise
+ > the following static build failure since bump to version 2021.10 in
+ > commit d1d93d488c76d4bc2551270007096693d8194435 and
+ > https://github.com/opcm/pcm/commit/12647a6ee579c29bd306fd034470eb62dcb3156e:
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 5e5dff6fe1..697dc51f7e 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -591,6 +591,24 @@ config BR2_PACKAGE_COLLECTD_USERS
- 	help
- 	  Counts the number of users currently logged in.
- 
-+config BR2_PACKAGE_COLLECTD_VIRT
-+	bool "virt"
-+	depends on BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS # libvirt
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # libvirt
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64 # libvirt
-+	depends on BR2_PACKAGE_HAS_UDEV # libvirt
-+	depends on BR2_USE_WCHAR # libvirt
-+	select BR2_PACKAGE_LIBVIRT
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  Gather statistics about virtualized guests on a system.
-+
-+comment "virt needs udev /dev management, a toolchain w/ wchar, kernel headers >= 3.12 (4.11 for AArch64)"
-+	depends on BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_USE_WCHAR || \
-+		!(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 && \
-+			(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64))
-+
- config BR2_PACKAGE_COLLECTD_VMEM
- 	bool "vmem"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 9d6f630fe3..5751757040 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -22,7 +22,7 @@ COLLECTD_PLUGINS_DISABLE = \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
- 	oracle perl pf pinba powerdns python routeros \
- 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
--	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
-+	tokyotyrant turbostat uuid varnish vserver write_kafka \
- 	write_mongodb xencpu xmms zfs_arc zone
- 
- COLLECTD_CONF_ENV += LIBS="-lm"
-@@ -149,6 +149,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_UPTIME),--enable-uptime,--disable-uptime) \
- 	$(if $(BR2_PACKAGE_COLLECTD_USERS),--enable-users,--disable-users) \
- 	$(if $(BR2_PACKAGE_COLLECTD_VALUE),--enable-match_value,--disable-match_value) \
-+	$(if $(BR2_PACKAGE_COLLECTD_VIRT),--enable-virt,--disable-virt) \
- 	$(if $(BR2_PACKAGE_COLLECTD_VMEM),--enable-vmem,--disable-vmem) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WIRELESS),--enable-wireless,--disable-wireless) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),--enable-write_http,--disable-write_http) \
-@@ -197,6 +198,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),lm-sensors) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SMART),libatasmart) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),netsnmp) \
-+	$(if $(BR2_PACKAGE_COLLECTD_VIRT),libvirt libxml2) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),libcurl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),libmicrohttpd protobuf-c) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),hiredis)
+ > /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: cannot find -lpcm
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/1276a3d49c8848039f034e7f03632df365097e94
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/pcm-tools/pcm-tools.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/pcm-tools/pcm-tools.mk b/package/pcm-tools/pcm-tools.mk
+ > index 8a58034232..d676df57f9 100644
+ > --- a/package/pcm-tools/pcm-tools.mk
+ > +++ b/package/pcm-tools/pcm-tools.mk
+ > @@ -17,7 +17,8 @@ define PCM_TOOLS_BUILD_CMDS
+ >  	touch $(@D)/daemon-binaries
+ >  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ >  		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC" \
+ > -		UNAME=Linux HOST=_LINUX
+ > +		UNAME=Linux HOST=_LINUX \
+ > +		$(foreach f,$(PCM_TOOLS_EXE_FILES),$(f).x)
+
+This could also have used addsuffix, but OK.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
