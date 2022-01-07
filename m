@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D3EC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 23:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A10BC433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 23:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E098A60B14;
-	Fri,  7 Jan 2022 23:14:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C72483112;
+	Fri,  7 Jan 2022 23:14:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JvhZtK1ZDgBF; Fri,  7 Jan 2022 23:14:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZeNyaAKwOijv; Fri,  7 Jan 2022 23:14:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4707E60AFE;
-	Fri,  7 Jan 2022 23:14:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4340082FD7;
+	Fri,  7 Jan 2022 23:14:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5C0301BF36E
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:14:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C05B1BF36E
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 49C258308D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 763D882FD7
  for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:14:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x9ArBvhY-Szz for <buildroot@lists.busybox.net>;
+ with ESMTP id taf6O0iUlQ-w for <buildroot@lists.busybox.net>;
  Fri,  7 Jan 2022 23:14:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FEEA82FD7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BE6081450
  for <buildroot@buildroot.org>; Fri,  7 Jan 2022 23:14:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A5FB6834E1; Fri,  7 Jan 2022 23:07:54 +0000 (UTC)
+ id 9ECE38349A; Fri,  7 Jan 2022 23:07:54 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 00:13:54 +0100
+Date: Fri, 7 Jan 2022 23:28:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf4cf9de833e2d571d98d1ca935ea08a3468e463
-X-Git-Newrev: 7b7d2989db6a1347107235acb487f8660dfcd733
+X-Git-Oldrev: 62c2da0e7a54e96a12190bcaa79e552b497e634b
+X-Git-Newrev: bf4cf9de833e2d571d98d1ca935ea08a3468e463
 X-Patchwork-Hint: ignore
-Message-Id: <20220107230754.A5FB6834E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump U-Boot and
- kernel
+Message-Id: <20220107230754.9ECE38349A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptopp: add a target variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +58,159 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b7d2989db6a1347107235acb487f8660dfcd733
+commit: https://git.buildroot.net/buildroot/commit/?id=bf4cf9de833e2d571d98d1ca935ea08a3468e463
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2021.10 and kernel to 5.15.12 version.
+So far, cryptopp only had a host variant, but some use-cases require
+this library on the target, so this adjusts the cryptopp package
+accordingly.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+One patch (submitted upstream) is needed to have the proper symlink
+corresponding to the SONAME of the shared library.
+
+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6-sabresd_defconfig     | 9 +++++----
- configs/imx6-sabresd_qt5_defconfig | 9 +++++----
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ package/Config.in                                  |  1 +
+ ...kefile-add-missing-shared-library-symlink.patch | 62 ++++++++++++++++++++++
+ package/cryptopp/Config.in                         |  8 +++
+ package/cryptopp/cryptopp.mk                       | 31 +++++++++++
+ 4 files changed, 102 insertions(+)
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 5a39f333d1..19986f2cbb 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/Config.in b/package/Config.in
+index 3a0cc0c585..b424d20de4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1397,6 +1397,7 @@ menu "Crypto"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+ 	source "package/cryptodev/Config.in"
++	source "package/cryptopp/Config.in"
+ 	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+ 	source "package/libargon2/Config.in"
+diff --git a/package/cryptopp/0001-GNUmakefile-add-missing-shared-library-symlink.patch b/package/cryptopp/0001-GNUmakefile-add-missing-shared-library-symlink.patch
+new file mode 100644
+index 0000000000..5f87414d53
+--- /dev/null
++++ b/package/cryptopp/0001-GNUmakefile-add-missing-shared-library-symlink.patch
+@@ -0,0 +1,62 @@
++From e4c2e3bc8174f24cf63923619f5d06d85b84ae1d Mon Sep 17 00:00:00 2001
++From: Kamel Bouhara <kamel.bouhara@bootlin.com>
++Date: Fri, 7 Jan 2022 22:59:23 +0100
++Subject: [PATCH] GNUmakefile: add missing shared library symlink
++
++The GNUmakefile install-lib target currently installs the following
++symlink:
++
++	libcryptopp.so -> libcryptopp.so.8.6.0
++
++However, it does not create the following symlink:
++
++	libcryptopp.so.8 -> libcryptopp.so.8.6.0
++
++This symlink is necessary at runtime because libcryptopp.so.8 is the
++SONAME of the cryptopp library, and therefore this is what the dynamic
++loader will search when starting a program that is linked against
++cryptopp.
++
++For native compilation, the 'ldconfig' invocation that immediately
++follows will create that symlink, so everything works.
++
++For cross-compilation however, ldconfig can't be used, and therefore
++LDCONFIG is passed as /bin/true, and therefore it doesn't create the
++symlink. So instead, create it directly inside the GNUmakefile,
++without relying on ldconfig.
++
++Upstream: https://github.com/weidai11/cryptopp/pull/1101
++Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ GNUmakefile       | 1 +
++ GNUmakefile-cross | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/GNUmakefile b/GNUmakefile
++index 23273edb..3b55e420 100644
++--- a/GNUmakefile
+++++ b/GNUmakefile
++@@ -1412,6 +1412,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
++ 	$(CHMOD) u=rwx,go=rx $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
++ ifeq ($(HAS_SOLIB_VERSION),1)
++ 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
++ 	$(LDCONF) $(DESTDIR)$(LIBDIR)
++ endif
++ endif
++diff --git a/GNUmakefile-cross b/GNUmakefile-cross
++index 9847f04b..a2b87e4a 100644
++--- a/GNUmakefile-cross
+++++ b/GNUmakefile-cross
++@@ -856,6 +856,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
++ 	$(CHMOD) u=rwx,go=rx $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
++ ifeq ($(HAS_SOLIB_VERSION),1)
++ 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
++ 	$(LDCONF) $(DESTDIR)$(LIBDIR)
++ endif
++ endif
++-- 
++2.33.1
++
+diff --git a/package/cryptopp/Config.in b/package/cryptopp/Config.in
+new file mode 100644
+index 0000000000..4ead5339ab
+--- /dev/null
++++ b/package/cryptopp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CRYPTOPP
++	bool "cryptopp"
++	depends on !BR2_STATIC_LIBS
++	help
++	  A free C++ class library of cryptographic schemes
++
++comment "cryptopp needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 6711a37fbc..5e6eb9644d 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -36,4 +36,35 @@ define HOST_CRYPTOPP_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
+ endef
  
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -24,15 +24,16 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.25"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 1330b5cfbf..38a86131dd 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -30,15 +30,16 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.25"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.12"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
++define CRYPTOPP_EXTRACT_CMDS
++	$(UNZIP) $(CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
++endef
++
++CRYPTOPP_CXXFLAGS = $(TARGET_CXXFLAGS) -fPIC
++
++# _mm256_broadcastsi128_si256 has been added only in gcc 4.9
++ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),y)
++CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
++endif
++
++CRYPTOPP_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	CXXFLAGS="$(CRYPTOPP_CXXFLAGS)"
++
++define CRYPTOPP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CRYPTOPP_MAKE_OPTS) \
++		PREFIX=/usr shared libcryptopp.pc
++endef
++
++define CRYPTOPP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
++		LDCONFIG=/bin/true install-lib
++endef
++
++define CRYPTOPP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
++		LDCONFIG=/bin/true install-lib
++endef
++
++$(eval $(generic-package))
+ $(eval $(host-generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
