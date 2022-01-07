@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E230C433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 18:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF01C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 18:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A213C607A4;
-	Fri,  7 Jan 2022 18:51:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9907360810;
+	Fri,  7 Jan 2022 18:53:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ho22Lnsqf1jk; Fri,  7 Jan 2022 18:51:43 +0000 (UTC)
+	with ESMTP id NV1w5xBVsaZ3; Fri,  7 Jan 2022 18:53:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4D6960803;
-	Fri,  7 Jan 2022 18:51:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2451BF317
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:51:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0057F60803;
+	Fri,  7 Jan 2022 18:53:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 382871BF317
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1581B60803
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:51:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3080A81386
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 18:53:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iQ9xIXTjOuU0 for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 18:51:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4qOYpFTYVdl6 for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 18:53:13 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E46DC607A4
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 18:51:39 +0000 (UTC)
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04C5D81383
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 18:53:12 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay10.mail.gandi.net (Postfix) with ESMTPSA id DE84D240003;
- Fri,  7 Jan 2022 18:51:37 +0000 (UTC)
-Date: Fri, 7 Jan 2022 19:51:36 +0100
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 3BACD200004;
+ Fri,  7 Jan 2022 18:53:10 +0000 (UTC)
+Date: Fri, 7 Jan 2022 19:53:08 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: azxxza22 <amrtmoh2006@gmail.com>
-Message-ID: <20220107195136.183a4555@windsurf>
-In-Reply-To: <20220102181525.9494-1-amrtmoh2006@gmail.com>
+Message-ID: <20220107195308.282518bc@windsurf>
+In-Reply-To: <20220102181525.9494-2-amrtmoh2006@gmail.com>
 References: <20220102181525.9494-1-amrtmoh2006@gmail.com>
+ <20220102181525.9494-2-amrtmoh2006@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] nodogsplash package added
+Subject: Re: [Buildroot] [PATCH 2/2] hash file added
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,132 +64,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-First of all, thanks a lot for your contribution! Please see below a
-number of comments. It would be good if you could address those
-comments and send an updated version.
-
-On Sun,  2 Jan 2022 20:15:24 +0200
+On Sun,  2 Jan 2022 20:15:25 +0200
 azxxza22 <amrtmoh2006@gmail.com> wrote:
 
 > Signed-off-by: azxxza22 <amrtmoh2006@gmail.com>
+> ---
+>  package/nodogsplash/nodogsplash.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/nodogsplash/nodogsplash.hash
 
-We need contributions to be made under a real name. Could you adjust
-this?
+This should be part of the patch adding the package.
 
->  package/Config.in                  |  1 +
->  package/nodogsplash/Config.in      |  9 ++++++++
->  package/nodogsplash/nodogsplash.mk | 37 ++++++++++++++++++++++++++++++
->  3 files changed, 47 insertions(+)
-
-You also need to add an entry in the DEVELOPERS file, so that we know
-who maintains this package.
-
-
-> diff --git a/package/nodogsplash/Config.in b/package/nodogsplash/Config.in
+> diff --git a/package/nodogsplash/nodogsplash.hash b/package/nodogsplash/nodogsplash.hash
 > new file mode 100644
-> index 0000000000..7a68bcccb0
+> index 0000000000..da059a854d
 > --- /dev/null
-> +++ b/package/nodogsplash/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_NODOGSPLASH
-> +	bool "nodogsplash"
-> +	depends on BR2_PACKAGE_LIBMICROHTTPD
+> +++ b/package/nodogsplash/nodogsplash.hash
+> @@ -0,0 +1,2 @@
+> +md5 edafdd4ef89218261f29a9074891cf7a nodogsplash-v4.5.1-br1.tar.gz
+> +md5 cbbd794e2a0a289b9dfcc9f513d1996e COPYING
 
-This should be:
+These should be sha256 hashes, and there should be a comment above that
+says:
 
-	select BR2_PACKAGE_LIBMICROHTTPD
-
-It would be useful to test the package with ./utils/test-pkg to make
-sure you have captured all toolchain dependencies.
-
-> +	help
-> +	   Nodogsplash is a Captive Portal that offers 
-> +	   a simple way to provide restricted access to the Internet by 
-> +	   showing a splash page to the user before Internet access is granted
-
-I think this last line is too long. Could you run "make check-package"
-and make sure you haven't introduced new warnings?
-
-> +	   https://github.com/nodogsplash/nodogsplash/
-> diff --git a/package/nodogsplash/nodogsplash.mk b/package/nodogsplash/nodogsplash.mk
-> new file mode 100644
-> index 0000000000..3075b7e9f1
-> --- /dev/null
-> +++ b/package/nodogsplash/nodogsplash.mk
-> @@ -0,0 +1,37 @@
-> +################################################################################
-> +#
-> +# nodogsplash
-> +#
-> +################################################################################
-
-Empty new line needed here.
-
-> +NODOGSPLASH_VERSION = v4.5.1
-
-Should be without the "v".
-
-> +NODOGSPLASH_SITE = git://github.com/nodogsplash/nodogsplash.git
-> +NODOGSPLASH_SITE_METHOD = git
-
-Instead of those two lines, use:
-
-NODOGSPLASH_SITE = $(call github,nodogsplash,nodogsplash,v$(NODOGSPLASH_VERSION))
-
-> +NODOGSPLASH_LICENSE = GPL-2.0
-> +NODOGSPLASH_LICENSE_FILES = COPYING
-> +NODOGSPLASH_DEPENDENCIES = libmicrohttpd
-> +NODOGSPLASH_INSTALL_STAGING = YES
-
-Why is this needed in staging? Does it install some library that
-another package will link against ?
-
-> +
-> +define NODOGSPLASH_BUILD_CMDS
-> +	$(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
-
-Why is $(MAKE1) used? Isn't $(MAKE) working?
-
-Ideally, this should be:
-
-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-
-> +endef
-> +
-> +define NODOGSPLASH_INSTALL_EXTRA_FILES
-> +	mkdir -p $(TARGET_DIR)/usr/bin
-> +	mkdir -p $(TARGET_DIR)/etc/nodogsplash/htdocs/images
-> +	cp $(@D)/resources/nodogsplash.conf $(TARGET_DIR)/etc/nodogsplash/
-> +	cp $(@D)/resources/splash.html $(TARGET_DIR)/etc/nodogsplash/htdocs/
-> +	cp $(@D)/resources/splash.css $(TARGET_DIR)/etc/nodogsplash/htdocs/
-> +	cp $(@D)/resources/status.html $(TARGET_DIR)/etc/nodogsplash/htdocs/
-> +	cp $(@D)/resources/splash.jpg $(TARGET_DIR)/etc/nodogsplash/htdocs/images/
-
-Use:
-
-	$(INSTALL) -D -m 0644 src dst
-
-it will automatically create any missing destination directory for you.
-
-> +endef
-> +
-> +NODOGSPLASH_POST_INSTALL_TARGET_HOOKS += NODOGSPLASH_INSTALL_EXTRA_FILES
-
-There's no need for a post-install target hook, just put the commands
-directly inside NODOGSPLASH_INSTALL_TARGET_CMDS.
-
-> +
-> +define NODOGSPLASH_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/nodogsplash $(TARGET_DIR)/usr/bin
-> +	$(INSTALL) -D -m 0755 $(@D)/ndsctl $(TARGET_DIR)/usr/bin
-
-Please use full destination paths, i.e:
-
-	$(INSTALL) -D -m 0755 $(@D)/nodogsplash $(TARGET_DIR)/usr/bin/nodogsplash
-	$(INSTALL) -D -m 0755 $(@D)/ndsctl $(TARGET_DIR)/usr/bin/ndsctl
-
-But I see the Makefile of the upstream project has an install target
-which seems to do the right thing. Why don't you use it?
+# Locally calculated
 
 Thanks!
 
