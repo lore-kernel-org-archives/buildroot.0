@@ -4,73 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB1AC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0D70C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 027CE424C1;
-	Fri,  7 Jan 2022 21:17:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C333424BD;
+	Fri,  7 Jan 2022 21:27:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ul0IaLkNIhet; Fri,  7 Jan 2022 21:17:47 +0000 (UTC)
+	with ESMTP id BvqhhoDliXfS; Fri,  7 Jan 2022 21:26:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C811424B7;
-	Fri,  7 Jan 2022 21:17:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 16AF61BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:17:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07BF3424B7;
+	Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF4511BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0395182591
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:17:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E92D3424BD
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eeM5yivsR6yO for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:17:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E12082695
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:17:42 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id o6so26856094edc.4
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 13:17:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=guXuFUkd9ajM+kXpZOdIz72DCh4GRu1G2MjO/5tcosA=;
- b=YkrL/kIyDxXfx5yQdCauthXam6/6ZEPa7Nng27JzYKSQfYFsBnYfjDXMbdlq0UYLWJ
- cK934blJI0iGg7czbLpvPQeEZcD6cRaBSCC77WFdQZfUQ8FoAOUKbZDYXnU4kk7Q4rXZ
- PTnlE7NbPsRNtv+Dw7pQN1zkxS77+Rno5MONIg1gETDZPbPLoZec1SqFrMVYOO/3ODbu
- Y3SFhBlYBEtIfn0vzzGeLEhuog7GtRkMVPK0cDTRFdgYDajWwPf/7BYp3/ikC1XDY4pZ
- B72LWCXl8hDUMrVU7yMeJbFKY75cEL7vJNb6l9jNyjWuHHa6S7PX2fZABqMCB9/ImTjR
- LtQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=guXuFUkd9ajM+kXpZOdIz72DCh4GRu1G2MjO/5tcosA=;
- b=C+UBjZ9SASPAL6/Wgf1zWq5LGr8+EYBzCLYaP+vJtjUkUgh+tGqTanc2WSAnz9E6ZB
- zUQzTmUByGU0l2DNDKSLszf5MP3Gm1tY8dYRwrBX/N3PCD7SA6jtnEhumS4yFqmedFIM
- EJKJJuE33npkF2FXHxXiiP+FTGUTK2oH+zIu0OsHWNp0oiQxB4CSuCqVDHjDUCTFZRm/
- ElW9oQN44fhPQ8kbg9rZXRqbMq6LZvIgR9FCVYQZTXIRgKcL5QxMQs8fAdmL9AqrM4y+
- PKH3FQFSRl5eQIlTbjBUaFRfwW0i6Bye5byqERPuoAyZuymhsF4Dilm0R0SLH3dwbNBI
- DmVA==
-X-Gm-Message-State: AOAM530rffF8JQjXdRqTwcaIc+Yid/VMyB+STAVMthDCD8SCBB/PR3zW
- Hk7K1TuWQ8Bl0HVSCPEAaUHre37MrlKM9slhvLk=
-X-Google-Smtp-Source: ABdhPJw/sPSPSIsoIUeyTtWLwpkgMwWKf+O/+64pQMRklQvxE6sFlPqLNLGmfcGRsHX/y5Vr0wAyV9XHSnjI7PkrAGs=
-X-Received: by 2002:a50:d691:: with SMTP id r17mr31579021edi.317.1641590261145; 
- Fri, 07 Jan 2022 13:17:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20220104210727.3634208-1-fontaine.fabrice@gmail.com>
- <20220107220857.63b9a0da@windsurf>
-In-Reply-To: <20220107220857.63b9a0da@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 7 Jan 2022 22:16:26 +0100
-Message-ID: <CAPi7W80Y2X0nXp8mGMEuQ6XG=5kO1U03=L-VwDmOpO_JOC2_NA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qpdf: needs atomic
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DKnrgyDQqwEu for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3447440010
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 5F31F8349E; Fri,  7 Jan 2022 21:20:44 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Fri, 7 Jan 2022 22:26:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6e518c47dd6a16d0dee66b208d365728453cc655
+X-Git-Newrev: a19b822239c36cb40a632899bb5c3e848a5fc81e
+X-Patchwork-Hint: ignore
+Message-Id: <20220107212044.5F31F8349E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pybind: switch to cmake
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,42 +53,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgdmVuLiA3IGphbnYuIDIwMjIgw6AgMjI6MDgsIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+IGEgw6ljcml0IDoKPgo+IE9uIFR1ZSwgIDQgSmFuIDIwMjIg
-MjI6MDc6MjcgKzAxMDAKPiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWls
-LmNvbT4gd3JvdGU6Cj4KPiA+IHFwZGYgbmVlZHMgYXRvbWljIHNpbmNlIGJ1bXAgdG8gdmVyc2lv
-biAxMC41LjAgaW4gY29tbWl0Cj4gPiBiNTM1MmMyMTc3MDExY2EzODljYmI3YzY4ZTc4NDQ3NTQ5
-Y2JkYWFhIGFuZAo+ID4gaHR0cHM6Ly9naXRodWIuY29tL3FwZGYvcXBkZi9jb21taXQvYzVjMWEw
-MjhjZGQzY2YzNDUwNDZjNDY5NjNmYjBmZGFjZmIyYzMzYzoKPiA+Cj4gPiAvaG9tZS9idWlsZHJv
-b3QvYXV0b2J1aWxkL2luc3RhbmNlLTIvb3V0cHV0LTEvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9t
-NjhrLWJ1aWxkcm9vdC11Y2xpbnV4LXVjbGliYy9iaW4vbGQucmVhbDogL2hvbWUvYnVpbGRyb290
-L2F1dG9idWlsZC9pbnN0YW5jZS0yL291dHB1dC0xL2J1aWxkL3FwZGYtMTAuNS4wL2xpYnFwZGYv
-YnVpbGQvLmxpYnMvbGlicXBkZi5hKFFQREYubyk6IGluIGZ1bmN0aW9uIGBRUERGOjpRUERGKCkn
-Ogo+ID4gUVBERi5jYzooLnRleHQrMHg0OGRlKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19h
-dG9taWNfZmV0Y2hfYWRkXzgnCj4gPgo+ID4gRml4ZXM6Cj4gPiAgLSBodHRwOi8vYXV0b2J1aWxk
-LmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy83ZTE4Njg5NjcwZGNiZTQ5MWMzNWYwNTk3ZTVjM2M3ODc5
-MzYyNjNmCj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUu
-ZmFicmljZUBnbWFpbC5jb20+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL2N1cHMtZmlsdGVycy9Db25m
-aWcuaW4gfCAyICsrCj4gPiAgcGFja2FnZS9xcGRmL0NvbmZpZy5pbiAgICAgICAgIHwgMiArKwo+
-ID4gIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCj4KPiBBcHBsaWVkIHRvIG1hc3Rl
-ciwgdGhhbmtzLiBIb3dldmVyLCBjb3VsZCB5b3UgZG8gYSB0ZXN0IGJ1aWxkIG9uCj4gc3BhcmN2
-OCA/IEluZGVlZCBub3JtYWxseSB3aGVuIHNvbWV0aGluZyBuZWVkcyBhdG9taWMsIGl0IGFsc28g
-bmVlZHMgdG8KPiBsaW5rIHdpdGggbGliYXRvbWljIHdoZW4gYXZhaWxhYmxlLCBhcyBzb21lIGFy
-Y2hpdGVjdHVyZXMgKHN1Y2ggYXMKPiBzcGFyY3Y4KSBoYXZlIGFsbCBhdG9taWMgYnVpbHQtaW5z
-IGltcGxlbWVudGVkIGluIGxpYmF0b21pYy4KcXBkZiBoYW5kbGVzIGxpbmtpbmcgd2l0aCBhdG9t
-aWMgc2luY2UgdmVyc2lvbiAxMC4wLjIgYW5kCmh0dHBzOi8vZ2l0aHViLmNvbS9xcGRmL3FwZGYv
-Y29tbWl0LzY2MTk4ZjQ0N2Y0NWE4NzcxOGI2NDU3NzU2OTc2YmFhOGRlZmIyZmQKPgo+IFRoYW5r
-cyEKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCj4gRW1i
-ZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20K
-QmVzdCBSZWdhcmRzLAoKRmFicmljZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=a19b822239c36cb40a632899bb5c3e848a5fc81e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+pybind11 is not really a Python module; it is actually a set of headers
+that is used to wrap Python objects in C++.
+
+Since pybind version 2.6.1, it uses CMake internally. This causes a
+number of build issues for Buildroot because either no cmake is present
+or it is too old.
+
+pybind in fact has three parts: the C++ headers, a python module
+pybind11, and the tests. The python package's only purpose is to serve
+as a configure script for users of pybind. CMake is mainly used to build
+and run the tests, which use the (mock-installed) pybind11 module to
+find the (mock-installed) C++ headers. CMake is also used to install the
+headers.
+
+The setup.py script calls into CMake to install the headers and CMake
+support files to a temporary directory, then copies that together with
+the pybind11 module into the Python directory. The pybind11 module then
+returns the include and cmake paths relative to its install location
+(using __file__ to determine the install location).
+
+This is not at all compatible with how Buildroot expects things to be
+organised.
+- The include and CMake files are installed somewhere within the Python
+  directories, where nobody will find them.
+- The Python module is installed for the target, but at build time
+  Python modules are read from the host directory only. Therefore, a
+  user of pybind can't actually load the module.
+
+To solve this, several options are possible:
+- Treat pybind as a host package. This causes users of pybind to build
+  with an include path pointing into the host directory. This happens to
+  work because pybind is a header-only library and because it is
+  installed in a specific location which is not contaminated by other
+  headers. However, it is philosophically wrong - a build for the target
+  should never have an include path pointing to the host directory.
+- Install pybind in the usual way into staging, and add a stub module to
+  the host directory that returns paths to the staging directory. This
+  leaves a useless pybind11 module in the staging directory, and puts
+  the headers and cmake files in an unusual location. In addition it
+  is not so simple - we need to jump through hoops to make sure that
+  cmake is called correctly when it goes through python-package.
+- Install the headers and cmake files using CMake, and add a (stub)
+  python module in the host directory that points users to the staging
+  directory. This puts the headers in the usual place
+  (STAGING_DIR/usr/include) and still makes it possible to find them
+  from a python package at build time.
+
+We choose the latter solution.
+
+First of all, convert to cmake-package. This installs just the headers
+and the cmake support files. We need to pass PYBIND11_NOPYTHON=ON
+because there is a cmake module that tries to find the python binary. It
+sometimes finds the system python, sometimes the host python. In either
+case, it checks whether this python's bitness and endianness correspond
+to that of the compiler - which generally it doesn't in
+cross-compilation. PYBIND_NOPYTHON bypasses this check.
+
+Install in staging and not in target. Before, it was installed to target
+but the python module would point to the target directory so it worked
+anyway; now, however, we can properly use the staging directory.
+
+Since it is no longer a python-package, the python module is not
+installed automatically. Install them manually in a post-staging-install
+hook. Since the python module is supposed to be used at build time,
+install it in the host directory rather than in staging.
+
+The python module normally looks in its current directory to find the
+include and cmake paths, but for cross-compilation this is wrong. Add a
+non-upstreamable patch that checks for STAGING_DIR in the environment.
+If it is set (which is the case in Buildroot), use that instead of the
+current directory.
+
+Add an explicit dependency on python3. The headers include Python.h, so
+any user of pybind needs to implicitly depend on python3. While we're at
+it, change it to support python3 only - even though pybind currently
+still supports python2, adding support for it in Buildroot is a little
+bit complicated and python2 will be removed soon anyway.
+
+Cc: Esben Haabendal <esben@geanix.com>
+Cc: Andreas Naumann <dev@andin.de>
+Co-Developed-by: Jagan Teki <jagan@amarulasolutions.com>
+Co-Developed-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...-pybind11-commands.py-support-STAGING_DIR.patch | 36 ++++++++++++++++++++++
+ package/python-pybind/Config.in                    |  1 +
+ package/python-pybind/python-pybind.mk             | 19 ++++++++++--
+ 3 files changed, 54 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
+new file mode 100644
+index 0000000000..981a387be4
+--- /dev/null
++++ b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
+@@ -0,0 +1,36 @@
++From 9feaba4792c1d0a28e560ae941fa9ebabbbe4013 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Fri, 7 Jan 2022 19:32:18 +0100
++Subject: [PATCH] pybind11/commands.py: support STAGING_DIR
++
++In Buildroot, we install build-time python scripts in the host directory
++(otherwise they can't be run with host python), but when running
++pybind11 --includes it should return the staging directory.
++
++Patch commands.py to use the STAGING_DIR environment variable instead of
++the current directory, if it is set.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++Upstream-Status: N/A, Buildroot specific
++---
++ pybind11/commands.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/pybind11/commands.py b/pybind11/commands.py
++index 34dbaf8..8c4876d 100644
++--- a/pybind11/commands.py
+++++ b/pybind11/commands.py
++@@ -1,8 +1,8 @@
++ # -*- coding: utf-8 -*-
++ import os
++ 
++-
++-DIR = os.path.abspath(os.path.dirname(__file__))
+++DIR = os.environ.get('STAGING_DIR') or \
+++    os.path.abspath(os.path.dirname(__file__))
++ 
++ 
++ def get_include(user=False):
++-- 
++2.31.1
++
+diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
+index 604cb9ee67..27bc196e32 100644
+--- a/package/python-pybind/Config.in
++++ b/package/python-pybind/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYBIND
+ 	bool "python-pybind"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  PyBind is a lightweight header-only library that exposes C++
+ 	  types in Python and vice versa, mainly to create Python
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index a6a1bdb976..4dd52003ad 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
+@@ -8,6 +8,21 @@ PYTHON_PYBIND_VERSION = 2.6.1
+ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+ PYTHON_PYBIND_LICENSE = BSD-3-Clause
+ PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-PYTHON_PYBIND_SETUP_TYPE = setuptools
++PYTHON_PYBIND_INSTALL_STAGING = YES
++PYTHON_PYBIND_INSTALL_TARGET = NO # Header-only library
++PYTHON_PYBIND_DEPENDENCIES = python3
+ 
+-$(eval $(python-package))
++PYTHON_PYBIND_CONF_OPTS = \
++	-DPYBIND11_INSTALL=ON \
++	-DPYBIND11_TEST=OFF \
++	-DPYBIND11_NOPYTHON=ON
++
++PYTHON_PYBIND_INSTALL_PATH = $(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/pybind11
++
++define PYTHON_PYBIND_INSTALL_MODULE
++	mkdir -p $(PYTHON_PYBIND_INSTALL_PATH)
++	cp -dpf $(@D)/pybind11/*.py $(PYTHON_PYBIND_INSTALL_PATH)
++endef
++PYTHON_PYBIND_POST_INSTALL_STAGING_HOOKS += PYTHON_PYBIND_INSTALL_MODULE
++
++$(eval $(cmake-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
