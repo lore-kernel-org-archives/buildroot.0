@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A1B5C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:52:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E06CC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 17:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 534788137B;
-	Fri,  7 Jan 2022 17:52:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 354EE60A85;
+	Fri,  7 Jan 2022 17:53:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BVTUb1CL9M8u; Fri,  7 Jan 2022 17:52:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id scCBPquXs2Xh; Fri,  7 Jan 2022 17:53:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 962E58136F;
-	Fri,  7 Jan 2022 17:52:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CCE151BF35F
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:51:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9062760A7C;
+	Fri,  7 Jan 2022 17:53:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 94E2F1BF35F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B650E40002
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:51:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 840DA42918
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 17:53:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FcnihXvO4y0K for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 17:51:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7DKlQOFZFz9j for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 17:53:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8C93400E5
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:51:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D925A42910
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 17:53:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 40BA683493; Fri,  7 Jan 2022 17:45:47 +0000 (UTC)
+ id 667D982DCE; Fri,  7 Jan 2022 17:46:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 18:51:44 +0100
+Date: Fri, 7 Jan 2022 18:52:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07e0923b58c9dd0788c012f5106491c0acff56d5
-X-Git-Newrev: 7af6659cb2cbd54b2ca6bad2d91291815e83fbc2
+X-Git-Oldrev: 7af6659cb2cbd54b2ca6bad2d91291815e83fbc2
+X-Git-Newrev: 30cefccaf7916b0b635071b3aa11c6b368607b2c
 X-Patchwork-Hint: ignore
-Message-Id: <20220107174547.40BA683493@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: bump version to 1.17.6
+Message-Id: <20220107174659.667D982DCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/4th: bump to version 3.64.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7af6659cb2cbd54b2ca6bad2d91291815e83fbc2
+commit: https://git.buildroot.net/buildroot/commit/?id=30cefccaf7916b0b635071b3aa11c6b368607b2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-View the release notes for more information:
-
-https://go.dev/doc/devel/release.html#go1.17.minor
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/4th/4th.hash | 2 +-
+ package/4th/4th.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 39f8226aae..9111c8c9aa 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/4th/4th.hash b/package/4th/4th.hash
+index 36d2941055..ae08a6bf5e 100644
+--- a/package/4th/4th.hash
++++ b/package/4th/4th.hash
 @@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  3defb9a09bed042403195e872dcbc8c6fae1485963332279668ec52e80a95a2d  go1.17.5.src.tar.gz
-+sha256  4dc1bbf3ff61f0c1ff2b19355e6d88151a70126268a47c761477686ef94748c8  go1.17.6.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0d9ceab2bb..062bec378c 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally computed:
+-sha256  f822f7dd8cfb0b1744a62d653c6efe933578ae1789ec60a088509a38bca4b4fc  4th-3.62.5-unix.tar.gz
++sha256  c0905e92316c151224858fcfff21c143c85efa4f9f1b2ade3c64cfd988e0a6a8  4th-3.64.0-unix.tar.gz
+ sha256  8c6111b645a02219579ea66e84aa8e78a0ed4f4dd80857ffb91bcda5528717d4  COPYING
+diff --git a/package/4th/4th.mk b/package/4th/4th.mk
+index aee59c463f..d031c0e4b4 100644
+--- a/package/4th/4th.mk
++++ b/package/4th/4th.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.17.5
-+GO_VERSION = 1.17.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-4TH_VERSION = 3.62.5
++4TH_VERSION = 3.64.0
+ 4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
+ 4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
+ 4TH_LICENSE = GPL-3.0+, LGPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
