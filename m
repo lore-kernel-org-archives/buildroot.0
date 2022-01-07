@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0AA4C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 19:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB737C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 19:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4150240002;
-	Fri,  7 Jan 2022 19:35:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 529DE42954;
+	Fri,  7 Jan 2022 19:51:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XYzb7dRvO9mr; Fri,  7 Jan 2022 19:35:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nT_LAd-SrPkD; Fri,  7 Jan 2022 19:51:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 885AF40192;
-	Fri,  7 Jan 2022 19:35:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A49242959;
+	Fri,  7 Jan 2022 19:51:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6FBE71BF5DC
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:35:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 361D91C2747
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EA7341601
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:35:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 242D042954
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:51:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V8YNcqeamNmQ for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 19:35:47 +0000 (UTC)
+ with ESMTP id QeyS6Vq48epT for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 19:51:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 207A1415F8
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 19:35:46 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id r10so5298744wrc.3
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 11:35:46 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E2FB14293C
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 19:51:19 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id k18so12976566wrg.11
+ for <buildroot@buildroot.org>; Fri, 07 Jan 2022 11:51:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ix47Ronkxr5UUHcsFzYc79dTKPNcqhtdPU9ifCYJeZI=;
- b=AI+UvhuQpifE869r1uBbgWNt1xZHNTPzUjkRDoHB5WTFB/LsZT5nxMe4EVjbiXum5n
- 4QW8tLBqzGBuYe/SUyH37wdvWAmrMMh4dBHdnGK9Tswf7xOXh9hrjdcIw9rLWcauUWla
- C3zE1KrcFZ48VP/xqa8twt4Dq07yTx6SbVx8D0jiYfYrsloWtn8pOJLa2IXMe/B3uCAw
- 6Db4kYEHeMg6DB00LLKmjtkERZE98JOZprTOLfHe+sGqzpyCoWtBZQv6lOkTwGst5e9p
- eksk/L3UKhwWWrk4IiE0lTmcQpOtiM74XNYzmrDvCLjaxCNYt0Umy788WsNaSYJxps2i
- j8Ow==
+ bh=25MD+XfNRBa285Ctnbl2AqmKB56k87VrmZyoylsyhLQ=;
+ b=Vydgasjs4fWzV/t73KqGYHCqiQ7mkU/kCBHMwq0RdM4Fmd+PJu7wcU4Tm14+tbNk9n
+ UlPzD/65uTHDrRm20/Og7K9eNCV1ZkLjNYL1ClgTRWEe8+pbID4MPGcfug2kepcF4apm
+ aSUla8vY9kXAFCVP0wSgXu2jAXjFKZnw7p9zLVaSXT1EuXX6yWIH/ArYeMof9ytrWPNH
+ aj167bov0R4WdwDJl+G1d9GorZMaatZ0KKQE2VFEbLtgFtCdseJMaO0k18TaSru8fwWT
+ OE5IkesRKs5iSDymO2y3aPo+OQ5tNX8KABni9vlel8+F2V1H3LBlqSgBm8EZqtbBY1w/
+ vXwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ix47Ronkxr5UUHcsFzYc79dTKPNcqhtdPU9ifCYJeZI=;
- b=Fo0M2Pk/brs4455G2hDg0GThK+D7SQ2N113s+z5ZCLfc+zxlXmfq5wiGliN8ytUPHZ
- FYkxImE3CLteN6nIFNtPe3LBITZ45YoVANuV6upVy3n4AUbtI18Atfx39piY2j0pFR4Z
- wMOgCfvtbw5Aao/SdET8LtsSHsN9A0QJW4ikogrbCoXHA8sWhoYhjo/lyi0amSscloQp
- IqyB+APCbeXiULXi0NGsoYLEkuAf9Eqb0DuADiO25Sl3VuYGv/28dUNbK+FGc/pBJzth
- XKyq/0qmgrtxb6euxIWapEh1nGORBlnHWziP7NSSinbj+TY9H8/GKKBustQsclOYBK8w
- 915Q==
-X-Gm-Message-State: AOAM533bMQn6tcA1Fv3DaogJ78PAE3QodR2D9PUXumkwFD/6ESzSmuf8
- CHmSEPZHkDthEBK0WiHiaV1BX1vEp3I=
-X-Google-Smtp-Source: ABdhPJwunE577eX4MlgykTr18+G0antDLEFqQu4GVMlct7eq14GrLqbQdsUGjt5QXAeb/rRpdouPuQ==
-X-Received: by 2002:a5d:46cf:: with SMTP id g15mr7440377wrs.621.1641584145117; 
- Fri, 07 Jan 2022 11:35:45 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id az15sm4973262wmb.47.2022.01.07.11.35.44
+ bh=25MD+XfNRBa285Ctnbl2AqmKB56k87VrmZyoylsyhLQ=;
+ b=WfZx1zjN11EKrwKw9iGTrF7NlhcT9BPUW5i7owiNlS0AVzbUGlmGOfv5f/QqGUR48v
+ K3G2Q6dVBrbv7WBtOtjSCQzyASBBQamgR1JtV5QUNVTSgrp50maTejXgh+WkA1jlhXw+
+ tWGu39pQqyMdxkT89bcVMOGg9PEqesJP+ELepH25TX1o2Ymdf/BB2auxs7JqSur9BLA8
+ rR5TArMjDjJbOHX6+Gj/khDN2LaXMKxn60+n/h7H7gTnXSc0KN060ceVdAnZk+7nKJq7
+ 96zltZXl3BZWmmzfGXZ0+WoLJf7qWrpztGJa+kaEafk+y0cRkXFEbZSbq6dbCZkiQ7+4
+ ij4g==
+X-Gm-Message-State: AOAM532uUAMR9j9DCqC9G+AjFPydj/vBQXQQp1TMQCfhQQ3KiaGAlzPp
+ tU463QcHuCeWttAX+f+6EEXvk5uHUY0=
+X-Google-Smtp-Source: ABdhPJzsyCZ5tQ/OCYkUT45juVNBt1mHPD5m3Zy9t9ShbvVD7FJo95HfX6ma212GxG7EY1KheK8+cQ==
+X-Received: by 2002:a05:6000:1c05:: with SMTP id
+ ba5mr6853692wrb.298.1641585078117; 
+ Fri, 07 Jan 2022 11:51:18 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id bk17sm5518311wrb.105.2022.01.07.11.51.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jan 2022 11:35:44 -0800 (PST)
+ Fri, 07 Jan 2022 11:51:17 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 20:34:36 +0100
-Message-Id: <20220107193436.1278176-1-fontaine.fabrice@gmail.com>
+Date: Fri,  7 Jan 2022 20:49:56 +0100
+Message-Id: <20220107194957.1320947-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/liburing: enable CONFIG_IO_URING
+Subject: [Buildroot] [PATCH 1/2] package/libosip2: bump to version 5.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,35 +84,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable CONFIG_IO_URING through LIBURING_LINUX_CONFIG_FIXUPS in case the
-user is also building a kernel
+https://git.savannah.nongnu.org/cgit/osip.git/tree/ChangeLog?h=5.3.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/liburing/liburing.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libosip2/libosip2.hash | 2 +-
+ package/libosip2/libosip2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
-index a977e74b4f..74ce4156f8 100644
---- a/package/liburing/liburing.mk
-+++ b/package/liburing/liburing.mk
-@@ -11,6 +11,10 @@ LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
- LIBURING_LICENSE_FILES = COPYING COPYING.GPL LICENSE README
- LIBURING_INSTALL_STAGING = YES
+diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+index 7a08bf26a7..071ad7e61a 100644
+--- a/package/libosip2/libosip2.hash
++++ b/package/libosip2/libosip2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  ee3784bc8e7774f56ecd0e2ca6e3e11d38b373435115baf1f1aa0ca0bfd02bf2  libosip2-5.2.1.tar.gz
++sha256  f4725916c22cf514969efb15c3c207233d64739383f7d42956038b78f6cae8c8  libosip2-5.3.0.tar.gz
  
-+define LIBURING_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IO_URING)
-+endef
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBURING_MAKE_OPTS += ENABLE_SHARED=0
- else
+ # Hash for license file:
+ sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index 967602b426..2f9b7a9242 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSIP2_VERSION = 5.2.1
++LIBOSIP2_VERSION = 5.3.0
+ LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
+ LIBOSIP2_INSTALL_STAGING = YES
+ LIBOSIP2_LICENSE = LGPL-2.1+
 -- 
 2.34.1
 
