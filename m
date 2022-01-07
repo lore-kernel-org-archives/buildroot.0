@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0D70C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 072AFC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C333424BD;
-	Fri,  7 Jan 2022 21:27:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE21060B09;
+	Fri,  7 Jan 2022 21:27:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BvqhhoDliXfS; Fri,  7 Jan 2022 21:26:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id paYGxxKnT9KJ; Fri,  7 Jan 2022 21:27:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 07BF3424B7;
-	Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6F5060806;
+	Fri,  7 Jan 2022 21:27:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF4511BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FBEE1BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E92D3424BD
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AAE740010
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:26:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DKnrgyDQqwEu for <buildroot@lists.busybox.net>;
+ with ESMTP id i8k0F220VRKl for <buildroot@lists.busybox.net>;
  Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3447440010
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AB5E424B7
  for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:26:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 5F31F8349E; Fri,  7 Jan 2022 21:20:44 +0000 (UTC)
+ id 68E388177F; Fri,  7 Jan 2022 21:20:44 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Fri, 7 Jan 2022 22:26:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e518c47dd6a16d0dee66b208d365728453cc655
-X-Git-Newrev: a19b822239c36cb40a632899bb5c3e848a5fc81e
+X-Git-Oldrev: a19b822239c36cb40a632899bb5c3e848a5fc81e
+X-Git-Newrev: 87f2b7004e6d40454d4b07bbe9b0058342c7767f
 X-Patchwork-Hint: ignore
-Message-Id: <20220107212044.5F31F8349E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pybind: switch to cmake
- package
+Message-Id: <20220107212044.68E388177F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add test for python-pybind
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,179 +58,186 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a19b822239c36cb40a632899bb5c3e848a5fc81e
+commit: https://git.buildroot.net/buildroot/commit/?id=87f2b7004e6d40454d4b07bbe9b0058342c7767f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pybind11 is not really a Python module; it is actually a set of headers
-that is used to wrap Python objects in C++.
+The way that python-pybind can be used is fairly complicated, so a
+runtime test for it is convenient. In addition, this test validates that
+the headers actually work at runtime.
 
-Since pybind version 2.6.1, it uses CMake internally. This causes a
-number of build issues for Buildroot because either no cmake is present
-or it is too old.
-
-pybind in fact has three parts: the C++ headers, a python module
-pybind11, and the tests. The python package's only purpose is to serve
-as a configure script for users of pybind. CMake is mainly used to build
-and run the tests, which use the (mock-installed) pybind11 module to
-find the (mock-installed) C++ headers. CMake is also used to install the
-headers.
-
-The setup.py script calls into CMake to install the headers and CMake
-support files to a temporary directory, then copies that together with
-the pybind11 module into the Python directory. The pybind11 module then
-returns the include and cmake paths relative to its install location
-(using __file__ to determine the install location).
-
-This is not at all compatible with how Buildroot expects things to be
-organised.
-- The include and CMake files are installed somewhere within the Python
-  directories, where nobody will find them.
-- The Python module is installed for the target, but at build time
-  Python modules are read from the host directory only. Therefore, a
-  user of pybind can't actually load the module.
-
-To solve this, several options are possible:
-- Treat pybind as a host package. This causes users of pybind to build
-  with an include path pointing into the host directory. This happens to
-  work because pybind is a header-only library and because it is
-  installed in a specific location which is not contaminated by other
-  headers. However, it is philosophically wrong - a build for the target
-  should never have an include path pointing to the host directory.
-- Install pybind in the usual way into staging, and add a stub module to
-  the host directory that returns paths to the staging directory. This
-  leaves a useless pybind11 module in the staging directory, and puts
-  the headers and cmake files in an unusual location. In addition it
-  is not so simple - we need to jump through hoops to make sure that
-  cmake is called correctly when it goes through python-package.
-- Install the headers and cmake files using CMake, and add a (stub)
-  python module in the host directory that points users to the staging
-  directory. This puts the headers in the usual place
-  (STAGING_DIR/usr/include) and still makes it possible to find them
-  from a python package at build time.
-
-We choose the latter solution.
-
-First of all, convert to cmake-package. This installs just the headers
-and the cmake support files. We need to pass PYBIND11_NOPYTHON=ON
-because there is a cmake module that tries to find the python binary. It
-sometimes finds the system python, sometimes the host python. In either
-case, it checks whether this python's bitness and endianness correspond
-to that of the compiler - which generally it doesn't in
-cross-compilation. PYBIND_NOPYTHON bypasses this check.
-
-Install in staging and not in target. Before, it was installed to target
-but the python module would point to the target directory so it worked
-anyway; now, however, we can properly use the staging directory.
-
-Since it is no longer a python-package, the python module is not
-installed automatically. Install them manually in a post-staging-install
-hook. Since the python module is supposed to be used at build time,
-install it in the host directory rather than in staging.
-
-The python module normally looks in its current directory to find the
-include and cmake paths, but for cross-compilation this is wrong. Add a
-non-upstreamable patch that checks for STAGING_DIR in the environment.
-If it is set (which is the case in Buildroot), use that instead of the
-current directory.
-
-Add an explicit dependency on python3. The headers include Python.h, so
-any user of pybind needs to implicitly depend on python3. While we're at
-it, change it to support python3 only - even though pybind currently
-still supports python2, adding support for it in Buildroot is a little
-bit complicated and python2 will be removed soon anyway.
-
-Cc: Esben Haabendal <esben@geanix.com>
-Cc: Andreas Naumann <dev@andin.de>
-Co-Developed-by: Jagan Teki <jagan@amarulasolutions.com>
-Co-Developed-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+[Arnout:
+ - Retain python3 only.
+ - python-pybind is a target package, not host.
+ - Select python-pybind instead of depend.
+ - Simplify python-pybind-example package.
+ - Check in python-pybind-example build if pybind11.get_include()
+   produces output.
+ - Don't use python3 -m pybind11 --includes: it includes the main python
+   includes, which are for the host, not for the target.
+ - Use TestPythonPackageBase instead of open-coding something imported
+   with host python.
+]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-pybind11-commands.py-support-STAGING_DIR.patch | 36 ++++++++++++++++++++++
- package/python-pybind/Config.in                    |  1 +
- package/python-pybind/python-pybind.mk             | 19 ++++++++++--
- 3 files changed, 54 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  3 ++
+ .../package/br2-external/python-pybind/Config.in   |  1 +
+ .../br2-external/python-pybind/external.desc       |  1 +
+ .../package/br2-external/python-pybind/external.mk |  1 +
+ .../package/python-pybind-example/Config.in        |  6 ++++
+ .../package/python-pybind-example/example.cpp      | 16 +++++++++
+ .../python-pybind-example/python-pybind-example.mk | 41 ++++++++++++++++++++++
+ .../testing/tests/package/sample_python_pybind.py  |  4 +++
+ .../testing/tests/package/test_python_pybind.py    | 15 ++++++++
+ 9 files changed, 88 insertions(+)
 
-diff --git a/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
-new file mode 100644
-index 0000000000..981a387be4
---- /dev/null
-+++ b/package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch
-@@ -0,0 +1,36 @@
-+From 9feaba4792c1d0a28e560ae941fa9ebabbbe4013 Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Fri, 7 Jan 2022 19:32:18 +0100
-+Subject: [PATCH] pybind11/commands.py: support STAGING_DIR
-+
-+In Buildroot, we install build-time python scripts in the host directory
-+(otherwise they can't be run with host python), but when running
-+pybind11 --includes it should return the staging directory.
-+
-+Patch commands.py to use the STAGING_DIR environment variable instead of
-+the current directory, if it is set.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+Upstream-Status: N/A, Buildroot specific
-+---
-+ pybind11/commands.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/pybind11/commands.py b/pybind11/commands.py
-+index 34dbaf8..8c4876d 100644
-+--- a/pybind11/commands.py
-++++ b/pybind11/commands.py
-+@@ -1,8 +1,8 @@
-+ # -*- coding: utf-8 -*-
-+ import os
-+ 
-+-
-+-DIR = os.path.abspath(os.path.dirname(__file__))
-++DIR = os.environ.get('STAGING_DIR') or \
-++    os.path.abspath(os.path.dirname(__file__))
-+ 
-+ 
-+ def get_include(user=False):
-+-- 
-+2.31.1
-+
-diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
-index 604cb9ee67..27bc196e32 100644
---- a/package/python-pybind/Config.in
-+++ b/package/python-pybind/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYBIND
- 	bool "python-pybind"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  PyBind is a lightweight header-only library that exposes C++
- 	  types in Python and vice versa, mainly to create Python
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index a6a1bdb976..4dd52003ad 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
-@@ -8,6 +8,21 @@ PYTHON_PYBIND_VERSION = 2.6.1
- PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
- PYTHON_PYBIND_LICENSE = BSD-3-Clause
- PYTHON_PYBIND_LICENSE_FILES = LICENSE
--PYTHON_PYBIND_SETUP_TYPE = setuptools
-+PYTHON_PYBIND_INSTALL_STAGING = YES
-+PYTHON_PYBIND_INSTALL_TARGET = NO # Header-only library
-+PYTHON_PYBIND_DEPENDENCIES = python3
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d049b99b91..7874677f7e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1124,6 +1124,9 @@ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+ F:	package/python-pybind/
+ F:	package/reaver/
++F:	support/testing/tests/package/br2-external/python-pybind
++F:	support/testing/tests/package/sample_python_pybind.py
++F:	support/testing/tests/package/test_python_pybind.py
  
--$(eval $(python-package))
-+PYTHON_PYBIND_CONF_OPTS = \
-+	-DPYBIND11_INSTALL=ON \
-+	-DPYBIND11_TEST=OFF \
-+	-DPYBIND11_NOPYTHON=ON
+ N:	Guo Ren <ren_guo@c-sky.com>
+ F:	arch/Config.in.csky
+diff --git a/support/testing/tests/package/br2-external/python-pybind/Config.in b/support/testing/tests/package/br2-external/python-pybind/Config.in
+new file mode 100644
+index 0000000000..70c77157b3
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_PYTHON_PYBIND_PATH/package/python-pybind-example/Config.in"
+diff --git a/support/testing/tests/package/br2-external/python-pybind/external.desc b/support/testing/tests/package/br2-external/python-pybind/external.desc
+new file mode 100644
+index 0000000000..eef5e0f5a0
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/external.desc
+@@ -0,0 +1 @@
++name: PYTHON_PYBIND
+diff --git a/support/testing/tests/package/br2-external/python-pybind/external.mk b/support/testing/tests/package/br2-external/python-pybind/external.mk
+new file mode 100644
+index 0000000000..3501f3135e
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_PYTHON_PYBIND_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in
+new file mode 100644
+index 0000000000..1b4d1e0d2c
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYBIND_EXAMPLE
++	bool "python-pybind-example"
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PYBIND
++	help
++	  This test creates a cpp macro later used on target in python
+diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp
+new file mode 100644
+index 0000000000..f2eea8e48d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/example.cpp
+@@ -0,0 +1,16 @@
++#include <pybind11/pybind11.h>
++namespace py = pybind11;
 +
-+PYTHON_PYBIND_INSTALL_PATH = $(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/pybind11
++int add (int i, int j) {
++    return i + j;
++}
 +
-+define PYTHON_PYBIND_INSTALL_MODULE
-+	mkdir -p $(PYTHON_PYBIND_INSTALL_PATH)
-+	cp -dpf $(@D)/pybind11/*.py $(PYTHON_PYBIND_INSTALL_PATH)
++PYBIND11_MODULE (example, m) {
++    // optional module description
++    m.doc() = "pybind11 example plugin";
++    // test a module method
++    m.def("add", &add, "example::add adds two integer numbers");
++    // test a module attribute
++    py::object hello = py::cast("Hello World");
++    m.attr("says") = hello;
++}
+diff --git a/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk
+new file mode 100644
+index 0000000000..a6d7e0daaf
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/python-pybind/package/python-pybind-example/python-pybind-example.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# python-pybind-example
++#
++################################################################################
++
++# this builds a C++ macro "add(a,b)"
++# that we expose to host-python with a custom install
++# and that the python test script will later use
++PYTHON_PYBIND_EXAMPLE_DEPENDENCIES = python-pybind
++
++PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE = \
++	$(shell $(HOST_DIR)/usr/bin/python3 -c 'import pybind11; print(pybind11.get_include())')
++
++PYTHON_PYBIND_EXAMPLE_CXX_FLAGS = \
++	$(TARGET_CXXFLAGS) \
++	-Wall -shared -std=c++11 -fPIC \
++	-I$(PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE) \
++	$(shell $(STAGING_DIR)/usr/bin/python3-config --includes --libs --ldflags)
++
++# .so to be installed must have exact suffix
++# otherwise import() in python will not work
++HOST_LIB_BINARY_SUFFIX = \
++	$(shell $(STAGING_DIR)/usr/bin/python3-config --extension-suffix)
++
++define PYTHON_PYBIND_EXAMPLE_BUILD_CMDS
++	if [ -z "$(PYTHON_PYBIND_EXAMPLE_PYBIND_INCLUDE)" ]; then \
++		echo "pybind11.get_include() returned empty"; \
++		exit 1; \
++	fi
++	$(TARGET_CXX) $(PYTHON_PYBIND_EXAMPLE_CXX_FLAGS) \
++		$(PYTHON_PYBIND_EXAMPLE_PKGDIR)/example.cpp \
++		-o $(@D)/example$(HOST_LIB_BINARY_SUFFIX)
 +endef
-+PYTHON_PYBIND_POST_INSTALL_STAGING_HOOKS += PYTHON_PYBIND_INSTALL_MODULE
 +
-+$(eval $(cmake-package))
++define PYTHON_PYBIND_EXAMPLE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/example$(HOST_LIB_BINARY_SUFFIX) \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/example$(HOST_LIB_BINARY_SUFFIX)
++endef
++
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/sample_python_pybind.py b/support/testing/tests/package/sample_python_pybind.py
+new file mode 100644
+index 0000000000..605c0bab15
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pybind.py
+@@ -0,0 +1,4 @@
++#!/usr/bin/env python
++import example
++print(example.add(1, 2))
++print(example.says)
+diff --git a/support/testing/tests/package/test_python_pybind.py b/support/testing/tests/package/test_python_pybind.py
+new file mode 100644
+index 0000000000..5e3c3b9cc5
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pybind.py
+@@ -0,0 +1,15 @@
++import os
++import infra
++import subprocess
++from tests.package.test_python import TestPythonPackageBase
++
++class TestPythonPybind (TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYBIND_EXAMPLE=y
++        """
++    sample_scripts = ["tests/package/sample_python_pybind.py"]
++    # ship examples macro & installs it to host
++    br2_external = [infra.filepath("tests/package/br2-external/python-pybind")]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
