@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75CEDC433EF
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 20:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C452C433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 20:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26E3581750;
-	Fri,  7 Jan 2022 20:35:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DFD0429BB;
+	Fri,  7 Jan 2022 20:35:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iZ3VP6h3mtm7; Fri,  7 Jan 2022 20:35:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yr1_xoHwXTjL; Fri,  7 Jan 2022 20:35:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80F228174D;
-	Fri,  7 Jan 2022 20:35:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 526511BF5DA
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:34:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 779DC429A2;
+	Fri,  7 Jan 2022 20:35:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 80FCB1BF5DA
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40C6E8174D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6341B404C5
  for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 20:34:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PcqY_b7oBjG5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ESML58_4NP1G for <buildroot@lists.busybox.net>;
  Fri,  7 Jan 2022 20:34:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76A29814AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E61A404C9
  for <buildroot@buildroot.org>; Fri,  7 Jan 2022 20:34:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BB31682A92; Fri,  7 Jan 2022 20:28:39 +0000 (UTC)
+ id B2E97834A3; Fri,  7 Jan 2022 20:28:39 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Jan 2022 21:34:43 +0100
+Date: Fri, 7 Jan 2022 21:33:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7f2b73fa510fd247aaadcf250d154893bde044d
-X-Git-Newrev: d2249821d3f30202ca2a35ad24918378d9a0a0e8
+X-Git-Oldrev: 6cb3475c5ad580adb9b783fd9684396281bca1fd
+X-Git-Newrev: f7f2b73fa510fd247aaadcf250d154893bde044d
 X-Patchwork-Hint: ignore
-Message-Id: <20220107202839.BB31682A92@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zlib-ng: bump to version 2.0.6
+Message-Id: <20220107202839.B2E97834A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libeXosip2: bump to version 5.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,62 +58,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2249821d3f30202ca2a35ad24918378d9a0a0e8
+commit: https://git.buildroot.net/buildroot/commit/?id=f7f2b73fa510fd247aaadcf250d154893bde044d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-RISC-V is supported since
-https://github.com/zlib-ng/zlib-ng/commit/81f1c8a41bd1427707f402450de8820816760fca
-
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.6
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.5
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.4
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.3
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.2
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.1
-https://github.com/zlib-ng/zlib-ng/releases/tag/2.0.0
+https://git.savannah.nongnu.org/cgit/exosip.git/tree/ChangeLog?h=5.3.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zlib-ng/zlib-ng.hash | 2 +-
- package/zlib-ng/zlib-ng.mk   | 2 +-
- package/zlib/Config.in       | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ package/libeXosip2/libeXosip2.hash | 2 +-
+ package/libeXosip2/libeXosip2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
-index 3e1dba35ba..a799cfe253 100644
---- a/package/zlib-ng/zlib-ng.hash
-+++ b/package/zlib-ng/zlib-ng.hash
+diff --git a/package/libeXosip2/libeXosip2.hash b/package/libeXosip2/libeXosip2.hash
+index b88a5b4c21..5cfee3ab29 100644
+--- a/package/libeXosip2/libeXosip2.hash
++++ b/package/libeXosip2/libeXosip2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  379723c0c954679a50d1d7df43084e2194dc51ecbc9987c889cb129d1f6734bc  zlib-ng-1.9.9-b1.tar.gz
-+sha256  8258b75a72303b661a238047cb348203d88d9dddf85d480ed885f375916fcab6  zlib-ng-2.0.6.tar.gz
- sha256  d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436  LICENSE.md
-diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-index c56fa72d6f..fb497b8c11 100644
---- a/package/zlib-ng/zlib-ng.mk
-+++ b/package/zlib-ng/zlib-ng.mk
+-sha256  87256b45a406f3c038e1e75e31372d526820366527c2af3bb89329bafd87ec42  libexosip2-5.2.1.tar.gz
++sha256  5b7823986431ea5cedc9f095d6964ace966f093b2ae7d0b08404788bfcebc9c2  libexosip2-5.3.0.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index b550e293ae..86d821b02f 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZLIB_NG_VERSION = 1.9.9-b1
-+ZLIB_NG_VERSION = 2.0.6
- ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
- ZLIB_NG_LICENSE = Zlib
- ZLIB_NG_LICENSE_FILES = LICENSE.md
-diff --git a/package/zlib/Config.in b/package/zlib/Config.in
-index 550c2efa93..d6d94889a7 100644
---- a/package/zlib/Config.in
-+++ b/package/zlib/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_ZLIB_NG_ARCH_SUPPORTS
- 	default y if BR2_aarch64
- 	default y if BR2_i386
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_riscv
- 	default y if BR2_s390x
- 	default y if BR2_x86_64
- 
+-LIBEXOSIP2_VERSION = 5.2.1
++LIBEXOSIP2_VERSION = 5.3.0
+ # Since version 5.0, letter 'X' in library's name is in lower case
+ LIBEXOSIP2_SOURCE = libexosip2-$(LIBEXOSIP2_VERSION).tar.gz
+ LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
