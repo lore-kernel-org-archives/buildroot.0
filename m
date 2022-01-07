@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF5DC433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 19:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0AA4C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 19:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2CAB4290F;
-	Fri,  7 Jan 2022 19:31:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4150240002;
+	Fri,  7 Jan 2022 19:35:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ogSMoHvj__gg; Fri,  7 Jan 2022 19:31:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A763428E0;
-	Fri,  7 Jan 2022 19:31:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F1A6E1BF5DC
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:31:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB48040192
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:31:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6cYw2wl6hWIM for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 19:31:27 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XYzb7dRvO9mr; Fri,  7 Jan 2022 19:35:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 885AF40192;
+	Fri,  7 Jan 2022 19:35:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FBE71BF5DC
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:35:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EA7341601
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 19:35:48 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V8YNcqeamNmQ for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 19:35:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CDF5140002
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 19:31:26 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id o30so4623257wms.4
- for <buildroot@buildroot.org>; Fri, 07 Jan 2022 11:31:26 -0800 (PST)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 207A1415F8
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 19:35:46 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id r10so5298744wrc.3
+ for <buildroot@buildroot.org>; Fri, 07 Jan 2022 11:35:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h3ljPGF9QTVkr8oZ3INp2swi5CrWia69i5tIHaI3l3Q=;
- b=k9QeduCNRuwDhIvJ95xLM7Pcm88WpwTH7CfjvRwr1lfy5kTLIHab+j5J0nqiWgduqN
- 2p33U51tIZm2QSxdIFiK5KWHgoNdNqqqeu+RnsFdlbuwnbhwV8dGBtZtyaA02CYP4bXl
- X5zPb2k8mDTBpRNB4v3QAEl5kJQdi8yRGraEwXmYlcyM8Kn9oyewyCtdpAvn+4ioISSB
- C3eak0rYE6WHBsWKFkELkqBbTUhm97ELrL2ZMjWuIIQXljHCAp22GYpMbQdcneEpyuIN
- 6kHjSBBkugx30zz91Wly0ubrbSmt/FuOQt7dSU9fvY/Hcm1+5HcrCJ2fXA5dAYNzLwrv
- XIkg==
+ bh=Ix47Ronkxr5UUHcsFzYc79dTKPNcqhtdPU9ifCYJeZI=;
+ b=AI+UvhuQpifE869r1uBbgWNt1xZHNTPzUjkRDoHB5WTFB/LsZT5nxMe4EVjbiXum5n
+ 4QW8tLBqzGBuYe/SUyH37wdvWAmrMMh4dBHdnGK9Tswf7xOXh9hrjdcIw9rLWcauUWla
+ C3zE1KrcFZ48VP/xqa8twt4Dq07yTx6SbVx8D0jiYfYrsloWtn8pOJLa2IXMe/B3uCAw
+ 6Db4kYEHeMg6DB00LLKmjtkERZE98JOZprTOLfHe+sGqzpyCoWtBZQv6lOkTwGst5e9p
+ eksk/L3UKhwWWrk4IiE0lTmcQpOtiM74XNYzmrDvCLjaxCNYt0Umy788WsNaSYJxps2i
+ j8Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=h3ljPGF9QTVkr8oZ3INp2swi5CrWia69i5tIHaI3l3Q=;
- b=jv08vqJkm4TiiHGcHYpdHEXpEGA68Wv0Rh5udu16YBGnhCNyvVbzIYa0rpJYDivUej
- 7QTaES+U4oq47j9EQZa1p3uui+qsxikbnBcxVQzw7va1Y5z8oEO3yWfCBlr5SlQwPcO+
- EncrmnJDPM6uozhqJOOmjSco49GYdzkFAQG2zDDM03BoujvtOxluVbGfluDoB08rT8rC
- r7z5s3j9C5SWzsdH3iBp0bzaNbCST+6LXRp++rM0OAR+4fA8MEajELDO/RkYVZTJFppd
- b/bPzuDCxv/1JG1/lySxPHaYyp1im2CmrVyI7fRO1Xh5fy0iXQDknXvR+G1uRgbe6AdV
- 3AeA==
-X-Gm-Message-State: AOAM533z8j3HXW3IgKTQ8B8QbozMUli1GCjc4LGQFTdKgviVQnIOrQVA
- dceyc4jn6pRuof7EiI66/Ce6U1q55WU=
-X-Google-Smtp-Source: ABdhPJymbLCap7n58LAn1XWsncLfNvY88wuJtWR4V2Ha9D0tyEyIN6ZJBukuCAjH55RHlthdSmAMDw==
-X-Received: by 2002:a7b:c407:: with SMTP id k7mr10878625wmi.179.1641583884793; 
- Fri, 07 Jan 2022 11:31:24 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id y15sm1616035wmi.40.2022.01.07.11.31.24
+ bh=Ix47Ronkxr5UUHcsFzYc79dTKPNcqhtdPU9ifCYJeZI=;
+ b=Fo0M2Pk/brs4455G2hDg0GThK+D7SQ2N113s+z5ZCLfc+zxlXmfq5wiGliN8ytUPHZ
+ FYkxImE3CLteN6nIFNtPe3LBITZ45YoVANuV6upVy3n4AUbtI18Atfx39piY2j0pFR4Z
+ wMOgCfvtbw5Aao/SdET8LtsSHsN9A0QJW4ikogrbCoXHA8sWhoYhjo/lyi0amSscloQp
+ IqyB+APCbeXiULXi0NGsoYLEkuAf9Eqb0DuADiO25Sl3VuYGv/28dUNbK+FGc/pBJzth
+ XKyq/0qmgrtxb6euxIWapEh1nGORBlnHWziP7NSSinbj+TY9H8/GKKBustQsclOYBK8w
+ 915Q==
+X-Gm-Message-State: AOAM533bMQn6tcA1Fv3DaogJ78PAE3QodR2D9PUXumkwFD/6ESzSmuf8
+ CHmSEPZHkDthEBK0WiHiaV1BX1vEp3I=
+X-Google-Smtp-Source: ABdhPJwunE577eX4MlgykTr18+G0antDLEFqQu4GVMlct7eq14GrLqbQdsUGjt5QXAeb/rRpdouPuQ==
+X-Received: by 2002:a5d:46cf:: with SMTP id g15mr7440377wrs.621.1641584145117; 
+ Fri, 07 Jan 2022 11:35:45 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id az15sm4973262wmb.47.2022.01.07.11.35.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jan 2022 11:31:24 -0800 (PST)
+ Fri, 07 Jan 2022 11:35:44 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jan 2022 20:29:52 +0100
-Message-Id: <20220107192952.1277336-1-fontaine.fabrice@gmail.com>
+Date: Fri,  7 Jan 2022 20:34:36 +0100
+Message-Id: <20220107193436.1278176-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mbuffer: bump to version 20211018
+Subject: [Buildroot] [PATCH 1/1] package/liburing: enable CONFIG_IO_URING
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,47 +85,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mircea Gliga <gliga.mircea@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Enable CONFIG_IO_URING through LIBURING_LINUX_CONFIG_FIXUPS in case the
+user is also building a kernel
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/liburing/liburing.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 7c200d543e..bab568d1d8 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  4e4712db5fbd4e71bfbfa2c145c6c646  mbuffer-20210328.tgz
-+md5  b6787260112e3ac416c0febdb097caa8  mbuffer-20211018.tgz
+diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
+index a977e74b4f..74ce4156f8 100644
+--- a/package/liburing/liburing.mk
++++ b/package/liburing/liburing.mk
+@@ -11,6 +11,10 @@ LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
+ LIBURING_LICENSE_FILES = COPYING COPYING.GPL LICENSE README
+ LIBURING_INSTALL_STAGING = YES
  
- # Locally computed after checking signature upstream
--sha256  51b5b8d8488991a55fe1dfce90130f9e47bc1ce286ba03b4f628c04b784fdc5d  mbuffer-20210328.tgz
-+sha256  e240c1e4e4ac14c28be8c660ec47d44ce16b1e8ec92aa907ad13004ffd5db6e3  mbuffer-20211018.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index c7c4456651..bbf27579f1 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBUFFER_VERSION = 20210328
-+MBUFFER_VERSION = 20211018
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
++define LIBURING_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IO_URING)
++endef
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBURING_MAKE_OPTS += ENABLE_SHARED=0
+ else
 -- 
 2.34.1
 
