@@ -1,64 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1B1C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B48DC433EF
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 21:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E69382A4E;
-	Fri,  7 Jan 2022 21:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBD6860A85;
+	Fri,  7 Jan 2022 21:36:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KBHigafq9jsE; Fri,  7 Jan 2022 21:36:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FD6960A99;
+	Fri,  7 Jan 2022 21:36:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 32E691BF35A
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:36:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 20C7C80AB9
+ for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:36:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UcvHhdbfCogY; Fri,  7 Jan 2022 21:35:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B499D823C6;
-	Fri,  7 Jan 2022 21:35:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 156BC1BF35A
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:35:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04B6540148
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 21:35:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id suyBreSQZREY for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 21:35:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E78CC400B5
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:35:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.243.6])
- by smtp3-g21.free.fr (Postfix) with ESMTP id CDE5B13F846;
- Fri,  7 Jan 2022 22:35:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641591302;
- bh=b7Va0TM8NV6UapPyrUKQpwrPr+lxIhsiHGLfp/foX0M=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=p0DSOyaPoA4UggEVnss8RnY+ea+vgZC/DC0J+6nyErG9LjKiAuY9bqv7HDlCvPZ2F
- /uuhQtfZXFrlum09ra/7iYjt3Mqkazr9v/Ib23RiG8GiXDqAb4p6fTLCBh0qdIEsk5
- OCaI/ZgnoSlq1iOzZh0qGgycQeRGqCCgVhTC1ksplDIjqZkufJsnZK6PGQG6lIGfcQ
- Su93VhDvVJlm3K8jaJ6dv9Iwt0a/4+lCOV7lzNg5WybHw4x4zmrpVJHcshlEwtuxaa
- AdmUoZ/qRclFVC5Tl+8dKiITHyFYaMMAIzwQ/rHcky5TI3Z9RoU1mtDc5/M8O99AJx
- i4M5ctcY2Pa7A==
-Received: from 37-165-29-190.coucou-networks.fr ([37.165.29.190])
- by webmail.free.fr
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wwwUPnadls_V for <buildroot@lists.busybox.net>;
+ Fri,  7 Jan 2022 21:36:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0119E80A99
+ for <buildroot@buildroot.org>; Fri,  7 Jan 2022 21:36:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay10.mail.gandi.net (Postfix) with ESMTPSA id CAFE4240005;
+ Fri,  7 Jan 2022 21:36:25 +0000 (UTC)
+Date: Fri, 7 Jan 2022 22:36:24 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Message-ID: <20220107223624.3ba7d348@windsurf>
+In-Reply-To: <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
+References: <20210107135307.1762186-1-maxime.chevallier@bootlin.com>
+ <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Fri, 07 Jan 2022 22:35:01 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220105142924.4b11ed83@windsurf>
-References: <2209e11a-bda9-5193-9b4d-20a5f0fa34e3@linatsea.fr>
- <20220105142924.4b11ed83@windsurf>
-Message-ID: <a8098a5d68bcf044356720ec3f7d2d9d@free.fr>
-X-Sender: ju.o@free.fr
-User-Agent: Webmail Free/1.3.3
-Subject: Re: [Buildroot] candidate packages : ros2 and wxwidgets
+Subject: Re: [Buildroot] [PATCH 1/3] package/refpolicy: Add patches pending
+ the next release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,110 +58,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
+Cc: Antoine Tenart <atenart@kernel.org>, Adam Duskett <aduskett@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Thierry,
+Hello Maxime,
 
-I would like to share some info about ROS in Buildroot.
+On Thu,  7 Jan 2021 14:53:05 +0100
+Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
 
-On 05/01/2022 14:29, Thomas Petazzoni wrote:
-> Hello Thierry,
+> In order to be able to run a basic system in enforcing mode, we need to
+> apply a few patches on top of RELEASE_2_20200818.
 > 
-> On Wed, 5 Jan 2022 10:46:46 +0100
-> Thierry Bultel <thierry.bultel@linatsea.fr> wrote:
+> This allows us to fix a few pending issues, most notably with systemd v246.
 > 
->> For a number of companies, I can see a growing interest in having ros2
->> support in buildroot.
->> Currently, people wanting to prototype (or make a product) a robotics
->> applications, are stuck
->> to either yocto, or, worse, to a desktop-like distribution.
-
-[...]
-
->> What are your thought about these both packages ? Any ideas, or links 
->> to
->> some WIP stuff ?
+> Patch 0001 is a squash of a few patches written by Antoine Tenart that
+> are already in the refpolicy master branch.
 > 
-> These packages would certainly be very welcome. ROS2 especially makes a
-> lot of sense.
+> Patches 2, 3 and 4 are also in the master branch, and are needed by
+> subsequen patches so that systemd-tmpfiles and agetty can make use of
+> nsswitch.
 > 
-> Some prior work:
+> Patches 5 and 6 are part of a pull-request that haven't been merged yet,
+> that addresses the issues with agetty and systemd-tmpfiles :
+> https://github.com/SELinuxProject/refpolicy/pull/330
 > 
->   https://github.com/mchalain/br_ros
->   http://lists.busybox.net/pipermail/buildroot/2019-March/246497.html
+> Patch 7 fixes the current issue with systemd v246 that is related to
+> sytemd-udevd now being a symlink to udevadm.
 > 
-> I'll be happy to help in the review of such packages.
+> The fix for that has been submitted on the refpolicy mailing-list, with
+> the review process ongoing :
+> https://lore.kernel.org/selinux-refpolicy/2b5b0f1e-2576-23f4-4ab4-26f8fcfb2c30@ieee.org/T/#t
+> 
+> Finally, Patch 8 addresses issues for which there's no clear strategy
+> yet for upstreaming in the refpolicy.
 
+So now, all of the patches except patch 8 are in upstream refpolicy,
+which is good.
 
-   In the context of the HoverGames https://www.hovergames.com/ drone
-challenge, I used ROS1 Noetic (last version for ROS1 series) with
-Buildroot on various boards (EMCraft NavQ, Technexion pico-pi, QEmu
-aarch64 and RV64). My actual need was the minimal dependencies to run
-"mavros" (at that time, mavros was not available for ROS2).
+However, this patch 8 is really not good, it doesn't document anything
+about why those fixes are needed. I think it would be acceptable to
+have out of tree refpolicy patches, but they should be just a mixed bag
+of fixes all in a single patch that just says "Buildroot fixes".
 
-I published my code here, for information:
-https://github.com/jolivain/buildroot/commits/navq
+We need that patch 8 to be split up into multiple patches, each with a
+proper explanation of what it is fixing. Perhaps this would also help
+with the upstreaming.
 
-See the demo defconfigs:
-https://github.com/jolivain/buildroot/commit/a50de54e721910a00ebe7192e37661cc0ad81b37
+So I'm afraid we can't merge this patch series as it is, just because
+patch 8 isn't properly explained/detailed.
 
-ROS1 can be tested in qemu Aarch64 virt with:
+Maxime: do you have that patch 8 broken down into smaller pieces with
+reasonable explanation about each piece?
 
-     make ros_defconfig
-     make
-     ./output/images/start-qemu.sh
-
-Login as root, then run a ros tutorial:
-
-     roslaunch roscpp_tutorials talker_listener.launch
-
-or launch mavros:
-
-     roslaunch mavros px4.launch fcu_url:=tcp-l://localhost
-
-While doing that, I did minor upstreaming work to let ROS play nicer
-with Buildroot, for example:
-https://github.com/ros-infrastructure/rospkg/commit/5ab4408e65f01bbb48971f6264f6c890b89cefa9
-and few other buildroot fixes or updates.
-
-Prior that work, I was aware of a previous integration, like this one:
-https://github.com/flatmax/buildroot.rk3399.external/tree/master/package/rockchip/ros
-It was a bit outdated for what I wanted to do.  I took some examples
-from it.
-
-While my Buildroot patches were sufficient to fulfill my needs, I
-don't think they were good enough to be upstreamed.  Moreover, ROS1
-Noetic is the last LTS version which will be EOL in 2025.  See:
-https://wiki.ros.org/Distributions#List_of_Distributions
-This is why I didn't submitted my patches to Buildroot.
-
-For the next 2022 edition of the HoverGames challenge, I would like
-to switch to ROS2 in Buildroot.  I'm currently exploring ways to
-regenerate ROS2 buildroot recipes automatically, using the ROS
-infrastructure packages.  I believe this is the way the Gentoo and
-Yocto/OpenEmbedded recipes are currently generated.
-
-See:
-https://github.com/ros-infrastructure/superflore
-https://github.com/ros-infrastructure/superflore/tree/master/superflore/generators
-
-My current idea would be to:
-- Add in Buildroot the minimum changes, if needed
-   (minimal infra things like pkg-catkin, other non-ROS package 
-dependencies)
-- Propose a "buildroot" generator in superflore upstream that create
-   an maintain some of the ROS2 recipes.
-
-Comments, ideas and suggestions are welcome!  Do not hesitate to
-contact me to discuss that topic.
+I really would like to see this being finalized.
 
 Best regards,
 
-Julien.
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
