@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7F8BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 18:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA071C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 18:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8915E408CD;
-	Sat,  8 Jan 2022 18:11:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0F260AF5;
+	Sat,  8 Jan 2022 18:12:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ASYfyWhI1GvO; Sat,  8 Jan 2022 18:11:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rh_eip75131j; Sat,  8 Jan 2022 18:12:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB65A408AC;
-	Sat,  8 Jan 2022 18:11:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0002360AA9;
+	Sat,  8 Jan 2022 18:12:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AD66B1BF593
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:11:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 211951BF593
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A95F4011F
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:11:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BB9C4011F
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:12:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eARuYCBsHwqQ for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 18:11:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5BBFF400E3
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:11:25 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id w16so35488577edc.11
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 10:11:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=jJTnH9rQPkVF8pGvg/Wv81rceNuT/kIv5rVwzfClN0o=;
- b=nzvZC5MfXM2WmtPp5+txeNA6ivLlXGiJHonF7ELRXxXdGZRUVwzM1p06wG13bRw9Hc
- uOy9oZNcIB2T+emwhRheQu8vhcq7HVeMuobcjfaK93XrKifbiiP80qkhenPdVlKFldiX
- WAPz/oHf7FhLhFzhNyreu6EwcCso3N9Tffmh11Jar31n5fdaDeyGZ92kQwiaUAkW8TCB
- FOgIErMLRPu6AVdAmsCND8rDeLn5oaWTWkCx7TfKJ/yWBDUdG1+XnZ9Aep1vjzUqqjwL
- yc0Ua5apGgJ7ow6cN2RjzM+udtK10rce6CFqbcDKe38eqcbP04MtLUEu+dAHcFGArNcU
- tYmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=jJTnH9rQPkVF8pGvg/Wv81rceNuT/kIv5rVwzfClN0o=;
- b=gXhaCCiRqLQ8oiVN6V3AyW8WZF3dUIeFdpoBFek2+PFtjHj/422/uUXCbPueYrQkMv
- Dn2NOY4OAboCJRuyZJ1Wlo7GMv9BYC57oInhHohCQZOTIHk2u/PquHDMuxBzjVtBZ+oH
- BIm6HSYwx6PAh5Z0l2J/9dZzApLa0/ABYUCe3hl5yZPq9E1JpiEfRGEChDj11HGELi4N
- vJylvhXHjYDp6116k8xaG4EsVhyQCWpma1JzO/yHj5Qsk/cTPoE7rzikajwGyraxGQ5N
- s3b3mi983MFAHDWmqIaLC3tR+dvuXBrSpSAOSYA10TABCsvMDRzPOyE6EVa+qmRv7/NK
- hM9g==
-X-Gm-Message-State: AOAM5303o5uqxIDHlmb80db0xqW4/lALnQZQzkJyI/wh1/sZXEzTeQCg
- KSrTa9iUwvM9f2Rk8JoJmn2jtKFrKopal+daI61oQbe1o3E=
-X-Google-Smtp-Source: ABdhPJxbjbF3Lnf5KAo+7Pa2trHA9HHpxUnuaf9M3louRVm1llN3PFCnGPQkEClFKTxlDYambvf7HFAiJDPzlp+fM70=
-X-Received: by 2002:a17:906:6a23:: with SMTP id
- qw35mr1915378ejc.117.1641665483464; 
- Sat, 08 Jan 2022 10:11:23 -0800 (PST)
+ with ESMTP id j4mUFyd6mQsd for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 18:12:06 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E86E7400E3
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:12:05 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 196351BF205;
+ Sat,  8 Jan 2022 18:12:02 +0000 (UTC)
+Date: Sat, 8 Jan 2022 19:12:02 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Message-ID: <20220108191202.374d45ae@windsurf>
+In-Reply-To: <20200306071440.30433-7-miquel.raynal@bootlin.com>
+References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
+ <20200306071440.30433-7-miquel.raynal@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220108162146.2735403-1-fontaine.fabrice@gmail.com>
- <20220108190414.6b638ea8@gmx.net>
-In-Reply-To: <20220108190414.6b638ea8@gmx.net>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 8 Jan 2022 19:10:08 +0100
-Message-ID: <CAPi7W82rQC2jnY+XVrih9nn9R+RkiDUHxGe-Fp2NuVLrnkOcfA@mail.gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump to
- version 2021.07.01
+Subject: Re: [Buildroot] [PATCH 6/7] package/qt5: generalize the condition
+ on which EGLFS KMS gets supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,99 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGV0ZXIsCgpMZSBzYW0uIDggamFudi4gMjAyMiDDoCAxOTowNCwgUGV0ZXIgU2VpZGVyZXIg
-PHBzLnJlcG9ydEBnbXgubmV0PiBhIMOpY3JpdCA6Cj4KPiBIZWxsbyBGYWJyaWNlLAo+Cj4gT24g
-U2F0LCAgOCBKYW4gMjAyMiAxNzoyMTo0NiArMDEwMCwgRmFicmljZSBGb250YWluZSA8Zm9udGFp
-bmUuZmFicmljZUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNl
-IEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KPiA+IC0tLQo+ID4gIHBhY2th
-Z2UvcmFzcGJlcnJ5cGktdXNiYm9vdC9yYXNwYmVycnlwaS11c2Jib290Lmhhc2ggfCAyICstCj4g
-PiAgcGFja2FnZS9yYXNwYmVycnlwaS11c2Jib290L3Jhc3BiZXJyeXBpLXVzYmJvb3QubWsgICB8
-IDUgKysrLS0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
-bnMoLSkKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9yYXNwYmVycnlwaS11c2Jib290L3Jh
-c3BiZXJyeXBpLXVzYmJvb3QuaGFzaCBiL3BhY2thZ2UvcmFzcGJlcnJ5cGktdXNiYm9vdC9yYXNw
-YmVycnlwaS11c2Jib290Lmhhc2gKPiA+IGluZGV4IDNmNjZiMTJmZjEuLmNlZGM1ZmI3ZTEgMTAw
-NjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL3Jhc3BiZXJyeXBpLXVzYmJvb3QvcmFzcGJlcnJ5cGktdXNi
-Ym9vdC5oYXNoCj4gPiArKysgYi9wYWNrYWdlL3Jhc3BiZXJyeXBpLXVzYmJvb3QvcmFzcGJlcnJ5
-cGktdXNiYm9vdC5oYXNoCj4gPiBAQCAtMSw1ICsxLDUgQEAKPiA+ICAjIExvY2FsbHkgY2FsY3Vs
-YXRlZAo+ID4gLXNoYTI1NiAgZTRhMDdkZjA1YzIzZTBlYmExMDBkNDAxMzM2N2U3ODIzZTNiOGJj
-NzJkYTdiNzliMDMxYmQzNDY2MTZjNmFlNSAgcmFzcGJlcnJ5cGktdXNiYm9vdC05MzI0ZmQ3MDM0
-YjlkMzYwNmFlZDhhMjdkYTc0ZDZkNTdlMDY2ZTdlLnRhci5nego+ID4gK3NoYTI1NiAgNDU2NTMx
-NGIzOGU3Yzc1MDViN2QzMmEzYjUxYjQ5Zjc5YzdkZDU3NjdkNDViODZkMzhlNTI1NWFlNzQ4OWE0
-MyAgcmFzcGJlcnJ5cGktdXNiYm9vdC0yMDIxLjA3LjAxLnRhci5nego+ID4KPiA+ICAjIExpY2Vu
-c2UgZmlsZXMKPiA+ICBzaGEyNTYgIGI0MDkzMGJiY2Y4MDc0NGM4NmM0NmExMmJjOWRhMDU2NjQx
-ZDcyMjcxNmMzNzhmNTY1OWI5ZTU1NWVmODMzZTEgIExJQ0VOU0UKPiA+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL3Jhc3BiZXJyeXBpLXVzYmJvb3QvcmFzcGJlcnJ5cGktdXNiYm9vdC5tayBiL3BhY2th
-Z2UvcmFzcGJlcnJ5cGktdXNiYm9vdC9yYXNwYmVycnlwaS11c2Jib290Lm1rCj4gPiBpbmRleCA1
-ZDdiNDMzYzY0Li4yZTQxOTRkYTBiIDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9yYXNwYmVycnlw
-aS11c2Jib290L3Jhc3BiZXJyeXBpLXVzYmJvb3QubWsKPiA+ICsrKyBiL3BhY2thZ2UvcmFzcGJl
-cnJ5cGktdXNiYm9vdC9yYXNwYmVycnlwaS11c2Jib290Lm1rCj4gPiBAQCAtNCw4ICs0LDkgQEAK
-PiA+ICAjCj4gPiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+Cj4gPiAtUkFTUEJFUlJZUElf
-VVNCQk9PVF9WRVJTSU9OID0gOTMyNGZkNzAzNGI5ZDM2MDZhZWQ4YTI3ZGE3NGQ2ZDU3ZTA2NmU3
-ZQo+ID4gLVJBU1BCRVJSWVBJX1VTQkJPT1RfU0lURSA9ICQoY2FsbCBnaXRodWIscmFzcGJlcnJ5
-cGksdXNiYm9vdCwkKFJBU1BCRVJSWVBJX1VTQkJPT1RfVkVSU0lPTikpCj4gPiArUkFTUEJFUlJZ
-UElfVVNCQk9PVF9WRVJTSU9OID0gMjAyMS4wNy4wMQo+Cj4gICAgICAgICAkIGdpdCBsb2cgLS1v
-bmVsaW5lIC0tcmV2ZXJzZQo+ICAgICAgICAgWy4uLl0KPiA5MzI0ZmQ3IEFkZCBuYXRpdmUgUmFz
-cGJlcnJ5IFBpIEltYWdlciBwb3J0IC0gYmV0YQo+IGVhZDNlMzAgcmVhZG1lOiBhZGQgbWFjT1Mg
-YnVpbGQgc3RlcAo+Cj4gMjA0OGFlNiAoMjAyMS4wNy4wMSkgTWVyZ2UgcHVsbCByZXF1ZXN0ICM4
-MyBmcm9tIG1ycG9sbG8vcGF0Y2gtMQo+Cj4gNmM0ZDQ0NCBVcGRhdGUgUmFzcGJlcnJ5IFBpIDQg
-RUVQUk9NIHRvIHBpZWVwcm9tLTIwMjEtMDctMDYKPiA1OTgzMGVhIE1lcmdlIHB1bGwgcmVxdWVz
-dCAjODUgZnJvbSB0aW1nMjM2L3BpZWVwcm9tLTIwMjEtMDctMDYKPiA4YjFjY2MxIFVwZGF0ZSBj
-aGFuZ2Vsb2cKPiA5YTQ4ODdlIEZpeCBgaW5zdGFsbGAgYW5kIGB1bmluc3RhbGxgIHRhcmdldHMg
-aW4gTWFrZWZpbGUuCj4gMzg0MGYzYiBNZXJnZSBwdWxsIHJlcXVlc3QgIzg2IGZyb20gY3BiLS9m
-ZWF0dXJlL2FkZC1pbnN0YWxsLXRhcmdldC1pbi1tYWtlZmlsZQo+IGZmOTg2ZTQgYm9vdGxvYWRl
-cjogUmVtb3ZlIE5WTWUgYmV0YSBmaWxlcwo+IGMyZGEwNWMgTWVyZ2UgcHVsbCByZXF1ZXN0ICM4
-OCBmcm9tIHBldGVyaGFycGVydWsvcmVtb3ZlX252bWUKPiA0NjA4ZDU3IFVwZGF0ZSBib290Y29k
-ZTQuYmluCj4gNzZlODU2ZCBNZXJnZSBwdWxsIHJlcXVlc3QgIzg5IGZyb20gcGV0ZXJoYXJwZXJ1
-ay9tYXN0ZXJfdXBkYXRlCj4gOGJjZDVjZSBCdW1wIGJvb3Rjb2RlLmJpbgo+IGQxYTlhNWMgYmV0
-YTogQWRkIHN1cHBvcnQgZm9yIHNlY3VyZS1ib290IC0gc2VlIFJlYWRtZS5tZAo+IDZlYjk5NzYg
-c2VjdXJlLWJvb3Q6IEFkZGVkIGV4YW1wbGUgYm9vdC5pbWcKPiA3OGUxODMwIG1ha2UtYm9vdC1p
-bWFnZTogRml4IHR5cG8gaW4gZG9jcyBBRlRfU0laRSAtPiBGQVRfU0laRQo+IDU4YmRhZjQgbWFr
-ZS1ib290LWltYWdlOiBVc2UgbG9zZXR1cCBpbnN0ZWFkIG9mIHVkaXNrc2N0bAo+IDRiZGQwMzIg
-c2VjdXJlLWJvb3QgQkVUQSBkb2N1bWVudGF0aW9uIHVwZGF0ZXMKPiA1MjQ3ZmZlIE1lcmdlIHB1
-bGwgcmVxdWVzdCAjNzcgZnJvbSBuaWxzLXdlcm5lci9wYXRjaC0xCj4gZGMxYjk1ZiBzZWN1cmUt
-Ym9vdDogTW92ZSB0aGUgZXhhbXBsZSBQRU0gZmlsZSB0byBzZWN1cmUtYm9vdC1leGFtcGxlCj4g
-ODA5NDVlZCBzZWN1cmUtYm9vdDogVXBkYXRlIHJlY292ZXJ5LGJvb3Rjb2RlNCArIEVFUFJPTSB0
-byBsYXRlc3QgYmV0YSAtIDIwMjEtMTAtMjcKPiBhNmUwZDhiIHNlY3VyZS1ib290OiBVcGRhdGUg
-UmVhZG1lIHRvIHVwZGF0ZSBtYXggcmFtZGlzayBzaXplIHRvIDk2TUIKPiAxNGUyOGJlIENvcnJl
-Y3RlZCB0aGUgYm9hcmQgZmxhZwo+IDdiNDI5YWIgTWVyZ2UgcHVsbCByZXF1ZXN0ICM5NiBmcm9t
-IERvZGFpbi9tYXN0ZXIKPiAwOTg1MmE5IENvcnJlY3RlZCB0aGUgLWIgZmxhZyBpbiB0aGUgcmVh
-ZG1lLm1kCj4gODc5NjQxZiBSZWFkbWU6IEFkZCBkb2NzIGZvciBleGFtaW5pbmcgdGhlIGNvbnRl
-bnRzIG9mIGJvb3QuaW1nCj4gNWY4YzIzMyBzZWN1cmUtYm9vdDogQWRkIG1vcmUgZG9jdW1lbnRh
-dGlvbiBhYm91dCB0aGUgUlNBIHNpZ25hdHVyZXMgYW5kIGFkZCBvcHRpb25hbCBwdWJsaWMga2V5
-IGFyZ3VtZW50Cj4gZDFhZDA1NyBNZXJnZSBwdWxsIHJlcXVlc3QgIzk4IGZyb20gdGltZzIzNi9z
-ZWN1cmUtYm9vdC1oc20KPiA2MTU0ZmUyIG1ha2UtYm9vdC1pbWFnZTogRml4IHVubW91bnQgYW5k
-IHNldCBHSUQKPiA4YjM5MGZlIG1ha2UtYm9vdC1pbWFnZTogRW5hYmxlIHRoZSBpbWFnZSBzaXpl
-IHRvIGJlIHNwZWNpZmllZAo+IGZjNDAzNWUgVXBkYXRlIHRoZSBkZWZhdWx0IEVFUFJPTSBpbWFn
-ZSB0byAyMDIxLTExLTIyCj4gYTdlZDhkMSBycGktZWVwcm9tLWNvbmZpZzogUHVsbCBpbiAtLWVk
-aXQgZml4ZXMgZnJvbSBycGktZWVwcm9tIHJlcG8KPiA4M2M5YTk2IE1lcmdlIHB1bGwgcmVxdWVz
-dCAjMTAzIGZyb20gdGltZzIzNi9waWVlcHJvbS0yMDIxLTExLTIyCj4gMzk2Yjk4ZiBzZWN1cmUt
-Ym9vdC1yZWNvdmVyeTogVXBkYXRlIHRvIGxhdGVzdCAyMDIxLTExLTIyIEVFUFJPTQo+IDE0ZWE2
-ODQgbXNkOiBGaXggbm9uLTI3MTEgTVNEIHN1cHBvcnQKPiA1MTViOTcyIFVwZGF0ZSB0aGUgZGVm
-YXVsdCBFRVBST00gaW1hZ2UgdG8gMjAyMS0xMi0wMgo+IDFhY2E2YmMgTWVyZ2UgcHVsbCByZXF1
-ZXN0ICMxMDQgZnJvbSBwZXRlcmhhcnBlcnVrL3VwZGF0ZV9kZWMKPiBlNWU0OTk0IFJlbW92ZSBp
-bWFnZXIgYmV0YSByZWxlYXNlCj4gOGJiNTgyMCBVc2UgcGtnLWNvbmZpZyB0byBsb2NhdGUgbGli
-dXNiLTEuMAo+IDZiMDVhM2EgYm9vdGxvYWRlcjogRW5hYmxlIHJldm9rZV9kZXZrZXkgaW4gc2Vj
-dXJlLWJvb3QgcmVjb3ZlcnkuYmluCj4gYTdkNGVjNCAoSEVBRCkgTWVyZ2UgcHVsbCByZXF1ZXN0
-ICMxMDggZnJvbSB0aW1nMjM2L3NlY3VyZS1ib290LXJldm9rZS1kZXZrZXkKPgo+IFRoZSB2ZXJz
-aW9uIGJ1bXAgdG8gMjAyMS4wNy4wMSBnYWlucyBvbmUgcmVhZG1lIHVwZGF0ZSwgd2h5IG5vdCBi
-dW1wCj4gdG8gaGVhZC9sYXRlc3QgKGFmdGVyIHRlc3RpbmcgdGhlIHJlc3VsdCk/CkJlY2F1c2Ug
-SSBwcmVmZXIgdG8gYnVtcCB0byBhIHN0YWJsZSByZWxlYXNlLgpUaGlzIGlzICJzYWZlciIgYW5k
-IHJlbGVhc2UtbW9uaXRvcmluZy5vcmcgd2lsbCB3YXJuIHVzIHdoZW4gYSBuZXcKdmVyc2lvbiB3
-aWxsIGJlIG1hZGUgYXZhaWxhYmxlIGJ5IHVzcHRyZWFtLgpGb3IgZXhhbXBsZSwgaXQgaXMgcHJl
-dHR5IGxpa2VseSB0aGF0IGNvbW1pdCA4YmI1ODIwIHdpbGwgcmFpc2UgYQpidWlsZCBmYWlsdXJl
-IGFzIHBrZy1jb25maWcgaXMgaGFyZC1jb2RlZCAoYnV0IEkgaGF2ZSBub3QgdGVzdGVkIGl0IHRv
-CmNvbmZpcm0gaXQpLgo+Cj4gUmVnYXJkcywKPiBQZXRlcgo+Cj4KPiA+ICtSQVNQQkVSUllQSV9V
-U0JCT09UX1NJVEUgPSBcCj4gPiArICAgICAkKGNhbGwgZ2l0aHViLHJhc3BiZXJyeXBpLHVzYmJv
-b3QsdiQoUkFTUEJFUlJZUElfVVNCQk9PVF9WRVJTSU9OKSkKPiA+ICBSQVNQQkVSUllQSV9VU0JC
-T09UX0xJQ0VOU0UgPSBBcGFjaGUtMi4wCj4gPiAgUkFTUEJFUlJZUElfVVNCQk9PVF9MSUNFTlNF
-X0ZJTEVTID0gTElDRU5TRQo+ID4KPgpCZXN0IFJlZ2FyZHMsCgpGYWJyaWNlCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Fri,  6 Mar 2020 08:14:39 +0100
+Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+
+> BR2_PACKAGE_HAS_LIBEGL indicates that the virtual libegl packet is
+> enabled. This packet may be provided by mesa3d (this is actually what
+> happens when selecting BR2_PACKAGE_MESA3D_OPENGL_EGL) but
+> other providers may exist.
+> 
+> Generalize the condition on which EGLFS KMS support is added to Qt5 to
+> allow rockchip-mali-bifrost (and potentially other) to use the KMS
+> back-end.
+> 
+> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+This is no longer needed since commit
+469829d9c55b7f5461e29f3f6436417836504410. All that conditional logic to
+determine which Qt libraries and plugins to install is gone, as we now
+use the Qt "make install" logic.
+
+So I'll mark this patch as Superseded.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
