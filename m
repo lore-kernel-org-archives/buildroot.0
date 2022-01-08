@@ -4,44 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 101C6C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jan 2022 23:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C8CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 00:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B111D401B7;
-	Fri,  7 Jan 2022 23:27:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05C2B429E4;
+	Sat,  8 Jan 2022 00:07:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nTBarQXdZVv3; Fri,  7 Jan 2022 23:27:01 +0000 (UTC)
+	with ESMTP id aUkJ5-lP-36E; Sat,  8 Jan 2022 00:07:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A101401B8;
-	Fri,  7 Jan 2022 23:27:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 737151BF36E
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:26:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F9B7428B3;
+	Sat,  8 Jan 2022 00:07:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DDC111C1189
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 00:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6262742A10
- for <buildroot@lists.busybox.net>; Fri,  7 Jan 2022 23:26:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9E8B82ACD
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 00:07:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wRBBEbQulfq5 for <buildroot@lists.busybox.net>;
- Fri,  7 Jan 2022 23:26:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 151D942A11
- for <buildroot@buildroot.org>; Fri,  7 Jan 2022 23:26:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0E707834E4; Fri,  7 Jan 2022 23:20:22 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 00:26:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30b2dbeae3930084634e126ead4e1e2930a58bad
-X-Git-Newrev: 829777c1c9a0d40c8c5753e6fe86acfc78edfc92
-X-Patchwork-Hint: ignore
-Message-Id: <20220107232022.0E707834E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeswitch: security bump version
- to 1.10.7
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=fastmail.com header.b="eWYD4e0h";
+ dkim=pass (2048-bit key) header.d=messagingengine.com
+ header.b="Hi5n02VQ"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vnkQSdMp5z_J for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 00:07:16 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com
+ [64.147.123.25])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D791E813FB
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 00:07:16 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+ by mailout.west.internal (Postfix) with ESMTP id 2578F3200E60;
+ Fri,  7 Jan 2022 19:07:13 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+ by compute6.internal (MEProxy); Fri, 07 Jan 2022 19:07:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+ message-id:subject:from:to:date:in-reply-to:references
+ :content-type:mime-version:content-transfer-encoding; s=fm1; bh=
+ RgrP/lsDmRC76iaCwBs4rUVB1gTKfTuk/ENwa8ruFgs=; b=eWYD4e0hB+3lcXmJ
+ ZZSCD5Wmsra48LmMkMMsGNs6a44krTiyBl32YEMFH6nbZihe0/383X8zynyTbv7+
+ iG1xtxAw/Rshs/Lr29u05gQntBXfTufinbpUZINyjqY6BcDbqk7dTC5kGIpui0l8
+ q2kx+gZ69zziQNmAOfmOK7tmFehJaoTATG8VcPU+xH0YgiV3hd2o1iP3O7keydgN
+ dH09Y4lqe3paPoK/CF29+ZqmilR6feLkhsGtvHqTreR+UMYMXtUk8AyCfxT6+P3w
+ O1gwNeV2KsC/ajkJHzo0lbxeQeZ895XcOfIqMWzZ3ZBBriJAzHj5wbJUdAe5NqdO
+ 38Ciuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=content-transfer-encoding:content-type
+ :date:from:in-reply-to:message-id:mime-version:references
+ :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+ :x-sasl-enc; s=fm1; bh=RgrP/lsDmRC76iaCwBs4rUVB1gTKfTuk/ENwa8ruF
+ gs=; b=Hi5n02VQ6++cRt3Rl6KrSjHfXofhsAC7znX/vjbg7pT8+4AR5C0vvs1Lt
+ nSoG16X9zO8krOoktVRD31IBqhWi4LCLRC6s1hU0I+ZdF4+gHtto9X3RR9sqDupI
+ 0q7narBmB/VfYkIHf72kCeLRrYICZ6JE2tdxKyGg+xbQ4VOP+zaB0TaYsLKnUFKQ
+ mbbUfjrq8nHAQfvIy/ase1FMeIDMWHH/PsAcoR3pkuypUMxWhN1dfG+WfflYkJmi
+ 1bO/AKYYVnYuj++mbCb4wOwRKtwmfh7jqfyFSDGnRkFsOXBcDivkTfgWmPD03zg8
+ LRbkWJKGP9eYPc0bHsifMNbJ9JHyg==
+X-ME-Sender: <xms:sNXYYbjDXhrymN0ETcFMM_flPl8bsppi-_T6V61PnepyOMUffm1VIQ>
+ <xme:sNXYYYDBxqPLTLAVTv7MDyj8kbfSZqEcjNXuZNuguSQ8c7odynjMWtLkzIjnp62fu
+ boF6KlJuKQ2KroAHPE>
+X-ME-Received: <xmr:sNXYYbG72aa95LaZoIiyUdVCnnGDtleJdJT7BNleo4Hk1Ql152ZPwAKE1nN3mrUBTFaq9PAJUAMkkL8Nbr-czmFIFJOmnL5sPD3-T4DO2Ar_5aPbZxg5KgkS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudegfedgudekucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+ cujfgurhepkffuhffvffgjfhgtfggggfesthekredttderjeenucfhrhhomheplfgvshhs
+ vgcuofhilhhlfihoohguuceojhgvshhsvggpuggvvhesfhgrshhtmhgrihhlrdgtohhmqe
+ enucggtffrrghtthgvrhhnpeehjeeihfduuefhffdugeevhfekjedtteehkeelkeelleef
+ fedvheeitdetvdeggeenucffohhmrghinhepsghuihhlughrohhothdrohhrghenucevlh
+ hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjvghsshgvpggu
+ vghvsehfrghsthhmrghilhdrtghomh
+X-ME-Proxy: <xmx:sNXYYYRcZXM3FBk9KL1VeBgjypkzC2I-mJuE4DBxzMfB3pdAjYbpuA>
+ <xmx:sNXYYYzAOjFNm2Qp2X4tW6e0AvHAoW2SKvx05P7ouEz5sviNL7qKkA>
+ <xmx:sNXYYe5f-ChNyQOXPwHFupQcaAtNAlQvcq_LeUkFFtIlvN3ULcUcng>
+ <xmx:sNXYYeY9hvVyf_C_Obbjo9GxcdemsXmhX7MBcSo3zdU3A25XspO5wA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 7 Jan 2022 19:07:12 -0500 (EST)
+Message-ID: <99fefbe8119003202a02e7696a98711c71bd30c7.camel@fastmail.com>
+From: Jesse Millwood <jesse_dev@fastmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+Date: Fri, 07 Jan 2022 19:07:11 -0500
+In-Reply-To: <4d73992c-3189-1989-525c-4506495c90ac@mind.be>
+References: <37282adb-8559-4124-874d-c1729bd3ce01@www.fastmail.com>
+ <09340549-99c9-b79c-17db-3967b1ab6335@mind.be>
+ <fff7dc06ab8c676e28709d3782e57e90ae121095.camel@fastmail.com>
+ <4d73992c-3189-1989-525c-4506495c90ac@mind.be>
+User-Agent: Evolution 3.42.2 (flatpak git) 
+MIME-Version: 1.0
+Subject: Re: [Buildroot] Overriding Kconfig Values from external br2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,360 +104,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7450703680788568251=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7450703680788568251==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=829777c1c9a0d40c8c5753e6fe86acfc78edfc92
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following security issues:
-
-- CVE-2021-41105: FreeSWITCH susceptible to Denial of Service via invalid
-  SRTP packets
-
-  When handling SRTP calls, FreeSWITCH is susceptible to a DoS where calls
-  can be terminated by remote attackers.  This attack can be done
-  continuously, thus denying encrypted calls during the attack.
-
-  https://github.com/signalwire/freeswitch/security/advisories/GHSA-jh42-prph-gp36
-
-- CVE-2021-41157: FreeSWITCH does not authenticate SIP SUBSCRIBE requests by default
-
-  By default, SIP requests of the type SUBSCRIBE are not authenticated in
-  the affected versions of FreeSWITCH.
-
-  https://github.com/signalwire/freeswitch/security/advisories/GHSA-g7xg-7c54-rmpj
-
-- CVE-2021-37624: FreeSWITCH does not authenticate SIP MESSAGE requests,
-  leading to spam and message spoofing
-
-  By default, SIP requests of the type MESSAGE (RFC 3428) are not
-  authenticated in the affected versions of FreeSWITCH.  MESSAGE requests
-  are relayed to SIP user agents registered with the FreeSWITCH server
-  without requiring any authentication.  Although this behaviour can be
-  changed by setting the auth-messages parameter to true, it is not the
-  default setting.
-
-  https://github.com/signalwire/freeswitch/security/advisories/GHSA-mjcm-q9h8-9xv3
-
-- CVE-2021-41145: FreeSWITCH susceptible to Denial of Service via SIP flooding
-
-  When flooding FreeSWITCH with SIP messages, it was observed that after a
-  number of seconds the process was killed by the operating system due to
-  memory exhaustion
-
-  https://github.com/signalwire/freeswitch/security/advisories/GHSA-jvpq-23v4-gp3m
-
-- CVE-2021-41158: FreeSWITCH vulnerable to SIP digest leak for configured gateways
-
-  An attacker can perform a SIP digest leak attack against FreeSWITCH and
-  receive the challenge response of a gateway configured on the FreeSWITCH
-  server.  This is done by challenging FreeSWITCH's SIP requests with the
-  realm set to that of the gateway, thus forcing FreeSWITCH to respond with
-  the challenge response which is based on the password of that targeted
-  gateway.
-
-  https://github.com/signalwire/freeswitch/security/advisories/GHSA-3v3f-99mv-qvj4
-
-Release notes:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.7
-
-Removed patch, upstream applied a different fix:
-https://github.com/signalwire/freeswitch/commit/e9fde845de5b8885282bf5e70f4be3645c5c3e9b
-
-Added optional dependency to libks, needed due to upstream commit
-https://github.com/signalwire/freeswitch/commit/ed9851666615d283effb76edc7028cc08b07eff9
-
-Added upstream patches to fix build errors.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: mention security fixes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch |  26 +++++
- ...lications-mod_cv-mod_cv.cpp-fix-build-wit.patch |  44 -------
- .../freeswitch/0002-core-fix--disable-libyuv.patch | 129 +++++++++++++++++++++
- package/freeswitch/freeswitch.hash                 |   4 +-
- package/freeswitch/freeswitch.mk                   |   8 +-
- 5 files changed, 163 insertions(+), 48 deletions(-)
-
-diff --git a/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch b/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch
-new file mode 100644
-index 0000000000..57f6e660c1
---- /dev/null
-+++ b/package/freeswitch/0001-fix-build-SWITCH_BYTE_ORDER-__BIG_ENDIAN.patch
-@@ -0,0 +1,26 @@
-+From 68039d344d8e826e8b403c9cd0284fd07b4495ac Mon Sep 17 00:00:00 2001
-+From: Dragos Oancea <dragos@signalwire.com>
-+Date: Tue, 26 Oct 2021 08:42:58 +0000
-+Subject: [PATCH] [core] fix build SWITCH_BYTE_ORDER == __BIG_ENDIAN
-+
-+Downloaded from upstream commit:
-+https://github.com/signalwire/freeswitch/commit/68039d344d8e826e8b403c9cd0284fd07b4495ac
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/switch_rtp.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/switch_rtp.c b/src/switch_rtp.c
-+index 1880bbb19c..843ee81381 100644
-+--- a/src/switch_rtp.c
-++++ b/src/switch_rtp.c
-+@@ -2155,7 +2155,7 @@ static void switch_send_rtcp_event(switch_rtp_t *rtp_session ,struct switch_rtcp
-+ 				switch_event_add_header_string(event, SWITCH_STACK_BOTTOM, header, value);
-+ 				snprintf(header, sizeof(header), "Source-Lost");
-+ #if SWITCH_BYTE_ORDER == __BIG_ENDIAN
-+-				tmpLost = report->lost; /* signed 24bit will extended signess to int32_t automatically */
-++				tmpLost = rtcp_report_block->lost; /* signed 24bit will extended signess to int32_t automatically */
-+ #else
-+ 				tmpLost = ntohl(rtcp_report_block->lost)>>8;
-+ 				tmpLost = tmpLost | ((tmpLost & 0x00800000) ? 0xff000000 : 0x00000000); /* ...and signess compensation */
-diff --git a/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch b/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch
-deleted file mode 100644
-index cd0a3ab4c2..0000000000
---- a/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 575409a14e62f73e83309daf8ff6642a235f250c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 16 Oct 2020 23:06:36 +0200
--Subject: [PATCH] src/mod/applications/mod_cv/mod_cv.cpp: fix build with opencv
-- 3.4.9
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Use cvScalar instead of CV_RGB to avoid the following build failure with
--opencv 3.4.9:
--
--mod_cv.cpp:693:24: error: conversion from ‘cv::Scalar {aka cv::Scalar_<double>}’ to non-scalar type ‘CvScalar’ requested
--         CvScalar col = CV_RGB((float)255 * object_neighbors / max_neighbors, 0, 0);
--                        ^
--
--Indeed, CV_RGB is defined as cv::Scalar instead of cvScalar since
--version 3.4.2 and
--https://github.com/opencv/opencv/commit/7f9253ea0a9fe2635926379420002dbf0c3fce0f
--
--It should be noted that CV_RGB(r,g,b) = cvScalar(b,g,r,0)
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/signalwire/freeswitch/pull/914]
-----
-- src/mod/applications/mod_cv/mod_cv.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/mod/applications/mod_cv/mod_cv.cpp b/src/mod/applications/mod_cv/mod_cv.cpp
--index 582f925abf..bbec755e91 100644
----- a/src/mod/applications/mod_cv/mod_cv.cpp
--+++ b/src/mod/applications/mod_cv/mod_cv.cpp
--@@ -690,7 +690,7 @@ void detectAndDraw(cv_context_t *context)
-- 		//printf("WTF %d\n", object_neighbors);
--         //cout << "Detected " << object_neighbors << " object neighbors" << endl;
--         const int rect_height = cvRound((float)img.rows * object_neighbors / max_neighbors);
---        CvScalar col = CV_RGB((float)255 * object_neighbors / max_neighbors, 0, 0);
--+        CvScalar col = cvScalar(0, 0, (float)255 * object_neighbors / max_neighbors, 0);
--         rectangle(img, cvPoint(0, img.rows), cvPoint(img.cols/10, img.rows - rect_height), col, -1);
-- 
--         parse_stats(&context->nestDetected, nestedObjects.size(), context->skip);
---- 
--2.28.0
--
-diff --git a/package/freeswitch/0002-core-fix--disable-libyuv.patch b/package/freeswitch/0002-core-fix--disable-libyuv.patch
-new file mode 100644
-index 0000000000..137cb27cf8
---- /dev/null
-+++ b/package/freeswitch/0002-core-fix--disable-libyuv.patch
-@@ -0,0 +1,129 @@
-+From a2ce46c6fde38d6ac54a8a2ee1a5b391e2ed2071 Mon Sep 17 00:00:00 2001
-+From: Sebastian Kemper <sebastian_ml@gmx.net>
-+Date: Mon, 1 Nov 2021 09:59:09 +0100
-+Subject: [PATCH] [core] fix "--disable-libyuv"
-+
-+Recent changes made it impossible to compile freeswitch without libyuv
-+support.
-+
-+src/switch_core_video.c: In function 'switch_img_read_from_file':
-+src/switch_core_video.c:3139:4: error: implicit declaration of function 'RAWToI420' [-Werror=implicit-function-declaration]
-+RAWToI420(data, width * 3,
-+^
-+src/switch_core_video.c:3148:4: error: implicit declaration of function 'ABGRToARGB' [-Werror=implicit-function-declaration]
-+ABGRToARGB(data, width * 4, img->planes[SWITCH_PLANE_PACKED], img->stride[SWITCH_PLANE_PACKED], width, height);
-+^
-+
-+Fix this my adding/moving the checks for "SWITCH_HAVE_YUV".
-+
-+Downloaded from upstream commit:
-+https://github.com/signalwire/freeswitch/commit/a2ce46c6fde38d6ac54a8a2ee1a5b391e2ed2071
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
-+---
-+ src/switch_core_video.c        | 12 ++++++++++++
-+ tests/unit/switch_core_video.c |  4 ++++
-+ 2 files changed, 16 insertions(+)
-+
-+diff --git a/src/switch_core_video.c b/src/switch_core_video.c
-+index 7dbd685d6ee..0d377f9c3e4 100644
-+--- a/src/switch_core_video.c
-++++ b/src/switch_core_video.c
-+@@ -3116,6 +3116,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_data_url_png(switch_image_t *img, cha
-+ 
-+ SWITCH_DECLARE(switch_image_t *) switch_img_read_from_file(const char* file_name, switch_img_fmt_t img_fmt)
-+ {
-++#ifdef SWITCH_HAVE_YUV
-+ 	int width = 0, height = 0, channels = 0;
-+ 	int comp = STBI_rgb;
-+ 	unsigned char *data = NULL;
-+@@ -3155,12 +3156,16 @@ SWITCH_DECLARE(switch_image_t *) switch_img_read_from_file(const char* file_name
-+ 	} else if (data) {
-+ 		stbi_image_free(data);
-+ 	}
-++#endif
-+ 
-+ 	return NULL;
-+ }
-+ 
-+ SWITCH_DECLARE(switch_status_t) switch_img_write_to_file(switch_image_t *img, const char* file_name, int quality)
-+ {
-++#ifndef SWITCH_HAVE_YUV
-++	return SWITCH_STATUS_FALSE;
-++#else
-+ 	int comp = STBI_rgb;
-+ 	unsigned char *data = NULL;
-+ 	const char *ext = strrchr(file_name, '.');
-+@@ -3217,6 +3222,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_write_to_file(switch_image_t *img, co
-+ 	free(data);
-+ 
-+ 	return ret ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
-++#endif
-+ }
-+ 
-+ typedef struct data_url_context_s {
-+@@ -3224,14 +3230,19 @@ typedef struct data_url_context_s {
-+ 	char **urlP;
-+ } data_url_context_t;
-+ 
-++#ifdef SWITCH_HAVE_YUV
-+ static void data_url_write_func(void *context, void *data, int size)
-+ {
-+ 	switch_buffer_t *buffer = (switch_buffer_t *)context;
-+ 	switch_buffer_write(buffer, data, size);
-+ }
-++#endif
-+ 
-+ SWITCH_DECLARE(switch_status_t) switch_img_data_url(switch_image_t *img, char **urlP, const char *type, int quality)
-+ {
-++#ifndef SWITCH_HAVE_YUV
-++	return SWITCH_STATUS_FALSE;
-++#else
-+ 	int comp = STBI_rgb;
-+ 	unsigned char *data = NULL;
-+ 	int stride_in_bytes = 0;
-+@@ -3300,6 +3311,7 @@ SWITCH_DECLARE(switch_status_t) switch_img_data_url(switch_image_t *img, char **
-+ 	switch_buffer_destroy(&buffer);
-+ 
-+ 	return ret ? SWITCH_STATUS_SUCCESS : SWITCH_STATUS_FALSE;
-++#endif /* SWITCH_HAVE_YUV */
-+ }
-+ 
-+ 
-+diff --git a/tests/unit/switch_core_video.c b/tests/unit/switch_core_video.c
-+index 27c96102929..e395db474d5 100644
-+--- a/tests/unit/switch_core_video.c
-++++ b/tests/unit/switch_core_video.c
-+@@ -48,6 +48,7 @@ FST_CORE_BEGIN("./conf")
-+ 		}
-+ 		FST_TEARDOWN_END()
-+ 
-++#ifdef SWITCH_HAVE_YUV
-+ 		FST_TEST_BEGIN(data_url_test)
-+ 		{
-+ 			char *data_url = NULL;
-+@@ -88,6 +89,7 @@ FST_CORE_BEGIN("./conf")
-+ 			unlink(argb_filename);
-+ 		}
-+ 		FST_TEST_END()
-++#endif /* SWITCH_HAVE_YUV */
-+ 
-+ 		FST_TEST_BEGIN(img_patch)
-+ 		{
-+@@ -239,6 +241,7 @@ FST_CORE_BEGIN("./conf")
-+ 		}
-+ 		FST_TEST_END()
-+ 
-++#ifdef SWITCH_HAVE_YUV
-+ 		FST_TEST_BEGIN(stb_data_url)
-+ 		{
-+ 			switch_image_t *img = switch_img_alloc(NULL, SWITCH_IMG_FMT_I420, 120, 60, 1);
-+@@ -321,6 +324,7 @@ FST_CORE_BEGIN("./conf")
-+ 			unlink(jpg_write_filename);
-+ 		}
-+ 		FST_TEST_END()
-++#endif /* SWITCH_HAVE_YUV */
-+ 	}
-+ 	FST_SUITE_END()
-+ }
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index dc5a67980f..8066c620c4 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,5 +1,5 @@
--# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.6.-release.tar.xz.sha256
--sha256  9a08d4e184e6d715e1c12c43a0f901597151752ef236f0a37e40996272b5c38d  freeswitch-1.10.6.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.7.-release.tar.xz.sha256
-+sha256  0919bddc2ea9cab2e4944314e71637bea9dd4f40d510722a74ea032104594c41  freeswitch-1.10.7.-release.tar.xz
- # Locally computed
- sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 944867cc75..c576e5f267 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.10.6
-+FREESWITCH_VERSION = 1.10.7
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
-@@ -120,7 +120,6 @@ FREESWITCH_ENABLED_MODULES += \
- 	endpoints/mod_rtc \
- 	endpoints/mod_rtmp \
- 	endpoints/mod_sofia \
--	endpoints/mod_verto \
- 	event_handlers/mod_cdr_csv \
- 	event_handlers/mod_cdr_sqlite \
- 	event_handlers/mod_event_socket \
-@@ -209,6 +208,11 @@ FREESWITCH_DEPENDENCIES += libilbc
- FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBKS),y)
-+FREESWITCH_DEPENDENCIES += libks
-+FREESWITCH_ENABLED_MODULES += endpoints/mod_verto
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
-
---===============7450703680788568251==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7450703680788568251==--
+T24gVGh1LCAyMDIyLTAxLTA2IGF0IDE4OjA5ICswMTAwLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3
+cm90ZToKPiAKPiAKPiBPbiAwNi8wMS8yMDIyIDE2OjM3LCBKZXNzZSBNaWxsd29vZCB3cm90ZToK
+PiA+IE9uIFRodSwgMjAyMi0wMS0wNiBhdCAxMDo0NSArMDEwMCwgQXJub3V0IFZhbmRlY2FwcGVs
+bGUgd3JvdGU6Cj4gPiA+IAo+ID4gPiAKPiA+ID4gT24gMDUvMDEvMjAyMiAyMDowMywgSmVzc2Ug
+TWlsbHdvb2Qgd3JvdGU6Cj4gPiA+ID4gSGVsbG8sCj4gPiA+ID4gCj4gPiA+ID4gSSBoYXZlIGFu
+IGV4dGVybmFsIEMvQysrIHRvb2xjaGFpbiB0aGF0IEkndmUgcHV0IHRvZ2V0aGVyIHRoYXQKPiA+
+ID4gPiB1c2VzCj4gPiA+ID4gTVVTTC4gSSd2ZQo+ID4gPiA+IGFsc28gYnVpbHQgYW4gZXh0ZXJu
+YWwgUnVzdCB0b29sY2hhaW4gdGhhdCB1c2VzIG15IE1VU0wKPiA+ID4gPiB0b29sY2hhaW4uCj4g
+PiA+ID4gCj4gPiA+ID4gTXkgaXNzdWUgaXMgdGhhdCB0aGVyZSBpcyBhIFJ1c3QgS2NvbmZpZyB2
+YXJpYWJsZSB0aGF0Cj4gPiA+ID4gc3BlY2lmaWVzIGlmCj4gPiA+ID4gYSBzcGVjaWZpYwo+ID4g
+PiA+IGFyY2hpdGVjdHVyZSBzdXBwb3J0cyBSdXN0Lgo+ID4gPiA+IAo+ID4gPiA+IFRoZSBLY29u
+ZmlnIHZhcmlhYmxlIGluIHF1ZXN0aW9uIGlzCj4gPiA+ID4gQlIyX1BBQ0tBR0VfSE9TVF9SVVNU
+Q19UQVJHRVRfQVJDSF9TVVBQT1JUUwo+ID4gPiA+IGluIHBhY2thZ2UvcnVzdGMvQ29uZmlnLmlu
+Lmhvc3QuCj4gPiA+IAo+ID4gPiBbc25pcF0KPiA+ID4gCj4gPiA+ID4gWW91IG1heSBub3RpY2Ug
+dGhhdCBJIGNoYW5nZWQgdGhlIGxpYmMgZGVwZW5kcyBsaW5lIHRvIGJlIG9yJ2QKPiA+ID4gPiB3
+aXRoCj4gPiA+ID4gQlIyX1RPT0xDSEFJTl9VU0VTX01VU0wuIEl0IHNlZW1zIHRoYXQgdGhpcyBk
+b2VzIG5vdCBnZXQKPiA+ID4gPiBjb25zaWRlcmVkCj4gPiA+ID4gd2hlbiBJCj4gPiA+ID4gY2hv
+b3NlIG15IGV4dGVybmFsIG11c2wgdG9vbGNoYWluIG9wdGlvbi4gSW4gdGhlIG1lbnVjb25maWcK
+PiA+ID4gPiB3aGVuIEkKPiA+ID4gPiBzZWFyY2ggZm9yCj4gPiA+ID4gdGhlIEJSMl9QQUNLQUdF
+X0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMgdmFyaWFibGUgd2l0aAo+ID4gPiA+IHRo
+ZQo+ID4gPiA+ICIvIiBrZXkgaXQKPiA+ID4gPiBsb29rcyBsaWtlIGl0IGlzIG9ubHkgZ2V0dGlu
+ZyBpdCBmcm9tIHRoZSBvcmlnaW5hbCBmaWxlLiBEb2VzCj4gPiA+ID4gYnVpbGRyb290IGhhdmUg
+YQo+ID4gPiA+IG1lY2hhbmlzbSBmb3Igb3ZlcndyaXRpbmcgdGhpcyBraW5kIG9mIHNldHRpbmcg
+YW5kIGlmIG5vdCwgZG9lcwo+ID4gPiA+IGFueW9uZSBoYXZlIGFuCj4gPiA+ID4gaWRlYSBvZiBo
+b3cgSSB3b3VsZCBhY2NvbXBsaXNoIHdoYXQgSSBhbSB0cnlpbmcgdG8gZG8gKG1ha2UKPiA+ID4g
+PiBidWlsZHJvb3QgaG9ub3IgbXkKPiA+ID4gPiBleHRlcm5hbCBydXN0IHRvb2xjaGFpbik/Cj4g
+PiA+IAo+ID4gPiDCoMKgIE5vLCB0aGVyZSdzIG5vIHdheSB0byBvdmVycmlkZSB0aGUgZGVwZW5k
+ZW5jaWVzIG9mIGFuIGV4aXN0aW5nCj4gPiA+IENvbmZpZy5pbgo+ID4gPiBzeW1ib2wgaW4gYW4g
+ZXh0ZXJuYWwuCj4gPiA+IAo+ID4gPiDCoMKgIEhvd2V2ZXIsIHRoaXMgd2FzIGNvcnJlY3RlZCBp
+biB1cHN0cmVhbSBCdWlsZHJvb3QgaW4gY29tbWl0Cj4gPiA+IGQ2OWQ0MGMwMjlkYzdkODE5OWI3
+NDVlYWVlNzU5ZDkyYjY2YzVkMTcuIFNvIHlvdSBjYW4gdHJ5IHRvCj4gPiA+IGJhY2twb3J0Cj4g
+PiA+IHRoYXQgY29tbWl0Cj4gPiA+IGluc3RlYWQsIG9yIGp1c3QgdXBkYXRlIEJ1aWxkcm9vdCB0
+byBzb21ldGhpbmcgbW9yZSByZWNlbnQuCj4gPiAKPiA+IEFybm91dCwgdGhhbmtzIGZvciB0aGUg
+cG9pbnRlciB0byB0aGUgY29tbWl0LiBUaGF0IGlzIGEgbG9naWNhbCB3YXkKPiA+IHRvCj4gPiBz
+dXBwb3J0IG90aGVyIHBsYXRmb3Jtcy4gSG93ZXZlciwgSSBoYXZlIGEgcG93ZXJwYyBtdXNsIHJ1
+c3QKPiA+IHRvb2xjaGFpbgo+ID4gdGhhdCBJJ3ZlIGJ1aWx0IGV4dGVybmFsbHkuCj4gPiAKPiA+
+IFdpdGggdGhlIGNoYW5nZXMgaW4gdGhhdCBjb21taXQgY2FuIEkgc2V0Cj4gPiBCUjJfUEFDS0FH
+RV9IT1NUX1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTIHRvICJ5IiBpbiBteSBleHRlcm5hbAo+
+ID4gbm93Cj4gCj4gwqAgQWgsIG5vLCB5b3UncmUgcmlnaHQsIHBvd2VycGMtdW5rbm93bi1saW51
+eC1tdXNsIGlzIGEgVGllciAzCj4gcGxhdGZvcm0gYW5kIHRoYXQgCj4gcGF0Y2ggb25seSBhZGRz
+IFRpZXIgMSBhbmQgMi4gV2UgY291bGQgYWRkIGEgVGllciAzIG9wdGlvbiBhcyB3ZWxsCj4gKGFu
+ZCBkaXNhYmxlIAo+IHRoZSBydXN0LWJpbiBvcHRpb24gaW4gdGhhdCBjYXNlKS4KPiAKPiDCoCBO
+b3RlIGhvd2V2ZXIgdGhhdCB0aGUgc3RkbGliIHN0YXR1cyBmb3IgdGhpcyB0YXJnZXQgaXMgbWFy
+a2VkIGFzCj4gIj8iIG9uIFsxXSwgCj4gc28gSSdtIG5vdCBzdXJlIGl0J3MgZXZlciBnb2luZyB0
+byB3b3JrLi4uCj4gCkkgaGF2ZSBpdCB3b3JraW5nIGFjdHVhbGx5LiBJIGhhZCB0byBwYXRjaCBt
+eSBjcm9zc3Rvb2wtbmcgdG9vbGNoYWluIHRvCmFkZCBhbiBleHRyYSBkZWZhdWx0IG1hY3JvIHNv
+IHRoYXQgbGlidW53aW5kIGJ1aWxkcy4gCgo+IAo+ID4gdGhhdCB0aGVyZSBpcyBubyBkZXBlbmRz
+IGV4cHJlc3Npb25zIGFuZCBpdCBpcyBhbGwgZGVmYXVsdCBsb2dpYz8KPiA+IE9yCj4gPiB3b3Vs
+ZCBJIGhhdmUgdG8gc3RpbGwgYWRkIGFub3RoZXIgZXhwcmVzc2lvbiB0aGF0IG1heWJlIGRlZmF1
+bHRzIHRvCj4gPiAieSIKPiA+IGlmIGEgbmV3IHZhcmlhYmxlIGlzIHRydWUgbGlrZQo+ID4gIkJS
+Ml9FWFRFUk5BTF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUyIgdGhhdCBpcyBkZWZpbmVkIGlu
+IG15Cj4gPiBleHRlcm5hbD8KPiAKPiDCoCBObywgdGhhdCdzIG5vdCBnb2luZyB0byB3b3JrLgo+
+IAo+IMKgIEkgdGhpbmsgeW91IGNhbiBtYWtlIGEgaGFjazogYWRkICJzZWxlY3QgCj4gQlIyX1BB
+Q0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUyIgdG8geW91ciAKPiBCUjJfVE9P
+TENIQUlOX0VYVEVSTkFMX01ZX01VU0wgZGVmaW5pdGlvbi4gSSB0aGluayB0aGF0IHdvcmtzLgo+
+IAo+IMKgIFJlZ2FyZHMsCj4gwqAgQXJub3V0Cj4gCgpUaGFua3MhIEkgaGFkIHRvIHVwZGF0ZSBz
+b21lIG5hbWVzIG9mIHNvbWUgdGhpbmdzIGJ1dCBJIHVwZGF0ZWQgbXkKYnVpbGRyb290IHJlcG8g
+YW5kIHdhcyBhYmxlIHRvIHVzZSB0aGUgc2VsZWN0IG1ldGhvZCB0byBlbmFibGUKQlIyX1BBQ0tB
+R0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUy4gCgo+IAo+ID4gCj4gPiBUaGFua3Ms
+Cj4gPiBKZXNzZQo+ID4gCj4gPiA+IAo+ID4gPiDCoMKgIFJlZ2FyZHMsCj4gPiA+IMKgwqAgQXJu
+b3V0Cj4gPiA+IAo+ID4gPiAKPiA+ID4gPiAKPiA+ID4gPiBUaGFua3MsCj4gPiA+ID4gSmVzc2UK
+PiA+ID4gPiAKPiA+ID4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+ID4gPiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+ID4gPiBidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwo+ID4gPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo+ID4gPiA+IAo+ID4gPiBfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
+PiA+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+ID4gCj4gX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
