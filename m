@@ -1,65 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B1CFC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 23:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA57DC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 23:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6CEE81450;
-	Sat,  8 Jan 2022 23:18:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4350F40116;
+	Sat,  8 Jan 2022 23:40:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pgUBt4Cv2bE1; Sat,  8 Jan 2022 23:18:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rcnom1cZGUDK; Sat,  8 Jan 2022 23:40:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E54BA814B8;
-	Sat,  8 Jan 2022 23:18:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7974B1BF27E
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:18:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA1514026E;
+	Sat,  8 Jan 2022 23:40:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 83E0C1BF27E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:40:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 681134028F
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:18:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 793424026E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:40:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FhFsuRQSMdsy for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 23:18:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0KCqB-Cf7U6Y for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 23:40:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B1DB4056A
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 23:18:00 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4919:b1be:c8bf:308d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id CBE3913F80A;
- Sun,  9 Jan 2022 00:17:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641683878;
- bh=5S4Lep0kTI2FPW5XHcnMPMbadXqrLbWNLety+ssPjFc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iixj1yupySwX/5NeXLpT+pc8FRRXVu8mtFfrwcWytd98TXG4gp+Sc2QSs6mJGhMEf
- kl7w9U76EMOTzxonoMeTg1my1XyAgd2S/7p+kEsqauBoNXth+4489rrvADle2Z74+n
- fdwZlG9VWmFdFkj+t9BOPnSPvdEkYAXDf63O5j74qUquGnmAsqEyVcexYBI7qPISa4
- tLfht4x3rhsqWTDBX8G+42M9Y48h9Vh/36Lm35SOqztOfFtfni5O5FZ83BZMuIGL0b
- 0Tby6U2Xm/huz16huZ8jMTzbaAwSWBjp9vpvNYhhIc24JI6wTPAUnt9J6BklblFktO
- QuhuuhUxTwRVQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 09 Jan 2022 00:17:54 +0100
-Date: Sun, 9 Jan 2022 00:17:54 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220108231754.GI1881783@scaer>
-References: <20220108223829.3701891-1-fontaine.fabrice@gmail.com>
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A72540116
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 23:40:36 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id a5so15003662wrh.5
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 15:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ftazLbjXVvJp2LNkeVeU2pRY3POqzt3wp7pvF7WF+Ew=;
+ b=Ioff+PvePfkISZqtd9OYSuVX4H5iUWoZNV+u9gPM+lCLVpydXdt6aDfrT+xcgLIsBV
+ I/hlWSnDPuLOjmZCVD9/JsOmgq74WbcuEcGzBrDTgH+CX3tOx2QI4Zi8dvPmEyxQnlsw
+ ONlWCJRArGVIwX4B19hUTyBMxp6dSET33x2tjq6w7eyrFQmyjnpv3y+wpf19YLuUbuU3
+ VCmo8XFXqA+Hpa3ObI4tiJ6MyLHuVoNGFb0DA2kesLCJeQKDDs4nhAz/FICWOa0X7VSj
+ gkh+s5BtrmsYSx5PWxTXW6qbEidoYA2enoV5uLxEi/ofHArZGBL4Y4irawZR3YCWx+QT
+ 8WXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ftazLbjXVvJp2LNkeVeU2pRY3POqzt3wp7pvF7WF+Ew=;
+ b=1aU3c+YTAb3vVK5gWnFE1FyLrqM+QQWm5AQRjeniZqJ8NgR2xS7qcps/U7EVPaObxq
+ PFfsTx9BX4dXIte8aN7Aes5iLxHStALb9zLsNcablDWCMuWiQMVRWneMt5KxJMmGkA9s
+ cSlzks53v6Zvn0IosowvpTYm08FJ+/HwO5PMZXx0jZgUAYNyH5tzRUTWKgvJRDHNcBgK
+ OlDuxud8MZ8tQgR5nw68WlO/tcDoCI+P7zC/M/Bi9PVrWvpdHes6LNmaVZln7IANfbof
+ jYaxN35vhO1oJxAq6JcwdEj/J5+KlNde2RdBTiqCbZgeXh7m2LbW1wzcJdIm4RtkAZ/N
+ dubA==
+X-Gm-Message-State: AOAM53211EZ87CwHuL+En5k+AOJFstwPaX/r7CaqSbuxU7ug1TyBhy5B
+ 67Rg4MMIJEVkeJHE41tjG5rQSUAnvpQ=
+X-Google-Smtp-Source: ABdhPJyWU2f/thxUY4QSo8c6R+qRB/QOnZH5RkNP+rslIfHOW48NN6FUM54u++K/jk9W+Aed82ghMw==
+X-Received: by 2002:a5d:4acb:: with SMTP id y11mr60135026wrs.64.1641685234972; 
+ Sat, 08 Jan 2022 15:40:34 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id s1sm1439276wrv.38.2022.01.08.15.40.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Jan 2022 15:40:34 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  9 Jan 2022 00:39:10 +0100
+Message-Id: <20220108233910.114777-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220108223829.3701891-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/2] package/libmd: new package
+Subject: [Buildroot] [PATCH 1/1] package/mongrel2: bump to version 1.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,120 +83,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Lionel Orry <lionel.orry@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+- Drop third patch (already in version)
+- Drop fourth patch (not needed since
+  https://github.com/mongrel2/mongrel2/commit/8a6db3beb32da1d66757a746f440d92edff166f9)
 
-On 2022-01-08 23:38 +0100, Fabrice Fontaine spake thusly:
-> This library provides message digest functions found on BSD systems
-> either on their libc (NetBSD, OpenBSD) or libmd (FreeBSD, DragonflyBSD,
-> macOS, Solaris) libraries and lacking on others like GNU systems.
-> 
-> https://www.hadrons.org/software/libmd/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/mongrel2/mongrel2/blob/v1.13.0/changelog.txt
 
-Series of 2 patches applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ition-error-when-building-with-gcc10.patch |  25 ----
+ .../0004-Support-urandom-inside-chroot.patch  | 113 ------------------
+ package/mongrel2/mongrel2.hash                |   4 +-
+ package/mongrel2/mongrel2.mk                  |   2 +-
+ 4 files changed, 3 insertions(+), 141 deletions(-)
+ delete mode 100644 package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
+ delete mode 100644 package/mongrel2/0004-Support-urandom-inside-chroot.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS               |  1 +
->  package/Config.in        |  1 +
->  package/libmd/Config.in  |  9 +++++++++
->  package/libmd/libmd.hash |  5 +++++
->  package/libmd/libmd.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/libmd/Config.in
->  create mode 100644 package/libmd/libmd.hash
->  create mode 100644 package/libmd/libmd.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cb06de820d..c1ccab966c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -899,6 +899,7 @@ F:	package/libidn2/
->  F:	package/libjpeg/
->  F:	package/liblockfile/
->  F:	package/libmatroska/
-> +F:	package/libmd/
->  F:	package/libmpdclient/
->  F:	package/libnetfilter_conntrack/
->  F:	package/libnetfilter_queue/
-> diff --git a/package/Config.in b/package/Config.in
-> index ad542ac8bc..d8ee96a588 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1412,6 +1412,7 @@ menu "Crypto"
->  	source "package/libgpgme/Config.in"
->  	source "package/libkcapi/Config.in"
->  	source "package/libksba/Config.in"
-> +	source "package/libmd/Config.in"
->  	source "package/libmhash/Config.in"
->  	source "package/libnss/Config.in"
->  	source "package/libolm/Config.in"
-> diff --git a/package/libmd/Config.in b/package/libmd/Config.in
-> new file mode 100644
-> index 0000000000..63139ad69b
-> --- /dev/null
-> +++ b/package/libmd/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBMD
-> +	bool "libmd"
-> +	help
-> +	  This library provides message digest functions found on BSD
-> +	  systems either on their libc (NetBSD, OpenBSD) or libmd
-> +	  (FreeBSD, DragonflyBSD, macOS, Solaris) libraries and lacking
-> +	  on others like GNU systems.
-> +
-> +	  https://www.hadrons.org/software/libmd/
-> diff --git a/package/libmd/libmd.hash b/package/libmd/libmd.hash
-> new file mode 100644
-> index 0000000000..1a3c9d80df
-> --- /dev/null
-> +++ b/package/libmd/libmd.hash
-> @@ -0,0 +1,5 @@
-> +# From https://lists.freedesktop.org/archives/libbsd/2021-October/000311.html
-> +sha512  731553ecc5e0e1eb228cced8fccd531fe31fb5c7627ca30013d287e1aeb8222959cf7498fbb7414bbabb967b25d4e8b0edd54fc47f6ccf55fc91087db0725ce3  libmd-1.0.4.tar.xz
-> +
-> +# Hash for license file
-> +sha256  4365ef6255ad553fce69dd4bc0e093472c5d0e41b8ea493a545cc926ce171aa6  COPYING
-> diff --git a/package/libmd/libmd.mk b/package/libmd/libmd.mk
-> new file mode 100644
-> index 0000000000..19a2458982
-> --- /dev/null
-> +++ b/package/libmd/libmd.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# libmd
-> +#
-> +################################################################################
-> +
-> +LIBMD_VERSION = 1.0.4
-> +LIBMD_SOURCE = libmd-$(LIBMD_VERSION).tar.xz
-> +LIBMD_SITE = https://archive.hadrons.org/software/libmd
-> +LIBMD_LICENSE = BSD-2-Clause, BSD-3-Clause, Beerware, ISC, Public Domain
-> +LIBMD_LICENSE_FILES = COPYING
-> +LIBMD_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.34.1
-> 
-
+diff --git a/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch b/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
+deleted file mode 100644
+index e1b5788494..0000000000
+--- a/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From c51815b10c39c6e802bd1b56549f1d479b480fcc Mon Sep 17 00:00:00 2001
+-From: Andrew Sun <adsun701@gmail.com>
+-Date: Sat, 18 Jul 2020 09:11:11 -0400
+-Subject: [PATCH] fix multiple definition error when building with gcc10
+-
+-[Retrieved from:
+-https://github.com/mongrel2/mongrel2/pull/343/commits/c51815b10c39c6e802bd1b56549f1d479b480fcc]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/unixy.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/unixy.h b/src/unixy.h
+-index 045e7c28..4225220c 100644
+---- a/src/unixy.h
+-+++ b/src/unixy.h
+-@@ -38,7 +38,7 @@
+- #include <bstring.h>
+- #include <unistd.h>
+- 
+--char *m2program;
+-+extern char *m2program;
+- 
+- int Unixy_chroot(bstring path);
+- 
+diff --git a/package/mongrel2/0004-Support-urandom-inside-chroot.patch b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
+deleted file mode 100644
+index 468ddb83fe..0000000000
+--- a/package/mongrel2/0004-Support-urandom-inside-chroot.patch
++++ /dev/null
+@@ -1,113 +0,0 @@
+-From 330e8c8352eb0ed3c178ac6e0102403c0a835492 Mon Sep 17 00:00:00 2001
+-From: Jason Miller <jason@milr.com>
+-Date: Thu, 5 Jul 2018 20:53:51 -0700
+-Subject: [PATCH] Support urandom inside chroot
+-
+-This adds a new default entropy function that uses a /dev/urandom stream
+-opened before the chroot.  If initializing that fails, it fallsback on
+-HAVEGE only if HAVEGE is supported by the mbedTLS.
+-
+-This should remove the hard requirement on HAVEGE
+-
+-resolves #326
+-resolves #327
+-
+-[Upstream status: https://github.com/mongrel2/mongrel2/pull/328]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/mongrel2.c |  7 -------
+- src/server.c   | 36 +++++++++++++++++++++++-------------
+- 2 files changed, 23 insertions(+), 20 deletions(-)
+-
+-diff --git a/src/mongrel2.c b/src/mongrel2.c
+-index da632d95..48ece8a5 100644
+---- a/src/mongrel2.c
+-+++ b/src/mongrel2.c
+-@@ -404,13 +404,6 @@ void taskmain(int argc, char **argv)
+-     rc = attempt_chroot_drop(srv);
+-     check(rc == 0, "Major failure in chroot/droppriv, aborting."); 
+- 
+--    // set up rng after chroot
+--    // TODO: once mbedtls is updated, we can move this back into Server_create
+--    if(srv->use_ssl) {
+--        rc = Server_init_rng(srv);
+--        check(rc == 0, "Failed to initialize rng for server %s", bdata(srv->uuid));
+--    }
+--
+-     final_setup();
+- 
+-     taskcreate(tickertask, NULL, TICKER_TASK_STACK);
+-diff --git a/src/server.c b/src/server.c
+-index 45761db4..e44e199b 100644
+---- a/src/server.c
+-+++ b/src/server.c
+-@@ -149,35 +149,45 @@ static int Server_load_ciphers(Server *srv, bstring ssl_ciphers_val)
+-     return -1;
+- }
+- 
+-+static int urandom_entropy_func(void *data, unsigned char *output, size_t len)
+-+{
+-+    FILE* urandom = (FILE *)data;
+-+    size_t rc = fread(output, 1, len, urandom);
+-+
+-+    if (rc != len) return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
+-+
+-+    return 0;
+-+}
+-+
+- int Server_init_rng(Server *srv)
+- {
+-     int rc;
+--    unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
+-     void *ctx = NULL;
+- 
+--    mbedtls_entropy_init( &srv->entropy );
+-+    FILE *urandom = fopen("/dev/urandom","r");
+- 
+--    // test the entropy source
+--    rc = mbedtls_entropy_func(&srv->entropy, buf, MBEDTLS_ENTROPY_BLOCK_SIZE);
+--
+--    if(rc == 0) {
+-+    if(urandom != NULL) {
+-         ctx = calloc(sizeof(mbedtls_ctr_drbg_context), 1);
+- 
+-         mbedtls_ctr_drbg_init((mbedtls_ctr_drbg_context *)ctx);
+-         rc = mbedtls_ctr_drbg_seed((mbedtls_ctr_drbg_context *)ctx,
+--            mbedtls_entropy_func, &srv->entropy, NULL, 0);
+-+            urandom_entropy_func, urandom, NULL, 0);
+-         check(rc == 0, "Init rng failed: ctr_drbg_init returned %d\n", rc);
+- 
+-         srv->rng_func = mbedtls_ctr_drbg_random;
+-         srv->rng_ctx = ctx;
+-     } else {
+--        log_warn("entropy source unavailable. falling back to havege rng");
+- 
+-+#if defined(MBEDTLS_HAVEGE_C)
+-+        log_warn("entropy source unavailable. falling back to havege rng");
+-         ctx = calloc(sizeof(mbedtls_havege_state), 1);
+-         mbedtls_havege_init((mbedtls_havege_state *)ctx);
+--
+-         srv->rng_func = mbedtls_havege_random;
+-         srv->rng_ctx = ctx;
+-+#else
+-+        log_err("Unable to initialize urandom entropy source, and mbedTLS compiled without HAVEGE");
+-+        goto error;
+-+#endif
+-     }
+- 
+-     return 0;
+-@@ -278,10 +288,10 @@ Server *Server_create(bstring uuid, bstring default_host,
+- 
+-     // TODO: once mbedtls supports opening urandom early and keeping it open,
+-     //   put the rng initialization back here (before chroot)
+--    //if(use_ssl) {
+--    //    rc = Server_init_rng(srv);
+--    //    check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
+--    //}
+-+    if(use_ssl) {
+-+        rc = Server_init_rng(srv);
+-+        check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
+-+    }
+- 
+-     if(blength(chroot) > 0) {
+-         srv->chroot = bstrcpy(chroot); check_mem(srv->chroot);
+diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+index ea3a1cb426..f4f094ea03 100644
+--- a/package/mongrel2/mongrel2.hash
++++ b/package/mongrel2/mongrel2.hash
+@@ -1,6 +1,6 @@
+ # From https://mongrel2.org
+-sha1  6f81fa747a1e198d1a655c3677b6de686a5a51f7  mongrel2-v1.12.2.tar.bz2
++sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
+ 
+ # Locally computed
+-sha256  3bffeae198c37a1efc9c12f77d5f1eb61cdf62b35d661babc2527dd030aa7d8f  mongrel2-v1.12.2.tar.bz2
++sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
+ sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index cbe7e3fb91..07914ad0fe 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGREL2_VERSION = 1.12.2
++MONGREL2_VERSION = 1.13.0
+ MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+ # Do not use the github helper here, the generated tarball is *NOT* the same
+ # as the one uploaded by upstream for the release.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
