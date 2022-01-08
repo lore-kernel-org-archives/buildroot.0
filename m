@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9B54C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6598AC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81C1E40220;
-	Sat,  8 Jan 2022 22:36:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 128BF401FF;
+	Sat,  8 Jan 2022 22:37:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dTXenbK3cgYz; Sat,  8 Jan 2022 22:36:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dbVJCPfM4xh6; Sat,  8 Jan 2022 22:37:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7692340256;
-	Sat,  8 Jan 2022 22:36:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2074F1BF3D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 568A5401F2;
+	Sat,  8 Jan 2022 22:37:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4554A1BF95D
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CDD360A9B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F83E81465
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fs3eA065dc-L for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dygVD4AEtdwr for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7527060A93
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF1DF8146E
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 470D683460; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
+ id 92D9A832C8; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 23:35:40 +0100
+Date: Sat, 8 Jan 2022 23:35:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ccff780f49a24f01c44d31f4fe3bc1ea0a36d5c
-X-Git-Newrev: 24ac316ff58e2c1deca8dc329705b0810414c8db
+X-Git-Oldrev: 4e5d2c0b9559f1aef62c8d547f9b38cc2ebb2099
+X-Git-Newrev: ffc503fab767c9d2381f7152bcaab024a6358748
 X-Patchwork-Hint: ignore
-Message-Id: <20220108222949.470D683460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang.mk: implement Go
- vendoring support
+Message-Id: <20220108222949.92D9A832C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gocryptfs: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,105 +58,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24ac316ff58e2c1deca8dc329705b0810414c8db
+commit: https://git.buildroot.net/buildroot/commit/?id=ffc503fab767c9d2381f7152bcaab024a6358748
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit introduces the download post-process script
-support/download/go-post-process, and hooks it into the Go package
-infrastructure.
+Adds the gocryptfs encrypted FUSE filesystem.
 
-The -modcacherw flag is added to ensure that the Go cache is
-read/write, and can be deleted properly upon "make clean".
+Currently uses without_openssl build tag, to use the native Go cryptography.
+However, the package could be improved by conditionally enabling openssl if it
+is also configured to be built by Buildroot.
 
-The <pkg>_LICENSE variable of golang packages is expanded with ",
-vendored dependencies licenses probably not listed" as currently for
-all packages, the licenses of the vendored dependencies are not taken
-into account.
-
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-golang.mk            | 13 ++++++++++++-
- support/download/go-post-process | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+), 1 deletion(-)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/gocryptfs/Config.in      | 12 ++++++++++++
+ package/gocryptfs/gocryptfs.hash |  3 +++
+ package/gocryptfs/gocryptfs.mk   | 19 +++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index d07242310d..35bcb1673b 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -42,12 +42,13 @@ define inner-golang-package
- 
- $(2)_BUILD_OPTS += \
- 	-ldflags "$$($(2)_LDFLAGS)" \
-+	-modcacherw \
- 	-tags "$$($(2)_TAGS)" \
- 	-trimpath \
- 	-p $(PARALLEL_JOBS)
- 
- # Target packages need the Go compiler on the host.
--$(2)_DEPENDENCIES += host-go
-+$(2)_DOWNLOAD_DEPENDENCIES += host-go
- 
- $(2)_BUILD_TARGETS ?= .
- 
-@@ -81,6 +82,16 @@ define $(2)_GEN_GOMOD
- endef
- $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
- 
-+$(2)_DOWNLOAD_POST_PROCESS = go
-+$(2)_DL_ENV = \
-+	$(HOST_GO_COMMON_ENV) \
-+	GOPROXY=direct \
-+	BR_GOMOD=$$($(2)_GOMOD)
-+
-+# Due to vendoring, it is pretty likely that not all licenses are
-+# listed in <pkg>_LICENSE.
-+$(2)_LICENSE += , vendored dependencies licenses probably not listed
-+
- # Build step. Only define it if not already defined by the package .mk
- # file.
- ifndef $(2)_BUILD_CMDS
-diff --git a/support/download/go-post-process b/support/download/go-post-process
-new file mode 100755
-index 0000000000..be202a4c0f
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2e3500e788..259cace487 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -531,6 +531,7 @@ F:	package/docker-proxy/
+ F:	package/embiggen-disk/
+ F:	package/fuse-overlayfs/
+ F:	package/go/
++F:	package/gocryptfs/
+ F:	package/mbpfan/
+ F:	package/mosh/
+ F:	package/pkg-golang.mk
+diff --git a/package/Config.in b/package/Config.in
+index f127b6bf45..081268527c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -221,6 +221,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/genext2fs/Config.in"
+ 	source "package/genpart/Config.in"
+ 	source "package/genromfs/Config.in"
++	source "package/gocryptfs/Config.in"
+ 	source "package/imx-usb-loader/Config.in"
+ 	source "package/mmc-utils/Config.in"
+ 	source "package/mtd/Config.in"
+diff --git a/package/gocryptfs/Config.in b/package/gocryptfs/Config.in
+new file mode 100644
+index 0000000000..2630cafdcf
 --- /dev/null
-+++ b/support/download/go-post-process
-@@ -0,0 +1,36 @@
-+#!/usr/bin/env bash
++++ b/package/gocryptfs/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_GOCRYPTFS
++	bool "gocryptfs"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  gocryptfs is an encrypted FUSE overlay filesystem.
 +
-+set -e
-+set -o pipefail
++	  https://github.com/rfjakob/gocryptfs
 +
-+. "${0%/*}/helpers"
++comment "gocryptfs needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gocryptfs/gocryptfs.hash b/package/gocryptfs/gocryptfs.hash
+new file mode 100644
+index 0000000000..94487815f5
+--- /dev/null
++++ b/package/gocryptfs/gocryptfs.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  4d89b76fe0b0c7218099f6f0ea6c1c87efe13927d95579a6ede82f20b6dbe48a  gocryptfs-2.2.0.tar.gz
++sha256  322a7e3b02cf18e38b7e6b18cafefb773df8676c65634b34e8a2beb931294a4b  LICENSE
+diff --git a/package/gocryptfs/gocryptfs.mk b/package/gocryptfs/gocryptfs.mk
+new file mode 100644
+index 0000000000..2a00e9a959
+--- /dev/null
++++ b/package/gocryptfs/gocryptfs.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# gocryptfs
++#
++################################################################################
 +
-+# Parse our options
-+while getopts "n:o:" OPT; do
-+    case "${OPT}" in
-+    o)  output="${OPTARG}";;
-+    n)  base_name="${OPTARG}";;
-+    :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-+    \?) error "unknown option '%s'\n" "${OPTARG}";;
-+    esac
-+done
++GOCRYPTFS_VERSION = 2.2.0
++GOCRYPTFS_SITE = $(call github,rfjakob,gocryptfs,v$(GOCRYPTFS_VERSION))
++GOCRYPTFS_LICENSE = MIT
++GOCRYPTFS_LICENSE_FILES = LICENSE
 +
-+# Already vendored tarball, nothing to do
-+if tar tf "${output}" | grep -q "^[^/]*/vendor" ; then
-+    exit 0
-+fi
++GOCRYPTFS_GOMOD = github.com/rfjakob/gocryptfs/v2
 +
-+post_process_unpack "${base_name}" "${output}"
++GOCRYPTFS_LDFLAGS = \
++	-X main.GitVersion=$(GOCRYPTFS_VERSION) \
++	-X main.GitVersionFuse=[vendored]
++GOCRYPTFS_TAGS = without_openssl
 +
-+# Do the Go vendoring
-+pushd "${base_name}" > /dev/null
-+
-+if [ ! -f go.mod ]; then
-+    echo "ERROR: no vendor/ folder and no go.mod, aborting"
-+    exit 1
-+fi
-+
-+go mod vendor -v -modcacherw
-+popd > /dev/null
-+
-+post_process_repack $(pwd) "${base_name}" "${output}"
++$(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
