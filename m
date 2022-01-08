@@ -4,50 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45CB0C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 17:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19938C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 17:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE8B560A71;
-	Sat,  8 Jan 2022 17:52:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D38BE60B02;
+	Sat,  8 Jan 2022 17:52:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZqM4KRiIiUqK; Sat,  8 Jan 2022 17:52:21 +0000 (UTC)
+	with ESMTP id YT1aMyVCmkLC; Sat,  8 Jan 2022 17:52:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CAA4607F9;
-	Sat,  8 Jan 2022 17:52:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 400F31BF2C6
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:52:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4252860AF5;
+	Sat,  8 Jan 2022 17:52:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CFFE51BF2C6
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2673B607F9
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:52:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC57C813BD
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:52:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEPKu_msAkaV for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 17:52:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1E5_mt2NAA7h for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 17:52:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC94B607F2
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 17:52:16 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id D1C51C0003;
- Sat,  8 Jan 2022 17:52:13 +0000 (UTC)
-Date: Sat, 8 Jan 2022 18:52:12 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20220108185212.49ba2aae@windsurf>
-In-Reply-To: <90d1cd65-6cb7-d708-9b57-2089c5485d63@smile.fr>
-References: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
- <20200915165156.179380a9@windsurf.hq.k.grp>
- <90d1cd65-6cb7-d708-9b57-2089c5485d63@smile.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C68C813B1
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 17:52:19 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 0755CC0002;
+ Sat,  8 Jan 2022 17:52:17 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n6Ft3-00070A-GU; Sat, 08 Jan 2022 18:52:17 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <cover.1641663315.git.yann.morin.1998@free.fr>
+ <d49d32ca841b59900f9b719023bb92ecbd77be10.1641663315.git.yann.morin.1998@free.fr>
+Date: Sat, 08 Jan 2022 18:52:17 +0100
+In-Reply-To: <d49d32ca841b59900f9b719023bb92ecbd77be10.1641663315.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 8 Jan 2022 18:35:40 +0100")
+Message-ID: <87wnjadsj2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATH v2 1/1] docs/manual: add qemu defconfigs
- gitlab test
+Subject: Re: [Buildroot] [PATCH 1/3] core/pkg-utils: properly indent
+ per-package-rsync
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +61,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Romain,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sat, 8 Jan 2022 11:56:54 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+ > Continuation lines should be indented one level more than the line the
+ > are the continuation of.
 
-> Maybe the manual needs a new chapter about the gitlab-ci in general and document
-> all pipeline trigger supported.
-> 
-> For a new qemu defconfigs, we need to take care of:
-> 
-> - define "# qemu_ARCH_defconfig" tag in the file board/qemu/ARCH/readme.txt
-> 
-> - Use board/qemu/post-image.sh post image script and provide the name of the
-> defconfig as argument of this script:
->   BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
->   BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-> 
-> - Enable host-qemu to use qemu built by Buildroot for the host:
->   BR2_PACKAGE_HOST_QEMU=y
->   BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-> 
-> Being in the manual would promote gitlab-ci testing with Qemu.
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Yes, I agree! We need a single place in the chapter with all the Gitlab
-CI details. Like the test-pkg integration, testing of defconfigs,
-testing of runtime tests, etc.
+Committed, thanks.
 
-I'll mark this patch as Changes Requested, because we don't want just a
-section/chapter specifically for the qemu defconfig testing in Gitlab
-CI, but a broader section;
-
-Please note that Gitlab CI testing of runtime tests is already
-documented in the manual, so it will have to be refactored.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
