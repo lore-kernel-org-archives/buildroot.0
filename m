@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F59AC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9B54C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC9E640185;
-	Sat,  8 Jan 2022 22:36:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81C1E40220;
+	Sat,  8 Jan 2022 22:36:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p8PW55BOPTIt; Sat,  8 Jan 2022 22:36:29 +0000 (UTC)
+	with ESMTP id dTXenbK3cgYz; Sat,  8 Jan 2022 22:36:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C220440220;
-	Sat,  8 Jan 2022 22:36:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 708FE1BF95D
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7692340256;
+	Sat,  8 Jan 2022 22:36:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2074F1BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AFE98148D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CDD360A9B
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j9LbuE1dcv8J for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fs3eA065dc-L for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F0F481465
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7527060A93
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 72A05832C8; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
+ id 470D683460; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sat, 8 Jan 2022 23:35:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 342fd3e7350479dc368541ac77a5130ebb53194c
-X-Git-Newrev: 049ca10248a4c5a808e7d96acd8711563916d318
+X-Git-Oldrev: 8ccff780f49a24f01c44d31f4fe3bc1ea0a36d5c
+X-Git-Newrev: 24ac316ff58e2c1deca8dc329705b0810414c8db
 X-Patchwork-Hint: ignore
-Message-Id: <20220108222949.72A05832C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sentry-cli: re-add package
+Message-Id: <20220108222949.470D683460@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-golang.mk: implement Go
+ vendoring support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,92 +59,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=049ca10248a4c5a808e7d96acd8711563916d318
+commit: https://git.buildroot.net/buildroot/commit/?id=24ac316ff58e2c1deca8dc329705b0810414c8db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit d19077677fc71fc8c8cd73945606f773d907a99a, but the
-package now uses the cargo-package infrastructure with its vendoring
-mechanism, which allows us to avoid the problems that caused the
-package to be removed in d19077677fc71fc8c8cd73945606f773d907a99a.
+This commit introduces the download post-process script
+support/download/go-post-process, and hooks it into the Go package
+infrastructure.
+
+The -modcacherw flag is added to ensure that the Go cache is
+read/write, and can be deleted properly upon "make clean".
+
+The <pkg>_LICENSE variable of golang packages is expanded with ",
+vendored dependencies licenses probably not listed" as currently for
+all packages, the licenses of the vendored dependencies are not taken
+into account.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in.host             |  1 +
- package/sentry-cli/Config.in.host  | 10 ++++++++++
- package/sentry-cli/sentry-cli.hash |  3 +++
- package/sentry-cli/sentry-cli.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/pkg-golang.mk            | 13 ++++++++++++-
+ support/download/go-post-process | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b80d886809..df7d988279 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1522,6 +1522,7 @@ F:	package/python-schedule/
- F:	package/python-sentry-sdk/
- F:	package/python-websockets/
- F:	package/python-xlib/
-+F:	package/sentry-cli/
- F:	package/sentry-native/
- F:	package/unclutter-xfixes/
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index d07242310d..35bcb1673b 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -42,12 +42,13 @@ define inner-golang-package
  
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 7400da5894..b3e00bb482 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -81,6 +81,7 @@ menu "Host utilities"
- 	source "package/s6-rc/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/sdbusplus/Config.in.host"
-+	source "package/sentry-cli/Config.in.host"
- 	source "package/sloci-image/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-diff --git a/package/sentry-cli/Config.in.host b/package/sentry-cli/Config.in.host
-new file mode 100644
-index 0000000000..3124015367
+ $(2)_BUILD_OPTS += \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
++	-modcacherw \
+ 	-tags "$$($(2)_TAGS)" \
+ 	-trimpath \
+ 	-p $(PARALLEL_JOBS)
+ 
+ # Target packages need the Go compiler on the host.
+-$(2)_DEPENDENCIES += host-go
++$(2)_DOWNLOAD_DEPENDENCIES += host-go
+ 
+ $(2)_BUILD_TARGETS ?= .
+ 
+@@ -81,6 +82,16 @@ define $(2)_GEN_GOMOD
+ endef
+ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+ 
++$(2)_DOWNLOAD_POST_PROCESS = go
++$(2)_DL_ENV = \
++	$(HOST_GO_COMMON_ENV) \
++	GOPROXY=direct \
++	BR_GOMOD=$$($(2)_GOMOD)
++
++# Due to vendoring, it is pretty likely that not all licenses are
++# listed in <pkg>_LICENSE.
++$(2)_LICENSE += , vendored dependencies licenses probably not listed
++
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+ ifndef $(2)_BUILD_CMDS
+diff --git a/support/download/go-post-process b/support/download/go-post-process
+new file mode 100755
+index 0000000000..be202a4c0f
 --- /dev/null
-+++ b/package/sentry-cli/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_SENTRY_CLI
-+	bool "host sentry-cli"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Official Sentry command line interface
++++ b/support/download/go-post-process
+@@ -0,0 +1,36 @@
++#!/usr/bin/env bash
 +
-+	  For managing debug information files and source maps.
++set -e
++set -o pipefail
 +
-+	  https://docs.sentry.io/cli/
-diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
-new file mode 100644
-index 0000000000..73f818125f
---- /dev/null
-+++ b/package/sentry-cli/sentry-cli.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256  d687336379fd96c4ee73f24bd062d31672bd7453af53311b72977be3c8c78fef  sentry-cli-1.59.0.tar.gz
-+sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
-diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
-new file mode 100644
-index 0000000000..58f5f1e325
---- /dev/null
-+++ b/package/sentry-cli/sentry-cli.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# sentry-cli
-+#
-+################################################################################
++. "${0%/*}/helpers"
 +
-+SENTRY_CLI_VERSION = 1.59.0
-+SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
-+SENTRY_CLI_LICENSE = BSD-3-clause
-+SENTRY_CLI_LICENSE_FILES = LICENSE
++# Parse our options
++while getopts "n:o:" OPT; do
++    case "${OPT}" in
++    o)  output="${OPTARG}";;
++    n)  base_name="${OPTARG}";;
++    :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
++    \?) error "unknown option '%s'\n" "${OPTARG}";;
++    esac
++done
 +
-+HOST_SENTRY_CLI_DEPENDENCIES = host-zlib
++# Already vendored tarball, nothing to do
++if tar tf "${output}" | grep -q "^[^/]*/vendor" ; then
++    exit 0
++fi
 +
-+$(eval $(host-cargo-package))
++post_process_unpack "${base_name}" "${output}"
++
++# Do the Go vendoring
++pushd "${base_name}" > /dev/null
++
++if [ ! -f go.mod ]; then
++    echo "ERROR: no vendor/ folder and no go.mod, aborting"
++    exit 1
++fi
++
++go mod vendor -v -modcacherw
++popd > /dev/null
++
++post_process_repack $(pwd) "${base_name}" "${output}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
