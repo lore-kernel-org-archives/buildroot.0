@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E47C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEAFFC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:16:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5042F4012A;
-	Sat,  8 Jan 2022 15:16:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A687340148;
+	Sat,  8 Jan 2022 15:16:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AfXQkoAgmIoF; Sat,  8 Jan 2022 15:16:33 +0000 (UTC)
+	with ESMTP id mE7AWBxU1-Ud; Sat,  8 Jan 2022 15:16:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6092840117;
-	Sat,  8 Jan 2022 15:16:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9952C1BF5A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6576E4027F;
+	Sat,  8 Jan 2022 15:16:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D4E021BF5A1
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 610434030C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8425F813E2
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:15:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eM71SnwqcJfa for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aIhJCrI2nILi for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 15:15:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3E974040B
+ by smtp1.osuosl.org (Postfix) with ESMTP id C550A81470
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 15:15:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3BD5582AB6; Sat,  8 Jan 2022 15:09:28 +0000 (UTC)
+ id 5DBCD82DF2; Sat,  8 Jan 2022 15:09:28 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 15:48:46 +0100
+Date: Sat, 8 Jan 2022 15:48:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df22a9d6b77d9e245dceb7c8fd3f9d80c8917ca0
-X-Git-Newrev: b7244efa8284627412a0385d9f07c2110717ee2c
+X-Git-Oldrev: 834464792e691a243d456335083b2a8b3363e261
+X-Git-Newrev: 20181c3f1b7191d2b6a1b78bfbe32c1f58e87359
 X-Patchwork-Hint: ignore
-Message-Id: <20220108150928.3BD5582AB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mstpd: bump version to 0.1.0
+Message-Id: <20220108150928.5DBCD82DF2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/btrfs-progs: bump version to 5.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7244efa8284627412a0385d9f07c2110717ee2c
+commit: https://git.buildroot.net/buildroot/commit/?id=20181c3f1b7191d2b6a1b78bfbe32c1f58e87359
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Shortly after MSTPd was added, version 0.1.0 was released. Update to the
-latest version.
+Reformatted hashes.
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Upstream relicensed libbtrfsutil to LGPL-2.1+ and removed
+libbtrfsutil/COPYING.LESSER:
+https://github.com/kdave/btrfs-progs/commit/9e30f779e3cbf12a88ebe309ee371851fdfd3aa0
+
+Add optional support for udev:
+https://github.com/kdave/btrfs-progs/commit/f74ebeee5c239e007a0144e93f0eee26949a85ec
+https://github.com/kdave/btrfs-progs/commit/1d0fa3781ef9374388b683cf96f9c48245025cf6
+
+Changelog:
+https://github.com/kdave/btrfs-progs/blob/master/CHANGES
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mstpd/mstpd.hash | 1 +
- package/mstpd/mstpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/btrfs-progs/btrfs-progs.hash |  7 +++----
+ package/btrfs-progs/btrfs-progs.mk   | 15 +++++++++++----
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/package/mstpd/mstpd.hash b/package/mstpd/mstpd.hash
-index fd76b959db..64e946d6d1 100644
---- a/package/mstpd/mstpd.hash
-+++ b/package/mstpd/mstpd.hash
-@@ -1,4 +1,5 @@
- # locally computed
- sha256  91a1862548b5b509caa2e96e5fb9912bc98d4d58cc98e99a577824735756c14d  mstpd-0.0.9.tar.gz
-+sha256  03d1ff4ca189d54322562cb2891888768af719d2c73ceafa5f1ca96133dffeb2  mstpd-0.1.0.tar.gz
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  LICENSE
- sha256  c5cfd44652276184374adf454150d436ce958ce50acc4ef9ccb3605a5ca7a9d3  hmac_md5.c
-diff --git a/package/mstpd/mstpd.mk b/package/mstpd/mstpd.mk
-index a870352869..907d094242 100644
---- a/package/mstpd/mstpd.mk
-+++ b/package/mstpd/mstpd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index aac144963e..339eab02aa 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 d41961b0a92160c80f894ad9a1882822889c2e1d084cbf3e08b8c214a5cf0137  btrfs-progs-v5.11.tar.xz
++sha256  6230f8f33961bd62633d601b0d049a3c6b833c1a1a7a2f2782d0c5796e7ab920  btrfs-progs-v5.15.1.tar.xz
+ # Locally computed
+-sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+-sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+-sha256 e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  libbtrfsutil/COPYING.LESSER
++sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 96456d1238..50c8e59e50 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,14 +4,13 @@
  #
  ################################################################################
  
--MSTPD_VERSION = 0.0.9
-+MSTPD_VERSION = 0.1.0
- MSTPD_SITE = $(call github,mstpd,mstpd,$(MSTPD_VERSION))
- MSTPD_AUTORECONF = YES
- MSTPD_LICENSE = GPL-2.0, RSA Data Security (md5)
+-BTRFS_PROGS_VERSION = 5.11
++BTRFS_PROGS_VERSION = 5.15.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+ BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
+-BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-3.0+ (libbtrfsutil)
+-BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING \
+-	libbtrfsutil/COPYING.LESSER
++BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-2.1+ (libbtrfsutil)
++BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING
+ BTRFS_PROGS_INSTALL_STAGING = YES
+ 
+ # Doesn't autodetect static-only and tries to build both
+@@ -31,9 +30,17 @@ else
+ BTRFS_PROGS_CONF_OPTS += --disable-convert
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++BTRFS_PROGS_CONF_OPTS += --enable-libudev
++BTRFS_PROGS_DEPENDENCIES += udev
++else
++BTRFS_PROGS_CONF_OPTS += --disable-libudev
++endif
++
+ HOST_BTRFS_PROGS_DEPENDENCIES = host-util-linux host-lzo host-zlib
+ HOST_BTRFS_PROGS_CONF_OPTS = \
+ 	--disable-backtrace \
++	--disable-libudev \
+ 	--disable-zstd \
+ 	--disable-python \
+ 	--disable-convert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
