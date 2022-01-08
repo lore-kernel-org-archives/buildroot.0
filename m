@@ -1,56 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33205C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 17:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B1C7C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 17:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1AD7607F9;
-	Sat,  8 Jan 2022 17:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E16EF81404;
+	Sat,  8 Jan 2022 17:27:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1KbZvjTyYQpX; Sat,  8 Jan 2022 17:26:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bvJ10Lpe2I1N; Sat,  8 Jan 2022 17:27:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 289CE607F2;
-	Sat,  8 Jan 2022 17:26:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B1DE813C0;
+	Sat,  8 Jan 2022 17:27:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 000AB1BF2C6
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:26:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 530181BF2C6
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0CF040127
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:26:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DA3E40127
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:27:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qROYaTw7TY0h for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 17:26:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C9E81400BA
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 17:26:49 +0000 (UTC)
-Received: from fwd72.dcpf.telekom.de (fwd72.aul.t-online.de [10.223.144.98])
- by mailout10.t-online.de (Postfix) with SMTP id 0EAAA5EB4
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:26:47 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd72.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n6FUK-23R4Ft0; Sat, 8 Jan 2022 18:26:44 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55060)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n6FUJ-0006mY-RC
- for buildroot@buildroot.org; Sat, 08 Jan 2022 18:26:43 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ with ESMTP id zjaEgkBqtqKg for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 17:27:08 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EDE5400BA
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 17:27:07 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id q8so17653094wra.12
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 09:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YSu3efJ0MYLtiSQDLK9gVqk3eccHNe8DK5S5o5DZAio=;
+ b=W4SYig7LICRfXmNmQn87OPF2NslyIFtYLyfLzHRUreuDTq5dA5HPWfXBl4fA+gCHgg
+ OQuQIKADZCDXkVr9wk0dsy8k/cX9ymsRoeGQBQH4MycHQ0/4mmYCpU0qitYQqaReHStU
+ 12UmeBeFG66xTtYui5JQCgwcvVLDZY6Ke27+hfKZgZYvjgaqrbUnY3qszg+KVwrWa7Km
+ KmH3O9KAV1PgjRl2cJ0ChqLTRewv0x6q89cNCPihxixxVvnkr1sGg2ln6aNqy69pE1aL
+ AtqzH7GoUX2lTt9XWyVC6bQdHLvrCpaD9btdwFoROnRDCycAVsg8PEiJOTAus9vtJXLg
+ ha9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=YSu3efJ0MYLtiSQDLK9gVqk3eccHNe8DK5S5o5DZAio=;
+ b=NfwYxX3IzBJ7Dip82Vc6MG5k9Uf8JNjLgWTk6WLjkGZOnUV/o8ngsCo4B3jHd8Abzo
+ 1N049/PG+v1qs32QLQb/+0h7Fx6+EJkNu8Z22+ph20hPiDL31mvN59ENfBfysV3YnA0g
+ BMNzs3UboEZSaXFuhR1vQOhRcX+oaouAlELmlu0456wcFGE0SuBjtRQgSiEhXQyQ2mIF
+ KkwSZ/lawZ1I1ZkYoplIk3p3WRvdTVwp2fN2B8kTfgYMPmLYZk0NIJDdEbO6jTiQz2fa
+ oV7033K1AR4TPEPbbJ7fmWxk9OeC8XMqIQFlb673/wP/+Vywt/6zYnCgx7PcrqQ/6kkm
+ 2x8Q==
+X-Gm-Message-State: AOAM532lRg6FJPZusEr78sdohYrNt4M751v7ikkAVdsJ5aV3Qhya0QbM
+ fbLDpv+u2HWNVHIdL9zyT+NBX1XkvbE=
+X-Google-Smtp-Source: ABdhPJyrDE2LINzna0rnmfusiODbLqi5VFSN+aCejXviqoW6KB0qRbkrSPL659m6U+Oys8Ietdt+Zg==
+X-Received: by 2002:a05:6000:1567:: with SMTP id
+ 7mr59354026wrz.513.1641662826151; 
+ Sat, 08 Jan 2022 09:27:06 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id c16sm2085507wrp.109.2022.01.08.09.27.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Jan 2022 09:27:05 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jan 2022 18:26:43 +0100
-Message-Id: <20220108172643.3465687-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+Date: Sat,  8 Jan 2022 18:24:41 +0100
+Message-Id: <20220108172441.2819559-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1641662804-0000B7AB-AB2B3FC7/0/0 CLEAN NORMAL
-X-TOI-MSGID: e5ac4ba4-c797-4208-b72a-b8e8f5b8c67c
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-argustv: bump version to
- 19.2.0-Matrix
+Subject: [Buildroot] [PATCH 1/1] package/safeclib: bump to version 02092020
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +86,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 2 +-
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- Update indentation in hash file (two spaces)
+- This bump will fix the following build failure with libest which was
+  added with commit f6f0e1e58168dfa9194db2e073efd20a98c15728:
 
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-index 47ecd18975..e58f9a4608 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  31f0ac72c8549339c18c828e51ce2531c24686c6ce6c734db0f2b0ce67ff41a3  kodi-pvr-argustv-19.1.1-Matrix.tar.gz
-+sha256  dfd19f9c1c4efe556d3764a5bec7842092b246932159ff69cf5bb1f64c8b9473  kodi-pvr-argustv-19.2.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 793f7f1adc..230ef1067c 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-@@ -4,7 +4,7 @@
+In file included from /home/buildroot/autobuild/instance-0/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/usr/include/libsafec/safe_lib.h:43:0,
+                 from est_server_http.c:39:
+/home/buildroot/autobuild/instance-0/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/usr/include/libsafec/safe_types.h:42:9: error: unknown type name 'size_t'
+ typedef size_t  rsize_t;
+         ^~~~~~
+
+https://github.com/rurban/safeclib/blob/v02092020/ChangeLog
+
+Fixes:
+ - http://autobuild.buildroot.org/results/5a12f1cb4153834078522b6068ff24ac0300d51d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/safeclib/safeclib.hash | 6 +++---
+ package/safeclib/safeclib.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/safeclib/safeclib.hash b/package/safeclib/safeclib.hash
+index 7e1c6794e4..af732f93fd 100644
+--- a/package/safeclib/safeclib.hash
++++ b/package/safeclib/safeclib.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/rurban/safeclib/releases/tag/v08112019
+-sha256	bc2f25875522c50a3a5901981020d906db0b6a7d365619b8d72412c126be3923	libsafec-08112019.0-gad76c7.tar.bz2
++# From https://github.com/rurban/safeclib/releases/tag/v02092020
++sha256  d374bdcbfcdc4c9a76abed3707667372ca212fd87a369e7bcaaa54e716d27c0a  libsafec-02092020.tar.xz
+ 
+ # Hash for license file
+-sha256	c33e77efd5781e3d59a2bb648c82d2a615035ef0d24cf58880380e3af906510b	COPYING
++sha256  c33e77efd5781e3d59a2bb648c82d2a615035ef0d24cf58880380e3af906510b  COPYING
+diff --git a/package/safeclib/safeclib.mk b/package/safeclib/safeclib.mk
+index 3af8fbb167..032a73bf67 100644
+--- a/package/safeclib/safeclib.mk
++++ b/package/safeclib/safeclib.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_ARGUSTV_VERSION = 19.1.1-Matrix
-+KODI_PVR_ARGUSTV_VERSION = 19.2.0-Matrix
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
- KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
+-SAFECLIB_VERSION = 08112019
++SAFECLIB_VERSION = 02092020
+ SAFECLIB_SITE = \
+ 	https://github.com/rurban/safeclib/releases/download/v$(SAFECLIB_VERSION)
+-SAFECLIB_SOURCE = libsafec-$(SAFECLIB_VERSION).0-gad76c7.tar.bz2
++SAFECLIB_SOURCE = libsafec-$(SAFECLIB_VERSION).tar.xz
+ SAFECLIB_LICENSE = MIT
+ SAFECLIB_LICENSE_FILES = COPYING
+ SAFECLIB_INSTALL_STAGING = YES
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
