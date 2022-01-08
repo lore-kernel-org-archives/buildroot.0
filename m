@@ -4,62 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A9F2C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260D2C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:42:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F199F60A73;
-	Sat,  8 Jan 2022 15:42:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C97D760A6F;
+	Sat,  8 Jan 2022 15:42:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8ux9YXBd7Fn6; Sat,  8 Jan 2022 15:42:41 +0000 (UTC)
+	with ESMTP id 2IZKsRpFysFr; Sat,  8 Jan 2022 15:42:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46E9360810;
-	Sat,  8 Jan 2022 15:42:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3261460AA9;
+	Sat,  8 Jan 2022 15:42:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A0E9E1BF5A1
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 427081BF5A1
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 892ED60810
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 307ED60AA9
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EWLKlGS8P74a for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
+ with ESMTP id rzV--jIM6La5 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 15:42:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com
- [209.85.216.53])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 09DFC607A3
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 15:42:37 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id
- c14-20020a17090a674e00b001b31e16749cso14053998pjm.4
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 07:42:37 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 17CCE60810
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 15:42:54 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id a5so13338289wrh.5
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 07:42:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DC28dFYcSft5p2AD+ioacbUl+T18JigloB9JBv30KfU=;
+ b=GAxYXb+rhkvecsuBSSBtoHBSqgiXE/x+RRl87uGX2EqLwphKnhwXLJz7kS/wtsMmap
+ DBSAoAMVJrFLO89wehEB1GqVFcue7KoGeDZRWoBVUOYOH/A24cmlDfAfnkspup8J1wbX
+ /OnEo1JipMIaYcd1RuUJzeSEvL3U9jwLOotQMuiQnPbdV5b7AWAxOTvzfGHjU8nuDpdp
+ JTQhN9Giax7ZfgQhy3sUPFHaznujkKHwyIPYg95cvjogQwRY978jI9pfjZ2Xwyvv1zcA
+ pf2YTnDE72w3DCfleCqHHvNvq9Y/KMSMxj3faDeplSSQe4VSuE7XXe4+Dk32hCwm5AWA
+ xcRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=DvDkd11FjLbodC6+sII3gvp48Qp33o8YckO4YwmHRE4=;
- b=zm6UkoERu9yDP72ugvkpt+/8JG0d1GCb8zD8R5aIBr0G60u7RWDiw0i1Ssio3zzGGP
- 78M06Sqflh5eV3qaL19yW4sO/oklNkoUyr0l8oLu/Fc7txnaQPPq4mmt51fbRa8bxvYS
- Si5k6i82IsqfXgLNd51OYmQTJoPXeH/GLW+YqMUrfJymedPgidhs4KtP4dXlSx30Obrf
- 6YmS+ocotTXrlo82Nf7+57OuJizcbkfMo1n9Bta7ydSssEr2O2SnecDrUMKhY2NeMdX+
- +KEl/3prtWgLL4wuYLzAMafNP3x7M9BRXlX9Lun5/EBTAqH0blnbju6vgs9k6wvaqXzV
- t88Q==
-X-Gm-Message-State: AOAM531KTcKSyqiMezTkr3D9ANQpWIJL+qD6yK+Z2eK6iVjanwAmG15j
- zoQe1to8WJ13baR4UQ3BjrkVDS8E7uXaLW9tAEw=
-X-Google-Smtp-Source: ABdhPJzUu4l0uD1Uv3s96Yd9j162SDbFqD0QRj8nMP7LbEXBImZiPjKBxzomchVvsn8uXTYsr+6CnY9VKp4qO+NcSUE=
-X-Received: by 2002:a17:90b:4c49:: with SMTP id
- np9mr21219756pjb.138.1641656557392; 
- Sat, 08 Jan 2022 07:42:37 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=DC28dFYcSft5p2AD+ioacbUl+T18JigloB9JBv30KfU=;
+ b=Yq6duoECx4VFLAwHD31N2iWy0dZaZcKHLSfjZtrc7a+mDwKCIkitHeLzp5wDFPyjYM
+ 5yeJurwo+CGPR8TouGmT1udIJ4dCm4NvrgXehgeLm+kpMsySHa8VBQejgTTIg6akmwin
+ O7aX3dUJxlc6ylYf8f372FrWhejZD2eFPkTXpdJlbRBL8kPKhUSvnupWyVO9qDOz+bn4
+ ogtHCjI12Gp1el0MDkge3/t6y81nuUlKTtFGygZC1H/dxirN8yWnSn+jQcJEjNZIreLQ
+ eU5tdV9ATvb4hcPHvTcbyfbG5XfxvtOAMt8u17JY88fjOCMJVrGgpNWq+PW0m+vhru+x
+ 0/GA==
+X-Gm-Message-State: AOAM530vkBF5K+3s+ofDtjIvSyMf5X5ke/XUu/lvsJbgwL/wpOgnpyUI
+ NsemJxtfQbsS4SYHS43x76L/2fU6mRs=
+X-Google-Smtp-Source: ABdhPJxFIItSTFitvaFwFvvGrK1iccDV5uAH6TKsZU/okKnStM7DDKdBLqd5/L8vtd+AkhFpQC0+uw==
+X-Received: by 2002:a05:6000:1866:: with SMTP id
+ d6mr56903326wri.704.1641656572103; 
+ Sat, 08 Jan 2022 07:42:52 -0800 (PST)
+Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
+ by smtp.gmail.com with ESMTPSA id w18sm1888219wrs.26.2022.01.08.07.42.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Jan 2022 07:42:51 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  8 Jan 2022 16:41:18 +0100
+Message-Id: <20220108154118.2320814-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20200926200021.28930-1-egorenar-dev@posteo.net>
-In-Reply-To: <20200926200021.28930-1-egorenar-dev@posteo.net>
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Jan 2022 16:42:25 +0100
-Message-ID: <CACXmViaj9Q6wkAPt1LZybPYPsZMws+T3UuycEea9GcoX2_5c5A@mail.gmail.com>
-To: Alexander Egorenkov <egorenar-dev@posteo.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/crash: new package
+Subject: [Buildroot] [PATCH 1/1] package/trinity: fix build with libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,112 +84,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Fix the following build failure raised on uclibc and musl since the
+addition of libexecinfo package in commit
+eea8ba446c10701a273432552108d80fb2224ef4:
 
-Sorry for the slow response.
+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: debug.o: in function `__show_backtrace':
+debug.c:(.text+0x10): undefined reference to `backtrace'
 
-On Sat, Sep 26, 2020 at 10:00 PM Alexander Egorenkov
-<egorenar-dev@posteo.net> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/bf78e4be9b9d9ca7d32f922d72ea6cd39a78d3d8
 
-> diff --git a/package/crash/0001-Support-cross-compilation.patch b/package/crash/0001-Support-cross-compilation.patch
-> new file mode 100644
-> index 0000000000..7e1bd3f861
-> --- /dev/null
-> +++ b/package/crash/0001-Support-cross-compilation.patch
-> @@ -0,0 +1,134 @@
-> +From 44cb56ad5bbd78203fb6f346299ccfe45f2568fe Mon Sep 17 00:00:00 2001
-> +From: Alexander Egorenkov <egorenar-dev@posteo.net>
-> +Date: Sat, 26 Sep 2020 14:29:49 +0200
-> +Subject: [PATCH 1/1] Support cross-compilation
-> +
-> +- Introduce CONF_CC variable to compile configure.c
-> +- Introduce CONF_HOST_ARCH to configure.c to enable overriding target
-> +  at compile time
-> +
-> +Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/trinity/trinity.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-I noticed that this patch is not yet upstream / I don't see a PR for
-it. Are you still interested in this package?
-
-The patch could be quite a bit smaller if you didn't move the !
-CONF_HOST_ARCH lines, but otherwise it looks fine to me.
-
-
-> +++ b/package/crash/Config.in
-> +config BR2_PACKAGE_CRASH
-> +       bool "crash"
-> +       depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on !BR2_STATIC_LIBS # dlopen
-> +       depends on BR2_USE_WCHAR
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       select BR2_PACKAGE_LESS
-
-The dependency on less looks odd. Presumably you mean this as a
-runtime dependency which we normally mark with a # runtime comment and
-then don't add to _DEPENDENCIES, but looking at the code it seems to
-work without less as well or with the busybox less applet?
-
-> +++ b/package/crash/crash.mk
-> @@ -0,0 +1,50 @@
-> +################################################################################
-> +#
-> +# crash
-> +#
-> +################################################################################
-> +
-> +CRASH_VERSION = 7.2.8
-> +CRASH_SITE = $(call github,crash-utility,crash,$(CRASH_VERSION))
-> +CRASH_DEPENDENCIES = host-bison less ncurses zlib
-> +CRASH_LICENSE = GPL-3.0
-
-Most of the code seems to come from the kernel and is marked as GPL-2.0+.
-
-> +CRASH_LICENSE_FILES = COPYING3
-> +
-> +CRASH_GDB_CONF_FLAGS = \
-> +       --host=$(GNU_TARGET_NAME)
-
-That looked odd to me. It apparently downloads a GDB tarball during
-the build step, patches and builds that, completely sidestepping the
-download / mirror logic of Buildroot (and our existing gdb patches),
-so that is not good. What is this needed for exactly? Can it instead
-use our existing gdb package?
-
-> +ifeq ($(BR2_i386),y)
-> +CRASH_TARGET = X86
-> +else ifeq ($(BR2_x86_64),y)
-> +CRASH_TARGET = X86_64
-> +else ifeq ($(BR2_arm)$(BR2_armeb),y)
-> +CRASH_TARGET = ARM
-> +else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-> +CRASH_TARGET = ARM64
-> +else ifeq ($(BR2_powerpc),y)
-> +CRASH_TARGET = PPC
-> +else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-> +CRASH_TARGET = PPC64
-> +else ifeq ($(BR2_s390x),y)
-> +CRASH_TARGET = S390X
-> +else ifeq ($(BR2_sparc64),y)
-> +CRASH_TARGET = SPARC64
-> +endif
-
-NIT: such conditional logic is a bit clearer / shorter in Config.in
-instead of in the .mk.
-
-What is the use case for this exactly? You are building it for the
-target, but wouldn't this make more sense as a host utility?
-
-The gdb download is a show stopper, so I have marked this as changes requested.
-
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index befb8de826..4dca50c0b6 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -11,16 +11,24 @@ TRINITY_LICENSE = GPL-2.0
+ TRINITY_LICENSE_FILES = COPYING
+ TRINITY_CPE_ID_VENDOR = trinity_project
+ 
++TRINITY_LDFLAGS = $(TARGET_LDFLAGS)
++
++ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++TRINITY_DEPENDENCIES += libexecinfo
++TRINITY_LDFLAGS += -lexecinfo
++endif
++
+ define TRINITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+ endef
+ 
+ define TRINITY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) LDFLAGS="$(TRINITY_LDFLAGS)"
+ endef
+ 
+ define TRINITY_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		LDFLAGS="$(TRINITY_LDFLAGS)" DESTDIR=$(TARGET_DIR)/usr install
+ endef
+ 
+ # Install helper scripts
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
