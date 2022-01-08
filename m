@@ -4,46 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41CA3C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AFFDC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD7B0402ED;
-	Sat,  8 Jan 2022 10:51:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53D074289F;
+	Sat,  8 Jan 2022 10:53:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pNpj-OoTSpj1; Sat,  8 Jan 2022 10:51:49 +0000 (UTC)
+	with ESMTP id oatEoWdhkDSD; Sat,  8 Jan 2022 10:53:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16149402C4;
-	Sat,  8 Jan 2022 10:51:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ADAA41BF306
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:51:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71BC741634;
+	Sat,  8 Jan 2022 10:53:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E4E8F1BF306
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A66D640231
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:51:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDA2F60A73
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FS0PzyRfISmG for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 10:51:44 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B71B40043
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:51:44 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4B701200003;
- Sat,  8 Jan 2022 10:51:41 +0000 (UTC)
-Date: Sat, 8 Jan 2022 11:51:40 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220108115140.760e195f@windsurf>
-In-Reply-To: <20220104205455.3632671-1-fontaine.fabrice@gmail.com>
-References: <20220104205455.3632671-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WeUgehfA8BWd for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B9C3C60803
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:53:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 841E61BF206;
+ Sat,  8 Jan 2022 10:53:43 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n69Ly-0006we-O8; Sat, 08 Jan 2022 11:53:42 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220108094533.1025401-1-bernd.kuhls@t-online.de>
+Date: Sat, 08 Jan 2022 11:53:42 +0100
+In-Reply-To: <20220108094533.1025401-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 8 Jan 2022 10:45:33 +0100")
+Message-ID: <87r19ih51l.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2, 1/1] package/file: fix build with gcc 4.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcap: bump version to 2.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,40 +59,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  4 Jan 2022 21:54:55 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Fix the following build failure raised since bump to version 5.41 in
-> commit d38b72bcd75392a88b5100839ac410859d0a6a79:
-> 
-> readelf.c: In function 'do_auxv_note':
-> readelf.c:1046:2: error: 'for' loop initial declarations are only allowed in C99 mode
->   for (size_t off = 0; off + elsize <= descsz; off += elsize) {
->   ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/31cbc313fceb84c0cbb1969fca5ac44244871dbc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Removed patch which was applied upstream:
+ > https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=afbc554d16a32ed352191e49b3673f2f72d0002f
 
-I am afraid it seems like this didn't fix the problem, see:
+ > Release notes:
+ > https://sites.google.com/site/fullycapable/release-notes-for-libcap
 
-  http://autobuild.buildroot.net/results/957/9573e8b01d8f21cd89a67475daabdeef533d31d7/build-end.log
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-ac_cv_prog_cc_c99='-std=gnu99' is properly passed to the configure
-script, but it still fails.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
