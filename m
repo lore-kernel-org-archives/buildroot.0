@@ -4,44 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5951CC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 08:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26D20C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 08:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E891D60B36;
-	Sat,  8 Jan 2022 08:20:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79AE160B14;
+	Sat,  8 Jan 2022 08:48:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id siVJP8iPSmbN; Sat,  8 Jan 2022 08:20:42 +0000 (UTC)
+	with ESMTP id fysN1idxCIOY; Sat,  8 Jan 2022 08:48:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62F7F60B14;
-	Sat,  8 Jan 2022 08:20:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 074301BF3F7
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:20:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C607960810;
+	Sat,  8 Jan 2022 08:48:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CBB41BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E88C040348
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:20:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4909F400FC
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:48:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KMTIIdYFogVB for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 08:20:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE2D0402B9
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 08:20:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 0E6B382946; Sat,  8 Jan 2022 08:14:26 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eJGz2bfI325T for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 08:48:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E532B400C5
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 08:48:19 +0000 (UTC)
+Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
+ by mailout03.t-online.de (Postfix) with SMTP id D235C2569
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:47:04 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd79.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n67NQ-0ca4Rd0; Sat, 8 Jan 2022 09:47:04 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55016)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n67NQ-0000y9-8c
+ for buildroot@buildroot.org; Sat, 08 Jan 2022 09:47:04 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 09:15:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 829777c1c9a0d40c8c5753e6fe86acfc78edfc92
-X-Git-Newrev: 0233b84204766f3e6eefbc773e121a71b827eaf7
-X-Patchwork-Hint: ignore
-Message-Id: <20220108081426.0E6B382946@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: tyest_python_pybind.py:
- fix flake8 errors
+Date: Sat,  8 Jan 2022 09:47:04 +0100
+Message-Id: <20220108084704.804720-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1641631624-00010BFA-7777F17D/0/0 CLEAN NORMAL
+X-TOI-MSGID: b94d3be5-a210-405a-9b89-a1e566172593
+Subject: [Buildroot] [PATCH 1/1] package/unrar: bump version to 6.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,40 +61,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0233b84204766f3e6eefbc773e121a71b827eaf7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-support/testing/tests/package/test_python_pybind.py:1:1: F401 'os' imported but unused
-support/testing/tests/package/test_python_pybind.py:3:1: F401 'subprocess' imported but unused
-support/testing/tests/package/test_python_pybind.py:6:1: E302 expected 2 blank lines, found 1
-1     E302 expected 2 blank lines, found 1
-2     F401 'os' imported but unused
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/testing/tests/package/test_python_pybind.py | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_pybind.py b/support/testing/tests/package/test_python_pybind.py
-index 5e3c3b9cc5..c0af7331a2 100644
---- a/support/testing/tests/package/test_python_pybind.py
-+++ b/support/testing/tests/package/test_python_pybind.py
-@@ -1,8 +1,7 @@
--import os
- import infra
--import subprocess
- from tests.package.test_python import TestPythonPackageBase
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 7900c44d1d..e354753bb2 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  3d010d14223e0c7a385ed740e8f046edcbe885e5c22c5ad5733d009596865300  unrarsrc-5.9.4.tar.gz
++sha256  d05022442009202a792e588bec58921c123ff046fc755f7f2272871a5bd79636  unrarsrc-6.1.3.tar.gz
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index 3c8e37a220..6923660153 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+
- class TestPythonPybind (TestPythonPackageBase):
-     __test__ = True
-     config = TestPythonPackageBase.config + \
+-UNRAR_VERSION = 5.9.4
++UNRAR_VERSION = 6.1.3
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = https://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
