@@ -1,79 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BA08C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 16:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F68C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 16:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E58260908;
-	Sat,  8 Jan 2022 16:17:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A813240128;
+	Sat,  8 Jan 2022 16:20:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jZOF-MBrDcoa; Sat,  8 Jan 2022 16:17:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rMap1RGPBq7A; Sat,  8 Jan 2022 16:20:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 145EB607FF;
-	Sat,  8 Jan 2022 16:17:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F21940106;
+	Sat,  8 Jan 2022 16:20:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5816B1BF599
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:17:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2348E1BF599
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:20:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 51B8140136
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:17:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E65340106
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:20:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vo-ujxapxI1w for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 16:17:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DE264011F
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 16:17:48 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id l10so17433425wrh.7
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 08:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7Dd5R9jSqlLFLd++WOAi1jaTH4rztihLx/QgCs6EihU=;
- b=cUa8whTS4VeCdkvRxptxtLMoNN/pejqlt4gQmNjto7yMN7NYBEUaRUkRTp/FDjBUJW
- ROs68RJpbCz4PwDoD2cbD3QRnh92xf2PsV8LWxZKdiJ2OovZWsoM75lmzGw/WdPfcGpS
- YVG7ktudt+6IZkEsH+PgQ3hdI/Xuvz1ZM81DHK5az4nW6kIYe54weXHKGpCdfCziz26F
- EN9pNA25cBjMku6x7pby4Zz17OXrEF8K52N/JoPPjLJLXfMkSMGKHU+sXC4fIzIt/tne
- +hsKdwlEZyg/HbnztQeUCzVj/q/5LPUuLtA78YRAC5pwuKfsJJdo2wCYSMxkGJ6Kw2Qs
- UA7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=7Dd5R9jSqlLFLd++WOAi1jaTH4rztihLx/QgCs6EihU=;
- b=Or+aRS9I3Y/A9hdo2oW/AzHHKmEPckLcEJgtP94vApg0FCUBPi1G3ZX8Fd3Sj3A0Z1
- pcTzqsYmZBhomz3ISNr7c/i5B+lEiVNG+N1TMknF2ol9Lz8gUEA76pZOOFsMW9au9mF+
- 9kC5D4dZWgJIZhnqSA4jJDAiXNQbWAxz1F4tqWaOfOOsZf4kETsKPeOHfwd12ZkRZ4SX
- ynq0r9UhDI7d9ut6rGW4akxTVpm5KHNlXy9HedkFJqsfhXo/4MSw4MAm/bP0bRbqdwBo
- QGaGUc7Kxlhp5JlS10avj2X8qHFhl4H81OWAaN6Z2C+t3DB2l1bBCx3z9kETecYkp6nU
- XJpg==
-X-Gm-Message-State: AOAM533UHK5jcFBC/Ptj0ttYjW6QKyD+Ss+QrVzP84QwaM/HO8F2D7SH
- tgQ1gP+DgkcGElh+f38oDfUtO0jg7l8=
-X-Google-Smtp-Source: ABdhPJy1SBOQ4iWyKAywNKKsNCPPRIDl9pW/bfm1RKkyAy9QV4K//SJ2SKzxmoXufz/zSoaAi6Jimw==
-X-Received: by 2002:a5d:4e44:: with SMTP id r4mr293016wrt.593.1641658666456;
- Sat, 08 Jan 2022 08:17:46 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id w17sm2113117wmc.14.2022.01.08.08.17.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jan 2022 08:17:46 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  8 Jan 2022 17:16:30 +0100
-Message-Id: <20220108161630.2730118-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id rhr6Fa9VUfy1 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 16:20:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B845C400BA
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 16:20:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 8628D1BF203;
+ Sat,  8 Jan 2022 16:20:21 +0000 (UTC)
+Date: Sat, 8 Jan 2022 17:20:19 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Message-ID: <20220108172019.4cb27c8e@windsurf>
+In-Reply-To: <20200306071440.30433-4-miquel.raynal@bootlin.com>
+References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
+ <20200306071440.30433-4-miquel.raynal@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libeastl: drop duplicated sentence
+Subject: Re: [Buildroot] [PATCH 3/7] package/rockchip-mali-bifrost: new
+ package with binary blobs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,35 +58,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop duplicated sentence from Config.in
+On Fri,  6 Mar 2020 08:14:36 +0100
+Miquel Raynal <miquel.raynal@bootlin.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libeastl/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+> From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> 
+> There is already a package adding Mali blobs for Sunxi Mali Utgard
+> GPUs. Many Rockchip SoCs feature a Mali Bifrost GPU and need specific
+> libraries provided under binary form with a non-GPL compliant license
+> by Rockchip. Package these libraries.
+> 
+> Define a common *_INSTALL_CMDS macro, which takes as argument the base
+> destination path, and use it to implement *_INSTALL_TARGET_CMDS and
+> *_INSTALL_STAGING_CMDS.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  package/Config.in                             |   1 +
+>  ...4-binaries-and-only-install-the-bifr.patch | 169 ++++++++++++++++++
+>  package/rockchip-mali-bifrost/Config.in       |  20 +++
+>  .../rockchip-mali-bifrost.hash                |   2 +
+>  .../rockchip-mali-bifrost.mk                  |  85 +++++++++
+>  5 files changed, 277 insertions(+)
+>  create mode 100644 package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch
+>  create mode 100644 package/rockchip-mali-bifrost/Config.in
+>  create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash
+>  create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk
 
-diff --git a/package/libeastl/Config.in b/package/libeastl/Config.in
-index 7609434519..5abea8f810 100644
---- a/package/libeastl/Config.in
-+++ b/package/libeastl/Config.in
-@@ -13,7 +13,6 @@ config BR2_PACKAGE_LIBEASTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	help
- 	  EASTL stands for Electronic Arts Standard Template
--	  Library. EASTL stands for Electronic Arts Standard Template
- 	  Library. It is a C++ template library of containers,
- 	  algorithms, and iterators useful for runtime and tool
- 	  development across multiple platforms.  It is an extensive
+Thanks for this patch, which we have finally applied! I did a large
+number of changes, almost rewriting it entirely:
+
+    [Thomas:
+    - Rename to rockchip-mali, because it contains other blobs than
+      Bifrost ones
+    - Add missing entry in DEVELOPERS file
+    - Change BR2_arm to BR2_ARM_EABIHF as only EABIhf blobs are provided
+      for arm32
+    - Add BR2_TOOLCHAIN_HAS_THREADS inherited from libdrm.
+    - Expose as a libgbm provider.
+    - Drop the patch, which was not necessary.
+    - Rework the entire installation logic, to be much simpler.]
+
+Thanks!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
