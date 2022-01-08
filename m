@@ -4,77 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD194C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DF3EC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E2664023B;
-	Sat,  8 Jan 2022 22:23:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C48CD40185;
+	Sat,  8 Jan 2022 22:28:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CyDzLSnTQ7Yw; Sat,  8 Jan 2022 22:23:06 +0000 (UTC)
+	with ESMTP id mP0a7Kz8oBNY; Sat,  8 Jan 2022 22:28:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 688C840232;
-	Sat,  8 Jan 2022 22:23:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A65191BF3D2
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:23:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6CAC40232;
+	Sat,  8 Jan 2022 22:28:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 126D41BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:28:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90B7060A4F
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:23:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0DACE81465
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:28:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0J3-C2P_myPY for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 22:23:02 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pIX4MCjCXNdC for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 22:28:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9F41B60767
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:23:02 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id e9so17235176wra.2
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 14:23:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F0CD981460
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:28:51 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id k30so1179344wrd.9
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 14:28:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=aKL2wpA3smiviV2lP8m1mNx1x14gZmWXBMsFp0nz1ng=;
- b=ed8Za9HvbHc4es2MUnDBnXcdO2x9JdEUAcYDvVzKItHAak0VXE/Dr/LwAvmtOdh3xG
- 19n3NKJSvMbJt2qRdrmgUcHtn8Ky+b5zml7qfF1KSeVd6zo8JFTL+6ckR5O043Z+6PhG
- kmppcq7FoNcAW1ClDSNiGU1Kt8SatYgrplMVevEcyJrBC+9NWWln1IN663vPdpEXCkLj
- cSdz/sjil94dGq4rFfgyxGtq8dRLnUpSdmgqYgfaK95o4MHsmm17wQvjko/sVFQJpcKI
- zPtWftPD55aX6WdrUWgGwhiVXHPUT2zH/4pOC1JSHIDNqoItkwLrF8+hkHZny5Ib/npz
- 8mbQ==
+ bh=ZIM52xLQk8TstAGIRHWFwKhlOH/TzzXVlR/BtMxKTyE=;
+ b=LNQlDSXhUrZ4KzKrjLObrjp7G98weFKes5d9xr4AuTUfNkCuWrtYuSnMntMaAE7K/A
+ kV7vwB4Aag86XSqvghcLjTym1Wd9oOJXNn84ORCyameMSuOwuY/JK3BaA9YCl69CAOOB
+ vvxGIitWo4hyz6XkHG+UORQeae1tukb0J6ddriNwT2EXGgtrpPolBNj3N0S6XIg1o/j2
+ 5EHlFN76FhckpX7DFkYztPDGOe5iWKT+XyoLRjjkrxFNB1QP9glBo+XGjPyXc2M4GXJm
+ txFu3qHYD41PAJZ5XKbPqk0lQWiWT/SnDZBQ1wBOtQSUInpzBh7TQOmlUTxz/XM17DrX
+ YWgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=aKL2wpA3smiviV2lP8m1mNx1x14gZmWXBMsFp0nz1ng=;
- b=S0z4Dvfd3vggRb58LbE2Fmwh6euNN3PX5TADI31oqJKP9QbWW1Uq7hGpqUMJi0qQDo
- rZAd88i1xHpadak6PB/4jKePUARPzdTyX+7hWsIThDSg4IvXtXbzSHrXc8CIVp8slpA2
- sd+v1KmPTQPsDQgCsQ87XPkRHM9P1ZnnyQW+UeKK+GkjeVts0UJNXLpCeuTgCL01k9d+
- bzZa9j17+IpfjteJxHIh3F8ak5vb6Ktwi5b+WxysedLethrCxTXqwWiZ7K85GK2iiW98
- LC+JzZ8bCN8U+xd5l0Z1FgvMFje4eDjae50ziZdnKO2wx3ryAGoVuElA/PJ41bhO5PvZ
- +bag==
-X-Gm-Message-State: AOAM530yrqGIRfkzEUz/7ilE8sp9JUm+cyh7insQJUXWZAPNt+RHE767
- RVeUyqWRgpKAoSshVfprSHFUwx7IolM=
-X-Google-Smtp-Source: ABdhPJx0ZccK3CW9ktCAhJJFq6M3T28rNUXjE+pq/IqNt03zpW2F51t5pruTmEPdKoEWzKr0va9Vzw==
-X-Received: by 2002:a05:6000:144c:: with SMTP id
- v12mr60182305wrx.62.1641680580835; 
- Sat, 08 Jan 2022 14:23:00 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id g8sm2409603wmh.17.2022.01.08.14.23.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jan 2022 14:23:00 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  8 Jan 2022 23:21:53 +0100
-Message-Id: <20220108222153.3689389-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=ZIM52xLQk8TstAGIRHWFwKhlOH/TzzXVlR/BtMxKTyE=;
+ b=mvBZGGT8tc4JbIo3HE7wotVJavyQzmZsj7gMlkD2YfLhmTDAH7MZTp9t8FitauiJYe
+ TLiUcnbU01/05YWf/UQxFma9KJS2IwUWviBRKlRGvdOugjCdl4YoZ6eosht6TPH39oIh
+ 3pF3Rkmz++2sZvpj8zMzCxovX912UesOLVRZC2/TFGB8zaJfzYf4o/eWdbwe9iinJaAH
+ XvPsZJpC4VOwd1DpMpq12Dfu4dmW3SNH231of836Aj4XkzcSKbSeaCD+dyOWZ2AQw7yX
+ p8vBuhQ8wAWzkXSKiVf76I82u54eAV66YURiFK0/kGIMWHLKX7neLO64z7MPLyvdSxfD
+ N95g==
+X-Gm-Message-State: AOAM533nVVZPXJ38Y66y0sIj3inGpwqPvCJ1F3feNZCsfSbi+3ATiCct
+ Fj6F9XL0UUo69lSGf6B3TLBVeQ==
+X-Google-Smtp-Source: ABdhPJxY5mgdhmcc+8kJKmK2PYTdNKmLtg1q298s2CJGp54kVIuJFGi1UnPl8aMwWZZhtDsRYeCVFQ==
+X-Received: by 2002:adf:f5cd:: with SMTP id k13mr4591774wrp.673.1641680930110; 
+ Sat, 08 Jan 2022 14:28:50 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id q8sm899534wrz.66.2022.01.08.14.28.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 08 Jan 2022 14:28:49 -0800 (PST)
+Message-ID: <516a0c55-6d67-f46a-b60b-4475b043c971@mind.be>
+Date: Sat, 8 Jan 2022 23:28:46 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/snort: bump to version 2.9.19
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>
+References: <20200825000246.4035-1-joseph.kogut@gmail.com>
+ <8bcace28-352f-1da3-51c6-0de868fa429f@mind.be>
+ <0570b1f3-5229-5c0e-796a-53f8747b540a@mind.be>
+ <CADYdroOi1mE2a1bgMgnX2dVuS5SOwPO6qNEkz_zTwEOud7pCXw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CADYdroOi1mE2a1bgMgnX2dVuS5SOwPO6qNEkz_zTwEOud7pCXw@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] systemd: ensure tmpfiles.d/legacy.conf
+ is installed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,52 +96,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Maxime Hadjinlian <maxime.hadjinlian@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://snort.org/downloads/snort/release_notes_2.9.19.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index 6df7ae5229..ac098564aa 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  2b4e30300ef6feca1f60c267e727c6c0  snort-2.9.18.1.tar.gz
-+md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
- 
- # Locally computed:
--sha256  da8af0f1b2e4f247d970c6a3c0e83fb6dcd5c84faa21aea49f306f269e8e28aa  snort-2.9.18.1.tar.gz
-+sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 54017d3460..41f450541f 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT_VERSION = 2.9.18.1
-+SNORT_VERSION = 2.9.19
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
--- 
-2.34.1
+On 08/01/2022 22:17, Norbert Lange wrote:
+> Am Sa., 8. Jan. 2022 um 21:40 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>
+>> On 08/01/2022 20:12, Arnout Vandecappelle wrote:
+>>>
+>>>
+>>> On 25/08/2020 02:02, Joseph Kogut wrote:
+>>>> Systemd doesn't install tmpfiles.d/legacy.conf when sysv compatiblity
+>>>> isn't enabled. This config sets up /var/lock, which many programs such
+>>>> as uboot's fw_printenv/setenv still depend on by default.
+>>>>
+>>>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>>>
+>>>   After all the discussion, I did finally apply to master, thanks.
+>>
+>>    And I ended up reverting it again - legacy.conf is now legacy.conf.in and it
+>> needs to be preprocessed, but that is only done if sysv-compat is enabled.
+>>
+>>    So if we want this, our only option is to enable sysv-compat (which is
+>> probably something we should do anyway).
+> 
+> Why the only option? you should just ship your own legacy.conf, it wont change.
 
+  I meant: if we want to use the legacy.conf from upstream. But you're right 
+it's not the only option, we could also manually sed out stuff from the .in file.
+
+
+> Adding sysv compatibility, which is alot more than just the mkdir and
+> symlink, would mean adding alot baggage.
+
+  Ack.
+
+> Baggage that wont even work as Yann spake thusly [1]
+> 
+> a tmpfile.conf with those 3 lines would be enough:
+> d /run/lock 0755 root root -
+> L /var/lock - - - - ../run/lock
+> d /run/lock/subsys 0755 root root -
+
+  All right, I hope I remember this by the time a see the patch :-)
+
+> 
+> Norbert.
+> 
+> PS. I am too lazy to google everything up, but I believe I brought up
+> this very topic before.
+
+  I'm also too lazy to google it.
+
+  Regards,
+  Arnout
+
+> 
+> [1] - https://lists.buildroot.org/pipermail/buildroot/2020-July/287275.html
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
