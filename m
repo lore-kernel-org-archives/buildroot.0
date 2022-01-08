@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89C02C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 16:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99103C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 16:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C39C60AE3;
-	Sat,  8 Jan 2022 16:53:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EB6D40908;
+	Sat,  8 Jan 2022 16:53:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mEr0T_VyXSHW; Sat,  8 Jan 2022 16:53:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1Q7OH8nWs6hq; Sat,  8 Jan 2022 16:53:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F17960A93;
-	Sat,  8 Jan 2022 16:53:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 107001BF599
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EC7440871;
+	Sat,  8 Jan 2022 16:53:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 898E21BF599
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3BB260674
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:52:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77DFF81423
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 16:52:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BT5nfLRtVWAA for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6gx-XXoIFafh for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 16:52:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D46660A93
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3552A8140C
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 16:52:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A463581DFE; Sat,  8 Jan 2022 16:46:22 +0000 (UTC)
+ id 89A0281DFE; Sat,  8 Jan 2022 16:46:22 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sat, 8 Jan 2022 17:51:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ed4147e76fe56322c47468be8a222204c459adf
-X-Git-Newrev: 79c5639597e961a36ee10e55b0479e642013448f
+X-Git-Oldrev: 2b5f7ce29288e2ba393ca7cd4768a83cdb5dec48
+X-Git-Newrev: 363dd649f31c7e7732f3cd509d43cebbb53e51ce
 X-Patchwork-Hint: ignore
-Message-Id: <20220108164622.A463581DFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rustc: fix the riscv64gc
- architecture handling
+Message-Id: <20220108164622.89A0281DFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ca-certificates: remove dependency
+ on host-python-cryptography
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +59,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79c5639597e961a36ee10e55b0479e642013448f
+commit: https://git.buildroot.net/buildroot/commit/?id=363dd649f31c7e7732f3cd509d43cebbb53e51ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-riscv64gc was made available for BR2_riscv, but RISC-V can be 32-bit
-or 64-bit, so we need to restrict it to BR2_RISCV_64. There's no need
-to keep the BR2_riscv dependency, as BR2_RISCV_64 can only be true
-when BR2_riscv is true.
+The host-python-cryptography module is only used by ca-certificates
+for a check of the expiration date of certificates, which is only a
+warning not even causing the build to abort, i.e something that
+Buildroot users are most likely never going to see.
 
-Also, BR2_PACKAGE_HOST_RUSTC_ARCH needs to be set to riscv64gc to
-allow rust-bin to download its pre-compiled standard library
-correctly.
+Since the host-python-cryptography dependency would soon require a
+dependency on rust, it's a lot simpler to just patch the
+certdata2pem.py script to no longer require cryptography, but only
+make use of it if available.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rustc/Config.in.host | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...tdata2pem.py-make-cryptography-module-opt.patch | 59 ++++++++++++++++++++++
+ package/ca-certificates/ca-certificates.mk         |  2 +-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index fe7404b3bd..80d1d1a3d8 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -49,7 +49,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_HOST_TOOLS_PLATFORMS
- 	default y if BR2_powerpc64le && BR2_TOOLCHAIN_USES_GLIBC
- 	# riscv64gc-unknown-linux-gnu
- 	# "g" stands for imafd, and we also need "c".
--	default y if BR2_riscv && BR2_RISCV_ISA_RVI && BR2_RISCV_ISA_RVM && \
-+	default y if BR2_RISCV_64 && BR2_RISCV_ISA_RVI && BR2_RISCV_ISA_RVM && \
- 			BR2_RISCV_ISA_RVA && BR2_RISCV_ISA_RVF && \
- 			BR2_RISCV_ISA_RVD && BR2_RISCV_ISA_RVC && \
- 			BR2_TOOLCHAIN_USES_GLIBC
-@@ -104,6 +104,7 @@ config BR2_PACKAGE_HOST_RUSTC_ARCH
- 	string
- 	default "armv5te" if BR2_ARM_CPU_ARMV5
- 	default "armv7"  if BR2_ARM_CPU_ARMV7A
-+	default "riscv64gc" if BR2_RISCV_64
- 	default BR2_ARCH
+diff --git a/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+new file mode 100644
+index 0000000000..b76c1bfd7f
+--- /dev/null
++++ b/package/ca-certificates/0001-mozilla-certdata2pem.py-make-cryptography-module-opt.patch
+@@ -0,0 +1,59 @@
++From bf18b564122e8f976681a2398862fde1eafd84ba Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 6 Jan 2022 23:15:00 +0100
++Subject: [PATCH] mozilla/certdata2pem.py: make cryptography module optional
++
++The Python cryptography module is only used to verify if trusted
++certificates have expired, but this is only a warning. For some build
++systems and distributions, providing Python cryptography is costly,
++especially since it's now partly written in Rust.
++
++As the check is only a warning, it's anyway going to be overlooked by
++most people. This commit changes the check to be optional: if the
++cryptography Python module is there, we perform the check, otherwise
++the check is skipped.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ mozilla/certdata2pem.py | 18 ++++++++++--------
++ 1 file changed, 10 insertions(+), 8 deletions(-)
++
++diff --git a/mozilla/certdata2pem.py b/mozilla/certdata2pem.py
++index ede23d4..a6261f8 100644
++--- a/mozilla/certdata2pem.py
+++++ b/mozilla/certdata2pem.py
++@@ -28,9 +28,6 @@ import sys
++ import textwrap
++ import io
++ 
++-from cryptography import x509
++-
++-
++ objects = []
++ 
++ # Dirty file parser.
++@@ -122,11 +119,16 @@ for obj in objects:
++         if not obj['CKA_LABEL'] in trust or not trust[obj['CKA_LABEL']]:
++             continue
++ 
++-        cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
++-        if cert.not_valid_after < datetime.datetime.now():
++-            print('!'*74)
++-            print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
++-            print('!'*74)
+++        try:
+++            from cryptography import x509
+++
+++            cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
+++            if cert.not_valid_after < datetime.datetime.now():
+++                print('!'*74)
+++                print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
+++                print('!'*74)
+++        except ImportError:
+++            pass
++ 
++         bname = obj['CKA_LABEL'][1:-1].replace('/', '_')\
++                                       .replace(' ', '_')\
++-- 
++2.33.1
++
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 7084ab781e..0b6962ab7b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -7,7 +7,7 @@
+ CA_CERTIFICATES_VERSION = 20211016
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+ CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20211022T144903Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3 host-python-cryptography
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
  
- config BR2_PACKAGE_HOST_RUSTC_ABI
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
