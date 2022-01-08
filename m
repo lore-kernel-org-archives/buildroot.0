@@ -4,86 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B656C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E65C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48BE240185;
-	Sat,  8 Jan 2022 22:39:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CE7B40185;
+	Sat,  8 Jan 2022 22:39:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KVRx51TM63pA; Sat,  8 Jan 2022 22:38:58 +0000 (UTC)
+	with ESMTP id NItIJPo0Q04R; Sat,  8 Jan 2022 22:39:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E75C340220;
-	Sat,  8 Jan 2022 22:38:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 656AF1BF3D2
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:38:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 044F040220;
+	Sat,  8 Jan 2022 22:39:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A89D11BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:39:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 620B24021E
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:38:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A38F0813C3
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:39:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9UBT0L0kNxSg for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 22:38:32 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AWnbH9q5Zg4Q for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 22:39:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A35A401A6
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:38:32 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id h10so8611252wrb.1
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 14:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6463A8135A
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:39:50 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id e9so17285403wra.2
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 14:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=UIhDph7QSbF9sDUS4vSXPkX+no05tht6b9Uyw9qDJGY=;
- b=dlqhTvNNuIltkhY/OKuu3NMb96EQBYkEH5N5lpdANCQBhIH5bGTj7UbyRF5xnZTMoM
- 0Wr4+bBDCPgAnAWfohMem+TnJm1sjw/jwJ3aXWeRYEEUaesMTAB39hTS9o57gQyzRgIy
- 8/jjk2eTa8ccfkc38LdOTpCjTK6YZCuAUOy6M9aS8aTyrYuNaM6mt7kX4a0yHxGmvF63
- V5PuU6jzh2lz/GdgWXYiJh48f38Ve7unr3Kj7pqOntdx51z7iQEDrhbroqccx/1e9o5C
- 9mW7O4cRf7XowYCgXNRavq6qTAms1K0ioXGi5XBP2jtd2dzjLmkq6NunN4pZcLeTylU9
- V3AA==
+ bh=LEoCjsEhQY4iJqbeuS46nolwGuMbtnUfKFsNQxbGFdI=;
+ b=EzQZvWa8+E+e2l/rELEA4QKOsdIsWzwoCzzHIPiwGOiB+t5VAMD8CC1Jqh/sGZckeY
+ U5jkL+UkOTq8tAZZFS4fya28JfRGY/G3S2V1L3v6NmPe2r8L/bJm9ltQ5A0ufh4axAq3
+ +bFx9YleZZlI2DzKub1aBgfejBrRqjz1L+Qk3Bz+Ld/MkyejkjfYeyH637aRJeEYUC43
+ XkMp6lahhJZY+jFiDQdg4miF3lpD/WfUSkMRkeU18E9B+RKRb4J9yileWwwB5V1CrYjJ
+ dHt9m9smUPJX7Rr/uahKM89saeOZqHkyqqkP2d79/znrhoidtjUD4ahIbxiaGMSRCqKv
+ bXDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=UIhDph7QSbF9sDUS4vSXPkX+no05tht6b9Uyw9qDJGY=;
- b=MKygNcKqbpEqCSMiCEew9e5nABp2kgxfY3P7qS6OZRVOqEOI7i5NhGwBNo8WvtS0Mg
- 9XrgQpWHiUPCcdTJg+3NJJIljKmrX1jEt37FMetnwTez1l5DAyyH5CgWxM7uWUveCRyZ
- PcQznkb1WaEjZYFisspFz6COjfs6fpXwfsrti3+Ax74hAtOLdrbSX4N8EE/A4moefbpU
- fVjxgIrCRIYLj6NLKYljlpOKGgAp9sjpgXOiByhk2LKSohyARB2Obak3Yby/o2h647kF
- B/30wLnUvIIUryNVwNJzSRPJth5K8hFX/nCvcAxirGvflJXKipHi1a0SEhSaQXJHbidl
- 4H2w==
-X-Gm-Message-State: AOAM532O69z8AdjvgXAdXl9mSuGj9CKnIFHBMEdXqxhlNCwbPcp+2AFt
- LrWRw8VoT6V7usDk9g0UG/FHVg==
-X-Google-Smtp-Source: ABdhPJzVICwsaJAwOa4tMTjPrne6DzMPhQxpzgYFMQG7Lvpyf8PWrL8/QmnFVHF8Z5NBOsJyfdPz7A==
-X-Received: by 2002:adf:ef52:: with SMTP id c18mr58026086wrp.162.1641681510669; 
- Sat, 08 Jan 2022 14:38:30 -0800 (PST)
-Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
- ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id e5sm2935627wrq.116.2022.01.08.14.38.29
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 08 Jan 2022 14:38:30 -0800 (PST)
-Message-ID: <6025dff1-66cb-f56e-21ad-41042efc5517@mind.be>
-Date: Sat, 8 Jan 2022 23:38:29 +0100
+ bh=LEoCjsEhQY4iJqbeuS46nolwGuMbtnUfKFsNQxbGFdI=;
+ b=m+/xJBnBXHchI87AR3VqzG1wWW1HpCEmAseKAR/KDqnyHeyNzdxn9ZAVYW6jm5n9Zi
+ K3QxIyP4l4f9YOF1H+35ZhPEXZJvT+Q15OIfOYh4A1Z4C28marfdLiPWbn14fnItfpv7
+ BQ+qTwNHiwIfDjxaxozdak8pJCMYXv+oGvSnMJwUPmNHggZU7G849g0zI6BZ5SuOWbef
+ X9pF3sbP41e/1uSCcisgUBVsRPP2/YitolJcBJfJjUo8jQGNp6dTjDkUECGmWSWJJifs
+ yZdxtbO3jG03pemMe2AXJzjIfIEhEoeK58bgFr5gTqcoReo6wUJYYaVS2kWfKFXW8zVd
+ /Mrw==
+X-Gm-Message-State: AOAM531kyzLBSDdcZu/g8Q6H8G6DMtMhY1uaI452jEkX80rYvN2ZGEnw
+ 2/xo38plOb/0n3WI1qlcn6aQXKtVAZA=
+X-Google-Smtp-Source: ABdhPJyJdbKBjE4sq6tN7aDuEDQK6KQVWHjZ0PPBpEj+ektWkhpnYJDCB0mm9xArKJzlGfbD/kOYdg==
+X-Received: by 2002:a5d:6c67:: with SMTP id r7mr61968361wrz.350.1641681588536; 
+ Sat, 08 Jan 2022 14:39:48 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
+ [92.167.208.201])
+ by smtp.gmail.com with ESMTPSA id g9sm2778267wmq.22.2022.01.08.14.39.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Jan 2022 14:39:48 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  8 Jan 2022 23:38:28 +0100
+Message-Id: <20220108223829.3701891-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Norbert Lange <nolange79@gmail.com>
-References: <20201126144745.502228-1-nolange79@gmail.com>
- <eae1a293-c218-3527-db3b-cd71c94135b3@mind.be>
- <CADYdroM-xNg-4XBbPh0bUhmgqr41j9f_CR-ou_Y3UgOy88+sfw@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CADYdroM-xNg-4XBbPh0bUhmgqr41j9f_CR-ou_Y3UgOy88+sfw@mail.gmail.com>
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/systemd: add support for
- creating journal catalog DB
+Subject: [Buildroot] [PATCH 1/2] package/libmd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,166 +85,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This library provides message digest functions found on BSD systems
+either on their libc (NetBSD, OpenBSD) or libmd (FreeBSD, DragonflyBSD,
+macOS, Solaris) libraries and lacking on others like GNU systems.
 
+https://www.hadrons.org/software/libmd/
 
-On 08/01/2022 22:46, Norbert Lange wrote:
-> Am Sa., 8. Jan. 2022 um 20:41 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
->>
->>    Hi Norbert,
->>
->> On 26/11/2020 15:47, Norbert Lange wrote:
->>> journald supports catalog files, or rather a binary database of
->>> those.
->>> Functionality added includes:
->>>
->>> -   A config option allows enabling the binary database.
->>>
->>> -   if the option is enabled, the database is built and moved to
->>>       /usr/share/factory. A symlink is created in /var pointing to
->>>       that file.
->>>       If BR2_ENABLE_LOCALE_PURGE is enabled, the catalogs not in the
->>>       language whitelist are deleted first.
->>>
->>> -   the service normally used for creating the DB during boot,
->>>       and the catalog source files used as input are deleted.
->>>
->>> The move to /usr/share/factory is helpful for having /usr as whole
->>> system distribution.
->>>
->>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->>
->>    I was going to apply a second time, but then I noticed that I made some
->> comments on v2 [1] that you haven't answered to and I still think they're valid.
->> So I've marked this patch as Changes Requested.
-> 
-> I did reply and cover the comments in [2], not sure whats missing?
-> Separating into 2 independent patches is not really helpfull IMHO.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/libmd/Config.in  |  9 +++++++++
+ package/libmd/libmd.hash |  5 +++++
+ package/libmd/libmd.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/libmd/Config.in
+ create mode 100644 package/libmd/libmd.hash
+ create mode 100644 package/libmd/libmd.mk
 
-  Oops, you're right. I'll look at the patch again tomorrow morning.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb06de820d..c1ccab966c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -899,6 +899,7 @@ F:	package/libidn2/
+ F:	package/libjpeg/
+ F:	package/liblockfile/
+ F:	package/libmatroska/
++F:	package/libmd/
+ F:	package/libmpdclient/
+ F:	package/libnetfilter_conntrack/
+ F:	package/libnetfilter_queue/
+diff --git a/package/Config.in b/package/Config.in
+index ad542ac8bc..d8ee96a588 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1412,6 +1412,7 @@ menu "Crypto"
+ 	source "package/libgpgme/Config.in"
+ 	source "package/libkcapi/Config.in"
+ 	source "package/libksba/Config.in"
++	source "package/libmd/Config.in"
+ 	source "package/libmhash/Config.in"
+ 	source "package/libnss/Config.in"
+ 	source "package/libolm/Config.in"
+diff --git a/package/libmd/Config.in b/package/libmd/Config.in
+new file mode 100644
+index 0000000000..63139ad69b
+--- /dev/null
++++ b/package/libmd/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBMD
++	bool "libmd"
++	help
++	  This library provides message digest functions found on BSD
++	  systems either on their libc (NetBSD, OpenBSD) or libmd
++	  (FreeBSD, DragonflyBSD, macOS, Solaris) libraries and lacking
++	  on others like GNU systems.
++
++	  https://www.hadrons.org/software/libmd/
+diff --git a/package/libmd/libmd.hash b/package/libmd/libmd.hash
+new file mode 100644
+index 0000000000..1a3c9d80df
+--- /dev/null
++++ b/package/libmd/libmd.hash
+@@ -0,0 +1,5 @@
++# From https://lists.freedesktop.org/archives/libbsd/2021-October/000311.html
++sha512  731553ecc5e0e1eb228cced8fccd531fe31fb5c7627ca30013d287e1aeb8222959cf7498fbb7414bbabb967b25d4e8b0edd54fc47f6ccf55fc91087db0725ce3  libmd-1.0.4.tar.xz
++
++# Hash for license file
++sha256  4365ef6255ad553fce69dd4bc0e093472c5d0e41b8ea493a545cc926ce171aa6  COPYING
+diff --git a/package/libmd/libmd.mk b/package/libmd/libmd.mk
+new file mode 100644
+index 0000000000..19a2458982
+--- /dev/null
++++ b/package/libmd/libmd.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libmd
++#
++################################################################################
++
++LIBMD_VERSION = 1.0.4
++LIBMD_SOURCE = libmd-$(LIBMD_VERSION).tar.xz
++LIBMD_SITE = https://archive.hadrons.org/software/libmd
++LIBMD_LICENSE = BSD-2-Clause, BSD-3-Clause, Beerware, ISC, Public Domain
++LIBMD_LICENSE_FILES = COPYING
++LIBMD_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.34.1
 
-  Regards,
-  Arnout
-
-> 
->>
->>    If you respin, please also include in the commit message the additional
->> explanations you made in reply to Romain.
->>
->>    Regards,
->>    Arnout
->>
->> [1] https://lore.kernel.org/buildroot/1d09c49a-6d08-1cd7-9785-92b56c17ae06@mind.be/
->>
->>
->>> ---
->>> v1->v2:
->>> -   Moved all logic into systemd.mk
->>> -   solved the LOCALE_PURGE order that way
->>> -   use the factory to store the file
->>> -   option to enable the DB (similar to udev HWDB)
->>> -   cant be anabled with !ROOTFS_RW, tons of
->>>       issues with that one
->>> v2->v3:
->>> -   use backticks instead of $$()
->>> -   be more explicit about what happens in
->>>       SYSTEMD_LOCALE_PURGE_CATALOGS
->>>
->>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->>> ---
->>>    package/systemd/Config.in  | 14 +++++++++++++
->>>    package/systemd/systemd.mk | 41 ++++++++++++++++++++++++++++++++++++++
->>>    2 files changed, 55 insertions(+)
->>>
->>> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
->>> index ec34478e3d..d576e6035b 100644
->>> --- a/package/systemd/Config.in
->>> +++ b/package/systemd/Config.in
->>> @@ -269,6 +269,20 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
->>>
->>>          http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
->>>
->>> +config BR2_PACKAGE_SYSTEMD_CATALOGDB
->>> +     bool "enable journal catalog database installation"
->>> +     depends on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW # conflicting tmpfiles magic
->>> +     help
->>> +       Build and install the journal catalog database.
->>> +
->>> +       catalog files are used to provide extended and potentially localized
->>> +       messages for the journal.
->>> +
->>> +       The original catalog files will be built into a DB at
->>> +       /usr/share/factory/var/lib/systemd/catalog/database.
->>> +
->>> +       https://www.freedesktop.org/wiki/Software/systemd/catalog/
->>> +
->>>    config BR2_PACKAGE_SYSTEMD_LOCALED
->>>        bool "enable locale daemon"
->>>        help
->>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
->>> index cb12f667d6..ae99c02abf 100644
->>> --- a/package/systemd/systemd.mk
->>> +++ b/package/systemd/systemd.mk
->>> @@ -613,6 +613,47 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
->>>        $(SYSTEMD_INSTALL_NETWORK_CONFS)
->>>    endef
->>>
->>> +ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
->>> +define SYSTEMD_LOCALE_PURGE_CATALOGS
->>> +     # go through all files with scheme <basename>.<langext>.catalog
->>> +     # and remove those where <langext> is not in LOCALE_NOPURGE
->>> +     for cfile in `find $(TARGET_DIR)/usr/lib/systemd/catalog -name '*.*.catalog'`; \
->>> +     do \
->>> +             basename=$${cfile##*/}; \
->>> +             basename=$${basename%.catalog}; \
->>> +             langext=$${basename#*.}; \
->>> +             [ "$$langext" = "$${basename}" ] && continue; \
->>> +             expr '$(LOCALE_NOPURGE)' : ".*\b$${langext}\b" >/dev/null && continue; \
->>> +             rm -f "$$cfile"; \
->>> +     done
->>> +endef
->>> +
->>> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_LOCALE_PURGE_CATALOGS
->>> +endif
->>> +
->>> +ifeq ($(BR2_PACKAGE_SYSTEMD_CATALOGDB),y)
->>> +define SYSTEMD_UPDATE_CATALOGS
->>> +     $(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
->>> +     install -D $(TARGET_DIR)/var/lib/systemd/catalog/database \
->>> +             $(TARGET_DIR)/usr/share/factory/var/lib/systemd/catalog/database
->>> +     rm $(TARGET_DIR)/var/lib/systemd/catalog/database
->>> +     ln -sf /usr/share/factory/var/lib/systemd/catalog/database \
->>> +             $(TARGET_DIR)/var/lib/systemd/catalog/database
->>> +     grep -q '^L /var/lib/systemd/catalog/database' $(TARGET_DIR)/usr/lib/tmpfiles.d/var.conf || \
->>> +             printf "\nL /var/lib/systemd/catalog/database\n" >> $(TARGET_DIR)/usr/lib/tmpfiles.d/var.conf
->>> +endef
->>> +
->>> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_UPDATE_CATALOGS
->>> +endif
->>> +
->>> +define SYSTEMD_RM_CATALOG_UPDATE_SERVICE
->>> +     rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog \
->>> +             $(TARGET_DIR)/usr/lib/systemd/system/systemd-journal-catalog-update.service \
->>> +             $(TARGET_DIR)/usr/lib/systemd/system/*/systemd-journal-catalog-update.service
->>> +endef
->>> +
->>> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_CATALOG_UPDATE_SERVICE
->>> +
->>>    define SYSTEMD_PRESET_ALL
->>>        $(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
->>>    endef
->>>
-> 
-> Norbert
-> 
-> [2] - https://lore.kernel.org/buildroot/1d09c49a-6d08-1cd7-9785-92b56c17ae06@mind.be/
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
