@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76DF8C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD81C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD3060AD6;
-	Sat,  8 Jan 2022 22:37:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35F9F60AD2;
+	Sat,  8 Jan 2022 22:37:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XXWYE88U3Kto; Sat,  8 Jan 2022 22:37:18 +0000 (UTC)
+	with ESMTP id ulUh-yzV9PEw; Sat,  8 Jan 2022 22:37:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6933C60AAC;
-	Sat,  8 Jan 2022 22:37:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1A091BF3D2
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D60860B02;
+	Sat,  8 Jan 2022 22:37:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 23A781BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A58A340256
+ by smtp3.osuosl.org (Postfix) with ESMTP id 554E660A93
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c51pM3_5xoft for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mgMxYS56_Qt4 for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8DB640220
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93F5360AA9
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7D75D832C8; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
+ id 6945883466; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 23:35:41 +0100
+Date: Sat, 8 Jan 2022 23:35:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 049ca10248a4c5a808e7d96acd8711563916d318
-X-Git-Newrev: 43c580ac9f848449333ecbe4336c2c9f2ba12158
+X-Git-Oldrev: 9d5749d2de9f2d4b0681593fbe0d95096612a1c2
+X-Git-Newrev: 342fd3e7350479dc368541ac77a5130ebb53194c
 X-Patchwork-Hint: ignore
-Message-Id: <20220108222949.7D75D832C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tinifier: new package
+Message-Id: <20220108222949.6945883466@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ripgrep: convert to cargo
+ infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,90 +59,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43c580ac9f848449333ecbe4336c2c9f2ba12158
+commit: https://git.buildroot.net/buildroot/commit/?id=342fd3e7350479dc368541ac77a5130ebb53194c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a Go package that needs vendor modules to be downloaded at
-build time.
+This commit converts the ripgrep package to the cargo
+infrastructure. This causes the vendoring mechanism to kick in, which
+changes the contents of the tarball. To avoid a clash on the hash, we
+change the version of ripgrep to the Git commit hash matching the
+13.0.0 tag, so there are no functional changes, but the tarball name
+is different.
 
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Christian Stewart <christian@paral.in>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/tinifier/Config.in     | 10 ++++++++++
- package/tinifier/tinifier.hash |  3 +++
- package/tinifier/tinifier.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
+ package/ripgrep/ripgrep.hash |  2 +-
+ package/ripgrep/ripgrep.mk   | 37 ++++++-------------------------------
+ 2 files changed, 7 insertions(+), 32 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index df7d988279..ab6648cec2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2787,6 +2787,7 @@ F:	package/rtc-tools/
- F:	package/sam-ba/
- F:	package/scons/
- F:	package/squashfs/
-+F:	package/tinifier/
- F:	package/wayland/
- F:	package/weston/
- F:	support/testing/tests/boot/test_syslinux.py
-diff --git a/package/Config.in b/package/Config.in
-index 15a831c1bf..ad6741f74c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -314,6 +314,7 @@ comment "Graphic applications"
- 	source "package/rrdtool/Config.in"
- 	source "package/stellarium/Config.in"
- 	source "package/tesseract-ocr/Config.in"
-+	source "package/tinifier/Config.in"
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index b2f03a95e6..cd2dbedfb4 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 0fb17aaf285b3eee8ddab17b833af1e190d73de317ff9648751ab0660d763ed2  ripgrep-13.0.0.tar.gz
++sha256 6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
+ sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 7c2b79a4a7..d587441cfa 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,7 +4,11 @@
+ #
+ ################################################################################
  
- comment "Graphic libraries"
- 	source "package/cegui/Config.in"
-diff --git a/package/tinifier/Config.in b/package/tinifier/Config.in
-new file mode 100644
-index 0000000000..fbadfe6bd9
---- /dev/null
-+++ b/package/tinifier/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_TINIFIER
-+	bool "tinifier"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  CLI tool for images compressing
-+
-+	  This tool uses tinypng.com API endpoint for compressing your
-+	  local jpg/png images (it supports parallel jobs).
-+
-+	  https://github.com/tarampampam/tinifier
-diff --git a/package/tinifier/tinifier.hash b/package/tinifier/tinifier.hash
-new file mode 100644
-index 0000000000..5681ed6a55
---- /dev/null
-+++ b/package/tinifier/tinifier.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  927e966f9d23ea7cc1942967a8fc16ef4c55c51bd096d44f54b418844a51aa12  tinifier-3.4.0.tar.gz
-+sha256  791d8fd993ace44d4d83e2f4820a64d5ad3e37412f029afad46d17a9259de2b6  LICENSE
-diff --git a/package/tinifier/tinifier.mk b/package/tinifier/tinifier.mk
-new file mode 100644
-index 0000000000..d7ed6f7c93
---- /dev/null
-+++ b/package/tinifier/tinifier.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tinifier
-+#
-+################################################################################
-+
-+TINIFIER_VERSION = 3.4.0
-+TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
-+TINIFIER_LICENSE = MIT
-+TINIFIER_LICENSE_FILES = LICENSE
-+TINIFIER_GOMOD = ./cmd/tinifier
-+
-+$(eval $(golang-package))
+-RIPGREP_VERSION = 13.0.0
++# Same as 13.0.0, we use a Git commit hash because the hash of this
++# tarball changed when moving to the cargo-package infrastructure, and
++# we can't change the hash of existing tarball. Please switch back to
++# a Git tag at the next version bump.
++RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
+@@ -13,33 +17,4 @@ RIPGREP_CPE_ID_VENDOR = ripgrep_project
+ # CVE only impacts ripgrep on Windows
+ RIPGREP_IGNORE_CVES += CVE-2021-3013
+ 
+-RIPGREP_DEPENDENCIES = host-rustc
+-RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo \
+-	__CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS="nightly" \
+-	CARGO_TARGET_APPLIES_TO_HOST="false"
+-
+-RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
+-
+-RIPGREP_CARGO_OPTS = \
+-	-Z target-applies-to-host \
+-	--target=$(RUSTC_TARGET_NAME) \
+-	--manifest-path=$(@D)/Cargo.toml
+-
+-ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
+-RIPGREP_CARGO_BIN_SUBDIR = debug
+-else
+-RIPGREP_CARGO_OPTS += --release
+-RIPGREP_CARGO_BIN_SUBDIR = release
+-endif
+-
+-define RIPGREP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
+-		cargo build $(RIPGREP_CARGO_OPTS)
+-endef
+-
+-define RIPGREP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/$(RIPGREP_BIN_DIR)/rg \
+-		$(TARGET_DIR)/usr/bin/rg
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cargo-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
