@@ -1,60 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C65BC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EDF3C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33A3B4021E;
-	Sat,  8 Jan 2022 14:17:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4C7660AA4;
+	Sat,  8 Jan 2022 14:23:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a91U_grTVX4C; Sat,  8 Jan 2022 14:17:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k5p4TarcLZih; Sat,  8 Jan 2022 14:23:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8169140249;
-	Sat,  8 Jan 2022 14:17:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E65831BF2FA
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:17:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B5AC60ABE;
+	Sat,  8 Jan 2022 14:23:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 82FF61BF2FA
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D418E81363
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:17:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7876B60ABE
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:23:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C70GdVJx6nWU for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 14:17:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C93981357
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:17:05 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 1652FC9A64
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:14:11 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 4861960004;
- Sat,  8 Jan 2022 14:14:06 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1n6CTt-0001uU-Jw; Sat, 08 Jan 2022 15:14:05 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211228153345.4087026-1-fontaine.fabrice@gmail.com>
- <20211228164916.2beec0d6@windsurf>
- <CAPi7W80OfGF3AhM2h6mjtsUjLEnYEV4gteJ12GFq4edNysEV5A@mail.gmail.com>
- <20211228181447.2a42dc86@windsurf>
- <ed10db1b-6b39-344d-8c4b-aa0a6d085d40@gmail.com>
- <CAPi7W8094+7P-RRPafDfRgSCe94aqQUfoQ7z=WvGRFsj_wdpww@mail.gmail.com>
-Date: Sat, 08 Jan 2022 15:14:05 +0100
-In-Reply-To: <CAPi7W8094+7P-RRPafDfRgSCe94aqQUfoQ7z=WvGRFsj_wdpww@mail.gmail.com>
- (Fabrice Fontaine's message of "Sun, 2 Jan 2022 21:36:34 +0100")
-Message-ID: <874k6egvrm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ntfC44nqpj2S for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 14:23:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C76C560A89
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:23:15 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id l10so16953655wrh.7
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 06:23:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=62hFXhXNecyIN3kiNiW3UAoKM6UPKK4S3kneiqVFqr0=;
+ b=g4EtQ8qzgBZAvaxUKC/ZSHVytuusRVdRQL3KFBkjzw2Sr+MVeuoAF5SHfF+aSgp8vc
+ fDSrvWphEI5Yb6T+Y+uA9wYVP6EZdu5a+I+893HEmmTse/YzwtjBVYx+YjNs5qq01ASp
+ XsVwQyjD5yc3Of1cNj+wyqujg8Cn2QdiP8DZV2ShPrHnIgmSsaoBDQlrPtK+q7/wo7h7
+ N9Gl4OR6yFbpxHHm8ECFfg5DigX+ldWTKbdFWuiVOLSLtyV183+ram37rIrFt1LmI/Nh
+ fIvhXcWczTOYDrvdFkB9sll9JqsOr0pYwa0+qxD7kqi1QyhkWzPT8uaCpzrMo77y2nLa
+ 73gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=62hFXhXNecyIN3kiNiW3UAoKM6UPKK4S3kneiqVFqr0=;
+ b=pQsT0P3ziUl9OeCIIl5umhtYt/VtunlJGWABnBvNYv2gWyoD8TbVDQgujphg/fE9GJ
+ bH/lFqwjHvYdbaLzj2MbTnpRyx4103T2t3EKO5tmV4uqHAfdM2V0NhMpycsdmbWiSqgg
+ tFCsz+dYArXZnXXe/KwpQkUmSvqo9+BGLpaYbMhSRATVm3LNmaaAvCXRZ9ITXGPwzc24
+ ulVsgWme3S0TsXgUXCEthEKmFXnRcN3bQZMW3IJHIUlUmcXE6ATSDkydHmXrPsCZ7Vwo
+ Byn4a4ErMUWg50SXYAljL3Tzo4YnfPOPbrBXVIQjkAaOuG53nf3Qj/fBawXz/bYdsqmg
+ nMTQ==
+X-Gm-Message-State: AOAM533wGneIQt0vAKJ8sb7Wd9UMTYEX936wnmZQnF/Q3yybZkAvHgMc
+ L75mnh4vKxjIwin24rJKabAzpQ==
+X-Google-Smtp-Source: ABdhPJzcvYDTkJYV5IqnBlZjjQRDfvmNi6QKuVzcapTIunaK+eUZ2y9FbZbyNsqeZOgMZaylN/Dwrw==
+X-Received: by 2002:a05:6000:1846:: with SMTP id
+ c6mr9529058wri.658.1641651793928; 
+ Sat, 08 Jan 2022 06:23:13 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id h20sm1598568wmq.38.2022.01.08.06.23.13
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 08 Jan 2022 06:23:13 -0800 (PST)
+Message-ID: <dbda2409-cd3f-325f-f586-55ce6986845f@mind.be>
+Date: Sat, 8 Jan 2022 15:23:12 +0100
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/mbedtls3: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Romain Naour <romain.naour@smile.fr>, Norbert Lange
+ <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20201126152832.1115350-1-nolange79@gmail.com>
+ <49065289-1e01-f807-3e4f-d5e6303de5b5@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <49065289-1e01-f807-3e4f-d5e6303de5b5@smile.fr>
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: Allow extra config
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,38 +94,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-
-Hi,
-
- > Indeed, this is also an alternative, even if I think that adding
- > mbedtls3 would be a great addition.
- > For example, libcurl supports mbedts 3.0 since its version 7.79 and
- > https://github.com/curl/curl/commit/3f126138be3c459a2794d35f8170e92e65a50dad.
- > Otherwise, as requested by Thomas, I sent an email to mbedtls mailing
- > list:
- > https://lists.trustedfirmware.org/archives/list/mbed-tls@lists.trustedfirmware.org/thread/HEHCNQZTBOZV56RTGRTGSQQRMEWYJPGI/
-
-What is the plan from upstream regarding mbedtls 2.x? Will it be
-maintained in parallel with 3.x for some time (and for how long?) or is
-it effectively EOL already?
-
-If it is EOL then I guess we should just update the current mbedtls
-package to 3.x (and disable mbedtls support for packages not compatible
-with it yet), but if the plan is to support 2.x for quite some time then
-indeed a separate mbedtls3 package makes more sense.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwOC8wMS8yMDIyIDEyOjA0LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gSGVsbG8gTm9yYmVy
+dCwKPiAKPiBMZSAyNi8xMS8yMDIwIMOgIDE2OjI4LCBOb3JiZXJ0IExhbmdlIGEgw6ljcml0wqA6
+Cj4+IFN5c3RlbWQgaGFzIHZlcnkgbWFueSBvcHRpb25zLCBhZGRpbmcgYSB3YXkgZm9yIHRoZSB1
+c2VyCj4+IHRvIHNldCBjdXN0b20gb3B0aW9ucyBjYW4gaGVscCBjdXN0b21pemF0aW9ucwo+PiB3
+aXRob3V0IGNoYW5naW5nIGJ1aWxkcm9vdCBmaWxlcy4KPiAKPiBUaGlzIGlzIGFsc28gdHJ1ZSBv
+ZiBhbnkgcGFja2FnZSBpbiBCdWlsZHJvb3QuIFVzZXJzIG1heSB3YW50IHRvIHByb3ZpZGUgYQo+
+IGN1c3RvbSBvcHRpb24gdGhhdCBpcyBub3QgaGFuZGxlZCB5ZXQgYnkgQnVpbGRyb290Lgo+IAo+
+IFdoYXQgaWYgdGhlIG9wdGlvbiBwcm92aWRlZCBpbiBCUjJfUEFDS0FHRV9TWVNURU1EX0VYVFJB
+X0NPTkZJRyByZXF1aXJlcyBhIGJ1aWxkCj4gZGVwZW5kZW5jeSA/CgpBbHNvLCBJIHRoaW5rIGl0
+J3MgcG9zc2libGUgdG8gZG8gdGhpcyBpbiBhIGJyMi1leHRlcm5hbC4gU29tZXRoaW5nIGxpa2U6
+CgpzeXN0ZW1kLW92ZXJyaWRlcy5tazoKCmlmZXEgKCQoQlIyX1BBQ0tBR0VfU1lTVEVNRF9PVkVS
+UklERVMpLHkpClNZU1RFTURfQ09ORl9PUFRTICs9IC1EZm9vIC1EYmFyClNZU1RFTURfREVQRU5E
+RU5DSUVTID0gZm9vYmFyCmVuZGlmCgogIFJlZ2FyZHMsCiAgQXJub3V0Cl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
