@@ -4,43 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F00C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E274C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BDEE81831;
-	Sat,  8 Jan 2022 09:54:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F51F817C0;
+	Sat,  8 Jan 2022 09:55:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UbVOA2QjiW4u; Sat,  8 Jan 2022 09:54:46 +0000 (UTC)
+	with ESMTP id r3bySy2uVXx9; Sat,  8 Jan 2022 09:55:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A423817EB;
-	Sat,  8 Jan 2022 09:54:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8801D8177C;
+	Sat,  8 Jan 2022 09:55:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E50A91BF343
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:54:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3442D1BF343
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E138A410B8
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:54:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2280F41604
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:55:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YzrxcyjRurdE for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 09:54:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FBD4410AB
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:54:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4045382A39; Sat,  8 Jan 2022 09:48:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id PKPhsPKNEjMG for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 09:55:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 19CF9410AB
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:55:31 +0000 (UTC)
+Received: from fwd71.dcpf.telekom.de (fwd71.aul.t-online.de [10.223.144.97])
+ by mailout10.t-online.de (Postfix) with SMTP id 5419511A92
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:54:52 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd71.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n68R2-3f3ioT0; Sat, 8 Jan 2022 10:54:52 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55040)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n68R1-00046X-R9
+ for buildroot@buildroot.org; Sat, 08 Jan 2022 10:54:51 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 10:51:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b636c507c64792d91df336eb5c379b0bff17977
-X-Git-Newrev: 2f8f69012e0eee7f3e98212fb3da118c211f3c0b
-X-Patchwork-Hint: ignore
-Message-Id: <20220108094831.4045382A39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xfsprogs: bump to version 5.14.2
+Date: Sat,  8 Jan 2022 10:54:51 +0100
+Message-Id: <20220108095451.1078507-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1641635692-00001674-EE039626/0/0 CLEAN NORMAL
+X-TOI-MSGID: 1e500e65-291a-4652-b5f5-28a754b358c4
+Subject: [Buildroot] [PATCH 1/1] package/libldns: bump version to 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,79 +61,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f8f69012e0eee7f3e98212fb3da118c211f3c0b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Reformatted hashes.
 
-liburcu is a mandatory dependency since version 5.14.0 and
-https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=e4da1b16e29f6fe6b34de9b9b0f97141fb2e1855
+Changelog: https://github.com/NLnetLabs/ldns/blob/develop/Changelog
 
-https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/doc/CHANGES?h=v5.14.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xfsprogs/Config.in     | 3 +++
- package/xfsprogs/xfsprogs.hash | 2 +-
- package/xfsprogs/xfsprogs.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ package/libldns/libldns.hash | 10 +++++-----
+ package/libldns/libldns.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
-index b8e07cc83d..a382b63ff8 100644
---- a/package/xfsprogs/Config.in
-+++ b/package/xfsprogs/Config.in
-@@ -1,12 +1,15 @@
- comment "xfsprogs needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libldns/libldns.hash b/package/libldns/libldns.hash
+index c8fb39d478..cab8b7dbdf 100644
+--- a/package/libldns/libldns.hash
++++ b/package/libldns/libldns.hash
+@@ -1,7 +1,7 @@
+-# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.7.1.tar.gz.sha1
+-sha1 d075a08972c0f573101fb4a6250471daaa53cb3e  ldns-1.7.1.tar.gz
+-# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.7.1.tar.gz.sha256
+-sha256 8ac84c16bdca60e710eea75782356f3ac3b55680d40e1530d7cea474ac208229  ldns-1.7.1.tar.gz
++# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.1.tar.gz.sha1
++sha1  df19a0404a608821b571525214a18988bc88bb46  ldns-1.8.1.tar.gz
++# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.1.tar.gz.sha256
++sha256  958229abce4d3aaa19a75c0d127666564b17216902186e952ca4aef47c6d7fa3  ldns-1.8.1.tar.gz
  
- config BR2_PACKAGE_XFSPROGS
- 	bool "xfsprogs"
-+	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_INIH
-+	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index b379839e7e..bb546601dc 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
--sha256  e04017e46d43e4d54b9a560fd7cea922520f8f6ef882404969d20cd4e5c790e9  xfsprogs-5.10.0.tar.xz
-+sha256  01ccd3ef9df2837753a5d876b8da84ea957d13d7a461b8c46e8afa4eb09aabc8  xfsprogs-5.14.2.tar.xz
- 
- # Hash for license files
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 71d02278e9..695471bddc 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -4,13 +4,13 @@
+ # Hash for license file:
+-sha256 9e0b1505c358d1a7c79555ee8bd1acbe2985dbc74dd81f3697cebf2161e922e6  LICENSE
++sha256  9e0b1505c358d1a7c79555ee8bd1acbe2985dbc74dd81f3697cebf2161e922e6  LICENSE
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 9c248bbc19..7deca978da 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFSPROGS_VERSION = 5.10.0
-+XFSPROGS_VERSION = 5.14.2
- XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
- XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
- XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
- XFSPROGS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
- 
--XFSPROGS_DEPENDENCIES = inih util-linux
-+XFSPROGS_DEPENDENCIES = inih liburcu util-linux
- 
- XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes PLATFORM="linux"
- XFSPROGS_CONF_OPTS = \
+-LIBLDNS_VERSION = 1.7.1
++LIBLDNS_VERSION = 1.8.1
+ LIBLDNS_SOURCE = ldns-$(LIBLDNS_VERSION).tar.gz
+ LIBLDNS_SITE = http://www.nlnetlabs.nl/downloads/ldns
+ LIBLDNS_LICENSE = BSD-3-Clause
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
