@@ -1,65 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EEBFC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72F97C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D384E40761;
-	Sat,  8 Jan 2022 22:04:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26AE54023B;
+	Sat,  8 Jan 2022 22:05:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KAhAXFSND9Ab; Sat,  8 Jan 2022 22:04:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30B07405D6;
-	Sat,  8 Jan 2022 22:04:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 450DE1BF3D2
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:04:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3047340117
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:04:20 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MjuEBeteriyy for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 22:04:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EF9D1400C1
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:04:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4919:b1be:c8bf:308d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A271713F814;
- Sat,  8 Jan 2022 23:04:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641679455;
- bh=aqtvx6LxfZOwwrt0ugg+T4Itud9mkOuGY9grkoe1fxc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jDcSpCkX4Ot8aYg+qSBMZjWYDz6Y3hEnCtfW7lEjUf/K+vONYc36ApwaXyiDqSlVk
- oLxD0ARb2f1vfgNu4C6GleKqolfPNKZ2QFyqNPk6PWRlKgoA5e/rKrNrMpstZoaIvr
- ro0d4CjXy85EiKPnL2ZNuOT+tC14EP0+sXO76iVNCBjUcTzwbHERi3lwPCn0NslvmZ
- owntoRwOGNEwwOKOw/UL7z40oPa1xd5npRziPoaTgDiDocWbue4V7RaLsSogekql8e
- H8pf+3pllX3PCavSWOKe6reFyyizNwqZ1zsHfGpX3M5Oqrb5NKLTQWhAYJUZZp2ecv
- 1qYCJvMJecPNQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 08 Jan 2022 23:04:13 +0100
-Date: Sat, 8 Jan 2022 23:04:13 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BM53lMXt5UcX; Sat,  8 Jan 2022 22:05:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4363840185;
+	Sat,  8 Jan 2022 22:05:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 707B31BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:05:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E99E8145D
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:05:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TxhpjS6UwwzS for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 22:05:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5B9018145C
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:05:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 738C640002;
+ Sat,  8 Jan 2022 22:05:49 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n6JqO-0000GF-Rn; Sat, 08 Jan 2022 23:05:48 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220108220413.GG1881783@scaer>
-References: <20220104205455.3632671-1-fontaine.fabrice@gmail.com>
+References: <20220108210752.3245794-1-fontaine.fabrice@gmail.com>
+Date: Sat, 08 Jan 2022 23:05:48 +0100
+In-Reply-To: <20220108210752.3245794-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 8 Jan 2022 22:07:52 +0100")
+Message-ID: <87h7adevcz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220104205455.3632671-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH v2, 1/1] package/file: fix build with gcc 4.8
+Subject: Re: [Buildroot] [PATCH 1/1] package/safeclib: fix build without
+ stack-protector
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,65 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2022-01-04 21:54 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since bump to version 5.41 in
-> commit d38b72bcd75392a88b5100839ac410859d0a6a79:
-> 
-> readelf.c: In function 'do_auxv_note':
-> readelf.c:1046:2: error: 'for' loop initial declarations are only allowed in C99 mode
->   for (size_t off = 0; off + elsize <= descsz; off += elsize) {
->   ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/31cbc313fceb84c0cbb1969fca5ac44244871dbc
+ > Fix the following build failure without stack-protector raised since
+ > bump to version 02092020 in commit
+ > ebe808ac4071395b4d1e90d617c33a5e6e514af1 and
+ > https://github.com/rurban/safeclib/commit/caa4408eb4a5c767f0474258af3b6ccf444e10aa:
 
-It turned out that all that was needed is to tun autoreconf. See the
-commti for the explanations:
-    https://git.buildroot.org/buildroot/commit/package/file/file.mk?id=590d89fdad50f48c120b91ac008cc2ea4b625e15
+ > /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/m68k-buildroot-uclinux-uclibc/bin/ld.real:
+ > ../src/.libs/libsafec-3.6.0.a(safe_mem_constraint.o): in function
+ > `handle_mem_bos_chk_warn':
+ > safe_mem_constraint.c:(.text+0x40): undefined reference to `__stack_chk_guard'
 
-Thanks!
+ > If stack-protector is enabled in the Buildroot config, the toolchain
+ > wrapper will make sure it is used, so there's no need for the safeclib
+ > configure to handle it.
 
-Regards,
-Yann E. MORIN.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a481ee2d26a094358b0298617cce691be3077f22
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Set ac_cv_prog_c99 for host as already done for target instead of
->    adding an upstreamable patch
-> 
->  package/file/file.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/file/file.mk b/package/file/file.mk
-> index 12647af8bb..62cec4b2c9 100644
-> --- a/package/file/file.mk
-> +++ b/package/file/file.mk
-> @@ -9,6 +9,7 @@ FILE_SITE = ftp://ftp.astron.com/pub/file
->  FILE_DEPENDENCIES = host-file
->  HOST_FILE_DEPENDENCIES = host-zlib
->  FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-> +HOST_FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  FILE_INSTALL_STAGING = YES
->  FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
->  FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+
+ > +++ b/package/safeclib/safeclib.mk
+ > @@ -11,5 +11,8 @@ SAFECLIB_SOURCE = libsafec-$(SAFECLIB_VERSION).tar.xz
+ >  SAFECLIB_LICENSE = MIT
+ >  SAFECLIB_LICENSE_FILES = COPYING
+ >  SAFECLIB_INSTALL_STAGING = YES
+ > +# We're patching configure.ac
+ > +SAFECLIB_AUTORECONF = YES
+ > +SAFECLIB_CONF_OPTS = --disable-hardening
+
+I've added a comment explaining why this is done, similar to how we do
+it in tpm2-tools.mk and committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
