@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFD8C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 23:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB49EC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 23:16:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36540403A8;
-	Sat,  8 Jan 2022 23:08:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 38BE640256;
+	Sat,  8 Jan 2022 23:16:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id awOULb3r2VCV; Sat,  8 Jan 2022 23:08:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z3a-waN5JmU3; Sat,  8 Jan 2022 23:16:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8147540362;
-	Sat,  8 Jan 2022 23:08:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD7A11BF27E
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:08:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61DE940227;
+	Sat,  8 Jan 2022 23:16:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D11E71BF27E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB56940362
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:08:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBBA881448
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:16:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zS9NB9St_hTC for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 23:08:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CpAr9SSInIqg for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 23:16:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0ABCA40360
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 23:08:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19BBE81446
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 23:16:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BF7858136C; Sat,  8 Jan 2022 23:02:34 +0000 (UTC)
+ id D1609813CA; Sat,  8 Jan 2022 23:10:01 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Jan 2022 00:08:39 +0100
+Date: Sun, 9 Jan 2022 00:15:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65ed981ce0135379b7faeb69519f4e3e666c0717
-X-Git-Newrev: 4f5ce3ad2c833d2025b2202a4fdcbb06629f1ece
+X-Git-Oldrev: fff307fc4a4c58c8ba2faafd69614d0bb2d75a93
+X-Git-Newrev: ea077d89ec4af31d5203a50b451f0fba28c5e1fe
 X-Patchwork-Hint: ignore
-Message-Id: <20220108230234.BF7858136C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-packaging: fix host variant
+Message-Id: <20220108231001.D1609813CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyparsing: enable host build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,36 +58,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f5ce3ad2c833d2025b2202a4fdcbb06629f1ece
+commit: https://git.buildroot.net/buildroot/commit/?id=ea077d89ec4af31d5203a50b451f0fba28c5e1fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The host variant of python-packaging was added in commit
-4cc445fd5fbb83c2b55f679f3d92223f34f214cb, but has two missing things:
+This will be required by host-python-packaging.
 
-- It's a python3 only package, so it should have
-  HOST_PYTHON_PACKAGING_NEEDS_HOST_PYTHON = python3
-
-- It depends on the pyparsing module, so it should have a dependency
-  on it.
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-packaging/python-packaging.mk | 2 ++
+ package/python-pyparsing/python-pyparsing.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index 1fd6f26d64..e2fb9b120b 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
-@@ -10,6 +10,8 @@ PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/df/86/aef78bab3a
- PYTHON_PACKAGING_SETUP_TYPE = setuptools
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-+HOST_PYTHON_PACKAGING_NEEDS_HOST_PYTHON = python3
-+HOST_PYTHON_PACKAGING_DEPENDENCIES = host-python-pyparsing
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 0dacf2371d..5741458d65 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -10,5 +10,7 @@ PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/c1/47/dfc9c342c9
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+ PYTHON_PYPARSING_SETUP_TYPE = setuptools
++HOST_PYTHON_PYPARSING_NEEDS_HOST_PYTHON = python3
  
  $(eval $(python-package))
- $(eval $(host-python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
