@@ -4,51 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D66C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F805C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3560D60B1B;
-	Sat,  8 Jan 2022 14:12:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5810160AA4;
+	Sat,  8 Jan 2022 14:12:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jHcGsKrvxOJF; Sat,  8 Jan 2022 14:12:32 +0000 (UTC)
+	with ESMTP id Eg7C9CCLcmOl; Sat,  8 Jan 2022 14:12:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7EF460AF7;
-	Sat,  8 Jan 2022 14:12:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 403011BF2FA
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5ABD60B5E;
+	Sat,  8 Jan 2022 14:12:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CB2581BF2FA
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2971F40140
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C695060B23
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8YrvZS7Pg4o for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 14:12:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04715400D3
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:12:17 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 6ACAE60006;
- Sat,  8 Jan 2022 14:12:15 +0000 (UTC)
-Date: Sat, 8 Jan 2022 15:10:54 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220108151054.68321880@windsurf>
-In-Reply-To: <20211105221800.1451167-5-giulio.benetti@benettiengineering.com>
-References: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
- <20211105221800.1451167-1-giulio.benetti@benettiengineering.com>
- <20211105221800.1451167-5-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 4/5]
- configs/olimex_a20_olinuxino_lime2_defconfig: use
- linux-disable-lima.fragment
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RO6oa6UfOS-z for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 14:12:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB50360AF7
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:12:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 6913D819F0; Sat,  8 Jan 2022 14:06:33 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 8 Jan 2022 15:12:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dbdd8971df4c6d57cdf27c89810b3b2c6893e82c
+X-Git-Newrev: 34b725c412d9771127405276052398d09f522613
+X-Patchwork-Hint: ignore
+Message-Id: <20220108140633.6913D819F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qemu_arm_versatile: switch to in-kernel
+ defconfig + fragment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,33 +53,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Peter Seiderer <ps.report@gmx.net>,
- Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org,
- Luca Ceresoli <luca@lucaceresoli.net>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  5 Nov 2021 23:17:59 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=34b725c412d9771127405276052398d09f522613
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This defconfig enables sunxi-mali-mainline-driver so we need to disable
-> Lima in Linux to prevent Mali to not load.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  configs/olimex_a20_olinuxino_lime2_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+This platform has its own kernel defconfig in Buildroot, but we cannot
+get quick idea about how much it diverged from the in-kernel defconfig.
 
-Applied to master, thanks.
+Let's use the upstream arch/arm/config/versatile_defconfig as a base,
+and maintain the diff as a merge-config fragment. The same .config is
+still generated (based on the 5.10.7 kernel).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The diff is quite big, but this is a good start-point for cleanups.
+Follow-up works can drop diff lines unless we find a good reason for
+divergence.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+[Arnout: rename linux.config to linux.fragment]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ board/qemu/arm-versatile/linux.config   | 43 ---------------------
+ board/qemu/arm-versatile/linux.fragment | 66 +++++++++++++++++++++++++++++++++
+ configs/qemu_arm_versatile_defconfig    |  4 +-
+ 3 files changed, 68 insertions(+), 45 deletions(-)
+
+diff --git a/board/qemu/arm-versatile/linux.config b/board/qemu/arm-versatile/linux.config
+deleted file mode 100644
+index b1001d84a7..0000000000
+--- a/board/qemu/arm-versatile/linux.config
++++ /dev/null
+@@ -1,43 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_ARCH_VERSATILE=y
+-CONFIG_PCI=y
+-CONFIG_PCI_VERSATILE=y
+-CONFIG_AEABI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_SCSI_SYM53C8XX_2=y
+-CONFIG_NETDEVICES=y
+-CONFIG_8139CP=y
+-CONFIG_PHYLIB=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_SERIO_AMBAKMI=y
+-CONFIG_LEGACY_PTY_COUNT=16
+-CONFIG_SERIAL_8250=m
+-CONFIG_SERIAL_8250_EXTENDED=y
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_SHARE_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=m
+-CONFIG_FB=y
+-CONFIG_FB_ARMCLCD=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_SOUND=y
+-CONFIG_SND=m
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-CONFIG_SND_ARMAACI=m
+-CONFIG_EXT4_FS=y
+-CONFIG_VFAT_FS=m
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_MAGIC_SYSRQ=y
+diff --git a/board/qemu/arm-versatile/linux.fragment b/board/qemu/arm-versatile/linux.fragment
+new file mode 100644
+index 0000000000..0aed558315
+--- /dev/null
++++ b/board/qemu/arm-versatile/linux.fragment
+@@ -0,0 +1,66 @@
++# CONFIG_BLK_DEV_INITRD is not set
++# CONFIG_BLK_DEV_RAM is not set
++# CONFIG_CMA is not set
++# CONFIG_CRAMFS is not set
++CONFIG_CMDLINE=""
++CONFIG_CRC16=y
++CONFIG_CRYPTO=y
++# CONFIG_DEBUG_FS is not set
++# CONFIG_DEBUG_KERNEL is not set
++# CONFIG_DEBUG_USER is not set
++CONFIG_DEVTMPFS=y
++# CONFIG_DRM is not set
++# CONFIG_EEPROM_LEGACY is not set
++# CONFIG_EXT2_FS is not set
++CONFIG_EXT4_FS=y
++CONFIG_FB_ARMCLCD=y
++# CONFIG_FONTS is not set
++CONFIG_FONT_8x16=y
++CONFIG_FONT_8x8=y
++# CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY is not set
++# CONFIG_FTRACE is not set
++# CONFIG_GPIOLIB is not set
++# CONFIG_HIGH_RES_TIMERS is not set
++CONFIG_HWMON=y
++CONFIG_HZ_PERIODIC=y
++# CONFIG_I2C_VERSATILE is not set
++CONFIG_INET_DIAG=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_IPV6=y
++# CONFIG_IP_MULTICAST is not set
++# CONFIG_IP_PNP is not set
++CONFIG_LOCALVERSION_AUTO=y
++# CONFIG_LOGO is not set
++CONFIG_LOG_BUF_SHIFT=17
++CONFIG_MDIO_DEVICE=y
++# CONFIG_MINIX_FS is not set
++# CONFIG_MMC is not set
++# CONFIG_MTD is not set
++# CONFIG_NEW_LEDS is not set
++# CONFIG_NFSD is not set
++# CONFIG_NFS_FS is not set
++# CONFIG_NLS_CODEPAGE_850 is not set
++# CONFIG_NLS_ISO8859_1 is not set
++# CONFIG_NO_HZ_IDLE is not set
++# CONFIG_NVMEM is not set
++# CONFIG_OABI_COMPAT is not set
++# CONFIG_PARTITION_ADVANCED is not set
++CONFIG_PCI=y
++CONFIG_PCI_VERSATILE=y
++CONFIG_PHYLIB=y
++# CONFIG_ROMFS_FS is not set
++# CONFIG_RTC_CLASS is not set
++CONFIG_SCSI=y
++CONFIG_SCSI_SPI_ATTRS=y
++CONFIG_SCSI_SYM53C8XX_2=y
++CONFIG_SERIO_SERPORT=y
++CONFIG_SLUB=y
++# CONFIG_SPI is not set
++# CONFIG_SYNC_FILE is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_TMPFS_XATTR=y
++# CONFIG_VFP is not set
++# CONFIG_XZ_DEC is not set
++CONFIG_8139CP=y
++CONFIG_BLK_DEV_SD=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index a039c47729..5e399d17de 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -21,8 +21,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
++BR2_LINUX_KERNEL_DEFCONFIG="versatile"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
