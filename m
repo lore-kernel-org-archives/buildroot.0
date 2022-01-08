@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE92C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1202FC433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 14:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2259160B03;
-	Sat,  8 Jan 2022 14:11:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B70DC40128;
+	Sat,  8 Jan 2022 14:12:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uHEEuzTXxDQ5; Sat,  8 Jan 2022 14:11:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SRHI1n1UzjC3; Sat,  8 Jan 2022 14:12:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C36760ABE;
-	Sat,  8 Jan 2022 14:11:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D72D21BF2FA
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:10:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C35AF4011F;
+	Sat,  8 Jan 2022 14:12:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A3BF31BF2FA
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4CC481765
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:10:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CB8D40106
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 14:12:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xzj2bO0ZYXwp for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 14:10:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8305681761
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:10:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gNkD_yJtvMcB for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 14:12:16 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 67004400D3
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 14:12:16 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 04D16C0003;
- Sat,  8 Jan 2022 14:10:50 +0000 (UTC)
-Date: Sat, 8 Jan 2022 15:10:49 +0100
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 86CF360004;
+ Sat,  8 Jan 2022 14:12:11 +0000 (UTC)
+Date: Sat, 8 Jan 2022 15:10:59 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220108151049.4ad9c666@windsurf>
-In-Reply-To: <20211105221800.1451167-4-giulio.benetti@benettiengineering.com>
+Message-ID: <20220108151059.56e74aa4@windsurf>
+In-Reply-To: <20211105221800.1451167-6-giulio.benetti@benettiengineering.com>
 References: <e20b07ab-2d45-1d04-d426-e740d20f8f67@lucaceresoli.net>
  <20211105221800.1451167-1-giulio.benetti@benettiengineering.com>
- <20211105221800.1451167-4-giulio.benetti@benettiengineering.com>
+ <20211105221800.1451167-6-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 3/5] board/olimex/a20_olinuxino: add
+Subject: Re: [Buildroot] [PATCH v2 5/5]
+ configs/olimex_a20_olinuxino_lime_defconfig: use
  linux-disable-lima.fragment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -68,21 +69,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  5 Nov 2021 23:17:58 +0100
+On Fri,  5 Nov 2021 23:18:00 +0100
 Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> +CONFIG_DRM_LIMA=n
+> This defconfig enables sunxi-mali-mainline-driver so we need to disable
+> Lima in Linux to prevent Mali to not load.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  configs/olimex_a20_olinuxino_lime_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-Changed to:
-
-# CONFIG_DRM_LIMA is not set
-
-and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
