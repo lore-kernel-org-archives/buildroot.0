@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF581C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 179CAC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B36640185;
-	Sat,  8 Jan 2022 22:37:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9DAF40241;
+	Sat,  8 Jan 2022 22:37:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yHI1phBbQaj1; Sat,  8 Jan 2022 22:37:42 +0000 (UTC)
+	with ESMTP id kCwQjoLYZUTx; Sat,  8 Jan 2022 22:37:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8859640241;
-	Sat,  8 Jan 2022 22:37:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7CDBA1BF3D2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BAD340270;
+	Sat,  8 Jan 2022 22:37:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 951371BF95D
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4E6A40220
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 310718146E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:36:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id na2YkAdhW__i for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2W7fF3tgQoYC for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B94EE40241
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9B8A8148A
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8752983460; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
+ id 9CB40832C8; Sat,  8 Jan 2022 22:29:49 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sat, 8 Jan 2022 23:35:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43c580ac9f848449333ecbe4336c2c9f2ba12158
-X-Git-Newrev: 4e5d2c0b9559f1aef62c8d547f9b38cc2ebb2099
+X-Git-Oldrev: ffc503fab767c9d2381f7152bcaab024a6358748
+X-Git-Newrev: 0fd3770cc64679d5ff541fdaa5d0fdb2f9d16111
 X-Patchwork-Hint: ignore
-Message-Id: <20220108222949.8752983460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/embiggen-disk: new package
+Message-Id: <20220108222949.9CB40832C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bat: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,101 +58,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e5d2c0b9559f1aef62c8d547f9b38cc2ebb2099
+commit: https://git.buildroot.net/buildroot/commit/?id=0fd3770cc64679d5ff541fdaa5d0fdb2f9d16111
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-embiggen-disk is a tool to automatically resize disks to fill available space.
+bat is a cat(1) clone with syntax highlighting and Git integration.
 
-Patch submitted upstream: https://github.com/bradfitz/embiggen-disk/pull/13
-
-Adds support for /dev/mmcblk0pN type paths.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: David Pierret <david.pierret@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/embiggen-disk/Config.in          | 19 +++++++++++++++++++
- package/embiggen-disk/embiggen-disk.hash |  3 +++
- package/embiggen-disk/embiggen-disk.mk   | 12 ++++++++++++
- 5 files changed, 36 insertions(+)
+ DEVELOPERS            |  3 +++
+ package/Config.in     |  1 +
+ package/bat/Config.in | 11 +++++++++++
+ package/bat/bat.hash  |  4 ++++
+ package/bat/bat.mk    | 12 ++++++++++++
+ 5 files changed, 31 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ab6648cec2..2e3500e788 100644
+index 259cace487..bc07fdbde3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -528,6 +528,7 @@ F:	package/delve/
- F:	package/docker-cli/
- F:	package/docker-engine/
- F:	package/docker-proxy/
-+F:	package/embiggen-disk/
- F:	package/fuse-overlayfs/
- F:	package/go/
- F:	package/mbpfan/
+@@ -680,6 +680,9 @@ F:	linux/linux-ext-ev3dev-linux-drivers.mk
+ F:	package/brickd/
+ F:	package/ev3dev-linux-drivers/
+ 
++N:	David Pierret <david.pierret@smile.fr>
++F:	package/bat/
++
+ N:	Davide Viti <zinosat@gmail.com>
+ F:	board/friendlyarm/nanopi-r1/
+ F:	configs/friendlyarm_nanopi_r1_defconfig
 diff --git a/package/Config.in b/package/Config.in
-index ad6741f74c..f127b6bf45 100644
+index 081268527c..dbfdcf6ce3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2528,6 +2528,7 @@ menu "System tools"
- 	source "package/earlyoom/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
-+	source "package/embiggen-disk/Config.in"
- 	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
- 	source "package/getent/Config.in"
-diff --git a/package/embiggen-disk/Config.in b/package/embiggen-disk/Config.in
+@@ -2607,6 +2607,7 @@ menu "System tools"
+ endmenu
+ 
+ menu "Text editors and viewers"
++	source "package/bat/Config.in"
+ 	source "package/ed/Config.in"
+ 	source "package/joe/Config.in"
+ 	source "package/less/Config.in"
+diff --git a/package/bat/Config.in b/package/bat/Config.in
 new file mode 100644
-index 0000000000..667d71c86e
+index 0000000000..515eaf591a
 --- /dev/null
-+++ b/package/embiggen-disk/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_EMBIGGEN_DISK
-+	bool "embiggen-disk"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_UTIL_LINUX # sfdisk
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES # sfdisk
++++ b/package/bat/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BAT
++	bool "bat"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	# we need a full version of less
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_LESS
 +	help
-+	  embiggen-disk is a tool to resize disk partitions at runtime.
++	  A cat(1) clone with syntax highlighting and Git integration.
 +
-+	  https://github.com/bradfitz/embiggen-disk
-+
-+comment "embiggen-disk needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
-+		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/embiggen-disk/embiggen-disk.hash b/package/embiggen-disk/embiggen-disk.hash
++	  https://github.com/sharkdp/bat
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
 new file mode 100644
-index 0000000000..3a290e2ec8
+index 0000000000..aa6c8d743d
 --- /dev/null
-+++ b/package/embiggen-disk/embiggen-disk.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  514cde66ab9fe6af91b97f17acc19b37976f675ebea0e1be741d6bd621811d87  embiggen-disk-9e7b2fc7b99c4dece41a805489a6ca377ce55a62.tar.gz
-+sha256  063aedec1652c5a05c2d04c40e032b932453142ee8ef7fd53c04a9acc127fc95  LICENSE
-diff --git a/package/embiggen-disk/embiggen-disk.mk b/package/embiggen-disk/embiggen-disk.mk
++++ b/package/bat/bat.hash
+@@ -0,0 +1,4 @@
++# Locally generated
++sha256  9c345788eb916777a60e7ff32031f1c92edc5565031e0c057bce860982768744  bat-0.18.3.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
++sha256  64de710b6309a7db5e44ad0af382300c7fb6f6d116d8ae32f0164e05db033068  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
 new file mode 100644
-index 0000000000..66f2087dbd
+index 0000000000..9b619af172
 --- /dev/null
-+++ b/package/embiggen-disk/embiggen-disk.mk
++++ b/package/bat/bat.mk
 @@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# embiggen-disk
++# bat
 +#
 +################################################################################
 +
-+EMBIGGEN_DISK_VERSION = 9e7b2fc7b99c4dece41a805489a6ca377ce55a62
-+EMBIGGEN_DISK_SITE = $(call github,bradfitz,embiggen-disk,$(EMBIGGEN_DISK_VERSION))
-+EMBIGGEN_DISK_LICENSE = Apache-2.0
-+EMBIGGEN_DISK_LICENSE_FILES = LICENSE
++BAT_VERSION = 0.18.3
++BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
++BAT_LICENSE = Apache-2.0 or MIT
++BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 +
-+$(eval $(golang-package))
++$(eval $(cargo-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
