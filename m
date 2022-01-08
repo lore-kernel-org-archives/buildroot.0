@@ -1,47 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF253C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 12:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB19FC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 12:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F362410B8;
-	Sat,  8 Jan 2022 12:32:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EB0D40022;
+	Sat,  8 Jan 2022 12:49:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ApP4ikVUuF6E; Sat,  8 Jan 2022 12:32:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3V_6GLgVBAfi; Sat,  8 Jan 2022 12:49:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B6B0409F7;
-	Sat,  8 Jan 2022 12:32:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D06A1BF957
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 12:32:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FD63400CF;
+	Sat,  8 Jan 2022 12:49:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 98A1E1BF957
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 12:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68D15409F7
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 12:32:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B38B400CF
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 12:49:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r0GcXjkKW8rU for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 12:32:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFF3A409A3
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 12:32:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 743AD82AE5; Sat,  8 Jan 2022 12:26:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id df9_A-HQFFoO for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 12:49:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0400A40022
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 12:49:27 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id c66so5659551wma.5
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 04:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=yXhy3XO8ZaKkdOI7xvu2L/wEiotVctvApbshIJXXtbc=;
+ b=EkTaPxsvSMjXj+t4O+InLSFjIuuHL6KBHPVTrJk9DQrvoZhFRy28kabzztL0xeva0l
+ y/a2HjY6N0yuoI5++AIDn6nt+WWkuWvQ8EZSvYNshyw8iNOag3IZJfLMm8ygGYRV3qTj
+ Jv1hO41K2SX0QNBnmfnUFQcJN8G2X1H3k4dIisyOyAOWgBrPgSmYIrttroiX+yG06aOO
+ H7hjuhucgNA15CM0Z4YEL+VDkWXoAzEhW0CtQaq3+dCGV/m1gNhdecdPh0qk59kdsKUm
+ CV4BEyS9R0hvb/wrYWNXbE+hBOmMiBrsrlu7bksdf1wltxPAnBxbxHgHLH5g8HXWOZPr
+ yy0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=yXhy3XO8ZaKkdOI7xvu2L/wEiotVctvApbshIJXXtbc=;
+ b=BwP3Hf3OHmbPPKYRscOPSXXFc5wBY+PBI2eJrQXI/aE68vJdtuM42Se2QN/EQUT0uF
+ ozxGW/WRCWHDakT/RpuYwRm4zHWXa+Klu37VaKlHy4jPQP/r89EfMI7gkab6N4xlEvsy
+ DplcrZsR2KzTIod4XxPzScsyYrFBigPgd9JiBM4GvQd7vw8K/lpOlJVfGk8Fl7/Uzxmu
+ fmfv55R4qGoyEMXwS5yfihOLGmE6mShUm84WvV3SevXdp2G4d/YnzlkF4W1xy8TKAe/g
+ B1xwhyyy2fFpu5jEmCiSdLsf98u5dQxYbNf/vmQx8PQhxPpknSx/4zNMRvpdtwaZeih4
+ RpRQ==
+X-Gm-Message-State: AOAM5307gpC+DA+X3BqCLPxi34ZtKljJ3DDWMNrvFtVF3vltB1Xwu926
+ CkWx7Brhe6LnQTO6xQtVLxjT1LEiyUp8SA==
+X-Google-Smtp-Source: ABdhPJxUWSNDOt/JNtasmhyk/rz437vyBc49uQsAUWmqwnZlkJEjDFn/+PQvAvddzEl4IIh1G7E+4g==
+X-Received: by 2002:a1c:2b42:: with SMTP id r63mr14318136wmr.80.1641646166060; 
+ Sat, 08 Jan 2022 04:49:26 -0800 (PST)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id l12sm1596841wmq.2.2022.01.08.04.49.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 08 Jan 2022 04:49:25 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 13:32:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5630e83c8452d3e9039feb15fd30ea005bfc6b55
-X-Git-Newrev: 2f33654365ffa8fc1b3d8f9e5394a81abb776f66
-X-Patchwork-Hint: ignore
-Message-Id: <20220108122611.743AD82AE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] busybox: background udhcpc by default if
- no lease is obtained
+Date: Sat,  8 Jan 2022 13:49:22 +0100
+Message-Id: <20220108124922.157020-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/terminology: bump to version 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,56 +85,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f33654365ffa8fc1b3d8f9e5394a81abb776f66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+See:
+https://www.enlightenment.org/news/2022-01-03-terminology-1.12.1
 
-The current behavior for busybox' udhcpc is to terminate if no lease is
-obtained at start up. Therefore no address is acquired if the link is
-established afterwards.
-
-By setting the -b flag udhcpc will background allowing the link to be
-established at any time.
-
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-[Peter: drop incompatible -n, also fixup busybox-minimal.config]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/busybox/busybox-minimal.config | 2 +-
- package/busybox/busybox.config         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/terminology/terminology.hash | 4 ++--
+ package/terminology/terminology.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/busybox-minimal.config b/package/busybox/busybox-minimal.config
-index a7aa19ea8a..65a347756d 100644
---- a/package/busybox/busybox-minimal.config
-+++ b/package/busybox/busybox-minimal.config
-@@ -961,7 +961,7 @@ CONFIG_UDHCP_DEBUG=9
- CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
- # CONFIG_FEATURE_UDHCP_RFC3397 is not set
- # CONFIG_FEATURE_UDHCP_8021Q is not set
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-b -R"
- 
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index 7e9658482a..2ad10af76f 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,3 +1,3 @@
+-# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.12.0.tar.xz.sha256sum
+-sha256  74d2d3b253a77bcb215fc36eedf0ccb59643452e2ef15c510430ffaa6034dcf0  terminology-1.12.0.tar.xz
++# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.12.1.tar.xz.sha256sum
++sha256  f8ced9584c2e9ae87452ce7425fd25b2d3e122c7489785d2917890215c6b5aa9  terminology-1.12.1.tar.xz
+ sha256  6863ee700fc82b9c3b82a1627136f6935a9eb68e6a64491f20e00b4023c33622  COPYING
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index 787c9ad137..c3125c71ec 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,7 +4,7 @@
  #
- # Print Utilities
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 1ea810e5be..3925521f28 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -970,7 +970,7 @@ CONFIG_UDHCP_DEBUG=0
- CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
- CONFIG_FEATURE_UDHCP_RFC3397=y
- CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n -O search"
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-b -R -O search"
+ ################################################################################
  
- #
- # Print Utilities
+-TERMINOLOGY_VERSION = 1.12.0
++TERMINOLOGY_VERSION = 1.12.1
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
+-- 
+2.31.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
