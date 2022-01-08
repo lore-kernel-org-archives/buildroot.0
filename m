@@ -1,46 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3211C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC47C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 22:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53ACA40241;
-	Sat,  8 Jan 2022 22:53:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAFB081501;
+	Sat,  8 Jan 2022 22:53:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wa0ZBJIBulWy; Sat,  8 Jan 2022 22:53:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QQKGBjfyA-7k; Sat,  8 Jan 2022 22:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4845F40185;
-	Sat,  8 Jan 2022 22:53:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15382814B7;
+	Sat,  8 Jan 2022 22:53:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A56781BF3D2
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:53:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C0AB1BF3D2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92DEA60AA9
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:53:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEBBC60AA9
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 22:53:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N-6Db1VoRR7s for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 22:53:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9F2760A9B
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:53:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AA20580462; Sat,  8 Jan 2022 22:47:29 +0000 (UTC)
+ with ESMTP id UOprc0Q_qubF for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 22:53:50 +0000 (UTC)
+X-Greylist: delayed 08:39:41 by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E0FBA60A9B
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 22:53:49 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id D0CC260002;
+ Sat,  8 Jan 2022 22:53:45 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n6Kan-00010t-5c; Sat, 08 Jan 2022 23:53:45 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 23:53:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65b351fc9b7d70c96a0efc96182685899c5b9111
-X-Git-Newrev: 65ed981ce0135379b7faeb69519f4e3e666c0717
-X-Patchwork-Hint: ignore
-Message-Id: <20220108224729.AA20580462@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/snort: bump to version 2.9.19
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220108222153.3689389-1-fontaine.fabrice@gmail.com>
+Date: Sat, 08 Jan 2022 23:53:45 +0100
+In-Reply-To: <20220108222153.3689389-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 8 Jan 2022 23:21:53 +0100")
+Message-ID: <878rvpet52.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/snort: bump to version 2.9.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,52 +59,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65ed981ce0135379b7faeb69519f4e3e666c0717
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-https://snort.org/downloads/snort/release_notes_2.9.19.txt
+ > https://snort.org/downloads/snort/release_notes_2.9.19.txt
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed, thanks.
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index 6df7ae5229..ac098564aa 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  2b4e30300ef6feca1f60c267e727c6c0  snort-2.9.18.1.tar.gz
-+md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
- 
- # Locally computed:
--sha256  da8af0f1b2e4f247d970c6a3c0e83fb6dcd5c84faa21aea49f306f269e8e28aa  snort-2.9.18.1.tar.gz
-+sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 54017d3460..41f450541f 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT_VERSION = 2.9.18.1
-+SNORT_VERSION = 2.9.19
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
