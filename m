@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B64D9C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 17:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79246C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 18:04:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61262408DA;
-	Sat,  8 Jan 2022 17:59:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30B0A81433;
+	Sat,  8 Jan 2022 18:04:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rx6Y5Mp_VwEq; Sat,  8 Jan 2022 17:59:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j_HScRSIATsx; Sat,  8 Jan 2022 18:04:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87B9B40356;
-	Sat,  8 Jan 2022 17:59:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 607431BF20D
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:59:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 518AA8143A;
+	Sat,  8 Jan 2022 18:04:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 89EAA1BF95D
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4151840356
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 17:59:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 748B760804
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:04:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pwre7wkyi2OM for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 17:59:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 376D540355
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 17:59:19 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id v6so17790488wra.8
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 09:59:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=m0g97PZhRCef42UOQSbtpTpLFVwWUk+G2HEviAU260k=;
- b=cGse5j1P21fqjfNmyGdAAu/tIy+e5ZBXR19qxdlNFRYJq/5D1ukH2p1v9n45CEpUvl
- s/1j95BnoI6lIlX3otBIm0B4+f6uwvK07FkuzRAvDSp1e0yyXfhBVVJFhFKZs18Xd1qr
- G/ojPKfd/LgxmEWC/vagD1X76Z2JTnCmGzYnRqqnKkGYPKAcxoXWyKdNirhW4AGt5n5K
- kixgSy4PYqYwzNe6SORc5t1hnTPmHPPZFR0mcsYqJumu13/AFKGbkxVQefGPe6IrF5H1
- AVIaEcCDkLetJuZvJbJksHeKMm/UUwkuRHxOPByIAxSsUbcoTStzt0bcMJgmdtZu9zTT
- We/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=m0g97PZhRCef42UOQSbtpTpLFVwWUk+G2HEviAU260k=;
- b=neQiXhYDvWEOmWnU4F6OSQpZR8x7K724FtPQMU+AyvSjZy/MCJ4nLfwNBUe19FLy2t
- BwAa2RWjBGZRQOg8UdMX/j7egsNRHYU0CmhCJ4hgOftsmYDU7oxGVYRccNYmHRShqCos
- 7UpKOb+WPhLqgC38L6STzUG3y2DWBHmi9XMNHrgNRdwtsCXg5hwpJ/butsM5OAIm6tMZ
- kK9zJVhPuZsehAf+DzO4SRdVHyIyIsTYMqGf+ZTlMbK+VDA5ANvNuAg8f4Wni5EeTr4D
- 5vFsDW/HSS0yhoTXEH6NRlKL37ug32BCHip4LTrVfDSayTd+FywM/Oh0WZ9T830sOhs6
- 9DZA==
-X-Gm-Message-State: AOAM5310qN+WlPsppyGrgDWO7dVwbeRrnzA/foaSifuhjEG5LIACePEK
- gymxbYTWWP2Ggvb5X9cq7Ur/0s9XEpo=
-X-Google-Smtp-Source: ABdhPJy/fLGROuddxsOnnsVJ//fhU81l72C06OVzO23b5B/VZHZFiqp6+9ujz1GOYqLQLvDni00+xg==
-X-Received: by 2002:a5d:4cca:: with SMTP id c10mr6181586wrt.683.1641664757394; 
- Sat, 08 Jan 2022 09:59:17 -0800 (PST)
-Received: from kali.home (2a01cb08896fec001e062303fcff6330.ipv6.abo.wanadoo.fr.
- [2a01:cb08:896f:ec00:1e06:2303:fcff:6330])
- by smtp.gmail.com with ESMTPSA id z5sm1051859wmf.25.2022.01.08.09.59.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jan 2022 09:59:17 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  8 Jan 2022 18:58:11 +0100
-Message-Id: <20220108175811.2978380-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w2NP0sRtrGpI for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 18:04:18 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DC22E607F2
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:04:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1641665055;
+ bh=YeHNxb7/BM3kb/9IyA6+iKIJ0RkKnSJcynXGTLJDlgY=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=MNB1YtTVa++zgncv7lsFOwKLfRFWk0/rIm1PMDt54ZdWxrVui7b4MNKe/bSo0deO2
+ rnG//GucAs6coymTF40hTEM/YjX9jTjh8s10oRwxPjbstdGXHqzsBg5MovxbmchaJi
+ uDkmgayJvv2KiOtvvwchOVEHf8Nup9ojsqd5M9O4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.8]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MDQiS-1nGkCf06T8-00AS5S; Sat, 08
+ Jan 2022 19:04:15 +0100
+Date: Sat, 8 Jan 2022 19:04:14 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220108190414.6b638ea8@gmx.net>
+In-Reply-To: <20220108162146.2735403-1-fontaine.fabrice@gmail.com>
+References: <20220108162146.2735403-1-fontaine.fabrice@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: bump to version 2.0.4
+X-Provags-ID: V03:K1:qR7GLyfhEDEoJVYsaOZ8UZlGpdCxMXRMeB/385XxuxCA00TKRfe
+ yS/PQqQIBxZyrtPFdkT4h2Y6cmCuR/OgjPlxeB6GHextYoHAi+6Oz7/GhDneZgC37mgC/GA
+ vM5oCol0GILtHHmBQJtim2juXMRYA6+ngFougwXM6JjdiUotFCHm3BcSl3z11M7RXARtgJp
+ 8puQOqkSOlb9ldMwedCTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:d/lKxS4+rA8=:U7bWntDnZPHRjiN15m6Pwh
+ FuiTAzZCRKZk8sOF2QAST+b92GGnzVle/jHpE6t+Mur+WbaFf3Z3RIrFkianopPsIASqdKEwx
+ XtPz7tL9YwOqSMvG/3FwtYOhjnvTGluoqKM8/Rtbq5L3+JQiBDwDaVrl5op6I5ALpEUz+tPb5
+ 6eCg29991YnpBkzlopJ8DiLgtsMfLuNmlC112UFMBazzFEv6Tgi8SPXgaLObSN3YjxuUmTcI7
+ 1JdErMn0I0mJy3m8MAk0Q5adm9yfRzI9zudo3aU5kF9F9CiqOwUcOjdhLikHt38Fu8+WzQtOg
+ tPxxPS76UN7x7Af4vJ9hgiugrdxATmtw26egURZChd6o7tN2+O8OvJCOiAh+fDUTi7qkgl0y7
+ OL331YtyTOiE5evH3o69p6D1B5Ocwg7Wj6rSjhIKXmdCIFTE2w25BbkAfU0gI7b8xh0y6IMZa
+ FKb7VejvQcS0lAcK1JKr/rKSxSscXY5DtQHSQYvpKCuxtDSBEan37+RRbSH0F0etDjw99f1Pw
+ 8MSRQkJQYxX+yBTK9L5v4GwoT8FNovQ1AjbrqBQaYZKem3SvvyLJCkCpFDHCVZM2QSscZ5pjm
+ cETGDKBmDhULP23HeyleRl/bkrDwEurBm1X6gGehg0FQc9ibGdYv3CT60hFEUD1ou0/2MoQ6c
+ yu+kkTlDBCWuzsM1cLhQlLagj+qozflonI4Rdmigep2v2IXh4e3BL2a/da3qkGDJvA8XqvjC9
+ iA2S+Yb13PqDTyyMzLCrPfhqqLvJwNZtHv860LZOl+AeIfwPwjHDkG9BgU8WoU7KTfuQhDWFo
+ y2iv8NWNDRLMNOaoh4W9KE2XMKeDueNvMYNzhhKGq2iMXDdKu9T5EM7i+yobIB6Bez5mHqJlY
+ m8dXiLDloBp6lgnGqq1y5EYP23t91KHbOIp85EOcbayTivPMHfRE02+rhohKkgm1nILjUQxhW
+ 4cKHB27VI9DRzLc8mjhE4YlWF1HqgT+VZemJQA/KyKlGFUGNiGwT961vlzWY6vL6boHxveO8P
+ vlZsCHAhhGtj218m+tj3aNhtrrP/pNBPZcfD/aSrTTLZftCbCHdKbsLnTlOOyPpCvo+k/fKIB
+ H1O59zRX3orfoE=
+Subject: Re: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump to
+ version 2021.07.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,123 +86,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Proulx <eeppeliteloop@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop second patch (already in version)
-- Update indentation in hash file (two spaces)
+Hello Fabrice,
 
-https://github.com/efficios/babeltrace/releases/tag/v2.0.4
+On Sat,  8 Jan 2022 17:21:46 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...trace_ir_ref.c-rename-user-structure.patch | 57 -------------------
- package/babeltrace2/babeltrace2.hash          | 12 ++--
- package/babeltrace2/babeltrace2.mk            |  2 +-
- 3 files changed, 7 insertions(+), 64 deletions(-)
- delete mode 100644 package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/raspberrypi-usbboot/raspberrypi-usbboot.hash | 2 +-
+>  package/raspberrypi-usbboot/raspberrypi-usbboot.mk   | 5 +++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> index 3f66b12ff1..cedc5fb7e1 100644
+> --- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> +++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated
+> -sha256  e4a07df05c23e0eba100d4013367e7823e3b8bc72da7b79b031bd346616c6ae5  raspberrypi-usbboot-9324fd7034b9d3606aed8a27da74d6d57e066e7e.tar.gz
+> +sha256  4565314b38e7c7505b7d32a3b51b49f79c7dd5767d45b86d38e5255ae7489a43  raspberrypi-usbboot-2021.07.01.tar.gz
+>
+>  # License files
+>  sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+> diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> index 5d7b433c64..2e4194da0b 100644
+> --- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> +++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> @@ -4,8 +4,9 @@
+>  #
+>  ################################################################################
+>
+> -RASPBERRYPI_USBBOOT_VERSION = 9324fd7034b9d3606aed8a27da74d6d57e066e7e
+> -RASPBERRYPI_USBBOOT_SITE = $(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
+> +RASPBERRYPI_USBBOOT_VERSION = 2021.07.01
 
-diff --git a/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch b/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
-deleted file mode 100644
-index ac9eee82d8..0000000000
---- a/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 7a27f13c192d15cae47740f3e884bba16f15ed41 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 26 Sep 2020 22:03:10 +0200
--Subject: [PATCH] tests/lib/test_trace_ir_ref.c: rename user structure
--
--Rename user structure to bt_user to avoid the following build failure
--with uclibc:
--
--test_trace_ir_ref.c:41:8: error: redefinition of 'struct user'
-- struct user {
--        ^
--In file included from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/procfs.h:33,
--                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:25,
--                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:329,
--                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
--                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib.h:34,
--                 from ../../src/common/assert.h:28,
--                 from ../../src/lib/object.h:28,
--                 from test_trace_ir_ref.c:25:
--/home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/user.h:48:8: note: originally defined here
-- struct user
--        ^~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e4229e2b9c892b419a9d2eaa6929b80ea62dd130
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/efficios/babeltrace/pull/115]
-----
-- tests/lib/test_trace_ir_ref.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/tests/lib/test_trace_ir_ref.c b/tests/lib/test_trace_ir_ref.c
--index d5dfa9cf..70caf29c 100644
----- a/tests/lib/test_trace_ir_ref.c
--+++ b/tests/lib/test_trace_ir_ref.c
--@@ -25,7 +25,7 @@
-- 
-- #define NR_TESTS 37
-- 
---struct user {
--+struct bt_user {
-- 	bt_trace_class *tc;
-- 	bt_stream_class *sc;
-- 	bt_event_class *ec;
--@@ -265,7 +265,7 @@ static void test_example_scenario(bt_self_component_source *self_comp)
-- 	bt_stream_class *weak_sc1 = NULL, *weak_sc2 = NULL;
-- 	bt_event_class *weak_ec1 = NULL, *weak_ec2 = NULL,
-- 			*weak_ec3 = NULL;
---	struct user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
--+	struct bt_user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
-- 
-- 	/* The only reference which exists at this point is on TC1. */
-- 	tc1 = create_tc1(self_comp);
---- 
--2.28.0
--
-diff --git a/package/babeltrace2/babeltrace2.hash b/package/babeltrace2/babeltrace2.hash
-index 27c47ba26f..164e65cded 100644
---- a/package/babeltrace2/babeltrace2.hash
-+++ b/package/babeltrace2/babeltrace2.hash
-@@ -1,8 +1,8 @@
--# From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.3.tar.bz2.sha256
--sha256 a53625152554102d868ba8395347d0daba0bec9c4b854c3e9bd97c77b0bf04a0  babeltrace2-2.0.3.tar.bz2
-+# From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.4.tar.bz2.sha256
-+sha256  774f116685dab5db9c51577dde43c8c1df482aae6bb78a089b1e9e7c8b489bca  babeltrace2-2.0.4.tar.bz2
- 
- # Hash for license files
--sha256 d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
--sha256 c68fd1ffc1623ea0dace21abf57305818e4998a4ae0c79010aaaa943eb660b55  lgpl-2.1.txt
--sha256 2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-+sha256  d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256  c68fd1ffc1623ea0dace21abf57305818e4998a4ae0c79010aaaa943eb660b55  lgpl-2.1.txt
-+sha256  2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
-index 1e03f5fdd2..eedfc72b8c 100644
---- a/package/babeltrace2/babeltrace2.mk
-+++ b/package/babeltrace2/babeltrace2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- BABELTRACE2_SITE = https://www.efficios.com/files/babeltrace
--BABELTRACE2_VERSION = 2.0.3
-+BABELTRACE2_VERSION = 2.0.4
- BABELTRACE2_SOURCE = babeltrace2-$(BABELTRACE2_VERSION).tar.bz2
- BABELTRACE2_LICENSE = MIT, LGPL-2.1 (src/common/list.h), GPL-2.0 (test code)
- BABELTRACE2_LICENSE_FILES = mit-license.txt lgpl-2.1.txt gpl-2.0.txt LICENSE
--- 
-2.34.1
+	$ git log --oneline --reverse
+	[...]
+9324fd7 Add native Raspberry Pi Imager port - beta
+ead3e30 readme: add macOS build step
+
+2048ae6 (2021.07.01) Merge pull request #83 from mrpollo/patch-1
+
+6c4d444 Update Raspberry Pi 4 EEPROM to pieeprom-2021-07-06
+59830ea Merge pull request #85 from timg236/pieeprom-2021-07-06
+8b1ccc1 Update changelog
+9a4887e Fix `install` and `uninstall` targets in Makefile.
+3840f3b Merge pull request #86 from cpb-/feature/add-install-target-in-makefile
+ff986e4 bootloader: Remove NVMe beta files
+c2da05c Merge pull request #88 from peterharperuk/remove_nvme
+4608d57 Update bootcode4.bin
+76e856d Merge pull request #89 from peterharperuk/master_update
+8bcd5ce Bump bootcode.bin
+d1a9a5c beta: Add support for secure-boot - see Readme.md
+6eb9976 secure-boot: Added example boot.img
+78e1830 make-boot-image: Fix typo in docs AFT_SIZE -> FAT_SIZE
+58bdaf4 make-boot-image: Use losetup instead of udisksctl
+4bdd032 secure-boot BETA documentation updates
+5247ffe Merge pull request #77 from nils-werner/patch-1
+dc1b95f secure-boot: Move the example PEM file to secure-boot-example
+80945ed secure-boot: Update recovery,bootcode4 + EEPROM to latest beta - 2021-10-27
+a6e0d8b secure-boot: Update Readme to update max ramdisk size to 96MB
+14e28be Corrected the board flag
+7b429ab Merge pull request #96 from Dodain/master
+09852a9 Corrected the -b flag in the readme.md
+879641f Readme: Add docs for examining the contents of boot.img
+5f8c233 secure-boot: Add more documentation about the RSA signatures and add optional public key argument
+d1ad057 Merge pull request #98 from timg236/secure-boot-hsm
+6154fe2 make-boot-image: Fix unmount and set GID
+8b390fe make-boot-image: Enable the image size to be specified
+fc4035e Update the default EEPROM image to 2021-11-22
+a7ed8d1 rpi-eeprom-config: Pull in --edit fixes from rpi-eeprom repo
+83c9a96 Merge pull request #103 from timg236/pieeprom-2021-11-22
+396b98f secure-boot-recovery: Update to latest 2021-11-22 EEPROM
+14ea684 msd: Fix non-2711 MSD support
+515b972 Update the default EEPROM image to 2021-12-02
+1aca6bc Merge pull request #104 from peterharperuk/update_dec
+e5e4994 Remove imager beta release
+8bb5820 Use pkg-config to locate libusb-1.0
+6b05a3a bootloader: Enable revoke_devkey in secure-boot recovery.bin
+a7d4ec4 (HEAD) Merge pull request #108 from timg236/secure-boot-revoke-devkey
+
+The version bump to 2021.07.01 gains one readme update, why not bump
+to head/latest (after testing the result)?
+
+Regards,
+Peter
+
+
+> +RASPBERRYPI_USBBOOT_SITE = \
+> +	$(call github,raspberrypi,usbboot,v$(RASPBERRYPI_USBBOOT_VERSION))
+>  RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
+>  RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
+>
 
 _______________________________________________
 buildroot mailing list
