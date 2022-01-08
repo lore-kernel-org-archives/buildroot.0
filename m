@@ -1,46 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7ABEC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 13:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C20ACC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 13:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73E0F4090A;
-	Sat,  8 Jan 2022 13:45:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C90B400CF;
+	Sat,  8 Jan 2022 13:49:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T2cESJiKt664; Sat,  8 Jan 2022 13:45:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fTzeTsa8csTl; Sat,  8 Jan 2022 13:49:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFD96408F2;
-	Sat,  8 Jan 2022 13:45:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E13621BF301
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 13:45:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23AC340103;
+	Sat,  8 Jan 2022 13:49:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C405A1BF301
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 13:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEE8D60AA4
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 13:45:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B94928149C
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 13:49:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UsjOyzHXtrnE for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 13:45:38 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E971260634
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 13:45:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8C33582BC6; Sat,  8 Jan 2022 13:39:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 14:45:33 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5ecbffe61594ea572da18d1550a7cbdc28b7e1d
-X-Git-Newrev: cd84e1bcf9f116ccff2092124d56c1203d831a42
-X-Patchwork-Hint: ignore
-Message-Id: <20220108133926.8C33582BC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: bump version to 0.23.5
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n5ns3gUNxFPp for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 13:49:22 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95D9B813C1
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 13:49:22 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v6so16769219wra.8
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 05:49:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=k1S5E2yg3jOYrBi8lWCt1x+8EZwvdREkLsAtLxnEZQY=;
+ b=eVrGQZbd6YzBZIPLaevD7FtPhUtYA1WWVRZ2My/qz6NFWj922Ts5j7jjvJDsIuz0Zo
+ nJEbRFjQ78Nh3bQ3M4tXA/GyvgMsQMQd8a3lJRWN9B6rnG8x9uW8/v1+qE8SrvEGtopf
+ 2j0lJ+dQ2/q9jHOMxIsc5lKj6d83Euhg0oDotiI0ogTPPFiCIEniXJfmgWfI3CT10vQK
+ n1RxpJ58A8JtrGWVx57wDozCdq+n6SeDtU4DvKMDJVG49oAZAXzUvYKSHFfNqtMbyGz4
+ X1F52SgNqP9Xp0vkjuymjCE3XZ36DNoMyp+p2JSNhXNwvMSrezvbnB+Gs6C+RJjd273V
+ ZiMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=k1S5E2yg3jOYrBi8lWCt1x+8EZwvdREkLsAtLxnEZQY=;
+ b=M5e7Ozk479hV4vBHsp/k9VVJg5FJzvx6YRjuK1QiqmY5VCIieKd9qNvthl4Mtp9bGy
+ +I9GASJBPCModMOsK9JKmERSPN5DJDM800tFi+GmwqOZ5o0TIZ9XY2/ANIWfZQ1QeO5G
+ S7R1v2OOYrCe7BycoLCjLej1Jtz2DTROlB7YaE5npsQKWiGWbmd4IGKS0cjZl+/PCm7M
+ 1xxFhgcd1rdQoSh27JkgOCox5Il4BcAcTv01jAT30E4eMw1yw2Su7rWLQl9Ee428e1SG
+ tf4PeMbMSDSFtfl3JSg0dlyejVDXxTT/ZK3UkFk0rQMBEDzGV43/6DAdvWCIp8WzeB50
+ t8lw==
+X-Gm-Message-State: AOAM532ugHAsIiQJj3LZe49A6GL1fx4DnA3yFeS+qPRk1Og8iSE2ctHc
+ Pa/hDcibLvfP36hvy9tSty9MuQ==
+X-Google-Smtp-Source: ABdhPJx5cqLI++o2keVaxTBRU991aZO1KSZcP1+ZyX8PPOvz9DIycAdoAx5QJtQkbZ3/fhiiIjRRDg==
+X-Received: by 2002:a05:6000:508:: with SMTP id
+ a8mr48784453wrf.578.1641649760844; 
+ Sat, 08 Jan 2022 05:49:20 -0800 (PST)
+Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
+ ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
+ by smtp.gmail.com with ESMTPSA id n12sm1823997wrf.29.2022.01.08.05.49.19
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 08 Jan 2022 05:49:20 -0800 (PST)
+Message-ID: <e465f71f-d772-2ab0-bdb0-6172a5ab8029@mind.be>
+Date: Sat, 8 Jan 2022 14:49:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Brandon Maier <brandon.maier@rockwellcollins.com>, buildroot@buildroot.org
+References: <20200415220032.140083-1-brandon.maier@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20200415220032.140083-1-brandon.maier@rockwellcollins.com>
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/toolchain-wrapper: Handle
+ debug info paths in gcc7 or below for reproducibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,103 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: matthew.weber@rockwellcollins.com, Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd84e1bcf9f116ccff2092124d56c1203d831a42
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched project URL to HTTPS as HTTP redirects to it.
 
-Added upstream patch to fix build error with uClibc:
-https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
-https://github.com/MusicPlayerDaemon/MPD/pull/1382
+On 16/04/2020 00:00, Brandon Maier wrote:
+> In GCC8 the flag -ffile-prefix-map handles cleaning up both the __FILE__
+> macros and the debug info paths. In GCC7 or below we are manually
+> handling the __FILE__ macros, but not debug info paths. Use
+> -fdebug-prefix-map to clean them up.
+> 
+> See for more detail: https://reproducible-builds.org/docs/build-path/
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-Changelog:
-https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.5/NEWS
+  Both applied to master, thanks. Sorry it took so long for such a simple patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Peter: also update MPD_SITE]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-lib-alsa-Error-add-missing-include.patch  | 25 ++++++++++++++++++++++
- package/mpd/Config.in                              |  2 +-
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  4 ++--
- 4 files changed, 29 insertions(+), 4 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/mpd/0002-lib-alsa-Error-add-missing-include.patch b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-new file mode 100644
-index 0000000000..c45a087a54
---- /dev/null
-+++ b/package/mpd/0002-lib-alsa-Error-add-missing-include.patch
-@@ -0,0 +1,25 @@
-+From 3856224df9160c201bc6d224aa927e7c358e3269 Mon Sep 17 00:00:00 2001
-+From: aeolio <git@aeolio.de>
-+Date: Tue, 14 Dec 2021 09:01:23 +0100
-+Subject: [PATCH] lib/alsa/Error: add missing #include
-+
-+Downloaded from upstream commit:
-+https://github.com/MusicPlayerDaemon/MPD/commit/3856224df9160c201bc6d224aa927e7c358e3269
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/lib/alsa/Error.cxx | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lib/alsa/Error.cxx b/src/lib/alsa/Error.cxx
-+index cd351f37d1..8ceb4417ca 100644
-+--- a/src/lib/alsa/Error.cxx
-++++ b/src/lib/alsa/Error.cxx
-+@@ -29,6 +29,7 @@
-+ 
-+ #include "Error.hxx"
-+ 
-++#include <stdarg.h>
-+ #include <alsa/error.h>
-+ 
-+ namespace Alsa {
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index eb10151df3..fc0f409448 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -16,7 +16,7 @@ menuconfig BR2_PACKAGE_MPD
- 	  it can play a variety of sound files while being
- 	  controlled by its network protocol.
- 
--	  http://www.musicpd.org
-+	  https://www.musicpd.org
- 
- if BR2_PACKAGE_MPD
- 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index cb9d05cd32..56f88490cf 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  b300625701005c6b14649f11dac118d05540529a5385d05b7c3062c0ce08f399  mpd-0.23.3.tar.xz
-+sha256  f22c2c25093a05f4566f9cd7207cfbcd8405af67ed29a989bcf8905f80b7a299  mpd-0.23.5.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7bda0963c6..6f01b29c6d 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).3
-+MPD_VERSION = $(MPD_VERSION_MAJOR).5
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
--MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
-+MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
- MPD_LICENSE = GPL-2.0+
- MPD_LICENSE_FILES = COPYING
+> ---
+>   toolchain/toolchain-wrapper.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+> index 09dda17890..7d55050135 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -26,6 +26,7 @@ TOOLCHAIN_WRAPPER_OPTS += -Wl,--build-id=none
+>   ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
+>   TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
+>   else
+> +TOOLCHAIN_WRAPPER_OPTS += -fdebug-prefix-map=$(BASE_DIR)=buildroot
+>   TOOLCHAIN_WRAPPER_OPTS += -D__FILE__=\"\" -D__BASE_FILE__=\"\" -Wno-builtin-macro-redefined
+>   endif
+>   endif
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
