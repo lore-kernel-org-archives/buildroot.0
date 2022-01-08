@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DBE2C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F00FC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC29818B5;
-	Sat,  8 Jan 2022 09:50:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19ED1401BE;
+	Sat,  8 Jan 2022 09:50:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p4CuCxzc3zR8; Sat,  8 Jan 2022 09:50:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B4chmlXr2yxJ; Sat,  8 Jan 2022 09:50:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 561E08186B;
-	Sat,  8 Jan 2022 09:50:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 628A41BF957
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C46B401FD;
+	Sat,  8 Jan 2022 09:50:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 65D121BF95D
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50392817BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52BD2401BE
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:49:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IRbATUHmjuvg for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Zi1Hytykm89 for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 09:49:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E9548145B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C5CF4287F
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:49:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8113982AB6; Sat,  8 Jan 2022 09:43:37 +0000 (UTC)
+ id 9122882ACB; Sat,  8 Jan 2022 09:43:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 10:47:03 +0100
+Date: Sat, 8 Jan 2022 10:48:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4c6cf4b1fc0f34e72ff047e76de53d3634f5184
-X-Git-Newrev: 2550344f7991105f3896340332e2f2dba9e44294
+X-Git-Oldrev: 545e61fffa2b9f03bf08f39d59016e4ee4f1ab92
+X-Git-Newrev: a4206de33e0dee3044fa36c555c48b439c3eeb0c
 X-Patchwork-Hint: ignore
-Message-Id: <20220108094337.8113982AB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unrar: bump version to 6.1.3
+Message-Id: <20220108094337.9122882ACB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtools: bump version to 4.0.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,38 +58,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2550344f7991105f3896340332e2f2dba9e44294
+commit: https://git.buildroot.net/buildroot/commit/?id=a4206de33e0dee3044fa36c555c48b439c3eeb0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+http://svn.savannah.gnu.org/viewvc/mtools/trunk/NEWS?view=markup
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index 7900c44d1d..e354753bb2 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3d010d14223e0c7a385ed740e8f046edcbe885e5c22c5ad5733d009596865300  unrarsrc-5.9.4.tar.gz
-+sha256  d05022442009202a792e588bec58921c123ff046fc755f7f2272871a5bd79636  unrarsrc-6.1.3.tar.gz
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index 3c8e37a220..6923660153 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index 86cfe693d9..c37d4df456 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  d09cff66d7277ad36a7573fc3e9803bfa558cdda83baabaafbf7761317462283  mtools-4.0.26.tar.lz
++sha256  78ac74b2d1cae77bb2da29461a13ed862ff6b7c1289d5bf80fdb09e039c2c48f  mtools-4.0.36.tar.lz
+ 
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 6d63a565bd..4908c3fa2f 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNRAR_VERSION = 5.9.4
-+UNRAR_VERSION = 6.1.3
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = https://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+-MTOOLS_VERSION = 4.0.26
++MTOOLS_VERSION = 4.0.36
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
