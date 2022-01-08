@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F6EC433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E8CDC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4B358146F;
-	Sat,  8 Jan 2022 10:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB01B8188A;
+	Sat,  8 Jan 2022 10:03:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dWKkPu52d8Dc; Sat,  8 Jan 2022 10:03:34 +0000 (UTC)
+	with ESMTP id lUlyvnqkmPpg; Sat,  8 Jan 2022 10:03:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E877A81442;
-	Sat,  8 Jan 2022 10:03:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98AE81BF957
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18E6F8186A;
+	Sat,  8 Jan 2022 10:03:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 95E581BF343
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 933F340886
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83B1960A9F
  for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:03:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZGJ9agdnfJqn for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id coczQOf1HcG5 for <buildroot@lists.busybox.net>;
  Sat,  8 Jan 2022 10:03:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C26EF405A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id C28F360810
  for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:03:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B7B0882AB7; Sat,  8 Jan 2022 09:57:19 +0000 (UTC)
+ id C1BEE82AD1; Sat,  8 Jan 2022 09:57:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 11:01:48 +0100
+Date: Sat, 8 Jan 2022 11:02:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 315ba5c26dd6bb0c01067e8346b4a7eceb7d0ee1
-X-Git-Newrev: 21648affd254d1cfe9e10735d558832ecb576155
+X-Git-Oldrev: 21648affd254d1cfe9e10735d558832ecb576155
+X-Git-Newrev: 5483ea9e972d8c18d63561cae5639b4510f2bb93
 X-Patchwork-Hint: ignore
-Message-Id: <20220108095719.B7B0882AB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/matchbox-lib: bump to version 1.12
+Message-Id: <20220108095719.C1BEE82AD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/matchbox-fakekey: bump to version
+ 0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,105 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21648affd254d1cfe9e10735d558832ecb576155
+commit: https://git.buildroot.net/buildroot/commit/?id=5483ea9e972d8c18d63561cae5639b4510f2bb93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop second and third patches (already in version)
+Use src/libfakekey.c as the license file because there is no COPYING in
+the git tarball
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox-lib/0002-libpng15.patch         | 26 ------------------------
- package/matchbox-lib/0003-include-setjmp-h.patch | 17 ----------------
- package/matchbox-lib/matchbox-lib.hash           |  3 +--
- package/matchbox-lib/matchbox-lib.mk             |  6 ++++--
- 4 files changed, 5 insertions(+), 47 deletions(-)
+ package/matchbox-fakekey/matchbox-fakekey.hash | 5 ++---
+ package/matchbox-fakekey/matchbox-fakekey.mk   | 9 ++++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/matchbox-lib/0002-libpng15.patch b/package/matchbox-lib/0002-libpng15.patch
-deleted file mode 100644
-index 3d68573b5f..0000000000
---- a/package/matchbox-lib/0002-libpng15.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Support for libpng 1.5+ shamelessly taken from Gentoo.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- a/libmb/mbpixbuf.c
--+++ b/libmb/mbpixbuf.c
--@@ -247,7 +247,7 @@
--     return NULL;
--   }
-- 
---  if ( setjmp( png_ptr->jmpbuf ) ) {
--+  if ( setjmp( png_jmpbuf(png_ptr) ) ) {
--     png_destroy_read_struct( &png_ptr, &info_ptr, NULL);
--     fclose(fd);
--     return NULL;
--@@ -269,8 +269,8 @@
--       ( color_type == PNG_COLOR_TYPE_GRAY_ALPHA ))
--     png_set_gray_to_rgb(png_ptr);
--  
---  if ( info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA 
---       || info_ptr->color_type == PNG_COLOR_TYPE_GRAY_ALPHA
--+  if ( color_type == PNG_COLOR_TYPE_RGB_ALPHA 
--+       || color_type == PNG_COLOR_TYPE_GRAY_ALPHA
--        )
--     *has_alpha = 1;
--   else
-diff --git a/package/matchbox-lib/0003-include-setjmp-h.patch b/package/matchbox-lib/0003-include-setjmp-h.patch
-deleted file mode 100644
-index 72e1e45d8f..0000000000
---- a/package/matchbox-lib/0003-include-setjmp-h.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--matchbox-lib: include setjmp.h
--
--Based on this upstream patch:
--
--   http://git.yoctoproject.org/cgit/cgit.cgi/libmatchbox/commit/?id=9315bcce1f01e7d6c00161442d61d3c676794d9d
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----- libmatchbox-1.9/libmb/mbpixbuf.c.orig	2014-02-21 12:45:46.867035956 +0000
--+++ libmatchbox-1.9/libmb/mbpixbuf.c	2014-02-21 12:46:43.482949583 +0000
--@@ -22,6 +22,7 @@
-- 
-- #include <strings.h>
-- #include "mbpixbuf.h"
--+#include <setjmp.h>
-- 
-- #define BYTE_ORD_24_RGB  0
-- #define BYTE_ORD_24_RBG  1
-diff --git a/package/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
-index d48fb32043..8144c10258 100644
---- a/package/matchbox-lib/matchbox-lib.hash
-+++ b/package/matchbox-lib/matchbox-lib.hash
+diff --git a/package/matchbox-fakekey/matchbox-fakekey.hash b/package/matchbox-fakekey/matchbox-fakekey.hash
+index 516e0b6362..3627b13913 100644
+--- a/package/matchbox-fakekey/matchbox-fakekey.hash
++++ b/package/matchbox-fakekey/matchbox-fakekey.hash
 @@ -1,4 +1,3 @@
--# From http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/1.9/libmatchbox-1.9.tar.bz2.md5
--md5	9f73e7515cc4679171a5db180dc1343b	libmatchbox-1.9.tar.bz2
+-# From http://downloads.yoctoproject.org/releases/matchbox/libfakekey/0.1/libfakekey-0.1.tar.bz2.md5
+-md5	83dbde4d77e8baf0176fe4291d8a2303	libfakekey-0.1.tar.bz2
  # Locally computed
-+sha256  5c7795e46c24d848a2b960f3b994911165d95e5d5731e39105ee0d808d2373eb  libmatchbox-1.12.tar.bz2
- sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 5541867699..00ca4a0d15 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -4,11 +4,13 @@
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  4e2fdc9bc20df469d53885c40e104122140131e06d4c184902070ec0b0f2ca9f  libfakekey-0.3.tar.bz2
++sha256  3271662131760e9b30dd92495a0ea0b598fc457798cc67948947365299dd607d  src/libfakekey.c
+diff --git a/package/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
+index e607c48c15..99921ef8e7 100644
+--- a/package/matchbox-fakekey/matchbox-fakekey.mk
++++ b/package/matchbox-fakekey/matchbox-fakekey.mk
+@@ -4,11 +4,14 @@
  #
  ################################################################################
  
--MATCHBOX_LIB_VERSION = 1.9
-+MATCHBOX_LIB_VERSION = 1.12
- MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
--MATCHBOX_LIB_SITE = http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/$(MATCHBOX_LIB_VERSION)
-+MATCHBOX_LIB_SITE = http://git.yoctoproject.org/cgit/cgit.cgi/libmatchbox/snapshot
- MATCHBOX_LIB_LICENSE = LGPL-2.1+
- MATCHBOX_LIB_LICENSE_FILES = COPYING
+-MATCHBOX_FAKEKEY_VERSION = 0.1
++MATCHBOX_FAKEKEY_VERSION = 0.3
+ MATCHBOX_FAKEKEY_SOURCE = libfakekey-$(MATCHBOX_FAKEKEY_VERSION).tar.bz2
+-MATCHBOX_FAKEKEY_SITE = http://downloads.yoctoproject.org/releases/matchbox/libfakekey/$(MATCHBOX_FAKEKEY_VERSION)
++MATCHBOX_FAKEKEY_SITE = \
++	http://git.yoctoproject.org/cgit/cgit.cgi/libfakekey/snapshot
+ MATCHBOX_FAKEKEY_LICENSE = GPL-2.0+
+-MATCHBOX_FAKEKEY_LICENSE_FILES = COPYING
++MATCHBOX_FAKEKEY_LICENSE_FILES = src/libfakekey.c
 +# From git
-+MATCHBOX_LIB_AUTORECONF = YES
- MATCHBOX_LIB_INSTALL_STAGING = YES
- MATCHBOX_LIB_DEPENDENCIES = host-pkgconf xlib_libXext
- MATCHBOX_LIB_CONF_OPTS = --disable-doxygen-docs
++MATCHBOX_FAKEKEY_AUTORECONF = YES
+ MATCHBOX_FAKEKEY_INSTALL_STAGING = YES
+ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
+ MATCHBOX_FAKEKEY_CONF_OPTS = --enable-expat
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
