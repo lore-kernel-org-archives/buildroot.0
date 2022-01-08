@@ -1,53 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AFFDC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F34CC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 10:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53D074289F;
-	Sat,  8 Jan 2022 10:53:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CECF81770;
+	Sat,  8 Jan 2022 10:54:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oatEoWdhkDSD; Sat,  8 Jan 2022 10:53:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3j5-x1PVzYYs; Sat,  8 Jan 2022 10:54:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71BC741634;
-	Sat,  8 Jan 2022 10:53:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A41481425;
+	Sat,  8 Jan 2022 10:54:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E4E8F1BF306
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6C3311BF306
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDA2F60A73
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5995A60A73
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 10:53:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WeUgehfA8BWd for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 10:53:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9C3C60803
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:53:46 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 841E61BF206;
- Sat,  8 Jan 2022 10:53:43 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1n69Ly-0006we-O8; Sat, 08 Jan 2022 11:53:42 +0100
+ with ESMTP id aytp3P-6yPHi for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 10:53:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B50F360803
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 10:53:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 9ECD082A00; Sat,  8 Jan 2022 10:47:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220108094533.1025401-1-bernd.kuhls@t-online.de>
-Date: Sat, 08 Jan 2022 11:53:42 +0100
-In-Reply-To: <20220108094533.1025401-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 8 Jan 2022 10:45:33 +0100")
-Message-ID: <87r19ih51l.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcap: bump version to 2.62
+To: buildroot@buildroot.org
+Date: Sat, 8 Jan 2022 11:47:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 24999e2025fb53b237b4f8f79244e45b0b366ca0
+X-Git-Newrev: efd0435add883e24b1a7053c12e2d71df7f5c247
+X-Patchwork-Hint: ignore
+Message-Id: <20220108104742.9ECD082A00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: bump version to 7.81.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,26 +52,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=efd0435add883e24b1a7053c12e2d71df7f5c247
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Removed patch which was applied upstream:
- > https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=afbc554d16a32ed352191e49b3673f2f72d0002f
+Changelog: https://curl.se/changes.html
 
- > Release notes:
- > https://sites.google.com/site/fullycapable/release-notes-for-libcap
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index c488df57b1..63d6ba306c 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-7.80.0.tar.xz.asc
++# https://curl.se/download/curl-7.81.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  a132bd93188b938771135ac7c1f3ac1d3ce507c1fcbef8c471397639214ae2ab  curl-7.80.0.tar.xz
++sha256  a067b688d1645183febc31309ec1f3cdce9213d02136b6a6de3d50f69c95a7d3  curl-7.81.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 24591f2e0a..20ebb4f271 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.80.0
++LIBCURL_VERSION = 7.81.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
