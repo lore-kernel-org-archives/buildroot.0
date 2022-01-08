@@ -1,88 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3461C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A9F2C433EF
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 15:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B8E140103;
-	Sat,  8 Jan 2022 15:41:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F199F60A73;
+	Sat,  8 Jan 2022 15:42:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kkd3ACTtqszk; Sat,  8 Jan 2022 15:41:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8ux9YXBd7Fn6; Sat,  8 Jan 2022 15:42:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36BF9400D9;
-	Sat,  8 Jan 2022 15:41:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 661771BF5A1
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:41:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46E9360810;
+	Sat,  8 Jan 2022 15:42:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A0E9E1BF5A1
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51198813A8
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:41:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 892ED60810
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GKHZxd8m4ziG for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 15:41:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EWLKlGS8P74a for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 15:42:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7218A812D5
- for <buildroot@busybox.net>; Sat,  8 Jan 2022 15:41:55 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id q8so17211536wra.12
- for <buildroot@busybox.net>; Sat, 08 Jan 2022 07:41:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=XznD/tLVB/eJm4r6DdT7pl6A1ugDCoiV5bu+oopdsOU=;
- b=ITN+SfaNQ1NASDQRnEj2OcSSlOAT861ssMMrydVhM8FmR42tm2hMPzgliwmOuyJjtU
- gZUinusL7/j495vcjVxHV29gW4HprsXMtGCxLeDqLn4UDCF3poIhzTmr110lSa7ROo1/
- /qhOW3KkmpLcJ4GVhOhEG/2auWeDyorcLaAivoWADSZpU9+Njk+JwzfldduM2jOkurC+
- hQNpbHfXZ2BNgA8//4+AJrYJ7br4QCiMBWU5iWLeGxJ3VWKuBwgeUbbA5KZDNYLBoo1F
- gtDb62fywLeIw15TfI2942kO0XS4vYJ+UM0oV2kgf2J2VxbkEuiQ+BghSvtWBRhH143/
- Qoxw==
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com
+ [209.85.216.53])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 09DFC607A3
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 15:42:37 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id
+ c14-20020a17090a674e00b001b31e16749cso14053998pjm.4
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 07:42:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=XznD/tLVB/eJm4r6DdT7pl6A1ugDCoiV5bu+oopdsOU=;
- b=f/ATdTr8Bshk41U2tA1KaUAnKie/mfr0c4Cbs/poY0y5W8EOpqcdSLLQfQheIojb8j
- D+oKUtDTSDUi/d3500yB9lNkXhCZnfIHqeSjURl1sZE+c7t19rg1ArksBrYnc57O+Cwo
- ifwWG4/AhDrc6LwokpB82ZdrCkQioVpf4POL5e3o877GkxjvkTkrDnIAYm3llu/6XcoS
- lIYFJHAIdiZdHeToEJlhwBzqAN/xWrVzDTVp0DApr5cpH1xiG1rH72cPyRQjxB37IL7Q
- PZFB2uNlRhdQHZ4VLlgu54OjhUbjrUvYWELQg2SvSaz+FuuFPjabmU70w+GsVpX3FRVA
- naXg==
-X-Gm-Message-State: AOAM531w/5nyNA5p8Fy9W6Bo7W9V/Seir+03v4465b616zDfPJGKBxPX
- oX5rPfPQsXpojFL8XLprt5v8c/TnIbLtIN/p
-X-Google-Smtp-Source: ABdhPJyCvb9WILfBhyJHd1Eam0e0hZR5Ip5tP2MFzTA+xnGbNNmXR9uhC5umTJLdphikPBqtDmKWpA==
-X-Received: by 2002:a05:6000:1377:: with SMTP id
- q23mr11825657wrz.371.1641656513583; 
- Sat, 08 Jan 2022 07:41:53 -0800 (PST)
-Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
- ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id s194sm2321271wme.45.2022.01.08.07.41.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 08 Jan 2022 07:41:53 -0800 (PST)
-Message-ID: <ffa44730-3281-5345-67cf-389a0045c18e@mind.be>
-Date: Sat, 8 Jan 2022 16:41:52 +0100
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=DvDkd11FjLbodC6+sII3gvp48Qp33o8YckO4YwmHRE4=;
+ b=zm6UkoERu9yDP72ugvkpt+/8JG0d1GCb8zD8R5aIBr0G60u7RWDiw0i1Ssio3zzGGP
+ 78M06Sqflh5eV3qaL19yW4sO/oklNkoUyr0l8oLu/Fc7txnaQPPq4mmt51fbRa8bxvYS
+ Si5k6i82IsqfXgLNd51OYmQTJoPXeH/GLW+YqMUrfJymedPgidhs4KtP4dXlSx30Obrf
+ 6YmS+ocotTXrlo82Nf7+57OuJizcbkfMo1n9Bta7ydSssEr2O2SnecDrUMKhY2NeMdX+
+ +KEl/3prtWgLL4wuYLzAMafNP3x7M9BRXlX9Lun5/EBTAqH0blnbju6vgs9k6wvaqXzV
+ t88Q==
+X-Gm-Message-State: AOAM531KTcKSyqiMezTkr3D9ANQpWIJL+qD6yK+Z2eK6iVjanwAmG15j
+ zoQe1to8WJ13baR4UQ3BjrkVDS8E7uXaLW9tAEw=
+X-Google-Smtp-Source: ABdhPJzUu4l0uD1Uv3s96Yd9j162SDbFqD0QRj8nMP7LbEXBImZiPjKBxzomchVvsn8uXTYsr+6CnY9VKp4qO+NcSUE=
+X-Received: by 2002:a17:90b:4c49:: with SMTP id
+ np9mr21219756pjb.138.1641656557392; 
+ Sat, 08 Jan 2022 07:42:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: guillaume.bressaix@gmail.com, buildroot@busybox.net
-References: <20200627130805.8615-1-guillaume.bressaix@gmail.com>
- <20200627130805.8615-2-guillaume.bressaix@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20200627130805.8615-2-guillaume.bressaix@gmail.com>
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-numpy: use fortran
- compiler when available
+References: <20200926200021.28930-1-egorenar-dev@posteo.net>
+In-Reply-To: <20200926200021.28930-1-egorenar-dev@posteo.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 8 Jan 2022 16:42:25 +0100
+Message-ID: <CACXmViaj9Q6wkAPt1LZybPYPsZMws+T3UuycEea9GcoX2_5c5A@mail.gmail.com>
+To: Alexander Egorenkov <egorenar-dev@posteo.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/crash: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +71,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi,
 
+Sorry for the slow response.
 
-On 27/06/2020 15:08, guillaume.bressaix@gmail.com wrote:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-> 
-> python-numpy can be built using fortran compiler if
-> available, this is the correct configure flag to do it
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->   package/python-numpy/python-numpy.mk | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index f9c55c9f3c..9e08fd5f2e 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -23,6 +23,10 @@ else
->   PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
->   endif
->   
-> +ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
-> +PYTHON_NUMPY_ENV += F90=$(TARGET_FC)
+On Sat, Sep 26, 2020 at 10:00 PM Alexander Egorenkov
+<egorenar-dev@posteo.net> wrote:
 
-  It's better to still explicitly pass --fcompiler=gnu95; same when fortran is 
-not available, pass --fcompiler=None. That way, we get an error if it 
-accidentally picks up the wrong compiler (e.g. from the host).
-
-  Therefore, I squashed the two patches, and applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> +endif
+> diff --git a/package/crash/0001-Support-cross-compilation.patch b/package/crash/0001-Support-cross-compilation.patch
+> new file mode 100644
+> index 0000000000..7e1bd3f861
+> --- /dev/null
+> +++ b/package/crash/0001-Support-cross-compilation.patch
+> @@ -0,0 +1,134 @@
+> +From 44cb56ad5bbd78203fb6f346299ccfe45f2568fe Mon Sep 17 00:00:00 2001
+> +From: Alexander Egorenkov <egorenar-dev@posteo.net>
+> +Date: Sat, 26 Sep 2020 14:29:49 +0200
+> +Subject: [PATCH 1/1] Support cross-compilation
 > +
->   define PYTHON_NUMPY_CONFIGURE_CMDS
->   	-rm -f $(@D)/site.cfg
->   	echo "[DEFAULT]" >> $(@D)/site.cfg
-> 
+> +- Introduce CONF_CC variable to compile configure.c
+> +- Introduce CONF_HOST_ARCH to configure.c to enable overriding target
+> +  at compile time
+> +
+> +Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+
+I noticed that this patch is not yet upstream / I don't see a PR for
+it. Are you still interested in this package?
+
+The patch could be quite a bit smaller if you didn't move the !
+CONF_HOST_ARCH lines, but otherwise it looks fine to me.
+
+
+> +++ b/package/crash/Config.in
+> +config BR2_PACKAGE_CRASH
+> +       bool "crash"
+> +       depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_STATIC_LIBS # dlopen
+> +       depends on BR2_USE_WCHAR
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> +       select BR2_PACKAGE_LESS
+
+The dependency on less looks odd. Presumably you mean this as a
+runtime dependency which we normally mark with a # runtime comment and
+then don't add to _DEPENDENCIES, but looking at the code it seems to
+work without less as well or with the busybox less applet?
+
+> +++ b/package/crash/crash.mk
+> @@ -0,0 +1,50 @@
+> +################################################################################
+> +#
+> +# crash
+> +#
+> +################################################################################
+> +
+> +CRASH_VERSION = 7.2.8
+> +CRASH_SITE = $(call github,crash-utility,crash,$(CRASH_VERSION))
+> +CRASH_DEPENDENCIES = host-bison less ncurses zlib
+> +CRASH_LICENSE = GPL-3.0
+
+Most of the code seems to come from the kernel and is marked as GPL-2.0+.
+
+> +CRASH_LICENSE_FILES = COPYING3
+> +
+> +CRASH_GDB_CONF_FLAGS = \
+> +       --host=$(GNU_TARGET_NAME)
+
+That looked odd to me. It apparently downloads a GDB tarball during
+the build step, patches and builds that, completely sidestepping the
+download / mirror logic of Buildroot (and our existing gdb patches),
+so that is not good. What is this needed for exactly? Can it instead
+use our existing gdb package?
+
+> +ifeq ($(BR2_i386),y)
+> +CRASH_TARGET = X86
+> +else ifeq ($(BR2_x86_64),y)
+> +CRASH_TARGET = X86_64
+> +else ifeq ($(BR2_arm)$(BR2_armeb),y)
+> +CRASH_TARGET = ARM
+> +else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+> +CRASH_TARGET = ARM64
+> +else ifeq ($(BR2_powerpc),y)
+> +CRASH_TARGET = PPC
+> +else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+> +CRASH_TARGET = PPC64
+> +else ifeq ($(BR2_s390x),y)
+> +CRASH_TARGET = S390X
+> +else ifeq ($(BR2_sparc64),y)
+> +CRASH_TARGET = SPARC64
+> +endif
+
+NIT: such conditional logic is a bit clearer / shorter in Config.in
+instead of in the .mk.
+
+What is the use case for this exactly? You are building it for the
+target, but wouldn't this make more sense as a host utility?
+
+The gdb download is a show stopper, so I have marked this as changes requested.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
