@@ -1,88 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A35C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 19:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EE85C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 19:00:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5379C400C1;
-	Sat,  8 Jan 2022 19:00:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E20BE814B8;
+	Sat,  8 Jan 2022 19:00:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NAXMuQl_K8nS; Sat,  8 Jan 2022 19:00:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cOthcaMdQNX6; Sat,  8 Jan 2022 19:00:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A9DD400E3;
-	Sat,  8 Jan 2022 19:00:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4D97F1BF593
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 19:00:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 116C681493;
+	Sat,  8 Jan 2022 19:00:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AF2721BF593
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 19:00:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AC4640266
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 19:00:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB86081496
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 19:00:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TPgqjqiz-E5f for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 19:00:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j7fFMoXhoC96 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 19:00:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3EC0E40255
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 19:00:30 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- x18-20020a7bc212000000b00347cc83ec07so2505037wmi.4
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 11:00:30 -0800 (PST)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4FED38148D
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 19:00:50 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id o30so6121485wms.4
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 11:00:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=O3nxG+F1yCmE8Uv6aJKKHAo0ED0CZqLCdBEFQgK/uHI=;
- b=QBs0MAifnT5ttTQ7y/0ivj31ZAA7Qy267bzN7cRRFm/mIjb4y8rDjXLk3BggCbT2Hv
- v81aPmi8zIWL9XyazqBuoNwCmpoXtOXbyokEENs4ikLdzJKKdy6P+rgpWdp2jelUwZ9A
- kLSea38JWKXGOXb9vv5p872A/ouR0291hfKbEwoeS7+pgLuRjw+ZrDVWv/9UKzO/QXRc
- uuZOaiI2Wogl6CxwG3tjteSaJVas+HPvitAy73LhgN4Gsk4bGlHJVd4a0RzR94hmcs1V
- LKougF+R3cR/7DWGi5aHKfJladPzumeOz4UTRFDC45ERMZ/NdesDwUgQ14b/px5rVOFs
- W1eQ==
+ bh=WG1WOo7hIf5wI54VVwd2NxkL17ljxIKFRdqFa5VxQ0w=;
+ b=Htd8ZrYsrNes5p1bxca2uzyEBYAv9d3GQhkAw5UgTYA+HzNKvI7xY6ohxjQnERvXe4
+ Pwg8U7ZbF3gNzpBwqyz/9fwezoDw/g2EA/MP9QlGx7KHPjXO4EBDYEpLPjUeJs1doD2J
+ uS1H44sjd+NDYyKliE7d+le/Dp3kwYwsqTqCe8hjn3ZXf4YYxE6i16JZsI3TErfdNZUe
+ 0L6RxJv7zZt1/pSCgl3FwwydVOyTi6oTZ9i9StwLURvedUVXxOZlnbucBG6gpvC4+ea0
+ L6v868Pmanx5kVkq6SI+voPBeacRiTTbOALnESQ6YHEySrG3YfBiWvLqxdymr9oinzJn
+ KDEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=O3nxG+F1yCmE8Uv6aJKKHAo0ED0CZqLCdBEFQgK/uHI=;
- b=Ag0i8T/BPSdKC8q3qXXOvSq9fORipcPwnbcTbD6I5y0R08v1tLRmCl/kbH2RCc3EcN
- YJF6zu1WpORcWX6AurB7ar34CEuhplR6mEkqZqtrMGr/lm3C6enB899XskpSyPVE244p
- tJA04lPl6BBcAm5ufFF2h0gXJFTTbusm2DCE4ml4LZ8z7lo0H95L46hrnBWyzy9GD6zc
- 9bmOQJoNWS0ZC1zHzx4noS5tQRM2Q6YbcEIypmb40vc3zAF/Xw7zigb+hF8I36z3iAhW
- q+dZxVPQHicCcr8+aJcoqemQwJ8STZU1M2P3DSGxTpVNIaWApWExubVQC2300bhsvbQL
- GBiw==
-X-Gm-Message-State: AOAM531YOZNgTanmmSteCgf0TeHR5OjNGlRHj+2vt4XUugeE8w8Va1Pd
- bgvmP33xOrD3NFfW2OnmHFhH/A==
-X-Google-Smtp-Source: ABdhPJxNZIB93V+Vvj8Fc5OhKtQePIwrt94NO6Aj+Kfc2Bq+imDkE9tnJ6f+VN4AH3pHi4/Dsh7gUA==
-X-Received: by 2002:a7b:c40b:: with SMTP id k11mr14058064wmi.132.1641668428372; 
- Sat, 08 Jan 2022 11:00:28 -0800 (PST)
+ bh=WG1WOo7hIf5wI54VVwd2NxkL17ljxIKFRdqFa5VxQ0w=;
+ b=2cyOwtATQE0YpMHddhZzinCjwVPGZOLmGdoVZTgcvgc1ypwDBpkXwuyxSOOd42Zq8F
+ J7EtIQePYiB7f3Z7uM9cUy4kgU3M7UOrADyewOU3zPXoBg8p6rPwB5Wh5UmfyypcN+SF
+ NUOFPtdoCw9oT/1YiZNBKhQrAdf2ay++vlHxiiC92dk4arrwUh2bTxZ1ZDmMdoQvQaNM
+ lZ9a3zc9dDDWqb14YAQkDiN1QeGC/ssVrLImBbiStCfAhdp41K0eX6jOtcpP1inuFVwh
+ qaDTUCs/Tn3lkdjEjLzna0jyzVpjF2IaSBuwaQi1FByVRyv8VeJ136I/5fSpdGGg27ZI
+ j1ZQ==
+X-Gm-Message-State: AOAM533byW9JXZ9b3UB04U2yj7bxWBiOFPJhs21RDOjZCrvJF1JYYx7Q
+ OIF9/Zs3OhUU6v4kz6pL2/+21Q==
+X-Google-Smtp-Source: ABdhPJz42YpmCyEO5YKS5TaUZcmo8sHMWyC2iAfkd6fIbdz2Afz1j+EVzsSORyqYDg/bxyUFt2j1QQ==
+X-Received: by 2002:a7b:c84a:: with SMTP id c10mr4770667wml.21.1641668448442; 
+ Sat, 08 Jan 2022 11:00:48 -0800 (PST)
 Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
  ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id k19sm2198208wmo.29.2022.01.08.11.00.27
+ by smtp.gmail.com with ESMTPSA id m13sm2182639wrn.57.2022.01.08.11.00.47
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 08 Jan 2022 11:00:28 -0800 (PST)
-Message-ID: <ee728679-ed33-323c-ee39-d2987033ca22@mind.be>
-Date: Sat, 8 Jan 2022 20:00:27 +0100
+ Sat, 08 Jan 2022 11:00:48 -0800 (PST)
+Message-ID: <5d4ae946-0cca-183e-c6ee-ad08518d4e78@mind.be>
+Date: Sat, 8 Jan 2022 20:00:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20220108175811.2978380-1-fontaine.fabrice@gmail.com>
+References: <20220108174749.2898891-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220108175811.2978380-1-fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/babeltrace2: bump to version
- 2.0.4
+In-Reply-To: <20220108174749.2898891-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/refpolicy: bump to version
+ 2.20220106
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +91,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: Antoine Tenart <atenart@kernel.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,11 +99,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 08/01/2022 18:58, Fabrice Fontaine wrote:
-> - Drop second patch (already in version)
-> - Update indentation in hash file (two spaces)
+On 08/01/2022 18:47, Fabrice Fontaine wrote:
+> Drop patches (already in version)
 > 
-> https://github.com/efficios/babeltrace/releases/tag/v2.0.4
+> https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20220106
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -116,107 +112,187 @@ On 08/01/2022 18:58, Fabrice Fontaine wrote:
   Arnout
 
 > ---
->   ...trace_ir_ref.c-rename-user-structure.patch | 57 -------------------
->   package/babeltrace2/babeltrace2.hash          | 12 ++--
->   package/babeltrace2/babeltrace2.mk            |  2 +-
->   3 files changed, 7 insertions(+), 64 deletions(-)
->   delete mode 100644 package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+>   ...ervices-samba.te-make-crack-optional.patch | 83 -------------------
+>   ...ervices-wireguard.te-make-iptables-o.patch | 54 ------------
+>   package/refpolicy/refpolicy.hash              |  2 +-
+>   package/refpolicy/refpolicy.mk                |  2 +-
+>   4 files changed, 2 insertions(+), 139 deletions(-)
+>   delete mode 100644 package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
+>   delete mode 100644 package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
 > 
-> diff --git a/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch b/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+> diff --git a/package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch b/package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
 > deleted file mode 100644
-> index ac9eee82d8..0000000000
-> --- a/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+> index 2dae5d4a76..0000000000
+> --- a/package/refpolicy/2.20210908/0001-policy-modules-services-samba.te-make-crack-optional.patch
 > +++ /dev/null
-> @@ -1,57 +0,0 @@
-> -From 7a27f13c192d15cae47740f3e884bba16f15ed41 Mon Sep 17 00:00:00 2001
+> @@ -1,83 +0,0 @@
+> -From 7c58f2508efc115dea03e18e1fa611ebf81f6ee6 Mon Sep 17 00:00:00 2001
 > -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sat, 26 Sep 2020 22:03:10 +0200
-> -Subject: [PATCH] tests/lib/test_trace_ir_ref.c: rename user structure
+> -Date: Wed, 4 Aug 2021 11:12:01 +0200
+> -Subject: [PATCH] policy/modules/services/samba.te: make crack optional
 > -
-> -Rename user structure to bt_user to avoid the following build failure
-> -with uclibc:
+> -Make crack optional to avoid the following build failure:
 > -
-> -test_trace_ir_ref.c:41:8: error: redefinition of 'struct user'
-> - struct user {
-> -        ^
-> -In file included from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/procfs.h:33,
-> -                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:25,
-> -                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:329,
-> -                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
-> -                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib.h:34,
-> -                 from ../../src/common/assert.h:28,
-> -                 from ../../src/lib/object.h:28,
-> -                 from test_trace_ir_ref.c:25:
-> -/home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/user.h:48:8: note: originally defined here
-> - struct user
-> -        ^~~~
+> - Compiling targeted policy.31
+> - env LD_LIBRARY_PATH="/tmp/instance-5/output-1/host/lib:/tmp/instance-5/output-1/host/usr/lib" /tmp/instance-5/output-1/host/usr/bin/checkpolicy -c 31 -U deny -S -O -E policy.conf -o policy.31
+> - policy/modules/services/samba.te:399:ERROR 'type crack_db_t is not within scope' at token ';' on line 360232:
+> - 	allow smbd_t crack_db_t:dir { getattr search open };
+> - #line 399
+> - checkpolicy:  error(s) encountered while parsing configuration
 > -
 > -Fixes:
-> - - http://autobuild.buildroot.org/results/e4229e2b9c892b419a9d2eaa6929b80ea62dd130
+> - - http://autobuild.buildroot.org/results/ab7098948d1920e42fa587e07f0513f23ba7fc74
 > -
 > -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/efficios/babeltrace/pull/115]
+> -[Upstream status: https://github.com/SELinuxProject/refpolicy/pull/407]
 > ----
-> - tests/lib/test_trace_ir_ref.c | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
+> - policy/modules/services/samba.te | 32 ++++++++++++++++++--------------
+> - 1 file changed, 18 insertions(+), 14 deletions(-)
 > -
-> -diff --git a/tests/lib/test_trace_ir_ref.c b/tests/lib/test_trace_ir_ref.c
-> -index d5dfa9cf..70caf29c 100644
-> ---- a/tests/lib/test_trace_ir_ref.c
-> -+++ b/tests/lib/test_trace_ir_ref.c
-> -@@ -25,7 +25,7 @@
+> -diff --git a/policy/modules/services/samba.te b/policy/modules/services/samba.te
+> -index 9d4665ae6..6c37625a9 100644
+> ---- a/policy/modules/services/samba.te
+> -+++ b/policy/modules/services/samba.te
+> -@@ -396,8 +396,6 @@ userdom_signal_all_users(smbd_t)
+> - userdom_home_filetrans_user_home_dir(smbd_t)
+> - userdom_user_home_dir_filetrans_user_home_content(smbd_t, { dir file lnk_file sock_file fifo_file })
 > -
-> - #define NR_TESTS 37
+> --usermanage_read_crack_db(smbd_t)
+> --
+> - ifdef(`hide_broken_symptoms',`
+> - 	files_dontaudit_getattr_default_dirs(smbd_t)
+> - 	files_dontaudit_getattr_boot_dirs(smbd_t)
+> -@@ -413,18 +411,6 @@ tunable_policy(`samba_create_home_dirs',`
+> - 	userdom_create_user_home_dirs(smbd_t)
+> - ')
 > -
-> --struct user {
-> -+struct bt_user {
-> - 	bt_trace_class *tc;
-> - 	bt_stream_class *sc;
-> - 	bt_event_class *ec;
-> -@@ -265,7 +265,7 @@ static void test_example_scenario(bt_self_component_source *self_comp)
-> - 	bt_stream_class *weak_sc1 = NULL, *weak_sc2 = NULL;
-> - 	bt_event_class *weak_ec1 = NULL, *weak_ec2 = NULL,
-> - 			*weak_ec3 = NULL;
-> --	struct user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
-> -+	struct bt_user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
+> --tunable_policy(`samba_domain_controller',`
+> --	gen_require(`
+> --		class passwd passwd;
+> --	')
+> --
+> --	usermanage_domtrans_passwd(smbd_t)
+> --	usermanage_kill_passwd(smbd_t)
+> --	usermanage_domtrans_useradd(smbd_t)
+> --	usermanage_domtrans_groupadd(smbd_t)
+> --	allow smbd_t self:passwd passwd;
+> --')
+> --
+> - tunable_policy(`samba_enable_home_dirs',`
+> - 	userdom_manage_user_home_content_dirs(smbd_t)
+> - 	userdom_manage_user_home_content_files(smbd_t)
+> -@@ -505,6 +491,24 @@ optional_policy(`
+> - 	seutil_sigchld_newrole(smbd_t)
+> - ')
 > -
-> - 	/* The only reference which exists at this point is on TC1. */
-> - 	tc1 = create_tc1(self_comp);
+> -+optional_policy(`
+> -+	usermanage_read_crack_db(smbd_t)
+> -+')
+> -+
+> -+optional_policy(`
+> -+	tunable_policy(`samba_domain_controller',`
+> -+		gen_require(`
+> -+			class passwd passwd;
+> -+		')
+> -+
+> -+		usermanage_domtrans_passwd(smbd_t)
+> -+		usermanage_kill_passwd(smbd_t)
+> -+		usermanage_domtrans_useradd(smbd_t)
+> -+		usermanage_domtrans_groupadd(smbd_t)
+> -+		allow smbd_t self:passwd passwd;
+> -+	')
+> -+')
+> -+
+> - ########################################
+> - #
+> - # Nmbd Local policy
 > ---
-> -2.28.0
+> -2.30.2
 > -
-> diff --git a/package/babeltrace2/babeltrace2.hash b/package/babeltrace2/babeltrace2.hash
-> index 27c47ba26f..164e65cded 100644
-> --- a/package/babeltrace2/babeltrace2.hash
-> +++ b/package/babeltrace2/babeltrace2.hash
-> @@ -1,8 +1,8 @@
-> -# From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.3.tar.bz2.sha256
-> -sha256 a53625152554102d868ba8395347d0daba0bec9c4b854c3e9bd97c77b0bf04a0  babeltrace2-2.0.3.tar.bz2
-> +# From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.4.tar.bz2.sha256
-> +sha256  774f116685dab5db9c51577dde43c8c1df482aae6bb78a089b1e9e7c8b489bca  babeltrace2-2.0.4.tar.bz2
+> diff --git a/package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch b/package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
+> deleted file mode 100644
+> index 4cd1f96558..0000000000
+> --- a/package/refpolicy/2.20210908/0002-policy-modules-services-wireguard.te-make-iptables-o.patch
+> +++ /dev/null
+> @@ -1,54 +0,0 @@
+> -From 67394d078c2e1438293b25d08cf408b0b0d55755 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Wed, 22 Sep 2021 23:55:59 +0200
+> -Subject: [PATCH] policy/modules/services/wireguard.te: make iptables optional
+> -
+> -Make iptables optional to avoid the following build failure raised since
+> -version 2.20210908 and
+> -https://github.com/SELinuxProject/refpolicy/commit/7f1a7b1cacd5d211077ce62fbb4e91890e65c820:
+> -
+> - Compiling targeted policy.33
+> - env LD_LIBRARY_PATH="/tmp/instance-0/output-1/host/lib:/tmp/instance-0/output-1/host/usr/lib" /tmp/instance-0/output-1/host/usr/bin/checkpolicy -c 33 -U deny -S -O -E policy.conf -o policy.33
+> - policy/modules/services/wireguard.te:66:ERROR 'type iptables_exec_t is not within scope' at token ';' on line 591892:
+> - #line 66
+> -	allow wireguard_t iptables_exec_t:file { getattr open map read execute ioctl };
+> - checkpolicy:  error(s) encountered while parsing configuration
+> - make[1]: *** [Rules.monolithic:79: policy.33] Error 1
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/a4223accc6adb70b06fd4e74ca4f28484446b6fa
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: https://github.com/SELinuxProject/refpolicy/pull/408]
+> ----
+> - policy/modules/services/wireguard.te | 10 ++++++----
+> - 1 file changed, 6 insertions(+), 4 deletions(-)
+> -
+> -diff --git a/policy/modules/services/wireguard.te b/policy/modules/services/wireguard.te
+> -index 7241f65e6..33fd3c55d 100644
+> ---- a/policy/modules/services/wireguard.te
+> -+++ b/policy/modules/services/wireguard.te
+> -@@ -61,10 +61,6 @@ corecmd_exec_shell(wireguard_t)
+> -
+> - domain_use_interactive_fds(wireguard_t)
+> -
+> --# wg-quick can be configured to run iptables and other networking
+> --# config tools when bringing up/down the wg interfaces
+> --iptables_domtrans(wireguard_t)
+> --
+> - # wg-quick tries to read /proc/filesystem when running "stat" and "mv" commands
+> - kernel_dontaudit_read_system_state(wireguard_t)
+> - kernel_dontaudit_search_kernel_sysctl(wireguard_t)
+> -@@ -75,3 +71,9 @@ miscfiles_read_localization(wireguard_t)
+> - sysnet_run_ifconfig(wireguard_t, wireguard_roles)
+> -
+> - userdom_use_user_terminals(wireguard_t)
+> -+
+> -+# wg-quick can be configured to run iptables and other networking
+> -+# config tools when bringing up/down the wg interfaces
+> -+optional_policy(`
+> -+	iptables_domtrans(wireguard_t)
+> -+')
+> ---
+> -2.33.0
+> -
+> diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+> index b8f6f023eb..b08c22ed4e 100644
+> --- a/package/refpolicy/refpolicy.hash
+> +++ b/package/refpolicy/refpolicy.hash
+> @@ -1,5 +1,5 @@
+>   # From https://github.com/SELinuxProject/refpolicy/releases
+> -sha256  4d3140d9fbb91322f5de36d73959464ce1d8946dcd149e36fcaf60e92444e902  refpolicy-2.20210908.tar.bz2
+> +sha256  965f98f0b68a24fd0b8e8d973d319332aea88973e1d6c455ef9c2a31aefaeaa6  refpolicy-2.20220106.tar.bz2
 >   
->   # Hash for license files
-> -sha256 d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
-> -sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-> -sha256 c68fd1ffc1623ea0dace21abf57305818e4998a4ae0c79010aaaa943eb660b55  lgpl-2.1.txt
-> -sha256 2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-> +sha256  d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
-> +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-> +sha256  c68fd1ffc1623ea0dace21abf57305818e4998a4ae0c79010aaaa943eb660b55  lgpl-2.1.txt
-> +sha256  2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-> diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
-> index 1e03f5fdd2..eedfc72b8c 100644
-> --- a/package/babeltrace2/babeltrace2.mk
-> +++ b/package/babeltrace2/babeltrace2.mk
-> @@ -5,7 +5,7 @@
->   ################################################################################
->   
->   BABELTRACE2_SITE = https://www.efficios.com/files/babeltrace
-> -BABELTRACE2_VERSION = 2.0.3
-> +BABELTRACE2_VERSION = 2.0.4
->   BABELTRACE2_SOURCE = babeltrace2-$(BABELTRACE2_VERSION).tar.bz2
->   BABELTRACE2_LICENSE = MIT, LGPL-2.1 (src/common/list.h), GPL-2.0 (test code)
->   BABELTRACE2_LICENSE_FILES = mit-license.txt lgpl-2.1.txt gpl-2.0.txt LICENSE
+>   # Locally computed
+>   sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+> index 975c3b584c..44c50af278 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+>   REFPOLICY_SITE_METHOD = git
+>   BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+>   else
+> -REFPOLICY_VERSION = 2.20210908
+> +REFPOLICY_VERSION = 2.20220106
+>   REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+>   REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
+>   endif
 > 
 _______________________________________________
 buildroot mailing list
