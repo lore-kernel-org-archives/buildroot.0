@@ -4,43 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7048C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92923C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 09:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C00A817EB;
-	Sat,  8 Jan 2022 09:50:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B71181460;
+	Sat,  8 Jan 2022 09:50:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X8lo_qHpGso5; Sat,  8 Jan 2022 09:50:30 +0000 (UTC)
+	with ESMTP id nue3fU4fTLqb; Sat,  8 Jan 2022 09:50:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9023B81460;
-	Sat,  8 Jan 2022 09:50:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE13C1BF343
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:49:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82AAA817BD;
+	Sat,  8 Jan 2022 09:50:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 482971BF343
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC9588145B
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:49:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4492D60745
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 09:50:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N9fPKobmBNe2 for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 09:49:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94C7C81460
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:49:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 99D0E82AB6; Sat,  8 Jan 2022 09:43:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4GBOdPcA3PbO for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 09:50:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1937960674
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 09:50:39 +0000 (UTC)
+Received: from fwd70.dcpf.telekom.de (fwd70.aul.t-online.de [10.223.144.96])
+ by mailout03.t-online.de (Postfix) with SMTP id 01A423DC3;
+ Sat,  8 Jan 2022 10:50:38 +0100 (CET)
+Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd70.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1n68Mv-0cS61h0; Sat, 8 Jan 2022 10:50:37 +0100
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55038)
+ by fli4l.lan.fli4l with esmtp (Exim 4.95)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1n68Mv-0003OF-FH;
+ Sat, 08 Jan 2022 10:50:37 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jan 2022 10:49:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4206de33e0dee3044fa36c555c48b439c3eeb0c
-X-Git-Newrev: 1b636c507c64792d91df336eb5c379b0bff17977
-X-Patchwork-Hint: ignore
-Message-Id: <20220108094337.99D0E82AB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exfatprogs: bump version to 1.1.3
+Date: Sat,  8 Jan 2022 10:50:37 +0100
+Message-Id: <20220108095037.1065173-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-TOI-EXPURGATEID: 150726::1641635437-00004E7B-ECD38E12/0/0 CLEAN NORMAL
+X-TOI-MSGID: f3f480d3-2bb4-4288-892d-80036e36feaa
+Subject: [Buildroot] [PATCH 1/1] package/libfribidi: bump version to 1.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,53 +61,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Mikhail Boiko <mikhailboiko85@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b636c507c64792d91df336eb5c379b0bff17977
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Updated license hash due to whitespace changes in upstream commit
-https://github.com/exfatprogs/exfatprogs/commit/7e30487e6d92f98e1ab91b037f5285453359ec9a
-
-Release notes: https://github.com/exfatprogs/exfatprogs/blob/master/NEWS
+Release notes: https://github.com/fribidi/fribidi/releases/tag/v1.0.11
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exfatprogs/exfatprogs.hash | 6 +++---
- package/exfatprogs/exfatprogs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libfribidi/libfribidi.hash | 2 +-
+ package/libfribidi/libfribidi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exfatprogs/exfatprogs.hash b/package/exfatprogs/exfatprogs.hash
-index 4dc18cd4b6..99f57c9deb 100644
---- a/package/exfatprogs/exfatprogs.hash
-+++ b/package/exfatprogs/exfatprogs.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/exfatprogs/exfatprogs/releases/download/1.1.0/exfatprogs-1.1.0.tar.xz.sha256
--sha256  69e2cf6430fc1d083c6ae0aea5eb80bf1b8e9775ed833bcd8331aef0fcacaf85  exfatprogs-1.1.0.tar.xz
-+# From https://github.com/exfatprogs/exfatprogs/releases/download/1.1.3/exfatprogs-1.1.3.tar.xz.sha256
-+sha256  3dbd74b60eec18d2c68d57be4a872d7baa4f7d848e669e31159452ef5245b809  exfatprogs-1.1.3.tar.xz
- 
- # Hash for license file
--sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/exfatprogs/exfatprogs.mk b/package/exfatprogs/exfatprogs.mk
-index e10acc9e5f..2911d21f4f 100644
---- a/package/exfatprogs/exfatprogs.mk
-+++ b/package/exfatprogs/exfatprogs.mk
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index 8e7eb49bcd..da25b2d24d 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f1c687c7831499bcacae5e8675945a39bacbad16ecaa945e9454a32df653c01  fribidi-1.0.10.tar.xz
++sha256  30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d  fribidi-1.0.11.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 97e875b4a2..adbd786db1 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXFATPROGS_VERSION = 1.1.0
-+EXFATPROGS_VERSION = 1.1.3
- EXFATPROGS_SOURCE = exfatprogs-$(EXFATPROGS_VERSION).tar.xz
- EXFATPROGS_SITE = https://github.com/exfatprogs/exfatprogs/releases/download/$(EXFATPROGS_VERSION)
- EXFATPROGS_LICENSE = GPL-2.0+
+-LIBFRIBIDI_VERSION = 1.0.10
++LIBFRIBIDI_VERSION = 1.0.11
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
+ LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
