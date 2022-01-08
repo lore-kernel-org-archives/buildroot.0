@@ -1,51 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA9BC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 18:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34C59C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 18:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C22B860AAC;
-	Sat,  8 Jan 2022 18:07:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0B474016C;
+	Sat,  8 Jan 2022 18:08:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vtp-CTSwMBNI; Sat,  8 Jan 2022 18:07:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9R5BhYAFCghy; Sat,  8 Jan 2022 18:08:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1260160A91;
-	Sat,  8 Jan 2022 18:07:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E9B621BF593
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:07:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06D3D4011F;
+	Sat,  8 Jan 2022 18:08:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FF461BF593
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E556981454
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:07:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A60C40127
+ for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 18:07:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NTb3dzfRZ8uk for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 18:07:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B74BA8144D
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:07:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 1F1331BF205;
- Sat,  8 Jan 2022 18:07:43 +0000 (UTC)
-Date: Sat, 8 Jan 2022 19:07:43 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Message-ID: <20220108190743.3ccfc87c@windsurf>
-In-Reply-To: <20200306071440.30433-5-miquel.raynal@bootlin.com>
-References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
- <20200306071440.30433-5-miquel.raynal@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/7] package/mali-bifrost-driver: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jJ5-kgsCMOL6 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jan 2022 18:07:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83C4A4011F
+ for <buildroot@buildroot.org>; Sat,  8 Jan 2022 18:07:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id BF08482BDD; Sat,  8 Jan 2022 18:01:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 8 Jan 2022 19:07:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d41f020bdc974a44b3e83da0daaa42ff109d157e
+X-Git-Newrev: 4afa6fd8c1457dce95b830da3ad3b0d255ca1d09
+X-Patchwork-Hint: ignore
+Message-Id: <20220108180145.BF08482BDD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hackrf: add a comma between
+ licenses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +53,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- buildroot@buildroot.org, Luca Ceresoli <luca@lucaceresoli.net>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  6 Mar 2020 08:14:37 +0100
-Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4afa6fd8c1457dce95b830da3ad3b0d255ca1d09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add a new package to build and install a generic ARM Mali Bifrost GPU
-> Linux kernel module.
-> 
-> This module is compliant with the standard kernel-module
-> infrastructure.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  package/Config.in                               |  1 +
->  package/mali-bifrost-driver/Config.in           | 17 +++++++++++++++++
->  .../mali-bifrost-driver.hash                    |  3 +++
->  .../mali-bifrost-driver/mali-bifrost-driver.mk  | 15 +++++++++++++++
->  4 files changed, 36 insertions(+)
->  create mode 100644 package/mali-bifrost-driver/Config.in
->  create mode 100644 package/mali-bifrost-driver/mali-bifrost-driver.hash
->  create mode 100644 package/mali-bifrost-driver/mali-bifrost-driver.mk
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/hackrf/hackrf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I finally applied, after renaming to "mali-driver", updating to the
-latest version, and doing a few small changes.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+index 391bddcdb0..d80f87e6b9 100644
+--- a/package/hackrf/hackrf.mk
++++ b/package/hackrf/hackrf.mk
+@@ -7,7 +7,7 @@
+ HACKRF_VERSION = 2018.01.1
+ HACKRF_SITE = https://github.com/mossmann/hackrf/releases/download/v$(HACKRF_VERSION)
+ HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
+-HACKRF_LICENSE = GPL-2.0+ BSD-3-Clause
++HACKRF_LICENSE = GPL-2.0+, BSD-3-Clause
+ HACKRF_LICENSE_FILES = COPYING
+ HACKRF_DEPENDENCIES = fftw-single libusb
+ HACKRF_SUBDIR = host
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
