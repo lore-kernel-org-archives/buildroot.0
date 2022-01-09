@@ -1,87 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6F8C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 21:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F0CC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 21:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39FCC404D4;
-	Sun,  9 Jan 2022 21:02:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80D704088F;
+	Sun,  9 Jan 2022 21:06:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0ALu_gthBcO; Sun,  9 Jan 2022 21:02:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kdjiytIcAM0a; Sun,  9 Jan 2022 21:06:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18E744058E;
-	Sun,  9 Jan 2022 21:02:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 173731BF44C
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:02:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAF104088A;
+	Sun,  9 Jan 2022 21:06:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91BFE1BF3C0
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05E62819E6
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:02:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BAD54058E
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:06:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZKPSbXKaZVGi for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 21:02:41 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zB3Rsac-Uz-N for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 21:06:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A09CE8198D
- for <buildroot@busybox.net>; Sun,  9 Jan 2022 21:02:41 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id l10so23065332wrh.7
- for <buildroot@busybox.net>; Sun, 09 Jan 2022 13:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC729404D4
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 21:06:12 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ a83-20020a1c9856000000b00344731e044bso6186431wme.1
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 13:06:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JSVsRkVmoTEbEqjrL80biA9znqxGpNQGqyFrYxraic4=;
- b=c3WU8bpKO8gVnWaxU2ZvUCFNQffWSgulNyII1J0m667TxFmAkkJGGwuBUBpxuhIp1/
- c968yll+pLAgM6HwePYUdntlTYAGLmG69gGKd0esdP2yARj3wpNYlZ9AvFkZ5rhswLcA
- 4oe1kVTsn+hWJvUiY/R01x8V7dVJOi5fBpHHYVD103sH86zhW4R2EknCVB3MEnDLxpsY
- aPg+bkOrP6XGnfAMHtCm5np2hlHlWO5lRHyyiB7yaBk0BdkfOsLtfxoFtL6fNI84zAoe
- zAOSj7hBGl3wHBGxKrHoE7bGpXZcsAg5+2OcE47oldqrEBbCLZTRN1kpCQJD/tlVsVhl
- fN5A==
+ bh=vYIdmuKx70gzPINgcxfBAib5RPSeg/pst+4oP02LNsM=;
+ b=Q5sI3bqJXpNQGntjYG0wPSakJgols3k193WOCB6pvkeLmpU9baLNqhcWzXh+esoAI+
+ pEpBHINQDWdXC51l5A0xbf3xghqmI/bNtZ5uuooFbSnWyAdg3MrGLASZqDdLLkZGe5Yu
+ NCT7O/qze3adCLnHhD45B7okBTpGTuPx49ZUP9Va1GqHrLWlcvX21/hMfs+Jmd9w4J8W
+ Y5vRCVSof61CJtdGXZ+NjF7+aUFjySl4jsVFvACuR3DkqSCPA4CJWQGKErP4fUJps97o
+ Fwj15u0KoOcvq507vYeJe7zulry/wYx4iNvYxzO20KYTttK4Dj+cLNEn6HodHphf1E2e
+ xOKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=JSVsRkVmoTEbEqjrL80biA9znqxGpNQGqyFrYxraic4=;
- b=8FV4J8/tQ9W8fuumWz+XUJnXxa1pLHlRlzx37p8cx6aMMfHlyeOaEFiuLibjkiwQqi
- Zy32XeyZLK4VRwb+tP7QQOASXknwLhUwrUtdR0uFT6C0JCN9aRXr7qc8A9p9eIq2LEnv
- T5i5yRsOSbqL7Ri5SIZyb77NubthOAoGRwmBAJrNq0I9c5lMDnhvDjhGOq2xfg1ADGN7
- Oo3izEp69P99GFuYFj6HDEp4Xge+CZGPwuxLWr5nde0NZeaQyjze1aLexLMZal5BjAHo
- TqpQwVB3WrYaYUXp6OJ8hcZWBbuCAI/QyAlwE+USTrgX0Pc/3ozPRQbUFQm8zpUZmpGn
- iE5g==
-X-Gm-Message-State: AOAM533jXnzNDZgDLHajhvIz2u0wY/nYQWi/a1XmDsBgycgXMsClPUDn
- 82MJM0736zdYHWFGXU/2tMghBA==
-X-Google-Smtp-Source: ABdhPJzvisxlypasLBdyDu3RXD0jrLHW0WOdS46C+0UHEB167FNSKWfpt3PTnLQqWGKODmMTkksoTg==
-X-Received: by 2002:a5d:644a:: with SMTP id d10mr5732646wrw.355.1641762159977; 
- Sun, 09 Jan 2022 13:02:39 -0800 (PST)
-Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
- ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id d5sm4757681wms.28.2022.01.09.13.02.39
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Jan 2022 13:02:39 -0800 (PST)
-Message-ID: <249a1325-0fe2-0691-b599-950d839665d4@mind.be>
-Date: Sun, 9 Jan 2022 22:02:38 +0100
+ bh=vYIdmuKx70gzPINgcxfBAib5RPSeg/pst+4oP02LNsM=;
+ b=4C7dTgzfD2CqnFBQBFTJ7it3k3PNuiOe/lPmg8CYgBHp8MOQN7KXBYTeSB9EFtCpyB
+ XYe2TI4X1esL6m48jnrIbaf+c3HF5w9iDaYGjLvfOt2swPLJBtg98G22iowYlsmOrf9/
+ rqughKGl/hXAU6jE96AY+x0YYktffW4RxECo3C+W/deKg+qx7LAGM/tcCNwenqr8L/sU
+ JJvt3UfC3lg0gXPc++a9x7m/ZlxwQ/tV+dqfM9pV9TjKokNQ7T5nVKeJIBF2sfAk8srv
+ dyYJYbf6728McIw1GZOp2pwq7GTf8uME2rAuC8NCTiSHop8tl025nxJ4uRiGlw1hi3BY
+ c5BA==
+X-Gm-Message-State: AOAM532WTfdc6Sc89709vZz5VeA1tY5l2NGyt8PENe5xL1pkrCy7CPLn
+ n3Kg+261EsujivJyB7fVj2njTeF1jgf61w==
+X-Google-Smtp-Source: ABdhPJxSVT9pyq3/DBXr+OJs6te3mI+K1yI0rd522K2LvjqBcCIe9sh1IdA+HqgJK9fjEY377gKxoQ==
+X-Received: by 2002:a05:600c:4f48:: with SMTP id
+ m8mr19981640wmq.158.1641762370964; 
+ Sun, 09 Jan 2022 13:06:10 -0800 (PST)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id o11sm5232219wmq.15.2022.01.09.13.06.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Jan 2022 13:06:10 -0800 (PST)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Sun,  9 Jan 2022 22:06:07 +0100
+Message-Id: <20220109210607.2270978-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: Peter Seiderer <ps.report@gmx.net>, buildroot@busybox.net
-References: <20210110222833.26301-1-ps.report@gmx.net>
- <20210110222833.26301-8-ps.report@gmx.net>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20210110222833.26301-8-ps.report@gmx.net>
-Subject: Re: [Buildroot] [RFC v2 07/12] package/vulkan-tools: new package
+Subject: [Buildroot] [PATCH v2] package/moby-buildkit: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,116 +89,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>, Julien Corjon <corjon.j@ecagroup.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Christian Stewart <christian@paral.in>
 
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Romain:
+  - remove host-pkgconf dependency
+  - Add the license file hash
+  - Fix the check-package warning in Config.in]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
 
-On 10/01/2021 23:28, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The license file hash was a copy past error.
+The 7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8 belong to
+balena-engine package from [1]
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://git.buildroot.net/buildroot/commit/?id=cb0d87004c824dc6bb421fe8316428d51e1335bd
+---
+ package/Config.in                        |  1 +
+ package/moby-buildkit/Config.in          | 19 +++++++++++++++++++
+ package/moby-buildkit/moby-buildkit.hash |  3 +++
+ package/moby-buildkit/moby-buildkit.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 package/moby-buildkit/Config.in
+ create mode 100644 package/moby-buildkit/moby-buildkit.hash
+ create mode 100644 package/moby-buildkit/moby-buildkit.mk
 
-  Rest of the series is Changes Requested because it all depends on vulkan-loader.
+diff --git a/package/Config.in b/package/Config.in
+index edae7e4f62..7bf17f486e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2554,6 +2554,7 @@ menu "System tools"
+ 	source "package/mender/Config.in"
+ 	source "package/mender-grubenv/Config.in"
+ 	source "package/mfoc/Config.in"
++	source "package/moby-buildkit/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/multipath-tools/Config.in"
+ 	source "package/ncdu/Config.in"
+diff --git a/package/moby-buildkit/Config.in b/package/moby-buildkit/Config.in
+new file mode 100644
+index 0000000000..93c852bcdb
+--- /dev/null
++++ b/package/moby-buildkit/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_MOBY_BUILDKIT
++	bool "moby-buildkit"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
++	help
++	  BuildKit is a toolkit for converting source code to build
++	  artifacts in an efficient, expressive and repeatable manner.
++
++	  https://github.com/moby/buildkit
++
++comment "moby-buildkit needs a glibc or musl toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_MMU
+diff --git a/package/moby-buildkit/moby-buildkit.hash b/package/moby-buildkit/moby-buildkit.hash
+new file mode 100644
+index 0000000000..3015e479f6
+--- /dev/null
++++ b/package/moby-buildkit/moby-buildkit.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  0cc31aa4b6dcdead63b07d75e0b89495ecffcc183f4f62695d8bb507433fc8ff  moby-buildkit-0.8.1.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
+new file mode 100644
+index 0000000000..3f0df351ef
+--- /dev/null
++++ b/package/moby-buildkit/moby-buildkit.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# moby-buildkit
++#
++################################################################################
++
++MOBY_BUILDKIT_VERSION = 0.8.1
++MOBY_BUILDKIT_SITE = $(call github,moby,buildkit,v$(MOBY_BUILDKIT_VERSION))
++MOBY_BUILDKIT_LICENSE = Apache-2.0
++MOBY_BUILDKIT_LICENSE_FILES = LICENSE
++
++MOBY_BUILDKIT_GOMOD = github.com/moby/buildkit
++
++MOBY_BUILDKIT_TAGS = cgo
++MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
++
++MOBY_BUILDKIT_LDFLAGS = \
++	-X $(MOBY_BUILDKIT_GOMOD)/version.Version="$(MOBY_BUILDKIT_VERSION)"
++
++MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(MOBY_BUILDKIT_BUILD_TARGETS))
++
++$(eval $(golang-package))
+-- 
+2.31.1
 
-  Regards,
-  Arnout
-
-> ---
-> Changes v1 -> v2:
->    - fix license SPDX (Yann E. MORIN)
->    - disable ICD (as it is only a mock ICD for testing purpouse)
-> ---
->   package/Config.in                      |  1 +
->   package/vulkan-tools/Config.in         | 17 +++++++++++++++++
->   package/vulkan-tools/vulkan-tools.hash |  3 +++
->   package/vulkan-tools/vulkan-tools.mk   | 25 +++++++++++++++++++++++++
->   4 files changed, 46 insertions(+)
->   create mode 100644 package/vulkan-tools/Config.in
->   create mode 100644 package/vulkan-tools/vulkan-tools.hash
->   create mode 100644 package/vulkan-tools/vulkan-tools.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 86676b57ef..b156d8de1a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -340,6 +340,7 @@ comment "Graphic libraries"
->   	source "package/tk/Config.in"
->   	source "package/vulkan-headers/Config.in"
->   	source "package/vulkan-loader/Config.in"
-> +	source "package/vulkan-tools/Config.in"
->   
->   comment "Other GUIs"
->   	source "package/qt5/Config.in"
-> diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
-> new file mode 100644
-> index 0000000000..54fa539dab
-> --- /dev/null
-> +++ b/package/vulkan-tools/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_VULKAN_TOOLS
-> +	bool "vulkan-tools"
-> +	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-> +	depends on !BR2_STATIC_LIBS # vullan-loader
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
-> +	select BR2_PACKAGE_VULKAN_HEADERS
-> +	select BR2_PACKAGE_VULKAN_LOADER
-> +
-> +	help
-> +	  The Khronos official Vulkan Tools and Utilities.
-> +
-> +	  https://github.com/KhronosGroup/Vulkan-Tools
-> +
-> +comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
-> new file mode 100644
-> index 0000000000..a4cf97ab34
-> --- /dev/null
-> +++ b/package/vulkan-tools/vulkan-tools.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  98a3a00471da65df833b4ffeb1ab29ec1d169d5feab54270cf4cd8f50f82e682  vulkan-tools-1.2.162.tar.gz
-> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-> diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
-> new file mode 100644
-> index 0000000000..129efddf3b
-> --- /dev/null
-> +++ b/package/vulkan-tools/vulkan-tools.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# vulkan-tools
-> +#
-> +################################################################################
-> +
-> +VULKAN_TOOLS_VERSION = 1.2.162
-> +VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
-> +VULKAN_TOOLS_LICENSE = Apache-2.0
-> +VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
-> +
-> +VULKAN_TOOLS_DEPENDENCIES = vulkan-headers vulkan-loader
-> +
-> +VULKAN_TOOLS_CONF_OPTS += \
-> +	-DBUILD_CUBE=OFF \
-> +	-DBUILD_VULKANINFO=ON \
-> +	-DBUILD_ICD=OFF \
-> +	-DINSTALL_ICD=OFF \
-> +	-DBUILD_WSI_XCB_SUPPORT=OFF \
-> +	-DBUILD_WSI_XLIB_SUPPORT=OFF \
-> +	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
-> +	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
-> +	-DUSE_CCACHE=OFF
-> +
-> +$(eval $(cmake-package))
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
