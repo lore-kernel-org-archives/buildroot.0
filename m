@@ -4,79 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2F5CC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A19AC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58579402D1;
-	Sun,  9 Jan 2022 22:18:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D10B0408A3;
+	Sun,  9 Jan 2022 22:19:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hcz82SBNMKDK; Sun,  9 Jan 2022 22:18:08 +0000 (UTC)
+	with ESMTP id bam3CzldtRUU; Sun,  9 Jan 2022 22:19:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F623402C4;
-	Sun,  9 Jan 2022 22:18:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A5C9E1BF41C
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:17:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36D17402D8;
+	Sun,  9 Jan 2022 22:19:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A1DC1BF41C
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:19:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93C3A8143B
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:17:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88A5960ACB
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:19:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nTD4bFfXZ0GS for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 22:17:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7KS6jrHIPHUs for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 22:19:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BDBFD81415
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:17:54 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id l10so23300458wrh.7
- for <buildroot@buildroot.org>; Sun, 09 Jan 2022 14:17:54 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CC37260669
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:19:41 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id o3so23306098wrh.10
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 14:19:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=QI9HHIewi4Io/453hZmHroH9qgMwPVWCLfjCawhZMo0=;
- b=nHjeJPDJh+bcupxoUs7H4zmKei0N2l85FMWvfFwydCKwbLqPH3bUGh25GS5VgWK+9E
- U+oLczRYdpWUawq9B3rFcdUVOojgr3VGahZw2WCQHgIUnFrZxoGG5GCudToJqDbndfTM
- c+fWS8M+ceASyt9UjnIkQHfaKWHmZHfrvcKnmGErGBWb5tqbtlzmogATzTorKoJvASx6
- vtxzP8f5WhSuHE2EwFmSCjCrWXSDL8G3LJkfnrVpymgDudW+4o3pQN9G2mVmNGGj2zZv
- cETTRXbTJaO7v+nWAiVfgWD+Drm+Fw8QEk1AZPmjBTNjzBTQLjChKaJ1lD8G0g4Br+8F
- RtGQ==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eqE88fT1aE9VwwiWr6gQ1NpYo8zcWEoWf0KzYNxsqZ0=;
+ b=H1bihEx+NyNpE1mrshGoAQgitm6hgf4IKQAZ8RHobLx53WDQG6B8kjtbOBNv05t/R8
+ tJ4bLOjsnmAhCIZzcP6FyLJQV5nXTF6dJGapJN9PtwOPpkN2YRkSR1eMZxhb0nx4QHwy
+ jvgKElxB6J49XvJnbUTHfKuUp+UKxRfN8pv+DZ4Uq4qfOjz+dk86qOYaM+/JbfjjklIN
+ 5wpwPVXQvwsJ0AaD5gnNWG17uY7ojK1UinzBvqVezARfzkMy9U9AJrZTrbpiVUZNHHhy
+ fEf4TtA5LNnU7OLxZO0prqw2N9HDnYSXkZZbNb4hlwDfe+4rwxF7btqDrU+VPs/MuTNC
+ wCpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=QI9HHIewi4Io/453hZmHroH9qgMwPVWCLfjCawhZMo0=;
- b=yL7vIju7N6O5cDo7k0m+tv7mJ3dQUfUgKq/KHXpOHL3YMGx/PwQjRgRD2n34yiVJia
- rgiOZL8HvSxxjKi2V8KxL9IPju7wILo95UwBXihx0Hixx2QGtOYHN3DZDJesJ2u+R3CP
- en7akzsrbirbLGwD2J5CEYNOwgELu3sgofyDcDkOkX6bHL/02s5vYwoqEWE9hLFHtrtl
- XmhkpZxBr5VWDyFNBIPUe2dnHg+jm5Ey2HnIzTuwMbmxmlurmcx+HNdPUACqC9dKd+DN
- brkRw1vlpclxtSQgmgYpN1vvqNFrlqKc2ZLGksOeaAvP1NRVR0BnU7V7DlaKb9UnOKbV
- SVlA==
-X-Gm-Message-State: AOAM530MwkYTg29VVR2gAaODKT36sTRXn5uEHzYsJsR7Qov0Dd6uDca+
- utDHxkcE2y/YreA3XBZSoMrBpQ0Pimw=
-X-Google-Smtp-Source: ABdhPJx9YdSvlJMEUsaG075Np/wtqHN2CrOiAMeny9y8zYVKtcZ2zI9WgiOdURoEGGNhHGQT/H9Ycg==
-X-Received: by 2002:a05:6000:107:: with SMTP id
- o7mr1757767wrx.414.1641766673047; 
- Sun, 09 Jan 2022 14:17:53 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eqE88fT1aE9VwwiWr6gQ1NpYo8zcWEoWf0KzYNxsqZ0=;
+ b=2mbrXWpib7lQTJDWIO9cIr1pVkaFHAhupgQ7T43afW/r8QPJJjViYfZUgsR2Bgre+0
+ 1fFe1jVP5JQJ+HnKgxHdSip26Vx4D3Wkq6Io1E3jV/OpNjh+hUW0qOsJERV21J2IHerM
+ Vnb0lShi5tGd1ijUPgLtJ1IEDWVG8NLmE0rfYOtg23gp5B8daN4KWHa07eQ9JU67W2ex
+ sc0Zu6NNHaTbvJj4+8xU9kwxiSCiyYjwDDP9iSzuibWewN6uXeW6SDD5v8QipOE3lS8H
+ D5PO0o2meq4LONs2sidN2pqqNejVaEnOxtTmvnpIm2RNqoaoe2jnB5gE0lYGBD6jj+1Y
+ HhfA==
+X-Gm-Message-State: AOAM532PPIkITEd15X5H0Wg935y2420KXI8IZR99YFdsLSxJUBcfzobA
+ xV0o6EtSV+MK5MTstZKqn6nZk5f4uAY=
+X-Google-Smtp-Source: ABdhPJziIsn+y10wGnnrEVAMvmyztwExnPsHEkPG2KSGuG+u6xzEt1wLP0eYuc0VcjpOzBrDMGtRVg==
+X-Received: by 2002:a05:6000:15c9:: with SMTP id
+ y9mr18207537wry.32.1641766779578; 
+ Sun, 09 Jan 2022 14:19:39 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
  [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id ay39sm4965950wmb.29.2022.01.09.14.17.52
+ by smtp.gmail.com with ESMTPSA id j16sm4336233wrp.76.2022.01.09.14.19.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Jan 2022 14:17:52 -0800 (PST)
+ Sun, 09 Jan 2022 14:19:39 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Jan 2022 23:16:33 +0100
-Message-Id: <20220109221633.1307381-2-fontaine.fabrice@gmail.com>
+Date: Sun,  9 Jan 2022 23:18:30 +0100
+Message-Id: <20220109221830.1343278-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220109221633.1307381-1-fontaine.fabrice@gmail.com>
-References: <20220109221633.1307381-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/hiawatha: disable ASM if needed
+Subject: [Buildroot] [PATCH 1/1] package/libvirt: drop C++ comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,59 +87,34 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Jared Bents <jared.bents@rockwellcollins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable ASM as already done in mbedtls package to avoid the following
-build failure raised since commit
-4e36e8f2081a66f477dd038793082045876d65ee:
-
-In file included from /home/buildroot/autobuild/instance-2/output-1/build/hiawatha-11.1/mbedtls/library/bignum.c:41:
-/home/buildroot/autobuild/instance-2/output-1/build/hiawatha-11.1/mbedtls/library/bignum.c: In function 'mpi_mul_hlp':
-/home/buildroot/autobuild/instance-2/output-1/build/hiawatha-11.1/mbedtls/library/bn_mul.h:86:13: error: the register 'hi' cannot be clobbered in 'asm' for the current target
-   86 | #define asm __asm
-      |             ^~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/5436b44777c5d417ae427b99602f516fd8f9489d
+Commit f81242ae4fb64ab85af5d38e70246222276552ae forgot to drop C++
+comment
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/hiawatha/hiawatha.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/libvirt/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index ed9f8aba54..14d3c9f1ee 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -22,6 +22,24 @@ HIAWATHA_CONF_OPTS = \
- 	-DWEBROOT_DIR=/var/www/hiawatha \
- 	-DWORK_DIR=/var/lib/hiawatha
+diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+index aeb560a498..5a6b067a0d 100644
+--- a/package/libvirt/Config.in
++++ b/package/libvirt/Config.in
+@@ -50,9 +50,6 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
+ 	  Build the libvirt daemon (libvirtd) otherwise build only the
+ 	  utility programs.
  
-+define HIAWATHA_MBEDTLS_DISABLE_ASM
-+	$(SED) '/^#define MBEDTLS_AESNI_C/d' \
-+		$(@D)/mbedtls/include/mbedtls/mbedtls_config.h
-+	$(SED) '/^#define MBEDTLS_HAVE_ASM/d' \
-+		$(@D)/mbedtls/include/mbedtls/mbedtls_config.h
-+	$(SED) '/^#define MBEDTLS_PADLOCK_C/d' \
-+		$(@D)/mbedtls/include/mbedtls/mbedtls_config.h
-+endef
-+
-+# ARM in thumb mode breaks debugging with asm optimizations
-+# Microblaze asm optimizations are broken in general
-+# MIPS R6 asm is not yet supported
-+ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-+HIAWATHA_POST_CONFIGURE_HOOKS += HIAWATHA_MBEDTLS_DISABLE_ASM
-+else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+HIAWATHA_POST_CONFIGURE_HOOKS += HIAWATHA_MBEDTLS_DISABLE_ASM
-+endif
-+
- ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
- HIAWATHA_CONF_OPTS += -DENABLE_TLS=ON
- else
+-comment "libvirtd needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP && !BR2_PACKAGE_NETCAT_OPENBSD
+-
+ # Stateful drivers are useful only when building the daemon.
+ if BR2_PACKAGE_LIBVIRT_DAEMON
+ 
 -- 
 2.34.1
 
