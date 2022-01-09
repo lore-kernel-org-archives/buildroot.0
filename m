@@ -1,47 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA51C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 312B3C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0D8E40579;
-	Sun,  9 Jan 2022 16:47:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C992240340;
+	Sun,  9 Jan 2022 16:48:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BZAGKjj2Aq2G; Sun,  9 Jan 2022 16:47:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id btaTchlV3_nm; Sun,  9 Jan 2022 16:48:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 787CA4059B;
-	Sun,  9 Jan 2022 16:47:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7FE0B1BF969
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:47:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFAAB4033B;
+	Sun,  9 Jan 2022 16:48:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 58B291BF48B
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 799A940495
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:47:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4706E60B12
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:48:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UrHjrcmQ0O3k for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 16:47:20 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F52C400CD
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 16:47:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 49CF382DF6; Sun,  9 Jan 2022 16:41:05 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i1TO8VqD1Q7j for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 16:48:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5F3F608A6
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 16:48:25 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtpfb2-g21.free.fr (Postfix) with ESMTP id 7E892428C44
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 17:48:22 +0100 (CET)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.89.173])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5DBC2B0054C;
+ Sun,  9 Jan 2022 17:48:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641746897;
+ bh=qv3/rgEBIZpweaiLxo/emQlR3tLJ8vhfjCGqJBPWC/M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GHWDlBTSUSPEQpbCBg3o+Nd8T3hCZTO7lIwWQPXy3WdtsuGCDr1IWXF4yQSdHEGJg
+ plZjuKvP+Zx51AR8WZa8uorWw8435aKNuuOP0BOoB9HFth8oaWEPhDKOShcabjPt/q
+ 6oeQvHxrAMsv3jokdI9K5TiJFn3vL3b30ekI/d1P4YRKiz2oHyq7X1kZZeefzWSy0Z
+ c1fVMUo3oPY3B4X51ZIa5vLdQm9WBjwD5umCPxx0wKeEVhSu6uzzrWbnAzdxaIcC7b
+ 6NrJWFbceieHcm5eRBFYs50IZOxJ1JLkkW7FbOKZIP40aXvYMldqoqLvTzPxYK9RZo
+ Cfoi7FqUVykQQ==
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 9 Jan 2022 17:47:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0378e2e5d9ce9d5676975dfbff501360094fdc1a
-X-Git-Newrev: 3f8fd984d89e25a2e1a2cc6d25c915ecd39c444b
-X-Patchwork-Hint: ignore
-Message-Id: <20220109164105.49CF382DF6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: make it aware of libglvnd
- and support it when present
+Date: Sun,  9 Jan 2022 17:47:55 +0100
+Message-Id: <20220109164756.1312023-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/2] package/riscv-isa-sim: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,130 +68,187 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f8fd984d89e25a2e1a2cc6d25c915ecd39c444b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Spike, the RISC-V ISA Simulator, implements a functional model of one
+or more RISC-V harts.
 
-When libglvnd is enabled, mesa3d must be told so, so as it installs its
-libraries with the vendor suffix (e.g. libEGL_mesa.so instead of
-libEGL.so).
+The host package provides an alternative solution to qemu.
 
-Additionally, the provider (in Buildroot parlance) is libglvnd, not mesa3d.
+https://github.com/riscv-software-src/riscv-isa-sim
 
-Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-[yann.morin.1998@free.fr:
-  - don't override the _PROVIDES variable, only assign when needed
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d/Config.in | 15 +++++++++------
- package/mesa3d/mesa3d.mk | 15 +++++++++++----
- 2 files changed, 20 insertions(+), 10 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/Config.in.host                        |  1 +
+ ...01-riscv-disable-precompiled-headers.patch | 34 +++++++++++++++++++
+ package/riscv-isa-sim/Config.in               | 18 ++++++++++
+ package/riscv-isa-sim/Config.in.host          | 13 +++++++
+ package/riscv-isa-sim/riscv-isa-sim.hash      |  3 ++
+ package/riscv-isa-sim/riscv-isa-sim.mk        | 13 +++++++
+ 8 files changed, 84 insertions(+)
+ create mode 100644 package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch
+ create mode 100644 package/riscv-isa-sim/Config.in
+ create mode 100644 package/riscv-isa-sim/Config.in.host
+ create mode 100644 package/riscv-isa-sim/riscv-isa-sim.hash
+ create mode 100644 package/riscv-isa-sim/riscv-isa-sim.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index c01f12529a..34b0352056 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -423,7 +423,8 @@ comment "gbm support needs a dri driver or a gallium driver w/ EGL support."
- config BR2_PACKAGE_MESA3D_OPENGL_GLX
- 	bool "OpenGL GLX"
- 	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_HAS_LIBGL if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_GL if BR2_PACKAGE_LIBGLVND
- 	select BR2_PACKAGE_MESA3D_NEEDS_X11
- 	help
- 	  Enable GLX graphic acceleration (OpenGL + X11).
-@@ -433,7 +434,8 @@ comment "OpenGL GLX support needs X11"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed65c74319..59a8dba2ab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1588,6 +1588,7 @@ F:	package/fluidsynth/
+ F:	package/glslsandbox-player/
+ F:	package/ptm2human/
+ F:	package/python-pyalsa/
++F:	package/riscv-isa-sim/
  
- config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
--	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBEGL if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_EGL if BR2_PACKAGE_LIBGLVND
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_MESA3D_GBM
- 	help
-@@ -442,7 +444,8 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 
- config BR2_PACKAGE_MESA3D_OPENGL_ES
- 	bool "OpenGL ES"
--	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_LIBGLES if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_GLES if BR2_PACKAGE_LIBGLVND
- 	help
- 	  Use the Khronos OpenGL ES APIs. This is commonly used on
- 	  embedded systems and represents a subset of the OpenGL API.
-@@ -453,13 +456,13 @@ config BR2_PACKAGE_PROVIDES_LIBGBM
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_GBM
- 
- config BR2_PACKAGE_PROVIDES_LIBGL
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBEGL
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBGLES
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index cd3a33a38e..e34ed4264f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -167,9 +167,9 @@ MESA3D_CONF_OPTS += -Dopengl=true
- # we do not need libva support in mesa3d, therefore disable this option
- MESA3D_CONF_OPTS += -Dgallium-va=disabled
- 
--# libGL is only provided for a full xorg stack
-+# libGL is only provided for a full xorg stack, without libglvnd
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
--MESA3D_PROVIDES += libgl
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgl)
- else
- define MESA3D_REMOVE_OPENGL_HEADERS
- 	rm -rf $(STAGING_DIR)/usr/include/GL/
-@@ -207,7 +207,7 @@ MESA3D_CONF_OPTS += \
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
--MESA3D_PROVIDES += libegl
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libegl)
- MESA3D_CONF_OPTS += \
- 	-Degl=enabled
- else
-@@ -216,7 +216,7 @@ MESA3D_CONF_OPTS += \
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
--MESA3D_PROVIDES += libgles
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgles)
- MESA3D_CONF_OPTS += -Dgles1=enabled -Dgles2=enabled
- else
- MESA3D_CONF_OPTS += -Dgles1=disabled -Dgles2=disabled
-@@ -271,4 +271,11 @@ ifeq ($(BR2_m68k),y)
- MESA3D_CFLAGS += -mlong-jump-table-offsets
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGLVND),y)
-+MESA3D_DEPENDENCIES += libglvnd
-+MESA3D_CONF_OPTS += -Dglvnd=true
-+else
-+MESA3D_CONF_OPTS += -Dglvnd=false
-+endif
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in b/package/Config.in
+index 85193f7802..b20cf45698 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2126,6 +2126,7 @@ menu "Miscellaneous"
+ 	source "package/proj/Config.in"
+ 	source "package/qemu/Config.in"
+ 	source "package/qpdf/Config.in"
++	source "package/riscv-isa-sim/Config.in"
+ 	source "package/rtl_433/Config.in"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/sunwait/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b3e00bb482..22aafb858a 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -77,6 +77,7 @@ menu "Host utilities"
+ 	source "package/qoriq-rcw/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
++	source "package/riscv-isa-sim/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch b/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch
+new file mode 100644
+index 0000000000..461f34e3a1
+--- /dev/null
++++ b/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch
+@@ -0,0 +1,34 @@
++From 980d5143089bf32ef8a6dfdf1bb9e9fe92fa7bf5 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sun, 9 Jan 2022 13:38:48 +0100
++Subject: [PATCH] riscv: disable precompiled headers
 +
- $(eval $(meson-package))
++While precompiling header, some toolchains fail with the message:
++
++    /path/to/toolchain/bin/ld: /path/to/sysroot/usr/lib/Scrt1.o: in function `_start':
++    (.text+0x54): undefined reference to `main'
++
++The patch totally disable precompiled headers.
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ riscv/riscv.mk.in | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/riscv/riscv.mk.in b/riscv/riscv.mk.in
++index 2347ce6..4f56eaf 100644
++--- a/riscv/riscv.mk.in
+++++ b/riscv/riscv.mk.in
++@@ -35,9 +35,6 @@ riscv_hdrs = \
++ 
++ riscv_install_hdrs = mmio_plugin.h
++ 
++-riscv_precompiled_hdrs = \
++-	insn_template.h \
++-
++ riscv_srcs = \
++ 	processor.cc \
++ 	execute.cc \
++-- 
++2.34.1
++
+diff --git a/package/riscv-isa-sim/Config.in b/package/riscv-isa-sim/Config.in
+new file mode 100644
+index 0000000000..1f5c8aad18
+--- /dev/null
++++ b/package/riscv-isa-sim/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_RISCV_ISA_SIM
++	bool "riscv-isa-sim"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	help
++	  Spike, the RISC-V ISA Simulator, implements a functional
++	  model of one or more RISC-V harts.
++
++	  https://github.com/riscv-software-src/riscv-isa-sim
++
++comment "riscv-isa-sim needs a toolchain w/ C++11, threads, wchar and dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || \
++		BR2_STATIC
+diff --git a/package/riscv-isa-sim/Config.in.host b/package/riscv-isa-sim/Config.in.host
+new file mode 100644
+index 0000000000..01a189a075
+--- /dev/null
++++ b/package/riscv-isa-sim/Config.in.host
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_HOST_RISCV_ISA_SIM
++	bool "host riscv-isa-sim"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	help
++	  Spike, the RISC-V ISA Simulator, implements a functional
++	  model of one or more RISC-V harts.
++
++	  The host package provides an alternative solution to qemu.
++
++	  https://github.com/riscv-software-src/riscv-isa-sim
++
++comment "host riscv-isa-sim needs a toolchain w/ C++11"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/riscv-isa-sim/riscv-isa-sim.hash b/package/riscv-isa-sim/riscv-isa-sim.hash
+new file mode 100644
+index 0000000000..d787a03e4c
+--- /dev/null
++++ b/package/riscv-isa-sim/riscv-isa-sim.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  9b29c220fed1e867e3bea4b5c565f2629237d525a4d9fe1668699c4406003a1f  riscv-isa-sim-1.1.0.tar.gz
++sha256  c65e436d18972c9c4bd192494fe4870bd2e158179474975b80a3559f27631632  LICENSE
+diff --git a/package/riscv-isa-sim/riscv-isa-sim.mk b/package/riscv-isa-sim/riscv-isa-sim.mk
+new file mode 100644
+index 0000000000..df5d4db9a2
+--- /dev/null
++++ b/package/riscv-isa-sim/riscv-isa-sim.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# riscv-isa-sim
++#
++################################################################################
++
++RISCV_ISA_SIM_VERSION = 1.1.0
++RISCV_ISA_SIM_SITE = $(call github,riscv-software-src,riscv-isa-sim,v$(RISCV_ISA_SIM_VERSION))
++RISCV_ISA_SIM_LICENSE = BSD-3-Clause
++RISCV_ISA_SIM_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
