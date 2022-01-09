@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D328C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:49:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4E8C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 099FE81A27;
-	Sun,  9 Jan 2022 22:49:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3512740231;
+	Sun,  9 Jan 2022 22:50:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pUYFK5m2PxRs; Sun,  9 Jan 2022 22:49:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lXl6knA456Q0; Sun,  9 Jan 2022 22:50:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 126AA81B9D;
-	Sun,  9 Jan 2022 22:49:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 150CD1BF41C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F82740305;
+	Sun,  9 Jan 2022 22:50:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DF451BF969
  for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CB3B60B87
+ by smtp2.osuosl.org (Postfix) with ESMTP id E96E740385
  for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eHppMCF7eyAX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hVXn5ioPqArX for <buildroot@lists.busybox.net>;
  Sun,  9 Jan 2022 22:49:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC6B560B71
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCD7A4010E
  for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:49:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3B9328324A; Sun,  9 Jan 2022 22:42:47 +0000 (UTC)
+ id 6F02C8324A; Sun,  9 Jan 2022 22:42:47 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 9 Jan 2022 23:45:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bcfce11044212166fc164d68f1dfdb01f3517a4a
-X-Git-Newrev: 4872d527319d710d5ebc04ed0b93b4e4a733e035
+X-Git-Oldrev: 0f51c6f6b5c75499bb55be913b5c3533d5a8f648
+X-Git-Newrev: 7be02d67a939a42e323cd199798f215197bf5f87
 X-Patchwork-Hint: ignore
-Message-Id: <20220109224247.3B9328324A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsigrok: fix C++ build with
- glibmm 2.68
+Message-Id: <20220109224247.6F02C8324A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-argon2-cffi-bindings: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,181 +59,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4872d527319d710d5ebc04ed0b93b4e4a733e035
+commit: https://git.buildroot.net/buildroot/commit/?id=7be02d67a939a42e323cd199798f215197bf5f87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cxx bindings are, silently, disabled since bump of glibmm to version
-2.68.2 in commit dddb65efbdf2c7952f22a1e51009f17f1676db4a resulting in
-the following build failure with pulseview:
-
---   Package 'libsigrokcxx', required by 'virtual:world', not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/ebb73892fd7471de4f0c109554dfdc65b93d3dcf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libsigrok/0001-Support-glibmm-2.68.patch | 129 +++++++++++++++++++++++
- package/libsigrok/libsigrok.mk                   |   3 +
- 2 files changed, 132 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-argon2-cffi-bindings/Config.in      | 11 ++++++++++
+ .../python-argon2-cffi-bindings.hash               |  5 +++++
+ .../python-argon2-cffi-bindings.mk                 | 25 ++++++++++++++++++++++
+ 5 files changed, 43 insertions(+)
 
-diff --git a/package/libsigrok/0001-Support-glibmm-2.68.patch b/package/libsigrok/0001-Support-glibmm-2.68.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e715d8d353..2aeb80844e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1291,6 +1291,7 @@ F:	package/python-aiorwlock/
+ F:	package/python-aiosignal/
+ F:	package/python-aiozipkin/
+ F:	package/python-argon2-cffi/
++F:	package/python-argon2-cffi-bindings/
+ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-bidict/
+diff --git a/package/Config.in b/package/Config.in
+index 5e01187b83..c9d099bd39 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -928,6 +928,7 @@ menu "External python modules"
+ 	source "package/python-ansicolors/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-argon2-cffi/Config.in"
++	source "package/python-argon2-cffi-bindings/Config.in"
+ 	source "package/python-arrow/Config.in"
+ 	source "package/python-asgiref/Config.in"
+ 	source "package/python-asn1crypto/Config.in"
+diff --git a/package/python-argon2-cffi-bindings/Config.in b/package/python-argon2-cffi-bindings/Config.in
 new file mode 100644
-index 0000000000..14d14ec406
+index 0000000000..3d409759e0
 --- /dev/null
-+++ b/package/libsigrok/0001-Support-glibmm-2.68.patch
-@@ -0,0 +1,129 @@
-+From 31ad5ec50ec0c9cc7a92f009925c5f58aecdcce1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 30 Dec 2021 14:58:11 +0100
-+Subject: [PATCH] Support glibmm 2.68
++++ b/package/python-argon2-cffi-bindings/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_ARGON2_CFFI_BINDINGS
++	bool "python-argon2-cffi-bindings"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_USE_MMU # libargon2
++	depends on !BR2_STATIC_LIBS # libargon2
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
++	select BR2_PACKAGE_LIBARGON2
++	help
++	  Low-level CFFI bindings for Argon2.
 +
-+Support glibmm 2.68 which has been released one year ago and is the
-+first stable release in the glibmm-2.68 ABI series:
-+https://gitlab.gnome.org/GNOME/glibmm/-/blob/2.68.2/NEWS
++	  https://github.com/hynek/argon2-cffi-bindings
+diff --git a/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash
+new file mode 100644
+index 0000000000..e088d3dad1
+--- /dev/null
++++ b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/argon2-cffi-bindings/json
++md5  f1591e1af7dea9ef3e5b982e2c196c1d  argon2-cffi-bindings-21.2.0.tar.gz
++sha256  bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3  argon2-cffi-bindings-21.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  9c158d4f433627f48ac24b6b4d37970afe4172514673c5318014d7cca157c6df  LICENSE
+diff --git a/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk
+new file mode 100644
+index 0000000000..f0d71e803a
+--- /dev/null
++++ b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# python-argon2-cffi-bindings
++#
++################################################################################
 +
-+As TimeVal is not available with glibmm 2.68, use DateTime which is
-+available since version 2.26
++PYTHON_ARGON2_CFFI_BINDINGS_VERSION = 21.2.0
++PYTHON_ARGON2_CFFI_BINDINGS_SOURCE = argon2-cffi-bindings-$(PYTHON_ARGON2_CFFI_BINDINGS_VERSION).tar.gz
++PYTHON_ARGON2_CFFI_BINDINGS_SITE = https://files.pythonhosted.org/packages/b9/e9/184b8ccce6683b0aa2fbb7ba5683ea4b9c5763f1356347f1312c32e3c66e
++PYTHON_ARGON2_CFFI_BINDINGS_SETUP_TYPE = setuptools
++PYTHON_ARGON2_CFFI_BINDINGS_LICENSE = MIT
++PYTHON_ARGON2_CFFI_BINDINGS_LICENSE_FILES = LICENSE
++PYTHON_ARGON2_CFFI_BINDINGS_DEPENDENCIES = \
++	host-python-cffi \
++	host-python-setuptools-scm \
++	libargon2
++PYTHON_ARGON2_CFFI_BINDINGS_ENV = ARGON2_CFFI_USE_SYSTEM=1
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/sigrok/mailman/message/37410614]
-+---
-+ README                                             |  2 +-
-+ bindings/cxx/classes.cpp                           | 13 ++++++-------
-+ bindings/cxx/include/libsigrokcxx/libsigrokcxx.hpp |  4 ++--
-+ bindings/cxx/libsigrokcxx.pc.in                    |  2 +-
-+ configure.ac                                       |  7 ++++++-
-+ 5 files changed, 16 insertions(+), 12 deletions(-)
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++PYTHON_ARGON2_CFFI_BINDINGS_ENV += ARGON2_CFFI_USE_SSE2=1
++else
++PYTHON_ARGON2_CFFI_BINDINGS_ENV += ARGON2_CFFI_USE_SSE2=0
++endif
 +
-+diff --git a/README b/README
-+index 768c8ca2..2515f059 100644
-+--- a/README
-++++ b/README
-+@@ -63,7 +63,7 @@ Requirements for the C++ bindings:
-+  - doxygen (required for building the bindings, not only for C++ API docs!)
-+  - graphviz (optional, only needed for the C++ API docs)
-+  - Python (2 or 3) executable (development files are not needed)
-+- - glibmm-2.4 (>= 2.32.0)
-++ - glibmm-2.4 (>= 2.32.0) or glibmm-2.68 (>= 2.68.0)
-+ 
-+ Requirements for the Python bindings:
-+ 
-+diff --git a/bindings/cxx/classes.cpp b/bindings/cxx/classes.cpp
-+index f9f79273..de600d03 100644
-+--- a/bindings/cxx/classes.cpp
-++++ b/bindings/cxx/classes.cpp
-+@@ -287,12 +287,12 @@ shared_ptr<UserDevice> Context::create_user_device(
-+ 		default_delete<UserDevice>{}};
-+ }
-+ 
-+-shared_ptr<Packet> Context::create_header_packet(Glib::TimeVal start_time)
-++shared_ptr<Packet> Context::create_header_packet(Glib::DateTime start_time)
-+ {
-+ 	auto header = g_new(struct sr_datafeed_header, 1);
-+ 	header->feed_version = 1;
-+-	header->starttime.tv_sec = start_time.tv_sec;
-+-	header->starttime.tv_usec = start_time.tv_usec;
-++	header->starttime.tv_sec = start_time.to_unix();
-++	header->starttime.tv_usec = start_time.get_microsecond();
-+ 	auto packet = g_new(struct sr_datafeed_packet, 1);
-+ 	packet->type = SR_DF_HEADER;
-+ 	packet->payload = header;
-+@@ -1154,11 +1154,10 @@ int Header::feed_version() const
-+ 	return _structure->feed_version;
-+ }
-+ 
-+-Glib::TimeVal Header::start_time() const
-++Glib::DateTime Header::start_time() const
-+ {
-+-	return Glib::TimeVal(
-+-		_structure->starttime.tv_sec,
-+-		_structure->starttime.tv_usec);
-++	Glib::DateTime time = Glib::DateTime::create_now_utc(_structure->starttime.tv_sec);
-++	return time.add_seconds(_structure->starttime.tv_usec / 1.0e6);
-+ }
-+ 
-+ Meta::Meta(const struct sr_datafeed_meta *structure) :
-+diff --git a/bindings/cxx/include/libsigrokcxx/libsigrokcxx.hpp b/bindings/cxx/include/libsigrokcxx/libsigrokcxx.hpp
-+index 97e54e17..d090c379 100644
-+--- a/bindings/cxx/include/libsigrokcxx/libsigrokcxx.hpp
-++++ b/bindings/cxx/include/libsigrokcxx/libsigrokcxx.hpp
-+@@ -274,7 +274,7 @@ public:
-+ 	std::shared_ptr<UserDevice> create_user_device(
-+ 		std::string vendor, std::string model, std::string version);
-+ 	/** Create a header packet. */
-+-	std::shared_ptr<Packet> create_header_packet(Glib::TimeVal start_time);
-++	std::shared_ptr<Packet> create_header_packet(Glib::DateTime start_time);
-+ 	/** Create a meta packet. */
-+ 	std::shared_ptr<Packet> create_meta_packet(
-+ 		std::map<const ConfigKey *, Glib::VariantBase> config);
-+@@ -711,7 +711,7 @@ public:
-+ 	/* Feed version number. */
-+ 	int feed_version() const;
-+ 	/* Start time of this session. */
-+-	Glib::TimeVal start_time() const;
-++	Glib::DateTime start_time() const;
-+ private:
-+ 	explicit Header(const struct sr_datafeed_header *structure);
-+ 	~Header();
-+diff --git a/bindings/cxx/libsigrokcxx.pc.in b/bindings/cxx/libsigrokcxx.pc.in
-+index 10a92f2d..7d2723fc 100644
-+--- a/bindings/cxx/libsigrokcxx.pc.in
-++++ b/bindings/cxx/libsigrokcxx.pc.in
-+@@ -6,7 +6,7 @@ includedir=@includedir@
-+ Name: libsigrokcxx
-+ Description: C++ bindings for libsigrok
-+ URL: http://www.sigrok.org
-+-Requires: libsigrok glibmm-2.4
-++Requires: libsigrok @SR_GLIBMM_REQUIRES@
-+ Version: @SR_PACKAGE_VERSION@
-+ Libs: -L${libdir} -lsigrokcxx
-+ Libs.private: -lm
-+diff --git a/configure.ac b/configure.ac
-+index 424b0002..d70575b7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -407,9 +407,14 @@ AS_IF([test "x$HAVE_CXX11" != x1],
-+ 	[SR_APPEND([sr_cxx_missing], [', '], ['C++11'])])
-+ 
-+ # The C++ bindings need glibmm.
-+-SR_PKG_CHECK([glibmm], [SR_PKGLIBS_CXX], [glibmm-2.4 >= 2.32.0])
-++SR_GLIBMM_REQUIRES=glibmm-2.4
-++SR_PKG_CHECK([glibmm], [SR_PKGLIBS_CXX], [$SR_GLIBMM_REQUIRES >= 2.32.0])
-++AS_IF([test "x$sr_have_glibmm" != xyes],
-++	[SR_GLIBMM_REQUIRES=glibmm-2.68
-++	SR_PKG_CHECK([glibmm], [SR_PKGLIBS_CXX], [$SR_GLIBMM_REQUIRES >= 2.68.0])])
-+ AS_IF([test "x$sr_have_glibmm" != xyes],
-+ 	[SR_APPEND([sr_cxx_missing], [', '], [glibmm])])
-++AC_SUBST(SR_GLIBMM_REQUIRES)
-+ 
-+ # The C++ bindings use Doxygen to parse libsigrok symbols.
-+ AC_CHECK_PROG([HAVE_DOXYGEN], [doxygen], [yes], [no])
-+-- 
-+2.34.1
-+
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 8e7c355fd0..2a26518614 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -11,6 +11,8 @@ LIBSIGROK_LICENSE_FILES = COPYING
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
- LIBSIGROK_CONF_OPTS = --disable-java --disable-python
-+# We're patching configure.ac
-+LIBSIGROK_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
- LIBSIGROK_CONF_OPTS += --with-libbluez
-@@ -52,6 +54,7 @@ LIBSIGROK_DEPENDENCIES += glibmm
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
-+LIBSIGROK_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++17"
- LIBSIGROK_CONF_OPTS += --enable-cxx
- # host-doxygen is used by C++ bindings to parse libsigrok symbols
- LIBSIGROK_DEPENDENCIES += \
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
