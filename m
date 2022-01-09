@@ -4,44 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C10DC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC56C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0A8A4057F;
-	Sun,  9 Jan 2022 16:32:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF18C40579;
+	Sun,  9 Jan 2022 16:33:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z0z-R0ZyCC0P; Sun,  9 Jan 2022 16:32:34 +0000 (UTC)
+	with ESMTP id 1UoSWqaCAyUi; Sun,  9 Jan 2022 16:33:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9034140593;
-	Sun,  9 Jan 2022 16:32:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 734071BF969
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:32:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC74D400CD;
+	Sun,  9 Jan 2022 16:33:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04AEC1BF48B
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6036881858
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:32:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E259F400CD
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:33:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id niPhclGQ57Na for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 16:32:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71C5F81842
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 16:32:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 909E582A93; Sun,  9 Jan 2022 16:26:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J7zdlCNlBZXP for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 16:33:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 880B4400A8
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 16:33:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 04343200005;
+ Sun,  9 Jan 2022 16:33:23 +0000 (UTC)
+Date: Sun, 9 Jan 2022 17:33:22 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sun, 9 Jan 2022 17:31:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ad7eb6c61d281912a8c692f0b69d46726394b10
-X-Git-Newrev: a206bbc5fe3453f8763268261c4a7aa6ba2c275d
-X-Patchwork-Hint: ignore
-Message-Id: <20220109162602.909E582A93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: account for
- unsure CVEs
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Message-ID: <20220109173322.7be771ad@windsurf>
+In-Reply-To: <20200921101515.132359-2-gregory.clement@bootlin.com>
+References: <20200921101515.132359-1-gregory.clement@bootlin.com>
+ <20200921101515.132359-2-gregory.clement@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v5 1/3] support/script/pkg-stats: Manage the
+ CVEs that need to be check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,102 +58,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a206bbc5fe3453f8763268261c4a7aa6ba2c275d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 21 Sep 2020 12:15:13 +0200
+Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 
-The .affects() method of the CVE class in support/scripts/cve.py can
-return 3 values: CVE_AFFECTS, CVE_DOESNT_AFFECT and CVE_UNKNOWN.
+> When looking for if a package is affected, the version comparison can
+> fail. This means that we don't know if the version of the package used
+> is affected or not and we need to check manually the version.
+> 
+> This patch exposes this new information in json and html format.
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  support/scripts/pkg-stats | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
 
-We of course properly account for CVEs where .affects() return
-CVE_AFFECTS, but the ones for which CVE_UNKNOWN is returned are
-currently ignored, and therefore treated as if they did not affect the
-package.
+I finally applied this patch, but after renaming the concept from "CVEs
+to check" to "unsure CVEs", and listing them in the same column as
+normal CVEs in the HTML rendering, but with a "(unsure)" notice next to
+them.
 
-However CVE_UNKNOWN in fact indicates that the v_start/v_end fields of
-the CPE entry could not be parsed by
-distutils.version.LooseVersion(). Instead of ignoring such cases, this
-commit adds support for the concept of "unsure CVEs", which will be
-listed next to CVEs known to affect the package, so that we are aware
-of them and can investigate the version issue.
+Thanks a lot!
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/pkg-stats | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a435abff3d..00ca5647ee 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -101,6 +101,7 @@ class Package:
-         self.cpeid = None
-         self.cves = list()
-         self.ignored_cves = list()
-+        self.unsure_cves = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-         self.status = {}
- 
-@@ -580,8 +581,11 @@ def check_package_cve_affects(cve, cpe_product_pkgs):
-         if product not in cpe_product_pkgs:
-             continue
-         for pkg in cpe_product_pkgs[product]:
--            if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid) == cve.CVE_AFFECTS:
-+            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
-+            if cve_status == cve.CVE_AFFECTS:
-                 pkg.cves.append(cve.identifier)
-+            elif cve_status == cve.CVE_UNKNOWN:
-+                pkg.unsure_cves.append(cve.identifier)
- 
- 
- def check_package_cves(nvd_path, packages):
-@@ -607,7 +611,7 @@ def check_package_cves(nvd_path, packages):
- 
-     for pkg in packages:
-         if 'cve' not in pkg.status:
--            if pkg.cves:
-+            if pkg.cves or pkg.unsure_cves:
-                 pkg.status['cve'] = ("error", "affected by CVEs")
-             else:
-                 pkg.status['cve'] = ("ok", "not affected by CVEs")
-@@ -662,8 +666,11 @@ def calculate_stats(packages):
-             stats["version-not-uptodate"] += 1
-         stats["patches"] += pkg.patch_count
-         stats["total-cves"] += len(pkg.cves)
-+        stats["total-unsure-cves"] += len(pkg.unsure_cves)
-         if len(pkg.cves) != 0:
-             stats["pkg-cves"] += 1
-+        if len(pkg.unsure_cves) != 0:
-+            stats["pkg-unsure-cves"] += 1
-         if pkg.cpeid:
-             stats["cpe-id"] += 1
-         else:
-@@ -921,6 +928,8 @@ def dump_html_pkg(f, pkg):
-     if pkg.is_status_error("cve"):
-         for cve in pkg.cves:
-             f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-+        for cve in pkg.unsure_cves:
-+            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s <i>(unsure)</i><br/>\n" % (cve, cve))
-     elif pkg.is_status_na("cve"):
-         f.write("    %s" % pkg.status['cve'][1])
-     else:
-@@ -1024,6 +1033,10 @@ def dump_html_stats(f, stats):
-             stats["pkg-cves"])
-     f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
-             stats["total-cves"])
-+    f.write("<tr><td>Packages affected by unsure CVEs</td><td>%s</td></tr>\n" %
-+            stats["pkg-unsure-cves"])
-+    f.write("<tr><td>Total number of unsure CVEs affecting all packages</td><td>%s</td></tr>\n" %
-+            stats["total-unsure-cves"])
-     f.write("<tr><td>Packages with CPE ID</td><td>%s</td></tr>\n" %
-             stats["cpe-id"])
-     f.write("<tr><td>Packages without CPE ID</td><td>%s</td></tr>\n" %
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
