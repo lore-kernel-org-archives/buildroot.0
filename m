@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A045C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C10DC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0D3C40546;
-	Sun,  9 Jan 2022 16:32:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0A8A4057F;
+	Sun,  9 Jan 2022 16:32:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id euQ6-IX2c0ay; Sun,  9 Jan 2022 16:32:21 +0000 (UTC)
+	with ESMTP id Z0z-R0ZyCC0P; Sun,  9 Jan 2022 16:32:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A753B400CD;
-	Sun,  9 Jan 2022 16:32:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E51A1BF48B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9034140593;
+	Sun,  9 Jan 2022 16:32:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 734071BF969
  for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:32:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 671F2400CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6036881858
  for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:32:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PJgFH6jrNupg for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id niPhclGQ57Na for <buildroot@lists.busybox.net>;
  Sun,  9 Jan 2022 16:32:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78973400A8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71C5F81842
  for <buildroot@buildroot.org>; Sun,  9 Jan 2022 16:32:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 991D282DEC; Sun,  9 Jan 2022 16:26:02 +0000 (UTC)
+ id 909E582A93; Sun,  9 Jan 2022 16:26:02 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Sun, 9 Jan 2022 17:31:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a206bbc5fe3453f8763268261c4a7aa6ba2c275d
-X-Git-Newrev: b102352b62917b053cae1f5d0591fe6507d81522
+X-Git-Oldrev: 5ad7eb6c61d281912a8c692f0b69d46726394b10
+X-Git-Newrev: a206bbc5fe3453f8763268261c4a7aa6ba2c275d
 X-Patchwork-Hint: ignore
-Message-Id: <20220109162602.991D282DEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add --disable
- option
+Message-Id: <20220109162602.909E582A93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: account for
+ unsure CVEs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,69 +59,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b102352b62917b053cae1f5d0591fe6507d81522
+commit: https://git.buildroot.net/buildroot/commit/?id=a206bbc5fe3453f8763268261c4a7aa6ba2c275d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When debugging pkg-stats, it's quite useful to be able to disable some
-features that are quite long (checking upstream URL, checking latest
-version, checking CVE). This commit adds a --disable option, which can
-take a comma-separated list of features to disable, such as:
+The .affects() method of the CVE class in support/scripts/cve.py can
+return 3 values: CVE_AFFECTS, CVE_DOESNT_AFFECT and CVE_UNKNOWN.
 
-     ./support/scripts/pkg-stats --disable url,upstream
+We of course properly account for CVEs where .affects() return
+CVE_AFFECTS, but the ones for which CVE_UNKNOWN is returned are
+currently ignored, and therefore treated as if they did not affect the
+package.
 
+However CVE_UNKNOWN in fact indicates that the v_start/v_end fields of
+the CPE entry could not be parsed by
+distutils.version.LooseVersion(). Instead of ignoring such cases, this
+commit adds support for the concept of "unsure CVEs", which will be
+listed next to CVEs known to affect the package, so that we are aware
+of them and can investigate the version issue.
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ support/scripts/pkg-stats | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 00ca5647ee..7e20ccc0da 100755
+index a435abff3d..00ca5647ee 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -1099,6 +1099,10 @@ def resolvepath(path):
-     return os.path.abspath(os.path.expanduser(path))
+@@ -101,6 +101,7 @@ class Package:
+         self.cpeid = None
+         self.cves = list()
+         self.ignored_cves = list()
++        self.unsure_cves = list()
+         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+         self.status = {}
+ 
+@@ -580,8 +581,11 @@ def check_package_cve_affects(cve, cpe_product_pkgs):
+         if product not in cpe_product_pkgs:
+             continue
+         for pkg in cpe_product_pkgs[product]:
+-            if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid) == cve.CVE_AFFECTS:
++            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
++            if cve_status == cve.CVE_AFFECTS:
+                 pkg.cves.append(cve.identifier)
++            elif cve_status == cve.CVE_UNKNOWN:
++                pkg.unsure_cves.append(cve.identifier)
  
  
-+def list_str(values):
-+    return values.split(',')
-+
-+
- def parse_args():
-     parser = argparse.ArgumentParser()
-     output = parser.add_argument_group('output', 'Output file(s)')
-@@ -1115,6 +1119,9 @@ def parse_args():
-                           help='List of packages (comma separated)')
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath)
-+    parser.add_argument('--disable', type=list_str,
-+                        help='Features to disable, comma-separated (cve, upstream, url)',
-+                        default=[])
-     args = parser.parse_args()
-     if not args.html and not args.json:
-         parser.error('at least one of --html or --json (or both) is required')
-@@ -1161,13 +1168,15 @@ def __main__():
-         pkg.set_url()
-         pkg.set_ignored_cves()
-         pkg.set_developers(developers)
--    print("Checking URL status")
--    loop = asyncio.get_event_loop()
--    loop.run_until_complete(check_package_urls(packages))
--    print("Getting latest versions ...")
--    loop = asyncio.get_event_loop()
--    loop.run_until_complete(check_package_latest_version(packages))
--    if args.nvd_path:
-+    if not "url" in args.disable:
-+        print("Checking URL status")
-+        loop = asyncio.get_event_loop()
-+        loop.run_until_complete(check_package_urls(packages))
-+    if not "upstream" in args.disable:
-+        print("Getting latest versions ...")
-+        loop = asyncio.get_event_loop()
-+        loop.run_until_complete(check_package_latest_version(packages))
-+    if not "cve" in args.disable and args.nvd_path:
-         print("Checking packages CVEs")
-         check_package_cves(args.nvd_path, packages)
-         check_package_cpes(args.nvd_path, packages)
+ def check_package_cves(nvd_path, packages):
+@@ -607,7 +611,7 @@ def check_package_cves(nvd_path, packages):
+ 
+     for pkg in packages:
+         if 'cve' not in pkg.status:
+-            if pkg.cves:
++            if pkg.cves or pkg.unsure_cves:
+                 pkg.status['cve'] = ("error", "affected by CVEs")
+             else:
+                 pkg.status['cve'] = ("ok", "not affected by CVEs")
+@@ -662,8 +666,11 @@ def calculate_stats(packages):
+             stats["version-not-uptodate"] += 1
+         stats["patches"] += pkg.patch_count
+         stats["total-cves"] += len(pkg.cves)
++        stats["total-unsure-cves"] += len(pkg.unsure_cves)
+         if len(pkg.cves) != 0:
+             stats["pkg-cves"] += 1
++        if len(pkg.unsure_cves) != 0:
++            stats["pkg-unsure-cves"] += 1
+         if pkg.cpeid:
+             stats["cpe-id"] += 1
+         else:
+@@ -921,6 +928,8 @@ def dump_html_pkg(f, pkg):
+     if pkg.is_status_error("cve"):
+         for cve in pkg.cves:
+             f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
++        for cve in pkg.unsure_cves:
++            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s <i>(unsure)</i><br/>\n" % (cve, cve))
+     elif pkg.is_status_na("cve"):
+         f.write("    %s" % pkg.status['cve'][1])
+     else:
+@@ -1024,6 +1033,10 @@ def dump_html_stats(f, stats):
+             stats["pkg-cves"])
+     f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
+             stats["total-cves"])
++    f.write("<tr><td>Packages affected by unsure CVEs</td><td>%s</td></tr>\n" %
++            stats["pkg-unsure-cves"])
++    f.write("<tr><td>Total number of unsure CVEs affecting all packages</td><td>%s</td></tr>\n" %
++            stats["total-unsure-cves"])
+     f.write("<tr><td>Packages with CPE ID</td><td>%s</td></tr>\n" %
+             stats["cpe-id"])
+     f.write("<tr><td>Packages without CPE ID</td><td>%s</td></tr>\n" %
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
