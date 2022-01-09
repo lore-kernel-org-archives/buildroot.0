@@ -1,51 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD1D3C433EF
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 08:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B8D7C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 16:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A3AD401AE;
-	Sat,  8 Jan 2022 08:17:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9978402FA;
+	Sun,  9 Jan 2022 16:28:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XkmgbN90sXfu; Sat,  8 Jan 2022 08:17:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7TquU9mEutPu; Sun,  9 Jan 2022 16:28:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5616B40124;
-	Sat,  8 Jan 2022 08:17:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 978FB1BF3F7
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:17:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 367F7402E9;
+	Sun,  9 Jan 2022 16:28:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B8E411BF48B
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B15B4023F
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 08:17:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A607960BA4
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 16:28:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id naYx6tU5ngTd for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 08:17:08 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C81D640124
- for <buildroot@uclibc.org>; Sat,  8 Jan 2022 08:17:08 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1n66uQ-0000YO-ED
- for buildroot@uclibc.org; Sat, 08 Jan 2022 09:17:06 +0100
-X-Injected-Via-Gmane: http://gmane.org/
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o4F0PhwzU8jw for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 16:28:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 010DF60A8D
+ for <buildroot@uclibc.org>; Sun,  9 Jan 2022 16:28:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 24A55814AA; Sun,  9 Jan 2022 16:21:59 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 08 Jan 2022 09:16:45 +0100
-Message-ID: <pan$ad6f$72209134$4bca0ad5$259acad9@ID-313208.user.individual.net>
-References: <20211106111145.1648068-1-bernd.kuhls@t-online.de>
- <20211106111145.1648068-3-bernd.kuhls@t-online.de>
- <87bl0njfg0.fsf__32796.2444674753$1641597992$gmane$org@dell.be.48ers.dk>
-Mime-Version: 1.0
-User-Agent: Pan/0.148 (Chamechaude; a70bd74)
-Subject: Re: [Buildroot] [PATCH v2 3/3] package/freeswitch: bump version to
- 1.10.7
+Date: Sun, 09 Jan 2022 16:28:13 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2021.08
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jacmet@uclibc.org
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-14451-163-pchqQHWRwz@https.bugs.busybox.net/>
+In-Reply-To: <bug-14451-163@https.bugs.busybox.net/>
+References: <bug-14451-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 14451] nodejs won't build on Fedora 35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,24 +74,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sat, 08 Jan 2022 00:26:07 +0100 schrieb Peter Korsgaard:
+https://bugs.busybox.net/show_bug.cgi?id=14451
 
-> This series was marked as superseeded in patchwork, but I applied it
-> anyway as freeswitch 1.10.7 fixes a number of fairly serious security
-> issues. Was there any specific reason why this was marked as
-> superseeded?
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Hi Peter,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-when posting the series I had not conducted a thorough runtime test. In 
-expectation of more backported patches needed from upstream I marked the 
-series as superseeded and lost track of the topic in the meantime.
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=5ad7eb6c61d281912a8c692f0b69d46726394b10,
+thanks
 
-But do not worry, the current package is fine, no other backported 
-patches are needed for my usecase.
-
-Regards, Bernd
-
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
