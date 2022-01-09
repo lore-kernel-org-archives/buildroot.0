@@ -1,65 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BB56C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3CE6C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5021980D1D;
-	Sun,  9 Jan 2022 22:36:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EC3C60B87;
+	Sun,  9 Jan 2022 22:41:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qc7pNMDtSG7L; Sun,  9 Jan 2022 22:36:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XOeMDg-t9fBZ; Sun,  9 Jan 2022 22:41:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C4A080D37;
-	Sun,  9 Jan 2022 22:36:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C451660B74;
+	Sun,  9 Jan 2022 22:41:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B16781BF41C
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:36:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 92C3D1BF41C
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9AB6D4045E
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:36:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E9CE40385
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:41:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4pqT_CXZ0qqF for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 22:36:30 +0000 (UTC)
+ with ESMTP id 20LF1_9h55de for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 22:41:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A3D2400FB
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:36:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:884e:4989:9dec:67ee])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C74AE5FF20;
- Sun,  9 Jan 2022 23:36:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641767788;
- bh=J5MR0HsG/bqj8prjOJ+5aL0dau74iCyphzs6n/tX3PU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VKPExCz0dV3ZIK9ZXNv3k/UD1Ni+wKM5ZI4hhPN/xpjgjRwgTo8Di6SqUFoNjAmLk
- FSKx2advc6xljj/nhfzOBWCiRZHS5NmXTfrCvUdCQbO3GxGrjdpg7bCPzrEd8Xq01m
- Gu9jOpTfEhGzz23DyXV73ybnCf8mkpsX3f55isr0YXXQUy3QKc85GA+UhElNa8wYwd
- tnU+e+YsnCNVvfNjoMb3/G5ZFpQFRv2YEpFhADVH03+Z59g68C5wDlLHuXR/42gWR5
- GKrnKmoraILT+hvXupZIdiFMxqW0r3vrKnqv9leLsOYQJjAxiZkBuf+61T3FjXJvul
- WKuUNtzISkU5Q==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 09 Jan 2022 23:36:25 +0100
-Date: Sun, 9 Jan 2022 23:36:25 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220109223625.GM1477939@scaer>
-References: <20220109222203.1397934-1-fontaine.fabrice@gmail.com>
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com
+ [IPv6:2607:f8b0:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9134B400FB
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:41:08 +0000 (UTC)
+Received: by mail-ot1-x335.google.com with SMTP id
+ h5-20020a9d6a45000000b005908066fa64so12488222otn.7
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 14:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=f7G7j9P7apQDZGZdCefVWSamWUgCH7KlWRVl8nzHz0U=;
+ b=bmpI4Bp5ZPwFWazr1knyv8us9TThh9ng/q5iM5eMpuWAqQxRiQ4z8K0iK3tM78v+8X
+ YfqU9QYMK5uO/YKZPrERANHIMFowk3ztbgzyn1UsCtPxB88DCspGLday0S9I4L3QCCbx
+ 6aqfM4JVLcpSMsz2EjcuD2AxsoJjUZm/60yIMMHaJx09oI8W7BNrF+xQf92Fjde4ZVkg
+ LK72PR7WrszrGZ+yR6SV3rE+kuTsiMYYoJApVQJB7x1uYEyPC+NwgFYEt0GPeLgFBpQp
+ 42sY9HI252XB5Jv+5MFPvPRhMft+H2GtaLBVHLYkIuk7pburB+qGjfO7/NugQbrzTOMM
+ UgKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=f7G7j9P7apQDZGZdCefVWSamWUgCH7KlWRVl8nzHz0U=;
+ b=shXlT/AKCubONtaWtnTO5ZiyqqJryP7oTeq7wndyqy+VjTf0NLYYU3Mk5SVBqCnqb3
+ uC8FEEE97ZnVGW1SdB4gj2HWn0x1Ugbk4VmAsBd9QSuGP04ixnCE8H5slNDzKpolmJNX
+ 1/62MZD1TmGt6lWDWZlLe+5ggFSxqY3M6CVNShY6/QuCKpAvJV7LBWm85vFSbUYd2qWW
+ QkhPz3YYiFBGOxeRdxRmert/yhy6ukoLkH5nvavvAUQ7epiC0CH6PR39AFWoAsXU+p/K
+ rgSKFHvdmYAvMvLHGrJTuhMhKVrBRJkOfllEZaT94mxDkq8Vr/2soWGXsoIbJ+sVp1T0
+ xIOQ==
+X-Gm-Message-State: AOAM5306R39b9zaOHkHXfMvvqiYpXMKjy+S2DiWwdS/85T7nInF1Xm1S
+ 5xgBWwCYYYSNw+0xgDOhzZK5yhl6TMfiC4/I+5E=
+X-Google-Smtp-Source: ABdhPJy/BS7LPhw3hwNYqN1twP/lDOExeF04yiqs//xPb7t5bpe0txA5B540wOmbB46uksxCZNBEGY6MIJQFQv81OLE=
+X-Received: by 2002:a9d:6f91:: with SMTP id h17mr4800822otq.151.1641768067455; 
+ Sun, 09 Jan 2022 14:41:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220109222203.1397934-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/avrdude: fix version
+References: <20201126152832.1115350-1-nolange79@gmail.com>
+ <CADvTj4p=60BwS0f6+UZABNYRw6BYph+qkTU7L9Gv+=LOJewsMQ@mail.gmail.com>
+ <CADYdroOofT_jFTyAFuTd+iZGbmYwFwofJ8aHYnuz4TAbk4C80A@mail.gmail.com>
+In-Reply-To: <CADYdroOofT_jFTyAFuTd+iZGbmYwFwofJ8aHYnuz4TAbk4C80A@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 9 Jan 2022 15:40:56 -0700
+Message-ID: <CADvTj4q4bR++z4YevSfa35Xxu7AUVMmS2o4mEtfP4WK3-cGx2A@mail.gmail.com>
+To: Norbert Lange <nolange79@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: Allow extra config
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,71 +84,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>, buildroot@buildroot.org
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+On Sat, Jan 8, 2022 at 2:31 PM Norbert Lange <nolange79@gmail.com> wrote:
+>
+> Am Sa., 8. Jan. 2022 um 20:04 Uhr schrieb James Hilliard
+> <james.hilliard1@gmail.com>:
+> >
+> > On Thu, Nov 26, 2020 at 8:28 AM Norbert Lange <nolange79@gmail.com> wrote:
+> > >
+> > > Systemd has very many options, adding a way for the user
+> > > to set custom options can help customizations
+> > > without changing buildroot files.
+> >
+> > I'm not sure this is a good idea, if a configuration option needs
+> > customizability it
+> > probably needs a specific kconfig option. Systemd config options tend to require
+> > dependency selection and special handling so this seems likely to cause
+> > spurious errors due to improper usage. Seems to be a pretty big footgun IMO.
+>
+> Sure, you are aware that many of my buildroot patches are stuck in limbo
+> since early 2020?
 
-On 2022-01-09 23:22 +0100, Fabrice Fontaine spake thusly:
-> Fix AVRDUDE_VERSION so that it matches what is returned by
-> release-monitoring.org
+Different issue IMO.
 
-Thanks for spotting that, I totally missed it...
+> Just doesnt seem feasible to timely fix everything and version bumps often leave
+> more untapped options. Some part of the necessity would be just being pragmatic.
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+I generally try to add any new options when bumping but I sometimes miss some.
 
-Applied to master, thanks.
+>
+> One example would be using the unified cgroups hierarchy
+> (-Ddefault-hierarchy=unified), hybrid is pretty much deprecated,
+> and some systemd features that buildroot allows to enable (OOMD for example)
+> wont work without it.
 
-Regards,
-Yann E. MORIN.
+I mean, this sounds like something that needs to be fixed in upstream buildroot.
 
-> ---
->  package/avrdude/avrdude.hash | 2 +-
->  package/avrdude/avrdude.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
-> index 1c7758afcd..d53d4dd60d 100644
-> --- a/package/avrdude/avrdude.hash
-> +++ b/package/avrdude/avrdude.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  bbe2cf09163b3561ea28e9d48c2a588838f7adcd7858e34ced9c886feacb5be6  avrdude-v6.4.tar.gz
-> +sha256  bbe2cf09163b3561ea28e9d48c2a588838f7adcd7858e34ced9c886feacb5be6  avrdude-6.4.tar.gz
->  sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  COPYING
-> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> index 5bbbc4e8c2..6a8e9074b7 100644
-> --- a/package/avrdude/avrdude.mk
-> +++ b/package/avrdude/avrdude.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -AVRDUDE_VERSION = v6.4
-> -AVRDUDE_SITE = $(call github,avrdudes,avrdude,$(AVRDUDE_VERSION))
-> +AVRDUDE_VERSION = 6.4
-> +AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
->  AVRDUDE_LICENSE = GPL-2.0+
->  AVRDUDE_LICENSE_FILES = COPYING
->  
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> >
+> > What systemd configure option would you want to be using that isn't
+> > currently able to be enabled?
+>
+> FYI those are the ones I currently use:
+>
+> -Ddefault-hierarchy=unified \
+> -Dutmp=false \
+> -Ddefault-dnssec=no \
+> -Didn=false \
+> -Denvironment-d=false \
+> -Dxdg-autostart=false \
+> -Ddns-over-tls=false \
+> -Ddefault-llmnr=no \
+> -Ddns-over-tls=false \
+> -Ddefault-mdns=no \
+> -Dlz4=false
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I'm seeing a lot of these added though(I remember adding some of them
+myself), are you
+trying to use a newer systemd than the version supported by the
+buildroot version you are
+building from?
+
+Note that systemd defaults can generally be overridden via configs in
+the overlay as well.
+
+>
+> Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
