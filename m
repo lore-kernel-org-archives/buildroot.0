@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 627C0C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 12:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49CAC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 12:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0182F400E9;
-	Sun,  9 Jan 2022 12:50:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 682AA4052F;
+	Sun,  9 Jan 2022 12:51:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dr2CpiCCe7Hy; Sun,  9 Jan 2022 12:50:58 +0000 (UTC)
+	with ESMTP id lSsBdpqGHmJX; Sun,  9 Jan 2022 12:51:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B8E9404A8;
-	Sun,  9 Jan 2022 12:50:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2617F40503;
+	Sun,  9 Jan 2022 12:51:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF19D1BF96B
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 12:50:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0EB8B1BF417
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 12:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA12040354
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 12:50:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5B1B40351
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 12:50:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KFiB_sE9ebLc for <buildroot@lists.busybox.net>;
+ with ESMTP id M-69y6QDmLt7 for <buildroot@lists.busybox.net>;
  Sun,  9 Jan 2022 12:50:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E20F40351
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E3E340336
  for <buildroot@buildroot.org>; Sun,  9 Jan 2022 12:50:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id B1CC082C0A; Sun,  9 Jan 2022 12:44:15 +0000 (UTC)
+ id 8A8BF82CFA; Sun,  9 Jan 2022 12:44:15 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Sun, 9 Jan 2022 13:48:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7a928f883b7f4c783b966fd6832332976517885
-X-Git-Newrev: 83319384fdb5d6666cb21ad915576385f232efb7
+X-Git-Oldrev: f90d23112d2b9d52d2368a0a3f907ba37e2c60ce
+X-Git-Newrev: eb49354eb34842f88218fcf9ef60576b85653e38
 X-Patchwork-Hint: ignore
-Message-Id: <20220109124415.B1CC082C0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: remove
- BR2_PACKAGE_SYSTEMD_TMPFILES completely
+Message-Id: <20220109124415.8A8BF82CFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: Update description and
+ kernel options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,73 +59,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83319384fdb5d6666cb21ad915576385f232efb7
+commit: https://git.buildroot.net/buildroot/commit/?id=eb49354eb34842f88218fcf9ef60576b85653e38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since tmpfiles is no longer optional, the Config.in symbol serves no
-purpose. It was only used in cryptsetup.mk, where we replace it with
-BR2_PACKAGE_SYSTEMD.
+realign the configuration to the README.
 
-Advise to do the same in Config.in.legacy.
+enable CONFIG_AUTOFS_FS (kernel >= 4.18) as well as the someday
+to be removed CONFIG_AUTOFS4_FS option.
 
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy                 | 9 +++++++++
- package/cryptsetup/cryptsetup.mk | 4 +---
- package/systemd/Config.in        | 4 ----
- 3 files changed, 10 insertions(+), 7 deletions(-)
+ package/systemd/Config.in  | 22 +++++++++++++++++-----
+ package/systemd/systemd.mk | 16 ++++++++++++----
+ 2 files changed, 29 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 75873ff74b..a9e95d6f58 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_SYSTEMD_TMPFILES
-+	bool "systemd tmpfiles support always enabled"
-+	select BR2_LEGACY
-+	help
-+	  The systemd tmpfiles support is always enabled, so the symbol
-+	  to make it optional has been removed. You need to update any
-+	  external packages that use this symbol to use
-+	  BR2_PACKAGE_SYSTEMD instead.
-+
- config BR2_PACKAGE_CIVETWEB_WITH_LUA
- 	bool "civetweb lua support option removed"
- 	select BR2_LEGACY
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 676cd25be4..9cfd647ac6 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -42,10 +42,8 @@ else
- CRYPTSETUP_CONF_OPTS += --disable-ssh-token
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- CRYPTSETUP_CONF_OPTS += --with-tmpfilesdir=/usr/lib/tmpfiles.d
--else
--CRYPTSETUP_CONF_OPTS += --without-tmpfilesdir
- endif
- 
- HOST_CRYPTSETUP_DEPENDENCIES = \
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 833c89eaa2..cc0736561e 100644
+index c8c5a9c47b..27a12bc947 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -500,10 +500,6 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on !BR2_STATIC_LIBS # kmod
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	select BR2_PACKAGE_HAS_UDEV
+@@ -51,13 +51,25 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  an elaborate transactional dependency-based service control
+ 	  logic.  It can work as a drop-in replacement for sysvinit.
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
+-	  Systemd requires a Linux kernel >= 3.0 with the following
++	  Systemd requires a Linux kernel >= 3.13 with the following
+ 	  options enabled:
  
--config BR2_PACKAGE_SYSTEMD_TMPFILES
--	bool
--	default y
--
- config BR2_PACKAGE_SYSTEMD_USERDB
- 	bool "enable userdb daemon"
- 	help
+-	  - CONFIG_CGROUPS
++	  - CONFIG_DEVTMPFS
++	  - CONFIG_CGROUPS (it is OK to disable all controllers)
+ 	  - CONFIG_INOTIFY_USER
+-	  - CONFIG_FHANDLE
+-	  - CONFIG_AUTOFS4_FS
++	  - CONFIG_SIGNALFD
++	  - CONFIG_TIMERFD
++	  - CONFIG_EPOLL
++	  - CONFIG_UNIX (it requires CONFIG_NET, but every other flag in
++	    it is not necessary)
++	  - CONFIG_SYSFS
++	  - CONFIG_PROC_FS
++	  - CONFIG_FHANDLE (libudev, mount and bind mount handling)
++
++	  - CONFIG_NET_NS (needed by PrivateNetwork=, used in some
++	    systemd units)
++
++	  - CONFIG_AUTOFS_FS / CONFIG_AUTOFS4_FS
+ 	  - CONFIG_TMPFS_POSIX_ACL
+ 	  - CONFIG_TMPFS_XATTR
+ 
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index d7d5e5289b..330619e206 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -725,14 +725,22 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+ SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+ 
+ define SYSTEMD_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_EPOLL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SIGNALFD)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_TIMERFD)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_FS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_EPOLL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_UNIX)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSFS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_FS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
++
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
++
++	$(call KCONFIG_DISABLE_OPT,CONFIG_SYSFS_DEPRECATED)
++
++	$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS_FS)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
