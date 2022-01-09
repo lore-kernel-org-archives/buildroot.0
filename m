@@ -1,82 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98390C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 03:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29F35C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 03:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0341400A9;
-	Sun,  9 Jan 2022 03:56:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEC1D405AA;
+	Sun,  9 Jan 2022 03:56:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s-v_ZNBY2Vc1; Sun,  9 Jan 2022 03:56:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aT6hoewHTPWh; Sun,  9 Jan 2022 03:56:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4402402DC;
-	Sun,  9 Jan 2022 03:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B83D64058B;
+	Sun,  9 Jan 2022 03:56:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BEB941BF2F2
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76A601BF2F2
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B3CC68174C
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64D1D8140D
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id piUnABShxXSy for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 03:56:09 +0000 (UTC)
+ with ESMTP id G0haVVpYnnw0 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD7E38140D
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 03:56:09 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id v10so8297114ilj.3
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 19:56:09 -0800 (PST)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97E3A81656
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id h23so12815570iol.11
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 19:56:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=5hpigwG3K+sAaxswoluVd07XPWWeq4ht2plyumlXBlU=;
- b=orESkkHxmWJzX6FNTc89b2mvIxlGWxiLKllqmBoa5U++azFGaPyR9IZpi6infndAwz
- tfMvsyytZPHqNnRv3QV+Cz7aG0ddrACQ6g8Ro7n9h0eaM+vBQrEBDDLgGC9qVVaeZNDu
- 3IjMyfkz5byyggfIHS0iI4e+eMsaWzhzcrN1MnHM8qfWkGUlZy08EGJwmPgJ+/naRTnn
- ixRjOPc54C7hXwbHnoiBbheYAe9HZWhDVB8/Lc4RBPf1IUA9Z+7PsstOq5xsaNu0SsS2
- OnmShvW3tonF1zafOI7/r/Lkk0MUJXi2Vtb88TWriKVVQH1Vk62yhLlVCmaCh/vBSR4c
- hFrw==
+ bh=U40BPliAvOK9O2CdGvm2Cr1slu+tNPMzL+N+P0KGzhw=;
+ b=kYKQL6ezwZ0dUw90mbboav+xzp1iPrl5+Xq90GKxBYyOkCJb1RLIu20ndl9fLq3ZGg
+ rCQUIH8weshLQSdzrvm1dL/BuxsPZISzc/r4d2vXhgn69cCelpZGrABdF/LHOvE3cBbu
+ ZD2KwRxhA5w4R0/69TrOJrLoufQiWvtIhwnHYV6E8er3zbRoz3dAWL/aWT93axylNp1V
+ 8BYrj5MMoTECzsXIDweTXHNsVJr+B/zvN+3NHb7p47uTzgJDmtsPVuBsdHkUVmQzgIwX
+ nWRfVCt/NRW2GweoDRhCQOhkZnrrGQqus0NyHDW91QSrvy+qugAZyo3QYqV+nVtD6o6b
+ iFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=5hpigwG3K+sAaxswoluVd07XPWWeq4ht2plyumlXBlU=;
- b=PhEkyV7Vuwj8GBAL5SshFXh58lpaERPCPG92YVuygjxzrJH6r+4KMmz53zqoH3iyED
- 5NYwl4+FkkoItieOhXwKyaxSYjCmeyObFFF7XcBRd3NXu6pr2CU6wbKSwkBJKf0juLl3
- 5jf5UiKqHPnnIi2E3l69Mcft/ae2GmGpfIhXRe5gGk0dYQhTeMz/AaofJ1wd9e5b0Od1
- it/3srA56orL/REeoeJTctFZgS+u2MERQrO3Mr+GgXduNMRomU62UHGxMO9jCFptcr2Q
- NGM/XsxLWz45uD0zRrZjHoBLROSYwr7bcnSrs7QrmthspZlIrH+l8ctCMjYQaAu2S4nH
- 2fBw==
-X-Gm-Message-State: AOAM533Gi1kUXkZO+XI+Re97lKwSvi+o0vrFJZtO76PcAItNlQ/OmTPI
- 6OdSyPtHeXo3n2Ymb2oi6KLfoWbZArc=
-X-Google-Smtp-Source: ABdhPJyjd0LIyvFwSNxLL3vUez8a/RJaM1Bkg0TsnfwjwBZ3urdjj14RHAmtw3AMufeTlVf+w/jCAQ==
-X-Received: by 2002:a05:6e02:1bc8:: with SMTP id
- x8mr30791800ilv.54.1641700568821; 
- Sat, 08 Jan 2022 19:56:08 -0800 (PST)
+ bh=U40BPliAvOK9O2CdGvm2Cr1slu+tNPMzL+N+P0KGzhw=;
+ b=Yg5KiaSDJgQ6mjGwa8Zp+3T199JeQcHug50KaHju3ydXslCfKfTAz1YZZRQOaKAqlu
+ hx6ZtH3/9bykQtTXKwC+iJEoeaKykJTreErzWxOL8YheHIHhhwwoIfQ7av1jh59QG3Q2
+ m7uKdY5tjQr5L68ObE42yc9sBNtf8TFoCMZoFUMrPAciWh6qtdROcAdWHax3VqTWhsu8
+ I+Yvf4KU74yFh767NPC1zYNru4rdFvGyqpM+SSFvFwk64tBu4RGU/A8mnlMa0cY+Aj36
+ HfQAhxnsJhak3KKcYW+X7x53B+Y6olUle/RM2J8ZQ80cso2gl27JB9+Ze62Bh7sQm0MM
+ Jnhw==
+X-Gm-Message-State: AOAM532kKdK3amYpR9EF/yq2NvfJPeXKpvzctM6r2SwSIHHj4596+8kf
+ iA2naANBs6kLVjpB/SOhnyeOHIotQ3A=
+X-Google-Smtp-Source: ABdhPJzjdc1Iq7OYJUgKsg79hg2waPIqxwEQn963lNKNnjzbw7U9ZY5o37mR/ZIK3umSR8K/bEZ5FQ==
+X-Received: by 2002:a05:6638:238a:: with SMTP id
+ q10mr34525096jat.294.1641700569487; 
+ Sat, 08 Jan 2022 19:56:09 -0800 (PST)
 Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
  [71.218.242.12])
  by smtp.gmail.com with ESMTPSA id l11sm1839833ilq.74.2022.01.08.19.56.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jan 2022 19:56:08 -0800 (PST)
+ Sat, 08 Jan 2022 19:56:09 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jan 2022 20:55:59 -0700
-Message-Id: <20220109035601.2483360-2-james.hilliard1@gmail.com>
+Date: Sat,  8 Jan 2022 20:56:00 -0700
+Message-Id: <20220109035601.2483360-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220109035601.2483360-1-james.hilliard1@gmail.com>
 References: <20220109035601.2483360-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/3] package/python-pep517: new package
+Subject: [Buildroot] [PATCH v3 2/3] package/python-pypa-build: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,45 +96,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Due to a namespace clash with python-build we need to use a different
+package name.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pep517/python-pep517.hash |  5 +++++
- package/python-pep517/python-pep517.mk   | 16 ++++++++++++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/python-pep517/python-pep517.hash
- create mode 100644 package/python-pep517/python-pep517.mk
+ .../python-pypa-build/python-pypa-build.hash  |  5 +++++
+ .../python-pypa-build/python-pypa-build.mk    | 19 +++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/python-pypa-build/python-pypa-build.hash
+ create mode 100644 package/python-pypa-build/python-pypa-build.mk
 
-diff --git a/package/python-pep517/python-pep517.hash b/package/python-pep517/python-pep517.hash
+diff --git a/package/python-pypa-build/python-pypa-build.hash b/package/python-pypa-build/python-pypa-build.hash
 new file mode 100644
-index 0000000000..4dd4c47fa0
+index 0000000000..c7daedc6b3
 --- /dev/null
-+++ b/package/python-pep517/python-pep517.hash
++++ b/package/python-pypa-build/python-pypa-build.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pep517/json
-+md5  7ed0adb5f737c316e071d48d66329a5d  pep517-0.12.0.tar.gz
-+sha256  931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0  pep517-0.12.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/build/json
++md5  ec3dbe55359ee735b45766b30dfad877  build-0.7.0.tar.gz
++sha256  1aaadcd69338252ade4f7ec1265e1a19184bf916d84c9b7df095f423948cb89f  build-0.7.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
-diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
++sha256  aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f  LICENSE
+diff --git a/package/python-pypa-build/python-pypa-build.mk b/package/python-pypa-build/python-pypa-build.mk
 new file mode 100644
-index 0000000000..da0431a637
+index 0000000000..6babade672
 --- /dev/null
-+++ b/package/python-pep517/python-pep517.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-pypa-build/python-pypa-build.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-pep517
++# python-pypa-build
 +#
 +################################################################################
 +
-+PYTHON_PEP517_VERSION = 0.12.0
-+PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
-+PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
-+PYTHON_PEP517_LICENSE = MIT
-+PYTHON_PEP517_LICENSE_FILES = LICENSE
-+PYTHON_PEP517_SETUP_TYPE = distutils
-+HOST_PYTHON_PEP517_NEEDS_HOST_PYTHON = python3
-+HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
++PYTHON_PYPA_BUILD_VERSION = 0.7.0
++PYTHON_PYPA_BUILD_SOURCE = build-$(PYTHON_PYPA_BUILD_VERSION).tar.gz
++PYTHON_PYPA_BUILD_SITE = https://files.pythonhosted.org/packages/f0/62/c73b775216bb1f34962beaf005f38460c6161177fef6e068a7a0c30a1597
++PYTHON_PYPA_BUILD_LICENSE = MIT
++PYTHON_PYPA_BUILD_LICENSE_FILES = LICENSE
++PYTHON_PYPA_BUILD_SETUP_TYPE = setuptools
++HOST_PYTHON_PYPA_BUILD_NEEDS_HOST_PYTHON = python3
++HOST_PYTHON_PYPA_BUILD_DEPENDENCIES = \
++	host-python-packaging \
++	host-python-pep517 \
++	host-python-tomli
 +
 +$(eval $(host-python-package))
 -- 
