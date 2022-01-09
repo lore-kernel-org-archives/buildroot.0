@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B99C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75FE5C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 830AF40339;
-	Sun,  9 Jan 2022 22:51:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22DBE404BC;
+	Sun,  9 Jan 2022 22:51:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VLJi2iJPjW6P; Sun,  9 Jan 2022 22:51:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wdP0TB8n89Ey; Sun,  9 Jan 2022 22:51:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2D9B40327;
-	Sun,  9 Jan 2022 22:51:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ACF2D1BF969
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A35B6404D4;
+	Sun,  9 Jan 2022 22:51:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 24D9D1BF41C
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B7E060B87
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12B1181A16
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:49:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HFPL22I6vDDr for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 22:49:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bRNDyDypkFqZ for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 22:49:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
 Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
  [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 855DB60B71
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:49:14 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id l10so23390765wrh.7
- for <buildroot@buildroot.org>; Sun, 09 Jan 2022 14:49:14 -0800 (PST)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C39781400
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:49:32 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id k18so23368791wrg.11
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 14:49:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=FD2CuC7MDJlSfueZi+l+odgeZSr8uVCJJKziZGEQUUw=;
- b=Wn+dRxoTHUFIIwLvLUjmqh528hSkH5DY8PjAnTdjAp8xERSr6//9gE6yGc5ZsrD/JF
- Fb+VXDJopFWatO7H165nwXYPF2dLtJiIuD7MOTgOY7yX7XMaMFc0y7G9N+ZJ6UZ9u9XI
- DjK1chGkZ6qXr1TgBEoLSHFn1nfiDMwUBd0WSGovxdAFw6Fy0h5OkqBNw7X+MXMaZTJ6
- eO+IU+3WlHV/f0RhhruQNPwyHD2HmMH5evHIybJrCe1AW23LgWII9q0Pwec3HedfhU56
- m1u1b/o++4KCGRmXVc/q+yvhKdcP27cqt6338/W0QyUQ74tNIeJjlIND7RQ/8aKcvRMo
- sMSg==
+ bh=AZtIfRBiC0v6tziW+xb7nXG9SUA/PNIgvIifZAnKKtY=;
+ b=LwOqFvUjfJDHnYGUurfv8VrVos9FVKqhgr4xsnNd0RXLjT/eHRGG0F5tmqwQQJ6D3G
+ skVgqpoNC/K4+NAXOKMKGcVIT0FWYfoxe4pCJKlH9lwA9c7biQiRItb7E1uDHnLySuiH
+ 3v+CuMCxDSEcd0XiR4gTFnNieWaD9C5WsJF4s7ll9pDLbW2kQQSBRL/UvKWVFcRqVai9
+ saghZ/H4AIrgx/TYdPPAEMa+JasuRloTyDsi6nJVdeUMg2WoIKqLdN3pCA9UYe9v93J4
+ 27nGw4Wi/2wL2fzSFR3p7JE6aiGt2oD3sJ/z/azLkJhO05gENH6FmCDY6XfoXZgDSRCk
+ Cvsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=FD2CuC7MDJlSfueZi+l+odgeZSr8uVCJJKziZGEQUUw=;
- b=nefsWIeWRPmo5ilpHDVbExoJnuaSJEMh17Xy6502h91OdVrCtU+2KA9/FAvqG5XDAE
- UlmqXhRgKbNi8vRrakdARU5WftNG7CqX6vAlTUm3fq/bEYc9PoDbMEhwbmnPfJiPOHfG
- G83pDB0BY8bouj/sPfp+pj70getFVzAdgPXoTnDO+79xHliDhe2bzzCfP6FBUD06bLkb
- DfYinVCOeL6JAZVCkctnDUbVXuZ41f7cIn6o0TEFRWpY1/aXamcBYO8RK0xYCANjU1vd
- TK97VRkJZ7qIyf9u8hDDC7Y21Aqjt1pF4p92EPRruka6r1nOuE/xBj0KkKyNpFfX/L4M
- zbZw==
-X-Gm-Message-State: AOAM533VNRMxkm2XklmTd4FRG7c4JPb0HSakvAcwjOr20sb09AlIkdSw
- rOLY6zLNfzIa3dW4+svYT/qBGA==
-X-Google-Smtp-Source: ABdhPJyM1zDVPbk7qdRjRhOQDDk1ZzYtHXSXv7J5LR2BhkmQ1C9WOuVwJWIHWdFZ0JwJWnaGGvywjg==
-X-Received: by 2002:a5d:456c:: with SMTP id a12mr1790480wrc.645.1641768552638; 
- Sun, 09 Jan 2022 14:49:12 -0800 (PST)
+ bh=AZtIfRBiC0v6tziW+xb7nXG9SUA/PNIgvIifZAnKKtY=;
+ b=Y824zE4IvcJaDTW5EGhkq4oKPsUNF8BP62QJtYbM2sDYH99I4gQWDzPi2JF1YuSLOw
+ wZE75QL8OGq3N7eP/LEnimadG0vcl9DtJv58JUZqb95znPh3+c3Jmgh4Kb6mt/qnKVTq
+ Hiydi+HE9q/7vW61NySODUPaAAx590Lk5ORN5qaKOw135aKPBHfxo8nsluuQ9utMcWy8
+ +N4a5afX+mDj3svpOw9IqopBcDR4KbmoCkA6s/XQUPJahyqyu9eA/vHfcOzauwz3ppwC
+ 0gdYQR3SN9oF+YkvtYcYdEljhxWVMu8GjPA2Ke+4fGMuJMftdUf0kNpLBrnu9Hc6u0M3
+ 01dw==
+X-Gm-Message-State: AOAM533anDHVHqsfJN6SPXGl/97CNs2Hji1zNDXZ4EB+cCrEQI3brSrZ
+ vzF9RgdcKbt4nfQN5d6jL8kt5Q==
+X-Google-Smtp-Source: ABdhPJxE4vinHCwwoVm30XTAM1ItMZD+qkAqfwuCeNDq+wPtA14IZ9R4qXQK6TS+M8F0ruRcw7U6Gg==
+X-Received: by 2002:a5d:6c6c:: with SMTP id r12mr63327221wrz.706.1641768570397; 
+ Sun, 09 Jan 2022 14:49:30 -0800 (PST)
 Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
  ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id z22sm5602723wmp.40.2022.01.09.14.49.11
+ by smtp.gmail.com with ESMTPSA id u3sm6302648wrs.0.2022.01.09.14.49.29
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Jan 2022 14:49:12 -0800 (PST)
-Message-ID: <756040b6-aff4-da3f-f6c8-468c58517288@mind.be>
-Date: Sun, 9 Jan 2022 23:49:11 +0100
+ Sun, 09 Jan 2022 14:49:30 -0800 (PST)
+Message-ID: <65a72688-6b48-47f0-f4b7-fffd5346e7ee@mind.be>
+Date: Sun, 9 Jan 2022 23:49:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220109035935.2698421-1-james.hilliard1@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220109171609.2527192-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220109035935.2698421-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-argon2-cffi-bindings:
- new package
+In-Reply-To: <20220109171609.2527192-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/vte: bump to version 0.66.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,8 +92,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,8 +100,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/01/2022 04:59, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 09/01/2022 18:16, Fabrice Fontaine wrote:
+> - Switch to meson-package and so replace host-intltool dependency by
+>    TARGET_NLS_DEPENDENCIES:
+>    https://gitlab.gnome.org/GNOME/vte/-/issues/87
+> - Retrieve upstream hash
+> - Switch license file to LGPL-3.0+:
+>    https://gitlab.gnome.org/GNOME/vte/-/commit/5e14529d4219f3792690566ef7ec70febd87e070
+> - Drop libxml2 dependency (not needed with meson)
+> - Add uclibc or glibc dependency, upstream doesn't want to support musl:
+>    https://gitlab.gnome.org/GNOME/vte/-/issues/72
+>    https://gitlab.gnome.org/GNOME/vte/-/issues/247
+> - Add optional icu dependency:
+>    https://gitlab.gnome.org/GNOME/vte/-/commit/9e4fbae2cabcd937ac4d1a984ba844d24b44b83f
+> - Add optional libfribidi dependency:
+>    https://gitlab.gnome.org/GNOME/vte/-/commit/7d3704f1c54e58443624355835f675ec22c6b9d3
+> - Add optional systemd dependency:
+>    https://gitlab.gnome.org/GNOME/vte/-/commit/81bd158c24ef1d716d3cbf801e72fda2e11b81b4
+> - Update indentation in hash file (two spaces)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
@@ -111,102 +127,235 @@ On 09/01/2022 04:59, James Hilliard wrote:
   Arnout
 
 > ---
-> Changes v1 -> v2:
->    - rebase on master
-> ---
->   DEVELOPERS                                    |  1 +
->   package/Config.in                             |  1 +
->   package/python-argon2-cffi-bindings/Config.in | 11 ++++++++
->   .../python-argon2-cffi-bindings.hash          |  5 ++++
->   .../python-argon2-cffi-bindings.mk            | 25 +++++++++++++++++++
->   5 files changed, 43 insertions(+)
->   create mode 100644 package/python-argon2-cffi-bindings/Config.in
->   create mode 100644 package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash
->   create mode 100644 package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk
+>   ...-with-kernel-headers-from-linux-4-13.patch | 54 +++++++++++++++++++
+>   ...or-fstack-protector-compiler-support.patch | 43 +++++++++++++++
+>   package/vte/Config.in                         |  7 +--
+>   package/vte/vte.hash                          |  8 +--
+>   package/vte/vte.mk                            | 45 +++++++++++-----
+>   5 files changed, 139 insertions(+), 18 deletions(-)
+>   create mode 100644 package/vte/0001-build-Fix-build-with-kernel-headers-from-linux-4-13.patch
+>   create mode 100644 package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3b544cae6b..c5186e029a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1291,6 +1291,7 @@ F:	package/python-aiorwlock/
->   F:	package/python-aiosignal/
->   F:	package/python-aiozipkin/
->   F:	package/python-argon2-cffi/
-> +F:	package/python-argon2-cffi-bindings/
->   F:	package/python-async-lru/
->   F:	package/python-async-timeout/
->   F:	package/python-bidict/
-> diff --git a/package/Config.in b/package/Config.in
-> index 378d6e8c0c..bc2113765b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -925,6 +925,7 @@ menu "External python modules"
->   	source "package/python-ansicolors/Config.in"
->   	source "package/python-argh/Config.in"
->   	source "package/python-argon2-cffi/Config.in"
-> +	source "package/python-argon2-cffi-bindings/Config.in"
->   	source "package/python-arrow/Config.in"
->   	source "package/python-asgiref/Config.in"
->   	source "package/python-asn1crypto/Config.in"
-> diff --git a/package/python-argon2-cffi-bindings/Config.in b/package/python-argon2-cffi-bindings/Config.in
+> diff --git a/package/vte/0001-build-Fix-build-with-kernel-headers-from-linux-4-13.patch b/package/vte/0001-build-Fix-build-with-kernel-headers-from-linux-4-13.patch
 > new file mode 100644
-> index 0000000000..3d409759e0
+> index 0000000000..7c3a5ab05e
 > --- /dev/null
-> +++ b/package/python-argon2-cffi-bindings/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_ARGON2_CFFI_BINDINGS
-> +	bool "python-argon2-cffi-bindings"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	depends on BR2_USE_MMU # libargon2
-> +	depends on !BR2_STATIC_LIBS # libargon2
-> +	select BR2_PACKAGE_PYTHON_CFFI # runtime
-> +	select BR2_PACKAGE_LIBARGON2
-> +	help
-> +	  Low-level CFFI bindings for Argon2.
+> +++ b/package/vte/0001-build-Fix-build-with-kernel-headers-from-linux-4-13.patch
+> @@ -0,0 +1,54 @@
+> +From 91123bb5201156e3d3adbe24305488f5eea2c8d7 Mon Sep 17 00:00:00 2001
+> +From: Christian Persch <chpe@src.gnome.org>
+> +Date: Mon, 27 Sep 2021 22:46:47 +0200
+> +Subject: [PATCH] build: Fix build with kernel headers from linux < 4.13
 > +
-> +	  https://github.com/hynek/argon2-cffi-bindings
-> diff --git a/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash
+> +We already support running with a kernel that doesn't support this
+> +ioctl, so let's also support building with one. Add the missing
+> +ioctl definition to missing.hh.
+> +
+> +Fixes: https://gitlab.gnome.org/GNOME/vte/-/issues/2514
+> +
+> +[Retrieved from:
+> +https://gitlab.gnome.org/GNOME/vte/-/commit/91123bb5201156e3d3adbe24305488f5eea2c8d7]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + src/missing.hh | 12 ++++++++++++
+> + 1 file changed, 12 insertions(+)
+> +
+> +diff --git a/src/missing.hh b/src/missing.hh
+> +index e5a58727..7902e41e 100644
+> +--- a/src/missing.hh
+> ++++ b/src/missing.hh
+> +@@ -23,11 +23,14 @@
+> + #include <fcntl.h>
+> +
+> + #ifdef __linux__
+> ++
+> ++#include <sys/ioctl.h>
+> + #include <sys/syscall.h>
+> +
+> + #if defined(__mips__) || defined(__mips64__)
+> + #include <asm/sgidefs.h>
+> + #endif
+> ++
+> + #endif
+> +
+> + /* NSIG isn't in POSIX, so if it doesn't exist use this here. See bug #759196 */
+> +@@ -128,4 +131,13 @@ char* strchrnul(char const* s,
+> + #define CLOSE_RANGE_CLOEXEC (1u << 2)
+> + #endif
+> +
+> ++#if !defined(TIOCGPTPEER)
+> ++/* See linux commit 54ebbfb1603415d9953c150535850d30609ef077 */
+> ++#if defined(__sparc__)
+> ++#define TIOCGPTPEER _IOR('t', 137, int)
+> ++#else
+> ++#define TIOCGPTPEER _IOR('T', 0x41, int)
+> ++#endif
+> ++#endif /* !TIOCGPTPEER */
+> ++
+> + #endif /* __linux__ */
+> +--
+> +GitLab
+> +
+> diff --git a/package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch b/package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch
 > new file mode 100644
-> index 0000000000..e088d3dad1
+> index 0000000000..67b6c47482
 > --- /dev/null
-> +++ b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/argon2-cffi-bindings/json
-> +md5  f1591e1af7dea9ef3e5b982e2c196c1d  argon2-cffi-bindings-21.2.0.tar.gz
-> +sha256  bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3  argon2-cffi-bindings-21.2.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  9c158d4f433627f48ac24b6b4d37970afe4172514673c5318014d7cca157c6df  LICENSE
-> diff --git a/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk
-> new file mode 100644
-> index 0000000000..f0d71e803a
-> --- /dev/null
-> +++ b/package/python-argon2-cffi-bindings/python-argon2-cffi-bindings.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# python-argon2-cffi-bindings
-> +#
-> +################################################################################
+> +++ b/package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch
+> @@ -0,0 +1,43 @@
+> +From e32dba1d5cf884959af5b2c0691db00c263ea048 Mon Sep 17 00:00:00 2001
+> +From: Christian Persch <chpe@src.gnome.org>
+> +Date: Mon, 27 Dec 2021 19:24:46 +0100
+> +Subject: [PATCH] build: Fix check for -fstack-protector* compiler support
 > +
-> +PYTHON_ARGON2_CFFI_BINDINGS_VERSION = 21.2.0
-> +PYTHON_ARGON2_CFFI_BINDINGS_SOURCE = argon2-cffi-bindings-$(PYTHON_ARGON2_CFFI_BINDINGS_VERSION).tar.gz
-> +PYTHON_ARGON2_CFFI_BINDINGS_SITE = https://files.pythonhosted.org/packages/b9/e9/184b8ccce6683b0aa2fbb7ba5683ea4b9c5763f1356347f1312c32e3c66e
-> +PYTHON_ARGON2_CFFI_BINDINGS_SETUP_TYPE = setuptools
-> +PYTHON_ARGON2_CFFI_BINDINGS_LICENSE = MIT
-> +PYTHON_ARGON2_CFFI_BINDINGS_LICENSE_FILES = LICENSE
-> +PYTHON_ARGON2_CFFI_BINDINGS_DEPENDENCIES = \
-> +	host-python-cffi \
-> +	host-python-setuptools-scm \
-> +	libargon2
-> +PYTHON_ARGON2_CFFI_BINDINGS_ENV = ARGON2_CFFI_USE_SYSTEM=1
+> +Need to use has_link_argument() on some platforms.
 > +
-> +ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-> +PYTHON_ARGON2_CFFI_BINDINGS_ENV += ARGON2_CFFI_USE_SSE2=1
+> +Fixes: https://gitlab.gnome.org/GNOME/vte/-/issues/2535
+> +
+> +[Retrieved from:
+> +https://gitlab.gnome.org/GNOME/vte/-/commit/e32dba1d5cf884959af5b2c0691db00c263ea048]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + meson.build | 6 ++++--
+> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 93b7f376..381d5d58 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -461,8 +461,6 @@ compiler_flags_common = [
+> +   '-fdiagnostics-show-option',
+> +   '-fno-common',
+> +   '-fno-semantic-interposition',
+> +-  '-fstack-protector',
+> +-  '-fstack-protector-strong',
+> + ]
+> +
+> + if enable_debug
+> +@@ -550,6 +548,10 @@ add_project_arguments(global_cxxflags, language: 'cpp')
+> + linker_flags = [
+> +   ['-Wl,-Bsymbolic', false,],
+> +   ['-Wl,-Bsymbolic-functions', get_option('_b_symbolic_functions'),],
+> ++
+> ++  # See issue vte#2535.
+> ++  ['-fstack-protector', false],
+> ++  ['-fstack-protector-strong', false],
+> + ]
+> +
+> + foreach flag: linker_flags
+> +--
+> +GitLab
+> +
+> diff --git a/package/vte/Config.in b/package/vte/Config.in
+> index 96de3d38cc..2635a6007c 100644
+> --- a/package/vte/Config.in
+> +++ b/package/vte/Config.in
+> @@ -7,11 +7,11 @@ config BR2_PACKAGE_VTE
+>   	depends on BR2_INSTALL_LIBSTDCPP
+>   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>   	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+>   	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+>   		BR2_PACKAGE_HAS_LIBGL
+>   	depends on BR2_PACKAGE_XORG7
+>   	select BR2_PACKAGE_LIBGTK3
+> -	select BR2_PACKAGE_LIBXML2
+>   	select BR2_PACKAGE_PCRE2
+>   	help
+>   	  VTE is a library (libvte) implementing a terminal emulator
+> @@ -22,13 +22,14 @@ config BR2_PACKAGE_VTE
+>   
+>   	  http://github.com/GNOME/vte
+>   
+> -comment "vte needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
+> +comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 4.8"
+>   	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+>   	depends on BR2_USE_MMU
+>   	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>   	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+>   		!BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+> +		BR2_TOOLCHAIN_USES_MUSL
+>   
+>   comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
+>   	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> diff --git a/package/vte/vte.hash b/package/vte/vte.hash
+> index 3fbc5acab0..90818d31f3 100644
+> --- a/package/vte/vte.hash
+> +++ b/package/vte/vte.hash
+> @@ -1,3 +1,5 @@
+> -# Locally calculated
+> -sha256	a3a9fb182740b392a45cd3f46fa61a985f68bb6b1817b52daec22034c46158c3  vte-0.48.3.tar.xz
+> -sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> +# Hash from: http://ftp.gnome.org/pub/gnome/sources/vte/0.66/vte-0.66.2.sha256sum
+> +sha256  e89974673a72a0a06edac6d17830b82bb124decf0cb3b52cebc92ec3ff04d976  vte-0.66.2.tar.xz
+> +
+> +# Hash for license file:
+> +sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  COPYING.LGPL3
+> diff --git a/package/vte/vte.mk b/package/vte/vte.mk
+> index 6c8d1433f5..07e813685e 100644
+> --- a/package/vte/vte.mk
+> +++ b/package/vte/vte.mk
+> @@ -4,26 +4,47 @@
+>   #
+>   ################################################################################
+>   
+> -VTE_VERSION = 0.48.3
+> +VTE_VERSION_MAJOR = 0.66
+> +VTE_VERSION = $(VTE_VERSION_MAJOR).2
+>   VTE_SOURCE = vte-$(VTE_VERSION).tar.xz
+> -VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/0.48
+> -VTE_DEPENDENCIES = host-intltool host-pkgconf libgtk3 libxml2 pcre2
+> -VTE_LICENSE = LGPL-2.1+
+> -VTE_LICENSE_FILES = COPYING
+> -VTE_CONF_OPTS += --disable-vala
+> +VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/$(VTE_VERSION_MAJOR)
+> +VTE_DEPENDENCIES = host-pkgconf libgtk3 pcre2 $(TARGET_NLS_DEPENDENCIES)
+> +VTE_LICENSE = LGPL-3.0+
+> +VTE_LICENSE_FILES = COPYING.LGPL3
+> +
+> +ifeq ($(BR2_PACKAGE_ICU),y)
+> +VTE_CONF_OPTS += -Dicu=true
+> +VTE_DEPENDENCIES += icu
 > +else
-> +PYTHON_ARGON2_CFFI_BINDINGS_ENV += ARGON2_CFFI_USE_SSE2=0
+> +VTE_CONF_OPTS += -Dicu=false
+> +endif
+>   
+>   ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> -VTE_CONF_OPTS += --enable-introspection
+> -VTE_DEPENDENCIES += gobject-introspection
+> +VTE_CONF_OPTS += -Dgir=true -Dvapi=true
+> +VTE_DEPENDENCIES += host-vala gobject-introspection
+>   else
+> -VTE_CONF_OPTS += --disable-introspection
+> +VTE_CONF_OPTS += -Dgir=false -Dvapi=false
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> -VTE_CONF_OPTS += --with-gnutls
+> +VTE_CONF_OPTS += -Dgnutls=true
+>   VTE_DEPENDENCIES += gnutls
+>   else
+> -VTE_CONF_OPTS += --without-gnutls
+> +VTE_CONF_OPTS += -Dgnutls=false
 > +endif
 > +
-> +$(eval $(python-package))
+> +ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
+> +VTE_CONF_OPTS += -Dfribidi=true
+> +VTE_DEPENDENCIES += libfribidi
+> +else
+> +VTE_CONF_OPTS += -Dfribidi=false
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +VTE_CONF_OPTS += -D_systemd=true
+> +VTE_DEPENDENCIES += systemd
+> +else
+> +VTE_CONF_OPTS += -D_systemd=false
+>   endif
+>   
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
 > 
 _______________________________________________
 buildroot mailing list
