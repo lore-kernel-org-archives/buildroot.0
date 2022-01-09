@@ -1,65 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F60C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 10:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D2BBC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 10:46:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A941160B2F;
-	Sun,  9 Jan 2022 10:36:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9D5281521;
+	Sun,  9 Jan 2022 10:46:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hinq8yfHtNXI; Sun,  9 Jan 2022 10:36:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V5hTre47wF40; Sun,  9 Jan 2022 10:46:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8A7260B28;
-	Sun,  9 Jan 2022 10:36:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C7BE1BF4DD
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:36:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EF0B8174F;
+	Sun,  9 Jan 2022 10:46:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E31E11BF4DD
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 153E7404EF
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:36:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2CC240319
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:46:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hc9QPyVjNOJK for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 10:36:12 +0000 (UTC)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 24uk4yBFn5xr for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 10:46:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9390540465
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 10:36:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4919:b1be:c8bf:308d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9D10F13F85F;
- Sun,  9 Jan 2022 11:36:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641724569;
- bh=O1DhjeZkCYDGYYauNt69ZMgnOm1dqFGHvOsMIBnPk/0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=G8ZdyA3prfHNrO9nOxHlV5xCXPnfQQrONcgJMAAMORjJeCPc8VSikpFoIwgZfK9PC
- +P5asAvR2jj51qFNv8E7eoPXq2LJWFLrdiPpsGZZq1SfY/qrmLf+Y0wuZmF84yU5Ta
- yOYBTeczybI8GMPnk69193UTGuvFS8DP6lP1K+mB7uflwAS9473Y9aNw8ko11DALib
- TLwPsjeDisdruk4H4+wwkycnQJqNThPKerz4yN4ZmRkqHg7/GS1qhLcho0NlJDUKo7
- 2ZNjgHT04JKa49JbIveha+swDU8vTIstj3t/bxpiVBp8GKyiMhkyo4UpwidUpljEHU
- /Mm+PtZUPVjpg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 09 Jan 2022 11:36:07 +0100
-Date: Sun, 9 Jan 2022 11:36:07 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220109103607.GK1881783@scaer>
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8BC8D402CA
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 10:46:11 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id k30so3485194wrd.9
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 02:46:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=h576DoEi8EhonmU/cTzKvuWnk1gs8gL5aem8TfAdJfc=;
+ b=5z6gAIo/tnvCKHIdnfqSvB7Br7ff3hb7I6PXVg7/ivUSrvjvpoaJiJDqlnMEM0hVJG
+ JhnCm/K971pn9EBvAVp98RPArElxdZ2zQ6dUOZ8xNwxcfnyvfRoNUFmanTMY3LOVrJU2
+ bV9kV9jDCq3eStFSVIcSPyHwYbkI6HO3NKDzyE3H7tQMb23xqQ4tJs6n6LAAZl8njiTM
+ Bqh4wuSHwAYTyR7VE2BrT8FF+WxjpQ+S5lx60WwF6ROaca5ctxzBc12FyXjw5gsJa/kr
+ VX3xHJBSGwMgPWbyZHjUdTR8OsYXbJ/cdKzOiqQbSQKKwltDjVjCdwv8pQEoitOMqzu9
+ aVBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=h576DoEi8EhonmU/cTzKvuWnk1gs8gL5aem8TfAdJfc=;
+ b=Rb/3sSkv8idqZUV0OlhCsNvTeZr1IMKBHczEevouaqnaOnvEoEINxe/iIiXqrobpF5
+ V33pqeHRlG5vDrbgpwfpd6Sg9ZS4mhqlcaHByJZgENc8LaKYsswKImF27tWlaUtBfeDx
+ ib1hW21sTmW9K0H+iPnRtPEYSA0YxHPbm+rufBWRsKsoAVUgI4gjzbfRQU1eSrJ6fMR/
+ QNsRs3q5mnQP4k5g3YqjCqe6px8Zd4DOVDNwBEdHpakDSjHInXQBaFt8jiY67lj5Sdr+
+ WBKFGdjJax0IdZZflfH5ywsknplCWr0PxFuntwyZpT0vyfErs929dQ5Lk76mRaYx2DPQ
+ j5hQ==
+X-Gm-Message-State: AOAM530y6zF60jW550EUp0JjCZp+4owrmnxbivOyxAi0Yp4yGCP/AtQU
+ SgnChFhE6/29wZlkH5A2tQC/ew==
+X-Google-Smtp-Source: ABdhPJwp3YPPjmRp6SsKv8SMTWHYu9gTWaktwUA7eB57RvDvnaWiWrSZ5Zoaz97p/vqrbAhcLP28bA==
+X-Received: by 2002:a5d:5186:: with SMTP id k6mr3602109wrv.514.1641725169582; 
+ Sun, 09 Jan 2022 02:46:09 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id k10sm3847215wrz.113.2022.01.09.02.46.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 09 Jan 2022 02:46:08 -0800 (PST)
+Message-ID: <43cb4bd6-d40d-5a58-051a-75c9f4b1e1c2@smile.fr>
+Date: Sun, 9 Jan 2022 11:46:07 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20220109080124.2271241-1-thomas.petazzoni@bootlin.com>
  <20220109080124.2271241-2-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220109080124.2271241-2-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+ <20220109103607.GK1881783@scaer>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220109103607.GK1881783@scaer>
 Subject: Re: [Buildroot] [PATCH 2/2] arch/Config.in.x86: add support for
  x86-64-v2, x86-64-v3, x86-64-v4
 X-BeenThere: buildroot@buildroot.org
@@ -74,140 +97,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
-
-On 2022-01-09 09:01 +0100, Thomas Petazzoni spake thusly:
-> In the face of the vast amount of x86-64 CPU architecture variants,
-> Linux distributions have worked together to define "micro-architecture
-> levels" in the x86-64 psABI, called x86-64-v2, x86-64-v3 and
-> x86-64-v4. They standardize a set of CPU features, and GCC since its
-> version 11.x has support for these micro-architecture levels as
-> -march= options.
-> 
-> It makes sense to support them in Buildroot, especially for those who
-> want to build toolchains that aim at targeting a reasonably broad
-> family of x86-64 processors.
-
-As for x86-64, I've added a dependency on BR2_x86_64.
-
-> More details:
-> 
->  https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/low-level-sys-info.tex
->  https://developers.redhat.com/blog/2021/01/05/building-red-hat-enterprise-linux-9-for-the-x86-64-v2-microarchitecture-level
->  https://www.phoronix.com/scan.php?page=news_item&px=GCC-11-x86-64-Feature-Levels
-
-I've added a URL to the upstream commit too.
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  arch/Config.in.x86 | 60 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
-> 
-> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-> index 794d808d96..153c8bad38 100644
-> --- a/arch/Config.in.x86
-> +++ b/arch/Config.in.x86
-> @@ -91,6 +91,63 @@ config BR2_x86_x86_64
->  	  "Generic CPU with 64-bit extensions" by the GCC
->  	  documentation. It is a 64-bit CPU with MMX, SSE and SSE2
->  	  support.
-> +config BR2_x86_x86_64_v2
-> +	bool "x86-64-v2"
-> +	select BR2_X86_CPU_HAS_MMX
-> +	select BR2_X86_CPU_HAS_SSE
-> +	select BR2_X86_CPU_HAS_SSE2
-> +	select BR2_X86_CPU_HAS_SSE3
-> +	select BR2_X86_CPU_HAS_SSSE3
-> +	select BR2_X86_CPU_HAS_SSE4
-> +	select BR2_X86_CPU_HAS_SSE42
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
-> +	help
-> +	  This option corresponds to the x86-64-v2 micro-architecture
-> +	  level, as defined by the x86-64 psABI document, see
-> +	  https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/low-level-sys-info.tex.
-> +
-> +	  It is close to the Nehalem CPU architecture, and is
-> +	  applicable for CPUs that support CMPXCHG16B, LAHF-SAHF,
-> +	  POPCNT, SSE3, SSE4.1, SSE4.2, SSSE3.
-> +config BR2_x86_x86_64_v3
-> +	bool "x86-64-v3"
-> +	select BR2_X86_CPU_HAS_MMX
-> +	select BR2_X86_CPU_HAS_SSE
-> +	select BR2_X86_CPU_HAS_SSE2
-> +	select BR2_X86_CPU_HAS_SSE3
-> +	select BR2_X86_CPU_HAS_SSSE3
-> +	select BR2_X86_CPU_HAS_SSE4
-> +	select BR2_X86_CPU_HAS_SSE42
-> +	select BR2_X86_CPU_HAS_AVX
-> +	select BR2_X86_CPU_HAS_AVX2
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
-> +	help
-> +	  This option corresponds to the x86-64-v3 micro-architecture
-> +	  level, as defined by the x86-64 psABI document, see
-> +	  https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/low-level-sys-info.tex.
-> +
-> +	  It is close to the Haswell CPU architecture, and is
-> +	  applicable for CPUs that support all of x86-64-v2 plus AVX,
-> +	  AVX2, BMI1, BMI2, F16C, FMA, LZCNT, MOVBE, XSAVE.
-> +config BR2_x86_x86_64_v4
-> +	bool "x86-64-v4"
-> +	select BR2_X86_CPU_HAS_MMX
-> +	select BR2_X86_CPU_HAS_SSE
-> +	select BR2_X86_CPU_HAS_SSE2
-> +	select BR2_X86_CPU_HAS_SSE3
-> +	select BR2_X86_CPU_HAS_SSSE3
-> +	select BR2_X86_CPU_HAS_SSE4
-> +	select BR2_X86_CPU_HAS_SSE42
-> +	select BR2_X86_CPU_HAS_AVX
-> +	select BR2_X86_CPU_HAS_AVX2
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
-> +	help
-> +	  This option corresponds to the x86-64-v4 micro-architecture
-> +	  level, as defined by the x86-64 psABI document, see
-> +	  https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/low-level-sys-info.tex.
-> +
-> +	  It is applicable for CPUs that support all of x86-64-v3 plus
-> +	  AVX512F, AVX512BW, AVX512CD, AVX512DQ, AVX512VL.
->  config BR2_x86_nocona
->  	bool "nocona"
->  	select BR2_X86_CPU_HAS_MMX
-> @@ -292,6 +349,9 @@ config BR2_GCC_TARGET_ARCH
->  	default "pentium4"	if BR2_x86_pentium4
->  	default "prescott"	if BR2_x86_prescott
->  	default "x86-64"	if BR2_x86_x86_64
-> +	default "x86-64-v2"	if BR2_x86_x86_64_v2
-> +	default "x86-64-v3"	if BR2_x86_x86_64_v3
-> +	default "x86-64-v4"	if BR2_x86_x86_64_v4
->  	default "nocona"	if BR2_x86_nocona
->  	default "core2"		if BR2_x86_core2
->  	default "corei7"	if BR2_x86_corei7
-> -- 
-> 2.33.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLCBZYW5uLAoKTGUgMDkvMDEvMjAyMiDDoCAxMTozNiwgWWFubiBFLiBNT1JJ
+TiBhIMOpY3JpdMKgOgo+IFRob21hcywgQWxsLAo+IAo+IE9uIDIwMjItMDEtMDkgMDk6MDEgKzAx
+MDAsIFRob21hcyBQZXRhenpvbmkgc3Bha2UgdGh1c2x5Ogo+PiBJbiB0aGUgZmFjZSBvZiB0aGUg
+dmFzdCBhbW91bnQgb2YgeDg2LTY0IENQVSBhcmNoaXRlY3R1cmUgdmFyaWFudHMsCj4+IExpbnV4
+IGRpc3RyaWJ1dGlvbnMgaGF2ZSB3b3JrZWQgdG9nZXRoZXIgdG8gZGVmaW5lICJtaWNyby1hcmNo
+aXRlY3R1cmUKPj4gbGV2ZWxzIiBpbiB0aGUgeDg2LTY0IHBzQUJJLCBjYWxsZWQgeDg2LTY0LXYy
+LCB4ODYtNjQtdjMgYW5kCj4+IHg4Ni02NC12NC4gVGhleSBzdGFuZGFyZGl6ZSBhIHNldCBvZiBD
+UFUgZmVhdHVyZXMsIGFuZCBHQ0Mgc2luY2UgaXRzCj4+IHZlcnNpb24gMTEueCBoYXMgc3VwcG9y
+dCBmb3IgdGhlc2UgbWljcm8tYXJjaGl0ZWN0dXJlIGxldmVscyBhcwo+PiAtbWFyY2g9IG9wdGlv
+bnMuCj4+Cj4+IEl0IG1ha2VzIHNlbnNlIHRvIHN1cHBvcnQgdGhlbSBpbiBCdWlsZHJvb3QsIGVz
+cGVjaWFsbHkgZm9yIHRob3NlIHdobwo+PiB3YW50IHRvIGJ1aWxkIHRvb2xjaGFpbnMgdGhhdCBh
+aW0gYXQgdGFyZ2V0aW5nIGEgcmVhc29uYWJseSBicm9hZAo+PiBmYW1pbHkgb2YgeDg2LTY0IHBy
+b2Nlc3NvcnMuCj4gCj4gQXMgZm9yIHg4Ni02NCwgSSd2ZSBhZGRlZCBhIGRlcGVuZGVuY3kgb24g
+QlIyX3g4Nl82NC4KPiAKPj4gTW9yZSBkZXRhaWxzOgo+Pgo+PiAgaHR0cHM6Ly9naXRsYWIuY29t
+L3g4Ni1wc0FCSXMveDg2LTY0LUFCSS8tL2Jsb2IvbWFzdGVyL3g4Ni02NC1BQkkvbG93LWxldmVs
+LXN5cy1pbmZvLnRleAo+PiAgaHR0cHM6Ly9kZXZlbG9wZXJzLnJlZGhhdC5jb20vYmxvZy8yMDIx
+LzAxLzA1L2J1aWxkaW5nLXJlZC1oYXQtZW50ZXJwcmlzZS1saW51eC05LWZvci10aGUteDg2LTY0
+LXYyLW1pY3JvYXJjaGl0ZWN0dXJlLWxldmVsCj4+ICBodHRwczovL3d3dy5waG9yb25peC5jb20v
+c2Nhbi5waHA/cGFnZT1uZXdzX2l0ZW0mcHg9R0NDLTExLXg4Ni02NC1GZWF0dXJlLUxldmVscwo+
+IAo+IEkndmUgYWRkZWQgYSBVUkwgdG8gdGhlIHVwc3RyZWFtIGNvbW1pdCB0b28uCgpTb3JyeSBJ
+J20gbGF0ZSwgYnV0IEkgaGFkIGEgbG9vayBhdCB0aGlzIHNlcmllcyB0byB1c2UgeDg2LTY0LXYz
+IGFuZCB4ODYtNjQtdjQKZm9yIFFlbXUgcnVudGltZSB0ZXN0aW5nLgoKVGhlcmUgYXJlIHNvbWUg
+bGltaXRhdGlvbiB3aXRoIHRoZSBjdXJyZW50IHZlcnNpb24gb2YgUWVtdSAoNi4yLjApOgoKIk5v
+dGUgdGhhdCBUQ0cgaXMgbm90IGNhcGFibGUgb2Ygc3VwcG9ydGluZyB0aGUgMiBuZXdlc3QgQUJJ
+IGxldmVscwpjdXJyZW50bHk6CgoqIHg4Ni02NC1hYmkzOgoKICBDUFVJRC4wMUg6RUNYLmZtYSBb
+Yml0IDEyXQogIENQVUlELjAxSDpFQ1guYXZ4IFtiaXQgMjhdCiAgQ1BVSUQuMDFIOkVDWC5mMTZj
+IFtiaXQgMjldCiAgQ1BVSUQuMDdIOkVCWC5hdngyIFtiaXQgNV0KCiogeDg2LTY0LWFiaTQ6Cgog
+IENQVUlELjAxSDpFQ1gucGNpZCBbYml0IDE3XQogIENQVUlELjAxSDpFQ1gueDJhcGljIFtiaXQg
+MjFdCiAgQ1BVSUQuMDFIOkVDWC50c2MtZGVhZGxpbmUgW2JpdCAyNF0KICBDUFVJRC4wN0g6RUJY
+LmludnBjaWQgW2JpdCAxMF0KICBDUFVJRC4wN0g6RUJYLmF2eDUxMmYgW2JpdCAxNl0KICBDUFVJ
+RC4wN0g6RUJYLmF2eDUxMmRxIFtiaXQgMTddCiAgQ1BVSUQuMDdIOkVCWC5yZHNlZWQgW2JpdCAx
+OF0KICBDUFVJRC4wN0g6RUJYLmF2eDUxMmNkIFtiaXQgMjhdCiAgQ1BVSUQuMDdIOkVCWC5hdng1
+MTJidyBbYml0IDMwXQogIENQVUlELjA3SDpFQlguYXZ4NTEydmwgW2JpdCAzMV0KICBDUFVJRC44
+MDAwMDAwMUg6RUNYLjNkbm93cHJlZmV0Y2ggW2JpdCA4XQogIENQVUlELjBESDpFQVgueHNhdmVj
+IFtiaXQgMV0iCgpodHRwczovL2xpc3RzLmdudS5vcmcvYXJjaGl2ZS9odG1sL3FlbXUtZGV2ZWwv
+MjAyMS0wMi9tc2cwMDE3MC5odG1sCgpJIHdhbnRlZCB0byByZXBseSB0byBhZGQgdGhpcyBpbmZv
+IGluIHRoZSBjb21taXQgbG9nLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+PiBTaWduZWQt
+b2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+
+IAo+IEFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCj4gCj4gUmVnYXJkcywKPiBZYW5uIEUuIE1P
+UklOLgo+IApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
