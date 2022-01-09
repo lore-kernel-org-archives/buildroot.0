@@ -4,61 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28CE7C433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 21:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BC92C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 22:06:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA4DF81815;
-	Sun,  9 Jan 2022 21:58:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 003EC82410;
+	Sun,  9 Jan 2022 22:06:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tHItw09em8Wm; Sun,  9 Jan 2022 21:58:13 +0000 (UTC)
+	with ESMTP id RbKEzQX_Xjqu; Sun,  9 Jan 2022 22:06:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0674E81762;
-	Sun,  9 Jan 2022 21:58:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B14F1BF3C0
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:58:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50A5A81A27;
+	Sun,  9 Jan 2022 22:05:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8C8F1BF41C
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 389F181762
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 21:58:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C16D140368
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 22:05:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AYOGGAEnvcqs for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 21:58:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0304281759
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 21:58:09 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:884e:4989:9dec:67ee])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1BE655FF23;
- Sun,  9 Jan 2022 22:58:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1641765487;
- bh=cCctVVm0q/6vKrE6NOjbSWVXQ0KkkW2NQ8ztvlYM5MY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=WAb7bszsGadPMjSMaLbfcaRhLK3Xe5TyD4ZS/yGdc7bKxNO/Etej6r3uAhL3QahSU
- LociYtbV4yDWCUDct+y92JamJ+2KHjj3q9NGNF/LkjpBBrxZVf5TYyQ4Cy772aqYhd
- 6zHsFS+UQoKLoNbnaJBq9QaKnNi62Q9dlmorEOBMCgn/Y0rO7WoRfFXiNtX7CTgXun
- hUueIaHuhlc+Y6pCB+wXSiavHfNEtCSwNoKzLsd7OGQAR5cnfVo0XB5DDA7Grfi2h5
- 1Wy+WbPt3tLqjmmiYpdYM4s8apldfED13S5prXXeTTcxznkIws1lUxhxm1POmGZjPY
- 4p7Sdtr/USLyg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 09 Jan 2022 22:58:03 +0100
-Date: Sun, 9 Jan 2022 22:58:03 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220109215803.GJ1477939@scaer>
-References: <20220109202003.3338357-1-fontaine.fabrice@gmail.com>
- <20220109204853.GH1477939@scaer>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220109204853.GH1477939@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/libvirt: libvirtd needs C++
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d9sfAzXK7We7 for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 22:05:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66A7F4010E
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 22:05:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 06D9F80250; Sun,  9 Jan 2022 21:59:41 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sun, 9 Jan 2022 23:01:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f81242ae4fb64ab85af5d38e70246222276552ae
+X-Git-Newrev: f35a4b4ae22046fb04edc165edbb27ee5439aa4b
+X-Patchwork-Hint: ignore
+Message-Id: <20220109215941.06D9F80250@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: add a check for the
+ new spacing convention
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,99 +53,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Jared Bents <jared.bents@rockwellcollins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f35a4b4ae22046fb04edc165edbb27ee5439aa4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-01-09 21:48 +0100, Yann E. MORIN spake thusly:
-> On 2022-01-09 21:20 +0100, Fabrice Fontaine spake thusly:
-> > Fix the following build failure raised since commit
-> > fbf25acfbfd5a73b3560918bea081768abbe5723:
-> > 
-> > WARNING: unmet direct dependencies detected for BR2_PACKAGE_NMAP
-> >   Depends on [n]: BR2_INSTALL_LIBSTDCPP [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
-> >   Selected by [y]:
-> >   - BR2_PACKAGE_LIBVIRT_DAEMON [=y] && BR2_PACKAGE_LIBVIRT [=y] && !BR2_PACKAGE_NETCAT_OPENBSD [=n]
-> > 
-> > Fixes:
-> >  - No autobuilder failures (yet)
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/libvirt/Config.in | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-> > index a35295bc97..d7ca5f8db5 100644
-> > --- a/package/libvirt/Config.in
-> > +++ b/package/libvirt/Config.in
-> > @@ -37,6 +37,7 @@ if BR2_PACKAGE_LIBVIRT
-> >  config BR2_PACKAGE_LIBVIRT_DAEMON
-> >  	bool "libvirtd"
-> >  	default y
-> > +	depends on BR2_INSTALL_LIBSTDCPP # nmap
-> 
-> In fact, the requirement on C++ is due to nmap-ncat, which is enabled
-> only if netcat-openbsd is not available, so I relaxed the requirement
-> accordingly.
+The seperation of the fields in the hash file should be 2 spaces for
+consistency.
 
-This introduced a messy circular dependency, so I pushed another patch
-that;
-  - remove the C++ dependency
-  - switches the nmap-ncat and netcat-openbsd conditional dependnecies
+Since a large number of hash files still violate this rule, exclude it
+from "make check-package" (and thus from CI).
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Arnout:
+ - Move it to a separate class, so it can be excluded.
+ - Exclude it from "make check-package"
+]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile                          |  2 +-
+ utils/checkpackagelib/lib_hash.py | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-> Applied to master, thanks.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> >  	select BR2_PACKAGE_DNSMASQ
-> >  	select BR2_PACKAGE_EBTABLES
-> > @@ -50,6 +51,9 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
-> >  	  Build the libvirt daemon (libvirtd) otherwise build only the
-> >  	  utility programs.
-> >  
-> > +comment "libvirtd needs a toolchain w/ C++"
-> > +	depends on !BR2_INSTALL_LIBSTDCPP
-> > +
-> >  # Stateful drivers are useful only when building the daemon.
-> >  if BR2_PACKAGE_LIBVIRT_DAEMON
-> >  
-> > -- 
-> > 2.34.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Makefile b/Makefile
+index 3099d35158..5fc7137e5a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1258,7 +1258,7 @@ check-flake8:
+ 
+ check-package:
+ 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
+-		-exec ./utils/check-package --exclude=Sob {} +
++		-exec ./utils/check-package --exclude=Sob --exclude=HashSpaces {} +
+ 
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
+index 3e381119a5..698d24fd6b 100644
+--- a/utils/checkpackagelib/lib_hash.py
++++ b/utils/checkpackagelib/lib_hash.py
+@@ -53,3 +53,19 @@ class HashType(_CheckFunction):
+                     .format(self.filename, lineno, self.url_to_manual),
+                     text,
+                     "expected {} hex digits".format(self.len_of_hash[htype])]
++
++
++class HashSpaces(_CheckFunction):
++    def check_line(self, lineno, text):
++        if _empty_line_or_comment(text):
++            return
++
++        fields = text.split()
++        if len(fields) != 3:
++            # Handled by HashNumberOfFields
++            return
++
++        if not re.match(re.escape("{}  {}  {}".format(*fields)), text):
++            return ["{}:{}: separation does not match expectation "
++                    "({}#adding-packages-hash)"
++                    .format(self.filename, lineno, self.url_to_manual), text]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
