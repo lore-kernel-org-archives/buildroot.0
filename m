@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C28AC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 10:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF65C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 10:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1904E60B28;
-	Sun,  9 Jan 2022 10:04:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E906A81656;
+	Sun,  9 Jan 2022 10:09:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HCyB7uwF7TPT; Sun,  9 Jan 2022 10:04:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1d3A3I-GfyEm; Sun,  9 Jan 2022 10:09:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A97A60767;
-	Sun,  9 Jan 2022 10:04:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 607781BF4DD
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:04:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 470F581465;
+	Sun,  9 Jan 2022 10:08:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A6A1C1BF4DD
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:08:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F3164034C
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:04:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94AC981465
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:08:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l4Te19Jrcp7i for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 10:04:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0F1DC40342
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 10:04:22 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 56E5BC0004;
- Sun,  9 Jan 2022 10:04:19 +0000 (UTC)
-Date: Sun, 9 Jan 2022 11:04:18 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CAk9GLPIEcOe for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 10:08:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA7D781460
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 10:08:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 803BA82B60; Sun,  9 Jan 2022 10:02:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20220109110418.0c7fc038@windsurf>
-In-Reply-To: <310621ef-6a6e-f7e6-18d1-20ace14a81b7@smile.fr>
-References: <20220106210000.397694-1-thomas.petazzoni@bootlin.com>
- <20220106210000.397694-6-thomas.petazzoni@bootlin.com>
- <310621ef-6a6e-f7e6-18d1-20ace14a81b7@smile.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 05/11] package/pkg-cargo.mk: introduce
- the cargo package infrastructure
+To: buildroot@buildroot.org
+Date: Sun, 9 Jan 2022 11:07:37 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5e78e7e97d772124f0d31653aca33731abe5b4db
+X-Git-Newrev: bfd1a31d0e590c8545df7159a9e61febbd220370
+X-Patchwork-Hint: ignore
+Message-Id: <20220109100242.803BA82B60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/download/go-post-process: drop -o
+ pipefail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +53,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <Matthew.Weber@rockwellcollins.com>,
- Patrick Havelange <patrick.havelange@essensium.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Buildroot List <buildroot@buildroot.org>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 7 Jan 2022 22:07:26 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bfd1a31d0e590c8545df7159a9e61febbd220370
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > +endif # ifeq ($(4),target)
-> > +endif # ifndef $(2)_BUILD_CMDS
-> > +  
-> 
-> is _INSTALL_STAGING_CMDS is missing here ?
-> 
-> Rust package may wand to install *.rlib files [1] (similar to .a)
+This breaks the post_process_unpack() function in
+support/download/helpers, which had a sequence of pipe, with "head"
+that can abort early and cause the pipe to fail.
 
-But will Cargo pick up .rlib files from STAGING_DIR ? I don't see how
-Cargo/Rust knows about STAGING_DIR. Aren't those .rlib files anyway
-installed in CARGO_HOME, and Cargo picks them up from here, or
-something like that?
+Fixes intermitent:
 
-Installing to STAGING_DIR is one thing, but what's important is to
-figure out if Cargo is really going to use what we install in
-STAGING_DIR.
+make[1]: *** [package/pkg-generic.mk:190: /builds/tpetazzoni/buildroot/test-output/TestDockerCompose/build/containerd-1.5.8/.stamp_downloaded] Error 141
 
-Do we have a specific example where one package installs a .rlib and
-another package uses it?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/download/go-post-process | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/download/go-post-process b/support/download/go-post-process
+index be202a4c0f..ef96a76948 100755
+--- a/support/download/go-post-process
++++ b/support/download/go-post-process
+@@ -1,7 +1,6 @@
+ #!/usr/bin/env bash
+ 
+ set -e
+-set -o pipefail
+ 
+ . "${0%/*}/helpers"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
