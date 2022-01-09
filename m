@@ -4,74 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA57DC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jan 2022 23:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98390C433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 03:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4350F40116;
-	Sat,  8 Jan 2022 23:40:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0341400A9;
+	Sun,  9 Jan 2022 03:56:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rcnom1cZGUDK; Sat,  8 Jan 2022 23:40:40 +0000 (UTC)
+	with ESMTP id s-v_ZNBY2Vc1; Sun,  9 Jan 2022 03:56:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA1514026E;
-	Sat,  8 Jan 2022 23:40:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83E0C1BF27E
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:40:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4402402DC;
+	Sun,  9 Jan 2022 03:56:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BEB941BF2F2
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 793424026E
- for <buildroot@lists.busybox.net>; Sat,  8 Jan 2022 23:40:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3CC68174C
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 03:56:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0KCqB-Cf7U6Y for <buildroot@lists.busybox.net>;
- Sat,  8 Jan 2022 23:40:37 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id piUnABShxXSy for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 03:56:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A72540116
- for <buildroot@buildroot.org>; Sat,  8 Jan 2022 23:40:36 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id a5so15003662wrh.5
- for <buildroot@buildroot.org>; Sat, 08 Jan 2022 15:40:36 -0800 (PST)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD7E38140D
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 03:56:09 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id v10so8297114ilj.3
+ for <buildroot@buildroot.org>; Sat, 08 Jan 2022 19:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ftazLbjXVvJp2LNkeVeU2pRY3POqzt3wp7pvF7WF+Ew=;
- b=Ioff+PvePfkISZqtd9OYSuVX4H5iUWoZNV+u9gPM+lCLVpydXdt6aDfrT+xcgLIsBV
- I/hlWSnDPuLOjmZCVD9/JsOmgq74WbcuEcGzBrDTgH+CX3tOx2QI4Zi8dvPmEyxQnlsw
- ONlWCJRArGVIwX4B19hUTyBMxp6dSET33x2tjq6w7eyrFQmyjnpv3y+wpf19YLuUbuU3
- VCmo8XFXqA+Hpa3ObI4tiJ6MyLHuVoNGFb0DA2kesLCJeQKDDs4nhAz/FICWOa0X7VSj
- gkh+s5BtrmsYSx5PWxTXW6qbEidoYA2enoV5uLxEi/ofHArZGBL4Y4irawZR3YCWx+QT
- 8WXQ==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=5hpigwG3K+sAaxswoluVd07XPWWeq4ht2plyumlXBlU=;
+ b=orESkkHxmWJzX6FNTc89b2mvIxlGWxiLKllqmBoa5U++azFGaPyR9IZpi6infndAwz
+ tfMvsyytZPHqNnRv3QV+Cz7aG0ddrACQ6g8Ro7n9h0eaM+vBQrEBDDLgGC9qVVaeZNDu
+ 3IjMyfkz5byyggfIHS0iI4e+eMsaWzhzcrN1MnHM8qfWkGUlZy08EGJwmPgJ+/naRTnn
+ ixRjOPc54C7hXwbHnoiBbheYAe9HZWhDVB8/Lc4RBPf1IUA9Z+7PsstOq5xsaNu0SsS2
+ OnmShvW3tonF1zafOI7/r/Lkk0MUJXi2Vtb88TWriKVVQH1Vk62yhLlVCmaCh/vBSR4c
+ hFrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=ftazLbjXVvJp2LNkeVeU2pRY3POqzt3wp7pvF7WF+Ew=;
- b=1aU3c+YTAb3vVK5gWnFE1FyLrqM+QQWm5AQRjeniZqJ8NgR2xS7qcps/U7EVPaObxq
- PFfsTx9BX4dXIte8aN7Aes5iLxHStALb9zLsNcablDWCMuWiQMVRWneMt5KxJMmGkA9s
- cSlzks53v6Zvn0IosowvpTYm08FJ+/HwO5PMZXx0jZgUAYNyH5tzRUTWKgvJRDHNcBgK
- OlDuxud8MZ8tQgR5nw68WlO/tcDoCI+P7zC/M/Bi9PVrWvpdHes6LNmaVZln7IANfbof
- jYaxN35vhO1oJxAq6JcwdEj/J5+KlNde2RdBTiqCbZgeXh7m2LbW1wzcJdIm4RtkAZ/N
- dubA==
-X-Gm-Message-State: AOAM53211EZ87CwHuL+En5k+AOJFstwPaX/r7CaqSbuxU7ug1TyBhy5B
- 67Rg4MMIJEVkeJHE41tjG5rQSUAnvpQ=
-X-Google-Smtp-Source: ABdhPJyWU2f/thxUY4QSo8c6R+qRB/QOnZH5RkNP+rslIfHOW48NN6FUM54u++K/jk9W+Aed82ghMw==
-X-Received: by 2002:a5d:4acb:: with SMTP id y11mr60135026wrs.64.1641685234972; 
- Sat, 08 Jan 2022 15:40:34 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id s1sm1439276wrv.38.2022.01.08.15.40.34
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=5hpigwG3K+sAaxswoluVd07XPWWeq4ht2plyumlXBlU=;
+ b=PhEkyV7Vuwj8GBAL5SshFXh58lpaERPCPG92YVuygjxzrJH6r+4KMmz53zqoH3iyED
+ 5NYwl4+FkkoItieOhXwKyaxSYjCmeyObFFF7XcBRd3NXu6pr2CU6wbKSwkBJKf0juLl3
+ 5jf5UiKqHPnnIi2E3l69Mcft/ae2GmGpfIhXRe5gGk0dYQhTeMz/AaofJ1wd9e5b0Od1
+ it/3srA56orL/REeoeJTctFZgS+u2MERQrO3Mr+GgXduNMRomU62UHGxMO9jCFptcr2Q
+ NGM/XsxLWz45uD0zRrZjHoBLROSYwr7bcnSrs7QrmthspZlIrH+l8ctCMjYQaAu2S4nH
+ 2fBw==
+X-Gm-Message-State: AOAM533Gi1kUXkZO+XI+Re97lKwSvi+o0vrFJZtO76PcAItNlQ/OmTPI
+ 6OdSyPtHeXo3n2Ymb2oi6KLfoWbZArc=
+X-Google-Smtp-Source: ABdhPJyjd0LIyvFwSNxLL3vUez8a/RJaM1Bkg0TsnfwjwBZ3urdjj14RHAmtw3AMufeTlVf+w/jCAQ==
+X-Received: by 2002:a05:6e02:1bc8:: with SMTP id
+ x8mr30791800ilv.54.1641700568821; 
+ Sat, 08 Jan 2022 19:56:08 -0800 (PST)
+Received: from james-x399.localdomain (71-218-242-12.hlrn.qwest.net.
+ [71.218.242.12])
+ by smtp.gmail.com with ESMTPSA id l11sm1839833ilq.74.2022.01.08.19.56.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jan 2022 15:40:34 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 08 Jan 2022 19:56:08 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Jan 2022 00:39:10 +0100
-Message-Id: <20220108233910.114777-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat,  8 Jan 2022 20:55:59 -0700
+Message-Id: <20220109035601.2483360-2-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220109035601.2483360-1-james.hilliard1@gmail.com>
+References: <20220109035601.2483360-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mongrel2: bump to version 1.13.0
+Subject: [Buildroot] [PATCH v3 1/3] package/python-pep517: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,207 +88,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lionel Orry <lionel.orry@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop third patch (already in version)
-- Drop fourth patch (not needed since
-  https://github.com/mongrel2/mongrel2/commit/8a6db3beb32da1d66757a746f440d92edff166f9)
-
-https://github.com/mongrel2/mongrel2/blob/v1.13.0/changelog.txt
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...ition-error-when-building-with-gcc10.patch |  25 ----
- .../0004-Support-urandom-inside-chroot.patch  | 113 ------------------
- package/mongrel2/mongrel2.hash                |   4 +-
- package/mongrel2/mongrel2.mk                  |   2 +-
- 4 files changed, 3 insertions(+), 141 deletions(-)
- delete mode 100644 package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
- delete mode 100644 package/mongrel2/0004-Support-urandom-inside-chroot.patch
+ package/python-pep517/python-pep517.hash |  5 +++++
+ package/python-pep517/python-pep517.mk   | 16 ++++++++++++++++
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/python-pep517/python-pep517.hash
+ create mode 100644 package/python-pep517/python-pep517.mk
 
-diff --git a/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch b/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
-deleted file mode 100644
-index e1b5788494..0000000000
---- a/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From c51815b10c39c6e802bd1b56549f1d479b480fcc Mon Sep 17 00:00:00 2001
--From: Andrew Sun <adsun701@gmail.com>
--Date: Sat, 18 Jul 2020 09:11:11 -0400
--Subject: [PATCH] fix multiple definition error when building with gcc10
--
--[Retrieved from:
--https://github.com/mongrel2/mongrel2/pull/343/commits/c51815b10c39c6e802bd1b56549f1d479b480fcc]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/unixy.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/unixy.h b/src/unixy.h
--index 045e7c28..4225220c 100644
----- a/src/unixy.h
--+++ b/src/unixy.h
--@@ -38,7 +38,7 @@
-- #include <bstring.h>
-- #include <unistd.h>
-- 
---char *m2program;
--+extern char *m2program;
-- 
-- int Unixy_chroot(bstring path);
-- 
-diff --git a/package/mongrel2/0004-Support-urandom-inside-chroot.patch b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
-deleted file mode 100644
-index 468ddb83fe..0000000000
---- a/package/mongrel2/0004-Support-urandom-inside-chroot.patch
-+++ /dev/null
-@@ -1,113 +0,0 @@
--From 330e8c8352eb0ed3c178ac6e0102403c0a835492 Mon Sep 17 00:00:00 2001
--From: Jason Miller <jason@milr.com>
--Date: Thu, 5 Jul 2018 20:53:51 -0700
--Subject: [PATCH] Support urandom inside chroot
--
--This adds a new default entropy function that uses a /dev/urandom stream
--opened before the chroot.  If initializing that fails, it fallsback on
--HAVEGE only if HAVEGE is supported by the mbedTLS.
--
--This should remove the hard requirement on HAVEGE
--
--resolves #326
--resolves #327
--
--[Upstream status: https://github.com/mongrel2/mongrel2/pull/328]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/mongrel2.c |  7 -------
-- src/server.c   | 36 +++++++++++++++++++++++-------------
-- 2 files changed, 23 insertions(+), 20 deletions(-)
--
--diff --git a/src/mongrel2.c b/src/mongrel2.c
--index da632d95..48ece8a5 100644
----- a/src/mongrel2.c
--+++ b/src/mongrel2.c
--@@ -404,13 +404,6 @@ void taskmain(int argc, char **argv)
--     rc = attempt_chroot_drop(srv);
--     check(rc == 0, "Major failure in chroot/droppriv, aborting."); 
-- 
---    // set up rng after chroot
---    // TODO: once mbedtls is updated, we can move this back into Server_create
---    if(srv->use_ssl) {
---        rc = Server_init_rng(srv);
---        check(rc == 0, "Failed to initialize rng for server %s", bdata(srv->uuid));
---    }
---
--     final_setup();
-- 
--     taskcreate(tickertask, NULL, TICKER_TASK_STACK);
--diff --git a/src/server.c b/src/server.c
--index 45761db4..e44e199b 100644
----- a/src/server.c
--+++ b/src/server.c
--@@ -149,35 +149,45 @@ static int Server_load_ciphers(Server *srv, bstring ssl_ciphers_val)
--     return -1;
-- }
-- 
--+static int urandom_entropy_func(void *data, unsigned char *output, size_t len)
--+{
--+    FILE* urandom = (FILE *)data;
--+    size_t rc = fread(output, 1, len, urandom);
--+
--+    if (rc != len) return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
--+
--+    return 0;
--+}
--+
-- int Server_init_rng(Server *srv)
-- {
--     int rc;
---    unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
--     void *ctx = NULL;
-- 
---    mbedtls_entropy_init( &srv->entropy );
--+    FILE *urandom = fopen("/dev/urandom","r");
-- 
---    // test the entropy source
---    rc = mbedtls_entropy_func(&srv->entropy, buf, MBEDTLS_ENTROPY_BLOCK_SIZE);
---
---    if(rc == 0) {
--+    if(urandom != NULL) {
--         ctx = calloc(sizeof(mbedtls_ctr_drbg_context), 1);
-- 
--         mbedtls_ctr_drbg_init((mbedtls_ctr_drbg_context *)ctx);
--         rc = mbedtls_ctr_drbg_seed((mbedtls_ctr_drbg_context *)ctx,
---            mbedtls_entropy_func, &srv->entropy, NULL, 0);
--+            urandom_entropy_func, urandom, NULL, 0);
--         check(rc == 0, "Init rng failed: ctr_drbg_init returned %d\n", rc);
-- 
--         srv->rng_func = mbedtls_ctr_drbg_random;
--         srv->rng_ctx = ctx;
--     } else {
---        log_warn("entropy source unavailable. falling back to havege rng");
-- 
--+#if defined(MBEDTLS_HAVEGE_C)
--+        log_warn("entropy source unavailable. falling back to havege rng");
--         ctx = calloc(sizeof(mbedtls_havege_state), 1);
--         mbedtls_havege_init((mbedtls_havege_state *)ctx);
---
--         srv->rng_func = mbedtls_havege_random;
--         srv->rng_ctx = ctx;
--+#else
--+        log_err("Unable to initialize urandom entropy source, and mbedTLS compiled without HAVEGE");
--+        goto error;
--+#endif
--     }
-- 
--     return 0;
--@@ -278,10 +288,10 @@ Server *Server_create(bstring uuid, bstring default_host,
-- 
--     // TODO: once mbedtls supports opening urandom early and keeping it open,
--     //   put the rng initialization back here (before chroot)
---    //if(use_ssl) {
---    //    rc = Server_init_rng(srv);
---    //    check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
---    //}
--+    if(use_ssl) {
--+        rc = Server_init_rng(srv);
--+        check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
--+    }
-- 
--     if(blength(chroot) > 0) {
--         srv->chroot = bstrcpy(chroot); check_mem(srv->chroot);
-diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
-index ea3a1cb426..f4f094ea03 100644
---- a/package/mongrel2/mongrel2.hash
-+++ b/package/mongrel2/mongrel2.hash
-@@ -1,6 +1,6 @@
- # From https://mongrel2.org
--sha1  6f81fa747a1e198d1a655c3677b6de686a5a51f7  mongrel2-v1.12.2.tar.bz2
-+sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
- 
- # Locally computed
--sha256  3bffeae198c37a1efc9c12f77d5f1eb61cdf62b35d661babc2527dd030aa7d8f  mongrel2-v1.12.2.tar.bz2
-+sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
- sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index cbe7e3fb91..07914ad0fe 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGREL2_VERSION = 1.12.2
-+MONGREL2_VERSION = 1.13.0
- MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
- # Do not use the github helper here, the generated tarball is *NOT* the same
- # as the one uploaded by upstream for the release.
+diff --git a/package/python-pep517/python-pep517.hash b/package/python-pep517/python-pep517.hash
+new file mode 100644
+index 0000000000..4dd4c47fa0
+--- /dev/null
++++ b/package/python-pep517/python-pep517.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pep517/json
++md5  7ed0adb5f737c316e071d48d66329a5d  pep517-0.12.0.tar.gz
++sha256  931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0  pep517-0.12.0.tar.gz
++# Locally computed sha256 checksums
++sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
+diff --git a/package/python-pep517/python-pep517.mk b/package/python-pep517/python-pep517.mk
+new file mode 100644
+index 0000000000..da0431a637
+--- /dev/null
++++ b/package/python-pep517/python-pep517.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-pep517
++#
++################################################################################
++
++PYTHON_PEP517_VERSION = 0.12.0
++PYTHON_PEP517_SOURCE = pep517-$(PYTHON_PEP517_VERSION).tar.gz
++PYTHON_PEP517_SITE = https://files.pythonhosted.org/packages/0a/65/6e656d49c679136edfba25f25791f45ffe1ea4ae2ec1c59fe9c35e061cd1
++PYTHON_PEP517_LICENSE = MIT
++PYTHON_PEP517_LICENSE_FILES = LICENSE
++PYTHON_PEP517_SETUP_TYPE = distutils
++HOST_PYTHON_PEP517_NEEDS_HOST_PYTHON = python3
++HOST_PYTHON_PEP517_DEPENDENCIES = host-python-tomli
++
++$(eval $(host-python-package))
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
