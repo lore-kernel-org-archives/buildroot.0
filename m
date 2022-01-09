@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F99CC433EF
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 15:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDAAC433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 15:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C60E981A2B;
-	Sun,  9 Jan 2022 15:00:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D10F960B69;
+	Sun,  9 Jan 2022 15:01:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TS_34SlLE0uk; Sun,  9 Jan 2022 15:00:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tikFNCBilMG1; Sun,  9 Jan 2022 15:01:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 276638177C;
-	Sun,  9 Jan 2022 15:00:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34E5660B68;
+	Sun,  9 Jan 2022 15:01:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F1B11BF4D6
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 15:00:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 088A01BF4D6
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 15:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E85740167
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 15:00:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7072E400FE
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 15:00:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OO8rHSmF4RfU for <buildroot@lists.busybox.net>;
+ with ESMTP id r9dg7OTlLFOH for <buildroot@lists.busybox.net>;
  Sun,  9 Jan 2022 15:00:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE97040352
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1B2B40439
  for <buildroot@buildroot.org>; Sun,  9 Jan 2022 15:00:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EC30982DC2; Sun,  9 Jan 2022 14:53:50 +0000 (UTC)
+ id 00FF082DCE; Sun,  9 Jan 2022 14:53:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Jan 2022 15:59:26 +0100
+Date: Sun, 9 Jan 2022 15:59:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e89b555a4d20799990f954d545d180832bb3cd05
-X-Git-Newrev: 490d8b13b16f32d23fc69ebf00ac1c98d9f523e1
+X-Git-Oldrev: 490d8b13b16f32d23fc69ebf00ac1c98d9f523e1
+X-Git-Newrev: f4353279ce2231c702eac1d1c6f875e3e6708375
 X-Patchwork-Hint: ignore
-Message-Id: <20220109145350.EC30982DC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp-av: bump to version 0.14.0
+Message-Id: <20220109145351.00FF082DCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbytesize: bump to version 2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +58,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=490d8b13b16f32d23fc69ebf00ac1c98d9f523e1
+commit: https://git.buildroot.net/buildroot/commit/?id=f4353279ce2231c702eac1d1c6f875e3e6708375
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.14.0/NEWS
+https://github.com/storaged-project/libbytesize/releases/tag/2.6
+https://github.com/storaged-project/libbytesize/blob/2.6/NEWS.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gupnp-av/gupnp-av.hash | 4 ++--
- package/gupnp-av/gupnp-av.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libbytesize/libbytesize.hash | 2 +-
+ package/libbytesize/libbytesize.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gupnp-av/gupnp-av.hash b/package/gupnp-av/gupnp-av.hash
-index 570f8ab3d0..ceab42ef52 100644
---- a/package/gupnp-av/gupnp-av.hash
-+++ b/package/gupnp-av/gupnp-av.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.13/gupnp-av-0.13.0.sha256sum:
--sha256  578b8f562b0f7e908416a41efbe2b7e6b892cd2ed7eac61ac63c48fdc8d7e6c8  gupnp-av-0.13.0.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.14/gupnp-av-0.14.0.sha256sum:
-+sha256  20aed546fc882e78a3f186a0c8bce5c841cc3a44b7ea528298fbdc82596fb156  gupnp-av-0.14.0.tar.xz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
-index c2d3c3ba18..655de87608 100644
---- a/package/gupnp-av/gupnp-av.mk
-+++ b/package/gupnp-av/gupnp-av.mk
+diff --git a/package/libbytesize/libbytesize.hash b/package/libbytesize/libbytesize.hash
+index 51fa43aef1..2dfa97dd6a 100644
+--- a/package/libbytesize/libbytesize.hash
++++ b/package/libbytesize/libbytesize.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6305addae2b7be313dbfc36b96094ec0544d5144859ab4a5685ca6d314d6fdda  libbytesize-2.5.tar.gz
++sha256  efaa2b35b2bb3b52bf7b4ff5d0ed2c5c61360a5196053808d615dd0aa2cf0741  libbytesize-2.6.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
+index 0ba380dc74..2ef08211c5 100644
+--- a/package/libbytesize/libbytesize.mk
++++ b/package/libbytesize/libbytesize.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GUPNP_AV_VERSION_MAJOR = 0.13
-+GUPNP_AV_VERSION_MAJOR = 0.14
- GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).0
- GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
- GUPNP_AV_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp-av/$(GUPNP_AV_VERSION_MAJOR)
+-LIBBYTESIZE_VERSION = 2.5
++LIBBYTESIZE_VERSION = 2.6
+ LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
+ LIBBYTESIZE_LICENSE = LGPL-2.1+
+ LIBBYTESIZE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
