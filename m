@@ -4,44 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6CC1C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 10:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741D8C433EF
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jan 2022 11:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7782B817A8;
-	Sun,  9 Jan 2022 10:54:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1305880B9B;
+	Sun,  9 Jan 2022 11:01:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dhf6KeiW0bR6; Sun,  9 Jan 2022 10:54:31 +0000 (UTC)
+	with ESMTP id yZl4OTDvJv4p; Sun,  9 Jan 2022 11:01:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8428F817A9;
-	Sun,  9 Jan 2022 10:54:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C3D21BF4DD
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:54:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A82880BCF;
+	Sun,  9 Jan 2022 11:01:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39E341BF4DD
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 11:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68F0140465
- for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 10:54:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F58C60B34
+ for <buildroot@lists.busybox.net>; Sun,  9 Jan 2022 11:01:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1x7yOSoTsqGT for <buildroot@lists.busybox.net>;
- Sun,  9 Jan 2022 10:54:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A841400E9
- for <buildroot@buildroot.org>; Sun,  9 Jan 2022 10:54:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DC21D82B94; Sun,  9 Jan 2022 10:48:13 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ubv_sFsuD4OU for <buildroot@lists.busybox.net>;
+ Sun,  9 Jan 2022 11:01:41 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0330860B2F
+ for <buildroot@buildroot.org>; Sun,  9 Jan 2022 11:01:40 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id l4so6926718wmq.3
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 03:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FddDuFjNnqE5jbjgARMir8ynNMFoQs+MeYktlIbsHbA=;
+ b=PVxDGl2x2kv+oYAFqUu/6fn9KPEDRu+EUUbZCwoI9xiqTtCAhcnSdZPtiS3clMQ2AR
+ bjUf+CspY02EIUKUAKG7bYIRSKEeiFlEMefnco2KarDYfUrTIXc72fU7D/xiWif+2hJY
+ zjF0aSls1ofWwV5RkKq0GmYmR1ePWqkUIm+xSZ79hmE5wJmwUIuyr63fBRHIviC9JTA9
+ 6MCuSiKjtAUpGNK6Ne7wwyXIOS3JgAut7AUZ4dsl8KfarN3WmCrqyY87JTxtG1PnFQiH
+ Tk6jlC72cIp3RZ5MPtf5eNszyd5sKt7W3GiKV7TOz69CBknCp0sBO4+kRxYkCaMv0neT
+ xeBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=FddDuFjNnqE5jbjgARMir8ynNMFoQs+MeYktlIbsHbA=;
+ b=U6dYlbPcg/+acH113KHn9fNOENLb32ljI5DTtetkT41ru8oahG7dLcRJkdVoPSZd26
+ aC570hSZCbkiziH0Z4JwvPsOyJrAbY4dkSCSRR3pBNwovcX+7Agb94DJ+BzyDkNDWa+7
+ yd2XuILcl6fgZSON0g00HU+3kRjPUM6qTArbrGutbGOgdqSKOmSSjJpPAfCVhnHUp7+v
+ wpK+h9Ed/qI0DmHPZq1gq7k2AnQ3enOOjaMObPObfW2shjCuHL26zQdoi2rUd3ZuthEd
+ JoqBrszGI5saIU3burztoFAiywBLcu54VF33bVsnJPiN4xqSUg312gx4kwQw4tLQ1niF
+ ycHQ==
+X-Gm-Message-State: AOAM533Sy73HOn3tTM0I7maaWG0qXmq13EuFoenGRR4mwQdcAzSd/i8w
+ s4mNgPxRtDL2Do9pMYPnLwQqdNlS58o=
+X-Google-Smtp-Source: ABdhPJz8ZCjcUAA2KPCcDVG3FSL6065W5F7dHVJ0J5CiactEA87J6HhOqGtcu/R7Hym6amX/BpW80A==
+X-Received: by 2002:a7b:c208:: with SMTP id x8mr12305988wmi.114.1641726099083; 
+ Sun, 09 Jan 2022 03:01:39 -0800 (PST)
+Received: from debian-noppl.. (62-178-205-20.cable.dynamic.surfer.at.
+ [62.178.205.20])
+ by smtp.gmail.com with ESMTPSA id az1sm3878445wrb.104.2022.01.09.03.01.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Jan 2022 03:01:38 -0800 (PST)
+From: Norbert Lange <nolange79@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Jan 2022 11:40:22 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 8b39532a1624b19ba66cadebd71cd51ef218f72f
-X-Git-Newrev: 095ba6763a9516158924d969276c131736148518
-X-Patchwork-Hint: ignore
-Message-Id: <20220109104813.DC21D82B94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/openblas:
- security bump to version 0.3.18
+Date: Sun,  9 Jan 2022 12:01:30 +0100
+Message-Id: <20220109110132.3430-1-nolange79@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: support
+ /var/lock again
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,156 +86,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: joseph.kogut@gmail.com, Norbert Lange <nolange79@gmail.com>,
+ yann.morin.1998@free.fr, aduskett@gmail.com, maxime.hadjinlian@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=095ba6763a9516158924d969276c131736148518
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+systemd's own configuration file is not installed anymore,
+as side effect of disabling sysv support.
 
-- Fix CVE-2021-4048: An out-of-bounds read flaw was found in the CLARRV,
-  DLARRV, SLARRV, and ZLARRV functions in lapack through version 3.10.0,
-  as also used in OpenBLAS before version 0.3.18. Specially crafted
-  inputs passed to these functions could cause an application using
-  lapack to crash or possibly disclose portions of its memory.
-- Drop first and second patches (already in version)
+the funtionality is added back in skeleton-init-systemd,
+since this is a buildroot feature to support software expecting
+this directories to exist, as well as trying to be similar to
+other init systems.
 
-https://github.com/xianyi/OpenBLAS/blob/v0.3.18/Changelog.txt
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- ...o-consider-Os-when-determining-LAPACK_NO.patch} |  0
- package/openblas/0001-fix-gfortran-detection.patch | 30 --------------
- ...x-support-for-passing-FFLAGS-on-the-make-.patch | 47 ----------------------
- ...tem-don-t-specify-optimization-level-bui.patch} |  0
- package/openblas/openblas.hash                     |  2 +-
- package/openblas/openblas.mk                       |  4 +-
- 6 files changed, 3 insertions(+), 80 deletions(-)
+ package/skeleton-init-systemd/legacy.conf              | 7 +++++++
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 1 +
+ 2 files changed, 8 insertions(+)
+ create mode 100644 package/skeleton-init-systemd/legacy.conf
 
-diff --git a/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch b/package/openblas/0001-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-similarity index 100%
-rename from package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-rename to package/openblas/0001-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-diff --git a/package/openblas/0001-fix-gfortran-detection.patch b/package/openblas/0001-fix-gfortran-detection.patch
-deleted file mode 100644
-index 1fecdac3e5..0000000000
---- a/package/openblas/0001-fix-gfortran-detection.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From ece3ce581e3ec530eaccfe7f284c52e115ec7aa9 Mon Sep 17 00:00:00 2001
--From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
--Date: Wed, 10 Feb 2021 14:22:59 +0100
--Subject: [PATCH] Strip parenthesized (pkgversion) data from GCC version string
-- to avoid misinterpretation
--
--See https://github.com/xianyi/OpenBLAS/issues/3099 for details.
--
--Upstream-status: backport
--
--[for import into Buildroot]
--Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
--
--
-----
-- f_check | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/f_check b/f_check
--index e9aca4ff9..ffe9c6b46 100644
----- a/f_check
--+++ b/f_check
--@@ -75,6 +75,7 @@ if ($compiler eq "") {
-- 
-- 	} elsif ($data =~ /GNU/ || $data =~ /GCC/ ) {
-- 
--+            $data =~ s/\(+.*?\)+//g;
-- 	    $data =~ /(\d+)\.(\d+).(\d+)/;
-- 	    $major = $1;
-- 	    $minor = $2;
-diff --git a/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch b/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
-deleted file mode 100644
-index 72b387b93e..0000000000
---- a/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 4d3829fa52240c2b7e48770ab19584db33ba7863 Mon Sep 17 00:00:00 2001
--From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
--Date: Fri, 5 Mar 2021 11:17:59 +0100
--Subject: [PATCH] Makefile: fix support for passing FFLAGS on the make
-- command line
--
--When openblas is built while passing FFLAGS on the make command line, the
--compilation of lapack objects will not contain the flags specified in
--Makefile but _only_ those passed in FFLAGS.
--
--This can lead to build failure, e.g. because -fPIC is not passed to the
--compilation of most lapack objects, but is given to the link command:
--
--.../buildroot/output/host/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -O2 -DMAX_STACK_ALLOC=2048 -Wall -m64 -DF_INTERFACE_GFORT -fPIC -DNO_WARMUP -DMAX_CPU_NUMBER=4 -DMAX_PARALLEL_NUMBER=1 -DVERSION=\"0.3.9\" -DASMNAME= -DASMFNAME=_ -DNAME=_ -DCNAME= -DCHAR_NAME=\"_\" -DCHAR_CNAME=\"\" -DNO_AFFINITY -I..  -shared -o ../libopenblas_nehalem-r0.3.9.so \
---Wl,--whole-archive ../libopenblas_nehalem-r0.3.9.a -Wl,--no-whole-archive \
---Wl,-soname,libopenblas.so.0 -lm -lgfortran -lm -lgfortran
--.../buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: ../libopenblas_nehalem-r0.3.9.a(sbdsvdx.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
--
--In the initial support for this principle, added in commit
--d0e731e8b825e7a554f245aa8f1118dcec9e2728, the flags specified in the
--makefile were appended to the flags specified on the command-line.
--
--Fix this situation by using 'override' for 'FFLAGS' in
--lapack-netlib/make.inc. The flags passed on the command-line are already
--part of the LAPACK_FFLAGS variable, so no '+=' is needed here.
--
--Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index fc5fe3f5..8ae1ff47 100644
----- a/Makefile
--+++ b/Makefile
--@@ -248,7 +248,7 @@ prof_lapack : lapack_prebuild
-- lapack_prebuild :
-- ifeq ($(NOFORTRAN), $(filter 0,$(NOFORTRAN)))
-- 	-@echo "FC          = $(FC)" > $(NETLIB_LAPACK_DIR)/make.inc
---	-@echo "FFLAGS      = $(LAPACK_FFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
--+	-@echo "override FFLAGS      = $(LAPACK_FFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
-- 	-@echo "POPTS       = $(LAPACK_FPFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
-- 	-@echo "FFLAGS_NOOPT       = -O0 $(LAPACK_NOOPT)" >> $(NETLIB_LAPACK_DIR)/make.inc
-- 	-@echo "PNOOPT      = $(LAPACK_FPFLAGS) -O0" >> $(NETLIB_LAPACK_DIR)/make.inc
---- 
--2.26.2
--
-diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0002-Makefile.system-don-t-specify-optimization-level-bui.patch
-similarity index 100%
-rename from package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
-rename to package/openblas/0002-Makefile.system-don-t-specify-optimization-level-bui.patch
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-index c58def9d5d..a1e35f4fc4 100644
---- a/package/openblas/openblas.hash
-+++ b/package/openblas/openblas.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  17d4677264dfbc4433e97076220adc79b050e4f8a083ea3f853a53af253bc380  openblas-0.3.9.tar.gz
-+sha256  1632c1e8cca62d8bed064b37747e331a1796fc46f688626337362bf0d16aeadb  openblas-0.3.18.tar.gz
- sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 21d05cf30d..2a9bd8b18c 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/skeleton-init-systemd/legacy.conf b/package/skeleton-init-systemd/legacy.conf
+new file mode 100644
+index 0000000000..0a5393408c
+--- /dev/null
++++ b/package/skeleton-init-systemd/legacy.conf
+@@ -0,0 +1,7 @@
++# Create legacy directories for buildroot
++# This is a subset of systemd's legacy.conf
++
++d /run/lock 0755 root root -
++d /run/lock/subsys 0755 root root -
++
++L /var/lock - - - - ../run/lock
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index 5d6b716f7a..1e212cc2f7 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -62,6 +62,7 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/srv
+ 	mkdir -p $(TARGET_DIR)/var
+ 	ln -s ../run $(TARGET_DIR)/var/run
++	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
+ 	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
+ endef
  
--OPENBLAS_VERSION = 0.3.9
--OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
-+OPENBLAS_VERSION = 0.3.18
-+OPENBLAS_SITE = https://github.com/xianyi/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
- OPENBLAS_LICENSE = BSD-3-Clause
- OPENBLAS_LICENSE_FILES = LICENSE
- OPENBLAS_INSTALL_STAGING = YES
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
