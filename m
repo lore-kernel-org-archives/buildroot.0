@@ -1,78 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48409C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F9ADC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 08:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1B9A827B5;
-	Mon, 10 Jan 2022 07:59:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E89EF40901;
+	Mon, 10 Jan 2022 08:02:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y5UaLBnyarkV; Mon, 10 Jan 2022 07:59:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hswVhiLEkXh0; Mon, 10 Jan 2022 08:02:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2471182771;
-	Mon, 10 Jan 2022 07:59:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8142E1BF20B
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:59:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5127B40905;
+	Mon, 10 Jan 2022 08:02:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E663E1BF334
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 08:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62E7D82771
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:59:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E173E400BF
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 08:02:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X0Cpxma0Wgw1 for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 07:59:22 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tZZchISBeTNT for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 08:02:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 198038271A
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:59:21 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id r9so23291900wrg.0
- for <buildroot@buildroot.org>; Sun, 09 Jan 2022 23:59:21 -0800 (PST)
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
+ [IPv6:2a00:1450:4864:20::12f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D461F4013A
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 08:02:32 +0000 (UTC)
+Received: by mail-lf1-x12f.google.com with SMTP id g11so41332080lfu.2
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 00:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YdSqMvxLPb2JFOBljSe8lPfK94d7MWVBFA9HWDh2Ozo=;
- b=UgjDNL67GvZVie1HZ8OjH8tot1vrE4wkIXo374IK1bxb0rCnzG9HDzmhQ6/BDi7guH
- Tkz9Q+LS3mcSMsH6TKQaqA/r1QVXo4sKZdOsy9D8DOt9ux/bm+7L4Ms3BjFqNPFUPx8t
- Jpfc9h1TLSxQ99bk5O+ZyZzuT/NGFiZ64Pos9CnLMKh7N1KEkcpqIiDqDvMtYzjehL68
- Yo/vi+bUDsStrOfUJhljtimjZFJWyB6Fsf8y4NKSx8gIULbhftv5yntePgrmHFxVkfXd
- vHYv/jYUTzrc6C2QWs3l3k34nRPc8yaQeWBgaDEbrZ60gLt1Uzi4IOGo40n+gRcKeA3p
- BLAQ==
+ bh=0rCngoOon7mfU9I4IZenIsVEd3Z7WBQsFuXXe/9hmew=;
+ b=STM8ZEbeuRHolqpZtoKxTWt9LfSgmAZoF7nI6ZLsl5DLrArz/XvqyPV/YIudrR0s5F
+ 1Poe4oDGQ3PhICapcXZlKYQGOBI3lA/G7c2pb2tXdOOkqC/WY1h+qhD3cMZD0aEz5oOB
+ IvBShFIQ68Gxu6Qe2hGj4uOHA+zDUYvrbTvMegETT1mHkmkMilOwsuTo9PLcCDrAGHhA
+ STZNyygTNsIVXGlVmfxDNe82GWfOy41a7AmMWhKiVPlgaCaq3sWkrJ11EGL7COdsSnl6
+ lKAk+mVvwKFR6+3yXxvzwxEc1tkgrZPmKMZzfl+0s6e5mmFinR32jT9ahUt43FRsIAJ3
+ rcAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=YdSqMvxLPb2JFOBljSe8lPfK94d7MWVBFA9HWDh2Ozo=;
- b=qgstMEuULaPrfqa0Jen/S5/6wsvM757oqbOaQ6sDsCDs90LX4sLdoC07AREABbTusv
- +o3Agqs7ATfV2Rl3QXHRlpZUgdQ/NQ8O2kkaFx04C2/jwuMdecCvSrsqNKdtZWLxnCRp
- +fNn2/+kZWeZ4dY4UIw1HvF0YqL1/yc5U/2EQqPQeL4eeDVeZtceOMq7+FAbFFUpIQJr
- f0En+j8B+fnTdvadvZ7blGcdBJSiQqJtIM8ZYG1k7v3UbUHs99DfeUKVAi7UPCIFvWJL
- EnyQ77c4F54Tu+3Y5KwPO61Em6W02IhFa5UpnZ7SY7wudhrhYMZ880Yb4TC/YFgbbxRY
- p82A==
-X-Gm-Message-State: AOAM532sJuUOf081Yrh2fvaYeIWwPAb6qN87ai7UbrscY6tpkTOGGv5/
- hIjfluyNW1gMDRdfDWuWxw8msn4P88I=
-X-Google-Smtp-Source: ABdhPJzKkNyqEngB7GF8LYsSujqpEhB+lZXiN3agfWQ8XdO+upOuR6Ue15cxzgwOsOQYT9fpB+qMmg==
-X-Received: by 2002:a05:6000:1acd:: with SMTP id
- i13mr63458237wry.406.1641801560111; 
- Sun, 09 Jan 2022 23:59:20 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id n41sm6143856wmr.3.2022.01.09.23.59.19
+ bh=0rCngoOon7mfU9I4IZenIsVEd3Z7WBQsFuXXe/9hmew=;
+ b=YvccClisirmxLeRkgGoC2szI9R3OA31KFF9109eE2totblGEuVtyCBCQhGnfunMXfI
+ hqLwKz3UzNrzXYNEReDhv7sCho46npixEBdgzjgQEh8BQ3Cfe+PjecJ69+3oOsduwUsn
+ Qs9lsoAhLFS7ZgdcMYHEo+wi7f1tzVmgUAYdDb/zq00ty8kZJGfAk5/6CrmcYIhLyW5o
+ IK+frJtus0mogxABeM3qrzSe493elv2JUNEte2isLTxdEFDOcWjjaksemOKG3dJ18gVx
+ W1ucEXcn2qaBBXqAjxZbZnnOv/cBdRfem9vW9NiLyrQpiZexx9vW6J5jwRAV+LfNbtZD
+ +qDQ==
+X-Gm-Message-State: AOAM532OZigV0114tz6rsrhPmWDh0PL7MG8lR9gJ2I+OzooPVYGQP4Ve
+ +uVsYyP6KurvvcRaLxvAVRf/hTyYTyQ=
+X-Google-Smtp-Source: ABdhPJwZJKYON9dxszkrfV6TngFknN+YI7AFb6WoPMFMOohJghDp0Oj6U25mQ7P+5zRGLrRxgqhtRg==
+X-Received: by 2002:a2e:7311:: with SMTP id o17mr51823298ljc.120.1641801750654; 
+ Mon, 10 Jan 2022 00:02:30 -0800 (PST)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com.
+ [82.209.154.112])
+ by smtp.gmail.com with ESMTPSA id g4sm941891lfu.137.2022.01.10.00.02.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Jan 2022 23:59:19 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Mon, 10 Jan 2022 00:02:30 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 08:58:04 +0100
-Message-Id: <20220110075804.1499122-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon, 10 Jan 2022 09:03:01 +0100
+Message-Id: <20220110080301.2805134-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/git: add xdg SELinux module
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2022.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,47 +85,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-xdg SELinux module is needed to avoid the following build failure raised
-since bump of refpolicy to version 2.20220106 in commit
-f6691d122ce25fc580ca88243f79f75cc2808ca7 and
-https://github.com/SELinuxProject/refpolicy/commit/64e637d895c516d7a6b6cbcd46b187136279fddd:
-
- policy/modules/services/git.te:121:ERROR 'attribute xdg_config_type is not declared' at token ';' on line 115358:
- 	typeattribute git_xdg_config_t xdg_config_type;
- #line 121
- checkpolicy:  error(s) encountered while parsing configuration
- Rules.monolithic:78: recipe for target 'policy.30' failed
-
-Fixes:
- - http://autobuild.buildroot.org/results/98d5b3db313000855721c0ad994951fe8cc781c0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- package/git/git.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 556921a9fc..90b1acd6a4 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -10,7 +10,7 @@ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_CPE_ID_VENDOR = git-scm
--GIT_SELINUX_MODULES = apache git
-+GIT_SELINUX_MODULES = apache git xdg
- GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
- # We're patching configure.ac
- GIT_AUTORECONF = YES
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index e81deb82a6..3a06340575 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e80631cb1363d4734fe9d0c91f69a68be3848166d6e0481db19ce44a9cb4f531  libostree-2021.6.tar.xz
++sha256  43a00e7856842b8a34f6616fc2ce1ce238ef43210cca41f70e6b4b0d2a9fcad5  libostree-2022.1.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index a6b09f95e5..22cb83d039 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2021.6
++LIBOSTREE_VERSION = 2022.1
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 -- 
-2.34.1
+2.33.0
 
 _______________________________________________
 buildroot mailing list
