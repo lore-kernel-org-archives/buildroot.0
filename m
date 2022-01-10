@@ -1,83 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5953C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 12:23:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EF2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 12:47:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EC6340906;
-	Mon, 10 Jan 2022 12:23:30 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZL4N7CCwmu6V; Mon, 10 Jan 2022 12:23:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 918DB4038C;
-	Mon, 10 Jan 2022 12:23:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE7A81BF275
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:23:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B136827BB
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:23:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B51028281A;
+	Mon, 10 Jan 2022 12:47:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gj9WQuu61seE for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 12:23:23 +0000 (UTC)
-X-Greylist: delayed 00:05:21 by SQLgrey-1.8.0
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A447081A27
- for <buildroot@busybox.net>; Mon, 10 Jan 2022 12:23:21 +0000 (UTC)
-Received: from methusalix.internal.home.lespocky.de ([92.117.37.181]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MEVBc-1n9dRU3GCg-00Fy68; Mon, 10 Jan 2022 13:17:26 +0100
-Received: from falbala.internal.home.lespocky.de ([192.168.243.94])
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <post@lespocky.de>)
- id 1n6tc1-0000yo-EF; Mon, 10 Jan 2022 13:17:22 +0100
-Date: Mon, 10 Jan 2022 13:17:16 +0100
-From: Alexander Dahl <post@lespocky.de>
-To: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Message-ID: <20220110121715.GA6032@falbala.internal.home.lespocky.de>
-Mail-Followup-To: David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
- MTD Mailing List <linux-mtd@lists.infradead.org>,
- Buildroot Mailing List <buildroot@busybox.net>,
- "Josh Boyer (Fedora)" <jwboyer@gmail.com>,
- "Riku Voipio (Debian)" <riku.voipio@linaro.org>,
- "Pascal Bleser (SUSE)" <pascal.bleser@opensuse.org>,
- "Levente Polyak (Arch)" <anthraxx@archlinux.org>,
- "Robbat (Gentoo)" <robbat2@gentoo.org>, embedded@gentoo.org,
- "Oliver Schinagl (Alpine)" <oliver@schinagl.nl>,
- "Pascal Bellard (SliTaz)" <pascal.bellard@slitaz.org>,
- =?iso-8859-1?Q?Llu=EDs_Batlle_i_Rossell_=28NixOS=29?= <shaba@altlinux.org>,
- "Sergey Bolshakov (ALT Linux)" <sbolshakov@altlinux.org>,
- "Orphaned (Void Linux)" <orphan@voidlinux.org>,
- Richard Weinberger <richard@nod.at>
-References: <c31dba4f-42a8-ba48-7df2-b56bf4699a4c@sigma-star.at>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V5byNidVqoJQ; Mon, 10 Jan 2022 12:47:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0922281386;
+	Mon, 10 Jan 2022 12:47:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A96B1BF275
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:47:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDAAF401D2
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:47:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=linatsea.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PXzTHpNe-h8U for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 12:47:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E67B401D1
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 12:47:33 +0000 (UTC)
+Received: (Authenticated sender: thierry.bultel@linatsea.fr)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id ECD9D100006;
+ Mon, 10 Jan 2022 12:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
+ t=1641818850;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Y0jThsZwmmqeqD6KF1R/zoOsitaDggjjX4mhTUkAM14=;
+ b=NDQ66WKFI83239qsow8iRHcSJSRToR7957vkXVVEdx36W9nVHqLgIO+THBw4lBqMLY2Ajv
+ OYP6s2Ivp9hvqW+fCaR8rTfYxWdVpE4Dq8CbEoSPv6wmMvn5b5KPphU9mrmbumpoT364ea
+ lhftZTaanD+pWvxRKpAeobgWvq0DFAz3xv48I59ib3MpqVYoDFORWSB2WJnfx4Yrl5KvcL
+ /nODJ2yy3BfYQHAOOh/72boQATPBuAvvNhxWxbs56a3ELyVL5zOywuqplgK4xX5CfvSEmq
+ cbk0cERLUuaM+EbpbGDsqZiyovQPt5phndRA7JXorh/+Xfhx3s3wWxk0i3tqtA==
+From: Thierry Bultel <thierry.bultel@linatsea.fr>
+To: buildroot@buildroot.org
+Date: Mon, 10 Jan 2022 13:46:42 +0100
+Message-Id: <20220110124644.1388438-1-thierry.bultel@linatsea.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <c31dba4f-42a8-ba48-7df2-b56bf4699a4c@sigma-star.at>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scan-Signature: cfc1030892414ad8b9e614439ac53396
-X-Provags-ID: V03:K1:2K4C7oUIkOL9cDS8fngW0GAotIjoim3o0J/mZ5Gw224CGGSJW1a
- 3bUyEsLpTUjPmI2Ge3eCxTY9jXEY3cMOE0pcHFMeZPjHn8Xb3J2SDkjpbjn5EbpoTpoj5cC
- oeTY4HcHq15z5t/9uoDBQcpH3FsPQVdgYddjSYiUs7+/rRKAIXtc11Cj6KK8lNqKbtWHpse
- yQa+LwerXFgAsxa1UfC8w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O4XXN90x60k=:GFSZA9sA9KV5zCBt3BlthI
- rlI46jSj+cWPlPq987P6gqX5o9Op7qTR/gmv+61t+W0KQPatuMyTf3UmAR1aVo1Qmd3BqbDVf
- 1Ii17UsvFkKTcSeNKMDiVcj/1Xfe3p0IgmVoLdszscD0xmorv58tN8FwwZbBzEoD4JHuLfvo1
- XoHzMGQsibVR6JHilGrz+bxx5iX+4HkNjOYP+ZZZ8HCj/XAKdyGCFWGufDwybbrIDFiZ76PVT
- JWOe9icFWNt6/uaQcYRtqK+34coP55wsP5l4PTrAu2sxhgH9vakcYoQY3115qm9yWZT0ML/D1
- 8VNV8QXX5piRB2bDdsN7q/T2UALXUZ56D5IgvDzsVsmNTFtgZx0/1ZzYqkzxRfB7K0c/9nWsw
- RPJS8R2YGdnJ+9PvorUUFt52m5QLNawYuyx3rhtq78hAxKjL1/wWbJD+sXJsVlpHq+6S+6jKc
- H7w2WIrKmjigoR1phHPGyJP77dYDvjoZm0TxdSA/wjpW9jlA/fDahNAlJEgVPRNASqyh71sJm
- 1ZFt0kM+kb3T6+hOnMEySaX3HDgZPA4MOrWD8urXvb5bOwTaTR1GV8q7SXYRuXav+prv5Ug9h
- F9LXF5Tgq/bKGZ9zr74tiDqUrjtpbyiD/V/7t8OfQBRenG/tzVGPmEeC8pfdWadeFj0uGutMm
- EfddCNH17G751Qmw2EbcxWKqiusBCdDyAuTDbkstrad/7YE3NpoDE+FKOuyPA6l80pbY=
-Subject: Re: [Buildroot] [ANNOUNCE] mtd-utils-2.1.4 is released
+Subject: [Buildroot] [PATCH v4 1/3] package/cross-ldd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,102 +65,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Sergey Bolshakov \(ALT Linux\)" <sbolshakov@altlinux.org>,
- "Pascal Bleser \(SUSE\)" <pascal.bleser@opensuse.org>,
- "Levente Polyak \(Arch\)" <anthraxx@archlinux.org>,
- "Oliver Schinagl \(Alpine\)" <oliver@schinagl.nl>, embedded@gentoo.org,
- "Riku Voipio \(Debian\)" <riku.voipio@linaro.org>,
- =?iso-8859-1?Q?Llu=EDs_Batlle_i_Rossell_=28NixOS=29?= <shaba@altlinux.org>,
- "Orphaned \(Void Linux\)" <orphan@voidlinux.org>,
- "Robbat \(Gentoo\)" <robbat2@gentoo.org>,
- MTD Mailing List <linux-mtd@lists.infradead.org>,
- Richard Weinberger <richard@nod.at>,
- Buildroot Mailing List <buildroot@busybox.net>,
- "Josh Boyer \(Fedora\)" <jwboyer@gmail.com>,
- "Pascal Bellard \(SliTaz\)" <pascal.bellard@slitaz.org>
-Content-Type: multipart/mixed; boundary="===============5938466189839646918=="
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+cross-ldd works just as ldd, but supports
+other architectures. It is needed by dracut, for instance.
+It is suffixed with "-ldd-buildroot" to avoid conflicts
+with toolchains that already implement it.
 
---===============5938466189839646918==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="x+6KMIRAuhnl3hBn"
-Content-Disposition: inline
+Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+---
+Changes v1 -> v2:
+  - simplified the download (suggested by Arnoult)
+Changes v2 -> v3
+  - changed the name to -ldd-cross, in order to avoid
+    a conflict with the external toolchains that implement it
+Changes v3 -> v4
+  - No more Config.in. It is just a bind host-only package
+  - cross-ldd.mk: added pointer to dracut documentation in
+    the comment
+  - Changed the suffix to -ldd-buildroot
+  - No longer uses SED, but uses an actual patch for that
 
+Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+---
+ .../cross-ldd/000-change-extension-name.patch | 12 ++++++++++
+ package/cross-ldd/cross-ldd.mk                | 23 +++++++++++++++++++
+ package/dracut/dracut                         | 15 ++++++++++++
+ 3 files changed, 50 insertions(+)
+ create mode 100644 package/cross-ldd/000-change-extension-name.patch
+ create mode 100644 package/cross-ldd/cross-ldd.mk
+ create mode 100644 package/dracut/dracut
 
---x+6KMIRAuhnl3hBn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello David,
-
-On Fri, Jan 07, 2022 at 03:24:59AM +0000, David Oberhollenzer wrote:
-> mtd-utils-2.1.4 is released.
->=20
-> Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.=
-1.4.tar.bz2
-> Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.=
-1.4.tar.bz2.asc
-> Signed git tag:        git://git.infradead.org/mtd-utils.git v2.1.4
->=20
-> Alternatively also mirrored here:
->=20
-> Tarball:               https://infraroot.at/pub/mtd/mtd-utils-2.1.4.tar.b=
-z2
-> Tarball gpg signature: https://infraroot.at/pub/mtd/mtd-utils-2.1.4.tar.b=
-z2.asc
-> Signed git tag:        https://git.infraroot.at/mtd-utils.git v2.1.4
-
-I tried to verify the gpg signature, but I could not find a public
-key. At https://keys.openpgp.org/ you only get a not working key:
-
-    gpg: key BCE5DC3C741A02D1: new key but contains no user ID - skipped
-
-I also searched at http://www.linux-mtd.infradead.org/index.html and
-could not find a key, could you please point us to a recent version?
-
-Greets
-Alex
-
---=20
-/"\ ASCII RIBBON | =BBWith the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.=AB
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-
---x+6KMIRAuhnl3hBn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEwo7muQJjlc+Prwj6NK3NAHIhXMYFAmHcI8cACgkQNK3NAHIh
-XMavFg//UIYGWw6LHjB3Z5KJYe9FKzLHp6NEKdk6pXmeUIuxufVKsfdS7nLPwsFP
-2hrli88DJG+ItYUl7bFyROEePNafSlAJiAXTAXoI5G0dCNz8TtnWZl7f9awayowf
-d5H+nlL6VeIa1fRE/z7MVIiQimmNYHnF2cCTauHmyaK+F41zOrqnlk9VvVebtCp2
-w4yB7RwCTiIRXSrAlaHeS2CRRz/bsUX4MjwL7uED0Z5y3fWRqYhJszju4Zp68JBM
-4LaNLmGSKll1Hmjk8FVIG4oHJFgMyZoLxwNA08xbiT8ynk4eXgaIKIRvs0KgKYAJ
-gcpnHbEw2TNqOJ/lis79z9wKgvMYKx5335pCnD0BD8acfO9s9v6PvxZkHVczj52Y
-xW2OBOcHMwjTw4PzNX0BsM7IAQ0TOL2YGpLkgHGotqQPM8f1EKXa3812FDxYhBCD
-4WPHI8hWQABnweSCIRUq8/4AZPUZPL/Ui+PqdAnjmZo2oHT8joCLYyhdxvJO8oB7
-at1O1Cdct9nPelGwLVaFMUdJQtxVDgzNqiTAENG92Hu3cREDmJ+dqG1uTnZ6Tb3X
-PxNWvvZ7QQU35mLiUqN19ERtOuAYbyNUBWL2pzkQ50d8DCAJBegB2kp7kjvzhLXz
-VyWjYr831/bObUkdGBqU0O4EZ1/j4SYM4Hfdl0fxO9xFkq6BxzY=
-=eEe8
------END PGP SIGNATURE-----
-
---x+6KMIRAuhnl3hBn--
-
---===============5938466189839646918==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/cross-ldd/000-change-extension-name.patch b/package/cross-ldd/000-change-extension-name.patch
+new file mode 100644
+index 0000000000..74364adc88
+--- /dev/null
++++ b/package/cross-ldd/000-change-extension-name.patch
+@@ -0,0 +1,12 @@
++diff -purN host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec.orig/cross-compile-ldd host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec/cross-compile-ldd
++--- host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec.orig/cross-compile-ldd	2022-01-06 12:25:40.144852639 +0000
+++++ host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec/cross-compile-ldd	2022-01-06 12:25:40.148852681 +0000
++@@ -19,7 +19,7 @@ sed="${SED:-sed}"
++ grep="${GREP:-grep}"
++ 
++ my_name="$( basename "${0}" )"
++-prefix="${0%-ldd}"
+++prefix="${0%-ldd-buildroot}"
++ gcc="${prefix}-gcc"
++ readelf="${prefix}-readelf"
++ fake_load_addr_root="$((0xdeadbeef))"
+diff --git a/package/cross-ldd/cross-ldd.mk b/package/cross-ldd/cross-ldd.mk
+new file mode 100644
+index 0000000000..845e819aee
+--- /dev/null
++++ b/package/cross-ldd/cross-ldd.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# cross-ldd
++#
++# ldd drop-in replacement for cross-compilation toolchains.
++# This is the officially supported version mentioned
++# in the dracut documentation (see dracut/docs/README.cross)
++#
++################################################################################
++
++CROSS_LDD_VERSION = 6c9c724ebd6a29c279c6e5734e44c07f067808ec
++CROSS_LDD_SOURCE = $(CROSS_LDD_VERSION).tar.gz
++CROSS_LDD_SITE = https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f/archive
++CROSS_LDD_LICENSE = GPL-2.0
++
++# Notice that we change the name to '-ldd-buildroot', in order to avoid conflict
++# with some external toolchains that implement it
++
++define HOST_CROSS_LDD_INSTALL_CMDS
++	install -D -m 755 $(@D)/cross-compile-ldd $(TARGET_CROSS)ldd-buildroot
++endef
++
++$(eval $(host-generic-package))
+diff --git a/package/dracut/dracut b/package/dracut/dracut
+new file mode 100644
+index 0000000000..9d3db3b58e
+--- /dev/null
++++ b/package/dracut/dracut
+@@ -0,0 +1,15 @@
++#!/bin/bash
++
++set -e
++set -x
++
++if [ -z "$*" ]; then
++    echo "No argument supplied"
++    exit
++fi
++
++DRACUT_LDD=${TARGET_CROSS}ldd-cross \
++DRACUT_INSTALL="${HOST_DIR}/lib/dracut/dracut-install" \
++dracutbasedir=${HOST_DIR}/usr/lib/dracut \
++dracutsysrootdir=${TARGET_DIR} \
++${HOST_DIR}/bin/dracut "$@"
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5938466189839646918==--
