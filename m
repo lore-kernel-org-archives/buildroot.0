@@ -1,59 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EF2C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 12:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79180C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 12:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B51028281A;
-	Mon, 10 Jan 2022 12:47:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09A6040502;
+	Mon, 10 Jan 2022 12:48:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V5byNidVqoJQ; Mon, 10 Jan 2022 12:47:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GkAZCNchg7hG; Mon, 10 Jan 2022 12:48:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0922281386;
-	Mon, 10 Jan 2022 12:47:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0A96B1BF275
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:47:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDC36405D8;
+	Mon, 10 Jan 2022 12:48:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 340661BF275
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:48:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDAAF401D2
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:47:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CDDF405D8
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 12:48:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=linatsea.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PXzTHpNe-h8U for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 12:47:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e0IossbWV_4I for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 12:48:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3E67B401D1
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 12:47:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B79C740502
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 12:48:33 +0000 (UTC)
 Received: (Authenticated sender: thierry.bultel@linatsea.fr)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id ECD9D100006;
- Mon, 10 Jan 2022 12:47:29 +0000 (UTC)
+ by relay11.mail.gandi.net (Postfix) with ESMTPSA id 4D293100006;
+ Mon, 10 Jan 2022 12:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
- t=1641818850;
+ t=1641818911;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=Y0jThsZwmmqeqD6KF1R/zoOsitaDggjjX4mhTUkAM14=;
- b=NDQ66WKFI83239qsow8iRHcSJSRToR7957vkXVVEdx36W9nVHqLgIO+THBw4lBqMLY2Ajv
- OYP6s2Ivp9hvqW+fCaR8rTfYxWdVpE4Dq8CbEoSPv6wmMvn5b5KPphU9mrmbumpoT364ea
- lhftZTaanD+pWvxRKpAeobgWvq0DFAz3xv48I59ib3MpqVYoDFORWSB2WJnfx4Yrl5KvcL
- /nODJ2yy3BfYQHAOOh/72boQATPBuAvvNhxWxbs56a3ELyVL5zOywuqplgK4xX5CfvSEmq
- cbk0cERLUuaM+EbpbGDsqZiyovQPt5phndRA7JXorh/+Xfhx3s3wWxk0i3tqtA==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uJp0nFIppUK8zXqQSiX0a07eKLt8vwI5RP2TsYOlPxQ=;
+ b=YG6zw5jpX+F+buA1YRN1VpTABekWeL3v0JXmZoWxMQWP17KgR7Jho7szXFvQBW1KalSA3U
+ hA905B8SxduSGSGL3x6G6wo/zAZw9NJSC0g+1l6AKsfa0XmRes/bw4FaqeZFncXGCcUwz1
+ D5CpcxQxXNjNnRh+iNwjxkPvJMS2weIo5Vn0scKpfiDmSNfagfXg+jL/EHLJZ7oc0a3CTF
+ tddYPCC8fR3HtPcNVxQ3B55k/0hMBzU40APnBaUqcV3dUsFDrBvqKwePy8BfcLZ+nR8ZD1
+ b7H08yoLI8QK9seVPFRcq7YugnCyuuKa5PiiYAF247BfR6Zzh+9UfsuSvrFWtA==
 From: Thierry Bultel <thierry.bultel@linatsea.fr>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 13:46:42 +0100
-Message-Id: <20220110124644.1388438-1-thierry.bultel@linatsea.fr>
+Date: Mon, 10 Jan 2022 13:46:44 +0100
+Message-Id: <20220110124644.1388438-3-thierry.bultel@linatsea.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220110124644.1388438-1-thierry.bultel@linatsea.fr>
+References: <20220110124644.1388438-1-thierry.bultel@linatsea.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 1/3] package/cross-ldd: new package
+Subject: [Buildroot] [PATCH v4 3/3] fs/cpio: new option to use dracut tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,103 +73,284 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cross-ldd works just as ldd, but supports
-other architectures. It is needed by dracut, for instance.
-It is suffixed with "-ldd-buildroot" to avoid conflicts
-with toolchains that already implement it.
+Adds an option to invoke the dracut host tool, providing
+a configuration file, instead of having a full cpio archive
+of the whole target directory.
 
 Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
----
-Changes v1 -> v2:
-  - simplified the download (suggested by Arnoult)
+Changes v1 -> v2 (suggested by Arnoult and Yann)
+  - was a new fs type, now an option of cpio
+  - deals with the case of a build with no kernel
+  - gets the kernel name in a smarter way
+  - checks for the name of dracut configuration file
 Changes v2 -> v3
-  - changed the name to -ldd-cross, in order to avoid
-    a conflict with the external toolchains that implement it
+  - fixed a typo on the --no-kernel option for dracut
+  - removed the unneeded dependency to kernel
+  - added tests for cpio, for both full, and dracut modes
 Changes v3 -> v4
-  - No more Config.in. It is just a bind host-only package
-  - cross-ldd.mk: added pointer to dracut documentation in
-    the comment
-  - Changed the suffix to -ldd-buildroot
-  - No longer uses SED, but uses an actual patch for that
+  - Config.in: applied Yann's comments on syntax and option in choice
+  - do no export TARGET_CROSS but give it in command line instead
+  - use $(ROOTFS_CPIO_DIR) as base for tmp directory
+  - let original, full cpio, first in the code, and dracut mode after
+  - removed unwanted comment in dracut.conf (in tests)
 
 Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
 ---
- .../cross-ldd/000-change-extension-name.patch | 12 ++++++++++
- package/cross-ldd/cross-ldd.mk                | 23 +++++++++++++++++++
- package/dracut/dracut                         | 15 ++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100644 package/cross-ldd/000-change-extension-name.patch
- create mode 100644 package/cross-ldd/cross-ldd.mk
- create mode 100644 package/dracut/dracut
+ fs/cpio/Config.in                     | 35 ++++++++++
+ fs/cpio/cpio.mk                       | 36 +++++++++++
+ support/testing/conf/dracut.conf      | 93 +++++++++++++++++++++++++++
+ support/testing/tests/fs/test_cpio.py | 44 +++++++++++++
+ 4 files changed, 208 insertions(+)
+ create mode 100644 support/testing/conf/dracut.conf
+ create mode 100644 support/testing/tests/fs/test_cpio.py
 
-diff --git a/package/cross-ldd/000-change-extension-name.patch b/package/cross-ldd/000-change-extension-name.patch
-new file mode 100644
-index 0000000000..74364adc88
---- /dev/null
-+++ b/package/cross-ldd/000-change-extension-name.patch
-@@ -0,0 +1,12 @@
-+diff -purN host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec.orig/cross-compile-ldd host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec/cross-compile-ldd
-+--- host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec.orig/cross-compile-ldd	2022-01-06 12:25:40.144852639 +0000
-++++ host-cross-ldd-6c9c724ebd6a29c279c6e5734e44c07f067808ec/cross-compile-ldd	2022-01-06 12:25:40.148852681 +0000
-+@@ -19,7 +19,7 @@ sed="${SED:-sed}"
-+ grep="${GREP:-grep}"
-+ 
-+ my_name="$( basename "${0}" )"
-+-prefix="${0%-ldd}"
-++prefix="${0%-ldd-buildroot}"
-+ gcc="${prefix}-gcc"
-+ readelf="${prefix}-readelf"
-+ fake_load_addr_root="$((0xdeadbeef))"
-diff --git a/package/cross-ldd/cross-ldd.mk b/package/cross-ldd/cross-ldd.mk
-new file mode 100644
-index 0000000000..845e819aee
---- /dev/null
-+++ b/package/cross-ldd/cross-ldd.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# cross-ldd
-+#
-+# ldd drop-in replacement for cross-compilation toolchains.
-+# This is the officially supported version mentioned
-+# in the dracut documentation (see dracut/docs/README.cross)
-+#
-+################################################################################
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index c1151a2881..efc5bd7857 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -7,6 +7,41 @@ config BR2_TARGET_ROOTFS_CPIO
+ 
+ if BR2_TARGET_ROOTFS_CPIO
+ 
++choice
++	prompt "cpio type"
++	default BR2_TARGET_ROOTFS_CPIO_FULL
 +
-+CROSS_LDD_VERSION = 6c9c724ebd6a29c279c6e5734e44c07f067808ec
-+CROSS_LDD_SOURCE = $(CROSS_LDD_VERSION).tar.gz
-+CROSS_LDD_SITE = https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f/archive
-+CROSS_LDD_LICENSE = GPL-2.0
++config BR2_TARGET_ROOTFS_CPIO_FULL
++	bool "cpio the whole root filesystem (ie the content of 'target')"
++	help
++	  Build a cpio archive containing the whole the root filesystem.
 +
-+# Notice that we change the name to '-ldd-buildroot', in order to avoid conflict
-+# with some external toolchains that implement it
++comment "dracut cpio needs busybox, or systemd init system"
++	depends on !BR2_INIT_BUSYBOX
++	depends on !BR2_INIT_SYSTEMD
 +
-+define HOST_CROSS_LDD_INSTALL_CMDS
-+	install -D -m 755 $(@D)/cross-compile-ldd $(TARGET_CROSS)ldd-buildroot
++config BR2_TARGET_ROOTFS_CPIO_DRACUT
++	bool "Invoke dracut to make an initramfs"
++	select BR2_PACKAGE_HOST_DRACUT
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS
++	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSTEMD
++	help
++	  Builds an additional initramfs using dracut.
++	  This can be useful to create a recovery system,
++	  for instance.
++
++endchoice
++
++if BR2_TARGET_ROOTFS_CPIO_DRACUT
++config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
++	string "configuration file"
++endif
++
++
++endif # BR2_TARGET_ROOTFS_CPIO
++
++if BR2_TARGET_ROOTFS_CPIO_FULL
++
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_CPIO_NONE
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index 81f8c393d1..62e73de8be 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -29,6 +29,8 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+ 
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+ 
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_FULL),y)
++
+ # --reproducible option was introduced in cpio v2.12, which may not be
+ # available in some old distributions, so we build host-cpio
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -53,4 +55,38 @@ endef
+ ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
+ endif
+ 
++else ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
++
++ROOTFS_CPIO_DEPENDENCIES += host-dracut
++
++ifeq ($(BR2_LINUX_KERNEL),y)
++ROOTFS_CPIO_DEPENDENCIES += linux
++endif
++
++ifeq ($(BR_BUILDING).$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE),y.)
++$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
++endif
++
++ifeq ($(BR2_LINUX_KERNEL),y)
++ROOTFS_CPIO_DRACUT_CMD_OPTS += --kver $(LINUX_VERSION_PROBED)
++else
++ROOTFS_CPIO_DRACUT_CMD_OPTS += --no-kernel
++endif
++
++define ROOTFS_CPIO_CMD
++	mkdir -p $(ROOTFS_CPIO_DIR)/tmp
++
++	TARGET_CROSS="$(TARGET_CROSS)" \
++	$(HOST_DIR)/sbin/dracut \
++		$(ROOTFS_CPIO_DRACUT_CMD_OPTS) \
++		-c $(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE) \
++		--tmpdir $(ROOTFS_CPIO_DIR)/tmp \
++		-M \
++		--force \
++		--keep \
++		$@
 +endef
 +
-+$(eval $(host-generic-package))
-diff --git a/package/dracut/dracut b/package/dracut/dracut
++endif #BR2_TARGET_ROOTFS_CPIO_DRACUT
++
+ $(eval $(rootfs))
+diff --git a/support/testing/conf/dracut.conf b/support/testing/conf/dracut.conf
 new file mode 100644
-index 0000000000..9d3db3b58e
+index 0000000000..5aeecd18ce
 --- /dev/null
-+++ b/package/dracut/dracut
-@@ -0,0 +1,15 @@
-+#!/bin/bash
++++ b/support/testing/conf/dracut.conf
+@@ -0,0 +1,93 @@
++#Simple dracut config for a system without systemd
 +
-+set -e
-+set -x
++#Dracut configuration
 +
-+if [ -z "$*" ]; then
-+    echo "No argument supplied"
-+    exit
-+fi
++show_modules=yes
++i18n_install_all=no
++lvmconf=no
++mdadmconf=no
++early_microcode=no
++hostonly=no
++hostonly_cmdline=no
++use_fstab=no
++kernel_cmdline="rd.break=initqueue"
++do_strip=no
 +
-+DRACUT_LDD=${TARGET_CROSS}ldd-cross \
-+DRACUT_INSTALL="${HOST_DIR}/lib/dracut/dracut-install" \
-+dracutbasedir=${HOST_DIR}/usr/lib/dracut \
-+dracutsysrootdir=${TARGET_DIR} \
-+${HOST_DIR}/bin/dracut "$@"
++# Dracut modules need
++add_dracutmodules+=" \
++busybox-buildroot \
++bash
++"
++
++# Modules to ignore
++omit_dracutmodules+=" \
++biosdevname \
++btrfs \
++bluetooth \
++busybox \
++caps \
++cifs \
++crypt \
++crypt-gpg \
++dash \
++dbus-broker \
++dbus-daemon \
++dm \
++dmraid \
++dmsquash-live-ntfs \
++dracut-systemd \
++fcoe \
++fcoe-uefi \
++fs-lib \
++iscsi \
++i18n \
++lvmmerge \
++lvm \ 
++lunmask \
++mdraid \
++memstrack \
++mksh \
++modsign \
++mount-root \
++multipath \
++nbd \
++network-legacy \
++network-wicked \
++nfs \
++nvdimm \
++nvmf \
++parse-lunmask \
++qemu \
++qemu-net \
++resume \
++rootfs-block \
++rngd \
++systemd \
++systemd-udevd \
++systemd-coredump \
++systemd-ask-password \
++systemd-timedated \
++systemd-rfkill \
++systemd-resolved \
++systemd-hostnamed \
++systemd-initrd \
++systemd-journald \
++systemd-ldconfig \
++systemd-networkd \
++systemd-timesyncd \
++systemd-veritysetup \
++systemd-modules-load \
++systemd-sysctl \
++systemd-repart \
++systemd-sysext \
++systemd-sysusers \
++systemd-tmpfiles \
++squash \
++ssh-client \
++stratis \
++tpm2-tss \
++udev-rules \
++url-lib \
++usrmount \
++"
++
+diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
+new file mode 100644
+index 0000000000..5570693dc2
+--- /dev/null
++++ b/support/testing/tests/fs/test_cpio.py
+@@ -0,0 +1,44 @@
++import os
++import infra.basetest
++
++CHECK_FS_CMD = "mount | grep 'rootfs on / type rootfs'"
++
++def boot_img(emulator, builddir):
++    img = os.path.join(builddir, "images", "rootfs.cpio")
++    emulator.boot(arch="armv7",
++                  kernel="builtin",
++                  options=["-initrd", "{}".format(img)])
++    emulator.login()
++    _, exit_code = emulator.run(CHECK_FS_CMD)
++    return exit_code
++
++class TestCpioDracut(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_INIT_BUSYBOX=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_DRACUT=y
++        BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE="{}"
++        """.format(infra.filepath("conf/dracut.conf"))
++
++    def test_run(self):
++
++        exit_code = boot_img(self.emulator,
++                             self.builddir)
++        self.assertEqual(exit_code, 0)
++
++class TestCpioFull(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_INIT_BUSYBOX=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_FULL=y
++        """
++
++    def test_run(self):
++
++        exit_code = boot_img(self.emulator,
++                             self.builddir)
++        self.assertEqual(exit_code, 0)
++
++
 -- 
 2.25.1
 
