@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 340BFC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEB9C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D580082771;
-	Mon, 10 Jan 2022 07:20:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49A16827FB;
+	Mon, 10 Jan 2022 07:20:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DXTM7D_KqN4i; Mon, 10 Jan 2022 07:20:35 +0000 (UTC)
+	with ESMTP id Tkcr0iXM0ib4; Mon, 10 Jan 2022 07:20:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 304608272A;
-	Mon, 10 Jan 2022 07:20:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A2F01BF97F
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:19:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9468482771;
+	Mon, 10 Jan 2022 07:20:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0102F1BF334
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 095E2605A2
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:19:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F014481465
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:19:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rtjRwsTHNMP1 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 218POUZwYsNC for <buildroot@lists.busybox.net>;
  Mon, 10 Jan 2022 07:19:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BEB460C00
+ by smtp1.osuosl.org (Postfix) with ESMTP id 109BA8270B
  for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:19:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id D4A0782DFE; Mon, 10 Jan 2022 07:13:16 +0000 (UTC)
+ id CAF4A82DFB; Mon, 10 Jan 2022 07:13:16 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Mon, 10 Jan 2022 08:17:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90be89396bcbdd529f4cff64e44aa9fa3b0983e7
-X-Git-Newrev: f56ecaad4b5a771ea97275c33e3bcb2497d289bb
+X-Git-Oldrev: 89ecfb3c789b57552373eb323e6b2ac9001295a3
+X-Git-Newrev: 90be89396bcbdd529f4cff64e44aa9fa3b0983e7
 X-Patchwork-Hint: ignore
-Message-Id: <20220110071316.D4A0782DFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-packaging: bump to version
- 21.3
+Message-Id: <20220110071316.CAF4A82DFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squid: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +58,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f56ecaad4b5a771ea97275c33e3bcb2497d289bb
+commit: https://git.buildroot.net/buildroot/commit/?id=90be89396bcbdd529f4cff64e44aa9fa3b0983e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+squid needs threads and
+https://github.com/squid-cache/squid/commit/7dba4ac446341548a0b101489785f2cef9a33caa
+to avoid the following build failure raised since
+bump to version 5.3 in commit efc07b7a1818787229ddb335ca26ff2cf03820ae:
+
+ntlm_fake_auth.cc: In function 'int main(int, char**)':
+ntlm_fake_auth.cc:187:18: error: 'std::this_thread' has not been declared
+  187 |             std::this_thread::sleep_for(std::chrono::milliseconds(response_delay));
+      |                  ^~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2aabc8375d41ad4d047d20ff8ee4fe1c978e7ee1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-packaging/python-packaging.hash | 4 ++--
- package/python-packaging/python-packaging.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-index 0c23a5f71c..0f353a9e36 100644
---- a/package/python-packaging/python-packaging.hash
-+++ b/package/python-packaging/python-packaging.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/packaging/json
--md5  240ba5823ed31051a1254e74c9d18d55  packaging-21.0.tar.gz
--sha256  7dc96269f53a4ccec5c0670940a4281106dd0bb343f47b7471f779df49c2fbe7  packaging-21.0.tar.gz
-+md5  e713c1939f294fd729af4a7be40dd141  packaging-21.3.tar.gz
-+sha256  dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb  packaging-21.3.tar.gz
- # Locally computed sha256 checksums
- sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index e2fb9b120b..569dc0bf58 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index 0df2aedef6..6272140768 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,13 +1,16 @@
+-comment "squid needs a toolchain w/ C++, gcc >= 4.8 not affected by bug 64735"
++comment "squid needs a toolchain w/ C++, threads, gcc >= 4.8 not affected by bug 64735"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
  
--PYTHON_PACKAGING_VERSION = 21.0
-+PYTHON_PACKAGING_VERSION = 21.3
- PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
--PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/df/86/aef78bab3afd461faecf9955a6501c4999933a48394e90f03cd512aad844
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/df/9e/d1a7217f69310c1db8fdf8ab396229f55a699ce34a203691794c5d1cad0c
- PYTHON_PACKAGING_SETUP_TYPE = setuptools
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	# needs fork()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
