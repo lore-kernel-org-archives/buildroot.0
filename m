@@ -1,52 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CDA1C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 18:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C6FFC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 19:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A712D400CB;
-	Mon, 10 Jan 2022 18:52:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9621860E46;
+	Mon, 10 Jan 2022 19:44:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sFHYyz4GpsqI; Mon, 10 Jan 2022 18:52:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KoxwyPPF_tS9; Mon, 10 Jan 2022 19:44:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86B2D400D6;
-	Mon, 10 Jan 2022 18:52:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAF3760E27;
+	Mon, 10 Jan 2022 19:44:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E34911BF352
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:52:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 627E01BF488
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 19:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D330F4025B
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:52:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FCE240961
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 19:44:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=heine.tech
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CdyhYkW2WkUI for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 18:52:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B6B140288
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 18:52:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A8CDD183487; Mon, 10 Jan 2022 19:52:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
- t=1641840743; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=MDCB7msx+hSWoTFj2oZc3qU3SSCfuCefvik4WVYijuI=;
- b=OmMVld4bZV2K+loIZQAtZhwL3PuNswgAAEG8hH9OqNUaGsy9mo4GfhBHyP4m1jRMBkQ1T/
- 5x+06o9TC5cHjTyFrnYvEbiiCwAzoD/jlt1QVcdYBLJSQukxdCQBMwMK62psScLs6pVlGX
- WrH/AuHMM0w5dW618I1wERx5FxLDRQM=
+ with ESMTP id MMQsctMw4nmh for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 19:44:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com
+ [IPv6:2607:f8b0:4864:20::a29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1D86540956
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 19:44:49 +0000 (UTC)
+Received: by mail-vk1-xa29.google.com with SMTP id 78so8855726vkz.7
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 11:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=xp+Vpf4Vw1/+XnZNIpdBdCga6Y95GVyKPKSHVj1rOLg=;
+ b=Yt6jhwJKXX2h1rN9FqNPQlpIFVHv1drZPH7TDmGeuatGuoNiWzmfs0YOxxgbG6JDxv
+ 6m52Exo0N+9qT1rQMGGi6du8RcWO7fIeWxqfrlTBvPiM1NPkdCjOOfJdPkYU2yawowUF
+ EL8BaSXBK8G2+z3IV+xmkmgyDzL9xq8+HLSMiuzJC+MReZnLBrtQ0TxdhX/I9ncQJyw9
+ OO13wlWctfMJlURiKly9U3wPDN67878IuGijqeCZNhTZhceF/XiaHer/agkbN+sEHsVf
+ wZmuUUJ/CkwyTVSomOsVAuvKyHlE6iAtEJpCmf4x9Vdn4CW0/vyPudhfF80x+S+BfAB/
+ UjNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=xp+Vpf4Vw1/+XnZNIpdBdCga6Y95GVyKPKSHVj1rOLg=;
+ b=dfVItZzkcGb1zoBD0ZE38J/jiU/9BxWvhNjrT2OwK1XKuWQavnw2GPgaTQ9uxludU0
+ VMaJCytBUgGGV3WpkdrvIBAd+1OQz3SOjCVTy+1DOlbDWMei2A8QHjcA1ODtNBSdEIHC
+ IwIhxeHEy0QXmcRijrhV1Bw/BZTG0r6KC2WmB41kjdr7jje/xLYCveX9GIj4KkpaRAHk
+ Y3EfEHrT8cJRAAaBZDjd33qe+03QTeKjddNbaO3Hs0sUR90VB4b8RE8b24qW6mYwjdjI
+ 8V9Di4zZlUHmWblcy9ViPmqLEzobuzCao1+T5qIZYckX3bzhJcyB4y5DrO5YL2HdBSlr
+ oW2g==
+X-Gm-Message-State: AOAM532xUwzTqwH6/Ck5ezK8SU0M4ul3i8cJeu/o0jJQh5inU9UHZTrx
+ ejeqxDg5lsJVvIsCI0v/08kAmGBUDlM=
+X-Google-Smtp-Source: ABdhPJwqhcKrYZs3rAcP+HxQ2Kppo49HQ6osDD3o08qBF2CLhHzKnVE8GU0c7FrNc5E0XaBJa/BbYA==
+X-Received: by 2002:a05:6122:16a7:: with SMTP id
+ 39mr662657vkl.30.1641843887731; 
+ Mon, 10 Jan 2022 11:44:47 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:485:504a:9e9e:dcdc:97da:bf2b])
+ by smtp.gmail.com with ESMTPSA id
+ 63sm4488283uak.17.2022.01.10.11.44.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Jan 2022 11:44:47 -0800 (PST)
+From: Fabio Estevam <festevam@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 19:51:40 +0100
-Message-Id: <20220110185147.84697-1-buildroot@heine.tech>
+Date: Mon, 10 Jan 2022 16:44:39 -0300
+Message-Id: <20220110194439.1809166-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH v5] package/networkd-dispatcher: new package
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2022.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,143 +86,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Michael Nosthoff via buildroot <buildroot@busybox.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Michael Nosthoff via buildroot <buildroot@busybox.net>
-
-Networkd-dispatcher is a dispatcher daemon for systemd-networkd
-connection status changes. This daemon is similar to
-NetworkManager-dispatcher, but is much more limited in the types of
-events it supports due to the limited nature of systemd-networkd.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2
-  - add .hash file
-  - use tabs for DEVELOPERS indentation
-
-v2 -> v3
-  - bump version to 2.1 (fixes an issue with systemd 246)
-  - resolve merge conflict in DEVELOPERS
-
-v3 -> v4
-  - adjust to changed dependencies of python-gobject
-  - removed dependencies already covered by depends on BR2_PACKAGE_DBUS
-  - sorted dependencies
-  - resolve merge conflict in DEVELOPERS
-
-v4 -> v5
-  - update dependencies of gobject-introspection
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/networkd-dispatcher/Config.in         | 21 ++++++++++++++++
- .../networkd-dispatcher.hash                  |  3 +++
- .../networkd-dispatcher.mk                    | 25 +++++++++++++++++++
- 5 files changed, 51 insertions(+)
- create mode 100644 package/networkd-dispatcher/Config.in
- create mode 100644 package/networkd-dispatcher/networkd-dispatcher.hash
- create mode 100644 package/networkd-dispatcher/networkd-dispatcher.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 12777e8d61..4b65d219c9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1991,6 +1991,7 @@ N:	Michael Nosthoff <buildroot@heine.tech>
- F:	package/grpc/
- F:	package/gtest/
- F:	package/libabseil-cpp/
-+F:	package/networkd-dispatcher/
- F:	package/protobuf/
- F:	package/re2/
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index bffb7cfb19b9..c630fc655291 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
-diff --git a/package/Config.in b/package/Config.in
-index 3a2ad30df9..23264afd9d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2294,6 +2294,7 @@ endif
- 	source "package/netstat-nat/Config.in"
- 	source "package/network-manager/Config.in"
- 	source "package/network-manager-openvpn/Config.in"
-+	source "package/networkd-dispatcher/Config.in"
- 	source "package/nfacct/Config.in"
- 	source "package/nftables/Config.in"
- 	source "package/nginx/Config.in"
-diff --git a/package/networkd-dispatcher/Config.in b/package/networkd-dispatcher/Config.in
-new file mode 100644
-index 0000000000..1dfa12ba45
---- /dev/null
-+++ b/package/networkd-dispatcher/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_NETWORKD_DISPATCHER
-+	bool "networkd-dispatcher"
-+	depends on BR2_USE_WCHAR # dbus-python -> glib2
-+	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # python-gobject -> gobject-introspection
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python -> glib2
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # python-gobject -> gobject-introspection -> host-qemu
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
-+	depends on BR2_PACKAGE_DBUS # dbus-python
-+	depends on BR2_PACKAGE_PYTHON3 # runtime, python-gobject
-+	depends on BR2_PACKAGE_SYSTEMD_NETWORKD # runtime
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_PYTHON_GOBJECT
-+	help
-+	  Networkd-dispatcher is a dispatcher daemon for
-+	  systemd-networkd connection status changes.
-+	  This daemon is similar to NetworkManager-dispatcher,
-+	  but is much more limited in the types of events it
-+	  supports due to the limited nature of systemd-networkd.
-+
-+	  https://gitlab.com/craftyguy/networkd-dispatcher
-diff --git a/package/networkd-dispatcher/networkd-dispatcher.hash b/package/networkd-dispatcher/networkd-dispatcher.hash
-new file mode 100644
-index 0000000000..ca7c300783
---- /dev/null
-+++ b/package/networkd-dispatcher/networkd-dispatcher.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  1682c0106d9d2879087612e76aebb87672ebf339c43f229a3ee27dadb428575b  networkd-dispatcher-2.1.tar.bz2
-+sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
-diff --git a/package/networkd-dispatcher/networkd-dispatcher.mk b/package/networkd-dispatcher/networkd-dispatcher.mk
-new file mode 100644
-index 0000000000..4f609db73a
---- /dev/null
-+++ b/package/networkd-dispatcher/networkd-dispatcher.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# networkd-dispatcher
-+#
-+################################################################################
-+
-+NETWORKD_DISPATCHER_VERSION = 2.1
-+NETWORKD_DISPATCHER_SOURCE = networkd-dispatcher-$(NETWORKD_DISPATCHER_VERSION).tar.bz2
-+NETWORKD_DISPATCHER_SITE = https://gitlab.com/craftyguy/networkd-dispatcher/-/archive/$(NETWORKD_DISPATCHER_VERSION)
-+NETWORKD_DISPATCHER_LICENSE = GPL-3.0
-+NETWORKD_DISPATCHER_LICENSE_FILES = LICENSE
-+
-+define NETWORKD_DISPATCHER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/networkd-dispatcher $(TARGET_DIR)/usr/bin/networkd-dispatcher
-+	mkdir -p $(TARGET_DIR)/etc/networkd-dispatcher/{routable,dormant,no-carrier,off,carrier,degraded,configuring,configured}.d
-+endef
-+
-+define NETWORKD_DISPATCHER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/networkd-dispatcher.service
-+	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.conf \
-+		$(TARGET_DIR)/etc/conf.d/networkd-dispatcher.conf
-+endef
-+
-+$(eval $(generic-package))
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2021.10"
++	bool "2022.01"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -85,7 +85,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2021.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2022.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 68259f69f26e..9171a794a168 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  cde723e19262e646f2670d25e5ec4b1b368490de950d4e26275a988c36df0bd4  u-boot-2021.10.tar.bz2
++sha256  81b4543227db228c03f8a1bf5ddbc813b0bb8f6555ce46064ef721a6fc680413  u-boot-2022.01.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
 -- 
 2.25.1
 
