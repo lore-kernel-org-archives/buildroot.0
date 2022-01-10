@@ -1,89 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E35C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 647CEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8128400BF;
-	Mon, 10 Jan 2022 07:21:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2363460C06;
+	Mon, 10 Jan 2022 07:26:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EE_vMKvSwkFB; Mon, 10 Jan 2022 07:21:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jDoyUh-ZYQoi; Mon, 10 Jan 2022 07:26:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A56C44031D;
-	Mon, 10 Jan 2022 07:21:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 592A11BF97F
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:21:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A79C60C00;
+	Mon, 10 Jan 2022 07:26:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 811521BF334
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4847E408F3
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:21:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E1C24031D
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:26:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kdLKKIhUFNoi for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 07:21:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id waKzwbHTQMAy for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 07:26:04 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 788EA408E8
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:21:28 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- o203-20020a1ca5d4000000b003477d032384so5058718wme.2
- for <buildroot@buildroot.org>; Sun, 09 Jan 2022 23:21:28 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59ECC40004
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:26:04 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id o3so24889618wrh.10
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 23:26:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ZY8zjUs4BHmv/zMusku97grbr55NHrDTvOs3bnu3u00=;
- b=b+vo5FSFucsV0YdmtcQgwZjm8BXlSgFMrQxQRquOarpIkAMhk9X6oab7jK/vkYNGz9
- rXXXcPz3ix08q53quS3w6SZgDq7T2sfLD+8aqfuzevh50giM9wBRSSxIO2F+jvaq6xpz
- Ljwq+67gXNIgOHSldSTDJpgnxqTSxLvB5mfTJ+HTf+I2di1S307naQhUzwW41MFYMuZW
- Yn6Sb7ianA7U2n7jQmO6kI2i0+yiXM7LTIdX5uYCdN5yeivLBwDYEnW7MmXTex41UJfB
- 1ZjdrolyDGPZ8adwFN+bDxmjCmaklGCw/YIjc2NJlJ0p9V5kIqU2w5stJU1CM6nlgWzo
- Ipmw==
+ bh=d9g7A5hWdvTSS+InXgVh0HxV/YctC/wlCo1Z5mdURM0=;
+ b=NmO+SOnvGkZ9nK8m+JbPgfVFwttnlUbi8OhQcv8fEJCJCQ7Ck4c8MtyNACeFQXTTB3
+ 6WH2Ar47/FYkSxOLE8r6bHYrwBOuvbPv1kGUKUWz0YhgDPaLS+LYo4eoONkWH6rHds1m
+ uXcmAFSWw1rlLmlPx+lQi/+wDcQz001NCpnkI96FblCQqnoa4lzIibuVhfg1rLr3E0HE
+ SnkwuhupgEEj0xJ+Aqlo/sgwWWc7mk54mjt0gtfNb/GRlnC6cAW4V6sCVR/+Iuiv7Dy7
+ eP/Okdv74+EdfEOzxcNRWBKMS5YQa3+Hd75ZHChvU5mEYznJR8/txkJAw7XU2GWZXhJe
+ Re3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=ZY8zjUs4BHmv/zMusku97grbr55NHrDTvOs3bnu3u00=;
- b=MH2LRhpSkShtxnsgJNcso0ybaMfoJXmbEfEKnH0rp26pmLPUYFvJB2Z8CwMd8geetw
- zUrMoaCM2HP1sd7ofyfEB8bgO82yDckaUqYonl4TmpGAP4n9sCb2EUFSqIjDMIacmccC
- Arm5CFfwVbCtmeHl0Urt4Dv+0M+HuSSWcQNMmRjEO3XvHg4qVcFVD649S5VXupTEqtIc
- W99FRJ3Ai4d4qYdkIpyIV5g8lCv9OWJqGIzic0uxqeOjNBAe6Iv43QW73KbToWepDlGY
- LL8v+069rT82Bwg+UQ53Bh8HcxeQiVQPFWJKgsUlhl4q1jWrIYwL3EPrhmeNA8tL7Gmf
- mS0Q==
-X-Gm-Message-State: AOAM5321pXiawI6HobkRtLe+I1mo6IHr3dxzsHP9Gzr2yaj4sfJyU4DQ
- DZsZ+FYio5qWF65JJvf4y1GWfQ==
-X-Google-Smtp-Source: ABdhPJwmWJEahLEbJKCamoknIO+9WwslVGedQAF0TRz/eC+48lgPbinY9ot8vID5kaiRnEOrUOQqcw==
-X-Received: by 2002:a05:600c:4f94:: with SMTP id
- n20mr20720905wmq.64.1641799286757; 
- Sun, 09 Jan 2022 23:21:26 -0800 (PST)
+ bh=d9g7A5hWdvTSS+InXgVh0HxV/YctC/wlCo1Z5mdURM0=;
+ b=Kq8/+xXlLKrXz5l5BMR3SPOSNLx+x+Io3I+cMdKrB95uTDnjH3FYIMEeTGcFF6MZis
+ S1HuUaTO9GBqfYf80pS1FvNu/5NJPN9cniVNbqvG3a9Ls9R7HXvbacxo1G4t9AdKEoqA
+ 3vp5EHsYQUJVhBE9PDLWl9pK84gemH5aTPHp+X7uak0rGgsmnUa8qmIAbZBSjrzPG9TV
+ hTEsL27haTxbNVjMeQRpPrtmE4fnz17SG9NpG53rbxOOtWfWI2bXxNomQxmvacpjY4YP
+ VxW+S+dau2I/Jy5+nOLwmJiCUJHVoW7VfILCYD9l0UUjKGHw/RCL8yZ2zuzufggcLeqs
+ Qcug==
+X-Gm-Message-State: AOAM532jEoVhEibnN1N8sBtdgw3LLq4hpODgGJNGFggDvTgibsa9Yjwr
+ TXlC03Ky5vSnlKeHxW9LzSF6cQ==
+X-Google-Smtp-Source: ABdhPJyPHVibaid+1LUqL+z05tJk92eCngvzNUrTxj6SumeqfOAJX+AXRJuwcLtY7/LXGj7y4YXH0Q==
+X-Received: by 2002:adf:f8d0:: with SMTP id f16mr4478039wrq.427.1641799562506; 
+ Sun, 09 Jan 2022 23:26:02 -0800 (PST)
 Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
  ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id g5sm6206666wrd.100.2022.01.09.23.21.26
+ by smtp.gmail.com with ESMTPSA id l4sm6413122wry.85.2022.01.09.23.26.01
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Jan 2022 23:21:26 -0800 (PST)
-Message-ID: <83376eb4-465e-c603-b989-26b0684520b2@mind.be>
-Date: Mon, 10 Jan 2022 08:21:25 +0100
+ Sun, 09 Jan 2022 23:26:02 -0800 (PST)
+Message-ID: <7229983a-cbde-eb3f-83cb-984544f3b355@mind.be>
+Date: Mon, 10 Jan 2022 08:26:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220110062327.1302104-1-james.hilliard1@gmail.com>
+To: Norbert Lange <nolange79@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+References: <20201126152832.1115350-1-nolange79@gmail.com>
+ <CADvTj4p=60BwS0f6+UZABNYRw6BYph+qkTU7L9Gv+=LOJewsMQ@mail.gmail.com>
+ <CADYdroOofT_jFTyAFuTd+iZGbmYwFwofJ8aHYnuz4TAbk4C80A@mail.gmail.com>
+ <CADvTj4q4bR++z4YevSfa35Xxu7AUVMmS2o4mEtfP4WK3-cGx2A@mail.gmail.com>
+ <CADYdroMDCcUYSj6XyrXUHi4hwDWjtTXNX7BOmLt-Eb3JK_3fQQ@mail.gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220110062327.1302104-1-james.hilliard1@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyparsing: bump to
- version 3.0.6
+In-Reply-To: <CADYdroMDCcUYSj6XyrXUHi4hwDWjtTXNX7BOmLt-Eb3JK_3fQQ@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: Allow extra config
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,7 +98,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+Cc: buildroot <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,48 +108,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 10/01/2022 07:23, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 09/01/2022 23:52, Norbert Lange wrote:
+> Not only missing, but I sometimes need a *different* config. For example i don't 
+> want to link against lz4, since I use zstd instead.
 
-  Applied to master, thanks.
+  Which is a great example of why the option doesn't work: it would affect 
+dependencies as well.
+
+  However, specifically for this one, we have in the .mk file:
+
+ifeq ($(BR2_PACKAGE_ZSTD),y)
+SYSTEMD_DEPENDENCIES += zstd
+SYSTEMD_CONF_OPTS += -Dzstd=true
+else
+SYSTEMD_CONF_OPTS += -Dzstd=false
+endif
+
+ifeq ($(BR2_PACKAGE_LZ4),y)
+SYSTEMD_DEPENDENCIES += lz4
+SYSTEMD_CONF_OPTS += -Dlz4=true
+else
+SYSTEMD_CONF_OPTS += -Dlz4=false
+endif
+
+So it should already do what you need, no?
 
   Regards,
   Arnout
-
-> ---
->   package/python-pyparsing/python-pyparsing.hash | 4 ++--
->   package/python-pyparsing/python-pyparsing.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-> index 2c52ff0843..a21baf46e5 100644
-> --- a/package/python-pyparsing/python-pyparsing.hash
-> +++ b/package/python-pyparsing/python-pyparsing.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/pyparsing/json
-> -md5  f0953e47a0112f7a65aec2305ffdf7b4  pyparsing-2.4.7.tar.gz
-> -sha256  c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1  pyparsing-2.4.7.tar.gz
-> +md5  2f5fad6c8e99ac2562ab08ad9e45b195  pyparsing-3.0.6.tar.gz
-> +sha256  d9bdec0013ef1eb5a84ab39a3b3868911598afa494f5faa038647101504e2b81  pyparsing-3.0.6.tar.gz
->   # Locally computed sha256 checksums
->   sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-> diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-> index 5741458d65..b6ab353a6d 100644
-> --- a/package/python-pyparsing/python-pyparsing.mk
-> +++ b/package/python-pyparsing/python-pyparsing.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_PYPARSING_VERSION = 2.4.7
-> +PYTHON_PYPARSING_VERSION = 3.0.6
->   PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
-> -PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210
-> +PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/ab/61/1a1613e3dcca483a7aa9d446cb4614e6425eb853b90db131c305bd9674cb
->   PYTHON_PYPARSING_LICENSE = MIT
->   PYTHON_PYPARSING_LICENSE_FILES = LICENSE
->   PYTHON_PYPARSING_SETUP_TYPE = setuptools
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
