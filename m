@@ -1,99 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5F1BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 21:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0B41C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 21:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C6B560E52;
-	Mon, 10 Jan 2022 21:10:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94D3B40946;
+	Mon, 10 Jan 2022 21:13:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IIFroKypo6F0; Mon, 10 Jan 2022 21:10:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U210g0AN6REV; Mon, 10 Jan 2022 21:13:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6878260E4F;
-	Mon, 10 Jan 2022 21:10:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 236201BF2B3
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 21:09:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E09974032D;
+	Mon, 10 Jan 2022 21:13:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 25CA61BF2B3
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 21:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 119E2830C0
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 21:09:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10D104032D
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 21:13:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zhLdXomwhFqx for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 21:09:58 +0000 (UTC)
-X-Greylist: delayed 00:10:59 by SQLgrey-1.8.0
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
- [148.163.156.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F014E82C75
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 21:09:57 +0000 (UTC)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJEC8c006100; 
- Mon, 10 Jan 2022 21:02:43 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
- by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm5s4usd-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 10 Jan 2022 21:02:42 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
- by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20AL0P8N003911;
- Mon, 10 Jan 2022 21:02:42 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com
- [149.81.74.108])
- by mx0a-001b2d01.pphosted.com with ESMTP id 3dfm5s4ure-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 10 Jan 2022 21:02:42 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
- by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20AL2H1w004128;
- Mon, 10 Jan 2022 21:02:40 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com
- (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
- by ppma05fra.de.ibm.com with ESMTP id 3df288ym71-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 10 Jan 2022 21:02:40 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com
- [9.149.105.62])
- by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP
- id 20AKrcFJ47907300
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 10 Jan 2022 20:53:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id DA6F5AE04D;
- Mon, 10 Jan 2022 21:02:37 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id A6930AE05D;
- Mon, 10 Jan 2022 21:02:37 +0000 (GMT)
-Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
- by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
- Mon, 10 Jan 2022 21:02:37 +0000 (GMT)
-Received: from yukon.ibmuc.com (unknown [9.171.70.95])
- by smtp.tlslab.ibm.com (Postfix) with ESMTP id 12AB122019F;
- Mon, 10 Jan 2022 22:02:36 +0100 (CET)
-From: =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TLjslIhbrGHB for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 21:13:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 496554031F
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 21:13:26 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id 2so8435924ilj.4
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 13:13:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ydNxBMH+7czzH5cJllg35x0+qJxcStOPaMJm8fDFuR0=;
+ b=qRqjI7p0mpXzqzYrdJUMlsd0dJXk6tmecZGS278R9avg18+fzX4AjvYEp9wFh0hFqZ
+ pOURU49DPlC06+IvTZ5guo89i99gxI0u0HvpBnrRAyjLJN0Wd2v1SJNykI99NwzqNLlq
+ TyN4czqlQIqpGns5X7n9EJrlHH5h/Ic+4GMrggIaXCALUxtkIqNyZjL9mO2xtTeEuM7D
+ q+PrQKpsVEeLx3V1GuZdYCAcCnHzM7BUBZqDLGfciz7zxdPlMiBwHB7cQ9VwfRWtwvfy
+ UkSYr0cpJj1Q8VcROMVbdIFOPaoJYTGUyhao89Yljix8ccgC4DFnNzJhm5LaMeReZe2j
+ guXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ydNxBMH+7czzH5cJllg35x0+qJxcStOPaMJm8fDFuR0=;
+ b=SOkTdy+r2sC5BtBIg1bzQTwojbFrHi4/mJM1s98VSLKu9ts1h3roj2qa3TCkppQEZj
+ Rac71yg1aEx3p7Uov0jE8FceperNL0mpbjONFZli7PuAihtxhESgrZLkrCNYgcTnKXdd
+ jyg8uu3ONJ9tKIsiDKZdxcyaGInZY9sePyMlnUg1Is7C5R6bu2+Pzao5Y1d1kKNTRQdu
+ rEehgTYgV+Co6mMZiLs3+wxRI6mv40XTX+PiGHOTTu3rH/MJCTlaljDPJYG0uj+Vu9iw
+ Vbqbq1/k1hoGSsHKylimi3Qn1tjLBoUYQFgUjjzliBr3Hf41K+TJIEk/8GOisSj2LPsI
+ zUpg==
+X-Gm-Message-State: AOAM532YJbFqxfZ3DmBypUSaJZR9D8/AmoUqOFx5CN64LiuMy+w7C4qW
+ ot4N9prdj9Mecyl8oxcTK9amOnfEx/8=
+X-Google-Smtp-Source: ABdhPJwVrBY2jc7N0bdxYIFbPqJbFIcGZ3GUCnDoLeDtd6EhNp6k3l7Xml4i5y0N7ig5mD4oYUhfiQ==
+X-Received: by 2002:a92:db0f:: with SMTP id b15mr887233iln.45.1641849205115;
+ Mon, 10 Jan 2022 13:13:25 -0800 (PST)
+Received: from james-x399.localdomain (97-118-242-51.hlrn.qwest.net.
+ [97.118.242.51])
+ by smtp.gmail.com with ESMTPSA id n6sm3845921ili.60.2022.01.10.13.13.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Jan 2022 13:13:24 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 22:02:33 +0100
-Message-Id: <20220110210235.817082-1-clg@kaod.org>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QJo7n5jNdeOb6QsZ24B9UxaFB58d4cTS
-X-Proofpoint-ORIG-GUID: V3iSH0vfSzMkn0-sNQiBPRWSWQorKM-O
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Date: Mon, 10 Jan 2022 14:13:23 -0700
+Message-Id: <20220110211323.1828141-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-10_09,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0
- priorityscore=1501 phishscore=0 malwarescore=0 mlxlogscore=820 mlxscore=0
- adultscore=0 clxscore=1034 impostorscore=0 spamscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201100141
-Subject: [Buildroot] [PATCH 1/3] configs/qemu: Add a ppc64le-powernv8
- configuration
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.61.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,62 +83,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>,
- Romain Naour <romain.naour@gmail.com>,
- =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UG93ZXJOViBpcyB0aGUgcGxhdGZvcm0gdXNpbmcgdGhlIE9QQUwgWzFdIGZpcm13YXJlIG9uIE9w
-ZW5QT1dFUgpzeXN0ZW1zLiBPUEFMIGZpcnN0IGxvYWRzIGEga2VybmVsIGFuZCBhbiBpbml0cmFt
-ZnMgaW1hZ2UgYmFzZWQgb24KYnVpbGRyb290IGluY2x1ZGluZyBhIHNlY29uZCBib290IGxvYWRl
-ciBwZXRpdGJvb3QgWzJdLiBUaGUgbGF0dGVyCmRvZXMgZGV2aWNlIGRpc2NvdmVyeSBhbmQga2V4
-ZWNzIGEgbmV3IExpbnV4IGltYWdlIGZyb20gZGlzayBvcgpuZXR3b3JrLgoKUUVNVSBpbXBsZW1l
-bnRzIFBvd2VyTlYgbWFjaGluZXMgWzNdIGZvciB0aGUgUE9XRVI4LCBQT1dFUjkgYW5kClBvd2Vy
-MTAgcHJvY2Vzc29ycyB3aGljaCBhcmUgdXNlZCBmb3IgZGV2IGFuZCB0ZXN0cy4gUE9XRVI4IGlt
-YWdlcwpiZWluZyBjb21wYXRpYmxlIHdpdGggUE9XRVI5IGFuZCBQb3dlcjEwLCBzaW1wbHkgYWRk
-IGEgc2luZ2xlCnFlbXVfcHBjNjRsZV9wb3dlcm52OCBib2FyZCBmb3IgYWxsLgoKVGhlIFFFTVUg
-c2NyaXB0IGJvb3RzIGRpcmVjdGx5IGZyb20gYSBudm1lIGRpc2sgYmVjYXVzZSBpdCBpcyBzaW1w
-bGUKZW5vdWdoIGJ1dCBhIHJlYWwgc3lzdGVtIHdvdWxkIGJvb3QgZnJvbSBhIHJhbWZzIGZpcnN0
-LgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuLXBvd2VyL3NraWJvb3QvYmxvYi9tYXN0ZXIv
-ZG9jL292ZXJ2aWV3LnJzdApbMl0gaHR0cHM6Ly9naXRodWIuY29tL29wZW4tcG93ZXIvcGV0aXRi
-b290LwpbM10gaHR0cHM6Ly9xZW11LnJlYWR0aGVkb2NzLmlvL2VuL2xhdGVzdC9zeXN0ZW0vcHBj
-L3Bvd2VybnYuaHRtbAoKU2lnbmVkLW9mZi1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9k
-Lm9yZz4KLS0tCiBib2FyZC9xZW11L3BwYzY0bGUtcG93ZXJudjgvcmVhZG1lLnR4dCAgfCAgNSAr
-KysrKwogY29uZmlncy9xZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmlnIHwgMjkgKysrKysr
-KysrKysrKysrKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCAzNCBpbnNlcnRpb25zKCspCiBj
-cmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcWVtdS9wcGM2NGxlLXBvd2VybnY4L3JlYWRtZS50eHQK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL3FlbXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25m
-aWcKCmRpZmYgLS1naXQgYS9ib2FyZC9xZW11L3BwYzY0bGUtcG93ZXJudjgvcmVhZG1lLnR4dCBi
-L2JvYXJkL3FlbXUvcHBjNjRsZS1wb3dlcm52OC9yZWFkbWUudHh0Cm5ldyBmaWxlIG1vZGUgMTAw
-NjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uMDU5ZjU1ZmJjOTE3Ci0tLSAvZGV2L251bGwKKysrIGIv
-Ym9hcmQvcWVtdS9wcGM2NGxlLXBvd2VybnY4L3JlYWRtZS50eHQKQEAgLTAsMCArMSw1IEBACitS
-dW4gdGhlIGVtdWxhdGlvbiB3aXRoOgorCitxZW11LXN5c3RlbS1wcGM2NCAtTSBwb3dlcm52OSAt
-a2VybmVsIHZtbGludXggLWFwcGVuZCAiY29uc29sZT1odmMwIHJvb3R3YWl0IHJvb3Q9L2Rldi9u
-dm1lMG4xIiAtZGV2aWNlIG52bWUsYnVzPXBjaWUuMyxhZGRyPTB4MCxkcml2ZT1kcml2ZTAsc2Vy
-aWFsPTEyMzQgLWRyaXZlIGZpbGU9Li9yb290ZnMuZXh0MixpZj1ub25lLGlkPWRyaXZlMCxmb3Jt
-YXQ9cmF3LGNhY2hlPW5vbmUgLWRldmljZSBlMTAwMGUsbmV0ZGV2PW5ldDAsbWFjPUMwOkZGOkVF
-OjAwOjAxOjAzLGJ1cz1wY2llLjEsYWRkcj0weDAgIC1uZXRkZXYgdXNlcixpZD1uZXQwIC1zZXJp
-YWwgbW9uOnN0ZGlvIC1ub2dyYXBoaWMgIyBxZW11X3BwYzY0bGVfcG93ZXJudjhfZGVmY29uZmln
-CisKK1RoZSBsb2dpbiBwcm9tcHQgd2lsbCBhcHBlYXIgaW4gdGhlIHRlcm1pbmFsIHdpbmRvdy4K
-ZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2VybnY4X2RlZmNvbmZpZyBiL2Nv
-bmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2VybnY4X2RlZmNvbmZpZwpuZXcgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCAwMDAwMDAwMDAwMDAuLmQ4ZWE2NjU1ZmNlMAotLS0gL2Rldi9udWxsCisrKyBiL2Nv
-bmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2VybnY4X2RlZmNvbmZpZwpAQCAtMCwwICsxLDI5IEBACisj
-IEFyY2hpdGVjdHVyZQorQlIyX3Bvd2VycGM2NGxlPXkKK0JSMl9wb3dlcnBjX3Bvd2VyOD15CisK
-KyMgU3lzdGVtCitCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0iaHZjMCIKK0JSMl9TWVNU
-RU1fREhDUD0iZXRoMCIKKworIyBGaWxlc3lzdGVtCitCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkK
-KyMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQKKworIyBJbWFnZQorQlIyX1JPT1RG
-U19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcWVtdS9wb3N0LWltYWdlLnNoIgorQlIyX1JPT1RG
-U19QT1NUX1NDUklQVF9BUkdTPSIkKEJSMl9ERUZDT05GSUcpIgorCisjIExpbnV4IGhlYWRlcnMg
-c2FtZSBhcyBrZXJuZWwKK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8x
-NT15CisKKyMgS2VybmVsCitCUjJfTElOVVhfS0VSTkVMPXkKK0JSMl9MSU5VWF9LRVJORUxfQ1VT
-VE9NX1ZFUlNJT049eQorQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4x
-NSIKK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJwb3dlcm52IgorQlIyX0xJTlVYX0tFUk5F
-TF9WTUxJTlVYPXkKKworIyBob3N0LXFlbXUgZm9yIGdpdGxhYiB0ZXN0aW5nCitCUjJfUEFDS0FH
-RV9IT1NUX1FFTVU9eQorQlIyX1BBQ0tBR0VfSE9TVF9RRU1VX1NZU1RFTV9NT0RFPXkKLS0gCjIu
-MzEuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 02d8900003..c9be54be05 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.60.3/meson-0.60.3.tar.gz.asc
+-sha256  87ca5fa9358a01864529392bd64e027158eb94afca7c7766b1866ef27eccb98e  meson-0.60.3.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.61.0/meson-0.61.0.tar.gz.asc
++sha256  ea9f33246b1f23f02e90a50e75e0f41e526f6dabf0c24f3e00e27a3f5abdc35c  meson-0.61.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e8443eacba..e63dc725bf 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.60.3
++MESON_VERSION = 0.61.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
