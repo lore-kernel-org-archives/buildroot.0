@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF050C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 22:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 332ADC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 22:55:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DDA7409A9;
-	Mon, 10 Jan 2022 22:54:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B00AF40641;
+	Mon, 10 Jan 2022 22:55:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4vNfZSpWjjfl; Mon, 10 Jan 2022 22:54:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9TujI79wp-p8; Mon, 10 Jan 2022 22:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8A9C40208;
-	Mon, 10 Jan 2022 22:54:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 287A81BF31C
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:54:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF3B540354;
+	Mon, 10 Jan 2022 22:55:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C176A1BF31C
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1731D40208
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:54:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCDC78316A
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:55:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4lXSrg91MVTj for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 22:54:35 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0PYCrGjHrRwm for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 22:55:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C6ED7401F8
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 22:54:34 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id o3so29573171wrh.10
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:54:34 -0800 (PST)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15DC1817B3
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 22:55:35 +0000 (UTC)
+Received: by mail-oi1-x22b.google.com with SMTP id w6so16971oiw.3
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wzFClCs/6lRVMILobWD50WkFv7OAvyUBBl6U/jSv5DQ=;
- b=InpF9R//OGxy/rcp2FUj7ktn+UTBh88mJA+wUzI/ob2tXI3Ibyth51rH2QwkuiBF5E
- FGb3eD0E7JpRB2yMPsm3edyWKWsUSVRSNl0oQFk9uMg/7JQMhjYb5KMZ6w2zbqSxnYdx
- 9YpP5ywWRx2H2SHG3Lb6vmzD3ipDpUFYrBYdIvgBl0szCDaEjNYgvDVSmddKByh1LzuT
- 0htKwv+sUG9TDeO9fNdckBiv7cRMXbPOpZRJ6dctCF18z0tQlpMwMeKSY0qv6UWYLF9P
- //6ky6SdT2P0q6TffYns3+fYwHFMHcvb6+Ph48+TDS4aIJ3X1Hn8gJBn970uOUNEHhpJ
- 1YYg==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=8DWGBVqUHSxc1QmzMBc6XzYNOu+516WNmdsgH5IU+sY=;
+ b=FgNNQGqvcN9iQyEg5PhLKJIYY18maV8C2rL7TnHw83iewYNPvMyNrOQ6M1mzg6k+Gn
+ Vf0hp6zT/pJU9D2v4bhHB2dws1SLKlhobXibGB69HVzcdegLs2Mc3gNaBztI90bt913A
+ UgRSj+DVkh8NkG9khFPJpVapN7LaGUQrgRpSQR7ctdgxxgQUHBKd0YbuA3uv1FVTrdCD
+ vNBIYRG+g2Ya69W/OryijI0O92wXGx+YDlKB9WZDfB9kRAauUE1/jgyfu703CBhoymSr
+ 8Wm5hqYnK1HhO47toEf4aEjWhYfO+yiPZNqMGCiRJu6G6O6HiOyZyU32DA4tZZAU9ca+
+ MSQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wzFClCs/6lRVMILobWD50WkFv7OAvyUBBl6U/jSv5DQ=;
- b=K7XsF7J0mT90xzRgGIDICwGQBtdgGCgEzlm6l1R3ji+s4itl/oN3cH90JX9FYH5siL
- mS8PcswXtJo/njilRm8XkRUzJEtIDFSCjB05NohQLatVpJvbqiOFGXOkM28Qd41H2PRI
- LZTVoanM5LUPAafZSlKCWlSDRJsB2nCBPhTv4rwUWazx3r8kBibBn9q3BDOlM8boMZl4
- XjdgBFFOi2QFI6sh1i+PaFlHKDlHN2LreyilQd6l82+fIw9VFrg9lyeJEmC0GhfDpi06
- MHUCXx4OlNmBKgRkxaTdawkKgchXdT7hLgvoyh59b8TLR5+Q3UU50CZksejMX5kZjQSY
- 2F5w==
-X-Gm-Message-State: AOAM531UyIC5YtYDk+WgC+a/DxmN5X5N6kNfw0NjoE7EZZwSBXSmaL1t
- etOAhjJQALkJhU2jokYUj3UbEhOQG0w=
-X-Google-Smtp-Source: ABdhPJx0HkFvzAY08zYgsvwiOFXjaf2FeidXFAsZdVMbGPz+aj1Vs/miK6ggUPok0XrO+xCyThYRPg==
-X-Received: by 2002:a5d:4841:: with SMTP id n1mr1401903wrs.620.1641855272756; 
- Mon, 10 Jan 2022 14:54:32 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id m6sm8803662wrp.34.2022.01.10.14.54.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Jan 2022 14:54:32 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 23:52:00 +0100
-Message-Id: <20220110225200.2000095-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=8DWGBVqUHSxc1QmzMBc6XzYNOu+516WNmdsgH5IU+sY=;
+ b=kgdalag7UXA0fMCnQjkbN865r6BZv5URaAYpphISKfzPPsui/H+kpyL9cyA7sFmhMA
+ XvBo6J3QB27DO6i+ld+XpL49jpoVZXSiGxuy4HUpi5Xf4S4D/u0TBKtxS7RUL9MoFnq0
+ 8jWYlBJObLfWYd6M6FoHI9vfA8kzHfZvlQCrlauTKbmquOBQZ9uDk4tOPVEbl+uI2V1z
+ sL4LSyWijUp0pGGbbSlECA/5J5MNcH01NNrfm+IRRynvyPAbhdnDQyfRDw6SmRAsSqVc
+ yTzQiXSwGUxtYU8+TzC7NAhPzYedjHhJjotZD5ET9C+nl6r/qJ1dSD6ja+C3xdsucwpE
+ tEAQ==
+X-Gm-Message-State: AOAM531U5YAByhzUT9Y/qyqISgGro+iKacGPutXaNilJiU4OW7FQHkzw
+ zasPFUPnVLLHWVVgBV1ooHK+sIsgAn90mDeIf38=
+X-Google-Smtp-Source: ABdhPJyXr2X4qcAoiS8w/9RF/oZtNYLVanP639T1QqubRBME4tdHy3MmVv/UpHFg3EvgrCCcW4c17mxlrGjONsQ+8WM=
+X-Received: by 2002:aca:ebcb:: with SMTP id j194mr658oih.67.1641855333943;
+ Mon, 10 Jan 2022 14:55:33 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/btrfs-progs: fix musl build
+References: <20211231202620.3521230-1-james.hilliard1@gmail.com>
+ <20220110221051.GT1477939@scaer>
+ <CADvTj4qnuwUh594-QC-4ySNQX2aSfhfs36tX-cH5vMB52EbgbQ@mail.gmail.com>
+ <20220110222808.GU1477939@scaer>
+ <CADvTj4ogaTxytpD11-s7EfGOJr=4L8VYGCDr82S4_rsmBEitkw@mail.gmail.com>
+ <2846b399-f095-acb3-c086-e44b3b74698e@lucaceresoli.net>
+In-Reply-To: <2846b399-f095-acb3-c086-e44b3b74698e@lucaceresoli.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 10 Jan 2022 15:55:22 -0700
+Message-ID: <CADvTj4otjX+dffwVjypCc-mkyrGWSvzKe-K=-__ou7U+Q=7J8Q@mail.gmail.com>
+To: Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/zynq-boot-bin: port to python3
+ and move to support/scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,144 +86,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <juju@cotds.org>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure raised since bump to version 5.15.1
-in commit 20181c3f1b7191d2b6a1b78bfbe32c1f58e87359:
+On Mon, Jan 10, 2022 at 3:46 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>
+> Hi James, Yann,
+>
+> On 10/01/22 23:31, James Hilliard wrote:
+> > On Mon, Jan 10, 2022 at 3:28 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >>
+> >> James, All,
+> >>
+> >> On 2022-01-10 15:18 -0700, James Hilliard spake thusly:
+> >>> On Mon, Jan 10, 2022 at 3:10 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> [--SNIP--]
+> >>>> So I wonder if it even makes sense to keep package/zynq-boot-bin now.
+> >>> Well if someone is using an older uboot that doesn't have the
+> >>> generation capability
+> >>> integrated then it's probably still needed right?
+> >>
+> >> But then, they would have that tool in their uboot tree, and then
+> >> nothing would prevent them from running it as a post-build (or
+> >> post-image) script.
+> >>
+> >> Yes, they would need to have a python2 on their host. But that will be
+> >> the case if they stick to such older tools which may break on more
+> >> recent systems, not just uboot...
+> >
+> > Yeah, the advantage here is that it works with python3 as is with older uboot
+> > versions. I guess the main issue is that vendor uboot trees are often ancient
+> > and rarely updated so this would be mostly useful for those situations.
+>
+> Is upgrading to python 3 just to simplify potential legacy users the
+> only motivation for this patch? Then I would not touch this package at
+> all and avoid keeping our own copy of the script.
 
-In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:4,
-                 from ./kerncompat.h:31,
-                 from common/utils.c:42:
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
-    7 | struct sysinfo {
-      |        ^~~~~~~
-In file included from common/utils.c:27:
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
-   10 | struct sysinfo {
-      |        ^~~~~~~
+Well the motivation is that we want to drop python 2 from the
+toolchain entirely,
+so leaving this package as is would not be an option(since it depends
+on the host
+python2 interpreter support we want to remove). We either need to
+remove it or use
+the python3 ported version(which due to the simplicity of the script
+should not cause
+any significant maintenance issues for us IMO).
 
-Fixes:
- - http://autobuild.buildroot.org/results/16f44fb9dea72a7079e8e5517e760dd79d2724cc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...nst-h-to-fix-build-with-5-12-headers.patch | 43 ++++++++++++++++
- ...-sys-sysinfo-h-conditionally-on-musl.patch | 49 +++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100644 package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
- create mode 100644 package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
-
-diff --git a/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch b/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
-new file mode 100644
-index 0000000000..b6c1a42456
---- /dev/null
-+++ b/package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
-@@ -0,0 +1,43 @@
-+From b28f7bd9bba6f65258da48955154794f466b4104 Mon Sep 17 00:00:00 2001
-+From: Bruce Ashfield <bruce.ashfield@gmail.com>
-+Date: Thu, 30 Dec 2021 15:23:59 +0200
-+Subject: [PATCH] btrfs-progs: include linux/const.h to fix build with 5.12+
-+ headers
-+
-+btrfs-tools compile fails with mips, musl and 5.12+ headers.
-+
-+The definition of __ALIGN_KERNEL has moved in 5.12+ kernels, so we
-+add an explicit include of const.h to pickup the macro:
-+
-+  | make: *** [Makefile:595: mkfs.btrfs] Error 1
-+  | make: *** Waiting for unfinished jobs....
-+  | libbtrfs.a(volumes.o): in function `dev_extent_search_start':
-+  | /usr/src/debug/btrfs-tools/5.12.1-r0/git/kernel-shared/volumes.c:464: undefined reference to `__ALIGN_KERNEL'
-+  | collect2: error: ld returned 1 exit status
-+
-+This is safe for older kernel's as well, since the header still
-+exists, and is valid to include.
-+
-+Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
-+[remove invalid OE Upstream-status]
-+Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
-+Signed-off-by: David Sterba <dsterba@suse.com>
-+[Retrieved from:
-+https://github.com/kdave/btrfs-progs/commit/b28f7bd9bba6f65258da48955154794f466b4104]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ kerncompat.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/kerncompat.h b/kerncompat.h
-+index df167fe6c..2503d1afa 100644
-+--- a/kerncompat.h
-++++ b/kerncompat.h
-+@@ -29,6 +29,7 @@
-+ #include <stddef.h>
-+ #include <linux/types.h>
-+ #include <linux/kernel.h>
-++#include <linux/const.h>
-+ #include <stdint.h>
-+ 
-+ #include <features.h>
-diff --git a/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch b/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
-new file mode 100644
-index 0000000000..7473fe67cb
---- /dev/null
-+++ b/package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
-@@ -0,0 +1,49 @@
-+From a2511aaa85c8d95d12805dfdcbb5667fa3e30ba5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 8 Jan 2022 22:44:44 +0100
-+Subject: [PATCH] btrfs-progs: include sys/sysinfo.h conditionally on musl
-+
-+Make inclusion of sys/sysinfo.h conditional to avoid the following build
-+failure on musl:
-+
-+In file included from .../i586-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:4,
-+                 from ./kerncompat.h:31,
-+                 from common/utils.c:42:
-+.../i586-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
-+    7 | struct sysinfo {
-+      |        ^~~~~~~
-+In file included from common/utils.c:27:
-+.../i586-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
-+   10 | struct sysinfo {
-+      |        ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16f44fb9dea72a7079e8e5517e760dd79d2724cc
-+
-+The 'struct sysinfo' is defined in linux/sysinfo.h and sys/sysinfo.h,
-+while both must not be included at the same time. Stop including
-+linux/kernel.h that sometimes unconditionally includes sys/sysinfo.h and
-+causes the double definition for some reason. As we now include
-+linux/const.h directly, there's no other effective change.
-+
-+Pull-request: #433
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: David Sterba <dsterba@suse.com>
-+[Retrieved from:
-+https://github.com/kdave/btrfs-progs/commit/a2511aaa85c8d95d12805dfdcbb5667fa3e30ba5]
-+---
-+ kerncompat.h | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/kerncompat.h b/kerncompat.h
-+index 2503d1afa..6ca1526e2 100644
-+--- a/kerncompat.h
-++++ b/kerncompat.h
-+@@ -28,7 +28,6 @@
-+ #include <assert.h>
-+ #include <stddef.h>
-+ #include <linux/types.h>
-+-#include <linux/kernel.h>
-+ #include <linux/const.h>
-+ #include <stdint.h>
-+ 
--- 
-2.34.1
-
+>
+> --
+> Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
