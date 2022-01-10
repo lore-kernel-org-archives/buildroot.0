@@ -1,90 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3948BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03347C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 07:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAD37826E7;
-	Mon, 10 Jan 2022 07:33:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0E060C07;
+	Mon, 10 Jan 2022 07:39:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C5yVjdfhTFfO; Mon, 10 Jan 2022 07:33:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DjEdqcDTDX9Z; Mon, 10 Jan 2022 07:39:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2363F826C0;
-	Mon, 10 Jan 2022 07:33:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B34091BF334
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:33:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD65B60C06;
+	Mon, 10 Jan 2022 07:39:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D3E7E1BF334
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9318A408E1
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:33:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C205860C06
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 07:39:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K5J94AFKiJSl for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 07:33:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gkB82KkS6ofg for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 07:39:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A2DA9408B6
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:33:15 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id k18so24900418wrg.11
- for <buildroot@buildroot.org>; Sun, 09 Jan 2022 23:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=TMxzMnz3ViGkv24mfrITNUtDFEVdu6HP72bGcotiB68=;
- b=BZH7Uryj+VQYOH7ewEeqShmvonz1gwR4dD/WN2z4JrbmZ1bKB+DZvPTVkNY8Cf1ezX
- G3oscpP/Nt68y0WzfG8J3eqwpXYIn6kSp3YFbFGuc0q0m0H3YhGQZMkZu+shol6lJU6M
- H1lpGx7roBnCmGm7oEI+0fRL8HW07ej9ya8j9Saj7hORwSTPjLEzkXtSAqnxssEb9GvD
- 6UOExjN4pTqGZFXqwiFyLgIOwl32NzSUK4aT5fLIRW/dHvsv2mVN4BYw4yGIAtUCjs3X
- z/nl7U6aAi+SiEa4Wj2v75a1D9Gsn3x7UFk7gQgIjcQMGe0T08Q/it07WB5bmixqX0FE
- 30gA==
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
+ [IPv6:2607:f8b0:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C505F60C01
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 07:39:05 +0000 (UTC)
+Received: by mail-ot1-x331.google.com with SMTP id
+ c3-20020a9d6c83000000b00590b9c8819aso4726825otr.6
+ for <buildroot@buildroot.org>; Sun, 09 Jan 2022 23:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=IoWyDim10MQXhdq7CaLpapsypee1MCgEA3Tz16OamTE=;
+ b=U2cTeJ+qwKTrS8VN20dwa8wLHfgj/PElxHndbiWut7HG4o+QjEfn7LTlyu1mThBmXx
+ 4JAaLDWRMdoqKx5m0jRRoSR+J12VLoCy4HQqEVweoZeoWYbg5HZksyI8LExmLc6DDST4
+ a+CCrdPum1E783XKvKcQtUvvW9Z0vGQERrQjyry3YzMA0FKidXQCv/OoMY0NFTcDq1Qy
+ GelOwAUOQ4NkMNaiwKF/utEBLkFe4TW8KtZAutzaZ5r+oDBqfd0aMlrYH3X/oETEaxWh
+ Sn4Ih0ak7r5oLyz8Ykdr7EBbfbcyqR5q44bX8/eFMGAEeEL8BSJnMZHpV5198zUIsPjo
+ Zl6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=TMxzMnz3ViGkv24mfrITNUtDFEVdu6HP72bGcotiB68=;
- b=VBDYRubiR9t1IOyvxlD3fBCak3Bz0lE4rHAYcC4tiL7x0c6kDolqMK31ozuBQGpUVV
- pFX6yPZaWbWNpUSxMxpgEqXM18984zvzMafRNmZYhy4es5eMiHImE/fENTly+Qrg6uZ3
- XWYv8CNCbbiJ5dnEc45hB1XgE4t/SN+URd9XBXEhaecrfSK6lDsP740zx+LImA7137Xi
- SJ/zXutsLantfIZ/5e47F1DdcIiJn3URrlX1VrNgBWtFe4lCZK9jgspkmilQwBmebDpF
- +CESAuzY1RBDmAe7qkVXSsLmqslXsksb7fbl2qGgt4Qb743ww7NR6tm31/H1pQaC7RBc
- zQsw==
-X-Gm-Message-State: AOAM530BFdgOnn+pC/GDvr8egNLUgBcW+gwn0ut4WV+DD7M2FtvRZb8r
- ZB9Y9fn/yuq6FIfZZ/xLYDkodw==
-X-Google-Smtp-Source: ABdhPJzr3vimVW2yfAoLVt31xeq+csbuBwjK2CeoCQ5V5LdQXKGDtk4CTtZaSKz1nOO2TFLa4fD8kw==
-X-Received: by 2002:a05:6000:1548:: with SMTP id
- 8mr63744497wry.195.1641799993810; 
- Sun, 09 Jan 2022 23:33:13 -0800 (PST)
-Received: from ?IPV6:2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1?
- ([2a01:cb19:8b51:cb00:8a68:e76b:e0e9:90a1])
- by smtp.gmail.com with ESMTPSA id b14sm6249096wri.112.2022.01.09.23.33.13
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Jan 2022 23:33:13 -0800 (PST)
-Message-ID: <420ac869-6aea-a492-7a74-3014b7bb4cf3@mind.be>
-Date: Mon, 10 Jan 2022 08:33:12 +0100
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=IoWyDim10MQXhdq7CaLpapsypee1MCgEA3Tz16OamTE=;
+ b=jD0MeFi16xsyj2an/pCt6j7BVXjQdF0UjqideuJb33j8r8I6Mo0LauMn7T+mK97A69
+ rCgfg4PhaAlVWTNNYTo3zhCthC62O2wL6xCmYmvW3LUtIgPV5mcxOBQajqsMRALacH/D
+ feX12PgS7NhC5rBfsJ4jxksl57QNKhqDywEbHBtEF+9qE3ckdbw8WKrSmkeWsKhK8Y6X
+ ZMX7yVMrcUk/kKnQQS+6FO4O0EZ6AnCIomjQvjC2LYdWsojL135Hw3i1230hk/MzesUO
+ 5aVYUZTG+B7hD92VfHpYIiBnNg71P1Pi2ju92M6wSqqaOurKopq1kgndZ0ehw3bFRDOr
+ iF6g==
+X-Gm-Message-State: AOAM531Oyzx2LioZwKAEqVfbJOfOyfawWL4FptRJBcBrL9/FJEohLad7
+ BQKdBck72HpGN1dPn/f/rlSwFxW88so=
+X-Google-Smtp-Source: ABdhPJw+zkYDng1EbWT1BJ2ibcJ86rpfIH2UQD19dtwgooQSywXKrHpI5q1zWDXIwcGb8kP3DgKXJQ==
+X-Received: by 2002:a05:6830:791:: with SMTP id
+ w17mr8713786ots.72.1641800344603; 
+ Sun, 09 Jan 2022 23:39:04 -0800 (PST)
+Received: from james-x399.localdomain (97-118-242-51.hlrn.qwest.net.
+ [97.118.242.51])
+ by smtp.gmail.com with ESMTPSA id 2sm1348881otm.41.2022.01.09.23.39.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Jan 2022 23:39:04 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 10 Jan 2022 00:38:50 -0700
+Message-Id: <20220110073850.1603711-2-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220110073850.1603711-1-james.hilliard1@gmail.com>
+References: <20220110073850.1603711-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-GB
-To: William Tambe <tambewilliam@gmail.com>
-References: <CAF8i9mOtQLce7b+H_PzHrsiUe_5qphpk-QsXq=WeLZodMv1heA@mail.gmail.com>
- <d85d6f3c-2315-8583-a48c-b0b58e443a4d@mind.be>
- <CAF8i9mPphK+bKcnTtd6soqP1_vfPaE=F=GB945sW+Xdwqm+h4A@mail.gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <CAF8i9mPphK+bKcnTtd6soqP1_vfPaE=F=GB945sW+Xdwqm+h4A@mail.gmail.com>
-Subject: Re: [Buildroot] BR2_PACKAGE_DHCP_CLIENT fails to build:
- readline/history.h: No such file or directory
+Subject: [Buildroot] [PATCH 2/2] package/python-tinycss2: bump to version
+ 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,105 +88,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This update drops distutils support and requires flit package
+infrastructure.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-tinycss2/Config.in            | 2 ++
+ package/python-tinycss2/python-tinycss2.hash | 4 ++--
+ package/python-tinycss2/python-tinycss2.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-On 10/01/2022 00:46, William Tambe wrote:
-> On Sun, Jan 9, 2022 at 2:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->>
->> On 09/01/2022 19:18, William Tambe wrote:
->>> I am attempting to build:
->>>
->>> +BR2_PACKAGE_DHCP=y
->>> +BR2_PACKAGE_DHCP_CLIENT=y
->>>
->>> However it fails as follow complaining about not finding readline/history.h:
->>>
->>> making all in /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/bin/nsupdate
->>> /home/tambewilliam/Documents/buildroot-build/host/bin/pu32-elf-gcc
->>
->>    pu32 doesn't exist in Buildroot, so this may very well be due to external changes.
+diff --git a/package/python-tinycss2/Config.in b/package/python-tinycss2/Config.in
+index e6c992b8c5..e7a5bb3659 100644
+--- a/package/python-tinycss2/Config.in
++++ b/package/python-tinycss2/Config.in
+@@ -4,3 +4,5 @@ config BR2_PACKAGE_PYTHON_TINYCSS2
+ 	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
+ 	help
+ 	  A tiny CSS parser.
++
++	  https://www.courtbouillon.org/tinycss2
+diff --git a/package/python-tinycss2/python-tinycss2.hash b/package/python-tinycss2/python-tinycss2.hash
+index eeb3754752..e8e1d93f83 100644
+--- a/package/python-tinycss2/python-tinycss2.hash
++++ b/package/python-tinycss2/python-tinycss2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tinycss2/json
+-md5  7caf513c4e87fc2449dcfbf407a8416f  tinycss2-1.1.0.tar.gz
+-sha256  fbdcac3044d60eb85fdb2aa840ece43cf7dbe798e373e6ee0be545d4d134e18a  tinycss2-1.1.0.tar.gz
++md5  60272f58f8d5834b2e09ffbc9bd5de53  tinycss2-1.1.1.tar.gz
++sha256  b2e44dd8883c360c35dd0d1b5aad0b610e5156c2cb3b33434634e539ead9d8bf  tinycss2-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6b94acee20ec9f2709333134f3ba70322535fb420af0ce8c1455d9cbe297f1d5  LICENSE
+diff --git a/package/python-tinycss2/python-tinycss2.mk b/package/python-tinycss2/python-tinycss2.mk
+index 4bf5b97766..e4fc5dc9c5 100644
+--- a/package/python-tinycss2/python-tinycss2.mk
++++ b/package/python-tinycss2/python-tinycss2.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TINYCSS2_VERSION = 1.1.0
++PYTHON_TINYCSS2_VERSION = 1.1.1
+ PYTHON_TINYCSS2_SOURCE = tinycss2-$(PYTHON_TINYCSS2_VERSION).tar.gz
+-PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/ce/d3/ece7a98d5826bd134e269a3a3030153d30482194fca71d95a3041812aab8
+-PYTHON_TINYCSS2_SETUP_TYPE = distutils
++PYTHON_TINYCSS2_SITE = https://files.pythonhosted.org/packages/1e/5a/576828164b5486f319c4323915b915a8af3fa4a654bbb6f8fc8e87b5cb17
++PYTHON_TINYCSS2_SETUP_TYPE = flit
+ PYTHON_TINYCSS2_LICENSE = BSD-3-Clause
+ PYTHON_TINYCSS2_LICENSE_FILES = LICENSE
+ 
+-- 
+2.25.1
 
-  So, do you have external changes that may be the cause of this? IOW, can you 
-reproduce the problem on upstream Buildroot?
-
->>
->>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35
->>> -I../.. -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/lwres/include
->>> -I../../lib/lwres/unix/include -I../../lib/lwres/include
->>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/dns/include
->>> -I../../lib/dns/include
->>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/bind9/include
->>> -I../../lib/bind9/include
->>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isc/include
->>> -I../../lib/isc -I../../lib/isc/include -I../../lib/isc/unix/include
->>> -I../../lib/isc/pthreads/include -I../../lib/isc/noatomic/include
->>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isccfg/include
->>> -I../../lib/isccfg/include    -D_REENTRANT -DVERSION=\"9.11.35\"
->>> -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
->>> -D_FILE_OFFSET_BITS=64  -Os -g0  -static   -W -Wall
->>> -Wmissing-prototypes -Wcast-qual -Wwrite-strings -Wformat
->>> -Wpointer-arith -fno-strict-aliasing -fno-delete-null-pointer-checks
->>> \
->>>           -DSESSION_KEYFILE=\"/var/run/named/session.key\" \
->>>           -c ./nsupdate.c
->>> ./nsupdate.c:104:10: fatal error: readline/history.h: No such file or directory
->>>     104 | #include <readline/history.h>
->>>         |          ^~~~~~~~~~~~~~~~~~~~
->>
->>    This sounds like you changed your configuration without doing 'make clean'. Is
->> that possible?
-> 
-> I am building from clean or from scratch.
-> 
->>
->>    Is BR2_PACKAGE_READLINE enabled in your configuration? Has it been built?
-> 
-> Yes, BR2_PACKAGE_READLINE is enabled in my configuration.
-
-  And does it get built? Does output/build/readline/.stamp_staging_installed exist?
-
-  The bind.mk file has this:
-ifeq ($(BR2_PACKAGE_READLINE),y)
-BIND_DEPENDENCIES += readline
-else
-BIND_CONF_OPTS += --with-readline=no
-endif
-
-which should make sure that readline is built and installed before bind. This in 
-turn should make sure that output/host/*/sysroot/usr/include/readline/history.h 
-exists.
-
-  Regards,
-  Arnout
-
-> 
->>
->>    Regards,
->>    Arnout
->>
->>> compilation terminated.
->>> make[5]: *** [Makefile:473: nsupdate.o] Error 1
->>> make[4]: *** [Makefile:79: subdirs] Error 1
->>> make[3]: *** [Makefile:88: subdirs] Error 1
->>> make[2]: *** [package/pkg-generic.mk:270:
->>> /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/.stamp_built]
->>> Error 2
->>> make[1]: *** [Makefile:23: _all] Error 2
->>> make[1]: Leaving directory '/home/tambewilliam/Documents/buildroot-build'
->>> make: *** [pu32/makefile:67: pu32-build/buildroot] Error 2
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot@buildroot.org
->>> https://lists.buildroot.org/mailman/listinfo/buildroot
->>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
