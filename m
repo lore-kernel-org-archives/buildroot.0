@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B49C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 18:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CDA1C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 18:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C30948333E;
-	Mon, 10 Jan 2022 18:00:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A712D400CB;
+	Mon, 10 Jan 2022 18:52:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3TxMrlnd4D8I; Mon, 10 Jan 2022 18:00:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E68682E19;
-	Mon, 10 Jan 2022 18:00:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16E2A1BF355
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:00:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 038874060E
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:00:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=googlemail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kw5ZQJdX4aDa for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 18:00:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7224D4016B
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 18:00:08 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id c71so45303666edf.6
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 10:00:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=sCdBRJ1SLIslCiGKElC4WBrl0t1pSwy+tiPvZOwVZ5o=;
- b=jCK39K5hU19pi/2WjRbuzjHkDHyGVkgZ4wkVziysZJ11KG2PF6HTOHXlsWbwaGpLof
- npBQ0Lpe/DY+xlKbqxtdVCQgzt7NIRm0ZP6onjiVlGJsaE9rDYaIZZ203QvjotKp6ZiV
- OrpKg9X0I3SexTwGfE3RuExurw59N0ON42kCuZTjFt2+a14vS5nGcYbpVRhTAJxZar3t
- AKtwBqa4xgvRlxWsTZ3uVWfO+mnWna4Bz6ToUVJrTpTE1NB7VFiMxFpliG+zTg0je9A2
- eruSctoJMXtrvRO9OOgxny2GP8QQ+JH/WVpJRA5e3yGLIi4aIt6XyGVEu+3NZiMCLcU3
- PA6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=sCdBRJ1SLIslCiGKElC4WBrl0t1pSwy+tiPvZOwVZ5o=;
- b=r5dPYb5AWfqs0tk0XHbWVPBNAkCOGV1HsQxUH58DS/x5rtohLvKWp16Gg5oJNp8eyi
- FBPCOJI2jE7bHFvYK92AAWD/s4WnfN2///OaeYPXVe6/gWNZuZQoMrrrCMIw9DVHVSkg
- MwjYz74jxHaKwZ/SDL14t/pMLMo56TBqGPJ1THcYBJq+Ib3Xx0U85+zUAumw6Vaofl0N
- gHafX+VOkkTIem/pqXfS/QF399XaF7pqvNiJt+YudW2AmZUChwvY7xuFHRqtb9ZrWBlk
- VIioRA++YRRt8hO4FlwEjkunON7jmYenGfJDp0IEdEV7IoNz1BTzMSKaOMmbmZKWeFlv
- K0Ow==
-X-Gm-Message-State: AOAM533H4U8Aggv85orAgVirJBGgna5IbfFTLfqrQuLn57C8x+VC6JJw
- 7URX6PBGpXcCrZGIRQDzBDjkJ72Yywv5NtBPeInXNjwp
-X-Google-Smtp-Source: ABdhPJzJqU/hYnc32C4kyppcqsKpC3VKsX71hNLEQVSFfmT3sl3cV5adfujxKfmubdH24tNpmSGa3rjtYa3YOsN/FBw=
-X-Received: by 2002:a05:6402:1ac9:: with SMTP id
- ba9mr816624edb.248.1641837606664; 
- Mon, 10 Jan 2022 10:00:06 -0800 (PST)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sFHYyz4GpsqI; Mon, 10 Jan 2022 18:52:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86B2D400D6;
+	Mon, 10 Jan 2022 18:52:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E34911BF352
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:52:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D330F4025B
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:52:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=heine.tech
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CdyhYkW2WkUI for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 18:52:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B6B140288
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 18:52:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A8CDD183487; Mon, 10 Jan 2022 19:52:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.tech; s=dkim;
+ t=1641840743; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=MDCB7msx+hSWoTFj2oZc3qU3SSCfuCefvik4WVYijuI=;
+ b=OmMVld4bZV2K+loIZQAtZhwL3PuNswgAAEG8hH9OqNUaGsy9mo4GfhBHyP4m1jRMBkQ1T/
+ 5x+06o9TC5cHjTyFrnYvEbiiCwAzoD/jlt1QVcdYBLJSQukxdCQBMwMK62psScLs6pVlGX
+ WrH/AuHMM0w5dW618I1wERx5FxLDRQM=
+To: buildroot@buildroot.org
+Date: Mon, 10 Jan 2022 19:51:40 +0100
+Message-Id: <20220110185147.84697-1-buildroot@heine.tech>
 MIME-Version: 1.0
-References: <20220110085850.11095-1-yegorslists@googlemail.com>
- <20220110085850.11095-2-yegorslists@googlemail.com>
- <20220110140450.GO1477939@scaer>
-In-Reply-To: <20220110140450.GO1477939@scaer>
-Date: Mon, 10 Jan 2022 18:59:55 +0100
-Message-ID: <CAGm1_kvtLsQW82XSjBHPz8CFdVsB4WBFZyyyhV_wYLbjfzVGVg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 2/2] package/avrdude: add support for Linux
- sysfs GPIO interface
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH v5] package/networkd-dispatcher: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,98 +58,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- buildroot <buildroot@buildroot.org>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Michael Nosthoff via buildroot <buildroot@busybox.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann, all,
+From: Michael Nosthoff via buildroot <buildroot@busybox.net>
 
-On Mon, Jan 10, 2022 at 3:04 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Yegor, All,
->
-> On 2022-01-10 09:58 +0100, yegorslists--- via buildroot spake thusly:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> >  package/avrdude/Config.in  | 3 +++
-> >  package/avrdude/avrdude.mk | 6 ++++++
-> >  2 files changed, 9 insertions(+)
-> >
-> > diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-> > index 89558a5ff5..57a8df66ea 100644
-> > --- a/package/avrdude/Config.in
-> > +++ b/package/avrdude/Config.in
-> > @@ -17,6 +17,9 @@ config BR2_PACKAGE_AVRDUDE
-> >
-> >  if BR2_PACKAGE_AVRDUDE
-> >
-> > +config BR2_PACKAGE_AVRDUDE_LINUXGPIO
-> > +     bool "Linux sysfs GPIO interface support"
-> > +
-> >  config BR2_PACKAGE_AVRDUDE_SPI
-> >       bool "SPI support"
-> >       default y # Backward compatibility
-> > diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> > index accd92c1d5..3ccba80d8e 100644
-> > --- a/package/avrdude/avrdude.mk
-> > +++ b/package/avrdude/avrdude.mk
-> > @@ -16,6 +16,12 @@ AVRDUDE_CONF_OPTS = --enable-linuxgpio
-> >  AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
-> >       host-flex host-bison
-> >
-> > +ifeq ($(BR2_PACKAGE_AVRDUDE_LINUXGPIO),y)
-> > +AVRDUDE_CONF_OPTS += --enable-linuxgpio
-> > +else
-> > +AVRDUDE_CONF_OPTS += --disable-linuxgpio
-> > +endif
->
-> We already have an unconditional activation of those:
->
->     https://github.com/buildroot/buildroot/blob/master/package/avrdude/avrdude.mk#L15
->
-> (which you can btw. incidentally also notice as part the hunk header).
+Networkd-dispatcher is a dispatcher daemon for systemd-networkd
+connection status changes. This daemon is similar to
+NetworkManager-dispatcher, but is much more limited in the types of
+events it supports due to the limited nature of systemd-networkd.
 
-My bad. I have just overlooked this setting. You can drop the patch.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
 
-Regards,
-Yegor
+Changes v1 -> v2
+  - add .hash file
+  - use tabs for DEVELOPERS indentation
 
-> So, if the intention was to be able to enable linux-gpio, then this is a
-> noop as they are already enabled. If the intention was to be able to
-> disable them, then the unconditional enable should be dropped.
->
-> But then, does it make sense to be able to disable linux GPIO?
->
-> And what if both SPI and GPIO are disabled?
->
-> Regards,
-> Yann E. MORIN.
->
-> >  ifeq ($(BR2_PACKAGE_AVRDUDE_SPI),y)
-> >  AVRDUDE_CONF_OPTS += --enable-linuxspi
-> >  else
-> > --
-> > 2.17.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+v2 -> v3
+  - bump version to 2.1 (fixes an issue with systemd 246)
+  - resolve merge conflict in DEVELOPERS
+
+v3 -> v4
+  - adjust to changed dependencies of python-gobject
+  - removed dependencies already covered by depends on BR2_PACKAGE_DBUS
+  - sorted dependencies
+  - resolve merge conflict in DEVELOPERS
+
+v4 -> v5
+  - update dependencies of gobject-introspection
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/networkd-dispatcher/Config.in         | 21 ++++++++++++++++
+ .../networkd-dispatcher.hash                  |  3 +++
+ .../networkd-dispatcher.mk                    | 25 +++++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 package/networkd-dispatcher/Config.in
+ create mode 100644 package/networkd-dispatcher/networkd-dispatcher.hash
+ create mode 100644 package/networkd-dispatcher/networkd-dispatcher.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12777e8d61..4b65d219c9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1991,6 +1991,7 @@ N:	Michael Nosthoff <buildroot@heine.tech>
+ F:	package/grpc/
+ F:	package/gtest/
+ F:	package/libabseil-cpp/
++F:	package/networkd-dispatcher/
+ F:	package/protobuf/
+ F:	package/re2/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 3a2ad30df9..23264afd9d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2294,6 +2294,7 @@ endif
+ 	source "package/netstat-nat/Config.in"
+ 	source "package/network-manager/Config.in"
+ 	source "package/network-manager-openvpn/Config.in"
++	source "package/networkd-dispatcher/Config.in"
+ 	source "package/nfacct/Config.in"
+ 	source "package/nftables/Config.in"
+ 	source "package/nginx/Config.in"
+diff --git a/package/networkd-dispatcher/Config.in b/package/networkd-dispatcher/Config.in
+new file mode 100644
+index 0000000000..1dfa12ba45
+--- /dev/null
++++ b/package/networkd-dispatcher/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_NETWORKD_DISPATCHER
++	bool "networkd-dispatcher"
++	depends on BR2_USE_WCHAR # dbus-python -> glib2
++	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS # python-gobject -> gobject-introspection
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject -> gobject-introspection
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python -> glib2
++	depends on BR2_HOST_GCC_AT_LEAST_8 # python-gobject -> gobject-introspection -> host-qemu
++	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject -> gobject-introspection
++	depends on BR2_PACKAGE_DBUS # dbus-python
++	depends on BR2_PACKAGE_PYTHON3 # runtime, python-gobject
++	depends on BR2_PACKAGE_SYSTEMD_NETWORKD # runtime
++	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_PYTHON_GOBJECT
++	help
++	  Networkd-dispatcher is a dispatcher daemon for
++	  systemd-networkd connection status changes.
++	  This daemon is similar to NetworkManager-dispatcher,
++	  but is much more limited in the types of events it
++	  supports due to the limited nature of systemd-networkd.
++
++	  https://gitlab.com/craftyguy/networkd-dispatcher
+diff --git a/package/networkd-dispatcher/networkd-dispatcher.hash b/package/networkd-dispatcher/networkd-dispatcher.hash
+new file mode 100644
+index 0000000000..ca7c300783
+--- /dev/null
++++ b/package/networkd-dispatcher/networkd-dispatcher.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  1682c0106d9d2879087612e76aebb87672ebf339c43f229a3ee27dadb428575b  networkd-dispatcher-2.1.tar.bz2
++sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/networkd-dispatcher/networkd-dispatcher.mk b/package/networkd-dispatcher/networkd-dispatcher.mk
+new file mode 100644
+index 0000000000..4f609db73a
+--- /dev/null
++++ b/package/networkd-dispatcher/networkd-dispatcher.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# networkd-dispatcher
++#
++################################################################################
++
++NETWORKD_DISPATCHER_VERSION = 2.1
++NETWORKD_DISPATCHER_SOURCE = networkd-dispatcher-$(NETWORKD_DISPATCHER_VERSION).tar.bz2
++NETWORKD_DISPATCHER_SITE = https://gitlab.com/craftyguy/networkd-dispatcher/-/archive/$(NETWORKD_DISPATCHER_VERSION)
++NETWORKD_DISPATCHER_LICENSE = GPL-3.0
++NETWORKD_DISPATCHER_LICENSE_FILES = LICENSE
++
++define NETWORKD_DISPATCHER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/networkd-dispatcher $(TARGET_DIR)/usr/bin/networkd-dispatcher
++	mkdir -p $(TARGET_DIR)/etc/networkd-dispatcher/{routable,dormant,no-carrier,off,carrier,degraded,configuring,configured}.d
++endef
++
++define NETWORKD_DISPATCHER_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/networkd-dispatcher.service
++	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.conf \
++		$(TARGET_DIR)/etc/conf.d/networkd-dispatcher.conf
++endef
++
++$(eval $(generic-package))
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
