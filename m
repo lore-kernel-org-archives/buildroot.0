@@ -1,55 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61F86C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 22:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC97DC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 22:57:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 113A840226;
-	Mon, 10 Jan 2022 22:57:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55EED40120;
+	Mon, 10 Jan 2022 22:57:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zx5qzyKZTX_Q; Mon, 10 Jan 2022 22:57:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fjMhhLYRAcGY; Mon, 10 Jan 2022 22:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 751D6401FF;
-	Mon, 10 Jan 2022 22:57:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 153BF1BF31C
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:56:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6597C40641;
+	Mon, 10 Jan 2022 22:57:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6ED371BF31C
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03B608137A
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:56:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 699B840354
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 22:57:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUhDk61memXM for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 22:56:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 05E2F81373
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 22:56:51 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id D14E2C1DFF
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 22:56:47 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 2349F20002;
- Mon, 10 Jan 2022 22:56:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1n73ag-0007UR-PL; Mon, 10 Jan 2022 23:56:38 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LZZhnTg-PfT9 for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 22:57:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FF5E40120
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 22:57:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D72B483467; Mon, 10 Jan 2022 22:50:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michael Walle <michael@walle.cc>
-References: <20220110095040.2212639-1-michael@walle.cc>
-Date: Mon, 10 Jan 2022 23:56:38 +0100
-In-Reply-To: <20220110095040.2212639-1-michael@walle.cc> (Michael Walle's
- message of "Mon, 10 Jan 2022 10:50:39 +0100")
-Message-ID: <87bl0j9p3t.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.16
+To: buildroot@buildroot.org
+Date: Mon, 10 Jan 2022 23:54:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 85459426d9f4f5909b359d9456f71bdeac3c46ff
+X-Git-Newrev: c27065870a9ff8dac23b94fcf24699c003df4f2f
+X-Patchwork-Hint: ignore
+Message-Id: <20220110225049.D72B483467@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: use kernel
+ 5.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,25 +53,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michael" == Michael Walle <michael@walle.cc> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c27065870a9ff8dac23b94fcf24699c003df4f2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/kontron_smarc_sal28_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've kept the default at 5.15.x given that it is a LTS and we are almost
-ready to release 2022.02 and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index ce8f8323ae..37e415cf32 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
