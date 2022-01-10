@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3391CC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B903C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C530940926;
-	Mon, 10 Jan 2022 14:50:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F54640609;
+	Mon, 10 Jan 2022 14:51:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CECsABa34Cjf; Mon, 10 Jan 2022 14:50:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gurNWGFtza4J; Mon, 10 Jan 2022 14:51:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D3B640906;
-	Mon, 10 Jan 2022 14:50:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 613371BF3C3
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18D5F40603;
+	Mon, 10 Jan 2022 14:51:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DE6C81BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FB9360BAC
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD13E82CA5
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Dn4RRNOCgBH for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 14:50:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SVs6oeyYcS_B for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 14:50:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B39960B31
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13C0982C99
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:23 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPA id B60AC60004;
- Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPA id 0AAE66000B;
+ Mon, 10 Jan 2022 14:50:19 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 15:50:05 +0100
-Message-Id: <20220110145007.133329-4-herve.codina@bootlin.com>
+Date: Mon, 10 Jan 2022 15:50:07 +0100
+Message-Id: <20220110145007.133329-6-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220110145007.133329-1-herve.codina@bootlin.com>
 References: <20220110145007.133329-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 3/5] package/libfutils: new package
+Subject: [Buildroot] [PATCH v3 5/5]
+ support/testing/tests/package/test_libshdata: new test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,152 +64,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The libfutils library is a library that contains some common
-useful functions (list, hash, time).
-
-https://github.com/Parrot-Developers/libfutils
+This new test ensures that libraries and binaries generated
+using Parrot Alchemy build system are correct.
+Indeed, the test uses libshdata-stress.
+This binary depends on libshdata.
+libshdata depends on libfutils and libfutils depends on ulog.
+All of these binaries and libraries are built using Alchemy.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
-Changes v1 -> v2
-  - Renamed ALCHEMY_TARGET_CONFIGURE_ENV to ALCHEMY_TARGET_ENV
-  - Removed ALCHEMY_TARGET_CONFIGURE_SDKS and set ALCHEMY_TARGET_SDK_DIRS
-  - Removed $(strip ...)
-  - Fixed indentation
-  - Added missing "depends on" in Config.in comment
+Changed v1 -> v2:
+  none
 
-Changes v2 -> v3
-  - Installed .a files when needed (ie not shared lib only)
-  - Used $(INSTALL) in all installation commands
-  - Created installation directories when needed
-  - Fixed dependencies chain in Alchemy atom.mk
+Changed v2 -> v3:
+  none
 
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/libfutils/Config.in      | 15 +++++++++
- package/libfutils/libfutils.hash |  3 ++
- package/libfutils/libfutils.mk   | 56 ++++++++++++++++++++++++++++++++
- 5 files changed, 76 insertions(+)
- create mode 100644 package/libfutils/Config.in
- create mode 100644 package/libfutils/libfutils.hash
- create mode 100644 package/libfutils/libfutils.mk
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_libshdata.py   | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 support/testing/tests/package/test_libshdata.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 31ca7bf608..ecb0837398 100644
+index 8d0258d7e8..68d66e08a7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1191,6 +1191,7 @@ F:	package/alchemy/
- F:	package/dtbocfg/
- F:	package/libdbi/
- F:	package/libdbi-drivers/
-+F:	package/libfutils/
- F:	package/lua-augeas/
- F:	package/modsecurity2/
- F:	package/php-apcu/
-diff --git a/package/Config.in b/package/Config.in
-index 39a98fcc66..163fd53e12 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1986,6 +1986,7 @@ menu "Other"
- 	source "package/libevent/Config.in"
- 	source "package/libexecinfo/Config.in"
- 	source "package/libffi/Config.in"
-+	source "package/libfutils/Config.in"
- 	source "package/libgee/Config.in"
- 	source "package/libgeos/Config.in"
- 	source "package/libglib2/Config.in"
-diff --git a/package/libfutils/Config.in b/package/libfutils/Config.in
+@@ -1201,6 +1201,7 @@ F:	package/php-pam/
+ F:	package/php-pecl-dbus/
+ F:	package/ulog/
+ F:	support/testing/tests/package/test_dtbocfg.py
++F:	support/testing/tests/package/test_libshdata.py
+ F:	support/testing/tests/package/test_lua_augeas.py
+ F:	support/testing/tests/package/test_php_apcu.py
+ F:	support/testing/tests/package/test_php_lua.py
+diff --git a/support/testing/tests/package/test_libshdata.py b/support/testing/tests/package/test_libshdata.py
 new file mode 100644
-index 0000000000..7f795fc7e0
+index 0000000000..80b032ac69
 --- /dev/null
-+++ b/package/libfutils/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBFUTILS
-+	bool "libfutils"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_INSTALL_LIBSTDCPP # ulog
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ulog
-+	select BR2_PACKAGE_ULOG
-+	help
-+	  This library contains some common useful functions (list,
-+	  hash, time)
++++ b/support/testing/tests/package/test_libshdata.py
+@@ -0,0 +1,25 @@
++import os
 +
-+	  https://github.com/Parrot-Developers/libfutils
++import infra.basetest
 +
-+comment "libfutils needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-diff --git a/package/libfutils/libfutils.hash b/package/libfutils/libfutils.hash
-new file mode 100644
-index 0000000000..1fdcd84b13
---- /dev/null
-+++ b/package/libfutils/libfutils.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  b38d40c46b83e448d8c1716ddfb04b7ecd384f5cd2cb773db5c26c0589accdb3  libfutils-c326ce0cc2a7354381265a7664bb215be587fac6.tar.gz
-+sha256  eca11a1c62fae8d64a1247d93271375baecff8396141d7ff8d89671ee7e3ed0d  COPYING
-diff --git a/package/libfutils/libfutils.mk b/package/libfutils/libfutils.mk
-new file mode 100644
-index 0000000000..0772d16ad7
---- /dev/null
-+++ b/package/libfutils/libfutils.mk
-@@ -0,0 +1,56 @@
-+################################################################################
-+#
-+# libfutils
-+#
-+################################################################################
 +
-+LIBFUTILS_VERSION = c326ce0cc2a7354381265a7664bb215be587fac6
-+LIBFUTILS_SITE = $(call github,Parrot-Developers,libfutils,$(LIBFUTILS_VERSION))
-+LIBFUTILS_LICENSE = BSD-3-Clause
-+LIBFUTILS_LICENSE_FILES = COPYING
-+LIBFUTILS_DEPENDENCIES = ulog host-alchemy
-+LIBFUTILS_INSTALL_STAGING = YES
++class TestLibshdata(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_LIBSHDATA=y
++        BR2_PACKAGE_LIBSHDATA_STRESS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBFUTILS_CONF_ENV += TARGET_GLOBAL_LDLIBS='-latomic'
-+endif
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img])
++        self.emulator.login()
 +
-+define LIBFUTILS_BUILD_CMDS
-+	$(ALCHEMY_TARGET_ENV) \
-+		ALCHEMY_TARGET_SDK_DIRS="$(ALCHEMY_SDK_BASEDIR)/ulog" \
-+		$(LIBFUTILS_CONF_ENV) \
-+		$(ALCHEMY_MAKE) libfutils
-+endef
-+
-+ifeq ($(BR2_SHARED_LIBS),)
-+define LIBFUTILS_INSTALL_STATIC_LIBS
-+	$(INSTALL) -D -m 644 $(@D)/alchemy-out/staging/usr/lib/libfutils.a \
-+		$(1)/usr/lib/libfutils.a
-+endef
-+endif
-+
-+define LIBFUTILS_INSTALL_HEADERS
-+	mkdir -p $(1)/usr/include/futils
-+	$(INSTALL) -m 644 $(@D)/include/futils/* $(1)/usr/include/futils/
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define LIBFUTILS_INSTALL_SHARED_LIBS
-+	mkdir -p $(1)/usr/lib/
-+	$(INSTALL) -m 644 $(@D)/alchemy-out/staging/usr/lib/libfutils.so* \
-+		$(1)/usr/lib/
-+endef
-+endif
-+
-+define LIBFUTILS_INSTALL_TARGET_CMDS
-+	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(TARGET_DIR))
-+endef
-+
-+define LIBFUTILS_INSTALL_STAGING_CMDS
-+	$(call LIBFUTILS_INSTALL_STATIC_LIBS, $(STAGING_DIR))
-+	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(STAGING_DIR))
-+	$(call LIBFUTILS_INSTALL_HEADERS, $(STAGING_DIR))
-+	$(call ALCHEMY_INSTALL_LIB_SDK_FILE, libfutils, libfutils, libfutils.so, libulog)
-+endef
-+
-+$(eval $(generic-package))
++        # Just run libshdata-stress.
++        # This ensures that library are well compiled and that all dependencies
++        # are met using Parrot Alchemy build system.
++        self.assertRunOk("libshdata-stress")
 -- 
 2.33.1
 
