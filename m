@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F62C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3391CC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF5BD82CE5;
-	Mon, 10 Jan 2022 14:50:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pyCLQYspLOVw; Mon, 10 Jan 2022 14:50:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BA8082CA5;
-	Mon, 10 Jan 2022 14:50:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8AC851BF3C3
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 796B340911
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C530940926;
+	Mon, 10 Jan 2022 14:50:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6smA4Mcbt3Cv for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 14:50:17 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CECsABa34Cjf; Mon, 10 Jan 2022 14:50:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D3B640906;
+	Mon, 10 Jan 2022 14:50:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 613371BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4FB9360BAC
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:22 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3Dn4RRNOCgBH for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 14:50:21 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 292D740906
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B39960B31
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:20 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPA id 1C43960014;
- Mon, 10 Jan 2022 14:50:15 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPA id B60AC60004;
+ Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 15:50:04 +0100
-Message-Id: <20220110145007.133329-3-herve.codina@bootlin.com>
+Date: Mon, 10 Jan 2022 15:50:05 +0100
+Message-Id: <20220110145007.133329-4-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220110145007.133329-1-herve.codina@bootlin.com>
 References: <20220110145007.133329-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/5] package/ulog: new package
+Subject: [Buildroot] [PATCH v3 3/5] package/libfutils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,137 +63,149 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The ulog library is a minimalistic logging library derived from
-Android logger.
+The libfutils library is a library that contains some common
+useful functions (list, hash, time).
 
-https://github.com/Parrot-Developers/ulog
+https://github.com/Parrot-Developers/libfutils
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
 Changes v1 -> v2
   - Renamed ALCHEMY_TARGET_CONFIGURE_ENV to ALCHEMY_TARGET_ENV
+  - Removed ALCHEMY_TARGET_CONFIGURE_SDKS and set ALCHEMY_TARGET_SDK_DIRS
   - Removed $(strip ...)
   - Fixed indentation
+  - Added missing "depends on" in Config.in comment
 
 Changes v2 -> v3
   - Installed .a files when needed (ie not shared lib only)
   - Used $(INSTALL) in all installation commands
   - Created installation directories when needed
+  - Fixed dependencies chain in Alchemy atom.mk
 
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/ulog/Config.in | 12 ++++++++++
- package/ulog/ulog.hash |  3 +++
- package/ulog/ulog.mk   | 50 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 67 insertions(+)
- create mode 100644 package/ulog/Config.in
- create mode 100644 package/ulog/ulog.hash
- create mode 100644 package/ulog/ulog.mk
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libfutils/Config.in      | 15 +++++++++
+ package/libfutils/libfutils.hash |  3 ++
+ package/libfutils/libfutils.mk   | 56 ++++++++++++++++++++++++++++++++
+ 5 files changed, 76 insertions(+)
+ create mode 100644 package/libfutils/Config.in
+ create mode 100644 package/libfutils/libfutils.hash
+ create mode 100644 package/libfutils/libfutils.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 79b33e9f22..31ca7bf608 100644
+index 31ca7bf608..ecb0837398 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1197,6 +1197,7 @@ F:	package/php-apcu/
- F:	package/php-lua/
- F:	package/php-pam/
- F:	package/php-pecl-dbus/
-+F:	package/ulog/
- F:	support/testing/tests/package/test_dtbocfg.py
- F:	support/testing/tests/package/test_lua_augeas.py
- F:	support/testing/tests/package/test_php_apcu.py
+@@ -1191,6 +1191,7 @@ F:	package/alchemy/
+ F:	package/dtbocfg/
+ F:	package/libdbi/
+ F:	package/libdbi-drivers/
++F:	package/libfutils/
+ F:	package/lua-augeas/
+ F:	package/modsecurity2/
+ F:	package/php-apcu/
 diff --git a/package/Config.in b/package/Config.in
-index 3a2ad30df9..39a98fcc66 100644
+index 39a98fcc66..163fd53e12 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1738,6 +1738,7 @@ menu "Logging"
- 	source "package/log4qt/Config.in"
- 	source "package/opentracing-cpp/Config.in"
- 	source "package/spdlog/Config.in"
-+	source "package/ulog/Config.in"
- 	source "package/zlog/Config.in"
- endmenu
- 
-diff --git a/package/ulog/Config.in b/package/ulog/Config.in
+@@ -1986,6 +1986,7 @@ menu "Other"
+ 	source "package/libevent/Config.in"
+ 	source "package/libexecinfo/Config.in"
+ 	source "package/libffi/Config.in"
++	source "package/libfutils/Config.in"
+ 	source "package/libgee/Config.in"
+ 	source "package/libgeos/Config.in"
+ 	source "package/libglib2/Config.in"
+diff --git a/package/libfutils/Config.in b/package/libfutils/Config.in
 new file mode 100644
-index 0000000000..ef155005c2
+index 0000000000..7f795fc7e0
 --- /dev/null
-+++ b/package/ulog/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_ULOG
-+	bool "ulog"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/libfutils/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBFUTILS
++	bool "libfutils"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_INSTALL_LIBSTDCPP # ulog
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ulog
++	select BR2_PACKAGE_ULOG
 +	help
-+	  This is a minimalistic logging library derived from
-+	  Android logger.
++	  This library contains some common useful functions (list,
++	  hash, time)
 +
-+	  https://github.com/Parrot-Developers/ulog
++	  https://github.com/Parrot-Developers/libfutils
 +
-+comment "ulog needs a toolchain w/ C++, threads"
++comment "libfutils needs a toolchain w/ C++, threads"
 +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ulog/ulog.hash b/package/ulog/ulog.hash
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+diff --git a/package/libfutils/libfutils.hash b/package/libfutils/libfutils.hash
 new file mode 100644
-index 0000000000..47adc093b9
+index 0000000000..1fdcd84b13
 --- /dev/null
-+++ b/package/ulog/ulog.hash
++++ b/package/libfutils/libfutils.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256  14e5773b32a79fa5380bdc7ac73a39a7cd3ab182830f57cf6f2994fb49cf38dc  ulog-0389d243352255f6182326dccdae3d56dadc078f.tar.gz
-+sha256  cbb97dd2528af2aa2b9aee6c1b3ff1caed758044c17b2c811cf44b2528c496da  COPYING
-diff --git a/package/ulog/ulog.mk b/package/ulog/ulog.mk
++sha256  b38d40c46b83e448d8c1716ddfb04b7ecd384f5cd2cb773db5c26c0589accdb3  libfutils-c326ce0cc2a7354381265a7664bb215be587fac6.tar.gz
++sha256  eca11a1c62fae8d64a1247d93271375baecff8396141d7ff8d89671ee7e3ed0d  COPYING
+diff --git a/package/libfutils/libfutils.mk b/package/libfutils/libfutils.mk
 new file mode 100644
-index 0000000000..4bfb913499
+index 0000000000..0772d16ad7
 --- /dev/null
-+++ b/package/ulog/ulog.mk
-@@ -0,0 +1,50 @@
++++ b/package/libfutils/libfutils.mk
+@@ -0,0 +1,56 @@
 +################################################################################
 +#
-+# ulog
++# libfutils
 +#
 +################################################################################
 +
-+ULOG_VERSION = 0389d243352255f6182326dccdae3d56dadc078f
-+ULOG_SITE = $(call github,Parrot-Developers,ulog,$(ULOG_VERSION))
-+ULOG_LICENSE = Apache-2.0
-+ULOG_LICENSE_FILES = COPYING
-+ULOG_DEPENDENCIES = host-alchemy
-+ULOG_INSTALL_STAGING = YES
++LIBFUTILS_VERSION = c326ce0cc2a7354381265a7664bb215be587fac6
++LIBFUTILS_SITE = $(call github,Parrot-Developers,libfutils,$(LIBFUTILS_VERSION))
++LIBFUTILS_LICENSE = BSD-3-Clause
++LIBFUTILS_LICENSE_FILES = COPYING
++LIBFUTILS_DEPENDENCIES = ulog host-alchemy
++LIBFUTILS_INSTALL_STAGING = YES
 +
-+define ULOG_BUILD_CMDS
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBFUTILS_CONF_ENV += TARGET_GLOBAL_LDLIBS='-latomic'
++endif
++
++define LIBFUTILS_BUILD_CMDS
 +	$(ALCHEMY_TARGET_ENV) \
-+		$(ALCHEMY_MAKE) libulog
++		ALCHEMY_TARGET_SDK_DIRS="$(ALCHEMY_SDK_BASEDIR)/ulog" \
++		$(LIBFUTILS_CONF_ENV) \
++		$(ALCHEMY_MAKE) libfutils
 +endef
 +
 +ifeq ($(BR2_SHARED_LIBS),)
-+define ULOG_INSTALL_STATIC_LIBS
-+	$(INSTALL) -D -m 644 $(@D)/alchemy-out/staging/usr/lib/libulog.a \
-+		$(1)/usr/lib/libulog.a
++define LIBFUTILS_INSTALL_STATIC_LIBS
++	$(INSTALL) -D -m 644 $(@D)/alchemy-out/staging/usr/lib/libfutils.a \
++		$(1)/usr/lib/libfutils.a
 +endef
 +endif
 +
-+define ULOG_INSTALL_HEADERS
-+	mkdir -p $(1)/usr/include/
-+	$(INSTALL) -m 644 $(@D)/libulog/include/* $(1)/usr/include/
++define LIBFUTILS_INSTALL_HEADERS
++	mkdir -p $(1)/usr/include/futils
++	$(INSTALL) -m 644 $(@D)/include/futils/* $(1)/usr/include/futils/
 +endef
 +
 +ifeq ($(BR2_STATIC_LIBS),)
-+define ULOG_INSTALL_SHARED_LIBS
++define LIBFUTILS_INSTALL_SHARED_LIBS
 +	mkdir -p $(1)/usr/lib/
-+	$(INSTALL) -m 644 $(@D)/alchemy-out/staging/usr/lib/libulog.so* \
++	$(INSTALL) -m 644 $(@D)/alchemy-out/staging/usr/lib/libfutils.so* \
 +		$(1)/usr/lib/
 +endef
 +endif
 +
-+define ULOG_INSTALL_TARGET_CMDS
-+	$(call ULOG_INSTALL_SHARED_LIBS, $(TARGET_DIR))
++define LIBFUTILS_INSTALL_TARGET_CMDS
++	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(TARGET_DIR))
 +endef
 +
-+define ULOG_INSTALL_STAGING_CMDS
-+	$(call ULOG_INSTALL_STATIC_LIBS, $(STAGING_DIR))
-+	$(call ULOG_INSTALL_SHARED_LIBS, $(STAGING_DIR))
-+	$(call ULOG_INSTALL_HEADERS, $(STAGING_DIR))
-+	$(call ALCHEMY_INSTALL_LIB_SDK_FILE, ulog, libulog, libulog.so)
++define LIBFUTILS_INSTALL_STAGING_CMDS
++	$(call LIBFUTILS_INSTALL_STATIC_LIBS, $(STAGING_DIR))
++	$(call LIBFUTILS_INSTALL_SHARED_LIBS, $(STAGING_DIR))
++	$(call LIBFUTILS_INSTALL_HEADERS, $(STAGING_DIR))
++	$(call ALCHEMY_INSTALL_LIB_SDK_FILE, libfutils, libfutils, libfutils.so, libulog)
 +endef
 +
 +$(eval $(generic-package))
