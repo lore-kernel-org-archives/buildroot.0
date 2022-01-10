@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F23FC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52F62C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 14:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 097424096F;
-	Mon, 10 Jan 2022 14:50:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF5BD82CE5;
+	Mon, 10 Jan 2022 14:50:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ROh6Y6Axi2qp; Mon, 10 Jan 2022 14:50:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pyCLQYspLOVw; Mon, 10 Jan 2022 14:50:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBA0D40954;
-	Mon, 10 Jan 2022 14:50:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1BA8082CA5;
+	Mon, 10 Jan 2022 14:50:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F102F1BF3C3
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AC851BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE29540906
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 796B340911
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 14:50:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ykj8knW1ndgD for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
+ with ESMTP id 6smA4Mcbt3Cv for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 14:50:17 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A1D14408B1
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 292D740906
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 14:50:16 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPA id 251196000D;
- Mon, 10 Jan 2022 14:50:12 +0000 (UTC)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPA id 1C43960014;
+ Mon, 10 Jan 2022 14:50:15 +0000 (UTC)
 From: Herve Codina <herve.codina@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 15:50:03 +0100
-Message-Id: <20220110145007.133329-2-herve.codina@bootlin.com>
+Date: Mon, 10 Jan 2022 15:50:04 +0100
+Message-Id: <20220110145007.133329-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220110145007.133329-1-herve.codina@bootlin.com>
 References: <20220110145007.133329-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/5] package/alchemy: new host package
+Subject: [Buildroot] [PATCH v3 2/5] package/ulog: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,132 +58,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxjaGVteSBpcyBhIGJ1aWxkIHN5c3RlbSBkZXZlbG9wZWQgYnkgUGFycm90LgoKSXQgaXMgYSBu
-ZXcgYnVpbGQgc3lzdGVtIGJhc2VkIG9uIHRoZSBvbmUgdXNlZCBpbiBBbmRyb2lkLgpBIGNlbnRy
-YWwgbWFrZWZpbGUgaW5zdGFuY2Ugc2NhbnMgYSB3b3Jrc3BhY2UgdG8gZmluZCB1c2VyCm1ha2Vm
-aWxlcywgaW5jbHVkZXMgdGhlbSBhbmQgcmVnaXN0ZXIgbW9kdWxlcyB0byBiZSBidWlsdC4KCmh0
-dHBzOi8vZ2l0aHViLmNvbS9QYXJyb3QtRGV2ZWxvcGVycy9hbGNoZW15CgpTaWduZWQtb2ZmLWJ5
-OiBIZXJ2ZSBDb2RpbmEgPGhlcnZlLmNvZGluYUBib290bGluLmNvbT4KLS0tCkNoYW5nZXMgdjEg
-LT4gdjIKICAtIEZpeGVkIG1pc3NpbmcgbGljZW5zZSBpbmZvcm1hdGlvbiByZWxhdGVkIHRvIGtj
-b25maWcKICAtIEluc3RhbGxlZCBBbGNoZW15IGluICQoSE9TVF9ESVIpL29wdC9hbGNoZW15CiAg
-LSBSZW5hbWVkIEFMQ0hFTVlfVEFSR0VUX0NPTkZJR1VSRV9FTlYgdG8gQUxDSEVNWV9UQVJHRVRf
-RU5WCiAgLSBSZW1vdmVkIEFMQ0hFTVlfVEFSR0VUX0NPTkZJR1VSRV9TREtTIG1hY3JvCgpDaGFu
-Z2VzIHYyIC0+IHYzCiAgLSBJbnRyb2R1Y2VkIGF0b20ubWsuaW4gYXMgc3VnZ2VzdGVkIGJ5IFlh
-bm4KICAtIEFkZGVkIExJQlJBUklFUyBpbiBhdG9tLm1rLmluIHRvIHNldCBBbGNoZW15IGRlcGVu
-ZGVuY2llcyBjaGFpbi4KICAgIFRoaXMgaXMgbmVlZGVkIHRvIGhhdmUgYSBjb21wbGV0ZSAuYSBm
-aWxlIGxpc3QgZm9yIHRoZSBsaW5rCiAgICBjb21tYW5kIGluIGNhc2Ugb2Ygc3RhdGljIGxpYiBv
-bmx5LgoKIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAx
-ICsKIC4uLmxjaGFpbnMtcmVtb3ZlLWhhc2gtc3R5bGUtbWFuYWdlbWVudC5wYXRjaCB8IDM2ICsr
-KysrKysrKysKIHBhY2thZ2UvYWxjaGVteS9hbGNoZW15Lmhhc2ggICAgICAgICAgICAgICAgICB8
-ICA0ICsrCiBwYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5tayAgICAgICAgICAgICAgICAgICAgfCA3
-MSArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL2FsY2hlbXkvYXRvbS5tay5pbiAgICAgICAg
-ICAgICAgICAgICAgfCAgOCArKysKIDUgZmlsZXMgY2hhbmdlZCwgMTIwIGluc2VydGlvbnMoKykK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2FsY2hlbXkvMDAwMS10b29sY2hhaW5zLXJlbW92
-ZS1oYXNoLXN0eWxlLW1hbmFnZW1lbnQucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2FsY2hlbXkvYWxjaGVteS5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hbGNoZW15
-L2FsY2hlbXkubWsKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2FsY2hlbXkvYXRvbS5tay5p
-bgoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IGNkMGI1NGIwNDEu
-Ljc5YjMzZTlmMjIgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAt
-MTE4Nyw2ICsxMTg3LDcgQEAgTjoJSGVucmlxdWUgQ2FtYXJnbyA8aGVucmlxdWVAaGVucmlxdWVj
-YW1hcmdvLmNvbT4KIEY6CXBhY2thZ2UvanNvbi1nbGliLwogCiBOOglIZXJ2w6kgQ29kaW5hIDxo
-ZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+CitGOglwYWNrYWdlL2FsY2hlbXkvCiBGOglwYWNrYWdl
-L2R0Ym9jZmcvCiBGOglwYWNrYWdlL2xpYmRiaS8KIEY6CXBhY2thZ2UvbGliZGJpLWRyaXZlcnMv
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL2FsY2hlbXkvMDAwMS10b29sY2hhaW5zLXJlbW92ZS1oYXNo
-LXN0eWxlLW1hbmFnZW1lbnQucGF0Y2ggYi9wYWNrYWdlL2FsY2hlbXkvMDAwMS10b29sY2hhaW5z
-LXJlbW92ZS1oYXNoLXN0eWxlLW1hbmFnZW1lbnQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggMDAwMDAwMDAwMC4uNTIyNzY2Yjk3NwotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uv
-YWxjaGVteS8wMDAxLXRvb2xjaGFpbnMtcmVtb3ZlLWhhc2gtc3R5bGUtbWFuYWdlbWVudC5wYXRj
-aApAQCAtMCwwICsxLDM2IEBACitGcm9tIDRjYjk2ODFhYjk5ZGIzZDhlMzMwYWM3ODllMTdlYzY5
-NTgzYWVjZDQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBIZXJ2ZSBDb2RpbmEgPGhl
-cnZlLmNvZGluYUBib290bGluLmNvbT4KK0RhdGU6IFRodSwgMjggT2N0IDIwMjEgMTg6Mzk6MTgg
-KzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gdG9vbGNoYWluczogcmVtb3ZlIC0taGFzaC1zdHlsZSBt
-YW5hZ2VtZW50CisKK1VzaW5nIGFuIGV4dGVybmFsIHRvb2xjaGFpbiwgd2l0aCBhbiBleHRlcm5h
-bCBjb25maWd1cmF0aW9uIGdpdmVuCit1c2luZyBUQVJHRVRfR0xPQkFMX1hYWFggdmFyaWFibGVz
-LCBoYXZpbmcgJy0taGFzaC1zdHlsZT1ib3RoJworaW4gQWxjaGVteSB0b29sY2hhaW5zIGNhbiBs
-ZWFkIHRvIGNvbXBpbGF0aW9uIGZhaWx1cmUuCisKK1RoaXMgcGF0Y2ggc2ltcGx5IHJlbW92ZXMg
-YWxsIC0taGFzaC1zdHlsZSBzZXR0aW5ncy4KKworU2lnbmVkLW9mZi1ieTogSGVydmUgQ29kaW5h
-IDxoZXJ2ZS5jb2RpbmFAYm9vdGxpbi5jb20+CistLS0KKyB0b29sY2hhaW5zL2xpbnV4L2VnbGli
-Yy9mbGFncy5tayB8IDkgKy0tLS0tLS0tCisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCA4IGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvdG9vbGNoYWlucy9saW51eC9lZ2xpYmMv
-ZmxhZ3MubWsgYi90b29sY2hhaW5zL2xpbnV4L2VnbGliYy9mbGFncy5taworaW5kZXggOTVjMGE0
-Ni4uNDQ3NDcyOSAxMDA2NDQKKy0tLSBhL3Rvb2xjaGFpbnMvbGludXgvZWdsaWJjL2ZsYWdzLm1r
-CisrKysgYi90b29sY2hhaW5zL2xpbnV4L2VnbGliYy9mbGFncy5taworQEAgLTExLDExICsxMSw0
-IEBAIFRBUkdFVF9HTE9CQUxfTERMSUJTICs9IC1wdGhyZWFkIC1scnQKKyBUQVJHRVRfR0xPQkFM
-X0NGTEFHUyArPSAtZnVud2luZC10YWJsZXMKKyAKKyAjIEVuYWJsZSBsaW5rIG9wdGltaXphdGlv
-biBmb3IgYmludXRpbHMncyBsZC4KKy0jIGdudSBoYXNoIG5vdCBzdXBwb3J0ZWQgYnkgbWlwcyBB
-QkkKKy1pZmVxICgiJChUQVJHRVRfQVJDSCkiLCJtaXBzIikKKy0gIFRBUkdFVF9HTE9CQUxfTERG
-TEFHUyArPSAtV2wsLU8xCistZWxzZSBpZmVxICgiJChUQVJHRVRfQVJDSCkiLCJtaXBzNjQiKQor
-LSAgVEFSR0VUX0dMT0JBTF9MREZMQUdTICs9IC1XbCwtTzEKKy1lbHNlCistICBUQVJHRVRfR0xP
-QkFMX0xERkxBR1MgKz0gLVdsLC1PMSwtLWhhc2gtc3R5bGU9Ym90aAorLWVuZGlmCisrVEFSR0VU
-X0dMT0JBTF9MREZMQUdTICs9IC1XbCwtTzEKKy0tIAorMi4zMS4xCisKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvYWxjaGVteS9hbGNoZW15Lmhhc2ggYi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5oYXNo
-Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjMzODk1MjYzY2MKLS0tIC9k
-ZXYvbnVsbAorKysgYi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5oYXNoCkBAIC0wLDAgKzEsNCBA
-QAorIyBMb2NhbGx5IGNvbXB1dGVkOgorc2hhMjU2ICAzNDZjMDZiOTMxNzY5MWE5MzcxZDg3OGI4
-NTBlNjFmOGJjZWM0ZjIwMTMyYWM5NTM0MGI5ZDI1NzFiZTI1ZWU4ICBhbGNoZW15LWQ5NWIzYzM4
-Y2QzNzgxNGExYjk4ZDBiYmY4MTNkZTdhZGFhZWNmYmMudGFyLmd6CitzaGEyNTYgIDU0MmY0NGVl
-Y2Q5Zjg4MDZlYzFhZTI4NTIwMWU0NDJhYjU0N2M4MmQ5ZjhjNzBlNDRjOTc3ZDYzMzJhMmJlYTAg
-IENPUFlJTkcKK3NoYTI1NiAgNDk4NzI4MTVlZTNkZTE2M2YwN2E4MzczN2M5OTZlNzdhNWJmZmEx
-ODZkMDZiMWUzYmI5NjliZmI2OGMyNTFkZiAgUkVBRE1FCmRpZmYgLS1naXQgYS9wYWNrYWdlL2Fs
-Y2hlbXkvYWxjaGVteS5tayBiL3BhY2thZ2UvYWxjaGVteS9hbGNoZW15Lm1rCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjMzZDQwNDc4YjcKLS0tIC9kZXYvbnVsbAorKysg
-Yi9wYWNrYWdlL2FsY2hlbXkvYWxjaGVteS5tawpAQCAtMCwwICsxLDcxIEBACisjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIworIworIyBhbGNoZW15CisjCisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwor
-CitBTENIRU1ZX1ZFUlNJT04gPSBkOTViM2MzOGNkMzc4MTRhMWI5OGQwYmJmODEzZGU3YWRhYWVj
-ZmJjCitBTENIRU1ZX1NJVEUgPSAkKGNhbGwgZ2l0aHViLFBhcnJvdC1EZXZlbG9wZXJzLGFsY2hl
-bXksJChBTENIRU1ZX1ZFUlNJT04pKQorQUxDSEVNWV9MSUNFTlNFID0gQlNELTMtQ2xhdXNlIChB
-bGNoZW15KSwgR1BMLTIuMCAoa2NvbmZpZykKK0FMQ0hFTVlfTElDRU5TRV9GSUxFUyA9IENPUFlJ
-TkcgUkVBRE1FCitIT1NUX0FMQ0hFTVlfREVQRU5ERU5DSUVTID0gaG9zdC1weXRob24zCisKK0FM
-Q0hFTVlfSE9NRSA9ICQoSE9TVF9ESVIpL29wdC9hbGNoZW15CitBTENIRU1ZX1NES19CQVNFRElS
-ID0gJChTVEFHSU5HX0RJUikvdXNyL2xpYi9hbGNoZW15L3NkaworCitkZWZpbmUgSE9TVF9BTENI
-RU1ZX0lOU1RBTExfQ01EUworCW1rZGlyIC1wICQoQUxDSEVNWV9IT01FKQorCWNwIC1yZiAkKEBE
-KS8qICQoQUxDSEVNWV9IT01FKQorCWNwICQoSE9TVF9BTENIRU1ZX1BLR0RJUikvYXRvbS5tay5p
-biAkKEFMQ0hFTVlfSE9NRSkvYXRvbS5tay5pbgorZW5kZWYKKworJChldmFsICQoaG9zdC1nZW5l
-cmljLXBhY2thZ2UpKQorCisjIFZhcmlhYmxlcyB1c2VkIGJ5IG90aGVyIHBhY2thZ2VzCisKK0FM
-Q0hFTVlfTUFLRSA9ICQoQUxDSEVNWV9IT01FKS9zY3JpcHRzL2FsY2hlbWFrZQorCisjIFRBUkdF
-VF9BUkNIIGlzIHNldCB0byAneHh4JyB0byBhdm9pZCBBbGNoZW15IG1hbmFnaW5nIHRoZSBhcmNo
-aXRlY3R1cmUuCisjIFdoZW4gQWxjaGVteSBtYW5hZ2VzIHRoZSBhcmNoaXRlY3R1cmUsIGl0IGNh
-biBhZGQgc29tZSBmbGFncyB0byBDRkdMQUdTIGFuZAorIyBjYW4gbGVhZCB0byBpbmNvcnJlY3Qg
-cmVzdWx0IHdpdGggdGhlIHRvb2xjaGFpbiBwcm92aWRlZCBpbiBUQVJHRVRfQ1JPU1MuCisjICd4
-eHgnIGlzIGFuIHVua25vd24gYXJjaGl0ZWN0dXJlIGZvciBBbGNoZW15LiBVc2luZyB0aGlzIHZh
-bHVlIGlzIGEgc2ltcGxlCisjIHdheSB0byBkaXNhYmxlIHRoZSBBbGNoZW15IGFyY2hpdGVjdHVy
-ZSBtYW5hZ2VtZW50LgorQUxDSEVNWV9UQVJHRVRfRU5WID0gXAorCSQoVEFSR0VUX01BS0VfRU5W
-KSBcCisJQUxDSEVNWV9IT01FPSQoQUxDSEVNWV9IT01FKSBcCisJQUxDSEVNWV9XT1JLU1BBQ0Vf
-RElSPSIkKEBEKSIgXAorCUFMQ0hFTVlfVEFSR0VUX09VVD1hbGNoZW15LW91dCBcCisJVEFSR0VU
-X09TPWxpbnV4IFwKKwlUQVJHRVRfT1NfRkxBVk9VUj1idWlsZHJvb3QgXAorCVRBUkdFVF9DUk9T
-Uz0iJChUQVJHRVRfQ1JPU1MpIiBcCisJVEFSR0VUX0FSQ0g9eHh4IFwKKwlUQVJHRVRfR0xPQkFM
-X0NYWEZMQUdTPSIkKFRBUkdFVF9DWFhGTEFHUykiIFwKKwlUQVJHRVRfR0xPQkFMX0xERkxBR1M9
-IiQoVEFSR0VUX0xERkxBR1MpIiBcCisJVEFSR0VUX0dMT0JBTF9GRkxBR1M9IiQoVEFSR0VUX0ZD
-RkxBR1MpIiBcCisJVEFSR0VUX0dMT0JBTF9GQ0ZMQUdTPSIkKFRBUkdFVF9GQ0ZMQUdTKSIKKwor
-aWZlcSAoJChCUjJfU1RBVElDX0xJQlMpLHkpCitBTENIRU1ZX1RBUkdFVF9FTlYgKz0gXAorCVRB
-UkdFVF9GT1JDRV9TVEFUSUM9MSBcCisJVEFSR0VUX0dMT0JBTF9DRkxBR1M9IiQoVEFSR0VUX0NG
-TEFHUykiCitlbHNlCitBTENIRU1ZX1RBUkdFVF9FTlYgKz0gXAorCVRBUkdFVF9HTE9CQUxfQ0ZM
-QUdTPSIkKFRBUkdFVF9DRkxBR1MpIC1mUElDIgorZW5kaWYKKworIyBJbnN0YWxsIGFuIEFsY2hl
-bXkgU0RLIGZpbGUuCisjIFRoaXMgbWFjcm8gY2FuIGJlIHVzZWQgYnkgQWxjaGVteSBwYWNrYWdl
-cworIyAkMTogQnVpbGRyb290IHBhY2thZ2UgbmFtZQorIyAkMjogQWxjaGVteSBtb2R1bGUgbmFt
-ZQorIyAkMzogQWxjaGVteSBtb2R1bGUgZmlsZSBuYW1lCisjICQ0OiBBbGNoZW15IG1vZHVsZSBs
-aWJyYXJpZXMgdGhpcyBtb2R1bGUgZGVwZW5kcyBvbgorZGVmaW5lIEFMQ0hFTVlfSU5TVEFMTF9M
-SUJfU0RLX0ZJTEUKKwkkKElOU1RBTEwpIC1tIDA2NDQgLUQgXAorCQkkKEFMQ0hFTVlfSE9NRSkv
-YXRvbS5tay5pbiBcCisJCSQoQUxDSEVNWV9TREtfQkFTRURJUikvJChzdHJpcCAkKDEpKS9hdG9t
-Lm1rCisJJChTRUQpICdzI0BTVEFHSU5HX0RJUkAjJChTVEFHSU5HX0RJUikjJyBcCisJCS1lICdz
-I0BNT0RVTEVAIyQoc3RyaXAgJCgyKSkjJyBcCisJCS1lICdzI0BNT0RVTEVfRklMRU5BTUVAIyQo
-c3RyaXAgJCgzKSkjJyBcCisJCS1lICdzI0BMSUJSQVJJRVNAIyQoc3RyaXAgJCg0KSkjJyBcCisJ
-CSQoQUxDSEVNWV9TREtfQkFTRURJUikvJChzdHJpcCAkKDEpKS9hdG9tLm1rCitlbmRlZgpkaWZm
-IC0tZ2l0IGEvcGFja2FnZS9hbGNoZW15L2F0b20ubWsuaW4gYi9wYWNrYWdlL2FsY2hlbXkvYXRv
-bS5tay5pbgpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4wODRhZTBlODlm
-Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9hbGNoZW15L2F0b20ubWsuaW4KQEAgLTAsMCAr
-MSw4IEBACitMT0NBTF9QQVRIIDo9ICQoY2FsbCBteS1kaXIpCitpbmNsdWRlICQoQ0xFQVJfVkFS
-UykKK0xPQ0FMX01PRFVMRSA6PSBATU9EVUxFQAorTE9DQUxfU0RLIDo9IEBTVEFHSU5HX0RJUkAK
-K0xPQ0FMX0RFU1RESVIgOj0gdXNyL2xpYgorTE9DQUxfTU9EVUxFX0ZJTEVOQU1FIDo9IEBNT0RV
-TEVfRklMRU5BTUVACitMT0NBTF9MSUJSQVJJRVMgOj0gQExJQlJBUklFU0AKK2luY2x1ZGUgJChC
-VUlMRF9MSUJSQVJZKQotLSAKMi4zMy4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+The ulog library is a minimalistic logging library derived from
+Android logger.
+
+https://github.com/Parrot-Developers/ulog
+
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+---
+Changes v1 -> v2
+  - Renamed ALCHEMY_TARGET_CONFIGURE_ENV to ALCHEMY_TARGET_ENV
+  - Removed $(strip ...)
+  - Fixed indentation
+
+Changes v2 -> v3
+  - Installed .a files when needed (ie not shared lib only)
+  - Used $(INSTALL) in all installation commands
+  - Created installation directories when needed
+
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/ulog/Config.in | 12 ++++++++++
+ package/ulog/ulog.hash |  3 +++
+ package/ulog/ulog.mk   | 50 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 67 insertions(+)
+ create mode 100644 package/ulog/Config.in
+ create mode 100644 package/ulog/ulog.hash
+ create mode 100644 package/ulog/ulog.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 79b33e9f22..31ca7bf608 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1197,6 +1197,7 @@ F:	package/php-apcu/
+ F:	package/php-lua/
+ F:	package/php-pam/
+ F:	package/php-pecl-dbus/
++F:	package/ulog/
+ F:	support/testing/tests/package/test_dtbocfg.py
+ F:	support/testing/tests/package/test_lua_augeas.py
+ F:	support/testing/tests/package/test_php_apcu.py
+diff --git a/package/Config.in b/package/Config.in
+index 3a2ad30df9..39a98fcc66 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1738,6 +1738,7 @@ menu "Logging"
+ 	source "package/log4qt/Config.in"
+ 	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
++	source "package/ulog/Config.in"
+ 	source "package/zlog/Config.in"
+ endmenu
+ 
+diff --git a/package/ulog/Config.in b/package/ulog/Config.in
+new file mode 100644
+index 0000000000..ef155005c2
+--- /dev/null
++++ b/package/ulog/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_ULOG
++	bool "ulog"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  This is a minimalistic logging library derived from
++	  Android logger.
++
++	  https://github.com/Parrot-Developers/ulog
++
++comment "ulog needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ulog/ulog.hash b/package/ulog/ulog.hash
+new file mode 100644
+index 0000000000..47adc093b9
+--- /dev/null
++++ b/package/ulog/ulog.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  14e5773b32a79fa5380bdc7ac73a39a7cd3ab182830f57cf6f2994fb49cf38dc  ulog-0389d243352255f6182326dccdae3d56dadc078f.tar.gz
++sha256  cbb97dd2528af2aa2b9aee6c1b3ff1caed758044c17b2c811cf44b2528c496da  COPYING
+diff --git a/package/ulog/ulog.mk b/package/ulog/ulog.mk
+new file mode 100644
+index 0000000000..4bfb913499
+--- /dev/null
++++ b/package/ulog/ulog.mk
+@@ -0,0 +1,50 @@
++################################################################################
++#
++# ulog
++#
++################################################################################
++
++ULOG_VERSION = 0389d243352255f6182326dccdae3d56dadc078f
++ULOG_SITE = $(call github,Parrot-Developers,ulog,$(ULOG_VERSION))
++ULOG_LICENSE = Apache-2.0
++ULOG_LICENSE_FILES = COPYING
++ULOG_DEPENDENCIES = host-alchemy
++ULOG_INSTALL_STAGING = YES
++
++define ULOG_BUILD_CMDS
++	$(ALCHEMY_TARGET_ENV) \
++		$(ALCHEMY_MAKE) libulog
++endef
++
++ifeq ($(BR2_SHARED_LIBS),)
++define ULOG_INSTALL_STATIC_LIBS
++	$(INSTALL) -D -m 644 $(@D)/alchemy-out/staging/usr/lib/libulog.a \
++		$(1)/usr/lib/libulog.a
++endef
++endif
++
++define ULOG_INSTALL_HEADERS
++	mkdir -p $(1)/usr/include/
++	$(INSTALL) -m 644 $(@D)/libulog/include/* $(1)/usr/include/
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define ULOG_INSTALL_SHARED_LIBS
++	mkdir -p $(1)/usr/lib/
++	$(INSTALL) -m 644 $(@D)/alchemy-out/staging/usr/lib/libulog.so* \
++		$(1)/usr/lib/
++endef
++endif
++
++define ULOG_INSTALL_TARGET_CMDS
++	$(call ULOG_INSTALL_SHARED_LIBS, $(TARGET_DIR))
++endef
++
++define ULOG_INSTALL_STAGING_CMDS
++	$(call ULOG_INSTALL_STATIC_LIBS, $(STAGING_DIR))
++	$(call ULOG_INSTALL_SHARED_LIBS, $(STAGING_DIR))
++	$(call ULOG_INSTALL_HEADERS, $(STAGING_DIR))
++	$(call ALCHEMY_INSTALL_LIB_SDK_FILE, ulog, libulog, libulog.so)
++endef
++
++$(eval $(generic-package))
+-- 
+2.33.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
