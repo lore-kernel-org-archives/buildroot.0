@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FE7C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 17:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B49C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jan 2022 18:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ACA3408C9;
-	Mon, 10 Jan 2022 17:45:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C30948333E;
+	Mon, 10 Jan 2022 18:00:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JaWlBm8zOgMK; Mon, 10 Jan 2022 17:45:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B98E8408BB;
-	Mon, 10 Jan 2022 17:45:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1E49F1BF355
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 17:45:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A2A38269C
- for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 17:45:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUw4hjh3obgW for <buildroot@lists.busybox.net>;
- Mon, 10 Jan 2022 17:45:24 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3TxMrlnd4D8I; Mon, 10 Jan 2022 18:00:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E68682E19;
+	Mon, 10 Jan 2022 18:00:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 16E2A1BF355
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:00:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 038874060E
+ for <buildroot@lists.busybox.net>; Mon, 10 Jan 2022 18:00:10 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=googlemail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kw5ZQJdX4aDa for <buildroot@lists.busybox.net>;
+ Mon, 10 Jan 2022 18:00:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 45CA982640
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 17:45:24 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id k30so10662347wrd.9
- for <buildroot@buildroot.org>; Mon, 10 Jan 2022 09:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nGUzC421Z7a3AL+Snxt18lkBsUMZSNoyx8Bpaepzgm4=;
- b=e2i27aknlwUmMq/8ClAKSwGC425CHC6IWCFPPGA82pD67HPIlkRz+43Bc52CTBzZ05
- jB6qlKjkrFlOgmQ/H9ooB11ummOUiCbutFU4ZA8xKZo0xw0bhGnLgL/canbXZY3ZYCnG
- vLk/PM9se/Br+T5QGINlRQ6czSTbDEG5idLD8G9xvImAIGeRhWHfQugv6mL2D3RVQ3Xd
- rWAxGWNZdiQTbEXO9pRLE4YX8OPb7e1UeSdLkDcRU/k116P7cNyRGRl3WkjPa0EWFe6k
- uDrTFQARZ/sdlU9swJbmIvFcBbYwiaQMDyMDrt+Wk46Af0E7WX3iYzYprYSw85nEdOzM
- wBsw==
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7224D4016B
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 18:00:08 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id c71so45303666edf.6
+ for <buildroot@buildroot.org>; Mon, 10 Jan 2022 10:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=sCdBRJ1SLIslCiGKElC4WBrl0t1pSwy+tiPvZOwVZ5o=;
+ b=jCK39K5hU19pi/2WjRbuzjHkDHyGVkgZ4wkVziysZJ11KG2PF6HTOHXlsWbwaGpLof
+ npBQ0Lpe/DY+xlKbqxtdVCQgzt7NIRm0ZP6onjiVlGJsaE9rDYaIZZ203QvjotKp6ZiV
+ OrpKg9X0I3SexTwGfE3RuExurw59N0ON42kCuZTjFt2+a14vS5nGcYbpVRhTAJxZar3t
+ AKtwBqa4xgvRlxWsTZ3uVWfO+mnWna4Bz6ToUVJrTpTE1NB7VFiMxFpliG+zTg0je9A2
+ eruSctoJMXtrvRO9OOgxny2GP8QQ+JH/WVpJRA5e3yGLIi4aIt6XyGVEu+3NZiMCLcU3
+ PA6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=nGUzC421Z7a3AL+Snxt18lkBsUMZSNoyx8Bpaepzgm4=;
- b=qoU2ndk0J2uCLAn7I5jScWWJj4nxnfLqhzItJUKh3EPnM3Nk9Gp0EZsAhgnBejSGLm
- PdbiPLaryf96fZ1aFkO0PsVtpu0ujQPPNgNqSm+xFQ5Sw/CRbDdk2+LrDIKKVTfHHFY6
- qFjeAuu3XrMZc82HsHb3Xyz0Ehb+EtNeU2gpBnY09lpE+dXhojnZurE+oGIc+j184Pym
- S3+I17nLOnF1dO3bXdRBccukW40olkOWzQ6w8U071gfrwwcqM6LdJeX20dNGAO2u8Vtz
- xouJ+BIAsbvj6jErDxP9m2DJIePnciTqoywFYYemMZwnalqNSjdPv3VjTOIDPIp1AmC0
- LGrQ==
-X-Gm-Message-State: AOAM532ffVW3pTcZyHTK9ifTyRuPH5gG3KFTGhPKXVuCWljhKvp7bY/L
- QJ/AJ8V7yoaFj347L1MGWgZWrzjPJy4=
-X-Google-Smtp-Source: ABdhPJyescvxgvKbvPCCZvaXX8dT/mVuqI+pJl20yE4BBZYATM2mToRq0IYjeGJ5rwWrmlrbvyvg8w==
-X-Received: by 2002:a5d:6d50:: with SMTP id k16mr548006wri.693.1641836722427; 
- Mon, 10 Jan 2022 09:45:22 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-2129-201.w92-167.abo.wanadoo.fr.
- [92.167.208.201])
- by smtp.gmail.com with ESMTPSA id z7sm4570684wrm.117.2022.01.10.09.45.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Jan 2022 09:45:22 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 10 Jan 2022 18:44:11 +0100
-Message-Id: <20220110174411.1761440-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=sCdBRJ1SLIslCiGKElC4WBrl0t1pSwy+tiPvZOwVZ5o=;
+ b=r5dPYb5AWfqs0tk0XHbWVPBNAkCOGV1HsQxUH58DS/x5rtohLvKWp16Gg5oJNp8eyi
+ FBPCOJI2jE7bHFvYK92AAWD/s4WnfN2///OaeYPXVe6/gWNZuZQoMrrrCMIw9DVHVSkg
+ MwjYz74jxHaKwZ/SDL14t/pMLMo56TBqGPJ1THcYBJq+Ib3Xx0U85+zUAumw6Vaofl0N
+ gHafX+VOkkTIem/pqXfS/QF399XaF7pqvNiJt+YudW2AmZUChwvY7xuFHRqtb9ZrWBlk
+ VIioRA++YRRt8hO4FlwEjkunON7jmYenGfJDp0IEdEV7IoNz1BTzMSKaOMmbmZKWeFlv
+ K0Ow==
+X-Gm-Message-State: AOAM533H4U8Aggv85orAgVirJBGgna5IbfFTLfqrQuLn57C8x+VC6JJw
+ 7URX6PBGpXcCrZGIRQDzBDjkJ72Yywv5NtBPeInXNjwp
+X-Google-Smtp-Source: ABdhPJzJqU/hYnc32C4kyppcqsKpC3VKsX71hNLEQVSFfmT3sl3cV5adfujxKfmubdH24tNpmSGa3rjtYa3YOsN/FBw=
+X-Received: by 2002:a05:6402:1ac9:: with SMTP id
+ ba9mr816624edb.248.1641837606664; 
+ Mon, 10 Jan 2022 10:00:06 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: fix build with gcc 4.8
+References: <20220110085850.11095-1-yegorslists@googlemail.com>
+ <20220110085850.11095-2-yegorslists@googlemail.com>
+ <20220110140450.GO1477939@scaer>
+In-Reply-To: <20220110140450.GO1477939@scaer>
+Date: Mon, 10 Jan 2022 18:59:55 +0100
+Message-ID: <CAGm1_kvtLsQW82XSjBHPz8CFdVsB4WBFZyyyhV_wYLbjfzVGVg@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH 2/2] package/avrdude: add support for Linux
+ sysfs GPIO interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,44 +84,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 2.28.0 in commit 0f8aab08e762742d753d5920718f31c629d0f8d7:
+Hi Yann, all,
 
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/mbedtls-2.28.0/library/bignum.c: In function 'mpi_select':
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/mbedtls-2.28.0/library/bignum.c:1994:5: error: 'for' loop initial declarations are only allowed in C99 mode
-     for( size_t i = 0; i < T_size; i++ )
-     ^
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/mbedtls-2.28.0/library/bignum.c:1994:5: note: use option -std=c99 or -std=gnu99 to compile your code
+On Mon, Jan 10, 2022 at 3:04 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Yegor, All,
+>
+> On 2022-01-10 09:58 +0100, yegorslists--- via buildroot spake thusly:
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  package/avrdude/Config.in  | 3 +++
+> >  package/avrdude/avrdude.mk | 6 ++++++
+> >  2 files changed, 9 insertions(+)
+> >
+> > diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
+> > index 89558a5ff5..57a8df66ea 100644
+> > --- a/package/avrdude/Config.in
+> > +++ b/package/avrdude/Config.in
+> > @@ -17,6 +17,9 @@ config BR2_PACKAGE_AVRDUDE
+> >
+> >  if BR2_PACKAGE_AVRDUDE
+> >
+> > +config BR2_PACKAGE_AVRDUDE_LINUXGPIO
+> > +     bool "Linux sysfs GPIO interface support"
+> > +
+> >  config BR2_PACKAGE_AVRDUDE_SPI
+> >       bool "SPI support"
+> >       default y # Backward compatibility
+> > diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+> > index accd92c1d5..3ccba80d8e 100644
+> > --- a/package/avrdude/avrdude.mk
+> > +++ b/package/avrdude/avrdude.mk
+> > @@ -16,6 +16,12 @@ AVRDUDE_CONF_OPTS = --enable-linuxgpio
+> >  AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+> >       host-flex host-bison
+> >
+> > +ifeq ($(BR2_PACKAGE_AVRDUDE_LINUXGPIO),y)
+> > +AVRDUDE_CONF_OPTS += --enable-linuxgpio
+> > +else
+> > +AVRDUDE_CONF_OPTS += --disable-linuxgpio
+> > +endif
+>
+> We already have an unconditional activation of those:
+>
+>     https://github.com/buildroot/buildroot/blob/master/package/avrdude/avrdude.mk#L15
+>
+> (which you can btw. incidentally also notice as part the hunk header).
 
-Fixes:
- - http://autobuild.buildroot.org/results/56ac0a8726d09eed8f45f865934fa7781a0e667a
+My bad. I have just overlooked this setting. You can drop the patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mbedtls/mbedtls.mk | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yegor
 
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 5facb99b2a..8745ff33f4 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -7,6 +7,7 @@
- MBEDTLS_VERSION = 2.28.0
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
- 	-DENABLE_TESTING=OFF \
- 	-DMBEDTLS_FATAL_WARNINGS=OFF
--- 
-2.34.1
-
+> So, if the intention was to be able to enable linux-gpio, then this is a
+> noop as they are already enabled. If the intention was to be able to
+> disable them, then the unconditional enable should be dropped.
+>
+> But then, does it make sense to be able to disable linux GPIO?
+>
+> And what if both SPI and GPIO are disabled?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  ifeq ($(BR2_PACKAGE_AVRDUDE_SPI),y)
+> >  AVRDUDE_CONF_OPTS += --enable-linuxspi
+> >  else
+> > --
+> > 2.17.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
