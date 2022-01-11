@@ -1,46 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3A2C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 21:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C34EC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 21:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 461BF41608;
-	Tue, 11 Jan 2022 21:00:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C570240901;
+	Tue, 11 Jan 2022 21:00:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fuFU-IZgelhp; Tue, 11 Jan 2022 21:00:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1B0EyTZ7CQkm; Tue, 11 Jan 2022 21:00:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E35C41606;
-	Tue, 11 Jan 2022 21:00:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC2601BF20B
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:59:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 87278408FE;
+	Tue, 11 Jan 2022 21:00:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 543E61BF239
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9474415F9
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:59:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4150A83E66
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PcmHfuFgJbeQ for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 20:59:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFE16415F7
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 20:59:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0FC89834E1; Tue, 11 Jan 2022 20:53:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sYxMXaGlD8w3 for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 21:00:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25F1F83E65
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 21:00:09 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 524C0E0003;
+ Tue, 11 Jan 2022 21:00:08 +0000 (UTC)
+Date: Tue, 11 Jan 2022 22:00:07 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Tue, 11 Jan 2022 21:59:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7425450ba27ecd3dacf795e42bb70ef0c98684e8
-X-Git-Newrev: 81945bde7c282d0ab5f304dc9795e2d68033cd98
-X-Patchwork-Hint: ignore
-Message-Id: <20220111205334.0FC89834E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptopp: disable neon if needed
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220111220007.50a69ce1@windsurf>
+In-Reply-To: <20220110173542.1748804-1-fontaine.fabrice@gmail.com>
+References: <20220110173542.1748804-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/cryptopp: needs wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,47 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julian Scheel <julian@jusst.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81945bde7c282d0ab5f304dc9795e2d68033cd98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 10 Jan 2022 18:35:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix the following build failure raised since commit
-bf4cf9de833e2d571d98d1ca935ea08a3468e463:
+> Fix the following build failure raised since commit
+> bf4cf9de833e2d571d98d1ca935ea08a3468e463:
+> 
+> In file included from seckey.h:11,
+>                  from 3way.h:10,
+>                  from 3way.cpp:5:
+> misc.h:1528:6: error: 'wstring' in namespace 'std' does not name a type
+>  1528 | std::wstring StringWiden(const char *str, bool throwOnError = true);
+>       |      ^~~~~~~
+> In file included from seckey.h:11,
+>                  from 3way.h:10,
+>                  from 3way.cpp:5:
+> misc.h:14:1: note: 'std::wstring' is defined in header '<string>'; did you forget to '#include <string>'?
+>    13 | #include "smartptr.h"
+>   +++ |+#include <string>
+>    14 | #include "stdcpp.h"
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/174fe03da7a40dd152703de93af6a213d9cac698
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/cryptopp/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-In file included from aria_simd.cpp:18:0:
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/lib/gcc/arm-none-linux-gnueabi/4.8.3/include/arm_neon.h:32:2: error: #error You must enable NEON instructions (e.g. -mfloat-abi=softfp -mfpu=neon) to use arm_neon.h
- #error You must enable NEON instructions (e.g. -mfloat-abi=softfp -mfpu=neon) to use arm_neon.h
-  ^
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/e4fd947c118174a4fad62cbed18816f02d39ec25
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cryptopp/cryptopp.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index 5e6eb9644d..4353e35e0a 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -47,6 +47,10 @@ ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),y)
- CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
- endif
- 
-+ifneq ($(BR2_ARM_CPU_HAS_NEON),y)
-+CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_ARM_NEON
-+endif
-+
- CRYPTOPP_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	CXXFLAGS="$(CRYPTOPP_CXXFLAGS)"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
