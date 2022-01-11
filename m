@@ -1,62 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2843AC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 16:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4161CC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 17:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9794283196;
-	Tue, 11 Jan 2022 16:14:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A05BF60E97;
+	Tue, 11 Jan 2022 17:09:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wJrwE-B3WaCb; Tue, 11 Jan 2022 16:14:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yUij6HLs1g03; Tue, 11 Jan 2022 17:09:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AABA282F8B;
-	Tue, 11 Jan 2022 16:14:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDAF360E8F;
+	Tue, 11 Jan 2022 17:09:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 067271BF83E
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 16:14:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D3EBE1BF368
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 17:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E354C60E93
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 16:14:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C246F60E8F
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 17:09:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=tkos.co.il
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZG0XKpfIOMhS for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 16:14:07 +0000 (UTC)
+ with ESMTP id 7A_cn4B-Aiy8 for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 17:09:24 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 954F960E8F
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 16:14:07 +0000 (UTC)
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx.tkos.co.il (Postfix) with ESMTPS id 1C5734401D4;
- Tue, 11 Jan 2022 18:14:03 +0200 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
- s=default; t=1641917643;
- bh=ENcg044dPWlFRNOt7VV9sWSWb+feCAis2VIJjeNCV+Y=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=X64j/nLOgJOJ8wssbWR54fkUYv/0ysSHTYB0BrBj7D+yOfH2WoVzLVbz772eoQUzk
- 0pcoKtMLehImePlxLyXLbwsrIeE9Ei74bKl8Cq7WFca40XQ09G0Gb30q9rXaDmmBqx
- I3ttI59CDJQZ0ZJFXYzVZeedN1sUIXm6RLSd1X7nUSZJTCzcuQkhUQm7JwHEBdVqqT
- a5ObSgz7KfSxuiafi2upzw0h24vR6Sr21VLtLTplwHcUq4lwVkAE9QlcQ6KbDoHFKH
- k9ffbmnHtaf1EtxIECIk+xKV2f/Hc4IMfXVgSDoEVmoXOV7a+OxkRM9HOHtBBK8vy+
- cKCOStSIXQzWw==
-References: <DM5PR02MB32914F0603DC48BC02D1CA328A519@DM5PR02MB3291.namprd02.prod.outlook.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-To: "Karicheri, Murali" <Murali.Karicheri@sandc.com>
-Date: Tue, 11 Jan 2022 18:13:15 +0200
-In-reply-to: <DM5PR02MB32914F0603DC48BC02D1CA328A519@DM5PR02MB3291.namprd02.prod.outlook.com>
-Message-ID: <87o84iw8qc.fsf@tarshish>
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 87FD960D71
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 17:09:24 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4de3:3dd8:1079:d363])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8798578038E;
+ Tue, 11 Jan 2022 18:09:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641920960;
+ bh=kuFtkv/x8GbnvAkwoj26vMfIjVIqnhmJSKLUsma+cSE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=sRlI9qz5klw38DdCPkO+/l42elL9LunwzEvsVGhpVPFZg9bk61prI6v7ZQIcbFnAk
+ rKaoWXUTyixVuEOz5iPNELah8aor8rs6V1YiJkK3FfwcXKJKuG4uylTFkpsLXNssTI
+ KBVC27kWx0rYXORAVBDILSpdhXRSSqH1/d/v15QMOWSyDBmaTLOdtKV6KbgTqIg9j9
+ w3QL7IDwy8j2fkoMjGZJES/vZ5plEGdvDyqFyvWyDJtOA7vmfXbrUielkUoWiOoesu
+ zDqehV6ti98rsEoj/iF5sohDgKt0zhpB3V2seE8MDasneo/13eg7PLHJjhWJksOPBE
+ vhkSBSLHh5vBw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 11 Jan 2022 18:09:18 +0100
+Date: Tue, 11 Jan 2022 18:09:18 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adrian Perez de Castro <aperez@igalia.com>
+Message-ID: <20220111170918.GV1477939@scaer>
+References: <20220111145527.3422053-1-aperez@igalia.com>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] creating packages for opkg for buildroot based
- embedded platform software
+Content-Disposition: inline
+In-Reply-To: <20220111145527.3422053-1-aperez@igalia.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH RFC 1/1] package/wpewebkit: use ninja for
+ faster builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,53 +70,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Murali,
+Adrian, All,
 
-On Tue, Jan 11 2022, Karicheri, Murali wrote:
-> Hello, buildroot experts,
->
-> I am new to buildroot and was working with a buildroot expert for migrating
-> our yocto based build system to use buildroot. Unfortunately, he has left our
-> company for another oppotunity. Ever since I have started using buildroot for
-> our build, I am very happy with its simplicity compared to yocto based build
-> system. However, I have learned that buildroot expect the entire rootfs to be
-> updated on a running system for updating fixes which is very expensive for
-> deployment where there is limited bandwidth available to update the system. So
-> that is the challenge that I am facing. Good news is opkg tools are supported
-> in buildroot which is good. Typically, we would like to let our customer do
-> periodic update to the system to have vulnerability fixes and other fixes
-> released by buildroot. For example, let us say we base our system on
-> 2021.02.x. So, when there is a maintenance update to this branch say,
-> 2021.02.06, we would like to create an ipk file with the changes and provide
-> that for syst
->  em update. Idea is the file will be smaller and thus requires less bandwidth
-> and will result in quicker update to the system. Do you have information on
-> any project that is working to create a package manager for systems that uses
-> buildroot for their build?
->
-> My research showed one resource but is for open embedded or yocto or openwrt
-> and is here. https://raymii.org/s/tutorials/Building_IPK_packages_by_hand.html
->
-> Do you think this is what I should try or any other relevant information on this topic?
+On 2022-01-11 16:55 +0200, Adrian Perez de Castro spake thusly:
+> Instruct CMake to use the Ninja generator, and override build/install
+> commands to use Ninja instead, which results in faster builds. The
+> host-ninja package is required to build some of the dependencies used
+> by wpewebkit (e.g. libepoxy) so in practice this is not introducing
+> a new host dependency that would slow down the build.
 
-This Buildroot FAQ is relevant:
+As discussed on IRC, we concluded that a better option is to make the
+cmake-package infrastructure in Buildroot ninja-aware, and that you were
+going to have a look at it. Thanks! :-)
 
-  https://buildroot.org/downloads/manual/manual.html#faq-no-binary-packages
+So, I've marked this patch as rejected in patchwork.
 
-baruch
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/wpewebkit/wpewebkit.mk | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index 64c179534f..2cbed60cb3 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
+> @@ -14,11 +14,12 @@ WPEWEBKIT_LICENSE_FILES = \
+>  	Source/WebCore/LICENSE-LGPL-2.1
+>  WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
+>  WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
+> -WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby \
+> +WPEWEBKIT_DEPENDENCIES = host-gperf host-ninja host-python3 host-ruby \
+>  	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
+>  	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+>  
+>  WPEWEBKIT_CONF_OPTS = \
+> +	-GNinja \
+>  	-DPORT=WPE \
+>  	-DENABLE_ACCESSIBILITY=OFF \
+>  	-DENABLE_API_TESTS=OFF \
+> @@ -101,4 +102,24 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+>  WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+>  endif
+>  
+> +define WPEWEBKIT_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(WPEWEBKIT_NINJA_ENV) \
+> +		$(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR) -- $(NINJA_OPTS) $(WPEWEBKIT_NINJA_OPTS)
+> +endef
+> +
+> +define WPEWEBKIT_INSTALL_CMDS
+> +	$(TARGET_MAKE_ENV) $(WPEWEBKIT_NINJA_ENV) \
+> +		$(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
+> +endef
+> +
+> +define WPEWEBKIT_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(WPEWEBKIT_NINJA_ENV) DESTDIR=$(STAGING_DIR) \
+> +		$(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
+> +endef
+> +
+> +define WPEWEBKIT_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(WPEWEBKIT_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+> +		$(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
+> +endef
+> +
+>  $(eval $(cmake-package))
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
