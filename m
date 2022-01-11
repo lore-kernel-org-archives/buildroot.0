@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4310DC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 16:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9211C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 18:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA023812F0;
-	Tue, 11 Jan 2022 16:11:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6081B414C1;
+	Tue, 11 Jan 2022 18:30:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yBGQVBuCxiS7; Tue, 11 Jan 2022 16:11:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mh_PwUjo7Lss; Tue, 11 Jan 2022 18:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56DBC812C5;
-	Tue, 11 Jan 2022 16:11:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AC5B4149F;
+	Tue, 11 Jan 2022 18:30:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4DB8C1BF83E
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 16:11:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66B751BF365
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39FF340114
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 16:11:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52AD6405B6
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:30:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 46o_PCjNC1ln for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 16:11:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 765D04016D
- for <buildroot@uclibc.org>; Tue, 11 Jan 2022 16:11:48 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1n7JkP-00072L-U5
- for buildroot@uclibc.org; Tue, 11 Jan 2022 17:11:45 +0100
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 11 Jan 2022 16:11:41 -0000 (UTC)
-Message-ID: <srka7t$pu1$1@ciao.gmane.io>
-User-Agent: slrn/1.0.3 (Linux)
-Subject: [Buildroot] Diagnosing conflicts due to new Python version
+ with ESMTP id I7LYDLWtmQYN for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 18:30:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73E30401DD
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 18:30:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id DE1A282A06; Tue, 11 Jan 2022 18:23:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 11 Jan 2022 19:28:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f51be73f25bdc9b370db42996475136098ebd251
+X-Git-Newrev: 27eb296a202b6559e8b6d363effb36af4319cb9f
+X-Patchwork-Hint: ignore
+Message-Id: <20220111182359.DE1A282A06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-headers: drop 5.14.x headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +58,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It seems that every time a new Python version is unmasks, it breaks
-things.
+commit: https://git.buildroot.net/buildroot/commit/?id=27eb296a202b6559e8b6d363effb36af4319cb9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This time it's a python-exec version conflict that prevents emerge
--u. FAICT, Python 3.10 requires python-exec 2.4.8, and some other
-package requires 2.4.6.
+The 5.14.x series is now EOL, so drop it.
 
-I've fixed things temporarily with:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998@free.fr: actualyl drop it from the choice list]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-package.use:
-
-   */* PYTHON_TARGETS: -python3_10
-   */* PYTHON_SINGLE_TARGET -python3_10
-
-package.mask:
-
-   =dev-lang/python-3.10
-
-No, at least I can continue to update the machine.
-
-When I eventually get the spare time to try to get Python 3.10
-working, how does one figure out which package is causing the problem
-by requring the older version of python-exec?
-
-I've tried adding a 't' to the emerge flags, but that doesn't seem to
-show anything useful.
-
-Is there any documentation on how to determine the cause of a package
-version conflict?
-
---
-Grant
-
-
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d36eac3302..b3e8d5a6d8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2022.02"
+ 
++config BR2_KERNEL_HEADERS_5_14
++	bool "kernel headers version 5.14.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 5.14.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE
+ 	bool "python-backports-functools-lru-cache package removed"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 86dc8d7af9..c40c26c1b2 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  027d7e8988bb69ac12ee92406c3be1fe13f990b1ca2249e226225cd1573308bb  linux-5.16.tar.xz
+ sha256  b3e9ba06a299a3e2ead4a15753bc46a3e0c90d3b92ffeed1034ccc9f13a717f0  linux-5.15.6.tar.xz
+-sha256  f41a259cb2002dd2e3286524b2bb4e803f4f982992d092706ecea613584023b3  linux-5.14.21.tar.xz
+ sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
+ sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8ee86e09af..bf306faf92 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -58,10 +58,6 @@ config BR2_KERNEL_HEADERS_5_10
+ 	bool "Linux 5.10.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 
+-config BR2_KERNEL_HEADERS_5_14
+-	bool "Linux 5.14.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+-
+ config BR2_KERNEL_HEADERS_5_15
+ 	bool "Linux 5.15.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+@@ -388,7 +384,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.14.21"	if BR2_KERNEL_HEADERS_5_14
+ 	default "5.15.6"	if BR2_KERNEL_HEADERS_5_15
+ 	default "5.16"		if BR2_KERNEL_HEADERS_5_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
