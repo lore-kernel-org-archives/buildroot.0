@@ -1,50 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58295C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 21:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71118C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 22:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03AB940901;
-	Tue, 11 Jan 2022 21:22:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC01A83E5E;
+	Tue, 11 Jan 2022 22:00:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bf6ubW-aISKo; Tue, 11 Jan 2022 21:22:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JdGS8oZ7jAvg; Tue, 11 Jan 2022 22:00:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 02CE2408FE;
-	Tue, 11 Jan 2022 21:22:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B65211BF989
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:22:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D0B683E4C;
+	Tue, 11 Jan 2022 22:00:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D82FD1BF989
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3CD9408FE
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:22:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D157D4160E
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d6eN_g8mzopP for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 21:22:27 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5EEA24016A
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 21:22:27 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3A96A20003;
- Tue, 11 Jan 2022 21:22:25 +0000 (UTC)
-Date: Tue, 11 Jan 2022 22:22:24 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220111222224.221ef0da@windsurf>
-In-Reply-To: <20220110075804.1499122-1-fontaine.fabrice@gmail.com>
-References: <20220110075804.1499122-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZAKomFNbpR1W for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
+ [89.40.174.40])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1B8641606
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 22:00:08 +0000 (UTC)
+Received: from [77.244.183.192] (port=63634 helo=[192.168.178.41])
+ by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
+ (envelope-from <luca@lucaceresoli.net>)
+ id 1n7PBW-0009ty-5R; Tue, 11 Jan 2022 23:00:06 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <20220111211708.517341-1-yann.morin.1998@free.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <5c2d7de5-56e5-d98a-3f13-3ef18ffcaa5e@lucaceresoli.net>
+Date: Tue, 11 Jan 2022 23:00:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/git: add xdg SELinux module
+In-Reply-To: <20220111211708.517341-1-yann.morin.1998@free.fr>
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
+ luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: Re: [Buildroot] [PATCH] package/zynq-boot-bin: drop legacy package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,41 +71,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 10 Jan 2022 08:58:04 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi Yann,
 
-> xdg SELinux module is needed to avoid the following build failure raised
-> since bump of refpolicy to version 2.20220106 in commit
-> f6691d122ce25fc580ca88243f79f75cc2808ca7 and
-> https://github.com/SELinuxProject/refpolicy/commit/64e637d895c516d7a6b6cbcd46b187136279fddd:
+On 11/01/22 22:17, Yann E. MORIN wrote:
+> Since commit 6dd5a33c485c (zynq_zed: bump U-Boot to xilinx-v2016.2), we
+> have no in-tree users of zynq-boot-bin.py, as U-Boot has since v2016.01
+> been able to natively generate Xilinx images.
 > 
->  policy/modules/services/git.te:121:ERROR 'attribute xdg_config_type is not declared' at token ';' on line 115358:
->  	typeattribute git_xdg_config_t xdg_config_type;
->  #line 121
->  checkpolicy:  error(s) encountered while parsing configuration
->  Rules.monolithic:78: recipe for target 'policy.30' failed
+> zynq-boot-bin.py is python2-only and there is zero chance that upstream
+> will move it to python3. WE could carry a pytohn3-compatible copy, but
+
+s/pytohn3/python3/
+
+> that tool is now virtually unused.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/98d5b3db313000855721c0ad994951fe8cc781c0
+> 6 years have passed now; let it rest in peace at last.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  package/git/git.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Config.in.legacy                         |  7 +++++++
+>  boot/uboot/Config.in                     | 12 ------------
+>  boot/uboot/uboot.mk                      | 11 -----------
+>  package/zynq-boot-bin/zynq-boot-bin.hash |  2 --
+>  package/zynq-boot-bin/zynq-boot-bin.mk   | 22 ----------------------
+>  5 files changed, 7 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.hash
+>  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index b3e8d5a6d8..16d5ac40b3 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
+>  
+>  comment "Legacy options removed in 2022.02"
+>  
+> +config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+> +	bool "Generate image for Xilinx Zynq"
+> +	select BR2_LEGACY
+> +	help
+> +	  Since 2016.1, U-Boot can natively generate the Zynq boot image,
+> +	  and so the Xilinx-specific format and tools have been removed.
 
-Applied to master, thanks.
+As said in the discussion after James' patch, I would add something like:
 
-Thomas
+  Should you still need zynq-boot-bin.py you can download it at <URL>
+  and call it from a post-build script. You will need to install python2
+  on your host to run it.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
