@@ -4,47 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D09B2C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 20:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF47C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 20:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82EB583E40;
-	Tue, 11 Jan 2022 20:33:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06D9183E5D;
+	Tue, 11 Jan 2022 20:36:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aTwZ33UxC2_j; Tue, 11 Jan 2022 20:33:01 +0000 (UTC)
+	with ESMTP id IK_kgzOT2RLJ; Tue, 11 Jan 2022 20:36:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE75F8349A;
-	Tue, 11 Jan 2022 20:33:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A4DD1BF239
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:32:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5591583E57;
+	Tue, 11 Jan 2022 20:36:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F046A1BF239
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 486D440517
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:32:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD4A883E57
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 20:35:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dCSxxwpBc0CE for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 20:32:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E891F4016A
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 20:32:57 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 71977100004;
- Tue, 11 Jan 2022 20:32:55 +0000 (UTC)
-Date: Tue, 11 Jan 2022 21:32:54 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wsR0-lseI2eh for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 20:35:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4203483E40
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 20:35:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 7D6F58324B; Tue, 11 Jan 2022 20:29:39 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220111213254.0073693d@windsurf>
-In-Reply-To: <20220110225200.2000095-1-fontaine.fabrice@gmail.com>
-References: <20220110225200.2000095-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/btrfs-progs: fix musl build
+To: buildroot@buildroot.org
+Date: Tue, 11 Jan 2022 21:33:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f363bc2958812539cf248f6cf44fe519445adf7a
+X-Git-Newrev: 7194084e99676a1792e5ff7b8dfc6469337508e1
+X-Patchwork-Hint: ignore
+Message-Id: <20220111202939.7D6F58324B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/assimp: bump version to 5.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,47 +52,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 10 Jan 2022 23:52:00 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7194084e99676a1792e5ff7b8dfc6469337508e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following musl build failure raised since bump to version 5.15.1
-> in commit 20181c3f1b7191d2b6a1b78bfbe32c1f58e87359:
-> 
-> In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:4,
->                  from ./kerncompat.h:31,
->                  from common/utils.c:42:
-> /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:7:8: error: redefinition of 'struct sysinfo'
->     7 | struct sysinfo {
->       |        ^~~~~~~
-> In file included from common/utils.c:27:
-> /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/i586-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
->    10 | struct sysinfo {
->       |        ^~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/16f44fb9dea72a7079e8e5517e760dd79d2724cc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...nst-h-to-fix-build-with-5-12-headers.patch | 43 ++++++++++++++++
->  ...-sys-sysinfo-h-conditionally-on-musl.patch | 49 +++++++++++++++++++
->  2 files changed, 92 insertions(+)
->  create mode 100644 package/btrfs-progs/0001-btrfs-progs-include-linux-const-h-to-fix-build-with-5-12-headers.patch
->  create mode 100644 package/btrfs-progs/0002-btrfs-progs-include-sys-sysinfo-h-conditionally-on-musl.patch
+For details see [1].
 
-Applied to master, thanks.
+[1] https://github.com/assimp/assimp/releases/tag/v5.1.6
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/assimp/assimp.hash | 2 +-
+ package/assimp/assimp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index 8f6d613bb4..50f0b3e6d6 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d62b58ed3b35c20f89570863a5415df97cb1b301b444d39687140fc883717ced  assimp-5.1.5.tar.gz
++sha256  52ad3a3776ce320c8add531dbcb2d3b93f2e1f10fcff5ac30178b09ba934d084  assimp-5.1.6.tar.gz
+ sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index b5f84ef56f..766b2c9b5a 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASSIMP_VERSION = 5.1.5
++ASSIMP_VERSION = 5.1.6
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
