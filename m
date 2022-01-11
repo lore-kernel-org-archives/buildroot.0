@@ -1,72 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B9B0C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 09:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E43D7C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 14:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D830660DFF;
-	Tue, 11 Jan 2022 09:10:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 550F7408B1;
+	Tue, 11 Jan 2022 14:47:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ojQxv10oigHG; Tue, 11 Jan 2022 09:10:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pahcFLDLOBnf; Tue, 11 Jan 2022 14:47:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2642860D72;
-	Tue, 11 Jan 2022 09:10:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AA37404F8;
+	Tue, 11 Jan 2022 14:47:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A83FF1BF276
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 09:10:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D64701BF3DE
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 14:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95B0283E29
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 09:10:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CECCD82D7C
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 14:47:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bjZvhijdTNp9 for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 09:10:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6365F83E28
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 09:10:10 +0000 (UTC)
-Received: from [77.244.183.192] (port=63874 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1n7DAN-000AMi-Sd; Tue, 11 Jan 2022 10:10:08 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20211231202620.3521230-1-james.hilliard1@gmail.com>
- <20220110221051.GT1477939@scaer>
- <CADvTj4qnuwUh594-QC-4ySNQX2aSfhfs36tX-cH5vMB52EbgbQ@mail.gmail.com>
- <20220110222808.GU1477939@scaer>
- <CADvTj4ogaTxytpD11-s7EfGOJr=4L8VYGCDr82S4_rsmBEitkw@mail.gmail.com>
- <2846b399-f095-acb3-c086-e44b3b74698e@lucaceresoli.net>
- <CADvTj4otjX+dffwVjypCc-mkyrGWSvzKe-K=-__ou7U+Q=7J8Q@mail.gmail.com>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <7659ce4e-a509-8ff3-1f98-17b7d2766623@lucaceresoli.net>
-Date: Tue, 11 Jan 2022 10:10:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CADvTj4otjX+dffwVjypCc-mkyrGWSvzKe-K=-__ou7U+Q=7J8Q@mail.gmail.com>
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH 1/1] package/zynq-boot-bin: port to python3
- and move to support/scripts
+ with ESMTP id atJx5WQOmiPs for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 14:47:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33BC882D04
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 14:47:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 01B1D82B52; Tue, 11 Jan 2022 14:41:09 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Tue, 11 Jan 2022 15:46:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c27065870a9ff8dac23b94fcf24699c003df4f2f
+X-Git-Newrev: f51be73f25bdc9b370db42996475136098ebd251
+X-Patchwork-Hint: ignore
+Message-Id: <20220111144110.01B1D82B52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: drop Henrique Camargo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,83 +52,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <juju@cotds.org>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8576395812273333072=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James, Yann,
+--===============8576395812273333072==
+Content-Type: text/plain
 
-On 10/01/22 23:55, James Hilliard wrote:
-> On Mon, Jan 10, 2022 at 3:46 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> Hi James, Yann,
->>
->> On 10/01/22 23:31, James Hilliard wrote:
->>> On Mon, Jan 10, 2022 at 3:28 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>>>
->>>> James, All,
->>>>
->>>> On 2022-01-10 15:18 -0700, James Hilliard spake thusly:
->>>>> On Mon, Jan 10, 2022 at 3:10 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>>> [--SNIP--]
->>>>>> So I wonder if it even makes sense to keep package/zynq-boot-bin now.
->>>>> Well if someone is using an older uboot that doesn't have the
->>>>> generation capability
->>>>> integrated then it's probably still needed right?
->>>>
->>>> But then, they would have that tool in their uboot tree, and then
->>>> nothing would prevent them from running it as a post-build (or
->>>> post-image) script.
->>>>
->>>> Yes, they would need to have a python2 on their host. But that will be
->>>> the case if they stick to such older tools which may break on more
->>>> recent systems, not just uboot...
->>>
->>> Yeah, the advantage here is that it works with python3 as is with older uboot
->>> versions. I guess the main issue is that vendor uboot trees are often ancient
->>> and rarely updated so this would be mostly useful for those situations.
->>
->> Is upgrading to python 3 just to simplify potential legacy users the
->> only motivation for this patch? Then I would not touch this package at
->> all and avoid keeping our own copy of the script.
-> 
-> Well the motivation is that we want to drop python 2 from the
-> toolchain entirely,
-> so leaving this package as is would not be an option(since it depends
-> on the host
-> python2 interpreter support we want to remove).
+commit: https://git.buildroot.net/buildroot/commit/?id=f51be73f25bdc9b370db42996475136098ebd251
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I see. I'm currently unable to keep up to date with current Buildroot
-development, apologies for the noise.
+He has privately requested to no longer be notified regarding this
+package.
 
-> We either need to
-> remove it or use
-> the python3 ported version(which due to the simplicity of the script
-> should not cause
-> any significant maintenance issues for us IMO).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-I agree it would not create much maintenance burden, especially since
-the script it is unchanged since ages.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12777e8d61..44911a7d94 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1183,9 +1183,6 @@ F:	package/linuxptp/
+ F:	package/netopeer2/
+ F:	package/sysrepo/
+ 
+-N:	Henrique Camargo <henrique@henriquecamargo.com>
+-F:	package/json-glib/
+-
+ N:	Hervé Codina <herve.codina@bootlin.com>
+ F:	package/dtbocfg/
+ F:	package/libdbi/
 
-But the question is for how long we want to maintain this tool in
-Buildroot. There is no in-tree user, there is an alternative in U-Boot
-since many years, even Xilinx removed their script years from their repo
-and looking for info about this tool on the Internet leads to almost
-nothing after ~2015. Users using this script nowadays with recent
-Buildroot are most probably zero or close to zero. And, as Yann pointed
-out, such users can still handle it with just a small annoyance.
+--===============8576395812273333072==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-For the above I'm in favor of removal, with a small paragraph in
-Config.in.legacy saying it's been removed but one can still download it
-from <URL> and call it in a post-build script after installing python2
-on the host.
-
--- 
-Luca
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8576395812273333072==--
