@@ -4,44 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6614C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 18:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C354C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 18:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6399B82F03;
-	Tue, 11 Jan 2022 18:30:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 390BA812C8;
+	Tue, 11 Jan 2022 18:31:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2iTyNJDND24o; Tue, 11 Jan 2022 18:30:34 +0000 (UTC)
+	with ESMTP id ksB4bUKFB91O; Tue, 11 Jan 2022 18:31:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D10E82A3B;
-	Tue, 11 Jan 2022 18:30:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4EF391BF365
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:30:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FCE381299;
+	Tue, 11 Jan 2022 18:31:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 48B9C1BF365
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 762F0401DD
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:30:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36DA280024
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 18:31:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hqCqxuYePNCe for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 18:30:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8448740201
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 18:30:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E72F1811E8; Tue, 11 Jan 2022 18:23:59 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 11 Jan 2022 19:28:47 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 27eb296a202b6559e8b6d363effb36af4319cb9f
-X-Git-Newrev: db14f7d71505aad2ae1e4aefc5c0ece97f5eacec
-X-Patchwork-Hint: ignore
-Message-Id: <20220111182359.E72F1811E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 10, 15}.x series
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AxOR2jGR2JgK for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 18:31:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1367A82A3B
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 18:31:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4de3:3dd8:1079:d363])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 6A98878035B;
+ Tue, 11 Jan 2022 19:31:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1641925881;
+ bh=nBhIhErX4a60ZsVTEXs9IlT5S70FRBEK+NLR889uWqU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=kSol6P5KdnH1AP0sfs0+aBonKJ5oOygsMOGKxx1cC/nsC1CpAgKsXzwDOlJ+2ch5F
+ +wNoWNHlZJuBQ87MFnYAOSWIhCFHUpfAdp9A3Qthozm1cjYMppN7M4XsyVwCqOIeVC
+ K2DJIBBGpfl8ItgHXppSoqbaX/amamTlxuV0yvde75jA+fEJV0B8Seisw2A2OZm8jr
+ BO3ZvxkEoawh61cf2UfG3oHzowN0lxFwHp5IOQ/LubUMRyvjQHZTuAZbFhyBRiUY4K
+ KQLpquXXxXRylnupme7RL07yl2TAi+A3wKX8fSNMJZY8U/6S2lQyVDW79xI5Cpsqun
+ nmvpqWp4nWR3Q==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 11 Jan 2022 19:31:19 +0100
+Date: Tue, 11 Jan 2022 19:31:19 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20220111183119.GW1477939@scaer>
+References: <20220110231303.31275-1-peter@korsgaard.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220110231303.31275-1-peter@korsgaard.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: drop 5.14.x
+ headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,86 +70,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db14f7d71505aad2ae1e4aefc5c0ece97f5eacec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+On 2022-01-11 00:13 +0100, Peter Korsgaard spake thusly:
+> The 5.14.x series is now EOL, so drop it.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6c30100921..891e2cdcb6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.15.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.83-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.83-cip1-rt1" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index c40c26c1b2..d0813e5db4 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  027d7e8988bb69ac12ee92406c3be1fe13f990b1ca2249e226225cd1573308bb  linux-5.16.tar.xz
--sha256  b3e9ba06a299a3e2ead4a15753bc46a3e0c90d3b92ffeed1034ccc9f13a717f0  linux-5.15.6.tar.xz
--sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
--sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
-+sha256  0a131b6a2f9f5ee37ecb332b5459ab35a87f0bf2d4ec923988d0663646cf156a  linux-5.15.13.tar.xz
-+sha256  945e4264c014a3d9dfc0a4639309dd1ec2fb545416556421f931b95da78c2725  linux-5.10.90.tar.xz
-+sha256  b09f74e0cf5fc7cf5de6aa932fe654c962cb10118bdbbdddb397022c6e6d382c  linux-5.4.170.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  6d2f83619493e656276dbf22afcdb80f42320e697570419380773bb4916130fd  linux-4.4.293.tar.xz
--sha256  b55d77774ed631f57f736bcdab021f68167455c9daede7e9e4161b4d564d8b53  linux-4.9.291.tar.xz
--sha256  9784204f95cfc7de1c933088e6f9364e99a29988ae4e6b9353677637eb171aa0  linux-4.14.256.tar.xz
--sha256  8f4ecd71fbcdd733c2849e2e5afe59d351c463c9a699bdbf428d88fa911009db  linux-4.19.219.tar.xz
-+sha256  86c9ed59b120fad14d207470446086ac46099cd7bb9e58682e368e721164a6e0  linux-4.4.298.tar.xz
-+sha256  fd4bdbc8be3472d6324fa0f5f57a17f5c3f509d5f5b4fa4f1a9797d982d0bca8  linux-4.9.296.tar.xz
-+sha256  bffaaa4c93ab4ed1de61f804c26c92b82dd80f92793e20194b62497d7b8b4723  linux-4.14.261.tar.xz
-+sha256  01ccfc3413c3bb305653ceb0aa528aba0caa61b326e43709bf1f8b624f211031  linux-4.19.224.tar.xz
- # Locally computed
- sha256  5738dcf020ff75fb6e43d6d1a8b572d2f1fe58c08b31f822eb42fb91d6bdc98f  linux-cip-5.10.83-cip1.tar.gz
- sha256  2395443c5f960e5c6343f70480209d2530da27aa6f0299412e0f4b7128fccb7c  linux-cip-5.10.83-cip1-rt1.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bf306faf92..248a9a2d97 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -378,13 +378,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.293"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.291"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.256"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.6"	if BR2_KERNEL_HEADERS_5_15
-+	default "4.4.298"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.296"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.261"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.224"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.170"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.90"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.13"	if BR2_KERNEL_HEADERS_5_15
- 	default "5.16"		if BR2_KERNEL_HEADERS_5_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+You forgot to remove it from the choice list, so I did.
+
+Applied to master with the above fixed, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Config.in.legacy                     | 7 +++++++
+>  linux/linux.hash                     | 1 -
+>  package/linux-headers/Config.in.host | 1 -
+>  3 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index d36eac3302..b3e8d5a6d8 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
+>  
+>  comment "Legacy options removed in 2022.02"
+>  
+> +config BR2_KERNEL_HEADERS_5_14
+> +	bool "kernel headers version 5.14.x are no longer supported"
+> +	select BR2_LEGACY
+> +	help
+> +	  Version 5.14.x of the Linux kernel headers are no longer
+> +	  maintained upstream and are now removed.
+> +
+>  config BR2_PACKAGE_PYTHON_BACKPORTS_FUNCTOOLS_LRU_CACHE
+>  	bool "python-backports-functools-lru-cache package removed"
+>  	select BR2_LEGACY
+> diff --git a/linux/linux.hash b/linux/linux.hash
+> index 86dc8d7af9..c40c26c1b2 100644
+> --- a/linux/linux.hash
+> +++ b/linux/linux.hash
+> @@ -1,7 +1,6 @@
+>  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+>  sha256  027d7e8988bb69ac12ee92406c3be1fe13f990b1ca2249e226225cd1573308bb  linux-5.16.tar.xz
+>  sha256  b3e9ba06a299a3e2ead4a15753bc46a3e0c90d3b92ffeed1034ccc9f13a717f0  linux-5.15.6.tar.xz
+> -sha256  f41a259cb2002dd2e3286524b2bb4e803f4f982992d092706ecea613584023b3  linux-5.14.21.tar.xz
+>  sha256  ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70  linux-5.10.83.tar.xz
+>  sha256  6246fe1776d83039d71f74eb839f38ebdec23e1b37a7bf76f3bce13cbf0290be  linux-5.4.163.tar.xz
+>  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 8ee86e09af..115ff0d3f9 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -388,7 +388,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+>  	default "4.19.219"	if BR2_KERNEL_HEADERS_4_19
+>  	default "5.4.163"	if BR2_KERNEL_HEADERS_5_4
+>  	default "5.10.83"	if BR2_KERNEL_HEADERS_5_10
+> -	default "5.14.21"	if BR2_KERNEL_HEADERS_5_14
+>  	default "5.15.6"	if BR2_KERNEL_HEADERS_5_15
+>  	default "5.16"		if BR2_KERNEL_HEADERS_5_16
+>  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
