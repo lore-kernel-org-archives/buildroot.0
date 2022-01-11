@@ -1,65 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71118C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 22:00:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5072AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 22:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC01A83E5E;
-	Tue, 11 Jan 2022 22:00:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D05916FB4A;
+	Tue, 11 Jan 2022 22:06:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JdGS8oZ7jAvg; Tue, 11 Jan 2022 22:00:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XHRhSfmJza5l; Tue, 11 Jan 2022 22:06:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D0B683E4C;
-	Tue, 11 Jan 2022 22:00:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62E8E6FB5C;
+	Tue, 11 Jan 2022 22:06:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D82FD1BF989
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82F981BF32E
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D157D4160E
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8010C41627
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 22:06:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZAKomFNbpR1W for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 22:00:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net
- [89.40.174.40])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D1B8641606
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 22:00:08 +0000 (UTC)
-Received: from [77.244.183.192] (port=63634 helo=[192.168.178.41])
- by hostingweb31.netsons.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <luca@lucaceresoli.net>)
- id 1n7PBW-0009ty-5R; Tue, 11 Jan 2022 23:00:06 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <20220111211708.517341-1-yann.morin.1998@free.fr>
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <5c2d7de5-56e5-d98a-3f13-3ef18ffcaa5e@lucaceresoli.net>
-Date: Tue, 11 Jan 2022 23:00:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220111211708.517341-1-yann.morin.1998@free.fr>
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id:
- luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-Subject: Re: [Buildroot] [PATCH] package/zynq-boot-bin: drop legacy package
+ with ESMTP id LgwfAI_jwNIy for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 22:06:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D40B441626
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 22:06:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id EA83A83478; Tue, 11 Jan 2022 22:00:20 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Tue, 11 Jan 2022 22:55:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c60df47735e2bfc91f7dbaf5642fc82744feeb86
+X-Git-Newrev: ea033cecf990ed3f86619647523a9ad2ccb09adb
+X-Patchwork-Hint: ignore
+Message-Id: <20220111220020.EA83A83478@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/riscv-isa-sim: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,67 +52,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=ea033cecf990ed3f86619647523a9ad2ccb09adb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 11/01/22 22:17, Yann E. MORIN wrote:
-> Since commit 6dd5a33c485c (zynq_zed: bump U-Boot to xilinx-v2016.2), we
-> have no in-tree users of zynq-boot-bin.py, as U-Boot has since v2016.01
-> been able to natively generate Xilinx images.
-> 
-> zynq-boot-bin.py is python2-only and there is zero chance that upstream
-> will move it to python3. WE could carry a pytohn3-compatible copy, but
+Spike, the RISC-V ISA Simulator, implements a functional model of one
+or more RISC-V harts.
 
-s/pytohn3/python3/
+The host package provides an alternative solution to qemu.
 
-> that tool is now virtually unused.
-> 
-> 6 years have passed now; let it rest in peace at last.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  Config.in.legacy                         |  7 +++++++
->  boot/uboot/Config.in                     | 12 ------------
->  boot/uboot/uboot.mk                      | 11 -----------
->  package/zynq-boot-bin/zynq-boot-bin.hash |  2 --
->  package/zynq-boot-bin/zynq-boot-bin.mk   | 22 ----------------------
->  5 files changed, 7 insertions(+), 47 deletions(-)
->  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.hash
->  delete mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index b3e8d5a6d8..16d5ac40b3 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2022.02"
->  
-> +config BR2_TARGET_UBOOT_ZYNQ_IMAGE
-> +	bool "Generate image for Xilinx Zynq"
-> +	select BR2_LEGACY
-> +	help
-> +	  Since 2016.1, U-Boot can natively generate the Zynq boot image,
-> +	  and so the Xilinx-specific format and tools have been removed.
+https://github.com/riscv-software-src/riscv-isa-sim
 
-As said in the discussion after James' patch, I would add something like:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in.host                             |  1 +
+ .../0001-riscv-disable-precompiled-headers.patch   | 34 ++++++++++++++++++++++
+ package/riscv-isa-sim/Config.in.host               | 13 +++++++++
+ package/riscv-isa-sim/riscv-isa-sim.hash           |  3 ++
+ package/riscv-isa-sim/riscv-isa-sim.mk             | 12 ++++++++
+ 6 files changed, 64 insertions(+)
 
-  Should you still need zynq-boot-bin.py you can download it at <URL>
-  and call it from a post-build script. You will need to install python2
-  on your host to run it.
-
--- 
-Luca
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c8242df8a6..13464178c0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1599,6 +1599,7 @@ F:	package/glslsandbox-player/
+ F:	package/ptm2human/
+ F:	package/python-distro/
+ F:	package/python-pyalsa/
++F:	package/riscv-isa-sim/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 6e027d96c2..c390ae3e7d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -78,6 +78,7 @@ menu "Host utilities"
+ 	source "package/qoriq-rcw/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
++	source "package/riscv-isa-sim/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch b/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch
+new file mode 100644
+index 0000000000..461f34e3a1
+--- /dev/null
++++ b/package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch
+@@ -0,0 +1,34 @@
++From 980d5143089bf32ef8a6dfdf1bb9e9fe92fa7bf5 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sun, 9 Jan 2022 13:38:48 +0100
++Subject: [PATCH] riscv: disable precompiled headers
++
++While precompiling header, some toolchains fail with the message:
++
++    /path/to/toolchain/bin/ld: /path/to/sysroot/usr/lib/Scrt1.o: in function `_start':
++    (.text+0x54): undefined reference to `main'
++
++The patch totally disable precompiled headers.
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ riscv/riscv.mk.in | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/riscv/riscv.mk.in b/riscv/riscv.mk.in
++index 2347ce6..4f56eaf 100644
++--- a/riscv/riscv.mk.in
+++++ b/riscv/riscv.mk.in
++@@ -35,9 +35,6 @@ riscv_hdrs = \
++ 
++ riscv_install_hdrs = mmio_plugin.h
++ 
++-riscv_precompiled_hdrs = \
++-	insn_template.h \
++-
++ riscv_srcs = \
++ 	processor.cc \
++ 	execute.cc \
++-- 
++2.34.1
++
+diff --git a/package/riscv-isa-sim/Config.in.host b/package/riscv-isa-sim/Config.in.host
+new file mode 100644
+index 0000000000..35e404caf0
+--- /dev/null
++++ b/package/riscv-isa-sim/Config.in.host
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_HOST_RISCV_ISA_SIM
++	bool "host riscv-isa-sim"
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++1
++	help
++	  Spike, the RISC-V ISA Simulator, implements a functional
++	  model of one or more RISC-V harts.
++
++	  The host package provides an alternative solution to qemu.
++
++	  https://github.com/riscv-software-src/riscv-isa-sim
++
++comment "host riscv-isa-sim needs host gcc >= 4.9"
++	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+diff --git a/package/riscv-isa-sim/riscv-isa-sim.hash b/package/riscv-isa-sim/riscv-isa-sim.hash
+new file mode 100644
+index 0000000000..d787a03e4c
+--- /dev/null
++++ b/package/riscv-isa-sim/riscv-isa-sim.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  9b29c220fed1e867e3bea4b5c565f2629237d525a4d9fe1668699c4406003a1f  riscv-isa-sim-1.1.0.tar.gz
++sha256  c65e436d18972c9c4bd192494fe4870bd2e158179474975b80a3559f27631632  LICENSE
+diff --git a/package/riscv-isa-sim/riscv-isa-sim.mk b/package/riscv-isa-sim/riscv-isa-sim.mk
+new file mode 100644
+index 0000000000..e10dd4c662
+--- /dev/null
++++ b/package/riscv-isa-sim/riscv-isa-sim.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# riscv-isa-sim
++#
++################################################################################
++
++RISCV_ISA_SIM_VERSION = 1.1.0
++RISCV_ISA_SIM_SITE = $(call github,riscv-software-src,riscv-isa-sim,v$(RISCV_ISA_SIM_VERSION))
++RISCV_ISA_SIM_LICENSE = BSD-3-Clause
++RISCV_ISA_SIM_LICENSE_FILES = LICENSE
++
++$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
