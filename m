@@ -4,48 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB5CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 21:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 792F7C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jan 2022 21:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF8C941600;
-	Tue, 11 Jan 2022 21:04:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EE0541603;
+	Tue, 11 Jan 2022 21:04:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8cZ4UjTG6Zhv; Tue, 11 Jan 2022 21:04:09 +0000 (UTC)
+	with ESMTP id I1m1RrtXq-px; Tue, 11 Jan 2022 21:04:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E24D41601;
-	Tue, 11 Jan 2022 21:04:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 025A11BF239
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:03:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F24241602;
+	Tue, 11 Jan 2022 21:04:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AC681BF239
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2ADB6FB29
- for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:03:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 879B441602
+ for <buildroot@lists.busybox.net>; Tue, 11 Jan 2022 21:04:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mr1q03JXQbTq for <buildroot@lists.busybox.net>;
- Tue, 11 Jan 2022 21:03:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3457360E73
- for <buildroot@buildroot.org>; Tue, 11 Jan 2022 21:03:52 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3B43C20002;
- Tue, 11 Jan 2022 21:03:50 +0000 (UTC)
-Date: Tue, 11 Jan 2022 22:03:49 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Message-ID: <20220111220349.44fdfef8@windsurf>
-In-Reply-To: <20220110092352.1247528-1-thomas.claveirole@green-communications.fr>
-References: <20220110092352.1247528-1-thomas.claveirole@green-communications.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OBf7eRVlFin0 for <buildroot@lists.busybox.net>;
+ Tue, 11 Jan 2022 21:04:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 763FC41601
+ for <buildroot@buildroot.org>; Tue, 11 Jan 2022 21:04:12 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id A5996FF805;
+ Tue, 11 Jan 2022 21:04:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1n7OJO-0006rQ-0u; Tue, 11 Jan 2022 22:04:10 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220110231303.31275-1-peter@korsgaard.com>
+ <20220111183119.GW1477939@scaer>
+Date: Tue, 11 Jan 2022 22:04:09 +0100
+In-Reply-To: <20220111183119.GW1477939@scaer> (Yann E. MORIN's message of
+ "Tue, 11 Jan 2022 19:31:19 +0100")
+Message-ID: <871r1e9e7q.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/openlayers: bump to version
- 6.11.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: drop 5.14.x
+ headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +67,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 10 Jan 2022 10:23:52 +0100
-Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/openlayers/openlayers.hash | 2 +-
->  package/openlayers/openlayers.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Peter, All,
+ > On 2022-01-11 00:13 +0100, Peter Korsgaard spake thusly:
+ >> The 5.14.x series is now EOL, so drop it.
 
-Applied to master, thanks.
+ > You forgot to remove it from the choice list, so I did.
 
-Thomas
+ > Applied to master with the above fixed, thanks.
+
+Ups, thanks for fixing it!
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
