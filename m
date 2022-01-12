@@ -1,79 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA22C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 09:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6528CC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 09:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E458541518;
-	Wed, 12 Jan 2022 09:47:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F22D960A92;
+	Wed, 12 Jan 2022 09:48:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 40GemE7vpLMu; Wed, 12 Jan 2022 09:47:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cLwQQUyUozM0; Wed, 12 Jan 2022 09:48:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2682841499;
-	Wed, 12 Jan 2022 09:47:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DA88F1BF86D
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 09:47:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A30F60593;
+	Wed, 12 Jan 2022 09:48:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 22A8B1BF86D
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 09:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C39DC40199
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 09:47:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EB7783F16
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 09:48:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Da6pgAzMyeNZ for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 09:47:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q2yarj3VCkSa for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 09:48:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8975A4014E
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 09:47:36 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id b1so1804323ilj.2
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 01:47:36 -0800 (PST)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D97D83EE3
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 09:48:44 +0000 (UTC)
+Received: by mail-oi1-x22e.google.com with SMTP id w188so2587537oiw.13
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 01:48:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=iFjLLQ4AQQ+i9iMjSX/gqsYGYlFxi1VU4RHdFJm5EEE=;
- b=p/3oaX574KwqH05lK/yVO9fieaDUm9v04mb+eEohmFxgptuuOSh2XGAcIVZql1R6BJ
- YuLrw+cHkL2OcSF6nRJfS6Ta8O/vRJnnwFa93Np40ok8DKdtYFDn69UkHTeTLzLnYsKj
- pGU+6kedfL9lKBg1BPMmT6XYPRjJ3Mci0PeShLR6BD/vlOI/BUw81vmumX5ccucqsBeo
- CV7g1831Fryiq3+geh6TQzTFEJbbHWPrPe4udcMFMl3SSy70m3KN0uqNKZ1Dw3xM1xym
- S+mQy5N4rLDFGC36KTcE/PpvYa11ryZ2kRKJYPYjv3VN80Ld34/yILpl+ENADCU2UzOa
- b+BA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=L/Zz5hChAcqL8zFHUt2usitLbKCXM11yj5gntqAZJFY=;
+ b=fuHZ2eY6Fgnkp7MCdaUK3EVCdTLmZ5xgtJYR9zsrbkRF5Mpb4F31vUtD2n9sdm35Ya
+ VbdJeFHMg5sYrPVIV4OOLdFrEaFscZS+t+lKBl3fjIT0GARCRJJ++cZ7UZwgzo5L7vxB
+ SDRhYrZAinlX2oDbyTmLddnc+iTMiRtIi885PJ/GzJwSjkYMgP3lM1yi4E5qJhB++1t1
+ FbHC6o5GJvOv2l+bCp5WqtrNOtwDqccc+WgGbEmxPxBGU3rQ+ybv8f7yW5GasJ2MiDts
+ dy7wsQk8MZSlWZ10Vmp10wEVMI5SsVFJWrF+y3+kG3m+nRRj8MToosSvgBHy7nEnJvn6
+ xAmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=iFjLLQ4AQQ+i9iMjSX/gqsYGYlFxi1VU4RHdFJm5EEE=;
- b=uQQGqRexfxCw/HsNHF1jT0IQtWLc9wVeF1vzjNQiIh2Atb1VdnzG3+J1rutJ2Q8ZrU
- 9RsowyfuAfNEgth5ILRcVPHXsJGTqLbSklj4DIl527GO36jZyqpBVES7Bkr5F2kaJfHJ
- tL4L8Xsz6z2u+DDKpob80rRTW4k8VAg0lE1a3UZhrJRnpB0epVQ3zhg8Dudeqg7gA1ef
- j71Kn6E782KAMhIb+S/M1GHaW7xXdtQasL4a9Q+eXPBO2T6TJfUgVw4TIoirTj8owtyj
- IWGEWfx/JWSrqgSthGz5nkxSH+AuKSlixkGKApv54X1lgUUeMUdjV8Eg/95wnQFEeYS4
- NsxA==
-X-Gm-Message-State: AOAM532xf0w8Hh8OA+rPSphLi+eboLv1iDNERnny6drmhqGwybWOmU5X
- e6lCGrUZ0ZsjbfG8sbvKW5TcTbqh6jI=
-X-Google-Smtp-Source: ABdhPJyGm2+8CC/t90GSewT2ZxFmdJwXRTlYLxDVH2YA1htXlZG6AjI1wFmcJWkb7OZQkCqYg4h9HA==
-X-Received: by 2002:a92:ca90:: with SMTP id t16mr4421692ilo.173.1641980855453; 
- Wed, 12 Jan 2022 01:47:35 -0800 (PST)
-Received: from james-x399.localdomain (97-118-242-51.hlrn.qwest.net.
- [97.118.242.51])
- by smtp.gmail.com with ESMTPSA id s6sm6971252ilq.21.2022.01.12.01.47.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Jan 2022 01:47:35 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 02:47:31 -0700
-Message-Id: <20220112094731.2117910-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=L/Zz5hChAcqL8zFHUt2usitLbKCXM11yj5gntqAZJFY=;
+ b=GAfykh8eXYiVf63vV5OWpIXtcJctgHVt7EwhZoOsSEZnhpUBgECGXhcFmRMqg/KL33
+ +rDoFuV7RTyIQDdu8NTPr834FITAQ4DRuxGp7Xwu7Bv+yhcpXtsXbY4e2O6BAGUYtLaJ
+ Rpwb2FGQsJNwc8MhkoI3Ras8OnbGHisWDga4YNzBwmc5Ii8WK32Q4YQf5LhxHyCI+RA7
+ ssSWDnvg5tf/Mh3zRKCEVtYw7XjHbIB2FmFPuiw2RnXKWOx7qI4vPD12vF0A9rSfH2Ru
+ uvlfZyWI9138u4JVzaG/RNZOdFFHdskRzmTwDq12qhK3UoqRX17zMnOEv9JbmI04WB6g
+ FKXw==
+X-Gm-Message-State: AOAM530lz4ILcpnAzpgDGytHBEGbJ2TAyQkMd8krHSRoK0aInpZkM1sd
+ BD5RXIwiAm+//zAGFEtxrt5my6KPxKGjD1MWDmk=
+X-Google-Smtp-Source: ABdhPJwx0XGPFm9OuzxLtIwhRSrTDXs5SlpZO40QaV3gEJw9DhflnjJQ8H1EWnuhguY45Xe3WymU7Ql8GveWI8FrICw=
+X-Received: by 2002:a05:6808:f8d:: with SMTP id
+ o13mr3517448oiw.67.1641980923150; 
+ Wed, 12 Jan 2022 01:48:43 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/polkit: fix build on meson 0.61.0
+References: <20220110211323.1828141-1-james.hilliard1@gmail.com>
+ <20220112091058.76318df8@windsurf>
+In-Reply-To: <20220112091058.76318df8@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 12 Jan 2022 02:48:32 -0700
+Message-ID: <CADvTj4r1U0hd=dy-bQBpXaiz9+mt_W6Wr7+kA+7ybi2uWLR=aw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.61.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,79 +82,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marek Belisko <marek.belisko@open-nandra.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport a patch removing invalid positional arguments:
-../output-1/build/polkit-0.120/actions/meson.build:3:5: ERROR: Function does not take positional arguments.
+On Wed, Jan 12, 2022 at 1:11 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello James,
+>
+> On Mon, 10 Jan 2022 14:13:23 -0700
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/meson/meson.hash | 4 ++--
+> >  package/meson/meson.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> I am wondering if this update hasn't broken some meson packages:
+>
+>  * polkit
+>    http://autobuild.buildroot.net/results/b2d/b2d2b27844b32b3609e11005966d85dc0dfb7a9f/build-end.log
+>
+>    ../output-1/build/polkit-0.120/actions/meson.build:3:5: ERROR: Function does not take positional arguments.
 
-Fixes:
- - http://autobuild.buildroot.net/results/b2d/b2d2b27844b32b3609e11005966d85dc0dfb7a9f
+Yeah, this should fix that bug:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220112094731.2117910-1-james.hilliard1@gmail.com/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...tional-parameters-to-i18n.merge_file.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch
-
-diff --git a/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch b/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch
-new file mode 100644
-index 0000000000..25fa4ef19b
---- /dev/null
-+++ b/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch
-@@ -0,0 +1,45 @@
-+From 30c368a6b729bc8a0a9d0d023739c4fa07b0928b Mon Sep 17 00:00:00 2001
-+From: Simon McVittie <smcv@debian.org>
-+Date: Mon, 25 Oct 2021 20:21:27 +0100
-+Subject: [PATCH] Don't pass positional parameters to i18n.merge_file
-+
-+These were always ignored, and Meson 0.60.0 disallowed them.
-+
-+Resolves: https://gitlab.freedesktop.org/polkit/polkit/-/issues/160
-+Reference: https://github.com/mesonbuild/meson/pull/9445
-+Signed-off-by: Simon McVittie <smcv@debian.org>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/99]
-+---
-+ actions/meson.build      | 1 -
-+ src/examples/meson.build | 1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/actions/meson.build b/actions/meson.build
-+index 2abaaf3..1e3f370 100644
-+--- a/actions/meson.build
-++++ b/actions/meson.build
-+@@ -1,7 +1,6 @@
-+ policy = 'org.freedesktop.policykit.policy'
-+ 
-+ i18n.merge_file(
-+-  policy,
-+   input: policy + '.in',
-+   output: '@BASENAME@',
-+   po_dir: po_dir,
-+diff --git a/src/examples/meson.build b/src/examples/meson.build
-+index c6305ab..8c18de5 100644
-+--- a/src/examples/meson.build
-++++ b/src/examples/meson.build
-+@@ -1,7 +1,6 @@
-+ policy = 'org.freedesktop.policykit.examples.pkexec.policy'
-+ 
-+ i18n.merge_file(
-+-  policy,
-+   input: policy + '.in',
-+   output: '@BASENAME@',
-+   po_dir: po_dir,
-+-- 
-+2.25.1
-+
--- 
-2.25.1
-
+>
+>  * host-gobject-introspection
+>    http://autobuild.buildroot.net/results/95e/95e4a23c16f6bd96566dc497663f38a0858c5a6e/build-end.log
+>
+>    ../output-1/build/host-gobject-introspection-1.68.0/giscanner/meson.build:51:0: ERROR: File doctemplates does not exist.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
