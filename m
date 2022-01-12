@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC0AC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63402C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D455D40225;
-	Wed, 12 Jan 2022 19:46:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13CA3400A4;
+	Wed, 12 Jan 2022 19:47:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pu-_rgBJa9ma; Wed, 12 Jan 2022 19:46:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JUoKIHC6sKL8; Wed, 12 Jan 2022 19:47:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B7AB401FD;
-	Wed, 12 Jan 2022 19:46:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 027BF4011D;
+	Wed, 12 Jan 2022 19:47:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC9541BF2CD
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:46:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CF6CB1BF2CD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17C4B415CE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 233CD415D1
  for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:46:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3tht_zBMCy6j for <buildroot@lists.busybox.net>;
+ with ESMTP id 2Vzhh-9hQatN for <buildroot@lists.busybox.net>;
  Wed, 12 Jan 2022 19:46:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B78D415D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A899415CF
  for <buildroot@buildroot.org>; Wed, 12 Jan 2022 19:46:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 45E5B82B45; Wed, 12 Jan 2022 19:39:54 +0000 (UTC)
+ id 32EE08345C; Wed, 12 Jan 2022 19:39:54 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 20:43:08 +0100
+Date: Wed, 12 Jan 2022 20:43:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60e27aee9b089de451c0dc3fe9e3fa3afb329447
-X-Git-Newrev: 9197cfa5a589a7cc152d249001ad69db4214917c
+X-Git-Oldrev: 0d0f84d2004b04bc93d5ceb58c86640f190e5d78
+X-Git-Newrev: 1b5e90c3203f944cb7f7ccad766f38580b9b2b6f
 X-Patchwork-Hint: ignore
-Message-Id: <20220112193954.45E5B82B45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 19.0.2-Matrix
+Message-Id: <20220112193954.32EE08345C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinycbor: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +58,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9197cfa5a589a7cc152d249001ad69db4214917c
+commit: https://git.buildroot.net/buildroot/commit/?id=1b5e90c3203f944cb7f7ccad766f38580b9b2b6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Disable -Werror to avoid the following build failure with gcc 4.8 raised
+since bump to version 0.6.0 in commit
+ee1a2826dcf7ff75f90b0bf9f7aa53d19ce19cf6 and
+https://github.com/intel/tinycbor/commit/e2a4ed135c4d9101c4df83f2dd033cd249b6ef07:
+
+/home/buildroot/autobuild/instance-1/output-1/host/bin/arm-none-linux-gnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I./src -std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -Werror=incompatible-pointer-types -Werror=implicit-function-declaration -Werror=int-conversion -fPIC  -c -o src/cborerrorstrings.pic.o src/cborerrorstrings.c
+cc1: error: -Werror=incompatible-pointer-types: no option -Wincompatible-pointer-types
+cc1: error: -Werror=int-conversion: no option -Wint-conversion
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a9fe64c42bb96f9e7b4af3050464f6570c1c00fa
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Makefile-add-DISABLE_WERROR.patch         | 44 ++++++++++++++++++++++
+ package/tinycbor/tinycbor.mk                       |  2 +-
+ 2 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index d193a0c4f8..c7a081f887 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d389af940011887378d1e6ad0ad91b81cfc138b862cf4a43593388c33308cb55  kodi-inputstream-adaptive-19.0.1-Matrix.tar.gz
-+sha256  f2285e77043a0c9160d1ab11dd5943cc584be17a2f7920be3002751ff697ec7b  kodi-inputstream-adaptive-19.0.2-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 6044ed07fb..f632a42adb 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch b/package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch
+new file mode 100644
+index 0000000000..334bea7eb0
+--- /dev/null
++++ b/package/tinycbor/0001-Makefile-add-DISABLE_WERROR.patch
+@@ -0,0 +1,44 @@
++From 5f26eaf8d7be760fafe11ef4a6e0f907e7e8c3f0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Jan 2022 23:17:45 +0100
++Subject: [PATCH] Makefile: add DISABLE_WERROR
++
++Allow the user to disable -Werror to avoid the following build failure
++with gcc 4.8 raised since version 0.6.0 and
++https://github.com/intel/tinycbor/commit/e2a4ed135c4d9101c4df83f2dd033cd249b6ef07:
++
++/home/buildroot/autobuild/instance-1/output-1/host/bin/arm-none-linux-gnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I./src -std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -Werror=incompatible-pointer-types -Werror=implicit-function-declaration -Werror=int-conversion -fPIC  -c -o src/cborerrorstrings.pic.o src/cborerrorstrings.c
++cc1: error: -Werror=incompatible-pointer-types: no option -Wincompatible-pointer-types
++cc1: error: -Werror=int-conversion: no option -Wint-conversion
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a9f/a9fe64c42bb96f9e7b4af3050464f6570c1c00fa
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/intel/tinycbor/commit/5f26eaf8d7be760fafe11ef4a6e0f907e7e8c3f0]
++---
++ Makefile | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 6492ea16..3cde2b3d 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -236,10 +236,15 @@ tag: distcheck
++ .SECONDARY:
++ 
++ cflags := $(CPPFLAGS) -I$(SRCDIR)src
++-cflags += -std=gnu99 $(CFLAGS) \
+++cflags += -std=gnu99 $(CFLAGS)
+++
+++ifneq ($(DISABLE_WERROR),1)
+++cflags += \
++ 	-Werror=incompatible-pointer-types \
++ 	-Werror=implicit-function-declaration \
++ 	-Werror=int-conversion
+++endif
+++
++ %.o: %.c
++ 	@test -d $(@D) || $(MKDIR) $(@D)
++ 	$(CC) $(cflags) $($(basename $(notdir $@))_CCFLAGS) -c -o $@ $<
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index bf6e8e4c1e..cad50e633b 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -16,7 +16,7 @@ ifeq ($(BR2_PACKAGE_CJSON),y)
+ TINYCBOR_DEPENDENCIES += cjson
+ endif
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.1-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.2-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-TINYCBOR_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) V=1
++TINYCBOR_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) DISABLE_WERROR=1 V=1
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TINYCBOR_MAKE_OPTS += BUILD_STATIC=1 BUILD_SHARED=0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
