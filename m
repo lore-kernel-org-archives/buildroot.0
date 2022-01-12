@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E5D6C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 10:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50954C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 10:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37C8D428AD;
-	Wed, 12 Jan 2022 10:37:10 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wqOOg5NZg_yA; Wed, 12 Jan 2022 10:37:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AF4C415FD;
-	Wed, 12 Jan 2022 10:37:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 502BE1BF831
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 10:37:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DF646FB8B
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 10:37:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D1B16FB90;
+	Wed, 12 Jan 2022 10:37:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c_UD2yjhrUWN for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id luj1E4W_Sthx; Wed, 12 Jan 2022 10:37:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49D216FB8A;
+	Wed, 12 Jan 2022 10:37:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 58F1B1BF9B9
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 10:37:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47E0583E75
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 10:37:06 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X__BHIpxc9xD for <buildroot@lists.busybox.net>;
  Wed, 12 Jan 2022 10:37:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65CE46FB89
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7ECFF83E73
  for <buildroot@buildroot.org>; Wed, 12 Jan 2022 10:37:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4B7238349D; Wed, 12 Jan 2022 10:30:44 +0000 (UTC)
+ id 6999E82A79; Wed, 12 Jan 2022 10:30:44 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 11:36:00 +0100
+Date: Wed, 12 Jan 2022 11:36:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1bbe25437f3120a26067e6f08e4258510f644a9
-X-Git-Newrev: 4317b1f9f21eda6d01c10da1ed15a2d87cfc666c
+X-Git-Oldrev: 8c97b8925ed01bfa18d66da9ab01863191c591f2
+X-Git-Newrev: 0e0118a6a7d85081529ad66aa72f74025d682c60
 X-Patchwork-Hint: ignore
-Message-Id: <20220112103044.4B7238349D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/snappy: bump to version 1.1.9
+Message-Id: <20220112103044.6999E82A79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/polkit: fix build on meson 0.61.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,129 +58,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4317b1f9f21eda6d01c10da1ed15a2d87cfc666c
+commit: https://git.buildroot.net/buildroot/commit/?id=0e0118a6a7d85081529ad66aa72f74025d682c60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Disable benchmarks through option added by
-  https://github.com/google/snappy/commit/4ebd8b2f23dd4ab67ca695256a128cd796d39ce6
-- Update indentation in hash file (two spaces)
+Backport a patch removing invalid positional arguments:
+../output-1/build/polkit-0.120/actions/meson.build:3:5: ERROR: Function does not take positional arguments.
 
-https://github.com/google/snappy/releases/tag/1.1.9
+Fixes:
+ - http://autobuild.buildroot.net/results/b2d/b2d2b27844b32b3609e11005966d85dc0dfb7a9f
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...nline-with-SNAPPY_ATTRIBUTE_ALWAYS_INLINE.patch | 71 ++++++++++++++++++++++
- package/snappy/snappy.hash                         |  4 +-
- package/snappy/snappy.mk                           |  4 +-
- 3 files changed, 75 insertions(+), 4 deletions(-)
+ ...-positional-parameters-to-i18n.merge_file.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/snappy/0001-Add-inline-with-SNAPPY_ATTRIBUTE_ALWAYS_INLINE.patch b/package/snappy/0001-Add-inline-with-SNAPPY_ATTRIBUTE_ALWAYS_INLINE.patch
+diff --git a/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch b/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch
 new file mode 100644
-index 0000000000..bd2ef07794
+index 0000000000..25fa4ef19b
 --- /dev/null
-+++ b/package/snappy/0001-Add-inline-with-SNAPPY_ATTRIBUTE_ALWAYS_INLINE.patch
-@@ -0,0 +1,71 @@
-+From 0c716d435abe65250100c2caea0e5126ac4e14bd Mon Sep 17 00:00:00 2001
-+From: "Georgi D. Sotirov" <gdsotirov@gmail.com>
-+Date: Wed, 5 May 2021 14:16:46 +0300
-+Subject: [PATCH] Add inline with SNAPPY_ATTRIBUTE_ALWAYS_INLINE
++++ b/package/polkit/0002-Don-t-pass-positional-parameters-to-i18n.merge_file.patch
+@@ -0,0 +1,45 @@
++From 30c368a6b729bc8a0a9d0d023739c4fa07b0928b Mon Sep 17 00:00:00 2001
++From: Simon McVittie <smcv@debian.org>
++Date: Mon, 25 Oct 2021 20:21:27 +0100
++Subject: [PATCH] Don't pass positional parameters to i18n.merge_file
 +
-+Add inline with SNAPPY_ATTRIBUTE_ALWAYS_INLINE on AdvanceToNextTag to
-+fix the following compilation errors and a warning with GCC:
++These were always ignored, and Meson 0.60.0 disallowed them.
 +
-+[  2%] Building CXX object CMakeFiles/snappy.dir/snappy.cc.o
-+/usr/bin/c++   -DHAVE_CONFIG_H -Dsnappy_EXPORTS
-+-I/tmp/snappy-1.1.9/build -I/tmp/snappy-1.1.9  -O3
-+-march=i586 -mtune=i686 -Wall -Wextra -fno-exceptions -fno-rtti -O3
-+-DNDEBUG -fPIC   -std=c++11 -o CMakeFiles/snappy.dir/snappy.cc.o -c
-+/tmp/snappy-1.1.9/snappy.cc
-+/tmp/snappy-1.1.9/snappy.cc:1017:8: warning: always_inline
-+function might not be inlinable [-Wattributes]
-+ size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
-+        ^
-+/tmp/snappy-1.1.9/snappy.cc: In function 'std::pair<const
-+unsigned char*, int> snappy::DecompressBranchless(const uint8_t*, const
-+uint8_t*, ptrdiff_t, T, ptrdiff_t) [with T = char*; uint8_t = unsigned
-+char; ptrdiff_t = int]':
-+/tmp/snappy-1.1.9/snappy.cc:1017:8: error: inlining failed in
-+call to always_inline 'size_t snappy::AdvanceToNextTag(const uint8_t**,
-+size_t*)': function body can be overwritten at link time
-+/tmp/snappy-1.1.9/snappy.cc:1097:53: error: called from here
-+         size_t tag_type = AdvanceToNextTag(&ip, &tag);
-+                                                     ^
-+/tmp/snappy-1.1.9/snappy.cc:1017:8: error: inlining failed in
-+call to always_inline 'size_t snappy::AdvanceToNextTag(const uint8_t**,
-+size_t*)': function body can be overwritten at link time
-+ size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
-+        ^
-+/tmp/snappy-1.1.9/snappy.cc:1097:53: error: called from here
-+         size_t tag_type = AdvanceToNextTag(&ip, &tag);
-+                                                     ^
-+/tmp/snappy-1.1.9/snappy.cc:1017:8: error: inlining failed in
-+call to always_inline 'size_t snappy::AdvanceToNextTag(const uint8_t**,
-+size_t*)': function body can be overwritten at link time
-+ size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
-+        ^
-+/tmp/snappy-1.1.9/snappy.cc:1097:53: error: called from here
-+         size_t tag_type = AdvanceToNextTag(&ip, &tag);
-+                                                     ^
-+CMakeFiles/snappy.dir/build.make:137: recipe for target
-+'CMakeFiles/snappy.dir/snappy.cc.o' failed
-+
-+Just like with other functions using SNAPPY_ATTRIBUTE_ALWAYS_INLINE
-+macro (i.e. __attribute__((always_inline)) ) it is necessary to use C++
-+inline specifier.
-+
-+[Retrieved from:
-+https://github.com/google/snappy/pull/128/commits/0c716d435abe65250100c2caea0e5126ac4e14bd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Resolves: https://gitlab.freedesktop.org/polkit/polkit/-/issues/160
++Reference: https://github.com/mesonbuild/meson/pull/9445
++Signed-off-by: Simon McVittie <smcv@debian.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/99]
 +---
-+ snappy.cc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ actions/meson.build      | 1 -
++ src/examples/meson.build | 1 -
++ 2 files changed, 2 deletions(-)
 +
-+diff --git a/snappy.cc b/snappy.cc
-+index 79dc0e8d..51157be2 100644
-+--- a/snappy.cc
-++++ b/snappy.cc
-+@@ -1014,7 +1014,7 @@ void MemMove(ptrdiff_t dst, const void* src, size_t size) {
-+ }
++diff --git a/actions/meson.build b/actions/meson.build
++index 2abaaf3..1e3f370 100644
++--- a/actions/meson.build
+++++ b/actions/meson.build
++@@ -1,7 +1,6 @@
++ policy = 'org.freedesktop.policykit.policy'
 + 
-+ SNAPPY_ATTRIBUTE_ALWAYS_INLINE
-+-size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
-++inline size_t AdvanceToNextTag(const uint8_t** ip_p, size_t* tag) {
-+   const uint8_t*& ip = *ip_p;
-+   // This section is crucial for the throughput of the decompression loop.
-+   // The latency of an iteration is fundamentally constrained by the
-diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
-index c08c5b7fe4..b49b0e7e3b 100644
---- a/package/snappy/snappy.hash
-+++ b/package/snappy/snappy.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 16b677f07832a612b0836178db7f374e414f94657c138e6993cbfc5dcc58651f  snappy-1.1.8.tar.gz
--sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
-+sha256  75c1fbb3d618dd3a0483bff0e26d0a92b495bbe5059c8b4f1c962b478b6e06e7  snappy-1.1.9.tar.gz
-+sha256  55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index e1fa28fbce..d31dcdd5fe 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--SNAPPY_VERSION = 1.1.8
-+SNAPPY_VERSION = 1.1.9
- SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
- SNAPPY_LICENSE = BSD-3-Clause
- SNAPPY_LICENSE_FILES = COPYING
- SNAPPY_CPE_ID_VENDOR = google
- SNAPPY_INSTALL_STAGING = YES
--SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_TESTS=OFF
-+SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_BENCHMARKS=OFF -DSNAPPY_BUILD_TESTS=OFF
- 
- $(eval $(cmake-package))
++ i18n.merge_file(
++-  policy,
++   input: policy + '.in',
++   output: '@BASENAME@',
++   po_dir: po_dir,
++diff --git a/src/examples/meson.build b/src/examples/meson.build
++index c6305ab..8c18de5 100644
++--- a/src/examples/meson.build
+++++ b/src/examples/meson.build
++@@ -1,7 +1,6 @@
++ policy = 'org.freedesktop.policykit.examples.pkexec.policy'
++ 
++ i18n.merge_file(
++-  policy,
++   input: policy + '.in',
++   output: '@BASENAME@',
++   po_dir: po_dir,
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
