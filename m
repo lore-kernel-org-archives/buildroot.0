@@ -1,69 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC3CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 16:52:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA11C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 16:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4AAD60AD8;
-	Wed, 12 Jan 2022 16:52:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6343684BDE;
+	Wed, 12 Jan 2022 16:59:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ONY-5LykO2oK; Wed, 12 Jan 2022 16:52:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 037F260AD4;
-	Wed, 12 Jan 2022 16:51:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A7E061BF4E3
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 16:51:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9612683E8B
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 16:51:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eY0GT7ZqFKTW for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 16:51:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC62683E10
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 16:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
- s=20170329;
- h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=AxSpzQ1S374aiDzZz4JpITvBAI3aQrO1g6W/Q+xKwMs=; b=PC3kJqRoc80vCPSWF9VeFnXgcE
- cGqFr7FCXPecrct2mL+vyBMzywdSPsVh08LtzdZQ6Nh6LSec3WQJi6Qs/6BFwLs7cjHSGGkYfdTti
- RTZxBv3rvaGod50zqTRltIuM2OFUvxQ7AaaHylR34WI9pbIVxzD8oxLYnhK2vtOU98rnD+2dL2B7W
- DxAf2CSzyUKiiHzACaMagIXZ/7xzVTUahIQnlB2W4jcfiEOHQ0UivUS8N2kc91L6YAvypOv7kO8K0
- PdJ5hdFi+i9GdMLXPrbqwBtBHRRn7uMwYH/cyOlXVLJsdmDP4SIsLYblVX2m/7BPJKXKHk/te86/W
- LOMAoUFw==;
-Received: from 91-152-140-238.elisa-laajakaista.fi ([91.152.140.238]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1n7gqp-0002kr-Rr; Wed, 12 Jan 2022 17:51:56 +0100
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 86f6da54;
- Wed, 12 Jan 2022 16:51:43 +0000 (UTC)
-Date: Wed, 12 Jan 2022 18:51:43 +0200
-Message-ID: <20220112185143.GE23006@momiji>
-From: Adrian Perez de Castro <aperez@igalia.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6HcJv8NgAK0M; Wed, 12 Jan 2022 16:59:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5A1884BDD;
+	Wed, 12 Jan 2022 16:59:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AE441BF2F6
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 16:59:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18DD260DCB
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 16:59:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=essensium.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wB1YjlduIahf for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 16:59:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39FAC60ABA
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 16:59:16 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id o6so12552332edc.4
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 08:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=essensium.com; s=google;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=Sefj6GmKZo7igDlOsjRTiCjO4PIBvUZD2ApuNFqE5Dk=;
+ b=G41bKUdoF/pJwndM8K6BPgEkCTqpYeK0Y9yFq0fQIoLU1t6tW2EeFvwoeuyXHnEv+2
+ Y0nJUFtYT2MJ7SrJ9GZAPeS09rIrYqiKqyHiIzx4PPZyGHDgHU8qIJZGEBW0GLjLdK3E
+ 9362LaaHkQj1DfuWZrLa/hzfU2wpNORobXks3hRdB+MqT8nMoScQ0AUup2xnKGzsLdO8
+ C9vsvtbvNLUIwBf3iQ1rxWHdnIp9K/JAFqsa121hrja4cRxq0TcCaFDF/phECa3SRZzf
+ MonlCghxBo1CMeQroIIAmNrkZU+Sn6njs+nXryS2uCrILBE5IE2noGTYvllQx41NpJeC
+ hWfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=Sefj6GmKZo7igDlOsjRTiCjO4PIBvUZD2ApuNFqE5Dk=;
+ b=Z+zeKhYow3QLxTwAZ0FFdRqOaOSuXRj+y1CE23sDdWYb/KR4efsCYSN5NQv0F+8ETB
+ EGPXl1h79mtkR7MZjX7bxOumwdoFsfsfYGc5THsCbssAgAkSgLRxKutF35MyWcjALnV4
+ eKiS6+sSwnJFyi0LF3sDzigC3wXedLwXDdfcTurifuffLpHM61iDbCJ0A0j74vAapgoL
+ cAzN1bdIbQ+DnIefOG7On21fWgv1di8RUAjoHv9xrJdMyfMubEWFYRlQgVGg7awUU70I
+ YEy5syc7sen9rWDsVHnaB98OsU9ghTf03xOuLEHlN9MgP4rXLMRcfKvBTt5mTsTs+UHb
+ uK6w==
+X-Gm-Message-State: AOAM5300joEx9OEIeo1THN1Ucp7a2G1D1X5mjmq10AjD3i3O9wKyYr4e
+ 9KP2dteIf6whVgLSXxSutiHGSg==
+X-Google-Smtp-Source: ABdhPJzzlVfyDgiUofljdKq1aLJ6LTb29HEA4ZEjmznzXO8G5gkduTpuJFvTgQijnRCUntOXhzSbQg==
+X-Received: by 2002:a17:906:76c5:: with SMTP id
+ q5mr487540ejn.523.1642006754459; 
+ Wed, 12 Jan 2022 08:59:14 -0800 (PST)
+Received: from wintermute.localnet ([109.128.145.10])
+ by smtp.gmail.com with ESMTPSA id gb35sm89150ejc.36.2022.01.12.08.59.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 12 Jan 2022 08:59:13 -0800 (PST)
+From: Frank Vanbever <frank.vanbever@essensium.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220112153516.239321c8@windsurf>
-References: <20220112132618.2634250-1-aperez@igalia.com>
- <20220112132618.2634250-3-aperez@igalia.com>
- <20220112153516.239321c8@windsurf>
+Date: Wed, 12 Jan 2022 17:59:12 +0100
+Message-ID: <2116555.irdbgypaU6@wintermute>
+In-Reply-To: <20211230155334.16da5582@windsurf>
+References: <20200217133806.21237-1-frank.vanbever@essensium.com>
+ <20200217145805.18815-1-frank.vanbever@essensium.com>
+ <20211230155334.16da5582@windsurf>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH RFC 2/2] package/pkg-cmake.mk: use ninja
- instead of make
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/fluentbit: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,75 +89,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============9151656976275866290=="
+Cc: Kevin Hilman <khilman@baylibre.com>,
+ Ryan Barnett <ryan.barnett@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Thomas,
 
---===============9151656976275866290==
-Content-Type: multipart/signed; boundary="WzymZi+5wDRR6KcM"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+On Thursday, 30 December 2021 15:53:34 CET Thomas Petazzoni wrote:
+> If you're still interested in this package, could you have a look?
+
+I took another look and basically came to the same conclusion as you. In an 
+ideal world I'd see it through, but my situation changed in the meantime and 
+right now I don't have the bandwidth to dive into fixing those problems. Sorry 
+about that.
+
+Best regards,
+Frank
 
 
---WzymZi+5wDRR6KcM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
 
-SGksCgpPbiBXZWQsIDEyIEphbiAyMDIyIDE1OjM1OjE2ICswMTAwIFRob21hcyBQZXRhenpvbmkg
-PHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgogCj4gT24gV2VkLCAxMiBKYW4g
-MjAyMiAxNToyNjoxOCArMDIwMAo+IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2Fs
-aWEuY29tPiB3cm90ZToKPiAKPiA+IFN3aXRjaCB0byBuaW5qYSBhcyB0aGUgYnVpbGQgdG9vbCBm
-b3IgdGhlIENNYWtlIHBhY2thZ2UgaW5mcmFzdHJ1Y3R1cmUuCj4gPiBOb3RlIHRoYXQgdGhlIGNo
-YW5nZXMgbWFrZSBwYWNrYWdlcyB3aGljaCB1c2UgW2hvc3QtXWNtYWtlLXBhY2thZ2UKPiA+IGRl
-cGVuZCBvbiBob3N0LW5pbmphLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBBZHJpYW4gUGVyZXog
-ZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4KPiA+IC0tLQo+ID4gIHBhY2thZ2UvcGtnLWNt
-YWtlLm1rIHwgMjQgKysrKysrKysrKysrKystLS0tLS0tLS0tCj4gPiAgMSBmaWxlIGNoYW5nZWQs
-IDE0IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9wa2ctY21ha2UubWsgYi9wYWNrYWdlL3BrZy1jbWFrZS5tawo+ID4gaW5kZXggM2Ix
-ZGIzNWZiNi4uNjVmMDA1YTkxNCAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvcGtnLWNtYWtlLm1r
-Cj4gPiArKysgYi9wYWNrYWdlL3BrZy1jbWFrZS5tawo+ID4gQEAgLTUxLDExICs1MSw2IEBAIGVu
-ZGlmCj4gPiAgCj4gPiAgZGVmaW5lIGlubmVyLWNtYWtlLXBhY2thZ2UKPiA+ICAKPiA+IC0kKDIp
-X01BS0UJCQk/PSAkJChNQUtFKQo+ID4gLSQoMilfSU5TVEFMTF9PUFRTCQk/PSBpbnN0YWxsCj4g
-PiAtJCgyKV9JTlNUQUxMX1NUQUdJTkdfT1BUUwk/PSBERVNURElSPSQkKFNUQUdJTkdfRElSKSBp
-bnN0YWxsL2Zhc3QKPiA+IC0kKDIpX0lOU1RBTExfVEFSR0VUX09QVFMJPz0gREVTVERJUj0kJChU
-QVJHRVRfRElSKSBpbnN0YWxsL2Zhc3QKPiAKPiBUaGlzIG1lYW5zIGFuIGF1ZGl0IG9mIGFsbCBj
-bWFrZS1wYWNrYWdlIHBhY2thZ2VzIG5lZWQgdG8gYmUgZG9uZSB0bwo+IHNlZSBpZiBhbnkgb2Yg
-dGhvc2UgdmFyaWFibGVzIGlzIHVzZWQuCgpJIHdpbGwgYmUgZ29pbmcgdGhyb3VnaCB0aGUgcGFj
-a2FnZXMgaW4gdGhlIG5leHQgZGF5cywgZm9yIG5vdyBhIGNvdXBsZQpvZiBub3RlcyBvbiB0aGUg
-b25lcyB5b3UgbWVudGlvbmVkIGFscmVhZHksIGJlbG93LgoKPiBJIGNvdWxkIHNwb3Q6Cj4gCj4g
-TVVTRVBBQ0tfTUFLRSA9ICQoTUFLRTEpCgpJIGZpeGVkIHRoaXMgbG9jYWxseSB1c2luZzoKCiAg
-TVVTRVBBQ0tfTklOSkFfT1BUUyA9IC1qMQoKU2FkbHksIHN3aXRjaGluZyB0byBOaW5qYSBkb2Vz
-IG5vdCBmaXggcGFyYWxsZWwgYnVpbGRzIGZvciB0aGlzIHBhY2thZ2UuCgo+IEJ1dCBhbHNvOgo+
-IAo+IEhPU1RfTUFSSUFEQl9NQUtFX09QVFMgPSBpbXBvcnRfZXhlY3V0YWJsZXMKClJlcGxhY2lu
-ZyB3aXRoIHRoZSBmb2xsb3dpbmcgd29ya3MsIGJlY2F1c2UgdGhlIENNYWtlIE5pbmphIGdlbmVy
-YXRvciBhbHNvCnByb2R1Y2VzIHRvcC1sZXZlbCBwaG9ueSB0YXJnZXRzOgoKICBIT1NUX01BUklB
-REJfTklOSkFfT1BUUyA9IGltcG9ydF9leGVjdXRhYmxlcwoKQm90aCB0aGVzZSB0d2Vha3MgKGFu
-ZCBsaWtlbHkgYSBidW5jaCBtb3JlKSB3aWxsIGJlIHBhcnQgb2YgdjIgb2YgdGhlIHBhdGNoCnNl
-dCA6KQogCkNoZWVycywK4oCUQWRyacOhbgo=
-
---WzymZi+5wDRR6KcM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYd8HHwAKCRCRxVnb5MkS
-Ow5FAJ4sZXtvIcNnHqKqz/B8HsrYA5S7jgCfZTltRu6maMEDetkFwPIlpa+GGiU=
-=lzEl
------END PGP SIGNATURE-----
-
---WzymZi+5wDRR6KcM--
-
---===============9151656976275866290==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9151656976275866290==--
