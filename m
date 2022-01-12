@@ -1,80 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A76FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 21:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3C6C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 21:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1301284C1C;
-	Wed, 12 Jan 2022 21:30:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0C63404CA;
+	Wed, 12 Jan 2022 21:58:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mxbQhR6zLku1; Wed, 12 Jan 2022 21:30:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2r9tWCFQTMwN; Wed, 12 Jan 2022 21:58:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3924884BD7;
-	Wed, 12 Jan 2022 21:30:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C19DF40012;
+	Wed, 12 Jan 2022 21:58:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C2B481BF2EA
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 21:30:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 653EF1BF2EA
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 21:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF2E984BE2
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 21:30:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93D2484B28
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 21:58:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vtxJZskQU4cW for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 21:30:25 +0000 (UTC)
+ with ESMTP id c5dg1xdCt_E9 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 21:58:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BA6A184BCB
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 21:30:24 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id c66so2513360wma.5
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 13:30:24 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE0DF83FA3
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 21:58:06 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id q8so6630992wra.12
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 13:58:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=BXBhZqIqPbVi7rGC9wKVgwHoIwoN50mT/NA/b73pd/g=;
- b=bZVnZEDjudzzP6D0Yh4Hea1XIJ94/lFv8FnwXQfh4UIEyuRmXq4FMAdwvbIMqTF5/U
- PtrlwmLVxsuNg8jQIKGac8NGhfkzNYf6M8X8WtoZJ7a0hdfwHhtODqQRvC+GwyaUhh/q
- zl32uuM8G7+tDZknQhAHMnI6mq7+pWVX7btYOQdek+8NsKmcG3EMckTX30f9wtfGBBnF
- 6aix8C2kGciXRskMB6Sy7xx9pKSw7Juf75IpBWb9pfNtZG/K7M2RJTQujEvnjHp37bb5
- iC9EKonM9JP0UJUvNPUA7xza88y8cqFwIMoiOOyh8+PWvF2CPmPARkb9HeKVi35rT0Nn
- nCaw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7D7WbWyN62SpGOunzyYjw1sWYydTYxK+FqxFGi8IO7A=;
+ b=NJOpYtfqI+LWUCFw7/NT17L02F1Gc50EyvyDw4zbec44H4Wmipeco5fgFwDR8YAns1
+ oIFLL+no0a0AapC7/wcwNYuRwHOofBa9ZEe/B6nDUi/32eHSfr7X/7LgL5HveBPZy2XF
+ DNX6fOxj0gJAahosAS6CUSSv23LTXjrp6xnf5bLV7TlXR66Vf3LIrSxkaf+QUINceFye
+ B8AQCB6Ip6NeDBHaWwlyhS97c0k719U6/L1RT2DFzq2WBZM+9vGKNmR4ngXaPFYHgwxo
+ 7JCbN7BtcEu8/4RsGS/DdgRbiCNhFmG0dt6YPQgy+6JeQ0eTdtO427TgzBmYrISW2OgW
+ AuEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=BXBhZqIqPbVi7rGC9wKVgwHoIwoN50mT/NA/b73pd/g=;
- b=h/CbHyaClSPFjafw8rkZgQh+8d7KWTety41XEHSAhrg9gKmSuSj2Ci9oCLYcSkIUui
- MdDBqQZff7iI1tuVS0REhDO5AYZnPLFJ0cH/mlEyD+bKfkS+JojBc/+X/CBvbRH7VmGZ
- Rt2CrlH07RhtGKvDnJJvsxpv50ziG1hTrP8FqFVO16h0XimZGp4aQIlprXIlgkQpL88t
- O5KTH0hVL3NSjFz8q+dMxiplZvrSw86jMwkDbpjaTlGZk6oYvZQdnzTNtUgAmJJx/3Im
- +HkGsdGygmcc645LKuGdHnM4gQnafTR1Hl7Kr+lVMKf5aXvuD/sedBdHq6t0Wy7N5tar
- Ecbw==
-X-Gm-Message-State: AOAM531VrP4X03wZ1DqdMah2oP4+9F+wnn2e250AH+TIxUn0XPoITckx
- 2/IIfLIEtRDZqpkpaaKkcd8wqRNz3gc=
-X-Google-Smtp-Source: ABdhPJyrxf73imDI0iCLLg+rp12JlXNU30ToCJB34t4VYT/dcDma6J6tuoTLx5sV489MWI9cwrkVBQ==
-X-Received: by 2002:a7b:c8c7:: with SMTP id f7mr8332624wml.16.1642023022749;
- Wed, 12 Jan 2022 13:30:22 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7D7WbWyN62SpGOunzyYjw1sWYydTYxK+FqxFGi8IO7A=;
+ b=NLNXdcOvj6b0LQDFf7TaZSYKcST2rQsfjSOKR+dBIOT+VnnUlC58m++uPkzgpqSPBM
+ Rt9ly4x7zNHcerxCkd81yswMo90rrCTfezsHINhj80LUnWw07Ti/+XmJ57UoBv6QQBdD
+ +I/586EsLZv6f027lDlCs1CpfIo8mZsoDicR3kX7mnJSROEORUCoRyaN8DYB3BGmwnFG
+ l/8us8SXvnrhuMWBk7EMa1bEetfL3mQ/UdbYYWMQy1mHATNBZHxhg2dkspcuQty181W+
+ mGg8FWcNz+NdY7c4ctG6i78RkSIIHjJOqPc5yleE7kUZQPLOp2a7dQ8YBToBaJyb+gPa
+ 72Uw==
+X-Gm-Message-State: AOAM531B4cp8RNyvlxjvdt3oZAOvQYpDP2GHdoDD/UsZ09RvrJwW7rp7
+ y/ajji6HuMQrvpGaD7Jt8+zTuglaN4U=
+X-Google-Smtp-Source: ABdhPJwW2Jpq7dgTLuTERplW7L+52O4YlIMsh9Cw4+MEnaZ3DdZMmM0uTspNRH8lGGp+k582FBfvPw==
+X-Received: by 2002:adf:d1ef:: with SMTP id g15mr1487370wrd.198.1642024684917; 
+ Wed, 12 Jan 2022 13:58:04 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-358-126.w2-10.abo.wanadoo.fr.
  [2.10.19.126])
- by smtp.gmail.com with ESMTPSA id v13sm725654wmh.45.2022.01.12.13.30.21
+ by smtp.gmail.com with ESMTPSA id p4sm1934706wmq.40.2022.01.12.13.58.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Jan 2022 13:30:22 -0800 (PST)
+ Wed, 12 Jan 2022 13:58:04 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 22:28:47 +0100
-Message-Id: <20220112212847.3166081-3-fontaine.fabrice@gmail.com>
+Date: Wed, 12 Jan 2022 22:56:37 +0100
+Message-Id: <20220112215637.3179786-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112212847.3166081-1-fontaine.fabrice@gmail.com>
-References: <20220112212847.3166081-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/3] package/python-hyperframe: bump to version
- 6.0.1
+Subject: [Buildroot] [PATCH 1/1] package/gnu-efi: add mips64el support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,67 +86,46 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Update site in Config.in
-- python 2.7 support has been dropped since version 6.0.0
-- Update indentation in hash file (two spaces)
-
-https://github.com/python-hyper/hyperframe/blob/v6.0.1/CHANGELOG.rst
+mips64el is supported since
+https://sourceforge.net/p/gnu-efi/code/ci/3f234f5b6ff5c16c6ddd5f2c2513fb329aecd30a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-hyperframe/Config.in              | 3 ++-
- package/python-hyperframe/python-hyperframe.hash | 6 +++---
- package/python-hyperframe/python-hyperframe.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/gnu-efi/Config.in  | 1 +
+ package/gnu-efi/gnu-efi.mk | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/python-hyperframe/Config.in b/package/python-hyperframe/Config.in
-index f3318a20e2..30457fe86e 100644
---- a/package/python-hyperframe/Config.in
-+++ b/package/python-hyperframe/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_HYPERFRAME
- 	bool "python-hyperframe"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  HTTP/2 framing layer for Python.
+diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
+index d456a23837..8e35fddbcb 100644
+--- a/package/gnu-efi/Config.in
++++ b/package/gnu-efi/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
+ 	default y if BR2_aarch64
+ 	default y if BR2_aarch64_be
+ 	default y if BR2_i386
++	default y if BR2_mips64el
+ 	default y if BR2_x86_64
  
--	  http://hyper.rtfd.org
-+	  https://github.com/python-hyper/hyperframe/
-diff --git a/package/python-hyperframe/python-hyperframe.hash b/package/python-hyperframe/python-hyperframe.hash
-index 3e686a4aa2..b39ab51a72 100644
---- a/package/python-hyperframe/python-hyperframe.hash
-+++ b/package/python-hyperframe/python-hyperframe.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hyperframe/json
--md5	6919183242feb26d8bce3b4cba81defd  hyperframe-5.2.0.tar.gz
--sha256	a9f5c17f2cc3c719b917c4f33ed1c61bd1f8dfac4b1bd23b7c80b3400971b41f  hyperframe-5.2.0.tar.gz
-+md5  153c064e8ac654aaf136b3388c36de48  hyperframe-6.0.1.tar.gz
-+sha256  ae510046231dc8e9ecb1a6586f63d2347bf4c8905914aa84ba585ae85f28a914  hyperframe-6.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256	763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed  LICENSE
-+sha256  763a9342a04df62046c9dc748a5287934eb0a5331c6863b3ca0aee20e18cb4ed  LICENSE
-diff --git a/package/python-hyperframe/python-hyperframe.mk b/package/python-hyperframe/python-hyperframe.mk
-index 7640ade5fd..4b13ca51a3 100644
---- a/package/python-hyperframe/python-hyperframe.mk
-+++ b/package/python-hyperframe/python-hyperframe.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ config BR2_PACKAGE_GNU_EFI
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 69618029f4..06bf254738 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -24,6 +24,8 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
+ GNU_EFI_PLATFORM = arm
+ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ GNU_EFI_PLATFORM = aarch64
++else ifeq ($(BR2_mips64el),y)
++GNU_EFI_PLATFORM = mips64el
+ endif
  
--PYTHON_HYPERFRAME_VERSION = 5.2.0
-+PYTHON_HYPERFRAME_VERSION = 6.0.1
- PYTHON_HYPERFRAME_SOURCE = hyperframe-$(PYTHON_HYPERFRAME_VERSION).tar.gz
--PYTHON_HYPERFRAME_SITE = https://files.pythonhosted.org/packages/e6/7f/9a4834af1010dc1d570d5f394dfd9323a7d7ada7d25586bd299fc4cb0356
-+PYTHON_HYPERFRAME_SITE = https://files.pythonhosted.org/packages/5a/2a/4747bff0a17f7281abe73e955d60d80aae537a5d203f417fa1c2e7578ebb
- PYTHON_HYPERFRAME_SETUP_TYPE = setuptools
- PYTHON_HYPERFRAME_LICENSE = MIT
- PYTHON_HYPERFRAME_LICENSE_FILES = LICENSE
+ GNU_EFI_MAKE_OPTS = \
 -- 
 2.34.1
 
