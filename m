@@ -1,56 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 610BBC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1545C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10E7141599;
-	Wed, 12 Jan 2022 19:17:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6672C400A4;
+	Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DoRzLG1G0Rkr; Wed, 12 Jan 2022 19:17:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AWQzHWBAOViD; Wed, 12 Jan 2022 19:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D79741593;
-	Wed, 12 Jan 2022 19:17:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64C704011D;
+	Wed, 12 Jan 2022 19:40:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 474AC1BF2CD
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:17:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 512A71BF2CD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 353CD60BE6
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:17:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D6DA60ACA
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:40:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GVZMYazD46qK for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 19:17:14 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mailout10.t-online.de (mailout10.t-online.de [194.25.134.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7591B60ACA
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 19:17:14 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout10.t-online.de (Postfix) with SMTP id 50743CFC8
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 20:17:12 +0100 (CET)
-Received: from fli4l.lan.fli4l ([84.161.177.158]) by fwd79.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1n7j7M-3aHqBl0; Wed, 12 Jan 2022 20:17:08 +0100
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48216)
- by fli4l.lan.fli4l with esmtp (Exim 4.95)
- (envelope-from <bernd.kuhls@t-online.de>) id 1n7j7M-0004j3-7H
- for buildroot@buildroot.org; Wed, 12 Jan 2022 20:17:08 +0100
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 20:17:06 +0100
-Message-Id: <20220112191708.77947-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id nxMWWPIRBvOg for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 19:40:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2CDFB60AA7
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 19:40:00 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id u21so14177690edd.5
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 11:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mApFpKqxMDIOvspJJWRXG+0Fs21Sm/EzDJ0E/GzTYBw=;
+ b=NVRYCKEYlapzntrpMm1Usfw2ICTxvfNFhOdjIljjGG5vmJAYsnZAHOinWo1GYkU/39
+ yPIwjJ5XguOH0HywhmCoJogETg4PmJdgtf7EI+UvIncfWkcnvp/NQjJ4NmyufFr26JfJ
+ h5tA010mAsHgfsutPmyqg7yFtdbvBvQuQuOw7xxF0ZLknKXOZk/W9I3qRsk8o5Mr+Dcl
+ 2ENMAs9mW0ka64yMbETY4kLFhE8ACizO0rXPNsLs76TgV4kv/I7k5dWpuOdk4qgTPLHM
+ cRVv2Qzlvw9EdqGx5QXKNWRNGnTvHYSogHDbX3Nt4P2a9p4Vp97/ar5dcxYAD/B9UBHo
+ 28hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mApFpKqxMDIOvspJJWRXG+0Fs21Sm/EzDJ0E/GzTYBw=;
+ b=ahlinkb4fYpBDDjpP+GLwKAA02DfZiOqe9NjLlmi7zUG0ZPdhxZt1+7zC1tN/Kql3r
+ 9EirKYFd7txaWhKZG1In8ymvEdMoKvWjS9RQYIMl45ecYLXG+mxQ7GHTaJhBO3xRcgYH
+ 5eVpVy0+DaVHbotugRt0Fp+P92R1A1ROzzVXpogqo6Z8bzMpr4m7yp6sYCtaNNSBVIZD
+ gDCg566bVCQkUZ9FLJ0PECuvoiFGURnQjAZ4PVefdcr/e9VbST5VCNXQbVdVIcyT33AO
+ FjRWGidq5rq44gpesvoyiGZHRhqzk4Jia7gR4gEc6EQjsALiIqf/hW+pVE6jFw0QyLV5
+ fehg==
+X-Gm-Message-State: AOAM530sijTTSryjowCgYHsNA5yWAnWVrTEMPpYCpLf/LwvPdQ+Wwijl
+ Pz1y5PxydA1BJGJPsAZpwdbmPg==
+X-Google-Smtp-Source: ABdhPJzvGCP/WfldREb49ud0B9iyjScR8hpquuuagzaNt6gNs1UyDQqLy1G96DhVudt/gqpKAAqtDg==
+X-Received: by 2002:a05:6402:27cb:: with SMTP id
+ c11mr1110028ede.86.1642016399284; 
+ Wed, 12 Jan 2022 11:39:59 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id k8sm199608ejc.115.2022.01.12.11.39.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 12 Jan 2022 11:39:58 -0800 (PST)
+Message-ID: <9e39bdad-16dd-1fb4-2c5e-2de0e032fcbc@mind.be>
+Date: Wed, 12 Jan 2022 20:39:57 +0100
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1642015028-00010BFA-FFD1E9BB/0/0 CLEAN NORMAL
-X-TOI-MSGID: 7bf52e6a-ed90-4d11-8180-d53527556319
-Subject: [Buildroot] [PATCH 1/3] package/kodi-inputstream-adaptive: bump
- version to 19.0.2-Matrix
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>, buildroot <buildroot@buildroot.org>
+References: <20220112101021.456463-1-nolange79@gmail.com>
+ <CADYdroPR-+z0fNJa8pD0ZFB3z6-fdGLpes7cUem5xSnyBCHv7g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CADYdroPR-+z0fNJa8pD0ZFB3z6-fdGLpes7cUem5xSnyBCHv7g@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCH] system/skeleton: provide run/lock directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +95,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index d193a0c4f8..c7a081f887 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d389af940011887378d1e6ad0ad91b81cfc138b862cf4a43593388c33308cb55  kodi-inputstream-adaptive-19.0.1-Matrix.tar.gz
-+sha256  f2285e77043a0c9160d1ab11dd5943cc584be17a2f7920be3002751ff697ec7b  kodi-inputstream-adaptive-19.0.2-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 6044ed07fb..f632a42adb 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.1-Matrix
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 19.0.2-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
--- 
-2.30.2
+
+On 12/01/2022 11:19, Norbert Lange wrote:
+> Am Mi., 12. Jan. 2022 um 11:10 Uhr schrieb Norbert Lange <nolange79@gmail.com>:
+>>
+>> We changed the skeletons in bf01e51f3c, so that var/lock
+>> points to run/lock. This resulted in build failures as
+>> some packages want to work with these paths.
+>>
+>> -   Create run/lock, the run directory will be purged
+>>      later anyway (since 5e78e7e97d).
+>> -   for init == systemd, create the var/lock symlink early
+>>      to prevent packages creating this path as directory.
+>>
+>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>> ---
+>>   package/skeleton-init-systemd/skeleton-init-systemd.mk | 2 ++
+>>   system/skeleton/run/{ => lock}/.empty                  | 0
+>>   2 files changed, 2 insertions(+)
+>>   rename system/skeleton/run/{ => lock}/.empty (100%)
+>>
+>> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> index 1e212cc2f7..795a171809 100644
+>> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> @@ -62,6 +62,8 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+>>          mkdir -p $(TARGET_DIR)/srv
+>>          mkdir -p $(TARGET_DIR)/var
+>>          ln -s ../run $(TARGET_DIR)/var/run
+>> +       # prevent install scripts to create var/lock as directory
+>> +       ln -s ../run/lock $(TARGET_DIR)/var/lock
+>>          install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
+>>          $(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
+>>   endef
+>> diff --git a/system/skeleton/run/.empty b/system/skeleton/run/lock/.empty
+>> similarity index 100%
+>> rename from system/skeleton/run/.empty
+>> rename to system/skeleton/run/lock/.empty
+>> --
+>> 2.34.1
+>>
+> 
+> Fixes: http://autobuild.buildroot.net/results/3ee/3ee8f9ee55e51af38e9dbe7b9840c9589d88a30f
+
+  Applied to master with that added, thanks.
+
+> (and alot more containing the vtun package)
+> 
+> For someone not fluent with mailing list workflows, and working with a
+> couple projects,
+> it might help having a few example commit messages (-templates) in the docs.
+> ie for respins, bug fixes, versioning (potentially of series)
+
+  Absolutely! I'm waiting for a really nice example to turn up on the list and 
+steal that for the documentation.
+
+  Regards,
+  Arnout
 
 _______________________________________________
 buildroot mailing list
