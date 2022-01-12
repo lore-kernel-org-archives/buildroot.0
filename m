@@ -1,46 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3808DC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7065BC433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 19:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD8DE84BB0;
-	Wed, 12 Jan 2022 19:41:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0AE54415D1;
+	Wed, 12 Jan 2022 19:45:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qAyxm3UvrxeK; Wed, 12 Jan 2022 19:41:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3zDl1tpvP_ze; Wed, 12 Jan 2022 19:45:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B5C584C27;
-	Wed, 12 Jan 2022 19:41:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 00BD61BF2CD
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:41:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47EA3415CF;
+	Wed, 12 Jan 2022 19:45:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C77211BF2CD
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1D79400A4
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:41:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B559384C2B
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 19:45:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DU9iBuV3_AW8 for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 19:41:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 093904031C
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 19:41:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 1158482A98; Wed, 12 Jan 2022 19:34:44 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 20:38:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e0118a6a7d85081529ad66aa72f74025d682c60
-X-Git-Newrev: 02d35007472675c147be79b4ca06959c83ae4128
-X-Patchwork-Hint: ignore
-Message-Id: <20220112193444.1158482A98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] system/skeleton: provide run/lock directory
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=mind.be
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oOcQiB_e2Sqq for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 19:45:10 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B3C0A84C29
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 19:45:10 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id t24so14198850edi.8
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 11:45:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mVx7zcrFW1TimsFzpHFyFG3COvbwyq/vcs68dcORcc4=;
+ b=hJkjNKFdG42T4xqdKRwP1dZ2mHlc5jPUKaCJqisUGA4os0PeLEsK/sQHMX+bOM7ghE
+ WxOl3zhSL4ZV8p0Akww1RQEBoMLbrio8Yj0RGVAIiZFHZJqGigj8aD1bRBmKzhGfh0uT
+ eLhZU6IRoEfafgrICTFQmVnnho15FadvBjM87f5XewiOHZXN1aTkcPceCO6u+NzdNP79
+ EndaTKsFc/LtptQgEqL2hrlHVTow7XTtdGA/KiHFYlhpf8metTDaaH5AD5lUM/dWUxvL
+ mhxbdQ36g8f/kef5u7r4+Q+BXmknClSlLhAAm6U3uTg9MrGvrkluIq8HUzs2e4ANiK86
+ E2Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=mVx7zcrFW1TimsFzpHFyFG3COvbwyq/vcs68dcORcc4=;
+ b=F+yi0bOGjt1CS9/CMYS6pjb6wbPI/DbFBkKsSyBGMxypF764sdKYaqQUtz72Rh2fP9
+ dcKOOD43nIkXh+hBWaWQxEcbGhN2WyFkRyi4x89qsaESZ+JXAvFlj78csOiZ8rS92FfI
+ B5lg2k+kr37SgCzwYA0XsaFvHoZGLAVrzaMfAN9RgVqUi0dp5dNsyqK2rbMSP2wUEtxC
+ Zr6cmN+QkE+nM5Fw/EdL7GREM0w6awONa83VUVL7tk3b68SlWWHATmVfoANOhkfWKkKv
+ lV9A8xnyc0CMTw3X4k5nQBmvKHuf+6hxf93rD+sera+7WNENxlUWpqIk7Pqra90WvkR7
+ iy/w==
+X-Gm-Message-State: AOAM532+/6g9WfUb5EBwK0pHjCHE2rAo1vHYM2mRxDfXvfdPmKrXBXkS
+ i7yOmz9aBjD62L5d/BIgyeCkqA==
+X-Google-Smtp-Source: ABdhPJwrL/BY3UsB3Q0u9aW5gPM6EXabXgxmMuhaTU18VCZCH9e+a8kYqqWn8RNxiWLz2Ii7yZbLUQ==
+X-Received: by 2002:a17:907:1c91:: with SMTP id
+ nb17mr975314ejc.712.1642016708858; 
+ Wed, 12 Jan 2022 11:45:08 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id f29sm191060ejj.209.2022.01.12.11.45.08
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 12 Jan 2022 11:45:08 -0800 (PST)
+Message-ID: <546b5c8e-2b49-b3bc-2e91-d8210f21d9c5@mind.be>
+Date: Wed, 12 Jan 2022 20:45:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-GB
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220112182800.3128945-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220112182800.3128945-1-fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: bump to version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,51 +94,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02d35007472675c147be79b4ca06959c83ae4128
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We changed the skeletons in bf01e51f3c, so that var/lock
-points to run/lock. This resulted in build failures as
-some packages want to work with these paths.
 
--   Create run/lock, the run directory will be purged
-    later anyway (since 5e78e7e97d).
--   for init == systemd, create the var/lock symlink early
-    to prevent packages creating this path as directory.
+On 12/01/2022 19:28, Fabrice Fontaine wrote:
+> https://github.com/FreeRDP/FreeRDP/releases/tag/2.5.0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/3ee/3ee8f9ee55e51af38e9dbe7b9840c9589d88a30f
+  Applied to master, thanks.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 2 ++
- system/skeleton/run/{ => lock}/.empty                  | 0
- 2 files changed, 2 insertions(+)
+  Regards,
+  Arnout
 
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index 1e212cc2f7..795a171809 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -62,6 +62,8 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/srv
- 	mkdir -p $(TARGET_DIR)/var
- 	ln -s ../run $(TARGET_DIR)/var/run
-+	# prevent install scripts to create var/lock as directory
-+	ln -s ../run/lock $(TARGET_DIR)/var/lock
- 	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
- 	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
- endef
-diff --git a/system/skeleton/run/.empty b/system/skeleton/run/lock/.empty
-similarity index 100%
-rename from system/skeleton/run/.empty
-rename to system/skeleton/run/lock/.empty
+> ---
+>   package/freerdp/freerdp.hash | 4 ++--
+>   package/freerdp/freerdp.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+> index 637e57e8b0..e31b8d5b96 100644
+> --- a/package/freerdp/freerdp.hash
+> +++ b/package/freerdp/freerdp.hash
+> @@ -1,5 +1,5 @@
+> -# From https://pub.freerdp.com/releases/freerdp-2.4.1.tar.gz.sha256
+> -sha256  ef75c87926643a0d0041f6556e343ac037380d4260c64885e7cdd20da0147edf  freerdp-2.4.1.tar.gz
+> +# From https://pub.freerdp.com/releases/freerdp-2.5.0.tar.gz.sha256
+> +sha256  0fd9396068cda8e6d884d063a4993001f140f46c36464ccae261b9475050cd2b  freerdp-2.5.0.tar.gz
+>   
+>   # Locally calculated
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index 40a3904024..c536f6cb1c 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -FREERDP_VERSION = 2.4.1
+> +FREERDP_VERSION = 2.5.0
+>   FREERDP_SITE = https://pub.freerdp.com/releases
+>   FREERDP_DEPENDENCIES = libglib2 openssl zlib
+>   FREERDP_LICENSE = Apache-2.0
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
