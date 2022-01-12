@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C1BEC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 13:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57944C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 13:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7CC16FBC4;
-	Wed, 12 Jan 2022 13:27:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E152D42917;
+	Wed, 12 Jan 2022 13:30:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jypAqwijmylf; Wed, 12 Jan 2022 13:27:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OwU39wQ3aUFz; Wed, 12 Jan 2022 13:30:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFDBA6FBD5;
-	Wed, 12 Jan 2022 13:27:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2292342911;
+	Wed, 12 Jan 2022 13:29:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C60A11BF3DC
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 13:26:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F03971BF3DC
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 13:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFBB940A35
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 13:26:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD58840A3F
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 13:29:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=igalia.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l-ecMIbOvQ7a for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 13:26:40 +0000 (UTC)
+ with ESMTP id GWAub4cyxGcf for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 13:29:57 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D41D640193
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 13:26:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C6EC040A28
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 13:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com; 
  s=20170329;
- h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
  Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
  :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=cvfaAdTOXgS0k41Y4Uzcu1hvhqpIMQ0B5tH+Y168Suo=; b=XW9pt5JVjqnHU9Ocurnu4a7rlM
- 01c84udHU9qn78KEpkXZ79yHVBeNhlJpBVz9uwUgd65Q7jVscNXKgjAn7RsoSI+S2KSpQIvit8+XK
- 1mbWfJ2i5tlmS/Tq2H1mN4RPfS+nI0/CSnYEa7p5QAGGSuuNkHZ0sKYWhGF5RtOCOTtI2tNN2MsWM
- +4coXIRP7jWs1+W47PMaxVxqfHrKeHC2wwfVf7Kb3RrX2TZFhb77RZwlaSSRg8gOo6w0ee8HB4U+l
- G273eOmCv/nVMbVQn/+4CjesKXfZzVvYzhyYmqm21mTD//etBy6iXkIq19mLm2jy9b8p+uAt7VUBa
- vak28AbQ==;
-Received: from 91-153-34-128.elisa-laajakaista.fi ([91.153.34.128] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
+ bh=evD56MGxbD8vWpbzoP62KnUR+YBAgUsOmy9OO92+VrQ=; b=BkIAq0UFg6duStTkfHkHXHbY6o
+ Mt9RH+3VoqeVTr2wAvtygrJDKZg3dbT1fU1S93YEcRmvghN9f0dLITY0tKGJcVBDR6gPHjKT3PSZn
+ ELwI1tNlnnIVw7Y9lsbSMvdnJGXWKQRdgwKvNK8UtKdkV9wptBx62NiCGqQiYCWc97ylunnTThvhT
+ HbdnjmJoqN6ZL32nfd24au9dv/LWh+qe9EACagIewssPZOOqP8jPJq9rIt8vL1siJBoM1bMIEyJyj
+ bK0r76ZhQ0hv5N7VB562NyPiOf/MSdI7HXJ3fX3RLQbuFHUj9sP3h+8bz0QFP9rRFjcNQo+1WgKn+
+ eTGBPROw==;
+Received: from 91-152-140-238.elisa-laajakaista.fi ([91.152.140.238]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1n7de9-000ARz-6P; Wed, 12 Jan 2022 14:26:37 +0100
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id e4ee66a3;
- Wed, 12 Jan 2022 13:26:19 +0000 (UTC)
+ id 1n7dhK-000AW2-QK; Wed, 12 Jan 2022 14:29:54 +0100
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 0a66b56c;
+ Wed, 12 Jan 2022 13:29:44 +0000 (UTC)
+Date: Wed, 12 Jan 2022 15:29:40 +0200
+Message-ID: <20220112152940.GC1050037@momiji>
 From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Jan 2022 15:26:18 +0200
-Message-Id: <20220112132618.2634250-3-aperez@igalia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112132618.2634250-1-aperez@igalia.com>
-References: <20220112132618.2634250-1-aperez@igalia.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20220111170918.GV1477939@scaer>
+References: <20220111145527.3422053-1-aperez@igalia.com>
+ <20220111170918.GV1477939@scaer>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH RFC 2/2] package/pkg-cmake.mk: use ninja instead
- of make
+Subject: Re: [Buildroot] [PATCH RFC 1/1] package/wpewebkit: use ninja for
+ faster builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,114 +74,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6036904938905500580=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch to ninja as the build tool for the CMake package infrastructure.
-Note that the changes make packages which use [host-]cmake-package
-depend on host-ninja.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/pkg-cmake.mk | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+--===============6036904938905500580==
+Content-Type: multipart/signed; boundary="njeOdXVG7IFpc2EL"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 3b1db35fb6..65f005a914 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -51,11 +51,6 @@ endif
- 
- define inner-cmake-package
- 
--$(2)_MAKE			?= $$(MAKE)
--$(2)_INSTALL_OPTS		?= install
--$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
--$(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
--
- $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
- 
- 
-@@ -88,6 +83,7 @@ define $(2)_CONFIGURE_CMDS
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-GNinja \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
-@@ -117,6 +113,7 @@ define $(2)_CONFIGURE_CMDS
- 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-+		-GNinja \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
-@@ -154,6 +151,8 @@ endif
- # primitives to find {C,LD}FLAGS, add it to the dependency list.
- $(2)_DEPENDENCIES += host-pkgconf
- 
-+$(2)_DEPENDENCIES += host-ninja
-+
- $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
- 
- #
-@@ -163,11 +162,13 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
- ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
- endef
- else
- define $(2)_BUILD_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
- endif
-@@ -178,7 +179,8 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
- endef
- endif
- 
-@@ -188,7 +190,8 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
- endef
- endif
- 
-@@ -198,7 +201,8 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
- endef
- endif
- 
--- 
-2.34.1
+
+--njeOdXVG7IFpc2EL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgWWFubiwgYWxsLAoKT24gVHVlLCAxMSBKYW4gMjAyMiAxODowOToxOCArMDEwMCAiWWFubiBF
+LiBNT1JJTiIgPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPiBBZHJpYW4sIEFsbCwK
+PiAKPiBPbiAyMDIyLTAxLTExIDE2OjU1ICswMjAwLCBBZHJpYW4gUGVyZXogZGUgQ2FzdHJvIHNw
+YWtlIHRodXNseToKPiA+IEluc3RydWN0IENNYWtlIHRvIHVzZSB0aGUgTmluamEgZ2VuZXJhdG9y
+LCBhbmQgb3ZlcnJpZGUgYnVpbGQvaW5zdGFsbAo+ID4gY29tbWFuZHMgdG8gdXNlIE5pbmphIGlu
+c3RlYWQsIHdoaWNoIHJlc3VsdHMgaW4gZmFzdGVyIGJ1aWxkcy4gVGhlCj4gPiBob3N0LW5pbmph
+IHBhY2thZ2UgaXMgcmVxdWlyZWQgdG8gYnVpbGQgc29tZSBvZiB0aGUgZGVwZW5kZW5jaWVzIHVz
+ZWQKPiA+IGJ5IHdwZXdlYmtpdCAoZS5nLiBsaWJlcG94eSkgc28gaW4gcHJhY3RpY2UgdGhpcyBp
+cyBub3QgaW50cm9kdWNpbmcKPiA+IGEgbmV3IGhvc3QgZGVwZW5kZW5jeSB0aGF0IHdvdWxkIHNs
+b3cgZG93biB0aGUgYnVpbGQuCj4gCj4gQXMgZGlzY3Vzc2VkIG9uIElSQywgd2UgY29uY2x1ZGVk
+IHRoYXQgYSBiZXR0ZXIgb3B0aW9uIGlzIHRvIG1ha2UgdGhlCj4gY21ha2UtcGFja2FnZSBpbmZy
+YXN0cnVjdHVyZSBpbiBCdWlsZHJvb3QgbmluamEtYXdhcmUsIGFuZCB0aGF0IHlvdSB3ZXJlCj4g
+Z29pbmcgdG8gaGF2ZSBhIGxvb2sgYXQgaXQuIFRoYW5rcyEgOi0pCgpIZXJlIGdvZXM6IGh0dHBz
+Oi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8/c2VyaWVzPTI4
+MDcyMwoKPiBTbywgSSd2ZSBtYXJrZWQgdGhpcyBwYXRjaCBhcyByZWplY3RlZCBpbiBwYXRjaHdv
+cmsuCgpHb29kLCBhcyBzYWlkIG9uIElSQywgSSBhbHNvIGFncmVlIGl0IHdvcnRoIGl0IHRvIHRh
+a2UgdGhlIGxvbmcgcm91dGUgYW5kCnRyeSB0byBnZXQgYWxsIENNYWtlIHBhY2thZ2VzIChvciBt
+b3N0LCBpZiBhbGwgaXMgbm90IHBvc3NpYmxlKSB3b3JraW5nCndpdGggTmluamEgOikKCkNoZWVy
+cywK4oCUQWRyacOhbgo=
+
+--njeOdXVG7IFpc2EL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYd7XxAAKCRCRxVnb5MkS
+OxdnAJ9xxwnNC6UeIpY2Sk7burLACYyP8gCdHpcDzt6oEOsJm107LEtzGyJ1ySU=
+=0+5l
+-----END PGP SIGNATURE-----
+
+--njeOdXVG7IFpc2EL--
+
+--===============6036904938905500580==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6036904938905500580==--
