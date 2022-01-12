@@ -1,67 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 976EDC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 12:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E1BC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jan 2022 12:56:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16EA283E70;
-	Wed, 12 Jan 2022 12:55:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC562400C4;
+	Wed, 12 Jan 2022 12:56:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BhBUOZOO9-tD; Wed, 12 Jan 2022 12:55:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u7bp4bY8r6-P; Wed, 12 Jan 2022 12:56:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C7E683F89;
-	Wed, 12 Jan 2022 12:55:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B05AB1BF3EB
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 12:55:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BA7040A20;
+	Wed, 12 Jan 2022 12:56:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EF941BF3EB
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 12:56:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A657D4162B
- for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 12:55:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 484DF4023B
+ for <buildroot@lists.busybox.net>; Wed, 12 Jan 2022 12:56:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UvanKTb5JDFE for <buildroot@lists.busybox.net>;
- Wed, 12 Jan 2022 12:55:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YkCO0sLxxgn9 for <buildroot@lists.busybox.net>;
+ Wed, 12 Jan 2022 12:56:46 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from 8.mo560.mail-out.ovh.net (8.mo560.mail-out.ovh.net
- [188.165.52.147])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 264AB414D1
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 12:55:11 +0000 (UTC)
-Received: from player750.ha.ovh.net (unknown [10.109.143.189])
- by mo560.mail-out.ovh.net (Postfix) with ESMTP id 0DF9F224B6
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 12:55:09 +0000 (UTC)
-Received: from armadeus.com (areims-654-1-107-29.w92-131.abo.wanadoo.fr
- [92.131.114.29])
- (Authenticated sender: sebastien.szymanski@armadeus.com)
- by player750.ha.ovh.net (Postfix) with ESMTPSA id 242142626520B;
- Wed, 12 Jan 2022 12:55:04 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-95G0017435bd08-09c3-433f-8792-3f48d256ba18,
- DBC6078D9532D6DF8456F6FF2492EB8C90038E69)
- smtp.auth=sebastien.szymanski@armadeus.com
-X-OVh-ClientIp: 92.131.114.29
-Message-ID: <551de001-1c47-7f9a-998f-37c9088b2670@armadeus.com>
-Date: Wed, 12 Jan 2022 13:53:40 +0100
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94A1B400C4
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 12:56:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id EF8C1200002;
+ Wed, 12 Jan 2022 12:56:40 +0000 (UTC)
+Date: Wed, 12 Jan 2022 13:56:37 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220112135637.12c5edc4@windsurf>
+In-Reply-To: <20220107045531.3985241-1-james.hilliard1@gmail.com>
+References: <20220107045531.3985241-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To: Baruch Siach <baruch@tkos.co.il>
-References: <20220112094250.27022-1-sebastien.szymanski@armadeus.com>
- <20220112094250.27022-2-sebastien.szymanski@armadeus.com>
- <87bl0hw8ek.fsf@tarshish>
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-In-Reply-To: <87bl0hw8ek.fsf@tarshish>
-X-Ovh-Tracer-Id: 14964335663919262581
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrtddugddvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpefurogsrghsthhivghnpgfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpefhtdefueffvdfhtdefueeffeduvdduieehtdehiedtleefffelfedvffevjeffieenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdelvddrudefuddruddugedrvdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejhedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-Subject: Re: [Buildroot] [PATCH 2/3] package/libimxvpuapi2: new package
+Subject: Re: [Buildroot] [PATCH v3 1/3]
+ package/qt5/qt5webengine-chromium-catapult: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,110 +57,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Naumann Andreas <ANaumann@ultratronik.de>,
+ Joshua Henderson <joshua.henderson@microchip.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org,
+ =?UTF-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQmFydWNoLAoKT24gMS8xMi8yMiAxMTozMSwgQmFydWNoIFNpYWNoIHdyb3RlOgo+IEhpIFPD
-qWJhc3RpZW4sCj4gCj4gT24gV2VkLCBKYW4gMTIgMjAyMiwgU8OpYmFzdGllbiBTenltYW5za2kg
-d3JvdGU6Cj4+IFRoaXMgaXMgdmVyc2lvbiAyIG9mIGxpYmlteHZwdWFwaS4KPj4gVGhlIEFQSSBo
-YXMgYmVlbiByZXdyaXR0ZW4sIGFuZCBpcyBpbmNvbXBhdGlibGUgd2l0aCB0aGUgb2xkZXIgb25l
-Lgo+PiBDdXJyZW50bHksIHRoZSBmb2xsb3dpbmcgcGxhdGZvcm1zIGFyZSBzdXBwb3J0ZWQgKGxp
-c3RlZCB3aXRoIHRoZWlyIFZQVXMpOgo+PiAqIGkuTVg2IChDaGlwcyZNZWRpYSBDT0RBOTYwIGNv
-ZGVjKQo+PiAqIGkuTVg4bSAoSGFudHJvIEcxL0cyIGRlY29kZXIsIG5vIGVuY29kZXIpCj4+ICog
-aS5NWDhtbSAoSGFudHJvIEcxL0cyIGRlY29kZXIsIEhhbnRybyBIMSBlbmNvZGVyKQo+IAo+IElz
-IHRoZXJlIHBhdGNoIDEvMyBpbiB0aGlzIHNlcmllcz8gSSBkaWRuJ3Qgc2hvdyB1cCBpbiB0aGUg
-bGlzdC4KClllcy4gTG9va3MgbGlrZSBpdCB0b29rIG1vcmUgdGltZSB0byByZWFjaCB0aGUgbWFp
-bGluZyBsaXN0LgoKUmVnYXJkcywKCj4gCj4gVGhhbmtzLAo+IGJhcnVjaAo+IAo+Pgo+PiBTaWdu
-ZWQtb2ZmLWJ5OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1h
-ZGV1cy5jb20+Cj4+IC0tLQo+PiAgIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgMSArCj4+ICAgcGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZpZy5pbiAgICAgICAg
-ICB8IDQ4ICsrKysrKysrKysrKysrKysrKysrKysrKwo+PiAgIHBhY2thZ2UvbGliaW14dnB1YXBp
-Mi9saWJpbXh2cHVhcGkyLmhhc2ggfCAgMyArKwo+PiAgIHBhY2thZ2UvbGliaW14dnB1YXBpMi9s
-aWJpbXh2cHVhcGkyLm1rICAgfCAyOCArKysrKysrKysrKysrKwo+PiAgIDQgZmlsZXMgY2hhbmdl
-ZCwgODAgaW5zZXJ0aW9ucygrKQo+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmlt
-eHZwdWFwaTIvQ29uZmlnLmluCj4+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliaW14
-dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gKPj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2Fn
-ZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIubWsKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KPj4gaW5kZXggOGQ4NDRhYTExZS4uMDA5
-ZDIwMDZmMCAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPj4gKysrIGIvcGFja2Fn
-ZS9Db25maWcuaW4KPj4gQEAgLTE3NjMsNiArMTc2Myw3IEBAIG1lbnUgIk11bHRpbWVkaWEiCj4+
-ICAgCXNvdXJjZSAicGFja2FnZS9saWJlYm1sL0NvbmZpZy5pbiIKPj4gICAJc291cmNlICJwYWNr
-YWdlL2xpYmhkaG9tZXJ1bi9Db25maWcuaW4iCj4+ICAgCXNvdXJjZSAicGFja2FnZS9saWJpbXh2
-cHVhcGkvQ29uZmlnLmluIgo+PiArCXNvdXJjZSAicGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZp
-Zy5pbiIKPj4gICAJc291cmNlICJwYWNrYWdlL2xpYm1hdHJvc2thL0NvbmZpZy5pbiIKPj4gICAJ
-c291cmNlICJwYWNrYWdlL2xpYm1tcy9Db25maWcuaW4iCj4+ICAgCXNvdXJjZSAicGFja2FnZS9s
-aWJtcGVnMi9Db25maWcuaW4iCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZwdWFwaTIv
-Q29uZmlnLmluIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZpZy5pbgo+PiBuZXcgZmlsZSBt
-b2RlIDEwMDY0NAo+PiBpbmRleCAwMDAwMDAwMDAwLi4wOTU0NzE4Y2MwCj4+IC0tLSAvZGV2L251
-bGwKPj4gKysrIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZpZy5pbgo+PiBAQCAtMCwwICsx
-LDQ4IEBACj4+ICtjb21tZW50ICJsaWJpbXh2cHVhcGkyIG5lZWRzIGFuIGkuTVggcGxhdGZvcm0g
-d2l0aCBWUFUgc3VwcG9ydCBhbmQgbGliaW14ZG1hYnVmZmVyIgo+PiArCWRlcGVuZHMgb24gQlIy
-X2FybSB8fCBCUjJfYWFyY2g2NAo+PiArCWRlcGVuZHMgb24gKCFCUjJfUEFDS0FHRV9GUkVFU0NB
-TEVfSU1YX0hBU19WUFUgXAo+PiArCQkmJiAhQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNf
-VlBVX0hBTlRSTykgXAo+PiArCQl8fCAhQlIyX1BBQ0tBR0VfTElCSU1YRE1BQlVGRkVSCj4+ICsK
-Pj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyCj4+ICsJYm9vbCAibGliaW14dnB1
-YXBpMiIKPj4gKwlkZXBlbmRzIG9uIEJSMl9hcm0gfHwgQlIyX2FhcmNoNjQgIyBPbmx5IHJlbGV2
-YW50IGZvciBpLk1YCj4+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX0hB
-U19WUFUgfHwgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNfVlBVX0hBTlRSTwo+PiArCWRl
-cGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCSU1YRE1BQlVGRkVSCj4+ICsJc2VsZWN0IEJSMl9QQUNL
-QUdFX0lNWF9WUFUgaWYgQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNfVlBVCj4+ICsJc2Vs
-ZWN0IEJSMl9QQUNLQUdFX0lNWF9WUFVfSEFOVFJPIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9J
-TVhfSEFTX1ZQVV9IQU5UUk8KPj4gKwloZWxwCj4+ICsJICBUaGlzIGxpYnJhcnkgcHJvdmlkZXMg
-YW4gQVBJIGZvciB1c2luZyBoYXJkd2FyZSB2aWRlbyBjb2RlY3MKPj4gKwkgIG9uIGkuTVggcGxh
-dGZvcm1zLiBUaGUgQVBJIGFic3RyYWN0cyBhd2F5IHBsYXRmb3JtIHNwZWNpZmljCj4+ICsJICBk
-ZXRhaWxzIGFuZCBhbGxvd3MgZm9yIHVzaW5nIHRoZSBzYW1lIGNvZGUgd2l0aCBkaWZmZXJlbnQK
-Pj4gKwkgIGhhcmR3YXJlIHZpZGVvIGNvZGVjcyBvbiBkaWZmZXJlbnQgaS5NWCBwbGF0Zm9ybXMu
-Cj4+ICsKPj4gKwkgIFRoaXMgaXMgdmVyc2lvbiAyIG9mIGxpYmlteHZwdWFwaS4gVGhlIEFQSSBo
-YXMgYmVlbiByZXdyaXR0ZW4sCj4+ICsJICBhbmQgaXMgaW5jb21wYXRpYmxlIHdpdGggdGhlIG9s
-ZGVyIG9uZS4KPj4gKwo+PiArCSAgaHR0cHM6Ly9naXRodWIuY29tL0ZyZWVzY2FsZS9saWJpbXh2
-cHVhcGkKPj4gKwo+PiAraWYgQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMgo+PiArY2hvaWNlCj4+
-ICsJcHJvbXB0ICJQbGF0Zm9ybSIKPj4gKwo+PiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQ
-VUFQSTJfSU1YNgo+PiArCWJvb2wgImkuTVg2IChDb2RhKSIKPj4gKwlkZXBlbmRzIG9uIEJSMl9Q
-QUNLQUdFX0lNWF9WUFUKPj4gKwo+PiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJf
-SU1YOE0KPj4gKwlib29sICJpLk1YOE0gKEhhbnRybykiCj4+ICsJZGVwZW5kcyBvbiBCUjJfUEFD
-S0FHRV9JTVhfVlBVX0hBTlRSTwo+PiArCj4+ICtjb25maWcgQlIyX1BBQ0tBR0VfTElCSU1YVlBV
-QVBJMl9JTVg4TU0KPj4gKwlib29sICJpLk1YOE1NIChIYW50cm8pIgo+PiArCWRlcGVuZHMgb24g
-QlIyX1BBQ0tBR0VfSU1YX1ZQVV9IQU5UUk8KPj4gK2VuZGNob2ljZQo+PiArCj4+ICtjb25maWcg
-QlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9QTEFURk9STQo+PiArCXN0cmluZwo+PiArCWRlZmF1
-bHQgImlteDYiIGlmIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfSU1YNgo+PiArCWRlZmF1bHQg
-ImlteDhtIiBpZiBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNCj4+ICsJZGVmYXVsdCAi
-aW14OG1tIiBpZiBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTQo+PiArCj4+ICtlbmRp
-Zgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFz
-aCBiL3BhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gKPj4gbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uZDI2Y2Y4NzY3Ygo+PiAtLS0gL2Rldi9u
-dWxsCj4+ICsrKyBiL3BhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gKPj4g
-QEAgLTAsMCArMSwzIEBACj4+ICsjIGxvY2FsbHkgY29tcHV0ZWQgaGFzaAo+PiArc2hhMjU2ICA2
-MTFhNTE3NmUzN2U1MTMyZDk3ODE3ZTZkNjA0OGFjZjIyOWY2N2VmZDIyMDFlM2Y0YWFiNmY3MjBl
-N2I2N2QxICBsaWJpbXh2cHVhcGkyLTIuMi4wLnRhci5nego+PiArc2hhMjU2ICA0YmIzM2NjNGNk
-OTU2YjU2Yjc3OWI1MDFmMThjYWU0NmE5ZTI2ZjhjODUwMGNjYTg2ZWQ3NThiOGJjNWUxNzg4ICBM
-SUNFTlNFCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZwdWFwaTIvbGliaW14dnB1YXBp
-Mi5tayBiL3BhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLm1rCj4+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAuLjY5NTcxNzFhZDMKPj4gLS0tIC9kZXYv
-bnVsbAo+PiArKysgYi9wYWNrYWdlL2xpYmlteHZwdWFwaTIvbGliaW14dnB1YXBpMi5tawo+PiBA
-QCAtMCwwICsxLDI4IEBACj4+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+PiArIwo+PiArIyBs
-aWJpbXh2cHVhcGkyCj4+ICsjCj4+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+PiArCj4+ICtM
-SUJJTVhWUFVBUEkyX1ZFUlNJT04gPSAyLjIuMAo+PiArTElCSU1YVlBVQVBJMl9TSVRFID0gJChj
-YWxsIGdpdGh1YixGcmVlc2NhbGUsbGliaW14dnB1YXBpLCQoTElCSU1YVlBVQVBJMl9WRVJTSU9O
-KSkKPj4gK0xJQklNWFZQVUFQSTJfTElDRU5TRSA9IExHUEwtMi4xKwo+PiArTElCSU1YVlBVQVBJ
-Ml9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+PiArTElCSU1YVlBVQVBJMl9ERVBFTkRFTkNJRVMg
-PSBob3N0LXBrZ2NvbmYgaG9zdC1weXRob24zIGxpYmlteGRtYWJ1ZmZlcgo+PiArTElCSU1YVlBV
-QVBJMl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPj4gK0xJQklNWFZQVUFQSTJfTkVFRFNfRVhURVJO
-QUxfV0FGID0gTk8KPj4gKwo+PiAraWZlcSAoJChCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lN
-WDYpLHkpCj4+ICtMSUJJTVhWUFVBUEkyX0RFUEVOREVOQ0lFUyArPSBpbXgtdnB1Cj4+ICtlbmRp
-Zgo+PiArCj4+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfSU1YOE0pJChCUjJf
-UEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTSkseSkKPj4gK0xJQklNWFZQVUFQSTJfREVQRU5E
-RU5DSUVTICs9IGlteC12cHUtaGFudHJvCj4+ICtlbmRpZgo+PiArCj4+ICtMSUJJTVhWUFVBUEky
-X0NPTkZfT1BUUyArPSBcCj4+ICsJLS1pbXgtaGVhZGVycz0kKFNUQUdJTkdfRElSKS91c3IvaW5j
-bHVkZS8gXAo+PiArCS0tc3lzcm9vdC1wYXRoPSQoU1RBR0lOR19ESVIpIFwKPj4gKwktLWlteC1w
-bGF0Zm9ybT0kKEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfUExBVEZPUk0pCj4+ICsKPj4gKyQo
-ZXZhbCAkKHdhZi1wYWNrYWdlKSkKPiAKPiAKCgotLSAKU8OpYmFzdGllbiBTenltYW5za2ksIEFy
-bWFkZXVzIFN5c3RlbXMKU29mdHdhcmUgZW5naW5lZXIKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+Hello James,
+
+On Thu,  6 Jan 2022 21:55:29 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> This version of catapult is python3 compatible and will be used to
+> replace the python2 only version in qt5webengine-chromium.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v2 -> v3:
+>   - add kconfig entry
+> ---
+>  package/qt5/Config.in                              |  1 +
+>  .../qt5/qt5webengine-chromium-catapult/Config.in   |  4 ++++
+>  .../qt5webengine-chromium-catapult.hash            |  3 +++
+>  .../qt5webengine-chromium-catapult.mk              | 14 ++++++++++++++
+>  4 files changed, 22 insertions(+)
+>  create mode 100644 package/qt5/qt5webengine-chromium-catapult/Config.in
+>  create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash
+>  create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk
+
+I have tested this patch series (I'm replying to the v3 because that's
+the one I tested) with the following defconfig:
+
+BR2_arm=y
+BR2_arm1176jzf_s=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5WEBENGINE=y
+BR2_PACKAGE_RPI_USERLAND=y
+
+and it failed to build like this:
+
+FAILED: host/obj/crypto/crypto/nss_key_util.o
+/usr/bin/g++ -MMD -MF host/obj/crypto/crypto/nss_key_util.o.d -DCRYPTO_IMPLEMENTATION -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Ihost/gen -I../../3rdparty/chromium -I../../3rdparty/chromium/third_party/perfetto/include -Ihost/gen/third_party/perfetto/build_config -Ihost/gen/third_party/perfetto -I../../3rdparty/chromium/third_party/boringssl/src/include -I../../3rdparty/chromium/third_party/abseil-cpp -I../../3rdparty/chromium/third_party/protobuf/src -Ihost/gen/protoc_out -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -m64 -Wall -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wno-unused-local-typedefs -Wno-maybe-uninitialized -Wno-deprecated-declarations -fno-delete-null-pointe
+ r-checks -Wno-comments -Wno-packed-not-aligned -Wno-dangling-else -Wno-missing-field-initializers -Wno-unused-parameter -O2 -fno-ident -fdata-sections -ffunction-sections -fno-omit-frame-pointer -g0 -fvisibility=hidden -I/usr/include/nss -I/usr/include/nspr -std=gnu++14 -Wno-narrowing -Wno-class-memaccess -Wno-attributes -Wno-class-memaccess -Wno-subobject-linkage -Wno-invalid-offsetof -Wno-return-type -Wno-deprecated-copy -fno-exceptions -fno-rtti -fvisibility-inlines-hidden -I/home/thomas/buildroot/buildroot/output/host/include -c ../../3rdparty/chromium/crypto/nss_key_util.cc -o host/obj/crypto/crypto/nss_key_util.o
+In file included from ../../3rdparty/chromium/crypto/nss_key_util.cc:5:
+../../3rdparty/chromium/crypto/nss_key_util.h:8:10: fatal error: secoidt.h: No such file or directory
+    8 | #include <secoidt.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+[19912/23484] CXX host/obj/crypto/crypto/sha2.o
+[19913/23484] CXX host/obj/crypto/crypto/secure_hash.o
+[19914/23484] CXX host/obj/base/base/base_jumbo_7.o
+[19915/23484] CXX host/obj/crypto/crypto/signature_creator.o
+[19916/23484] CXX host/obj/base/base/base_jumbo_11.o
+[19917/23484] CXX host/obj/crypto/crypto/symmetric_key.o
+[19918/23484] CXX host/obj/crypto/crypto/signature_verifier.o
+[19919/23484] CXX host/obj/base/base/base_jumbo_4.o
+In file included from host/gen/base/base_jumbo_4.cc:6:
+./../../3rdparty/chromium/base/debug/alias.cc:11: warning: ignoring #pragma clang max_tokens_here [-Wunknown-pragmas]
+   11 | #pragma clang max_tokens_here 250
+      |
+ninja: build stopped: subcommand failed.
+make[5]: *** [Makefile.gn_run:356: run_ninja] Error 1
+make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
+make[3]: *** [Makefile:79: sub-core-make_first] Error 2
+make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+make[1]: *** [package/pkg-generic.mk:295: /home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.8/.stamp_built] Error 2
+make: *** [Makefile:84: _all] Error 2
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
