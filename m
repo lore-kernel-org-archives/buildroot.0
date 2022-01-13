@@ -4,40 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 000A3C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2745C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:07:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74FFD401CE;
-	Thu, 13 Jan 2022 21:04:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BBC7401CE;
+	Thu, 13 Jan 2022 21:07:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8d90wDkR-kEQ; Thu, 13 Jan 2022 21:04:49 +0000 (UTC)
+	with ESMTP id LAqY8U4Wg82W; Thu, 13 Jan 2022 21:07:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82F7040222;
-	Thu, 13 Jan 2022 21:04:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C8B91BF487
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:04:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AB9640222;
+	Thu, 13 Jan 2022 21:07:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BF2F1BF487
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B696831C1
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:04:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 749FC6FC74
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:07:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NO1xl-b7ic-k for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 21:04:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BB4583145
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:04:42 +0000 (UTC)
-From: Paul Cercueil <paul@crapouillou.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IhlTiPkbK_KU for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 21:07:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B41616FC73
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:07:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 5938B83591; Thu, 13 Jan 2022 21:00:55 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 13 Jan 2022 21:04:31 +0000
-Message-Id: <20220113210431.1361727-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] Config.in: add option to only use ccache
- for BR
+Date: Thu, 13 Jan 2022 22:02:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b8abbe72c281bf646373b53abc2471631b8be71
+X-Git-Newrev: fa3e7a63b93620b8227d66c6a973cd6140432cf3
+X-Patchwork-Hint: ignore
+Message-Id: <20220113210055.5938B83591@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-rtsp-server: fix
+ introspection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -49,124 +53,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>, Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add an option, disabled by default, to only use ccache for Buildroot
-packages.
+commit: https://git.buildroot.net/buildroot/commit/?id=fa3e7a63b93620b8227d66c6a973cd6140432cf3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When enabled, ccache will be used when building Buildroot itself, but
-the toolchain exported as SDK will not make use of ccache to build
-external programs, unless the "BR_USE_CCACHE" environment variable is
-set.
+Fix the following build failure with introspection:
 
-The motivation behind this change is to be able to speed up iterative
-building of a Buildroot based distribution, without forcing the users of
-the SDK to use ccache, which has the problem of clobbering the
-filesystem in a hidden directory if the cache directory is left as
-default, or trying to access a cache folder that existed on the machine
-that built the SDK but which may not exist on the machine on which it
-was later installed.
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
+Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
+error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
+If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
+Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in                      | 9 +++++++++
- linux/linux.mk                 | 4 ++++
- package/Makefile.in            | 4 ++++
- toolchain/toolchain-wrapper.c  | 5 +++++
- toolchain/toolchain-wrapper.mk | 4 ++++
- 5 files changed, 26 insertions(+)
+ ...1-gst-rtsp-server-meson.build-add-gst_dep.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index f0cd6f48ed..fec2332077 100644
---- a/Config.in
-+++ b/Config.in
-@@ -374,6 +374,15 @@ config BR2_CCACHE_USE_BASEDIR
- 	  the section "COMPILING IN DIFFERENT DIRECTORIES" in the ccache
- 	  manual for more information.
- 
-+config BR2_CCACHE_BR_ONLY
-+	bool "Only use ccache for building Buildroot packages"
-+	default n
-+	help
-+	  When enabled, ccache will be used when building Buildroot
-+	  itself, but the toolchain exported as SDK will not make use of
-+	  ccache to build external programs, unless the "BR_USE_CCACHE"
-+	  environment variable is set.
+diff --git a/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
+new file mode 100644
+index 0000000000..b63f634598
+--- /dev/null
++++ b/package/gstreamer1/gst1-rtsp-server/0001-gst-rtsp-server-meson.build-add-gst_dep.patch
+@@ -0,0 +1,41 @@
++From b6bc8fbb72d6d3914c616dc64d15b961493cb9c2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 20 Dec 2021 10:09:36 +0100
++Subject: [PATCH] gst/rtsp-server/meson.build: add gst_dep
 +
- endif
- 
- config BR2_ENABLE_DEBUG
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 61fdc0c76c..339848e29b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -69,6 +69,10 @@ LINUX_MAKE_ENV = \
- 	$(HOST_MAKE_ENV) \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
-+ifeq ($(BR2_CCACHE_BR_ONLY),y)
-+LINUX_MAKE_ENV += BR_USE_CCACHE=1
-+endif
++Add gst_dep to gst_rtsp_server_deps, in the context of buildroot, this
++will avoid the following build failure, because the correct girdir
++location will be retrieved from gstreamer-1.0.pc:
 +
- LINUX_INSTALL_IMAGES = YES
- LINUX_DEPENDENCIES = host-kmod \
- 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 508ea7c366..34556fa7b0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -263,6 +263,10 @@ export PERL5LIB=$(HOST_DIR)/lib/perl
- 
- TARGET_MAKE_ENV = PATH=$(BR_PATH)
- 
-+ifeq ($(BR2_CCACHE_BR_ONLY),y)
-+	TARGET_MAKE_ENV += BR_USE_CCACHE=1
-+endif
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/riscv32-buildroot-linux-gnu/sysroot/usr/bin/g-ir-compiler gst/rtsp-server/GstRtspServer-1.0.gir --output gst/rtsp-server/GstRtspServer-1.0.typelib --includedir=/usr/share/gir-1.0
++Could not find GIR file 'Gst-1.0.gir'; check XDG_DATA_DIRS or use --includedir
++error parsing file gst/rtsp-server/GstRtspServer-1.0.gir: Failed to parse included gir Gst-1.0
++If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help.
++Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"
 +
- TARGET_CONFIGURE_OPTS = \
- 	$(TARGET_MAKE_ENV) \
- 	AR="$(TARGET_AR)" \
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 0fb6064b1c..bf0194c8fc 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -510,6 +510,11 @@ int main(int argc, char **argv)
- 	if (getenv("BR_NO_CCACHE"))
- 		/* Skip the ccache call */
- 		exec_args++;
-+#ifdef BR_CCACHE_BR_ONLY
-+	else if (!getenv("BR_USE_CCACHE"))
-+		/* Skip the ccache call */
-+		exec_args++;
-+#endif
- #endif
- 
- 	/* Debug the wrapper to see final arguments passed to the real compiler. */
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index cbf46f15fa..cda9eaf342 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -73,6 +73,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_CCACHE_BR_ONLY),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BR_ONLY
-+endif
++Fixes:
++ - http://autobuild.buildroot.org/results/04af6b22cfa0cffb6a3109a3b32b27137ad2e0b0
 +
- ifeq ($(BR2_PIC_PIE),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR2_PIC_PIE
- endif
--- 
-2.34.1
-
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/merge_requests/217]
++---
++ gst/rtsp-server/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst/rtsp-server/meson.build b/gst/rtsp-server/meson.build
++index 24d7c39..874da14 100644
++--- a/gst/rtsp-server/meson.build
+++++ b/gst/rtsp-server/meson.build
++@@ -55,7 +55,7 @@ rtsp_server_headers = [
++ 
++ install_headers(rtsp_server_headers, subdir : 'gstreamer-1.0/gst/rtsp-server')
++ 
++-gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep]
+++gst_rtsp_server_deps = [gstrtsp_dep, gstrtp_dep, gstsdp_dep, gstnet_dep, gstapp_dep, gst_dep]
++ gst_rtsp_server = library('gstrtspserver-@0@'.format(api_version),
++   rtsp_server_sources,
++   include_directories : rtspserver_incs,
++-- 
++2.33.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
