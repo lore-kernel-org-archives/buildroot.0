@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32D93C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 19:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE37C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 19:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC0474164E;
-	Thu, 13 Jan 2022 19:44:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C02736FC61;
+	Thu, 13 Jan 2022 19:45:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y6AhPcmmMHeu; Thu, 13 Jan 2022 19:44:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tj14e-F-Xygf; Thu, 13 Jan 2022 19:45:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3152D41662;
-	Thu, 13 Jan 2022 19:44:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED4CC1BF5B3
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 19:43:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2112460782;
+	Thu, 13 Jan 2022 19:44:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 19C011BF5B3
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 19:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA7674011F
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 19:43:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0860A6FC5F
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 19:44:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cuhlsD55srXb for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 19:43:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nvtq_XuYoXT1 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 19:44:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9933400E4
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 19:43:54 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 07DC66059D
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 19:44:54 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 954D8200002;
- Thu, 13 Jan 2022 19:43:52 +0000 (UTC)
-Date: Thu, 13 Jan 2022 20:43:51 +0100
+ by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id E2B8940026;
+ Thu, 13 Jan 2022 19:44:51 +0000 (UTC)
+Date: Thu, 13 Jan 2022 20:44:51 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220113204351.2d39b41b@windsurf>
-In-Reply-To: <20220112212847.3166081-1-fontaine.fabrice@gmail.com>
-References: <20220112212847.3166081-1-fontaine.fabrice@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220113204451.23849f67@windsurf>
+In-Reply-To: <20220112203939.606775-1-james.hilliard1@gmail.com>
+References: <20220112203939.606775-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] package/python-h2: bump to version 4.1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5base: disable broken
+ qmake sysrootify
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,29 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 12 Jan 2022 22:28:45 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello James,
 
-> - Update site in Config.in
-> - Reorder select
-> - python 2.7 support has been dropped since version 4.0.0
+On Wed, 12 Jan 2022 13:39:39 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> Currently the qmake gcc sysrootify path logic causes issues with
+> per-package directories, disable automatic gcc sysroot for qt5base
+> install and override all qt.conf paths manually to point to their
+> correct locations.
 > 
-> https://github.com/python-hyper/h2/blob/v4.1.0/CHANGELOG.rst
+> Redirect HostData to STAGING_DIR as mkspecs need to be available there
+> instead of the HOST_DIR for cross compilation to work.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-h2/Config.in      | 5 +++--
->  package/python-h2/python-h2.hash | 6 +++---
->  package/python-h2/python-h2.mk   | 4 ++--
->  3 files changed, 8 insertions(+), 7 deletions(-)
+>  package/qt5/qt5base/qt.conf.in | 18 +++++++++++++++---
+>  package/qt5/qt5base/qt5base.mk |  2 ++
+>  2 files changed, 17 insertions(+), 3 deletions(-)
 
-Series applied to master, thanks!
+Do you have a bit more details on what this changing, i.e how this is
+making things better?
+
+I have no doubt that it can make things better, but it would be useful
+in the commit log to have extra details on what specific
+details/aspects it is fixing/improving.
+
+Thanks a lot!
 
 Thomas
 -- 
