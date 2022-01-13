@@ -4,48 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 804DAC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 12:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B2E2C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 15:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED24441685;
-	Thu, 13 Jan 2022 12:18:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B16A0402D1;
+	Thu, 13 Jan 2022 15:49:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5B_QAejndiZ2; Thu, 13 Jan 2022 12:18:56 +0000 (UTC)
+	with ESMTP id 1jJ2hqJ7irnv; Thu, 13 Jan 2022 15:49:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FDDF41680;
-	Thu, 13 Jan 2022 12:18:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 531654164E;
+	Thu, 13 Jan 2022 15:49:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5255C1BF57B
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 12:18:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5EEC91BF3FD
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 15:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FD7784BD3
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 12:18:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DB5884CBC
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 15:49:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NJkr3RUi5yWq for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 12:18:52 +0000 (UTC)
+ with ESMTP id Yw6S2zE3XJ8Y for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 15:49:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mail.steinkuehler.net (unknown [70.184.225.181])
- by smtp1.osuosl.org (Postfix) with ESMTP id 436E484B2F
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 12:18:52 +0000 (UTC)
-Received: (qmail 6384 invoked from network); 13 Jan 2022 06:18:51 -0600
-Received: from 152.ks.newtek.dhcp (HELO ?10.34.1.152?) (charles@10.34.1.152)
- by mail.steinkuehler.net with SMTP; 13 Jan 2022 06:18:51 -0600
-Message-ID: <2fc839d4-9c06-0197-dc15-58893d78afe9@steinkuehler.net>
-Date: Thu, 13 Jan 2022 06:18:48 -0600
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4330A84CD1
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 15:49:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4934120000A;
+ Thu, 13 Jan 2022 15:49:07 +0000 (UTC)
+Date: Thu, 13 Jan 2022 16:49:06 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220113164906.5db00b20@windsurf>
+In-Reply-To: <53b29654-5d59-26e6-4635-a1ecb87babe0@mind.be>
+References: <20220112132618.2634250-1-aperez@igalia.com>
+ <20220112160512.GC6032@falbala.internal.home.lespocky.de>
+ <20220112184729.GB23006@momiji>
+ <53b29654-5d59-26e6-4635-a1ecb87babe0@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: "Karicheri, Murali" <Murali.Karicheri@sandc.com>
-References: <DM5PR02MB3291BEB37006D28524E582C38A519@DM5PR02MB3291.namprd02.prod.outlook.com>
-From: Charles Steinkuehler <charles@steinkuehler.net>
-In-Reply-To: <DM5PR02MB3291BEB37006D28524E582C38A519@DM5PR02MB3291.namprd02.prod.outlook.com>
-Subject: Re: [Buildroot] creating packages for opkg for buildroot based
- embedded platform software
+Subject: Re: [Buildroot] [PATCH RFC 0/2] Use Ninja as build tool for
+ CMake-based packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +60,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>, Alexander Dahl <post@lespocky.de>,
+ Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 1/11/2022 11:37 AM, Karicheri, Murali wrote:
-> Hi Baruch,
- > > <snip>
-> 
-> I fully appreciate the intentions of buildroot to keep it simple. I
-> had already reviewed the FAQ you had pointed out.  What I am looking
-> for is something outside buildroot. Typically, embedded systems that
-> I am working with have firmware update mechanism in place. System
-> doesn't modify the active rootfs but update an alternate set of
-> partitions and switch to that once update is successful. So, we could
-> potentially generate two rootfs contents using buildroot. One using
-> say version 2021.02.02 and another with 2021.02.06 for example. We
-> are using ARM tool chain for our build and assume we will keep it
-> same for incremental updates. Understand that we might have to change
-> the tool chain as well since there could be vulnerability fixes to
-> tool chain. So, wondering if we could do a diff of both rootfs
-> contents and create an ipk for the diff and update the alternate
-> media for this purpose. Also, we will do extensive testing of our
-> product software. So, this will be QA tested before pushing to field.
- >
-> Is there anything work done for this type of use cases?
+On Wed, 12 Jan 2022 19:55:03 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-As you have discovered, buildroot is focused on building a complete root 
-filesystem.  There are many tools available to manage updates and handle 
-firmware upgrades.  Buildroot can build these tools for you (eg: RAUC, 
-SWupdate, etc), but configuration of the embedded system, the update 
-process, and generating the update packages is up to you.  There is 
-almost infinite flexibility, which means you can probably do exactly 
-what you want, but that can also make it hard to get something running.
+>   There's one disadvantage to Ninja in Buildroot context: until [1] is fixed, it 
+> doesn't collaborate well with top-level parallel build. This means that if you 
+> run with a toplevel JLEVEL of e.g. 24, you can easil end up with 40-100 compiles 
+> running in parallel. The problem already exists for meson packages, but these 
+> are sufficiently rare that they don't pose a problem in practice. I don't know 
+> if it's going to become a problem if cmake packages are added to the mix.
 
-I needed a mechanism to do "A B" firmware updates and recently put 
-together a Buildroot + RAUC example for the Raspberry Pi that generates 
-a working basic system that can be updated:
+meson-based packages are no longer rare: we now have 116 packages using
+the meson-package infrastructure, including very high profile packages
+such as systemd, mesa3d, libglib2, and more.
 
-https://github.com/cdsteinkuehler/br2rauc
+It is still higher than the 328 cmake-based package we have of course,
+but I wouldn't say that meson is "sufficiently rare" :-)
 
-This does full rootfs updates and allows for atomic boot loader updates, 
-using the post-image.sh script to build the RAUC bundles needed for 
-performing an update along with the root filesystem image generated by 
-Buildroot.  If you want to do partial updates, you can setup RAUC 
-differently, perhaps with an overlay partition to hold your point 
-release updates.
+Annoying that this problem hasn't been resolved in upstream ninja :-/
 
+Thomas
 -- 
-Charles Steinkuehler
-charles@steinkuehler.net
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
