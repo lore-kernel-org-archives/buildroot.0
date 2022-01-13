@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE545C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E46E9C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 795F8415C0;
-	Thu, 13 Jan 2022 21:40:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 949C4415E6;
+	Thu, 13 Jan 2022 21:40:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s6gSsN9mNPxr; Thu, 13 Jan 2022 21:40:23 +0000 (UTC)
+	with ESMTP id 3DBq_fBFOTGU; Thu, 13 Jan 2022 21:40:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA950415BD;
-	Thu, 13 Jan 2022 21:40:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A435841634;
+	Thu, 13 Jan 2022 21:40:34 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 784341BF487
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:40:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 89A4B1BF487
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 665CB84CEB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FA8284CDE
  for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:40:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7TyPAn1pKmxz for <buildroot@lists.busybox.net>;
+ with ESMTP id MV5xzVuc7iMY for <buildroot@lists.busybox.net>;
  Thu, 13 Jan 2022 21:40:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A372484CDE
+ by smtp1.osuosl.org (Postfix) with ESMTP id A56AC84CE2
  for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:40:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3AB1B828C8; Thu, 13 Jan 2022 21:33:56 +0000 (UTC)
+ id 427FB82753; Thu, 13 Jan 2022 21:33:56 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Thu, 13 Jan 2022 22:12:03 +0100
+Date: Thu, 13 Jan 2022 22:23:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e68ec6de08f0ae9488a4df62ea15eb7e2bdf7b8
-X-Git-Newrev: ddba0ef6b1e8e407c44bb1036a75aecaeb89da92
+X-Git-Oldrev: ddba0ef6b1e8e407c44bb1036a75aecaeb89da92
+X-Git-Newrev: 2da2f359dba50aafef1202edda34374d99b77a14
 X-Patchwork-Hint: ignore
-Message-Id: <20220113213356.3AB1B828C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pahole: new host package
+Message-Id: <20220113213356.427FB82753@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: add
+ BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,100 +59,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddba0ef6b1e8e407c44bb1036a75aecaeb89da92
+commit: https://git.buildroot.net/buildroot/commit/?id=2da2f359dba50aafef1202edda34374d99b77a14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pahole is a tool used to show data structure embedded in debugging
-information formats like DWARF.
-
-It is notably needed by the Linux kernel to generate BPF Type
-Format (BTF) information used by Compile Once - Run Everywhere (CO-RE)
-BPF tools.
-
-To be built, pahole needs __LIB to be set to lib at stated in its
-README.
+CONFIG_DEBUG_BTF_INFO relies on pahole, so kernel DWARF are converted to BTF.
+If CONFIG_DEBUG_BTF_INFO is set and BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE not,
+an error message is shown and .config is not written.
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                    |  3 +++
- package/Config.in.host        |  1 +
- package/pahole/Config.in.host |  6 ++++++
- package/pahole/pahole.hash    |  3 +++
- package/pahole/pahole.mk      | 18 ++++++++++++++++++
- 5 files changed, 31 insertions(+)
+ linux/Config.in | 12 ++++++++++++
+ linux/linux.mk  | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a17e828aa5..a91e2dfcde 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -971,6 +971,9 @@ N:	Floris Bos <bos@je-eigen-domein.nl>
- F:	package/ipmitool/
- F:	package/odhcploc/
+diff --git a/linux/Config.in b/linux/Config.in
+index 891e2cdcb6..582f37ba7c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -470,6 +470,18 @@ config BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+ 	  CONFIG_UNWINDER_ORC=y, please install libelf-dev,
+ 	  libelf-devel or elfutils-libelf-devel".
  
-+N:	Francis Laniel <flaniel@linux.microsoft.com>
-+F:	package/pahole/
-+
- N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c390ae3e7d..20034f6ee0 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -61,6 +61,7 @@ menu "Host utilities"
- 	source "package/omap-u-boot-utils/Config.in.host"
- 	source "package/openocd/Config.in.host"
- 	source "package/opkg-utils/Config.in.host"
-+	source "package/pahole/Config.in.host"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pigz/Config.in.host"
-diff --git a/package/pahole/Config.in.host b/package/pahole/Config.in.host
-new file mode 100644
-index 0000000000..e427629632
---- /dev/null
-+++ b/package/pahole/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PAHOLE
-+	bool "host pahole"
++config BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE
++	bool "Needs host pahole"
 +	help
-+	  Pahole and other DWARF utils.
++	  Some Linux kernel configuration options (such as
++	  CONFIG_DEBUG_INFO_BTF) require building a host program
++	  called pahole. Enabling this option will ensure host-pahole
++	  gets built before the Linux kernel.
 +
-+	  https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
-new file mode 100644
-index 0000000000..420db15e75
---- /dev/null
-+++ b/package/pahole/pahole.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  cde85af68b368f50a913be387f94f6b43612a04af6c92387b4dcabb712a668fe  pahole-v1.23-br1.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
-new file mode 100644
-index 0000000000..1ad937062d
---- /dev/null
-+++ b/package/pahole/pahole.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# pahole
-+#
-+################################################################################
++	  Enable this option if you get a Linux kernel build failure
++	  such as "BTF: .tmp_vmlinux.btf: pahole (pahole) is not
++	  available".
 +
-+PAHOLE_VERSION = v1.23
-+PAHOLE_SITE = git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-+PAHOLE_SITE_METHOD = git
-+# pahole contains git submodule and relies on them to be built.
-+PAHOLE_GIT_SUBMODULES = YES
-+HOST_PAHOLE_DEPENDENCIES = host-elfutils
-+# Defining __LIB is needed to build pahole.
-+HOST_PAHOLE_CONF_OPTS = -D__LIB=lib
-+PAHOLE_LICENSE = GPL-2.0
-+PAHOLE_LICENSE_FILES = COPYING
+ # Linux extensions
+ source "linux/Config.ext.in"
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 61fdc0c76c..dd2eebd446 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -114,6 +114,17 @@ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
+ LINUX_DEPENDENCIES += host-elfutils host-pkgconf
+ endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
++LINUX_DEPENDENCIES += host-pahole
++else
++define LINUX_FIXUP_CONFIG_PAHOLE_CHECK
++	if grep -q "^CONFIG_DEBUG_INFO_BTF=y" $(KCONFIG_DOT_CONFIG); then \
++		echo "To use CONFIG_DEBUG_INFO_BTF, enable host-pahole (BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE)" 1>&2; \
++		exit 1; \
++	fi
++endef
++endif
 +
-+$(eval $(host-cmake-package))
+ # If host-uboot-tools is selected by the user, assume it is needed to
+ # create a custom image
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS),y)
+@@ -324,6 +335,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_DISABLE_OPT,$(opt))
+ 	)
+ 	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
++	$(LINUX_FIXUP_CONFIG_PAHOLE_CHECK)
+ 	$(if $(BR2_arm)$(BR2_armeb),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
+ 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
