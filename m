@@ -4,47 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C731BC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:51:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E41AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 814E384CF4;
-	Thu, 13 Jan 2022 21:51:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD0C080C7B;
+	Thu, 13 Jan 2022 21:56:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WsYtNEIsIHDA; Thu, 13 Jan 2022 21:51:02 +0000 (UTC)
+	with ESMTP id q2_LP-wLn6XN; Thu, 13 Jan 2022 21:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D254284BF2;
-	Thu, 13 Jan 2022 21:51:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 992641BF616
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:51:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3777B80C13;
+	Thu, 13 Jan 2022 21:56:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E9171BF616
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9471084BF2
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:51:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DEAC40A6D
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:56:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e9ywwDgmEQXD for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 21:50:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A6F784BEB
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:50:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay11.mail.gandi.net (Postfix) with ESMTPSA id 95B23100003;
- Thu, 13 Jan 2022 21:50:57 +0000 (UTC)
-Date: Thu, 13 Jan 2022 22:50:56 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220113225056.52fdda1d@windsurf>
-In-Reply-To: <20210929220027.10505-1-romain.naour@gmail.com>
-References: <20210929220027.10505-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BdHGcoizHdqt for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 21:56:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC5704010C
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:56:48 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id s30so24308730lfo.7
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 13:56:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:to:cc:references
+ :from:in-reply-to:content-transfer-encoding;
+ bh=dG4kP8bO6sU1P0Wu2PjnuDM76hUqCWN9UETvZlSALD0=;
+ b=FkzZK2uD3LDwjYwkQ340qpCTEtXrX2y3UL2bdTmhisfzZ0cYeTeT53ZbHLQn8XfB6i
+ 5pMg75pvxQ+BJ+MA5xbgyy1KSB9d9dVCq0yBCI2+5rM1d+AGskPDvWbFU+/Iuyi0IYsM
+ PGz3zw7Jugy2pYC0Utdve98S8q4/1l2loI0PqxXh4BjSW+E7Mz80eOdffSbeI89vRQr0
+ d6p1gmbIuoM9KAEECCgebUQZhRQL087lrVxeBshqZkrgq1d2tz39ZuGy/DpAnymYYpWh
+ cS/g12LSHV2xC83pqcn6tskNF/BnxYBLN/nfFe5p7ZMly9dEmD3uHUMAL7XtCsqxARED
+ dGjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :to:cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=dG4kP8bO6sU1P0Wu2PjnuDM76hUqCWN9UETvZlSALD0=;
+ b=Knenk1Qo/rNpvidCkjINSz+hM9motk15N/HKirsr7Qt2kO+AiQdhxbvRpk0xATK9+V
+ d5KhL/j52MEAjP9ioYAwLDtaRwz961Bwc+U8wLjTuXfrw8XN6I2mebb/LQdfRHP3AMSP
+ O/T/GqbjA+f99X32o5kSaCkub4oUi0R/Uia1Ps576EcFFQyMp3uy4OUQgR8y3m+i7/B2
+ jDtElvAbWaBW+EoiXVBTEpr2mURSt6M2h81Z5+xS5H6xWjPYFlN5o5ZZ6oV23oKzOgT4
+ 3SNjFSN/fAvtVU9LF3Whp3kGHX3EceyTVMHkbD4x4L0qZSJh96bf5tRRlCem8gHywhdS
+ ENIQ==
+X-Gm-Message-State: AOAM530ck5iiROWBN2vY6mQliMDCGwnOfG77YgxyE9D/6LIil8OMpT9y
+ IbGUM/r2akyAo4UffLyrzHg7IuTdu1c=
+X-Google-Smtp-Source: ABdhPJxZ7UpQ8sdAX9/E7hw9I/QodnaARVfOVRqPzpdVCu7XhSGasYlUmEQKyMA3J7oZdovhvxxvcQ==
+X-Received: by 2002:ac2:532f:: with SMTP id f15mr4673392lfh.644.1642111006645; 
+ Thu, 13 Jan 2022 13:56:46 -0800 (PST)
+Received: from [192.168.26.149]
+ (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+ by smtp.googlemail.com with ESMTPSA id g41sm401015lfv.47.2022.01.13.13.56.45
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 13 Jan 2022 13:56:46 -0800 (PST)
+Message-ID: <f1d00786-1b7c-5385-fcca-8560048eea02@gmail.com>
+Date: Thu, 13 Jan 2022 22:56:45 +0100
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH RFC] package/binutils: build deterministic
- archives by default
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20211021085540.18764-1-zajec5@gmail.com>
+ <20220113224252.0a46e30b@windsurf>
+From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220113224252.0a46e30b@windsurf>
+Subject: Re: [Buildroot] [PATCH] board/broadcom: add support for bcm47xx
+ platform devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +90,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+ buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Romain,
+On 13.01.2022 22:42, Thomas Petazzoni wrote:
+> Thanks for this contribution, but it doesn't seem to be really useful
+> as it is: the root filesystem generated as a tarball is not even used,
+> and there is no readme.txt. We prefer to have directly useful defconfig
+> files.
 
-On Thu, 30 Sep 2021 00:00:27 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Thank you for your feedback, I'm still "learning" buildroot.
 
-> The option --enable-deterministic-archives that build deterministic
-> archives is supported by binutils since binutils 2.23 [1][2].
-> 
-> See "Static libraries" chapter [3].
-> https://reproducible-builds.org/docs/archives/
-> 
-> Enable this option for target and host variant.
-> 
-> It was added to Yocto Morty (2.2) in 2016 [4].
-> 
-> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=2e30cb575a1d2b1eb8f776356ed59b0722a943d1
-> [2] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=9cb80f72d8b8b2f59562692d9385cd5a533e9b3f
-> [3] https://reproducible-builds.org/docs/archives
-> [4] https://github.com/openembedded/openembedded-core/commit/df0d525c02780b5a0bd7a177a249c55f41797476
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+I aim to upstream 3 Broadcom platforms support and I already learnt
+about kernel + rootfs + readme.txt in another patch review. I didn't
+send V2 for bcm47xx yet, I plan to get back to working on it once I
+(hopefully) get:
+[PATCH V2] board/broadcom: add support for BCM4908 platform devices
 
-The drawback of this approach is that it doesn't address the problem
-for external toolchains, which have not necessarily been built with
---enable-deterministic-archives.
-
-We could either pass -D in TARGET_AR (but of course that is subject to
-packages obeying to that), or we could extend the toolchain wrapper to
-also cover the ar tool ?
-
-For this to be worth the effort, it would be useful to get some actual
-case where this is causing a problem. Indeed, in Buildroot, we don't
-really care about the reproducibility of .a archives themselves. So
-unless their lack of reproducibility trickles down to the
-statically-linked executables that result from using those .a, I'm not
-sure this is really worth it.
-
-I'll mark the patch as Changes Requested, but feel free to disagree and
-put it back in the New state.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+accepted (V2 or another one). I want to learn on 1 platform and then
+get other ones. So I'll work on bcm47xx V2 a bit later.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
