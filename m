@@ -1,47 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA61C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 20:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37C2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 20:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7729141667;
-	Thu, 13 Jan 2022 20:39:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75F7440196;
+	Thu, 13 Jan 2022 20:39:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AiQwrFciWSXK; Thu, 13 Jan 2022 20:39:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x52Dx2546x5I; Thu, 13 Jan 2022 20:39:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFBA44165A;
-	Thu, 13 Jan 2022 20:39:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 975B51BF3ED
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:38:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84D2340125;
+	Thu, 13 Jan 2022 20:39:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 563B71BF3ED
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FDEE41696
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:38:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 524FF6FB7D
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:39:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0xK6x1SNDdI1 for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 20:38:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9C77415FB
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 20:38:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 532D383582; Thu, 13 Jan 2022 20:32:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ICGeNzmupTr5 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 20:38:59 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5794760D9C
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 20:38:59 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 9EA4F60002;
+ Thu, 13 Jan 2022 20:38:56 +0000 (UTC)
+Date: Thu, 13 Jan 2022 21:38:55 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Thu, 13 Jan 2022 21:38:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a607efc6d3606e862babfbd17ca8e39398f7c2a5
-X-Git-Newrev: e247f605e82fdfca6fbee6365baec982d1468071
-X-Patchwork-Hint: ignore
-Message-Id: <20220113203225.532D383582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webkit: use backported ICU
- patch from upstream
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220113213855.24e00974@windsurf>
+In-Reply-To: <20220104205213.1367539-1-james.hilliard1@gmail.com>
+References: <20220104205213.1367539-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5webkit: use backported
+ ICU patch from upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,77 +57,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ =?UTF-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e247f605e82fdfca6fbee6365baec982d1468071
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  4 Jan 2022 13:52:13 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Use backported upstream ICU fix instead of adapted downstream patch.
+> Use backported upstream ICU fix instead of adapted downstream patch.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  ...ion-ICU-68.1-no-longer-exposes-FALS.patch} | 35 +++++++++++++++----
+>  1 file changed, 28 insertions(+), 7 deletions(-)
+>  rename package/qt5/qt5webkit/{0001-Fix-ICU-related-compile-failures-from-capital-bool-d.patch => 0001-WinCairo-PlayStation-ICU-68.1-no-longer-exposes-FALS.patch} (86%)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...yStation-ICU-68.1-no-longer-exposes-FALS.patch} | 35 +++++++++++++++++-----
- 1 file changed, 28 insertions(+), 7 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/qt5/qt5webkit/0001-Fix-ICU-related-compile-failures-from-capital-bool-d.patch b/package/qt5/qt5webkit/0001-WinCairo-PlayStation-ICU-68.1-no-longer-exposes-FALS.patch
-similarity index 86%
-rename from package/qt5/qt5webkit/0001-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
-rename to package/qt5/qt5webkit/0001-WinCairo-PlayStation-ICU-68.1-no-longer-exposes-FALS.patch
-index 11d0b7b248..0c3e8b3586 100644
---- a/package/qt5/qt5webkit/0001-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
-+++ b/package/qt5/qt5webkit/0001-WinCairo-PlayStation-ICU-68.1-no-longer-exposes-FALS.patch
-@@ -1,18 +1,39 @@
--From bf936a2bc8120f693f1effd3d9b130cddc6c4185 Mon Sep 17 00:00:00 2001
--From: Henri Roosen <henri.roosen@ginzinger.com>
--Date: Thu, 18 Mar 2021 11:53:57 +0100
--Subject: [PATCH] Fix ICU related compile failures from capital bool defines
-+From 736e1d804d1efa2077c4f1fe0b9084927d82e249 Mon Sep 17 00:00:00 2001
-+From: "stephan.szabo@sony.com"
-+ <stephan.szabo@sony.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Tue, 3 Nov 2020 20:06:15 +0000
-+Subject: [PATCH] [WinCairo/PlayStation] ICU 68.1 no longer exposes FALSE and
-+ TRUE macros by default https://bugs.webkit.org/show_bug.cgi?id=218522
- 
--See ICU-21267
-+Reviewed by Don Olmstead.
- 
--Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
-+Source/WebCore:
-+
-+* platform/text/TextCodecICU.cpp: Replace use of TRUE with true
-+
-+Source/WebKit:
-+
-+* UIProcess/CoordinatedGraphics/DrawingAreaProxyCoordinatedGraphics.cpp: Replace FALSE with false
-+
-+Source/WTF:
-+
-+Replace uses of FALSE and TRUE with false and true.
-+
-+* wtf/text/icu/UTextProvider.h:
-+* wtf/text/icu/UTextProviderLatin1.cpp:
-+* wtf/text/icu/UTextProviderUTF16.cpp:
-+
-+Change-Id: I876cf2b10b8c858c3d265113c062d159749a2f3e
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk@269325 268f45cc-cd09-0410-ab3c-d52691b4dbfc
- Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1@gmail.com: backport from upstream commit
-+736e1d804d1efa2077c4f1fe0b9084927d82e249]
- ---
-  Source/WebCore/platform/text/TextCodecICU.cpp      |  2 +-
-  Source/WebCore/platform/text/icu/UTextProvider.h   |  8 ++++----
-  .../platform/text/icu/UTextProviderLatin1.cpp      | 14 +++++++-------
-  .../platform/text/icu/UTextProviderUTF16.cpp       |  4 ++--
-- 4 files changed, 14 insertions(+), 14 deletions(-)
-+ 7 files changed, 45 insertions(+), 14 deletions(-)
- 
- diff --git a/Source/WebCore/platform/text/TextCodecICU.cpp b/Source/WebCore/platform/text/TextCodecICU.cpp
- index dd6ff0675bb1..e0f4bd718828 100644
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
