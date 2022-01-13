@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C76AC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 20:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA485C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 21:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 250A2401CE;
-	Thu, 13 Jan 2022 20:51:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 463EE84CD2;
+	Thu, 13 Jan 2022 21:01:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iPKLk6wQk2sZ; Thu, 13 Jan 2022 20:51:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9psZXpH1SHLA; Thu, 13 Jan 2022 21:01:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2FE0D40196;
-	Thu, 13 Jan 2022 20:51:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CAA6B1BF3ED
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:51:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F9E884CCF;
+	Thu, 13 Jan 2022 21:01:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0075F1BF3ED
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:01:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B751B40196
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 20:51:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA8B56FB7E
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 21:01:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RonJgO8yK0kW for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 20:51:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VAIuF5IOc2qj for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 21:01:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 578314010C
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 20:51:07 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C4846FB7D
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 21:01:00 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5E2A460002;
- Thu, 13 Jan 2022 20:51:05 +0000 (UTC)
-Date: Thu, 13 Jan 2022 21:51:04 +0100
+ by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 42C56C0003;
+ Thu, 13 Jan 2022 21:00:58 +0000 (UTC)
+Date: Thu, 13 Jan 2022 22:00:57 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20220113215104.02a734a1@windsurf>
-In-Reply-To: <20220110200151.830192-1-ju.o@free.fr>
-References: <20220110200151.830192-1-ju.o@free.fr>
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Message-ID: <20220113220057.1db30808@windsurf>
+In-Reply-To: <20220112184821.916646-1-heiko.thiery@gmail.com>
+References: <20220112184821.916646-1-heiko.thiery@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-gnupg: new package
+Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,41 +57,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+Hello,
 
-On Mon, 10 Jan 2022 21:01:51 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+On Wed, 12 Jan 2022 19:48:22 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
->  DEVELOPERS                             |  1 +
->  package/Config.in                      |  1 +
->  package/python-gnupg/Config.in         | 15 +++++++++++++++
->  package/python-gnupg/python-gnupg.hash |  5 +++++
->  package/python-gnupg/python-gnupg.mk   | 13 +++++++++++++
->  5 files changed, 35 insertions(+)
+> diff --git a/board/kontron/bl-imx8mm/boot.cmd b/board/kontron/bl-imx8mm/boot.cmd
+> new file mode 100644
+> index 0000000000..7ce3198dbc
+> --- /dev/null
+> +++ b/board/kontron/bl-imx8mm/boot.cmd
+> @@ -0,0 +1,8 @@
+> +echo "Root File Sytem on MMC${devnum}"
+> +setenv rootfs /dev/mmcblk${devnum}p1
+> +setenv bootargs root=${rootfs} rootwait rw ${extrabootargs}
+> +
+> +load ${devtype} ${devnum} ${kernel_addr_r} boot/Image
+> +load ${devtype} ${devnum} ${fdt_addr_r} boot/imx8mm-kontron-n801x-s.dtb
+> +
+> +booti ${kernel_addr_r} - ${fdt_addr_r}
 
-Thanks for the patch, which I have applied, with a change (see below).
-However, more importantly, could you write and contribute a test case
-for python-gnupg in our runtime test infrastructure ? See
-https://buildroot.org/downloads/manual/manual.html#_using_the_runtime_tests_framework
-for some amount of details.
+Have you considered using extlinux.conf ? This is generally much easier
+than a boot script, and removes the need to generate the boot script.
 
-> +config BR2_PACKAGE_PYTHON_GNUPG
-> +	bool "python-gnupg"
-> +	select BR2_PACKAGE_GNUPG2 if !BR2_PACKAGE_GNUPG # runtime
 
-This generates a circular dependency reported by kconfig, because
-another package does exactly the opposite. So I have inverted the logic
-here:
+> diff --git a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
+> new file mode 100644
+> index 0000000000..ed088dd0f8
+> --- /dev/null
+> +++ b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
+> @@ -0,0 +1,28 @@
+> +From 95a311af81cd47c44d3d6e3f717f06a06d8f3dfd Mon Sep 17 00:00:00 2001
+> +From: Heiko Thiery <heiko.thiery@gmail.com>
+> +Date: Mon, 10 Jan 2022 14:13:02 +0100
+> +Subject: [PATCH 1/2] imx: imx8mm: imx8mm-kontron-n801x-s: convert options to Kconfig
 
-select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2 # runtime
+I suppose the U-Boot patches are on their way upstream?
 
-Best regards,
+
+> diff --git a/board/kontron/bl-imx8mm/post-image.sh b/board/kontron/bl-imx8mm/post-image.sh
+> new file mode 100755
+> index 0000000000..564211c829
+> --- /dev/null
+> +++ b/board/kontron/bl-imx8mm/post-image.sh
+> @@ -0,0 +1,3 @@
+> +#!/bin/sh
+> +
+> +support/scripts/genimage.sh -c $(dirname $0)/genimage.cfg
+
+Could you call support/scripts/genimage.sh directly as the post-image
+script, using the BR2_ROOTFS_POST_SCRIPT_ARGS to pass the -c ...
+argument? We already do that in many defconfigs.
+
+
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-kontron-n801x-s"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+> +
+> +BR2_PACKAGE_FREESCALE_IMX=y
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+> +BR2_PACKAGE_FIRMWARE_IMX=y
+> +
+> +# Filesystem / image
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +
+> +# Bootloader
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880000"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
+> +BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
+> +BR2_TARGET_UBOOT_SPL=y
+> +
+> +# Required host tools to create the SD/eMMC image
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+
+You need FIT support ?
+
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/kontron/bl-imx8mm/boot.cmd"
+
+These would no longer be needed if switching to extlinux.conf.
+
+Thanks a lot!
 
 Thomas
 -- 
