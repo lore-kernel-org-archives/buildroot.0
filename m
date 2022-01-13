@@ -4,74 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 541F1C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 17:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47157C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 17:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA791400D9;
-	Thu, 13 Jan 2022 17:02:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B236940A5B;
+	Thu, 13 Jan 2022 17:38:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6HepUy65Z87E; Thu, 13 Jan 2022 17:02:48 +0000 (UTC)
+	with ESMTP id X7JoGv4YzX9h; Thu, 13 Jan 2022 17:38:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF18D400F2;
-	Thu, 13 Jan 2022 17:02:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4709D1BF4DB
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 17:02:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7A0040146;
+	Thu, 13 Jan 2022 17:38:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E4F01BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 17:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 337E241643
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 17:02:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E79683E7A
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 17:38:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oBp3n8WOr3vE for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 17:02:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com
- [IPv6:2607:f8b0:4864:20::735])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2930841626
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 17:02:45 +0000 (UTC)
-Received: by mail-qk1-x735.google.com with SMTP id t24so7780157qkg.11
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 09:02:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=oTWyPjaa9aZGM2SnljeCNHLkI4gqTIIoMc0H/AzJQX0=;
- b=RS4pOVPkGvnLjFc5aJ6eW84gBEaIx7KK3wwkL9vUPW4H6ES7U2DxTQDAf7cSsuFFTG
- gH9S9j7e7yC/+POrFiDdJ6NtL/rwVPmw9PjHQcGzsAYpgHp/k0BaEJs3O3Bz0BCdQ/J8
- FmkK5JTXJ9sNE6M8hZRYD0fsSt790xJ5Qn3omlsQgKfU2aasIXogriTx3Jw7A8hrlWrX
- J5WLi6SSUU16txE6ocGxaMPBJF+NTBI4dqUvXMQkTa2IE8KK4XpR2nQ9cX3McfmEqNyA
- seQCIDXvSF3AJI0byeJWEI9Jn37J5Lggp1+alqco54t/rvlR4vq0gAilnvjEDSnm6Tws
- JxgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=oTWyPjaa9aZGM2SnljeCNHLkI4gqTIIoMc0H/AzJQX0=;
- b=QI4J15A/Jdf7HR3h5cgJNBQP1NsyDFnDeodPqbWGIdUI7O3GtkExh0cGJy/2ce60Ve
- ayJXTk3YsjjuyTOdHWuo3UJrmJYPDpipi4fwAPjVUOdetycS3eYNbYbz7/bMkLOamBYt
- qHyfpE2sBpQsZVmcG7hw0tLv7WqCVNhMCiMwQi0i5ehGuMTT58LrG6WE9GU17u/AJu3J
- bTjWkXjhXQXOe31LjIB7TzQGrStodvupG7R6dwvA8/KV3cw41Ul0w8thicCBjozs6ykL
- JMw25l8oetT3FclPPvCmYt3E1Sh/oc+AwoFWmHHXuyacP/R6TSaNkqNZJY8Wm+yO8nKY
- UvKA==
-X-Gm-Message-State: AOAM532oPHQ4rjl8w1ZbFT8O496LclI7Gby3TopMwAtO0Vw3x08esNKf
- QGvNtdJWJOtp5e7JQuCHddLmSIhrMy/VfSrJDBs=
-X-Google-Smtp-Source: ABdhPJxPpjZD1i5UG2sRlq78E03vTL0ZRSiLZTufFldKedqUkwVHX7tEKn1wLksiXUQsEOEP4qF/7e8q/Oq3cNoPzvk=
-X-Received: by 2002:a05:620a:1496:: with SMTP id
- w22mr3724903qkj.463.1642093363794; 
- Thu, 13 Jan 2022 09:02:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20201023093641.619746-1-raj.khem@gmail.com>
- <20220109000312.6b307c17@windsurf>
-In-Reply-To: <20220109000312.6b307c17@windsurf>
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 13 Jan 2022 09:02:17 -0800
-Message-ID: <CAMKF1sonf_9RsMYvpB4zxUYLJs7N99iOeiypLmTDpfK6wtBbMA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
- via cross compiler
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hqYZ9a8RIn-L for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 17:38:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF87383E12
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 17:38:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id A82798352F; Thu, 13 Jan 2022 17:31:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 13 Jan 2022 18:37:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: feb9185fc185c1f76e3789b0dc521e3cf98c1ebb
+X-Git-Newrev: 6dda369e7e8a4bb77b4449818a16b13c4f530e07
+X-Patchwork-Hint: ignore
+Message-Id: <20220113173150.A82798352F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: add upstream patch to fix
+ vapigen support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,81 +53,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas
+commit: https://git.buildroot.net/buildroot/commit/?id=6dda369e7e8a4bb77b4449818a16b13c4f530e07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Jan 8, 2022 at 3:03 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Khem,
->
-> On Fri, 23 Oct 2020 02:36:41 -0700
-> Khem Raj <raj.khem@gmail.com> wrote:
->
-> > Using linux/version.h is assumed to be hardcoded inside sysroot but this
-> > does not consider the case where toolchains might be built with
-> > --with-native-system-header-dir which means the header directories will
-> > not be under <sysroot>/usr/include but customized, archlinux, debian
-> > built cross toolchains use these install settings ( due to multiarch )
-> > they have the headers installed like /usr/aarch64-linux-gnu/include and
-> > not /usr/aarch64-linux-gnu/usr/include
-> >
-> > This patch adds logic to use cross compiler to compute the path to
-> > linux/version.h on the fly, it means we do not really need to assume the
-> > install structure
-> >
-> > Fixes built when using external toolchains provided by archlinux e.g.
-> >
-> > Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  support/scripts/check-kernel-headers.sh           | 15 ++++++++++++++-
-> >  toolchain/helpers.mk                              |  2 +-
-> >  .../toolchain-external/pkg-toolchain-external.mk  |  3 ++-
-> >  3 files changed, 17 insertions(+), 3 deletions(-)
->
-> We finally took some time to review and discuss this patch. As you can
-> probably imagine due to the delay, we are (at least in its current
-> form) not going to apply it.
->
-> While it would be nice to not hardcode /usr/include/linux/version.h, we
-> would need:
->
->  - To account for CFLAGS, as they can affect which sysroot is used by
->    the toolchain in case of multilib toolchains.
->
->  - A solution that also uses the cross-compiler to detect where
->    <linux/version.h> is in the case of the internal toolchain backend.
->
-> However, overall, the motivation of using distribution toolchains is
-> dubious. We still believe that it cannot work, because distribution
-> toolchains can contain any number of random libraries. The sysroot of
-> those toolchains (including the random set of libraries that have been
-> installed) will be copied to Buildroot STAGING_DIR, causing confusion
-> with the packages that Buildroot will build.
->
-> So overall, we feel that the benefit of the patch is not sufficient
-> compared to the extra effort to fix the remaining comments that we have
-> on it. If you're still interested in pursuing this, we would welcome a
-> new patch that addresses the above two issues.
->
+Import an upstream patch which fixes a typo in the Meson source code
+which caused a wrong command line option to be passed to the vapigen
+program. This fixes the build for all packages which use Meson and
+provide API bindings generated using said tool.
 
- I think its fine to drop this patch. I was trying to prove that how
-easy and fast it
-could be to build buildroot but this is not a real world usecase.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...me-fix-typo-in-vapigen-option-metadatadir.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/meson/0003-gnome-fix-typo-in-vapigen-option-metadatadir.patch b/package/meson/0003-gnome-fix-typo-in-vapigen-option-metadatadir.patch
+new file mode 100644
+index 0000000000..3788ee0f11
+--- /dev/null
++++ b/package/meson/0003-gnome-fix-typo-in-vapigen-option-metadatadir.patch
+@@ -0,0 +1,33 @@
++From 9952446a2a28ea2b009f4b8b2a14ad50f0878bdd Mon Sep 17 00:00:00 2001
++From: Michal Vasilek <michal.vasilek@nic.cz>
++Date: Mon, 10 Jan 2022 21:27:30 +0100
++Subject: [PATCH] gnome: fix typo in vapigen option metadatadir
++
++This typo was introduced in 9ef36fa80bf4483bcd837ea3985a51ab533c7972 and
++can cause a build failure, because --metadatdir is not a valid vapigen
++option.
++
++[aperez@igalia.com: backport from upstream]
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++[yann.morin.1998@free.fr: make it an actual backport]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ mesonbuild/modules/gnome.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
++index 1125e56e7..dfc66c2e3 100644
++--- a/mesonbuild/modules/gnome.py
+++++ b/mesonbuild/modules/gnome.py
++@@ -1934,7 +1934,7 @@ class GnomeModule(ExtensionModule):
++         cmd: T.List[T.Union[str, 'ExternalProgram']]
++         cmd = [state.find_program('vapigen'), '--quiet', f'--library={library}', f'--directory={build_dir}']
++         cmd.extend([f'--vapidir={d}' for d in kwargs['vapi_dirs']])
++-        cmd.extend([f'--metadatdir={d}' for d in kwargs['metadata_dirs']])
+++        cmd.extend([f'--metadatadir={d}' for d in kwargs['metadata_dirs']])
++         cmd.extend([f'--girdir={d}' for d in kwargs['gir_dirs']])
++         cmd += pkg_cmd
++         cmd += ['--metadatadir=' + source_dir]
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
