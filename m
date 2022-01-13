@@ -1,78 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32737C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 00:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F4FCC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jan 2022 05:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 997936000A;
-	Thu, 13 Jan 2022 00:20:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B41E415C0;
+	Thu, 13 Jan 2022 05:13:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKnDtsq04TgD; Thu, 13 Jan 2022 00:20:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LLF--BYLz6I4; Thu, 13 Jan 2022 05:13:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8C8C6FBF8;
-	Thu, 13 Jan 2022 00:20:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94AE1415BD;
+	Thu, 13 Jan 2022 05:13:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C390B1C1127
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 00:19:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5361BF867
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 05:13:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1B4D415A2
- for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 00:19:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59ECF415BD
+ for <buildroot@lists.busybox.net>; Thu, 13 Jan 2022 05:13:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CYDikbjkZECj for <buildroot@lists.busybox.net>;
- Thu, 13 Jan 2022 00:19:58 +0000 (UTC)
+ with ESMTP id Q4o-L9x4BgB4 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jan 2022 05:13:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
- [IPv6:2607:f8b0:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A86F9415A0
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 00:19:58 +0000 (UTC)
-Received: by mail-ot1-x32c.google.com with SMTP id
- i5-20020a05683033e500b0057a369ac614so4453427otu.10
- for <buildroot@buildroot.org>; Wed, 12 Jan 2022 16:19:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D941C415BB
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 05:13:14 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id 30so18744899edv.3
+ for <buildroot@buildroot.org>; Wed, 12 Jan 2022 21:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=unikie-com.20210112.gappssmtp.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
  :cc:content-transfer-encoding;
- bh=NooniZxRv1FDOUSS5qAVLldLLDDLF6qlQepT8oCpS3I=;
- b=bwRJyjZVnMWGjd09F2DnquAo6o6U7x2jXCXK0N2AyUWkM32JIdIg85stZfsoJFXm7/
- gfB+yno1v+mhgzTIq/rJuPUgJ7KebBQFUe9zkelJj+cZSXMKgtcz0dw+b8Vzxebafvqh
- vsTVCvELud851RRND6BcK2nEOOcq4s+tyYeykqCBy/PEiJ42Q0HfvTzETtoIllL2u5LK
- f8kxB4dCgPNW1J6YN3PJ9fPfuJLDhpi2V6UE2yW+39SEDv8KxGMY78BwrNm8XuWOzrfG
- Fis4BSQKzDX9dYR4kcExdRm0cVH5TAomEd0TM69O3DudqpEqIsrcQWjSm5BvrPEGYq0+
- 1vjw==
+ bh=DVOI3wWg8iQX87RGQ6DxNYkmmxucfVETL9eCfky8S6k=;
+ b=mBs487/HC5qiXf+Ro9hlGKhnPrr3YwU5semKtMIKJ0VAKz+DItKCvodOfOwIzMAvj2
+ qWoxkfafUflv6Sa4v/m1DqsomI+cbPPkUrOgrDlKNLa+OTM4mhy539nI1r7AwoRs7rj1
+ HXafyXi5HhHib+hU+iir7iKaFWU5PITJL44xAG49/Oky4pDFZtMIcX5mndWxMUViqH3p
+ SglVSC3ku5Y9jWFa/wC/UdTueqcdcVrgW7wRj+JLl+AUbVxCQm5ixmL2vXOwT4FXU/WP
+ 1O5zNnV1Cz3AZcxzuiHDHcagk/T5i6t7wgPGIbRr7+Uc78ZvvRIctPZNRG4V7YX+aFLH
+ zA9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc:content-transfer-encoding;
- bh=NooniZxRv1FDOUSS5qAVLldLLDDLF6qlQepT8oCpS3I=;
- b=NmoHtjN7g+tgbVfR/NR4d5QwTrlahKfyw/1pYbDDc0QwDoyshIzj28PiFkLa2/4k4V
- LYKSV5wK0IdUtg/W2Z8fVKlGU4V4yPc4yCm8A7RuUF9AKjocvOvZZklS8cEN5mKFbGyi
- U4LQ72MrGofExfdMcnBs/SPJOLBdLJzVT4RRI4UgwqUV6txiuaFKDmqHfnjGLhOOHITO
- aws3FaYIJ3Yj1kpqa1aC1igqgbHblUdDKfFnNY4fX3W7cb7chYAD+nDX04L+mHjvRm7m
- wJguJOi8x1SwzKHrbxm1epLl2nm6tMkYYCXvEGKgOShFi2FMrRYxeYYwa8n1VgpFm63k
- b27A==
-X-Gm-Message-State: AOAM530soyeECWFNvzwSTQD33G/ovlvR/l7lzhiXDt74Ir60hQcTC7Ht
- cnQ71WTogY88PTIzqlCffh4DH4JX9AlG2acFWb8=
-X-Google-Smtp-Source: ABdhPJyTIGISUtjzH5ZAhAUZdey7CSO6UcKo03m02kZ7oswB7j5fd66k10UUWXZt7HBEcs6byF8VsEOVxyjYDlBuMn4=
-X-Received: by 2002:a9d:70cc:: with SMTP id w12mr1518557otj.30.1642033197566; 
- Wed, 12 Jan 2022 16:19:57 -0800 (PST)
+ bh=DVOI3wWg8iQX87RGQ6DxNYkmmxucfVETL9eCfky8S6k=;
+ b=RoKuOPGQAxQG7zeJK9vCxoBL7NOY2vT9aPCmX7FlQ5F+QKWyVibQ89j96wEZWWhS5G
+ qd0I82Ij0jkKg0FJEYci+rs11A97whukMvge9CqfpCA7i4c5sxjbY9tnT7WrcBFwTWIG
+ iPrJruz/E+ARm1dlQ6A4Fqyl8p/YgT6XLFGkQ+bqATjTV0dVhkzAny6HGOmImBeGwWhM
+ PPhhKcsZoInlyiO0nJMphoUonFkH1oK65e8Ri010fx7nHBx0qYc0xvAmb8uiP5V0OYYN
+ YFNKopbq+sLkPZy+5Sbabh2ldwMU2UqqSZfz5jjlBBwNUz3DwkbZvTJM3jON7HxXb0Cq
+ rQ7A==
+X-Gm-Message-State: AOAM530CbwEL7X0TkQlz4XSmFxleLcw/4asSfAbA7HUD6qMjiMrsFRo4
+ RTCevEkoVMoiJ8tAjDQ+fyoMpHBFtQ30/4M2aAPrxu5389pd5FmR
+X-Google-Smtp-Source: ABdhPJzipWaJB54SoCCS7HIGxoRk1tmXyeJfSo9QOpqmBr3+CRyZo0Smk0wVPrAR3My/KgaM36Vz77UokNxJakqWpUA=
+X-Received: by 2002:a50:c38c:: with SMTP id h12mr2770788edf.72.1642050792940; 
+ Wed, 12 Jan 2022 21:13:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220107045531.3985241-1-james.hilliard1@gmail.com>
- <20220112135637.12c5edc4@windsurf>
-In-Reply-To: <20220112135637.12c5edc4@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 12 Jan 2022 17:19:46 -0700
-Message-ID: <CADvTj4qmO3=uSB-YU7-uvmXDqRqZwzptaKX9xLN_6FFVCYeB+Q@mail.gmail.com>
+References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
+ <20211210141209.1812043-2-jose.pekkarinen@unikie.com>
+ <20220105214129.2f5fffae@windsurf>
+ <CAJPV9MpzSPFyj-AMO+_iCNZ-PVp+DcKaH1yrMHvO2TawoUPa1g@mail.gmail.com>
+ <20220112155103.7e6c11c0@windsurf>
+ <CAJPV9MpjN_fPn04Z6crTsogUL2-UWjgBr2P-A9Uz-QYqYd_aGw@mail.gmail.com>
+ <20220112170043.03abd8c1@windsurf>
+In-Reply-To: <20220112170043.03abd8c1@windsurf>
+From: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Date: Thu, 13 Jan 2022 07:12:37 +0200
+Message-ID: <CAJPV9Mo=aD1BgXuJVagAfmtsDpDCrPZTVpKwNiQQYY08_wngrw@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v3 1/3]
- package/qt5/qt5webengine-chromium-catapult: new package
+Subject: Re: [Buildroot] [PATCH 2/7] package/minijail: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,117 +86,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Joshua Henderson <joshua.henderson@microchip.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
- buildroot <buildroot@buildroot.org>,
- =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 12, 2022 at 5:56 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Thu,  6 Jan 2022 21:55:29 -0700
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > This version of catapult is python3 compatible and will be used to
-> > replace the python2 only version in qt5webengine-chromium.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v2 -> v3:
-> >   - add kconfig entry
-> > ---
-> >  package/qt5/Config.in                              |  1 +
-> >  .../qt5/qt5webengine-chromium-catapult/Config.in   |  4 ++++
-> >  .../qt5webengine-chromium-catapult.hash            |  3 +++
-> >  .../qt5webengine-chromium-catapult.mk              | 14 ++++++++++++++
-> >  4 files changed, 22 insertions(+)
-> >  create mode 100644 package/qt5/qt5webengine-chromium-catapult/Config.in
-> >  create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.hash
-> >  create mode 100644 package/qt5/qt5webengine-chromium-catapult/qt5webengine-chromium-catapult.mk
->
-> I have tested this patch series (I'm replying to the v3 because that's
-> the one I tested) with the following defconfig:
->
-> BR2_arm=y
-> BR2_arm1176jzf_s=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_QT5WEBENGINE=y
-> BR2_PACKAGE_RPI_USERLAND=y
->
-> and it failed to build like this:
-
-Yeah, there's quite a few issues with the qt5webengine update build in
-general, I've
-split out the kde qt5 deps update so that it can be
-reviewed/tested/merged before the
-qt5webengine update as the other updates require much more minimal changes and
-should make it easier to test the qt5webengine update issues
-separately once the kde
-are verified to not create regressions:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220113000935.2353800-1-james.hilliard1@gmail.com/
-
-I also think I fixed a potentially related issue with qmake sysrootify
-path generation by
-disabling it and setting sysroot paths manually, this seems to work
-better and appears
-to fix per-package directory builds on a number of the qt5
-modules(although some seem
-to still have issues), this should hopefully make it easier to fix the
-qt5webengine issues
-as well:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220112203939.606775-1-james.hilliard1@gmail.com/
-
-Both of these should apply on top of master and should not depend on each other.
-
->
-> FAILED: host/obj/crypto/crypto/nss_key_util.o
-> /usr/bin/g++ -MMD -MF host/obj/crypto/crypto/nss_key_util.o.d -DCRYPTO_IMPLEMENTATION -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Ihost/gen -I../../3rdparty/chromium -I../../3rdparty/chromium/third_party/perfetto/include -Ihost/gen/third_party/perfetto/build_config -Ihost/gen/third_party/perfetto -I../../3rdparty/chromium/third_party/boringssl/src/include -I../../3rdparty/chromium/third_party/abseil-cpp -I../../3rdparty/chromium/third_party/protobuf/src -Ihost/gen/protoc_out -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -m64 -Wall -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wno-unused-local-typedefs -Wno-maybe-uninitialized -Wno-deprecated-declarations -fno-delete-null-poin
- te
->  r-checks -Wno-comments -Wno-packed-not-aligned -Wno-dangling-else -Wno-missing-field-initializers -Wno-unused-parameter -O2 -fno-ident -fdata-sections -ffunction-sections -fno-omit-frame-pointer -g0 -fvisibility=hidden -I/usr/include/nss -I/usr/include/nspr -std=gnu++14 -Wno-narrowing -Wno-class-memaccess -Wno-attributes -Wno-class-memaccess -Wno-subobject-linkage -Wno-invalid-offsetof -Wno-return-type -Wno-deprecated-copy -fno-exceptions -fno-rtti -fvisibility-inlines-hidden -I/home/thomas/buildroot/buildroot/output/host/include -c ../../3rdparty/chromium/crypto/nss_key_util.cc -o host/obj/crypto/crypto/nss_key_util.o
-> In file included from ../../3rdparty/chromium/crypto/nss_key_util.cc:5:
-> ../../3rdparty/chromium/crypto/nss_key_util.h:8:10: fatal error: secoidt.h: No such file or directory
->     8 | #include <secoidt.h>
->       |          ^~~~~~~~~~~
-> compilation terminated.
-> [19912/23484] CXX host/obj/crypto/crypto/sha2.o
-> [19913/23484] CXX host/obj/crypto/crypto/secure_hash.o
-> [19914/23484] CXX host/obj/base/base/base_jumbo_7.o
-> [19915/23484] CXX host/obj/crypto/crypto/signature_creator.o
-> [19916/23484] CXX host/obj/base/base/base_jumbo_11.o
-> [19917/23484] CXX host/obj/crypto/crypto/symmetric_key.o
-> [19918/23484] CXX host/obj/crypto/crypto/signature_verifier.o
-> [19919/23484] CXX host/obj/base/base/base_jumbo_4.o
-> In file included from host/gen/base/base_jumbo_4.cc:6:
-> ./../../3rdparty/chromium/base/debug/alias.cc:11: warning: ignoring #pragma clang max_tokens_here [-Wunknown-pragmas]
->    11 | #pragma clang max_tokens_here 250
->       |
-> ninja: build stopped: subcommand failed.
-> make[5]: *** [Makefile.gn_run:356: run_ninja] Error 1
-> make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 2
-> make[3]: *** [Makefile:79: sub-core-make_first] Error 2
-> make[2]: *** [Makefile:49: sub-src-make_first] Error 2
-> make[1]: *** [package/pkg-generic.mk:295: /home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.8/.stamp_built] Error 2
-> make: *** [Makefile:84: _all] Error 2
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCBKYW4gMTIsIDIwMjIgYXQgNjowMCBQTSBUaG9tYXMgUGV0YXp6b25pCjx0aG9tYXMu
+cGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPgo+IE9uIFdlZCwgMTIgSmFuIDIwMjIgMTc6
+MDg6MjYgKzAyMDAKPiBKb3PDqSBQZWtrYXJpbmVuIDxqb3NlLnBla2thcmluZW5AdW5pa2llLmNv
+bT4gd3JvdGU6Cj4KPiA+ID4gcHJsaW1pdCgpIGV4aXN0cyBpbiBtdXNsLiBXYXMgPHN5cy9yZXNv
+dXJjZS5oPiBpbmNsdWRlZCwgYXMgc3VnZ2VzdGVkCj4gPiA+IGJ5IHRoZSBwcmxpbWl0KCkgbWFu
+IHBhZ2UgPwo+ID4KPiA+ICAgICBJdCBpczoKPiA+Cj4gPiAkIGNhdCBsaWJtaW5pamFpbC5jCj4g
+PiBbLi4uXQo+ID4gI2luY2x1ZGUgPHN5cy9yZXNvdXJjZS5oPgo+ID4gWy4uLl0KPgo+IEFoLCBp
+dCdzIHVDbGliYyB0aGF0IGlzIG1pc3NpbmcgcHJsaW1pdCgpLiBDYW4geW91IGNvbmZpcm0gdGhh
+dAo+IG1pbmlqYWlsIGJ1aWxkcyBmaW5lIHdpdGggZ2xpYmMgYW5kIG11c2wsIGJ1dCBicmVha3Mg
+b24gdUNsaWJjIGR1ZSB0bwo+IHBybGltaXQoKSBiZWluZyBtaXNzaW5nPwo+Cj4gSSdtIG5vdCBz
+dXJlIGl0J3MgcG9zc2libGUgdG8gcmVwbGFjZSBwcmxpbWl0KCkgYnkgc2V0cmxpbWl0KCkuIElu
+ZGVlZCwKPiBwcmxpbWl0KCkgaGFzIGEgUElEIGFzIHRoZSBmaXJzdCBhcmd1bWVudCwgd2hpY2gg
+YWxsb3dzIHRvIHN0ZSByZXNvdXJjZQo+IGxpbWl0cyBvbiBvdGhlciBwcm9jZXNzZXMsIHdoaWxl
+IHNldHJsaW1pdCgpIG9ubHkgdGFrZXMgY2FyZSBvZiB0aGUKPiBjdXJyZW50IHByb2Nlc3MuCj4K
+PiBJJ20gYWZyYWlkIGl0IHNlZW1zIHdlIHdpbGwgaGF2ZSB0byBkaXNhbGxvdyB0aGUgdXNlIG9m
+IG1pbmlqYWlsIHdpdGgKPiB1Q2xpYmMgdG9vbGNoYWlucy4KCiAgICBIaSwKCiAgICBZZXMsIGl0
+IGlzIG9ubHkgdWNsaWJjLCB0aGlzIGlzIHRoZSBvdXQgb2YgdGVzdC1wa2c6CgokIHV0aWxzL3Rl
+c3QtcGtnIC1jIG1pbmlqYWlsLmNmZyAtcCBtaW5pamFpbAogICAgICAgICAgICAgICAgICAgYm9v
+dGxpbi1hcm12NS11Y2xpYmMgWzEvNl06IEZBSUxFRAogICAgICAgICAgICAgICAgICAgIGJvb3Rs
+aW4tYXJtdjctZ2xpYmMgWzIvNl06IE9LCiAgICAgICAgICAgICAgICAgIGJvb3RsaW4tYXJtdjdt
+LXVjbGliYyBbMy82XTogU0tJUFBFRAogICAgICAgICAgICAgICAgICAgIGJvb3RsaW4teDg2LTY0
+LW11c2wgWzQvNl06IE9LCiAgICAgICAgICAgICAgICAgICAgIGJyLWFybS1mdWxsLXN0YXRpYyBb
+NS82XTogU0tJUFBFRAogICAgICAgICAgICAgICAgICAgICAgICAgICBzb3VyY2VyeS1hcm0gWzYv
+Nl06IE9LCjYgYnVpbGRzLCAyIHNraXBwZWQsIDEgYnVpbGQgZmFpbGVkLCAwIGxlZ2FsLWluZm8g
+ZmFpbGVkCgogICAgVGhhbmtzIQoKICAgIEpvc8OpLgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
