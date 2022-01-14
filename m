@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 140A0C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30AA4C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C91960B26;
-	Fri, 14 Jan 2022 16:49:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6BC460AA9;
+	Fri, 14 Jan 2022 16:49:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fsG0ty-yl5Bs; Fri, 14 Jan 2022 16:49:18 +0000 (UTC)
+	with ESMTP id rst-8Y-VwXAz; Fri, 14 Jan 2022 16:49:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E000A60B57;
-	Fri, 14 Jan 2022 16:49:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AD4141C115D
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:49:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C46B960B5E;
+	Fri, 14 Jan 2022 16:49:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D0E641BF362
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99AE140130
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:49:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B925683EF6
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:49:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YzXewnb2LT4g for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 16:49:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0yx2KljBNjTn for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 16:49:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98892400F3
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:49:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E958383EF1
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:49:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 66C57835C0; Fri, 14 Jan 2022 16:42:37 +0000 (UTC)
+ id B917883487; Fri, 14 Jan 2022 16:42:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 17:40:29 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c062ff23f231c8d8e14b9168841e532768a382ec
-X-Git-Newrev: 22c4abd1449880ef1557101308aec84321990371
+Date: Fri, 14 Jan 2022 17:35:20 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: b05f64c4777c7233578eb06f8565ae432e3590f7
+X-Git-Newrev: a86d297ba09061051d54cf859b194054afd26ba8
 X-Patchwork-Hint: ignore
-Message-Id: <20220114164237.66C57835C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- support/scripts/pkg-stats: Don't print directory in 'make' call
+Message-Id: <20220114164245.B917883487@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] utils/getdeveloperlib.py:
+ fix developer being reported for unrelated path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22c4abd1449880ef1557101308aec84321990371
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a86d297ba09061051d54cf859b194054afd26ba8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-It is possible that some users of buildroot have put it in a repository
-and call into it from another Makefile such as:
-.DEFAULT:
-	$(MAKE) O=$(abspath $(O)) -C buildroot $(@)
+Currently, by following the instructions in the manual and querying for
+developers for a patch that changes path
+package/foobar
+the script reports both developers that have these entries in the
+DEVELOPERS file:
+F:	package/foo/
+F:	package/foobar/
 
-This technique works well except that Make tells us that it changes into
-the buildroot directory:
-make[1]: Entering directory 'buildroot'
+Starting from commit "afc112b0e4 utils/getdeveloperlib.py: fix issue
+with hasfile()" get-developers script uses os.path.abspath() and
+os.path.relpath().
+The catch is that those functions return the absolute path and the
+relative path without the trailing slash.
 
-Because this line doesn't have an equals within it, python raises a
-ValueError exception within pkg-stats.
+When the paths associated to a developer are then compared to the paths
+a patch touches, using the string.startswith(), any substring returns
+True, leading to developers for package/foo/ being wrongly reported
+for package/foobar/ .
 
-This patch has python tell the invoked make not to print directories
+Fix this by re-adding the trailing slash after using relpath().
 
-Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: James Knight <james.d.knight@live.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit c988867fd2c72fe5abeb63c4abe92f10eea6499d)
+(cherry picked from commit 29bb478a49712dfa8ec25262cac77b7c8ff1e51f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ utils/getdeveloperlib.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 4e7f27c3a3..6e656bfc29 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -364,7 +364,8 @@ def get_config_packages():
- 
- def package_init_make_info():
-     # Fetch all variables at once
--    variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
-+    variables = subprocess.check_output(["make", "--no-print-directory", "-s",
-+                                         "BR2_HAVE_DOT_CONFIG=y", "printvars",
-                                          "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES %_CPE_ID"])
-     variable_list = variables.decode().splitlines()
- 
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index f2b36862e3..c05e1f888b 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -253,6 +253,8 @@ def parse_developers():
+                 for f in dev_files:
+                     dev_file = os.path.relpath(f, brpath)
+                     dev_file = dev_file.replace(os.sep, '/')  # force unix sep
++                    if f[-1] == '/':  # relpath removes the trailing /
++                        dev_file = dev_file + '/'
+                     files.append(dev_file)
+             elif line == "":
+                 if not name:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
