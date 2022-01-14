@@ -1,78 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43538C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 07:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 187C1C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 08:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3F7284D0A;
-	Fri, 14 Jan 2022 07:44:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86200416CA;
+	Fri, 14 Jan 2022 08:45:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uEFxriAd_18I; Fri, 14 Jan 2022 07:44:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1mwnnHDooEHh; Fri, 14 Jan 2022 08:45:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3057A84D08;
-	Fri, 14 Jan 2022 07:44:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BCEF91BF3A8
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 07:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB28F416C8;
+	Fri, 14 Jan 2022 08:45:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AC751BF38D
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 08:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D61B84D08
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 07:44:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 495DA416C8
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 08:45:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eVTJd_ZAeGf2 for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 07:44:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B4EEB84B35
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 07:44:50 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id s1so14134215wra.6
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 23:44:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+HF4F2I5IXwygyQ+qgLt4UBtWQx5HH3AVngs3r4OjIE=;
- b=W4mkT91mxmMWtL9ZYuV8k6o7mT71x6klqXM6lUH6hXRjZxRiTxQy4T9lcw8aTs+wwI
- zrZBjV9vDQ4sRulOq2+jbyucs8d5yjKz+TfHLyC+znOFXFzwmKtRqHemY2fboPeNQq7b
- xWtqrg2kq/5F3/cR23wYL4eeyS9nBYYxVti5ehtmPzefAUqUZtaFO3JHL22lFvkwhYmi
- BZ/iQl63L5rSBLxo9nxN3PhEzJgq7Bk7MtALlth2wddDFt2sTFe1ScMO5+gxQYNSA75N
- X4/9RySaAeLXNZ2TP/9hsy8cuWkq/aTa35yPlqMwzXBivmlWAKkfekKdJ35z11cU1TKL
- PtuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=+HF4F2I5IXwygyQ+qgLt4UBtWQx5HH3AVngs3r4OjIE=;
- b=gdI8QDgsf/qjNOya70TMgsUV4sK3MpYhj5QkoC2JaryeOojWDKejvnagRA9REpKAiW
- l8cujNzaRJs85WsnWWZt8E+EMaHmYi5TwDxd5cbZmxMacKy42ByD/VdGXwOY9aYD8I6V
- 5rjqwOjLV9OAFmgacSxI6TeG5SKH2Pyy5ODk9W1mdXBsM+FT/nPK/GjtcxpxfRqJN/T5
- 4Ypd1I2fE1ac962FWHQ1xlFTwx244krkHxMeoY5oBc5vw1i6lyCpJL88XYjhYx2sG0NA
- 80kRtykM9Mdz2DYJiSxahvYmGHzjP8C9H8LB4gTBY9bUDUrlNiIOmHq5mU6Xd2vl55ki
- nwhg==
-X-Gm-Message-State: AOAM532ZvyCzn7XiHUyyDXSc4eeLZTXum/pJFFe0D5+w+mfIccnZ9efV
- 25kmKXYwzdEqW09xCWNNhS/lt3SrAnE=
-X-Google-Smtp-Source: ABdhPJzEjqPt3LrovGhnqKz0WF7WFR7PCJtBWd/Xibuz7gxboAAeWLMMB4YHxW/SiwqAFaPzCfqmJA==
-X-Received: by 2002:a05:6000:1a87:: with SMTP id
- f7mr7382446wry.150.1642146288835; 
- Thu, 13 Jan 2022 23:44:48 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-1379-66.w86-229.abo.wanadoo.fr.
- [86.229.226.66])
- by smtp.gmail.com with ESMTPSA id b1sm5613910wrd.92.2022.01.13.23.44.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Jan 2022 23:44:48 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gv3PCqci1vYo for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 08:45:11 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEA69416C7
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 08:45:10 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 8ICpnR1CFiF0a8ICqnsFsD; Fri, 14 Jan 2022 09:45:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642149908; bh=PCThXe67HzvjaCvtTypJsI8VyZrTt6XXfMW+hk+YiSk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=JcM+njH0hHXGEyKhcE33WAYKoyUf7yrLnjeobYG7VacB/YXjfuI6EW90Wfb8v440Y
+ Td5fdhMDx0euisqHW3m8Bx4Ddw3+PdWWJmYAgceeDp+xJJBBk1REYqjUxdluu6GUf5
+ R99Nx9YYjOHDmS5NZKmaGrmcy0Hc5E7zRzYznZBW0iLosM2VDWD5arcVVktCufsowI
+ SvzaH6+CQsObcrLNM0yYrOBNVPrv9AL8Ua+r0QpV0PyKHFw09Fnx6kNGw2+txqRMGM
+ 6G+Sq8UeXU5LF26zYlbcXjFLnq4oFMrEICQTYedD86nNoTyftph040hcU1OD4EmZ0a
+ DGeZJKBCatGgA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 08:43:09 +0100
-Message-Id: <20220114074309.356873-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 14 Jan 2022 09:45:06 +0100
+Message-Id: <20220114084506.776644-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libglvnd: needs threads
+X-CMAE-Envelope: MS4wfGd/l6IDJ0+nijw2mOM5S+7znpI78hezss9yw15qe3+yDNL3P2HHS34YPGi+mIGRIGp1O7wuScCCzNyrlVjT7o0ivsf8WD+uVqNxKGJrjk2o4yEWxsue
+ wZI5KTXG9n5PAE04iGczQ+NlEQegp1ioYO5shNSdUh9JneSvpW6Csn3X5gmAHRG5AV07GDIMQ0sNvyiC1Kdi2PEUSdT8DNJ/+8hx7jFbxX7T/di6i3GomHuq
+ aqsu72AoJYsNm/QOJjjC9CxMiMvB/uZO/XjcHb4xf8BZqLrOCZT1zl8qgw2qfEUQkmkB/MbIClXHrwdkwx72KQ==
+Subject: [Buildroot] [PATCH] package/poppler: fix build failure due to gcc
+ bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,51 +65,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since the addition of the package
-in commit 0378e2e5d9ce9d5676975dfbff501360094fdc1a:
+The bullet package exhibits gcc bug 68485 when built for the Microblaze
+architecture with optimization enabled, which causes a build failure.
 
-In file included from ../src/util/glvnd_pthread.c:39:
-../src/util/glvnd_pthread.h:33:10: fatal error: pthread.h: No such file or directory
-   33 | #include <pthread.h>
-      |          ^~~~~~~~~~~
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y like we
+already do for BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y.
 
 Fixes:
- - http://autobuild.buildroot.org/results/63624bafc6f7a225d4db0667df977fd6141561aa
+http://autobuild.buildroot.net/results/96e77ddba5042ba4dacb16b328fc298a4f00f49a/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libglvnd/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/poppler/poppler.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libglvnd/Config.in b/package/libglvnd/Config.in
-index cd19fde582..d020c21465 100644
---- a/package/libglvnd/Config.in
-+++ b/package/libglvnd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBGLVND
- 	bool "libglvnd"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  The GL Vendor-Neutral Dispatch library
- 
-@@ -45,6 +46,6 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- 
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 9e9bfc9cba..18c044a9f6 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -131,4 +131,12 @@ else
+ POPPLER_CONF_OPTS += -DUSE_FLOAT=ON
  endif
  
--comment "libglvnd needs a toolchain w/ dynamic library"
-+comment "libglvnd needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++POPPLER_CXXFLAGS = $(TARGET_CXXCFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++POPPLER_CXXFLAGS += -O0
++endif
++
++POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(POPPLER_CXXFLAGS)"
++
+ $(eval $(cmake-package))
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
