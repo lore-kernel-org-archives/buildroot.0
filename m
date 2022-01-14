@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED010C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 14:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C82C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 14:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C62A41686;
-	Fri, 14 Jan 2022 14:54:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2DEB40448;
+	Fri, 14 Jan 2022 14:54:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XoI8dQEd4gQe; Fri, 14 Jan 2022 14:54:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kh4tyaOzUPXh; Fri, 14 Jan 2022 14:54:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1F87416B1;
-	Fri, 14 Jan 2022 14:54:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 906F71BF3E5
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 14:54:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A1CD40503;
+	Fri, 14 Jan 2022 14:54:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5059D1BF3E5
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 14:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7ED984165E
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 14:54:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D71D401B2
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 14:54:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s0vcdlsw1O4W for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 14:54:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tVwhLkIG876R for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 14:54:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8D9C41580
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 14:54:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59E4B400E9
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 14:54:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D03FF83566; Fri, 14 Jan 2022 14:47:45 +0000 (UTC)
+ id 5535983566; Fri, 14 Jan 2022 14:47:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 15:35:16 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 095ba6763a9516158924d969276c131736148518
-X-Git-Newrev: de4e10e8d16c2eebb302954ba44609c6ff4ee279
+Date: Fri, 14 Jan 2022 15:35:05 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: f0f648eb6bf3602d9e34691bea43cd6fae1eb40f
+X-Git-Newrev: 0fa9874a4a82fc0e3ba655c2b3a1be5f6d6b8ee2
 X-Patchwork-Hint: ignore
-Message-Id: <20220114144745.D03FF83566@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] utils/scanpypi: fix
+Message-Id: <20220114144752.5535983566@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] utils/scanpypi: fix
  buildutils check in python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de4e10e8d16c2eebb302954ba44609c6ff4ee279
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0fa9874a4a82fc0e3ba655c2b3a1be5f6d6b8ee2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 The message attribute does not exist in python3, see PEP-0352:
 https://www.python.org/dev/peps/pep-0352/
