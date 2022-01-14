@@ -1,75 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BAF7C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 09:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C7BC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 09:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF7060AD0;
-	Fri, 14 Jan 2022 09:39:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2C8D402A8;
+	Fri, 14 Jan 2022 09:42:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wT_OQfzQJq_Z; Fri, 14 Jan 2022 09:39:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qQCk7U6LpY70; Fri, 14 Jan 2022 09:42:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 676F160AA9;
-	Fri, 14 Jan 2022 09:39:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0EE871BF3DF
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 09:39:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D05B740173;
+	Fri, 14 Jan 2022 09:42:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 733ED1BF3DF
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 09:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B02A83F89
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 09:39:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F89240173
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 09:42:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lyk3ivUqt5tD for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 09:39:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dz5QNKwkWutT for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 09:42:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 247BC83F5F
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 09:39:39 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id b14so9948881lff.3
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 01:39:39 -0800 (PST)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 13038400F2
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 09:42:47 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id p27so16753414lfa.1
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 01:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=QktnRjLdnMVOvTHfgZ3yuYeEpl81zbDfYolFRu7Eqj8=;
- b=Ww6RGUSyUF9K018fKMnLHwnTnyZDEcF1Ry9bjWLUI8Ook6ku3jgy0DWB4DF8g1Bl8G
- E8Sdv9vWec1ewLk76aKPmr7fbXyygIWjzyF2J+/S8w9XlCLbT8v1VBmvDJ3s0q/Dj7xB
- Q79Ci4rCS9JJMLZTwirm6gi55p4eigljoFqJ1MBunY9s6tDLT+BzFCggW825pF97ciuf
- vtvGnmLe89NNiii9f6whw3ma1O2FEBW+Lw5uJP/YO7kDHnPmQ5R4b86P87HY7BXDhtm4
- w48tRQy0uRDXtvjPpsm4UY7+tkGVtNJFkbaGsI326NAmKGhWWN1ixJK4lHDnuvLAUB+8
- BWpA==
+ :cc; bh=XK1dCtLtzgod0waoCa0sbV9QCn9xaFGvoTb5VSXTMwo=;
+ b=VoisdpPUsgVfSycPUqQklGjR33IwEuiT0mfW9nj1PDMceBs2CzRxmtfQCZu4DhCCRt
+ 0YZVV7/8uWni9mlKjTUaNrG3Rk7y+TzlWH0APFdOtSXOPmzkFMS6Ep4ltggq2rCA0/9E
+ A56rbQtapkc6kSS0lzx3rGohEpPtdNOVpXVAGPXKDZOINiEgxuhVHSZ9Fb90/YsUfR0O
+ 9p9gWFo/D/hgxBlH0Jo4gnj3TOdcAdNer5FSAeIu5S2OXcKLNv23+hz9FqeotQEqewFA
+ ot6eu5ejcQp4Hm4cwGSkZAJSHkIwiKDN6WEjed0LZ52gOdfdzbXOCdyIC/pkhv24jLu9
+ dMeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=QktnRjLdnMVOvTHfgZ3yuYeEpl81zbDfYolFRu7Eqj8=;
- b=M3bURmjpoy83nkor5WauM85JJAzUG/sZxuBIckYEQpyaLQTPvQnEO7y2HOjBXh/Tuu
- yNFlPv1QazGKB+8lHZRBCE0lQsL8CzpJV8/mLEBjYX12p8AWlWj2P45B6bJQ6bF0WPwc
- cVf+lqfVxFe1ftN7lJekLhn3cpuVHldean2xM0PS5bjGVS1adFYG+XQrwyutVIOHPJJw
- XsXks7+xTS/+IhahVhHpVBTprjhvw4PPBdeZM8IB87aZs+gMu8AI9VEFzLsqIjR4jbbg
- 7DicbakBaKCL7nRckVvU1vj7z0Qd1pmjHLoPi91+7VVLmpxVT52xFfybORlEkXXXgtve
- H1AQ==
-X-Gm-Message-State: AOAM533wdR6C/dihR3RLxIMN/8GdVBqPFCNHkc0bfqalYmgRUmieGkDp
- HQWsMzKiNsqBFnoC9JRdZnsedVm2EGQoqjJWyxk=
-X-Google-Smtp-Source: ABdhPJxJjDqWnXJiAMtxgz32cpB0hI5XoRvdEqxyXgcjhyeIY/bIXkY7JO9tOyl/qKqdBY4L1C1wm6YJkGHTNNLwi4o=
-X-Received: by 2002:a19:ae14:: with SMTP id f20mr6241771lfc.106.1642153177245; 
- Fri, 14 Jan 2022 01:39:37 -0800 (PST)
+ bh=XK1dCtLtzgod0waoCa0sbV9QCn9xaFGvoTb5VSXTMwo=;
+ b=7Tj8WD3WHJu0FFh6T0xNELLgz8Dg2RSkMnWZpgn+ZeCDMH2eIg3RPxFtHPpmhr7OD+
+ LWyiEU7kdVJ66EDLlGv5JCi8AV6Z2wsmRdGNyxkJh19sSnA6TxgvM3UAQed7nmw4iays
+ imFODFJ2lPWV1FTKJv0AfYnK5nWwCp5j79GOMgEa9jVSXUHJ6uBFDo9wJKNVrHh0PEC4
+ 02u8am5OeQyljOZEVbOspo4IEyAqVW1LSoyf2rIyLzWAw6S//P1N4mKHuRG4ZJtrbAMy
+ dPUokCl/L7nKYO76EhfIlRAFeK67dHZHN0AbevvZTNfl0co3ykM3wQuQl8P6yVM7xofg
+ 2XRQ==
+X-Gm-Message-State: AOAM5305v+qWfYP4rRMX5RkPrDcsQdm/AdaSRuuOR5J6XgX95GCYVw0/
+ 0aV1sUdaS2SicX1BxSHhW9sxVks4RavaNjde+50=
+X-Google-Smtp-Source: ABdhPJzeEmkX7ClR+yFAlRvMKijQHe+qzl3Cb19A2vT33QxOQDuEcZVFTbJIA2QM9lcFTx3ZO6YPEBLrTAeeB45uHhg=
+X-Received: by 2002:a19:f00f:: with SMTP id p15mr4593743lfc.196.1642153365876; 
+ Fri, 14 Jan 2022 01:42:45 -0800 (PST)
 MIME-Version: 1.0
 References: <20220112184821.916646-1-heiko.thiery@gmail.com>
  <20220113220057.1db30808@windsurf>
- <CAOMZO5C+cjNoVVEe44MsnuZgVj2TKdTJo8xF7Y0o5ksjk_TLpw@mail.gmail.com>
-In-Reply-To: <CAOMZO5C+cjNoVVEe44MsnuZgVj2TKdTJo8xF7Y0o5ksjk_TLpw@mail.gmail.com>
+In-Reply-To: <20220113220057.1db30808@windsurf>
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 14 Jan 2022 10:39:26 +0100
-Message-ID: <CAEyMn7Z-+WVwtYje4EutgZVBMBZqdvS+3kt7DhGvOzJD0no1Yg@mail.gmail.com>
-To: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 14 Jan 2022 10:42:34 +0100
+Message-ID: <CAEyMn7YJEuGsAJxUWpPJ96JRoUC3KwSpZvT0zdsnVfUA3-tt9g@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: new
  defconfig
 X-BeenThere: buildroot@buildroot.org
@@ -83,63 +80,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabio,
+Hi Thomas,
 
-Am Fr., 14. Jan. 2022 um 00:14 Uhr schrieb Fabio Estevam <festevam@gmail.com>:
+Am Do., 13. Jan. 2022 um 22:00 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
 >
-> Hi Heiko,
+> Hello,
 >
-> On Thu, Jan 13, 2022 at 6:01 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
+> On Wed, 12 Jan 2022 19:48:22 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
 >
-> > Have you considered using extlinux.conf ? This is generally much easier
-> > than a boot script, and removes the need to generate the boot script.
+> > diff --git a/board/kontron/bl-imx8mm/boot.cmd b/board/kontron/bl-imx8mm/boot.cmd
+> > new file mode 100644
+> > index 0000000000..7ce3198dbc
+> > --- /dev/null
+> > +++ b/board/kontron/bl-imx8mm/boot.cmd
+> > @@ -0,0 +1,8 @@
+> > +echo "Root File Sytem on MMC${devnum}"
+> > +setenv rootfs /dev/mmcblk${devnum}p1
+> > +setenv bootargs root=${rootfs} rootwait rw ${extrabootargs}
+> > +
+> > +load ${devtype} ${devnum} ${kernel_addr_r} boot/Image
+> > +load ${devtype} ${devnum} ${fdt_addr_r} boot/imx8mm-kontron-n801x-s.dtb
+> > +
+> > +booti ${kernel_addr_r} - ${fdt_addr_r}
 >
-> I used your patch as a reference and modified it as per Thomas'
-> suggestions to add Buildroot support for imx8mm-evk using only
-> upstream components.
->
-> Please find attached the patch.
->
-> I haven't submitted it formally yet because the kernel does not always boot.
+> Have you considered using extlinux.conf ? This is generally much easier
+> than a boot script, and removes the need to generate the boot script.
 
-Can you tell me how often this happens? I updated my defconfig with
-the comments from Thomas. Now I bootet the board with that several
-times and can not see the behavior you describe.
+I will switch to extlinux.
 
 >
-> Usually, it hangs at:
+> > diff --git a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
+> > new file mode 100644
+> > index 0000000000..ed088dd0f8
+> > --- /dev/null
+> > +++ b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
+> > @@ -0,0 +1,28 @@
+> > +From 95a311af81cd47c44d3d6e3f717f06a06d8f3dfd Mon Sep 17 00:00:00 2001
+> > +From: Heiko Thiery <heiko.thiery@gmail.com>
+> > +Date: Mon, 10 Jan 2022 14:13:02 +0100
+> > +Subject: [PATCH 1/2] imx: imx8mm: imx8mm-kontron-n801x-s: convert options to Kconfig
 >
-> mmc1 is current device
-> Scanning mmc 1:1...
-> Found /boot/extlinux/extlinux.conf
-> Retrieving file: /boot/extlinux/extlinux.conf
-> 1:      imx8mm-evk-buildroot
-> Retrieving file: /boot/Image
-> append: root=/dev/mmcblk0p1 rootwait rw
-> Retrieving file: /boot/imx8mm-evk.dtb
-> Moving Image from 0x40480000 to 0x40600000, end=42770000
-> ## Flattened Device Tree blob at 43000000
->    Booting using the fdt blob at 0x43000000
->    Loading Device Tree to 000000004fff5000, end 000000004ffffd6b ... OK
->
-> Starting kernel ...
-> (hangs here)
->
-> Looks like a U-Boot issue that I need to investigate.
->
-> Thanks for your patch and hope this helps.
+> I suppose the U-Boot patches are on their way upstream?
 
-Your welcome,
+The patches are already posted upstream:
 
+https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-1-heiko.thiery@gmail.com/
+https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-2-heiko.thiery@gmail.com/
+
+>
+> > diff --git a/board/kontron/bl-imx8mm/post-image.sh b/board/kontron/bl-imx8mm/post-image.sh
+> > new file mode 100755
+> > index 0000000000..564211c829
+> > --- /dev/null
+> > +++ b/board/kontron/bl-imx8mm/post-image.sh
+> > @@ -0,0 +1,3 @@
+> > +#!/bin/sh
+> > +
+> > +support/scripts/genimage.sh -c $(dirname $0)/genimage.cfg
+>
+> Could you call support/scripts/genimage.sh directly as the post-image
+> script, using the BR2_ROOTFS_POST_SCRIPT_ARGS to pass the -c ...
+> argument? We already do that in many defconfigs.
+
+Ok
+
+>
+> > +# Kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
+> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-kontron-n801x-s"
+> > +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > +
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+> > +
+> > +BR2_PACKAGE_FREESCALE_IMX=y
+> > +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+> > +BR2_PACKAGE_FIRMWARE_IMX=y
+> > +
+> > +# Filesystem / image
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> > +
+> > +# Bootloader
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880000"
+> > +BR2_TARGET_UBOOT=y
+> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
+> > +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> > +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+> > +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> > +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> > +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
+> > +BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
+> > +BR2_TARGET_UBOOT_SPL=y
+> > +
+> > +# Required host tools to create the SD/eMMC image
+> > +BR2_PACKAGE_HOST_GENIMAGE=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+>
+> You need FIT support ?
+
+No .. I will remove it.
+
+>
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/kontron/bl-imx8mm/boot.cmd"
+>
+> These would no longer be needed if switching to extlinux.conf.
+
+Ok.
+
+I will prepare and test the new version. Thanks.
 -- 
 Heiko
 _______________________________________________
