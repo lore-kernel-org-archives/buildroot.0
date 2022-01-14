@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D29FC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 15:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87C0EC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 15:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DCC060B52;
-	Fri, 14 Jan 2022 15:57:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4344783FB3;
+	Fri, 14 Jan 2022 15:57:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JbKOlYVGybhF; Fri, 14 Jan 2022 15:57:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 830F683E3A;
+	Fri, 14 Jan 2022 15:57:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 382DC1BF5A2
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:56:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3486260B3C
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:56:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tM7__QgHRpf0; Fri, 14 Jan 2022 15:56:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7381B60B26;
-	Fri, 14 Jan 2022 15:56:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 114411BF5A2
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:56:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F029B400FE
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:56:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HgWlpVR4sSTT for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 15:56:32 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vujfck30SZdT for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 15:56:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFE454040D
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 15:56:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F080607B4
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 15:56:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 91B7F7F8B5; Fri, 14 Jan 2022 15:50:06 +0000 (UTC)
+ id 631DF83545; Fri, 14 Jan 2022 15:50:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 16:53:42 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 6af6a010f26d1839b3387c80369d4321500ea3ee
-X-Git-Newrev: 05889c9c37d6367c4643c7992714ed461da6fe2e
+Date: Fri, 14 Jan 2022 16:25:13 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 0fa9874a4a82fc0e3ba655c2b3a1be5f6d6b8ee2
+X-Git-Newrev: c1c56be8a0cd9cdfefe15dc9897d41c56b007546
 X-Patchwork-Hint: ignore
-Message-Id: <20220114155006.91B7F7F8B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pcre2: bump to
- version 10.37
+Message-Id: <20220114155011.631DF83545@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x]
+ package/python-charset-normalizer: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +59,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05889c9c37d6367c4643c7992714ed461da6fe2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c56be8a0cd9cdfefe15dc9897d41c56b007546
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-diff LICENSE:
--Copyright (c) 1997-2020 University of Cambridge
-+Copyright (c) 1997-2021 University of Cambridge
--Copyright(c) 2010-2020 Zoltan Herczeg
-+Copyright(c) 2010-2021 Zoltan Herczeg
+A host variant of the python-charset-normalizer package will be needed
+for the host-python-requests package.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0b151824ea9cba34b3c97d9ff82b5e1b52dee9c3)
+(cherry picked from commit 07fc2fb1a5625ea18c76fab906b8da83ac1f49f3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre2/pcre2.hash | 6 +++---
- package/pcre2/pcre2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-charset-normalizer/python-charset-normalizer.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index b30a290968..130ce1f596 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://ftp.pcre.org/pub/pcre/pcre2-10.36.tar.bz2.sig
--sha256  a9ef39278113542968c7c73a31cfcb81aca1faa64690f400b907e8ab6b4a665c  pcre2-10.36.tar.bz2
-+# https://ftp.pcre.org/pub/pcre/pcre2-10.37.tar.bz2.sig
-+sha256  4d95a96e8b80529893b4562be12648d798b957b1ba1aae39606bbc2ab956d270  pcre2-10.37.tar.bz2
- # Locally computed
--sha256  8937734bbb1ba65d9f8ac7a7c8fc9016759a09aa2fb37d2175c06c9e7a856a24  LICENCE
-+sha256  9c9488256e3612ec5ea40fd12abe7ec55a58f23bd36e6f465116c2b3cbffba02  LICENCE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index d02772650f..220eb8a99c 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index e1b805fbfb..7fe9f96996 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
+@@ -10,5 +10,7 @@ PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/9f/c5/3
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
++HOST_PYTHON_CHARSET_NORMALIZER_NEEDS_HOST_PYTHON = python3
  
--PCRE2_VERSION = 10.36
-+PCRE2_VERSION = 10.37
- PCRE2_SITE = https://ftp.pcre.org/pub/pcre
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
