@@ -4,77 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CB18C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 02:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA39C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 02:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7DDA60AD6;
-	Fri, 14 Jan 2022 02:46:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1D3460AD6;
+	Fri, 14 Jan 2022 02:47:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u12ASlMfXFgG; Fri, 14 Jan 2022 02:46:07 +0000 (UTC)
+	with ESMTP id 3lkNhgfLjb74; Fri, 14 Jan 2022 02:47:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 007D060AA9;
-	Fri, 14 Jan 2022 02:46:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FCC51BF3C6
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 02:46:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EFA860AA9;
+	Fri, 14 Jan 2022 02:47:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 71B6E1BF3C6
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 02:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CF01415C8
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 02:46:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 604E260AA9
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 02:47:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lcknr73Mm6ue for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 02:46:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rqa5Sd5huQhg for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 02:47:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
- [IPv6:2607:f8b0:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AEEB5415C6
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 02:46:04 +0000 (UTC)
-Received: by mail-ot1-x329.google.com with SMTP id
- s8-20020a0568301e0800b00590a1c8cc08so8616403otr.9
- for <buildroot@buildroot.org>; Thu, 13 Jan 2022 18:46:04 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DFDF60A89
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 02:47:40 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id i5so30070996edf.9
+ for <buildroot@buildroot.org>; Thu, 13 Jan 2022 18:47:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4piyR5AALmkIkbzVV0ffKJcg7xLH5/peZjbu2uqI9Dw=;
- b=pvZ5evPNn0Wzc+wmYcgzPbqFuqGd2ZkNLSlmYPzNa6SSEhQCA9gcjppoTUtyTxpESL
- ixqm2Y7ef5P/cTm0KUYgvH/TEsGpxIAbmcEV/mxsE9gltVGncyPe3vPGDLcfQNQPjf76
- FwVhBQBV7It+fDvTyYbnS1yu7pflBT1TdgmpPwmnEps4SwH1MHd250N5crqvXeQ4guWv
- 61V5CEl7BAkW0AYfgrOMtcpbwAupfXL48izIfKlwKF2o1J8Ihi2pTwZXaAfd3H8YScmV
- DlkpVieYEVq0xQQE6d4rscZz7mhqGKxwBYCZLl80j8flOj73wRbZIp/xsfve6vtaHQJ9
- u6yA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=aw0mz/N0+IVCYqz24+b4Xw0ivchLI20rIpx6n/FCYd4=;
+ b=jMX+dAPr/9/BvdwBY4zbclvYtm3k1PSXWMkcxypU6nRSDie+Fgz2BItheI7/4WE45I
+ CVbZ4Hd2xrq/VhkQo3FKgQFJqILxcM6LDmDVKwXl932hxeCrjXA8AM6Aghud/ScdRnJo
+ jdqj8Fauks1jlNLkEht6GbC82x2SgFEyqChZz9G47kViBCCatXbBwqEftHDZlYfzwDsO
+ RhNKg6+mx+rokoQCAp37EDsseIqjlL6T5xj28NxbmG4VWqQSzqmaD3+1Qxi95jSyJgZB
+ uIm9st9qw3JjaAQu6NJHNF6E9BXwNAYtu8gdUxyv6UK6H39keI7OwPgFEHPkiv7tLKwV
+ /F1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4piyR5AALmkIkbzVV0ffKJcg7xLH5/peZjbu2uqI9Dw=;
- b=UtOalYMUnhTxrzpFiUhyKAaV3IvrOjcVVCNubSuWJvyqLESlM8xrEj8ahU5dlAI8IF
- wZk9igwIB++l3JytW8qRdr1rAqBD9Rm0ImhnYFygT2MQKTbKHQ/e5OtULNO2SXOXGrB+
- Bl5Ric2Gem5mviR1al7APl7JyGBTe+vShQJ51/N9uC4vm3GRg7Gm2FQsHGwzzfACgz5U
- Fef+euxR4C3iKP5C3BYsCtHXpBaBCmxIrltj/C5oU0xYuRk2sC5lbzn7GYECXIA7EobH
- goGCIxN0Jpsn6hJm+IP3M+AjmeWIQ9S8wEkUbVliMZY9BuZpIdoiw9iF7ioZeVUtGpRM
- Q5Lw==
-X-Gm-Message-State: AOAM530mLFbYgFk26SCb7NDBs+bbJpzQ0/fYsawi+YVaMU8u57BSH4lu
- AzjbjgLtMXe5e8OCm7CkmIeDjeNtG84jqw==
-X-Google-Smtp-Source: ABdhPJwp3zIFzNNmagsBCWdwR+pxkPNKqksrWqviBvvkHvWHBhvXTLZqnjB4IX4c+yXiKYb1+nj27w==
-X-Received: by 2002:a05:6830:2645:: with SMTP id
- f5mr5269805otu.19.1642128363325; 
- Thu, 13 Jan 2022 18:46:03 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:485:504a:8fbc:8dd:60c7:a0d])
- by smtp.gmail.com with ESMTPSA id n19sm1121301otq.11.2022.01.13.18.46.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Jan 2022 18:46:02 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 13 Jan 2022 23:45:55 -0300
-Message-Id: <20220114024555.319448-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=aw0mz/N0+IVCYqz24+b4Xw0ivchLI20rIpx6n/FCYd4=;
+ b=cSUajPO5DNdBJbsRzoyfEBxr38Pz9obBVeecANyhozCgt5oWsCBWyLQkVXOyhQvw7W
+ jIHlSZXaopMOp6Zv4LhgezXkJ9dce0bh2d9UJb/QTYp868gb6WbiiSJviyXMJRuLwoAx
+ wmQZK20HI/SPCKiTvu+KguHFnS5al60w1OqYbUsGyGH/hC+QFa2olxhLjVZqvrPKca6h
+ GKVnRiKRf7T5oxsM3MgA5/5a4hJh4aP7oYcNIvNBXqzLGK1rxpbfk0mSH1v0cMz+2iy9
+ R9E6ozq1nvvJAjiJKy0/sWbB3/WPOcmzsr9nRw8+5S0IinuxPo6hscsLxoh1RMkD/6A5
+ N7GA==
+X-Gm-Message-State: AOAM530BQKAqzdmcpyAbVPeInTT7ycfdqMnXu32+JOtJ98bhpCOOOfHQ
+ 9ptOAp61/cKIdI4NkgN+2hOgb7uKSzkzME/Cb9jrY2/F20g=
+X-Google-Smtp-Source: ABdhPJzElNCLGFd31dJIVp1JqcECaAAJYWM/Fw33RdRJpl2HUrLM5be3A0ujQfv28xNYZMIYuLZAn+DfhrZkHJlIO2o=
+X-Received: by 2002:a17:906:274f:: with SMTP id
+ a15mr5597081ejd.492.1642128458757; 
+ Thu, 13 Jan 2022 18:47:38 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] configs/imx8mmevk: new defconfig
+References: <20220112184821.916646-1-heiko.thiery@gmail.com>
+ <20220113220057.1db30808@windsurf>
+ <CAOMZO5C+cjNoVVEe44MsnuZgVj2TKdTJo8xF7Y0o5ksjk_TLpw@mail.gmail.com>
+In-Reply-To: <CAOMZO5C+cjNoVVEe44MsnuZgVj2TKdTJo8xF7Y0o5ksjk_TLpw@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 13 Jan 2022 23:47:27 -0300
+Message-ID: <CAOMZO5ALS0kbonEJq4pSQPkR-dCha4hb84rGENt+GAAfkazeVA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,142 +82,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: heiko.thiery@gmail.com, Fabio Estevam <festevam@gmail.com>,
- frieder.schrempf@kontron.de
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ Frieder Schrempf <frieder.schrempf@kontron.de>,
+ buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for imx8mmevk_defconfig that allows booting kernel, U-Boot and
-TFA from the upstream repositories.
+On Thu, Jan 13, 2022 at 8:14 PM Fabio Estevam <festevam@gmail.com> wrote:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v1:
-- Also use TF-A and U-Boot upstream versions.
+> I haven't submitted it formally yet because the kernel does not always boot.
+>
+> Usually, it hangs at:
+>
+> mmc1 is current device
+> Scanning mmc 1:1...
+> Found /boot/extlinux/extlinux.conf
+> Retrieving file: /boot/extlinux/extlinux.conf
+> 1:      imx8mm-evk-buildroot
+> Retrieving file: /boot/Image
+> append: root=/dev/mmcblk0p1 rootwait rw
+> Retrieving file: /boot/imx8mm-evk.dtb
+> Moving Image from 0x40480000 to 0x40600000, end=42770000
+> ## Flattened Device Tree blob at 43000000
+>    Booting using the fdt blob at 0x43000000
+>    Loading Device Tree to 000000004fff5000, end 000000004ffffd6b ... OK
+>
+> Starting kernel ...
+> (hangs here)
+>
+> Looks like a U-Boot issue that I need to investigate.
 
- DEVELOPERS                                    |  1 +
- board/freescale/imx8mmevk/genimage.cfg        | 16 ++++++++
- board/freescale/imx8mmevk/readme.txt          |  6 +++
- .../boot/extlinux/extlinux.conf               |  4 ++
- configs/imx8mmevk_defconfig                   | 39 +++++++++++++++++++
- 5 files changed, 66 insertions(+)
- create mode 100644 board/freescale/imx8mmevk/genimage.cfg
- create mode 100644 board/freescale/imx8mmevk/rootfs_overlay/boot/extlinux/extlinux.conf
- create mode 100644 configs/imx8mmevk_defconfig
+With kernel 5.15.14 it boots fine, so I submitted the patch with 5.15
+instead of 5.16.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 12777e8d61..e19072a14e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -839,6 +839,7 @@ F:	configs/imx6ullevk_defconfig
- F:	configs/imx6ulpico_defconfig
- F:	configs/imx7d-sdb_defconfig
- F:	configs/imx7dpico_defconfig
-+F:	configs/imx8mmevk_defconfig
- F:	configs/imx8mqevk_defconfig
- F:	configs/mx25pdk_defconfig
- F:	configs/mx51evk_defconfig
-diff --git a/board/freescale/imx8mmevk/genimage.cfg b/board/freescale/imx8mmevk/genimage.cfg
-new file mode 100644
-index 0000000000..3a83aa1f03
---- /dev/null
-+++ b/board/freescale/imx8mmevk/genimage.cfg
-@@ -0,0 +1,16 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition imx-boot {
-+		in-partition-table = "no"
-+		image = "flash.bin"
-+		offset = 33k
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		offset = 8M
-+	}
-+}
-diff --git a/board/freescale/imx8mmevk/readme.txt b/board/freescale/imx8mmevk/readme.txt
-index 7b69405d30..a8e80a48f9 100644
---- a/board/freescale/imx8mmevk/readme.txt
-+++ b/board/freescale/imx8mmevk/readme.txt
-@@ -10,8 +10,14 @@ Build
- 
- First, configure Buildroot for the i.MX8MM EVK board:
- 
-+If you want to use the NXP kernel:
-+
-   make freescale_imx8mmevk_defconfig
- 
-+Or if you want to use a mainline kernel:
-+
-+  make imx8mmevk_defconfig
-+
- Build all components:
- 
-   make
-diff --git a/board/freescale/imx8mmevk/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imx8mmevk/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..0ba2e4cbfc
---- /dev/null
-+++ b/board/freescale/imx8mmevk/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx8mm-evk-buildroot
-+  kernel /boot/Image
-+  devicetree /boot/imx8mm-evk.dtb
-+  append root=/dev/mmcblk1p1 rootwait rw 
-diff --git a/configs/imx8mmevk_defconfig b/configs/imx8mmevk_defconfig
-new file mode 100644
-index 0000000000..170b8d273b
---- /dev/null
-+++ b/configs/imx8mmevk_defconfig
-@@ -0,0 +1,39 @@
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_OVERLAY="board/freescale/imx8mmevk/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imx8mmevk/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.14"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="240M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30890000"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
--- 
-2.25.1
-
+I will investigate the 5.16 boot problem later.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
