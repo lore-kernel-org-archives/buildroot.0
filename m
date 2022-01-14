@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A95ADC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB79EC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:18:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A15484B82;
-	Fri, 14 Jan 2022 16:18:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 436044159F;
+	Fri, 14 Jan 2022 16:18:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W1h4EeiEhyHV; Fri, 14 Jan 2022 16:18:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id q4ajx-55F3wk; Fri, 14 Jan 2022 16:18:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B39CA831D6;
-	Fri, 14 Jan 2022 16:18:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 82E321BF362
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E56E415A6;
+	Fri, 14 Jan 2022 16:18:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AAD91C115D
  for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F70084B93
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89DCC40269
  for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8cnmKmQbToI for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ez8YFZygAmBy for <buildroot@lists.busybox.net>;
  Fri, 14 Jan 2022 16:18:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC750831D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3A184159F
  for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:18:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A192C80127; Fri, 14 Jan 2022 16:11:46 +0000 (UTC)
+ id AD753835B1; Fri, 14 Jan 2022 16:11:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 16:57:40 +0100
+Date: Fri, 14 Jan 2022 17:01:34 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: abcbd15a86645bb0e7e1960765496781c7e6e242
-X-Git-Newrev: 8af3f8029dfd22a134265937b61ba3346e2617e9
+X-Git-Oldrev: 8af3f8029dfd22a134265937b61ba3346e2617e9
+X-Git-Newrev: a0fd2911938ff2a56df3214491b96c0d8fece89c
 X-Patchwork-Hint: ignore
-Message-Id: <20220114161146.A192C80127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/qt5quickcontrols2: fix project URL
+Message-Id: <20220114161146.AD753835B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mpd: correct typo
+ in help message
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,30 +59,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af3f8029dfd22a134265937b61ba3346e2617e9
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fd2911938ff2a56df3214491b96c0d8fece89c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://doc.qt.io/qt-5/qtquickcontrols2-index.html is re-directed to
-https://doc.qt.io/qt-5/qtquickcontrols-index.html so use it directly
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 83bf1790c13a6a6ba4e4008f685d7b824ed15079)
+(cherry picked from commit 158a04a0a9ca479146f13828516e77136b903095)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5quickcontrols2/Config.in | 2 +-
+ package/mpd/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
-index 3f81e20d52..02e36257cc 100644
---- a/package/qt5/qt5quickcontrols2/Config.in
-+++ b/package/qt5/qt5quickcontrols2/Config.in
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
- 	  This module was in tech preview in Qt 5.6, and promoted
- 	  to a core module in Qt 5.7.0.
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 7a2597558b..7731b203b9 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -398,7 +398,7 @@ config BR2_PACKAGE_MPD_ID3TAG
  
--	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
-+	  https://doc.qt.io/qt-5/qtquickcontrols-index.html
+ endif
+ 
+-comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
++comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 8, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
