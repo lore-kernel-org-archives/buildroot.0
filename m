@@ -1,54 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F41B7C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 15:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ACEAC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 15:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9811D404A8;
-	Fri, 14 Jan 2022 15:58:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F34FB60B57;
+	Fri, 14 Jan 2022 15:58:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kKXCInwN8dgi; Fri, 14 Jan 2022 15:58:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iFFMz0V0gu1k; Fri, 14 Jan 2022 15:58:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAD8B4010F;
-	Fri, 14 Jan 2022 15:58:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A651A1BF5A2
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:57:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BEC360B3C;
+	Fri, 14 Jan 2022 15:58:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D0B51BF5A2
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9517E84BC6
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:57:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B83360B54
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 15:58:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9vzszXFsrmyr for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 15:57:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oEoJkwvB2etW for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 15:58:03 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B75E483DEF
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 15:57:33 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9AFA460B3C
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 15:58:03 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id AF75E40012;
- Fri, 14 Jan 2022 15:57:29 +0000 (UTC)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 325E31C0006;
+ Fri, 14 Jan 2022 15:57:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n8OxE-0008LH-Oj; Fri, 14 Jan 2022 16:57:28 +0100
+ id 1n8Oxc-0008NL-Eh; Fri, 14 Jan 2022 16:57:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Peter Seiderer <ps.report@gmx.net>
 References: <20211114162923.21474-1-ps.report@gmx.net>
-Date: Fri, 14 Jan 2022 16:57:28 +0100
-In-Reply-To: <20211114162923.21474-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 14 Nov 2021 17:29:22 +0100")
-Message-ID: <87y23i71jr.fsf@dell.be.48ers.dk>
+ <20211114162923.21474-2-ps.report@gmx.net>
+Date: Fri, 14 Jan 2022 16:57:52 +0100
+In-Reply-To: <20211114162923.21474-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 14 Nov 2021 17:29:23 +0100")
+Message-ID: <87tue671j3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH/next v1 1/2] package/qt5*: change project
- URLs to https
+Subject: Re: [Buildroot] [PATCH/next v1 2/2] package/qt5quickcontrols2: fix
+ project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,7 +72,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - change http project URLs to https
+ > - https://doc.qt.io/qt-5/qtquickcontrols2-index.html is re-directed to
+ >   https://doc.qt.io/qt-5/qtquickcontrols-index.html so use it directly
+
  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed to 2021.02.x and 2021.11.x, thanks.
