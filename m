@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26C3C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE448C4321E
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 286024159F;
-	Fri, 14 Jan 2022 16:37:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9089B60A9D;
+	Fri, 14 Jan 2022 16:41:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VPG6iL7CIZtB; Fri, 14 Jan 2022 16:37:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ROaVIXtHKu6m; Fri, 14 Jan 2022 16:41:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DB0E4151C;
-	Fri, 14 Jan 2022 16:37:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B5BD61BF362
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:37:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9E6160B1C;
+	Fri, 14 Jan 2022 16:41:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 752251BF362
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A25184040D
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:37:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6334D84B7F
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:41:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eeddwUuEKmyi for <buildroot@lists.busybox.net>;
- Fri, 14 Jan 2022 16:37:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B3520400F3
- for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:37:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GSZUKjGSpmCr for <buildroot@lists.busybox.net>;
+ Fri, 14 Jan 2022 16:40:59 +0000 (UTC)
+X-Greylist: delayed 00:42:58 by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 460E984B77
+ for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:40:59 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0EB6D24000E;
- Fri, 14 Jan 2022 16:37:19 +0000 (UTC)
+ by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 0A0761C000E;
+ Fri, 14 Jan 2022 16:40:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n8PZn-00013H-Ax; Fri, 14 Jan 2022 17:37:19 +0100
+ id 1n8PdI-0001A0-7P; Fri, 14 Jan 2022 17:40:56 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20211121215713.4167839-1-ricardo.martincoski@gmail.com>
-Date: Fri, 14 Jan 2022 17:37:19 +0100
-In-Reply-To: <20211121215713.4167839-1-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 21 Nov 2021 18:57:13 -0300")
-Message-ID: <878rvi6zpc.fsf@dell.be.48ers.dk>
+To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+References: <20211211204815.0159982964@busybox.osuosl.org>
+Date: Fri, 14 Jan 2022 17:40:56 +0100
+In-Reply-To: <20211211204815.0159982964@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Sat, 11 Dec 2021 21:35:19 +0100")
+Message-ID: <874k666zjb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] utils/getdeveloperlib.py: fix developer
- being reported for unrelated path
+Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: Don't print
+ directory in 'make' call
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,41 +60,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Knight <james.d.knight@live.com>,
- Heiko Thiery <heiko.thiery@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Currently, by following the instructions in the manual and querying for
- > developers for a patch that changes path
- > package/foobar
- > the script reports both developers that have these entries in the
- > DEVELOPERS file:
- > F:	package/foo/
- > F:	package/foobar/
+ > commit: https://git.buildroot.net/buildroot/commit/?id=c988867fd2c72fe5abeb63c4abe92f10eea6499d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Starting from commit "afc112b0e4 utils/getdeveloperlib.py: fix issue
- > with hasfile()" get-developers script uses os.path.abspath() and
- > os.path.relpath().
- > The catch is that those functions return the absolute path and the
- > relative path without the trailing slash.
+ > It is possible that some users of buildroot have put it in a repository
+ > and call into it from another Makefile such as:
+ > .DEFAULT:
+ > 	$(MAKE) O=$(abspath $(O)) -C buildroot $(@)
 
- > When the paths associated to a developer are then compared to the paths
- > a patch touches, using the string.startswith(), any substring returns
- > True, leading to developers for package/foo/ being wrongly reported
- > for package/foobar/ .
+ > This technique works well except that Make tells us that it changes into
+ > the buildroot directory:
+ > make[1]: Entering directory 'buildroot'
 
- > Fix this by re-adding the trailing slash after using relpath().
+ > Because this line doesn't have an equals within it, python raises a
+ > ValueError exception within pkg-stats.
 
- > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- > Cc: Heiko Thiery <heiko.thiery@gmail.com>
- > Cc: James Knight <james.d.knight@live.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > This patch has python tell the invoked make not to print directories
+
+ > Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2021.02.x and 2021.11.x, thanks.
 
