@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 432A2C433EF
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC747C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jan 2022 16:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E65C6404C0;
-	Fri, 14 Jan 2022 16:20:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CD1284B89;
+	Fri, 14 Jan 2022 16:20:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oTGdsFF-pRNt; Fri, 14 Jan 2022 16:20:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NPk0SP9hZPKC; Fri, 14 Jan 2022 16:20:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A28D240500;
-	Fri, 14 Jan 2022 16:20:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6B651BF362
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD9984B7F;
+	Fri, 14 Jan 2022 16:20:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BB811BF362
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21DDA60806
- for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5742F84B7F
+ for <buildroot@lists.busybox.net>; Fri, 14 Jan 2022 16:18:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BTJmhYU22dx2 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8BrQKHROLdk for <buildroot@lists.busybox.net>;
  Fri, 14 Jan 2022 16:18:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65BD660709
+ by smtp1.osuosl.org (Postfix) with ESMTP id 521A5831D6
  for <buildroot@buildroot.org>; Fri, 14 Jan 2022 16:18:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 41D87835A7; Fri, 14 Jan 2022 16:11:51 +0000 (UTC)
+ id 2E283835B1; Fri, 14 Jan 2022 16:11:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jan 2022 17:04:59 +0100
+Date: Fri, 14 Jan 2022 16:57:47 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 3472ab96734a7f7e43d07117f947cade9cad0f5e
-X-Git-Newrev: 56e7d20666934352074ddf5db48acf8627829278
+X-Git-Oldrev: 4790030db42a013e44ccd31d9df7ba21756d6db8
+X-Git-Newrev: 9c11f5d893ebdf10acb4e218856d5f6827e720bd
 X-Patchwork-Hint: ignore
-Message-Id: <20220114161151.41D87835A7@busybox.osuosl.org>
+Message-Id: <20220114161151.2E283835B1@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2021.11.x]
- utils/checkpackagelib/lib_mk.py: fix check for overridden variable
+ package/qt5quickcontrols2: fix project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,74 +59,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56e7d20666934352074ddf5db48acf8627829278
+commit: https://git.buildroot.net/buildroot/commit/?id=9c11f5d893ebdf10acb4e218856d5f6827e720bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Currently this .mk snippet results in unexpected behavior from
-check-package:
-|VAR_1 = VALUE1
-|ifeq (condition)
-|VAR_1 := $(VAR_1), VALUE2
-|endif
+https://doc.qt.io/qt-5/qtquickcontrols2-index.html is re-directed to
+https://doc.qt.io/qt-5/qtquickcontrols-index.html so use it directly
 
-Fix commit "163f160a8e utils/{check-package, checkpackagelib}:
-consistently use raw strings for re.compile" that ended up doing this:
--    CONCATENATING = re.compile("^([A-Z0-9_]+)\s*(\+|:|)=\s*\$\(\\1\)")
-+    CONCATENATING = re.compile(r"^([A-Z0-9_]+)\s*(\+|:|)=\s*\$\(\\1\)")
-
-But raw strings do not expect escaping when referencing \1 and the
-pattern ends up searching for a raw '\\1' instead of an occurrence of
-the first pattern inside parenthesis.
-
-|$ python3
-|Python 3.8.10 (default, Sep 28 2021, 16:10:42)
-|[GCC 9.3.0] on linux
-|Type "help", "copyright", "credits" or "license" for more information.
-|>>> import re
-|>>> p1 = re.compile('(foo)bar\\1')
-|>>> p2 = re.compile(r'(foo)bar\\1')
-|>>> p3 = re.compile(r'(foo)bar\1')
-|>>> s1 = 'foobarfoo'
-|>>> s2 = 'foobar\\1'
-|>>> print(p1.search(s1))
-|<re.Match object; span=(0, 9), match='foobarfoo'>
-|>>> print(p2.search(s1))
-|None
-|>>> print(p3.search(s1))
-|<re.Match object; span=(0, 9), match='foobarfoo'>
-|>>> print(p1.search(s2))
-|None
-|>>> print(p2.search(s2))
-|<re.Match object; span=(0, 8), match='foobar\\1'>
-|>>> print(p3.search(s2))
-|None
-|>>>
-
-So use '\1' instead of '\\1' in the raw string.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5bbedea9c2317bfb04d1efd5fb157e725e86c2fb)
+(cherry picked from commit 83bf1790c13a6a6ba4e4008f685d7b824ed15079)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/checkpackagelib/lib_mk.py | 2 +-
+ package/qt5/qt5quickcontrols2/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 0278354434..572fe75990 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -77,7 +77,7 @@ class Indent(_CheckFunction):
+diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+index 3f81e20d52..02e36257cc 100644
+--- a/package/qt5/qt5quickcontrols2/Config.in
++++ b/package/qt5/qt5quickcontrols2/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 	  This module was in tech preview in Qt 5.6, and promoted
+ 	  to a core module in Qt 5.7.0.
  
- 
- class OverriddenVariable(_CheckFunction):
--    CONCATENATING = re.compile(r"^([A-Z0-9_]+)\s*(\+|:|)=\s*\$\(\\1\)")
-+    CONCATENATING = re.compile(r"^([A-Z0-9_]+)\s*(\+|:|)=\s*\$\(\1\)")
-     END_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(end_conditional)))
-     OVERRIDING_ASSIGNMENTS = [':=', "="]
-     START_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(start_conditional)))
+-	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
++	  https://doc.qt.io/qt-5/qtquickcontrols-index.html
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
