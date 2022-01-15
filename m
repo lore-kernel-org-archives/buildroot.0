@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E8EC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A57C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4FBC24010E;
-	Sat, 15 Jan 2022 09:31:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4161A60BBF;
+	Sat, 15 Jan 2022 09:40:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xhXnbK6HJfGQ; Sat, 15 Jan 2022 09:31:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zfq64vKn6j7R; Sat, 15 Jan 2022 09:40:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4134340569;
-	Sat, 15 Jan 2022 09:31:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3418A1BF34B
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:31:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA41F607F2;
+	Sat, 15 Jan 2022 09:40:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 26D471BF34B
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:40:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 217D54013A
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:31:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14DCF828BA
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:40:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5RDp4iTb9phw for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 09:31:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8HjXj5oEAaM for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 09:40:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04CE64010E
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 09:31:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3E0BF825F8; Sat, 15 Jan 2022 09:24:50 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp1.osuosl.org (Postfix) with ESMTP id 536CE828A5
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 09:40:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 87FDF8258B; Sat, 15 Jan 2022 09:34:09 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 09:41:54 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 4fea34dddc967e7fc3377dee8f17bd32615a1523
-X-Git-Newrev: 257dda3c473fd6e818812183ba8ce66f8d718412
+Date: Sat, 15 Jan 2022 10:39:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67af1b5ba50f387f6fb6ec7cc67283e1c9813fc0
+X-Git-Newrev: 9b32c37a260b0fec70fd9c16bca6632d8be19e7f
 X-Patchwork-Hint: ignore
-Message-Id: <20220115092450.3E0BF825F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/keepalived: fix
- CVE-2021-44225
+Message-Id: <20220115093409.87FDF8258B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boost: enable system on host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +58,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=257dda3c473fd6e818812183ba8ce66f8d718412
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9b32c37a260b0fec70fd9c16bca6632d8be19e7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In Keepalived through 2.2.4, the D-Bus policy does not sufficiently
-restrict the message destination, allowing any user to inspect and
-manipulate any property. This leads to access-control bypass in some
-situations in which an unrelated D-Bus system service has a settable
-(writable) property
+boost system (which provides boost asio) is needed by host-riscv-isa-sim
+since its addition in commit ea033cecf990ed3f86619647523a9ad2ccb09adb:
+
+configure: error: Could not find a version of the Boost::Asio library!
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6c33a66386ab2171454d8ea8c1bd17a5582e21dd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e4464fabb6323dba4974096886166b9c4631fd38)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...02-dbus-fix-policy-to-not-be-overly-broad.patch | 42 ++++++++++++++++++++++
- package/keepalived/keepalived.mk                   |  3 ++
- 2 files changed, 45 insertions(+)
+ package/boost/boost.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/keepalived/0002-dbus-fix-policy-to-not-be-overly-broad.patch b/package/keepalived/0002-dbus-fix-policy-to-not-be-overly-broad.patch
-new file mode 100644
-index 0000000000..6287d6117d
---- /dev/null
-+++ b/package/keepalived/0002-dbus-fix-policy-to-not-be-overly-broad.patch
-@@ -0,0 +1,42 @@
-+From 7977fec0be89ae6fe87405b3f8da2f0b5e415e3d Mon Sep 17 00:00:00 2001
-+From: Vincent Bernat <vincent@bernat.ch>
-+Date: Tue, 23 Nov 2021 06:50:59 +0100
-+Subject: [PATCH] dbus: fix policy to not be overly broad
-+
-+The DBus policy did not restrict the message destination, allowing any
-+user to inspect and manipulate any property.
-+
-+Signed-off-by: Vincent Bernat <vincent@bernat.ch>
-+
-+[Retrieved from:
-+https://github.com/acassen/keepalived/commit/7977fec0be89ae6fe87405b3f8da2f0b5e415e3d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ keepalived/dbus/org.keepalived.Vrrp1.conf | 13 ++++++++-----
-+ 1 file changed, 8 insertions(+), 5 deletions(-)
-+
-+diff --git a/keepalived/dbus/org.keepalived.Vrrp1.conf b/keepalived/dbus/org.keepalived.Vrrp1.conf
-+index 2b78a575c..b5ced6085 100644
-+--- a/keepalived/dbus/org.keepalived.Vrrp1.conf
-++++ b/keepalived/dbus/org.keepalived.Vrrp1.conf
-+@@ -3,12 +3,15 @@
-+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-+ <busconfig>
-+ 	<policy user="root">
-+-		<allow own="org.keepalived.Vrrp1"/>
-+-		<allow send_destination="org.keepalived.Vrrp1"/>
-++		<allow own="org.keepalived.Vrrp1" />
-++		<allow send_destination="org.keepalived.Vrrp1" />
-+ 	</policy>
-+ 	<policy context="default">
-+-		<allow send_interface="org.freedesktop.DBus.Introspectable" />
-+-		<allow send_interface="org.freedesktop.DBus.Peer" />
-+-		<allow send_interface="org.freedesktop.DBus.Properties" />
-++		<allow send_destination="org.keepalived.Vrrp1"
-++		       send_interface="org.freedesktop.DBus.Introspectable" />
-++		<allow send_destination="org.keepalived.Vrrp1"
-++		       send_interface="org.freedesktop.DBus.Peer" />
-++		<allow send_destination="org.keepalived.Vrrp1"
-++		       send_interface="org.freedesktop.DBus.Properties" />
-+ 	</policy>
-+ </busconfig>
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 5d42cab741..e31c02dec5 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -12,6 +12,9 @@ KEEPALIVED_LICENSE_FILES = COPYING
- KEEPALIVED_CPE_ID_VENDOR = keepalived
- KEEPALIVED_CONF_OPTS = --disable-hardening
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 6d1046e9a2..2d2a8fb311 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -17,7 +17,7 @@ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+ 	contract container coroutine date_time exception fiber filesystem graph \
+ 	graph_parallel iostreams json locale log math mpi nowide program_options \
+-	python random serialization stacktrace system test thread timer \
++	python random serialization stacktrace test thread timer \
+ 	type_erasure wave)
  
-+# 0002-dbus-fix-policy-to-not-be-overly-broad.patch
-+KEEPALIVED_IGNORE_CVES += CVE-2021-44225
-+
- ifeq ($(BR2_PACKAGE_JSON_C),y)
- KEEPALIVED_DEPENDENCIES += json-c
- KEEPALIVED_CONF_OPTS += --enable-json
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
