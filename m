@@ -1,47 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1723C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 10:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA80C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 10:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62C0982980;
-	Sat, 15 Jan 2022 10:39:02 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GnowTZUC-DQD; Sat, 15 Jan 2022 10:39:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2B95826D5;
-	Sat, 15 Jan 2022 10:39:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 40CBD1BF5DD
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 10:38:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AD1960AC0
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 10:38:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9239960AE4;
+	Sat, 15 Jan 2022 10:39:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mBkMqQlijEV2 for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 10:38:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A94960AA9
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 10:38:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 73668826D6; Sat, 15 Jan 2022 10:32:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lF6V20Amfvlb; Sat, 15 Jan 2022 10:39:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3B6460AC0;
+	Sat, 15 Jan 2022 10:39:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 60B131BF5DD
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 10:39:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F1E0826D5
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 10:39:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eUUk57bWz7TL for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 10:39:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C28C826C2
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 10:39:28 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id v123so10723505wme.2
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 02:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=21avlzowxuK/WG9HIYQibfZPjhYmzl4T7zLN6Mt92uY=;
+ b=UPQsyuICWcqocXgX06jPziqTdvVy8RVrCyfc3pcwu6ZeyviYXo9b+73lSxMxl2sBIG
+ nbaUv5IQalQSPaA9/nuJY0l33CdPs6//VK+QxMRH9RjE57GzEFlY1UX0oHh52fGBZ/WW
+ 7VGeax4U0EKSW+SXgjlam4pvqOr1jYxuH5z22+ARaPzfToCcOQP6JHRLA0BL2++z/aff
+ M3qSdAxoon0bwLj83Aud7ISdPT5Y5IK2HNnCYu0PzeOgQY4fGJCIy7kaMJjiarvkeMTh
+ 2Vt+W6OLCxH7Hlu3IpX92O8C0WGUFiRxzGd4u1jljbAV1RBbxwzvnHE8EMmEg4nZg5yH
+ b9tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=21avlzowxuK/WG9HIYQibfZPjhYmzl4T7zLN6Mt92uY=;
+ b=wI9FfHxh2nQejT+res8B5iuUvgPmEnALLcPlCcqss7JyvK1yMCys+df0e6FNmxKlH4
+ 7XlTRNfITBUmgMtTmi2b/KJYWgMoGicT6XWR5tlkj7yqJz9AkSvmWLaiuAsWV5ZRTJ9i
+ o+M6rT8AjWjSmnSZflJXOOm+hOupAYW+ON5aXdW2PyBTJPXrlYQ9hEqcOJxr+m8MJXhl
+ YIWNyNSchYRIoBkeRQQ2n1n14LTuj2Pcfas3A/6rCZRVFQ1hlSIea3D5+LwModTinJy+
+ 0VcF1pWmta76IBsCaQ3Awnl8KL/CWLbKvODVxFACygmOpkUllIxginUgzhxw6jjb4td4
+ CQTg==
+X-Gm-Message-State: AOAM532o3IppiSZ03DH8bNg9bB5tCrD2G9NVCDClF1HzBaYySKlHyFY3
+ wr8hrFmTz9nhwjYEXFdZhwnL4iniqpU=
+X-Google-Smtp-Source: ABdhPJzO/hlmFlao0tkMv0w79fGq0c5vPrCUMuBFepkJfh1pa7/0hGifnVan9fU/kJooJ4JcBjA2nQ==
+X-Received: by 2002:a5d:4201:: with SMTP id n1mr11756584wrq.239.1642243166588; 
+ Sat, 15 Jan 2022 02:39:26 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-358-126.w2-10.abo.wanadoo.fr.
+ [2.10.19.126])
+ by smtp.gmail.com with ESMTPSA id g12sm3733wri.104.2022.01.15.02.39.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Jan 2022 02:39:26 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 11:38:44 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: c25e90cb3b4b52968d8bcf0d2722329a073e3bcd
-X-Git-Newrev: 71786cb620d61498676645fc9087e9518d8b85d6
-X-Patchwork-Hint: ignore
-Message-Id: <20220115103230.73668826D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x]
- package/docker-containerd: security bump to version 1.4.12
+Date: Sat, 15 Jan 2022 11:37:54 +0100
+Message-Id: <20220115103754.1759593-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/boost: enable all features except
+ python on host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,48 +86,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71786cb620d61498676645fc9087e9518d8b85d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Enable all features except python on host variant as suggested by
+Yann E. Morin in
+https://patchwork.ozlabs.org/project/buildroot/patch/20220114171847.634174-1-fontaine.fabrice@gmail.com
 
-The twelfth patch release for containerd 1.4 contains a few minor bug fixes
-and an update to mitigate CVE-2021-41190.
+Indeed, host packages have no way to express their dependencies on host
+boost
 
-https://github.com/containerd/containerd/releases/tag/v1.4.12
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boost/boost.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 82b9d00d8c..ffcbeee54b 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  d42bf6d4f303061166fa5ec2657726a443d978fe13cf08ed13532df5216a61b2  docker-containerd-1.4.11.tar.gz
-+sha256  85a531725f15e2d136131119d42af4507a5389e0947015152075c4c93816fb5c  docker-containerd-1.4.12.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 80f621fe7c..08c189525c 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 2d2a8fb311..ad071ed206 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,13 +12,7 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ BOOST_CPE_ID_VENDOR = boost
  
--DOCKER_CONTAINERD_VERSION = 1.4.11
-+DOCKER_CONTAINERD_VERSION = 1.4.12
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+-# keep host variant as minimal as possible
+-HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+-	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+-	contract container coroutine date_time exception fiber filesystem graph \
+-	graph_parallel iostreams json locale log math mpi nowide program_options \
+-	python random serialization stacktrace test thread timer \
+-	type_erasure wave)
++HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc --without-libraries=python
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
