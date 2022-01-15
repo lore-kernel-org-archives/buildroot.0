@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7691EC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B8AC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35A94408D4;
-	Sat, 15 Jan 2022 11:18:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40421408CF;
+	Sat, 15 Jan 2022 11:20:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dOQAt0fw1zsd; Sat, 15 Jan 2022 11:18:48 +0000 (UTC)
+	with ESMTP id gmgn8eG6948U; Sat, 15 Jan 2022 11:20:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93616408CD;
-	Sat, 15 Jan 2022 11:18:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85EEC1BF2E4
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:18:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40927408CC;
+	Sat, 15 Jan 2022 11:20:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 889D11BF2E4
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 741EC60888
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:18:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8216582884
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:20:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S4HR_DuUgXi0 for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 11:18:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 77470607D1
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:18:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ujrKNr4eZpMn for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 11:20:03 +0000 (UTC)
+X-Greylist: delayed 00:09:20 by SQLgrey-1.8.0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A3A5582882
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:20:02 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9358C40004;
- Sat, 15 Jan 2022 11:18:43 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id B7194FF802;
+ Sat, 15 Jan 2022 11:20:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n8h51-0000WR-0e; Sat, 15 Jan 2022 12:18:43 +0100
+ id 1n8h6G-0000af-2v; Sat, 15 Jan 2022 12:20:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-References: <20211214121123.6867-1-buildroot@heine.tech>
-Date: Sat, 15 Jan 2022 12:18:42 +0100
-In-Reply-To: <20211214121123.6867-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Tue, 14 Dec 2021 13:11:21 +0100")
-Message-ID: <87zgnx2qnh.fsf@dell.be.48ers.dk>
+To: Waldemar Brodkorb <wbx@openadk.org>
+References: <YbiPBtumWqf2+41V@waldemar-brodkorb.de>
+Date: Sat, 15 Jan 2022 12:20:00 +0100
+In-Reply-To: <YbiPBtumWqf2+41V@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Tue, 14 Dec 2021 13:33:10 +0100")
+Message-ID: <87v8yl2qlb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to
- version 3.10.4
+Subject: Re: [Buildroot] [PATCH] package/ruby: security update to 3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,21 +59,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
- > This release fixes two bugs introduced in release 3.10.0 and fixes the
- > conversion of std::filesystem::path. All changes are backward-compatible.
-
- > https://github.com/nlohmann/json/releases/tag/v3.10.4
-
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Committed to 2021.11.x, thanks.
+
+For 2021.02.x I will instead bump to 2.7.5, which has the same fixes.
 
 -- 
 Bye, Peter Korsgaard
