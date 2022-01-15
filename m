@@ -4,77 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 222FAC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 21:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62D46C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 21:15:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4418400A6;
-	Sat, 15 Jan 2022 21:11:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D09CD4012D;
+	Sat, 15 Jan 2022 21:15:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7HYnd1RXKiGs; Sat, 15 Jan 2022 21:11:24 +0000 (UTC)
+	with ESMTP id YZS3C9jce5M7; Sat, 15 Jan 2022 21:15:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BFDF4012D;
-	Sat, 15 Jan 2022 21:11:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED97D40571;
+	Sat, 15 Jan 2022 21:15:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8BD2F1BF393
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 21:11:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC0041BF393
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 21:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7050081CAD
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 21:11:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA2D581C58
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 21:15:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g2F907XJh9Yr for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 21:11:20 +0000 (UTC)
+ with ESMTP id kx7iu184EnWF for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 21:15:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 85B2B81C58
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 21:11:20 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id n137so10654117iod.4
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 13:11:20 -0800 (PST)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE5EB81AF4
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 21:15:19 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ s6-20020a7bc386000000b0034a89445406so10640495wmj.2
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 13:15:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dfC4dM4YhGTUEbZxppw6+diu9il3JpuBMq5ZeXYWDps=;
- b=NVaiuSn2x9rq3ADb8OVQX/3SLRMp9iOAvPz6+LvkDQ4GsVlWyDM0o71DXucis4iik3
- kZcD7WoHwIqjKa1/RNPy9fR3H/u7ZtARHtOcLs/+01kCIjRcJmTUkx+uQ/vxQjZ+Ed1Y
- Bqce/KPODRy0idIfHhz1LlPNu+MtOBw+b9suR7Y8eG6RcoW1WG1uBtYQfnJMCP/sspfd
- 0B6nKHZG4wHJrEqFaEl9pIj+E1OA4JSb2pT4bKWskdo56S9DrZISYmIrULf1U9U64w3S
- m4EQg0C9S42hX2C0m7/+MK4fUxOZBcrseaQcD8Gd0VASbUzqAWEyhWOqE4u4F+HhsRCj
- O3xw==
+ bh=3+1yQ7IqqE7VUxqu1iTNVdZmPWY4AIWRs0iIS5jt4Fg=;
+ b=J2RkQw56in2vyq+ZCW+SNT9cvtzffwlcmZwIhuOyD6apvjF8t2Rk2zg8p8akQLfCi+
+ qImjwMAJm/aBmDFUEL8vIBINVLqQy7kTBSbnhW1lfKZSvJbmskEbg1lQxNxGJlJeOyFL
+ ZrAjS4KG8qcn0s3mIQYeSOUoTPTws9TzqcKlfN+n8zZmE7a0IWvS7tfHSOESMA+Ey7Hz
+ ngB71fT4ZQgce7KhYAqH0B7kZujV+SBylEtyT0P5ILLhV9MO3ipGn4BipH4IUXwnGc63
+ NXH4jxksy6tMa3zV734ncz2R4K3m8kzuke4r7E/+NLflk5rSLnI2mW2JVMjmRPQwGCJV
+ xfZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=dfC4dM4YhGTUEbZxppw6+diu9il3JpuBMq5ZeXYWDps=;
- b=rtNomg92mnIuLYQOXtToWmy4lq0/sgWXeWSeoonPw30N4itYkNmpXBpP+HohNBGRg5
- RG6smwuNXVyaj4L7NlEiD5D7kWt4DEk/tyuIbdnU0C/ZbwON4oSKDDQOWPKB1mR6LkGa
- 1FtIoW90Ox0+1ML5eKasIHW9DPkdVXlIPRjxRfEJ2R+ifyrvcA4DTLpkeXZUUj/+hM4K
- ufoH4s0E4sW0SawxXBqRFuRmeV1Uw2KWSPs8MMe2quUBRGbG+Tqk9n85hppXfGpkdduq
- XTTG95FV9jY6e/2+Sp6ee/KIG1AycCdBLL2TDq7B5kWEIHDYF2v5nPvyYBHRcDpmCIOg
- dZGg==
-X-Gm-Message-State: AOAM5321xwJSyEQeso/Hm/4paPSlMLtAr9oepVRL0BQ/eQGTGEZhzLmQ
- HVUHF3myHZGx9dAcJFq+vVXop9lBxhY=
-X-Google-Smtp-Source: ABdhPJzj8tla+L/5ptSYNoveEIZ/55cjo3RO1e7SlhCh9sKdHKTu6uI4CteToXGrhdWXDQ1VtLBo/g==
-X-Received: by 2002:a5e:8608:: with SMTP id z8mr6595423ioj.58.1642281079288;
- Sat, 15 Jan 2022 13:11:19 -0800 (PST)
-Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
- [97.118.239.242])
- by smtp.gmail.com with ESMTPSA id i23sm6134452ila.85.2022.01.15.13.11.18
+ bh=3+1yQ7IqqE7VUxqu1iTNVdZmPWY4AIWRs0iIS5jt4Fg=;
+ b=HU2wyaAknp3nHzH1k9aPPEWWXz6rb1ZaX/IiuzyD+miNchSDLHQDiVrAc4Rbibs3MN
+ P076HdgWLy+QwmFJ0gIaEpDZ+WlkPPs4SPkr2Q6E8ysTfMSrcwIWPuc0oDoSWDzcakAx
+ cq5ldC2AlxWlgSn1gc0KMoVaBlshOq1Cq/Qf6QUVmKA+sGzwqm+sPtlvSIoE0TAff9YO
+ YzVbfVWaZzy3r/RbLOASyPYaypNxWVx3omCBOzcAdw/df2EcgQunFoNkc9mDjZbSlJ/3
+ opTfVqEvZ492qnUtoNrljGih3Nz81UoaG0gYLL5prxNFO3KwSK++8ply5enQ71TcGyyZ
+ ebjw==
+X-Gm-Message-State: AOAM531YVtuZw+InwQI50XW1K2L2jT6/d58yVZ3Bati7DtwBT7hXpoar
+ uEKGojf2sSRP/749Y52qVdqPcU/7Lno=
+X-Google-Smtp-Source: ABdhPJyiqAGROlAZih8H5oGGwEjGZgUnEz8uepE904J4kyju1G8BRveLY5urqcZH4XE8dsb8INov4Q==
+X-Received: by 2002:a5d:6a0a:: with SMTP id m10mr13328025wru.296.1642281317936; 
+ Sat, 15 Jan 2022 13:15:17 -0800 (PST)
+Received: from gilles-Gazelle-Professional.. (138.23.87.79.rev.sfr.net.
+ [79.87.23.138])
+ by smtp.gmail.com with ESMTPSA id b5sm4547956wmq.28.2022.01.15.13.15.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Jan 2022 13:11:18 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 15 Jan 2022 13:15:17 -0800 (PST)
+From: Gilles Talis <gilles.talis@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 14:11:12 -0700
-Message-Id: <20220115211112.3224696-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sat, 15 Jan 2022 22:14:49 +0100
+Message-Id: <20220115211449.393250-1-gilles.talis@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/qt5/qt5base: disable broken
- qmake sysrootify
+Subject: [Buildroot] [PATCH] package/iozone: bump to version 3_493
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,91 +86,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently the qmake gcc sysrootify path logic causes issues with
-per-package directories, disable automatic gcc sysroot for qt5base
-install and override all qt.conf paths manually to point to their
-correct locations.
-
-Redirect HostData to STAGING_DIR as mkspecs need to be available there
-instead of the HOST_DIR for cross compilation to work.
-
-This fixes some build errors with per-package directories such as:
-/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
-cannot find /lib64/libc.so.6
-/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
-cannot find /usr/lib64/libc_nonshared.a
-/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
-cannot find /lib/ld-linux-aarch64.so.1
-collect2: error: ld returned 1 exit status
-make[4]: *** [Makefile:122: ../../lib/libQt5Svg.so.5.15.2] Error 1
-make[3]: *** [Makefile:48: sub-svg-make_first-ordered] Error 2
-make[2]: *** [Makefile:49: sub-src-make_first] Error 2
-make[1]: *** [package/pkg-generic.mk:295:
-/home/buildroot/buildroot/output/build/qt5svg-5.15.2/.stamp_built]
-Error 2
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
-Changes v1 -> v2:
-  - add some missing overrides to qt.conf.in
----
- package/qt5/qt5base/qt.conf.in | 21 ++++++++++++++++++---
- package/qt5/qt5base/qt5base.mk |  2 ++
- 2 files changed, 20 insertions(+), 3 deletions(-)
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-index 2215cbd4e1..c92f52ced0 100644
---- a/package/qt5/qt5base/qt.conf.in
-+++ b/package/qt5/qt5base/qt.conf.in
-@@ -2,6 +2,21 @@
- Prefix=/usr
- HostPrefix=@@HOST_DIR@@
- Sysroot=@@STAGING_DIR@@
--Headers=/usr/include/qt5
--Plugins=/usr/lib/qt/plugins
--Examples=/usr/lib/qt/examples
-+SysrootifyPrefix=false
-+Binaries=@@STAGING_DIR@@/usr/bin
-+Libraries=@@STAGING_DIR@@/usr/lib
-+Headers=@@STAGING_DIR@@/usr/include/qt5
-+Plugins=@@STAGING_DIR@@/usr/lib/qt/plugins
-+Examples=@@STAGING_DIR@@/usr/lib/qt/examples
-+Tests=@@STAGING_DIR@@/usr/lib/qt/tests
-+Data=@@STAGING_DIR@@
-+Translations=@@STAGING_DIR@@/translations
-+Documentation=@@STAGING_DIR@@/doc
-+ArchData=@@STAGING_DIR@@/usr
-+LibraryExecutables=@@STAGING_DIR@@/usr/libexec
-+Imports=@@STAGING_DIR@@/usr/imports
-+Qml2Imports=@@STAGING_DIR@@/usr/qml
-+Settings=@@STAGING_DIR@@/etc
-+HostBinaries=@@HOST_DIR@@/bin
-+HostLibraries=@@HOST_DIR@@/lib
-+HostData=@@STAGING_DIR@@
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index bcdf036f00..6c05e710d8 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -311,8 +311,10 @@ define QT5BASE_CONFIGURE_CMDS
- 		-v \
- 		-prefix /usr \
- 		-hostprefix $(HOST_DIR) \
-+		-hostdatadir $(STAGING_DIR) \
- 		-headerdir /usr/include/qt5 \
- 		-sysroot $(STAGING_DIR) \
-+		-no-gcc-sysroot \
- 		-plugindir /usr/lib/qt/plugins \
- 		-examplesdir /usr/lib/qt/examples \
- 		-no-rpath \
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 1255392e38..9ecf1d1af8 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  93c9142d61e6a71ea43b0a266bad7f49f07ce5f5d31b36f8edf4dd386795c483  iozone3_492.tgz
++sha256  5a52f5017e022e737f5b55f320cc6ada0f2a8c831a5f996cce2a44e03e91c038  iozone3_493.tgz
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 2282a44eb8..2df4a2aa84 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IOZONE_VERSION = 3.492
++IOZONE_VERSION = 3.493
+ IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tgz
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
 -- 
-2.25.1
+2.32.0
 
 _______________________________________________
 buildroot mailing list
