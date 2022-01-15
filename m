@@ -1,75 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A200C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 12:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30ED9C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 13:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02FFC60BBC;
-	Sat, 15 Jan 2022 12:10:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACB2940004;
+	Sat, 15 Jan 2022 13:08:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rbWvAYMJDB8A; Sat, 15 Jan 2022 12:10:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xDQadRbQqpeF; Sat, 15 Jan 2022 13:08:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0312060AA9;
-	Sat, 15 Jan 2022 12:10:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D2C511BF4E2
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 12:10:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 614014036E;
+	Sat, 15 Jan 2022 13:08:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09F971BF5D7
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 13:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C05D4827A5
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 12:10:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC7C840327
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 13:08:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I3WdxNS__REl for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 12:10:13 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8016382681
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 12:10:13 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id 15so11112946edx.9
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 04:10:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=6hmIYRFbJHds3W56Bk/7bCtuZryLzqI61k3urFx+HrI=;
- b=WOx56myupdiaCV899d4SoTQiy4SpA3Bg07mSDq7ek7b4pkSPry/5o8EGEDVowdt/w5
- grRC9s6flMWUMt6i5votxYkIYmKX01yAq4wq2ig5Z4ffwp+jNr1mcwVhQ6cuCk0/udMH
- 0BO2Deil8yzWaClfkN659KCT/fuaaqHhaPSQNt1EITsX71ejY1M4kOyu3Dx9ce57gDHI
- avgPRYk3NYsF4KRrPUbWeXF1xiDaM/nEJq+TWqahh6D8BkIFxu3AzyKlQpYIsETZ0pmd
- ZhbmuQQXo6gDMquKYaWcz+R3bUe33uud52eCYVw91Ccpc4O9/pqCceghfqgxn7pBtTXO
- h7BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=6hmIYRFbJHds3W56Bk/7bCtuZryLzqI61k3urFx+HrI=;
- b=HI8OtboHRxTNxam6AKUR+D1UnnjA3bgoNhKfw1ICt1ydfcQOw7pghlZz0+X4KGAmZ+
- 6IiflIxJ5JU7bhctO7FZ9SrTWC/XYIOprx3Fsb0I0XxjPAyIOSsGscgJ/mhTG2SmmYXL
- WCz9ia6dxWU/Sft/jXvJZl/nSA0sYmq5n1cV/AYSVh/PqRhxn9kfhnfbAgpvVN09ZKCW
- UuLYUFjHCY02ligfChETv0GNL2MQ19pUOMYtoqTDYRqkHlgoEEWKfy/L5uRZftRbhoD9
- nJasz8BYjAvxmewJBGoUqg6tElX4ifuhCw7xQMBasHLvoubhZJ9CTGOuuPkYhHeVfw1Z
- FH3w==
-X-Gm-Message-State: AOAM531BgojipvYBI3ERetrE42bGEwyRhZDZuSgCg5FEYzI8+kSTRPYa
- Mbm2DR3Yb7FO1n7e4eWLfHshXXqI81JxjajEPHMVTboB9UvNIg==
-X-Google-Smtp-Source: ABdhPJyQqjy923MPjOc/tek1YYcrU7PDbDrwxzqtsPw15TgcgMv+TPBHLMFNFK4beu2LJEgEJCwmiHFBg2kZgOKtPCA=
-X-Received: by 2002:a50:da48:: with SMTP id a8mr12658408edk.155.1642248611645; 
- Sat, 15 Jan 2022 04:10:11 -0800 (PST)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nh6N4IESG97z for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 13:08:37 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23DE4402E8
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 13:08:37 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a19f:b904:d24b:da3])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7453E13F84C;
+ Sat, 15 Jan 2022 14:08:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642252114;
+ bh=pmLYZyTRN1e0nWrSDX7wifpQhzXnHEDa9fAQBFH24YI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uh9jw98qiCW74V4ShLvGKcoIB7qcHMw9SYsId42Ep3zFq+AFfRs/xlSWxQKzPAL6o
+ 3epBNBr6Olpin06m3topRCaf68LwuY3dXw7x4zwFK/DfS89Glid9yJKC0pmzVdwmpr
+ 7TkgORNa4r1gGN1ZZB5XUzsTz4UjRyz0aTH2iTcLHnBFiBr2VzGYcSZF7OZlkTKloE
+ 1/h3ID82cLwY9f9Z9okkUYonVxj1N0Hczq41/vQJbYDPqQpjBwFZeHWOH6JyKL1j2c
+ dfqu4XWTupuzTvtAFENk120UR/Ye5IvgqoyrseBnM7R16t/tS0gOBVERg/I0Nlnnh7
+ 3FmfHS2uFrKbw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 15 Jan 2022 14:08:28 +0100
+Date: Sat, 15 Jan 2022 14:08:28 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220115130828.GM1945846@scaer>
+References: <20220115103754.1759593-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-References: <20220114024555.319448-1-festevam@gmail.com>
- <CAEyMn7bX0YgDmvmmewcrhy0k+O53_1fdbP4KkCQm0ffKfyC2qA@mail.gmail.com>
-In-Reply-To: <CAEyMn7bX0YgDmvmmewcrhy0k+O53_1fdbP4KkCQm0ffKfyC2qA@mail.gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 15 Jan 2022 09:10:00 -0300
-Message-ID: <CAOMZO5AT532fgTBG8Jte2N_DNmEqi654XRyxnbsrqZxvfqMDog@mail.gmail.com>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Subject: Re: [Buildroot] [PATCH v2] configs/imx8mmevk: new defconfig
+Content-Disposition: inline
+In-Reply-To: <20220115103754.1759593-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 1/1] package/boost: enable all features
+ except python on host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,53 +72,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Schrempf Frieder <frieder.schrempf@kontron.de>,
- buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Heiko,
+Fabrice, All,
 
-On Sat, Jan 15, 2022 at 3:56 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
++Peter K., +Thomas P., +Arnout.
 
-> > +       partition imx-boot {
-> > +               in-partition-table = "no"
-> > +               image = "flash.bin"
-> > +               offset = 33k
->
-> Giulio pointed out to me that the units should be described with
-> capital letters.
+On 2022-01-15 11:37 +0100, Fabrice Fontaine spake thusly:
+> Enable all features except python on host variant as suggested by
+> Yann E. Morin in
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220114171847.634174-1-fontaine.fabrice@gmail.com
+> 
+> Indeed, host packages have no way to express their dependencies on host
+> boost
 
-Thanks for pointing this out. I will change it.
+So, I was not expecting an actual patch so fast, and I was doing more
+testing here...
 
-In the long term, we could probably use a common genimage.cfg too.
+So, with a recent-enough gcc (e.g. gcc-10 as is available in our Docker
+image used in our CI), the full Boost (save for python) is indeed built.
 
-> I my respin I used:
->
-> append root=PARTUUID=%PARTUUID% rootwait rw
->
-> The UUID is created in a post-build.sh script and set it in
-> extlinux.conf and genimage.cfg
->
-> With that the image would not limited to be located on the SD card.
+So I gave it a shot on a much older system, like my autobuilder, that is
+still running gcc-4.8. And there, only the headers component is built;
+everything else is just skipped.
 
-Good idea. Will change it.
+This means that host packages that depend on specific features of
+host-boost will fail randomly depending on the host system, and there is
+no way to prevent that, except by adding appropriate Config.in.host
+options for host-boost.
 
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
+Note: in our case, host-riscv-isa-sim already depends on gcc >= 4.9, so
+it would not be selectable on my autobuilder. But still...
 
-On my tests, I noticed that if I build U-Boot 2022.01 + TF-A mainline,
-then the kernel 5.16 does not boot.
+So I wonder what we should do... Any idea?
 
-Using TF-A from the NXP BSP allows me to boot 5.16 without issues.
+Regards,
+Yann E. MORIN.
 
-I will try to investigate why this happens with imx8mm-evk, as your
-board does not show issues.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boost/boost.mk | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index 2d2a8fb311..ad071ed206 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -12,13 +12,7 @@ BOOST_LICENSE = BSL-1.0
+>  BOOST_LICENSE_FILES = LICENSE_1_0.txt
+>  BOOST_CPE_ID_VENDOR = boost
+>  
+> -# keep host variant as minimal as possible
+> -HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+> -	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+> -	contract container coroutine date_time exception fiber filesystem graph \
+> -	graph_parallel iostreams json locale log math mpi nowide program_options \
+> -	python random serialization stacktrace test thread timer \
+> -	type_erasure wave)
+> +HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc --without-libraries=python
+>  
+>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+>  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Thanks
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
