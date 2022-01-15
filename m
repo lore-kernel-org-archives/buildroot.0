@@ -1,53 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C1AC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D75C7C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4628B408CF;
-	Sat, 15 Jan 2022 11:01:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A6E380BDE;
+	Sat, 15 Jan 2022 11:01:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3Afmvd42k3t; Sat, 15 Jan 2022 11:01:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UJr3NzZPlcu9; Sat, 15 Jan 2022 11:01:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F8D1408CC;
-	Sat, 15 Jan 2022 11:01:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 75C421BF5DD
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5B0E80BD6;
+	Sat, 15 Jan 2022 11:01:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A8E8D1BF95D
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61011400C8
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A59B780BD6
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id An0zfszDLRxs for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 11:01:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 22F7640004
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 81342200002;
- Sat, 15 Jan 2022 11:01:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1n8go5-0007yI-Mw; Sat, 15 Jan 2022 12:01:13 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R9JwoWYClSyU for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ECE6C80BCC
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 0F85F829FC; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20211212174922.668065-1-fontaine.fabrice@gmail.com>
-Date: Sat, 15 Jan 2022 12:01:13 +0100
-In-Reply-To: <20211212174922.668065-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 12 Dec 2021 18:49:22 +0100")
-Message-ID: <87pmot4612.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.1.4
+To: buildroot@buildroot.org
+Date: Sat, 15 Jan 2022 11:48:02 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 4eeeda794b345d3fde69770f215fe6897848a16d
+X-Git-Newrev: daa07be55df578ba78994aba964e8f6f91ccae23
+X-Patchwork-Hint: ignore
+Message-Id: <20220115105522.0F85F829FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/clamav: bump to
+ version 0.103.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=daa07be55df578ba78994aba964e8f6f91ccae23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
- > Mutt 2.1.4 was released on December 11, 2021. This is a bug-fix release,
- > fixing a performance issue when used with DavMail.
+ClamAV 0.103.4 is a critical patch release:
+https://blog.clamav.net/2021/11/clamav-01034-and-01041-patch-releases.html
 
- > Mutt 2.1.3 was released on September 10, 2021. This is a bug-fix
- > release, fixing some of the fixes in the last release. IMAP and
- > QRESYNC users are advised to upgrade.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ac629ef040fc8b10521d2592c944e09fd70b7016)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Mutt 2.1.2 was released on August 24, 2021. This is an important bug-fix
- > release, fixing a potential data-loss IMAP bug, a couple QRESYNC bugs,
- > and a few other issues. IMAP users are strongly advised to upgrade.
-
- > http://www.mutt.org
- > https://gitlab.com/muttmua/mutt/-/blob/mutt-2-1-4-rel/ChangeLog
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index a2ed115d24..d68b04af76 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9f6e3d18449f3d1a3992771d696685249dfa12736fe2b2929858f2c7d8276ae9  clamav-0.103.3.tar.gz
++sha256  def0ad15500fa6aff81d8e68b9f83aa75ee5b607a01335c1d26dbcc959932f85  clamav-0.103.4.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 63af111da5..94b589b975 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.103.3
++CLAMAV_VERSION = 0.103.4
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
