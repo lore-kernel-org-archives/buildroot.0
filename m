@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C6AFC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3DDC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D517E402F3;
-	Sat, 15 Jan 2022 09:21:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DAA140878;
+	Sat, 15 Jan 2022 09:22:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 43TYsXKi4DBF; Sat, 15 Jan 2022 09:21:57 +0000 (UTC)
+	with ESMTP id R_eBgItQj_WK; Sat, 15 Jan 2022 09:22:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25B844028E;
-	Sat, 15 Jan 2022 09:21:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 436671BF34B
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D7BB4087A;
+	Sat, 15 Jan 2022 09:22:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DEFA1BF34B
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 311AC4056A
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:21:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AA0060BFA
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:22:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGftDRUL50bA for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 09:21:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ldaezWG6tvMX for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 09:22:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 657074010E
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 09:21:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4E7B60AA9
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 09:22:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id A36FC813AA; Sat, 15 Jan 2022 09:15:25 +0000 (UTC)
+ id 2E3E3817E6; Sat, 15 Jan 2022 09:16:09 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 10:21:43 +0100
+Date: Sat, 15 Jan 2022 10:22:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d19436b88dcea890b6a73b242e2a2cbb66e17fcd
-X-Git-Newrev: 88606bd9eb4cc244388a3dec70a21d54ee3fe352
+X-Git-Oldrev: 88606bd9eb4cc244388a3dec70a21d54ee3fe352
+X-Git-Newrev: 67af1b5ba50f387f6fb6ec7cc67283e1c9813fc0
 X-Patchwork-Hint: ignore
-Message-Id: <20220115091525.A36FC813AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/open62541: add
- OPEN62541_CPE_ID_VENDOR
+Message-Id: <20220115091609.2E3E3817E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/targetcli-fb: add
+ TARGETCLI_FB_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,32 +59,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88606bd9eb4cc244388a3dec70a21d54ee3fe352
+commit: https://git.buildroot.net/buildroot/commit/?id=67af1b5ba50f387f6fb6ec7cc67283e1c9813fc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:open62541:open62541 is a valid CPE identifier for this
-package:
+cpe:2.3:a:targetcli-fb_project:targetcli-fb is a valid CPE identifier
+for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopen62541%3Aopen62541
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atargetcli-fb_project%3Atargetcli-fb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/open62541/open62541.mk | 1 +
+ package/targetcli-fb/targetcli-fb.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 66777ce501..fb28a614e2 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -11,6 +11,7 @@ OPEN62541_GIT_SUBMODULES = YES
- OPEN62541_INSTALL_STAGING = YES
- OPEN62541_LICENSE = MPL-2.0
- OPEN62541_LICENSE_FILES = LICENSE
-+OPEN62541_CPE_ID_VENDOR = open62541
+diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+index 75643446d2..7425423b8f 100644
+--- a/package/targetcli-fb/targetcli-fb.mk
++++ b/package/targetcli-fb/targetcli-fb.mk
+@@ -10,6 +10,7 @@ TARGETCLI_FB_VERSION = 2.1.fb41
+ TARGETCLI_FB_SITE = $(call github,open-iscsi,targetcli-fb,v$(TARGETCLI_FB_VERSION))
+ TARGETCLI_FB_LICENSE = Apache-2.0
+ TARGETCLI_FB_LICENSE_FILES = COPYING
++TARGETCLI_FB_CPE_ID_VENDOR = targetcli-fb_project
+ TARGETCLI_FB_SETUP_TYPE = setuptools
+ TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
  
- # Force Release build to remove -Werror.
- # Don't use git describe to get the version number.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
