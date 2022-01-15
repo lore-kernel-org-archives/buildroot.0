@@ -1,83 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66BF5C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 20:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F34C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 20:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F61C81B36;
-	Sat, 15 Jan 2022 20:05:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9607C60BAC;
+	Sat, 15 Jan 2022 20:19:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id utSPu-U3XXbX; Sat, 15 Jan 2022 20:04:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mZa4PHXK8WVg; Sat, 15 Jan 2022 20:19:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85C9981B23;
-	Sat, 15 Jan 2022 20:04:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E29DD60745;
+	Sat, 15 Jan 2022 20:19:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0A3921BF3E9
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:03:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 44BD41BF3A6
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC883605DB
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:03:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D11E60BBA
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:19:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id afJxBoMurl7N for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 20:03:42 +0000 (UTC)
+ with ESMTP id cU1om7lL65jw for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 20:19:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46867600BB
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 20:03:42 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id a18so47649909edj.7
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 12:03:42 -0800 (PST)
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com
+ [IPv6:2607:f8b0:4864:20::929])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 51E7E60BAC
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 20:19:32 +0000 (UTC)
+Received: by mail-ua1-x929.google.com with SMTP id l15so23086229uai.11
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 12:19:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=7ipBu57dWoBca8bjPVqg8t+34VyKyV2zn28/ywY1DUc=;
- b=IGo8lJopk8ygxblLhLdBTZ8Hq5VpD2f4VBI/R31n47YcF/RoLTLiwq0xaxvwEr1CBL
- vbwIxZPebCeQe9fTVMN9iIKaNi+2l9WGI6nkgS3pN5/xlE7x6QJkn//pvGYIlHejzGMI
- W9DTg8CAK4ZuDVH1H8gqOUwzirOLFbpBxAgyvhwom1/POu4RKRE2IGt77lxjYMwm/knm
- rFJDStpBlszc6fMsKRVira+Y5D7Es0koPCFKeZU9e3i5Vo0HwSN3FjeeGb8+3fyIXGMv
- 9V1sQmYsqP7kr7fvlaKVJp801bzuy1FhtlUigDQUjnnLGFVTF7F3izSo6Xz54V9lscJP
- BXlA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=NX7qr/SzR8OiMaEOKT9Lop3hk/hmeg+xRGasK7FIjRs=;
+ b=Uqdn6a8no5TLf7n06CsagSpfzkC3AMpasaAyWkYZyOJLpmF5S9wE3Y90uXz9Geiehx
+ jSFUJ/egz5MEwm+jZoWnIjGMnTfcNKQtmIazodaakJH2bBaTO/o3M73h94mAnpLxCTeZ
+ egJBm3qWzFXHB68X4GQoR5V/QdmDMjpI7NyE17ChYLg0irV9UgFcOB+0yVHHydcjaaOd
+ udNDLzno/G5w9w+1Ov0lKXgMKnfJiXHyTqjo0/tJRG3XLkEatrF4Y91POGnFN2O/E0Cg
+ aGi4UyWuEef/Mx3Q0JgOWgnjJsRbgQqdY8hvOnlFAGkUzbxlrE/QJdTBT+xKXvhKSBR1
+ vEtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=7ipBu57dWoBca8bjPVqg8t+34VyKyV2zn28/ywY1DUc=;
- b=QsEyHTzM2UdknzRG+JTi71a8Mm/GcrJP1ohjjsrR85G2m6WlSiThT0I2H+xmsUWRMh
- kVHe/QWA30dAL1XS2hzpJF++0Z6QNNH6rHyKbo6fFLWiOTs5DL5FLKJpN9AYBMsHpk5Y
- CCo7ygAnKiAk8O0j2AcF2isyQEXCe3MqgPXVfvOUdzoxCAcEIIcbbSFNf6kIRmJIJIru
- nflnTq6Qj+MSgO1DGJZgLNM4ruACZ2okc7oPPWIONHHQN10XZH7+jsNH8SlXHELV/VMM
- /olJVhuGDJiEnT3VL2GbIo81E+PYtghMZoWK5gZ53RVn4atPLBqWx2YelPXOMDatgMkO
- ZXxg==
-X-Gm-Message-State: AOAM532bKjpeHEpbuD6KcRdNohlOJEBGuxHbWiufbYVIM1LJps9GHxB6
- yhzfw6v48FRTAFDWXQmEdaUSDIlzZrbilQ==
-X-Google-Smtp-Source: ABdhPJzNWfloR7UuJtBqSPAKMfPOhaHaE6o/6OuDeuTZYqpMUMfsD/L6UFHvaq6rlDR9t9V3wZFh8A==
-X-Received: by 2002:a05:6402:34cb:: with SMTP id
- w11mr14135873edc.400.1642277020607; 
- Sat, 15 Jan 2022 12:03:40 -0800 (PST)
-Received: from localhost (ptr-5gw9tzn82s1glqex1i.18120a2.ip6.access.telenet.be.
- [2a02:1810:510:3800:ad4b:62a2:fdc7:acc6])
- by smtp.gmail.com with ESMTPSA id w11sm2257982eds.88.2022.01.15.12.03.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Jan 2022 12:03:40 -0800 (PST)
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 21:03:05 +0100
-Message-Id: <20220115200306.14037-8-patrickdepinguin@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220115200306.14037-1-patrickdepinguin@gmail.com>
-References: <20220115200306.14037-1-patrickdepinguin@gmail.com>
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=NX7qr/SzR8OiMaEOKT9Lop3hk/hmeg+xRGasK7FIjRs=;
+ b=x3kPm9AbNnagvIlXX2UoouogN2uKMr7nQzXe+Zy65oV+LzaIKjAiqOheWulnD76Rm+
+ tFh4YcVSrpHxGfNOBsWtjw2WvjLbnYnfZNkzBusuYJ5grzkT0NIa5oocyvcz0V81/obf
+ RPFca4c9TF+nye07j5LrfuLu9MdmOBNcLCG0jSf93rhRyww5s5ChI4+mxIuvmMqqllVm
+ yZSpfmbWidgSMEqkAHFodxYyVcMWdX4K2wlWprNe7M5A0IjbJDVYKa8hjzSXny25P6PL
+ sAJbhVMyfS2aS+P4KoO9e4snHq0S3nKgVp6mlcjJuzGwF177O9z27iYXOP3iR4jvuLWc
+ yDiQ==
+X-Gm-Message-State: AOAM532dKaCC5TA9+GIvzOuPUJ2m3xcYdt+hYUP/pXBhGdiEstTrobLx
+ dH47Ylaq4ZZC2Bp13v1QmMLYC27cY+U7G7pgjjLxXPd8
+X-Google-Smtp-Source: ABdhPJzbNC9XiCWkhKQUVxf4Ztteg7wOQMGAdxUKrFW4pDictq8wMBQaVZBSg8sSlRSD2sPeO2HfPob1P3CNWdYthao=
+X-Received: by 2002:ab0:a90:: with SMTP id d16mr6114758uak.69.1642277970979;
+ Sat, 15 Jan 2022 12:19:30 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCHv2 7/7] linux/linux.mk: correct LINUX_ARCH_PATH
- for sparc64
+References: <20211024113931.88898-1-gilles.talis@gmail.com>
+ <20220113224531.6f9ac64a@windsurf>
+In-Reply-To: <20220113224531.6f9ac64a@windsurf>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sat, 15 Jan 2022 21:19:19 +0100
+Message-ID: <CAKcgs2ygLz2KyxZ4_oShqXY_UDwrH9-W4PPsk4k6G50_757STw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH] configs/friendlyarm_nanopi_r2s: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,45 +81,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: romain.naour@gmail.com,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-Buildroot uses variable LINUX_ARCH_PATH to refer to the arch-specific
-directory in the Linux tree, which may not necessarily be arch/$(KERNEL_ARCH).
-
-Buildroot already accounts for the case of KERNEL_ARCH=i386 and
-KERNEL_ARCH=x86_64, but does not for KERNEL_ARCH=sparc64, in which case the
-correct directory is arch/sparc.
-
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dd2eebd446..35e2484588 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -242,6 +242,8 @@ ifeq ($(KERNEL_ARCH),i386)
- LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else ifeq ($(KERNEL_ARCH),x86_64)
- LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
-+else ifeq ($(KERNEL_ARCH),sparc64)
-+LINUX_ARCH_PATH = $(LINUX_DIR)/arch/sparc
- else
- LINUX_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
--- 
-2.32.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKVGhhbmtzIGZvciB0aGUgcmV2aWV3LgoKTGUgamV1LiAxMyBqYW52LiAy
+MDIyIMOgIDIyOjQ1LCBUaG9tYXMgUGV0YXp6b25pCjx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4u
+Y29tPiBhIMOpY3JpdCA6Cj4KPiBIZWxsbyBHaWxsZXMsCj4KPiBPbiBTdW4sIDI0IE9jdCAyMDIx
+IDEzOjM5OjMxICswMjAwCj4gR2lsbGVzIFRhbGlzIDxnaWxsZXMudGFsaXNAZ21haWwuY29tPiB3
+cm90ZToKPgo+ID4gVGhlIE5hbm9QaSBSMlMgaXMgYSBGcmllbmRseUVsZWMgbWluaS1yb3V0ZXIg
+YmFzZWQgb246Cj4gPgo+ID4gLSBSb2NrY2hpcCBSSzMzMjggU29DCj4gPiAtIDFHQiAob3IgMkdC
+KSBERFI0IFJBTQo+ID4gLSBHaWdhYml0IEV0aGVybmV0IChXQU4pCj4gPiAtIEdpZ2FiaXQgRXRo
+ZXJuZXQgKFVTQjMpIChMQU4pCj4gPiAtIFVTQiAyLjAgSG9zdCBQb3J0Cj4gPiAtIE1pY3JvU0Qg
+c2xvdAo+ID4gLSBSZXNldCBidXR0b24KPiA+IC0gV0FOIC0gTEFOIC0gU1lTIExFRAo+ID4KPiA+
+IGh0dHBzOi8vd3d3LmZyaWVuZGx5YXJtLmNvbS9pbmRleC5waHA/cm91dGU9cHJvZHVjdC9wcm9k
+dWN0JnBhdGg9NjkmcHJvZHVjdF9pZD0yODIKPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBHaWxsZXMg
+VGFsaXMgPGdpbGxlcy50YWxpc0BnbWFpbC5jb20+Cj4KPiBUaGlzIG9idmlvdXNseSBsb29rcyB2
+ZXJ5IGdvb2QsIGJ1dCB0aGVyZSBpcyBvbmUgcXVlc3Rpb246IGNvdWxkIHlvdQo+IGRyb3AgdGhl
+IFZGQVQgcGFydGl0aW9uLCBhbmQgaGF2ZSB0aGUga2VybmVsLCBEVEIgYW5kIGV4dGxpbnV4LmNv
+bmYgYmUKPiBkaXJlY3RseSBpbiB0aGUgZXh0NCBwYXJ0aXRpb24sIHdpdGggVS1Cb290IGxvYWRp
+bmcgdGhlbSBmcm9tIHRoZSBleHQ0Cj4gcGFydGl0aW9uIGRpcmVjdGx5Pwo+Cj4gVGhpcyB3b3Vs
+ZCBzaW1wbGlmeSB0aGluZ3MgYSBiaXQuCkdvb2Qgc3VnZ2VzdGlvbi4gSSB3aWxsIGRvIHRoYXQg
+YW5kIHNlbmQgYSB2MiBzaG9ydGx5LgoKPgo+IFRoYW5rcyEKPgo+IFRob21hcwo+IC0tCj4gVGhv
+bWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4
+IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9ib290bGluLmNv
+bQoKVGhhbmtzIQpHaWxsZXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
