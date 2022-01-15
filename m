@@ -4,72 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FBD3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 19:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE31EC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 20:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DCB540519;
-	Sat, 15 Jan 2022 19:45:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4AEE6400A6;
+	Sat, 15 Jan 2022 20:03:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MsEdpDckIeIG; Sat, 15 Jan 2022 19:45:38 +0000 (UTC)
+	with ESMTP id c0NgpHWL0LCC; Sat, 15 Jan 2022 20:03:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2859F40502;
-	Sat, 15 Jan 2022 19:45:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 00DC21BF3E9
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:45:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00287400D6;
+	Sat, 15 Jan 2022 20:03:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AA9061BF3E9
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0F6640502
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:45:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99180605DB
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 20:03:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GrCAyeqmBclc for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 19:45:35 +0000 (UTC)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8mhyxFB6Gi4x for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 20:03:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE9FF400A6
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 19:45:34 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id s11so8454321ioe.12
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:45:34 -0800 (PST)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E260A600BB
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 20:03:27 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id 30so47716462edv.3
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 12:03:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=/un8ejhtlw2n6+tyuYXBFnDgYcMyqYzV4xg7pG8xC+4=;
- b=Gv0+XXuLXENmk4IuMU+cnaIoF6ugc35inD74jGMHZCeWAyOKD9Yjz4E17KnPs7QbFK
- xYBfVSi3iuUa+J7tviQlbjrJruex6MsMN7AfqLg9ZYbArKvcezssaoAUUe5/m22eoSJG
- H5wZtHTHXGmAnT7IDnf0LHyQadweWwv68Bp8osDJWpKVcpWndWFOLP/3Dx/Tf5wJ4UQt
- HJaHKkbQlpJKPoc1BR7fE0wZkDhR0dR8IkDLl639lfxzSrGrRjLEkzS/wRKQe48faBkE
- pYXjQ28P+Clt6ZD3kOg/q1NnShIle/ozc01Q/DwDajJT8YDeooegcA1PPhyE+dkvUTpf
- obYA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=P639LnIf9FhKHHMkfFPmMAgqYZPE1RKVKnu0ry2vCpw=;
+ b=Mq351OoUckWpfeOejSEky4xsLzM4E0yE75Om4veUxg8nn4phyFsWJRP5J1etGEz3MO
+ fiAVb3RMQ9akmwl9Eq3w/nXCJhE4T/VeU4i60AiTF3BsGspkBa4DsVxmSI075wmsskyX
+ L5ZN3g3gW3QIZd8UNYIGxZxM+Tr3LG/Uaf4rT36NqpDPX0nTwJvZoY3TSEVY+jDZBSJs
+ 82yCCPwoMF+NqtBMAvTCauUCVnokCpySUidzYn5chjsW+wgyhu14kWkX3E4bDxQMVULp
+ 8ZbAY2qIPd98Mb0BPxNOmMlmE5Tud/XInL7sOvlQg2Zb7TErwFrwdst8J9wIRXPLkEwf
+ kgaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=/un8ejhtlw2n6+tyuYXBFnDgYcMyqYzV4xg7pG8xC+4=;
- b=OYhpcSFfOkk4PZ5snNLc1oLFKY+1RMKUnQrKP61FgubYXQSwoyOgxLxr0m4Saxy1bC
- bn1Vh8jGjI/dQ3vpotC7h/d/eH/jBh9F7g0DMpYpXHp7bi35PsSjFwCDVB+G8kERKj+i
- jXqd2ggOMvf68PF5pOrXKFmm09PFGoMjtFeKXMWGeI4KklIIfAC79TRhaegDlSZ1c8CL
- rlPYGbMBeF2XTUMtW7DChev9b4uzndb/R7z3hdtrqpumG//mXvQMx/MRUpwCujYIF3X1
- 32+TtK+EHqsaXKXI5QL9Xll2L4hsOGf0SX3kpDV4VqMUSuVtfqvJTT/OPk4nRx/QnyB6
- AJyw==
-X-Gm-Message-State: AOAM533UgFk0mc7YEv8NoTTTVUqYbVPsxq3vfKbmlGK+6rxvu8J+Phrf
- hA1axUa3qfvPBIxLyKnR37o3GgKaKjxsDqHpXx5UELil
-X-Google-Smtp-Source: ABdhPJzxuO6lrsCX/eFnTesmh0LCOHZ+PcI/R8ZugaeGzwOJMQf2nuxDXJTW/O4ybZj6N/yHkjvXgtna/wYNwJSp5CM=
-X-Received: by 2002:a5d:9a95:: with SMTP id c21mr6772719iom.189.1642275934014; 
- Sat, 15 Jan 2022 11:45:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20210518113652.29609-1-patrickdepinguin@gmail.com>
- <20210518113652.29609-4-patrickdepinguin@gmail.com>
- <1a139b63-48ff-fe9e-2041-cc1724a753b2@gmail.com>
-In-Reply-To: <1a139b63-48ff-fe9e-2041-cc1724a753b2@gmail.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=P639LnIf9FhKHHMkfFPmMAgqYZPE1RKVKnu0ry2vCpw=;
+ b=p9s7giM95aEAnIeToKGrsnZD4T9Nq1P1MSNAXyXoo299ZAsCoT1G5hrCJ4MNgXzmGZ
+ hhh9YEnq4vVAt4dbaiaSg8SWfdXiNHZsuikLdYsvAqS2A9iTp7FeeziG0IPZtKV6aWdT
+ 1hRitP4hb0U6ozr6EOFWAhvrV8eud+3TO7P75E0SRIkWlHRQAp0s/bdDa4niNucoN2PN
+ Cu6XLrL/7Nvt71QEioLCkcQjZ/0T0BjBN0rUlK2TcoJ0jqA7S0abvUWdN/6iZ0J/P8kE
+ +X1mxaheC5KlfgeD38hzXJj/PrQOLwuKQ7/gA/YfTLlpjlxN+ILiJKwLoZ9nqudolgIA
+ j8uQ==
+X-Gm-Message-State: AOAM533rL1V5wRAMycsHeUasPR2ZnRm1R2zal4wgarUQF1NS01JnUVuG
+ T6jyWDDLWOclLRO/oXEwK0ju7ry/jx4=
+X-Google-Smtp-Source: ABdhPJyYaerskNVs600Hl+5pZjWgFO15n6+fnVxCpeLuX7i4f7FInt9JmymbLEZkrQSLQGprWC6HoA==
+X-Received: by 2002:a05:6402:520b:: with SMTP id
+ s11mr14161212edd.27.1642277005952; 
+ Sat, 15 Jan 2022 12:03:25 -0800 (PST)
+Received: from localhost (ptr-5gw9tzn82s1glqex1i.18120a2.ip6.access.telenet.be.
+ [2a02:1810:510:3800:ad4b:62a2:fdc7:acc6])
+ by smtp.gmail.com with ESMTPSA id j21sm2822267ejj.133.2022.01.15.12.03.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Jan 2022 12:03:25 -0800 (PST)
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 15 Jan 2022 20:45:22 +0100
-Message-ID: <CAAXf6LVbA9E4TquNzY2+ov80XTZV_rMaoeN+UKNqg69-1EvYCQ@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
-Subject: Re: [Buildroot] [PATCH 3/4] core: introduce BR2_KERNEL_ARCH_OVERRIDE
+To: buildroot@buildroot.org
+Date: Sat, 15 Jan 2022 21:02:58 +0100
+Message-Id: <20220115200306.14037-1-patrickdepinguin@gmail.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCHv2 0/7] Basic support for 64-bit kernel and
+ 32-bit userland
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,57 +87,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: romain.naour@gmail.com,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RWwganVlLCAxMyBlbmUgMjAyMiBhIGxhcyAyMzowNSwgUm9tYWluIE5hb3VyCig8cm9tYWluLm5h
-b3VyQGdtYWlsLmNvbT4pIGVzY3JpYmnDszoKPgo+IEhpIFRob21hcywKPgo+IExlIDE4LzA1LzIw
-MjEgw6AgMTM6MzYsIFRob21hcyBEZSBTY2hhbXBoZWxlaXJlIGEgw6ljcml0IDoKPiA+IEZyb206
-IFRob21hcyBEZSBTY2hhbXBoZWxlaXJlIDx0aG9tYXMuZGVfc2NoYW1waGVsZWlyZUBub2tpYS5j
-b20+Cj4gPgo+ID4gVGhlcmUgYXJlIGNhc2VzIHdoZXJlIGEgNjQtYml0IGFyY2hpdGVjdHVyZSBp
-cyBydW5uaW5nIGEgNjQtYml0IGtlcm5lbCBidXQKPiA+IDMyLWJpdCB1c2Vyc3BhY2UuIEV4YW1w
-bGVzIGluY2x1ZGU6Cj4gPiAgICAgKiBhYXJjaDY0IGFyY2hpdGVjdHVyZSwgd2l0aCBhYXJjaDY0
-IGtlcm5lbCBhbmQgMzItYml0IChBUk0pIHVzZXJzcGFjZQo+ID4gICAgICogeDg2XzY0IGFyY2hp
-dGVjdHVyZSwgd2l0aCB4ODZfNjQga2VybmVsIGFuZCAzMi1iaXQgKGkzODYpIHVzZXJzcGFjZQo+
-ID4KPiA+IEluIEJ1aWxkcm9vdCwgdGhlIEFSQ0gvQlIyX0FSQ0ggYW5kIE5PUk1BTElaRURfQVJD
-SCB2YXJpYWJsZXMgd2lsbCByZWZlciB0bwo+ID4gdGhlIDMyLWJpdCBhcmNoaXRlY3R1cmUsIGJ1
-dCB0aGUga2VybmVsIG5lZWRzIHRvIGJlIGJ1aWx0IHdpdGggdGhlIDY0LWJpdAo+ID4gYXJjaGl0
-ZWN0dXJlLgo+ID4KPiA+IE1ha2UgaXQgcG9zc2libGUgdG8gZGVmaW5lIHRoZSBjb3JyZWN0IGFy
-Y2hpdGVjdHVyZSB0byBiZSB1c2VkIGZvciB0aGUKPiA+IGtlcm5lbCwgaW4gYSBuZXcgY29uZmln
-IG9wdGlvbiAnQlIyX0tFUk5FTF9BUkNIX09WRVJSSURFJy4gVGhlIHVzZXIgaXMKPiA+IGV4cGVj
-dGVkIHRvIGtub3cgdGhlIHZhbGlkIHZhbHVlcy4KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBUaG9t
-YXMgRGUgU2NoYW1waGVsZWlyZSA8dGhvbWFzLmRlX3NjaGFtcGhlbGVpcmVAbm9raWEuY29tPgo+
-ID4gLS0tCj4gPiAgTWFrZWZpbGUgICAgICAgfCAgNCArKysrCj4gPiAgYXJjaC9Db25maWcuaW4g
-fCAxNSArKysrKysrKysrKysrKysKPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDE5IGluc2VydGlvbnMo
-KykKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvTWFrZWZpbGUgYi9NYWtlZmlsZQo+ID4gaW5kZXggYzUz
-OTllOWEzNS4uZDA5Y2Y3Yzk1OCAxMDA2NDQKPiA+IC0tLSBhL01ha2VmaWxlCj4gPiArKysgYi9N
-YWtlZmlsZQo+ID4gQEAgLTQzNCw3ICs0MzQsMTEgQEAgUVVJRVQgOj0gJChpZiAkKGZpbmRzdHJp
-bmcgcywkKGZpbHRlci1vdXQgLS0lLCQoTUFLRUZMQUdTKSkpLC1xKQo+ID4gICMgU3RyaXAgb2Zm
-IHRoZSBhbm5veWluZyBxdW90aW5nCj4gPiAgQVJDSCA6PSAkKGNhbGwgcXN0cmlwLCQoQlIyX0FS
-Q0gpKQo+ID4gIE5PUk1BTElaRURfQVJDSCA6PSAkKGNhbGwgcXN0cmlwLCQoQlIyX0tFUk5FTF9B
-UkNIKSkKPiA+ICtpZmVxICgkKGNhbGwgcXN0cmlwLCQoQlIyX0tFUk5FTF9BUkNIX09WRVJSSURF
-KSksKQo+ID4gIEtFUk5FTF9BUkNIIDo9ICQoY2FsbCBxc3RyaXAsJChCUjJfS0VSTkVMX0FSQ0gp
-KQo+ID4gK2Vsc2UKPiA+ICtLRVJORUxfQVJDSCA6PSAkKGNhbGwgcXN0cmlwLCQoQlIyX0tFUk5F
-TF9BUkNIX09WRVJSSURFKSkKPiA+ICtlbmRpZgo+ID4KPiA+ICBaQ0FUIDo9ICQoY2FsbCBxc3Ry
-aXAsJChCUjJfWkNBVCkpCj4gPiAgQlpDQVQgOj0gJChjYWxsIHFzdHJpcCwkKEJSMl9CWkNBVCkp
-Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9Db25maWcuaW4gYi9hcmNoL0NvbmZpZy5pbgo+ID4gaW5k
-ZXggNzU3NWFjZjQ4Yy4uYzgyMTAwZjU0MSAxMDA2NDQKPiA+IC0tLSBhL2FyY2gvQ29uZmlnLmlu
-Cj4gPiArKysgYi9hcmNoL0NvbmZpZy5pbgo+ID4gQEAgLTMyOSw2ICszMjksMjEgQEAgY29uZmln
-IEJSMl9BUkNICj4gPiAgY29uZmlnIEJSMl9LRVJORUxfQVJDSAo+ID4gICAgICAgc3RyaW5nCj4g
-Pgo+ID4gK2NvbmZpZyBCUjJfS0VSTkVMX0FSQ0hfT1ZFUlJJREUKPiA+ICsgICAgIHN0cmluZyAi
-S2VybmVsIGFyY2hpdGVjdHVyZSBvdmVycmlkZSIKPgo+IE1heWJlIGl0IHdvdWxkIGJlIGJldHRl
-ciB0byBhZGQgYXJjaGl0ZWN0dXJlIGRlcGVuZGVuY2llcyBoZXJlIChCUjJfQVJDSF9JU182NCkK
-PgoKTm90ZSB0aGF0IEJSMl9BUkNIIGFuZCBCUjJfQVJDSF9JU182NCByZWZlciB0byB0aGUgYXJj
-aGl0ZWN0dXJlCkJ1aWxkcm9vdCByZWFsbHkgdXNlcywgd2hpY2ggaW4gdGhlc2Ugc2NlbmFyaW9z
-IGlzIHRoZSAzMi1iaXQKYXJjaGl0ZWN0dXJlLiBTbyBsZXR0aW5nIEJSMl9LRVJORUxfQVJDSF9P
-VkVSUklERSBkZXBlbmQgb24KQlIyX0FSQ0hfSVNfNjQgaXMgbm90IHBvc3NpYmxlLgoKSWYgd2Ug
-cmVzdHJpY3QgdGhlIHdob2xlIGZlYXR1cmUgdG8gc3BlY2lmaWMgY2FzZXMgKGUuZy4gdGhlIHR3
-byBvbmVzCnRoYXQgSSBjdXJyZW50bHkgbmVlZCkgYW5kIGV4dGVuZCBvbiBjYXNlLWJ5LWNhc2Ug
-YmFzaXMsIHdlIGNvdWxkIGJlCm1vcmUgc3BlY2lmaWMgaGVyZS4KCkJlc3QgcmVnYXJkcywKVGhv
-bWFzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Hello,
+
+Even though there are already cases where a 64-bit kernel is combined with
+32-bit userland, like MIPS64n32, that Buildroot can support out-of-the-box,
+there are other combinations that don't currently work.
+
+At work, we have two such cases:
+- 64-bit x86_64 kernel with 32-bit i386 userspace
+- 64-bit aarch64 kernel with 32-bit arm userspace
+
+This series adds basic support for these cases, with the limitation that the
+user still needs to know what they are doing.
+
+Patch 1 is a general improvement and can land even if you don't agree
+with the rest.
+
+Patch 2 handles the realization that 'KERNEL_ARCH' can mean two different
+things, and that we need two separate variables.
+
+Patch 3 makes it possible for users to specify the kernel architecture that
+differs from the Buildroot notion of userspace architecture.
+
+Patch 4 fixes the build of perf in this mixed 64-bit-kernel+32-bit-userspace
+case.
+
+Patch 5 prepares host-qemu for the case of x86_64. I'm not very fond of the fact
+that this does not provide a generic solution.
+
+Patch 6 adds a new qemu defconfig for x86_64 kernel and x86 userspace, that
+employs the new logic.
+
+Finally patch 7 corrects LINUX_ARCH_PATH for sparc64, not directly related to
+this series but reported by Romain Naour during his review.
+
+
+As hinted above, users that would like to employ such scenarios still need to
+know what they are doing:
+
+- the correct value of BR2_KERNEL_ARCH_OVERRIDE is to be known by the user
+
+- the toolchain should be capable of generating both 64-bit (kernel) output as
+  well as 32-bit userspace output. This is typically done with a multilib
+  toolchain, where the default output is 64-bit so that the kernel build does
+  not require additional changes, while passing the correct '-mXXX' flag as
+  BR2_TARGET_OPTIMIZATION for the userspace compilations.
+
+- it is not possible to create one multilib toolchain that supports Aarch64 and
+  (32-bit) ARM output. We have solved it by packaging two individual toolchains
+  in one archive, with symlinks at top-level to the 32-bit toolchain, and
+  some additional changes in Buildroot to make sure the 64-bit toolchain is
+  used where needed (kernel, bootloader)
+
+- BR2_KERNEL_64_USERLAND_32 is not automatically passed.
+
+
+An alternative implementation would be to explicitly support certain
+combinations, but this is less flexible.
+
+Best regards,
+Thomas
+
+Thomas De Schampheleire (7):
+  arch: move definition of KERNEL_ARCH to Config.in.<arch> files
+  core: introduce NORMALIZED_ARCH as non-kernel replacement for
+    KERNEL_ARCH
+  core: introduce BR2_KERNEL_ARCH_OVERRIDE
+  perf: fix compilation in case of i386 userspace with x86_64 kernel
+  package/qemu: add support for overridden KERNEL_ARCH=x86_64
+  configs: add new qemu defconfig 'x86_multilib'
+  linux/linux.mk: correct LINUX_ARCH_PATH for sparc64
+
+ Makefile                                      | 22 ++-----
+ arch/Config.in                                | 18 ++++++
+ arch/Config.in.arc                            |  3 +
+ arch/Config.in.arm                            |  4 ++
+ arch/Config.in.csky                           |  3 +
+ arch/Config.in.m68k                           |  3 +
+ arch/Config.in.microblaze                     |  3 +
+ arch/Config.in.mips                           |  3 +
+ arch/Config.in.nds32                          |  3 +
+ arch/Config.in.nios2                          |  3 +
+ arch/Config.in.or1k                           |  3 +
+ arch/Config.in.powerpc                        |  3 +
+ arch/Config.in.riscv                          |  3 +
+ arch/Config.in.s390x                          |  3 +
+ arch/Config.in.sh                             |  3 +
+ arch/Config.in.sparc                          |  4 ++
+ arch/Config.in.x86                            |  4 ++
+ arch/Config.in.xtensa                         |  3 +
+ board/qemu/x86_multilib/linux.config          | 57 +++++++++++++++++++
+ board/qemu/x86_multilib/post-build.sh         | 11 ++++
+ board/qemu/x86_multilib/readme.txt            |  7 +++
+ boot/barebox/barebox.mk                       | 10 ++--
+ boot/uboot/uboot.mk                           |  6 +-
+ configs/qemu_x86_multilib_defconfig           | 26 +++++++++
+ linux/linux.mk                                |  2 +
+ package/busybox/busybox.mk                    |  2 +-
+ .../environment-setup/environment-setup.mk    |  2 +-
+ package/kvmtool/kvmtool.mk                    |  4 +-
+ package/libselinux/libselinux.mk              |  2 +-
+ package/linux-tools/linux-tool-perf.mk.in     |  7 ++-
+ .../linux-tools/linux-tool-selftests.mk.in    |  6 +-
+ package/olsr/olsr.mk                          |  4 +-
+ package/pciutils/pciutils.mk                  |  2 +-
+ package/qemu/qemu.mk                          |  3 +
+ package/uboot-tools/uboot-tools.mk            | 10 ++--
+ 35 files changed, 210 insertions(+), 42 deletions(-)
+ create mode 100644 board/qemu/x86_multilib/linux.config
+ create mode 100755 board/qemu/x86_multilib/post-build.sh
+ create mode 100644 board/qemu/x86_multilib/readme.txt
+ create mode 100644 configs/qemu_x86_multilib_defconfig
+
+-- 
+2.32.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
