@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DE66C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 19:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1468C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 19:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C0FC405B5;
-	Sat, 15 Jan 2022 19:34:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47730813C7;
+	Sat, 15 Jan 2022 19:34:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Oq-jx5ZXH6af; Sat, 15 Jan 2022 19:34:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9851D81919;
+	Sat, 15 Jan 2022 19:34:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 280881BF95E
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:33:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 134EE4056A
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:33:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DTFBcA1csMrL; Sat, 15 Jan 2022 19:34:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E2E8405A5;
-	Sat, 15 Jan 2022 19:34:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21DC21BF95D
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:33:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1074440299
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 19:33:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XT7CF3CQnIAG for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GERfRhV-DaQC for <buildroot@lists.busybox.net>;
  Sat, 15 Jan 2022 19:33:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48EB640342
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40A7240519
  for <buildroot@buildroot.org>; Sat, 15 Jan 2022 19:33:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 91AF582DC1; Sat, 15 Jan 2022 19:27:26 +0000 (UTC)
+ id 88AE982DBE; Sat, 15 Jan 2022 19:27:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 20:32:44 +0100
+Date: Sat, 15 Jan 2022 20:24:42 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 839078c5da6c24727d6a065f5b3728bf8a216ded
-X-Git-Newrev: 86a3f40405772faca6847553b3a541a501a73c88
+X-Git-Oldrev: 1b86bd9fee12fbaada52bc383d36626a6ec2fa07
+X-Git-Newrev: 839078c5da6c24727d6a065f5b3728bf8a216ded
 X-Patchwork-Hint: ignore
-Message-Id: <20220115192726.91AF582DC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/lapack: security
- bump to version 3.10.0
+Message-Id: <20220115192726.88AE982DBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x]
+ configs/beaglebone_qt5_defconfig: bump to u-boot 2021.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +59,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a3f40405772faca6847553b3a541a501a73c88
+commit: https://git.buildroot.net/buildroot/commit/?id=839078c5da6c24727d6a065f5b3728bf8a216ded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-- Fix CVE-2021-4048: An out-of-bounds read flaw was found in the CLARRV,
-  DLARRV, SLARRV, and ZLARRV functions in lapack through version 3.10.0,
-  as also used in OpenBLAS before version 0.3.18. Specially crafted
-  inputs passed to these functions could cause an application using
-  lapack to crash or possibly disclose portions of its memory.
-- Update license hash, year changed:
-  https://github.com/Reference-LAPACK/lapack/commit/f67034373ee2972b4ea5de5a3d635b30ad3026c2
-- Update indentation in hash file (two spaces)
+Fixes:
+  /usr/bin/ld: scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition...
+  scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
 
-http://netlib.org/lapack/lapack-3.10.0.html
+    Tested on beaglebone black and beaglebone white (A6)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 59a1fcc69620da8eab1c048977fa22d297b18284)
+(cherry picked from commit 7b55cb018dbcc10d15b62e049d48b691fa8e4c9c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lapack/lapack.hash | 4 ++--
- package/lapack/lapack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/beaglebone_qt5_defconfig | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
-index bac7210c29..6f6dbff1a6 100644
---- a/package/lapack/lapack.hash
-+++ b/package/lapack/lapack.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 106087f1bb5f46afdfba7f569d0cbe23dacb9a07cd24733765a0e89dbe1ad573  lapack-3.9.0.tar.gz
--sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
-+sha256  328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19  lapack-3.10.0.tar.gz
-+sha256  66246b7d3e6736aea46e63fd5e087659474d07edfe2f9b051d085d9b42aaac61  LICENSE
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 41774f6167..f34f685ae2 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LAPACK_VERSION = 3.9.0
-+LAPACK_VERSION = 3.10.0
- LAPACK_LICENSE = BSD-3-Clause
- LAPACK_LICENSE_FILES = LICENSE
- LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 11a91677ce..ff03a05a8e 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -32,13 +32,11 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
