@@ -1,54 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7058C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:38:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC423C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95EAC40502;
-	Sat, 15 Jan 2022 15:38:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B0B181DBF;
+	Sat, 15 Jan 2022 15:38:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DLHZ4bO3uDGb; Sat, 15 Jan 2022 15:38:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G2sg0aZ4T_9g; Sat, 15 Jan 2022 15:38:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AADA14010E;
-	Sat, 15 Jan 2022 15:38:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 24AA41BF4E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EE3281B14;
+	Sat, 15 Jan 2022 15:38:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CE9B1BF4E7
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EABA40502
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B4CF60AC5
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:37:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2O6SjbsWdEpa for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 15:37:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 79BCB40004
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:37:37 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5A892240006;
- Sat, 15 Jan 2022 15:37:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1n8l7V-0006I5-G3; Sat, 15 Jan 2022 16:37:33 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZW78mkdZKPQp for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 15:37:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1CB260A8D
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:37:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 526B4821C8; Sat, 15 Jan 2022 15:31:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-References: <20211216190423.3F963822A3@busybox.osuosl.org>
-Date: Sat, 15 Jan 2022 16:37:33 +0100
-In-Reply-To: <20211216190423.3F963822A3@busybox.osuosl.org> (Arnout
- Vandecappelle's message of "Thu, 16 Dec 2021 20:07:37 +0100")
-Message-ID: <875yql2eo2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/python-django: security bump
- to version 3.2.10
+To: buildroot@buildroot.org
+Date: Sat, 15 Jan 2022 16:19:25 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: ab4c0e6fc28aa5ea2f07c4699d1bff9c7edca78a
+X-Git-Newrev: 8339a5b58390032521577ef6fa4be4653fb1dfc2
+X-Patchwork-Hint: ignore
+Message-Id: <20220115153110.526B4821C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gupnp-tools: bump
+ to version 0.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,38 +53,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8339a5b58390032521577ef6fa4be4653fb1dfc2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=086d357dfb177ef28d7831716707d2424a2ea4bd
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop patch (already in version)
 
- > Fixes the following security issues:
+https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.10.2/NEWS
 
- > - CVE-2021-44420: Potential bypass of an upstream access control based on
- >   URL paths
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b6e6c45327c6311117dc3316ad8413fc7540597a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...001-src-meson.build-upload-needs-gupnp-av.patch | 30 ----------------------
+ package/gupnp-tools/gupnp-tools.hash               |  4 +--
+ package/gupnp-tools/gupnp-tools.mk                 |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
 
- >   HTTP requests for URLs with trailing newlines could bypass an upstream
- >   access control based on URL paths.
-
- >   This issue has low severity, according to the Django security policy.
-
- >   https://www.djangoproject.com/weblog/2021/dec/07/security-releases/
-
- > In addition, 3.2.8 / 3.2.9 fixes a number of bugs.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gupnp-tools/0001-src-meson.build-upload-needs-gupnp-av.patch b/package/gupnp-tools/0001-src-meson.build-upload-needs-gupnp-av.patch
+deleted file mode 100644
+index f8eba76773..0000000000
+--- a/package/gupnp-tools/0001-src-meson.build-upload-needs-gupnp-av.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 0831f77e990e363f78e3f6a5c461084988824f7b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 2 Jul 2019 23:48:12 +0200
+-Subject: [PATCH] src/meson.build: upload needs gupnp-av
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.gnome.org/GNOME/gupnp-tools/merge_requests/3]
+----
+- src/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/meson.build b/src/meson.build
+-index 84b2ca2..6601f45 100644
+---- a/src/meson.build
+-+++ b/src/meson.build
+-@@ -2,9 +2,9 @@ subdir('common')
+- 
+- if get_option('av-tools') and gupnp_av.found()
+-     subdir('av-cp')
+-+    subdir('upload')
+- endif
+- 
+- subdir('discover')
+- subdir('network-light')
+- subdir('universal-cp')
+--subdir('upload')
+--- 
+-2.20.1
+-
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index 30f1b8293d..28a1d26ede 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.0.sha256sum:
+-sha256  41da7ff5ba8e2425adcb64ca5e04c81f57ca20ec6fdb84923939fdad42c6a18d  gupnp-tools-0.10.0.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.2.sha256sum:
++sha256  6de49ef4b375b8a164f74b766168b1184e0d28196b6b07a4f5341f08dfd85d6c  gupnp-tools-0.10.2.tar.xz
+ 
+ # Locally computed:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 182b0145c8..7b34de52a0 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GUPNP_TOOLS_VERSION_MAJOR = 0.10
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).0
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
