@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06C62C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D56C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE89960ACB;
-	Sat, 15 Jan 2022 15:36:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C918A60B31;
+	Sat, 15 Jan 2022 15:36:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cERtGGHoedAF; Sat, 15 Jan 2022 15:36:07 +0000 (UTC)
+	with ESMTP id ORAOtMMvfA5Z; Sat, 15 Jan 2022 15:36:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13F7960A8D;
-	Sat, 15 Jan 2022 15:36:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A7001BF4E7
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:36:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13BA860ACB;
+	Sat, 15 Jan 2022 15:36:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BA2511BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48C7E40889
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:36:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5C3C4010E
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:36:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z0yKNAXklQ_3 for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 15:36:04 +0000 (UTC)
-X-Greylist: delayed 05:51:22 by SQLgrey-1.8.0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05E71403EC
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:36:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iMiU-GeL-xFN for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 15:36:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 801AF40004
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:36:46 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0887A100003;
- Sat, 15 Jan 2022 15:36:00 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6F2E540002;
+ Sat, 15 Jan 2022 15:36:44 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n8l60-00069W-2f; Sat, 15 Jan 2022 16:36:00 +0100
+ id 1n8l6h-0006DF-QL; Sat, 15 Jan 2022 16:36:43 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-References: <20211216190423.2AEED821EB@busybox.osuosl.org>
-Date: Sat, 15 Jan 2022 16:36:00 +0100
-In-Reply-To: <20211216190423.2AEED821EB@busybox.osuosl.org> (Arnout
+References: <20211216190423.34EC88229F@busybox.osuosl.org>
+Date: Sat, 15 Jan 2022 16:36:43 +0100
+In-Reply-To: <20211216190423.34EC88229F@busybox.osuosl.org> (Arnout
  Vandecappelle's message of "Thu, 16 Dec 2021 20:07:37 +0100")
-Message-ID: <87ee592eqn.fsf@dell.be.48ers.dk>
+Message-ID: <87a6fx2epg.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/python3: bump version to 3.9.9
+Subject: Re: [Buildroot] [git commit] package/xen: add XSA-385, 386, 388,
+ 389 security fixes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,20 +68,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=ce81a6e6d2ee11b7cc23ad49252f5a696ab20299
+ > commit: https://git.buildroot.net/buildroot/commit/?id=c0932240fbd891528ae5d479f5df5229ed370416
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop 0030-Fix-cross-compiling-the-uuid-module.patch as the patched code has
- > been reworked upstream and python3 is built with --disable-uuid:
+ > Fixes the following security issues:
 
- > https://github.com/python/cpython/commit/91a51c5ffc3bd9da28a0000550530f6f2bcc25a2
+ > - XSA-385: guests may exceed their designated memory limit
+ >   https://xenbits.xenproject.org/xsa/advisory-385.html
 
- > Rework 0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch as
- > the MULTIARCH code is now conditional on !darwin:
+ > - XSA-386: PCI devices with RMRRs not deassigned correctly
+ >   https://xenbits.xenproject.org/xsa/advisory-386.html
 
- > https://github.com/python/cpython/commit/9901d153c201d852d27dc9d3074e283c26468f6d
+ > - XSA-388: PoD operations on misaligned GFNs
+ >   https://xenbits.xenproject.org/xsa/advisory-388.html
 
- > Refresh and renumber remaining patches.
+ > - XSA-389: issues with partially successful P2M updates on x86
+ >   https://xenbits.xenproject.org/xsa/advisory-389.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
