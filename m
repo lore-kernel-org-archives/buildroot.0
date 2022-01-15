@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD21C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9676FC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 09:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FEE4409AC;
-	Sat, 15 Jan 2022 09:20:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58BDB60C01;
+	Sat, 15 Jan 2022 09:21:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z510LyEOaVWX; Sat, 15 Jan 2022 09:20:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N4jVyhksNUEW; Sat, 15 Jan 2022 09:21:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4A1D409A8;
-	Sat, 15 Jan 2022 09:20:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD60E60C1A;
+	Sat, 15 Jan 2022 09:21:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4E91BF34B
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:20:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1725E1BF34B
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 386E64013A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BA2740004
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 09:20:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9c1C_c2BR3X3 for <buildroot@lists.busybox.net>;
+ with ESMTP id VIP1oXT02Nyc for <buildroot@lists.busybox.net>;
  Sat, 15 Jan 2022 09:20:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 761DC40004
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7855A4010E
  for <buildroot@buildroot.org>; Sat, 15 Jan 2022 09:20:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id AD3B9825DF; Sat, 15 Jan 2022 09:14:23 +0000 (UTC)
+ id B5245817B8; Sat, 15 Jan 2022 09:14:23 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 10:19:56 +0100
+Date: Sat, 15 Jan 2022 10:19:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93d23ef91fcfd8bf7f5a3ffc23d82bad8e868b34
-X-Git-Newrev: 33a3f1f30dedaf613dccac5b86ec909a1f404957
+X-Git-Oldrev: 33a3f1f30dedaf613dccac5b86ec909a1f404957
+X-Git-Newrev: d19436b88dcea890b6a73b242e2a2cbb66e17fcd
 X-Patchwork-Hint: ignore
-Message-Id: <20220115091423.AD3B9825DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vim: security bump to version
- 8.2.4092
+Message-Id: <20220115091423.B5245817B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 3.4.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +59,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33a3f1f30dedaf613dccac5b86ec909a1f404957
+commit: https://git.buildroot.net/buildroot/commit/?id=d19436b88dcea890b6a73b242e2a2cbb66e17fcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2021-4192: vim is vulnerable to Use After Free
-Fix CVE-2021-4193: vim is vulnerable to Out-of-bounds Read
+Fix the following security issues:
+- https://www.wireshark.org/security/wnpa-sec-2021-16.html
+  (CVE-2021-4186)
+- https://www.wireshark.org/security/wnpa-sec-2021-17.html
+  (CVE-2021-4185)
+- https://www.wireshark.org/security/wnpa-sec-2021-18.html
+  (CVE-2021-4184)
+- https://www.wireshark.org/security/wnpa-sec-2021-20.html
+  (CVE-2021-4182)
+- https://www.wireshark.org/security/wnpa-sec-2021-21.html
+  (CVE-2021-4181)
+
+https://www.wireshark.org/docs/relnotes/wireshark-3.4.11.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 6fa5d1bef0..fff5072063 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  39579f7d50a6e8d7c13105a288fd85f4cdfad7f11df49706bd8f16ab37fe43b8  vim-8.2.3930.tar.gz
-+sha256  2464110940c3d8d53bfef6d16912653c85187132fc0f87e937a382cafc4c6370  vim-8.2.4092.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  96970b67f9cb38b0e759946cff22562a3c4b11ce78f62f2117d5e7ecded9ab4d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 6643ef0841..408b33a409 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index bc7c9f4d7e..7b67e316ed 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.10.txt
+-sha1  63839abd94d3ae376f860e2d2969777680106578  wireshark-3.4.10.tar.xz
+-sha256  8aa7ef4a44ae62bb8db463cf761e2cc03b97305e0e77ed5be53fa83729187cef  wireshark-3.4.10.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.11.txt
++sha1  b656d8709b8b0b3d2a94665af6bec88495ad994c  wireshark-3.4.11.tar.xz
++sha256  a0e227bce2cc3a51ef3301891a0243231990b52a39b68a84a6e32f69c4e75279  wireshark-3.4.11.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 2ba81d1f39..0361d0bb64 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VIM_VERSION = 8.2.3930
-+VIM_VERSION = 8.2.4092
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-WIRESHARK_VERSION = 3.4.10
++WIRESHARK_VERSION = 3.4.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
