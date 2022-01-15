@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38DDBC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2251C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECDFF81437;
-	Sat, 15 Jan 2022 11:02:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72E01813EF;
+	Sat, 15 Jan 2022 11:02:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O8l4aBpVHVKV; Sat, 15 Jan 2022 11:02:44 +0000 (UTC)
+	with ESMTP id I0RmQl1ByqOz; Sat, 15 Jan 2022 11:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E5F88140A;
-	Sat, 15 Jan 2022 11:02:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2E41BF5DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2E5B81431;
+	Sat, 15 Jan 2022 11:02:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B38681BF5DD
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0958E40004
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADA6C40131
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ms3_wCj4fnpJ for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jNeDY3HC_fvm for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11E5E400C8
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4DE04015B
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 29AE8829FC; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
+ id 0738A829F9; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 11:57:44 +0100
+Date: Sat, 15 Jan 2022 11:47:50 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 823354d13d9112f83624de9a17c13f5c77f9e1a8
-X-Git-Newrev: 74d578c31c67afaf9fb7a92c07b34e24cc09d1c1
+X-Git-Oldrev: 9bdea4db4ba8df19b50e5ac72217336b1d4e2316
+X-Git-Newrev: 4eeeda794b345d3fde69770f215fe6897848a16d
 X-Patchwork-Hint: ignore
-Message-Id: <20220115105522.29AE8829FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x]
- package/x11r7/xlib_libX11: bump version to 1.7.3.1
+Message-Id: <20220115105522.0738A829F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/clamav: drop
+ first patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,59 +54,83 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3644994726753148985=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74d578c31c67afaf9fb7a92c07b34e24cc09d1c1
+--===============3644994726753148985==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4eeeda794b345d3fde69770f215fe6897848a16d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Upstream switched from bz2 to xz tarball.
+First patch is not needed since bump to version 0.99.1 in commit
+2c8e5dd69f4f281b2b497ae7ec9ec95c47e7c80c and
+https://github.com/Cisco-Talos/clamav/commit/689005317680854627b79c76ffa6e42a8160b0e1
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-December/003120.html
-https://lists.x.org/archives/xorg-announce/2021-December/003121.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e39d5fb074807ee2e1725549d555153262626e41)
+(cherry picked from commit 3d565a831d7316ffbd182694b25674ab0101718b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...roto.c-fix-build-error-due-to-missing-soc.patch | 34 ----------------------
+ ...use-backtrace-if-using-uClibc-without-ba.patch} |  0
+ 2 files changed, 34 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 7aeef33446..126be07f03 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-June/003092.html
--sha256  1cfa35e37aaabbe4792e9bb690468efefbfbf6b147d9c69d6f90d13c3092ea6c  libX11-1.7.2.tar.bz2
--sha512  d01e5c1848c76218605e5af2d353de6b301a251555b52a38dbe930e6635d5e8a92d1486eb6d328ad5d42a5939e0d16868ffa19a75e5a7863d1a32e0d0727bdc7  libX11-1.7.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-December/003121.html
-+sha256  2ffd417266fb875028fdc0ef349694f63dbcd76d0b0cfacfb52e6151f4b60989  libX11-1.7.3.1.tar.xz
-+sha512  a2620076db4bf35ab94706c8ab714e9c3fecbdd533cf99cdffeabaf49a1a1d30a233eb2dc76da51b01d50c43f11780aa3b2936668d982a33fa7d5008be44e25b  libX11-1.7.3.1.tar.xz
- 
- # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index aa3ebf1593..a8dc7f3668 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XLIB_LIBX11_VERSION = 1.7.2
--XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
-+XLIB_LIBX11_VERSION = 1.7.3.1
-+XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
- XLIB_LIBX11_LICENSE_FILES = COPYING
+diff --git a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
+deleted file mode 100644
+index daac677eaa..0000000000
+--- a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 52fda6e6689e22866a39ec4273713fb6035c38b2 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 7 May 2018 23:14:46 +0200
+-Subject: [PATCH] clamdscan/proto.c: fix build error due to missing sockaddr_un
+- definition
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-proto.c: In function ‘dconnect’:
+-proto.c:86:67: error: invalid application of ‘sizeof’ to incomplete type ‘struct sockaddr_un’
+-             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Upstream-status: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
+----
+- clamdscan/proto.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/clamdscan/proto.c b/clamdscan/proto.c
+-index 0205f6da0..d3396732f 100644
+---- a/clamdscan/proto.c
+-+++ b/clamdscan/proto.c
+-@@ -42,6 +42,7 @@
+- #include <sys/stat.h>
+- #include <fcntl.h>
+- #include <sys/types.h>
+-+#include <sys/un.h>
+- #ifdef HAVE_SYS_SELECT_H
+- #include <sys/select.h>
+- #endif
+--- 
+-2.14.3
+-
+diff --git a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch b/package/clamav/0001-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+similarity index 100%
+rename from package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+rename to package/clamav/0001-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+
+--===============3644994726753148985==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3644994726753148985==--
