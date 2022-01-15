@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 181C9C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17320C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 15:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C853E60AEE;
-	Sat, 15 Jan 2022 15:40:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B167140004;
+	Sat, 15 Jan 2022 15:40:17 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p4Zv2rZwxvI4; Sat, 15 Jan 2022 15:40:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 828BD4052B;
+	Sat, 15 Jan 2022 15:40:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 700671BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:38:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69AF560BAC
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:38:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AlqVTO46XM6B; Sat, 15 Jan 2022 15:40:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AFFC60767;
-	Sat, 15 Jan 2022 15:40:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EEEA01BF4E7
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:38:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDC9081D7D
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 15:38:25 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p1-pmaiHZTsN for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 15:38:25 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S7ZpI8HsFfXz for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 15:38:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35FEE818C4
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:38:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC04060B8A
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 15:38:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D94AA82B52; Sat, 15 Jan 2022 15:31:56 +0000 (UTC)
+ id 5AFEB82B52; Sat, 15 Jan 2022 15:32:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 16:38:20 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 025fa150745f7a6c26d3be656a55a8462b7f45ba
-X-Git-Newrev: 325b341440fa646818796a470eaf45241c7b1503
+Date: Sat, 15 Jan 2022 16:38:02 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 0896f414e6417b5491496d8793d407c6b19919ae
+X-Git-Newrev: 6aa6048432f9bf55527d79997f77b0f6feacae8c
 X-Patchwork-Hint: ignore
-Message-Id: <20220115153156.D94AA82B52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/privoxy: security
+Message-Id: <20220115153201.5AFEB82B52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/privoxy: security
  bump to version 3.0.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325b341440fa646818796a470eaf45241c7b1503
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6aa6048432f9bf55527d79997f77b0f6feacae8c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Fixes the following security issues:
 
@@ -109,7 +109,7 @@ index 92ecd1dd21..cf1056ecc4 100644
 +sha256  04b104e70dac61561b9dd110684b250fafc8c13dbe437a60fae18ddd9a881fae  privoxy-3.0.33-stable-src.tar.gz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
 diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index adb5af28ac..5fe9d5cc3e 100644
+index c1859ed5f2..06642200df 100644
 --- a/package/privoxy/privoxy.mk
 +++ b/package/privoxy/privoxy.mk
 @@ -4,7 +4,7 @@
