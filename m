@@ -1,53 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B97C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:17:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39E1C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B241C81B7B;
-	Sat, 15 Jan 2022 11:17:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A867B40350;
+	Sat, 15 Jan 2022 11:17:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yJPjxXuIZyyr; Sat, 15 Jan 2022 11:17:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0966B40340;
+	Sat, 15 Jan 2022 11:17:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 287E61BF2E4
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:17:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2515781AF4
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:17:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RrP297476up7; Sat, 15 Jan 2022 11:17:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DFD481AF4;
-	Sat, 15 Jan 2022 11:17:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12D471BF2E4
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:17:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F241D60888
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:17:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mQvmf2vJ7ZnT for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 11:17:07 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 48to3UiQ0hLr for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 11:17:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 008DB607D1
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:17:06 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 477CD81B25
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:17:11 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 98BBDFF807;
- Sat, 15 Jan 2022 11:17:04 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 101FE40007;
+ Sat, 15 Jan 2022 11:17:08 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1n8h3P-0000Rg-Up; Sat, 15 Jan 2022 12:17:03 +0100
+ id 1n8h3U-0000Rr-Ea; Sat, 15 Jan 2022 12:17:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20211213221035.1779283-1-fontaine.fabrice@gmail.com>
-Date: Sat, 15 Jan 2022 12:17:03 +0100
-In-Reply-To: <20211213221035.1779283-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 13 Dec 2021 23:10:34 +0100")
-Message-ID: <878rvh45ao.fsf@dell.be.48ers.dk>
+ <20211213221035.1779283-2-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Jan 2022 12:17:08 +0100
+In-Reply-To: <20211213221035.1779283-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Dec 2021 23:10:35 +0100")
+Message-ID: <874k6545aj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/libvirt: fix libvirtd option
+Subject: Re: [Buildroot] [PATCH 2/2] package/libvirt: fix dependencies in
+ Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,14 +69,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Replace libvirtd by driver_libvirtd to avoid the following build failure
- > raised since the addition of the package in commit
- > ccfc90e1010e42e6529afae3a5ea8bf7226dabc1:
+ > Drop spurious "depends on WCHAR" added with commit
+ > ccfc90e1010e42e6529afae3a5ea8bf7226dabc1 and adds missing wchar comment
 
- > ../output-1/build/libvirt-7.7.0/meson.build:1:0: ERROR: Unknown options: "libvirtd"
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/3a20db6cb39c0d91213adbe82934274659df43e7
+ > While at it, drop BR2_USE_MMU from comment as it is already added by
+ > BR2_PACKAGE_LIBVIRT_ARCH_SUPPORTS and fix indentation before
+ > (BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 || !BR2_aarch64))
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
