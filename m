@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE608C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E09C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A2FD40575;
-	Sat, 15 Jan 2022 11:02:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 539B54013A;
+	Sat, 15 Jan 2022 11:02:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L7s2i242l2ek; Sat, 15 Jan 2022 11:02:18 +0000 (UTC)
+	with ESMTP id Aep6iV3H_xhy; Sat, 15 Jan 2022 11:02:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B57B40571;
-	Sat, 15 Jan 2022 11:02:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF5661BF95E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A55140569;
+	Sat, 15 Jan 2022 11:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CFFB11BF95D
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE5B260AC1
+ by smtp2.osuosl.org (Postfix) with ESMTP id CADC24013A
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TcJ14yYt9def for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vy6HxM8k9ebE for <buildroot@lists.busybox.net>;
  Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C77F60A8F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 098DD40004
  for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 32F7F82911; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
+ id 21838829F9; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 11:59:14 +0100
+Date: Sat, 15 Jan 2022 11:55:07 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 74d578c31c67afaf9fb7a92c07b34e24cc09d1c1
-X-Git-Newrev: 1de8b3afe12c40fd127011b888f1c7f55b2227ff
+X-Git-Oldrev: dccdddf13ac2106c65ebbfd6e211581e13578517
+X-Git-Newrev: 823354d13d9112f83624de9a17c13f5c77f9e1a8
 X-Patchwork-Hint: ignore
-Message-Id: <20220115105522.32F7F82911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] DEVELOPERS: remove Roman
- Gorbenkov, e-mail bouncing
+Message-Id: <20220115105522.21838829F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/go: security bump
+ to 1.17.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,34 +59,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1de8b3afe12c40fd127011b888f1c7f55b2227ff
+commit: https://git.buildroot.net/buildroot/commit/?id=823354d13d9112f83624de9a17c13f5c77f9e1a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-<roman.gorbenkov@ens2m.org>: host mxd.relay.renater.fr[194.214.200.9] said: 550
-    5.5.0 Requested actions not taken as the mailbox is unavailable (in reply
-    to RCPT TO command)
+go1.17.4 (released 2021-12-02) includes fixes to the compiler, linker, runtime,
+and the go/types, net/http, and time packages.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 656f4a3718c5c643e419718ee693109093accbd9)
+go1.17.5 (released 2021-12-09) includes security fixes to the syscall and
+net/http packages:
+
+ - CVE-2021-44716
+ - CVE-2021-44717
+
+https://go.dev/doc/devel/release#go1.17
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit eb92bb01b325521e5bd85349ad57281c1e481c33)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c9848ac428..048d88ff55 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2402,9 +2402,6 @@ F:	support/testing/tests/package/test_glxinfo.py
- F:	support/testing/tests/package/test_openssh.py
- F:	toolchain/
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9031c33d8a..39f8226aae 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  705c64251e5b25d5d55ede1039c6aa22bea40a7a931d14c370339853643c3df0  go1.17.3.src.tar.gz
++sha256  3defb9a09bed042403195e872dcbc8c6fae1485963332279668ec52e80a95a2d  go1.17.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 59177e54db..0d9ceab2bb 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
--F:	package/davfs2/
--
- N:	Ryan Barnett <ryan.barnett@collins.com>
- F:	package/atftp/
- F:	package/c-periphery/
+-GO_VERSION = 1.17.3
++GO_VERSION = 1.17.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
