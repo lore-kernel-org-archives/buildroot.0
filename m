@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C5FC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2FEAC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF4314056D;
-	Sat, 15 Jan 2022 11:03:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80A99408C7;
+	Sat, 15 Jan 2022 11:04:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3PCRqSyOwcPx; Sat, 15 Jan 2022 11:03:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GlH6tDM4Z-LB; Sat, 15 Jan 2022 11:04:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D07D34056B;
-	Sat, 15 Jan 2022 11:03:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19E421BF95E
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA06140894;
+	Sat, 15 Jan 2022 11:04:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B9FE1BF966
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 075C380BD8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24B3A4015B
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ZgWnZUkv5as for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P26uNRxH8O3U for <buildroot@lists.busybox.net>;
  Sat, 15 Jan 2022 11:01:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B1D080BD6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 631D240131
  for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 73357829F9; Sat, 15 Jan 2022 10:55:26 +0000 (UTC)
+ id 7B71C829FC; Sat, 15 Jan 2022 10:55:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 11:50:42 +0100
+Date: Sat, 15 Jan 2022 11:53:47 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d645ab244230c03908e7cb6c440ba143c9203cf5
-X-Git-Newrev: 2f445c949b0e5018a47107101fe8c5231b2fe3e2
+X-Git-Oldrev: 2f445c949b0e5018a47107101fe8c5231b2fe3e2
+X-Git-Newrev: 0a110aa56451bbe0b5713812b44b99e473b69afd
 X-Patchwork-Hint: ignore
-Message-Id: <20220115105526.73357829F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/clamav: bump to
- version 0.103.4
+Message-Id: <20220115105526.7B71C829FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/x11r7/xapp_xauth:
+ bump version to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f445c949b0e5018a47107101fe8c5231b2fe3e2
+commit: https://git.buildroot.net/buildroot/commit/?id=0a110aa56451bbe0b5713812b44b99e473b69afd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-ClamAV 0.103.4 is a critical patch release:
-https://blog.clamav.net/2021/11/clamav-01034-and-01041-patch-releases.html
+Removed md5 and sha1 license hashes.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-November/003118.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ac629ef040fc8b10521d2592c944e09fd70b7016)
+(cherry picked from commit 01414cc093d9e791b15caff37dd426623068883c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xauth/xapp_xauth.hash | 9 ++++-----
+ package/x11r7/xapp_xauth/xapp_xauth.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index a2ed115d24..d68b04af76 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  9f6e3d18449f3d1a3992771d696685249dfa12736fe2b2929858f2c7d8276ae9  clamav-0.103.3.tar.gz
-+sha256  def0ad15500fa6aff81d8e68b9f83aa75ee5b607a01335c1d26dbcc959932f85  clamav-0.103.4.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 63af111da5..94b589b975 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
+diff --git a/package/x11r7/xapp_xauth/xapp_xauth.hash b/package/x11r7/xapp_xauth/xapp_xauth.hash
+index 0251c083a7..22ea4cadfd 100644
+--- a/package/x11r7/xapp_xauth/xapp_xauth.hash
++++ b/package/x11r7/xapp_xauth/xapp_xauth.hash
+@@ -1,7 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-July/003005.html
+-md5 e50587c1bb832aafd1a19d91a0890a0b  xauth-1.1.tar.bz2
+-sha1 16180e36d75a23cb182cb91e78f24273f1a63967  xauth-1.1.tar.bz2
+-sha256 6d1dd1b79dd185107c5b0fdd22d1d791ad749ad6e288d0cdf80964c4ffa7530c  xauth-1.1.tar.bz2
+-sha512 b6ecd59a853a491ef45bf8cfbff63bed36645f81cb79ae9d18458b57f7502bccf92f0d979d3337578518646f680ad379e67b1dac15a927cbb11372733e7a3a0c  xauth-1.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-November/003118.html
++sha256  164ea0a29137b284a47b886ef2affcb0a74733bf3aad04f9b106b1a6c82ebd92  xauth-1.1.1.tar.bz2
++sha512  998c3158378fff50d368959c29335173b8d98e02591cb3d7b2f9534b5a44b19deb4cb7da9bf291ca5a37f69f833d72839b2c6611723306d10c1b4968ae4d4120  xauth-1.1.1.tar.bz2
++
+ # Locally computed
+ sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5  COPYING
+diff --git a/package/x11r7/xapp_xauth/xapp_xauth.mk b/package/x11r7/xapp_xauth/xapp_xauth.mk
+index cd900f0055..64b064d3bd 100644
+--- a/package/x11r7/xapp_xauth/xapp_xauth.mk
++++ b/package/x11r7/xapp_xauth/xapp_xauth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.103.3
-+CLAMAV_VERSION = 0.103.4
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-XAPP_XAUTH_VERSION = 1.1
++XAPP_XAUTH_VERSION = 1.1.1
+ XAPP_XAUTH_SOURCE = xauth-$(XAPP_XAUTH_VERSION).tar.bz2
+ XAPP_XAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XAUTH_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
