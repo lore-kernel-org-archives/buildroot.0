@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B6C3C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE608C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 11:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18D764052B;
-	Sat, 15 Jan 2022 11:02:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A2FD40575;
+	Sat, 15 Jan 2022 11:02:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9LfNQxyQwKVY; Sat, 15 Jan 2022 11:02:05 +0000 (UTC)
+	with ESMTP id L7s2i242l2ek; Sat, 15 Jan 2022 11:02:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C5CD400C8;
-	Sat, 15 Jan 2022 11:02:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9FD6F1BF5DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B57B40571;
+	Sat, 15 Jan 2022 11:02:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5661BF95E
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DE7140183
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE5B260AC1
  for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QmBqenx8Jarz for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TcJ14yYt9def for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEB3240131
- for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C77F60A8F
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 11:01:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F327C82911; Sat, 15 Jan 2022 10:55:21 +0000 (UTC)
+ id 32F7F82911; Sat, 15 Jan 2022 10:55:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jan 2022 11:39:38 +0100
+Date: Sat, 15 Jan 2022 11:59:14 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 7bfd519b796cb98c5d4eee2e2e251121689dd604
-X-Git-Newrev: 9bdea4db4ba8df19b50e5ac72217336b1d4e2316
+X-Git-Oldrev: 74d578c31c67afaf9fb7a92c07b34e24cc09d1c1
+X-Git-Newrev: 1de8b3afe12c40fd127011b888f1c7f55b2227ff
 X-Patchwork-Hint: ignore
-Message-Id: <20220115105521.F327C82911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/alsa-utils: fix
- install rule for alsactl
+Message-Id: <20220115105522.32F7F82911@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] DEVELOPERS: remove Roman
+ Gorbenkov, e-mail bouncing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,33 +59,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bdea4db4ba8df19b50e5ac72217336b1d4e2316
+commit: https://git.buildroot.net/buildroot/commit/?id=1de8b3afe12c40fd127011b888f1c7f55b2227ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-The copy command for /usr/share/alsa missing an asterisk cause it to copy to
-/usr/share/alsa/alsa instead of /usr/share/alsa where it should be.
+<roman.gorbenkov@ens2m.org>: host mxd.relay.renater.fr[194.214.200.9] said: 550
+    5.5.0 Requested actions not taken as the mailbox is unavailable (in reply
+    to RCPT TO command)
 
-Signed-off-by: Khoa Hoang <admin@khoahoang.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6c71b52235d88cd8d38b4fd02c87f791aaa8eff3)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 656f4a3718c5c643e419718ee693109093accbd9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-utils/alsa-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 427280c1e6..2603e52f18 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -77,7 +77,7 @@ define ALSA_UTILS_INSTALL_TARGET_CMDS
- 	fi
- 	if [ -x "$(TARGET_DIR)/usr/sbin/alsactl" ]; then \
- 		mkdir -p $(TARGET_DIR)/usr/share/; \
--		cp -rdpf $(STAGING_DIR)/usr/share/alsa/ $(TARGET_DIR)/usr/share/alsa/; \
-+		cp -rdpf $(STAGING_DIR)/usr/share/alsa/* $(TARGET_DIR)/usr/share/alsa/; \
- 	fi
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c9848ac428..048d88ff55 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2402,9 +2402,6 @@ F:	support/testing/tests/package/test_glxinfo.py
+ F:	support/testing/tests/package/test_openssh.py
+ F:	toolchain/
  
+-N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+-F:	package/davfs2/
+-
+ N:	Ryan Barnett <ryan.barnett@collins.com>
+ F:	package/atftp/
+ F:	package/c-periphery/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
