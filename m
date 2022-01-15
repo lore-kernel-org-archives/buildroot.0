@@ -1,78 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 227A8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 23:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B88BC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 23:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF290818D4;
-	Sat, 15 Jan 2022 23:03:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A2DF605E3;
+	Sat, 15 Jan 2022 23:04:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MMqFBzfm7VlR; Sat, 15 Jan 2022 23:03:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 03DvuEiJHYID; Sat, 15 Jan 2022 23:04:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B08F818C9;
-	Sat, 15 Jan 2022 23:03:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E074607F0;
+	Sat, 15 Jan 2022 23:04:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6EE2C1BF373
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:03:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6341BF36C
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 592E5818C9
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:03:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5620C818CA
+ for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:04:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (1024-bit key) header.d=gmx.net
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T5T0nUW4qBuq for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 23:03:12 +0000 (UTC)
+ with ESMTP id eqLOVTjONZsY for <buildroot@lists.busybox.net>;
+ Sat, 15 Jan 2022 23:04:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F19E8176D
- for <buildroot@busybox.net>; Sat, 15 Jan 2022 23:03:11 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06083818C9
+ for <buildroot@busybox.net>; Sat, 15 Jan 2022 23:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1642287785;
- bh=jVQQevBjIsW1GZUl4AUbNbBeZVhQpz2KP9SD+IN/J4U=;
+ s=badeba3b8450; t=1642287876;
+ bh=fHy39lOe7gO16eFmQmn0KRKZ/mWDBR4jy6ajyB4Jgtc=;
  h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=Iyp1iQl8RvhKvPV6zFkBTGsc1gaDAtY7u2iA6ciKxpE+DzrSSnYxb9xPr1CjVvVx0
- Q33yrb1wE4+u6XKgR8LNrxADaUhAsuzZLGjTlBB4nuZP7O9qkRlOuLJRep3i82s/xu
- NwN+D02rArZgS37QJSzSwSl+rMh+iSn43vuXT/UM=
+ b=KystACmOm0vig/Tr+Kc2SsVRYvLtTLAaI7ciWz6bDRwWg9243bmYyRqoQrkNTiXX5
+ tUp3Q6Jwlov6nFxeqk7tINCNmjiH/zxYxvyToDOkoQm9YhPWCr/0YQjXvGDVHAmFQy
+ A2UWfW1NZ5Z/7EvTgV4Gg6JJPdPgiHQhvYIY2N+Q=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.238]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgNct-1mggCM2nKJ-00hrvR; Sun, 16
- Jan 2022 00:03:05 +0100
-Date: Sun, 16 Jan 2022 00:03:04 +0100
+Received: from localhost ([62.216.209.238]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPXdC-1mv2DG2FPO-00Mb9r; Sun, 16
+ Jan 2022 00:04:36 +0100
+Date: Sun, 16 Jan 2022 00:04:35 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220116000304.15e7dcf8@gmx.net>
-In-Reply-To: <20220109142748.4f7c1a59@windsurf>
+Message-ID: <20220116000435.03d5b920@gmx.net>
+In-Reply-To: <20220109144430.1064ea1c@windsurf>
 References: <20201221203952.22168-1-ps.report@gmx.net>
  <20201221203952.22168-3-ps.report@gmx.net>
  <20220109142748.4f7c1a59@windsurf>
+ <20220109144430.1064ea1c@windsurf>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/QNrqwvDFQ2Hm1PlH5Ehw3aIiSPaQi6UPf10ypFKh5c10mUb/Xt
- J7htca2savf9bUDYL1aoDxyNpZ+ToVyGvI6BcbXGit2/heXZkf8V1gwA7iH5ojgD/iWiJZJ
- +fcqOdo4TtSzSkkijynJaB+HwJfHiuOKU1gPw+7rtazGGbIZXX+nyvWHbsZ6RZwfvNO1vio
- CCWAZL5QyUz1eQfQaFFXg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:d6s644qUb3U=:Fd5ysGAcCeat4suqwq5jLd
- ++O0qmQZ3+1DTce/YofH6dqWlCY8V4q3rkAKzWhRQ9A7H7s2LjWsmEYqCrq566X1+c92TBTKR
- ux3W3381rfDjag9BU/4XRRAc+IkTiKi03sYf0jH7nJ6DeZ6FikdI5x0xldIgbMVs6NCQCai5q
- BzRVx5SX1kN7czEK1CbOZWjKQCnL8hpHfeVorvcOev1tePyKQf2vQPQZF0V+WZkoLLREcyB+R
- 27v2OkiubuDdKSnUixqSpD5ZVzjY95sbHGbvubTProqJmRBrCaCaT2D3fjviDvVrRo8ygDwZk
- 3KYjqE1oZCiSUWyVvrWnE4214sZAsabgHcxyD+08WGcEWspJ6BqdMRj4q6SRde42V3gah14T1
- IQ7vAX6eyguOTnVoCAVfNFvA/sSkJltbHeZ51TNb9tqCp4JlKdhHQoYlgx4nQ+b+YFy5Kn3Ay
- VEKE4/nwHOr7j4rh5VS1gvo3TxJgNHbeBcw+NJl5MNkUICEGkzkho2SEcZJg6UdlqnE0hBSp8
- my8ukgWdnctrAIyBNC1b7bSsCwy1W6hFMkyyNGUye8YbthbMPyy8G5FP/1FD2NwNQx9gGAZaC
- N7Ev+a2urkIPcXOwBuR7yByE7X2nQWSULuLs3MG5Swpqip27XsvtvnU1S5Wy/E2xAry0Qa7si
- Vsbybs6ZNd0jjhAV+lvR7UdlkQV58G7lLZShjaFuFfjuPRnoWE5/oWLR8hbJYmaAxhKa04tVU
- zoUAKEfrxfsxic8oQ45OBzdajDH+JF4eZLknYwEBjgNQcgNzW4wQoL2Wz6kCScZfi22uUjhJK
- 9XDqW7jTCSLffkZfr76p5x7FuiA69JmjTx7dFhiVvfLx00N9htMQ1F5AypILBxGLNTKYkIqY3
- meAqtWrhgee/HUdjt8ESmDZm3tdl/GlL4mi6Sdix0bbf8PaXsStE71uZCSAF1M5tl/RF7ik7m
- Ksdr4XQHgQkgoBjwAzIB0IA0c7ax2loxvzKdcxUUgsOjFcajHg1XsYQOyn2gumDFHOaDH6H7o
- Qal3u9OWaf5/FFYSvOywDTVJdOvQid0Z6G2sYbfOCXW2OknapG+lSEAsHjhNiVpoOZc82S/L6
- VY76pxQN6B+AJI=
+X-Provags-ID: V03:K1:xeO4HmXQMjQUiEA3dLsd/1nFD+augn3TcTleYNPh1o+/yjIQef9
+ fJIumr7r1BDE+TLdaBnDJ+IAR6lBOfOAPKXAwtRoTnxQ+/ATJ3yzhICs3BSNMzEdBqb3ZRJ
+ qB3jlqW2v8vR149ptgLZ5jszgR4srKMIpvY/SSdnmVY8/0AEJ/6cnFlO/dwDTkcnqSPt5yM
+ BepeTYe/L3V9PEdrSQQOg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l6Bhd+9mu1c=:q/DaBx2urFeN8i7K1/XMUG
+ Nv32v7579HURTZt4tFQ/gJXwgX4hSbnpNj1mFiB2kR37SEVwgaHXXN+s4WuxJ9tzNDXg1mRnw
+ GGnbPLIsYDhre6Hw70DUrJWiMMfoLkdHsOWG/kCCxsdnAIcrwhmcAKpMnVT58rDRinbtsieje
+ fEq7HePfoAzn9VzZieaLF0JAPRH0JnW/PY87s2CzLD3biiLyzRCy1Vk0tPXgNbMVlZgrGHZfu
+ wvsj3WWkQh28f5WUTEi+w3pJc3fkrMJtV30FlEWifr0kNZAFJTd5hxuv6cNWnDfF1m783wUfd
+ vhsrxzF0uCeDkk9vvKdI0BANavNCS5KucFac9OGJAbpeHM2S0vYEje2ZkW89SVlbEgYakdJPn
+ yaja9AlySyuWm857m0G4dGS3laA271t2krBUoiw5UpgzS+lQsQGO8eMey05K8VEkGylh8b52G
+ vZcCXE9XcNZxaScgsLb+GAiTuHuXiKOD4dgoW4hs79/gwkf7s5WJpdlXBzra+P3DmHwgj/e7F
+ doLaaoSqrt1gwH+b8o0GzFcTchanQ8GPbQGpm5kX0sD2qsaaF7OcmWs6ORx1TtpttOdi7lpbK
+ YGFSLTKJWn9/IMik1E8PPym9Gcs21XSlMXjUibjEc8+wcrTewINv+tEhmenhmfMcrtERDbtd1
+ dleJL4QkJV3kzMTOZ+8Cg58k4KcqjI092DEpL3TdA2SJLaDq4bxeoXv8ZW5WerrpceS4yocpP
+ wVdthB4sdbmkTnYfNHnbVQ3rskhMXccE/MVXHljCgZ0kIcQfuh/dcAvA+18A0qWco6k2K7o4b
+ AuEpFAMm4GVG6wbu2AQPBIR2XCihqVOwPWkUaxRn3eqsFe5wY8rndo4RRnyYtAB2fWMp/orKK
+ tdJFyc0Va0OFvcgUwiBWoFd6w8KYrNAJZxBjmJ9Sncd4Izq/nky1ZgY1D2Aq7lpepkuV//5P9
+ /63ZlnL+1pPvaTJgnJj+QVxZ7FkV8UpCDoCxHlI/MVoMe41Luht7kj/vP3UoYTjzRbJ4flcdw
+ czTHmzUSDIp1lNZZkOIIlWj92N8sRoNUwAVJkLiZeFvGTDg+irIvgmCLh9QfGxKDeGkGBbwZc
+ noFny0mRHF/9XU=
 Subject: Re: [Buildroot] [PATCH v1] package/qt5webengine: add optional
  host-freetype/host-libjpeg dependency
 X-BeenThere: buildroot@buildroot.org
@@ -86,11 +89,12 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+Cc: Arthur Courtel <arthur.courtel@smile.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  =?UTF-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>,
  Julien Corjon <corjon.j@ecagroup.com>, buildroot@busybox.net,
- Maxime Hadjinlian <maxime.hadjinlian@gmail.com>,
- Martin Bark <martin@barkynet.com>, Arthur Courtel <arthur.courtel@smile.fr>
+ Martin Bark <martin@barkynet.com>,
+ Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -98,51 +102,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Thomas,
 
-On Sun, 9 Jan 2022 14:27:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sun, 9 Jan 2022 14:44:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> On Mon, 21 Dec 2020 21:39:51 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
+> On Sun, 9 Jan 2022 14:27:48 +0100
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 >
-> > - add optional host-freetype dependency
+> > I am falling into this issue while building the following defconfig:
 > >
-> > Fixes:
+> > BR2_arm=y
+> > BR2_arm1176jzf_s=y
+> > BR2_TOOLCHAIN_EXTERNAL=y
+> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> > BR2_PACKAGE_QT5=y
+> > BR2_PACKAGE_QT5WEBENGINE=y
+> > BR2_PACKAGE_RPI_USERLAND=y
 > >
-> >   Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config freetype2
-> >   Returned 1.
-> >   stderr:
-> >
-> >   Package freetype2 was not found in the pkg-config search path.
-> >   Perhaps you should add the directory containing `freetype2.pc'
-> >   to the PKG_CONFIG_PATH environment variable
-> >   Package 'freetype2', required by 'virtual:world', not found
-> >   Could not run pkg-config.
-> >
-> >   See //build/linux/BUILD.gn:24:3: whence it was called.
-> >     pkg_config("freetype_from_pkgconfig") {
-> >     ^--------------------------------------
-> >   See //build/config/freetype/BUILD.gn:10:24: which caused the file to be included.
-> >       public_configs = [ "//build/linux:freetype_from_pkgconfig" ]
-> >                          ^--------------------------------------
-> >   Project ERROR: GN run error!
-> >   make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 3
-> >   make[3]: *** [Makefile:79: sub-core-make_first] Error 2
-> >   make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+> > Did you had the chance to investigate more deeply why having fontconfig
+> > support in Qt leads qt5webengine wanting to find freetype2 on the host?
 >
-> I am falling into this issue while building the following defconfig:
+> Interestingly, in commit
+> https://github.com/meta-qt5/meta-qt5/commit/280487f20bca829527a597d6263b0344a01917ac#diff-f0ffde666f6ff0282f8400203b3ba20968494d3c7245106eca761bd79baa1c78R26
+> the meta-qt5 layer, when upgrading Qt to 5.15.2 added jpeg-native and
+> freetype-native as new unconditional dependencies.
 >
-> BR2_arm=y
-> BR2_arm1176jzf_s=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_QT5WEBENGINE=y
-> BR2_PACKAGE_RPI_USERLAND=y
->
-> Did you had the chance to investigate more deeply why having fontconfig
-> support in Qt leads qt5webengine wanting to find freetype2 on the host?
+> But there are no explanations. Is it really because the Chromium stuff
+> is building a host tool with freetype/jpeg, or is it just a workaround
+> for some incorrect behavior of the Chromium build process that needs
+> freetype/jpeg on the target, but checks for them on the host?
 
-The observation is that all (optional) qt target options are requested by
-qtwebengine for the host (and buildroot package fontconfig selects freetype)...
+Would say yes...
 
 Regards,
 Peter
