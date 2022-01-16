@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E4BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 09:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B0DC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 10:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6748740873;
-	Sun, 16 Jan 2022 09:45:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF9434032D;
+	Sun, 16 Jan 2022 10:17:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xMjwUsTFeZQs; Sun, 16 Jan 2022 09:45:25 +0000 (UTC)
+	with ESMTP id 4Kwcq-MWxP7Z; Sun, 16 Jan 2022 10:17:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B38CB4077D;
-	Sun, 16 Jan 2022 09:45:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57CCD1BF25B
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 09:45:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E630740325;
+	Sun, 16 Jan 2022 10:17:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF8451BF426
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CAA982611
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 09:45:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBC7040325
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:17:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aTa4Agc3yzOn for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 09:45:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wcPvbEUFWmO7 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 10:17:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5460E825E6
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 09:45:22 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id t24so52316577edi.8
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 01:45:22 -0800 (PST)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F1EC40321
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 10:17:52 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id d14so12257545ila.1
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 02:17:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc:content-transfer-encoding;
- bh=Yl+RXOYxRm3ar4uh1Lr+9ceeSm3CIrx54EXLPgcRPRs=;
- b=F7QAWkyg3GbGkJixbxAGmObqYlR4qus89Bdp4bP4ESoGsUu1jx8iP8C7bHXnpNQLeE
- WJJ5qApmhm7c71fmEV214G19BhzR39OntJyfvWY8j5JGPkXnNwn8Okz4EfRnK3ylY7Si
- ZW8krY+oPT8n6lbMpzzCtrY9FTRYNimSYTpn6MfoUlll+PAzdiOpWjmzeZ92AW3GAdqm
- EOyFc+jTfCS4fZvKPu5rzx48czoFjwofpkCgHESFyPH6aXVsNDEagZ8dkJ319qireNCq
- IEXBYUHyUMnP6pejkkIhbezmScRKQyeDAnUdCzYgnr//XKwWygn9yCSC941PWkKmTjNg
- rvdw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=El9lGphzk4LX0+XfK0enCsvI2Ycn6XgNtPZsMvH7K+w=;
+ b=OJizuxgV0qOqkstAd9Q2JDe4LW+PGEkA8uO1pHq2RXMu6wnqFWeu01hXKMdq/Y616u
+ RyNerBscGJtuWYftr8MmaogMoMVyLWzS59xs5uEvG7/cAwHmrOTLhRym8auPJcIHuj8d
+ yhem1zObwT0vYrQ2sJuqGUE07pVcbphW8UEzIh/fZ3n0rJKgLzhsZ50p9CAp1Mh+Uow5
+ ws2ALIvvcJiMjoc4nOgQkk8GrbqroqfYWtuf57Cr6MG01FOagNsRuKAves1ucJ9bx0N2
+ 3lp5Slszsb7PyXRZOomWypRse2TUj6znIUaDP0h/0qRB7tUSmXDuyo7Me35TyTLIeUDZ
+ JKeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc:content-transfer-encoding;
- bh=Yl+RXOYxRm3ar4uh1Lr+9ceeSm3CIrx54EXLPgcRPRs=;
- b=yB9vTyleCBhGc6jRpWINYtHMz3s2Jy90JvSOayLb5aSSzSiX6ORCRSqfgE9WPccGz+
- p/HJQWPOmK08ytAEeWp+gtaH6mFJh+7AuWJYN+A7viK1JMjx74kktnDpjW7Pgfj+7EQX
- stRXk+0Qg0bPrh8nGWP2sX1kignct1c86leQCTeTC1+UqynJoyllZ3mEzsC4vny+TM5x
- gSAkYmOe2x4WbSfFlf6KnYWRKjj3p5K/ng80ZwD9rDal991hL844HzUnunU7S/6+BaZ3
- AQcjuh5SaKiqdr4lCPXKqwtoBMmHezQj/m0iEZtkxMVORbjZSeQ19JJukTR3XeePFCcZ
- omEw==
-X-Gm-Message-State: AOAM5305FI28/btepyMzI53TXqOQYl3yiLdye2s+ShXZJGYTntu4MoGQ
- yNoB6KKoV4M+VeL9vSjpG5DrfeY034bdANpEa9mdkNC7
-X-Google-Smtp-Source: ABdhPJx6maWomu/EbDL2byBKEJb5V/22xeY4Em/5Dm2m4FDwq6gan9GrmUCsqjsyKl8056kwz68Gnn4e0fBrPk0AQDo=
-X-Received: by 2002:a17:906:2bcf:: with SMTP id
- n15mr12631295ejg.184.1642326320395; 
- Sun, 16 Jan 2022 01:45:20 -0800 (PST)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=El9lGphzk4LX0+XfK0enCsvI2Ycn6XgNtPZsMvH7K+w=;
+ b=QsGDHbn6dTdHuL97nG6fToPmCtnOlXdfW5J7Wlgnobswqy21eBUiOLvMYEA9w+dIf2
+ 6D6yRNrIGXN4XAMjd+HHngxVto4TmyAqRZTp2bkRdytcQe1O4UnCi6yh/tAM8Oh+ZPlG
+ b4O3lWn9f72yDi7Nsti4+uu7Ne3ucfwMETYM4yK5CFqQCvrb2h70AaOBz0wLEwHfK8dM
+ 2RE7m2LmbV+jkemcJu4lOrqdxcTykZjhOboEI52ehEhbvkRyWSIlLkd1jso/1BfzPt/f
+ z7i6uwwK/BTRpSeOdYbgAb9SQCl6CGt16E0L2NJRK/DJZq6FSZuC5l44+JdApLsFoq9b
+ /bNQ==
+X-Gm-Message-State: AOAM531xPpkV79CgEaP5Ozlbc8DwwqKLZdVBz7Km61UGeSZZOLf/Orvc
+ 9aJC5CFpmkZEzH7EvHs2vWPvT/Mt3uE=
+X-Google-Smtp-Source: ABdhPJw+p97uyHPSZm+RmepI4RnOC/daCtWH+tF/XV9QU9EbGt+O1YaFHLJA5uH8SI8FiOZN4oh7Bg==
+X-Received: by 2002:a05:6e02:1a86:: with SMTP id
+ k6mr8944589ilv.223.1642328271005; 
+ Sun, 16 Jan 2022 02:17:51 -0800 (PST)
+Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
+ [97.118.239.242])
+ by smtp.gmail.com with ESMTPSA id d16sm6564651ila.51.2022.01.16.02.17.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 16 Jan 2022 02:17:50 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 16 Jan 2022 03:17:39 -0700
+Message-Id: <20220116101739.2623120-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211119175553.2413433-1-fontaine.fabrice@gmail.com>
- <20211121145741.1fa4dffb@windsurf> <20220113231438.5aa8742e@windsurf>
-In-Reply-To: <20220113231438.5aa8742e@windsurf>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Jan 2022 10:43:45 +0100
-Message-ID: <CAPi7W81-uZBSkZM13TidniExTbGicRZZ08g8jQbiRr_UdzgsAw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH v2,
- 1/2] Revert "package/log4cxx: select boost chrono and date-time
- with gcc < 7"
+Subject: [Buildroot] [PATCH v3 1/1] package/qt5/qt5base: disable broken
+ qmake sysrootify
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,37 +85,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKTGUgamV1LiAxMyBqYW52LiAyMDIyIMOgIDIzOjE0LCBUaG9tYXMgUGV0
-YXp6b25pCjx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiBhIMOpY3JpdCA6Cj4KPiBIZWxs
-byBGYWJyaWNlLAo+Cj4gT24gU3VuLCAyMSBOb3YgMjAyMSAxNDo1Nzo0MSArMDEwMAo+IFRob21h
-cyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gPiBP
-biBGcmksIDE5IE5vdiAyMDIxIDE4OjU1OjUyICswMTAwCj4gPiBGYWJyaWNlIEZvbnRhaW5lIDxm
-b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4gd3JvdGU6Cj4gPgo+ID4gPiBUaGlzIHJldmVydHMg
-Y29tbWl0IDNjMjI0NWNiNjU3NDFjOTY1ZjRiYjg3ZDM1YWMzYzY0ZjI1MGExYWUgdG8gbW92ZQo+
-ID4gPiB0aGVzZSBzZWxlY3RzIG9uIGJvb3N0IHNpZGUgYXMgdGhlIGJ1aWxkIGZhaWx1cmUgd2Fz
-IHJhaXNlZCB3aXRoIGdjYyA+PQo+ID4gPiA3IChtYWtpbmcgdGhpcyBjb21taXQgYSAibm8tb3Ai
-KS4gSW5kZWVkLCB0aGUgYnVpbGQgZmFpbHVyZSBpcyByYWlzZWQKPiA+ID4gd2l0aCBjbWFrZSA8
-IDMuMjEuMywgYmVjYXVzZSBjbWFrZSBhc3N1bWVkIHRoYXQgYm9vc3QgdGhyZWFkIGRlcGVuZHMg
-b24KPiA+ID4gZGF0ZS10aW1lIHVudGlsCj4gPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9LaXR3YXJl
-L0NNYWtlL2NvbW1pdC8xYWQwYzVhZTUzZmMwYzRmNzc0MTY2MzM3ZjBlOWM5M2M1NzhjZjliLgo+
-ID4KPiA+IEkgZG9uJ3QgdW5kZXJzdGFuZCB3aHkgeW91IHNheSB0aGlzIGNvbW1pdCBpcyBhIG5v
-LW9wLiBJdCBjbGVhcmx5Cj4gPiBpc24ndC4gSW4gZ2NjIDwgNy54IGNvbmZpZ3VyYXRpb25zLCB0
-aGlzIGNvbW1pdCBlbnN1cmVzIHRoYXQgYm9vc3QKPiA+IGNocm9ubyBhbmQgYm9vc3QgZGF0ZS10
-aW1lIGFyZSBzZWxlY3RlZC4KPiA+Cj4gPiBUaGUgZmFjdCB0aGF0IHlvdSByZWFsaXplIGxhdGVy
-IHRoYXQgdGhlIGJ1aWxkIGZhaWx1cmUgb2NjdXJyZWQgd2l0aAo+ID4gZ2NjID49IDcueCwgbWVh
-bmluZyB0aGlzIGNvbW1pdCBkb2VzIG5vdCBoZWxwIGZpeGluZyB0aGUgaXNzdWUgZG9lcyBub3QK
-PiA+IG1ha2UgdGhpcyBjb21taXQgYSBuby1vcC4KPgo+IERvIHlvdSBoYXZlIHNvbWUgZmVlZGJh
-Y2svY29tbWVudCBvbiB0aGUgYWJvdmUgcXVlc3Rpb25zPwoKSW5kZWVkLCB0aGlzIGlzIG5vdCBh
-IG5vLW9wIHNvIEkgc3VnZ2VzdCB0byBvbmx5IGFwcGx5IHRoZSBzZWNvbmQKcGF0Y2ggb2YgdGhl
-IHNlcmllLgoKPgo+IFRoYW5rcyEKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwg
-Y28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
-aW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQpCZXN0IFJlZ2FyZHMs
-CgpGYWJyaWNlCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Currently the qmake gcc sysrootify path logic causes issues with
+per-package directories, disable automatic gcc sysroot for qt5base
+install and override all qt.conf paths manually to point to their
+correct locations.
+
+Redirect HostData to STAGING_DIR as mkspecs need to be available there
+instead of the HOST_DIR for cross compilation to work.
+
+Also set qmake target pkg-config path for qt5webengine.
+
+This fixes some build errors with per-package directories such as:
+/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
+cannot find /lib64/libc.so.6
+/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
+cannot find /usr/lib64/libc_nonshared.a
+/home/buildroot/buildroot/output/per-package/qt5base/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld:
+cannot find /lib/ld-linux-aarch64.so.1
+collect2: error: ld returned 1 exit status
+make[4]: *** [Makefile:122: ../../lib/libQt5Svg.so.5.15.2] Error 1
+make[3]: *** [Makefile:48: sub-svg-make_first-ordered] Error 2
+make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+make[1]: *** [package/pkg-generic.mk:295:
+/home/buildroot/buildroot/output/build/qt5svg-5.15.2/.stamp_built]
+Error 2
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - set target pkg-config path
+Changes v1 -> v2:
+  - add some missing overrides to qt.conf.in
+---
+ package/qt5/qt5base/qmake.conf.in |  4 ++++
+ package/qt5/qt5base/qt.conf.in    | 21 ++++++++++++++++++---
+ package/qt5/qt5base/qt5base.mk    |  2 ++
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index 024c074928..d12f884a55 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -8,6 +8,10 @@
+ 
+ include(../common/linux_device_pre.conf)
+ 
++# set up pkg-config
++QMAKE_PKG_CONFIG        = $$[QT_HOST_PREFIX]/bin/pkg-config
++QMAKE_PKGCONFIG_PREFIX  = /usr
++
+ # modifications to g++-unix.conf
+ QMAKE_CC                = $${CROSS_COMPILE}gcc
+ QMAKE_CXX               = $${CROSS_COMPILE}g++
+diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
+index 2215cbd4e1..c92f52ced0 100644
+--- a/package/qt5/qt5base/qt.conf.in
++++ b/package/qt5/qt5base/qt.conf.in
+@@ -2,6 +2,21 @@
+ Prefix=/usr
+ HostPrefix=@@HOST_DIR@@
+ Sysroot=@@STAGING_DIR@@
+-Headers=/usr/include/qt5
+-Plugins=/usr/lib/qt/plugins
+-Examples=/usr/lib/qt/examples
++SysrootifyPrefix=false
++Binaries=@@STAGING_DIR@@/usr/bin
++Libraries=@@STAGING_DIR@@/usr/lib
++Headers=@@STAGING_DIR@@/usr/include/qt5
++Plugins=@@STAGING_DIR@@/usr/lib/qt/plugins
++Examples=@@STAGING_DIR@@/usr/lib/qt/examples
++Tests=@@STAGING_DIR@@/usr/lib/qt/tests
++Data=@@STAGING_DIR@@
++Translations=@@STAGING_DIR@@/translations
++Documentation=@@STAGING_DIR@@/doc
++ArchData=@@STAGING_DIR@@/usr
++LibraryExecutables=@@STAGING_DIR@@/usr/libexec
++Imports=@@STAGING_DIR@@/usr/imports
++Qml2Imports=@@STAGING_DIR@@/usr/qml
++Settings=@@STAGING_DIR@@/etc
++HostBinaries=@@HOST_DIR@@/bin
++HostLibraries=@@HOST_DIR@@/lib
++HostData=@@STAGING_DIR@@
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index bcdf036f00..6c05e710d8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -311,8 +311,10 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-v \
+ 		-prefix /usr \
+ 		-hostprefix $(HOST_DIR) \
++		-hostdatadir $(STAGING_DIR) \
+ 		-headerdir /usr/include/qt5 \
+ 		-sysroot $(STAGING_DIR) \
++		-no-gcc-sysroot \
+ 		-plugindir /usr/lib/qt/plugins \
+ 		-examplesdir /usr/lib/qt/examples \
+ 		-no-rpath \
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
