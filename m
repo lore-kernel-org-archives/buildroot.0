@@ -1,79 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75246C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 19:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A47C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 19:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5D1860AC9;
-	Sun, 16 Jan 2022 19:23:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53924819F5;
+	Sun, 16 Jan 2022 19:34:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uQeYz_8IkD-m; Sun, 16 Jan 2022 19:23:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kFBCrJfukOir; Sun, 16 Jan 2022 19:34:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D029E60745;
-	Sun, 16 Jan 2022 19:23:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE3201BF408
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:23:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E512819D2;
+	Sun, 16 Jan 2022 19:34:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14B821BF408
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:34:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDA7340509
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:23:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE675403B7
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:33:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EB0PVSPLEUy9 for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 19:23:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com
- [IPv6:2607:f8b0:4864:20::b2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B446C404CF
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 19:23:30 +0000 (UTC)
-Received: by mail-yb1-xb2f.google.com with SMTP id c6so39710168ybk.3
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 11:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=Y5q+BcT77Z1FyC4vUvjFzWe+X9+HOX8SgFjwzbKYYXo=;
- b=qRLVtwecwFHhLqaXGODEXAsizPOUGBhRzf+p3k5GRZIHxU+kEuO+lma97cfN790etM
- VMscQWNIO5db7PJCr3CQwwmsMoXxhY/l/p+njGiyHLUNAxZV19+q5yLDi1l4K+Pegmtg
- tgR0vsSyXWS8gsgIX7SqFtzET3ae1+0c0tisEVs+UUEMJ8Gxo9mChL6ge2ER/yx7f2d6
- Se0ziDEgxodGZa3vd1EBILbF3pnOVdvIAAYsCXiskd24YpfkYHYZTrwm18B9fC2jbjC1
- Ss/1fMZ4s2Y7HyIp35X8eoBQfs5GSpyDL3+63QqgvPHfGeiBk8Sm4kAXCtW3t92ElkY7
- JvwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=Y5q+BcT77Z1FyC4vUvjFzWe+X9+HOX8SgFjwzbKYYXo=;
- b=4Na53jkO7vqbtciq6G2PXwq5sVtA2fOQUqz7tx8rjmu+cO39VRzAarsoNT7BQByYmy
- 2vVl08kYKFh4RiLnXInZg5q2delR76neRRFMTXb+CsxzU3jbYRvKMFRUvd+E01gyOTGy
- r5kU1n1xB1q846cumvTRiPnahADUnaKSGL1kA7NbivFmK4Hn4pqkUqed96FLj1KiRL5J
- HbPRVruUhvEg3wuA7YVXptNXgZE/Hga/5FCHAfTSmqHiaHYuczOPb61yP+lQi9q/lJhD
- HAd92OJctN+hHuTFVCVQ3lSmskbUu6haTGr2TAq1mMbRmKYch0PGkP/z5im+mnDWuTgA
- ReAg==
-X-Gm-Message-State: AOAM530jr4eF6Jgh8jBlompt0d+Rw2iXI/55H0NyV3+dOqrAfJ4ap6TS
- ZTXDTlJBRlenJs3iVbbGOcc9aw89NMrENTPyAws4GWZtQtQ=
-X-Google-Smtp-Source: ABdhPJwjNVhlNTOoVomziTLu8cKowrOPeTSfLYVe/wfiDBeHqgPdWl+09+aViWszsQCQ/7F+L7OJ5bDwzUsjE45J9r0=
-X-Received: by 2002:a05:6902:124e:: with SMTP id
- t14mr25599636ybu.65.1642361009642; 
- Sun, 16 Jan 2022 11:23:29 -0800 (PST)
-MIME-Version: 1.0
-References: <CAF8i9mOtQLce7b+H_PzHrsiUe_5qphpk-QsXq=WeLZodMv1heA@mail.gmail.com>
- <d85d6f3c-2315-8583-a48c-b0b58e443a4d@mind.be>
- <CAF8i9mPphK+bKcnTtd6soqP1_vfPaE=F=GB945sW+Xdwqm+h4A@mail.gmail.com>
- <420ac869-6aea-a492-7a74-3014b7bb4cf3@mind.be>
-In-Reply-To: <420ac869-6aea-a492-7a74-3014b7bb4cf3@mind.be>
-From: William Tambe <tambewilliam@gmail.com>
-Date: Sun, 16 Jan 2022 13:23:20 -0600
-Message-ID: <CAF8i9mMGixY2q5e+fXH=-0H6vss97Q4T1uKwnUg-zTzZ5d7Hkg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] BR2_PACKAGE_DHCP_CLIENT fails to build:
- readline/history.h: No such file or directory
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mITCzwP4_ywC for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 19:33:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 733B84033F
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 19:33:58 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id 9BHnn3C35gdXd9BHonRvzm; Sun, 16 Jan 2022 20:33:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642361636; bh=FYrA+TLhZRlEfkEBYKbYvYZEvmikfPFGHwy7OZtpkfE=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=HmvyAeJPtVQDQuALTMEjVYYDUBv4CFz0TNb3cMNFnYsGSTqlcPseqHnwW56ofYZSa
+ n8qpXTCiCJ+CnEtaRuB6CqnKgMp74jdm6djbQ3ZKyvnXRQuRxZ64s09nlt3gdQdjer
+ gpHnxU1Oxfde+V5pkm93Oi+Z78Wla65ZzmMb/a/rZE1kl0SGpEYMreGkUS3wef/G5l
+ i7M6nF3H1cTj8qVTXcvkdqcFnAJeVKixenV5NyyX8cp95tGEMmypnynUu6AjJs4b75
+ jJf7sbE6rhzCWdvwiFOCUlcUTPMoIo/amR6Sqnot3NXqt7j5Zz33WL+sKsJ8rcxoC4
+ qVSt0uhHOPkKQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sun, 16 Jan 2022 20:33:55 +0100
+Message-Id: <7398CECE-A994-4692-BCA7-FD6ACB33395F@benettiengineering.com>
+References: <78e0fe75-0ecc-51ce-6270-d6f228cfdbaf@gmail.com>
+In-Reply-To: <78e0fe75-0ecc-51ce-6270-d6f228cfdbaf@gmail.com>
+To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfLdSUVP6SQGTk8QcA8ccKs3jfMWAuCFsOF0vi/PeXjPbBPEaGfldYr4FDD5o/RoJP9NSYmzvs/7Xnmg1F9ZT8oIFXjRqjQ+fgLqx8fuNNSOacBe5tiHa
+ D8sQIFd5AHDbg5OAvXRHSb8G0SzPdpQVew5ttOVka1AYNMhNn4WzVSTXVToQoUAKkx/rQppBprNbx9eEYHQMXHi4vGRWEN1yWnk1c6bFvZC/nkjxP0nj62D2
+ yntmI5Omep90+323cDgBoA==
+Subject: Re: [Buildroot] [PATCH] board/orangepi/orangepi-zero:extlinux,
+ refactoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,157 +69,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Jan 10, 2022 at 1:33 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 10/01/2022 00:46, William Tambe wrote:
-> > On Sun, Jan 9, 2022 at 2:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 09/01/2022 19:18, William Tambe wrote:
-> >>> I am attempting to build:
-> >>>
-> >>> +BR2_PACKAGE_DHCP=y
-> >>> +BR2_PACKAGE_DHCP_CLIENT=y
-> >>>
-> >>> However it fails as follow complaining about not finding readline/history.h:
-> >>>
-> >>> making all in /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/bin/nsupdate
-> >>> /home/tambewilliam/Documents/buildroot-build/host/bin/pu32-elf-gcc
-> >>
-> >>    pu32 doesn't exist in Buildroot, so this may very well be due to external changes.
->
->   So, do you have external changes that may be the cause of this? IOW, can you
-> reproduce the problem on upstream Buildroot?
->
-> >>
-> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35
-> >>> -I../.. -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/lwres/include
-> >>> -I../../lib/lwres/unix/include -I../../lib/lwres/include
-> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/dns/include
-> >>> -I../../lib/dns/include
-> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/bind9/include
-> >>> -I../../lib/bind9/include
-> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isc/include
-> >>> -I../../lib/isc -I../../lib/isc/include -I../../lib/isc/unix/include
-> >>> -I../../lib/isc/pthreads/include -I../../lib/isc/noatomic/include
-> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isccfg/include
-> >>> -I../../lib/isccfg/include    -D_REENTRANT -DVERSION=\"9.11.35\"
-> >>> -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> >>> -D_FILE_OFFSET_BITS=64  -Os -g0  -static   -W -Wall
-> >>> -Wmissing-prototypes -Wcast-qual -Wwrite-strings -Wformat
-> >>> -Wpointer-arith -fno-strict-aliasing -fno-delete-null-pointer-checks
-> >>> \
-> >>>           -DSESSION_KEYFILE=\"/var/run/named/session.key\" \
-> >>>           -c ./nsupdate.c
-> >>> ./nsupdate.c:104:10: fatal error: readline/history.h: No such file or directory
-> >>>     104 | #include <readline/history.h>
-> >>>         |          ^~~~~~~~~~~~~~~~~~~~
-> >>
-> >>    This sounds like you changed your configuration without doing 'make clean'. Is
-> >> that possible?
-> >
-> > I am building from clean or from scratch.
-> >
-> >>
-> >>    Is BR2_PACKAGE_READLINE enabled in your configuration? Has it been built?
-> >
-> > Yes, BR2_PACKAGE_READLINE is enabled in my configuration.
->
->   And does it get built? Does output/build/readline/.stamp_staging_installed exist?
-
-Yes it gets built and installed and .stamp_staging_installed exists.
-
-Below are related buildroot files listing:
-
-$ ls -ld buildroot-build/build/readline-8.1/.*
-drwxr-xr-x  6 tambewilliam tambewilliam 4096 Jan 16 12:58
-buildroot-build/build/readline-8.1/.
-drwxr-xr-x 30 tambewilliam tambewilliam 4096 Jan 16 12:59
-buildroot-build/build/readline-8.1/..
--rw-r--r--  1 tambewilliam tambewilliam   84 Jan 16 12:58
-buildroot-build/build/readline-8.1/.applied_patches_list
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.files-list-host.txt
--rw-r--r--  1 tambewilliam tambewilliam  799 Jan 16 12:58
-buildroot-build/build/readline-8.1/.files-list-staging.txt
--rw-r--r--  1 tambewilliam tambewilliam  822 Jan 16 12:58
-buildroot-build/build/readline-8.1/.files-list.txt
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_built
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_configured
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_downloaded
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_extracted
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_installed
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_patched
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_staging_installed
--rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
-buildroot-build/build/readline-8.1/.stamp_target_installed
-
->
->   The bind.mk file has this:
-> ifeq ($(BR2_PACKAGE_READLINE),y)
-> BIND_DEPENDENCIES += readline
-> else
-> BIND_CONF_OPTS += --with-readline=no
-> endif
->
-> which should make sure that readline is built and installed before bind. This in
-> turn should make sure that output/host/*/sysroot/usr/include/readline/history.h
-> exists.
-
-When I search for history.h I find it in following locations:
-
-$ find buildroot-build/ | fgrep history.h
-buildroot-build/target/usr/include/readline/history.h
-buildroot-build/host/pu32-buildroot-linux-gnu/sysroot/usr/include/readline/history.h
-buildroot-build/build/bash-5.1/lib/readline/history.h
-buildroot-build/build/readline-8.1/doc/history.html
-buildroot-build/build/readline-8.1/history.h
-
-How to make buildroot use include path
-host/pu32-buildroot-linux-gnu/sysroot/usr/include/readline/ such that
-it will find history.h ?
-
->
->   Regards,
->   Arnout
->
-> >
-> >>
-> >>    Regards,
-> >>    Arnout
-> >>
-> >>> compilation terminated.
-> >>> make[5]: *** [Makefile:473: nsupdate.o] Error 1
-> >>> make[4]: *** [Makefile:79: subdirs] Error 1
-> >>> make[3]: *** [Makefile:88: subdirs] Error 1
-> >>> make[2]: *** [package/pkg-generic.mk:270:
-> >>> /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/.stamp_built]
-> >>> Error 2
-> >>> make[1]: *** [Makefile:23: _all] Error 2
-> >>> make[1]: Leaving directory '/home/tambewilliam/Documents/buildroot-build'
-> >>> make: *** [pu32/makefile:67: pu32-build/buildroot] Error 2
-> >>> _______________________________________________
-> >>> buildroot mailing list
-> >>> buildroot@buildroot.org
-> >>> https://lists.buildroot.org/mailman/listinfo/buildroot
-> >>>
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU2VyZ2V5LAoKK0NjIGJ1aWxkcm9vdCBNTCwKCj4gSWwgZ2lvcm5vIDE2IGdlbiAyMDIyLCBh
+bGxlIG9yZSAxOToxOSwgU2VyZ2V5IEt1em1pbm92IDxrdXptaW5vdi5zZXJnZXk4MUBnbWFpbC5j
+b20+IGhhIHNjcml0dG86Cj4gCj4g77u/MTYuMDEuMjAyMiAxODoyOSwgR2l1bGlvIEJlbmV0dGk6
+Cj4+IEhpIFNlcmdleSwgUGV0ZXIsIEFsbCwKPj4gCj4+ICsjIEFyY2hpdGVjdHVyZQo+PiBCUjJf
+YXJtPXkKPj4gQlIyX2NvcnRleF9hNz15Cj4+IEJSMl9BUk1fRlBVX1ZGUFY0PXkKPj4g4oCmSGVy
+ZSBeXl4geW91IGNhbiBlbmFibGUgVkZQK05FT04uIEl04oCZcyB3b3JraW5nIG9uIGFsbCBPbGlt
+ZXggYm9hcmRzIHdpdGggc3VueGkgQTcgYW5kIGNhbiBzcGVlZCB0aGluZ3MgdXAuCj4+IAo+IEhp
+LCBHaXVsaW8uIEkgd2lsbCB0ZXN0LCB0aGFua3MuCgorMQoKPiAKPiAKPj4+ICsjIFdpcmVsZXNz
+IGRyaXZlciBhbmQgZmlybXdhcmUKPj4+ICsjIFsxNi4wMS4yMDIyXSBEb2Vzbid0IGNvbXBpbGUg
+d2l0aCBuZXdlciBrZXJuZWxzID4gNS4xMi54Cj4+PiBCUjJfUEFDS0FHRV9YUjgxOV9YUkFESU89
+eQo+Pj4gQlIyX1BBQ0tBR0VfQVJNQklBTl9GSVJNV0FSRT15Cj4+PiBCUjJfUEFDS0FHRV9BUk1C
+SUFOX0ZJUk1XQVJFX1hSODE5PXkKPj4gQ2FuIHlvdSBwb2ludCBhIHRlc3QgY2FzZT8gVGhpcyB3
+YXkgSSBjb3VsZCB0cnkgdG8gZml4IGJ1aWxkaW5nIGFuZCB5b3UgY291bGQgdGVzdCBpZiBpdCB3
+b3Jrcy4KPj4gCj4+IFRoYW5rIHlvdQo+PiBCZXN0IHJlZ2FyZHMKPj4g4oCULQo+PiBHaXVsaW8g
+QmVuZXR0aQo+PiBCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwo+PiAKPiBUbyBjaGVjaywgc2V0IHRo
+ZSBwYXJhbWV0ZXJzIGluIHRoZSBjdXJyZW50IHZlcnNpb24gb2YgQnVpbGRyb290Cj4gQlIyX1BB
+Q0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKPiBCUjJfTElOVVhfS0VSTkVM
+X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjE1Igo+IGluIHRoZSBjb25maWdzL29yYW5nZXBp
+X3plcm9fZGVmY29uZmlnIGZpbGUKCk9rLCB0aGFuayB5b3UuCgpCZXN0IHJlZ2FyZHMKR2l1bGlv
+Cgo+IAo+IG1ha2Ugb3JhbmdlcGlfemVyb19kZWZjb25maWcKPiBtYWtlCj4gCj4gCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
