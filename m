@@ -1,75 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB92C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 10:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AE61C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 10:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A994D826FB;
-	Sun, 16 Jan 2022 10:38:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0D0C4031D;
+	Sun, 16 Jan 2022 10:41:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jaX9bZXNMiW2; Sun, 16 Jan 2022 10:38:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yjkp72ibLCUw; Sun, 16 Jan 2022 10:41:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDCAE826D5;
-	Sun, 16 Jan 2022 10:38:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89A6D1BF426
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:38:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9045240167;
+	Sun, 16 Jan 2022 10:41:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BD0A71BF426
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85541826D5
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:38:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A70294024A
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:41:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5zCy2nG42Xb9 for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 10:38:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
- [IPv6:2607:f8b0:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3CE5481BFA
- for <buildroot@busybox.net>; Sun, 16 Jan 2022 10:38:29 +0000 (UTC)
-Received: by mail-oi1-x231.google.com with SMTP id g205so19230852oif.5
- for <buildroot@busybox.net>; Sun, 16 Jan 2022 02:38:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=jNtxpDxqgCWZOZwJIyMQhaBs8HfI6NOQ85I2GzyVMmE=;
- b=M2yOZWWmCBAodwfE5Sb+0pvgRSI93RO38Sw4HG2aYH5PEa/lrFHAw6GXbDqWeQfmH9
- RdSWaUtXqM3LaHP6aU+Cye4BET0dEU2AndO9onoYv7EZ6T00e6UyjYjSn3yefJ2yV7O2
- YOioO3+3xcQl2QNtEzxFelnusk+nGVuGCytvBVdxeULSA8YBMOaPH3wRAxTRn0plM8gB
- 7KttyEcIYozHclI+/IBSyaVtG4qvNOMNrBan/dN8GFZOEFVrd5RhrMvsstYo/q8wnwbs
- aVasJzYMcJX0odB74sW5CWj8ioAd28JjsjuxPenpgZzWfP8m/odxGBXZoEA1UOIs2UbY
- vMYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=jNtxpDxqgCWZOZwJIyMQhaBs8HfI6NOQ85I2GzyVMmE=;
- b=B5cjPEO/po2g5/bikzOtV7uEliIK0fdLC1uqWwtf5mon0xy3CiHluP5hrUtGDaLySi
- WuR2UBB0Yu9uHjXgG/7NgNnPVFiWDIX95gFJzENx+EhaLSqzQ4lYxhh6XQaIIhhnNjp9
- unJdLx6sxa6+ZdRch/5WdSI3JDrVs3J7VkZQm6k+dCi+HOgNW3Vhqqp4brDuIHwDdR1e
- IPWjNMRxD47bFyviOgGnhWLYgl/eYP9XaOnvQ1bsGTyjbzqJEt8cIHsdprxEZW594Xcj
- qcvdmy9Lfw5P4VDvy5UJirMV66yoZhyIkYj8B0urGYpjxcOe4ARaZ8nZZsQzD1Xhn9yO
- IuNA==
-X-Gm-Message-State: AOAM530RxgfpbYKzEobqKZyadGvpWg/UhfwwJOd8/LV9/kzkrGUNIa3n
- Hpe+JlNVrQYVvb1hlijYwwmZzUvnE5NMS7DhEVU=
-X-Google-Smtp-Source: ABdhPJxmRYGe/0QLsAZ2Wtw/xRl8PxyqJJOlLvXRn0ferEet74oMRpLyChe9njPfOLVxzt6eNZFQ60P2XqVCEgwu9So=
-X-Received: by 2002:a05:6808:118b:: with SMTP id
- j11mr13571955oil.65.1642329508191; 
- Sun, 16 Jan 2022 02:38:28 -0800 (PST)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0dGGtak7IK3Q for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 10:41:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 828904023E
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 10:41:41 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.173.27.224])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E77BCB00583;
+ Sun, 16 Jan 2022 11:41:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642329698;
+ bh=ihoGnxg5m3MbL0axbYlCN4odMaMFeTienuP6H1VzPh0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=HeCv0liy4WRKgypuElDGXUssVefBjcOddqE6yTzMphx/qq/OCuG177fnQ2+filgA/
+ 3Qx7HIdYWiyj7I3LTQtfRCLeqwqVkXf1Hv+pjMO8JP1wQ2+hTVbyQcb1j5QeXq3AB0
+ 1s9XeF6wanohr4wxZgsOwGrVKVIhUsvFbd7LP578ASbkgxlvJ873sjip3hN2Nfs2rH
+ 77KT3qPLdt1ubbfl+uiDdmNfLGUIMBwjFnQmjMsvBbdNv0jbsM3cjM2vujXMBwMNTl
+ Dac7RAMO95zN19lJlFwUd1mxw0ys9Prh6IEJGqJTBRjSLKWvvgJLiKsxYH8BUQnDFR
+ wGHlK/wDeYrfw==
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 16 Jan 2022 11:41:14 +0100
+Message-Id: <20220116104114.103601-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20201221203952.22168-1-ps.report@gmx.net>
- <20201221203952.22168-3-ps.report@gmx.net>
-In-Reply-To: <20201221203952.22168-3-ps.report@gmx.net>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 16 Jan 2022 03:38:17 -0700
-Message-ID: <CADvTj4oC2aojVqzacG3sR=-WCbbeFgAGk+QvSVfz3czC+AVx=w@mail.gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Subject: Re: [Buildroot] [PATCH v1] package/qt5webengine: add optional
- host-freetype/host-libjpeg dependency
+Subject: [Buildroot] [PATCH 1/1] support/testing: add test for python-gnupg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,98 +65,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Arthur Courtel <arthur.courtel@smile.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- =?UTF-8?B?R2HDq2wgUG9ydGF5?= <gael.portay@collabora.com>,
- Julien Corjon <corjon.j@ecagroup.com>, Buildroot <buildroot@busybox.net>,
- Martin Bark <martin@barkynet.com>,
- Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Dec 21, 2020 at 1:40 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> - add optional host-freetype dependency
->
-> Fixes:
->
->   Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config freetype2
->   Returned 1.
->   stderr:
->
->   Package freetype2 was not found in the pkg-config search path.
->   Perhaps you should add the directory containing `freetype2.pc'
->   to the PKG_CONFIG_PATH environment variable
->   Package 'freetype2', required by 'virtual:world', not found
->   Could not run pkg-config.
->
->   See //build/linux/BUILD.gn:24:3: whence it was called.
->     pkg_config("freetype_from_pkgconfig") {
->     ^--------------------------------------
->   See //build/config/freetype/BUILD.gn:10:24: which caused the file to be included.
->       public_configs = [ "//build/linux:freetype_from_pkgconfig" ]
->                          ^--------------------------------------
->   Project ERROR: GN run error!
->   make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 3
->   make[3]: *** [Makefile:79: sub-core-make_first] Error 2
->   make[2]: *** [Makefile:49: sub-src-make_first] Error 2
->
-> - add optiobal hist-libjpeg dependency
->
-> Fixes:
->
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/917539230
->
->   Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config libjpeg
->   Returned 1.
->   stderr:
->   Package libjpeg was not found in the pkg-config search path.
->   Perhaps you should add the directory containing `libjpeg.pc'
->   to the PKG_CONFIG_PATH environment variable
->   Package 'libjpeg', required by 'virtual:world', not found
->   Could not run pkg-config.
->   See //third_party/BUILD.gn:17:3: whence it was called.
->     pkg_config("system_libjpeg") {
->     ^-----------------------------
->   See //third_party/blink/renderer/platform/BUILD.gn:159:5: which caused the file to be included.
->       "//third_party:jpeg",
->       ^-------------------
->   Project ERROR: GN run error!
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/qt5/qt5webengine/qt5webengine.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> index 64c9c96cc2..8ab50a0fbf 100644
-> --- a/package/qt5/qt5webengine/qt5webengine.mk
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -29,6 +29,14 @@ endif
->
->  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
->
-> +ifeq ($(BR2_PACKAGE_QT5BASE_FONTCONFIG),y)
-> +QT5WEBENGINE_DEPENDENCIES += host-freetype
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_JPEG),y)
-> +QT5WEBENGINE_DEPENDENCIES += host-libjpeg
-> +endif
-> +
->  QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_system_ffmpeg
->
->  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-> --
-> 2.29.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This commit add a simple test doing symmetric encryption/decryption
+to check this python interface with the gpg binary is working fine.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                    |  2 ++
+ .../tests/package/sample_python_gnupg.py      | 24 +++++++++++++++++++
+ .../tests/package/test_python_gnupg.py        | 21 ++++++++++++++++
+ 3 files changed, 47 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_gnupg.py
+ create mode 100644 support/testing/tests/package/test_python_gnupg.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a91e2dfcde..e038941b3b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1611,6 +1611,8 @@ F:	package/python-distro/
+ F:	package/python-gnupg/
+ F:	package/python-pyalsa/
+ F:	package/riscv-isa-sim/
++F:	support/testing/tests/package/sample_python_gnupg.py
++F:	support/testing/tests/package/test_python_gnupg.py
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/support/testing/tests/package/sample_python_gnupg.py b/support/testing/tests/package/sample_python_gnupg.py
+new file mode 100644
+index 0000000000..b5b718a8cb
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_gnupg.py
+@@ -0,0 +1,24 @@
++import gnupg
++
++gpg = gnupg.GPG(verbose=True)
++
++plain_data = "Some plain text data"
++good_passphrase = "Good Passphrase"
++
++# Test Encrypt
++result = gpg.encrypt(plain_data, None, passphrase=good_passphrase, symmetric=True)
++assert(result.returncode == 0)
++enc_data = str(result)
++assert(enc_data != plain_data)
++
++# Test Good Decrypt
++result = gpg.decrypt(enc_data, passphrase=good_passphrase)
++assert(result.returncode == 0)
++dec_data = str(result)
++assert(dec_data == plain_data)
++
++# Test Bad Decrypt
++result = gpg.decrypt(enc_data, passphrase='A Wrong Passphrase')
++assert(result.returncode != 0)
++dec_data = str(result)
++assert(dec_data != plain_data)
+diff --git a/support/testing/tests/package/test_python_gnupg.py b/support/testing/tests/package/test_python_gnupg.py
+new file mode 100644
+index 0000000000..0c71f6b6d0
+--- /dev/null
++++ b/support/testing/tests/package/test_python_gnupg.py
+@@ -0,0 +1,21 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy2GnuPG(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_GNUPG=y
++        """
++    sample_scripts = ["tests/package/sample_python_gnupg.py"]
++
++
++class TestPythonPy3GnuPG(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_GNUPG=y
++        """
++    sample_scripts = ["tests/package/sample_python_gnupg.py"]
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
