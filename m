@@ -1,83 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B88BC433EF
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jan 2022 23:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C029C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 01:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A2DF605E3;
-	Sat, 15 Jan 2022 23:04:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0348403AA;
+	Sun, 16 Jan 2022 01:34:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 03DvuEiJHYID; Sat, 15 Jan 2022 23:04:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B2818kTreCyz; Sun, 16 Jan 2022 01:34:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E074607F0;
-	Sat, 15 Jan 2022 23:04:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D6341BF36C
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:04:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEB1E4017B;
+	Sun, 16 Jan 2022 01:34:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F1ED1BF3DA
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 01:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5620C818CA
- for <buildroot@lists.busybox.net>; Sat, 15 Jan 2022 23:04:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2133403EC
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 01:34:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eqLOVTjONZsY for <buildroot@lists.busybox.net>;
- Sat, 15 Jan 2022 23:04:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 06083818C9
- for <buildroot@busybox.net>; Sat, 15 Jan 2022 23:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1642287876;
- bh=fHy39lOe7gO16eFmQmn0KRKZ/mWDBR4jy6ajyB4Jgtc=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=KystACmOm0vig/Tr+Kc2SsVRYvLtTLAaI7ciWz6bDRwWg9243bmYyRqoQrkNTiXX5
- tUp3Q6Jwlov6nFxeqk7tINCNmjiH/zxYxvyToDOkoQm9YhPWCr/0YQjXvGDVHAmFQy
- A2UWfW1NZ5Z/7EvTgV4Gg6JJPdPgiHQhvYIY2N+Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.238]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPXdC-1mv2DG2FPO-00Mb9r; Sun, 16
- Jan 2022 00:04:36 +0100
-Date: Sun, 16 Jan 2022 00:04:35 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220116000435.03d5b920@gmx.net>
-In-Reply-To: <20220109144430.1064ea1c@windsurf>
-References: <20201221203952.22168-1-ps.report@gmx.net>
- <20201221203952.22168-3-ps.report@gmx.net>
- <20220109142748.4f7c1a59@windsurf>
- <20220109144430.1064ea1c@windsurf>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-suse-linux-gnu)
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X0EB_ReeR0Nu for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 01:34:48 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C13784032E
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 01:34:48 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id x193so18227958oix.0
+ for <buildroot@buildroot.org>; Sat, 15 Jan 2022 17:34:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=2xi784Zrk6h5BF7MSk5aywz6mcufBIRcq8Ar1udFnYE=;
+ b=hecv/GugLx8TmhNy/B2Kfbg/A/NT+S16C0/YEVlW7HrrpTJtZxA7jNYLgPue2uf0EN
+ 7ltKJ/4LzovaInhW+Yu/GTLgaVP6CTXSAxF+o1WUnxTZRdTbDNfY/1yE95ov2czEBkr+
+ 0LtqOl/cgWsW6BsKfNv5VdSujB59XpSSNpb3yJU7nIxOtx6TOL4srZYsVcAiA3aIZeLr
+ Gx65xxA3Mki3EPcYOt61Y0SxPgzqVsCRyCZexy28eOXRBf+Krad+CrdSRw0rHmFnHNia
+ Qdx9JfW04zNjtTxGgJV4zerG5EqTOxtYjDSU6I4OFN0JOc/GH79U7ffRwv9CUUEMF5JL
+ 9EVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=2xi784Zrk6h5BF7MSk5aywz6mcufBIRcq8Ar1udFnYE=;
+ b=JXpZZZYZoKrl2I40ISyOMVhsAByOlOtfdIcsSmSU7XPxjI7RPkvPafADP0J7d4ZCJX
+ O3eg4cmE2qtSG0ny8GkCFEOSkY1R1k2yg/u3irHehejkyXLEyzay16KhOeqsjfF4YTWf
+ MqfcSvnOsqArjJXyMHxqxHrUXqOCazPJwEYHPkCHobGRsOyVW9NPWWIxM1RmCzoWVfAX
+ l2X0sICthAb32kaBA98hLJJMzpvP5EofMCM9IjemKi/KobNIL8uHIZw+18IF8Poc08JE
+ S9A7Az4p/sQqc/BPWkLZQZbnf3QUT+cs8q8XqPdQrmGQ8S5HTo9ZqyyZAVe7iY6ViVoL
+ Nauw==
+X-Gm-Message-State: AOAM5335pxJKItf7PYrs7JyX+wU8WK/S40VCLdtlHZjiOVw8bvScYXnd
+ un0n5toA1mgDIydA+prWz1YDSDcRaAEYMMU7TMP7uCGwuGc=
+X-Google-Smtp-Source: ABdhPJyrM3vDlpNf5yA8mbc6ubZL8HggI05ql4u2yvmK3kYoewDvZeaeEzYD5qRPLTmwuNEU3uWMQeYV4lIea9r/8zQ=
+X-Received: by 2002:a05:6808:f8d:: with SMTP id
+ o13mr16976693oiw.67.1642296887619; 
+ Sat, 15 Jan 2022 17:34:47 -0800 (PST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:xeO4HmXQMjQUiEA3dLsd/1nFD+augn3TcTleYNPh1o+/yjIQef9
- fJIumr7r1BDE+TLdaBnDJ+IAR6lBOfOAPKXAwtRoTnxQ+/ATJ3yzhICs3BSNMzEdBqb3ZRJ
- qB3jlqW2v8vR149ptgLZ5jszgR4srKMIpvY/SSdnmVY8/0AEJ/6cnFlO/dwDTkcnqSPt5yM
- BepeTYe/L3V9PEdrSQQOg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:l6Bhd+9mu1c=:q/DaBx2urFeN8i7K1/XMUG
- Nv32v7579HURTZt4tFQ/gJXwgX4hSbnpNj1mFiB2kR37SEVwgaHXXN+s4WuxJ9tzNDXg1mRnw
- GGnbPLIsYDhre6Hw70DUrJWiMMfoLkdHsOWG/kCCxsdnAIcrwhmcAKpMnVT58rDRinbtsieje
- fEq7HePfoAzn9VzZieaLF0JAPRH0JnW/PY87s2CzLD3biiLyzRCy1Vk0tPXgNbMVlZgrGHZfu
- wvsj3WWkQh28f5WUTEi+w3pJc3fkrMJtV30FlEWifr0kNZAFJTd5hxuv6cNWnDfF1m783wUfd
- vhsrxzF0uCeDkk9vvKdI0BANavNCS5KucFac9OGJAbpeHM2S0vYEje2ZkW89SVlbEgYakdJPn
- yaja9AlySyuWm857m0G4dGS3laA271t2krBUoiw5UpgzS+lQsQGO8eMey05K8VEkGylh8b52G
- vZcCXE9XcNZxaScgsLb+GAiTuHuXiKOD4dgoW4hs79/gwkf7s5WJpdlXBzra+P3DmHwgj/e7F
- doLaaoSqrt1gwH+b8o0GzFcTchanQ8GPbQGpm5kX0sD2qsaaF7OcmWs6ORx1TtpttOdi7lpbK
- YGFSLTKJWn9/IMik1E8PPym9Gcs21XSlMXjUibjEc8+wcrTewINv+tEhmenhmfMcrtERDbtd1
- dleJL4QkJV3kzMTOZ+8Cg58k4KcqjI092DEpL3TdA2SJLaDq4bxeoXv8ZW5WerrpceS4yocpP
- wVdthB4sdbmkTnYfNHnbVQ3rskhMXccE/MVXHljCgZ0kIcQfuh/dcAvA+18A0qWco6k2K7o4b
- AuEpFAMm4GVG6wbu2AQPBIR2XCihqVOwPWkUaxRn3eqsFe5wY8rndo4RRnyYtAB2fWMp/orKK
- tdJFyc0Va0OFvcgUwiBWoFd6w8KYrNAJZxBjmJ9Sncd4Izq/nky1ZgY1D2Aq7lpepkuV//5P9
- /63ZlnL+1pPvaTJgnJj+QVxZ7FkV8UpCDoCxHlI/MVoMe41Luht7kj/vP3UoYTjzRbJ4flcdw
- czTHmzUSDIp1lNZZkOIIlWj92N8sRoNUwAVJkLiZeFvGTDg+irIvgmCLh9QfGxKDeGkGBbwZc
- noFny0mRHF/9XU=
-Subject: Re: [Buildroot] [PATCH v1] package/qt5webengine: add optional
- host-freetype/host-libjpeg dependency
+References: <20220112203939.606775-1-james.hilliard1@gmail.com>
+ <20220115233736.634f0d0b@gmx.net>
+In-Reply-To: <20220115233736.634f0d0b@gmx.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 15 Jan 2022 18:34:36 -0700
+Message-ID: <CADvTj4oZfgo1UuSBW1Ar-8jr9TfD0UG54=o9yDLQ3o9Qe03+AA@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5base: disable broken
+ qmake sysrootify
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,55 +83,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Arthur Courtel <arthur.courtel@smile.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- =?UTF-8?B?R2HDq2w=?= Portay <gael.portay@collabora.com>,
- Julien Corjon <corjon.j@ecagroup.com>, buildroot@busybox.net,
- Martin Bark <martin@barkynet.com>,
- Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
-
-On Sun, 9 Jan 2022 14:44:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> On Sun, 9 Jan 2022 14:27:48 +0100
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, Jan 15, 2022 at 3:37 PM Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> > I am falling into this issue while building the following defconfig:
+> Hello James, *,
+>
+> On Wed, 12 Jan 2022 13:39:39 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > Currently the qmake gcc sysrootify path logic causes issues with
+> > per-package directories, disable automatic gcc sysroot for qt5base
+> > install and override all qt.conf paths manually to point to their
+> > correct locations.
 > >
-> > BR2_arm=y
-> > BR2_arm1176jzf_s=y
-> > BR2_TOOLCHAIN_EXTERNAL=y
-> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> > BR2_PACKAGE_QT5=y
-> > BR2_PACKAGE_QT5WEBENGINE=y
-> > BR2_PACKAGE_RPI_USERLAND=y
+> > Redirect HostData to STAGING_DIR as mkspecs need to be available there
+> > instead of the HOST_DIR for cross compilation to work.
 > >
-> > Did you had the chance to investigate more deeply why having fontconfig
-> > support in Qt leads qt5webengine wanting to find freetype2 on the host?
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/qt5/qt5base/qt.conf.in | 18 +++++++++++++++---
+> >  package/qt5/qt5base/qt5base.mk |  2 ++
+> >  2 files changed, 17 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
+> > index 2215cbd4e1..db9ab0c364 100644
+> > --- a/package/qt5/qt5base/qt.conf.in
+> > +++ b/package/qt5/qt5base/qt.conf.in
+> > @@ -2,6 +2,18 @@
+> >  Prefix=/usr
+> >  HostPrefix=@@HOST_DIR@@
+> >  Sysroot=@@STAGING_DIR@@
+> > -Headers=/usr/include/qt5
+> > -Plugins=/usr/lib/qt/plugins
+> > -Examples=/usr/lib/qt/examples
+> > +SysrootifyPrefix=false
+> > +Binaries=@@STAGING_DIR@@/usr/bin
+> > +Libraries=@@STAGING_DIR@@/usr/lib
+> > +Headers=@@STAGING_DIR@@/usr/include/qt5
+> > +Plugins=@@STAGING_DIR@@/usr/lib/qt/plugins
+> > +Examples=@@STAGING_DIR@@/usr/lib/qt/examples
+> > +Data=@@STAGING_DIR@@
+> > +Translations=@@STAGING_DIR@@/translations
+> > +ArchData=@@STAGING_DIR@@/usr
+> > +LibraryExecutables=@@STAGING_DIR@@/usr/libexec
+> > +Imports=@@STAGING_DIR@@/usr/imports
+> > +Qml2Imports=@@STAGING_DIR@@/usr/qml
+> > +HostBinaries=@@HOST_DIR@@/bin
+> > +HostLibraries=@@HOST_DIR@@/lib
+> > +HostData=@@STAGING_DIR@@
+> > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> > index bcdf036f00..6c05e710d8 100644
+> > --- a/package/qt5/qt5base/qt5base.mk
+> > +++ b/package/qt5/qt5base/qt5base.mk
+> > @@ -311,8 +311,10 @@ define QT5BASE_CONFIGURE_CMDS
+> >               -v \
+> >               -prefix /usr \
+> >               -hostprefix $(HOST_DIR) \
+> > +             -hostdatadir $(STAGING_DIR) \
+> >               -headerdir /usr/include/qt5 \
+> >               -sysroot $(STAGING_DIR) \
+> > +             -no-gcc-sysroot \
+> >               -plugindir /usr/lib/qt/plugins \
+> >               -examplesdir /usr/lib/qt/examples \
+> >               -no-rpath \
 >
-> Interestingly, in commit
-> https://github.com/meta-qt5/meta-qt5/commit/280487f20bca829527a597d6263b0344a01917ac#diff-f0ffde666f6ff0282f8400203b3ba20968494d3c7245106eca761bd79baa1c78R26
-> the meta-qt5 layer, when upgrading Qt to 5.15.2 added jpeg-native and
-> freetype-native as new unconditional dependencies.
+> This one leads to the following compile failure for qt5webengine-5.15.2:
 >
-> But there are no explanations. Is it really because the Chromium stuff
-> is building a host tool with freetype/jpeg, or is it just a workaround
-> for some incorrect behavior of the Chromium build process that needs
-> freetype/jpeg on the target, but checks for them on the host?
+>   .../host/lib/gcc/arm-buildroot-linux-gnueabihf/10.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find crti.o: No such file or directory
+> collect2: error: ld returned 1 exit status
 
-Would say yes...
-
-Regards,
-Peter
+Hmm, I'll test that again.
 
 >
-> Thomas
+>
+> But the file crti.o exists:
+>
+>         $ find . -name crti.o
+>         ./build/glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/build/csu/crti.o
+>         ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/crti.o
+>
+>
+> Did not (yet) test with your latest (v2) patch iteration...
+>
+> Compile with qt5webengine bump to 5.15.8-lts fails already before the linking stage
+> (see secoidt.h/pk11pub.h No such file or directory failure reported by already by
+> Thomas)...
 
+Does qt5webengine build ok without per-package directories with just
+the KDE bump
+for all the other qt5 packages?:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220113000935.2353800-1-james.hilliard1@gmail.com/
+
+I separated that out to make it easier to isolate the linker issues
+with the qt5webengine
+5.15.8-lts build.
+
+>
+> Regards,
+> Peter
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
