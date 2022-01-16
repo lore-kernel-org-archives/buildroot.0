@@ -4,77 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB2C4C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 10:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A784C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 10:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 706B860AAD;
-	Sun, 16 Jan 2022 10:46:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D947E60BDA;
+	Sun, 16 Jan 2022 10:55:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vTU0p0uFyhwM; Sun, 16 Jan 2022 10:46:01 +0000 (UTC)
+	with ESMTP id Xs0GzwvhVLws; Sun, 16 Jan 2022 10:55:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5103C60AE4;
-	Sun, 16 Jan 2022 10:46:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2EE1BF426
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:45:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29C1A60BA4;
+	Sun, 16 Jan 2022 10:55:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E99FD1BF426
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8201D826FF
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:45:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D823F60BA4
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 10:55:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UVsS8D_Ovnww for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 10:45:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com
- [IPv6:2607:f8b0:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C8F3826FB
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 10:45:57 +0000 (UTC)
-Received: by mail-ot1-x335.google.com with SMTP id
- g1-20020a9d6481000000b00592d01f2b6eso11970413otl.5
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 02:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=ol7jPCT5055L1IaVjEAtkGFmHMxE9fwM50xXJc0gUMk=;
- b=e2TqGzPEGtAIuW/oG2M0kAjFkO8B1AKbUiZJFK8f2Bvalqr9WjSU7zCmHQuOXmp+P1
- mNQz+YCMkZ65Ry2QBkeqcWimEnEYrSGRiYh8CS7/UrIUYvCGOMzAZLAAYO236Pp9AToV
- kPJ2hyBRTOOg+5mWTA4CmLIDY6qasmGMNCoGAz1/8X0YLvV9NxULw2Ma2GVikUvTE/F5
- QUkT5dKnDBwJZj1876NyyQo2ZnVsXXDNEgBsEn4Iod32LTsVWCn/F05/kWjevk4KRZ4m
- hScV8WOzwUrl0aqFZG9/ie53bBL8r7Di6NxFkgU6XA6kIZ4qPsI3kWybSeajDYpqDopZ
- j2tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=ol7jPCT5055L1IaVjEAtkGFmHMxE9fwM50xXJc0gUMk=;
- b=SPt955jVxj9m6UfYfK42d3YoFeKWNKAEwfQmFfXC84Rbtg4idZ9Ew+2A+ADGhQIc4w
- ZVSFHHfAHMDCk1zHOoQa72aJL9kLbXmvhWTzzUyqYXbBd/JK9osvq1xX26JG4R91PE7k
- tQZnzh6rxdMpv5f1Nw8bgRXn2ISkm6QTdTVjDrnPfwBk/YkkQMeXAO29mlELhw6AAwhm
- oA3W/YytksnT/VB+QpfQDb96ut6ynGwGqHVq53P+SxYqC9+kNdQuRZC0LJ1X7+xbquJu
- 7g99NAWOMiLDAGWpq/sOjTbBHw2ADtZtavc5wZ/GA0TuaZuWg6mshl2wBN1HbC9Oax1S
- DX/Q==
-X-Gm-Message-State: AOAM532Slhthj16CXmdY8rq6Y0/+PhLTcSfG/WLY9SMLG7IvnaQlG4TA
- HS7kSgh9sDKZJaVHjyp2LWHstheNS8txHQX/B9YJqytrgE0=
-X-Google-Smtp-Source: ABdhPJwg8I81CCCArh4pJhHeiLV/FwN2wvnFXCjyYSt4Y+vIy0XIGMvm2iyOMYtVWeXb4MWC1XOr85V+alMMvoBpy6c=
-X-Received: by 2002:a9d:63c3:: with SMTP id e3mr9178654otl.30.1642329956111;
- Sun, 16 Jan 2022 02:45:56 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iJp6aKIAZX7B for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 10:55:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DA0C660AE4
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 10:55:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.6])
+ by smtp4-g21.free.fr (Postfix) with ESMTP id B81B419F5A6;
+ Sun, 16 Jan 2022 11:55:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642330541;
+ bh=po80WxaiU+ZQydndgnhLe4v2vlN4gMh9Ek1WQxm6dqY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=KJadOmMP+x9M+ln9WeM7Urg4of5hDDsPijCn2WrGjnr9avbzNaquaz75DUD5AQPOz
+ mjrNnTZjTGmIb0mje+fWjLfrLnPVuy8ZHmG6J8DbQBAMu/SZaZQwSjSKRVjFUSFKHZ
+ tqfhSXKmJVIc190ZI13fE6K77kl3DP+Gra2H5Wvhphg3MPF7zbJcyHbg3okHE5S/rT
+ +Wh0Mwm74LPESPa5rQTAtQXc3o3sQj5nPywQuCEKrseFRon1qdR+LA+Af6N64khzLo
+ mDXcqlM8uLhgz4uBW+Xp+XTFOj1GS5oF/LuebExFzwbKhAalGqG/lKgESfdx8UYhqu
+ jBM2WW0HVsG/g==
+Received: from 37-173-27-224.coucou-networks.fr ([37.173.27.224])
+ by webmail.free.fr
 MIME-Version: 1.0
-References: <20220112203939.606775-1-james.hilliard1@gmail.com>
- <20220115233736.634f0d0b@gmx.net>
- <CADvTj4pFsYA+vaz4k6Fru9KnuRUeHmZ6QhQP_WJsxS+kHy1qdw@mail.gmail.com>
- <20220116101901.23db5faa@gmx.net>
- <CADvTj4rT_wwssYQ3FGRQza5oVdbGyTvf6AM3Yx-_VKg_GWnrnQ@mail.gmail.com>
-In-Reply-To: <CADvTj4rT_wwssYQ3FGRQza5oVdbGyTvf6AM3Yx-_VKg_GWnrnQ@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 16 Jan 2022 03:45:45 -0700
-Message-ID: <CADvTj4p2v4gr77vE_zDJ436Wm-kuvzBmwvr5pg96cS-6kw2hXw@mail.gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5base: disable broken
- qmake sysrootify
+Date: Sun, 16 Jan 2022 11:55:41 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220113215104.02a734a1@windsurf>
+References: <20220110200151.830192-1-ju.o@free.fr>
+ <20220113215104.02a734a1@windsurf>
+Message-ID: <77b72a63fdde563f496649641a0efab1@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-gnupg: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,218 +68,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Corjon <corjon.j@ecagroup.com>, buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Jan 16, 2022 at 3:28 AM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> On Sun, Jan 16, 2022 at 2:19 AM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello James,
-> >
-> > On Sat, 15 Jan 2022 22:08:57 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > > On Sat, Jan 15, 2022 at 3:37 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > > >
-> > > > Hello James, *,
-> > > >
-> > > > On Wed, 12 Jan 2022 13:39:39 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
-> > > >
-> > > > > Currently the qmake gcc sysrootify path logic causes issues with
-> > > > > per-package directories, disable automatic gcc sysroot for qt5base
-> > > > > install and override all qt.conf paths manually to point to their
-> > > > > correct locations.
-> > > > >
-> > > > > Redirect HostData to STAGING_DIR as mkspecs need to be available there
-> > > > > instead of the HOST_DIR for cross compilation to work.
-> > > > >
-> > > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > > ---
-> > > > >  package/qt5/qt5base/qt.conf.in | 18 +++++++++++++++---
-> > > > >  package/qt5/qt5base/qt5base.mk |  2 ++
-> > > > >  2 files changed, 17 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-> > > > > index 2215cbd4e1..db9ab0c364 100644
-> > > > > --- a/package/qt5/qt5base/qt.conf.in
-> > > > > +++ b/package/qt5/qt5base/qt.conf.in
-> > > > > @@ -2,6 +2,18 @@
-> > > > >  Prefix=/usr
-> > > > >  HostPrefix=@@HOST_DIR@@
-> > > > >  Sysroot=@@STAGING_DIR@@
-> > > > > -Headers=/usr/include/qt5
-> > > > > -Plugins=/usr/lib/qt/plugins
-> > > > > -Examples=/usr/lib/qt/examples
-> > > > > +SysrootifyPrefix=false
-> > > > > +Binaries=@@STAGING_DIR@@/usr/bin
-> > > > > +Libraries=@@STAGING_DIR@@/usr/lib
-> > > > > +Headers=@@STAGING_DIR@@/usr/include/qt5
-> > > > > +Plugins=@@STAGING_DIR@@/usr/lib/qt/plugins
-> > > > > +Examples=@@STAGING_DIR@@/usr/lib/qt/examples
-> > > > > +Data=@@STAGING_DIR@@
-> > > > > +Translations=@@STAGING_DIR@@/translations
-> > > > > +ArchData=@@STAGING_DIR@@/usr
-> > > > > +LibraryExecutables=@@STAGING_DIR@@/usr/libexec
-> > > > > +Imports=@@STAGING_DIR@@/usr/imports
-> > > > > +Qml2Imports=@@STAGING_DIR@@/usr/qml
-> > > > > +HostBinaries=@@HOST_DIR@@/bin
-> > > > > +HostLibraries=@@HOST_DIR@@/lib
-> > > > > +HostData=@@STAGING_DIR@@
-> > > > > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> > > > > index bcdf036f00..6c05e710d8 100644
-> > > > > --- a/package/qt5/qt5base/qt5base.mk
-> > > > > +++ b/package/qt5/qt5base/qt5base.mk
-> > > > > @@ -311,8 +311,10 @@ define QT5BASE_CONFIGURE_CMDS
-> > > > >               -v \
-> > > > >               -prefix /usr \
-> > > > >               -hostprefix $(HOST_DIR) \
-> > > > > +             -hostdatadir $(STAGING_DIR) \
-> > > > >               -headerdir /usr/include/qt5 \
-> > > > >               -sysroot $(STAGING_DIR) \
-> > > > > +             -no-gcc-sysroot \
-> > > > >               -plugindir /usr/lib/qt/plugins \
-> > > > >               -examplesdir /usr/lib/qt/examples \
-> > > > >               -no-rpath \
-> > > >
-> > > > This one leads to the following compile failure for qt5webengine-5.15.2:
-> > > >
-> > > >   .../host/lib/gcc/arm-buildroot-linux-gnueabihf/10.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find crti.o: No such file or directory
-> > > > collect2: error: ld returned 1 exit status
-> > >
-> > > So I was able to reproduce this error, however best I can tell it's
-> > > probably not a regression
-> >
-> > This is a known failure, see the patches adding host-freetype/host-libjepeg/host-harfbuzz ([1])
-> > or your own qt5webengine bump adding host-freetype dependency ([2])...
->
-> So there's a major pkg-config bug here, I partially fixed it here but
-> it seems gn
-> is mangling some of the paths after getting them from pkg-config:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220116101739.2623120-1-james.hilliard1@gmail.com/
->
-> This gets the target pkg-config paths set up right at least
-> output/build/qt5webengine-5.15.2/src/core/release/args.gn:
-> pkg_config = "/home/buildroot/buildroot/output/host/bin/pkg-config"
-> host_pkg_config =
-> "/home/buildroot/buildroot/output/build/qt5webengine-5.15.2/host-bin/host-pkg-config"
->
-> However gn I think is prepending the target_sysroot to the include
-> paths or something:
-> target_sysroot =
->     "/home/buildroot/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot"
->
-> which causes this error:
-> /home/buildroot/buildroot/output/host/bin/aarch64-linux-g++ -MMD -MF
-> obj/crypto/crypto/nss_util.o.d -DCRYPTO_IMPLEMENTATION -DUSE_UDEV
-> -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD
-> -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS
-> -D__STDC_FORMAT_MACROS
-> -DCR_SYSROOT_HASH=2cade9ee1ca9186b28ac768c19e1ab7c45ee0600 -DNDEBUG
-> -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Igen
-> -I../../3rdparty/chromium
-> -I../../3rdparty/chromium/third_party/boringssl/src/include
-> -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector
-> -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe
-> -pthread -Wall -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
-> -Wno-unused-local-typedefs -Wno-maybe-uninitialized
-> -Wno-deprecated-declarations -fno-delete-null-pointer-checks
-> -Wno-comments -Wno-packed-not-aligned -Wno-dangling-else
-> -Wno-missing-field-initializers -Wno-unused-parameter -O2 -fno-ident
-> -fdata-sections -ffunction-sections -fno-omit-frame-pointer -g0
-> -fvisibility=hidden
-> -I/home/buildroot/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/home/buildroot/buildroot/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/include/nss
-> -I/home/buildroot/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/home/buildroot/buildroot/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/include/nspr
-> -std=gnu++14 -Wno-narrowing -Wno-class-memaccess -Wno-attributes
-> -Wno-class-memaccess -Wno-subobject-linkage -Wno-invalid-offsetof
-> -Wno-return-type -Wno-deprecated-copy -fno-exceptions -fno-rtti
-> --sysroot=../../../../../host/aarch64-buildroot-linux-gnu/sysroot
-> -fvisibility-inlines-hidden -c
-> ../../3rdparty/chromium/crypto/nss_util.cc -o
-> obj/crypto/crypto/nss_util.o
-> ../../3rdparty/chromium/crypto/nss_util.cc:8:10: fatal error:
-> pk11pub.h: No such file or directory
->     8 | #include <pk11pub.h>
->       |          ^~~~~~~~~~~
->
-> The include path being set by gn doesn't exist, although it's at least
-> trying to use the
-> target variant now:
-> /home/buildroot/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/home/buildroot/buildroot/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/include/nss
+Hi Thomas,
 
-Hmm, so I think I found a way to get that to not happen by setting
-PKG_CONFIG_SYSROOT_DIR="/":
-https://patchwork.ozlabs.org/project/buildroot/patch/20220116104321.2696659-1-james.hilliard1@gmail.com/
+On 13/01/2022 21:51, Thomas Petazzoni wrote:
+> Hello Julien,
+> 
+> On Mon, 10 Jan 2022 21:01:51 +0100
+> Julien Olivain <ju.o@free.fr> wrote:
+> 
+>>  [...]
+>> +config BR2_PACKAGE_PYTHON_GNUPG
+>> +	bool "python-gnupg"
+>> +	select BR2_PACKAGE_GNUPG2 if !BR2_PACKAGE_GNUPG # runtime
+> 
+> This generates a circular dependency reported by kconfig, because
+> another package does exactly the opposite. So I have inverted the logic
+> here:
+> 
+> select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2 # runtime
 
->
-> >
-> > Additional the SIGSTKSZ fix is needed...
->
-> Yeah, on newer glibc's it's needed.
->
-> >
-> > Regards,
-> > Peter
-> >
-> > [1] http://lists.busybox.net/pipermail/buildroot/2022-January/634005.html
-> > [2] http://lists.busybox.net/pipermail/buildroot/2022-January/633439.html
-> >
-> >
-> > > as the compilation still fails due to a different error without this patch:
-> > >
-> > > ERROR at //build/config/linux/pkg_config.gni:103:17: Script returned
-> > > non-zero exit code.
-> > >     pkgresult = exec_script(pkg_config_script, args, "value")
-> > >                 ^----------
-> > > Current dir: /home/buildroot/buildroot/output/build/qt5webengine-5.15.2/src/core/release/
-> > > Command: /home/buildroot/buildroot/output/host/bin/python2
-> > > /home/buildroot/buildroot/output/build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py
-> > > -p /home/buildroot/buildroot/output/build/qt5webengine-5.15.2/host-bin/host-pkg-config
-> > > libjpeg
-> > > Returned 1.
-> > > stderr:
-> > >
-> > > Package libjpeg was not found in the pkg-config search path.
-> > > Perhaps you should add the directory containing `libjpeg.pc'
-> > > to the PKG_CONFIG_PATH environment variable
-> > > Package 'libjpeg', required by 'virtual:world', not found
-> > > Could not run pkg-config.
-> > >
-> > > See //third_party/BUILD.gn:17:3: whence it was called.
-> > >   pkg_config("system_libjpeg") {
-> > >   ^-----------------------------
-> > > See //third_party/blink/renderer/platform/BUILD.gn:159:5: which caused
-> > > the file to be included.
-> > >     "//third_party:jpeg",
-> > >     ^-------------------
-> > > Project ERROR: GN run error!
-> > >
-> > > >
-> > > >
-> > > > But the file crti.o exists:
-> > > >
-> > > >         $ find . -name crti.o
-> > > >         ./build/glibc-2.34-9-g9acab0bba6a5a57323b1f94bf95b21618a9e5aa4/build/csu/crti.o
-> > > >         ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/crti.o
-> > > >
-> > > >
-> > > > Did not (yet) test with your latest (v2) patch iteration...
-> > > >
-> > > > Compile with qt5webengine bump to 5.15.8-lts fails already before the linking stage
-> > > > (see secoidt.h/pk11pub.h No such file or directory failure reported by already by
-> > > > Thomas)...
-> > > >
-> > > > Regards,
-> > > > Peter
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot@buildroot.org
-> > > https://lists.buildroot.org/mailman/listinfo/buildroot
-> >
+What do you think about reversing the logic of all Buildroot packages
+selecting gnupg so they default to gnupg2?
+
+Quoting: https://gnupg.org/download/index.html
+"""
+GnuPG 1.4 is the old, single binary version which still support the
+unsafe PGP-2 keys. This branch has no dependencies on the above listed
+libraries or the Pinentry. However, it lacks many modern features and
+will receive only important updates.
+"""
+
+There is currently only two packages selecting gnupg:
+gpgme and python-gnupg
+
+Most Linux distributions are now shipping gnupg2 by default.  gnupg v1
+is now more for legacy/compatibility cases.
+
+If you agree, I can send a patch for this.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
