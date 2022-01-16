@@ -1,91 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE21C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 22:04:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3649DC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 22:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8BFC402A4;
-	Sun, 16 Jan 2022 22:04:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC499605AB;
+	Sun, 16 Jan 2022 22:04:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F7N1kYMTwuOL; Sun, 16 Jan 2022 22:04:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18C1B402A6;
-	Sun, 16 Jan 2022 22:04:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A16D41BF476
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 22:04:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96ED360ADC
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 22:04:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=dbrgn.ch header.b="B0MDCTFs";
- dkim=pass (2048-bit key) header.d=messagingengine.com
- header.b="kHU5iH1S"
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W_-A45tNLX00 for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 22:04:14 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com
- [66.111.4.29])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 04C3660745
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 22:04:13 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
- by mailout.nyi.internal (Postfix) with ESMTP id 4172C5C0182
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 17:04:12 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
- by compute3.internal (MEProxy); Sun, 16 Jan 2022 17:04:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dbrgn.ch; h=date
- :from:to:subject:message-id:mime-version:content-type
- :content-transfer-encoding; s=fm1; bh=Kba9ZCv2SGHiiBs+6QfWlQ3rau
- kFBrvzNtKNhhlXZuI=; b=B0MDCTFsc7GEjuG0LHynY2CULQSxQwjSto/Fp4ovHL
- gCNw+Bvt9CWPMF1FfUqwI2xilOV2v1FhzhZlpSippY/k90Wn42k9xL81+LkhwEGv
- EQB7EWcv6sz2EKAaG8fja4nhLKTWFww12YzNDdI2g8cWHsatm5ucjnvD04iTt9Rw
- 4MaKfVAoX4sIvOmCUyDdYI5Fwyzd0F14ERPjqOh1dFJ1xwX2cQsXk9f9jbvVZiAe
- tJWGQynviVl/0inWHzog9DhckMv4dQc2Yc4iwjuLYgExot/s7PJdIoDT31Mwv1Eu
- O37PyReAAAyrJ0PCnVhrZucw9pvYmjp4+kzqJZkVTZzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=content-transfer-encoding:content-type
- :date:from:message-id:mime-version:subject:to:x-me-proxy
- :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Kba9ZC
- v2SGHiiBs+6QfWlQ3raukFBrvzNtKNhhlXZuI=; b=kHU5iH1SKpIAhyQwlhA+j6
- 6eULBzcS5LQeVqTap+hIX/yj/I1NpEPwsyPoSD93ABzbFAWgTWkFSJQ2IlJfKMf/
- j3cD4Bwv8dDEpJinBLSDyOo0vE2z4qD5InUOTz/NZQhLoo5N7TTUU4mwKmmy5TCm
- mwjYSYZpijDcC2cVWZ5QTjQo0B8s/PpjJyX6nXkimBdkvMgaxjwWunxHpdxwInaf
- 9IRAh6gwszEG0ey40oVyl9GU+7Lr4QgsSuZtixWVvUbLHrsujHb0HUonWf0hijpO
- z+5prM6ChXY4Q4evsgYIQbJuTLfVbPSpRxmEJrnzeLf2nLtH+XYNG9GWYvNwEA9w
- ==
-X-ME-Sender: <xms:W5bkYbNM9Vy7MjCXSqBKIg-aDXWbOC2tssNIlTMOnW8BXyFKb0vr0g>
- <xme:W5bkYV-WVC68V47bEinOmZIEszu-YfjNdz3zjPY6VwMiCHufqxpqJNdCExxJrlmmC
- 8PDL4OywBLMLOH_>
-X-ME-Received: <xmr:W5bkYaS4EbLc6087ztuMWaoY7I1gUd6EqBMQFjbySbEeLDQB5IhqGt3r7GIOmlK2LD8bFHvm8sE84EkpYlWsjw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdelgdduheekucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkofggtgfgsehtjeertd
- ertddvnecuhfhrohhmpeffrghnihhlohcuuegrrhhgvghnuceomhgrihhlsegusghrghhn
- rdgthheqnecuggftrfgrthhtvghrnhepkeffteffveejledvveehhfelvefgffevjeeuhf
- ehheekfefffefhteekfedtjeefnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucev
- lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghilhesug
- gsrhhgnhdrtghh
-X-ME-Proxy: <xmx:XJbkYfthgnFJTGZDjfXS6UWZH-pgKrQ0E3nkwoz3DcpAQfxuKVSmiw>
- <xmx:XJbkYTf-MrJCPuv1wSFj3LXMI5SV0d5mntWCvbZFJMZMmDt6661tWg>
- <xmx:XJbkYb1Dtj2Rg1DHfxYjQStKS7qxdsoF76B6xG6nxkCoW9mTYOMb5A>
- <xmx:XJbkYbGRR8anQLw-zxyyd7Mp9pfJVUu2SrynYukhsrH6OG5QJe1c1w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA for
- <buildroot@buildroot.org>; Sun, 16 Jan 2022 17:04:11 -0500 (EST)
-Date: Sun, 16 Jan 2022 23:04:04 +0100
-From: Danilo Bargen <mail@dbrgn.ch>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4vlrEG2e8abm; Sun, 16 Jan 2022 22:04:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF24160ADC;
+	Sun, 16 Jan 2022 22:04:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E589A1BF3CB
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 22:04:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE1D3403D6
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 22:04:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sQdjUGFy03sQ for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 22:04:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E86040383
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 22:04:30 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ l12-20020a7bc34c000000b003467c58cbdfso20023728wmj.2
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 14:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9oNtmFzifo/wZ23XjBJZ9fGwpqr1P21xsVykdsOn43Q=;
+ b=h0gBWGyWQR6uJbIYxd6OTcmTLWYS/JeAJg5CJbb5GFB20QUyAeJ5E4ANH9XLyMHILy
+ I6ICJZjO7ntYb8M8CRgJf28kINGjwqF7pUXGMlMDBIFs5zRbQwU2zctg13nwYYeK6wDK
+ sKdBCyRxvhFwmJpuSl2T7HOOywc5zvFZRuwoUInzsqoe9PIRFdu7fw8y8TTM63gIxR2Z
+ X+3dUCPX+8cxqY3jxxufQ+NVWKGksJHpFdd0yEaV2JVfP9OyfdS86kxT7JxkzqoRAQIe
+ W3lMy3T3YiZo2qwkK+hA0Hv6Bv8no6avgTIPvy/5AGr6rHYJ7lPY7N+vG1wkXQzYXvDT
+ LCIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=9oNtmFzifo/wZ23XjBJZ9fGwpqr1P21xsVykdsOn43Q=;
+ b=kzQM4FX0Mo3IbF/tyqEcQCyLSZw/ivMGR14+O6bfyRpkph0VPV8kEWTIaSfzW554HD
+ FEEP2KKSZYPEzqNEjDyN4k3uz5neaR/KQF3Hym8ZwQbsE2ySOKjS6aaq513kZwmcCM86
+ KpHLehTEo7u3KkzWBmPDoYSVG01idkOw23AXv0Tj9N1fxnQo9K3nbyXeMqwox8gYABCy
+ /k3SM8GFUbtzgzrkXka+BK1b4rsPBkX/QMU1a3SdMbNvqHalw89eAvhX4nK16DmSIvVg
+ EvlF9tY+++SjnR0EDG1JbvuzIr2Z/HzJa2uBNvlAprrRwVpNcnsNS/H9tv8djsU5v4GF
+ vIHQ==
+X-Gm-Message-State: AOAM530EIrmRoeLkIyLXHTddV/hXUQ08+pDVwazz5ycCph8L3/ek/Db+
+ oa7vHq531qFPnhSwo8Ue+OEvyIjgRQo=
+X-Google-Smtp-Source: ABdhPJxWQ5Sr7FYjXXlIV5jjQFYJNvgV/a5sjoT70+X56n+WTpxdzNRFKDl0NYZ27lpmRqdQnmHkwA==
+X-Received: by 2002:a05:600c:2481:: with SMTP id 1mr7727687wms.3.1642370668291; 
+ Sun, 16 Jan 2022 14:04:28 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-358-126.w2-10.abo.wanadoo.fr.
+ [2.10.19.126])
+ by smtp.gmail.com with ESMTPSA id s8sm13940222wra.9.2022.01.16.14.04.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 16 Jan 2022 14:04:28 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <20220116230404.71f68dbb@c3po>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+Date: Sun, 16 Jan 2022 23:03:02 +0100
+Message-Id: <20220116220302.3434242-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] Hash verification from GitHub
+Subject: [Buildroot] [PATCH 1/1] package/lighttpd: fix CVE-2022-22707
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,62 +86,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello folks
+In lighttpd 1.4.46 through 1.4.63, the mod_extforward_Forwarded function
+of the mod_extforward plugin has a stack-based buffer overflow (4 bytes
+representing -1), as demonstrated by remote denial of service (daemon
+crash) in a non-default configuration. The non-default configuration
+requires handling of the Forwarded header in a somewhat unusual manner.
+Also, a 32-bit system is much more likely to be affected than a 64-bit
+system.
 
-I'm trying to create a new buildroot package (my first one). This is
-what the makefile (tealdeer.mk) looks like:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...x-out-of-bounds-OOB-write-fixes-3134.patch | 94 +++++++++++++++++++
+ package/lighttpd/lighttpd.mk                  |  3 +
+ 2 files changed, 97 insertions(+)
+ create mode 100644 package/lighttpd/0002-mod_extforward-fix-out-of-bounds-OOB-write-fixes-3134.patch
 
-  TEALDEER_VERSION = 1.5.0
-  TEALDEER_SITE = $(call github,dbrgn,tealdeer,v$(TEALDEER_VERSION))
-  TEALDEER_LICENSE = Apache-2.0 or MIT
-  TEALDEER_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-  $(eval $(cargo-package))
+diff --git a/package/lighttpd/0002-mod_extforward-fix-out-of-bounds-OOB-write-fixes-3134.patch b/package/lighttpd/0002-mod_extforward-fix-out-of-bounds-OOB-write-fixes-3134.patch
+new file mode 100644
+index 0000000000..2cad8a6d18
+--- /dev/null
++++ b/package/lighttpd/0002-mod_extforward-fix-out-of-bounds-OOB-write-fixes-3134.patch
+@@ -0,0 +1,94 @@
++From 8c62a890e23f5853b1a562b03fe3e1bccc6e7664 Mon Sep 17 00:00:00 2001
++From: povcfe <povcfe@qq.com>
++Date: Wed, 5 Jan 2022 11:11:09 +0000
++Subject: [PATCH] [mod_extforward] fix out-of-bounds (OOB) write (fixes #3134)
++
++(thx povcfe)
++
++(edited: gstrauss)
++
++There is a potential remote denial of service in lighttpd mod_extforward
++under specific, non-default and uncommon 32-bit lighttpd mod_extforward
++configurations.
++
++Under specific, non-default and uncommon lighttpd mod_extforward
++configurations, a remote attacker can trigger a 4-byte out-of-bounds
++write of value '-1' to the stack. This is not believed to be exploitable
++in any way beyond triggering a crash of the lighttpd server on systems
++where the lighttpd server has been built 32-bit and with compiler flags
++which enable a stack canary -- gcc/clang -fstack-protector-strong or
++-fstack-protector-all, but bug not visible with only -fstack-protector.
++
++With standard lighttpd builds using -O2 optimization on 64-bit x86_64,
++this bug has not been observed to cause adverse behavior, even with
++gcc/clang -fstack-protector-strong.
++
++For the bug to be reachable, the user must be using a non-default
++lighttpd configuration which enables mod_extforward and configures
++mod_extforward to accept and parse the "Forwarded" header from a trusted
++proxy. At this time, support for RFC7239 Forwarded is not common in CDN
++providers or popular web server reverse proxies. It bears repeating that
++for the user to desire to configure lighttpd mod_extforward to accept
++"Forwarded", the user must also be using a trusted proxy (in front of
++lighttpd) which understands and actively modifies the "Forwarded" header
++sent to lighttpd.
++
++lighttpd natively supports RFC7239 "Forwarded"
++hiawatha natively supports RFC7239 "Forwarded"
++
++nginx can be manually configured to add a "Forwarded" header
++https://www.nginx.com/resources/wiki/start/topics/examples/forwarded/
++
++A 64-bit build of lighttpd on x86_64 (not known to be affected by bug)
++in front of another 32-bit lighttpd will detect and reject a malicious
++"Forwarded" request header, thereby thwarting an attempt to trigger
++this bug in an upstream 32-bit lighttpd.
++
++The following servers currently do not natively support RFC7239 Forwarded:
++nginx
++apache2
++caddy
++node.js
++haproxy
++squid
++varnish-cache
++litespeed
++
++Given the general dearth of support for RFC7239 Forwarded in popular
++CDNs and web server reverse proxies, and given the prerequisites in
++lighttpd mod_extforward needed to reach this bug, the number of lighttpd
++servers vulnerable to this bug is estimated to be vanishingly small.
++Large systems using reverse proxies are likely running 64-bit lighttpd,
++which is not known to be adversely affected by this bug.
++
++In the future, it is desirable for more servers to implement RFC7239
++Forwarded.  lighttpd developers would like to thank povcfe for reporting
++this bug so that it can be fixed before more CDNs and web servers
++implement RFC7239 Forwarded.
++
++x-ref:
++  "mod_extforward plugin has out-of-bounds (OOB) write of 4-byte -1"
++  https://redmine.lighttpd.net/issues/3134
++  (not yet written or published)
++  CVE-2022-22707
++
++[Retrieved from:
++https://github.com/lighttpd/lighttpd1.4/commit/8c62a890e23f5853b1a562b03fe3e1bccc6e7664]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/mod_extforward.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/mod_extforward.c b/src/mod_extforward.c
++index 733231fd2..1a04befa6 100644
++--- a/src/mod_extforward.c
+++++ b/src/mod_extforward.c
++@@ -715,7 +715,7 @@ static handler_t mod_extforward_Forwarded (request_st * const r, plugin_data * c
++         while (s[i] == ' ' || s[i] == '\t') ++i;
++         if (s[i] == ';') { ++i; continue; }
++         if (s[i] == ',') {
++-            if (j >= (int)(sizeof(offsets)/sizeof(int))) break;
+++            if (j >= (int)(sizeof(offsets)/sizeof(int))-1) break;
++             offsets[++j] = -1; /*("offset" separating params from next proxy)*/
++             ++i;
++             continue;
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 5d53767263..eb9556e619 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -39,6 +39,9 @@ LIGHTTPD_CONF_OPTS = \
+ 	-Dbuild_static=false \
+ 	-Dmoduledir=lib/lighttpd
+ 
++# 0002-mod_extforward-fix-out-of-bounds-OOB-write-fixes-3134.patch
++LIGHTTPD_IGNORE_CVES += CVE-2022-22707
++
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
+ LIGHTTPD_DEPENDENCIES += openssl
+ LIGHTTPD_CONF_OPTS += -Dwith_openssl=true
+-- 
+2.34.1
 
-The URL should expand to
-https://github.com/dbrgn/tealdeer/archive/v1.5.0/tealdeer-1.5.0.tar.gz.
-To generate the checksum, I ran:
-
-  $ sha256sum tealdeer-1.5.0.tar.gz
-  00902a50373ab75fedec4578c6c2c02523fad435486918ad9a86ed01f804358a  tealdeer-1.5.0.tar.gz
-
-I also added a hash file (tealdeer.hash):
-
-  # Locally generated
-  sha256  00902a50373ab75fedec4578c6c2c02523fad435486918ad9a86ed01f804358a  tealdeer-1.5.0.tar.gz
-  sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
-  sha256  a313b5e62b80a08f3aae0fa62ff3de8482ef55247299eb352ab44f87ef456b1b  LICENSE-MIT
-
-When building this package, checksum verification fails every time.
-
-  ERROR: tealdeer-1.5.0.tar.gz has wrong sha256 hash:
-  ERROR: expected: 00902a50373ab75fedec4578c6c2c02523fad435486918ad9a86ed01f804358a
-  ERROR: got     : 42febf9ee84721b9230077d62e2fc51201fd59624d3c776ccc1a634788768a60
-  ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-No matter how I download the file (via wget, through the GitHub web UI,
-etc), it always results in the SHA256 checksum starting with 009...,
-but buildroot always thinks it should be 42f... I also tried changing
-the TEALDEER_SITE variable as follows:
-
-  TEALDEER_SITE = https://github.com/dbrgn/tealdeer/archive/v$(TEALDEER_VERSION)
-
-...to ensure that this URL is *really* being downloaded, but it fails
-every time.
-
-Full build log can be found here:
-https://gist.github.com/dbrgn/cc9e96051a079f5b63c531ca3c195954
-
-Does someone have any pointers why the hash verification would fail in
-this case? It must be some obvious mistake I'm making, but I cannot
-figure out what it is.
-
-Best regards,
-Danilo Bargen
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
