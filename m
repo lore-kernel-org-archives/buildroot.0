@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DCADC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 17:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75246C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 19:23:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5C0060B32;
-	Sun, 16 Jan 2022 17:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5D1860AC9;
+	Sun, 16 Jan 2022 19:23:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ElsfXWuRyQSh; Sun, 16 Jan 2022 17:54:25 +0000 (UTC)
+	with ESMTP id uQeYz_8IkD-m; Sun, 16 Jan 2022 19:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1770460675;
-	Sun, 16 Jan 2022 17:54:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 057201BF5DE
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 17:54:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D029E60745;
+	Sun, 16 Jan 2022 19:23:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DE3201BF408
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E825382771
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 17:54:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDA7340509
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 19:23:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iUqsgmXV9uCE for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 17:54:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EB0PVSPLEUy9 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 19:23:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8169481B7B
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 17:54:08 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id k5so6740434wmj.3
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 09:54:08 -0800 (PST)
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com
+ [IPv6:2607:f8b0:4864:20::b2f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B446C404CF
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 19:23:30 +0000 (UTC)
+Received: by mail-yb1-xb2f.google.com with SMTP id c6so39710168ybk.3
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 11:23:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xPlGz7NteSqLAvC0ODJsP0XUKsaHecrCw0qx0qG1XJk=;
- b=XXwLHL+sRiM5GnLprTX4w6VZ2dKHUwGkEF0Aj/N6iQ41H6sEtna78XYqbVwuJsIVBA
- ZvPRfGN5Fd9CVnFdbQD6crmvD/g3zAuHUmrvJj4k7sBWPvZWhr+fzM/vKxj2Tg0/ScuA
- KA5WTeefL6bSC9UYAYG1rXoPOSl/uoMQp1Exw7DpG3ukONsTP+hBv5qRn+ajd2+zV4qs
- Mp5j22VWonPNtp4NyUw4TqV8n4OUDZNHs7oRBIP7OnP2BD3j9hajBhJBZj0WIdPWCX5O
- Oar7gJAuS/RJ7aHjFFodtm7kPI1ZWbfa6KnO3s2B9XtBoIPjRh+6LwBodK291IMrfb/A
- J+HA==
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Y5q+BcT77Z1FyC4vUvjFzWe+X9+HOX8SgFjwzbKYYXo=;
+ b=qRLVtwecwFHhLqaXGODEXAsizPOUGBhRzf+p3k5GRZIHxU+kEuO+lma97cfN790etM
+ VMscQWNIO5db7PJCr3CQwwmsMoXxhY/l/p+njGiyHLUNAxZV19+q5yLDi1l4K+Pegmtg
+ tgR0vsSyXWS8gsgIX7SqFtzET3ae1+0c0tisEVs+UUEMJ8Gxo9mChL6ge2ER/yx7f2d6
+ Se0ziDEgxodGZa3vd1EBILbF3pnOVdvIAAYsCXiskd24YpfkYHYZTrwm18B9fC2jbjC1
+ Ss/1fMZ4s2Y7HyIp35X8eoBQfs5GSpyDL3+63QqgvPHfGeiBk8Sm4kAXCtW3t92ElkY7
+ JvwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xPlGz7NteSqLAvC0ODJsP0XUKsaHecrCw0qx0qG1XJk=;
- b=evgZPUCfK6LLWfqEmOVDzYIS89a2HCxDWBxL1pZJJqxK0j9CFcOtMNEZ3kcXkIN7WX
- 90FwIfY880XqHYl+tLKg+E4RQJO2bZ0I2kU3fLRqQvkD727i9CvhL+nOLCnsc8+jpZUM
- iE/zhTNFcesdKQbDNWx6MuoN0/rwmytkXeYG+bk5Uf8/7BbVCg/lQn0zP9/tinfC2itZ
- UjbzybtOVNPWZ7jBiiA99kiy8RG7XgWyfttwMQm8CADS2M88+gqB7Mq2X3Yhl8y8eHcr
- 0p/VTGPSDE7MtHcX7og2oXjKxV0oZpDvtijm5kZe8+vfU8j4WboW+7bdlb0oORvp74RG
- BRaQ==
-X-Gm-Message-State: AOAM530eQrD1XIXf6D69E22nq0czpUhJgfscDrFlrudiMFxIsUQ//YML
- oYqqA6pPaZh+fEwg+sEw5JzeI3OnobU=
-X-Google-Smtp-Source: ABdhPJw2CxJAQcucohW7MvfVNAN4xPGxkvHmO5B9auHLOIQyT3/Ezt5/l0KFt4fY92Z1EUfI1Lnuvw==
-X-Received: by 2002:a5d:4301:: with SMTP id h1mr15796258wrq.511.1642355646091; 
- Sun, 16 Jan 2022 09:54:06 -0800 (PST)
-Received: from gilles-Gazelle-Professional.. (138.23.87.79.rev.sfr.net.
- [79.87.23.138])
- by smtp.gmail.com with ESMTPSA id c11sm18922302wmq.48.2022.01.16.09.54.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Jan 2022 09:54:05 -0800 (PST)
-From: Gilles Talis <gilles.talis@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Jan 2022 18:53:19 +0100
-Message-Id: <20220116175320.453041-1-gilles.talis@gmail.com>
-X-Mailer: git-send-email 2.32.0
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Y5q+BcT77Z1FyC4vUvjFzWe+X9+HOX8SgFjwzbKYYXo=;
+ b=4Na53jkO7vqbtciq6G2PXwq5sVtA2fOQUqz7tx8rjmu+cO39VRzAarsoNT7BQByYmy
+ 2vVl08kYKFh4RiLnXInZg5q2delR76neRRFMTXb+CsxzU3jbYRvKMFRUvd+E01gyOTGy
+ r5kU1n1xB1q846cumvTRiPnahADUnaKSGL1kA7NbivFmK4Hn4pqkUqed96FLj1KiRL5J
+ HbPRVruUhvEg3wuA7YVXptNXgZE/Hga/5FCHAfTSmqHiaHYuczOPb61yP+lQi9q/lJhD
+ HAd92OJctN+hHuTFVCVQ3lSmskbUu6haTGr2TAq1mMbRmKYch0PGkP/z5im+mnDWuTgA
+ ReAg==
+X-Gm-Message-State: AOAM530jr4eF6Jgh8jBlompt0d+Rw2iXI/55H0NyV3+dOqrAfJ4ap6TS
+ ZTXDTlJBRlenJs3iVbbGOcc9aw89NMrENTPyAws4GWZtQtQ=
+X-Google-Smtp-Source: ABdhPJwjNVhlNTOoVomziTLu8cKowrOPeTSfLYVe/wfiDBeHqgPdWl+09+aViWszsQCQ/7F+L7OJ5bDwzUsjE45J9r0=
+X-Received: by 2002:a05:6902:124e:: with SMTP id
+ t14mr25599636ybu.65.1642361009642; 
+ Sun, 16 Jan 2022 11:23:29 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/opencl-clhpp: new package
+References: <CAF8i9mOtQLce7b+H_PzHrsiUe_5qphpk-QsXq=WeLZodMv1heA@mail.gmail.com>
+ <d85d6f3c-2315-8583-a48c-b0b58e443a4d@mind.be>
+ <CAF8i9mPphK+bKcnTtd6soqP1_vfPaE=F=GB945sW+Xdwqm+h4A@mail.gmail.com>
+ <420ac869-6aea-a492-7a74-3014b7bb4cf3@mind.be>
+In-Reply-To: <420ac869-6aea-a492-7a74-3014b7bb4cf3@mind.be>
+From: William Tambe <tambewilliam@gmail.com>
+Date: Sun, 16 Jan 2022 13:23:20 -0600
+Message-ID: <CAF8i9mMGixY2q5e+fXH=-0H6vss97Q4T1uKwnUg-zTzZ5d7Hkg@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] BR2_PACKAGE_DHCP_CLIENT fails to build:
+ readline/history.h: No such file or directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,100 +85,156 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-opencl-clhpp are the OpenCL API C++ bindings
+On Mon, Jan 10, 2022 at 1:33 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 10/01/2022 00:46, William Tambe wrote:
+> > On Sun, Jan 9, 2022 at 2:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >>
+> >> On 09/01/2022 19:18, William Tambe wrote:
+> >>> I am attempting to build:
+> >>>
+> >>> +BR2_PACKAGE_DHCP=y
+> >>> +BR2_PACKAGE_DHCP_CLIENT=y
+> >>>
+> >>> However it fails as follow complaining about not finding readline/history.h:
+> >>>
+> >>> making all in /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/bin/nsupdate
+> >>> /home/tambewilliam/Documents/buildroot-build/host/bin/pu32-elf-gcc
+> >>
+> >>    pu32 doesn't exist in Buildroot, so this may very well be due to external changes.
+>
+>   So, do you have external changes that may be the cause of this? IOW, can you
+> reproduce the problem on upstream Buildroot?
+>
+> >>
+> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35
+> >>> -I../.. -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/lwres/include
+> >>> -I../../lib/lwres/unix/include -I../../lib/lwres/include
+> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/dns/include
+> >>> -I../../lib/dns/include
+> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/bind9/include
+> >>> -I../../lib/bind9/include
+> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isc/include
+> >>> -I../../lib/isc -I../../lib/isc/include -I../../lib/isc/unix/include
+> >>> -I../../lib/isc/pthreads/include -I../../lib/isc/noatomic/include
+> >>> -I/home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/lib/isccfg/include
+> >>> -I../../lib/isccfg/include    -D_REENTRANT -DVERSION=\"9.11.35\"
+> >>> -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> >>> -D_FILE_OFFSET_BITS=64  -Os -g0  -static   -W -Wall
+> >>> -Wmissing-prototypes -Wcast-qual -Wwrite-strings -Wformat
+> >>> -Wpointer-arith -fno-strict-aliasing -fno-delete-null-pointer-checks
+> >>> \
+> >>>           -DSESSION_KEYFILE=\"/var/run/named/session.key\" \
+> >>>           -c ./nsupdate.c
+> >>> ./nsupdate.c:104:10: fatal error: readline/history.h: No such file or directory
+> >>>     104 | #include <readline/history.h>
+> >>>         |          ^~~~~~~~~~~~~~~~~~~~
+> >>
+> >>    This sounds like you changed your configuration without doing 'make clean'. Is
+> >> that possible?
+> >
+> > I am building from clean or from scratch.
+> >
+> >>
+> >>    Is BR2_PACKAGE_READLINE enabled in your configuration? Has it been built?
+> >
+> > Yes, BR2_PACKAGE_READLINE is enabled in my configuration.
+>
+>   And does it get built? Does output/build/readline/.stamp_staging_installed exist?
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/opencl-clhpp/Config.in         | 10 ++++++++++
- package/opencl-clhpp/opencl-clhpp.hash |  3 +++
- package/opencl-clhpp/opencl-clhpp.mk   | 16 ++++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/opencl-clhpp/Config.in
- create mode 100644 package/opencl-clhpp/opencl-clhpp.hash
- create mode 100644 package/opencl-clhpp/opencl-clhpp.mk
+Yes it gets built and installed and .stamp_staging_installed exists.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a91e2dfcde..483afa4932 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1084,6 +1084,7 @@ F:	package/libeXosip2/
- F:	package/libolm/
- F:	package/libosip2/
- F:	package/ocrad/
-+F:	package/opencl-clhpp/
- F:	package/opusfile/
- F:	package/restclient-cpp/
- F:	package/tesseract-ocr/
-diff --git a/package/Config.in b/package/Config.in
-index 4df1474b91..08eb3ad809 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1564,6 +1564,7 @@ menu "Graphics"
- 	source "package/libvips/Config.in"
- 	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
-+	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
- 	source "package/opengl/Config.in"
-diff --git a/package/opencl-clhpp/Config.in b/package/opencl-clhpp/Config.in
-new file mode 100644
-index 0000000000..12045be055
---- /dev/null
-+++ b/package/opencl-clhpp/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_OPENCL_CLHPP
-+	bool "opencl-clhpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  opencl-clhpp are the OpenCL API C++ bindings
-+
-+	  http://github.khronos.org/OpenCL-CLHPP/
-+
-+comment "opencl-clhpp needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/opencl-clhpp/opencl-clhpp.hash b/package/opencl-clhpp/opencl-clhpp.hash
-new file mode 100644
-index 0000000000..27b27cd80c
---- /dev/null
-+++ b/package/opencl-clhpp/opencl-clhpp.hash
-@@ -0,0 +1,3 @@
-+# Locally Computed
-+sha256  869456032e60787eed9fceaeaf6c6cb4452bc0ff97e0f5a271510145a1c8f4d4  opencl-clhpp-2.0.16.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/opencl-clhpp/opencl-clhpp.mk b/package/opencl-clhpp/opencl-clhpp.mk
-new file mode 100644
-index 0000000000..610cd45b62
---- /dev/null
-+++ b/package/opencl-clhpp/opencl-clhpp.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# opencl-clhpp
-+#
-+################################################################################
-+
-+OPENCL_CLHPP_VERSION = 2.0.16
-+OPENCL_CLHPP_SITE = $(call github,KhronosGroup,OpenCL-CLHPP,v$(OPENCL_CLHPP_VERSION))
-+OPENCL_CLHPP_LICENSE = Apache-2.0
-+OPENCL_CLHPP_LICENSE_FILES = LICENSE.txt
-+OPENCL_CLHPP_INSTALL_STAGING = YES
-+
-+# OpenCL_CLHPP is a header-only library
-+OPENCL_CLHPP_INSTALL_TARGET = NO
-+
-+$(eval $(cmake-package))
--- 
-2.32.0
+Below are related buildroot files listing:
 
+$ ls -ld buildroot-build/build/readline-8.1/.*
+drwxr-xr-x  6 tambewilliam tambewilliam 4096 Jan 16 12:58
+buildroot-build/build/readline-8.1/.
+drwxr-xr-x 30 tambewilliam tambewilliam 4096 Jan 16 12:59
+buildroot-build/build/readline-8.1/..
+-rw-r--r--  1 tambewilliam tambewilliam   84 Jan 16 12:58
+buildroot-build/build/readline-8.1/.applied_patches_list
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.files-list-host.txt
+-rw-r--r--  1 tambewilliam tambewilliam  799 Jan 16 12:58
+buildroot-build/build/readline-8.1/.files-list-staging.txt
+-rw-r--r--  1 tambewilliam tambewilliam  822 Jan 16 12:58
+buildroot-build/build/readline-8.1/.files-list.txt
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_built
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_configured
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_downloaded
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_extracted
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_installed
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_patched
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_staging_installed
+-rw-r--r--  1 tambewilliam tambewilliam    0 Jan 16 12:58
+buildroot-build/build/readline-8.1/.stamp_target_installed
+
+>
+>   The bind.mk file has this:
+> ifeq ($(BR2_PACKAGE_READLINE),y)
+> BIND_DEPENDENCIES += readline
+> else
+> BIND_CONF_OPTS += --with-readline=no
+> endif
+>
+> which should make sure that readline is built and installed before bind. This in
+> turn should make sure that output/host/*/sysroot/usr/include/readline/history.h
+> exists.
+
+When I search for history.h I find it in following locations:
+
+$ find buildroot-build/ | fgrep history.h
+buildroot-build/target/usr/include/readline/history.h
+buildroot-build/host/pu32-buildroot-linux-gnu/sysroot/usr/include/readline/history.h
+buildroot-build/build/bash-5.1/lib/readline/history.h
+buildroot-build/build/readline-8.1/doc/history.html
+buildroot-build/build/readline-8.1/history.h
+
+How to make buildroot use include path
+host/pu32-buildroot-linux-gnu/sysroot/usr/include/readline/ such that
+it will find history.h ?
+
+>
+>   Regards,
+>   Arnout
+>
+> >
+> >>
+> >>    Regards,
+> >>    Arnout
+> >>
+> >>> compilation terminated.
+> >>> make[5]: *** [Makefile:473: nsupdate.o] Error 1
+> >>> make[4]: *** [Makefile:79: subdirs] Error 1
+> >>> make[3]: *** [Makefile:88: subdirs] Error 1
+> >>> make[2]: *** [package/pkg-generic.mk:270:
+> >>> /home/tambewilliam/Documents/buildroot-build/build/bind-9.11.35/.stamp_built]
+> >>> Error 2
+> >>> make[1]: *** [Makefile:23: _all] Error 2
+> >>> make[1]: Leaving directory '/home/tambewilliam/Documents/buildroot-build'
+> >>> make: *** [pu32/makefile:67: pu32-build/buildroot] Error 2
+> >>> _______________________________________________
+> >>> buildroot mailing list
+> >>> buildroot@buildroot.org
+> >>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> >>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
