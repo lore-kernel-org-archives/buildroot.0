@@ -1,90 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CF78C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 12:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C14CC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jan 2022 12:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F4EF60777;
-	Sun, 16 Jan 2022 12:01:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A394A8176F;
+	Sun, 16 Jan 2022 12:05:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bt0CalkGZiYt; Sun, 16 Jan 2022 12:01:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EviKGBNVkPev; Sun, 16 Jan 2022 12:05:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DED46076C;
-	Sun, 16 Jan 2022 12:01:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EE5E8186A;
+	Sun, 16 Jan 2022 12:05:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8E821BF3F3
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 12:01:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E1331BF32C
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 12:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C760880E7E
- for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 12:01:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BFB68186A
+ for <buildroot@lists.busybox.net>; Sun, 16 Jan 2022 12:05:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=mind.be
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NPGzTwDsDyY1 for <buildroot@lists.busybox.net>;
- Sun, 16 Jan 2022 12:01:28 +0000 (UTC)
+ with ESMTP id IAtIH-C2d1DF for <buildroot@lists.busybox.net>;
+ Sun, 16 Jan 2022 12:05:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 51F3380DA8
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 12:01:28 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id 15so20007353edx.9
- for <buildroot@buildroot.org>; Sun, 16 Jan 2022 04:01:27 -0800 (PST)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0F458176F
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 12:05:38 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id w16so53245347edc.11
+ for <buildroot@buildroot.org>; Sun, 16 Jan 2022 04:05:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=oNwTXEhoNnrTi2sdJe6E9CVWINvy2Zvat93JAQ4wAzw=;
- b=JKGIhnkOxpcPm/QZr2g3cY7RR+oty0UIl2Yf3F2fv8403/FqmifCGTrnsfgH9y1Dq0
- AlPc4KGqLKh8t9FoiNscYSglmSxHkZ4wvcKhhgYgvJbCJxS0J/hDcfy9lkODLnW+G3S2
- Uz47G6mhAKXsK0VF/L7+prVuLGzOHb94YosUg4N6Lgq/aLuQScPkxVLpjQ85XzqkZJi7
- 2BPPENpfThbyQKcIjsUiKt9wQr9jJvnkmXGSHJCsLEMMCyd0oUsRCxX98nnf2/JOxjnu
- RLMtpgmX55eqsbN9zsP7zXvtTSUO/Ye0h95/q/SCTCe+6Uj8J0t5DHP6Y6IhwjaPVgkj
- rr3Q==
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=7GCf/rVqPO5XilaBZM12qLnfnKj1yVCeq/v2BSwgaYE=;
+ b=Ldxun7I7Ew59p3f7IYMpx5pnZ/mKfB9WfCwj4MQeDTqz3wS7ehBV8xGnrJ+cbrNtQ2
+ jpbZ9kzsU3MRbkFk7vT/j8AIix6/rUIGx3LV0bszA75O/nfujP0P8vWydwYAqQR59MQh
+ wfDh3O7HB0nIb9JgjTPRQ+F1bFkIy2iLgabWpWJc2CX15/TgAdpHDYpiQ4q0gt9VtB4K
+ Rl15hzSN9ZZeiaUcDLg7TnhPaImio1ESQCbUTfZ4bGbjYWUSVKMjW69MrIBlxkMFPQzV
+ xrrUycu81tOeFW1moGGN06kIgdmjaEBE+G4yB9q6HHEh6+eVtUmvr4s+J4xJ/xRL8Q15
+ VMXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
+ :content-language:to:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=oNwTXEhoNnrTi2sdJe6E9CVWINvy2Zvat93JAQ4wAzw=;
- b=G1nl229jvcVieusEUIaUjolg0fBqklHKZhZP0udFuifsFoJo78bqMYfnILyjIbYjEv
- L1kj0OartdP2k+DYzGOzCMINwl1/SfzrK2vqZo6h82hJcCkmPy6JWOgWd2XlFRmXrW8Q
- P1g5hKKpfXwucmpK0YM2Ja0mDbfakf8ayy/DOlTdg3Bk4YhfTrQEnO1Oi2M/zod4hW07
- hjAo7+zgABAG6TCZMfY1pmm4nZA0RS4rPSu1lrx58Phv6u5y6dw9IIheFzOFEmbocnZA
- 23UNFcQSBoSkJJx/jRjWJxkzZTAPkeyOP0LYor8IU+Z891Q50rN6DbhnCsh7TqjpPGq3
- qjzA==
-X-Gm-Message-State: AOAM533dXiHZJTv7mVFS05ii64gI66x68twyJWWrY3IxN4jCvCySLNwF
- yRHG+4Y6i6gw64WMluuQHOKoN+pn4Nx8Fg==
-X-Google-Smtp-Source: ABdhPJwfaX1lmZDmzmnQFve+GfVZAxnPT+KcRe8nrOCORrDWkZ9okxAtEoRMMUqaaFosgQ2799wZPA==
-X-Received: by 2002:a05:6402:518d:: with SMTP id
- q13mr16537650edd.377.1642334485981; 
- Sun, 16 Jan 2022 04:01:25 -0800 (PST)
+ bh=7GCf/rVqPO5XilaBZM12qLnfnKj1yVCeq/v2BSwgaYE=;
+ b=QMhL4tG2VwPwMvQWRBmgcIyRculGl+vE86UCrPa7yOf6yltX7SHVLPk/Lyyo0JCjin
+ uETQStQfNvCF6B/CoKxxolpVg/MuVF6hq+d5Tos9MB7N2HQAOGqLhm0DXXTsWkVL2r6Z
+ 6FKcg8VnO8ypf4H9C4woQt/n7JZsKWQasGeylUV+A4JTNpm4Scx25rE5+usjlZuKx1Hl
+ aon9xqfeVNX3xVkMgDqGojPApVNXCDcM6UMwAZpWt+OZoaW+4gnfNajG9vhHWh/GpzZ0
+ TWljmLfl0OBJd1F0k3BJ49RkudG3Gz+f12lZF2Fy8WHqwcxN4oGYMFjEgAAs6wda34uH
+ +W4w==
+X-Gm-Message-State: AOAM533/ZHmL/IvAcThEOO48G4nWlbvZ8Evy+EVPSn3+xxHtA2RjAVsh
+ f1iSvhvtu8UnBGfVRLKrwEN/Go9xNNfoHA==
+X-Google-Smtp-Source: ABdhPJzKuG9r+QnbbWEUH5jse8A3s4Y+I1ImMGTbi0gqoHpgZnwax6DDPKlQXCVEWeTy4NJfCYVrpQ==
+X-Received: by 2002:a17:906:d552:: with SMTP id
+ cr18mr264792ejc.387.1642334736654; 
+ Sun, 16 Jan 2022 04:05:36 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
  (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id o18sm483238ejd.52.2022.01.16.04.01.25
+ by smtp.gmail.com with ESMTPSA id kz9sm3398813ejc.152.2022.01.16.04.05.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 16 Jan 2022 04:01:25 -0800 (PST)
-Message-ID: <6ece845a-20a1-4d79-c544-21e0f1f2fc6f@mind.be>
-Date: Sun, 16 Jan 2022 13:01:24 +0100
+ Sun, 16 Jan 2022 04:05:35 -0800 (PST)
+Message-ID: <35bc0513-f94a-7dc1-e583-7c1a425d78ae@mind.be>
+Date: Sun, 16 Jan 2022 13:05:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
 Content-Language: en-GB
-To: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220110200151.830192-1-ju.o@free.fr>
- <20220113215104.02a734a1@windsurf> <77b72a63fdde563f496649641a0efab1@free.fr>
+To: Adam Baxter <voltagex@voltagex.org>, buildroot@buildroot.org
+References: <c8e17fb9-4990-4267-b723-73ed1ced9c0b@www.fastmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <77b72a63fdde563f496649641a0efab1@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-gnupg: new package
+In-Reply-To: <c8e17fb9-4990-4267-b723-73ed1ced9c0b@www.fastmail.com>
+Subject: Re: [Buildroot] nvidia driver fails to build: compiler version
+ check failed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,40 +92,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNi8wMS8yMDIyIDExOjU1LCBKdWxpZW4gT2xpdmFpbiB3cm90ZToKPiBIaSBUaG9tYXMs
-Cj4gCj4gT24gMTMvMDEvMjAyMiAyMTo1MSwgVGhvbWFzIFBldGF6em9uaSB3cm90ZToKPj4gSGVs
-bG8gSnVsaWVuLAo+Pgo+PiBPbiBNb24sIDEwIEphbiAyMDIyIDIxOjAxOjUxICswMTAwCj4+IEp1
-bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+IHdyb3RlOgo+Pgo+Pj4gwqBbLi4uXQo+Pj4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9QWVRIT05fR05VUEcKPj4+ICvCoMKgwqAgYm9vbCAicHl0aG9uLWdu
-dXBnIgo+Pj4gK8KgwqDCoCBzZWxlY3QgQlIyX1BBQ0tBR0VfR05VUEcyIGlmICFCUjJfUEFDS0FH
-RV9HTlVQRyAjIHJ1bnRpbWUKPj4KPj4gVGhpcyBnZW5lcmF0ZXMgYSBjaXJjdWxhciBkZXBlbmRl
-bmN5IHJlcG9ydGVkIGJ5IGtjb25maWcsIGJlY2F1c2UKPj4gYW5vdGhlciBwYWNrYWdlIGRvZXMg
-ZXhhY3RseSB0aGUgb3Bwb3NpdGUuIFNvIEkgaGF2ZSBpbnZlcnRlZCB0aGUgbG9naWMKPj4gaGVy
-ZToKPj4KPj4gc2VsZWN0IEJSMl9QQUNLQUdFX0dOVVBHIGlmICFCUjJfUEFDS0FHRV9HTlVQRzIg
-IyBydW50aW1lCj4gCj4gV2hhdCBkbyB5b3UgdGhpbmsgYWJvdXQgcmV2ZXJzaW5nIHRoZSBsb2dp
-YyBvZiBhbGwgQnVpbGRyb290IHBhY2thZ2VzCj4gc2VsZWN0aW5nIGdudXBnIHNvIHRoZXkgZGVm
-YXVsdCB0byBnbnVwZzI/Cj4gCj4gUXVvdGluZzogaHR0cHM6Ly9nbnVwZy5vcmcvZG93bmxvYWQv
-aW5kZXguaHRtbAo+ICIiIgo+IEdudVBHIDEuNCBpcyB0aGUgb2xkLCBzaW5nbGUgYmluYXJ5IHZl
-cnNpb24gd2hpY2ggc3RpbGwgc3VwcG9ydCB0aGUKPiB1bnNhZmUgUEdQLTIga2V5cy4gVGhpcyBi
-cmFuY2ggaGFzIG5vIGRlcGVuZGVuY2llcyBvbiB0aGUgYWJvdmUgbGlzdGVkCj4gbGlicmFyaWVz
-IG9yIHRoZSBQaW5lbnRyeS4gSG93ZXZlciwgaXQgbGFja3MgbWFueSBtb2Rlcm4gZmVhdHVyZXMg
-YW5kCj4gd2lsbCByZWNlaXZlIG9ubHkgaW1wb3J0YW50IHVwZGF0ZXMuCj4gIiIiCj4gCj4gVGhl
-cmUgaXMgY3VycmVudGx5IG9ubHkgdHdvIHBhY2thZ2VzIHNlbGVjdGluZyBnbnVwZzoKPiBncGdt
-ZSBhbmQgcHl0aG9uLWdudXBnCj4gCj4gTW9zdCBMaW51eCBkaXN0cmlidXRpb25zIGFyZSBub3cg
-c2hpcHBpbmcgZ251cGcyIGJ5IGRlZmF1bHQuwqAgZ251cGcgdjEKPiBpcyBub3cgbW9yZSBmb3Ig
-bGVnYWN5L2NvbXBhdGliaWxpdHkgY2FzZXMuCgogIFBlcmhhcHMgd2Ugc2hvdWxkIHNpbXBseSBy
-ZW1vdmUgZ251cGcgaW5zdGVhZC4gV2UndmUgaGFkIGdudXBnMiBmb3IgNy41IHllYXJzIApub3cs
-IHRoYXQgc2hvdWxkIGJlIGVub3VnaCB0byBtaWdyYXRlLgoKICBSZWdhcmRzLAogIEFybm91dAoK
-PiAKPiBJZiB5b3UgYWdyZWUsIEkgY2FuIHNlbmQgYSBwYXRjaCBmb3IgdGhpcy4KPiAKPiBCZXN0
-IHJlZ2FyZHMsCj4gCj4gSnVsaWVuLgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 16/01/2022 11:28, Adam Baxter wrote:
+> Hi all
+> 
+> Using buildroot master 6e4791b751c0f8e0ba218da2c22e71d3e1436b5d
+> 
+> Config is hopefully attached.
+> 
+> Also, the below driver version was released by Nvidia on 2019.11.8 - perhaps it should be updated or removed?
+> 
+> make[1]: Entering directory '/home/voltagex/src/buildroot/output/build/linux-5.15.13'
+> 
+> Compiler version check failed:
+> 
+> The major and minor number of the compiler used to
+> compile the kernel:
+> 
+> x86_64-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-1172-g6e4791b751) 11.2.0, GNU ld (GNU Binutils) 2.37
+> 
+> does not match the compiler used here:
+> 
+> x86_64-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-1172-g6e4791b751) 11.2.0
+
+  Clearly these two are the same, so that sounds like a bug in nvidia's compiler 
+check.
+
+> Copyright (C) 2021 Free Software Foundation, Inc.
+> This is free software; see the source for copying conditions.  There is NO
+> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> 
+> 
+> It is recommended to set the CC environment variable
+> to the compiler that was used to compile the kernel.
+> 
+> The compiler version check can be disabled by setting
+> the IGNORE_CC_MISMATCH environment variable to "1".
+
+  Sounds like the best option is to set this environment variable in 
+nvidia-driver.mk then. We already make sure that the module is built with the 
+same toolchain as the kernel.
+
+
+  Regards,
+  Arnout
+
+
+> However, mixing compiler versions between the kernel
+> and kernel modules can result in subtle bugs that are
+> difficult to diagnose.
+> 
+> *** Failed CC version check. Bailing out! ***
+> 
+> make[2]: *** [/home/voltagex/src/buildroot/output/build/nvidia-driver-390.132/kernel/Kbuild:189: cc_version_check] Error 1
+> 
+> 
+> (after looking at this I realised I'd probably have more luck with nouveau, anyway)
+> 
+> Thanks,
+> Adam
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
