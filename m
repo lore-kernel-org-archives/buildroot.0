@@ -1,82 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCB3CC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 10:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D69FEC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 10:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E42D813D9;
-	Mon, 17 Jan 2022 10:07:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7172940220;
+	Mon, 17 Jan 2022 10:17:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bwCHSpYD5OrG; Mon, 17 Jan 2022 10:07:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E48ED813E3;
-	Mon, 17 Jan 2022 10:07:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E7671BF3D7
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:07:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B50E40517
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:07:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id indfjOPiNfBx for <buildroot@lists.busybox.net>;
- Mon, 17 Jan 2022 10:07:26 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B08840186
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 10:07:26 +0000 (UTC)
-Received: by mail-lf1-x12c.google.com with SMTP id bu18so32573111lfb.5
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 02:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=fw7WxMkAphTKEpZocalV7O0LIIp3CMTdxbuZPn+3so8=;
- b=cnKx1ztCSyc42JDyOvpWJZCAUkAZz4raclUyZnOJQD2SeuwOWtYeHOLrrO8ZoWJW/5
- xKPeUYOQoED8OWh+bYLZKOW1SDe2/phCpFF7jgQqqNRu0h9qB8MpomSZ9Nz2Ij1hidPT
- ACQc3E7H/HEukra5P7y71MKHFkbOksZdoa6+2XV0lCsamt9ocisLHI3RAHln2SvK+3gf
- 2QN7vgBXvnl3yRUkiAWpdij86TgZyGXp8TBZJov1rV8tDrs8W7wvSZrNI7keIUezGS9/
- 16mGRiDWY3mAQz4Lv4J76+KUYf9ZJdAL56lek91cirAOGfm4ahvg+XnAOMH/GiITmk5R
- SiXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=fw7WxMkAphTKEpZocalV7O0LIIp3CMTdxbuZPn+3so8=;
- b=ce0WiOXGsCxU63U8DoWGMkB89AahMnETWMv2GWVkK9Ib2ih+jC7Eza9pe5oqPRHLj6
- VAk0TYrkZhzAoXUlA5YZJQzLN4APYDgsAuZirRZHC8l1d1ARo5GtRZItMrltzytbMH8A
- AQqEMIb+sK04+NULPdfyFIsM2+5OVAUwaa8HPpbOuX+9/YHmzlS0z8xJSMlGaz8zTLuO
- gBm+bMV+WN4qkrHg8YlDw1XgpShL4s4/b3UDK/I7aOtbGaQ0F8LEarHf0h4sbcybt+MP
- AyG1AbESTndv4s5yICkQLk1mIAEUMb3aWXwXhEVMIebocwJ97b2cLVAeTgzB7SwzFQzt
- o0vQ==
-X-Gm-Message-State: AOAM532doGSYFPY8yftnj1sBGGLRuGYtKeRtBqQZLU25pybgOJX2/LfW
- /jgeMb8RYcgpknBFqG6I4thNOh2sTqc=
-X-Google-Smtp-Source: ABdhPJzB+SnpMLh12jvPh+HZGQKVhxrMuqx7qTerRYQ1OYYul0IQtfb6T8cgzVqRmm6l50Ys96BQ4Q==
-X-Received: by 2002:a19:8c55:: with SMTP id i21mr16982450lfj.627.1642414044276; 
- Mon, 17 Jan 2022 02:07:24 -0800 (PST)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
- by smtp.gmail.com with ESMTPSA id
- m7sm1324744ljb.59.2022.01.17.02.07.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 17 Jan 2022 02:07:23 -0800 (PST)
-Date: Mon, 17 Jan 2022 11:07:50 +0100
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <YeU/9slJuw7BG8ue@gmail.com>
-References: <2209e11a-bda9-5193-9b4d-20a5f0fa34e3@linatsea.fr>
- <20220105142924.4b11ed83@windsurf>
- <5d0600a1-eb8c-8d69-cf9a-fee4fbca0c73@smile.fr>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HidifZ8FssNk; Mon, 17 Jan 2022 10:17:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68D7740232;
+	Mon, 17 Jan 2022 10:17:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D8AD81BF3D7
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:17:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C03C36079E
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:17:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RrfQ9gIn75Pk for <buildroot@lists.busybox.net>;
+ Mon, 17 Jan 2022 10:17:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8EE6060AAB
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 10:17:12 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:3413:1d36:355:a22c])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 432DC20039F;
+ Mon, 17 Jan 2022 11:17:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642414629;
+ bh=lodpoRTUYPLDF2jyQg5l6+OAD3xrp3GqOjg1xNlGdDc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ToxQwd+p2MDzK4A3d3/I+Mh0d8dn+kQUmBxnlYiue00WUfNPexlNMVWBDRotqWB4f
+ SlgfNYZvlETy5xD50l8JsYTXwoKcOEY7GDcoQI7iDDA+a6znEKd9afxfSXl69U+7tW
+ hiq4ZcCbGtlq9b1RMmIUJO4j3V5UfPVEiit4kmlSJv4zWhr1rNyXLVz1/kZYLb/bxl
+ S7uoHth5NwgMLjZ4WOLsvsHgIGW8LCdA3+iOpbO00gOeCmI1lvVPLdgAO71kkO0PE5
+ O2k23k8WzPkAD1YrX91SQ60BT0rd7vUtcio+qlxplBvCxdYp4lern6rn+HKLug9LgW
+ HPwPlahFM90GQ==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 17 Jan 2022 11:17:05 +0100
+Date: Mon, 17 Jan 2022 11:17:05 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220117101705.GB2313964@scaer>
+References: <20220116230404.71f68dbb@c3po>
+ <CADvTj4qFSfOYQ+AkOsQyGgNbuRROEmgx1giiKGaJn2jRVyhsOw@mail.gmail.com>
+ <20220116233758.59918490@c3po>
+ <CADvTj4pjgwNt4ZnFB2ZmDeZP0nGaGPveqAapCTC+TOx3SEoBrw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <5d0600a1-eb8c-8d69-cf9a-fee4fbca0c73@smile.fr>
-Subject: Re: [Buildroot] candidate packages : ros2 and wxwidgets
+Content-Disposition: inline
+In-Reply-To: <CADvTj4pjgwNt4ZnFB2ZmDeZP0nGaGPveqAapCTC+TOx3SEoBrw@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] Hash verification from GitHub
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,68 +74,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thierry Bultel <thierry.bultel@linatsea.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0820637722480620451=="
+Cc: Danilo Bargen <mail@dbrgn.ch>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+James, Danilo, All,
 
---===============0820637722480620451==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="jOztRmLQsobXNVOw"
-Content-Disposition: inline
+On 2022-01-16 15:51 -0700, James Hilliard spake thusly:
+> On Sun, Jan 16, 2022 at 3:38 PM Danilo Bargen <mail@dbrgn.ch> wrote:
+> > > Just use the hash buildroot generated for you, it should be correct.
+> > > (...)
+> > > Yeah, it's not going to match since buildroot is doing stuff like
+> > > vendoring the cargo deps before generating the tarball
+> > Ahh, that explains it. Does this mean that for Cargo based packages, it
+> > will always be TOFU and checksums provided by the project / maintainer
+> > cannot be used (because they will mismatch)?
+> A maintainer could sign the tarball generated by buildroot and upload it to
+> github releases if they want.
 
+To be exact: an upstream maintainer (i.e. not a Buildroot maintainer).
 
---jOztRmLQsobXNVOw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> As you can see the script will bail out if the tarball already has
+> vendored deps:
+> https://github.com/buildroot/buildroot/blob/6e4791b751c0f8e0ba218da2c22e71d3e1436b5d/support/download/cargo-post-process#L16-L19
 
-Hello,
+The script will not "bail out" on pre-vendored tarballs; it will just
+exit without touching the tarball at all.
 
-On Wed, Jan 05, 2022 at 02:40:47PM +0100, Romain Naour wrote:
-> >=20
-> > I'll be happy to help in the review of such packages.
->=20
-> Same here, I'll try to help.
->=20
+I.e. it means that we prefer using tarballs as-is from their upstreams,
+when they are vendored; we only vendor packages which upstreams have
+not.
 
-Count me in as well.
+> So as long as the upstream release tarball has vendored deps the hash should
+> not change AFAIU.
 
-/Marcus
+Yes, this is the goal.
 
---jOztRmLQsobXNVOw
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+Yann E. MORIN.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmHlP/EACgkQiIBOb1ld
-UjKTMhAAgnO03vy6v0rQHKz1Dh3gPdmnwt42O5m7/qpf1KGUaTnceOKatIEWgxjL
-F+VYDi7vzpNjo0ex8NEabz1Amnt0XnwNVzF5rD0XQBNUq8322ooNg7cM6ujwD4wn
-mBZdud3jJ87JZCD0XCmnmwExo2Kl/9VV91BCR2KGmIk95dSUwhbF79oJKItav8j/
-AmZI+fi6zXdYCHEa8GnnATKX8zUXKKcpaI3b2Dyg8yDEW0ZjFO+y/leopv6Ohp6W
-AeCVdd0UQp0werwPUPSTETPsDMrnLIhRiwQTwdSaZaqIcnR1ZS1IhBdMRYsPCDl3
-f9ltGA1ksZPhMuGkqCisisHS/LxItDHx6k7f9/88njIwflIFNVPIbVS11sfxKmTn
-WYlKYVlYQq6/7mqHr26Vups31Opcflu35rwWjvbmDJbqGyFGZg6mTA612Aoh60+Q
-hUM7JCZEqqWeqsRxHApxyPrKPdS2yG4+32a9k6VzZcy2QNV3AvWC03o7ApRiCO2I
-wLswBEvs3xyld2N8DUFLS9KycntwCVHzzvruB6Q6NHWqoPhLnSnQ3/sZRQ5xwHxX
-yQBz0DUg6FpgULp8t0sKojBFQ2F5wOFiG2JIZxfH3+YFjCzW29XgnyG/8VlaZOZ8
-6771DBAaKYaUUyX1aAk+fmD3vyMgfyBS5iDCt9RIsuXN1ltZeqc=
-=P9Nr
------END PGP SIGNATURE-----
-
---jOztRmLQsobXNVOw--
-
---===============0820637722480620451==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0820637722480620451==--
