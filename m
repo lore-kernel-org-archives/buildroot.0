@@ -1,68 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DC17C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 10:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FFADC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 11:37:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFE384033C;
-	Mon, 17 Jan 2022 10:32:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8278240584;
+	Mon, 17 Jan 2022 11:37:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s5T0l_THSaWk; Mon, 17 Jan 2022 10:32:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id em627kSfa4Jz; Mon, 17 Jan 2022 11:37:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44EB34032D;
-	Mon, 17 Jan 2022 10:32:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F348C1BF3D7
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:32:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0C5740220;
+	Mon, 17 Jan 2022 11:37:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AC3841BF419
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 11:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFAF94032D
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 10:32:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9ABDB81244
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 11:37:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xlLT47Nhyc5y for <buildroot@lists.busybox.net>;
- Mon, 17 Jan 2022 10:32:24 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id phMb5lkxwRjg for <buildroot@lists.busybox.net>;
+ Mon, 17 Jan 2022 11:37:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 14DAF4030C
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 10:32:23 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:3413:1d36:355:a22c])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2089C2003D6;
- Mon, 17 Jan 2022 11:32:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1642415542;
- bh=Z8tUeX3hyw83E0cE9Hd/VwqJDD37QV9wdCH3su/Por4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Y5fH2IsuXFCXtiw4vh3YdHZWvmCMU72yERUp0sbOLKShZeDTZTk92Ya9Kre25wB6D
- lfRie53LEBReRDA7f5Fs5Z1udfDGjf87/mTMmpeBSuu1OQ0XHy5yj5nCDCC+I11fNW
- HI//JW1M9UNRJAOjwBxWaT/QkVOj/bAyqFom2ffk2IXltY6v8lezoS4PhrM1kIxn/e
- 9MYYUSSZWcBiJctAqL+lCco4u89NV4cXB0Q64PhdWqhsNxinosoks6yvwsgsLHqPDL
- yTTOXmDbwObs7b3po5aJv3ev49H20tH4BlZG0cbg93FFMiz198+bI4zK+Zec4clReg
- Ik1F4w5QWMWUg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 17 Jan 2022 11:32:18 +0100
-Date: Mon, 17 Jan 2022 11:32:18 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Danilo Bargen <mail@dbrgn.ch>
-Message-ID: <20220117103218.GD2313964@scaer>
-References: <20220116230404.71f68dbb@c3po>
- <CADvTj4qFSfOYQ+AkOsQyGgNbuRROEmgx1giiKGaJn2jRVyhsOw@mail.gmail.com>
- <20220116233758.59918490@c3po>
- <CADvTj4pjgwNt4ZnFB2ZmDeZP0nGaGPveqAapCTC+TOx3SEoBrw@mail.gmail.com>
- <20220117101705.GB2313964@scaer>
- <1ae38367-2e5c-20c7-0ba1-ebaff05cf8e7@dbrgn.ch>
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DFF880F05
+ for <buildroot@busybox.net>; Mon, 17 Jan 2022 11:37:09 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id k5so10519018wmj.3
+ for <buildroot@busybox.net>; Mon, 17 Jan 2022 03:37:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5/zVHhujwH1YnkCXkZxMGsTSGztciWM2rudxtrWiReQ=;
+ b=Yb+2yyM7W4LoT1sSYsiFtUEs5CfgQqzUzokx6O52SDKy2mSI/9pfih9rv7eWv6S5yI
+ LP001KmYEl4eWxd7F3lQgO7LRuYwkSzyORJJQhR4PJJK8ekjV1cr2KS7dzaDz1sxDxcv
+ qsw+Pa9QyfDw1rv9itzUaLMZ86DY1FuPZuE/iZ/h5fU5ElkjddBoE3la05bEVp6FflLV
+ ohQLcV5QJmClja+zVllB232i3OQRZYkLHWHEvRgDFMPWwe8sbCYUup1VkL1FM3TO6QHQ
+ QATZzoE0ErjXhpRbNKdRRbtPrW2HeOGmLLx1yLzBE+uJXLt58nH/gr6njeSnpi6oPILb
+ Vjsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=5/zVHhujwH1YnkCXkZxMGsTSGztciWM2rudxtrWiReQ=;
+ b=QCA3lO7wCqgg9SLDqMzLE2fMr7FYRXcDOry1lue2BFrf/Jw/vinmaNWs+X/WM/cd4y
+ 9d7QBLDPENHERQ7zh4wT8HC1MW9jJwK/qOYKUtO3AN+MWiJ+4q/bGK3ONqA5fl2OXnem
+ 2hG0nHKfRQbTDI8mtTgv8UZvyWD08d9itBjW1IQnd5bnlSBC53e+75NA+lgJZT0f1lMS
+ S4niWedo9dSpvDWKXvYFI7V7mrgxig4Cl7+DgfjCUJ609mN+N5L8BQASpyAP/Gw4JWI9
+ YcPHvwc52bc+2B3xEf9XXf9A4zpnR4CSmYmaMsPGnaUJr0dTMRdl83DApu3lqKJ7/ich
+ iiCw==
+X-Gm-Message-State: AOAM531yboWr5cVIgjUtP20kpNonauQNUJ4mDrWC4W0rYNagB9yU5pdq
+ tN8JrOeZMU+0e00Ha8GqYSKzjbhp5+Y=
+X-Google-Smtp-Source: ABdhPJy+6g+pNR+MUI7dh5xHTcFC0kITEomMsxXm1nT2N+oeQeuOOC5xUOt/Y9fMkbrqJs4bsyi+0w==
+X-Received: by 2002:a05:6000:178b:: with SMTP id
+ e11mr16389940wrg.126.1642419427740; 
+ Mon, 17 Jan 2022 03:37:07 -0800 (PST)
+Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id g6sm14592077wri.80.2022.01.17.03.37.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 17 Jan 2022 03:37:07 -0800 (PST)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 17 Jan 2022 12:36:56 +0100
+Message-Id: <20220117113656.234077-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <1ae38367-2e5c-20c7-0ba1-ebaff05cf8e7@dbrgn.ch>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] Hash verification from GitHub
+Subject: [Buildroot] [PATCH] package/prosody: security bump to 0.11.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,55 +86,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Danilo, All,
+see https://blog.prosody.im/prosody-0.11.12-released/
 
-On 2022-01-17 11:24 +0100, Danilo Bargen spake thusly:
-> On 1/17/22 11:17, Yann E. MORIN wrote:
-> >>A maintainer could sign the tarball generated by buildroot and upload it to
-> >>github releases if they want.
-> >
-> >To be exact: an upstream maintainer (i.e. not a Buildroot maintainer).
-> >
-> >(...)
-> >
-> >I.e. it means that we prefer using tarballs as-is from their upstreams,
-> >when they are vendored; we only vendor packages which upstreams have
-> >not.
-> That makes sense! I am the maintainer of tealdeer, and I'll provide a
-> vendored source tarball for the next release. (I've heard of "cargo vendor"
-> before, but I haven't used it so far.)
-> 
-> Maybe a corresponding paragraph could be added to the docs at
-> https://nightly.buildroot.org/#_integration_of_cargo_based_packages ?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Yeah, so I already noticed that the nightly manual is not up to date...
-
-It indeed points to the correct sha1 in master, but the Cargo part is
-not what it should be; it is still the older text from before we added
-the cargo infra. We're looking into the issue...
-
-You can hack on the manual too, it's in:    docs/manual/
-And you can generate the manual locally:    make manual-html
-
-Patches welcome! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index ee459f85d..a925d0d00 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5  78d01bb97a935f6a776d141873a33fd7  prosody-0.11.11.tar.gz
+-sha1  ff653812fcb1789a517b55281a8d01e9e8261848  prosody-0.11.11.tar.gz
+-sha256  a1af90e2d4ac2f7cf81b385475140ecee60bec1eb83003efb5aeb89765b13774  prosody-0.11.11.tar.gz
+-sha512  eb9851e1b279bef894d556ca6bc6210d1cd55e0c02a9d475f74e6e6b4a2dfef704fd3de77b71cff97909925c48c60940c34cfb541e6f3801e23e90ea21d119a9  prosody-0.11.11.tar.gz
++md5  64a99571a5de84ace24d8142a1556d68  prosody-0.11.12.tar.gz
++sha1  64c918439c2df130204dcd86398832cb7a481eb3  prosody-0.11.12.tar.gz
++sha256  56cd52d820f5b3ed37e02d8a2577aa064bbc04db8e87fd18a6020eba0c10560d  prosody-0.11.12.tar.gz
++sha512  cd03ee8b02ffaa478b5329d9942d833cfed2d8bf720bf580a2082d681e7d333bc34f45041cea7234bee75f1a0e7c07983a685fe2ac9b31d51a0dbb36e87ba5d2  prosody-0.11.12.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 7acfa4708..d697c8556 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.11.11
++PROSODY_VERSION = 0.11.12
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.32.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
