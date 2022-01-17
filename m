@@ -1,77 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46492C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 09:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4750C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 09:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB55B608D8;
-	Mon, 17 Jan 2022 09:34:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19B48402B5;
+	Mon, 17 Jan 2022 09:50:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id knyGtqK73akk; Mon, 17 Jan 2022 09:34:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XfwrT7xf1xv5; Mon, 17 Jan 2022 09:50:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEED0607F9;
-	Mon, 17 Jan 2022 09:34:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50C4F402C3;
+	Mon, 17 Jan 2022 09:50:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6DAA61BF41A
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:34:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76B231BF41A
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:50:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C3C58146C
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:34:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64EB7813DA
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:50:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=dbrgn.ch header.b="BB6KROC3";
+ dkim=pass (2048-bit key) header.d=messagingengine.com
+ header.b="CMz92EkZ"
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fYQ8LVdimKW3 for <buildroot@lists.busybox.net>;
- Mon, 17 Jan 2022 09:34:47 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1BCC08146B
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 09:34:47 +0000 (UTC)
-Received: by mail-oi1-x22b.google.com with SMTP id g205so22620330oif.5
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 01:34:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=VVklyhqKGdQ/jRzYjmNcq3iMK1pi1bZXLCZbHpOZWfY=;
- b=kFyih9KEFBTyvlDsuTreDjmAMjq4BGD5GMLx4ZNk9z5T+Uqc6rZOiqwd1AkcIAmrsC
- PmajwRd7ks30AbkyABAGX1/7SCvg4Xg3aTDzq1jCUhmDJJbK2uJfpztTmYyCRXrqAJrB
- fFlrdXrfi3e1D0wi4FT45JP7cMtkQudl2WEpzFMepFq986b9CxQkuujbwemiBcoNsaT0
- cAJVCLO5wfF4JUjzBkp1QBSQ3da7amSIufyOT9xjaxlCP2wL1cQpeZ/yiEjKWb0uYWEL
- F3CDlS65WKZrXXMVn5xcNETxiCTKmr7IBTr2iWT44LYIaE8juDdeTRoSF0KqVYbKpDjt
- G7pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=VVklyhqKGdQ/jRzYjmNcq3iMK1pi1bZXLCZbHpOZWfY=;
- b=ibkvjb6BBWzaNG+YbptyYTQcigvb2k3YY3n1SfkKwWPeNP06WPGTV0g1as0ITqjIqZ
- EXZsxNRXwqmb9flzQgipDXvgRHIA8oz4qTxGCKw8Bmbux5igrZ4Wv+Ri32Q0KFaL332S
- I0S+DnxARHTwBgJ9fO96pNQXP+8ypGZc7/pft9fWod8ITGz3WEnEQEWbf/wsOg+VZnrG
- zFJsQGTKTJ0vhTK1kvsE0e++ou69PDZb0ubxVdqTrekTSBaGtMAdS52I8/hgSzP09L8/
- vVPAcSIN1PVQaT3/hVzYgZqxVatbWn1BLoV8j8BuK5NvNNBjGuSHj94YIQ2AxY5DHwFf
- 2Bvg==
-X-Gm-Message-State: AOAM532CwLmtYLnYpi7fWFNfwzHSLAjP0k5n16taOcf9HIjWVtvFQjFP
- 6MRyX0nY20dBb1/Ehr5+/iqJUI50oyKQw9xfynuP/DrE4Zk=
-X-Google-Smtp-Source: ABdhPJzDsvw3CD7AfGLTgm3neRzhzKX6LJDyFKWY/Fso1i6PTi+IMQ7aACUbOQch8f6K+3sEkap9aANGY5qvkJgTR28=
-X-Received: by 2002:a05:6808:16a3:: with SMTP id
- bb35mr16995185oib.72.1642412085658; 
- Mon, 17 Jan 2022 01:34:45 -0800 (PST)
+ with ESMTP id IOIqQKi_uEXh for <buildroot@lists.busybox.net>;
+ Mon, 17 Jan 2022 09:50:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com
+ [66.111.4.26])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE5BB81372
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 09:50:29 +0000 (UTC)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+ by mailout.nyi.internal (Postfix) with ESMTP id D76655C0400
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 04:50:26 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+ by compute1.internal (MEProxy); Mon, 17 Jan 2022 04:50:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dbrgn.ch; h=date
+ :from:to:subject:message-id:mime-version:content-type
+ :content-transfer-encoding; s=fm1; bh=lXltm3y4k1pLuFlh2VrtJCms41
+ gm2Cf90zAPDItZHaA=; b=BB6KROC3lPEqYB+pE20LaSvhVvWi7uREIZvQuMWDjg
+ HwXrMdgtPNtQLCj+cM934/+DPSizKraYbc4NmbL6FCZ2UuP9ijtOyH/Az7a9uQAb
+ dKwhmZizFbs95wFo/76x0++VrRNLq60SU/L2jV77Zb37zj5hBphH24KVuRcLAyHb
+ EMPrAp7m/utLnfQI7oXEQrKZH3xUtIvwb/uUnydhbfUSVpCBUY8dU48yGJFdCr36
+ +w5Uq5/rDjxD0gaGBmpLu8jzHnBvoVtEHfPu7MnyUqJcYGRB7qTi88ggoTFAZzMa
+ oK0io/3rDCHjFkwQHsnyDFXhaUc03XFMZNd/gIvk5BFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=content-transfer-encoding:content-type
+ :date:from:message-id:mime-version:subject:to:x-me-proxy
+ :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=lXltm3
+ y4k1pLuFlh2VrtJCms41gm2Cf90zAPDItZHaA=; b=CMz92EkZa2ZHr8eSgzURYx
+ /ExG6Pa4L+zNr0mwJRLTNeTcLTQKBwqaCZ3NIuqmMwVwcwWgX3t4OpwtVwWK4UB1
+ 5juLkmI/5JrBsg7tb+pci2AHg98/jLg83vs4XBadOa48x1rc2T5a31QVkb9qYSAw
+ lYMFHa55Bm+OwYG1xpMTnEaMBWGsN99VnfEwnFW84nJDSC4zC+vDpJcN6/SKMj/P
+ E57KlitZ3uUVbPKE7lfPS81SJOZGjFcHw5tGtKhgurBqOSrt2fV6ImUq3pO0TgnA
+ vCZIxXBz+B9qpYac8jhA/qzBoQU9JILyMpKimUKcCqlTw8wnfXNDDnnD0e0R6bIA
+ ==
+X-ME-Sender: <xms:4jvlYZaYaO112R2DvzteLZdcTiReOh7reM-v1RvYMrfaYSc-IPPRPw>
+ <xme:4jvlYQbY3RQeeYEEvK1aFI06cCvKF0md6o6L3bbo-FmBS2wCOOYiop6Ygs_dheFIo
+ LmGVuDkigGDsIXE>
+X-ME-Received: <xmr:4jvlYb-2coP7Frtovu8ZMWPWu9y56BPVo02NSlMkpAGD3RIDp5o-7hoL4DWgyAkm3trF5pmYzcF9mgufbN5eeA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddugddtlecutefuodetggdotefrodftvf
+ curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+ uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukffogggtgfesthejredtre
+ dtvdenucfhrhhomhepffgrnhhilhhouceurghrghgvnhcuoehmrghilhesuggsrhhgnhdr
+ tghhqeenucggtffrrghtthgvrhhnpeevhfdvgedvheevueelueetvdelveetgfehiefgud
+ ejueetteeuhfdvheeftdeutdenucffohhmrghinheplhgvrghrnhgumhgrrhgtrdgtohhm
+ pdgsvghgrhhifhhfshdrtghomhdplhhishhtrdhorhhgnecuvehluhhsthgvrhfuihiivg
+ eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrihhlsegusghrghhnrdgthh
+X-ME-Proxy: <xmx:4jvlYXrV_mb9exPCprMxoQBZoUzQ6vc1I03GkZ9TPZbsvvrb24XpBQ>
+ <xmx:4jvlYUpFCKO_C-30LL1LdxW8-7w3pzP5l9kgvXKdSpk1XgLbn_BcQw>
+ <xmx:4jvlYdSY5GWXdh4aOZyqn_9WUNn03fRfMvI2qSnkBz3b2bxOhdj2Nw>
+ <xmx:4jvlYRBWaUnTnV-b70i7mGkn_Stc2BqgU42fCbYgA-oRnll8mM6D9Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <buildroot@buildroot.org>; Mon, 17 Jan 2022 04:50:26 -0500 (EST)
+Date: Mon, 17 Jan 2022 10:50:17 +0100
+From: Danilo Bargen <mail@dbrgn.ch>
+To: buildroot@buildroot.org
+Message-ID: <20220117105017.28d6aacc@c3po>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220114101247.342256-1-nolange79@gmail.com>
- <5273d4d1-8254-e53d-0ce2-9c390fe315ad@mind.be>
-In-Reply-To: <5273d4d1-8254-e53d-0ce2-9c390fe315ad@mind.be>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 17 Jan 2022 10:34:34 +0100
-Message-ID: <CADYdroOkk1aMB1Hxk8uLYaAeGEHsweXWkTHK39PhS5cz-tP_=g@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Subject: Re: [Buildroot] [PATCH 1/2] support/scripts/mkusers: allow option
- for system uid/gid
+Subject: [Buildroot] DMARC on this mailing list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,203 +97,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am So., 16. Jan. 2022 um 13:25 Uhr schrieb Arnout Vandecappelle
-<arnout@mind.be>:
->
->
->
-> On 14/01/2022 11:12, Norbert Lange wrote:
-> > Some software decides based on uid/gid whether a user is a
-> > system or normal/human user, with differnt behaviour for those
-> > flavors (example journald [2]).
->
->   Thank you for the short yet sufficient summary!
->
-> >
-> > So adding logic to create system-users is necessary, we take
-> > the now common ranges from [1].
-> >
-> > This extends the mkusers script to allow -2 for uid/gid,
-> > this argument will take an identifier from the system range.
-> >
-> > System/user ranges are added as variables, and the argument
-> > for user/system uid was added as variable aswell.
-> > Thus some magic constants could be removed, some further
-> > occurences of -1 were replaced with equivalent logic.
-> >
-> > [1] - https://systemd.io/UIDS-GIDS/
-> > [2] - https://www.freedesktop.org/software/systemd/man/journald.conf.html
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
->
->   You forgot to mention that this is v2. v1 is here [1].
+Hello folks
 
-I did not forget it, just did not find references I pushed
-the patch before.
+I recently enabled report-only DMARC on my e-mail domain. After sending
+a few e-mails to this ML yesterday, this resulted in multiple DMARC
+would-be rejection e-mails.
 
->
->   I think the only change is in the commit message.
+DMARC relies on SPF (correct sender IP) *or* DKIM (correct signature). A
+nice tool to visualize this is https://www.learndmarc.com/. If either
+SPF or DKIM passes, the e-mail should be accepted.
 
-Nah, its a bit more.
+In the case of mailing lists, the way I understand it, there are two
+options:
 
->
-> > ---
-> >   support/scripts/mkusers | 57 +++++++++++++++++++++++++++++------------
-> >   1 file changed, 40 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> > index d00ba33823..9d8295e8a3 100755
-> > --- a/support/scripts/mkusers
-> > +++ b/support/scripts/mkusers
-> > @@ -8,6 +8,15 @@ MIN_UID=1000
-> >   MAX_UID=1999
-> >   MIN_GID=1000
-> >   MAX_GID=1999
-> > +# use names from /etc/adduser.conf
-> > +FIRST_SYSTEM_UID=100
-> > +LAST_SYSTEM_UID=999
-> > +FIRST_SYSTEM_GID=100
-> > +LAST_SYSTEM_GID=999
-> > +# argument to automatically crease system/user id
-> > +AUTO_SYSTEM_ID=-2
->
->   Wouldn't it be better to use -1 for system users (= the usual case) and add -2
-> for normal users? System users are the usual, after all, and all current in-tree
-> uses of -1 are definitely system users.
->
->   I though that someone had already made this remark, but I can't find any trace
-> of it.
->
-> > +AUTO_USER_ID=-1
-> > +
->
-> [snip]
-> > @@ -222,8 +233,12 @@ add_one_group() {
-> >       local members
-> >
-> >       # Generate a new GID if needed
-> > -    if [ ${gid} -eq -1 ]; then
-> > -        gid="$( generate_gid "${group}" )"
-> > +    if [ ${gid} -lt 0 ]; then
-> > +        if [ ${gid} -eq ${AUTO_USER_ID} ]; then
-> > +            gid="$( generate_gid "${group}" )"
->
->   (nitpick) For symmetry, I'd always pass the first and last as argument here.
->
-> > +        else
-> > +            gid="$( generate_gid "${group}" $FIRST_SYSTEM_GID $LAST_SYSTEM_GID )"
-> > +        fi
-> >       fi
->
->   (nitpick) I'd structure the entire block above as follows:
->
->      if [ ${gid} -eq ${AUTO_USER_ID} ]; then
->      elif [ ${gid} -eq ${AUTO_SYSTEM_ID} ]; then
->      fi
->
-> That's one level less deep, and more explicit about the system-id branch.
->
->   Both remarks also apply to the uid case of course.
->
-> >
-> >       members=$(get_members "$group")
-> > @@ -247,16 +262,19 @@ add_one_group() {
-> >   #   - not already used by a user
-> >   generate_uid() {
-> >       local username="${1}"
-> > +    local minuid="${2:-$MIN_UID}"
-> > +    local maxuid="${3:-$MAX_UID}"
->
->   So here I'd remove the defaults and instead always pass the arguments.
->
->
->
->   Regards,
->   Arnout
->
-> [1]
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=152843&state=%2A&archive=both
->
->
-> > +
-> >       local uid
-> >
-> >       uid="$( get_uid "${username}" )"
-> >       if [ -z "${uid}" ]; then
-> > -        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
-> > +        for(( uid=minuid; uid<=maxuid; uid++ )); do
-> >               if [ -z "$( get_username "${uid}" )" ]; then
-> >                   break
-> >               fi
-> >           done
-> > -        if [ ${uid} -gt ${MAX_UID} ]; then
-> > +        if [ ${uid} -gt ${maxuid} ]; then
-> >               fail "can not allocate a UID for user '%s'\n" "${username}"
-> >           fi
-> >       fi
-> > @@ -307,8 +325,13 @@ add_one_user() {
-> >       check_user_validity "${username}" "${uid}" "${group}" "${gid}"
-> >
-> >       # Generate a new UID if needed
-> > -    if [ ${uid} -eq -1 ]; then
-> > -        uid="$( generate_uid "${username}" )"
-> > +    if [ ${uid} -lt 0 ]; then
-> > +        if [ ${uid} -eq ${AUTO_USER_ID} ]; then
-> > +            uid="$( generate_uid "${username}" )"
-> > +        else
-> > +            uid="$( generate_uid "${username}" $FIRST_SYSTEM_UID $LAST_SYSTEM_UID )"
-> > +
-> > +        fi
-> >       fi
-> >
-> >       # Remove any previous instance of this user
-> > @@ -384,8 +407,8 @@ main() {
-> >           ENTRIES+=( "${line}" )
-> >       done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
-> >
-> > -    # We first create groups whose gid is not -1, and then we create groups
-> > -    # whose gid is -1 (automatic), so that, if a group is defined both with
-> > +    # We first create groups whose gid is positive, and then we create groups
-> > +    # whose gid is automatic, so that, if a group is defined both with
-> >       # a specified gid and an automatic gid, we ensure the specified gid is
-> >       # used, rather than a different automatic gid is computed.
-> >
-> > @@ -399,7 +422,7 @@ main() {
-> >       # Then, create all the main groups which gid *is* automatic
-> >       for line in "${ENTRIES[@]}"; do
-> >           read username uid group gid passwd home shell groups comment <<<"${line}"
-> > -        [ ${gid} -eq -1 ] || continue    # Non-automatic gid
-> > +        [ ${gid} -lt 0 ] || continue    # Non-automatic gid
-> >           add_one_group "${group}" "${gid}"
-> >       done
-> >
-> > @@ -410,7 +433,7 @@ main() {
-> >           read username uid group gid passwd home shell groups comment <<<"${line}"
-> >           if [ "${groups}" != "-" ]; then
-> >               for g in ${groups//,/ }; do
-> > -                add_one_group "${g}" -1
-> > +                add_one_group "${g}" ${AUTO_USER_ID}
-> >               done
-> >           fi
-> >       done
-> > @@ -433,7 +456,7 @@ main() {
-> >       for line in "${ENTRIES[@]}"; do
-> >           read username uid group gid passwd home shell groups comment <<<"${line}"
-> >           [ "${username}" != "-" ] || continue # Magic string to skip user creation
-> > -        [ ${uid} -eq -1        ] || continue # Non-automatic uid
-> > +        [ ${uid} -lt 0        ] || continue # Non-automatic uid
-> >           add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-> >                        "${home}" "${shell}" "${groups}" "${comment}"
-> >       done
-> >
+- Rewrite the "From:" header so that the e-mail appears to be coming
+  from the ML itself. Put the original sender e-mail in the "Reply-To"
+  header instead. If this is not being done, the sender IP (the mailing
+  list) does not match the sender e-mail domain and SPF fails. Note
+  that this *might* impact the buildroot ML reputation for some big
+  mailservers.
+- Expect that mail servers with DMARC enabled also have DKIM enabled,
+  and ensure that the e-mail body is not modified (i.e. turn off the
+  automatically inserted footer). Put mailing list unsubscribe links
+  in the headers instead. This way, even though the sender IP does not
+  match, the signature should still be intact.
 
-Norbert
+These approaches are described in the following blog post I found
+online: https://begriffs.com/posts/2018-09-18-dmarc-mailing-list.html
+
+I don't know if mailman allows turning off body modifications (i.e.
+RFC2369 and RFC2919), but it definitely allows "From"-munging:
+https://wiki.list.org/DEV/DMARC
+
+I'm still quite new to this mailing list and don't want to put out any
+demands, but I wanted to bring up this issue, since it will probably be
+more and more of an issue in the future (DMARC adoption is increasing).
+
+Cheers,
+Danilo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
