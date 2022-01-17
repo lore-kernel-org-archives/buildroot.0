@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62D1C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 19:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE544C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 19:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 802C94013E;
-	Mon, 17 Jan 2022 19:14:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 379AC402C2;
+	Mon, 17 Jan 2022 19:21:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BXvt-gGm7p79; Mon, 17 Jan 2022 19:14:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X6IJJprdwnNb; Mon, 17 Jan 2022 19:21:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F99D40137;
-	Mon, 17 Jan 2022 19:14:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 37EA41BF395
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 19:14:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5563A402A9;
+	Mon, 17 Jan 2022 19:21:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F9621BF395
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 19:21:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CE2781452
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 19:14:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E300402A9
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 19:21:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 21m2Dh4YbxHK for <buildroot@lists.busybox.net>;
- Mon, 17 Jan 2022 19:14:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mLJ0JFb67vFV for <buildroot@lists.busybox.net>;
+ Mon, 17 Jan 2022 19:21:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EB688144B
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 19:14:07 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 9XS9n0IbOc6LX9XS9noSED; Mon, 17 Jan 2022 20:14:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642446846; bh=y6D+iAHwEWOzj79KD2DUYicaKiUQLzzoq66R/kWOJEE=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=Zi/ryBUfyribXFe+jFZEQyeyeTmhQ5ewee7gEHggG6IdKtDLg7Shtl/kzBILpCqn8
- mj3a7rLdhQd4vrrWPvBXHNpJYgCVgaXedM3n15XDACvQ4/r76v37NrZ93CXYDOrLuR
- wYvy7674djgoBDeBV96Ost396uNAohA+x/rcH/L4bqBMdGITFVHl1M2SU6LXlEHltc
- TApUgFMSm7kcczA56KEUS//rHbLk3FCN/3J8eHrlzi9C82a0Bxv3DCyGtf1Z305SaE
- +S9bUiPfBCJ8gPK5gJDyQx8J/9jeumr8Ogy/kO5U4SdY5gE6+LC/qaJeouCX0bLvQ8
- q7Ni2iYIDFIyQ==
-To: Hanspeter Portner <dev@open-music-kontrollers.ch>, buildroot@buildroot.org
-References: <20210610105739.488491-1-dev@open-music-kontrollers.ch>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <61e64587-f5f2-2a38-5b0a-4cbb9a708557@benettiengineering.com>
-Date: Mon, 17 Jan 2022 20:14:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.87.133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E8100402A6
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 19:21:14 +0000 (UTC)
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com
+ [10.225.0.209])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 4FB6DC0455
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 19:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+ t=1642447273; bh=ZHQj2OWVrMupMmpduQq/CVfa/ZyJ/Cz6tuEd3JLzrj8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=gXfqloZjUlYLfhmqJPYfnsjmgoi/sqUAORQYn1pe7cYMe64s/yjUaTEGMOZukPCpr
+ QxnHZeZNpWCRT/BcD1P6W4tHT1XD6NcrWBcM8MS5/92kWjZVJ0ek7A425l6eGiXzUB
+ yvRS7OFf5AEGX5fwnO1/KJpQ+Loxlesl1txh7BrRxLn1VyZPkoAQplHnU8zyzsLwxF
+ cQElmF87ZLHxOxTmT9FSj+BUCOZXZXV43+01hAhjYdtoNOjlEGqjuNFQxW+DTBkin9
+ w8EztmTnB975pdvABr6x+NvEx6dQ22akcA0hohI4FRibJB/PsnRPIUPknadXgOUupT
+ 1XC0Z4zR0UUQQ==
+Received: from abrodkin-5550.internal.synopsys.com (unknown [10.121.15.16])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id 199FAA005C;
+ Mon, 17 Jan 2022 19:21:10 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+To: buildroot@buildroot.org
+Date: Mon, 17 Jan 2022 22:20:17 +0300
+Message-Id: <20220117192017.8841-1-abrodkin@synopsys.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210610105739.488491-1-dev@open-music-kontrollers.ch>
-Content-Language: en-US
-X-CMAE-Envelope: MS4wfGo7rEH6SiVmI6NV2quZsMwDmhTe3Cy7d3tMXu7dZ7RKrahGagSYfm+60iV77T72MMW/ibVlrcNeliEUquvj7Aqf2bexKrdKZ364FGUwJPjTamw4tjBI
- CkBcyVVATos3ajRiO8lgN6esOyvDWmA8xm9LIs6D0/fULYfFdoowen8FFgnWnUSOABMvFwBmP+9d8hm0SwFC+N04JcPktRe11M8/Jpzstzwal4nypRBhofo3
- ggdHDWqSxYybafJNaX44Ig==
-Subject: Re: [Buildroot] [PATCH 1/1] configs/toradex_colibri_imx6: initial
- commit
+Subject: [Buildroot] [PATCH] configs/cubieboard2: U-Boot needs Python3 &
+ OpenSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,147 +71,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSGFuc3BldGVyLAoKT24gMTAvMDYvMjEgMTI6NTcsIEhhbnNwZXRlciBQb3J0bmVyIHdyb3Rl
-Ogo+IEJhc2VkIG9uIGNvbmZpZ3MvdG9yYWRleF9hcGFsaXNfaW14NiB3aXRoIFRvcmFkZXgnIG1h
-aW5saW5lIGxpbnV4L3Vib290Cj4gYnJhbmNoZXMuCj4gCj4gVGVzdGVkIG9uOgo+ICAgIE1vZHVs
-ZTogICAgJ1RvcmFkZXggQ29sIElNWDZETCA1MTJNQiBWMS4wQScKPiAgICBFdmFsYm9hcmQ6ICdU
-b3JhZGV4IENvbCBFdmFsdWF0aW9uIFYzLjJBJwoKT3ZlcmFsbCBjb21taXQgbG9nIGlzIG5vdCB0
-aGF0IGNsZWFyLiBUaGlzIHBhdGNoICJhZGRzIGluaXRpYWwgCnN1cHBvcnQoaXMgaXQgY29tcGxl
-dGU/KSBmb3IgdG9yYWRleF9jb2xpYnJpX2lteDYiLgoKQ2FuIHlvdSBwbGVhc2UgcmV3b3JkIHRo
-aXMgY29tbWl0IGxvZz8KCkFuZC4uLgoKPiBTaWduZWQtb2ZmLWJ5OiBIYW5zcGV0ZXIgUG9ydG5l
-ciA8ZGV2QG9wZW4tbXVzaWMta29udHJvbGxlcnMuY2g+Cj4gLS0tCj4gICBib2FyZC90b3JhZGV4
-L2NvbGlicmktaW14Ni9nZW5pbWFnZS5jZmcgIHwgMTUgKysrKysrKwo+ICAgYm9hcmQvdG9yYWRl
-eC9jb2xpYnJpLWlteDYvcG9zdC1pbWFnZS5zaCB8IDIwICsrKysrKysrKwo+ICAgYm9hcmQvdG9y
-YWRleC9jb2xpYnJpLWlteDYvcmVhZG1lLnR4dCAgICB8IDUzICsrKysrKysrKysrKysrKysrKysr
-KysrKwo+ICAgYm9hcmQvdG9yYWRleC9jb2xpYnJpLWlteDYvdUVudi50eHQgICAgICB8ICA3ICsr
-KysKPiAgIGNvbmZpZ3MvdG9yYWRleF9jb2xpYnJpX2lteDZfZGVmY29uZmlnICAgfCAyNSArKysr
-KysrKysrKwo+ICAgNSBmaWxlcyBjaGFuZ2VkLCAxMjAgaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IGJvYXJkL3RvcmFkZXgvY29saWJyaS1pbXg2L2dlbmltYWdlLmNmZwo+ICAg
-Y3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL3RvcmFkZXgvY29saWJyaS1pbXg2L3Bvc3QtaW1hZ2Uu
-c2gKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC90b3JhZGV4L2NvbGlicmktaW14Ni9yZWFk
-bWUudHh0Cj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvdG9yYWRleC9jb2xpYnJpLWlteDYv
-dUVudi50eHQKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL3RvcmFkZXhfY29saWJyaV9p
-bXg2X2RlZmNvbmZpZwo+IAo+IGRpZmYgLS1naXQgYS9ib2FyZC90b3JhZGV4L2NvbGlicmktaW14
-Ni9nZW5pbWFnZS5jZmcgYi9ib2FyZC90b3JhZGV4L2NvbGlicmktaW14Ni9nZW5pbWFnZS5jZmcK
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjkxYzkyN2M3MjMKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvdG9yYWRleC9jb2xpYnJpLWlteDYvZ2VuaW1hZ2Uu
-Y2ZnCj4gQEAgLTAsMCArMSwxNSBAQAo+ICsjIE1pbmltYWwgU0QgY2FyZCBpbWFnZSBmb3IgdGhl
-IFRvcmFkZXggQ29saWJyaSBpLk1YNiBDT00KPiArIwo+ICsjIEl0IGRvZXMgbm90IG5lZWQgYSBi
-b290IHNlY3Rpb24gZm9yIGEgYm9vdGxvYWRlciBzaW5jZSBpdCBpcyBib290ZWQKPiArIyBmcm9t
-IGl0cyBpbnRlcm5hbCBmbGFzaCBtZW1vcnkgKGVNTUMpLgoKSSdtIG5vdCB1c2VkIHRvIGlteDYg
-YW55bW9yZSBmb3IgbWFueSB5ZWFycywgc28gSSBkb24ndCByZW1lbWJlciBob3cgCmJvb3Rsb2Fk
-ZXIgY2FuIGF1dG9tYXRpY2FsbHkgbG9hZCB1LWJvb3QgYW5kIGxpbnV4LiBNYXliZSBoZXJlIHlv
-dSAKZGlkbid0IGV4cGxhaW4gd2VsbCB3aGF0J3MgZ29pbmcgb24gYW5kIHRoaXMgc2hvdWxkIGdv
-IGZvciBzdXJlIG9uIApjb21taXQgbG9nIHRvby4KCj4gKwo+ICtpbWFnZSBzZGNhcmQuaW1nIHsK
-PiArICBoZGltYWdlIHsKPiArICB9Cj4gKwo+ICsgIHBhcnRpdGlvbiByb290ZnMgewo+ICsgICAg
-cGFydGl0aW9uLXR5cGUgPSAweDgzCj4gKyAgICBpbWFnZSA9ICJyb290ZnMuZXh0MiIKPiArICAg
-IHNpemUgPSA1MTJNCj4gKyAgfQo+ICt9Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL3RvcmFkZXgvY29s
-aWJyaS1pbXg2L3Bvc3QtaW1hZ2Uuc2ggYi9ib2FyZC90b3JhZGV4L2NvbGlicmktaW14Ni9wb3N0
-LWltYWdlLnNoCj4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPiBpbmRleCAwMDAwMDAwMDAwLi5iOTVl
-MTc1YTI5Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3RvcmFkZXgvY29saWJyaS1pbXg2
-L3Bvc3QtaW1hZ2Uuc2gKPiBAQCAtMCwwICsxLDIwIEBACj4gKyMhL3Vzci9iaW4vZW52IGJhc2gK
-PiArCj4gK0dFTklNQUdFX0NGRz0iJChkaXJuYW1lICQwKS9nZW5pbWFnZS5jZmciCj4gK0dFTklN
-QUdFX1RNUD0iJHtCVUlMRF9ESVJ9L2dlbmltYWdlLnRtcCIKPiArCj4gKyMgY29weSB0aGUgdUVu
-di50eHQgdG8gdGhlIG91dHB1dC9pbWFnZXMgZGlyZWN0b3J5Cj4gK2NwIGJvYXJkL3RvcmFkZXgv
-Y29saWJyaS1pbXg2L3VFbnYudHh0ICRCSU5BUklFU19ESVIvdUVudi50eHQKPiArCj4gK3JtIC1y
-ZiAiJHtHRU5JTUFHRV9UTVB9Igo+ICsKPiArIyBnZW5lcmF0ZSByb290ZnMuaW1nCj4gK2dlbmlt
-YWdlIFwKPiArICAtLXJvb3RwYXRoICIke1RBUkdFVF9ESVJ9IiBcCj4gKyAgLS10bXBwYXRoICIk
-e0dFTklNQUdFX1RNUH0iIFwKPiArICAtLWlucHV0cGF0aCAiJHtCSU5BUklFU19ESVJ9IiBcCj4g
-KyAgLS1vdXRwdXRwYXRoICIke0JJTkFSSUVTX0RJUn0iIFwKPiArICAtLWNvbmZpZyAiJHtHRU5J
-TUFHRV9DRkd9Igo+ICsKPiArUkVUPSR7P30KPiArZXhpdCAke1JFVH0KPiBkaWZmIC0tZ2l0IGEv
-Ym9hcmQvdG9yYWRleC9jb2xpYnJpLWlteDYvcmVhZG1lLnR4dCBiL2JvYXJkL3RvcmFkZXgvY29s
-aWJyaS1pbXg2L3JlYWRtZS50eHQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAw
-MDAwMDAuLjUwMDc4ZGIxNzMKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvdG9yYWRleC9j
-b2xpYnJpLWlteDYvcmVhZG1lLnR4dAo+IEBAIC0wLDAgKzEsNTMgQEAKPiArVG9yYWRleCBDb2xp
-YnJpIGkuTVg2IENvbXB1dGVyIG9uIE1vZHVsZQo+ICsKPiArSW50cm8KPiArPT09PT0KPiArCj4g
-K1RoZSBDb2xpYnJpIGlNWDYgaXMgYSBTT0RJTU0gc2l6ZWQgY29tcHV0ZXIgbW9kdWxlIGJhc2Vk
-IG9uIE5YUMKuL0ZyZWVzY2FsZQo+ICtpLk1YIDYgU29DLiBUaGUgbW9kdWxlIHRhcmdldHMgYSB3
-aWRlIHJhbmdlIG9mIGFwcGxpY2F0aW9ucywgaW5jbHVkaW5nOgo+ICtNZWRpY2FsIERldmljZXMs
-IE5hdmlnYXRpb24sIEluZHVzdHJpYWwgQXV0b21hdGlvbiwgSE1JcywgQXZpb25pY3MsCj4gK0Vu
-dGVydGFpbm1lbnQgc3lzdGVtLCBQT1MsIERhdGEgQWNxdWlzaXRpb24sIFRoaW4gQ2xpZW50cywg
-Um9ib3RpY3MsIEdhbWluZwo+ICthbmQgbXVjaCBtb3JlLiBJdCBvZmZlcnMgYSB3aWRlIHJhbmdl
-IG9mIGludGVyZmFjZXMgZnJvbSBzaW1wbGUgR1BJT3MsIGluZHVzdHJ5Cj4gK3N0YW5kYXJkIEky
-QywgU1BJLCBDQU4sIGFuZCBVQVJUIGJ1c2VzIHRocm91Z2ggdG8gaGlnaCBzcGVlZCBVU0IgMi4w
-IGludGVyZmFjZXMKPiArYW5kIGEgMTYvMzJiaXQgZXh0ZXJuYWwgbWVtb3J5IGJ1cyAocGFyYWxs
-ZWwgYnVzKS4gVGhlIEhETUkgaW50ZXJmYWNlIG1ha2VzIGl0Cj4gK3ZlcnkgZWFzeSB0byBjb25u
-ZWN0IGxhcmdlLCBmdWxsIEhEIHJlc29sdXRpb24gZGlzcGxheXMKPiArCj4gK2h0dHBzOi8vd3d3
-LnRvcmFkZXguY29tL2NvbXB1dGVyLW9uLW1vZHVsZXMvY29saWJyaS1hcm0tZmFtaWx5L254cC1m
-cmVlc2NhbGUtaW14Ngo+ICsKPiArSXQgc3VwcG9ydHMgb25lIGNhcnJpZXIgYm9hcmRzOgo+ICsK
-PiArQ29saWJyaSBFdmFsdWF0aW9uIEJvYXJkCj4gK2h0dHBzOi8vd3d3LnRvcmFkZXguY29tL3By
-b2R1Y3RzL2NhcnJpZXItYm9hcmQvY29saWJyaS1ldmFsdWF0aW9uLWJvYXJkCj4gKwo+ICtIb3cg
-dG8gYnVpbGQgaXQKPiArPT09PT09PT09PT09PT09Cj4gKwo+ICtDb25maWd1cmUgQnVpbGRyb290
-Ogo+ICsKPiArICAgICQgbWFrZSB0b3JhZGV4X2NvbGlicmlfaW14Nl9kZWZjb25maWcKPiArCj4g
-K0NvbXBpbGUgZXZlcnl0aGluZyBhbmQgYnVpbGQgdGhlIHJvb3RmcyBpbWFnZToKPiArCj4gKyAg
-ICAkIG1ha2UKPiArCgpTbyBoZXJlIGJhc2ljYWxseSB5b3Ugb25seSBidWlsZCB0aGUgcm9vdGZz
-LgoKPiArSG93IHRvIGJvb3QgdGhlIGltYWdlCj4gKz09PT09PT09PT09PT09PT09PT09PQo+ICsK
-PiArVGhlIGJvYXJkIG9ubHkgYm9vdHMgZnJvbSBpdHMgaW50ZXJuYWwgZmxhc2ggbWVtb3J5IGVN
-TUMsIHNvIHRoZQo+ICtib290bG9hZGVyIGltYWdlIHNob3VsZCBiZSBjb3BpZWQgdG8gaXQsIGZv
-bGxvd2luZyB0aGUgcHJvY2VkdXJlcwo+ICtkZXNjcmliZWQgaW4gVG9yYWRleCB3ZWJzaXRlLgo+
-ICsKPiAraHR0cDovL2RldmVsb3Blci50b3JhZGV4LmNvbS9rbm93bGVkZ2UtYmFzZS9mbGFzaGlu
-Zy1saW51eC1vbi1pbXg2LW1vZHVsZXMKPiArCj4gK0J1aWxkcm9vdCBwcmVwYXJlcyBhICJzZGNh
-cmQuaW1nIiBpbiBvdXRwdXQvaW1hZ2VzLyB3aXRoIHRoZSBrZXJuZWwKPiAraW1hZ2UsIGRldmlj
-ZSB0cmVlIGFuZCBhIHJvb3QgZmlsZXN5c3RlbSwgcmVhZHkgdG8gYmUgZHVtcGVkIG9uIGFuIFNE
-Cj4gK2NhcmQuCj4gKwo+ICsgICAgJCBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9
-L2Rldi9zZFggYnM9MU0KPiArCj4gK1RvIGJvb3QgZnJvbSB0aGUgU0QgY2FyZCwgeW91IHNob3Vs
-ZCBjaGFuZ2UgdGhlIFUtQm9vdAo+ICtlbnZpcm9ubWVudC4gU2luY2UgVS1Cb290IGlzIHJ1bm5p
-bmcgZnJvbSBpbnRlcm5hbCBlTU1DLCB5b3Ugd2lsbCBuZWVkCj4gK3RvIGFjY2VzcyBpdHMgY29t
-bWFuZCBsaW5lIHByb21wdCBhbmQgbWFudWFsbHkgc2V0IHRoZSBuZWNlc3NhcnkKPiArdmFyaWFi
-bGVzIHRvIGJvb3QgZnJvbSB0aGUgZXh0ZXJuYWwgU0QgY2FyZC4gRm9yIGNvbnZlbmllbmNlLCB5
-b3UgY2FuCj4gK3VzZSB1RW52LnR4dCBwcm92aWRlZCBpbiBvdXRwdXQvaW1hZ2VzLyBhcyBhIHJl
-ZmVyZW5jZSB0byBjcmVhdGUgdGhlCj4gK25lY2Vzc2FyeSBVLUJvb3QgdmFyaWFibGVzIHRvIGJv
-b3QgZnJvbSB0aGUgU0QgY2FyZC4KCkFoIGhlcmUgaXQncyBjbGFyaWZpZWQuIEJ1dCB0aGlzIG9u
-bHkgY3JlYXRlcyBhIHJvb3RmcyBhbmQgbmVlZCBzb21lIApleHRlcm5hbCBpbnRlcnZlbnRpb24u
-CgpDb3VsZG4ndCB5b3UgY3JlYXRlIHN1cHBvcnQgaW5jbHVkaW5nIHUtYm9vdCBpbiB0aGUgZ2Vu
-aW1hZ2UuY2ZnPwoKQmVjYXVzZSB3aGF0IEkgZXhwZWN0IGZyb20gYSBkZWZjb25maWcgdGhhdCBw
-cm9kdWNlcyBhIHNkY2FyZC5pbWcgaXMgCnRoYXQgSSBmbGFzaCBpdCBhbmQgaXQgc2ltcGx5IHdv
-cmtzLgoKT3RoZXJ3aXNlLCBwbGVhc2UgcmVuYW1lIHRoZSBkZWZjb25maWcgYnkgcGxhY2luZyBf
-cm9vdGZzX29ubHkgc3VmZml4IGF0IAp0aGUgZW5kLiBCdXQgSSdkIGdvIGZvciBoYXZpbmcgYSB1
-bmlxdWUgaW1hZ2Ugd2l0aCB1LWJvb3QgaW5jbHVkZWQuCgo+IGRpZmYgLS1naXQgYS9ib2FyZC90
-b3JhZGV4L2NvbGlicmktaW14Ni91RW52LnR4dCBiL2JvYXJkL3RvcmFkZXgvY29saWJyaS1pbXg2
-L3VFbnYudHh0Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5lOGZl
-Yzc4N2FhCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3RvcmFkZXgvY29saWJyaS1pbXg2
-L3VFbnYudHh0Cj4gQEAgLTAsMCArMSw3IEBACj4gK3NldGVudiBib290X2ZpbGUgJ3pJbWFnZScK
-PiArc2V0ZW52IGZkdF9maWxlICdpbXg2ZGwtY29saWJyaS1ldmFsLXYzLmR0YicKPiArc2V0ZW52
-IHNkYXJncyAnaXA9b2ZmIHJvb3Q9L2Rldi9tbWNibGswcDEgcncsbm9hdGltZSByb290ZnN0eXBl
-PWV4dDQgcm9vdHdhaXQnCj4gK3NldGVudiBzZGR0YmxvYWQgJ2V4dDJsb2FkIG1tYyAxOjEgJHtm
-ZHRfYWRkcl9yfSBib290LyR7ZmR0X2ZpbGV9Jwo+ICtzZXRlbnYgc2RrZXJuZWxsb2FkICdleHQy
-bG9hZCBtbWMgMToxICR7a2VybmVsX2FkZHJfcn0gYm9vdC8ke2Jvb3RfZmlsZX0nCj4gK3NldGVu
-diBib290Y21kICdydW4gc2V0dXA7IHNldGVudiBib290YXJncyAke2RlZmFyZ3N9ICR7c2Rhcmdz
-fSAke3NldHVwYXJnc30gJHt2aWRhcmdzfTsgZWNobyBCb290aW5nIGZyb20gU0QgY2FyZC4uLjsg
-cnVuIHNkZHRibG9hZDsgcnVuIHNka2VybmVsbG9hZDsgYm9vdHogJHtrZXJuZWxfYWRkcl9yfSAt
-ICR7ZmR0X2FkZHJfcn0nCj4gK3J1biBib290Y21kCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvdG9y
-YWRleF9jb2xpYnJpX2lteDZfZGVmY29uZmlnIGIvY29uZmlncy90b3JhZGV4X2NvbGlicmlfaW14
-Nl9kZWZjb25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjBl
-NTAzODE1NzkKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvY29uZmlncy90b3JhZGV4X2NvbGlicmlf
-aW14Nl9kZWZjb25maWcKPiBAQCAtMCwwICsxLDI1IEBACj4gK0JSMl9hcm09eQo+ICtCUjJfY29y
-dGV4X2E5PXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzQ9eQo+
-ICtCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5bXhjMCIKPiArQlIyX1JPT1RGU19Q
-T1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvdG9yYWRleC9jb2xpYnJpLWlteDYvcG9zdC1pbWFnZS5z
-aCIKPiArQlIyX0xJTlVYX0tFUk5FTD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0dJVD15
-Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9fVVJMPSJnaXQ6Ly9naXQudG9yYWRleC5j
-b20vbGludXgtdG9yYWRleC5naXQiCj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1JFUE9fVkVS
-U0lPTj0idG9yYWRleF81LjQueSIKPiArQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InRvcmFk
-ZXgtaW14X3Y2X3Y3Igo+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiArQlIyX0xJ
-TlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9ImlteDZkbC1jb2xpYnJpLWV2YWwtdjMiCj4gK0JS
-Ml9MSU5VWF9LRVJORUxfSU5TVEFMTF9UQVJHRVQ9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQy
-PXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKPiArQlIyX1RBUkdFVF9VQk9PVD15Cj4g
-K0JSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+ICtCUjJfVEFSR0VUX1VC
-T09UX0NVU1RPTV9HSVQ9eQo+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9SRVBPX1VSTD0iZ2l0
-Oi8vZ2l0LnRvcmFkZXguY29tL3UtYm9vdC10b3JhZGV4LmdpdCIKPiArQlIyX1RBUkdFVF9VQk9P
-VF9DVVNUT01fUkVQT19WRVJTSU9OPSJ0b3JhZGV4XzIwMjAuMDciCj4gK0JSMl9UQVJHRVRfVUJP
-T1RfQk9BUkRfREVGQ09ORklHPSJjb2xpYnJpX2lteDYiCj4gK0JSMl9UQVJHRVRfVUJPT1RfRk9S
-TUFUX0lNRz15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9T
-UExfTkFNRT0iU1BMIgoKV2hlcmUgZG9lcyB1LWJvb3QgYmluYXJ5IGdvZXMgaW50byBtZW1vcnk/
-IEJlY2F1c2UgYXMgSSBjYW4gc2VlLCBlTU1DIAp1LWJvb3Qgd2lsbCBiZSB1c2VkIGluc3RlYWQg
-b2YgdGhlIHNkLWNhcmQgb25lLiBTbyBpbiBjYXNlIHlvdSBvbmx5IHdhbnQgCnRvIHByb2R1Y2Ug
-YSByb290ZnMgd2l0aCBsaW51eCBpbnNpZGUsIEkgd291bGQgYWxzbyByZW1vdmUgdGhlIHVib290
-IApidWlsZGluZyBoZXJlLgoKVGhhbmsgeW91IQpCZXN0IHJlZ2FyZHMKLS0gCkdpdWxpbyBCZW5l
-dHRpCkJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+After update of the U-Boot [1] we were missing dependency on Python3,
+and so were seeing failures like in [2]:
+------------------------->8--------------------
+  HOSTLD  scripts/dtc/dtc
+scripts/dtc/pylibfdt/libfdt_wrap.c:154:11: fatal error: Python.h: No such file or directory
+  154 | # include <Python.h>
+      |           ^~~~~~~~~~
+compilation terminated.
+error: command '/usr/bin/gcc' failed with exit code 1
+------------------------->8--------------------
+
+So that get fixed with "BR2_TARGET_UBOOT_NEEDS_PYTHON3=y".
+And then once we use Python3, we also need OpenSSL, similarly to [3]
+and the likes. So do it with "BR2_TARGET_UBOOT_NEEDS_OPENSSL=y".
+
+Hopefully now all starts to build w/o any issues.
+
+And while at it let's add a bit more structure to the config!
+
+[1] https://git.buildroot.net/buildroot/commit/?id=06f10a88f30b73aaea5c0e0888d7ba9d9a6420f3
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/1946650570
+[3] https://git.buildroot.net/buildroot/commit/?id=cf2a7663ccc6089e98e0d6ec39fa8623749c0c24
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+---
+
+P.S. I didn't see that problem on the U-Boot bump, as I built all
+locally and quite obviously had Python3 and all the headers installed
+in the system.
+
+---
+ configs/cubieboard2_defconfig | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index a9356295c1..18337fac72 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -1,32 +1,42 @@
++# Architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
++
+ # Linux headers same as kernel, a 5.15 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+-BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
++
++# Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/cubietech/cubieboard2/boot.cmd"
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
