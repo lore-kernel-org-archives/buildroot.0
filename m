@@ -1,87 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45CD9C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 09:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46492C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jan 2022 09:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD3F781462;
-	Mon, 17 Jan 2022 09:04:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB55B608D8;
+	Mon, 17 Jan 2022 09:34:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id coIm3SOw_JA5; Mon, 17 Jan 2022 09:04:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id knyGtqK73akk; Mon, 17 Jan 2022 09:34:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3FCB81460;
-	Mon, 17 Jan 2022 09:04:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEED0607F9;
+	Mon, 17 Jan 2022 09:34:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5919F1BF41A
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:04:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6DAA61BF41A
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:34:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4707181460
- for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:04:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C3C58146C
+ for <buildroot@lists.busybox.net>; Mon, 17 Jan 2022 09:34:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xYQTR34vCbrO for <buildroot@lists.busybox.net>;
- Mon, 17 Jan 2022 09:04:35 +0000 (UTC)
+ with ESMTP id fYQ8LVdimKW3 for <buildroot@lists.busybox.net>;
+ Mon, 17 Jan 2022 09:34:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 464E78145F
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 09:04:35 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 25-20020a05600c231900b003497473a9c4so22622303wmo.5
- for <buildroot@buildroot.org>; Mon, 17 Jan 2022 01:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=bhN/BOKdUu0xc5n3mwJhXHiPO4OQS6FNQl7VYZShIKU=;
- b=VTouK4zInlrXPcHlM5/RhnPqRNWzEDrnKd53KJDT++TN0ogPBBqPL/56KooJweQ7io
- YG/NiUc0SB/Yr2ElonJxI9fStB8VqBrFtK8azSQzHbDx7dLR+RozP0ueqY7nqM+EfD7o
- uCZfPFc8YXcPnYfMqscYCGrLpvM/faPhNaVtpvuk/iLZCYjKrBT2+WBqfJS7jxBnBHBF
- cE34VtfSV1lQx0W+YiGmAzAvBVOicCrPOWxS0vE01TY1ffcJl/Nhh47Lr6B3JP2bsag3
- L0B+Cr4pCCM8n87nHngQPPpsVgwxIVDj8ydYjczT5HpFMJMfD7+Xv0qmltzEIrS0Ifns
- 7jeA==
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BCC08146B
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 09:34:47 +0000 (UTC)
+Received: by mail-oi1-x22b.google.com with SMTP id g205so22620330oif.5
+ for <buildroot@buildroot.org>; Mon, 17 Jan 2022 01:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=VVklyhqKGdQ/jRzYjmNcq3iMK1pi1bZXLCZbHpOZWfY=;
+ b=kFyih9KEFBTyvlDsuTreDjmAMjq4BGD5GMLx4ZNk9z5T+Uqc6rZOiqwd1AkcIAmrsC
+ PmajwRd7ks30AbkyABAGX1/7SCvg4Xg3aTDzq1jCUhmDJJbK2uJfpztTmYyCRXrqAJrB
+ fFlrdXrfi3e1D0wi4FT45JP7cMtkQudl2WEpzFMepFq986b9CxQkuujbwemiBcoNsaT0
+ cAJVCLO5wfF4JUjzBkp1QBSQ3da7amSIufyOT9xjaxlCP2wL1cQpeZ/yiEjKWb0uYWEL
+ F3CDlS65WKZrXXMVn5xcNETxiCTKmr7IBTr2iWT44LYIaE8juDdeTRoSF0KqVYbKpDjt
+ G7pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=bhN/BOKdUu0xc5n3mwJhXHiPO4OQS6FNQl7VYZShIKU=;
- b=plmzLW6rvARKyKE+GZpYaUdAL6rfi/9A3EVQIci4H9n54FwJdt/rS/6eotJlUuxQhD
- HbmSnYkjpEuFQmaTWNzee9bBkvsxDkO7zzEhC0LtpefE5AT8J9bp3+4ifwOmRIHgANAr
- jtDoi6k1lBNhlswOFu3Qzx7s4t1UScpCx31YHPhFkskpHRa/a25/DRNGgB9sUWdpaI9F
- AJYen8xZvzIU0GyXWq5/38cPp1sWOqZz99enRJJem0xC42gkPIBqeQNcCoTpF8iyv0wp
- hlJ1cfhkns82kG/fpEKUt7MvRp2BFcDaO4rG6BTBx+1kcSH7Qlv/bgy9In22zM7gxtDU
- KO3g==
-X-Gm-Message-State: AOAM532KAKoO+ZwofdtPXhp5cyyf9ocUf6cx3AJUqNFjVWGtMT/kkxgM
- phkKGks0U0qMywD1Sg+RHMMiHg==
-X-Google-Smtp-Source: ABdhPJzRn8f2fKrZHakmOBZkdARjEAhAYvvH23IvJ3lfCPt9M8w5KBpX47DXH+8EaA5mRgS/lnsWzQ==
-X-Received: by 2002:a5d:4087:: with SMTP id o7mr18449570wrp.189.1642410273401; 
- Mon, 17 Jan 2022 01:04:33 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f?
- (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
- by smtp.gmail.com with ESMTPSA id g12sm13119633wrm.109.2022.01.17.01.04.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 17 Jan 2022 01:04:33 -0800 (PST)
-Message-ID: <c139bb91-1e00-64b9-0b2e-bb2f57e85a99@smile.fr>
-Date: Mon, 17 Jan 2022 10:04:32 +0100
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=VVklyhqKGdQ/jRzYjmNcq3iMK1pi1bZXLCZbHpOZWfY=;
+ b=ibkvjb6BBWzaNG+YbptyYTQcigvb2k3YY3n1SfkKwWPeNP06WPGTV0g1as0ITqjIqZ
+ EXZsxNRXwqmb9flzQgipDXvgRHIA8oz4qTxGCKw8Bmbux5igrZ4Wv+Ri32Q0KFaL332S
+ I0S+DnxARHTwBgJ9fO96pNQXP+8ypGZc7/pft9fWod8ITGz3WEnEQEWbf/wsOg+VZnrG
+ zFJsQGTKTJ0vhTK1kvsE0e++ou69PDZb0ubxVdqTrekTSBaGtMAdS52I8/hgSzP09L8/
+ vVPAcSIN1PVQaT3/hVzYgZqxVatbWn1BLoV8j8BuK5NvNNBjGuSHj94YIQ2AxY5DHwFf
+ 2Bvg==
+X-Gm-Message-State: AOAM532CwLmtYLnYpi7fWFNfwzHSLAjP0k5n16taOcf9HIjWVtvFQjFP
+ 6MRyX0nY20dBb1/Ehr5+/iqJUI50oyKQw9xfynuP/DrE4Zk=
+X-Google-Smtp-Source: ABdhPJzDsvw3CD7AfGLTgm3neRzhzKX6LJDyFKWY/Fso1i6PTi+IMQ7aACUbOQch8f6K+3sEkap9aANGY5qvkJgTR28=
+X-Received: by 2002:a05:6808:16a3:: with SMTP id
+ bb35mr16995185oib.72.1642412085658; 
+ Mon, 17 Jan 2022 01:34:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1616963387.git.yann.morin.1998@free.fr>
- <d41046d49bd9db1ccc30dea7d1f4d8c2310d3536.1616963387.git.yann.morin.1998@free.fr>
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <d41046d49bd9db1ccc30dea7d1f4d8c2310d3536.1616963387.git.yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 1/3] legacy: increase the duration during
- whih we keep legacy symbols
+References: <20220114101247.342256-1-nolange79@gmail.com>
+ <5273d4d1-8254-e53d-0ce2-9c390fe315ad@mind.be>
+In-Reply-To: <5273d4d1-8254-e53d-0ce2-9c390fe315ad@mind.be>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 17 Jan 2022 10:34:34 +0100
+Message-ID: <CADYdroOkk1aMB1Hxk8uLYaAeGEHsweXWkTHK39PhS5cz-tP_=g@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/2] support/scripts/mkusers: allow option
+ for system uid/gid
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +83,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwgQWxsLAoKTGUgMjgvMDMvMjAyMSDDoCAyMjozMCwgWWFubiBFLiBNT1JJTiBh
-IMOpY3JpdMKgOgo+IE91ciBMVFMgaXMgb25seSBvbmUteWVhciBsb25nIChhY3R1YWxseSwgbW9y
-ZSBsaWtlIDEzIG1vcG50aHMpLCB3aGljaAo+IGlzIHN0aWxsIHNlZW4gYXMgdG9vIHNob3J0IGJ5
-IHNvbWUsIHdobyBkbyBub3QgaGF2ZSB0aGUgYmFuZHdpZHRoLAo+IHdpbGxpbmduZXNzLCBhbmQv
-b3IgY2FwYWJpbGl0eSB0byB1cGRhdGUgb25jZSBhIHllYXIuCj4gCj4gQXMgc3VjaCwgdGhlIDIt
-eWVhciByZXRlbnRpb24gZ3VhcmFudGVlIGZvciB0aGUgbGVnYWN5IHN5bWJvbHMsIGlzCj4gb2Z0
-ZW4gbm90IGVub3VnaCwgYW5kIHBlb3BsZSBtaXNzIG9uIHRoZW0gd2hlbiBldmVudHVhbGx5IG1p
-Z3JhdGluZy4KPiAKPiBGdXJ0aGVybW9yZSwgdGhlIGN1eXN0b21zIHNvIGZhciBoYXMgYmVlbiB0
-byBkcm9wIHRoZSBzeW1ib2xzIG9ubHkgYWZ0ZXIKPiBhIDUteWVhciBwZXJpb2QgaGFzIGVsYXBz
-ZWQ6Cj4gICAgIGYyODliMWIzNmY1YyAgbGVnYWN5OiBkcm9wIG9wdGlvbnMgcmVtb3ZlZCBtb3Jl
-IHRoYW4gNSB5ZWFycyBhZ28gbm93Cj4gICAgIGE1MmUxMDZiYmQwOCAgbGVnYWN5OiByZW1vdmUg
-b3B0aW9ucyBtYWRlIGxlZ2FjeSA1IHllYXJzIGFnbwo+ICAgICBhN2Y0OWE5NjkzZDcgIENvbmZp
-Zy5pbi5sZWdhY3k6IGRyb3AgMjAxMy4wMiBlbnRyaWVzCj4gCj4gU28sIG1ha2UgdGhlIGN1c3Rv
-bXMgdGhlIG5ldyBydWxlOiBpbmNyZWFzZSB0aGUgcmV0ZW5ldGlvbiBwZXJpb2QgdG8gNQo+IHll
-YXJzLgoKSSdtIGF3YXJlIG9mIHNvbWUgcHJvamVjdHMgdXNpbmcgYW4gb3V0IG9mIGRhdGUgQnVp
-bGRyb290IHZlcnNpb24gZnJvbSAyMDEyIGFuZAoyMDE2LiBCdXQgc3dpdGNoaW5nIGJldHdlZW4g
-QnVpbGRyb290IDIwMTIgdG8gQnVpbGRyb290IDIwMjIgcmVxdWlyZXMgYSBjb21wbGV0ZQpyZXdv
-cmssIG5vdCBqdXN0IHVwZGF0aW5nIHRoZSBCdWlsZHJvb3QgZGVmY29uZmlnIHRvIHJlbW92ZSBs
-ZWdhY3kgb3B0aW9uLgoKSXMgcmVhbGx5IGEgYmVuZWZpdCB0byByZW1vdmUgdGhlc2VzIGxlZ2Fj
-eSBjb25maWcgPwoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IFJlcG9ydGVkLWJ5OiBUaG9t
-YXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IFNpZ25lZC1vZmYt
-Ynk6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgo+IC0tLQo+ICBDb25m
-aWcuaW4ubGVnYWN5IHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvQ29uZmlnLmluLmxlZ2FjeSBiL0NvbmZpZy5p
-bi5sZWdhY3kKPiBpbmRleCA4ZWJiYzRjMjk1Li45NjdiNjdlMDNlIDEwMDY0NAo+IC0tLSBhL0Nv
-bmZpZy5pbi5sZWdhY3kKPiArKysgYi9Db25maWcuaW4ubGVnYWN5Cj4gQEAgLTYsNyArNiw3IEBA
-Cj4gICMgVGhpcyB3aWxsIG1ha2UgdGhlIHRyYW5zaXRpb24gZm9yIHRoZSB1c2VyIG1vcmUgY29u
-dmVuaWVudC4KPiAgIwo+ICAjIFdoZW4gYWRkaW5nIGxlZ2FjeSBzeW1ib2xzIHRvIHRoaXMgZmls
-ZSwgYWRkIHRoZW0gdG8gdGhlIGZyb250LiBUaGUgb2xkZXN0Cj4gLSMgc3ltYm9scyB3aWxsIGJl
-IHJlbW92ZWQgYWdhaW4gYWZ0ZXIgYWJvdXQgdHdvIHllYXJzLgo+ICsjIHN5bWJvbHMgd2lsbCBi
-ZSByZW1vdmVkIGFnYWluIGFmdGVyIGF0IGxlYXN0IGZpdmUgeWVhcnMuCj4gICMKPiAgIyBUaGUg
-c3ltYm9sIHNob3VsZCBiZSBjb3BpZWQgYXMtaXMgZnJvbSB0aGUgcGxhY2Ugd2hlcmUgaXQgd2Fz
-IHByZXZpb3VzbHkKPiAgIyBkZWZpbmVkLCBidXQgdGhlIGhlbHAgdGV4dCBzaG91bGQgYmUgcmVt
-b3ZlZCBvciByZXBsYWNlZCB3aXRoIHNvbWV0aGluZyB0aGF0Cj4gCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Am So., 16. Jan. 2022 um 13:25 Uhr schrieb Arnout Vandecappelle
+<arnout@mind.be>:
+>
+>
+>
+> On 14/01/2022 11:12, Norbert Lange wrote:
+> > Some software decides based on uid/gid whether a user is a
+> > system or normal/human user, with differnt behaviour for those
+> > flavors (example journald [2]).
+>
+>   Thank you for the short yet sufficient summary!
+>
+> >
+> > So adding logic to create system-users is necessary, we take
+> > the now common ranges from [1].
+> >
+> > This extends the mkusers script to allow -2 for uid/gid,
+> > this argument will take an identifier from the system range.
+> >
+> > System/user ranges are added as variables, and the argument
+> > for user/system uid was added as variable aswell.
+> > Thus some magic constants could be removed, some further
+> > occurences of -1 were replaced with equivalent logic.
+> >
+> > [1] - https://systemd.io/UIDS-GIDS/
+> > [2] - https://www.freedesktop.org/software/systemd/man/journald.conf.html
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>
+>   You forgot to mention that this is v2. v1 is here [1].
+
+I did not forget it, just did not find references I pushed
+the patch before.
+
+>
+>   I think the only change is in the commit message.
+
+Nah, its a bit more.
+
+>
+> > ---
+> >   support/scripts/mkusers | 57 +++++++++++++++++++++++++++++------------
+> >   1 file changed, 40 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+> > index d00ba33823..9d8295e8a3 100755
+> > --- a/support/scripts/mkusers
+> > +++ b/support/scripts/mkusers
+> > @@ -8,6 +8,15 @@ MIN_UID=1000
+> >   MAX_UID=1999
+> >   MIN_GID=1000
+> >   MAX_GID=1999
+> > +# use names from /etc/adduser.conf
+> > +FIRST_SYSTEM_UID=100
+> > +LAST_SYSTEM_UID=999
+> > +FIRST_SYSTEM_GID=100
+> > +LAST_SYSTEM_GID=999
+> > +# argument to automatically crease system/user id
+> > +AUTO_SYSTEM_ID=-2
+>
+>   Wouldn't it be better to use -1 for system users (= the usual case) and add -2
+> for normal users? System users are the usual, after all, and all current in-tree
+> uses of -1 are definitely system users.
+>
+>   I though that someone had already made this remark, but I can't find any trace
+> of it.
+>
+> > +AUTO_USER_ID=-1
+> > +
+>
+> [snip]
+> > @@ -222,8 +233,12 @@ add_one_group() {
+> >       local members
+> >
+> >       # Generate a new GID if needed
+> > -    if [ ${gid} -eq -1 ]; then
+> > -        gid="$( generate_gid "${group}" )"
+> > +    if [ ${gid} -lt 0 ]; then
+> > +        if [ ${gid} -eq ${AUTO_USER_ID} ]; then
+> > +            gid="$( generate_gid "${group}" )"
+>
+>   (nitpick) For symmetry, I'd always pass the first and last as argument here.
+>
+> > +        else
+> > +            gid="$( generate_gid "${group}" $FIRST_SYSTEM_GID $LAST_SYSTEM_GID )"
+> > +        fi
+> >       fi
+>
+>   (nitpick) I'd structure the entire block above as follows:
+>
+>      if [ ${gid} -eq ${AUTO_USER_ID} ]; then
+>      elif [ ${gid} -eq ${AUTO_SYSTEM_ID} ]; then
+>      fi
+>
+> That's one level less deep, and more explicit about the system-id branch.
+>
+>   Both remarks also apply to the uid case of course.
+>
+> >
+> >       members=$(get_members "$group")
+> > @@ -247,16 +262,19 @@ add_one_group() {
+> >   #   - not already used by a user
+> >   generate_uid() {
+> >       local username="${1}"
+> > +    local minuid="${2:-$MIN_UID}"
+> > +    local maxuid="${3:-$MAX_UID}"
+>
+>   So here I'd remove the defaults and instead always pass the arguments.
+>
+>
+>
+>   Regards,
+>   Arnout
+>
+> [1]
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=152843&state=%2A&archive=both
+>
+>
+> > +
+> >       local uid
+> >
+> >       uid="$( get_uid "${username}" )"
+> >       if [ -z "${uid}" ]; then
+> > -        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
+> > +        for(( uid=minuid; uid<=maxuid; uid++ )); do
+> >               if [ -z "$( get_username "${uid}" )" ]; then
+> >                   break
+> >               fi
+> >           done
+> > -        if [ ${uid} -gt ${MAX_UID} ]; then
+> > +        if [ ${uid} -gt ${maxuid} ]; then
+> >               fail "can not allocate a UID for user '%s'\n" "${username}"
+> >           fi
+> >       fi
+> > @@ -307,8 +325,13 @@ add_one_user() {
+> >       check_user_validity "${username}" "${uid}" "${group}" "${gid}"
+> >
+> >       # Generate a new UID if needed
+> > -    if [ ${uid} -eq -1 ]; then
+> > -        uid="$( generate_uid "${username}" )"
+> > +    if [ ${uid} -lt 0 ]; then
+> > +        if [ ${uid} -eq ${AUTO_USER_ID} ]; then
+> > +            uid="$( generate_uid "${username}" )"
+> > +        else
+> > +            uid="$( generate_uid "${username}" $FIRST_SYSTEM_UID $LAST_SYSTEM_UID )"
+> > +
+> > +        fi
+> >       fi
+> >
+> >       # Remove any previous instance of this user
+> > @@ -384,8 +407,8 @@ main() {
+> >           ENTRIES+=( "${line}" )
+> >       done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
+> >
+> > -    # We first create groups whose gid is not -1, and then we create groups
+> > -    # whose gid is -1 (automatic), so that, if a group is defined both with
+> > +    # We first create groups whose gid is positive, and then we create groups
+> > +    # whose gid is automatic, so that, if a group is defined both with
+> >       # a specified gid and an automatic gid, we ensure the specified gid is
+> >       # used, rather than a different automatic gid is computed.
+> >
+> > @@ -399,7 +422,7 @@ main() {
+> >       # Then, create all the main groups which gid *is* automatic
+> >       for line in "${ENTRIES[@]}"; do
+> >           read username uid group gid passwd home shell groups comment <<<"${line}"
+> > -        [ ${gid} -eq -1 ] || continue    # Non-automatic gid
+> > +        [ ${gid} -lt 0 ] || continue    # Non-automatic gid
+> >           add_one_group "${group}" "${gid}"
+> >       done
+> >
+> > @@ -410,7 +433,7 @@ main() {
+> >           read username uid group gid passwd home shell groups comment <<<"${line}"
+> >           if [ "${groups}" != "-" ]; then
+> >               for g in ${groups//,/ }; do
+> > -                add_one_group "${g}" -1
+> > +                add_one_group "${g}" ${AUTO_USER_ID}
+> >               done
+> >           fi
+> >       done
+> > @@ -433,7 +456,7 @@ main() {
+> >       for line in "${ENTRIES[@]}"; do
+> >           read username uid group gid passwd home shell groups comment <<<"${line}"
+> >           [ "${username}" != "-" ] || continue # Magic string to skip user creation
+> > -        [ ${uid} -eq -1        ] || continue # Non-automatic uid
+> > +        [ ${uid} -lt 0        ] || continue # Non-automatic uid
+> >           add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
+> >                        "${home}" "${shell}" "${groups}" "${comment}"
+> >       done
+> >
+
+Norbert
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
