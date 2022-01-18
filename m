@@ -1,68 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B24EC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F624C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 11:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C928405EE;
-	Tue, 18 Jan 2022 10:55:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C19D60C2E;
+	Tue, 18 Jan 2022 11:20:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sXNfvZhUMV5O; Tue, 18 Jan 2022 10:55:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qdl9lGpce09g; Tue, 18 Jan 2022 11:20:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31AD3400C6;
-	Tue, 18 Jan 2022 10:55:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B4441BF2A6
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EB5760A97;
+	Tue, 18 Jan 2022 11:20:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 83EEF1BF5B5
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4998980B6E
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72554408B1
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:19:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KIjC3zjJ_iN1 for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 10:53:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10106.aruba.it (smtpcmd10106.aruba.it [62.149.156.106])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7371980B4E
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:53:51 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 9lxknDlmTDzPJ9m0ana6Qb; Tue, 18 Jan 2022 11:46:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642502810; bh=4zSNrKk+qLR/zbt4drEFtHZE8uyB9lrP4Q7sEmi71TY=;
- h=From:To:Subject:Date:MIME-Version;
- b=jD+GtJ1q26bBKEJrq0bjVArc7zzssZABPf2Ym4m+5oxot9HniRFiaHMXTA/ql6B79
- l3zaGwntkpNBUl3D/p9Vv9j3bRzNSlC2d+7qo8S00NAOv/XjBxT7K0YvqrEHFgo+z5
- Eyq5KmaCUDHZ292PhvpAoSKGvKgjlZSOV+olw6e5U0sIBeiKF1Nyl8mqR8vYGkBWEe
- RsmdFpHiIBDm5Ul6LuEF6vIABttdZ3nq+MuXsjTPnVEw8fffu0SHkYuIxwd1oPGBap
- wtBT8TnsLRDSoSie0cIyV9vF3Bd0dMLWiE/SWCQlM/Lq41eEuCwip4Qnp9GVcURCY0
- pF0LjWznxtveQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 11:43:23 +0100
-Message-Id: <20220118104338.2081259-14-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
-References: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D8ldGcVKPltz for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 11:19:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B68E40872
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 11:19:58 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id e79so2588456iof.13
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 03:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc:content-transfer-encoding;
+ bh=3eTNSowjasakm1rHY8FOzWUYT+wKb2vA9ZU+XCas9KA=;
+ b=K/pqu+92FQTHmtd/cUFr3qsDx4L5dYfhBOOiMXGRL2xLquBQNXVG9GzqeRa2+LvjtP
+ NHmBvLCSiR21u+h0gIIr5XTcUgPdvfFKA1gcRoiJipL9/b42o0BqvWCryNNQPqTNzVcS
+ UFjpIeV66ST4EnDXVAlZdfHAcW80yOjcLIYva/KSKoMIEy5gRvMdLw9KvL5py92fCj06
+ IOiOc9ibmsMsbPAbE+OqkGb/wUEoooWk2L9GDUO1jQ38VwjMAVyXEopnw4IN46aVfw/1
+ ReF7TCjyghdenGaPif+RkQsXSMHzplphptVZPA8Yx62PtVEcHIQY37cP3HS43XsVOw6E
+ gfbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc:content-transfer-encoding;
+ bh=3eTNSowjasakm1rHY8FOzWUYT+wKb2vA9ZU+XCas9KA=;
+ b=KOCtzQPjffVngh0I4GGiRaJTnqXNi5WjBFuR1yHkKynk9LqCJXRGhd7rLAI5yupdj3
+ XVyitOOHNkAv4SZX/Gzh62uUv9aZed8J4KQnb2YUeM+0A+VmU0Rm1Dq7s7FXyFucaIZP
+ NzyVBZ89rCgxeMUzIKs+aiP0Gqcn4a4JWPcPj/P1tdSFBf0zYZISWH5J0ooq7wWE7mN4
+ tI4r1VXEv0Zk6pP3xlRkJRnIYend+djLcJAkcByMmmczq1AruBYeN4yyItPSz6V0T6PV
+ eG8C6bU5oqOBR6NtdJ8lwWOkVUxjT/yHaAF9K0+KFWRGJ3cUQ8B4fLrDP9gne1pyIzaI
+ UZPA==
+X-Gm-Message-State: AOAM532CwqjV/wwdjYDs/FMvTLKcH4QOy2B8CxaXJgmErkmwdhYpYsRZ
+ Li4ozsS6bA+s/AZ0pkmDs5S4ht1B/Nh+Z6A2jS6EL1P7/yQz4g==
+X-Google-Smtp-Source: ABdhPJwXKPhiIsFt8cEQ6Kjf+gqkP2j1RCuaSNgDkpwtJrHQgZk5lXJdb75fdE0YUfLy3QHaIXcEjpcAZU96adOxnig=
+X-Received: by 2002:a6b:1545:: with SMTP id 66mr12146494iov.62.1642504797418; 
+ Tue, 18 Jan 2022 03:19:57 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfAgo0pKOv8aIc6emebqEiSAjXEZwKHlcz9gxxD41h+K0bmAjFETsrmloSIn6v0e0Ttx3uWj2hXXPJIaMC+mLvQFUqksMg7yWDTOmCPRum9Gz4ZSb4+vF
- viqqpHkQeJsO5FKaRpY2LuwSdPIIIGXXoyj5it8xtxZKl2WisqvZC9Bs5y2bDaMfuKX5TJYfMGsEi7mtaKe9NgmCdGM8uf+LGYK5abxp3eDEvwvhlyEe8HDU
- dnjroL8kr2KZJ1Fu9Z0EvPedJ8dBTr5/ADvx8n2TLN8bWVT6HtqvVmUEU9xVmKYoPokwwOco7vxLBtZszzHWqXvZUtpGudgLHA/tNcjIwiQW/dTr2UKcxS+u
- PuXCzuHT0j4E2hqE2K3ufATn0OjvyIFDvJd5vxUSoGl1Xo1Ohw5mS/i9wXhvQYwiJdckkrLRj2csv/yUQTuTam3ErcnvmVlFKu0fqfbB8LpKhLJmgxo19paK
- BcV410cV+8IJp+qH9EXAfY9Wr6PcrdaFQrHctsW3GGf1MFEE0XBbEVhnwWfnP9uOFGua2XtQGS82Nr0uAWRNucfFk8R50CAWWRb0D9mIV+kMO2hwoVg3iFO/
- v8+AJD3G1vtm8Ob8Wo4J94a9jekIq2CZ5Dw+XaJvshRoGDO6wJdF/4PKnDxvR9fUlyLdcYpDfgBDJmH6ReYhPhcIp4hv6Mco53RDOzqb6brLWnBy2V0uL/1J
- 1q64PJ8M4YBnKewVncFDIWItJpelpO+bntZQnpwK/Bolu0WRoVj2jsQURFuXbMV651yieeQLADNweC640LC2VLRrTVMm03/gSvd0yEUWkiB5FFGcv1wWaMn3
- METQOseAzA9/JW25wx2oZ0Y3z0TW101T0/rjd4kMsMDDQ4AsBUghDp4uPDmbqA==
-Subject: [Buildroot] [PATCH 13/28] configs/grinn_liteboard_defconfig: enable
- NEON/VFPV4 FPU strategy
+References: <20220115200306.14037-1-patrickdepinguin@gmail.com>
+ <20220115200306.14037-7-patrickdepinguin@gmail.com>
+In-Reply-To: <20220115200306.14037-7-patrickdepinguin@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 18 Jan 2022 12:19:46 +0100
+Message-ID: <CAAXf6LU949oVpaUvM=q8t8jZzTNXHWoLDu0gB3BdTEudK+6G7Q@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>, romain.naour@gmail.com
+Subject: Re: [Buildroot] [PATCHv2 6/7] configs: add new qemu defconfig
+ 'x86_multilib'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,47 +83,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>, Simon Doppler <dopsi@dopsi.ch>,
- Edgar Bonet <bonet@grenoble.cnrs.fr>, Jan Kraval <jan.kraval@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Sergey Matyukevich <geomatsi@gmail.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Davide Viti <zinosat@gmail.com>, Mike Harmony <mike.harmony@snapav.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Michel Stempin <michel.stempin@wanadoo.fr>,
- Lothar Felten <lothar.felten@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabio Estevam <festevam@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Biagio Montaruli <biagio.hkr@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This board has i.MX6UL that is a cortex-A7 and supports NEON/VFPV4 FPU
-strategy, so let's enable it.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- configs/grinn_liteboard_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index 9cad66e15a..640e77c4d7 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpFbCBzw6FiLCAxNSBlbmUgMjAyMiBhIGxhcyAyMTowMywgVGhvbWFzIERlIFNjaGFtcGhl
+bGVpcmUKKDxwYXRyaWNrZGVwaW5ndWluQGdtYWlsLmNvbT4pIGVzY3JpYmnDszoKPgo+IEZyb206
+IFRob21hcyBEZSBTY2hhbXBoZWxlaXJlIDx0aG9tYXMuZGVfc2NoYW1waGVsZWlyZUBub2tpYS5j
+b20+Cj4KPiBBZGQgYSBuZXcgcWVtdSBkZWZjb25maWcgZm9yIGFuIHg4Nl82NCB0YXJnZXQgdGhh
+dCB3aWxsIHJ1biBhbiB4ODZfNjQga2VybmVsCj4gYnV0IHVzZXJzcGFjZSBpbiAzMi1iaXQgKHg4
+NikgbW9kZSwgdXNpbmcgQlIyX0tFUk5FTF9BUkNIX09WRVJSSURFLgo+Cj4gU2lnbmVkLW9mZi1i
+eTogVGhvbWFzIERlIFNjaGFtcGhlbGVpcmUgPHRob21hcy5kZV9zY2hhbXBoZWxlaXJlQG5va2lh
+LmNvbT4KPiAtLS0KPgo+IE5vdGUgdGhhdCB0aGUgZGVmY29uZmlnIHJlZmVycyB0byBhIHRvb2xj
+aGFpbiBhdAo+IGF1dG9idWlsZC5idWlsZHJvb3Qub3JnLCBidXQgaXMgbm90IHlldCBwcmVzZW50
+IGF0IHRoYXQgbG9jYXRpb24uCj4gSSB1cGxvYWRlZCB0aGUgdG9vbGNoYWluIHRlbXBvcmFyaWx5
+IHRvOgo+IGh0dHA6Ly9wYXRyaWNrZGVwaW5ndWluLmNvbS9jdG5nLTY3MzdjZmFhOGNlNi14ODZf
+bXVsdGlsaWItZ2xpYmMtZ2NjMTEudGFyLnh6Cj4gbWQ1c3VtOmIwODVjMGQ4ZjEzN2MwNzhmOGYw
+OWQxMTZkODM2NGY4Cj4gc2hhMjU2c3VtIDJhNTI0MWQ5Mjc0MjM5NTMyZTQ0ZDM3YzY1NTA5OTMx
+ZmJjMTIwZGI1OTkxNDEyZjk0NmViMzgxNzZkYjRkYzIKPgo+CgpSb21haW4gTmFvdXIgbm90aWZp
+ZWQgbWUgdGhhdCB0aGlzIHRvb2xjaGFpbiBkb2VzIG5vdCBydW4gb24gdGhlIEdDQwpGYXJtIChJ
+bGxlZ2FsIGluc3RydWN0aW9uKSBzbyBJIG1hZGUgYSBuZXcgdmVyc2lvbiwgY3VycmVudGx5IHVw
+bG9hZGVkCmF0OgpodHRwOi8vcGF0cmlja2RlcGluZ3Vpbi5jb20vY3RuZy02NzM3Y2ZhYThjZTYt
+eDg2X211bHRpbGliLWdsaWJjLWdjYzExLTIudGFyLnh6Cm1kNXN1bTogIDNjZWU2NGY4MjY3NTQ0
+NmFkMjU1ZjZjMTY1Nzg2ZWI1CnNoYTI1NnN1bTogNjcxNWJmYmMxOTU1ODhiNjQ4M2QzOWU5ZWM2
+ZDcwNjExY2FjM2I5OWJmMmRkMzRmZWRiZWQwZDRlNmM3ZWRjMQoKQmVzdCByZWdhcmRzLApUaG9t
+YXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
