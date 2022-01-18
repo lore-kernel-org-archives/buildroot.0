@@ -1,66 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFE7C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CC07C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:44:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09DE540900;
-	Tue, 18 Jan 2022 10:44:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23371819D6;
+	Tue, 18 Jan 2022 10:44:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ObGj4ohUF_zq; Tue, 18 Jan 2022 10:44:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b5QVHGW-2tmD; Tue, 18 Jan 2022 10:44:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38201408FD;
-	Tue, 18 Jan 2022 10:44:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7262E1BF28D
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:44:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B97A818D4;
+	Tue, 18 Jan 2022 10:44:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ABCED1BF28D
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6051E408FD
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:44:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96DCA405EC
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:44:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id anyVzzz52Fmd for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 10:44:06 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sdvwVkZnsaTx for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 10:44:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34E75408FC
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:44:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45474400C6
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:44:22 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.178.108])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9lxknDlmTDzPJ9lxzna3aL; Tue, 18 Jan 2022 11:44:03 +0100
+ id 9lxknDlmTDzPJ9lyAna3kV; Tue, 18 Jan 2022 11:44:20 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642502643; bh=IVg3rZ661uAjjGR2Hek8p/XzN8Y8Vc5TR7x7ANEPti8=;
+ t=1642502661; bh=Ah4ZYGA2WAml/ufrZ7lUdTxJrCx2yig73inoRgR38Lo=;
  h=From:To:Subject:Date:MIME-Version;
- b=RKqCC8R9MdzDTwgY0P/Pc9Y9hRx1qMf7thXZTPKf6RQOdaVSvSPoejWdNyFmyhioX
- T9/XnlzSg6094sKLkkfJR4OD7ZFk50MOPP4mw/xWcNLfZOkSjCbaCw23YgT508ldZh
- HqzJvMxgOw4mcHba2gWR/Vr9TyQgt6k0RiHvg43CdCi6vw2Qh3NVhw+I0qtUAmsP5w
- vjjLTUynIOrZ/qPsSb0BwHwIrnYrc9mTjDRusqxyYMk+gQGbbU6GFK2grl1IqYC+KB
- MdAY5/q4OVTd+jf4REWgHcDsaMzWAoVv+f016uLcXlt/j46WDH+d+H6O5pfdVRyDxL
- b7WIzKPO30ZJg==
+ b=RbgYsBdG0ObAKjUzSwQM5wwaL8FqBzcUb70eg3a6KPeGKfqAS6p4nq84Je4YXseMK
+ 2wCmOPndweOp0e2gCsEm+mipaIm5aZtz6aGQEf69vCrrGcXC86juV7BOTY92h/cyMX
+ J3X92NXGZPmzklXaUCQLfP88/cco/K5Abohd6JTZ5ILl9NfwpudcfxomjqeiI7bf5n
+ ZZAJnMhu61FVJ6688kJVT0hfpIrENAok15xDLLs+wD4MtUzgqoWR35bfhk/OA10mcL
+ 42o2SCuvJiUb49MygBwejjSzYihG5iKv41JUOfV3Gy9HSOpnsiR4pQG051qEreIBRu
+ skzgfSO5hFg+g==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 11:43:11 +0100
-Message-Id: <20220118104338.2081259-2-giulio.benetti@benettiengineering.com>
+Date: Tue, 18 Jan 2022 11:43:12 +0100
+Message-Id: <20220118104338.2081259-3-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 References: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfH6TaVeUiEMbdqo8raQcPws8nxLHGRZskhAm2Yt7zbkU1ViAG881oVa/WqeJZX2ZoCLwbHVPI5qHyR0dZ5o0rvQQDp3p6HYk07XguJnl/p/XTmsFmGQm
- t+K9qFGNH0VyD+eYTLnULBUHrzQRkxd9FOnKLzsAyjqCIp+u0dsun1meU0xY7YrPaSDvVSLWDJGso9D287hYPMZZ5HXpxiudE7dLgH8Ic32MA7R+9jEo5Sd6
- o2h85mvMrJRqOx2C0CNBEt+3by+E5L8dhDRgm/hx/t+7jMu56TPWCtJbr7wFmfBzPyB15Ig9yRTR3cnXh0Ohk5CPOXLwhulN4qVEC3ob5dl+K+E9MwI8F3W0
- N6vmxnjBXxCnWDM4iT5iSKRmpcuG7/WEiFQiia/OIfjQJMvaJ+eKHTCd/FKEAi/pUnk0brM4ORv7m+N/kFjQMsJ/pNQTCRxI4Pe7wQx8+0q3IiBfC9UU5j74
- g7Q/B2OFMjuIUNlLXaXXd3GoGZUoDy5abVx/sbAqPAp87ma6gYNz0hX82dpuN+vptdH9OzJ+r9uQcsa4Nej0g7lcUsOkzAa1kwwvu9Y2eGroNGqx/bbjgu1k
- je1K5zb/xN4+eStL2JVXAT4hnVecrjRQM1x47/GETjNfIDL5I5fqKTrNEflDtQwXNQZitQxcugOv4pT60DDxwS0COEe8yIVYs2n+9rm4UkSUYJgQDCrz0wdz
- 6YelYezRL0DeBfqcCmOv+V+IsPhSDo2zKJqUMruWmlblX2QZte6yhHXtReehGX3BsMYOfRBx2zPisVfaMD2NDIw6zWYEA6VQVti2K19nJmCgi8/d40ZdAebU
- Rm7OpKq0V5F54hbg+8V8yCInl9Mo4EknTgPwISMAtB1oRuyUnu8X2+AZj6thfQ==
-Subject: [Buildroot] [PATCH 01/28]
- configs/acmesystems_acqua_a5_256mb_defconfig: enable NEON/VFPV4 FPU
+X-CMAE-Envelope: MS4wfHLMDY212TW6aiiYnm4WX5tCnEUEsx1gSEjq56DRmPVt/om4sSqoAFJA82qtFCJBxTrlLEjXiuQ135mqTXfQWvnQ0OYpJHfH7aKukIs6fnmYKfDXFnC1
+ 2pt88bDl7ueni6PcJBQOeRXf/zRT+KRw4m7Vl8eDFgW7Lhtr4CRXeqIpLMu3TQlM7w+VwJb6fJqzOmAN4JqYfzDkyk+xat1W5ixyB8xOsF8zA0KmJtRGWUMH
+ PPd9l/dUMYW26Dn0S88qHug8Yu/HGbjk2vbh30cpfFhwSDKJfKpnCi9XqVMvU2FWM2F2R9C1yB47OA8y7ypaskaQkA0zFN/2ZQb4b+h6MVEiBgqvOTW0DRQZ
+ zsE+9QJCPzBaYBlJ/Ybi/6T/E+Z5ltUTLPi3XXfCTM03c12ZqLz/O8uE4OgLtH7h97Q90g0xkokBmXLKil14c1DazdrTp0rjp9mlWewqnfYSN0JuCdaF7xBi
+ g+A8Hhu1cwm3GnD3ZnfodOMSdAEhqQMfLOyI4rSjIIK0jVrqcC3+j9dNdKSaY18sYqP4ON9UjVu1Ljlhb+L/LEXQu3ov7I6rKUPxqe9lVSEV/eB+snKVswpy
+ bCjSkeh3vqP6TmAToDjb7MkgsyvfdaCX54qEaf242kqPoeNQcqvbjCaZRcKBtWPFg6puQ1NT3Xlmbfan/nQbmqf5mvM0Q/H8DkSSeknmXU5oyLFZ+Iqwdwgp
+ z+FokY2qTek3pKwDaEgc6j1tvBNzUMAio7qcUZpSYg9Dhqznl16Nur3Jy20uvVPy8kLV+GYROvDNLzrBo3mZst9AjxZQ4OffXX/0/RLsHtt5nrKGVfLlOJ38
+ o7vwpI/SoGFhAukddScgd2AOfy68xhpLlfT1mHEUq/Z3TUUy7v+DkqltH6uK/g==
+Subject: [Buildroot] [PATCH 02/28]
+ configs/acmesystems_acqua_a5_512mb_defconfig: enable NEON/VFPV4 FPU
  strategy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -104,20 +106,21 @@ So let's enable VFPV4/NEON FPU strategy instead of the default VFPV4-D16.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- configs/acmesystems_acqua_a5_256mb_defconfig | 1 +
+ configs/acmesystems_acqua_a5_512mb_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index f8129f3780..991de4c1be 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -1,5 +1,6 @@
+diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+index e399d4a9ff..56885ea5a1 100644
+--- a/configs/acmesystems_acqua_a5_512mb_defconfig
++++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+@@ -1,6 +1,7 @@
  BR2_arm=y
  BR2_cortex_a5=y
-+BR2_ARM_FPU_NEON_VFPV4=y
  BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_NEON_VFPV4=y
  BR2_ARM_INSTRUCTIONS_THUMB2=y
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_SYSTEM_DHCP="eth0"
 -- 
 2.25.1
 
