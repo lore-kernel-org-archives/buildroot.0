@@ -1,53 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47859C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 11:22:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70E5CC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 11:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0070D60D72;
-	Tue, 18 Jan 2022 11:22:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6B1B4019D;
+	Tue, 18 Jan 2022 11:51:50 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nvJprwlMzS4j; Tue, 18 Jan 2022 11:22:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JFsj4xSvoEdg; Tue, 18 Jan 2022 11:51:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF2D760C2E;
-	Tue, 18 Jan 2022 11:22:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F3FF1BF5B5
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:22:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23A774014A;
+	Tue, 18 Jan 2022 11:51:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A2591BF990
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AA2C60C2E
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:22:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78AC880DAD
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 11:51:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nn6nZ4PiZtZ7 for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 11:22:45 +0000 (UTC)
-X-Greylist: delayed 00:07:00 by SQLgrey-1.8.0
-Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7740B60A97
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 11:22:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5098F265E5E
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 11:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
- t=1642504540; h=from:subject:date:message-id:to:mime-version:
- content-transfer-encoding; bh=npSiYQAqXSMirZevQh19UqZ/w75K1ckyCSVfh8VbbLg=;
- b=OerBLvSCakcnoHhyFHEtCyjVJ6S17g87n3jYLFQlhwuIySCbC4Y68LLeMTEN7/KjlDxatf
- RftLcQf7jSGH/Kl6WmqSIjGnug5wS68KQOvsZ3G4XqsEPsUCSLrwMKAo7KeRgfnf9zvbLa
- pqmAWD9I7pWWc3p/2x2hbOGxLIv1KIovW5S3Pqgj9aX9WmNyplyoK/fwZkjG5yejHMNHFQ
- 7NjTWvGHPRNMLrYCUbLSv2nCxMZB31uD6aaKLjF7T0mUIGyhFWEllIUeJeAVwS+p5vQksF
- pJPdt/YW+KGfGDi/CqkV985Jaur6kDoH5Y+PE52SJ1Gv6Rh14uN9iH054amjEg==
-To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 14:14:58 +0300
-Message-Id: <20220118111457.2491318-1-adeep@lexina.in>
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RvTehXDDKHTP for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 11:51:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FF2580C80
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 11:51:46 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ l12-20020a7bc34c000000b003467c58cbdfso5153571wmj.2
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 03:51:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=5klmzXs0qbM/uLFHfG40INV8iCY80e5c4YQg1D9jntA=;
+ b=OSwAPb2bs11Y3UT+iaqBIrocEl69fXU+W0flIQyrdIR0qfOAZwkHknX/xyessu4hPx
+ M4m/9T72xwwMVy4iWFqkYfQiq8gYUhszv22uaZt/ZjASK5bNpM55oIk4eyEMiFyIWXOH
+ 6i5cu4U9jg7FDC5AKqukQwqipgIYMizCSjhoI7j00+BLOOLBlBYmvTRh5advgmvQhWVc
+ AuCXOR0EtbnXYH6DQCDvhZTqZApfn51vIBFUaQR+lzgE3543c+qvDeiuw8acqULZEMKP
+ tWJjksx1b4Ji6t2u9PqqYmcZlcQG/doORxh90kt9B9nNk4jnSr2zCF4lM7WNc56RHGi2
+ TNyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=5klmzXs0qbM/uLFHfG40INV8iCY80e5c4YQg1D9jntA=;
+ b=YI4CK8k+tn1x+fT+HssaTr0jq0vVikLjQJGt3OGa/QnRnIjUm/h7NOmVBWqdbEgaLm
+ GQ4WFPY+BvhoDjc3gdKLPUx4OfcJ7BugOwhKQsYzoZ+8RkijOumIpI34EXWG4rwIgkbn
+ 3Ab4cAMGUddcSYmrAgpGUhd1+drUQOYCLrywBFvi8DXBrydNTLKJDQaCrVzqMATXhnpn
+ NcJYNu8UP4W1MFiDVDdVToM7Aca1FzZqT2KPd8aw/ax3yTjREy2AeDKzWIjnJgX5R2TS
+ ybYer74q81/Gh8Am0dXMjpDAvekOhAyoLRBTxJxYS8VkyzuFLFKuyuVOM+DUUi1vgf66
+ 1Sew==
+X-Gm-Message-State: AOAM533XQc0grd00KrdbFgVUjuShD09gHxMT2aeLLCTbXgnPQD6HUOFY
+ nVAmL6myQh/OVVTMTrNUqQI=
+X-Google-Smtp-Source: ABdhPJxEePrPLibvsjjwsA8faKrh+5zmecGipaof/L6Sho0F60vVUwVLvIRa0UIQM3u+3sn2JzxSUw==
+X-Received: by 2002:adf:ec8a:: with SMTP id z10mr226034wrn.296.1642506704902; 
+ Tue, 18 Jan 2022 03:51:44 -0800 (PST)
+Received: from [192.168.1.43]
+ (amontpellier-158-1-160-63.w92-145.abo.wanadoo.fr. [92.145.131.63])
+ by smtp.gmail.com with ESMTPSA id v13sm19005158wro.90.2022.01.18.03.51.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 18 Jan 2022 03:51:44 -0800 (PST)
+Message-ID: <13491b39-7995-1aa7-a2cb-5af43467bb95@gmail.com>
+Date: Tue, 18 Jan 2022 12:51:43 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [PATCH] package/amlogic-boot-fip: new package
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To: Thomas De Schampheleire <patrickdepinguin@gmail.com>,
+ buildroot <buildroot@buildroot.org>
+References: <20220115200306.14037-1-patrickdepinguin@gmail.com>
+ <20220115200306.14037-7-patrickdepinguin@gmail.com>
+ <CAAXf6LU949oVpaUvM=q8t8jZzTNXHWoLDu0gB3BdTEudK+6G7Q@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <CAAXf6LU949oVpaUvM=q8t8jZzTNXHWoLDu0gB3BdTEudK+6G7Q@mail.gmail.com>
+Subject: Re: [Buildroot] [PATCHv2 6/7] configs: add new qemu defconfig
+ 'x86_multilib'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,134 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Vyacheslav Bocharov via buildroot <buildroot@buildroot.org>
-Reply-To: Vyacheslav Bocharov <adeep@lexina.in>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gerome Burlats <gerome.burlats@smile.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Firmware Image Package (FIP) sources to sign Amlogic SoC u-boot binaries
-in LibreELEC, Armbian and meta-meson, buildroot.
-
-https://github.com/LibreELEC/amlogic-boot-fip
-
-Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
----
- DEVELOPERS                                    |  3 ++
- package/Config.in                             |  1 +
- package/amlogic-boot-fip/Config.in            | 17 +++++++++
- .../amlogic-boot-fip/amlogic-boot-fip.hash    |  2 +
- package/amlogic-boot-fip/amlogic-boot-fip.mk  | 37 +++++++++++++++++++
- 5 files changed, 60 insertions(+)
- create mode 100644 package/amlogic-boot-fip/Config.in
- create mode 100644 package/amlogic-boot-fip/amlogic-boot-fip.hash
- create mode 100644 package/amlogic-boot-fip/amlogic-boot-fip.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a91e2dfcde..deda803018 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2894,6 +2894,9 @@ N:	Volkov Viacheslav <sv99@inbox.ru>
- F:	package/v4l2grab/
- F:	package/zbar/
- 
-+N:	Vyacheslav Bocharov <devel+buildroot@lexina.in>
-+F:	package/amlogic-boot-fip/
-+
- N:	Wade Berrier <wberrier@gmail.com>
- F:	package/ngrep/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 4df1474b91..df38024af2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -418,6 +418,7 @@ endmenu
- menu "Hardware handling"
- menu "Firmware"
- 	source "package/am33x-cm3/Config.in"
-+	source "package/amlogic-boot-fip/Config.in"
- 	source "package/armbian-firmware/Config.in"
- 	source "package/b43-firmware/Config.in"
- 	source "package/linux-firmware/Config.in"
-diff --git a/package/amlogic-boot-fip/Config.in b/package/amlogic-boot-fip/Config.in
-new file mode 100644
-index 0000000000..ceb09f8247
---- /dev/null
-+++ b/package/amlogic-boot-fip/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_AMLOGIC_BOOT_FIP
-+	 bool "amlogic-boot-fip"
-+	 help
-+	   This package enables access to various u-boot
-+	   blobs from the LibreELEC amlogic-boot-fip repository.
-+
-+	   https://github.com/LibreELEC/amlogic-boot-fip
-+
-+if BR2_PACKAGE_AMLOGIC_BOOT_FIP
-+
-+config BR2_PACKAGE_AMLOGIC_BOOT_FIP_BOARD
-+	string "Board uboot firmware config"
-+	depends on BR2_PACKAGE_AMLOGIC_BOOT_FIP
-+	help
-+	  Name of the board for which U-Boot firmware should be built 
-+	  from amlogic-boot-fip
-+endif
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.hash b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-new file mode 100644
-index 0000000000..5d6dd237e3
---- /dev/null
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  cdf9d3872457c33a2755cc504f6b0560a62a6ee04437ac28e66623a345ed4936  amlogic-boot-fip-7ff0004e0e4d261ba81334a2f46302bd06704aca-br1.tar.gz
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.mk b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-new file mode 100644
-index 0000000000..6f646ae871
---- /dev/null
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-@@ -0,0 +1,37 @@
-+
-+################################################################################
-+#
-+# amlogic-boot-fip
-+#
-+################################################################################
-+
-+AMLOGIC_BOOT_FIP_VERSION = 7ff0004e0e4d261ba81334a2f46302bd06704aca
-+AMLOGIC_BOOT_FIP_SITE = https://github.com/LibreELEC/amlogic-boot-fip
-+AMLOGIC_BOOT_FIP_SITE_METHOD = git
-+AMLOGIC_BOOT_FIP_INSTALL_IMAGES = YES
-+AMLOGIC_BOOT_FIP_DEPENDENCIES = uboot
-+
-+AMLOGIC_BOOT_FIP_LICENSE = PROPRIETARY
-+AMLOGIC_BOOT_FIP_REDISTRIBUTE = NO
-+
-+AMLOGIC_BOOT_BINS += u-boot.bin.sd.bin
-+
-+define AMLOGIC_BOOT_FIP_BUILD_CMDS
-+    mkdir -p $(@D)/fip
-+    cp $(BINARIES_DIR)/u-boot.bin $(@D)/fip/bl33.bin
-+    cd "$(@D)"; ./build-fip.sh $(call qstrip,$(BR2_PACKAGE_AMLOGIC_BOOT_FIP_BOARD)) $(@D)/fip/bl33.bin $(@D)/fip
-+endef
-+
-+ifeq ($(BR2_PACKAGE_AMLOGIC_BOOT_FIP),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_AMLOGIC_BOOT_FIP_BOARD)),)
-+$(error No board u-boot firmware config name specified, check your BR2_PACKAGE_AMLOGIC_BOOT_FIP_BOARD setting)
-+endif # qstrip BR2_PACKAGE_AMLOGIC_BOOT_FIP_BOARD
-+endif
-+
-+define AMLOGIC_BOOT_FIP_INSTALL_IMAGES_CMDS
-+	$(foreach f,$(AMLOGIC_BOOT_BINS), \
-+			cp -dpf "$(@D)/fip/$(f)" "$(BINARIES_DIR)/"
-+	)
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMTgvMDEvMjAyMiDDoCAxMjoxOSwgVGhvbWFzIERlIFNjaGFtcGhl
+bGVpcmUgYSDDqWNyaXTCoDoKPiBIaSwKPiAKPiBFbCBzw6FiLCAxNSBlbmUgMjAyMiBhIGxhcyAy
+MTowMywgVGhvbWFzIERlIFNjaGFtcGhlbGVpcmUKPiAoPHBhdHJpY2tkZXBpbmd1aW5AZ21haWwu
+Y29tPikgZXNjcmliacOzOgo+Pgo+PiBGcm9tOiBUaG9tYXMgRGUgU2NoYW1waGVsZWlyZSA8dGhv
+bWFzLmRlX3NjaGFtcGhlbGVpcmVAbm9raWEuY29tPgo+Pgo+PiBBZGQgYSBuZXcgcWVtdSBkZWZj
+b25maWcgZm9yIGFuIHg4Nl82NCB0YXJnZXQgdGhhdCB3aWxsIHJ1biBhbiB4ODZfNjQga2VybmVs
+Cj4+IGJ1dCB1c2Vyc3BhY2UgaW4gMzItYml0ICh4ODYpIG1vZGUsIHVzaW5nIEJSMl9LRVJORUxf
+QVJDSF9PVkVSUklERS4KPj4KPj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIERlIFNjaGFtcGhlbGVp
+cmUgPHRob21hcy5kZV9zY2hhbXBoZWxlaXJlQG5va2lhLmNvbT4KPj4gLS0tCj4+Cj4+IE5vdGUg
+dGhhdCB0aGUgZGVmY29uZmlnIHJlZmVycyB0byBhIHRvb2xjaGFpbiBhdAo+PiBhdXRvYnVpbGQu
+YnVpbGRyb290Lm9yZywgYnV0IGlzIG5vdCB5ZXQgcHJlc2VudCBhdCB0aGF0IGxvY2F0aW9uLgo+
+PiBJIHVwbG9hZGVkIHRoZSB0b29sY2hhaW4gdGVtcG9yYXJpbHkgdG86Cj4+IGh0dHA6Ly9wYXRy
+aWNrZGVwaW5ndWluLmNvbS9jdG5nLTY3MzdjZmFhOGNlNi14ODZfbXVsdGlsaWItZ2xpYmMtZ2Nj
+MTEudGFyLnh6Cj4+IG1kNXN1bTpiMDg1YzBkOGYxMzdjMDc4ZjhmMDlkMTE2ZDgzNjRmOAo+PiBz
+aGEyNTZzdW0gMmE1MjQxZDkyNzQyMzk1MzJlNDRkMzdjNjU1MDk5MzFmYmMxMjBkYjU5OTE0MTJm
+OTQ2ZWIzODE3NmRiNGRjMgo+Pgo+Pgo+IAo+IFJvbWFpbiBOYW91ciBub3RpZmllZCBtZSB0aGF0
+IHRoaXMgdG9vbGNoYWluIGRvZXMgbm90IHJ1biBvbiB0aGUgR0NDCj4gRmFybSAoSWxsZWdhbCBp
+bnN0cnVjdGlvbikgc28gSSBtYWRlIGEgbmV3IHZlcnNpb24sIGN1cnJlbnRseSB1cGxvYWRlZAo+
+IGF0Ogo+IGh0dHA6Ly9wYXRyaWNrZGVwaW5ndWluLmNvbS9jdG5nLTY3MzdjZmFhOGNlNi14ODZf
+bXVsdGlsaWItZ2xpYmMtZ2NjMTEtMi50YXIueHoKPiBtZDVzdW06ICAzY2VlNjRmODI2NzU0NDZh
+ZDI1NWY2YzE2NTc4NmViNQo+IHNoYTI1NnN1bTogNjcxNWJmYmMxOTU1ODhiNjQ4M2QzOWU5ZWM2
+ZDcwNjExY2FjM2I5OWJmMmRkMzRmZWRiZWQwZDRlNmM3ZWRjMQoKVGhpcyB0b29sY2hhaW4gZG9l
+c24ndCB3b3JrIGVpdGhlci4KCkRpZCB5b3UgdHJpZWQgd2l0aCBDVF9FWFRSQV9DRkxBR1NfRk9S
+X0JVSUxEPSItbWFyY2g9eDg2LTY0IiA/CldpdGggQ1RfRVhUUkFfQ1hYRkxBR1NfRk9SX0JVSUxE
+IG1heWJlIG9yIGJvdGguCgpBbHNvLCBidWlsZGluZyB3aXRoIGEgRGViaWFuIGplc3NpZSBkb2Nr
+ZXIgY29udGFpbmVyIHdvdWxkIGFsbG93IHRvIHJ1biB0aGUKdG9vbGNoYWluIHdpdGggb2xkIEds
+aWJjLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IEJlc3QgcmVnYXJkcywKPiBUaG9tYXMK
+PiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
