@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9690FC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 21:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 376DEC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 21:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39423414C1;
-	Tue, 18 Jan 2022 21:15:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE2C882778;
+	Tue, 18 Jan 2022 21:15:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AS_fVKOwv4_J; Tue, 18 Jan 2022 21:15:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x05M4MZVc373; Tue, 18 Jan 2022 21:15:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37542414C5;
-	Tue, 18 Jan 2022 21:15:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 078151BF33E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47C468276B;
+	Tue, 18 Jan 2022 21:15:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 408421BF33E
  for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 21:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA70E60E41
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D3BE414C1
  for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 21:14:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=gmx.net
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zfiSaR6otsyB for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xC7ZuqLz1UCa for <buildroot@lists.busybox.net>;
  Tue, 18 Jan 2022 21:14:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5D11A60E08
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 21:14:41 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7EA1C4149F
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 21:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1642540478;
- bh=wWFrVohnzob7pFeF8oknqxDTyTmlcMzE3zDS4q95Jag=;
+ s=badeba3b8450; t=1642540476;
+ bh=f16fV5zdiISe4Ey7K8rPPCKDhjALlnZJsK+bndZ26y4=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=GFERnYu5NT5ALLsSj3/BrD9ZjZ8pV+HEn4zTAkpeFEhMPkdUlABCMC8L305HLkamW
- pmCSyj4hIofJ6GviIukmkAQYZ/RP9erChqrMxzsit14HXYlnJMarQeV/ZQjb/eJZPj
- OWNqX+srU94Z4QUf/dFT+5l7klRWhBDGWqMev19c=
+ b=HPltwwDOZLQVkLPfAfVsZUWuSJe1xDxhkwTrmVXNayFNJjedZd6DDRdU3KtQlbGyM
+ A5Rfx4geT74oDHVmj7ovmG7OU3zme9DFE14nu+tVYK363aTkpzprmBVwIIc3wR/I1d
+ jesK4s2UhC0ttRwwpSsHxYZNR3XbdskWvLR2z5A8=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.fritz.box ([62.216.209.124]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MQMyZ-1mwXgi3x21-00MNea; Tue, 18 Jan 2022 22:14:38 +0100
+ 1MnJhO-1mQvsG2I5s-00jFht; Tue, 18 Jan 2022 22:14:36 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 22:14:34 +0100
-Message-Id: <20220118211434.9854-6-ps.report@gmx.net>
+Date: Tue, 18 Jan 2022 22:14:30 +0100
+Message-Id: <20220118211434.9854-2-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118211434.9854-1-ps.report@gmx.net>
 References: <20220118211434.9854-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:yZbbP/FvsUPchdRXBtoSarD0N3iMYHpkfHBe6OVOLzTKZqgEyK2
- miaqyLtQrrgAKEfM2DtRbThEXarr0LSHm6gYWp6RGHRxDYt0bjYaSHjzf25K/Dee2axTE6o
- UpcaXrnmbOiJVhevXXZYpjkby9m26FRAVJDJEstMkPG3907zP7anpxPSzmq5VVynFivUEK5
- 1QtqATpQluqBg5P/ROwGw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UilwjhgZWPQ=:y3ZK8fXf/WKowJwxLiZEOH
- qIBbr6ArtFpB9clnZVMRQJLt52GsPCzbiRrB1rrx2GqNjaiMJJA1TU3SOKLIgi1Q9NF79Tvau
- TgXZ69XswmALd27wV9VsacneNe7TQEWfusZkvuMq+tiFrv/i9dTBwB7qakGaLfjczmlLb/Nof
- /FcfuR1xICIsTOPXKKRmtsLMRwz539fyJDq2tdZZ/mWL4yjbKkt5DXFwVpvDj38JvdYx6g+C0
- gVbwIRiIyZigpRdJ5y0M32bbyZzb/6PVGaTBCua0npvtw8cyasS8gSEljXIXgne63TbCI2lnH
- 7Mu5ln/iBJO83givQQmFETSv0mNQYlFi1naipt8kAvVt2AHX+YbT0ayNj5XVIAQtta0neXKfG
- gfNLKtRpBPrzVuvW+d1F3yVmhnRMZmWl7p27wlwpPf0Br9qGhlUQRO5vOgkTj6L+tPSpLg3Dg
- BA0eJJPcA9Kbu/oGxwX9NePLqpYQ5fHIx2rPdeQl/29KRU2mXxLN5LwGY7z0m4OcrMdVRz7zJ
- 3ZfDfZ7D4nv0mRdgd5lpTnCjPcmKVhmHoJKOloRd3/vKb2sr4MEOhkmVjYM7InKznU8cOtQ2L
- eCcBRKGmcU/Fj9eW6DBik7BD4gLwKBW8cBHfPUFBDr45l+Nd4BhlE1R+1a96AYdk0Bkts192a
- oK/Dh4ypjxEn3RCyhp7PMfNTZZ1E+Tuj0eOAC+9BYcwl86pOCwSq/eIOE7S2byAm7IZxfNNp/
- apOJhB041WeqJ8t/JlUhJgh7GggGaIknWFq6teFRM1+baKFX9hB2ywCLN3X0JDRhau0uUkeRI
- 7soKOaG0NNUQvPh/x9k2PxgdPUMVHNSbp13aFMgEM9mXY+D6gPhQfmRudw0mLXI74x0MqdaqR
- kd9DqYoqCPuO4Rx0SVTbIbfng09MxJNgVZ+NmDgP1OSR3XSzneN7hkwNWl+F4oVRIreJCz3aH
- AmFJtodOucUbMmqOgv4RltdiiGYxEDrbvp6dErEqoxAdil3kG51W2HrlKnjydnWYMHeZohY3N
- n4F8k5FX9/r0StibZ2yOflgPNXuJjhC3i3xYQIzDiSiZxBttGDJuZOdxVeO0KiT1yVJZzXxKy
- GtvX58KT2KlbzY=
-Subject: [Buildroot] [PATCH v1 6/6] package/brcmfmac_sdio-firmware-rpi: new
- package (former rpi-bt-firmware/rpi-wifi-firmware)
+X-Provags-ID: V03:K1:38I/3KbHoJKCPPgJ/GWLcMpRjmkIkG5SOoRaR4p95wd5Wk0tuLo
+ rhmrMgNgoN2l6GqPoYVxba22RtzqecJBO8tCmWldr005w/ArlI2eQxikKiGSKDfcGtAtbb7
+ W+On14MDnKdOoKDZb8aiT67LB1WNvb7/AZXjiTONItLvpMYIx2fvoywfO5XR3h3g+AtM2XZ
+ BG2RVln9/v2Ag8epC9NGw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EAOFVGFzbVg=:yQ9pgl3TrKJ6o7USFadMx2
+ fNAAyiRzo1MnIWLnvETnlBwq8fry22t4OMnzVBf6ok2YtEuS93oCTbFurJZ/jyeyQusIB34a4
+ hoM247j8o+By84QihOqANI6PG/SKUXgufLD9ifBNZSS2A1y7jHKxQNjrcLItJG6mrHLbhk//u
+ FfbeguA1tlJxRDYgKAGODc1XWC/wPXOZOCvZsK4XVF+iFHgBm3dUIBYjQpi2RyAGyMdC50bln
+ /QCnoE/zuD9z8fn72tH2Eun+qQp5wga1paEdjWweZzXjFl1xi/UPh4USwFlm8WSErrEcAGq2J
+ S0/ER544Emc0RTYX/hglN36tMBG+gM5a7hIrDF19z+NCB3fCuNFIPK4SB775AHRf6p4vmJ0Cf
+ UjxbvFfRvvF+ZMQMqkQqQnSuPhCSZUOHUZ55Y+Uh5zUe8z1VSUirQwjZse2yxluIvOaAmanp5
+ YjpAFnQ7irvg5Eln7dWtLvYSF0MHmt2B62JGiysHFafAgW5K8Zk2juA8fAYLWP+mGquOKlSSz
+ T2oGsSdT7Q4ZElsBBUCR9Ewf0y4n5pg4b2SKHJQ4ANgWOWKkljofnCrLZiHwcv+qGMmkFYDmw
+ WTJE1u9IZKikq9NURKGPWao61zSj4Xu27PX69tJTZro3eqhK+bP9Eqs1paBCc3MaWoyoouse7
+ V28Hxl7iPlS8nZrImA0hfWW9ozNlVfYTMYH4CvkdNKGGAWoECX3vUfq2gEwzCv5WiYOyT27ep
+ AbQ+Y36Tyc6PYvAq6RkGcWUTSySxpV2KrXFTh7i1iIFpPET/vRVMzbUGR1xJzaEiKl9zDloDb
+ 2dKEmRZBIOcuo13r7CkAIBPGNI1pzZkgdrpT2BJPs9rxVrcUxn9Te9G4UEEeerPwLE/AZtcOW
+ cfKfEPHLMYeRO3r/v9xfH7CX23aDwQEAdfYTg425l0W3p5UMGgJ4Hovwl/0dKb+TIbRNhKwYF
+ DM86sZqjj4q29pWD5YFo4iX4wPx49Uvwy5iHPhmvbLolJAoiGJK46WarUfp9oG7GPCHKWXp/q
+ ttb5y7nLwdKie1A5Ge3cElIdZtPVc7eIeACaZKlKi8jgY9K89d6dHT+1QLkXIIQhTLQZzVMrk
+ P3pygLdLUikjj0=
+Subject: [Buildroot] [PATCH v1 2/6] package/rpi-firmware: bump version to
+ 3f20b83
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,266 +94,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Move rpi-bt-firmware and rpi-wifi-firmware packages to the new
-brcmfmac_sdio-firmware-rpi one (as they share the same donwload).
+Changelog:
+
+  095deea759 kernel: overlays: vc4-kms-v3d: Change composite handling
+  2e9b609e53c kernel: Bump to 5.10.79
+  12bc6e36773 firmware: dtoverlay: Rebase aliases in overlays like labels
+  24d966d35bb kernel: Bump to 5.10.81
+  ca52e7c1303 kernel: edt-ft5x06 touchscreen fixes
+  1a0297bfbf7 kernel: Bump to 5.10.82
+  0a1a871d04c kernel: Fix for IN Token of USB Endpoint 1 stopping occasionally on Pi 4
+  303d0012cd7 kernel: Bump to 5.10.83
+  bd8b6d5dc8e kernel: Bump to 5.10.85
+  56f1b8bbc88 kernel: Bump to 5.10.87
+  536baf33ae9 kernel: Bump to 5.10.88
+  ce71e3e9b34 kernel: Bump to 5.10.89
+  19b570d0d6a firmware: arm-loader: Fix kernel8.img selection on 2837 with arm_64bit=1
+  fbbde90b709 kernel: drm/vc4: fix non-working audio on RPi3 and no video with DVI
+  165bd7bc562 firmware: improve firmware camera detection
+  318e3373496 kernel: Bump to 5.10.90
+  175984a6dc4 kernel: drm/vc4: Add alpha_blend_mode property to each plane
+  20c5829b0af kernel: Bump to 5.10.92
+  3f20b832b27 firmware: arm_loader: Only clip min/max to the same value for turbo clocks
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes:
-  - patch moved after the rpi-bt-firmware/rpi-wifi-firmware version bump
-    as it saves some code/download duplication but the new package/name
-    is harder to find/remember...
----
- Config.in.legacy                              | 18 ++++++++++++
- DEVELOPERS                                    |  3 +-
- package/Config.in                             |  3 +-
- package/brcmfmac_sdio-firmware-rpi/Config.in  | 29 +++++++++++++++++++
- .../brcmfmac_sdio-firmware-rpi.hash}          |  2 +-
- .../brcmfmac_sdio-firmware-rpi.mk}            | 27 +++++++++++++----
- package/rpi-bt-firmware/Config.in             |  9 ------
- package/rpi-bt-firmware/rpi-bt-firmware.hash  |  3 --
- package/rpi-bt-firmware/rpi-bt-firmware.mk    | 17 -----------
- package/rpi-wifi-firmware/Config.in           | 13 ---------
- 10 files changed, 71 insertions(+), 53 deletions(-)
- create mode 100644 package/brcmfmac_sdio-firmware-rpi/Config.in
- rename package/{rpi-wifi-firmware/rpi-wifi-firmware.hash => brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash} (68%)
- rename package/{rpi-wifi-firmware/rpi-wifi-firmware.mk => brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk} (61%)
- delete mode 100644 package/rpi-bt-firmware/Config.in
- delete mode 100644 package/rpi-bt-firmware/rpi-bt-firmware.hash
- delete mode 100644 package/rpi-bt-firmware/rpi-bt-firmware.mk
- delete mode 100644 package/rpi-wifi-firmware/Config.in
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index dd64b7da1b..465d7bef90 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,24 @@ endif
- 
- comment "Legacy options removed in 2022.02"
- 
-+config BR2_PACKAGE_RPI_BT_FIRMWARE
-+	bool "rpi-bt-firmware package was renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI
-+	select BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT
-+	help
-+	  Package rpi-bt-firmware was moved as option to
-+	  package brcmfmac-sdio-firmware-rpi.
-+ 
-+config BR2_PACKAGE_RPI_WIFI_FIRMWARE
-+	bool "rpi-wifi-firmware package was renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI
-+	select BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI
-+	help
-+	  Package rpi-wifi-firmware was moved as option to
-+	  package brcmfmac-sdio-firmware-rpi.
-+ 
- config BR2_PACKAGE_HOST_GDB_PYTHON
- 	bool "GDB Python2 support removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a91e2dfcde..dc810b6fe1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1832,12 +1832,11 @@ F:	configs/qemu_riscv64_virt_defconfig
- N:	Martin Bark <martin@barkynet.com>
- F:	board/raspberrypi/
- F:	configs/raspberrypi3_defconfig
-+F:	package/brcmfmac_sdio-firmware-rpi/
- F:	package/ca-certificates/
- F:	package/connman/
- F:	package/nodejs/
--F:	package/rpi-bt-firmware/
- F:	package/rpi-firmware/
--F:	package/rpi-wifi-firmware/
- F:	package/tzdata/
- F:	package/zic/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 4df1474b91..3b38af7232 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -419,15 +419,14 @@ menu "Hardware handling"
- menu "Firmware"
- 	source "package/am33x-cm3/Config.in"
- 	source "package/armbian-firmware/Config.in"
-+	source "package/brcmfmac_sdio-firmware-rpi/Config.in"
- 	source "package/b43-firmware/Config.in"
- 	source "package/linux-firmware/Config.in"
- 	source "package/murata-cyw-fw/Config.in"
- 	source "package/odroidc2-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
- 	source "package/rcw-smarc-sal28/Config.in"
--	source "package/rpi-bt-firmware/Config.in"
- 	source "package/rpi-firmware/Config.in"
--	source "package/rpi-wifi-firmware/Config.in"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-diff --git a/package/brcmfmac_sdio-firmware-rpi/Config.in b/package/brcmfmac_sdio-firmware-rpi/Config.in
-new file mode 100644
-index 0000000000..73f400a2b7
---- /dev/null
-+++ b/package/brcmfmac_sdio-firmware-rpi/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI
-+	bool "brcmfmac-sdio-firmware-rpi"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  Raspberry Broadcom Bluetooth and Wifi firmware.
-+
-+	  https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi
-+
-+if BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI
-+
-+config BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT
-+	bool "brcmfmac-sdio-firmware-rpi-bt"
-+	help
-+	  Raspberry Pi 3 and Zero W Broadcom BCM43438 Bluetooth module
-+	  firmware. Raspberry Pi 3 Model B+ Broadcom BCM4345C0
-+	  Bluetooth module firmware.
-+
-+config BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI
-+	bool "brcmfmac-sdio-firmware-rpi-wifi"
-+	depends on !BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-+	help
-+	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
-+	  NVRAM data. Raspberry Pi 3 Model B+ Broadcom BCM43455
-+	  wifi module NVRAM data.
-+
-+comment "brcmfmac-sdio-firmware-rpi-wifi conflicts with linux-firmware Broadcom BRCM bcm43xx"
-+	depends on BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-+
-+endif
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-similarity index 68%
-rename from package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-rename to package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-index 7ff47b8cfe..a12e92cbac 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-+++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 7cbfd1b249..ec13115f3b 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e51b717c2a60ca29fcdd8e04e07c00996226cb48fa56a8ad1934b5f4ddee2e3d  rpi-wifi-firmware-ea9963f3f77b4bb6cd280577eb115152bdd67e8d.tar.gz
-+sha256  e51b717c2a60ca29fcdd8e04e07c00996226cb48fa56a8ad1934b5f4ddee2e3d  brcmfmac_sdio-firmware-rpi-ea9963f3f77b4bb6cd280577eb115152bdd67e8d.tar.gz
- sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-similarity index 61%
-rename from package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-rename to package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-index b54cd359a4..4d1f285442 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-+++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-@@ -1,15 +1,24 @@
- ################################################################################
- #
--# rpi-wifi-firmware
-+# brcmfmac_sdio-firmware-rpi
+ # Locally computed
+-sha256  a079a31fc80a23421589edcacef94faa713b12d3e77b92710ae2594c8d549477  rpi-firmware-fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25.tar.gz
++sha256  33aea2cb9c3be94c3dd6a96fbb3443eee5af1dc5fc9140e1fadc50832983064e  rpi-firmware-3f20b832b27cd730deb6419b570f31a98167eef6.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index f773f83999..b46a7f5270 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_WIFI_FIRMWARE_VERSION = ea9963f3f77b4bb6cd280577eb115152bdd67e8d
--RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
--RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
--RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
-+BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = ea9963f3f77b4bb6cd280577eb115152bdd67e8d
-+BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
-+BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
-+BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENCE.broadcom_bcm43xx
- 
--define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
-+
-+ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT),y)
-+define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_BT
-+        $(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
-+        $(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI),y)
-+define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_WIFI
- 	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
- 	$(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
- 	ln -sf ../cypress/cyfmac43430-sdio.bin $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.bin
-@@ -24,5 +33,11 @@ define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/cypress
- 	$(INSTALL) -m 0644 $(@D)/firmware/cypress/cyfmac* $(TARGET_DIR)/lib/firmware/cypress
- endef
-+endif
-+
-+define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_CMDS
-+	$(BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_BT)
-+	$(BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_WIFI)
-+endef
- 
- $(eval $(generic-package))
-diff --git a/package/rpi-bt-firmware/Config.in b/package/rpi-bt-firmware/Config.in
-deleted file mode 100644
-index 45643d6a52..0000000000
---- a/package/rpi-bt-firmware/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_RPI_BT_FIRMWARE
--	bool "rpi-bt-firmware"
--	depends on BR2_arm || BR2_aarch64
--	help
--	  Raspberry Pi 3 and Zero W Broadcom BCM43438 Bluetooth module
--	  firmware. Raspberry Pi 3 Model B+ Broadcom BCM4345C0
--	  Bluetooth module firmware.
--
--	  https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-deleted file mode 100644
-index a575a02e97..0000000000
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  e51b717c2a60ca29fcdd8e04e07c00996226cb48fa56a8ad1934b5f4ddee2e3d  rpi-bt-firmware-ea9963f3f77b4bb6cd280577eb115152bdd67e8d.tar.gz
--sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-deleted file mode 100644
-index f2d54f33bf..0000000000
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ /dev/null
-@@ -1,17 +0,0 @@
--################################################################################
--#
--# rpi-bt-firmware
--#
--################################################################################
--
--RPI_BT_FIRMWARE_VERSION = ea9963f3f77b4bb6cd280577eb115152bdd67e8d
--RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
--RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
--RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
--
--define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
--	$(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
--endef
--
--$(eval $(generic-package))
-diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
-deleted file mode 100644
-index 7e81b286c0..0000000000
---- a/package/rpi-wifi-firmware/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_RPI_WIFI_FIRMWARE
--	bool "rpi-wifi-firmware"
--	depends on BR2_arm || BR2_aarch64
--	depends on !BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
--	help
--	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
--	  NVRAM data. Raspberry Pi 3 Model B+ Broadcom BCM43455
--	  wifi module NVRAM data.
--
--	  https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi
--
--comment "rpi-wifi-firmware conflicts with linux-firmware Broadcom BRCM bcm43xx"
--	depends on BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
+-RPI_FIRMWARE_VERSION = fa9a00624e7d5d3dcdb297dff132dc32cc2d9a25
++RPI_FIRMWARE_VERSION = 3f20b832b27cd730deb6419b570f31a98167eef6
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 2.34.1
 
