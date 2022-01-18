@@ -1,67 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9493C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C85DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B270408FE;
-	Tue, 18 Jan 2022 10:50:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF3C081A1C;
+	Tue, 18 Jan 2022 10:50:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uPcvbZWLjQwg; Tue, 18 Jan 2022 10:50:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bsByatyFI9hj; Tue, 18 Jan 2022 10:50:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9BD40906;
-	Tue, 18 Jan 2022 10:50:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C07211BF28D
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:50:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27A4181A15;
+	Tue, 18 Jan 2022 10:50:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A71951BF28D
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC011408FE
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:50:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93959405EC
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:50:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTrYxz7eAgtw for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 10:50:20 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pqau-YBUvyfn for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 10:50:23 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd10106.aruba.it (smtpcmd10106.aruba.it [62.149.156.106])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9ABA24025B
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:50:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1EEE400C6
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:50:22 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.178.108])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9lxknDlmTDzPJ9m15na6uB; Tue, 18 Jan 2022 11:47:16 +0100
+ id 9lxknDlmTDzPJ9m33na8vr; Tue, 18 Jan 2022 11:49:18 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642502837; bh=jMdz7UZ7YUFVqmUcM+8XZTz94ZKByKFDiBifrZSuRP8=;
+ t=1642502959; bh=6lMcu5LDTWecrr0FFxcTpZPUJfZE/2d/p3iEW1RYy1I=;
  h=From:To:Subject:Date:MIME-Version;
- b=N9i7W08n7iTRuykyhGIIm9VIQ+xWRSpfqXYrHjkqvg/h0cVRIaTuy5/bUlQ23h2GN
- RE0og0C/VS3kCDav9HuKdRjjufiklV8MTWniQmWkla286CRDf27bRX9puviP/0dW+E
- +lc1R2sdm5r6bU2knYXmU9gGh5cZYqAYpUwjLtugdwqUWur65ZhZBlciknGEOH5JL4
- FVdi9QJCU0T+jmlBhWLqamvQ/Eivyn6vP9lHok1+i5LCx42GkFB8I0CEiydcmen5iU
- tuzR6g1cB7pQp5pZgx2JYDcBtcCWI7rS0WAiYkmMkPcQH6knAYRjihvK1+IRuBbrao
- uTeYY8gBNcqzg==
+ b=OzKVmLdfJVR4jPH0dVN2YPxm/bDOYm/TosJaXPQ9oYHBjW9aWVsajjbgIXg8gnP6q
+ FJJpaK9tb945jN/uRMIPDcEWVpC6GtlMDocIxIWDFmRnjOi02POM6wHL255wBVIxsK
+ kxxeUrOtXc/gGQHX5TZcH/5KJQVsY4GVDAhtMAhZ0WcenRMg4oYmyM/37U9fWd3s5W
+ vF1vGG579+p8lKtOWevIHM/KJeM8v+uQ0x/KYNHq01sOeROzmlf7BQ1oUw77X5GTYA
+ Ifr98YWk++DR+UzcC1/dlGT9EeBCYwKECJvs0M14JVXhZ8zf+Vol3Y6zx/26Asi0ku
+ Pl/ReDuRXO5cA==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 11:43:25 +0100
-Message-Id: <20220118104338.2081259-16-giulio.benetti@benettiengineering.com>
+Date: Tue, 18 Jan 2022 11:43:38 +0100
+Message-Id: <20220118104338.2081259-29-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 References: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfB0f5dJLXvDvAVheN83+aUk540MRHx2NEMtyl+9ZaxG39DvOQq9vFVJJOUYA/d4m8y8Xml/l8nDLT76eFmoesiHR/4lJj4c63p4L3D4O8U1EBeAL9qO6
- Vc+r7svDE+Ja2aau4rg10XqjI25Hf2n+UvGjD4QOz/qZ0BfiAlfQYUEknXSs1U1Tx1TNmnKlYvCdzhF3FBp3Q8I1j/Fa0f5GXFYgtzdCYh5MIg3R46nnoflc
- 6YE6kU1xlBQYQn2L1gx9RH4NavuQKS60E96bWcFi1fLdCIp+J4z4MGpEBwhyUr0frvM6LuwHl2d6bykudIPPSsRnD7zvWnoBhlHMLAGp0u9JioPNLkIFHD87
- 7LDrdDm4mI36iSrzF627XMPvegaaulrXZCk6wEskjyW1zAooPjHAHzpA/NVrbbQVHS8B1Q4QNj04dpW52lQ7PqhfAyyzbKs1oIRXqELCbxVFckZYyBwGpIIW
- 10WdO1qlgfa8GYEVyof80ULi2HTfZvPNS0KNRcrRCp5VhXKgiQF4qmhrP12yy7sTo0wImmp46Ycy8eB5W/Sj0HGBzvkqRUlekVGoXK1StcOXX1y7oJhaGGZ8
- VwDWioxy/Pmq3dZo72TatTeOOS8ChO1f/tnReD+ns9ZfgC4cfYu7VDR/HevZzOY2qIlXwEjEUIoM4s5laxjqNoakboCT7W4Vu2/s8+/+z7YY8dPa8UW13NwX
- LDvmTHvkncaGtMJLWIV1DxZEHOatmGdTixByZkKrm9SOUeQ2Jxexn3bL7wadIc90xU6WbmV8CRIqEgM1YDj7Ki+BdxHNvOCk18ChwfAa46useWhLTXKR/Bdl
- YOEAMRIpprQ212PQ2mlMtn4JcjnDewpRCf7J3jOSA89B4ifa+efO5g5rTgHpjg==
-Subject: [Buildroot] [PATCH 15/28]
- configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig: enable NEON/VFPV4 FPU
- strategy
+X-CMAE-Envelope: MS4wfHreXDzHwCyqW+nGm9LHX4zzI3MLqIaLq5KTnFv3d06mHWxO7StuZfGmaU3036rl/ouqpJOcsRHOBwtdwmTYIlqXEyy9E+Mx3wxJtl6vc+BSTHH41Jqo
+ RmdeRjuWdZdUfm1LKPfnrTWqYzhGYuk7LIu5mzbmRfS7n8A2kHVmNQoI+URoCNm7r5jQyNFpqZi+0MOYdjjZQdmXqgpwKrZFrBhuioKbv/UdWIjbrCXQ45UM
+ 7cTx1kL1GSi77XtBnnhZpGgtx7TLWXQeoDo/meIGXpAIHwiVyzODuO10FQvlyGnldjiqhBd0nfAStum4l6WhHv0H06j3zWkvHl8SI0qKKIjSwKl7WBuAnBm8
+ 1F7Ohte1hhxtYSByhgDKEYHXnZ3Y/xFAcKkG4rnIQmrrzvEN7m5FPk2sDoMeebB/mhqqrKhyibfCcf5pYO3tLw3iszb+5lnPdN73tVTphT6K3KlVVDhD/3tx
+ fw5zbqhh6M62/LBNigQRnmOxepXcU6fmUkM2bMMtDoYEW8Ni6Z+E8s8c69tgPDThVafBXTOBTnpWh2lwzkwwbAnF/QaktzTA2qUrSYFLtetNIlYcYG2MMqQy
+ UCtSVwkbJECb6tLosMGP9UiK3EY2vKGjuUxWDQKuYhd//XSHxvZpz4hgJWe1+pKI4RCD2Q0K55PgioX++DUPnNuJCsSBP+dk25pVbR4gjuZuhNRSx9amG036
+ QQKqc+h+aN5b4zwbVs8B3okED8AZH0rZZN33F+EYolqA4gmogwi27TVUCxxQDjgtH3N8ShP+3LofNyOR01oLoFrw3F253GRCpSLwBxIjEiAERukgptJc5/QC
+ 9rbYcWe8RAaAHbJro54ay3t7Qnhs+/ezlumfkt5PUlNur9AzhWzYtV4p0Vvonw==
+Subject: [Buildroot] [PATCH 28/28] configs/stm32mp157c_odyssey_defconfig:
+ enable NEON/VFPV4 FPU strategy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,34 +92,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As pointed by SAMA5D2 Datasheet[1]:
-```
-The Cortex-A5 NEON Media Processing Engine (MPE) extends the Cortex-A5
-functionality to provide support for the ARM v7 Advanced SIMD v2 and
-Vector Floating-Point v4 (VFPv4) instruction sets.
-```
-
-So let's enable VFPV4/NEON FPU strategy instead of the default VFPV4-D16.
-
-[1]: https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/DataSheets/SAMA5D2-Series-Data-sheet-ds60001476G.pdf
+This board has stm32mp157c that is a cortex-A7 and supports NEON/VFPV4 FPU
+strategy, so let's enable it instead of the default VFPV4-D16.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig | 1 +
+ configs/stm32mp157c_odyssey_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-index 024e8a1465..c5b9e65a81 100644
---- a/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-+++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_defconfig
-@@ -2,6 +2,7 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
+diff --git a/configs/stm32mp157c_odyssey_defconfig b/configs/stm32mp157c_odyssey_defconfig
+index 6b699830b1..6aa772b8c0 100644
+--- a/configs/stm32mp157c_odyssey_defconfig
++++ b/configs/stm32mp157c_odyssey_defconfig
+@@ -1,5 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
 +BR2_ARM_FPU_NEON_VFPV4=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_GLOBAL_PATCH_DIR="board/seeed/stm32mp157c-odyssey/patches"
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_OVERLAY="board/seeed/stm32mp157c-odyssey/overlay/"
 -- 
 2.25.1
 
