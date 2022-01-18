@@ -1,66 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F5F6C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32306C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2005600B9;
-	Tue, 18 Jan 2022 10:54:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF6B581A2B;
+	Tue, 18 Jan 2022 10:54:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uAb8s8CLvcgw; Tue, 18 Jan 2022 10:54:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xLoNsAhllatY; Tue, 18 Jan 2022 10:54:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5315560030;
-	Tue, 18 Jan 2022 10:54:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 126EB1BF28D
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4524980BF5;
+	Tue, 18 Jan 2022 10:54:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 45E9F1BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0E77F60DCB
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41C0980B6E
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:53:19 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kqdWbyL0n5Jz for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 10:53:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TprScMQqaWyZ for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 10:53:18 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtpcmd10106.aruba.it (smtpcmd10106.aruba.it [62.149.156.106])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8418560D8E
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:53:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72DBE80B4E
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:53:18 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.178.108])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9lxknDlmTDzPJ9lzyna5ib; Tue, 18 Jan 2022 11:46:06 +0100
+ id 9lxknDlmTDzPJ9m09na5st; Tue, 18 Jan 2022 11:46:15 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642502766; bh=EAmlj7Ru96zjXBjVoUgmvxirmq8H9qqNQqvxuo7fM5Q=;
+ t=1642502776; bh=Ecwa/BOFRG7Q90lA8p1uZI/xPx0jghOh3TBB9TEYcnY=;
  h=From:To:Subject:Date:MIME-Version;
- b=Dse4bxcuOAt9a2SI7bB8hY6AQ3Bax89XMVEy5rnRKU9Q5GFF2H1gm96vq1zhmCsvE
- Tl7+nwCcIK8PN2DRzvpwWTpPefmu992LucTHizUUtSJLVVvQ+NME3ZtkeTrpXz13sH
- /azmaVBginCzYVh49BR3QNEGL7r6Yp0mmslfvSeiBgQO+GB9xfyQlu7FaR/CHIVilc
- QsKQWKcB4N6asryRkom3Kqvs7J1zk5md40Ig2njsOZykjyNrJPxV0rDnQ8+1vtBTIe
- hPCoC2ktgtbDXXbwi8lKvdOrZYW8Bhx2sVrPqoTQ9nOer4Bs5Svupsx0nDubHYA7XJ
- EQloympQwynTQ==
+ b=n4jAXMiMul+f5CcE8NNB+n5gAc3fSB3V81CrZlYjWpbDx+duC704LsabjAM4k10Tj
+ TkwwyI1xcMkW9efSJS6XI6/hCWsO4+WwE+RQsZ4PW8jBxanyglDP3w7n/2ObRwn3fj
+ 0M8Upx+ZAkpyUfQy74LqFOfMRBhNRXIL7qPLS4TtG+1Em78EtEzlzkBzWe7GMEeQW9
+ tA4dQDxpFN2TsQkRpnXIPnWeVcpQjol7wuegXNh66ITW0qFsZzSUPM957Opwgw2rfV
+ m5a319fR0ED+DsrnsXFSn8uSJtaHGnEZ/+Bgrqt+bIt3fWIv3ACNx/Z0r3ktumNo2L
+ WCfdZHMMlhOUA==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 11:43:19 +0100
-Message-Id: <20220118104338.2081259-10-giulio.benetti@benettiengineering.com>
+Date: Tue, 18 Jan 2022 11:43:20 +0100
+Message-Id: <20220118104338.2081259-11-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 References: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfAYiJ5UfdFkwFMpd5UMTSBW7sA3sjqaQJdluLSKHaG6bCIFmskNcmpm5Yj3fULkqbKmDqwkbDXdPR5B5bt3Lp2rJkm5bo8lZStbBsbIUAZD18WM7Za57
- 0q0kZSip9t9q0+P7Kk9CkdOHWDQLv/LYvvdUAfuaDVw68/pX+1Ed1AMqvnp/WyKeE2TZco2vooh80lSMYvcvaFbLspdOBl0pJEzKn5Lprl/N3bkxEF4YBRRw
- e7s2GbXRmynt7+DolPvdSNHWzkT10GVdTOVmKBUxCqAg7bbxVFvFqf+W3FAzd5Om5We+NC2UQJrm070mRAFYXC8R9j+AgV3Z95uqr4uHtwa1GXnAFkQMwZ7u
- +rl1D86814PolIJ59xqq3YrXuBVwtX0ntax6Sv/x26GtUTZu4iE4m0O7v5a7a++UjKGly9i5kbg9sdZTG93qd5HrPEF785XU0b0U4reFEx8c29pn4ipXGW6B
- QYh+AU1NcQ4EJ0aE4BQJ1+LS3A46YUoT2tVr49tSkZnZdcCO8QIjZ1ElT+4H8dtSKYRI1gfucHZcEvXvsywznllt2cQWohSXErRm2061+C5NPM2Xf7mi2Xun
- /ILs6ptVlDJtvC9AILlaFHFNbZtzdaYVLuwMaQcZ2zagTssTXR2nP121b8BZJ2kR8R+0W0+rj/InMV115o7P+9xN7ZWe97TTHIeWhnWaRqNQXUu+V3uwwE1s
- tNEiZKgIlOgNZ2y7qi7HO4jWcQPBqUDscT/DXk79a0GLnKFYviKZX+4szNAvVeEP+BSmpwZQutVP07Mm4+efVb1ny5Tl39s98mYziutGsbynCkjymoS7piRv
- WZ/tfFzqAvaKneSTT9iXlza65DGmGUbdIZ7jhYHcra972mNUkADjTTFwF4mvuA==
-Subject: [Buildroot] [PATCH 09/28] configs/friendlyarm_nanopi_m1_defconfig:
- enable NEON/VFPV4 FPU strategy
+X-CMAE-Envelope: MS4wfDktE9Ilz2Qo8EGf/Cipux0GITtw2ev+1OJ8O68YCEvS0Z84j9vUvvDmLGZAymDpIpfXSH/qIyOeIcAaGWXtxTCT2V277lnU1KsFRDgNYt6EEpC/P2BK
+ QV3xQMRHCh+0syHKI5L3tGbkl4ZAx590kdK6+UmmfBKDMNIsGf+gaUJVbi/Wtynnc6g52nW2ED9FeaeAzG8QycwCL5CgNTKCiwrP2bqzjVr4rseNaQNwjxTK
+ Ht5AOBkQXpOLERUfrHecvNMc0prYAPBPvM61eEJ+Kb7IukioXOKTbRTyyoQSe/pdgR+Rqsz5aRv/8DdaRgSKJSh5gfVSwaxQFFuL6Im/ko6uQuuKjjvC2Eb5
+ ikafZQ8dGDM5y6tbfM058zdLdP7Y2A6OFKOt/h5E3+Ufeq776LP5tZV0fAu6NbT8SbOwlDYrd7fBpss8vQVKc7iHotHgBdp0c7IYtTAnC0ufgEPqe/VOp6Ze
+ pveJFkaM3Jh+eblU+CpefUMJw2f4S1EV7P6S8OX9lkhwik9i0uD2LE2Baaov0PqpuHBeFAf5ipGGDMjphg/izl9/QU56TJw0iBRyn7W0SG97Q9ZRVTecCBSZ
+ 1TEZ5XrqzaALfCNdv6nJiXmkBk9FqU0f71yx+XD4voJtmbXhmjXjBvM6NEw5sjepz1ALbk3m599X878O1xd/iYqVhxnyhDZOLmhVD9YKU8qAyUaO0shRx1Ey
+ 1mIUFIjG6lEjDOqfzMexiqL+byRpwoHaydFW3XUv3EHmUr2J/o2El4Od+ybpVXEM6TMJ8bVqP8vd6tgAilymbhGbVN3yg1gG6Pmn3tHQqQmT6kFizdv8Ml4f
+ lllZNCsTP6Z0cK56JKeB9oMDzIsvownjN881CB5NwM/b/4kEurTzK6b8i4sAtA==
+Subject: [Buildroot] [PATCH 10/28]
+ configs/friendlyarm_nanopi_m1_plus_defconfig: enable NEON/VFPV4 FPU
+ strategy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,13 +96,13 @@ FPU strategy, so let's enable it instead of only VFPV4.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- configs/friendlyarm_nanopi_m1_defconfig | 2 +-
+ configs/friendlyarm_nanopi_m1_plus_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/friendlyarm_nanopi_m1_defconfig b/configs/friendlyarm_nanopi_m1_defconfig
-index 18cfcb261e..6e78e662be 100644
---- a/configs/friendlyarm_nanopi_m1_defconfig
-+++ b/configs/friendlyarm_nanopi_m1_defconfig
+diff --git a/configs/friendlyarm_nanopi_m1_plus_defconfig b/configs/friendlyarm_nanopi_m1_plus_defconfig
+index 06adc54b15..bd4d78cbf6 100644
+--- a/configs/friendlyarm_nanopi_m1_plus_defconfig
++++ b/configs/friendlyarm_nanopi_m1_plus_defconfig
 @@ -1,7 +1,7 @@
  # Architecture
  BR2_arm=y
