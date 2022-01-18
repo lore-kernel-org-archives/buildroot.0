@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D39C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 21:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A28BC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 22:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB71981340;
-	Tue, 18 Jan 2022 21:58:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAB214016D;
+	Tue, 18 Jan 2022 22:27:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id awJV-7_s-WC3; Tue, 18 Jan 2022 21:58:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB7D381306;
-	Tue, 18 Jan 2022 21:58:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AF8C1BF33E
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 21:58:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 196F140893
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 21:58:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kQrfr8gm2vgK for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 21:58:11 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8tdwD3744orM; Tue, 18 Jan 2022 22:27:11 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 153C340179;
+	Tue, 18 Jan 2022 22:27:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 41CCF1BF399
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 22:27:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11432408F0
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 22:27:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jXWYa5PD80bB for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 22:27:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BCF9940872
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 21:58:10 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id d3so850870lfv.13
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 13:58:10 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3418F40180
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 22:27:05 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id v123so1231448wme.2
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 14:27:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=qdUxk0yLADT4YaJW8xMH5RKmhPKL6y425O4hkn3xDz4=;
- b=VDPE5ndemLbMz7bqlkJt+R/zDlw+kfJ4i/LkpWoWKB8PHDqcN6K6PA+kPWTfcu5N2U
- upQMZYoWBauCw2Zf8PfdbiootjbUAZ/tmhFTjs7NZjnYg9e911mRc1HwmhlRz1jbiaN9
- agmriiT6ChBY85gQTFg1zxJe5FPVprdGMDKz1i2BgGPzB3s1fWpBsN8xlGXKvpCBCVyM
- S8T9MTKP9bWKJeOfT+P4Bu80qnBEL52hpUewqmaxu2c1zIjt0awC+4ppwKkuZJNjqxh/
- pm5WbzslYmv4DuKXQwGkqXdXNu9ABM2+TYuBqwX+Q0VF+e4Wz/OLGlhjuQLs012bpTX3
- rLlQ==
+ bh=zDzKRZOe0zrvQbxF23mZMtILeOyGZKzTfBhrMsNbqXQ=;
+ b=nFfIRjuL+34UF1uU2q56m21X+GHiAIsYFHeIa1LurpTO0FYISpas9Q3J015S6ug4fx
+ oWsj/cWc8ltENhIEtWzYb+lYMwKbI/aC1HBuUdKqVgUxXvk2jmgJHi5EK+BOSV9IEcpa
+ d9yHT7jh7rNbHaj29eWJpBSHYKdBGZt3kV/iI//5q+hBytZyF1KWah9vTIrbRpTMthdE
+ mTAEwww2WjCviXI15UEm/e6QkXnGzdzWxiBZMaquD95fIjBvjDnv3h0mHuR+HVQGndUh
+ rmrNvCivGCBoobpeQdzzAfTLZAASV2AVqmPIW2Fp5k+MghAjVuPYp71Q9SCXnFREYN9U
+ Grsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=qdUxk0yLADT4YaJW8xMH5RKmhPKL6y425O4hkn3xDz4=;
- b=5sohVHMMo9/O+7VHy08IoFrQXlMaQl5TPs7cG6pT82GSNBJTkZJaDYjSowN0a9BbP9
- 8NZqb21fp5nGSaBl4UKPGpHicX4osNA0+KMIoXm5QK6BZrCvM6lbtKUc/B2QfxSXqZYs
- sZe35aaOZWpOOo7rujbudjWB/ZxBpTgm/WXrZJOI+r8UH1p4iMnna6nYD92s9SRGeXfR
- c8+iRDoTTcKAOHZQEMVYi23202cisxhVEJhCyILD7/fQ1qnNZnF0Qsj/v3c83L7T2R4q
- O0HWcvRiYpBBhfNPMybQkIf+VG7IaL2AReooz7OGbuxsmqKHQKDbuTSjj4/xCY/YK/U1
- xVeQ==
-X-Gm-Message-State: AOAM530SMX2GXHLs/cdtup+eQ6bd8rq8WvDxcXi3LOSFMUlDPS747vmO
- wXOovV/2unzTPB/1GFnQkZ466HNMXpo=
-X-Google-Smtp-Source: ABdhPJyWbM92QN16GJ+8/FoZipSEo85ibkCzoQOw5jwk0obwwQE3wqv9eiRqtCCdfXIshXJ0XnFXTA==
-X-Received: by 2002:a05:651c:103c:: with SMTP id
- w28mr15271380ljm.148.1642543088579; 
- Tue, 18 Jan 2022 13:58:08 -0800 (PST)
-Received: from hellfire.local ([178.155.5.204])
- by smtp.gmail.com with ESMTPSA id f20sm1723749ljg.112.2022.01.18.13.58.06
+ bh=zDzKRZOe0zrvQbxF23mZMtILeOyGZKzTfBhrMsNbqXQ=;
+ b=zKp7MfROFRWOHDmP55y3IQGa6Kx9agHcPOzDu+mkuTLsJQpHBzWHGAKeyAh9QtY8/y
+ ipqsluZkKRjetqkT87fEk8Sue+m+BBBNBttxOyd8EjQLnj1r9WGfMJrwLswjFxn8p8JY
+ rJtH3GvP0iC56pKwT9vYAnfaV/km5CfnS5BaHvyNfcWiENDKV2K+btaCQYoioQtClYTF
+ HODo9NQjI4HOhoNVny8nLpUkNShaOwH1xQB5lmgECIl/tl6PcF1dc1rtteajdRabPyrN
+ /NI7w1EhjjXDVhwAStiJaGn9vYROMdGIhVCiLJR3cKmqwKg6gJmDr6xoW7XQGS3zOZr2
+ NzdA==
+X-Gm-Message-State: AOAM5300eLJpIVkOwvHj8K02fXwQsehDBfnFqxYSory32d2/AZaYLbZj
+ cHx23dOGt6d3PNigHb8+UH0ke065MYw=
+X-Google-Smtp-Source: ABdhPJxA5dr1cPO94XWSUwD9JElKDTBxtlInjm9o7JNJo0R0nJ/6I9mPF2Eff3FHURsXdljt/nlc2g==
+X-Received: by 2002:a7b:c5ce:: with SMTP id n14mr599530wmk.11.1642544823309;
+ Tue, 18 Jan 2022 14:27:03 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-358-126.w2-10.abo.wanadoo.fr.
+ [2.10.19.126])
+ by smtp.gmail.com with ESMTPSA id r15sm3929205wmq.3.2022.01.18.14.27.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 18 Jan 2022 13:58:07 -0800 (PST)
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+ Tue, 18 Jan 2022 14:27:02 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 Jan 2022 00:58:03 +0300
-Message-Id: <20220118215803.18635-1-kuzminov.sergey81@gmail.com>
+Date: Tue, 18 Jan 2022 23:24:24 +0100
+Message-Id: <20220118222425.164134-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] board/orangepi/orangepi-zero:extlinux,
- refactoring
+Subject: [Buildroot] [PATCH 1/2] package/gcc: define _REENTRANT for OpenRISC
+ when -pthread is passed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,287 +86,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Will Newton <will.newton@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
-- common scenarios for multiple boards to create the SD image: board/orangepi/common;
-- extlinux.conf instead of boot.scr;
-- exclude FAT partition;
-- defconfig refactoring;
-- kernel: bump to version 5.16.1;
-- u-boot: bump to version 2022.01;
-- added BR2_ARM_FPU_NEON_VFPV4;
-- added fast_commit for ext4.
+Patch added by commit eee96b0f0ad224b3e09a9b98c26d056e18f17fd5 on gcc
+9.3.0 must also be applied on gcc 10 and 11 to avoid the following build
+failure on numerous packages (babeltrace2, pcsc-lite, tpm2-pkcs11,
+etc.):
 
-Patch required to work:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220118063531.2039729-1-giulio.benetti@benettiengineering.com/
+configure:13774: checking whether pthreads work with -pthread
+configure:13868: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/bin/or1k-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2  -std=gnu99 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c   >&5
+conftest.c:27:26: error: #error "_REENTRANT must be defined"
+   27 | #                        error "_REENTRANT must be defined"
+      |                          ^~~~~
 
-Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+It should be noted that external bootlins will have to be rebuilt.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cb58d4fbaeb08d188c2f8bf05ef1604789fa8766
+ - http://autobuild.buildroot.org/results/7af9d4b68bd46ed260ed66ba2cc3c9c21482e741
+ - http://autobuild.buildroot.org/results/6f926bec146752873f8032b593f0de1cb222ea46
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/orangepi/common/extlinux.conf       |  5 ++
- board/orangepi/common/genimage.cfg        | 20 +++++++
- board/orangepi/common/post-build.sh       | 34 +++++++++++
- board/orangepi/common/uboot-extras.config |  3 +
- board/orangepi/orangepi-zero/boot.cmd     |  9 ---
- board/orangepi/orangepi-zero/genimage.cfg | 36 ------------
- configs/orangepi_zero_defconfig           | 69 ++++++++++++++---------
- 7 files changed, 104 insertions(+), 72 deletions(-)
- create mode 100644 board/orangepi/common/extlinux.conf
- create mode 100644 board/orangepi/common/genimage.cfg
- create mode 100755 board/orangepi/common/post-build.sh
- create mode 100644 board/orangepi/common/uboot-extras.config
- delete mode 100644 board/orangepi/orangepi-zero/boot.cmd
- delete mode 100644 board/orangepi/orangepi-zero/genimage.cfg
+ ...TRANT-for-OpenRISC-when-pthread-is-p.patch | 31 +++++++++++++++++++
+ ...TRANT-for-OpenRISC-when-pthread-is-p.patch | 31 +++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+ create mode 100644 package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
 
-diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
+diff --git a/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
 new file mode 100644
-index 0000000000..015f29270e
+index 0000000000..5ac03d7c0c
 --- /dev/null
-+++ b/board/orangepi/common/extlinux.conf
-@@ -0,0 +1,5 @@
-+LABEL default
-+  kernel /boot/%LINUXIMAGE%
-+  devicetreedir /boot
-+  append root=PARTUUID=%PARTUUID% rootwait console=${console}
-+# append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
-diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
++++ b/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+@@ -0,0 +1,31 @@
++From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 27 Mar 2020 21:23:53 +0100
++Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
++
++The detection of pthread support fails on OpenRISC unless _REENTRANT
++is defined. Added the CPP_SPEC definition to correct this.
++
++Patch sent upstream: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94372
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ gcc/config/or1k/linux.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
++index cbdc781418f..36303af892c 100644
++--- a/gcc/config/or1k/linux.h
+++++ b/gcc/config/or1k/linux.h
++@@ -32,6 +32,8 @@
++ #undef MUSL_DYNAMIC_LINKER
++ #define MUSL_DYNAMIC_LINKER  "/lib/ld-musl-or1k.so.1"
++ 
+++#define CPP_SPEC "%{pthread:-D_REENTRANT}"
+++
++ #undef LINK_SPEC
++ #define LINK_SPEC "%{h*}			\
++    %{static:-Bstatic}				\
++-- 
++2.31.1
++
+diff --git a/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
 new file mode 100644
-index 0000000000..8b80ffb138
+index 0000000000..5ac03d7c0c
 --- /dev/null
-+++ b/board/orangepi/common/genimage.cfg
-@@ -0,0 +1,20 @@
-+image sdcard.img {
-+	hdimage {
-+		partition-table-type = gpt
-+		gpt-no-backup = true
-+		gpt-location = 1008K # 1MB - 16KB
-+	}
++++ b/package/gcc/11.2.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
+@@ -0,0 +1,31 @@
++From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 27 Mar 2020 21:23:53 +0100
++Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
 +
-+	partition u-boot {
-+		in-partition-table = false
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1000K # 1MB - 8KB - 16KB
-+	}
++The detection of pthread support fails on OpenRISC unless _REENTRANT
++is defined. Added the CPP_SPEC definition to correct this.
 +
-+	partition rootfs {
-+		offset = 1M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
-new file mode 100755
-index 0000000000..296f94b174
---- /dev/null
-+++ b/board/orangepi/common/post-build.sh
-@@ -0,0 +1,34 @@
-+#!/bin/sh
++Patch sent upstream: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94372
 +
-+linux_image()
-+{
-+	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
-+		echo "uImage"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
-+		echo "Image"
-+	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
-+		echo "Image.gz"
-+	else
-+		echo "zImage"
-+	fi
-+}
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ gcc/config/or1k/linux.h | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+generic_getty()
-+{
-+	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
-+		echo ""
-+	else
-+		echo "s/\s*console=\S*//"
-+	fi
-+}
++diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
++index cbdc781418f..36303af892c 100644
++--- a/gcc/config/or1k/linux.h
+++++ b/gcc/config/or1k/linux.h
++@@ -32,6 +32,8 @@
++ #undef MUSL_DYNAMIC_LINKER
++ #define MUSL_DYNAMIC_LINKER  "/lib/ld-musl-or1k.so.1"
++ 
+++#define CPP_SPEC "%{pthread:-D_REENTRANT}"
+++
++ #undef LINK_SPEC
++ #define LINK_SPEC "%{h*}			\
++    %{static:-Bstatic}				\
++-- 
++2.31.1
 +
-+PARTUUID="$($HOST_DIR/bin/uuidgen)"
-+
-+install -d "$TARGET_DIR/boot/extlinux/"
-+
-+sed -e "$(generic_getty)" \
-+	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
-+	-e "s/%PARTUUID%/$PARTUUID/g" \
-+	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+
-+sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/orangepi/common/uboot-extras.config b/board/orangepi/common/uboot-extras.config
-new file mode 100644
-index 0000000000..5aa97523d9
---- /dev/null
-+++ b/board/orangepi/common/uboot-extras.config
-@@ -0,0 +1,3 @@
-+CONFIG_BOOTDELAY=0
-+CONFIG_USE_PREBOOT=y
-+CONFIG_PREBOOT="setenv preboot;"
-diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
-deleted file mode 100644
-index d094a64fe5..0000000000
---- a/board/orangepi/orangepi-zero/boot.cmd
-+++ /dev/null
-@@ -1,9 +0,0 @@
--setenv fdt_high ffffffff
--
--part uuid mmc 0:2 uuid
--setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
--
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
--
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
-deleted file mode 100644
-index 32f5454ae6..0000000000
---- a/board/orangepi/orangepi-zero/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the OrangePi Zero
--#
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-h2-plus-orangepi-zero.dtb",
--			"boot.scr"
--		}
--	}
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 1c107b10e6..d1cae2b4f3 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -1,49 +1,64 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_FPU_VFPV4=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+#BR2_ARM_INSTRUCTIONS_THUMB2=y
-+
-+# System
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
-+BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
- BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
--BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
- BR2_SYSTEM_DHCP="eth0"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
--BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.config"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/orangepi/common/uboot-extras.config"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.config"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="63M"
-+BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,fast_commit"
-+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
-+BR2_TARGET_ROOTFS_TAR=n
-+
-+# Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_GENIMAGE=y
- 
--# wireless driver and firmware
-+# Wireless driver and firmware
- BR2_PACKAGE_XR819_XRADIO=y
- BR2_PACKAGE_ARMBIAN_FIRMWARE=y
- BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819=y
- 
--# wireless support
-+# Wireless support
- BR2_PACKAGE_IW=y
- BR2_PACKAGE_WIRELESS_TOOLS=y
- BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-@@ -51,5 +66,5 @@ BR2_PACKAGE_WPA_SUPPLICANT=y
- BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
- BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
- 
--# spi flash support
-+# Spi flash support
- BR2_PACKAGE_MTD=y
 -- 
 2.34.1
 
