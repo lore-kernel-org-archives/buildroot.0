@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 991EFC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A75FDC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jan 2022 10:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E0BC60D7B;
-	Tue, 18 Jan 2022 10:43:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2120F60D78;
+	Tue, 18 Jan 2022 10:44:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SN5csuqsnGhn; Tue, 18 Jan 2022 10:43:38 +0000 (UTC)
+	with ESMTP id YcboyWkgvjxl; Tue, 18 Jan 2022 10:44:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D66A60D78;
-	Tue, 18 Jan 2022 10:43:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 42F331BF28D
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:43:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6163460D80;
+	Tue, 18 Jan 2022 10:43:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ADF21BF28D
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EBA260D78
- for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:43:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94DB6405EC
+ for <buildroot@lists.busybox.net>; Tue, 18 Jan 2022 10:43:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U8MDYbcGqMjP for <buildroot@lists.busybox.net>;
- Tue, 18 Jan 2022 10:43:34 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B7Y0YM45vhi5 for <buildroot@lists.busybox.net>;
+ Tue, 18 Jan 2022 10:43:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp3.osuosl.org (Postfix) with ESMTP id B976A60D76
- for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:43:33 +0000 (UTC)
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29FF9400C6
+ for <buildroot@buildroot.org>; Tue, 18 Jan 2022 10:43:55 +0000 (UTC)
 Received: from localhost.localdomain ([146.241.178.108])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9lxVneE6rX0z79lxWneNHv; Tue, 18 Jan 2022 11:43:30 +0100
+ id 9lxknDlmTDzPJ9lxmna3NC; Tue, 18 Jan 2022 11:43:54 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642502610; bh=Hg9OWpIfFCpSIkEFtDUh7Y5ajk/p4wnhBnmgQWpwwkw=;
+ t=1642502634; bh=Hg9OWpIfFCpSIkEFtDUh7Y5ajk/p4wnhBnmgQWpwwkw=;
  h=From:To:Subject:Date:MIME-Version;
- b=cnU8yVNXJgpT7fjBBwdVFFdZ4IdI/FXAEAFp9NShBIB7PjE/MqOeD7RrDxEqk28NX
- BmaA9UxxhkLGt0iYfeN40P7/C6Yweo94odVP53wTBmGfro09ZcYL6ToBLnC2dQq1pY
- DEQSWVuizBj4R+PF489Qr0fEVKLI5TPRHg51PdklZSTLhk8aqK36sQ7VlN6kxW+il4
- E4BfCbncAjgI5zZ2s6hVmRvbrnIWaK4YK3j3C2TQUkDrUy0LMaxXPRmEPTDkJkPa6L
- AQEXpY4O3pTCmU0tJNxM/7PGnEtSYpQwg9GiUGp1XiOd4U9hnLk2qpOREDJkQw/ZwZ
- 2nPejet5S9oXQ==
+ b=LTEYYKyqszaMCDPIQ27X9f4bAqnTeGNczKP1WarJWQJLEvVrRg4Ws2nvp2vR/az+6
+ CmVd53IKEiTVREMHmJS2K1JN7IK/tO0KoO4ZNMLZvsJ2s3tViS8Nsg6Tvr/MtvnCPU
+ OaqiqNp5ZCdEi5qMIvtriUA70IJxn5GS0VvkM+8kmy510foP+qrgE8vV9T1GQPFTtl
+ Ct0Sf81GpQeEy8B/H7toxcAMaHiemqZn4xKFa7pqeV/QnnaVfEI6vdd1UmJ+MlNHRV
+ XpUxtoQvL2ZgCJqZbVi1e/v7GO5Za71IHJmlIiAX7Mt1r1xx0ZnhuY1uyR8I96iG1a
+ F9vikh6haq2gQ==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jan 2022 11:42:56 +0100
-Message-Id: <20220118104324.2081177-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 18 Jan 2022 11:43:10 +0100
+Message-Id: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfFyY8jydvl9hKplVdAItKsvzXMZAs8rTS3E7D8GtMlP4L+udb2XqNiO8hZafMcKVGhg+3kmB2EAmtc5wBgMw4AMU9VzT804bbIUF+fQSSaaIBi3JFYiw
- TriWoQ4Do7dC/WPM3ac5f2ar9dnZfE7350SxRrbb9/yvDPOSP3BczDuz5vEhlI6AQu0TcSxQrOfvQSLOTsQ5iYcPYHzW5vsDGSp7Je4x1PuRX3TAQcZfVUES
- +9fJzArmqDXKjUT5lpdu7pWvXL9tvX2Je+pBdyc387OQH6J6G+E0fn/jAP9VSm9Yi8mDzHNW8nhYhve+1QXB7fvJ7RCiMM2DMgp0GE3zrUm2Su95ffrzPIZT
- cU8MkMvno8daEyaVDqhUssp5CXqPXSxAmfjRijVVG6OyG4BPmPtvaAtqMeUQj+wW3YiB7vUwSIFmC67K+a8Z7ZvtJKm9nboS191KyLBPpXgLMgSMBzLOK646
- Yvb9tjJRSrowVFOTa5MeShgDCKnBVqaKgQdFw8wfWtl5DLoq63vsuqIMkfG9Re61WKkbsJuM6BC7rUxQ39SQO7ffhKk0EFbXjzAZBDRxj3AVr8lloWDHA9ra
- 6TTFGpe51jfc3y0TYPAgVOUUmp1IyDQFaDkX7q8WtSuHT+VHOnm6Df+UIo2JtvcANTYGgKYVxt/2Tk4AnhOv9E0yKq0mnisnwO8Y0YFync9yWU2NxWZI7Rvq
- 8GwmQETMuwr4VCDJjrAB2ZXhX+tkBIkPDN1Tm8fQkFtM1qPgg8OmnXR0QLHp44kdg6gLtZM+0BTwUUPB5eFK5Q9ZOj2hfhsq3QbpNVwO2UH1BmCK2lulQE0K
- lbJirbSobLkMr0O+rk6QF/8VGDynM0saZCD9OccMwVbpjJpJUB4+ISMesyTIyw==
+X-CMAE-Envelope: MS4wfCDzQHPNaIltGl0rq50eEPgRfGBIvu+QGMabeDoODOsi+MOs85zZDyzHV1I3pGYU9PFFfT8jjyhKciPyrFSmjc9CcTnFRfobw4x0Mq+MxccCvL2uV+rz
+ irrnzLV1YHa5vV88a8iJyexJkaeGLYHWUKSEJRgSgYgEjtiOFoWNculICby/2E7A9dW+V8RGiDJCnzRa7DryodTVA2TruaKOmbGu1B444YAc5K+BIX7R+7dy
+ iruDdZs5qml9C0mlBYrjUIepcTCV1+IEKazOPA+LsEHnIk8q7QTRTmp/XE6QVqRFoDUYAw33oH6ry9DFpCk27XMxM4gyiFaBaZdlT0vVXW8n7BigbBP83jqP
+ fIQQJOnX3iRRGjEoIko/yFRioAachT0MUVdELa1nklXhkeZrz5ykVGz3zeo6zdBCfy/O+8jPTxfFIsiddu3noPrfVUHjEawqk9vfF/fO4TwWJO0WvkDoSUxQ
+ FUDq6yrD5Gr4vJLPG3HcG2tl5hxAyQQiPjWkXxLigdbTnQSo70fEPK7iwyt0N+sVqeaaBoTl464SDXD+MpwmRzjBeko1rI/Jsj5PphrpUnYhZGf0PJSiVn+H
+ 1bzLCOVDiKxzmXDKE5lUUojo5JlggzpQFLGYyFxSYAjzqA7QXt4DbVd1r/cWVn767M2oHR8+qVtE0fo+S0V27cX1fJxJ5tdbAG/BnnRj2k5+F9WxFbmGZR3t
+ 49EJkh8dYBZWaSVj9FN+4AKmZEIYSUwxbJgLbVK+4NbeSSfg01BwARMNy4fIiJtq9URdtgi/WoYgfUxPqDnRtDXVW1SyfFIpju4Tu0c+hT/wlgJMfdzA5bSD
+ pSepx6ksdTA9uXFSHxppt0B7vqRX0Y0h3zHsrEov3hOr9pwSIvvBM1224PGFvA==
 Subject: [Buildroot] [PATCH 00/28] Use the best FPU strategies on 32-bits
  Arm Cortex
 X-BeenThere: buildroot@buildroot.org
