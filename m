@@ -1,62 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59A69C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 08:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 167D4C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 08:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E911F60B00;
-	Wed, 19 Jan 2022 08:16:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EA884043B;
+	Wed, 19 Jan 2022 08:46:05 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YprJW5suyeVT; Wed, 19 Jan 2022 08:16:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GdJwztB5GV64; Wed, 19 Jan 2022 08:46:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 262AC60807;
-	Wed, 19 Jan 2022 08:16:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89E67403A4;
+	Wed, 19 Jan 2022 08:46:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6DEDC1BF35B
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:16:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E576A1BF35B
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C37C60807
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:16:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E173260A99
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:46:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NJ2ooNU8OeNh for <buildroot@lists.busybox.net>;
- Wed, 19 Jan 2022 08:16:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55C84607C9
- for <buildroot@buildroot.org>; Wed, 19 Jan 2022 08:16:55 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPA
- id A69FnTFwKc6LXA69Gn7FAN; Wed, 19 Jan 2022 09:16:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642580214; bh=4hzz2W+EyfsggaB8jm97es9cWb8KAKvHrOrQ1TbiD4U=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=JZWrynhqBTTaGerTFEGi3Cke/N3HYrqKtFrhwRz3Sl/2TOj7wQZrY3g7Nac+mrt40
- rEFED1ntDEe1kj922Rrw042h/YPcri/t4Y/FUcNoMTZG3Go7QvWjxlW1m3JKmaIUOb
- yzUY5+nEn2au+C0LGHvu+FZ1wVBebRrCVLAgv1rMTPgAnNGW1Nre1KNQs7vY6VsEF1
- CcEFxz1wwZix28Snf0uCaBYDnSok8wFf76bGAqnsESo/UicwddfV+N8q8OyQS3KKdH
- vB1Cxu40axCQyVfq9tylS1nwOLeIXorW46mLQP3wxmlKv616i94qbu/Hf9yBtkMro6
- RN63O0ZGfkkOQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Wed, 19 Jan 2022 09:16:53 +0100
-Message-Id: <1F1B4469-02B4-4D3D-A4DD-B2A76124B13C@benettiengineering.com>
-References: <YefIQplvD1EaBOXX@antec>
-In-Reply-To: <YefIQplvD1EaBOXX@antec>
-To: Stafford Horne <shorne@gmail.com>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfMKfEQqlOQ39EufVhla+rV8vdGIHF88QRjfSXj5kIiXo6pTdR/tVtIAaUW+3RKOsyVHBhf0w8kagU9md5rGzfE2RVfAl/hFCQugpjB21/W03rHUp6gKJ
- BoDQnARg16fV6JdKad5nitW/TwEsKRCuPQJ4t2lh2vkfOOdTw2RQFxuaC9XFGI+j+ngmG8FfuXyqB52PIVXz/SdLk0rXj1SIiv+qv6mYfoTKfRGrFsBLhiT6
- 8cvqgfQvFlOx7uQpeTR8B/+ifsvDCkwdJgu1D8gj4dV+5CiHzmcAsJ7GFuhHSW/lAaI0RXJHK98teQ6WUzILXXDi/J7/3d3ICX0pQz/IbPRj97UeBBB/Snrg
- ctOaWBW9JK6ilmXcUqe2tmnoBhz20qsks5MiQNYLAydNUfxWVw9S545aQpGj8wL698tOVFAO
-Subject: Re: [Buildroot] [PATCH 1/2] package/gcc: define _REENTRANT for
- OpenRISC when -pthread is passed
+ with ESMTP id zL1NCJYOIlR3 for <buildroot@lists.busybox.net>;
+ Wed, 19 Jan 2022 08:45:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B58660A8E
+ for <buildroot@buildroot.org>; Wed, 19 Jan 2022 08:45:57 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id r16so1567837ile.8
+ for <buildroot@buildroot.org>; Wed, 19 Jan 2022 00:45:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=abj7YwE3Kh5i+y9UCkpuVdwxQIO+9u2Kq1mE+QMM0Ws=;
+ b=SfwWHnwxi7OZYQ+OKBbOwVnB+vLAmUtg0AWIMV3auplG7jrnIrbKNQE92UQYF9Srbd
+ VneuwxLbNR4TZKPTBi+ChVvsF/dIr88Yu/PQ92GgEQ2Njd4S3dl0BmiPLmQpcgNmk2N3
+ dZnQmNTVQXDDLiXmnzMoP7+Rl6A9JI/lQL9626YlwF3LpP3Z+UgmidA63TFxAKWHYHXd
+ BEyiC2w3q0a6yQwkmpr6X4FOBVQ+wnifQ9PEMRWWrtgf3x+oYKbmr0o/DeVqtScDnvLO
+ PLC07Q8IVC1xOaMmiqFbIAIPU4dotujy9pIYg/mlW/9LSiGG9hjT6q+uhzV0doZXwuIR
+ 7pxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=abj7YwE3Kh5i+y9UCkpuVdwxQIO+9u2Kq1mE+QMM0Ws=;
+ b=PN9QfQJs5nIyDf+/Z6tf20gBHatwxzEbLeYS5HYO8WAcEgQqIXrfinV4DW1i2BEABk
+ STqYgig2U1dUodCCIFz9m2nzSzzP3hRm1GrBiPF8GpIbxn0nFgjg4D/MiDpNrcvl19fv
+ ZerhKfXYzyPDni7ikasOJGGpJa/uHjvWBJurgtbhjotWntp4OPk82CzKG6cdKH7jR9z1
+ JMX1QBnl7dGoEWKcB2M98TxpwnU39mi3T3+wJJkBABQ2k4mBWFgsG8o7cLgsr0tES2jK
+ QM7wQ5t9oJ756iNQgDRY9BaSk89mdceZSScWYTUcUpKoFubA3M+iiKIzlRj5IOFZglQQ
+ 7t1g==
+X-Gm-Message-State: AOAM532Yby+a38GVgl2fSsLy7S6dNkIX0VKvId+5lrccmPGIEFvgi5x3
+ 04Hjo2RDbLtFNZ/LGRgSsEZrgLBhu7U=
+X-Google-Smtp-Source: ABdhPJyWhApP78WEj8rN3dMpXlad8waeWLYIEXerZsDtOccVqXZzXcSmkO0qzzZTJS82YhKFGv6KuQ==
+X-Received: by 2002:a05:6e02:1e01:: with SMTP id
+ g1mr15969317ila.129.1642581956362; 
+ Wed, 19 Jan 2022 00:45:56 -0800 (PST)
+Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
+ [97.118.239.242])
+ by smtp.gmail.com with ESMTPSA id q16sm4830513iow.47.2022.01.19.00.45.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 19 Jan 2022 00:45:56 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 19 Jan 2022 01:45:45 -0700
+Message-Id: <20220119084545.3642950-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH 1/1] package/re2: switch to generic-package make
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,51 +87,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Will Newton <will.newton@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgU3RhZmZvcmQsCgo+IElsIGdpb3JubyAxOSBnZW4gMjAyMiwgYWxsZSBvcmUgMDk6MTQsIFN0
-YWZmb3JkIEhvcm5lIDxzaG9ybmVAZ21haWwuY29tPiBoYSBzY3JpdHRvOgo+IAo+IO+7v09uIFdl
-ZCwgSmFuIDE5LCAyMDIyIGF0IDA4OjU0OjExQU0gKzAxMDAsIFRob21hcyBQZXRhenpvbmkgd3Jv
-dGU6Cj4+IEhlbGxvIEZhYnJpY2UsCj4+IAo+Pj4gT24gVHVlLCAxOCBKYW4gMjAyMiAyMzoyNDoy
-NCArMDEwMAo+Pj4gRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+
-IHdyb3RlOgo+Pj4gCj4+PiBQYXRjaCBhZGRlZCBieSBjb21taXQgZWVlOTZiMGYwYWQyMjRiM2Uw
-OWE5Yjk4YzI2ZDA1NmUxOGYxN2ZkNSBvbiBnY2MKPj4+IDkuMy4wIG11c3QgYWxzbyBiZSBhcHBs
-aWVkIG9uIGdjYyAxMCBhbmQgMTEgdG8gYXZvaWQgdGhlIGZvbGxvd2luZyBidWlsZAo+Pj4gZmFp
-bHVyZSBvbiBudW1lcm91cyBwYWNrYWdlcyAoYmFiZWx0cmFjZTIsIHBjc2MtbGl0ZSwgdHBtMi1w
-a2NzMTEsCj4+PiBldGMuKToKPj4+IAo+Pj4gY29uZmlndXJlOjEzNzc0OiBjaGVja2luZyB3aGV0
-aGVyIHB0aHJlYWRzIHdvcmsgd2l0aCAtcHRocmVhZAo+Pj4gY29uZmlndXJlOjEzODY4OiAvaG9t
-ZS9naXVsaW9iZW5ldHRpL2F1dG9idWlsZC9ydW4vaW5zdGFuY2UtMC9vdXRwdXQtMS9ob3N0L2Jp
-bi9vcjFrLWxpbnV4LWdjYyAtbyBjb25mdGVzdCAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdF
-RklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0ICAtT3MgLWcyICAtc3RkPWdudTk5
-IC1wdGhyZWFkIC1EX0xBUkdFRklMRV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09VUkNFIC1EX0ZJ
-TEVfT0ZGU0VUX0JJVFM9NjQgIGNvbmZ0ZXN0LmMgICA+JjUKPj4+IGNvbmZ0ZXN0LmM6Mjc6MjY6
-IGVycm9yOiAjZXJyb3IgIl9SRUVOVFJBTlQgbXVzdCBiZSBkZWZpbmVkIgo+Pj4gICAyNyB8ICMg
-ICAgICAgICAgICAgICAgICAgICAgICBlcnJvciAiX1JFRU5UUkFOVCBtdXN0IGJlIGRlZmluZWQi
-Cj4+PiAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+Cj4+PiAKPj4+IEl0IHNo
-b3VsZCBiZSBub3RlZCB0aGF0IGV4dGVybmFsIGJvb3RsaW5zIHdpbGwgaGF2ZSB0byBiZSByZWJ1
-aWx0Lgo+Pj4gCj4+PiBGaXhlczoKPj4+IC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3Jn
-L3Jlc3VsdHMvY2I1OGQ0ZmJhZWIwOGQxODhjMmY4YmYwNWVmMTYwNDc4OWZhODc2Ngo+Pj4gLSBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy83YWY5ZDRiNjhiZDQ2ZWQyNjBl
-ZDY2YmEyY2MzYzljMjE0ODJlNzQxCj4+PiAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9y
-Zy9yZXN1bHRzLzZmOTI2YmVjMTQ2NzUyODczZjgwMzJiNTkzZjBkZTFjYjIyMmVhNDYKPj4+IAo+
-Pj4gU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFp
-bC5jb20+Cj4+IAo+PiBXb3csIHRoaXMgcGF0Y2ggc3RpbGwgaGFzbid0IGJlZW4gYWNjZXB0ZWQg
-aW4gdXBzdHJlYW0gZ2NjPyBJdCdzIGJlZW4KPj4gc3VibWl0dGVkIGEgbG9vb25nIHRpbWUgYWdv
-IEkgYmVsaWV2ZS4KPiAKPiBIZWxsbywKPiAKPiBJIG11c3QgaGF2ZSBtaXNzZWQgdGhpcyBvbmUu
-ICBJdCBsb29rcyBnb29kIHRvIG1lIEkgd2lsbCBwdXNoIGl0IHVwc3RyZWFtLgoKSeKAmXZlIGp1
-c3Qgd3JpdHRlbiBJIHdvdWxkIGhhdmUgcGluZ2VkIHlvdSBzb29uIGFuZCB5b3XigJl2ZSBhcHBl
-YXJlZDotKQpCZXR0ZXIgdGhpcyB3YXkhCgpLaW5kIHJlZ2FyZHMK4oCULQpHaXVsaW8gQmVuZXR0
-aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwoKPiAKPiAtU3RhZmZvcmQKPiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+The cmake build appears to be missing features such as pkg-config
+generation support, switch to the regular makefile based build
+which appears to work better.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/re2/re2.mk | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index b562d5d7ef..144c82339f 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -10,8 +10,30 @@ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
+ RE2_INSTALL_STAGING = YES
+ 
+-RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
+-HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
++define RE2_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		-C $(@D)
++endef
+ 
+-$(eval $(cmake-package))
+-$(eval $(host-cmake-package))
++define RE2_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) install
++endef
++
++define RE2_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) install
++endef
++
++define HOST_RE2_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		-C $(@D)
++endef
++
++define HOST_RE2_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
++		-C $(@D) DESTDIR="$(HOST_DIR)" prefix=/usr install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
