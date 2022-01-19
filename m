@@ -1,82 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D46CC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 08:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87C53C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 08:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89979404FF;
-	Wed, 19 Jan 2022 08:14:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 202DE41515;
+	Wed, 19 Jan 2022 08:14:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OgydLAsL6NLg; Wed, 19 Jan 2022 08:14:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZPeh8BUwa6B4; Wed, 19 Jan 2022 08:14:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74E15403A4;
-	Wed, 19 Jan 2022 08:14:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D5D461BF35B
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:13:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51F39409AC;
+	Wed, 19 Jan 2022 08:14:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 76E3C1BF35B
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C384D60807
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:13:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72F12409AC
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 08:14:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hrG06xBYqq5K for <buildroot@lists.busybox.net>;
- Wed, 19 Jan 2022 08:13:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
- [IPv6:2607:f8b0:4864:20::102f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18719607C9
- for <buildroot@buildroot.org>; Wed, 19 Jan 2022 08:13:57 +0000 (UTC)
-Received: by mail-pj1-x102f.google.com with SMTP id
- a1-20020a17090a688100b001b3fd52338eso1931866pjd.1
- for <buildroot@buildroot.org>; Wed, 19 Jan 2022 00:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:references:mime-version
- :content-disposition:in-reply-to;
- bh=zr2e5zutvg4d0I7a19UMr/oXwXdYp3SyV8pktD7FJv8=;
- b=p/v4i9mUmCGMnze1gZb9Ys5Z0l7R8FjMEMP+qMnZlUpqD1jIn3yjgiPzprkxcYqxCk
- y9ntPq4PGqTp+M5KbDtT+7h4nWg3a8FY3RgsRW5GRqYOcVveaej0BiwPVA9I4oN5UeLI
- MStuCmppaPpqZTxV82uV9wV9XlM8goNFjB67ye6+G+nAOcdv/sBU4oE4eWInKsN1tvEr
- qg++bRb59kkX/Iu3RSu8GW/+24pTXoExh9/qRaJZhLfvNYqpJ4as5DoGo1xVXyH6lvqy
- 5qpg46kzekD7rl8XQ4FrOdbq3CN1tgSIT2zlbiPRcs6D5rFSOY7h4xBKLc8MdNHkK61E
- y6pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:references
- :mime-version:content-disposition:in-reply-to;
- bh=zr2e5zutvg4d0I7a19UMr/oXwXdYp3SyV8pktD7FJv8=;
- b=jmvNI/XDlGwQEeVbDbU3K1zjIijXUCOFzZn+2zlxBy9FIwyjT4buqa6JFi8+tWwmSu
- 75+xWtqsP2EVaTchRDPtLk8Z9/bYjGzhyMQ9BCS84P7l6YBNvhkyp2k0dgcIeRFzqNaP
- ZGktRjPlcui3ZPgDmq77uh5DO4+I7zexw9zTsawGyzZeWurAFUHiMiKOUR1/yC0i84xM
- Rs3hYzgRNw/Mkbsshkiw5pZdcX3WzhOi2kQbr6xGnNiwnEaI5s47+pF5OcnzHwZzo4Da
- K3+Dty/IMkvhul0eY3ubZtNSaFSfbdz5zJJMrD+he5JOMqzvhtrfUx1DVihExM3OvfGT
- o/9A==
-X-Gm-Message-State: AOAM5317piUu5/uOSdYH/+FOCqlzrhts4CQw0VEDxO9MQbXtcVUMjfmv
- 8Z5dcOXMnNTcr2mCCjSU5jc=
-X-Google-Smtp-Source: ABdhPJxGiZIGJJEVeNaRn+NBqWtKogrh9F7DhOYUoJ8AU62JAOWxuwx9h+HQto/jDpgwbINchCiiEg==
-X-Received: by 2002:a17:903:191:b0:14a:59cb:3199 with SMTP id
- z17-20020a170903019100b0014a59cb3199mr31149317plg.139.1642580037414; 
- Wed, 19 Jan 2022 00:13:57 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
- by smtp.gmail.com with ESMTPSA id a19sm5499144pfh.139.2022.01.19.00.13.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Jan 2022 00:13:56 -0800 (PST)
-Date: Wed, 19 Jan 2022 17:13:54 +0900
-From: Stafford Horne <shorne@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <YefIQplvD1EaBOXX@antec>
-References: <20220118222425.164134-1-fontaine.fabrice@gmail.com>
- <20220119085411.22ee6fb6@windsurf>
-MIME-Version: 1.0
-Content-Disposition: inline
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bt8nNw9PWGjP for <buildroot@lists.busybox.net>;
+ Wed, 19 Jan 2022 08:14:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED2234091D
+ for <buildroot@buildroot.org>; Wed, 19 Jan 2022 08:14:50 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id A67EnTDiYc6LXA67Fn7D0M; Wed, 19 Jan 2022 09:14:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642580089; bh=Qg4xhQAwSfPYAI5UD+HrSxE5tCAqjFr80XbyGbWHrYM=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=ivAkpv0Lg/+mHZUqDpCJUhlrS5hawh84AD8iqdlpfNaARQ1HesS5kXYfdDw+HEo+i
+ B8eQVE//Z99li7BNlDqwHZ0HXTw7HN5cA2Cd6Sw2j59Ym7M/1iEBnTeY5l1K52aPZs
+ Ti2+i7J4KSvVM6cThniwxn0SE0qtDN2QasXFQKk92Edp8JP9OiwKkzzPSmzdhjXIk6
+ WI+ST/dduxFJAsbnMDJ2WNoUe382WVWDD9Xdt9zm2okGb7zRRY2vKTOOk8b3GW+Ze1
+ WcPZUHWOX/OpFX6+QTwqG28Y/lQU2NTOBaWHoHjnVNhh8c4G/r9lt5LvqC9iJ14Xl1
+ HmF5U0BBZTLtg==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Wed, 19 Jan 2022 09:14:48 +0100
+Message-Id: <DDA3B9CA-4DF9-4E3E-8B23-B62D04711735@benettiengineering.com>
+References: <20220119085411.22ee6fb6@windsurf>
 In-Reply-To: <20220119085411.22ee6fb6@windsurf>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfJUGW9au/4SyDrqtzR/eX3g8NhY2jz3t+1irI1J5oUmMj7G62LnJqlfAkSjwrAqe/yFSajcgPwtYk3w9OkSHOoBuGxVB1ygFxQ5c3P679jFPbtJR1LPV
+ gYD9fZtkmWMlaZy7F7OBR5bTuZU1KV74YbEyPKateFDb2E7hmR+SZJdidyBrGB8lgbWx4kS/ONZaJ3dt9qiAHi461icn+No552zjuk1AL5XeK8oSMVf0IlOg
+ Z1XmvYIn2R6GAz8Nv+7M68vbGZWioSmGOXhcLFmEkSNMNxV/wETrEmVgzWcwJ08+B9WETgshar15SVN5gx3yZpc4Klj82GqdjcPUdq1U+7VI/uvaA8UfOOog
+ jpyaYPXqcyqkgLYSZDq84axKtFkwBzuA/6WY1vL9UoaKucSSuPU=
 Subject: Re: [Buildroot] [PATCH 1/2] package/gcc: define _REENTRANT for
  OpenRISC when -pthread is passed
 X-BeenThere: buildroot@buildroot.org
@@ -91,50 +69,45 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Will Newton <will.newton@gmail.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+ Romain Naour <romain.naour@gmail.com>, Will Newton <will.newton@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Jan 19, 2022 at 08:54:11AM +0100, Thomas Petazzoni wrote:
-> Hello Fabrice,
-> 
-> On Tue, 18 Jan 2022 23:24:24 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
-> > Patch added by commit eee96b0f0ad224b3e09a9b98c26d056e18f17fd5 on gcc
-> > 9.3.0 must also be applied on gcc 10 and 11 to avoid the following build
-> > failure on numerous packages (babeltrace2, pcsc-lite, tpm2-pkcs11,
-> > etc.):
-> > 
-> > configure:13774: checking whether pthreads work with -pthread
-> > configure:13868: /home/giuliobenetti/autobuild/run/instance-0/output-1/host/bin/or1k-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2  -std=gnu99 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c   >&5
-> > conftest.c:27:26: error: #error "_REENTRANT must be defined"
-> >    27 | #                        error "_REENTRANT must be defined"
-> >       |                          ^~~~~
-> > 
-> > It should be noted that external bootlins will have to be rebuilt.
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/cb58d4fbaeb08d188c2f8bf05ef1604789fa8766
-> >  - http://autobuild.buildroot.org/results/7af9d4b68bd46ed260ed66ba2cc3c9c21482e741
-> >  - http://autobuild.buildroot.org/results/6f926bec146752873f8032b593f0de1cb222ea46
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Wow, this patch still hasn't been accepted in upstream gcc? It's been
-> submitted a looong time ago I believe.
-
-Hello,
-
-I must have missed this one.  It looks good to me I will push it upstream.
-
--Stafford
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLCBBbGwsCgo+IElsIGdpb3JubyAxOSBnZW4gMjAyMiwgYWxsZSBvcmUgMDg6NTYs
+IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IGhhIHNjcml0
+dG86Cj4gCj4g77u/SGVsbG8gRmFicmljZSwKPiAKPj4gT24gVHVlLCAxOCBKYW4gMjAyMiAyMzoy
+NDoyNCArMDEwMAo+PiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
+bT4gd3JvdGU6Cj4+IAo+PiBQYXRjaCBhZGRlZCBieSBjb21taXQgZWVlOTZiMGYwYWQyMjRiM2Uw
+OWE5Yjk4YzI2ZDA1NmUxOGYxN2ZkNSBvbiBnY2MKPj4gOS4zLjAgbXVzdCBhbHNvIGJlIGFwcGxp
+ZWQgb24gZ2NjIDEwIGFuZCAxMSB0byBhdm9pZCB0aGUgZm9sbG93aW5nIGJ1aWxkCj4+IGZhaWx1
+cmUgb24gbnVtZXJvdXMgcGFja2FnZXMgKGJhYmVsdHJhY2UyLCBwY3NjLWxpdGUsIHRwbTItcGtj
+czExLAo+PiBldGMuKToKPj4gCj4+IGNvbmZpZ3VyZToxMzc3NDogY2hlY2tpbmcgd2hldGhlciBw
+dGhyZWFkcyB3b3JrIHdpdGggLXB0aHJlYWQKPj4gY29uZmlndXJlOjEzODY4OiAvaG9tZS9naXVs
+aW9iZW5ldHRpL2F1dG9idWlsZC9ydW4vaW5zdGFuY2UtMC9vdXRwdXQtMS9ob3N0L2Jpbi9vcjFr
+LWxpbnV4LWdjYyAtbyBjb25mdGVzdCAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0
+X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0ICAtT3MgLWcyICAtc3RkPWdudTk5IC1wdGhy
+ZWFkIC1EX0xBUkdFRklMRV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09VUkNFIC1EX0ZJTEVfT0ZG
+U0VUX0JJVFM9NjQgIGNvbmZ0ZXN0LmMgICA+JjUKPj4gY29uZnRlc3QuYzoyNzoyNjogZXJyb3I6
+ICNlcnJvciAiX1JFRU5UUkFOVCBtdXN0IGJlIGRlZmluZWQiCj4+ICAgMjcgfCAjICAgICAgICAg
+ICAgICAgICAgICAgICAgZXJyb3IgIl9SRUVOVFJBTlQgbXVzdCBiZSBkZWZpbmVkIgo+PiAgICAg
+IHwgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+Cj4+IAo+PiBJdCBzaG91bGQgYmUgbm90
+ZWQgdGhhdCBleHRlcm5hbCBib290bGlucyB3aWxsIGhhdmUgdG8gYmUgcmVidWlsdC4KPj4gCj4+
+IEZpeGVzOgo+PiAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2NiNThk
+NGZiYWViMDhkMTg4YzJmOGJmMDVlZjE2MDQ3ODlmYTg3NjYKPj4gLSBodHRwOi8vYXV0b2J1aWxk
+LmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy83YWY5ZDRiNjhiZDQ2ZWQyNjBlZDY2YmEyY2MzYzljMjE0
+ODJlNzQxCj4+IC0gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNmY5MjZi
+ZWMxNDY3NTI4NzNmODAzMmI1OTNmMGRlMWNiMjIyZWE0Ngo+PiAKPj4gU2lnbmVkLW9mZi1ieTog
+RmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4gCj4gV293LCB0
+aGlzIHBhdGNoIHN0aWxsIGhhc24ndCBiZWVuIGFjY2VwdGVkIGluIHVwc3RyZWFtIGdjYz8gSXQn
+cyBiZWVuCj4gc3VibWl0dGVkIGEgbG9vb25nIHRpbWUgYWdvIEkgYmVsaWV2ZS4KClRoYXTigJlz
+IHdoZW4gdGhlIG5ldyBtYWludGFpbmVyIHRvb2sgb3ZlciB0aGUgcHJldmlvdXMgb25lLiBJIHBp
+bmcgaGltIGFib3V0IHRoaXMgc28gaGUgY2FuIGNvbW1pdCBpdC4gWWV0QW5vdGhlck9yMWtCdWcg
+Oi0pCgpCZXN0IHJlZ2FyZHMKR2l1bGlvCgo+IAo+IFRob21hcwo+IC0tIAo+IFRob21hcyBQZXRh
+enpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2Vy
+bmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
