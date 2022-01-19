@@ -1,64 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500B5C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 22:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E455C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 22:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5E02827A9;
-	Wed, 19 Jan 2022 22:23:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D139C40204;
+	Wed, 19 Jan 2022 22:37:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HODQb0wvHrfj; Wed, 19 Jan 2022 22:23:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2jZ3bDCUZKlO; Wed, 19 Jan 2022 22:37:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1652D82741;
-	Wed, 19 Jan 2022 22:23:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D04A4401A1;
+	Wed, 19 Jan 2022 22:37:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07AA71BF3FF
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:23:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5CA561BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8CE0401A1
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:23:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A8A3401A1
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:37:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nIhVNT3DXTIU for <buildroot@lists.busybox.net>;
- Wed, 19 Jan 2022 22:23:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09CDF4011C
- for <buildroot@buildroot.org>; Wed, 19 Jan 2022 22:23:34 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id AJMbnmV0dDzPJAJMbn28Jb; Wed, 19 Jan 2022 23:23:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642631013; bh=CmKbKQ90eb8SVyLc+OvwV1obiw3mujzXDir+25rPFs4=;
- h=From:To:Subject:Date:MIME-Version;
- b=f5aezAprjBbpWDkDZDg89s9fNhZALj0X71hdlzHsIAA8K93TaNBIDmIV6ZWRtD7aE
- OKbKWPlqyub5TjN2gP824Jl++kSyyEpnw/hs1fymhXflRVZGfsSfJz7O3pEb0SxAX7
- YmBh5mMpGtze3cDwd3mSqi4jg+BXcXvfIdkvWEngVaTGdPvyGKaZkVkmD8CYktUmIR
- CVMCUwM7+5Duy8UkCNvdQLRT1kBLIALDC/ow1XAU4Xo/3gPVGRZ6sSqmH7ONTtv81l
- jO9iJwG9NXexwrCo9+G5rGli/Rbqf3jjPeMNCN1PokIGahpfRIS+M0cKjxL+kRVZlp
- RgPy0jItcreeA==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTP id zzOLTlOqUvz2 for <buildroot@lists.busybox.net>;
+ Wed, 19 Jan 2022 22:37:28 +0000 (UTC)
+X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CEC10400A4
+ for <buildroot@buildroot.org>; Wed, 19 Jan 2022 22:37:27 +0000 (UTC)
+Received: from calakmul.fritz.box ([151.61.70.64]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.17.189]) with ESMTPA (Nemesis) id
+ 1MEFjJ-1n2vVB1bN7-00AI3e; Wed, 19 Jan 2022 23:32:20 +0100
+From: Pedro Aguilar <paguilar@paguilar.org>
 To: buildroot@buildroot.org
-Date: Wed, 19 Jan 2022 23:23:32 +0100
-Message-Id: <20220119222332.66485-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 19 Jan 2022 23:32:08 +0100
+Message-Id: <20220119223208.1196891-1-paguilar@paguilar.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
-References: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfMhvi5tpf3JYk8jDLJUjjG6FCcmyqp4jjcFLTb5fA/LjedeuD/ileCPsCvV/5K6Moo5j2Hft/qfWwxzJpbZ0sQ+d1pEhBleaviLauoEzFS0JGufyjkiS
- QBgAyrqOPY1Uxa5EBv0ZaMU61dSMgQjcHyEfGKY7/O5yJwbWQhkEeNu3HzEsEDGAskaOSoEk1GVwUyptGnzoyNioEZa6hzXFhkONHbLLbSlwL1e5OmuCSMyr
- EdcAKaqCLK6u4KvsMO+hO7TUyPjHZKQgRthgI2k/1cxjZpNxI1ERUYIYwgyMC6fGbhNbj/f9c+6w3RCuy4rgZ6Kk/9GVkArnSKwQeaacCVXIMaVLXaGLVc4Y
- rHuyxDmDpoGjKcjRI/pvnBchHCilhQ==
-Subject: [Buildroot] [PATCH v3] package/refpolicy: Add option to disable
- "dontaudit" rules
+X-Provags-ID: V03:K1:9d8MGcMp4BY5hR0z0GODGJXZpl3iL0pmrS87mSJFUcFVak5pth8
+ b1OQWLl2Yb/cEuIHuYa+ZCLcP5XR/3cVBJM22yIl2rwgtDRWhb530F+qac/fJXHjCzyaeAE
+ vbPWF2E8wTDCJoDN/bXsyEpi6bAE9bYTxWJKvftS3wY310F2lSRQUJS4s/k0YrpPXXTzWbN
+ zlgdQjW4jM4DOxa036uYw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1zA637039uk=:lKOPoAGUmLZOL3C0mAIryK
+ 1WUxNR75OqTK4Y2obwETDMnSk86n3aV3Tvu7tnxmj0ujrA5RpAmrOhoYfyH6ebdUvTX3DN6Tt
+ Jj3hsZLbs2Nh8rE+d1MtZs1gmYw7JA9VDe8YXhLUWbTaCcB7wg0GokyA+yHUrPV/leQPgE7AX
+ XTcrUAICLLET2Ez4Oq1TFie3Nf1I1prrOw6WjQLF1WNvoCKp93lSN6Bhz1q+m9Gu6vXiudxrc
+ YDa3kYffX3/BFX6CiQDK2poXgfMsqwpUlbSA+UqOmixoO3g0UlbAzOHwBoigF/o+LkOWVkbip
+ ZLTx6yDrzmwvDLy/oQlPzzDaEgjufgk0dr6A0MGBbpQMIF0inDBHlYaa3xD8HB+OoGxebIFam
+ NgxgdpmMLTwk5DzUxZDDOguWTDUnGSELiFonL2prELxs8XZN7Ala37OXFOP6HUFql9Sf6rY4u
+ vpxpoLFb8S8w3+FLYF9MJ2fL9zOqav+BggjTsaEALfIAb20TV11zlNJjvst7+FDS2YjHpLu0Y
+ rRNj72yfK+ai4sV7N9DH9ZjkLLElInGb8vNrT32Orq5N96dp8YelH4l01FJgTMHt6CdA32wCo
+ oZ17qSIIVEBzkpecqzp5rQvmlPVFiTugtEPdS+/nwOUdZOXb195RmPx4EHpcuIxWthiaKJ0Bp
+ WmGHfGKPvYJP4CHQhaSobITGdyCvJwxtB9GCL/XFf028gkr5HBZ61Bp1EEI/PYqmIOeIETO9a
+ z4AvJANWYzhF4a7N
+Subject: [Buildroot] [PATCH 1/1] package/libunistring: bump version to 1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,96 +68,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+- Update indentation in hash file (two spaces)
 
-Some rules in the refpolicy are declared with "dontaudit", effectively
-suppressing any AVC violation log, while still denying the actions.
-
-This is useful in some cases, where denied actions are to be expected
-but won't prevent the system from operating.
-
-However in some other cases, the suppressed logs are important to
-troubleshoot some issues.
-
-Disabling the "dontaudit" rules can be done either from the running
-system by rebuilding the policy with "semodules -DB", or when initialy
-building the policy by using the "enableaudit" make target.
-
-This commit allows building the refpolicy with the "enableaudit" target
-prior to installing it, thanks to a dedicated config option.
-
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Giulio: moved REFPOLICY_POST_BUILD_HOOKS inside ifeq/endef]
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 ---
-Maxime:
-V1->V2:
-* Use POST_BUILD_HOOKS to summon make enableaudit, as per Antoine Tenart
-and Thomas petazzoni's reviews
-Giulio:
-V2->V3:
-* moved REFPOLICY_POST_BUILD_HOOKS into ifeq/endef as suggested by Antoine
-Tenart
+ package/libunistring/libunistring.hash | 6 +++---
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-NOTE: this patch superseeds V2:
-https://patchwork.ozlabs.org/project/buildroot/patch/20210128125256.1419587-1-maxime.chevallier@bootlin.com/
----
- package/refpolicy/Config.in    | 14 ++++++++++++++
- package/refpolicy/refpolicy.mk |  7 +++++++
- 2 files changed, 21 insertions(+)
-
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 0e72b895df..caba147feb 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -113,6 +113,20 @@ config BR2_REFPOLICY_EXTRA_MODULES
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 2e4595b17d..145c8c3e54 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
+-sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
++sha256	5bab55b49f75d77ed26b257997e919b693f29fd4a1bc22e0e6e024c246c72741  libunistring-1.0.tar.xz
+ # Locally calculated
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+-sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 1ed7ecf906..a69eacd676 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
-+config BR2_REFPOLICY_DISABLE_DONTAUDIT
-+	bool "Disable dontaudit"
-+	help
-+	  Builds the refpolicy with the "dontaudit" rules disabled.
-+	  This will trigger unseen, and probably unharmful audit logs that are
-+	  explicitely silenced otherwise. This option can be helpful for
-+	  debugging purposes, should a silenced message cause a real issue
-+	  that would otherwise be hard to troubleshoot.
-+
-+	  This option should be used for debugging purposes only, due to
-+	  the amount of avc logs it generates.
-+
-+	  If unsure, select n.
-+
- endif
- 
- comment "refpolicy needs a toolchain w/ threads, gcc >= 5, host gcc >= 5"
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 44c50af278..e113c3496e 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -118,6 +118,13 @@ define REFPOLICY_BUILD_CMDS
- 	$(REFPOLICY_MAKE) -C $(@D) policy
- endef
- 
-+ifeq ($(BR2_REFPOLICY_DISABLE_DONTAUDIT),y)
-+define REFPOLICY_DISABLE_DONTAUDIT_CMDS
-+	$(REFPOLICY_MAKE) -C $(@D) enableaudit
-+endef
-+REFPOLICY_POST_BUILD_HOOKS += REFPOLICY_DISABLE_DONTAUDIT_CMDS
-+endif
-+
- define REFPOLICY_INSTALL_STAGING_CMDS
- 	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
- 		install-src install-headers
+-LIBUNISTRING_VERSION = 0.9.10
++LIBUNISTRING_VERSION = 1.0
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
 -- 
 2.25.1
 
