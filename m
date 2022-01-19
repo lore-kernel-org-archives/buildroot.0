@@ -4,44 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0782DC433F5
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 21:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500B5C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jan 2022 22:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E2BB82660;
-	Wed, 19 Jan 2022 21:54:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5E02827A9;
+	Wed, 19 Jan 2022 22:23:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6h6bFj24sA-2; Wed, 19 Jan 2022 21:54:11 +0000 (UTC)
+	with ESMTP id HODQb0wvHrfj; Wed, 19 Jan 2022 22:23:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E714781970;
-	Wed, 19 Jan 2022 21:54:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1652D82741;
+	Wed, 19 Jan 2022 22:23:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 178401BF3FC
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 21:53:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 07AA71BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:23:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12FA2401D2
- for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 21:53:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8CE0401A1
+ for <buildroot@lists.busybox.net>; Wed, 19 Jan 2022 22:23:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3KFHaQmflLUo for <buildroot@lists.busybox.net>;
- Wed, 19 Jan 2022 21:53:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AFDF401D8
- for <buildroot@buildroot.org>; Wed, 19 Jan 2022 21:53:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 4DE0582235; Wed, 19 Jan 2022 21:47:19 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ with ESMTP id nIhVNT3DXTIU for <buildroot@lists.busybox.net>;
+ Wed, 19 Jan 2022 22:23:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09CDF4011C
+ for <buildroot@buildroot.org>; Wed, 19 Jan 2022 22:23:34 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id AJMbnmV0dDzPJAJMbn28Jb; Wed, 19 Jan 2022 23:23:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642631013; bh=CmKbKQ90eb8SVyLc+OvwV1obiw3mujzXDir+25rPFs4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=f5aezAprjBbpWDkDZDg89s9fNhZALj0X71hdlzHsIAA8K93TaNBIDmIV6ZWRtD7aE
+ OKbKWPlqyub5TjN2gP824Jl++kSyyEpnw/hs1fymhXflRVZGfsSfJz7O3pEb0SxAX7
+ YmBh5mMpGtze3cDwd3mSqi4jg+BXcXvfIdkvWEngVaTGdPvyGKaZkVkmD8CYktUmIR
+ CVMCUwM7+5Duy8UkCNvdQLRT1kBLIALDC/ow1XAU4Xo/3gPVGRZ6sSqmH7ONTtv81l
+ jO9iJwG9NXexwrCo9+G5rGli/Rbqf3jjPeMNCN1PokIGahpfRIS+M0cKjxL+kRVZlp
+ RgPy0jItcreeA==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 Jan 2022 22:50:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a4300e8261f352f9e4af5e569fd55ad944843f7
-X-Git-Newrev: 507b1b9770142f9dba418653b1285a65252de705
-X-Patchwork-Hint: ignore
-Message-Id: <20220119214719.4DE0582235@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/cubieboard2: U-Boot needs Python3
- & OpenSSL
+Date: Wed, 19 Jan 2022 23:23:32 +0100
+Message-Id: <20220119222332.66485-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+References: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4wfMhvi5tpf3JYk8jDLJUjjG6FCcmyqp4jjcFLTb5fA/LjedeuD/ileCPsCvV/5K6Moo5j2Hft/qfWwxzJpbZ0sQ+d1pEhBleaviLauoEzFS0JGufyjkiS
+ QBgAyrqOPY1Uxa5EBv0ZaMU61dSMgQjcHyEfGKY7/O5yJwbWQhkEeNu3HzEsEDGAskaOSoEk1GVwUyptGnzoyNioEZa6hzXFhkONHbLLbSlwL1e5OmuCSMyr
+ EdcAKaqCLK6u4KvsMO+hO7TUyPjHZKQgRthgI2k/1cxjZpNxI1ERUYIYwgyMC6fGbhNbj/f9c+6w3RCuy4rgZ6Kk/9GVkArnSKwQeaacCVXIMaVLXaGLVc4Y
+ rHuyxDmDpoGjKcjRI/pvnBchHCilhQ==
+Subject: [Buildroot] [PATCH v3] package/refpolicy: Add option to disable
+ "dontaudit" rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,97 +70,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Antoine Tenart <atenart@kernel.org>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=507b1b9770142f9dba418653b1285a65252de705
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-After update of the U-Boot [1] we were missing dependency on Python3,
-and so were seeing failures like in [2]:
-------------------------->8--------------------
-  HOSTLD  scripts/dtc/dtc
-scripts/dtc/pylibfdt/libfdt_wrap.c:154:11: fatal error: Python.h: No such file or directory
-  154 | # include <Python.h>
-      |           ^~~~~~~~~~
-compilation terminated.
-error: command '/usr/bin/gcc' failed with exit code 1
-------------------------->8--------------------
+Some rules in the refpolicy are declared with "dontaudit", effectively
+suppressing any AVC violation log, while still denying the actions.
 
-So that get fixed with "BR2_TARGET_UBOOT_NEEDS_PYTHON3=y".
-And then once we use Python3, we also need OpenSSL, similarly to [3]
-and the likes. So do it with "BR2_TARGET_UBOOT_NEEDS_OPENSSL=y".
+This is useful in some cases, where denied actions are to be expected
+but won't prevent the system from operating.
 
-Hopefully now all starts to build w/o any issues.
+However in some other cases, the suppressed logs are important to
+troubleshoot some issues.
 
-And while at it let's add a bit more structure to the config!
+Disabling the "dontaudit" rules can be done either from the running
+system by rebuilding the policy with "semodules -DB", or when initialy
+building the policy by using the "enableaudit" make target.
 
-[1] https://git.buildroot.net/buildroot/commit/?id=06f10a88f30b73aaea5c0e0888d7ba9d9a6420f3
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/1946650570
-[3] https://git.buildroot.net/buildroot/commit/?id=cf2a7663ccc6089e98e0d6ec39fa8623749c0c24
+This commit allows building the refpolicy with the "enableaudit" target
+prior to installing it, thanks to a dedicated config option.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Giulio: moved REFPOLICY_POST_BUILD_HOOKS inside ifeq/endef]
 ---
- configs/cubieboard2_defconfig | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+Maxime:
+V1->V2:
+* Use POST_BUILD_HOOKS to summon make enableaudit, as per Antoine Tenart
+and Thomas petazzoni's reviews
+Giulio:
+V2->V3:
+* moved REFPOLICY_POST_BUILD_HOOKS into ifeq/endef as suggested by Antoine
+Tenart
 
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index a9356295c1..18337fac72 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,32 +1,42 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+NOTE: this patch superseeds V2:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210128125256.1419587-1-maxime.chevallier@bootlin.com/
+---
+ package/refpolicy/Config.in    | 14 ++++++++++++++
+ package/refpolicy/refpolicy.mk |  7 +++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index 0e72b895df..caba147feb 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -113,6 +113,20 @@ config BR2_REFPOLICY_EXTRA_MODULES
+ 
+ endif
+ 
++config BR2_REFPOLICY_DISABLE_DONTAUDIT
++	bool "Disable dontaudit"
++	help
++	  Builds the refpolicy with the "dontaudit" rules disabled.
++	  This will trigger unseen, and probably unharmful audit logs that are
++	  explicitely silenced otherwise. This option can be helpful for
++	  debugging purposes, should a silenced message cause a real issue
++	  that would otherwise be hard to troubleshoot.
 +
- # Linux headers same as kernel, a 5.15 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
--BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
++	  This option should be used for debugging purposes only, due to
++	  the amount of avc logs it generates.
 +
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
++	  If unsure, select n.
 +
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/cubietech/cubieboard2/boot.cmd"
+ endif
+ 
+ comment "refpolicy needs a toolchain w/ threads, gcc >= 5, host gcc >= 5"
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 44c50af278..e113c3496e 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -118,6 +118,13 @@ define REFPOLICY_BUILD_CMDS
+ 	$(REFPOLICY_MAKE) -C $(@D) policy
+ endef
+ 
++ifeq ($(BR2_REFPOLICY_DISABLE_DONTAUDIT),y)
++define REFPOLICY_DISABLE_DONTAUDIT_CMDS
++	$(REFPOLICY_MAKE) -C $(@D) enableaudit
++endef
++REFPOLICY_POST_BUILD_HOOKS += REFPOLICY_DISABLE_DONTAUDIT_CMDS
++endif
 +
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
+ define REFPOLICY_INSTALL_STAGING_CMDS
+ 	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
+ 		install-src install-headers
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
