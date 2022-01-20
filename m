@@ -1,66 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B9EFC433EF
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jan 2022 22:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63666C433EF
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jan 2022 23:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A22C5400A6;
-	Thu, 20 Jan 2022 22:14:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBC4F82EA5;
+	Thu, 20 Jan 2022 23:57:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qDNL9zvfqt1P; Thu, 20 Jan 2022 22:14:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qLYcZkQrGo3q; Thu, 20 Jan 2022 23:57:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E2B44055F;
-	Thu, 20 Jan 2022 22:14:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D883D82F77;
+	Thu, 20 Jan 2022 23:57:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B8FBF1BF28F
- for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 22:14:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97E761BF289
+ for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 23:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A71CA82B34
- for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 22:14:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8231482F77
+ for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 23:57:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ldon_CATMWZN for <buildroot@lists.busybox.net>;
- Thu, 20 Jan 2022 22:14:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp1.osuosl.org (Postfix) with ESMTP id F35D482B2F
- for <buildroot@buildroot.org>; Thu, 20 Jan 2022 22:14:39 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id AfhWn75mIXfntAfhWnfnGo; Thu, 20 Jan 2022 23:14:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642716879; bh=3Bfr1X2CQxFG9MbpHyeRUtixhCDtZBRadHQpZs4gw6Q=;
- h=Subject:From:To:Date:MIME-Version:Content-Type;
- b=c/oA6HFf4CpPebhWWEZlNG6k3goJBCsl7fmDmBeFmcjxWtDE1goD5sbvMxCZ3fo01
- e5Q2hBnoWkL5xjfbrHZFvVfsegoCLB2q0SN3wn6atjN5shcyIGFGQI4Ob5E/D5NwAc
- LSbNVcgBN2xyzIYwQvAQP4ey5GIuNlRcWR1WicFe8E4WODzkbEhtAUUUq99HFwlsrr
- yF0vPrQno7SOLrboX9DVO1Z6H0NepZeaCbj5rsRF4sCCAaLOSaOCFtR1r/yA8DrZGd
- ROJkow6pLe01NYRDkKGxRafXAqYLJe5JvAlMjx8xHlx4W5uDy166lHYojCOWssKK+C
- y0jWrqezIZd8Q==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>, buildroot@buildroot.org
-References: <20220120185043.7745-1-kuzminov.sergey81@gmail.com>
- <d12af38f-509f-00a2-e1d7-7cf870aeea52@benettiengineering.com>
-Message-ID: <4a5824ea-2704-d3bd-9b76-ac6f629be230@benettiengineering.com>
-Date: Thu, 20 Jan 2022 23:14:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ with ESMTP id t39c2F5HErrL for <buildroot@lists.busybox.net>;
+ Thu, 20 Jan 2022 23:57:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D843882EA5
+ for <buildroot@buildroot.org>; Thu, 20 Jan 2022 23:57:34 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ c3-20020a9d6c83000000b00590b9c8819aso9684180otr.6
+ for <buildroot@buildroot.org>; Thu, 20 Jan 2022 15:57:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=c4MCg5+klInCAvV8mWM7BR9aXsoKb1QVs1EaeLGKsPI=;
+ b=KW4n9hg4M2ylIR1VVady7IjTv+r//9oQXPAOqe9I7JSDj0zmQKqU2mdRbTRPreI8KF
+ uwVjt55v6FarL7O2o2wUsiaP44TlHgCBsMnQtjVQOI0BeVZW9/r4KB1g7Az5MVCRojAX
+ faagkQSYDPqJ979sl8yO8zGPEDh2bXO6DzKQvMhQXpSADSC83jYK56EY8fC5HcktWQTm
+ ZsJAx5RtgmnKbLL0tvShWo43ojZPU5WGhpxQH/jCxbrTbJSOgqTzx9O4EYAWz7wukeUR
+ kwfcgcZWJ8Pr/x22xLL7aHz2KvZzeM4O/J8N3xAhws7ZgCVkf9sNfjXFgBXH9Ys9qreZ
+ viIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=c4MCg5+klInCAvV8mWM7BR9aXsoKb1QVs1EaeLGKsPI=;
+ b=wlbzshFgNn2aOXDclFl7dVksXAXVrsUtvOB96g9zyGsch1bLwDojn1ewsVRXnzY66l
+ xAgirwgus/n4wEJXf5DNtjw+NORvO3dR0VYw4QESClZTpy+DCcpoE2ejvOkpdkDi+Mnw
+ lGYfDUOyLdFsad/aTDCSOorD0k45dIGS6mtLKaa/sx1onO4Jgv16/kFpADQthrB+fgx5
+ rS6ARUxL4AYc2gT4M3x4XPen4+8bHjYFD/s3gFsExYJeT4Jywn5zRqBWg0I9Pgc7erk4
+ y08Fm5kfFrin1cymcmX5HXZGKKXQrtH8NqLiAdB98WBDi2eTLIXQpdKP95a8N6pS5pfb
+ tTzg==
+X-Gm-Message-State: AOAM533INCkNyy7JBNXmmds+UDIseD7zRLSa/HQyW7WFAODOe7XAhQIN
+ iEVUdskvve3oJWssipBbrJK2B+aB7ChvA2WNER4=
+X-Google-Smtp-Source: ABdhPJy9aw3Y1E9eQZHwSQm8FEqIha6myNDkTDyP0KvjEjZl7i8R4ef1lTppJAA110GHBUe0IUQNalxsmi8NpJ6Tpwk=
+X-Received: by 2002:a9d:63c3:: with SMTP id e3mr976627otl.30.1642723053663;
+ Thu, 20 Jan 2022 15:57:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <d12af38f-509f-00a2-e1d7-7cf870aeea52@benettiengineering.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4xfLVXuiNmQSVbLMwvBABSxDdS9oyWXCV0OtxlJ0usWBOTq/NmlM7Jh0t8KFWGKp64NQsEPYrKlahoPerNjJ3rSEbVUXC6AB9tsm0+vnsNmrtXuxxk4tk4
- B5V5bLGnV8i7qnUywfuCZGUzy+3vm1pJnQGq0Uo0xuWtXRnAjtI9EKrYOtGT72C5/NWRaG7jtDl7G+rNgwC3+QdQ/kzB2nohAUkngKXg962FXB4ry/ysT0Kv
- OZaEOw2yeOJX+SYRi0dduI0YSPRCaxLgindE1g0te50=
-Subject: Re: [Buildroot] [PATCH v3] board/orangepi/orangepi-zero: bump Linux
- and U-Boot versions
+References: <20220119084545.3642950-1-james.hilliard1@gmail.com>
+ <20220119204518.GC3095239@scaer>
+ <CADvTj4q2AWnzpQbbQHFRUWnKki_uRCcDTOiT7pwRZ4-Ao0o3fw@mail.gmail.com>
+ <20220120222936.6e7b5aba@gmx.net>
+In-Reply-To: <20220120222936.6e7b5aba@gmx.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 20 Jan 2022 16:57:22 -0700
+Message-ID: <CADvTj4rXQO8Kbe0sMA5YJdj6A2R98OELOB5sPD_xriZ_npkaFQ@mail.gmail.com>
+To: Peter Seiderer <ps.report@gmx.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/re2: switch to generic-package
+ make build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,381 +83,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ah, sorry for top-posting. Please put me in Cc on next iteration. Thank 
-you :-)
+On Thu, Jan 20, 2022 at 2:29 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello James, Yann,
+>
+> On Wed, 19 Jan 2022 17:42:46 -0700, James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > On Wed, Jan 19, 2022 at 1:45 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > >
+> > > James, All,
+> > >
+> > > On 2022-01-19 01:45 -0700, James Hilliard spake thusly:
+> > > > The cmake build appears to be missing features such as pkg-config
+> > > > generation support, switch to the regular makefile based build
+> > > > which appears to work better.
+> > >
+> > > Can't we just fix the CMakeList.txt and submit a patch upstream,
+> > > instead?
+> >
+> > It looked like this had been brought up before and there was some issue that was
+> > making this difficult to fix with cmake.
+> > See:
+> > https://github.com/google/re2/issues/349
+> >
+> > >
+> > > Also, see below...
+> > >
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > ---
+> > > >  package/re2/re2.mk | 30 ++++++++++++++++++++++++++----
+> > > >  1 file changed, 26 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+> > > > index b562d5d7ef..144c82339f 100644
+> > > > --- a/package/re2/re2.mk
+> > > > +++ b/package/re2/re2.mk
+> > > > @@ -10,8 +10,30 @@ RE2_LICENSE = BSD-3-Clause
+> > > >  RE2_LICENSE_FILES = LICENSE
+> > > >  RE2_INSTALL_STAGING = YES
+> > > >
+> > > > -RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
+> > > > -HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
+> > > > +define RE2_BUILD_CMDS
+> > > > +     $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> > > > +             -C $(@D)
+> > > > +endef
+> > > >
+> > > > -$(eval $(cmake-package))
+> > > > -$(eval $(host-cmake-package))
+> > > > +define RE2_INSTALL_STAGING_CMDS
+> > > > +     $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> > > > +             DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) install
+> > > > +endef
+> > > > +
+> > > > +define RE2_INSTALL_TARGET_CMDS
+> > > > +     $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> > > > +             DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) install
+> > >
+> > > The 'install' target will forcibly build and install static and shared
+> > > libs:
+> > >
+> > >     https://github.com/google/re2/blob/main/Makefile#L297
+> > >
+> > >     296: .PHONY: install
+> > >     297: install: static-install shared-install
+> > >
+> > > So, this is probably going to not play nicely for builds where a shared
+> > > build is not possible.
+> >
+> > Sent a v2 which should fix this:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20220120003827.395469-1-james.hilliard1@gmail.com/
+> >
+> > >
+> > > AFAICS, the cmake-based buildsystem got that one correct, though, so it
+> > > would be a bit of a shame to regress on that point...
+> > >
+>
+> Or keep the cmake build and do the following to install re2.pc (taken from #349, [1]):
+>
+> --- a/package/re2/re2.mk
+> +++ b/package/re2/re2.mk
+> @@ -9,9 +9,20 @@ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+>  RE2_LICENSE = BSD-3-Clause
+>  RE2_LICENSE_FILES = LICENSE
+>  RE2_INSTALL_STAGING = YES
+> +# keep original Makefile (for re2.pc install)
+> +RE2_SUPPORTS_IN_SOURCE_BUILD = NO
+>
+>  RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
+>  HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
+>
+> +# install re2.pc
+> +define RE2_INSTALL_PKG_CONFIG
+> +       $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) \
+> +               libdir=/usr/lib includedir=/usr/include \
+> +               common-install
+> +endef
+> +
+> +RE2_POST_INSTALL_STAGING_HOOKS += RE2_INSTALL_PKG_CONFIG
+> +
+>  $(eval $(cmake-package))
+>  $(eval $(host-cmake-package))
+>
+> Regards,
+> Peter
+>
+> [1] https://github.com/macports/macports-ports/pull/9836#issuecomment-807868854
 
--- 
-Giulio Benetti
-Benetti Engineering sas
+There's a problem with this approach, the makefile with common-install
+gets overwritten
+by the one generated by cmake if cmake is used.
 
-On 20/01/22 23:13, Giulio Benetti wrote:
-> Hi Sergey,
-> 
-> On 20/01/22 19:50, Sergey Kuzminov wrote:
->> v1:
->> - Linux: bump to version 5.12.19 (from 5.12.2).
->> - U-Boot: bump to version 2022.01 (from 2021.04).
->> - Added fast_commit for ext4. When creating a file system with this option, writing speeds up twice in some cases: https://lwn.net/Articles/834483/
->> - Refactoring configs/orangepi_zero_defconfig.
->> - Switched to extlinux.
->> - Createed common scenarios for multiple boards to create an SD image: board/orangepi/common.
->>
->> v2:
->> - Linux: bump to version 5.16.1 (from 5.12.19) thanks to a patch from Giulio for xr819-xradio (link below).
-> 
-> On (link below) use [1] instead and then...
-> 
->> - Added in genimage.cfg: partition rootfs {offset = 1M} to prevent possible alignment error.
->> - Added BR2_ARM_EABIHF=y to make it visible in the config file, previously added implicitly.
->> - Replaced BR2_ARM_FPU_VFPV4 with BR2_ARM_FPU_NEON_VFPV4 because processor supports it.
->> - Deleted BR2_GCC_ENABLE_LTO=y, added by mistake.
->>
->> v3:
->> - Changed the name of the patch (from board/orangepi/orangepi-zero:extlinux, refactoring).
->> - Linux: bump to version 5.16.2 (from 5.16.1).
->> - Returned (# BR2_TARGET_ROOTFS_TAR is not set) instead of (BR2_TARGET_ROOTFS_TAR=n), added in v1.
->> - Renamed file uboot-extras.config -> uboot-extras.fragment.
->> - Renamed file linux-extras.config -> linux-extras.fragment.
->> - Deleted (#BR2_ARM_INSTRUCTIONS_THUMB2=y), added in v2.
->>
->> Patch required to work:
->> https://patchwork.ozlabs.org/project/buildroot/patch/20220118063531.2039729-1-giulio.benetti@benettiengineering.com/
-> 
-> ...put here:
-> [1]:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220118063531.2039729-1-giulio.benetti@benettiengineering.com/
-> 
->>
->> Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-> 
-> ---
-> all V1->V2, V2->V3 changes go here with the 3 dashes above
-> And you need to keep V1 as commit log, not listing it here, so it has to
-> summarize what this patch does. I'm wondering if maybe it makes sense to
-> split it up to more than one patch. You're doing lot of stuff in this
-> patch that can be bisectable even with different patches. So please try
-> to move some changes into other patches and keep this one doing what the
-> subject tells:
-> bump Linux and U-Boot versions
-> 
->> ---
->>    board/orangepi/common/extlinux.conf           |  5 ++
->>    board/orangepi/common/genimage.cfg            | 20 ++++++
->>    board/orangepi/common/post-build.sh           | 34 ++++++++++
->>    board/orangepi/common/uboot-extras.fragment   |  3 +
->>    board/orangepi/orangepi-zero/boot.cmd         |  9 ---
->>    board/orangepi/orangepi-zero/genimage.cfg     | 36 ----------
->>    ...ux-extras.config => linux-extras.fragment} |  0
->>    configs/orangepi_zero_defconfig               | 68 +++++++++++--------
->>    8 files changed, 103 insertions(+), 72 deletions(-)
->>    create mode 100644 board/orangepi/common/extlinux.conf
->>    create mode 100644 board/orangepi/common/genimage.cfg
->>    create mode 100755 board/orangepi/common/post-build.sh
->>    create mode 100644 board/orangepi/common/uboot-extras.fragment
->>    delete mode 100644 board/orangepi/orangepi-zero/boot.cmd
->>    delete mode 100644 board/orangepi/orangepi-zero/genimage.cfg
->>    rename board/orangepi/orangepi-zero/{linux-extras.config => linux-extras.fragment} (100%)
->>
->> diff --git a/board/orangepi/common/extlinux.conf b/board/orangepi/common/extlinux.conf
->> new file mode 100644
->> index 0000000000..015f29270e
->> --- /dev/null
->> +++ b/board/orangepi/common/extlinux.conf
->> @@ -0,0 +1,5 @@
->> +LABEL default
->> +  kernel /boot/%LINUXIMAGE%
->> +  devicetreedir /boot
->> +  append root=PARTUUID=%PARTUUID% rootwait console=${console}
->> +# append root=PARTUUID=%PARTUUID% rootwait console=${console} rootfstype=ext4 quiet panic=10
->> diff --git a/board/orangepi/common/genimage.cfg b/board/orangepi/common/genimage.cfg
->> new file mode 100644
->> index 0000000000..8b80ffb138
->> --- /dev/null
->> +++ b/board/orangepi/common/genimage.cfg
->> @@ -0,0 +1,20 @@
->> +image sdcard.img {
->> +	hdimage {
->> +		partition-table-type = gpt
->> +		gpt-no-backup = true
->> +		gpt-location = 1008K # 1MB - 16KB
->> +	}
->> +
->> +	partition u-boot {
->> +		in-partition-table = false
->> +		image = "u-boot-sunxi-with-spl.bin"
->> +		offset = 8K
->> +		size = 1000K # 1MB - 8KB - 16KB
->> +	}
->> +
->> +	partition rootfs {
->> +		offset = 1M
->> +		image = "rootfs.ext4"
->> +		partition-uuid = %PARTUUID%
->> +	}
->> +}
-> 
-> Here you add a common genimage.cfg, so another patch(including the
-> removal of the one specific genimage.cfg below)
-> 
->> diff --git a/board/orangepi/common/post-build.sh b/board/orangepi/common/post-build.sh
->> new file mode 100755
->> index 0000000000..296f94b174
->> --- /dev/null
->> +++ b/board/orangepi/common/post-build.sh
->> @@ -0,0 +1,34 @@
->> +#!/bin/sh
->> +
->> +linux_image()
->> +{
->> +	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
->> +		echo "uImage"
->> +	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
->> +		echo "Image"
->> +	elif grep -Eq "^BR2_LINUX_KERNEL_IMAGEGZ=y$" ${BR2_CONFIG}; then
->> +		echo "Image.gz"
->> +	else
->> +		echo "zImage"
->> +	fi
->> +}
->> +
->> +generic_getty()
->> +{
->> +	if grep -Eq "^BR2_TARGET_GENERIC_GETTY=y$" ${BR2_CONFIG}; then
->> +		echo ""
->> +	else
->> +		echo "s/\s*console=\S*//"
->> +	fi
->> +}
->> +
->> +PARTUUID="$($HOST_DIR/bin/uuidgen)"
->> +
->> +install -d "$TARGET_DIR/boot/extlinux/"
->> +
->> +sed -e "$(generic_getty)" \
->> +	-e "s/%LINUXIMAGE%/$(linux_image)/g" \
->> +	-e "s/%PARTUUID%/$PARTUUID/g" \
->> +	"board/orangepi/common/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
->> +
->> +sed "s/%PARTUUID%/$PARTUUID/g" "board/orangepi/common/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-> 
-> here ^^^ you add the post-build.sh and including its defconfig option
-> should be another patch. And this should go with the adding of
-> extlinux.conf above because it's related.
-> 
->> diff --git a/board/orangepi/common/uboot-extras.fragment b/board/orangepi/common/uboot-extras.fragment
->> new file mode 100644
->> index 0000000000..5aa97523d9
->> --- /dev/null
->> +++ b/board/orangepi/common/uboot-extras.fragment
->> @@ -0,0 +1,3 @@
->> +CONFIG_BOOTDELAY=0
->> +CONFIG_USE_PREBOOT=y
->> +CONFIG_PREBOOT="setenv preboot;"
->> diff --git a/board/orangepi/orangepi-zero/boot.cmd b/board/orangepi/orangepi-zero/boot.cmd
->> deleted file mode 100644
->> index d094a64fe5..0000000000
->> --- a/board/orangepi/orangepi-zero/boot.cmd
->> +++ /dev/null
->> @@ -1,9 +0,0 @@
->> -setenv fdt_high ffffffff
->> -
->> -part uuid mmc 0:2 uuid
->> -setenv bootargs console=ttyS0,115200 root=PARTUUID=${uuid} rootwait
->> -
->> -fatload mmc 0 $kernel_addr_r zImage
->> -fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-zero.dtb
->> -
->> -bootz $kernel_addr_r - $fdt_addr_r
-> 
-> This ^^^ must be added to extlinux.conf replacing patch.
-> 
->> diff --git a/board/orangepi/orangepi-zero/genimage.cfg b/board/orangepi/orangepi-zero/genimage.cfg
->> deleted file mode 100644
->> index 32f5454ae6..0000000000
->> --- a/board/orangepi/orangepi-zero/genimage.cfg
->> +++ /dev/null
->> @@ -1,36 +0,0 @@
->> -# Minimal SD card image for the OrangePi Zero
->> -#
->> -image boot.vfat {
->> -	vfat {
->> -		files = {
->> -			"zImage",
->> -			"sun8i-h2-plus-orangepi-zero.dtb",
->> -			"boot.scr"
->> -		}
->> -	}
->> -	size = 10M
->> -}
->> -
->> -image sdcard.img {
->> -	hdimage {
->> -	}
->> -
->> -	partition u-boot {
->> -		in-partition-table = "no"
->> -		image = "u-boot-sunxi-with-spl.bin"
->> -		offset = 8K
->> -		size = 1016K # 1MB - 8KB
->> -	}
->> -
->> -	partition boot {
->> -		partition-type = 0xC
->> -		bootable = "true"
->> -		image = "boot.vfat"
->> -	}
->> -
->> -	partition rootfs {
->> -		partition-type = 0x83
->> -		image = "rootfs.ext4"
->> -		size = 512M
->> -	}
->> -}
->> diff --git a/board/orangepi/orangepi-zero/linux-extras.config b/board/orangepi/orangepi-zero/linux-extras.fragment
->> similarity index 100%
->> rename from board/orangepi/orangepi-zero/linux-extras.config
->> rename to board/orangepi/orangepi-zero/linux-extras.fragment
->> diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
->> index 1c107b10e6..430d38af3e 100644
->> --- a/configs/orangepi_zero_defconfig
->> +++ b/configs/orangepi_zero_defconfig
->> @@ -1,49 +1,63 @@
->> +# Architecture
->>    BR2_arm=y
->>    BR2_cortex_a7=y
->> -BR2_ARM_FPU_VFPV4=y
->> +BR2_ARM_EABIHF=y
->> +BR2_ARM_FPU_NEON_VFPV4=y
-> 
-> This FPU stuff ^^^ is another patch
-> 
->> +
->> +# System
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
->> +BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
->>    BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
->>    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
->> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
->> -BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
->> -BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
->>    BR2_SYSTEM_DHCP="eth0"
->> -BR2_LINUX_KERNEL=y
->> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
->> -BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->> -BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
->> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.config"
->> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->> -BR2_TARGET_ROOTFS_EXT2=y
->> -BR2_TARGET_ROOTFS_EXT2_4=y
->> -# BR2_TARGET_ROOTFS_TAR is not set
-> 
-> 
-> 
->> +
->> +# Bootloader
->>    BR2_TARGET_UBOOT=y
->>    BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->>    BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
->> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
->>    BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
->>    BR2_TARGET_UBOOT_NEEDS_DTC=y
->>    BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->>    BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->>    BR2_TARGET_UBOOT_SPL=y
->>    BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
->> -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->> -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
->> -BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero/boot.cmd"
->> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
->> -BR2_PACKAGE_HOST_GENIMAGE=y
->> -BR2_PACKAGE_HOST_MTOOLS=y
->> -BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> 
-> Here ^^^ you move lines down, and there can be a patch for only
-> reordering stuff, 1 for uboot and 1 for linux.
-> 
->> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/orangepi/common/uboot-extras.fragment"
-> 
-> This ^^^ goes with uboot-extras.fragment common patch
-> 
->> +
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
->> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.fragment"
->> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
->> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.2"
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
-> 
-> This ^^^ is ok, but you also moved the lines
-> 
->> +
->> +# Filesystem
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_ROOTFS_EXT2_4=y
->> +BR2_TARGET_ROOTFS_EXT2_SIZE="63M"
->> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^64bit,fast_commit"
->> +BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
->> +# BR2_TARGET_ROOTFS_TAR is not set
-> 
-> This ^^^ ? If there is a reason is another patch, and ofc the removal of
-> # not set goes together
-> 
->> +
->> +# Image
->> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
->>    BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-zero/genimage.cfg"
->> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cf > +
->> +# Required tools to create the SD image
->> +BR2_PACKAGE_HOST_GENIMAGE=y
-> 
-> This ^^^ goes with common genimage.cfg patch
-> 
->>    
->> -# wireless driver and firmware
->> +# Wireless driver and firmware
->>    BR2_PACKAGE_XR819_XRADIO=y
->>    BR2_PACKAGE_ARMBIAN_FIRMWARE=y
->>    BR2_PACKAGE_ARMBIAN_FIRMWARE_XR819=y
->>    
->> -# wireless support
->> +# Wireless support
->>    BR2_PACKAGE_IW=y
->>    BR2_PACKAGE_WIRELESS_TOOLS=y
->>    BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
->> @@ -51,5 +65,5 @@ BR2_PACKAGE_WPA_SUPPLICANT=y
->>    BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
->>    BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
->>    
->> -# spi flash support
->> +# Spi flash support
->>    BR2_PACKAGE_MTD=y
->>
-> 
-> Various comment capitalizing is another patch.
-> 
-> So I would expect a patchset with like 6/7 patches.
-> 
-> Otherwise you move a lot of stuff all in once.
-> But keep in mind that it must be bisectable, so this defconfig has to
-> produce something working after applying every single patch.
-> 
-> Kind regards!
-> 
-
+>
+>
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > > +endef
+> > > > +
+> > > > +define HOST_RE2_BUILD_CMDS
+> > > > +     $(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> > > > +             -C $(@D)
+> > > > +endef
+> > > > +
+> > > > +define HOST_RE2_INSTALL_CMDS
+> > > > +     $(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> > > > +             -C $(@D) DESTDIR="$(HOST_DIR)" prefix=/usr install
+> > > > +endef
+> > > > +
+> > > > +$(eval $(generic-package))
+> > > > +$(eval $(host-generic-package))
+> > > > --
+> > > > 2.25.1
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot@buildroot.org
+> > > > https://lists.buildroot.org/mailman/listinfo/buildroot
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
