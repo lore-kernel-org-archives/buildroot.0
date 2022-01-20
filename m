@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C04A0C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jan 2022 12:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EC3AC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jan 2022 13:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BD4960D68;
-	Thu, 20 Jan 2022 12:55:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0B4841606;
+	Thu, 20 Jan 2022 13:54:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zupTHxPt4wJ3; Thu, 20 Jan 2022 13:54:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25C3341603;
+	Thu, 20 Jan 2022 13:54:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 087A61BF384
+ for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 13:54:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BE3160F38
+ for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 13:54:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FXt3OHENwNRW; Thu, 20 Jan 2022 12:55:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68A8B60B0C;
-	Thu, 20 Jan 2022 12:55:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA0501BF38B
- for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 12:55:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5831400D0
- for <buildroot@lists.busybox.net>; Thu, 20 Jan 2022 12:55:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2aUbgUigGImE for <buildroot@lists.busybox.net>;
- Thu, 20 Jan 2022 12:55:10 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2Fu-08pUlHbz for <buildroot@lists.busybox.net>;
+ Thu, 20 Jan 2022 13:54:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BB9F400C5
- for <buildroot@uclibc.org>; Thu, 20 Jan 2022 12:55:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACA2F60F5F
+ for <buildroot@uclibc.org>; Thu, 20 Jan 2022 13:54:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 53B0083545; Thu, 20 Jan 2022 12:48:31 +0000 (UTC)
+ id 5277B835C0; Thu, 20 Jan 2022 13:47:58 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 20 Jan 2022 12:55:10 +0000
+Date: Thu, 20 Jan 2022 13:54:37 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jhiljanen@europower-consulting.com
+X-Bugzilla-Who: giulio.benetti@micronovasrl.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-14531-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14531-163-JcCIZcy5U7@https.bugs.busybox.net/>
+In-Reply-To: <bug-14531-163@https.bugs.busybox.net/>
+References: <bug-14531-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14531] New: Package EFL - build error
+Subject: [Buildroot] [Bug 14531] Package EFL - build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,25 +76,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14531
 
-            Bug ID: 14531
-           Summary: Package EFL - build error
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: jhiljanen@europower-consulting.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Giulio Benetti <giulio.benetti@micronovasrl.com> ---
+Hi jhiljanen,
 
-I get an error when building the EFL package:
+I've tried with Buildroot master branch and I've found 2 missing dependencies:
+- libinput
+- libxkbcommon
+and this deserves a patch
 
-output/build/efl-1.26.0/src/lib/elput/meson.build:1:0: ERROR: Unknown variable
-"eeze"
+But once enabled them efl builds correctly.
+
+Which Buildroot version are you using?
 
 -- 
 You are receiving this mail because:
