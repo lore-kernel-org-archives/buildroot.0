@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6C5C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 21:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66320C433EF
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 21:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED4FA60EF3;
-	Fri, 21 Jan 2022 21:27:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2733A41717;
+	Fri, 21 Jan 2022 21:27:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N7vthOI-9FOk; Fri, 21 Jan 2022 21:27:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i7j1i-u-lh2p; Fri, 21 Jan 2022 21:27:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3308460F6B;
-	Fri, 21 Jan 2022 21:27:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D95B416B9;
+	Fri, 21 Jan 2022 21:27:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E4981BF30C
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2BCB51BF30C
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BA4860FD5
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2434360F0A
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bhnRhEL0Uxu8 for <buildroot@lists.busybox.net>;
- Fri, 21 Jan 2022 21:26:20 +0000 (UTC)
+ with ESMTP id NjEa6VQyfA_j for <buildroot@lists.busybox.net>;
+ Fri, 21 Jan 2022 21:26:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF0C660F6B
+ by smtp3.osuosl.org (Postfix) with ESMTP id E016460FD1
  for <buildroot@buildroot.org>; Fri, 21 Jan 2022 21:26:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 7EECF82B4C; Fri, 21 Jan 2022 21:19:38 +0000 (UTC)
+ id 886078353C; Fri, 21 Jan 2022 21:19:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 21 Jan 2022 22:23:47 +0100
+Date: Fri, 21 Jan 2022 22:23:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd75f2d403d6d7a63d151572b955c05ca25f942f
-X-Git-Newrev: b1050a4c32f55e9e7e521f57490e6ca430119f42
+X-Git-Oldrev: b1050a4c32f55e9e7e521f57490e6ca430119f42
+X-Git-Newrev: 7b9961c6e15661f74140dd7656ca4485a059bb73
 X-Patchwork-Hint: ignore
-Message-Id: <20220121211938.7EECF82B4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-libwww-perl: bump to version
- 6.60
+Message-Id: <20220121211938.886078353C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-dns: bump to version 1.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,43 +58,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1050a4c32f55e9e7e521f57490e6ca430119f42
+commit: https://git.buildroot.net/buildroot/commit/?id=7b9961c6e15661f74140dd7656ca4485a059bb73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 6 +++---
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index 2c9b19d6ef..e32258050c 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 916603e715..1af14e2a45 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  e0b7b07a01f19cc507d3a9b55951ce3a  libwww-perl-6.57.tar.gz
--sha256  30c242359cb808f3fe2b115fb90712410557f0786ad74844f9801fd719bc42f8  libwww-perl-6.57.tar.gz
-+md5  ce5180358d9279b2843a6518bf2de200  libwww-perl-6.60.tar.gz
-+sha256  cdd28b9237b9c6791725b9099695c7c3c720b33881606fd6cc7635a5495bb07c  libwww-perl-6.60.tar.gz
+-md5  e8ee02ec42dfeb10ae4a0d175d5fcafc  Net-DNS-1.32.tar.gz
+-sha256  b890a7b44d573f27cc713caadf1e12eaaa4478a6504d1157194df614316b5b50  Net-DNS-1.32.tar.gz
++md5  f3ba5295ee588d25dabc74a2ecda296a  Net-DNS-1.33.tar.gz
++sha256  5a40e7cf524e4bd2c33cf03b82b47d5308b712083aa5ee180b0b5af54c71fbd2  Net-DNS-1.33.tar.gz
  
  # computed by scancpan
--sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-+sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 23e2aa3bb8..aa15ebb594 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+ sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index afba3e216a..fa7b50c023 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.57
-+PERL_LIBWWW_PERL_VERSION = 6.60
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_DNS_VERSION = 1.32
++PERL_NET_DNS_VERSION = 1.33
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
