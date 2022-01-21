@@ -4,80 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FF60C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 18:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0205C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 18:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95EF560F04;
-	Fri, 21 Jan 2022 18:59:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A070760F01;
+	Fri, 21 Jan 2022 18:59:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OBX_GDu3-D5u; Fri, 21 Jan 2022 18:59:18 +0000 (UTC)
+	with ESMTP id O207cpbL02X5; Fri, 21 Jan 2022 18:59:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5DAA60A9E;
-	Fri, 21 Jan 2022 18:59:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D335B60A99;
+	Fri, 21 Jan 2022 18:59:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CEFD71BF2FF
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 18:58:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3162D1BF2FF
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 18:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCD238134E
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 18:58:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AD958125E
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 18:58:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yveZP0sxVzI9 for <buildroot@lists.busybox.net>;
+ with ESMTP id BRWtHRDlz4YH for <buildroot@lists.busybox.net>;
  Fri, 21 Jan 2022 18:58:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F276781330
- for <buildroot@busybox.net>; Fri, 21 Jan 2022 18:58:52 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- o1-20020a1c4d01000000b0034d95625e1fso15422078wmh.4
- for <buildroot@busybox.net>; Fri, 21 Jan 2022 10:58:52 -0800 (PST)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9A57D80F44
+ for <buildroot@busybox.net>; Fri, 21 Jan 2022 18:58:53 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id c2so18803862wml.1
+ for <buildroot@busybox.net>; Fri, 21 Jan 2022 10:58:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=yj5F6LXNe2bZcuX1evLGLW3fl8iVYEXoccy7ESmLWKA=;
- b=pBrDsmEHOXOWi6dzQS7eZyeYkUeMEcrq/YZ7VyR4tG9l9ePWuwejWF2R/IfV2+sicE
- THzcJqO6ACpd0JfXs1MqjYeUR1ByK4YFM6s3kX3INMMEsN03O+vHsspCjWy6mAYeyxtw
- fvzY+MhuUeNGq6ZMmCDH8Ql5VAKo7apnyHjYOkXhC5lYOVFPbHND15Y1CJt7SNOanwOl
- 4ySEgh7clg7L3SmIqC9KU3EbMrQdbg96qG7TDnfP22PuMoNI3kEcJdKrbpyTPiwfwJkX
- CeB+9tkzVVvI7eJHLP5UytgbnP8fb98kBCnDptVjUuRejXE0jxdKYJO7QTf4bP6RwwMq
- g0sQ==
+ bh=ei4Xv4o2pOR6S2ty1NSSqhLoOImjUC+dfu4/vWG3xOs=;
+ b=YI8OmVmZFHuWiOcHfbAOcgEoBMlUZj/ld1oaG5yBWWye/UioDiSXwO6BEx79Rx1N7o
+ 0mq8A7o7dWqwU+4e/aZ0QuIaJ7N7Dack+SHY9HImh1bScye0KkDW04fDcQyUyBGAl4M8
+ g4qo0iJPSXzEKte5k+9w3u31yP9AC1tG3nXIsiE41xEnjzW/tBme1TigKhbm9plTntiI
+ k7qCZTSwDZ6RrC27PJeGjZahfWqAuDLEi5nm7XhSt4cL7uB4A9hlSRR+UZR8WFbLowl2
+ EpxGub5BwqVxy/Ac1pfaC0hd3v2E71wovWlOG7AZI/uMRGVYbTSlRqe1oonkWT40R+/G
+ W5Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=yj5F6LXNe2bZcuX1evLGLW3fl8iVYEXoccy7ESmLWKA=;
- b=J1wkrqTicOjg02UERygYIwoM28cXitO1q5ZoeQfBg09VYC92kgugxdfPpCZapxjVoT
- 5peOM5uLiJNYGoXcfr5k7DwPu+nl6ev1x6JcJNtbn3MBWGSTny5PH8l7VmPvHZGq3TuY
- OoCXf4hhaqsw32L82jnUgE1wHpGm6qZUzDtCwVRvAqekLpCEt6FbvwFTpPttURjvDV9P
- 4E9fwM/9QpUsIRlnh2aNYSsm5544Oj7M8qz4L5OlU2iPWdpU/rrfBA7paTsKfHRr5Zyw
- BJpnq1UigvvOTXtpvaCek3/2wol3jPhRzXHOp1J+cmsQnM/c25W77vpn8ypEWNxdvnWV
- NP+w==
-X-Gm-Message-State: AOAM533t+8+Yy/0lJxN7xvusd2+pi41EORqrFD00v/0nXNgW7hBwwoON
- EU7VwXxDRCZt/4WCig+SJ8YqbcZRtjo=
-X-Google-Smtp-Source: ABdhPJwJi9smJWdoma9ilP2GL/a5vMO21na/P5Zhi9t9MVVwbtXrfUKfRTXQEe1xx/H2F/7stxsNNg==
-X-Received: by 2002:a1c:7205:: with SMTP id n5mr1922059wmc.35.1642791531259;
- Fri, 21 Jan 2022 10:58:51 -0800 (PST)
+ bh=ei4Xv4o2pOR6S2ty1NSSqhLoOImjUC+dfu4/vWG3xOs=;
+ b=Ai5eFXOTWHKqUc2meYwNe6p64duXnVjvx3+8zA2JY5xhRMKwUMKc0djz0kndwIEh96
+ Att+wQs9T7EbxcKbvKrcbXq5reQ748FcdCXXBbvAFyqG/QmjDd4cParf/KbV/npsymLD
+ KOiAOcD5Iz8qhqhEejQODJW0/Xi4a0ysNcoOsZ3GVJOfbAvyeRQ41F1HkS+yvd/CqVVn
+ lVMqEnDCTZWEgr+l3TyiLUKX5NfiWQgJwrdQzq0A/wwg4IJHNRUoZQZrboufjS67wvNk
+ ipsIvPn7JQQJXoD67QxDrydbqaQAORKM+ZX8KnYT6a4HWXaJpDDdubsX+GMMpOL+VFnw
+ 2iIg==
+X-Gm-Message-State: AOAM531fHiuiY3OaCbN2ZnAh/M4EN2QFPSb7jA5gOIc6PhCq8ht5OAt+
+ mMMDfqe7+9D/1jejbw5I6D9iBJArUv0=
+X-Google-Smtp-Source: ABdhPJyd8HQcTK9wMuO9Ds0NCCUbLz3J4MLKPQSYbONeY0tC2WeH1fQjvRr66Tea86LZkIZxiUvfgg==
+X-Received: by 2002:a7b:cc11:: with SMTP id f17mr1917821wmh.84.1642791532016; 
+ Fri, 21 Jan 2022 10:58:52 -0800 (PST)
 Received: from v2021.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id d2sm6165681wru.40.2022.01.21.10.58.50
+ by smtp.gmail.com with ESMTPSA id d2sm6165681wru.40.2022.01.21.10.58.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Fri, 21 Jan 2022 10:58:51 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 21 Jan 2022 13:38:54 +0100
-Message-Id: <20220121123859.754653-3-francois.perrad@gadz.org>
+Date: Fri, 21 Jan 2022 13:38:55 +0100
+Message-Id: <20220121123859.754653-4-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220121123859.754653-1-francois.perrad@gadz.org>
 References: <20220121123859.754653-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/8] package/perl-io-socket-ssl: bump to version
- 2.074
+Subject: [Buildroot] [PATCH 4/8] package/perl-libwww-perl: bump to version
+ 6.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,36 +95,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-libwww-perl/perl-libwww-perl.hash | 6 +++---
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index b5dc29973..4a1d71e34 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 2c9b19d6e..e32258050 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  4fb67fc8c4817dce8116f2eb7878fd9c  IO-Socket-SSL-2.072.tar.gz
--sha256  b5bee81db3905a9069340a450a48e1e1b32dec4ede0064f5703bafb9a707b89d  IO-Socket-SSL-2.072.tar.gz
-+md5  53201b8e4dfaf25d4d661a54fdfda602  IO-Socket-SSL-2.074.tar.gz
-+sha256  36486b6be49da4d029819cf7069a7b41ed48af0c87e23be0f8e6aba23d08a832  IO-Socket-SSL-2.074.tar.gz
+-md5  e0b7b07a01f19cc507d3a9b55951ce3a  libwww-perl-6.57.tar.gz
+-sha256  30c242359cb808f3fe2b115fb90712410557f0786ad74844f9801fd719bc42f8  libwww-perl-6.57.tar.gz
++md5  ce5180358d9279b2843a6518bf2de200  libwww-perl-6.60.tar.gz
++sha256  cdd28b9237b9c6791725b9099695c7c3c720b33881606fd6cc7635a5495bb07c  libwww-perl-6.60.tar.gz
  
  # computed by scancpan
- sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index b32cce12c..1ab70509b 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+-sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
++sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index 23e2aa3bb..aa15ebb59 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.072
-+PERL_IO_SOCKET_SSL_VERSION = 2.074
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
+-PERL_LIBWWW_PERL_VERSION = 6.57
++PERL_LIBWWW_PERL_VERSION = 6.60
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
 -- 
 2.32.0
 
