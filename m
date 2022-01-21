@@ -1,46 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F14D2C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 20:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7359EC433EF
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 20:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6038560071;
-	Fri, 21 Jan 2022 20:53:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F31508139F;
+	Fri, 21 Jan 2022 20:53:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ot5tS-JI-OVB; Fri, 21 Jan 2022 20:53:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kzjO8FOpZpMj; Fri, 21 Jan 2022 20:53:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 270AD60A90;
-	Fri, 21 Jan 2022 20:53:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 520D41BF5F5
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 20:53:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3BE881678;
+	Fri, 21 Jan 2022 20:53:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 22D191BF5F5
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 20:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 408BF408BF
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 20:53:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1113681678
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 20:53:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sm5woQjC911Y for <buildroot@lists.busybox.net>;
- Fri, 21 Jan 2022 20:53:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28CE8408A0
- for <buildroot@buildroot.org>; Fri, 21 Jan 2022 20:53:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D7CC581DF3; Fri, 21 Jan 2022 20:46:33 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 21 Jan 2022 21:50:27 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9757e7d99ec02f2464bbd4120c2c260d8bfc7e22
-X-Git-Newrev: 9151eab3c7e4548a052be69aecba1f2b1ee6396c
-X-Patchwork-Hint: ignore
-Message-Id: <20220121204633.D7CC581DF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: fix CVE-2021-38593
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mJ4Nei4C3BlA for <buildroot@lists.busybox.net>;
+ Fri, 21 Jan 2022 20:53:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 535E08139F
+ for <buildroot@buildroot.org>; Fri, 21 Jan 2022 20:53:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:90bb:6e44:a706:407c])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 35A64780313;
+ Fri, 21 Jan 2022 21:53:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642798414;
+ bh=Nm5GkdVud0pDfwdW9SyyteBPMqngLMla9qKPqV6Fh2E=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=A/RfcQljjPXxxizMAhrPwAwB8ut5aPnn7uOFMJIvkxpzkT0KZCpRB9jido25dMJ6j
+ JCUVWTtWQEncsGWUdV12WRulzFse0WTolSMG/G3vxRoLhK7lYdfqILDcFzki7tn8dD
+ 8IKmi/ojFDmDWpH2xul39+t7u3hqfzYV5xyQr1lNl8r0dln43/g3+JATALJxLhA6HP
+ fW9rCOb493YUeUhoyAo3AHc48XnDl6SujOzrMiCCZAHUn/RUOEkbsVOGHqQIP64B+X
+ QEQblAHZZWfTNggn7b79+ngg5I5kaUGWMqlXvEG6DJb+PiAj8M7YT0m35vcGdlGOXK
+ fX0R0syCDjV5w==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 21 Jan 2022 21:53:27 +0100
+Date: Fri, 21 Jan 2022 21:53:27 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Message-ID: <20220121205327.GK3252931@scaer>
+References: <20220121165046.183224-1-quentin.schulz@theobroma-systems.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220121165046.183224-1-quentin.schulz@theobroma-systems.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH v2] package/qt5/qt5base: fix CVE-2021-38593
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,380 +69,299 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3552985499702382269=="
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Quentin Schulz <foss+buildroot@0leil.net>,
+ Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3552985499702382269==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9151eab3c7e4548a052be69aecba1f2b1ee6396c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-5.15.2 is the last public release of 5.15 and does not contain this CVE
-fix. However, >=6.1.2 and >5.12.12 all contain the necessary patches so
-let's port them to 5.15.2.
-
-Technically only the first two patches are required to patch the CVE.
-However, the second patch introduces a regression that is fixed in the third
-patch.
-
-The patches are taken from KDE kde/5.15 git branch.
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...ssing-intensive-painting-of-high-number-o.patch | 163 +++++++++++++++++++++
- ...x-for-avoiding-huge-number-of-tiny-dashes.patch |  37 +++++
- ...x-for-avoiding-huge-number-of-tiny-dashes.patch | 100 +++++++++++++
- package/qt5/qt5base/qt5base.mk                     |   4 +
- 4 files changed, 304 insertions(+)
-
-diff --git a/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch b/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-new file mode 100644
-index 0000000000..03287d19ca
---- /dev/null
-+++ b/package/qt5/qt5base/0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-@@ -0,0 +1,163 @@
-+From 307bc02e379e63aa9b7a3d21bbcd9c84d34c600f Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Tue, 13 Apr 2021 14:23:45 +0200
-+Subject: [PATCH] Avoid processing-intensive painting of high number of tiny
-+ dashes
-+
-+When stroking a dashed path, an unnecessary amount of processing would
-+be spent if there is a huge number of dashes visible, e.g. because of
-+scaling. Since the dashes are too small to be indivdually visible
-+anyway, just replace with a semi-transparent solid line for such
-+cases.
-+
-+Pick-to: 6.1 6.0 5.15
-+Change-Id: I9e9f7861257ad5bce46a0cf113d1a9d7824911e6
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+(cherry picked from commit f4d791b330d02777fcaf02938732892eb3167e9b)
-+
-+* asturmlechner 2021-08-21:
-+Conflict from preceding 94dd2ceb in dev branch:
-+	src/gui/painting/qpaintengineex.cpp
-+	Resolved via:
-+
-+     if (pen.style() > Qt::SolidLine) {
-+         QRectF cpRect = path.controlPointRect();
-+         const QTransform &xf = state()->matrix;
-+-        if (pen.isCosmetic()) {
-++        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-+             clipRect = d->exDeviceRect;
-+             cpRect.translate(xf.dx(), xf.dy());
-+         } else {
-+
-+FTBFS from preceding 471e4fcb in dev branch changing QVector to QList:
-+	Resolved via:
-+
-+         QRectF extentRect = cpRect.adjusted(-pw, -pw, pw, pw) & clipRect;
-+         qreal extent = qMax(extentRect.width(), extentRect.height());
-+         qreal patternLength = 0;
-+-        const QList<qreal> pattern = pen.dashPattern();
-++        const QVector<qreal> pattern = pen.dashPattern();
-+         const int patternSize = qMin(pattern.size(), 32);
-+         for (int i = 0; i < patternSize; i++)
-+             patternLength += qMax(pattern.at(i), qreal(0));
-+
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/081d835c040a90f8ee76807354355062ac521dfb]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp           | 44 +++++++++++++++----
-+ .../other/lancelot/scripts/tinydashes.qps     | 34 ++++++++++++++
-+ 2 files changed, 69 insertions(+), 9 deletions(-)
-+ create mode 100644 tests/auto/other/lancelot/scripts/tinydashes.qps
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 5d8f89eadd..55fdb0c2a0 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -385,7 +385,7 @@ QPainterState *QPaintEngineEx::createState(QPainterState *orig) const
-+ 
-+ Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
-+ 
-+-void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-++void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+ {
-+ #ifdef QT_DEBUG_DRAW
-+     qDebug() << "QPaintEngineEx::stroke()" << pen;
-+@@ -403,6 +403,38 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-+         d->stroker.setCubicToHook(qpaintengineex_cubicTo);
-+     }
-+ 
-++    QRectF clipRect;
-++    QPen pen = inPen;
-++    if (pen.style() > Qt::SolidLine) {
-++        QRectF cpRect = path.controlPointRect();
-++        const QTransform &xf = state()->matrix;
-++        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-++            clipRect = d->exDeviceRect;
-++            cpRect.translate(xf.dx(), xf.dy());
-++        } else {
-++            clipRect = xf.inverted().mapRect(QRectF(d->exDeviceRect));
-++        }
-++        // Check to avoid generating unwieldy amount of dashes that will not be visible anyway
-++        QRectF extentRect = cpRect & clipRect;
-++        qreal extent = qMax(extentRect.width(), extentRect.height());
-++        qreal patternLength = 0;
-++        const QVector<qreal> pattern = pen.dashPattern();
-++        const int patternSize = qMin(pattern.size(), 32);
-++        for (int i = 0; i < patternSize; i++)
-++            patternLength += qMax(pattern.at(i), qreal(0));
-++        if (pen.widthF())
-++            patternLength *= pen.widthF();
-++        if (qFuzzyIsNull(patternLength)) {
-++            pen.setStyle(Qt::NoPen);
-++        } else if (extent / patternLength > 10000) {
-++            // approximate stream of tiny dashes with semi-transparent solid line
-++            pen.setStyle(Qt::SolidLine);
-++            QColor color(pen.color());
-++            color.setAlpha(color.alpha() / 2);
-++            pen.setColor(color);
-++        }
-++    }
-++
-+     if (!qpen_fast_equals(pen, d->strokerPen)) {
-+         d->strokerPen = pen;
-+         d->stroker.setJoinStyle(pen.joinStyle());
-+@@ -430,14 +462,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-+         return;
-+     }
-+ 
-+-    if (pen.style() > Qt::SolidLine) {
-+-        if (qt_pen_is_cosmetic(pen, state()->renderHints)){
-+-            d->activeStroker->setClipRect(d->exDeviceRect);
-+-        } else {
-+-            QRectF clipRect = state()->matrix.inverted().mapRect(QRectF(d->exDeviceRect));
-+-            d->activeStroker->setClipRect(clipRect);
-+-        }
-+-    }
-++    if (!clipRect.isNull())
-++        d->activeStroker->setClipRect(clipRect);
-+ 
-+     if (d->activeStroker == &d->stroker)
-+         d->stroker.setForceOpen(path.hasExplicitOpen());
-+diff --git a/tests/auto/other/lancelot/scripts/tinydashes.qps b/tests/auto/other/lancelot/scripts/tinydashes.qps
-+new file mode 100644
-+index 0000000000..d41ced7f5f
-+--- /dev/null
-++++ b/tests/auto/other/lancelot/scripts/tinydashes.qps
-+@@ -0,0 +1,34 @@
-++# Version: 1
-++# CheckVsReference: 5%
-++
-++path_addEllipse mypath 20.0 20.0 200.0 200.0
-++
-++save
-++setPen blue 20 SolidLine FlatCap
-++pen_setCosmetic true
-++pen_setDashPattern [ 0.0004 0.0004 ]
-++setBrush yellow
-++
-++drawPath mypath
-++translate 300 0
-++setRenderHint Antialiasing true
-++drawPath mypath
-++restore
-++
-++path_addEllipse bigpath 200000.0 200000.0 2000000.0 2000000.0
-++
-++setPen blue 20 DotLine FlatCap
-++setBrush yellow
-++
-++save
-++translate 0 300
-++scale 0.0001 0.00011
-++drawPath bigpath
-++restore
-++
-++save
-++translate 300 300
-++setRenderHint Antialiasing true
-++scale 0.0001 0.00011
-++drawPath bigpath
-++restore
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch b/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-new file mode 100644
-index 0000000000..16e0f20200
---- /dev/null
-+++ b/package/qt5/qt5base/0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-@@ -0,0 +1,37 @@
-+From 856d11f695fb6effe26a359f9ad0efdf24067085 Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Fri, 23 Jul 2021 15:53:56 +0200
-+Subject: [PATCH] Improve fix for avoiding huge number of tiny dashes
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Some pathological cases were not caught by the previous fix.
-+
-+Fixes: QTBUG-95239
-+Pick-to: 6.2 6.1 5.15
-+Change-Id: I0337ee3923ff93ccb36c4d7b810a9c0667354cc5
-+Reviewed-by: Robert Löhning <robert.loehning@qt.io>
-+(cherry picked from commit 6b400e3147dcfd8cc3a393ace1bd118c93762e0c)
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/fed5713eeba5bf8e0ee413cb4e77109bfa7c2bce]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 55fdb0c2a0..19e4b23423 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -426,7 +426,7 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+             patternLength *= pen.widthF();
-+         if (qFuzzyIsNull(patternLength)) {
-+             pen.setStyle(Qt::NoPen);
-+-        } else if (extent / patternLength > 10000) {
-++        } else if (qFuzzyIsNull(extent) || extent / patternLength > 10000) {
-+             // approximate stream of tiny dashes with semi-transparent solid line
-+             pen.setStyle(Qt::SolidLine);
-+             QColor color(pen.color());
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch b/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch
-new file mode 100644
-index 0000000000..ca3c2736ae
---- /dev/null
-+++ b/package/qt5/qt5base/0012-Refix-for-avoiding-huge-number-of-tiny-dashes.patch
-@@ -0,0 +1,100 @@
-+From 3b1a60f651776a7b2d155803b07a52a9e27bdf78 Mon Sep 17 00:00:00 2001
-+From: Eirik Aavitsland <eirik.aavitsland@qt.io>
-+Date: Fri, 30 Jul 2021 13:03:49 +0200
-+Subject: [PATCH] Refix for avoiding huge number of tiny dashes
-+
-+Previous fix hit too widely so some valid horizontal and vertical
-+lines were affected; the root problem being that such lines have an
-+empty control point rect (width or height is 0). Fix by caculating in
-+the pen width.
-+
-+Pick-to: 6.2 6.1 5.15
-+Change-Id: I7a436e873f6d485028f6759d0e2c6456f07eebdc
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+(cherry picked from commit 84aba80944a2e1c3058d7a1372e0e66676411884)
-+[Retrieved from: https://invent.kde.org/qt/qt/qtbase/-/commit/427df34efdcb56582a9ae9f7d2d1f39eeff70328]
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/gui/painting/qpaintengineex.cpp           |  8 ++---
-+ .../gui/painting/qpainter/tst_qpainter.cpp    | 31 +++++++++++++++++++
-+ 2 files changed, 35 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/gui/painting/qpaintengineex.cpp b/src/gui/painting/qpaintengineex.cpp
-+index 19e4b23423..9fe510827a 100644
-+--- a/src/gui/painting/qpaintengineex.cpp
-++++ b/src/gui/painting/qpaintengineex.cpp
-+@@ -415,18 +415,18 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &inPen)
-+             clipRect = xf.inverted().mapRect(QRectF(d->exDeviceRect));
-+         }
-+         // Check to avoid generating unwieldy amount of dashes that will not be visible anyway
-+-        QRectF extentRect = cpRect & clipRect;
-++        qreal pw = pen.widthF() ? pen.widthF() : 1;
-++        QRectF extentRect = cpRect.adjusted(-pw, -pw, pw, pw) & clipRect;
-+         qreal extent = qMax(extentRect.width(), extentRect.height());
-+         qreal patternLength = 0;
-+         const QVector<qreal> pattern = pen.dashPattern();
-+         const int patternSize = qMin(pattern.size(), 32);
-+         for (int i = 0; i < patternSize; i++)
-+             patternLength += qMax(pattern.at(i), qreal(0));
-+-        if (pen.widthF())
-+-            patternLength *= pen.widthF();
-++        patternLength *= pw;
-+         if (qFuzzyIsNull(patternLength)) {
-+             pen.setStyle(Qt::NoPen);
-+-        } else if (qFuzzyIsNull(extent) || extent / patternLength > 10000) {
-++        } else if (extent / patternLength > 10000) {
-+             // approximate stream of tiny dashes with semi-transparent solid line
-+             pen.setStyle(Qt::SolidLine);
-+             QColor color(pen.color());
-+diff --git a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-+index 42e98ce363..d7c3f95f1d 100644
-+--- a/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-++++ b/tests/auto/gui/painting/qpainter/tst_qpainter.cpp
-+@@ -308,6 +308,7 @@ private slots:
-+     void fillPolygon();
-+ 
-+     void drawImageAtPointF();
-++    void scaledDashes();
-+ 
-+ private:
-+     void fillData();
-+@@ -5468,6 +5469,36 @@ void tst_QPainter::drawImageAtPointF()
-+     paint.end();
-+ }
-+ 
-++void tst_QPainter::scaledDashes()
-++{
-++    // Test that we do not hit the limit-huge-number-of-dashes path
-++    QRgb fore = qRgb(0, 0, 0xff);
-++    QRgb back = qRgb(0xff, 0xff, 0);
-++    QImage image(5, 32, QImage::Format_RGB32);
-++    image.fill(back);
-++    QPainter p(&image);
-++    QPen pen(QColor(fore), 3, Qt::DotLine);
-++    p.setPen(pen);
-++    p.scale(1, 2);
-++    p.drawLine(2, 0, 2, 16);
-++    p.end();
-++
-++    bool foreFound = false;
-++    bool backFound = false;
-++    int i = 0;
-++    while (i < 32 && (!foreFound || !backFound)) {
-++        QRgb pix = image.pixel(3, i);
-++        if (pix == fore)
-++            foreFound = true;
-++        else if (pix == back)
-++            backFound = true;
-++        i++;
-++    }
-++
-++    QVERIFY(foreFound);
-++    QVERIFY(backFound);
-++}
-++
-+ QTEST_MAIN(tst_QPainter)
-+ 
-+ #include "tst_qpainter.moc"
-+-- 
-+2.34.1
-+
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index bcdf036f00..4ef3759566 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -11,6 +11,10 @@ QT5BASE_SOURCE = qtbase-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5BASE_VERSION).tar.xz
- QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
- QT5BASE_INSTALL_STAGING = YES
- 
-+# 0010-Avoid-processing-intensive-painting-of-high-number-o.patch
-+# 0011-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch
-+QT5BASE_IGNORE_CVES += CVE-2021-38593
-+
- # A few comments:
- #  * -no-pch to workaround the issue described at
- #     http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
-
---===============3552985499702382269==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3552985499702382269==--
+UXVlbnRpbiwgQWxsLAoKT24gMjAyMi0wMS0yMSAxNzo1MCArMDEwMCwgUXVlbnRpbiBTY2h1bHog
+c3Bha2UgdGh1c2x5Ogo+IDUuMTUuMiBpcyB0aGUgbGFzdCBwdWJsaWMgcmVsZWFzZSBvZiA1LjE1
+IGFuZCBkb2VzIG5vdCBjb250YWluIHRoaXMgQ1ZFCj4gZml4LiBIb3dldmVyLCA+PTYuMS4yIGFu
+ZCA+NS4xMi4xMiBhbGwgY29udGFpbiB0aGUgbmVjZXNzYXJ5IHBhdGNoZXMgc28KPiBsZXQncyBw
+b3J0IHRoZW0gdG8gNS4xNS4yLgo+IAo+IFRlY2huaWNhbGx5IG9ubHkgdGhlIGZpcnN0IHR3byBw
+YXRjaGVzIGFyZSByZXF1aXJlZCB0byBwYXRjaCB0aGUgQ1ZFLgo+IEhvd2V2ZXIsIHRoZSBzZWNv
+bmQgcGF0Y2ggaW50cm9kdWNlcyBhIHJlZ3Jlc3Npb24gdGhhdCBpcyBmaXhlZCBpbiB0aGUgdGhp
+cmQKPiBwYXRjaC4KPiAKPiBUaGUgcGF0Y2hlcyBhcmUgdGFrZW4gZnJvbSBLREUga2RlLzUuMTUg
+Z2l0IGJyYW5jaC4KPiAKPiBDYzogUXVlbnRpbiBTY2h1bHogPGZvc3MrYnVpbGRyb290QDBsZWls
+Lm5ldD4KPiBTaWduZWQtb2ZmLWJ5OiBRdWVudGluIFNjaHVseiA8cXVlbnRpbi5zY2h1bHpAdGhl
+b2Jyb21hLXN5c3RlbXMuY29tPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMs
+Cllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+IAo+IHYyOgo+ICAtIGFkZGVkIHRoaXJkIHBhdGNoIGZv
+ciBmaXhpbmcgcmVncmVzc2lvbiBpbnRyb2R1Y2VkIGJ5IHRoZSBzZWNvbmQgcGF0Y2gsCj4gIC0g
+Y2hlcnJ5LXBpY2tlZCBjb21taXRzIGZyb20ga2RlIGdpdCBrZGUvNS4xNSBicmFuY2ggaW5zdGVh
+ZCBvZiB0YWtpbmcKPiAgcGF0Y2hlcyBmcm9tIDUuMTIuMTIgc2luY2UgdGhleSBhbGwgYXBwbGll
+ZCBuaWNlbHksCj4gCj4gIC4uLi1pbnRlbnNpdmUtcGFpbnRpbmctb2YtaGlnaC1udW1iZXItby5w
+YXRjaCB8IDE2MyArKysrKysrKysrKysrKysrKysKPiAgLi4uLWF2b2lkaW5nLWh1Z2UtbnVtYmVy
+LW9mLXRpbnktZGFzaGVzLnBhdGNoIHwgIDM3ICsrKysKPiAgLi4uLWF2b2lkaW5nLWh1Z2UtbnVt
+YmVyLW9mLXRpbnktZGFzaGVzLnBhdGNoIHwgMTAwICsrKysrKysrKysrCj4gIHBhY2thZ2UvcXQ1
+L3F0NWJhc2UvcXQ1YmFzZS5tayAgICAgICAgICAgICAgICB8ICAgNCArCj4gIDQgZmlsZXMgY2hh
+bmdlZCwgMzA0IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcXQ1
+L3F0NWJhc2UvMDAxMC1Bdm9pZC1wcm9jZXNzaW5nLWludGVuc2l2ZS1wYWludGluZy1vZi1oaWdo
+LW51bWJlci1vLnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3F0NS9xdDViYXNl
+LzAwMTEtSW1wcm92ZS1maXgtZm9yLWF2b2lkaW5nLWh1Z2UtbnVtYmVyLW9mLXRpbnktZGFzaGVz
+LnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3F0NS9xdDViYXNlLzAwMTItUmVm
+aXgtZm9yLWF2b2lkaW5nLWh1Z2UtbnVtYmVyLW9mLXRpbnktZGFzaGVzLnBhdGNoCj4gCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0NWJhc2UvMDAxMC1Bdm9pZC1wcm9jZXNzaW5nLWludGVu
+c2l2ZS1wYWludGluZy1vZi1oaWdoLW51bWJlci1vLnBhdGNoIGIvcGFja2FnZS9xdDUvcXQ1YmFz
+ZS8wMDEwLUF2b2lkLXByb2Nlc3NpbmctaW50ZW5zaXZlLXBhaW50aW5nLW9mLWhpZ2gtbnVtYmVy
+LW8ucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjAzMjg3
+ZDE5Y2EKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9xdDUvcXQ1YmFzZS8wMDEwLUF2
+b2lkLXByb2Nlc3NpbmctaW50ZW5zaXZlLXBhaW50aW5nLW9mLWhpZ2gtbnVtYmVyLW8ucGF0Y2gK
+PiBAQCAtMCwwICsxLDE2MyBAQAo+ICtGcm9tIDMwN2JjMDJlMzc5ZTYzYWE5YjdhM2QyMWJiY2Q5
+Yzg0ZDM0YzYwMGYgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEVpcmlrIEFhdml0
+c2xhbmQgPGVpcmlrLmFhdml0c2xhbmRAcXQuaW8+Cj4gK0RhdGU6IFR1ZSwgMTMgQXByIDIwMjEg
+MTQ6MjM6NDUgKzAyMDAKPiArU3ViamVjdDogW1BBVENIXSBBdm9pZCBwcm9jZXNzaW5nLWludGVu
+c2l2ZSBwYWludGluZyBvZiBoaWdoIG51bWJlciBvZiB0aW55Cj4gKyBkYXNoZXMKPiArCj4gK1do
+ZW4gc3Ryb2tpbmcgYSBkYXNoZWQgcGF0aCwgYW4gdW5uZWNlc3NhcnkgYW1vdW50IG9mIHByb2Nl
+c3Npbmcgd291bGQKPiArYmUgc3BlbnQgaWYgdGhlcmUgaXMgYSBodWdlIG51bWJlciBvZiBkYXNo
+ZXMgdmlzaWJsZSwgZS5nLiBiZWNhdXNlIG9mCj4gK3NjYWxpbmcuIFNpbmNlIHRoZSBkYXNoZXMg
+YXJlIHRvbyBzbWFsbCB0byBiZSBpbmRpdmR1YWxseSB2aXNpYmxlCj4gK2FueXdheSwganVzdCBy
+ZXBsYWNlIHdpdGggYSBzZW1pLXRyYW5zcGFyZW50IHNvbGlkIGxpbmUgZm9yIHN1Y2gKPiArY2Fz
+ZXMuCj4gKwo+ICtQaWNrLXRvOiA2LjEgNi4wIDUuMTUKPiArQ2hhbmdlLUlkOiBJOWU5Zjc4NjEy
+NTdhZDViY2U0NmEwY2YxMTNkMWE5ZDc4MjQ5MTFlNgo+ICtSZXZpZXdlZC1ieTogQWxsYW4gU2Fu
+ZGZlbGQgSmVuc2VuIDxhbGxhbi5qZW5zZW5AcXQuaW8+Cj4gKyhjaGVycnkgcGlja2VkIGZyb20g
+Y29tbWl0IGY0ZDc5MWIzMzBkMDI3NzdmY2FmMDI5Mzg3MzI4OTJlYjMxNjdlOWIpCj4gKwo+ICsq
+IGFzdHVybWxlY2huZXIgMjAyMS0wOC0yMToKPiArQ29uZmxpY3QgZnJvbSBwcmVjZWRpbmcgOTRk
+ZDJjZWIgaW4gZGV2IGJyYW5jaDoKPiArCXNyYy9ndWkvcGFpbnRpbmcvcXBhaW50ZW5naW5lZXgu
+Y3BwCj4gKwlSZXNvbHZlZCB2aWE6Cj4gKwo+ICsgICAgIGlmIChwZW4uc3R5bGUoKSA+IFF0OjpT
+b2xpZExpbmUpIHsKPiArICAgICAgICAgUVJlY3RGIGNwUmVjdCA9IHBhdGguY29udHJvbFBvaW50
+UmVjdCgpOwo+ICsgICAgICAgICBjb25zdCBRVHJhbnNmb3JtICZ4ZiA9IHN0YXRlKCktPm1hdHJp
+eDsKPiArLSAgICAgICAgaWYgKHBlbi5pc0Nvc21ldGljKCkpIHsKPiArKyAgICAgICAgaWYgKHF0
+X3Blbl9pc19jb3NtZXRpYyhwZW4sIHN0YXRlKCktPnJlbmRlckhpbnRzKSl7Cj4gKyAgICAgICAg
+ICAgICBjbGlwUmVjdCA9IGQtPmV4RGV2aWNlUmVjdDsKPiArICAgICAgICAgICAgIGNwUmVjdC50
+cmFuc2xhdGUoeGYuZHgoKSwgeGYuZHkoKSk7Cj4gKyAgICAgICAgIH0gZWxzZSB7Cj4gKwo+ICtG
+VEJGUyBmcm9tIHByZWNlZGluZyA0NzFlNGZjYiBpbiBkZXYgYnJhbmNoIGNoYW5naW5nIFFWZWN0
+b3IgdG8gUUxpc3Q6Cj4gKwlSZXNvbHZlZCB2aWE6Cj4gKwo+ICsgICAgICAgICBRUmVjdEYgZXh0
+ZW50UmVjdCA9IGNwUmVjdC5hZGp1c3RlZCgtcHcsIC1wdywgcHcsIHB3KSAmIGNsaXBSZWN0Owo+
+ICsgICAgICAgICBxcmVhbCBleHRlbnQgPSBxTWF4KGV4dGVudFJlY3Qud2lkdGgoKSwgZXh0ZW50
+UmVjdC5oZWlnaHQoKSk7Cj4gKyAgICAgICAgIHFyZWFsIHBhdHRlcm5MZW5ndGggPSAwOwo+ICst
+ICAgICAgICBjb25zdCBRTGlzdDxxcmVhbD4gcGF0dGVybiA9IHBlbi5kYXNoUGF0dGVybigpOwo+
+ICsrICAgICAgICBjb25zdCBRVmVjdG9yPHFyZWFsPiBwYXR0ZXJuID0gcGVuLmRhc2hQYXR0ZXJu
+KCk7Cj4gKyAgICAgICAgIGNvbnN0IGludCBwYXR0ZXJuU2l6ZSA9IHFNaW4ocGF0dGVybi5zaXpl
+KCksIDMyKTsKPiArICAgICAgICAgZm9yIChpbnQgaSA9IDA7IGkgPCBwYXR0ZXJuU2l6ZTsgaSsr
+KQo+ICsgICAgICAgICAgICAgcGF0dGVybkxlbmd0aCArPSBxTWF4KHBhdHRlcm4uYXQoaSksIHFy
+ZWFsKDApKTsKPiArCj4gK1tSZXRyaWV2ZWQgZnJvbTogaHR0cHM6Ly9pbnZlbnQua2RlLm9yZy9x
+dC9xdC9xdGJhc2UvLS9jb21taXQvMDgxZDgzNWMwNDBhOTBmOGVlNzY4MDczNTQzNTUwNjJhYzUy
+MWRmYl0KPiArU2lnbmVkLW9mZi1ieTogUXVlbnRpbiBTY2h1bHogPHF1ZW50aW4uc2NodWx6QHRo
+ZW9icm9tYS1zeXN0ZW1zLmNvbT4KPiArLS0tCj4gKyBzcmMvZ3VpL3BhaW50aW5nL3FwYWludGVu
+Z2luZWV4LmNwcCAgICAgICAgICAgfCA0NCArKysrKysrKysrKysrKystLS0tCj4gKyAuLi4vb3Ro
+ZXIvbGFuY2Vsb3Qvc2NyaXB0cy90aW55ZGFzaGVzLnFwcyAgICAgfCAzNCArKysrKysrKysrKysr
+Kwo+ICsgMiBmaWxlcyBjaGFuZ2VkLCA2OSBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQo+
+ICsgY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL2F1dG8vb3RoZXIvbGFuY2Vsb3Qvc2NyaXB0cy90
+aW55ZGFzaGVzLnFwcwo+ICsKPiArZGlmZiAtLWdpdCBhL3NyYy9ndWkvcGFpbnRpbmcvcXBhaW50
+ZW5naW5lZXguY3BwIGIvc3JjL2d1aS9wYWludGluZy9xcGFpbnRlbmdpbmVleC5jcHAKPiAraW5k
+ZXggNWQ4Zjg5ZWFkZC4uNTVmZGIwYzJhMCAxMDA2NDQKPiArLS0tIGEvc3JjL2d1aS9wYWludGlu
+Zy9xcGFpbnRlbmdpbmVleC5jcHAKPiArKysrIGIvc3JjL2d1aS9wYWludGluZy9xcGFpbnRlbmdp
+bmVleC5jcHAKPiArQEAgLTM4NSw3ICszODUsNyBAQCBRUGFpbnRlclN0YXRlICpRUGFpbnRFbmdp
+bmVFeDo6Y3JlYXRlU3RhdGUoUVBhaW50ZXJTdGF0ZSAqb3JpZykgY29uc3QKPiArIAo+ICsgUV9H
+VUlfRVhQT1JUIGV4dGVybiBib29sIHF0X3NjYWxlRm9yVHJhbnNmb3JtKGNvbnN0IFFUcmFuc2Zv
+cm0gJnRyYW5zZm9ybSwgcXJlYWwgKnNjYWxlKTsgLy8gcXRyYW5zZm9ybS5jcHAKPiArIAo+ICst
+dm9pZCBRUGFpbnRFbmdpbmVFeDo6c3Ryb2tlKGNvbnN0IFFWZWN0b3JQYXRoICZwYXRoLCBjb25z
+dCBRUGVuICZwZW4pCj4gKyt2b2lkIFFQYWludEVuZ2luZUV4OjpzdHJva2UoY29uc3QgUVZlY3Rv
+clBhdGggJnBhdGgsIGNvbnN0IFFQZW4gJmluUGVuKQo+ICsgewo+ICsgI2lmZGVmIFFUX0RFQlVH
+X0RSQVcKPiArICAgICBxRGVidWcoKSA8PCAiUVBhaW50RW5naW5lRXg6OnN0cm9rZSgpIiA8PCBw
+ZW47Cj4gK0BAIC00MDMsNiArNDAzLDM4IEBAIHZvaWQgUVBhaW50RW5naW5lRXg6OnN0cm9rZShj
+b25zdCBRVmVjdG9yUGF0aCAmcGF0aCwgY29uc3QgUVBlbiAmcGVuKQo+ICsgICAgICAgICBkLT5z
+dHJva2VyLnNldEN1YmljVG9Ib29rKHFwYWludGVuZ2luZWV4X2N1YmljVG8pOwo+ICsgICAgIH0K
+PiArIAo+ICsrICAgIFFSZWN0RiBjbGlwUmVjdDsKPiArKyAgICBRUGVuIHBlbiA9IGluUGVuOwo+
+ICsrICAgIGlmIChwZW4uc3R5bGUoKSA+IFF0OjpTb2xpZExpbmUpIHsKPiArKyAgICAgICAgUVJl
+Y3RGIGNwUmVjdCA9IHBhdGguY29udHJvbFBvaW50UmVjdCgpOwo+ICsrICAgICAgICBjb25zdCBR
+VHJhbnNmb3JtICZ4ZiA9IHN0YXRlKCktPm1hdHJpeDsKPiArKyAgICAgICAgaWYgKHF0X3Blbl9p
+c19jb3NtZXRpYyhwZW4sIHN0YXRlKCktPnJlbmRlckhpbnRzKSl7Cj4gKysgICAgICAgICAgICBj
+bGlwUmVjdCA9IGQtPmV4RGV2aWNlUmVjdDsKPiArKyAgICAgICAgICAgIGNwUmVjdC50cmFuc2xh
+dGUoeGYuZHgoKSwgeGYuZHkoKSk7Cj4gKysgICAgICAgIH0gZWxzZSB7Cj4gKysgICAgICAgICAg
+ICBjbGlwUmVjdCA9IHhmLmludmVydGVkKCkubWFwUmVjdChRUmVjdEYoZC0+ZXhEZXZpY2VSZWN0
+KSk7Cj4gKysgICAgICAgIH0KPiArKyAgICAgICAgLy8gQ2hlY2sgdG8gYXZvaWQgZ2VuZXJhdGlu
+ZyB1bndpZWxkeSBhbW91bnQgb2YgZGFzaGVzIHRoYXQgd2lsbCBub3QgYmUgdmlzaWJsZSBhbnl3
+YXkKPiArKyAgICAgICAgUVJlY3RGIGV4dGVudFJlY3QgPSBjcFJlY3QgJiBjbGlwUmVjdDsKPiAr
+KyAgICAgICAgcXJlYWwgZXh0ZW50ID0gcU1heChleHRlbnRSZWN0LndpZHRoKCksIGV4dGVudFJl
+Y3QuaGVpZ2h0KCkpOwo+ICsrICAgICAgICBxcmVhbCBwYXR0ZXJuTGVuZ3RoID0gMDsKPiArKyAg
+ICAgICAgY29uc3QgUVZlY3RvcjxxcmVhbD4gcGF0dGVybiA9IHBlbi5kYXNoUGF0dGVybigpOwo+
+ICsrICAgICAgICBjb25zdCBpbnQgcGF0dGVyblNpemUgPSBxTWluKHBhdHRlcm4uc2l6ZSgpLCAz
+Mik7Cj4gKysgICAgICAgIGZvciAoaW50IGkgPSAwOyBpIDwgcGF0dGVyblNpemU7IGkrKykKPiAr
+KyAgICAgICAgICAgIHBhdHRlcm5MZW5ndGggKz0gcU1heChwYXR0ZXJuLmF0KGkpLCBxcmVhbCgw
+KSk7Cj4gKysgICAgICAgIGlmIChwZW4ud2lkdGhGKCkpCj4gKysgICAgICAgICAgICBwYXR0ZXJu
+TGVuZ3RoICo9IHBlbi53aWR0aEYoKTsKPiArKyAgICAgICAgaWYgKHFGdXp6eUlzTnVsbChwYXR0
+ZXJuTGVuZ3RoKSkgewo+ICsrICAgICAgICAgICAgcGVuLnNldFN0eWxlKFF0OjpOb1Blbik7Cj4g
+KysgICAgICAgIH0gZWxzZSBpZiAoZXh0ZW50IC8gcGF0dGVybkxlbmd0aCA+IDEwMDAwKSB7Cj4g
+KysgICAgICAgICAgICAvLyBhcHByb3hpbWF0ZSBzdHJlYW0gb2YgdGlueSBkYXNoZXMgd2l0aCBz
+ZW1pLXRyYW5zcGFyZW50IHNvbGlkIGxpbmUKPiArKyAgICAgICAgICAgIHBlbi5zZXRTdHlsZShR
+dDo6U29saWRMaW5lKTsKPiArKyAgICAgICAgICAgIFFDb2xvciBjb2xvcihwZW4uY29sb3IoKSk7
+Cj4gKysgICAgICAgICAgICBjb2xvci5zZXRBbHBoYShjb2xvci5hbHBoYSgpIC8gMik7Cj4gKysg
+ICAgICAgICAgICBwZW4uc2V0Q29sb3IoY29sb3IpOwo+ICsrICAgICAgICB9Cj4gKysgICAgfQo+
+ICsrCj4gKyAgICAgaWYgKCFxcGVuX2Zhc3RfZXF1YWxzKHBlbiwgZC0+c3Ryb2tlclBlbikpIHsK
+PiArICAgICAgICAgZC0+c3Ryb2tlclBlbiA9IHBlbjsKPiArICAgICAgICAgZC0+c3Ryb2tlci5z
+ZXRKb2luU3R5bGUocGVuLmpvaW5TdHlsZSgpKTsKPiArQEAgLTQzMCwxNCArNDYyLDggQEAgdm9p
+ZCBRUGFpbnRFbmdpbmVFeDo6c3Ryb2tlKGNvbnN0IFFWZWN0b3JQYXRoICZwYXRoLCBjb25zdCBR
+UGVuICZwZW4pCj4gKyAgICAgICAgIHJldHVybjsKPiArICAgICB9Cj4gKyAKPiArLSAgICBpZiAo
+cGVuLnN0eWxlKCkgPiBRdDo6U29saWRMaW5lKSB7Cj4gKy0gICAgICAgIGlmIChxdF9wZW5faXNf
+Y29zbWV0aWMocGVuLCBzdGF0ZSgpLT5yZW5kZXJIaW50cykpewo+ICstICAgICAgICAgICAgZC0+
+YWN0aXZlU3Ryb2tlci0+c2V0Q2xpcFJlY3QoZC0+ZXhEZXZpY2VSZWN0KTsKPiArLSAgICAgICAg
+fSBlbHNlIHsKPiArLSAgICAgICAgICAgIFFSZWN0RiBjbGlwUmVjdCA9IHN0YXRlKCktPm1hdHJp
+eC5pbnZlcnRlZCgpLm1hcFJlY3QoUVJlY3RGKGQtPmV4RGV2aWNlUmVjdCkpOwo+ICstICAgICAg
+ICAgICAgZC0+YWN0aXZlU3Ryb2tlci0+c2V0Q2xpcFJlY3QoY2xpcFJlY3QpOwo+ICstICAgICAg
+ICB9Cj4gKy0gICAgfQo+ICsrICAgIGlmICghY2xpcFJlY3QuaXNOdWxsKCkpCj4gKysgICAgICAg
+IGQtPmFjdGl2ZVN0cm9rZXItPnNldENsaXBSZWN0KGNsaXBSZWN0KTsKPiArIAo+ICsgICAgIGlm
+IChkLT5hY3RpdmVTdHJva2VyID09ICZkLT5zdHJva2VyKQo+ICsgICAgICAgICBkLT5zdHJva2Vy
+LnNldEZvcmNlT3BlbihwYXRoLmhhc0V4cGxpY2l0T3BlbigpKTsKPiArZGlmZiAtLWdpdCBhL3Rl
+c3RzL2F1dG8vb3RoZXIvbGFuY2Vsb3Qvc2NyaXB0cy90aW55ZGFzaGVzLnFwcyBiL3Rlc3RzL2F1
+dG8vb3RoZXIvbGFuY2Vsb3Qvc2NyaXB0cy90aW55ZGFzaGVzLnFwcwo+ICtuZXcgZmlsZSBtb2Rl
+IDEwMDY0NAo+ICtpbmRleCAwMDAwMDAwMDAwLi5kNDFjZWQ3ZjVmCj4gKy0tLSAvZGV2L251bGwK
+PiArKysrIGIvdGVzdHMvYXV0by9vdGhlci9sYW5jZWxvdC9zY3JpcHRzL3RpbnlkYXNoZXMucXBz
+Cj4gK0BAIC0wLDAgKzEsMzQgQEAKPiArKyMgVmVyc2lvbjogMQo+ICsrIyBDaGVja1ZzUmVmZXJl
+bmNlOiA1JQo+ICsrCj4gKytwYXRoX2FkZEVsbGlwc2UgbXlwYXRoIDIwLjAgMjAuMCAyMDAuMCAy
+MDAuMAo+ICsrCj4gKytzYXZlCj4gKytzZXRQZW4gYmx1ZSAyMCBTb2xpZExpbmUgRmxhdENhcAo+
+ICsrcGVuX3NldENvc21ldGljIHRydWUKPiArK3Blbl9zZXREYXNoUGF0dGVybiBbIDAuMDAwNCAw
+LjAwMDQgXQo+ICsrc2V0QnJ1c2ggeWVsbG93Cj4gKysKPiArK2RyYXdQYXRoIG15cGF0aAo+ICsr
+dHJhbnNsYXRlIDMwMCAwCj4gKytzZXRSZW5kZXJIaW50IEFudGlhbGlhc2luZyB0cnVlCj4gKytk
+cmF3UGF0aCBteXBhdGgKPiArK3Jlc3RvcmUKPiArKwo+ICsrcGF0aF9hZGRFbGxpcHNlIGJpZ3Bh
+dGggMjAwMDAwLjAgMjAwMDAwLjAgMjAwMDAwMC4wIDIwMDAwMDAuMAo+ICsrCj4gKytzZXRQZW4g
+Ymx1ZSAyMCBEb3RMaW5lIEZsYXRDYXAKPiArK3NldEJydXNoIHllbGxvdwo+ICsrCj4gKytzYXZl
+Cj4gKyt0cmFuc2xhdGUgMCAzMDAKPiArK3NjYWxlIDAuMDAwMSAwLjAwMDExCj4gKytkcmF3UGF0
+aCBiaWdwYXRoCj4gKytyZXN0b3JlCj4gKysKPiArK3NhdmUKPiArK3RyYW5zbGF0ZSAzMDAgMzAw
+Cj4gKytzZXRSZW5kZXJIaW50IEFudGlhbGlhc2luZyB0cnVlCj4gKytzY2FsZSAwLjAwMDEgMC4w
+MDAxMQo+ICsrZHJhd1BhdGggYmlncGF0aAo+ICsrcmVzdG9yZQo+ICstLSAKPiArMi4zNC4xCj4g
+Kwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3F0NS9xdDViYXNlLzAwMTEtSW1wcm92ZS1maXgtZm9y
+LWF2b2lkaW5nLWh1Z2UtbnVtYmVyLW9mLXRpbnktZGFzaGVzLnBhdGNoIGIvcGFja2FnZS9xdDUv
+cXQ1YmFzZS8wMDExLUltcHJvdmUtZml4LWZvci1hdm9pZGluZy1odWdlLW51bWJlci1vZi10aW55
+LWRhc2hlcy5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4u
+MTZlMGYyMDIwMAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3F0NS9xdDViYXNlLzAw
+MTEtSW1wcm92ZS1maXgtZm9yLWF2b2lkaW5nLWh1Z2UtbnVtYmVyLW9mLXRpbnktZGFzaGVzLnBh
+dGNoCj4gQEAgLTAsMCArMSwzNyBAQAo+ICtGcm9tIDg1NmQxMWY2OTVmYjZlZmZlMjZhMzU5Zjlh
+ZDBlZmRmMjQwNjcwODUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEVpcmlrIEFh
+dml0c2xhbmQgPGVpcmlrLmFhdml0c2xhbmRAcXQuaW8+Cj4gK0RhdGU6IEZyaSwgMjMgSnVsIDIw
+MjEgMTU6NTM6NTYgKzAyMDAKPiArU3ViamVjdDogW1BBVENIXSBJbXByb3ZlIGZpeCBmb3IgYXZv
+aWRpbmcgaHVnZSBudW1iZXIgb2YgdGlueSBkYXNoZXMKPiArTUlNRS1WZXJzaW9uOiAxLjAKPiAr
+Q29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNm
+ZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK1NvbWUgcGF0aG9sb2dpY2FsIGNhc2VzIHdlcmUgbm90
+IGNhdWdodCBieSB0aGUgcHJldmlvdXMgZml4Lgo+ICsKPiArRml4ZXM6IFFUQlVHLTk1MjM5Cj4g
+K1BpY2stdG86IDYuMiA2LjEgNS4xNQo+ICtDaGFuZ2UtSWQ6IEkwMzM3ZWUzOTIzZmY5M2NjYjM2
+YzRkN2I4MTBhOWMwNjY3MzU0Y2M1Cj4gK1Jldmlld2VkLWJ5OiBSb2JlcnQgTMO2aG5pbmcgPHJv
+YmVydC5sb2VobmluZ0BxdC5pbz4KPiArKGNoZXJyeSBwaWNrZWQgZnJvbSBjb21taXQgNmI0MDBl
+MzE0N2RjZmQ4Y2MzYTM5M2FjZTFiZDExOGM5Mzc2MmUwYykKPiArW1JldHJpZXZlZCBmcm9tOiBo
+dHRwczovL2ludmVudC5rZGUub3JnL3F0L3F0L3F0YmFzZS8tL2NvbW1pdC9mZWQ1NzEzZWViYTVi
+ZjhlMGVlNDEzY2I0ZTc3MTA5YmZhN2MyYmNlXQo+ICtTaWduZWQtb2ZmLWJ5OiBRdWVudGluIFNj
+aHVseiA8cXVlbnRpbi5zY2h1bHpAdGhlb2Jyb21hLXN5c3RlbXMuY29tPgo+ICstLS0KPiArIHNy
+Yy9ndWkvcGFpbnRpbmcvcXBhaW50ZW5naW5lZXguY3BwIHwgMiArLQo+ICsgMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvc3Jj
+L2d1aS9wYWludGluZy9xcGFpbnRlbmdpbmVleC5jcHAgYi9zcmMvZ3VpL3BhaW50aW5nL3FwYWlu
+dGVuZ2luZWV4LmNwcAo+ICtpbmRleCA1NWZkYjBjMmEwLi4xOWU0YjIzNDIzIDEwMDY0NAo+ICst
+LS0gYS9zcmMvZ3VpL3BhaW50aW5nL3FwYWludGVuZ2luZWV4LmNwcAo+ICsrKysgYi9zcmMvZ3Vp
+L3BhaW50aW5nL3FwYWludGVuZ2luZWV4LmNwcAo+ICtAQCAtNDI2LDcgKzQyNiw3IEBAIHZvaWQg
+UVBhaW50RW5naW5lRXg6OnN0cm9rZShjb25zdCBRVmVjdG9yUGF0aCAmcGF0aCwgY29uc3QgUVBl
+biAmaW5QZW4pCj4gKyAgICAgICAgICAgICBwYXR0ZXJuTGVuZ3RoICo9IHBlbi53aWR0aEYoKTsK
+PiArICAgICAgICAgaWYgKHFGdXp6eUlzTnVsbChwYXR0ZXJuTGVuZ3RoKSkgewo+ICsgICAgICAg
+ICAgICAgcGVuLnNldFN0eWxlKFF0OjpOb1Blbik7Cj4gKy0gICAgICAgIH0gZWxzZSBpZiAoZXh0
+ZW50IC8gcGF0dGVybkxlbmd0aCA+IDEwMDAwKSB7Cj4gKysgICAgICAgIH0gZWxzZSBpZiAocUZ1
+enp5SXNOdWxsKGV4dGVudCkgfHwgZXh0ZW50IC8gcGF0dGVybkxlbmd0aCA+IDEwMDAwKSB7Cj4g
+KyAgICAgICAgICAgICAvLyBhcHByb3hpbWF0ZSBzdHJlYW0gb2YgdGlueSBkYXNoZXMgd2l0aCBz
+ZW1pLXRyYW5zcGFyZW50IHNvbGlkIGxpbmUKPiArICAgICAgICAgICAgIHBlbi5zZXRTdHlsZShR
+dDo6U29saWRMaW5lKTsKPiArICAgICAgICAgICAgIFFDb2xvciBjb2xvcihwZW4uY29sb3IoKSk7
+Cj4gKy0tIAo+ICsyLjM0LjEKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0NWJhc2Uv
+MDAxMi1SZWZpeC1mb3ItYXZvaWRpbmctaHVnZS1udW1iZXItb2YtdGlueS1kYXNoZXMucGF0Y2gg
+Yi9wYWNrYWdlL3F0NS9xdDViYXNlLzAwMTItUmVmaXgtZm9yLWF2b2lkaW5nLWh1Z2UtbnVtYmVy
+LW9mLXRpbnktZGFzaGVzLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwLi5jYTNjMjczNmFlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvcXQ1L3F0
+NWJhc2UvMDAxMi1SZWZpeC1mb3ItYXZvaWRpbmctaHVnZS1udW1iZXItb2YtdGlueS1kYXNoZXMu
+cGF0Y2gKPiBAQCAtMCwwICsxLDEwMCBAQAo+ICtGcm9tIDNiMWE2MGY2NTE3NzZhN2IyZDE1NTgw
+M2IwN2E1MmE5ZTI3YmRmNzggTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEVpcmlr
+IEFhdml0c2xhbmQgPGVpcmlrLmFhdml0c2xhbmRAcXQuaW8+Cj4gK0RhdGU6IEZyaSwgMzAgSnVs
+IDIwMjEgMTM6MDM6NDkgKzAyMDAKPiArU3ViamVjdDogW1BBVENIXSBSZWZpeCBmb3IgYXZvaWRp
+bmcgaHVnZSBudW1iZXIgb2YgdGlueSBkYXNoZXMKPiArCj4gK1ByZXZpb3VzIGZpeCBoaXQgdG9v
+IHdpZGVseSBzbyBzb21lIHZhbGlkIGhvcml6b250YWwgYW5kIHZlcnRpY2FsCj4gK2xpbmVzIHdl
+cmUgYWZmZWN0ZWQ7IHRoZSByb290IHByb2JsZW0gYmVpbmcgdGhhdCBzdWNoIGxpbmVzIGhhdmUg
+YW4KPiArZW1wdHkgY29udHJvbCBwb2ludCByZWN0ICh3aWR0aCBvciBoZWlnaHQgaXMgMCkuIEZp
+eCBieSBjYWN1bGF0aW5nIGluCj4gK3RoZSBwZW4gd2lkdGguCj4gKwo+ICtQaWNrLXRvOiA2LjIg
+Ni4xIDUuMTUKPiArQ2hhbmdlLUlkOiBJN2E0MzZlODczZjZkNDg1MDI4ZjY3NTlkMGUyYzY0NTZm
+MDdlZWJkYwo+ICtSZXZpZXdlZC1ieTogQWxsYW4gU2FuZGZlbGQgSmVuc2VuIDxhbGxhbi5qZW5z
+ZW5AcXQuaW8+Cj4gKyhjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDg0YWJhODA5NDRhMmUxYzMw
+NThkN2ExMzcyZTBlNjY2NzY0MTE4ODQpCj4gK1tSZXRyaWV2ZWQgZnJvbTogaHR0cHM6Ly9pbnZl
+bnQua2RlLm9yZy9xdC9xdC9xdGJhc2UvLS9jb21taXQvNDI3ZGYzNGVmZGNiNTY1ODJhOWFlOWY3
+ZDJkMWYzOWVlZmY3MDMyOF0KPiArU2lnbmVkLW9mZi1ieTogUXVlbnRpbiBTY2h1bHogPHF1ZW50
+aW4uc2NodWx6QHRoZW9icm9tYS1zeXN0ZW1zLmNvbT4KPiArLS0tCj4gKyBzcmMvZ3VpL3BhaW50
+aW5nL3FwYWludGVuZ2luZWV4LmNwcCAgICAgICAgICAgfCAgOCArKy0tLQo+ICsgLi4uL2d1aS9w
+YWludGluZy9xcGFpbnRlci90c3RfcXBhaW50ZXIuY3BwICAgIHwgMzEgKysrKysrKysrKysrKysr
+KysrKwo+ICsgMiBmaWxlcyBjaGFuZ2VkLCAzNSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygt
+KQo+ICsKPiArZGlmZiAtLWdpdCBhL3NyYy9ndWkvcGFpbnRpbmcvcXBhaW50ZW5naW5lZXguY3Bw
+IGIvc3JjL2d1aS9wYWludGluZy9xcGFpbnRlbmdpbmVleC5jcHAKPiAraW5kZXggMTllNGIyMzQy
+My4uOWZlNTEwODI3YSAxMDA2NDQKPiArLS0tIGEvc3JjL2d1aS9wYWludGluZy9xcGFpbnRlbmdp
+bmVleC5jcHAKPiArKysrIGIvc3JjL2d1aS9wYWludGluZy9xcGFpbnRlbmdpbmVleC5jcHAKPiAr
+QEAgLTQxNSwxOCArNDE1LDE4IEBAIHZvaWQgUVBhaW50RW5naW5lRXg6OnN0cm9rZShjb25zdCBR
+VmVjdG9yUGF0aCAmcGF0aCwgY29uc3QgUVBlbiAmaW5QZW4pCj4gKyAgICAgICAgICAgICBjbGlw
+UmVjdCA9IHhmLmludmVydGVkKCkubWFwUmVjdChRUmVjdEYoZC0+ZXhEZXZpY2VSZWN0KSk7Cj4g
+KyAgICAgICAgIH0KPiArICAgICAgICAgLy8gQ2hlY2sgdG8gYXZvaWQgZ2VuZXJhdGluZyB1bndp
+ZWxkeSBhbW91bnQgb2YgZGFzaGVzIHRoYXQgd2lsbCBub3QgYmUgdmlzaWJsZSBhbnl3YXkKPiAr
+LSAgICAgICAgUVJlY3RGIGV4dGVudFJlY3QgPSBjcFJlY3QgJiBjbGlwUmVjdDsKPiArKyAgICAg
+ICAgcXJlYWwgcHcgPSBwZW4ud2lkdGhGKCkgPyBwZW4ud2lkdGhGKCkgOiAxOwo+ICsrICAgICAg
+ICBRUmVjdEYgZXh0ZW50UmVjdCA9IGNwUmVjdC5hZGp1c3RlZCgtcHcsIC1wdywgcHcsIHB3KSAm
+IGNsaXBSZWN0Owo+ICsgICAgICAgICBxcmVhbCBleHRlbnQgPSBxTWF4KGV4dGVudFJlY3Qud2lk
+dGgoKSwgZXh0ZW50UmVjdC5oZWlnaHQoKSk7Cj4gKyAgICAgICAgIHFyZWFsIHBhdHRlcm5MZW5n
+dGggPSAwOwo+ICsgICAgICAgICBjb25zdCBRVmVjdG9yPHFyZWFsPiBwYXR0ZXJuID0gcGVuLmRh
+c2hQYXR0ZXJuKCk7Cj4gKyAgICAgICAgIGNvbnN0IGludCBwYXR0ZXJuU2l6ZSA9IHFNaW4ocGF0
+dGVybi5zaXplKCksIDMyKTsKPiArICAgICAgICAgZm9yIChpbnQgaSA9IDA7IGkgPCBwYXR0ZXJu
+U2l6ZTsgaSsrKQo+ICsgICAgICAgICAgICAgcGF0dGVybkxlbmd0aCArPSBxTWF4KHBhdHRlcm4u
+YXQoaSksIHFyZWFsKDApKTsKPiArLSAgICAgICAgaWYgKHBlbi53aWR0aEYoKSkKPiArLSAgICAg
+ICAgICAgIHBhdHRlcm5MZW5ndGggKj0gcGVuLndpZHRoRigpOwo+ICsrICAgICAgICBwYXR0ZXJu
+TGVuZ3RoICo9IHB3Owo+ICsgICAgICAgICBpZiAocUZ1enp5SXNOdWxsKHBhdHRlcm5MZW5ndGgp
+KSB7Cj4gKyAgICAgICAgICAgICBwZW4uc2V0U3R5bGUoUXQ6Ok5vUGVuKTsKPiArLSAgICAgICAg
+fSBlbHNlIGlmIChxRnV6enlJc051bGwoZXh0ZW50KSB8fCBleHRlbnQgLyBwYXR0ZXJuTGVuZ3Ro
+ID4gMTAwMDApIHsKPiArKyAgICAgICAgfSBlbHNlIGlmIChleHRlbnQgLyBwYXR0ZXJuTGVuZ3Ro
+ID4gMTAwMDApIHsKPiArICAgICAgICAgICAgIC8vIGFwcHJveGltYXRlIHN0cmVhbSBvZiB0aW55
+IGRhc2hlcyB3aXRoIHNlbWktdHJhbnNwYXJlbnQgc29saWQgbGluZQo+ICsgICAgICAgICAgICAg
+cGVuLnNldFN0eWxlKFF0OjpTb2xpZExpbmUpOwo+ICsgICAgICAgICAgICAgUUNvbG9yIGNvbG9y
+KHBlbi5jb2xvcigpKTsKPiArZGlmZiAtLWdpdCBhL3Rlc3RzL2F1dG8vZ3VpL3BhaW50aW5nL3Fw
+YWludGVyL3RzdF9xcGFpbnRlci5jcHAgYi90ZXN0cy9hdXRvL2d1aS9wYWludGluZy9xcGFpbnRl
+ci90c3RfcXBhaW50ZXIuY3BwCj4gK2luZGV4IDQyZTk4Y2UzNjMuLmQ3YzNmOTVmMWQgMTAwNjQ0
+Cj4gKy0tLSBhL3Rlc3RzL2F1dG8vZ3VpL3BhaW50aW5nL3FwYWludGVyL3RzdF9xcGFpbnRlci5j
+cHAKPiArKysrIGIvdGVzdHMvYXV0by9ndWkvcGFpbnRpbmcvcXBhaW50ZXIvdHN0X3FwYWludGVy
+LmNwcAo+ICtAQCAtMzA4LDYgKzMwOCw3IEBAIHByaXZhdGUgc2xvdHM6Cj4gKyAgICAgdm9pZCBm
+aWxsUG9seWdvbigpOwo+ICsgCj4gKyAgICAgdm9pZCBkcmF3SW1hZ2VBdFBvaW50RigpOwo+ICsr
+ICAgIHZvaWQgc2NhbGVkRGFzaGVzKCk7Cj4gKyAKPiArIHByaXZhdGU6Cj4gKyAgICAgdm9pZCBm
+aWxsRGF0YSgpOwo+ICtAQCAtNTQ2OCw2ICs1NDY5LDM2IEBAIHZvaWQgdHN0X1FQYWludGVyOjpk
+cmF3SW1hZ2VBdFBvaW50RigpCj4gKyAgICAgcGFpbnQuZW5kKCk7Cj4gKyB9Cj4gKyAKPiArK3Zv
+aWQgdHN0X1FQYWludGVyOjpzY2FsZWREYXNoZXMoKQo+ICsrewo+ICsrICAgIC8vIFRlc3QgdGhh
+dCB3ZSBkbyBub3QgaGl0IHRoZSBsaW1pdC1odWdlLW51bWJlci1vZi1kYXNoZXMgcGF0aAo+ICsr
+ICAgIFFSZ2IgZm9yZSA9IHFSZ2IoMCwgMCwgMHhmZik7Cj4gKysgICAgUVJnYiBiYWNrID0gcVJn
+YigweGZmLCAweGZmLCAwKTsKPiArKyAgICBRSW1hZ2UgaW1hZ2UoNSwgMzIsIFFJbWFnZTo6Rm9y
+bWF0X1JHQjMyKTsKPiArKyAgICBpbWFnZS5maWxsKGJhY2spOwo+ICsrICAgIFFQYWludGVyIHAo
+JmltYWdlKTsKPiArKyAgICBRUGVuIHBlbihRQ29sb3IoZm9yZSksIDMsIFF0OjpEb3RMaW5lKTsK
+PiArKyAgICBwLnNldFBlbihwZW4pOwo+ICsrICAgIHAuc2NhbGUoMSwgMik7Cj4gKysgICAgcC5k
+cmF3TGluZSgyLCAwLCAyLCAxNik7Cj4gKysgICAgcC5lbmQoKTsKPiArKwo+ICsrICAgIGJvb2wg
+Zm9yZUZvdW5kID0gZmFsc2U7Cj4gKysgICAgYm9vbCBiYWNrRm91bmQgPSBmYWxzZTsKPiArKyAg
+ICBpbnQgaSA9IDA7Cj4gKysgICAgd2hpbGUgKGkgPCAzMiAmJiAoIWZvcmVGb3VuZCB8fCAhYmFj
+a0ZvdW5kKSkgewo+ICsrICAgICAgICBRUmdiIHBpeCA9IGltYWdlLnBpeGVsKDMsIGkpOwo+ICsr
+ICAgICAgICBpZiAocGl4ID09IGZvcmUpCj4gKysgICAgICAgICAgICBmb3JlRm91bmQgPSB0cnVl
+Owo+ICsrICAgICAgICBlbHNlIGlmIChwaXggPT0gYmFjaykKPiArKyAgICAgICAgICAgIGJhY2tG
+b3VuZCA9IHRydWU7Cj4gKysgICAgICAgIGkrKzsKPiArKyAgICB9Cj4gKysKPiArKyAgICBRVkVS
+SUZZKGZvcmVGb3VuZCk7Cj4gKysgICAgUVZFUklGWShiYWNrRm91bmQpOwo+ICsrfQo+ICsrCj4g
+KyBRVEVTVF9NQUlOKHRzdF9RUGFpbnRlcikKPiArIAo+ICsgI2luY2x1ZGUgInRzdF9xcGFpbnRl
+ci5tb2MiCj4gKy0tIAo+ICsyLjM0LjEKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcXQ1L3F0
+NWJhc2UvcXQ1YmFzZS5tayBiL3BhY2thZ2UvcXQ1L3F0NWJhc2UvcXQ1YmFzZS5tawo+IGluZGV4
+IGJjZGYwMzZmMDAuLjRlZjM3NTk1NjYgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9xdDUvcXQ1YmFz
+ZS9xdDViYXNlLm1rCj4gKysrIGIvcGFja2FnZS9xdDUvcXQ1YmFzZS9xdDViYXNlLm1rCj4gQEAg
+LTExLDYgKzExLDEwIEBAIFFUNUJBU0VfU09VUkNFID0gcXRiYXNlLSQoUVQ1X1NPVVJDRV9UQVJC
+QUxMX1BSRUZJWCktJChRVDVCQVNFX1ZFUlNJT04pLnRhci54ego+ICBRVDVCQVNFX0RFUEVOREVO
+Q0lFUyA9IGhvc3QtcGtnY29uZiBwY3JlMiB6bGliCj4gIFFUNUJBU0VfSU5TVEFMTF9TVEFHSU5H
+ID0gWUVTCj4gIAo+ICsjIDAwMTAtQXZvaWQtcHJvY2Vzc2luZy1pbnRlbnNpdmUtcGFpbnRpbmct
+b2YtaGlnaC1udW1iZXItby5wYXRjaAo+ICsjIDAwMTEtSW1wcm92ZS1maXgtZm9yLWF2b2lkaW5n
+LWh1Z2UtbnVtYmVyLW9mLXRpbnktZGFzaGVzLnBhdGNoCj4gK1FUNUJBU0VfSUdOT1JFX0NWRVMg
+Kz0gQ1ZFLTIwMjEtMzg1OTMKPiArCj4gICMgQSBmZXcgY29tbWVudHM6Cj4gICMgICogLW5vLXBj
+aCB0byB3b3JrYXJvdW5kIHRoZSBpc3N1ZSBkZXNjcmliZWQgYXQKPiAgIyAgICAgaHR0cDovL2Nv
+bW1lbnRzLmdtYW5lLm9yZy9nbWFuZS5jb21wLmxpYi5xdC5kZXZlbC81OTMzLgo+IC0tIAo+IDIu
+MzQuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAK
+Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
+ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
+IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
+ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
+WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
+LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
+eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
