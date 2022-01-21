@@ -1,82 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A8DC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 21:16:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 493FBC433F5
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jan 2022 21:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F3C760F61;
-	Fri, 21 Jan 2022 21:16:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABD8D402D0;
+	Fri, 21 Jan 2022 21:26:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9Wd_0frI9hqY; Fri, 21 Jan 2022 21:26:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7730F4019D;
+	Fri, 21 Jan 2022 21:26:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 71D831BF30C
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E0A760FD5
+ for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:26:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0awSZb07Aqez; Fri, 21 Jan 2022 21:16:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0343760F0A;
-	Fri, 21 Jan 2022 21:16:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 761021BF5EA
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:16:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DA5840189
- for <buildroot@lists.busybox.net>; Fri, 21 Jan 2022 21:16:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cVp4dzvfvQIs for <buildroot@lists.busybox.net>;
- Fri, 21 Jan 2022 21:16:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
- [IPv6:2607:f8b0:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 624DA4012F
- for <buildroot@buildroot.org>; Fri, 21 Jan 2022 21:16:41 +0000 (UTC)
-Received: by mail-ot1-x336.google.com with SMTP id
- y11-20020a0568302a0b00b0059a54d66106so13427929otu.0
- for <buildroot@buildroot.org>; Fri, 21 Jan 2022 13:16:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc; bh=pSajHjeqPAUkaZcV6C1RpdtIiZTRKax0vODdpjbnBfo=;
- b=Qg/ANsbPuDm0dUFIJo1jUJw76TYScaOAocOYga8aV/gskE1HgRj+ITlmh7vFxSZorO
- DqKzR5WtP98Bx1FLe9UaOaf53dYp4UxN1CQ+YiVLRCIYfjGMOudeH3rfM1F1QCJ0g4E5
- jR6+loxhth3UDT9zI+U5XfzzkrnFO0Dl807hyZ/DwaP1m7KXWrsCcwD+kq83iIS99mly
- 1CSN9Qjv6Tfyqkw6cr9daCVbKfi4mMTXDvBdKtva8yJz+AUPiJM07cmyRDVtJTLnUsXT
- GSrdrEfCfhJYbrCiJFy1dI71LSXU5Az3nwIokZ2dr4hvlZnFM7EDEUJTjnqDpBnzjDDg
- fj+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=pSajHjeqPAUkaZcV6C1RpdtIiZTRKax0vODdpjbnBfo=;
- b=PgWo5ZX+k6EESmogMyRE3AERMBB5cx9RzMSzBGcvr6YETQdDOKWYdlnJi0/RKv/BdR
- y6hE6PGfa50cjJfbJE+xG38Rp6XwTDoQJnD1myXEmec9tS/6IFNEtZ/s1n6UssbOpQ04
- bLy8fXxEjUzxdnbCnc4/SriGH+tDGxkrccqTq3whRfI1A5IWiql1WRC42pr8eqKwwPck
- jCM1cecOgKr0DWqahX9d4jTSpNqoRNDvGhQ5FPoilMKIy8OvBvSl/Z3+9ZR8inr7INPe
- O6qDj3x0qT2lWXzUUHN8j7jZr/4K22j0YRgLaEx/NT9PEb/LVvB/rx5PjhLOSnx8AgRM
- 27OA==
-X-Gm-Message-State: AOAM530ZN6Nkcxa/gdOwtM30ibGVpCk3bnjVedZQiVGsGHJDYpcW3Gfh
- QDSlnKvcW7k/0CRoew6PnM7oSiJ4x1E61mUCJHtUNZNj
-X-Google-Smtp-Source: ABdhPJxoopYbn7QPBERKykqEIqqVAatVAWoi6IuSdeJul4qwnpMoAonaKYU/ZEVx2UaFIXEqbPt3xC0o+FEW3efbAso=
-X-Received: by 2002:a9d:63c3:: with SMTP id e3mr4139125otl.30.1642799800278;
- Fri, 21 Jan 2022 13:16:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119084545.3642950-1-james.hilliard1@gmail.com>
- <20220119204518.GC3095239@scaer>
- <CADvTj4q2AWnzpQbbQHFRUWnKki_uRCcDTOiT7pwRZ4-Ao0o3fw@mail.gmail.com>
- <20220120222936.6e7b5aba@gmx.net>
- <CADvTj4rXQO8Kbe0sMA5YJdj6A2R98OELOB5sPD_xriZ_npkaFQ@mail.gmail.com>
- <20220121065850.GF3252931@scaer> <20220121084141.6eac525e@windsurf>
- <20220121075924.GG3252931@scaer> <20220121142623.7d5d72bc@windsurf>
-In-Reply-To: <20220121142623.7d5d72bc@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 21 Jan 2022 14:16:29 -0700
-Message-ID: <CADvTj4rBGJBc8cmGvByC=8iU7PZkzcRwbTZSzbP2wKLiR+O2Qg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/re2: switch to generic-package
- make build
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OkvhB5mfhCb9 for <buildroot@lists.busybox.net>;
+ Fri, 21 Jan 2022 21:26:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBBA760F68
+ for <buildroot@buildroot.org>; Fri, 21 Jan 2022 21:26:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 6C8D48353C; Fri, 21 Jan 2022 21:19:38 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 21 Jan 2022 22:23:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 068d86abf1d3024dbe3bcd657874d8216e8bb4f8
+X-Git-Newrev: 6b1e9b844c04176555f179a061b9021f6ee1d304
+X-Patchwork-Hint: ignore
+Message-Id: <20220121211938.6C8D48353C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
+ 6.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,40 +53,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Jan 21, 2022 at 6:26 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Fri, 21 Jan 2022 08:59:24 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->
-> > > I might be missing something in the whole discussion, but why not patch
-> > > the CMake build system so that it also installs this .pc file, and
-> > > contribute this fix upstream ?
-> >
-> > Because upstream have not been very enthusisatic about it, as James
-> > pointed out when I suggested the same. ;-)
->
-> Upstream is not enthusiastic about supporting pkg-config, about having
-> their two possible build systems behave in the same way? What sort of
-> odd upstream is that?
+commit: https://git.buildroot.net/buildroot/commit/?id=6b1e9b844c04176555f179a061b9021f6ee1d304
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best I can tell the cmake build is mostly intended for non-system
-builds/installs
-or something weird like that.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/perl-http-message/perl-http-message.hash | 6 +++---
+ package/perl-http-message/perl-http-message.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index 62cf0588ad..1a5d9ad0df 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  e291f19e9532ffb7d1c80eab786bf0f2  HTTP-Message-6.33.tar.gz
+-sha256  23b967f71b852cb209ec92a1af6bac89a141dff1650d69824d29a345c1eceef7  HTTP-Message-6.33.tar.gz
++md5  e847fb3e297e740080ab6fd1ac127f7f  HTTP-Message-6.36.tar.gz
++sha256  576a53b486af87db56261a36099776370c06f0087d179fc8c7bb803b48cddd76  HTTP-Message-6.36.tar.gz
+ 
+ # computed by scancpan
+-sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
++sha256  f2f428b5f8a3bf4e6a71cd5ea92558a3d123d3d7c5075d34923e71e46dea94df  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 18e673ae1c..3b5d6e7b5f 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTTP_MESSAGE_VERSION = 6.33
++PERL_HTTP_MESSAGE_VERSION = 6.36
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
