@@ -4,43 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDE8C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 13:52:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A626C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 13:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E404E40360;
-	Sat, 22 Jan 2022 13:52:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3FB940897;
+	Sat, 22 Jan 2022 13:53:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0z7gBKvYlIxG; Sat, 22 Jan 2022 13:52:40 +0000 (UTC)
+	with ESMTP id M6wwkMtSxu16; Sat, 22 Jan 2022 13:53:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C0E44032D;
-	Sat, 22 Jan 2022 13:52:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D57C91BF3D5
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:52:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42AD640871;
+	Sat, 22 Jan 2022 13:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E15991BF3D5
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D28374032D
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:52:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE57482BEB
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:53:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vBKUJQ15xZiG for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 13:52:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2190E4025C
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 13:52:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 433EF8291D; Sat, 22 Jan 2022 13:45:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NpQLmhA58UFM for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 13:53:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A823482BD6
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 13:53:25 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E4B5540006;
+ Sat, 22 Jan 2022 13:53:23 +0000 (UTC)
+Date: Sat, 22 Jan 2022 14:53:23 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 22 Jan 2022 14:52:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61ef0ff827754d07cd006f3107d4772ba1d2d1fc
-X-Git-Newrev: 2ecc4379d1b310184c721dd4c9be0a12269f6234
-X-Patchwork-Hint: ignore
-Message-Id: <20220122134552.433EF8291D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vte: install to staging
+To: rainbox2k12 <rainbox2k12@msgsafe.io>
+Message-ID: <20220122145323.583b4b6c@windsurf>
+In-Reply-To: <20220117114419.B8EAB3F465@exit1-us.msgsafe.io>
+References: <20220117114419.B8EAB3F465@exit1-us.msgsafe.io>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] package/vte: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,36 +56,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ecc4379d1b310184c721dd4c9be0a12269f6234
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-vte also provides libvte, a library that can be linked to by other
-programs, so install it in staging.
+On Mon, 17 Jan 2022 11:44:19 +0000 (UTC)
+rainbox2k12 via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Rainer Jonsson <rainbox2k12@msgsafe.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/vte/vte.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Can you accept my patch as an attached text document?
 
-diff --git a/package/vte/vte.mk b/package/vte/vte.mk
-index 07e813685e..ceb2f09d67 100644
---- a/package/vte/vte.mk
-+++ b/package/vte/vte.mk
-@@ -11,6 +11,7 @@ VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/$(VTE_VERSION_MAJOR)
- VTE_DEPENDENCIES = host-pkgconf libgtk3 pcre2 $(TARGET_NLS_DEPENDENCIES)
- VTE_LICENSE = LGPL-3.0+
- VTE_LICENSE_FILES = COPYING.LGPL3
-+VTE_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
- VTE_CONF_OPTS += -Dicu=true
+I have applied your patch. I suppose this msgsafe.io service doesn't
+provide SMTP, so you can't use git send-email?
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
