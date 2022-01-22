@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61614C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 17:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A6C4C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 17:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02BCC81448;
-	Sat, 22 Jan 2022 17:39:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09ACE40966;
+	Sat, 22 Jan 2022 17:40:09 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bNOI9tGwFX2O; Sat, 22 Jan 2022 17:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6-yR1sd8sk2C; Sat, 22 Jan 2022 17:40:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3577981444;
-	Sat, 22 Jan 2022 17:39:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE8021BF2C0
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:39:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FE3840990;
+	Sat, 22 Jan 2022 17:40:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A53761BF2C0
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADB7781444
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:39:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 935A560B78
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:39:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6cxdRCDrpFLl for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 17:39:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5qszZaDhEpgD for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 17:39:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB5B481442
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:39:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF1BC60625
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B6D7F82A06; Sat, 22 Jan 2022 17:32:59 +0000 (UTC)
+ id 9CE3F82A14; Sat, 22 Jan 2022 17:33:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jan 2022 18:39:17 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: ff1cd8a27540f677dcf6106f3958701922fdb40e
-X-Git-Newrev: 1ca45102f557d277bee9ed856c51c08f02db1cb2
+Date: Sat, 22 Jan 2022 18:39:10 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 6ec2241856579b7de135c699288a8d449fe551dd
+X-Git-Newrev: d8b4e8eedcf83d91487d1dad2fd274128a1ca48e
 X-Patchwork-Hint: ignore
-Message-Id: <20220122173259.B6D7F82A06@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/icu: fix build
+Message-Id: <20220122173310.9CE3F82A14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/icu: fix build
  failure due to a library clash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ca45102f557d277bee9ed856c51c08f02db1cb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d8b4e8eedcf83d91487d1dad2fd274128a1ca48e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 ICU build scripting adds some host libraries to LD_LIBRARY_PATH by
 using constructs of the following form:
