@@ -4,63 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 899B0C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 19:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27582C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 19:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A04640590;
-	Sat, 22 Jan 2022 19:09:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D015D405AF;
+	Sat, 22 Jan 2022 19:09:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WpfL7Dnw7wyc; Sat, 22 Jan 2022 19:09:32 +0000 (UTC)
+	with ESMTP id iJ2LGEnITUa9; Sat, 22 Jan 2022 19:09:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DF974049D;
-	Sat, 22 Jan 2022 19:09:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E282E1BF574
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:09:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7A3B4027A;
+	Sat, 22 Jan 2022 19:09:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 864E41BF574
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFC7760AD4
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:09:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 747A0408FC
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:09:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5kg5iSbI63jO for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 19:09:27 +0000 (UTC)
-X-Greylist: delayed 00:07:05 by SQLgrey-1.8.0
-Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
- by smtp3.osuosl.org (Postfix) with ESMTP id 740106076A
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 19:09:27 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id BLeVn71dGXfntBLeVnzFr1; Sat, 22 Jan 2022 20:02:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1642878140; bh=lTPToYm/IHKGVs6eXpNowH+ssAz3pWdLJGyHpv9KBrU=;
- h=Subject:To:From:Date:MIME-Version:Content-Type;
- b=N/EDEUY8tQQBUhpwh9JsiPNaKj9uzSCHzI3qMD1g8QBmJMnFQ5FrFASylf4cZS4o+
- INGSFuJZIhOYiSez9MsY+F+6VSm6ZCiBTgnshRfgI6yRYwrp0iaZWlZJfWdGjeC9Pg
- Ft84GAn8NUL9DjKIazzXwxLE/4zj1Exyg3alTsldWAiHmDrI2Zt9O7kuez55yxmOjA
- XRJMoK5TkICN0jx9e/2QVAai5NZIKnp9px0hrzy3Yxrk/fTghb3+35zFU+y+HZVrZF
- R715GykyuG1eVS6me7kNW8bNUJSQ4BojgOxTrZbLJRmdaQ9jhrGm1Wq0XQ7uPCc+4N
- EBcSpo/nCsHGQ==
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-References: <20220122185049.1194-1-petr.vorel@gmail.com>
- <20220122185049.1194-2-petr.vorel@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <c2326582-34f4-b9f9-8335-29bf85587e70@benettiengineering.com>
-Date: Sat, 22 Jan 2022 20:02:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220122185049.1194-2-petr.vorel@gmail.com>
-Content-Language: en-US
-X-CMAE-Envelope: MS4xfAdk8v7m09fs7EIBoKZMoORGq75Nt/YR6+coGPAgcAt8o/aWpftGqGSjrtjXquRfbefeelHxwpAXqH4iPHij9oH4d+39vEBvoh674yMJYTXb9+tmUjr+
- G7Wh7ZFubDq0tmv6yzmBW9hBa8QrfF0cnPiKnu8SMU2lGzZu9pj6KRLkdD6XHKkdBcrE+fxDJ9wAc9pgBGrFxwXk/Ns2X2xu5zLVfP9g0IdI//iqyUKSjSeJ
- rw1l78R2pAQTYEzgBFDWEQ==
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/nfs-utils: Update supported
- versions
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id esLtq1bZe-rL for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 19:09:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E52AF408E1
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 19:09:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 90DF182A2A; Sat, 22 Jan 2022 19:02:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 22 Jan 2022 20:08:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 24307955a2edf9e112ab815c139ceab83b3d4072
+X-Git-Newrev: 5803bbd9002aab836cf0d86c5bf0674e3c1ca819
+X-Patchwork-Hint: ignore
+Message-Id: <20220122190259.90DF182A2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_aarch64_virt_defconfig:
+ linux.config: enable fb/input support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,54 +53,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+commit: https://git.buildroot.net/buildroot/commit/?id=5803bbd9002aab836cf0d86c5bf0674e3c1ca819
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 22/01/22 19:50, Petr Vorel wrote:
-> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+The Linux config already enabled drm-virtio for graphics output, but not the
+corresponding virtio-input / evdev drivers for input or the compatibility fb
+option.
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Enable them so keyboard/mouse input works and /dev/fb0 is provided.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/qemu/aarch64-virt/linux.config | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> ---
-> New in v2
-> 
->   package/nfs-utils/Config.in | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-> index df9c12ca44..f00debc420 100644
-> --- a/package/nfs-utils/Config.in
-> +++ b/package/nfs-utils/Config.in
-> @@ -12,6 +12,8 @@ config BR2_PACKAGE_NFS_UTILS
->   	help
->   	  The NFS Linux kernel server.
->   
-> +	  Supports NFSv3 and optionally NFSv4 (and later).
-> +
->   	  http://linux-nfs.org/
->   
->   if BR2_PACKAGE_NFS_UTILS
-> @@ -24,7 +26,7 @@ config BR2_PACKAGE_NFS_UTILS_NFSV4
->   	select BR2_PACKAGE_LVM2
->   	select BR2_PACKAGE_SQLITE
->   	help
-> -	  Enable NFSv4/NFSv4.1 support
-> +	  Enable NFSv4/NFSv4.1/NFSv4.2 support
->   
->   comment "NFSv4/NFSv4.1 support needs a toolchain w/ dynamic library"
->   	depends on BR2_STATIC_LIBS
-> 
-
+diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
+index e3a4a92913..f9763b73b7 100644
+--- a/board/qemu/aarch64-virt/linux.config
++++ b/board/qemu/aarch64-virt/linux.config
+@@ -47,6 +47,7 @@ CONFIG_DUMMY=y
+ CONFIG_MACVLAN=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_NLMON=y
++CONFIG_INPUT_EVDEV=y
+ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_VIRTIO_CONSOLE=y
+@@ -56,9 +57,11 @@ CONFIG_TCG_TPM=y
+ CONFIG_TCG_TIS=y
+ CONFIG_DRM=y
+ CONFIG_DRM_VIRTIO_GPU=y
++CONFIG_FB=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_PL031=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+ CONFIG_MAILBOX=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
