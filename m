@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5ED8C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 19:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F40CC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 19:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 542D160BAC;
-	Sat, 22 Jan 2022 19:10:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E828260B96;
+	Sat, 22 Jan 2022 19:13:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vRwICLIi91Co; Sat, 22 Jan 2022 19:10:28 +0000 (UTC)
+	with ESMTP id sj36FYl8lQma; Sat, 22 Jan 2022 19:13:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 862BB60AD4;
-	Sat, 22 Jan 2022 19:10:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C273A6076A;
+	Sat, 22 Jan 2022 19:13:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C65401BF95D
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:10:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A1E191BF95D
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B446560AD4
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:10:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E17E6076A
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 19:13:55 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B_FyIjUoR1OW for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 19:10:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 88F636076A
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 19:10:24 +0000 (UTC)
+ with ESMTP id gcdYDcJ9Jcdt for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 19:13:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D0C060596
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 19:13:53 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:8038:e8ec:605a:7149])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4935BB0054C;
- Sat, 22 Jan 2022 20:10:17 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2C18FB00548;
+ Sat, 22 Jan 2022 20:13:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1642878621;
- bh=IZlt3eNkcIfeiGEXngYWSGcmm5SMcsltU6gqqSZrAwY=;
+ s=smtp-20201208; t=1642878830;
+ bh=MvEjfo+1mJboEfzf3URFc7Pw3CXCxg+agboezmN0i24=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=M/RJhOwUEnO8bDusudCYtiS2b/Du76OPVJ9BSpQnTQymCNyeDcR8LVsUHwG33/3ND
- jDR1LojD5QHX9Bje3zVB8kqxbdYWtjaM7NKViTyl1wpagaPtFzxEG0RzsqSeJgJRLH
- jhJ+bdn6rztgWYQFPezxLuDJMFMjt2EIxe50rKGUJpVXeOlC/rQ9TFzfnLOeDqHCBU
- bPFse3BcwXY32goHs4vzJEvW4INjaZYNFagVKJ/w499BVayDbh0BSyFToJADpqQrUh
- zQNBXe+vpvaZBHSmm21MKjUdHZOt+1S5ArIZNpTTZ7lb/0a73LNvpq7hutk33MR3uQ
- FubIYIQJbKKIA==
+ b=CN1bTgOvmkfWZyFnwpJdh+QWWN9owY2QzPjULHg5O5U8PdvURV9seFHGbuNFalhKI
+ a/c08td5qgX8wMVSxczYqsEwoLCFplN3USKrYoVtBAubF5PxPmNZnaJktOFuQFCveX
+ KH3LtwBlHHh00BOscg1kHJu788u+KlH3y9DFfL8unnbJgp2THBygjS2buOWUFXGzoM
+ VR3smjXlQ7IzGhFyB6cgkab4plFO+dAFtznbnx9K9nt7Gq+61R4K5JztSIKBOp2e4G
+ 3cyv3A3u21o+JwaJ7mc5vz/kwa7KGyW6IgL9y7+7xjOVZa+PCXG+YMktv/IHyYMFOD
+ WkWaDZZv/+iCg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 22 Jan 2022 20:10:16 +0100
-Date: Sat, 22 Jan 2022 20:10:16 +0100
+ Sat, 22 Jan 2022 20:13:46 +0100
+Date: Sat, 22 Jan 2022 20:13:46 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20220122191016.GA3621364@scaer>
-References: <20220122153714.26991-1-peter@korsgaard.com>
+To: Petr Vorel <petr.vorel@gmail.com>
+Message-ID: <20220122191346.GB3621364@scaer>
+References: <20220122185049.1194-1-petr.vorel@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220122153714.26991-1-peter@korsgaard.com>
+In-Reply-To: <20220122185049.1194-1-petr.vorel@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/3] configs/qemu_aarch64_virt_defconfig:
- don't hard code getty port
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/nfs-utils: bump version to
+ 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,44 +70,251 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Petr, All,
 
-On 2022-01-22 16:37 +0100, Peter Korsgaard spake thusly:
-> The Linux defconfig both has VT and serial port support, so it makes more
-> sense to run getty on /dev/console instead of hard coding the serial port.
+On 2022-01-22 19:50 +0100, Petr Vorel spake thusly:
+> This version dropped support to NFSv2.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Drop patches backported from this release.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-Series of 3 patches applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  configs/qemu_aarch64_virt_defconfig | 1 -
->  1 file changed, 1 deletion(-)
+> Changes v1->v2:
+> * note dropped NFSv2 support
 > 
-> diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-> index e6b72d8838..0caf38112d 100644
-> --- a/configs/qemu_aarch64_virt_defconfig
-> +++ b/configs/qemu_aarch64_virt_defconfig
-> @@ -4,7 +4,6 @@ BR2_cortex_a53=y
+>  ...nfsdcltrack-sqlite-Fix-printf-format.patch | 52 ---------------
+>  ...rack-nfsdcltrack.c-Fix-printf-format.patch | 48 --------------
+>  ...track-Use-uint64_t-instead-of-time_t.patch | 66 -------------------
+>  package/nfs-utils/nfs-utils.hash              |  4 +-
+>  package/nfs-utils/nfs-utils.mk                |  2 +-
+>  5 files changed, 3 insertions(+), 169 deletions(-)
+>  delete mode 100644 package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
+>  delete mode 100644 package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
+>  delete mode 100644 package/nfs-utils/0003-nfsdcltrack-Use-uint64_t-instead-of-time_t.patch
+> 
+> diff --git a/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch b/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
+> deleted file mode 100644
+> index 14894602c4..0000000000
+> --- a/package/nfs-utils/0001-nfsdcltrack-sqlite-Fix-printf-format.patch
+> +++ /dev/null
+> @@ -1,52 +0,0 @@
+> -From d05ba5335e869bcd68c0def795c55fd5037914e3 Mon Sep 17 00:00:00 2001
+> -From: Petr Vorel <petr.vorel () gmail ! com>
+> -Date: Thu, 22 Jul 2021 16:15:44 +0000
+> -Subject: [PATCH] nfsdcltrack/sqlite: Fix printf format
+> -
+> -sqlite.c: In function 'sqlite_remove_unreclaimed':
+> -sqlite.c:547:71: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'time_t' {aka 'long long int'} [-Werror=format=]
+> -  547 |  ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %ld",
+> -      |                                                                     ~~^
+> -      |                                                                       |
+> -      |                                                                       long int
+> -      |                                                                     %lld
+> -  548 |    grace_start);
+> -      |    ~~~~~~~~~~~
+> -      |    |
+> -      |    time_t {aka long long int}
+> -
+> -Found in Buildroot riscv32 build.
+> -
+> -Link: http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/build-end.log
+> -
+> -Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> -Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=4f2a5b64386600430ec6b71e57b88c5efaa70aed
+> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ----
+> - utils/nfsdcltrack/sqlite.c | 3 ++-
+> - 1 file changed, 2 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/utils/nfsdcltrack/sqlite.c b/utils/nfsdcltrack/sqlite.c
+> -index f79aebb3..cea4a411 100644
+> ---- a/utils/nfsdcltrack/sqlite.c
+> -+++ b/utils/nfsdcltrack/sqlite.c
+> -@@ -46,6 +46,7 @@
+> - #include <sys/stat.h>
+> - #include <sys/types.h>
+> - #include <fcntl.h>
+> -+#include <inttypes.h>
+> - #include <unistd.h>
+> - #include <sqlite3.h>
+> - #include <linux/limits.h>
+> -@@ -544,7 +545,7 @@ sqlite_remove_unreclaimed(time_t grace_start)
+> - 	int ret;
+> - 	char *err = NULL;
+> - 
+> --	ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %ld",
+> -+	ret = snprintf(buf, sizeof(buf), "DELETE FROM clients WHERE time < %"PRIu64,
+> - 			grace_start);
+> - 	if (ret < 0) {
+> - 		return ret;
+> --- 
+> -2.25.1
+> -
+> diff --git a/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch b/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
+> deleted file mode 100644
+> index 0893959460..0000000000
+> --- a/package/nfs-utils/0002-nfsdcltrack-nfsdcltrack.c-Fix-printf-format.patch
+> +++ /dev/null
+> @@ -1,48 +0,0 @@
+> -From 14eb2cae4fca95609ae4efde2444fd0a5ddfca04 Mon Sep 17 00:00:00 2001
+> -From: Petr Vorel <petr.vorel () gmail ! com>
+> -Date: Thu, 22 Jul 2021 16:15:45 +0000
+> -Subject: [PATCH] nfsdcltrack/nfsdcltrack.c: Fix printf format
+> -
+> -nfsdcltrack.c: In function 'cltrack_gracedone':
+> -nfsdcltrack.c:528:47: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'time_t' {aka 'long long int'} [-Werror=format=]
+> -  528 |  xlog(D_GENERAL, "%s: grace done. gracetime=%ld", __func__, gracetime);
+> -      |                                             ~~^             ~~~~~~~~~
+> -      |                                               |             |
+> -      |                                               long int      time_t {aka long long int}
+> -      |                                             %lld
+> -
+> -Found in Buildroot riscv32 build.
+> -
+> -Link: http://autobuild.buildroot.net/results/9bc1d43a588338b7395af7bc97535ee16a6ea2d9/build-end.log
+> -
+> -Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> -Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=5a53426c0f4e84f6644c11e4f01015597d3bb82c
+> -Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ----
+> - utils/nfsdcltrack/nfsdcltrack.c | 3 ++-
+> - 1 file changed, 2 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/utils/nfsdcltrack/nfsdcltrack.c b/utils/nfsdcltrack/nfsdcltrack.c
+> -index e926f1c0..0b37c094 100644
+> ---- a/utils/nfsdcltrack/nfsdcltrack.c
+> -+++ b/utils/nfsdcltrack/nfsdcltrack.c
+> -@@ -33,6 +33,7 @@
+> - #include <sys/stat.h>
+> - #include <sys/types.h>
+> - #include <fcntl.h>
+> -+#include <inttypes.h>
+> - #include <unistd.h>
+> - #include <libgen.h>
+> - #include <sys/inotify.h>
+> -@@ -525,7 +526,7 @@ cltrack_gracedone(const char *timestr)
+> - 	if (*tail)
+> - 		return -EINVAL;
+> - 
+> --	xlog(D_GENERAL, "%s: grace done. gracetime=%ld", __func__, gracetime);
+> -+	xlog(D_GENERAL, "%s: grace done. gracetime=%"PRIu64, __func__, gracetime);
+> - 
+> - 	ret = sqlite_remove_unreclaimed(gracetime);
+> - 
+> --- 
+> -2.25.1
+> -
+> diff --git a/package/nfs-utils/0003-nfsdcltrack-Use-uint64_t-instead-of-time_t.patch b/package/nfs-utils/0003-nfsdcltrack-Use-uint64_t-instead-of-time_t.patch
+> deleted file mode 100644
+> index 384f4fd806..0000000000
+> --- a/package/nfs-utils/0003-nfsdcltrack-Use-uint64_t-instead-of-time_t.patch
+> +++ /dev/null
+> @@ -1,66 +0,0 @@
+> -From 383d787d1b77f165da68495cb0363220b66935a4 Mon Sep 17 00:00:00 2001
+> -From: Steve Dickson <steved@redhat.com>
+> -Date: Tue, 27 Jul 2021 21:12:17 -0400
+> -Subject: [PATCH] nfsdcltrack: Use uint64_t instead of time_t
+> -
+> -With recent commits (4f2a5b64,5a53426c) that fixed
+> -compile errors on x86_64 machines, caused similar
+> -errors on i686 machines.
+> -
+> -The variable type that was being used was a time_t,
+> -which changes size between architects, which
+> -caused the compile error.
+> -
+> -Changing the variable to uint64_t fixed the issue.
+> -
+> -Signed-off-by: Steve Dickson <steved@redhat.com>
+> -Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=383d787d1b77f165da68495cb0363220b66935a4
+> -Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ----
+> - utils/nfsdcltrack/nfsdcltrack.c | 2 +-
+> - utils/nfsdcltrack/sqlite.c      | 2 +-
+> - utils/nfsdcltrack/sqlite.h      | 2 +-
+> - 3 files changed, 3 insertions(+), 3 deletions(-)
+> -
+> -diff --git a/utils/nfsdcltrack/nfsdcltrack.c b/utils/nfsdcltrack/nfsdcltrack.c
+> -index 0b37c094..7c1c4bcc 100644
+> ---- a/utils/nfsdcltrack/nfsdcltrack.c
+> -+++ b/utils/nfsdcltrack/nfsdcltrack.c
+> -@@ -508,7 +508,7 @@ cltrack_gracedone(const char *timestr)
+> - {
+> - 	int ret;
+> - 	char *tail;
+> --	time_t gracetime;
+> -+	uint64_t gracetime;
+> - 
+> - 
+> - 	ret = sqlite_prepare_dbh(storagedir);
+> -diff --git a/utils/nfsdcltrack/sqlite.c b/utils/nfsdcltrack/sqlite.c
+> -index cea4a411..cf0c6a45 100644
+> ---- a/utils/nfsdcltrack/sqlite.c
+> -+++ b/utils/nfsdcltrack/sqlite.c
+> -@@ -540,7 +540,7 @@ out_err:
+> -  * remove any client records that were not reclaimed since grace_start.
+> -  */
+> - int
+> --sqlite_remove_unreclaimed(time_t grace_start)
+> -+sqlite_remove_unreclaimed(uint64_t grace_start)
+> - {
+> - 	int ret;
+> - 	char *err = NULL;
+> -diff --git a/utils/nfsdcltrack/sqlite.h b/utils/nfsdcltrack/sqlite.h
+> -index 06e7c044..ba8cdfa8 100644
+> ---- a/utils/nfsdcltrack/sqlite.h
+> -+++ b/utils/nfsdcltrack/sqlite.h
+> -@@ -26,7 +26,7 @@ int sqlite_insert_client(const unsigned char *clname, const size_t namelen,
+> - int sqlite_remove_client(const unsigned char *clname, const size_t namelen);
+> - int sqlite_check_client(const unsigned char *clname, const size_t namelen,
+> - 				const bool has_session);
+> --int sqlite_remove_unreclaimed(const time_t grace_start);
+> -+int sqlite_remove_unreclaimed(const uint64_t grace_start);
+> - int sqlite_query_reclaiming(const time_t grace_start);
+> - 
+> - #endif /* _SQLITE_H */
+> --- 
+> -2.32.0
+> -
+> diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+> index 2073bebd8a..a73bf80e70 100644
+> --- a/package/nfs-utils/nfs-utils.hash
+> +++ b/package/nfs-utils/nfs-utils.hash
+> @@ -1,4 +1,4 @@
+> -# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.4/sha256sums.asc
+> -sha256  51997d94e4c8bcef5456dd36a9ccc38e231207c4e9b6a9a2c108841e6aebe3dd  nfs-utils-2.5.4.tar.xz
+> +# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.1/sha256sums.asc
+> +sha256  60dfcd94a9f3d72a12bc7058d811787ec87a6d593d70da2123faf9aad3d7a1df  nfs-utils-2.6.1.tar.xz
+>  # Locally computed
+>  sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> index 07b44b5a93..6a3a801359 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  # System
->  BR2_SYSTEM_DHCP="eth0"
-> -BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
->  
->  # Filesystem
->  BR2_TARGET_ROOTFS_EXT2=y
+> -NFS_UTILS_VERSION = 2.5.4
+> +NFS_UTILS_VERSION = 2.6.1
+>  NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+>  NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+>  NFS_UTILS_LICENSE = GPL-2.0+
 > -- 
-> 2.20.1
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
