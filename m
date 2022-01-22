@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83280C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 17:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C035BC433EF
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 18:00:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 087DE40587;
-	Sat, 22 Jan 2022 17:55:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A57460B71;
+	Sat, 22 Jan 2022 18:00:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lnu-B5ub8dPN; Sat, 22 Jan 2022 17:55:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FbelWiEfPjeT; Sat, 22 Jan 2022 17:59:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 236FB40102;
-	Sat, 22 Jan 2022 17:55:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0530D1BF2C0
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:55:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0DE260AF0;
+	Sat, 22 Jan 2022 17:59:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DFC021BF2C0
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 009E240102
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:55:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBD66408A1
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:59:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m0d70CfTqZq9 for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 17:55:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LqbSvKxcq8NP for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 17:59:57 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C3619400CE
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:55:11 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B68C840897
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:59:56 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AD541C0009;
- Sat, 22 Jan 2022 17:55:09 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 30AF6FF805;
+ Sat, 22 Jan 2022 17:59:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nBKbU-00033m-PN; Sat, 22 Jan 2022 18:55:08 +0100
+ id 1nBKg4-0003JH-F2; Sat, 22 Jan 2022 18:59:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211217214145.1C5FF80288@busybox.osuosl.org>
-Date: Sat, 22 Jan 2022 18:55:08 +0100
-In-Reply-To: <20211217214145.1C5FF80288@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 17 Dec 2021 22:46:55 +0100")
-Message-ID: <87pmojy7sz.fsf@dell.be.48ers.dk>
+To: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+References: <20211217215308.46712811FB@busybox.osuosl.org>
+Date: Sat, 22 Jan 2022 18:59:52 +0100
+In-Reply-To: <20211217215308.46712811FB@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Fri, 17 Dec 2021 22:58:11 +0100")
+Message-ID: <87lez7y7l3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/linux-pam: separate locale and
- wchar dependencies
+Subject: Re: [Buildroot] [git commit] configs/stm32f469_xip_disco: fix
+ kernel bootup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,25 +66,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=ac9261edec111836952970e26cf373cc15b9e8ac
+ > commit: https://git.buildroot.net/buildroot/commit/?id=82c1a437929acaeeb7f0cc198d5e5fa4b7862d5b
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > They are currently expressed as such:
+ > The current configuration fails to boot on the stm32f469-disco board.
+ > Make it bootable again by reverting the DRAM patches.
 
- >      depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
+ > Also change the kernel load address from 0x8010000 to 0x800C000 to
+ > allocate more space to the kernel, since 32kB for the device tree is
+ > enough.
 
- > which is not the common practice in Buildroot. We prefer to use:
+ > Also clean up the rootfs a bit with the common stm32-post-build.sh
+ > script.
 
- >      depends on BR2_ENABLE_LOCALE
- >      depends on BR2_USE_WCHAR
+ > Signed-off-by: Dario Binacchi <dariobin@libero.it>
+ > Acked-by: Christophe Priouzeau <christophe.priouzeau@foss.st.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > This commit ensures linux-pam is consistent with this best practice.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2021.02.x and 2021.11.x, thanks.
+Committed to 2021.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
