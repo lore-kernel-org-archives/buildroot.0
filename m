@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E221C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 18:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F81C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 18:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15B73400CE;
-	Sat, 22 Jan 2022 18:14:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8AE040904;
+	Sat, 22 Jan 2022 18:14:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Cmz_-5BzEtI; Sat, 22 Jan 2022 18:14:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2F9D404BD;
-	Sat, 22 Jan 2022 18:14:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D45611BF2C2
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D09F3408E5
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:49 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Vb82dIiTPYG for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c4mZz8JPg09o; Sat, 22 Jan 2022 18:14:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F213E408DF;
+	Sat, 22 Jan 2022 18:14:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E1721BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 899AC404BD
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lAn2fVEXM0MF for <buildroot@lists.busybox.net>;
  Sat, 22 Jan 2022 18:13:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F2FCD408D3
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 18:13:48 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id s18so5870052wrv.7
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 10:13:48 -0800 (PST)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A4829400CE
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 18:13:49 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id s18so5870075wrv.7
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 10:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=AFq5kF8dWKkKUkmVyCKDqgh7JKBb8iWL/SJmtfI/RW4=;
- b=M/3ElEcwCRyy7kCbk8MsEkupooPc+OpeRAQvyjLqieGEjwDcWz3ODjdrvQ20mnekRx
- JVDcKCIESw0ratpyrGoIBOslv+IPghHFjj6TZFzo445j/WdjLOb6jZj2g0KPG/42twZe
- qfNVD12P0YPS0z5kAxqf6ILMgd3wq/KWSye5YnAauVJ6/HrWZ+nsnFtRIbR1AdZGRkOj
- 3G/kPLQQ1xTKjU4M3nyXDLSyknGl+QHaJimiIX4aP6IzQzZw83ki44V+HNkAyosd/vnp
- UAvtoUMJb/d0XbveW6dwHnbH0aeJn5whfbUyxe0cpwHZWRN+z391nN/EgMvG9cFuycL9
- iW2Q==
+ bh=3ja9EPckjjbpJnzgyWXH5idHG0Phw5fmvq7NeDfAhww=;
+ b=bRmfqY9vnlXjpltrixA8XLOYrMy9dTdiwceZm36/IRcdi3Vh0y1oG300TH/XU2FNfU
+ owCrnJqpllBi3LOsOwGNA6UlqKB0BmJVY3csdO9EdbBOCrtaexfkFGFphmXIguJw8Y1i
+ hASnFsIAbG3DHGPQUihcTxE0AMtJi40TyY0J/Mf/pxVzzJWQmMmA/bu/ECJ3b+3mfZSM
+ 52xhbrABx+zm1/vVoU/zO63Q9xBiG7jvOMrcjTAZXGOPSEqEintbqEI4EsZq9WUIjcXc
+ dknfBMhfWd2691kDDr61nQkaUTRZ8LOE267Knlnw2pTTXAyhPFShjBMjUaYUWZQGx0E0
+ 5xQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=AFq5kF8dWKkKUkmVyCKDqgh7JKBb8iWL/SJmtfI/RW4=;
- b=o46aYI6Z2w8gQIcBfyV9C5AQOko9lFvG4ruJfMHP5ZzZnTppt8C8CSTuBjJOQpG3HW
- giu+uD0VZ56AFFsLpyIS1FskbgTgbkCYG/Xialb4wr3k/4ZaDXniv1axpt4sFQMW5Ved
- jqIHCEjWrh1KZxrgHnUY8HvvGWOj7PVxzFIMiASCHERpzDLJsHfYw5EqjCOH1jwBFdHp
- HdoDc9sKN7F62tpmK2bXtgWpgq0qhijBMp7lztNG+mAM4RIdchgpz1WyEpk0nfbykAjo
- Fj2nESO2lBGMDhZa7MapxL2q5IqUXnjn/z88fG7Lkch96T6GVD8L2y4wRSzZkbXvkY34
- 3uPg==
-X-Gm-Message-State: AOAM531NfFuST2PeR/LKttLeRac+u6nGLea2CjtPYgLgl/SQQO/8Xvth
- 3hRtz+J6OtvP33XIBwRRKDliuSEjvoE=
-X-Google-Smtp-Source: ABdhPJzRbm4MliHRAVtwOahxEq975JtuWKMeiXpO+KCGWqJvRcyc85Pb1kQCDJDvFQj03OHzUzN4OA==
-X-Received: by 2002:a5d:64c4:: with SMTP id f4mr8365861wri.429.1642875227214; 
+ bh=3ja9EPckjjbpJnzgyWXH5idHG0Phw5fmvq7NeDfAhww=;
+ b=rQ4v/aTGHGfjx7sH7P+6Y8M4+jlYE1xowt+7yCB1X5oltyAm1WEydj2Lnv619x2hgo
+ MQup4ZqRb1Vh4TG6eKeOVIwthBxiU7xaqG7HmVK/QO4eLeIo2cqMu7q3KmRP0DE+CcwX
+ E/FAJXAX0XPcNfsYGER+agidbQueVmr3WUrz9rJXZQyN2ue6C6wdQF71qxLjF31aQ2aN
+ 5VgClTn1cRvm8U3RUio0W/KXvvXX9jioVfQYj+9ha61MrwrWomBiEDU9R4pf0iN+HQZ2
+ jJGC+zVWJ4RUvzJXM6ZzqCNjppU2z0oRCw7uLeZaCCjCMgjlbPcFtpAhsFNMsTxBExBR
+ RDaw==
+X-Gm-Message-State: AOAM531EIxmDn9IRMdPpGChiusnJxuCVxIbsBt7t1S047qZip8s2u5RH
+ 0LItjUKVxjMEb3BpGyR2USnKHAhwi+s=
+X-Google-Smtp-Source: ABdhPJxxQyd0nUC9tGomMkmZD+pWNCeN6iEWGMytVSJyJJIcL49BDwTkt5zZRFjKbYX+x0C4rCULXg==
+X-Received: by 2002:adf:eb45:: with SMTP id u5mr8476051wrn.496.1642875227973; 
  Sat, 22 Jan 2022 10:13:47 -0800 (PST)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:8038:e8ec:605a:7149])
- by smtp.gmail.com with ESMTPSA id 31sm11713638wrl.27.2022.01.22.10.13.46
+ by smtp.gmail.com with ESMTPSA id 31sm11713638wrl.27.2022.01.22.10.13.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 22 Jan 2022 10:13:46 -0800 (PST)
+ Sat, 22 Jan 2022 10:13:47 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jan 2022 19:13:44 +0100
-Message-Id: <d8090469994194488cc6b26fa584aef57354f4cd.1642875217.git.yann.morin.1998@free.fr>
+Date: Sat, 22 Jan 2022 19:13:45 +0100
+Message-Id: <0883bf75cfefe1b97c562b8dae4b2349dd9ece4f.1642875217.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1642875217.git.yann.morin.1998@free.fr>
 References: <cover.1642875217.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2 v2] core/pkg-generic: fixup all PPD paths in
- a generic fashion
+Subject: [Buildroot] [PATCH 2/2 v2] core/pkg-generic: apply post-prepare
+ hooks before monitoring directories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,206 +87,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Naumann <anaumann@ultratronik.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Louis-Paul CORDIER <lpdev@cordier.org>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
+Cc: Herve Codina <herve.codina@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some files contain hard-coded absolute paths that point to the host
-and/or staging directories.
+Monitoring the target/ and host/ directories and so on, will serve to
+generate lists of files installed by the packages. Those lists are then
+used to generate graphs of the size those package take on the target
+for example.
 
-With per-package directories (aka. PPD), these paths point to the PPD
-of the package that created the files, when we want them to point to the
-PPD of the package that uses them.
+With PPD, we will also want to use those lists to only copy those files
+actually installed by each dependencies of a package, recursively.
 
-Up until now, we had two hooks that attempted to fix those files:
+Currently, those lists are not entirely reliable, as the starting points
+are established before we apply PPD fixup hooks. As such, at the end of
+a package installation, fixed up files will be found to belong to the
+current package, while they were in fact provided by one of its
+dependency.
 
-  - a libtool-specific hook that searches for all .la files and seds
-    them with the proper PPD,
+While this does no big harm, if at all, for the size graphs, it will
+trigger overwrite detection when we eventually gather packages together
+to aggregate a PPD or te final host and target. So, we better have the
+lists of files be reliable.
 
-  - a python-specific hook that tweaks just the sysconfigdata and
-    removes the byte-compiled version of the sysconfigdata.
-
-But now, we also have a few other kinds of files for which we need to
-fix the PPD: .cmake, .pc, or .pri files, and probably a bunch of others
-as well.
-
-We solve this issue by just replacing any PPD in text files, with the
-current package's PPD.
-
-This is very similar to, and inspired from what is done when relocating
-the SDK. However, we can't use the existing relocate-sdk script, because
-that needs to know the original location, which we do not have when we
-aggregate the PPD (we could store it, but we can easily do without it).
-
-Furthermore, we use a construct that is way more efficient than
-relocate-sdk. First, we skip binary files with grep, which means we have
-way less files to check with 'file' [0]. Second, we use xargs to sed
-multiple files at once: printf is a shell built-in, so it's fast, and so
-we do not have to spawn a sed for each file to fixup.
-
-[0] We still keep using 'file' as a safety net, to avoid mangling a
-binary file that grep would have missed.
-
-Finally, the existing python-specific macro is simplified to just remove
-the pre-compiled sysconfigdata files. And we rename it accordingly.
-
-And as for some timings, to see the impact, with the defconfig below,
-and with the downloads already local, and with a PC mostly idle (mail
-and IRC activity only):
-
-                    Before      Now         Delta
-  - without PPD :   7min 27s    7min 23s    -0.9%
-  - with PPD    :   7min 51s    7min 59s    +1.7%
-  - with PPD -j8:   5min 51s    5min 56s    +1.4%
-
-So we can see a slight increase in time, but it is mostly in the noise
-(some builds without this change did exceed some builds with this
-change, due to background noise). Also, depending on scheduling, there
-can be less parallelism; for example, python3 does not build in
-parallel, and with this special defconfig, python is on the critical
-path of a lot of packages that are python modules, which can negatively
-impact a parallel build too. A more realistic, bigger defconfig would
-probably be more parallel... YMMV...
-
-Delta without PPD is also due to background noise, as those hooks are
-not used when PPD is not enabled.
-
-Defconfig used:
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_PYTHON3=y
-    BR2_PACKAGE_PYTHON_AIOBLESCAN=y
-    BR2_PACKAGE_PYTHON_AIOCOAP=y
-    BR2_PACKAGE_PYTHON_AIOFILES=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_CORS=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_DEBUGTOOLBAR=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_MAKO=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_REMOTES=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_SECURITY=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_SESSION=y
-    BR2_PACKAGE_PYTHON_AIOHTTP_SSE=y
-    BR2_PACKAGE_PYTHON_AIOJOBS=y
-    BR2_PACKAGE_PYTHON_AIOLOGSTASH=y
-    BR2_PACKAGE_PYTHON_AIOMONITOR=y
-    BR2_PACKAGE_PYTHON_AIOPROCESSING=y
-    BR2_PACKAGE_PYTHON_AIOREDIS=y
-    BR2_PACKAGE_PYTHON_AIORWLOCK=y
-    BR2_PACKAGE_PYTHON_AIOZIPKIN=y
-    BR2_PACKAGE_LIGHTTPD=y
-    BR2_PACKAGE_LIGHTTPD_OPENSSL=y
-    BR2_PACKAGE_LIGHTTPD_ZLIB=y
-    BR2_PACKAGE_LIGHTTPD_BZIP2=y
-    BR2_PACKAGE_LIGHTTPD_PCRE=y
-    BR2_PACKAGE_LIGHTTPD_WEBDAV=y
-    # BR2_TARGET_ROOTFS_TAR is not set
+So, we only start monitoring the directories after we apply the PPD
+fixups (or seen the other way around for a smaller diff: we apply the
+PPD fixups before we start monitoring the directories).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Louis-Paul CORDIER <lpdev@cordier.org>
-Cc: Andreas Naumann <anaumann@ultratronik.de>
-
+Cc: Herve Codina <herve.codina@bootlin.com>
 ---
-Changes v1 -> v2:
-  - use grep --binary-files=without-match as it *considerably* speeds
-    up the fixup  (Arnout)
-  - rename the python hook  (arnout)
----
- package/pkg-generic.mk | 45 +++++++++++++++++++++---------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6a5fe5507b..78226ee266 100644
+index 78226ee266..b3a7e1d60e 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -90,21 +90,24 @@ endif
- #######################################
- # Helper functions
- 
--# Make sure .la files only reference the current per-package
--# directory.
--
--# $1: package name (lower case)
--# $2: staging directory of the package
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
--define fixup-libtool-files
--	$(Q)find $(2) \( -path '$(2)/lib*' -o -path '$(2)/usr/lib*' \) \
--		-name "*.la" -print0 | xargs -0 --no-run-if-empty \
--		$(SED) "s:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$(1)/:g"
-+
-+# Ensure files like .la, .pc, .pri, .cmake, and so on, point to the
-+# proper staging and host directories for the current package: find
-+# all text files that contain the PPD root, and replace it with the
-+# current package's PPD.
-+define PPD_FIXUP_PATHS
-+	$(Q)grep --binary-files=without-match -lrZ '$(PER_PACKAGE_DIR)/[^/]\+/' $(HOST_DIR) \
-+	|while read -d '' f; do \
-+		file -b --mime-type "$${f}" | grep -q '^text/' || continue; \
-+		printf '%s\0' "$${f}"; \
-+	done \
-+	|xargs -0 --no-run-if-empty \
-+		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
- endef
--endif
- 
--# Make sure python _sysconfigdata*.py files only reference the current
--# per-package directory.
-+# Remove python's pre-compiled "sysconfigdata", as it may contain paths to
-+# the original staging or host dirs.
- #
- # Can't use $(foreach d, $(HOST_DIR)/lib/python* $(STAGING_DIR)/usr/lib/python*, ...)
- # because those directories may be created in the same recipe this macro will
-@@ -113,19 +116,15 @@ endif
- # fail.
- # So we just use HOST_DIR as a starting point, and filter on the two directories
- # of interest.
--ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
--define FIXUP_PYTHON_SYSCONFIGDATA
-+define PPD_PYTHON_REMOVE_SYSCONFIGDATA_PYC
- 	$(Q)find $(HOST_DIR) \
- 		\(    -path '$(HOST_DIR)/lib/python*' \
- 		   -o -path '$(STAGING_DIR)/usr/lib/python*' \
- 		\) \
--		\(    \( -name "_sysconfigdata*.pyc" -delete \) \
--		   -o \( -name "_sysconfigdata*.py" -print0 \) \
--		\) \
--	| xargs -0 --no-run-if-empty \
--		$(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
-+		\( -name "_sysconfigdata*.pyc" -delete \)
- endef
--endif
-+
-+endif  # PPD
- 
- # Functions to collect statistics about installed files
- 
-@@ -278,8 +277,6 @@ $(BUILD_DIR)/%/.stamp_configured:
+@@ -273,11 +273,11 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call MESSAGE,"Configuring")
+ 	$(Q)mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR) $(BINARIES_DIR)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
++	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
+ 	@$(call pkg_size_before,$(TARGET_DIR))
  	@$(call pkg_size_before,$(STAGING_DIR),-staging)
  	@$(call pkg_size_before,$(BINARIES_DIR),-images)
  	@$(call pkg_size_before,$(HOST_DIR),-host)
--	$(call fixup-libtool-files,$(NAME),$(HOST_DIR))
--	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
- 	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
+-	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
  	$($(PKG)_CONFIGURE_CMDS)
-@@ -836,7 +833,9 @@ $(2)_EXTRACT_CMDS ?= \
- 		$$(TAR_OPTIONS) -)
- 
- # pre/post-steps hooks
--$(2)_POST_PREPARE_HOOKS += FIXUP_PYTHON_SYSCONFIGDATA
-+$(2)_POST_PREPARE_HOOKS += \
-+	PPD_FIXUP_PATHS \
-+	PPD_PYTHON_REMOVE_SYSCONFIGDATA_PYC
- 
- ifeq ($$($(2)_TYPE),target)
- ifneq ($$(HOST_$(2)_KCONFIG_VAR),)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 -- 
 2.25.1
 
