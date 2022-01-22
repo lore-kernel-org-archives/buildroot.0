@@ -1,61 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EF8C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 16:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0946C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 16:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06F7C40240;
-	Sat, 22 Jan 2022 16:14:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3944440921;
+	Sat, 22 Jan 2022 16:54:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OAOnw7wyhvSK; Sat, 22 Jan 2022 16:14:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id thYXOTAdhp8S; Sat, 22 Jan 2022 16:54:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1C84401C2;
-	Sat, 22 Jan 2022 16:14:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB9061BF575
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 16:14:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8579740926;
+	Sat, 22 Jan 2022 16:54:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 421E31BF575
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 16:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A76D1401C2
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 16:14:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3089060AC5
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 16:54:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nw_XG8aqQASt for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 16:14:47 +0000 (UTC)
-X-Greylist: delayed 00:05:14 by SQLgrey-1.8.0
-Received: from mx.msync.work (mx.msync.work [95.217.65.204])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 03AC9400DA
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 16:14:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3B16B2730BD; Sat, 22 Jan 2022 16:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
- t=1642867770; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=B+pSH3eDoCwx8qONIbfrrUyvB5jznEMG/DMGjMskvRc=;
- b=hXbIbarXEcBXVvn4ntgqb2GNDhOHdAlOohjoOF5l5BRkXUg0CC4U4iZGWVu2rue+fpwS5p
- Mbv0XpUuaKqUqJf/W+8UUeIWJqxVGWwDHczxj69Rkgkp41wgSRrKgwRZwOe31O4Ea1I0KU
- o+ID8paFtrxIvQMoALpNdBBUQG/xFB6AvPNmKWdm6HSFc9InNM0NYPN1+v00hOuM5bHk9M
- bJ2mwixzEYO+oJ0UUMurFbVYv6sGJeaavnV50VsHFRYtX+y8zsMokrPQxJ0vQdEvGP6BeI
- qdQnfU+p3GG90PfNYndnA2JaguRrpokoVIGYjXf9SbmoiXJOCjjU2btSOkTTww==
-Message-ID: <1a3ce2b5-4b17-b79f-5dd5-29637575d473@lexina.in>
-Date: Sat, 22 Jan 2022 19:09:28 +0300
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZDhxvvWa4gXh for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 16:54:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E377660A70
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 16:54:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9ED8D100002;
+ Sat, 22 Jan 2022 16:54:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nBJf5-0001Ex-PG; Sat, 22 Jan 2022 17:54:47 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+References: <20211216171656.27339-1-peter@korsgaard.com>
+Date: Sat, 22 Jan 2022 17:54:47 +0100
+In-Reply-To: <20211216171656.27339-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 16 Dec 2021 18:16:55 +0100")
+Message-ID: <87bl03zp60.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-GB
-To: Neil Armstrong <narmstrong@baylibre.com>
-References: <20220118111457.2491318-1-adeep@lexina.in>
- <20220122143327.7d1a1cf7@windsurf>
- <27eb54d9-6897-a2df-00c3-fb6dca8aba91@lexina.in>
- <20220122160914.7e4cc513@windsurf>
-In-Reply-To: <20220122160914.7e4cc513@windsurf>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/amlogic-boot-fip: new package
+Subject: Re: [Buildroot] [PATCH] package/xserver_xorg-server: security bump
+ to version 21.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,52 +59,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Vyacheslav via buildroot <buildroot@buildroot.org>
-Reply-To: Vyacheslav <adeep@lexina.in>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi, Neil!
-Can you help us with understanding license for Amlogic binaries in
-https://github.com/LibreELEC/amlogic-boot-fip?
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > Fixes the following vulnerabilities:
+ > * CVE-2021-4008/ZDI-CAN-14192 SProcRenderCompositeGlyphs out-of-bounds
+ >   access
 
-22.01.2022 18:09, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 22 Jan 2022 18:05:06 +0300
-> Vyacheslav <adeep@lexina.in> wrote:
-> 
->>> So how can the contents of this repository be useful? OK, then can be
->>> used locally for your own experiments. But for building an actual
->>> device that you can ship/provide to others, using the contents of that
->>> repository, because Amlogic does not even allow you to distribute the
->>> contents of this repository.
->>>
->>> So I am wondering if it's really reasonable to package this in
->>> Buildroot.
->>>    
->> You already have package/odroidc2-firmware with same license.
->> amlogic-boot-fip just put all similar binaries together and Neil
->> Armstrong made a build system for aml uboot binaries.
-> 
-> Well, I wasn't aware package/odroidc2-firmware was under the same
-> restrictive license. Are the license terms for
-> package/odroidc2-firmware available somewhere? This package is
-> downloaded from https://github.com/hardkernel/u-boot, but I don't see
-> the license terms from Amlogic preventing redistribution. Of course, I
-> understand that they simply may be missing (which would be really bad!).
-> 
-> But how can anyone use those blobs? You can't redistribute them.
-> According to their license, just putting them on Github is not even
-> allowed.
-> 
-> Thomas
+ >   The handler for the CompositeGlyphs request of the Render extension does
+ >   not properly validate the request length leading to out of bounds memory
+ >   write.
+
+ > * CVE-2021-4009/ZDI-CAN 14950 SProcXFixesCreatePointerBarrier out-of-bounds
+ >   access
+
+ >   The handler for the CreatePointerBarrier request of the XFixes extension
+ >   does not properly validate the request length leading to out of bounds
+ >   memory write.
+
+ > * CVE-2021-4010/ZDI-CAN-14951 SProcScreenSaverSuspend out-of-bounds access
+
+ >   The handler for the Suspend request of the Screen Saver extension does not
+ >   properly validate the request length leading to out of bounds memory
+ >   write.
+
+ > * CVE-2021-4011/ZDI-CAN-14952 SwapCreateRegister out-of-bounds access
+
+ >   The handlers for the RecordCreateContext and RecordRegisterClients
+ >   requests of the Record extension do not properly validate the request
+ >   length leading to out of bounds memory write.
+
+ > For details, see the advisory:
+ > https://lists.x.org/archives/xorg-announce/2021-December/003122.html
+
+ > Builds without systemd unfortunately got broken.  Add a patch fixing that
+ > from an upstream merge request:
+ > https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+In the mean time xserver 1.20.14 has been released with the same
+security fixes, so I've used that for 2021.02.x / 2021.11.x.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
