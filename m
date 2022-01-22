@@ -1,47 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 409B2C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 13:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B89E1C433EF
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 13:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F13C360ABB;
-	Sat, 22 Jan 2022 13:36:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BF46414A1;
+	Sat, 22 Jan 2022 13:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pwOCl4bFGxfX; Sat, 22 Jan 2022 13:36:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iev3TliFYJ-b; Sat, 22 Jan 2022 13:36:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D5D460A8B;
-	Sat, 22 Jan 2022 13:36:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A2CA1BF3D5
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:36:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 635DF415D3;
+	Sat, 22 Jan 2022 13:36:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B4C71BF3D5
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:36:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68BBD83E09
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:36:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEE70415D3
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 13:36:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1QXXkG2a-OeU for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 13:36:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5F80083DF4
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 13:36:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8739B825C1; Sat, 22 Jan 2022 13:29:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CY-x4xsYCfbO for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 13:36:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3899F414A1
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 13:36:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id 278D2200002;
+ Sat, 22 Jan 2022 13:36:31 +0000 (UTC)
+Date: Sat, 22 Jan 2022 14:36:30 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 22 Jan 2022 14:35:37 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2915d5a9f1f95c99f28a2276e18acdeeb0ab23d6
-X-Git-Newrev: b5e36f80a6629ef5701d4751d7fc6f7dd6a98476
-X-Patchwork-Hint: ignore
-Message-Id: <20220122132930.8739B825C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjpeg: security bump to version
- 9e
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220122143630.5ffd3018@windsurf>
+In-Reply-To: <20220117223026.3567941-1-fontaine.fabrice@gmail.com>
+References: <20220117223026.3567941-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libjpeg: security bump to
+ version 9e
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,59 +56,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e36f80a6629ef5701d4751d7fc6f7dd6a98476
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Jan 2022 23:30:26 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-rdgif.c, cderror.h: add sanity check for GIF image dimensions.
-Thank to Casper Sun for cjpeg potential vulnerability report.
+> rdgif.c, cderror.h: add sanity check for GIF image dimensions.
+> Thank to Casper Sun for cjpeg potential vulnerability report.
+> 
+> - Update hash of README (changes not related to license)
+> - Update indentation in hash file (two spaces)
+> 
+> https://jpegclub.org/reference/reference-sources/
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libjpeg/libjpeg.hash | 4 ++--
+>  package/libjpeg/libjpeg.mk   | 8 ++------
+>  2 files changed, 4 insertions(+), 8 deletions(-)
 
-- Update hash of README (changes not related to license)
-- Update indentation in hash file (two spaces)
+Applied to master, thanks.
 
-https://jpegclub.org/reference/reference-sources/
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libjpeg/libjpeg.hash | 4 ++--
- package/libjpeg/libjpeg.mk   | 8 ++------
- 2 files changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
-index 4f0a677d04..1a2e82caef 100644
---- a/package/libjpeg/libjpeg.hash
-+++ b/package/libjpeg/libjpeg.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256	99cb50e48a4556bc571dadd27931955ff458aae32f68c4d9c39d624693f69c32	jpegsrc.v9d.tar.gz
--sha256	3dc4e4a145c907a96bd6a0e40be3f722fecf061951909143cdff5365cba9c78c	README
-+sha256  4077d6a6a75aeb01884f708919d25934c93305e49f7e3f36db9129320e6f4f3d  jpegsrc.v9e.tar.gz
-+sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  README
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index 6b55aba7e5..caf7f05f44 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -4,12 +4,8 @@
- #
- ################################################################################
- 
--LIBJPEG_VERSION = 9d
--# 9d was released 2020-01-12, but the tarball was replaced upstream circa
--# 2021-03, causing hash mismatch. Until there is a new version released,
--# use our cached copy from s.b.o.
--#LIBJPEG_SITE = http://www.ijg.org/files
--LIBJPEG_SITE = http://sources.buildroot.org/libjpeg
-+LIBJPEG_VERSION = 9e
-+LIBJPEG_SITE = http://www.ijg.org/files
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
- LIBJPEG_LICENSE_FILES = README
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
