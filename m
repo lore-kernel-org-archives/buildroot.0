@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E52AC433F5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 17:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83280C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 17:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E481260B6C;
-	Sat, 22 Jan 2022 17:54:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 087DE40587;
+	Sat, 22 Jan 2022 17:55:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WN4qJnjjKJAr; Sat, 22 Jan 2022 17:54:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lnu-B5ub8dPN; Sat, 22 Jan 2022 17:55:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29A666076A;
-	Sat, 22 Jan 2022 17:54:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A4191BF2C0
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:54:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 236FB40102;
+	Sat, 22 Jan 2022 17:55:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0530D1BF2C0
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05E0283EDB
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:54:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 009E240102
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 17:55:13 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IXT1Z5gYAdKG for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 17:54:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m0d70CfTqZq9 for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 17:55:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8CEA83ED8
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:54:22 +0000 (UTC)
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C3619400CE
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 17:55:11 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 94DEBC0003;
- Sat, 22 Jan 2022 17:54:20 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id AD541C0009;
+ Sat, 22 Jan 2022 17:55:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nBKah-00030Q-Mz; Sat, 22 Jan 2022 18:54:19 +0100
+ id 1nBKbU-00033m-PN; Sat, 22 Jan 2022 18:55:08 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211217214145.112BD802C5@busybox.osuosl.org>
-Date: Sat, 22 Jan 2022 18:54:19 +0100
-In-Reply-To: <20211217214145.112BD802C5@busybox.osuosl.org> (Thomas
+References: <20211217214145.1C5FF80288@busybox.osuosl.org>
+Date: Sat, 22 Jan 2022 18:55:08 +0100
+In-Reply-To: <20211217214145.1C5FF80288@busybox.osuosl.org> (Thomas
  Petazzoni's message of "Fri, 17 Dec 2021 22:46:55 +0100")
-Message-ID: <87tudvy7uc.fsf@dell.be.48ers.dk>
+Message-ID: <87pmojy7sz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/linux-pam: add missing
- BR2_USE_MMU dependency on comment
+Subject: Re: [Buildroot] [git commit] package/linux-pam: separate locale and
+ wchar dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,12 +68,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=8f0df6609a0a1045c16a7d55711f21fc42af756b
+ > commit: https://git.buildroot.net/buildroot/commit/?id=ac9261edec111836952970e26cf373cc15b9e8ac
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > BR2_PACKAGE_LINUX_PAM depends on BR2_USE_MMU, but this dependency is
- > not taken into account in the Config.in comment, which this commit
- > fixes.
+ > They are currently expressed as such:
+
+ >      depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
+
+ > which is not the common practice in Buildroot. We prefer to use:
+
+ >      depends on BR2_ENABLE_LOCALE
+ >      depends on BR2_USE_WCHAR
+
+ > This commit ensures linux-pam is consistent with this best practice.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
