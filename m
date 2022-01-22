@@ -1,81 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D21C433EF
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 18:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5B90C433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 18:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D586F83F1E;
-	Sat, 22 Jan 2022 18:11:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B6A5408E5;
+	Sat, 22 Jan 2022 18:13:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id za9ZvC52WTqN; Sat, 22 Jan 2022 18:11:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oBt-ev2mIt1a; Sat, 22 Jan 2022 18:13:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FADA83F14;
-	Sat, 22 Jan 2022 18:11:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A32C1BF2C2
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:11:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96D72408E4;
+	Sat, 22 Jan 2022 18:13:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A2FBD1BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6095A404BD
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:11:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A9A2408DF
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 18:13:47 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ERjxBXpgCCKo for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 18:11:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HMrKgh4gmtSx for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 18:13:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A929B400CE
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 18:11:02 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id b13so48728780edn.0
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 10:11:02 -0800 (PST)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62A6B408D3
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 18:13:46 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id a13so5875259wrh.9
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 10:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
- :content-disposition:in-reply-to;
- bh=CdHM5FBhciVFD8wPYKCH/LmJhBnj5AxiPczVkPbwE0s=;
- b=Q1/xUYGfigFBTLNujybxcaSOM0AVproNMGi23EKSR0h7pyS3d2SYXZvp+XW6BZnosh
- Gdb4nTqPY3TM/VCzrpxbOsRyr0pA0/xYVSPyphO7e1ZIPi8Zjy9/6Iq8XQ0Q8h4o0nWZ
- 6dyR24ZeGrlc8SIbYC/NOv/ox3V+XH+HXj9++3tYkBHd5DEbEBfxhSAr2mwCtJbZq0i+
- eKudvU1z7lJhJX4syRGUECbF6mazFOYF4A4XM/4ztK1TZjTTNDbhLXRRaSdhuwJ2vS4x
- +n7SH/tPwTwofin6z+x4BKMeFa/o0Ao3EsRjhQhsN6NlXCMSfMG+aLsbsBlXyy3pdT7E
- NrgQ==
+ h=sender:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=P49eOIYY1dYJ4eMwT85Yl9PfedI25/873xoEBVq/cXI=;
+ b=ZLpDYjFzTW7pOWyTQJG6GVWtphEqwnx286cMtOwi2OaaiXOOa2XD59a6P3Kgoi+Z+w
+ Sosy7KOqnwXBb1VCiLoKtEKQT0Aruz64UG2kKG2ld24ANYjl0qr5EasYuTH/Mv6q3nhZ
+ SebSICxvzDc6on7LqlZF4hOoOvpyBZnmNS170V/uw6bnCzeERkWSS6xRMWOLUAhCxFeo
+ WH0z8lewuAh8ITKjAGW6n6uFFkHbFJArLB3AkBKVYNUAiyBDArrVdHMjmo91OONmPl/K
+ Mk3aNEKVYEFeSMCyZGQDjJrk66vWTDDxPp15ToNqm45FyIWbc0IR/ajX1WJbcRhX2MN1
+ M9XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
- :references:mime-version:content-disposition:in-reply-to;
- bh=CdHM5FBhciVFD8wPYKCH/LmJhBnj5AxiPczVkPbwE0s=;
- b=uwjcGYTTKPqfpZrW6IJj95qQD5PEezMuDkwygXDjiejSM4au8pDqj6EfdaXSVebXDo
- PRi9orTz88DpMdljtwH8TKY2TwquDKcDeMcwfPG+WYJlzTeMyBRZ6zIAPIxqBU0nNNBc
- Xi9AND76W4VtTqfcNY7zJNNFtG7AFEazUoyXG8YMf+nKCDHjJn8BvzhB4BYRtktesEAY
- EoZ9xFTaMWcZzoA7gk1lzvOibkob14o4E332c2ztgEtqFtbJWRwpmwbvuIX8rycPi5Ge
- 0/fS4QW+NvJk/VLqINCuuI7Sv+y7OiZta55nLiw24w5HDFN4Q6zwmW+ZQpAdw50EvDZU
- +k8A==
-X-Gm-Message-State: AOAM530e22a2BJYyqLgUrA5hIH10eJAFJA8ZQDky4MpJ997Yo+URo3Ee
- XZmh9LacE67ULj8e4guGZ75PBorOs04xWw==
-X-Google-Smtp-Source: ABdhPJwQafzw9AqWwmjQ8DLwaoAxxM7TAHw3ENrbxdTvi1gQhAxgwlNX4PJiIuJYGMN5HwBc9iaGWw==
-X-Received: by 2002:a05:6402:1d49:: with SMTP id
- dz9mr1131354edb.226.1642875060818; 
- Sat, 22 Jan 2022 10:11:00 -0800 (PST)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id s1sm3894269edt.49.2022.01.22.10.11.00
+ h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+ :mime-version:content-transfer-encoding;
+ bh=P49eOIYY1dYJ4eMwT85Yl9PfedI25/873xoEBVq/cXI=;
+ b=gQYmb1/Ds81Nj5wkcD1kBSlEhKKL4rlHSBop8CKmAQ849XHQU8Xi0pz7R0tbae93iB
+ 7YyDhXUrixM0183LZsjUQ+8jGcDrWT4L/ApZgODCDe4PFb8ZAJeAiEyVMahbgjl851S/
+ /Mg27iZ45X/E71WOhv4NhrgTdlVEkEidyI1PxW2gpIHHIKlVSj66sZ8DmCj6HI/cKTob
+ hpHE8O7E5d3/AGZJHga2vP65F8DzwO9nFP2emBhHUDBcE4K4aYsG4bqjjqaE2QGZDE49
+ jwvWjU7NFXQ2jhb52Zlh7zSGmP7M1+wnChKABzbbB5W2yvppX60iqjlbMIL2h1ucySvn
+ R2bQ==
+X-Gm-Message-State: AOAM532d0e9tOjNGIbHt6IN/N0zZ5NjjztEmxKCFCRWPQQ1io6PsEkQu
+ com56NMkg5c82HrIMCGNvLYGdkYEK9c=
+X-Google-Smtp-Source: ABdhPJyTRtVDko3AusBdO66bZmJwAiOvxmeT8EzOi6OReMp2hsVi5drtdChDPqyH40DiZypiQCERWw==
+X-Received: by 2002:adf:e445:: with SMTP id t5mr8251768wrm.537.1642875224538; 
+ Sat, 22 Jan 2022 10:13:44 -0800 (PST)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:8038:e8ec:605a:7149])
+ by smtp.gmail.com with ESMTPSA id j4sm10761902wrq.81.2022.01.22.10.13.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 22 Jan 2022 10:11:00 -0800 (PST)
-Date: Sat, 22 Jan 2022 19:10:58 +0100
-From: Petr Vorel <petr.vorel@gmail.com>
+ Sat, 22 Jan 2022 10:13:44 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <YexIspJ7Tw4LKRzm@pevik>
-References: <20220122180804.30250-1-petr.vorel@gmail.com>
+Date: Sat, 22 Jan 2022 19:13:43 +0100
+Message-Id: <cover.1642875217.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220122180804.30250-1-petr.vorel@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: bump version to 2.6.1
+Subject: [Buildroot] [PATCH 0/2 v2] core: fixup PPD paths (branch
+ yem/ppd-fixup-paths)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,22 +83,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Herve Codina <herve.codina@bootlin.com>,
+ Andreas Naumann <anaumann@ultratronik.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Louis-Paul CORDIER <lpdev@cordier.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Hello All!
 
-note this version does not support NFSv2 any more.
-Does it need to be mentioned to the commit message?
-I didn't add it, because even NFSv3 is quite old (and I recommend to use
-NFSv4.2).
+This series builds upon previous good work from Andreas [0], Louis-Paul
+[1], and Adam [2].
 
-Kind regards,
-Petr
+The first patch is the core of the change: rather than have multiple
+hooks that each cater for different types of files (.py, .pc, .pri,
+.cmake and so on), we jut do what we already do in relocate-sdk: we just
+look for all text files that have a PPD prefix in them, and replace tht
+with the current package's PPD.
+
+The second patch ensures that we can build reliable files lists, so that
+files we tweak in the infra are not believed to be installed/modified by
+the current package.
+
+[0] https://lore.kernel.org/buildroot/20200217212350.29750-21-anaumann@ultratronik.de/
+[1] https://lore.kernel.org/buildroot/a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org/
+[2] https://lore.kernel.org/buildroot/20220106171720.12857-1-aduskett@gmail.com/
+
+Changes v1 -> v2:
+  - use --binary-files=without-match, as this *considerably* speeds up
+    the fixup  (Arnout)
+  - rename the python fixup  (Arnout)
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      core/pkg-generic: fixup all PPD paths in a generic fashion
+      core/pkg-generic: apply post-prepare hooks before monitoring directories
+
+ package/pkg-generic.mk | 47 +++++++++++++++++++++++------------------------
+ 1 file changed, 23 insertions(+), 24 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
