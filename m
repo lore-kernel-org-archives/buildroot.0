@@ -1,46 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDFD1C433F5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 07:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539CFC433F5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jan 2022 10:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 261EA83E1D;
-	Sat, 22 Jan 2022 07:07:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3918415DD;
+	Sat, 22 Jan 2022 10:50:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DpyNXj_ZY4LS; Sat, 22 Jan 2022 07:06:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SclQQtQkkQFk; Sat, 22 Jan 2022 10:50:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3A8183E1E;
-	Sat, 22 Jan 2022 07:06:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6D5331BF2A7
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 07:06:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB8E741513;
+	Sat, 22 Jan 2022 10:50:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 874B51BF5E9
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 10:50:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5191C607F2
- for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 07:06:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74D75401DD
+ for <buildroot@lists.busybox.net>; Sat, 22 Jan 2022 10:50:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mj7D__AHFN8I for <buildroot@lists.busybox.net>;
- Sat, 22 Jan 2022 07:06:55 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4979460782
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 07:06:55 +0000 (UTC)
-Received: (Authenticated sender: bot@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2861140003
- for <buildroot@buildroot.org>; Sat, 22 Jan 2022 07:06:52 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fnqa-6IPfPcR for <buildroot@lists.busybox.net>;
+ Sat, 22 Jan 2022 10:50:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 50EC4400F8
+ for <buildroot@buildroot.org>; Sat, 22 Jan 2022 10:50:27 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:90bb:6e44:a706:407c])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 008CE780350;
+ Sat, 22 Jan 2022 11:50:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+ s=smtp-20201208; t=1642848624;
+ bh=iAz/u1lRkxw1Hj0XfIdZEhBOmf1RylL6kIoupzK3yd8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Yfou2u2Hnvjk3bvCVUp1jsg4p4uJsnfATLZjYPIp//4dXiCAmjhzFpXMF/xjyWj9C
+ 6atmU4TN5ukTE/SdUKbu4N8RDoOfvkrQz15oLvjG08lhXvN4yrjw21V0zTI/LxnrIK
+ 3GSjP32tz5A7xTJKuIBouWtDKLF0JLuxnB/amjx/NeAGSKIUgCbzIu/H+gDJR3o6KD
+ tE62ChaejFhNtZdU03wQtROX195bHjimoVlXKFm+BP0Mdx1UDDMvEWVlPJGN8dXUBJ
+ SmeSoXjcacRfedbjutpG4Q3iiqxxie6b04SX5CFnLaD25+OUTK6ctX5jWLr61UvFvC
+ 3GctUKZRvyZAw==
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 22 Jan 2022 11:50:17 +0100
+Date: Sat, 22 Jan 2022 11:50:17 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220122105017.GM3252931@scaer>
+References: <cover.1641663315.git.yann.morin.1998@free.fr>
+ <91348c3073b0dcf57a8ea3227bae74c23a122713.1641663315.git.yann.morin.1998@free.fr>
+ <e0fb6796-834f-f23f-a388-37c35b59ec99@mind.be>
+ <20220113215805.GM1477939@scaer>
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jan 2022 07:06:51 -0000
-Message-Id: <20220122070657.5191C607F2@smtp3.osuosl.org>
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-01-21
+Content-Disposition: inline
+In-Reply-To: <20220113215805.GM1477939@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+Subject: Re: [Buildroot] [PATCH 2/3] core/pkg-generic: fixup all PPD paths
+ in a generic fashion
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,250 +75,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Louis-Paul CORDIER <lpdev@cordier.org>, Adam Duskett <aduskett@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Naumann <anaumann@ultratronik.de>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-Autobuild statistics for 2022-01-21
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2021.02.x  | 70  |  5  |  0  | 75  |
-  2021.11.x  | 17  |  6  |  0  | 23  |
-    master   | 94  | 29  |  0  | 123 |
-
-Classification of failures by reason for master
------------------------------------------------
-
-                  rygel-0.40.2 | 7 
-                       frr-8.1 | 4 
-             bluez5_utils-5.63 | 2 
-      qt5webkit-5.212.0-alpha4 | 2 
-                cryptopp-8.6.0 | 1 
-              cryptsetup-2.4.2 | 1 
-                   guile-3.0.7 | 1 
-                   gvfs-1.48.1 | 1 
-                 hiawatha-11.1 | 1 
-             ksmbd-tools-3.4.3 | 1 
-                libglvnd-1.3.2 | 1 
-                mongodb-4.2.11 | 1 
-                nodejs-14.18.3 | 1 
-               pulseview-0.4.2 | 1 
-                rtorrent-0.9.8 | 1 
-           tesseract-ocr-5.0.1 | 1 
-                       unknown | 1 
-                 wavemon-0.9.4 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/6217231b30e9f62574a7408359bb8b18ef0a4228 |     
-    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/cbca95b985a594e897c9dacbe12341d3a0a34f06 |     
-  powerpc    |         cryptopp-8.6.0         | NOK | http://autobuild.buildroot.net/results/6b96ab6c391e304dc1f6c175e6ae4e68a8362d9b |     
-microblazeel |        cryptsetup-2.4.2        | NOK | http://autobuild.buildroot.net/results/4c5e5eaca926372cc71418583b56ea0d93d110cc |     
-microblazeel |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/dbda895ef25cc48fee89ac49863480a6773778f9 |     
-    arc      |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/5e524ed0b4768304caad7fa29249cf64751ec6d6 |     
-   nios2     |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/0f43deb205ad3da2b37694aa777f3cbf184436a4 |     
-  mips64el   |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/0e3fd4b6121097e7ea648d57f9f57596a395bec8 |     
-  aarch64    |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/69ade733bd49d6cfafc0f162c352e2d624bfa9b2 | ORPH
-   mipsel    |          gvfs-1.48.1           | NOK | http://autobuild.buildroot.net/results/e22684977c48652c170da28b3b3ce5808eb63b47 | ORPH
-    arm      |         hiawatha-11.1          | NOK | http://autobuild.buildroot.net/results/12a20b3f9e4f9f343b7a23f3fed530407827615e |     
- powerpc64   |       ksmbd-tools-3.4.3        | NOK | http://autobuild.buildroot.net/results/05272cff4dee5b09d00b7f7f50c77bcd6f13f9fa |     
-    arm      |         libglvnd-1.3.2         | NOK | http://autobuild.buildroot.net/results/d27fcdd52ad149433e38539ef3bd00b501ae32c4 | ORPH
-    arm      |         mongodb-4.2.11         | NOK | http://autobuild.buildroot.net/results/0e199ae9f1bc4d9d6a542afb4a01dce3f605cb5f |     
-   mipsel    |         nodejs-14.18.3         | NOK | http://autobuild.buildroot.net/results/f2ab8baa03dd2dad4b9fbe3ed175f006a745f3dd |     
-  riscv32    |        pulseview-0.4.2         | NOK | http://autobuild.buildroot.net/results/4158a3a5ec242eb1987352f75754d4fe63761a38 |     
-  aarch64    |    qt5webkit-5.212.0-alpha4    | NOK | http://autobuild.buildroot.net/results/53016bd78eedffb608efb8f4c069c217fb8859c2 |     
-   mipsel    |    qt5webkit-5.212.0-alpha4    | NOK | http://autobuild.buildroot.net/results/0cda723b5fcf349270ad20875aec6d317d774f66 |     
-    sh4      |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/bd03b1790b50a5f3f8e7697c3ad9ba31dc16e5c3 | ORPH
-   mipsel    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/5796cfad0dff3218bac43f3bfb1488b1f953b39d |     
-  riscv64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/66c839da496742b9a34598cf6d0a2ec83779ba2f |     
-    i586     |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/9c4d38131a27255b7be320c3a6dc1009f0b54aa1 |     
-microblazeel |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/408f07a95f55bb8c15c4df092de61ecd1c99bda7 |     
-    arm      |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/303e1b4a2d6e8f9a5abe382d862b601494ae7eb0 |     
-  riscv64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/446b5f21c8906ac75ef9e65670e28ac583eccebb |     
-  riscv64    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/86a60928dc063946886f403211348e65bf8099e2 |     
-    arm      |      tesseract-ocr-5.0.1       | NOK | http://autobuild.buildroot.net/results/0bac6491188b6681df2ca13eb230706e83cbb130 |     
-    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/6c789e62dd2b24a4f265aaddc34f30f6283a961b |     
-   xtensa    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/9e6966d48d75a987b69052d518dbcebb53e7ba6b |     
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-              gnuradio-3.8.1.0 | 1 
-  gobject-introspection-1.64.1 | 1 
-          gstreamer1-mm-1.10.0 | 1 
-            qt5location-5.15.2 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    sh4      |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/08143fac4c9a19096d6375500505bf1984423598 |     
-   x86_64    |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/2e14189d66bf643ecef5546fa9f84a62cb6083f4 | ORPH
-    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/2e2175d95d63f4a606da6d38028eb390a8eb9d92 | ORPH
-   x86_64    |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/845168c5ee9c0e77a775f4e764c4205b368ca225 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/9162bc2b5fa9408edf2bec3d2a4db48cf3644abb |     
-
-
-Classification of failures by reason for 2021.11.x
---------------------------------------------------
-
-                   gstd-0.13.0 | 1 
-              host-erlang-22.2 | 1 
-libdbi-88b8477d57153b9f736d... | 1 
-                   libnss-3.73 | 1 
-                 libqmi-1.30.2 | 1 
-                nodejs-14.18.1 | 1 
-
-
-Detail of failures for 2021.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/da0348d455ac3660491bbec9ff9b8a15d6186b0d | ORPH
-   x86_64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/7f856109152d8c9ad224377317cd750b3870e584 |     
-    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/adc3b7eb59b9a71ccb2ba79c724b693bbecbf5db |     
-   x86_64    |          libnss-3.73           | NOK | http://autobuild.buildroot.net/results/c368e02bedecb8ccb0b5db8c27f61912b43f09a3 |     
-    arm      |         libqmi-1.30.2          | NOK | http://autobuild.buildroot.net/results/dbce587915079f8014ea48524682fd567f33214d |     
-    arm      |         nodejs-14.18.1         | NOK | http://autobuild.buildroot.net/results/c3715d2b8e3a938c6d5dd93d2497ea8adec0f70f |     
-
-
-Gitlab CI results for 2022-01-21
-================================
-
-Detail of defconfig failures for master
----------------------------------------
-
-                        defconfig |                        link to the job                        | orph?
-----------------------------------+---------------------------------------------------------------+------
-                amarula_a64_relic | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143358  |      
-                      andes_ae3xx | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143361  |      
-               arcturus_ucls1012a | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143362  |      
-                 arcturus_ucp1020 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143363  |      
-                         arm_juno | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143366  |      
-                   armadeus_apf27 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143368  |      
-                  at91sam9260eknf | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143373  |      
-                   at91sam9g20dfc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143375  |      
-                 at91sam9g45m10ek | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143377  |      
-                     at91sam9rlek | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143379  |      
-                     at91sam9x5ek | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143381  |      
-                 at91sam9x5ek_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143383  |      
-                 at91sam9x5ek_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143384  |      
-             at91sam9x5ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143386  |      
-   atmel_sama5d27_som1_ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143388  |      
-       atmel_sama5d2_xplained_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143390  |      
-   atmel_sama5d2_xplained_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143391  |      
-           atmel_sama5d3_xplained | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143395  |      
-       atmel_sama5d3_xplained_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143396  |      
-       atmel_sama5d3_xplained_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143397  |      
-   atmel_sama5d3_xplained_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143398  |      
-                 atmel_sama5d3xek | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143399  |      
-           atmel_sama5d4_xplained | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143401  |      
-       atmel_sama5d4_xplained_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143402  |      
-       atmel_sama5d4_xplained_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143404  |      
-   atmel_sama5d4_xplained_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143405  |      
-                      bananapi_m1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143407  |      
-                 bananapi_m1_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143409  |      
-                 bananapi_m2_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143410  |      
-                bananapi_m2_ultra | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143411  |      
-                     bananapi_m64 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143415  |      
-                        bananapro | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143416  |      
-                   beagleboardx15 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143417  |      
-                   beaglebone_qt5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143420  |      
-                          beaglev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143427  |      
-                      beelink_gs1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143428  |      
-                  chromebook_snow | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143431  |      
-                     csky_gx6605s | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143433  |      
-            engicam_imx6qdl_icore | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143435  |      
-        engicam_imx6qdl_icore_qt5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143436  |      
-        engicam_imx6qdl_icore_rqs | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143437  |      
-              engicam_imx6ul_geam | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143439  |      
-             engicam_imx6ul_isiot | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143440  |      
-               freescale_p1025twr | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143460  |      
-             freescale_t1040d4rdb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143462  |      
-          freescale_t2080_qds_rdb | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143463  |      
-            friendlyarm_nanopc_t4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143464  |      
-           friendlyarm_nanopi_a64 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143465  |      
-            friendlyarm_nanopi_m1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143467  | ORPH 
-       friendlyarm_nanopi_m1_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143469  | ORPH 
-            friendlyarm_nanopi_m4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143470  |      
-           friendlyarm_nanopi_neo | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143474  |      
-          friendlyarm_nanopi_neo2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143472  |      
-          friendlyarm_nanopi_neo4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143473  |      
-     friendlyarm_nanopi_neo_plus2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143476  |      
-            friendlyarm_nanopi_r1 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143477  |      
-                          galileo | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143478  |      
-                         imx23evk | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143487  |      
-                       imx8mmpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143500  |      
-                        imx8mpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143501  |      
-                         lego_ev3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143506  |      
-                    licheepi_zero | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143507  |      
-          microchip_sam9x60ek_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143510  |      
-      microchip_sam9x60ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143511  |      
- microchip_sama5d27_wlsom1_ek_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143512  |      
-...hip_sama5d27_wlsom1_ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143513  |      
-        microchip_sama5d2_icp_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143515  |      
-    microchip_sama5d2_icp_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143517  |      
-          microchip_sama7g5ek_mmc | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143518  |      
-      microchip_sama7g5ek_mmc_dev | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143519  |      
-                          mx25pdk | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143522  |      
-                   mx6sx_udoo_neo | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143527  |      
-                        odroidxu4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143546  |      
-          olimex_imx233_olinuxino | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143556  |      
-                   orangepi_lite2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143562  |      
-                orangepi_one_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143566  |      
-                     orangepi_pc2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143567  |      
-                    orangepi_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143572  | ORPH 
-                   orangepi_prime | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143574  |      
-                  orangepi_rk3399 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143577  |      
-                     orangepi_win | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143578  |      
-              orangepi_zero_plus2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143580  |      
-                   pc_x86_64_bios | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143584  |      
-                   pcengines_apu2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143590  |      
-                           pine64 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143591  |      
-                    pine64_sopine | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143592  |      
-                 qemu_ppc_g3beige | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143631  |      
-               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143660  |      
-                        riotboard | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143668  |      
-                    roc_pc_rk3399 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143669  |      
-                        rock_pi_4 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143671  |      
-                      rock_pi_n10 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143672  |      
-                       rock_pi_n8 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143674  |      
-                        rockpro64 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143675  |      
-                 s6lx9_microboard | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143677  |      
-                 snps_aarch64_vdk | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143679  |      
-               snps_arc700_axs101 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143680  |      
-              snps_archs38_axs103 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143682  |      
-                snps_archs38_hsdk | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143685  |      
-                socrates_cyclone5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143687  |      
-                solidrun_clearfog | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143689  |      
-              toradex_apalis_imx6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143706  |      
-                           ts4900 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143707  |      
-                           ts7680 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143709  |      
-                        warpboard | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143714  |      
-                    zynq_microzed | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143715  |      
-                      zynq_qmtech | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143716  |      
-                       zynq_zc706 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143717  |      
-                         zynq_zed | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143718  |      
-                    zynqmp_zcu106 | https://gitlab.com/buildroot.org/buildroot/-/jobs/1995143719  |      
-
-
-
--- 
-http://autobuild.buildroot.net
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QXJub3V0LCBBbGwsCgpPbiAyMDIyLTAxLTEzIDIyOjU4ICswMTAwLCBZYW5uIEUuIE1PUklOIHNw
+YWtlIHRodXNseToKPiBPbiAyMDIyLTAxLTEyIDIxOjQyICswMTAwLCBBcm5vdXQgVmFuZGVjYXBw
+ZWxsZSBzcGFrZSB0aHVzbHk6Cj4gPiBPbiAwOC8wMS8yMDIyIDE4OjM1LCBZYW5uIEUuIE1PUklO
+IHdyb3RlOgo+ID4gPlNvbWUgZmlsZXMgY29udGFpbiBoYXJkLWNvZGVkIGFic29sdXRlIHBhdGhz
+IHRoYXQgcG9pbnQgdG8gdGhlIGhvc3QKPiA+ID5hbmQvb3Igc3RhZ2luZyBkaXJlY3Rvcmllcy4K
+PiA+ID4KPiA+ID5XaXRoIHBlci1wYWNrYWdlIGRpcmVjdG9yaWVzIChha2EuIFBQRCksIHRoZXNl
+IHBhdGhzIHBvaW50IHRvIHRoZSBQUEQKPiA+ID5vZiB0aGUgcGFja2FnZSB0aGF0IGNyZWF0ZWQg
+dGhlIGZpbGVzLCB3aGVuIHdlIHdhbnQgdGhlbSB0byBwb2ludCB0byB0aGUKPiA+ID5QUEQgb2Yg
+dGhlIHBhY2thZ2UgdGhhdCB1c2VzIHRoZW0uCj4gWy0tU05JUC0tXQo+ID4gPitkZWZpbmUgUFBE
+X0ZJWFVQX1BBVEhTCj4gPiA+KwkkKFEpZ3JlcCAtbHJaICckKFBFUl9QQUNLQUdFX0RJUikvW14v
+XVwrLycgJChIT1NUX0RJUikgXAo+ID4gIFRoaXMgd2lsbCB0cmF3bCB0byBsYXJnZSBiaW5hcnkg
+ZmlsZXMgYW5kIHBvdGVudGlhbGx5IHRha2UgYSBsb25nIHRpbWUuLi4KPiAKPiBJIHRvbyB0aG91
+Z2h0IG9mIHRoYXQsIGFuZCBJIGV2ZW4gZGlzY3Vzc2VkIGl0IHNsaWdodGx5IHdpdGggUGV0ZXIg
+Sy4KPiBoZXJlIGFib3V0IHdoYXQgd291bGQgYmUgbW9zdCBlZmZpY2llbnQ6IGdyZXAtdGhlbi1m
+aWxlLCBvciBmaWxlLXRoZW4tZ3JlcD8KPiAKPiBCdXQgaWYgd2UgYWRkIC0tYmluYXJ5LWZpbGVz
+PXdpdGhvdXQtbWF0Y2ggdG8gZ3JlcCwgdGhlbiBpdCB3aWxsCj4gYmFpbC1vdXQgZWFybHkgb24g
+YmluYXJ5IGZpbGVzLCB3aGljaCB3b3VsZCBiZSBtb3JlIGVmZmljaWVudC4gQW5kIHRoZW4KPiB3
+ZSBzdGlsbCBwYXNzIHRoYXQgdGhyb3VnaCBmaWxlIHRvIHJlYWxseSBnZXQgb25seSB0ZXh0IGZp
+bGVzLgo+IAo+IEJ1dCBhIHRleHQtZmlsZSB3aXRoIHV0ZjggaXMgcmVhbGx5IGEgYmluYXJ5IGZp
+bGUsIHNvIHdvdWxkIGdyZXAgaWdub3JlCj4gaXQ/CgpTbyBJIHRyaWVkIGFuZCBjcmVhdGVkIGEg
+c2ltcGxlIGZpbGUgd2l0aCBhcmJpdHJhcnkgbm9uLUFTQ0lJIFVURi04CnN5bWJvbHMgKEkganVz
+dCBjb3B5LXBhc3RlZCB0aGUgY2hpbmVzZSBXaWtpcGVkaWEgaG9tZSBwYWdlLCBhcmJpdGFyaWx5
+CndyYXBwZWQgZm9yICJyZWFkYWJpbGl0eSIpOgoKICAgICQgY2F0IGZvbwogICAg6Iux5qC85YWw
+6Laz55CD6LaF57qn6IGU6LWb6YeR5omL5aWX5aWW5piv6Iux5qC85YWw6Laz55CD6LaF57qn6IGU
+6LWb55qE5LiA5Liq5aWW6aG577yMCiAgICDmr4/lubTpooHlj5HkuIDmrKHvvIzpooHnu5nlnKjl
+vZPotZvlraPoi7HotoXogZTotZvkuK3lrozmiJDmnIDlpJrmrKHpm7blsIHnmoTlrojpl6jlkZjj
+gIIKICAgIOWcqOi2s+eQg+S4re+8jOmbtuWwgeaMh+eahOaYr+WuiOmXqOWRmOWcqOS4gOaVtOWc
+uuavlOi1m+S4reS/neaMgeS4jeWkseeQg+OAgjIwMDXlubTvvIwKICAgIOiLsei2heiBlOi1m+es
+rOS4gOasoemigeWPkemHkeaJi+Wll+Wllu+8jOWIh+WwlOilv+eahOW9vOW+l8K35YiH6LWr6I63
+5aWW77yM5YiH6LWr5ZyoCiAgICAyMDA0LTA16LWb5a2j5a6M5oiQ5LqGMjTlnLrpm7blsIHvvIzo
+h7Pku4rku43mmK/oi7HotoXogZTotZvnmoTorrDlvZXjgILliIfotavlkozkuZTCtwogICAg5ZOI
+54m55ZCE6LWi5b6X6L+H5Zub5qyh6YeR5omL5aWX5aWW77yM5bm25YiX6I636K+l5aWW5qyh5pWw
+5pyA5aSa55qE55CD5ZGY77yM5YiH6LWr6L+Y5pivCiAgICDoh7Pku4rllK/kuIDkuIDkvY3kuLrk
+uKTlrrbkv7HkuZDpg6jvvIjliIflsJTopb/jgIHpmL/mo67nurPvvInmlYjlipvml7bpg73ojrfl
+vpfph5HmiYvlpZcKICAgIOWllueahOeQg+WRmOOAguS9qeS9qcK36Zu357qz5YiZ5piv56ys5LiA
+5Liq6IO95aSf6L+e57ut6I635b6X6K+l5aWW55qE55CD5ZGY77yM5LuW5ZyoMjAwNgogICAg6Iez
+MjAwOOW5tOi/nue7reS4ieasoeiOt+W+l+iLsei2hemHkeaJi+Wll+OAguS5lMK35ZOI54m55YiZ
+5ZyoMjAxMS0yMDEz5bm06L+95bmz5LqGCiAgICDov5nkuIDmiJDlsLHjgIIKCiAgICAkIGZpbGUg
+LWIgLS1taW1lLXR5cGUgZm9vCiAgICB0ZXh0L3BsYWluCgogICAgJCBncmVwIC0tYmluYXJ5LWZp
+bGVzPXdpdGhvdXQtbWF0Y2gg5piv6Iux6LaFIGZvbwogICAgMjAwNC0wNei1m+Wto+WujOaIkOS6
+hjI05Zy66Zu25bCB77yM6Iez5LuK5LuN5piv6Iux6LaF6IGU6LWb55qE6K6w5b2V44CC5YiH6LWr
+5ZKM5LmUwrcKClNvLCBhIHRleHQgZmlsZSB3aXRoIHV0Zi04IGNoYXJzIGlzIHN0aWxsIHJlY29n
+bmllZCBhcyBhIHRleHQgZmlsZSwKYW5kIGdyZXAgd2lsbCBhbHNvIG5vdCByZWNvZ25pc2UgaXQg
+YXMgYSBiaW5hcnkgZmlsZS4KClNvIHdlIGNhbiB0ZWxsIGdyZXAgdG8gYmFpbCBvdXQgZWFybHkg
+b24gYmluYXJ5IGZpbGVzLCB0byBzcGVlZCB1cCB0aGUKc3R1ZmYuIEknZCBzdGlsbCBrZWVwIHRo
+ZSAnZmlsZScgdGVzdCBhcyBhIGZ1cnRoZXIgc2FmZXR5IG5ldCwgdGhvdWdoLgoKU28sIGdyZXAg
+ZG9lcyBub3QgZm9sbG93IHN5bWxpbmtzLCBhbmQgd2UgY2FuIGNhbiBzcGVlZCBncmVwIGJ5Cmlu
+c3RydWN0aW5nIGl0IHRvIHNraXAgYmluYXJ5IGZpbGVzLiBBcyBzdWNoLCBJIHRoaW5rIGFsbCB5
+b3VyIGlzc3VlcwpoYXZlIGJlZW4gYWRkcmVzc2VkIG5vdy4KClJlZ2FyZHMsCllhbm4gRS4gTU9S
+SU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0t
+LS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFs
+LVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwK
+fCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAg
+IHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4t
+LS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8v
+eW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAg
+Y29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0t
+LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
