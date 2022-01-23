@@ -4,86 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9249EC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 15:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBCCFC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 16:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E74881251;
-	Sun, 23 Jan 2022 15:48:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A14781A1C;
+	Sun, 23 Jan 2022 16:09:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Vct8LewHD_Y; Sun, 23 Jan 2022 15:48:29 +0000 (UTC)
+	with ESMTP id gmkkCgoWmgcJ; Sun, 23 Jan 2022 16:09:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44D3E80B04;
-	Sun, 23 Jan 2022 15:48:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CDB8E1BF2F0
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 15:48:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8B18819F5;
+	Sun, 23 Jan 2022 16:09:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 641111BF3F0
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 16:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C91A56059B
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 15:48:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52935819F5
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 16:09:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sn8n28Fd-DOE for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 15:48:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9Gfv5u_dYuWZ for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 16:09:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8A12160592
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 15:48:25 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id v123so21321197wme.2
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 07:48:25 -0800 (PST)
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com
+ [IPv6:2607:f8b0:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D5F4819C8
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 16:09:21 +0000 (UTC)
+Received: by mail-ot1-x335.google.com with SMTP id
+ z25-20020a0568301db900b005946f536d85so18864774oti.9
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 08:09:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:in-reply-to:content-transfer-encoding;
- bh=lZ4sCfvSYUN2Bk5pxa/WpXl88FhpR2I0qwr7Ku63cz0=;
- b=FY9c4qlAyoD3nq8hXb0LxRDaf2y4spZVoQVo8bNfMgM2Q5M+5g+MY4ZgGlYZvqcL/g
- 1Y3W1usHK+gTHI+f3xrgQobS72hcxfvu0p9rgcrHEIKPL7/dpIwQXRoMj4redy6dQ1sT
- Jh3RILqB4r1gtfH77lj690Bo2pj5pj06ZXSzWi/m5tExhETodRZ5hCmcMPqP+px61xHx
- 4tzb2nOp/L2OjJ2jYjyEPztmzOUozh+/ynrcSfep68+RQHv94jXqEO2mQ44GhaaF2Mrn
- QUnuFUzjfW2GRweLFsynqFyOFGq9J2LsLmM//VQdhYFTACNhYvD5LU6rgyLEDw/O46Tl
- VhxA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=cNWpYJaEUb4++wiSR7HvBPXldgJ0SXsGYZik2GUpO9M=;
+ b=ZF1djxUuS+MdMfZkaUzRco/B6GTQqP1RJB29YchHvA9zbtUqystPp8DlherywEA+bI
+ Q9KjsShVoypaMNvtFBEwpjIqaavHtzTa1hfzpsYfa43Q3nyhrOUmcSwN13CKWUWSKCVQ
+ Do+0PuNsE3KqmZW8kXZqlEgFqZnVUS3u3WLui3jkODM59PujK/XIRFRUtcE0F5JQiBIt
+ hdvk8+4NKtz86Voq+sOAXIATdoUhsZwaM70exZLOgHwxUjv7axs+1Hi5EJJOvpTjl/Jb
+ SGH9E3X3BKbOWbcYwDOmoCRa8ovJz3sq5B+9AlwGAZzznLoQxYSkoMIIGA/mAxds5RzU
+ PiVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:in-reply-to
- :content-transfer-encoding;
- bh=lZ4sCfvSYUN2Bk5pxa/WpXl88FhpR2I0qwr7Ku63cz0=;
- b=XMZ4hazan75di0ZteOlHxoDeZDD0zblgCnrE3ZMLLQXsBGaGds+YCCYNkvSPZMlQnh
- ZrOWmWGzWDlgYphvTJLJ64tjdF5Isb0U7/uRXR3T+lb+gvlafuLqGUzA13dJyXlERrEC
- xJTpX5Vz5SwcQmzqqBs4duWBYTUPY6K/yHoDhvMjX/5Ow9A91NUKGbkNXW6pEES0xPF3
- dlBVSDKD612upmVi2VMVnC29OSkveXmgoWIc66DRkIkSn7jqnR8oFLFubSlR20JmRznK
- 0hb/W43KLB+yZnJ9XKECWK4TRew9xlDWvXPvksx6qGyWnIALN44R8pNmx72tyPFnL0MF
- NVqw==
-X-Gm-Message-State: AOAM531Bi+3XmQJ5O+PLcpdUrR9sgiWb9izSujt6f4nip2mYVbq7L74T
- kTNOsch0SLkxdAsJw+GQSBc=
-X-Google-Smtp-Source: ABdhPJzX98Bm8U5am/SNOYtHQqNaBu2sRqdnmdBQTf9sk1cmGfHsTccRGYx3vw9le8Gh9nbr2TcqDQ==
-X-Received: by 2002:a1c:7911:: with SMTP id l17mr8370069wme.117.1642952903765; 
- Sun, 23 Jan 2022 07:48:23 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id o25sm2979098wms.9.2022.01.23.07.48.22
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 23 Jan 2022 07:48:23 -0800 (PST)
-Message-ID: <9c63c5dc-a9dd-ff60-73e5-a2a7f09746f0@gmail.com>
-Date: Sun, 23 Jan 2022 16:48:22 +0100
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=cNWpYJaEUb4++wiSR7HvBPXldgJ0SXsGYZik2GUpO9M=;
+ b=Elc6a5n7b05WW4Q8qt2ldtO4XJdlyie3MRznmDmOzIbzouN8OcFz5Af6XQm9pdYGxs
+ Kw3f27HZktVPMU1Hd8KYa5w3k/yiXzCPj1X3cK8eyGd1mUqE6kOlAiYkx70dbvRdNX6N
+ Go8mtTgOMQnc2/BmwhJq4v8ux4U1Ahcb5BcE/TVQJ33Fqu5awt8wK9/yhqDs2ruyLPHI
+ /OEnKojAfthFSy00x0o+vknHiO1E96HM+FcMWW9+tkrXYA5A8iOfXvQOp7lQkNJEBMJB
+ sgzDPIW4zhPx+TY16I5FnaHrWpn8su4Oz2JuGXnHrh9VYI23gEmlPoeaSAf2R2rOw+Dk
+ Ma6Q==
+X-Gm-Message-State: AOAM533bd4iKlOEf9RYZ/ioPE7Uc5aXc9R4Ae4Ykc2FJd73QKwRbyq6M
+ XVf8NuI8evOGeTk0nmsNLWRFdVhQPzU=
+X-Google-Smtp-Source: ABdhPJx45mPJ8RYGKsGVAWHTXsFD9nerHy8IenuPRQ2c7xdQxskQTiUao95ATvI4lBfI2PYJfTqqOA==
+X-Received: by 2002:a9d:4719:: with SMTP id a25mr9191972otf.35.1642954160280; 
+ Sun, 23 Jan 2022 08:09:20 -0800 (PST)
+Received: from localhost.localdomain ([179.232.77.5])
+ by smtp.gmail.com with ESMTPSA id f2sm4282763oiw.50.2022.01.23.08.09.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Jan 2022 08:09:19 -0800 (PST)
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 23 Jan 2022 13:08:44 -0300
+Message-Id: <20220123160847.2653086-2-ricardo.martincoski@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220123160847.2653086-1-ricardo.martincoski@gmail.com>
+References: <20220123160847.2653086-1-ricardo.martincoski@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20220122153714.26991-1-peter@korsgaard.com>
- <20220122153714.26991-3-peter@korsgaard.com>
- <bde7ae07-e97b-592a-1680-da61af531fe8@gmail.com>
- <f427a5f8-c19a-4f13-c8ce-b1c2ca75432d@korsgaard.com>
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <f427a5f8-c19a-4f13-c8ce-b1c2ca75432d@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH 3/3] configs/qemu_aarch64_virt_defconfig:
- bump Linux kernel to 5.15.16
+Subject: [Buildroot] [PATCH v2 2/4] support/docker: add python3-pytest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,45 +85,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUGV0ZXIsCgpMZSAyMy8wMS8yMDIyIMOgIDE1OjQ4LCBQZXRlciBLb3JzZ2FhcmQgYSDD
-qWNyaXTCoDoKPiBPbiAyMy8wMS8yMDIyIDExLjU2LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gCj4+
-PiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4xNSIKPj4+ICtCUjJf
-TElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1LjE1LjE2Igo+Pgo+PiBXaHkganVz
-dCBvbmx5IHRha2luZyBjYXJlIG9mIHRoaXMgZGVmY29uZmlnID8KPiAKPiBTaW1wbHkgYmVjYXVz
-ZSBJIGRpZCBzb21lIG90aGVyIGNoYW5nZXMgdG8gaXQgKHNlZSB0aGUgb3RoZXIgcGF0Y2hlcyBp
-biB0aGUKPiBzZXJpZXMpLgo+IAo+PiBNb3N0IHFlbXUgZGVmY29uZmlnIGFyZSB1c2luZyB0aGUg
-c2FtZSBrZXJuZWwgdmVyc2lvbiAoNS4xNSkuIFVzdWFsbHkgd2UgdHJ5IHRvCj4+IGtlZXAgYWxs
-IG9mIHRoZW0gaW4gc3luYy4KPiAKPiBPay4KClRvIHRlc3QgYWxsIHFlbXUgZGVmY29uZmlnIGlu
-IGdpdGxhYiB5b3UgY2FuIHB1c2ggYSBicmFuY2ggbmFtZWQKImtlcm5lbC01LjE1LjE2LWRlZmNv
-bmZpZ3MtcWVtdSIKCldoZXJlOiAia2VybmVsLTUuMTUuMTYiIGlzIGEgcHJlZml4LCAiLWRlZmNv
-bmZpZ3MtIiB0cmlnZ2VyIGEgcGlwZWxpbmUgZm9yCnRlc3RpbmcgQnVpbGRyb290IGRlZmNvbmZp
-cyBhbmQgInFlbXUiIGlzIGEgcGF0dGVybiB0byBtYXRjaCBhbGwgZGVmY29uZmlnIG5hbWVkCnFl
-bXUqLgoKU2VlOgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9j
-b21taXQvNjVkMmYwNGMwMTJhZjQ5MmE5YjlkYTA0ZGZhM2IzY2JkMjAzNDdmMQoKVGhlIGtlcm5l
-bCA1LjE1IGlzIG5vdCBhcyBvbGQsIGRvIHdlIHdhbnQgdG8gZm9sbG93IGNsb3NlbHkgdGhlIGxh
-dGVzdCBrZXJuZWwKdmVyc2lvbiBmb3IgUWVtdSBkZWZjb25maWdzPyBCdXQgaXQncyBhbm5veWlu
-ZyB0byBtb2RpZnkgZWFjaCB0aW1lIHRoZSBrZXJuZWwKdmVyc2lvbiBpbiBzZXZlcmFsIHBsYWNl
-LgoKPiAKPj4gU2luY2UgUWVtdSBkZWZjb25maWdzIGFyZSBydW50aW1lIHRlc3RlZCBlYWNoIHdl
-ZWsgaW4gR2l0TGFiLUNJIG1heWJlIHdlIGNhbgo+PiBzYWZlbHkgc3dpdGNoIHRvIEJSMl9MSU5V
-WF9LRVJORUxfTEFURVNUX1ZFUlNJT04gaW5zdGVhZCA/Cj4+IEJ1dCB3ZSBoYXZlIHRvIGNoZWNr
-IHFlbXUgZGVmY29uZmlncyB1c2luZyBhIGxvY2FsIGtlcm5lbCBwYXRjaCwgY3VycmVudGx5Cj4+
-IHBwYy1tcGM4NTQ0ZHMgYW5kIGFybS12ZXJzYXRpbGUgb3Iga2VlcGluZyBrZXJuZWwgY3VzdG9t
-IHZlcnNpb24gZm9yIHRoZW0uCj4+Cj4+IEFsc28gQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1RfVkVS
-U0lPTiByZWZlciB0byB0aGUgbGF0ZXN0IHN0YWJsZSBrZXJuZWwgdmVyc2lvbiwKPj4gbm90IHRo
-ZSBsYXRlc3QgbHRzIHZlcnNpb24uCj4gCj4gVGhhdCB3b3VsZCBtZWFuIHRoYXQgdGhleSBhcmUg
-bm90IHJlYWxseSByZXByb2R1Y2libGUsIHNvIEkgZG9uJ3QgcmVhbGx5IGxpa2UgaXQuCgpGb3Ig
-YSBnaXZlbiBCdWlsZHJvb3QgdmVyc2lvbiBCUjJfTElOVVhfS0VSTkVMX0xBVEVTVF9WRVJTSU9O
-IGlzIHNldCB3aXRoIGEKZGVmYXVsdCBrZXJuZWwgdmVyc2lvbi4KCkFjdHVhbGx5IGRlZmNvbmZp
-Z3MgYXJlIGFscmVhZHkgbm90IHJlcHJvZHVjaWJsZSBzaW5jZSB0aGUgaW50ZXJuYWwgdG9vbGNo
-YWluCmNvbXBvbmVudHMgdmVyc2lvbiB1c2UgdGhlIGRlZmF1bHQgdmVyc2lvbi4KQnV0IGluZGVl
-ZCwgdGhlIGtlcm5lbCB2ZXJzaW9uIGNoYW5nZSBmYXN0ZXIgdGhhbiB0aGUgdG9vbGNoYWluLgoK
-QmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IC0tIAo+IEJ5ZSwgUGV0ZXIgS29yc2dhYXJkCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+... so the unit tests for check-package can run in the GitLab CI.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Acked-by: Romain Naour <romain.naour@smile.fr>
+---
+Changes v1 -> v2:
+  - none
+---
+ support/docker/Dockerfile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 5ca087546e..120e301b7c 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -41,6 +41,7 @@ RUN apt-get install -y --no-install-recommends \
+         python3-flake8 \
+         python3-nose2 \
+         python3-pexpect \
++        python3-pytest \
+         qemu-system-arm \
+         qemu-system-x86 \
+         rsync \
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
