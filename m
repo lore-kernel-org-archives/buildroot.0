@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA31BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FDE3C433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 762904012E;
-	Sun, 23 Jan 2022 19:50:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1864440345;
+	Sun, 23 Jan 2022 19:52:28 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1IZ6cn6DCts2; Sun, 23 Jan 2022 19:50:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kUmpxeJvmShq; Sun, 23 Jan 2022 19:52:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 500804014C;
-	Sun, 23 Jan 2022 19:50:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E38C4033A;
+	Sun, 23 Jan 2022 19:52:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 571351BF406
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 575021BF97A
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45FEF60C2B
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53D4060C2B
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7yeG8yLdmBXW for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 19:49:56 +0000 (UTC)
+ with ESMTP id smTyZOQVMiE2 for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8694660C2A
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:49:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E0277829F4; Sun, 23 Jan 2022 19:43:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77843600CA
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id CC94782B4C; Sun, 23 Jan 2022 19:45:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:47:26 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: c756e6ac7b14684712f85fcdc18598431f081a72
-X-Git-Newrev: 1eb325609509caa6eced3220f88434add8e08125
+Date: Sun, 23 Jan 2022 20:49:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4b44e7d988569778d952e9ad3e7e76cfe75bbe7e
+X-Git-Newrev: 6a42e347222a2d04947d2e6985ea241ce593a0ad
 X-Patchwork-Hint: ignore
-Message-Id: <20220123194309.E0277829F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/apache: security
- bump to version 2.4.52
+Message-Id: <20220123194537.CC94782B4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nmon: bump to version 16n
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,72 +58,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eb325609509caa6eced3220f88434add8e08125
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6a42e347222a2d04947d2e6985ea241ce593a0ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Update indentation in hash file (two spaces)
 
-  *) SECURITY: CVE-2021-44790: Possible buffer overflow when parsing
-     multipart content in mod_lua of Apache HTTP Server 2.4.51 and
-     earlier (cve.mitre.org)
-     A carefully crafted request body can cause a buffer overflow in
-     the mod_lua multipart parser (r:parsebody() called from Lua
-     scripts).
-     The Apache httpd team is not aware of an exploit for the
-     vulnerabilty though it might be possible to craft one.
-     This issue affects Apache HTTP Server 2.4.51 and earlier.
-     Credits: Chamal
-
-  *) SECURITY: CVE-2021-44224: Possible NULL dereference or SSRF in
-     forward proxy configurations in Apache HTTP Server 2.4.51 and
-     earlier (cve.mitre.org)
-     A crafted URI sent to httpd configured as a forward proxy
-     (ProxyRequests on) can cause a crash (NULL pointer dereference)
-     or, for configurations mixing forward and reverse proxy
-     declarations, can allow for requests to be directed to a
-     declared Unix Domain Socket endpoint (Server Side Request
-     Forgery).
-     This issue affects Apache HTTP Server 2.4.7 up to 2.4.51
-     (included).
-
-For more details, see the changes file:
-https://downloads.apache.org/httpd/CHANGES_2.4.52
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bdc3f6888f669919bf8820be1eb75340b48ee7e1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
+ package/nmon/nmon.hash | 6 +++---
+ package/nmon/nmon.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 138717c336..014d920772 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
+index fd3f09c63a..1d7226a4fe 100644
+--- a/package/nmon/nmon.hash
++++ b/package/nmon/nmon.hash
 @@ -1,5 +1,5 @@
--# From https://downloads.apache.org/httpd/httpd-2.4.51.tar.bz2.{sha256,sha512}
--sha256  20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4  httpd-2.4.51.tar.bz2
--sha512  9fb07c4b176f5c0485a143e2b1bb1085345ca9120b959974f68c37a8911a57894d2cb488b1b42fdf3102860b99e890204f5e9fa7ae3828b481119c563812cc66  httpd-2.4.51.tar.bz2
-+# From https://downloads.apache.org/httpd/httpd-2.4.52.tar.bz2.{sha256,sha512}
-+sha256  0127f7dc497e9983e9c51474bed75e45607f2f870a7675a86dc90af6d572f5c9  httpd-2.4.52.tar.bz2
-+sha512  97c021c576022a9d32f4a390f62e07b5f550973aef2f299fd52defce1a9fa5d27bd4a676e7bf214373ba46063d34aecce42de62fdd93678a4e925cfcbb2afdf6  httpd-2.4.52.tar.bz2
+ # From https://sourceforge.net/projects/nmon/files/
+-md5 df67f07ea4006c6204acff586beada81  lmon16m.c
+-sha1 68cd02be19036a287fe352823db93223e73a9411  lmon16m.c
++md5  a8172601fdc05f3bc58455cbd3f4475e  lmon16n.c
++sha1  024a3b56179838f0e04bf1706cc9ba56595301a8  lmon16n.c
  # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index ff01b25106..5fcb887fbc 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+-sha256 2bed4d45fdfdf1d1387ec91e139c04975d5f838e3e0d53c0fe2d803a707e5fc1  lmon16m.c
++sha256  c0012cc2d925dee940c37ceae297abac64ba5a5c30e575e7418b04028613f5f2  lmon16n.c
+diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
+index 8b39748cce..01371a8c74 100644
+--- a/package/nmon/nmon.mk
++++ b/package/nmon/nmon.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.51
-+APACHE_VERSION = 2.4.52
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
+-NMON_VERSION = 16m
++NMON_VERSION = 16n
+ NMON_SITE = https://sourceforge.net/projects/nmon/files
+ NMON_SOURCE = lmon$(NMON_VERSION).c
+ NMON_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
