@@ -4,78 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C2D6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 09:50:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62A3EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 09:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD1FC60B0E;
-	Sun, 23 Jan 2022 09:50:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15E7660AFB;
+	Sun, 23 Jan 2022 09:51:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YPOtvT5MllWu; Sun, 23 Jan 2022 09:50:49 +0000 (UTC)
+	with ESMTP id a5Gay8-AdP4l; Sun, 23 Jan 2022 09:51:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2893D60AFB;
-	Sun, 23 Jan 2022 09:50:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FE2B60AF1;
+	Sun, 23 Jan 2022 09:51:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DAB521BF57F
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 09:50:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 57B721BF57F
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 09:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D749D4067F
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 09:50:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 464614067F
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 09:50:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GQsngnBv8-J5 for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 09:50:35 +0000 (UTC)
+ with ESMTP id KdlzDi0D-weT for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 09:50:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 309E64067C
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 09:50:35 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id l25so8089683wrb.13
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 01:50:35 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 547054067C
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 09:50:36 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ az27-20020a05600c601b00b0034d2956eb04so25569440wmb.5
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 01:50:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=OMfR4oOJ6i5ho+cyFnywMtWFBxtxPpKJT8miuk5s8ak=;
- b=W6l50RX7BxXVeM5IZl9vbvMN9iY3QKVbe7gNbE3gpCNxAUHhC25KtC9IG/roOrronF
- z+eWjjEjhc5IMM1DA5M2wQ8vpEauk/kdWyQx8Rm1GZi8F8Cui0f2MkXhD0/Z1fFKks4b
- WZTkLHWND0V/aCCBMWO8GwhB0AeLZNjYbrCzBhSmObGvi6AtdnOmBoprIp44DhM5pSxY
- U+fVEopRwV0ZQOxVsL67KFtRPQZpyv78K6pSjpXHbglOOc3BE7lx4ORzDYwBBZwDjfZC
- XCMXp2dN9OKeNljDhfVHU4XOhgtG7GzSndWDaBApaZMjRVPdervXWUlD9sQKFBItEoIG
- 9xjQ==
+ bh=eNSjjbHju/89FiANAsIY3GS2/XWjBeOVCnp2+sNyxB8=;
+ b=etNkvDwfSTkjjAiEfxSwEgSuZW42SwOsv+8C+lIW08o6rqbcVzM82IAQqB6dYpVQ+W
+ OPGwUU8UjYlu27Ks1YtlRLIb9HJ9JS7dW9ac1ucHhntBr0ovhtphCGwb/Nnw59qm617G
+ PNFfVmuXW3ttQuktAR+d+wUsbYUUECaJowLtX6OguqiVCb2+KjBdtY0oWmnrlk/brNvy
+ 3gRZ8zWgvtC1BuE9/A5Yrq7EdF3xOYCUo9ckq3ifeCANabzM4AMrgUcgstIQha+Ueb0B
+ 0MbGsDiiXmTirLrGlbGL0p+ulb0vbHnI/B1VXxJsr6MsI7ZZKK/hzpoCntDirh8NxjiO
+ Zn5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=OMfR4oOJ6i5ho+cyFnywMtWFBxtxPpKJT8miuk5s8ak=;
- b=McTHMUc/83ax/+meGtwpKt2Ob/rIQ6IIXTbeWQnYE+2Zb6O/rvGJLs32drV//T6a94
- b746CM2K6rfgiBHq8tI2Q1qqmPX8RBhR4pK6eXAywH/uu1Ss1nPpELvgfVD4JPeHRr9a
- EssWXFh0TURfQlhFvLURZbycjsVQU0o/Pf7XZFwkwW5/2L5Sk+mLz8NIm0B0bmbBEgJ0
- FBfuCc9WAn9rQ2gWPHqYxfq8ItbgwpSI3e4svOPCucR21FmO6BSVHrWRv4STGNqremK8
- gebJxLa1FqkB6vnBVNWb/vgqbSSzNo69F0+4D5TacI6DARCmftBvZSkjDWSCpstnTstI
- G9tg==
-X-Gm-Message-State: AOAM530oZ5h1+jdxZHFXe8e6dYfANkUvVhKHMlRtKnKHqHN5WmqxYcSG
- JPJazIhltkXLZGjH2w0UYNhKYTXrXsM=
-X-Google-Smtp-Source: ABdhPJxfQ9eIvmr1xFv4CLyg5Wy1tWrD/YL/oT6gbvjCwmJkBr/WfP6RJG5KWtlTB2EkgpVa46xsEA==
-X-Received: by 2002:adf:9f14:: with SMTP id l20mr10236510wrf.65.1642931433369; 
- Sun, 23 Jan 2022 01:50:33 -0800 (PST)
+ bh=eNSjjbHju/89FiANAsIY3GS2/XWjBeOVCnp2+sNyxB8=;
+ b=sR38hFa73DT2PSY6HVAT6K/7aVKwSW6CNu3OUIOr/JE3XV9QwAdhJN1AV8Wd5nxbBX
+ tSCQ3fPUWQA2dOxWKsFQbPdbZZMUxExXPI6U+ftXO6iVF24PaLcEkOd59i2GYt9L8PLx
+ uX4Q08wRDLnR+s4fk38shxVDLRESTcuWORaoxWhgJ3eIdN/4Vc4egHC/Ozsypn4EgHgB
+ o9TuzYwpfNT/NL9dx4qIZs5j7e+3YcEm3x9lgbwWTkJBMC2Q42eRwUOhylzn8C7y1jhP
+ 5SmQe1YYFdPRnq5kA7r1qmA0AKa0IlYUFCiDo9N7Xk0AhoWDG8KaPNbqwrn8crp4BgLH
+ 1VNQ==
+X-Gm-Message-State: AOAM5339xHqRGzD9F1z/RLneZvPhIYb9TUjV+FqMI81OUhyKPLT5bMxv
+ kOVBANzu+uFHn0azEqA03viY22rcHbE=
+X-Google-Smtp-Source: ABdhPJy2qwPDXNndaf6IG0jjVz6oAYAXvpOTWTSLqjdc7iJFGZ4li7hYnwhAT3SCRcqJmGcAFo0VQg==
+X-Received: by 2002:a1c:cc0f:: with SMTP id h15mr7378040wmb.38.1642931434467; 
+ Sun, 23 Jan 2022 01:50:34 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id l24sm9773505wme.17.2022.01.23.01.50.32
+ by smtp.gmail.com with ESMTPSA id l24sm9773505wme.17.2022.01.23.01.50.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 01:50:32 -0800 (PST)
+ Sun, 23 Jan 2022 01:50:34 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 10:48:46 +0100
-Message-Id: <20220123094850.491817-2-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jan 2022 10:48:47 +0100
+Message-Id: <20220123094850.491817-3-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220123094850.491817-1-fontaine.fabrice@gmail.com>
 References: <20220123094850.491817-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/6] package/lighttpd: add zstd support
+Subject: [Buildroot] [PATCH 3/6] package/lighttpd: add brotli support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,51 +97,86 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lighttpd/Config.in   | 6 ++++++
- package/lighttpd/lighttpd.mk | 8 +++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ ...uild-meson-fix-typo-in-variable-name.patch | 25 +++++++++++++++++++
+ package/lighttpd/Config.in                    |  6 +++++
+ package/lighttpd/lighttpd.mk                  |  8 +++++-
+ 3 files changed, 38 insertions(+), 1 deletion(-)
+ create mode 100644 package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch
 
+diff --git a/package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch b/package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch
+new file mode 100644
+index 0000000000..d338979d46
+--- /dev/null
++++ b/package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch
+@@ -0,0 +1,25 @@
++From 876a1e1b2cc21282a0df5245004197cdffe1d380 Mon Sep 17 00:00:00 2001
++From: Glenn Strauss <gstrauss@gluelogic.com>
++Date: Thu, 20 Jan 2022 07:04:51 -0500
++Subject: [PATCH] [build] meson: fix typo in variable name
++
++[Retrieved from:
++https://github.com/lighttpd/lighttpd1.4/commit/876a1e1b2cc21282a0df5245004197cdffe1d380]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/meson.build b/src/meson.build
++index 4ee163468..b35c1037f 100644
++--- a/src/meson.build
+++++ b/src/meson.build
++@@ -266,7 +266,7 @@ endif
++ libbrotli = []
++ if get_option('with_brotli')
++ 	libbrotli = [ compiler.find_library('brotlienc') ]
++-	if compiler.has_function('BrotliEncoderCreateInstance', args: defs, dependencies: libbrotlienc, prefix: '#include <brotli/encode.h>')
+++	if compiler.has_function('BrotliEncoderCreateInstance', args: defs, dependencies: libbrotli, prefix: '#include <brotli/encode.h>')
++ 		conf_data.set('HAVE_BROTLI_ENCODE_H', true)
++ 		conf_data.set('HAVE_BROTLI', true)
++ 	else
 diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index 59c1e0b2a6..05a7c84961 100644
+index 05a7c84961..f3e252d850 100644
 --- a/package/lighttpd/Config.in
 +++ b/package/lighttpd/Config.in
-@@ -65,4 +65,10 @@ config BR2_PACKAGE_LIGHTTPD_ZLIB
- 	help
- 	  Enable zlib support for lighttpd mod_deflate.
+@@ -21,6 +21,12 @@ config BR2_PACKAGE_LIGHTTPD
  
-+config BR2_PACKAGE_LIGHTTPD_ZSTD
-+	bool "zstd support"
-+	select BR2_PACKAGE_ZSTD
+ if BR2_PACKAGE_LIGHTTPD
+ 
++config BR2_PACKAGE_LIGHTTPD_BROTLI
++	bool "brotli support"
++	select BR2_PACKAGE_BROTLI
 +	help
-+	  Enable zstd support for lighttpd mod_deflate.
++	  Enable brotli support for lighttpd mod_deflate.
 +
- endif
+ config BR2_PACKAGE_LIGHTTPD_BZIP2
+ 	bool "bzip2 support"
+ 	select BR2_PACKAGE_BZIP2
 diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index bdbf75191c..4f05db4e29 100644
+index 4f05db4e29..22db1a7348 100644
 --- a/package/lighttpd/lighttpd.mk
 +++ b/package/lighttpd/lighttpd.mk
-@@ -32,7 +32,6 @@ LIGHTTPD_CONF_OPTS = \
- 	-Dwith_wolfssl=false \
- 	-Dwith_xattr=false \
- 	-Dwith_xxhash=true \
--	-Dwith_zstd=false \
- 	-Dbuild_extra_warnings=false \
+@@ -13,7 +13,6 @@ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd
+ LIGHTTPD_DEPENDENCIES = host-pkgconf xxhash
+ LIGHTTPD_CONF_OPTS = \
+-	-Dwith_brotli=false \
+ 	-Dwith_dbi=false \
+ 	-Dwith_fam=false \
+ 	-Dwith_gnutls=false \
+@@ -36,6 +35,13 @@ LIGHTTPD_CONF_OPTS = \
  	-Dbuild_static=false \
  	-Dmoduledir=lib/lighttpd
-@@ -92,6 +91,13 @@ else
- LIGHTTPD_CONF_OPTS += -Dwith_zlib=false
- endif
  
-+ifeq ($(BR2_PACKAGE_LIGHTTPD_ZSTD),y)
-+LIGHTTPD_DEPENDENCIES += zstd
-+LIGHTTPD_CONF_OPTS += -Dwith_zstd=true
++ifeq ($(BR2_PACKAGE_LIGHTTPD_BROTLI),y)
++LIGHTTPD_DEPENDENCIES += brotli
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=true
 +else
-+LIGHTTPD_CONF_OPTS += -Dwith_zstd=false
++LIGHTTPD_CONF_OPTS += -Dwith_brotli=false
 +endif
 +
- define LIGHTTPD_INSTALL_CONFIG
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_BZIP2),y)
+ LIGHTTPD_DEPENDENCIES += bzip2
+ LIGHTTPD_CONF_OPTS += -Dwith_bzip=true
 -- 
 2.34.1
 
