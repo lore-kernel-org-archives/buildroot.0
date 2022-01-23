@@ -1,67 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF5BC433F5
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A570C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 20:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A396405E3;
-	Sun, 23 Jan 2022 19:55:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CED8403C1;
+	Sun, 23 Jan 2022 20:03:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KDGnmadRTGFk; Sun, 23 Jan 2022 19:55:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0734F40253;
-	Sun, 23 Jan 2022 19:55:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4658C1BF406
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:55:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 357FB40867
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:55:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ms3Jt8PZF7Vg for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 19:55:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 487F240333
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:55:00 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:a491:f028:92d2:337e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A5EFA5FFA7;
- Sun, 23 Jan 2022 20:54:55 +0100 (CET)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l_wwJtivaq86; Sun, 23 Jan 2022 20:03:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A884403B4;
+	Sun, 23 Jan 2022 20:03:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E84A1BF406
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 20:03:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68A7B4014C
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 20:03:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iuphoDKwurO7 for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 20:03:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3DDD4012E
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 20:03:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.59])
+ by smtp3-g21.free.fr (Postfix) with ESMTP id C41C513F89D;
+ Sun, 23 Jan 2022 21:03:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1642967698;
- bh=ecDQhV4DBe95fq8InqLyAgklhNsdzVMZAEXXJvr6QXw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Oq/LM+2pEZVrcchBWfkFU9I/nqFt1HB32Qcznv2WSKJlzvuR0olD7c5jVuavN+qch
- dZ718vuOR4hBsu6XAeDxHzJkVZrTMxXTcR2Cb7CkKT+5CbYLGhp1ukjp1q6XQhTvjc
- FQp1IWczjT1EMihLV5cW8bsDpRTw+M7K/DW924028VUhngDx+ENN3kw2A1hDlKpMm7
- cf289uFd3K6RKPdCQOOYQFeCsTPLk90bVAdcQtdeMaRPQIE4FtgXnuFYxF41U0Bhlr
- STZwLWf600stC0uG22FlyPYzu1+lhKFC3x4Qqg99a7K8LIMI2pE+Tgk93zyFZbmG6U
- CnZu8nsOReUEQ==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Jan 2022 20:54:55 +0100
-Date: Sun, 23 Jan 2022 20:54:55 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220123195455.GG2502@scaer>
-References: <20220123134751.703269-1-fontaine.fabrice@gmail.com>
- <20220123134751.703269-2-fontaine.fabrice@gmail.com>
+ s=smtp-20201208; t=1642968201;
+ bh=8j5G4lmNwOUpUUqJxBcw7fxNQILcaoqFU7zhxNuk9Cw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=H1hx500Il1jemX8WnyDEmvsVRPiCPFK3TUQ0kQkAwsTqVzAiBWW+22DE++AwUgyJL
+ NCtwG4d66s3Uw+AmJX6CH588KrEgLXko0aeB7hj2jK9pevTTm4ejUTa2nA8eE2NfYf
+ WwxIn2PfG+avhqKhOgGHig60anYP/CY+qWfpmHK/SyY6y1bTi1WTFEHR9p3EX822BK
+ cDNv46+hdayN3/pdGdgr9kAOkeWREu2hIUSdRpjxEPbrdsVXS7l5G1Jz//ROMwW0hm
+ 94mPxwEmmUMVI9zMgnhtjdorItZwgO2KUP6/4QrO/WFLbK/ld/qgsq3CUteHooOO3+
+ p5CwkH3H6rw2Q==
+Received: from [37.164.138.195]
+	by webmail.free.fr
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220123134751.703269-2-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 2/2] package/libpjsip: security bump to
- version 2.11.1
+Date: Sun, 23 Jan 2022 21:03:21 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20220119202351.GA3095239@scaer>
+References: <20220115160449.2292472-1-fontaine.fabrice@gmail.com>
+ <20220119202351.GA3095239@scaer>
+Message-ID: <c4c033a6c8012a54043d4f1e28678834@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/riscv-isa-sim: set --with-boost
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,82 +70,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All
+Hi Yann,
 
-On 2022-01-23 14:47 +0100, Fabrice Fontaine spake thusly:
-> Security update. This version is recommended for all users to improve
-> the security of applications using PJSIP.
+On 19/01/2022 21:23, Yann E. MORIN wrote:
+> Fabrice, All,
 > 
-> Fix CVE-2020-15260, CVE-2021-21375 and CVE-2021-32686
+> On 2022-01-15 17:04 +0100, Fabrice Fontaine spake thusly:
+>> Set --with-boost to avoid the following build failure when a non 
+>> working
+>> boost version is installed on host. This failure is raised since the
+>> addition of the package in commit
+>> ea033cecf990ed3f86619647523a9ad2ccb09adb:
+>> 
+>> configure:5559: error: Could not find a version of the Boost::Asio 
+>> library!
+>> 
+>> Fixes:
+>>  - 
+>> http://autobuild.buildroot.org/results/855b66b86d979cc922b947da932b0e2388481263
+>> 
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> ---
+>>  package/riscv-isa-sim/riscv-isa-sim.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/package/riscv-isa-sim/riscv-isa-sim.mk 
+>> b/package/riscv-isa-sim/riscv-isa-sim.mk
+>> index ee9067d304..90eed93c36 100644
+>> --- a/package/riscv-isa-sim/riscv-isa-sim.mk
+>> +++ b/package/riscv-isa-sim/riscv-isa-sim.mk
+>> @@ -9,5 +9,6 @@ RISCV_ISA_SIM_SITE = $(call 
+>> github,riscv-software-src,riscv-isa-sim,v$(RISCV_ISA
+>>  RISCV_ISA_SIM_LICENSE = BSD-3-Clause
+>>  RISCV_ISA_SIM_LICENSE_FILES = LICENSE
+>>  HOST_RISCV_ISA_SIM_DEPENDENCIES = host-boost host-dtc
+>> +HOST_RISCV_ISA_SIM_CONF_OPTS = --with-boost=$(HOST_DIR)
 > 
-> Update indentation in hash file (two spaces)
+> To be noted: riscv-isa-sim could also be configured with 
+> --without-boost
+> and the build succeeds.
 > 
-> https://github.com/pjsip/pjproject/security/advisories/GHSA-8hcp-hm38-mfph
-> https://github.com/pjsip/pjproject/security/advisories/GHSA-hvq6-f89p-frvp
-> https://github.com/pjsip/pjproject/security/advisories/GHSA-cv8x-p47p-99wr
-> https://github.com/pjsip/pjproject/releases/tag/2.11
-> https://github.com/pjsip/pjproject/releases/tag/2.11.1
+> Anyway: applied to master, thanks.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Julien, do you know what ill-effect building without Boost would have?
 
-Applied to master, thanks.
+The absence of Boost is removing the "Command I/O via socket" feature of
+riscv-isa-sim (-s command line option).  See:
+https://github.com/riscv-software-src/riscv-isa-sim/blob/v1.1.0/spike_main/spike.cc#L30
+It's generally not needed in simple use-cases.
 
-Regards,
-Yann E. MORIN.
+My initial intent was to have host-riscv-isa-sim compiled without this 
+Boost
+support.
 
-> ---
->  package/libpjsip/libpjsip.hash | 4 ++--
->  package/libpjsip/libpjsip.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+The upstream riscv-isa-sim detection of boost seems a bit peculiar and 
+does not
+really honor --without-boost/--without-boost-regex/--without-boost-asio.
+
+Setting --without-boost alone on a system with boost will make the 
+./configure
+fail with:
+
+     checking whether the Boost::ASIO library is available... yes
+     configure: error: Could not find a version of the Boost::Asio 
+library!
+
+Setting --without-boost --without-boost-regex --without-boost-asio will 
+end up
+with a successful configuration/compilation, but with a binary linked 
+with
+libboost_regex.so and libboost_system.so...
+
+I believe this part could be slightly improved before setting 
+--without-boost
+in the BR recipe.  I'll have a look into that.
+
+Best regards,
+
+Julien.
+
+> Regards,
+> Yann E. MORIN.
 > 
-> diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-> index 68c2208885..f39ebf4060 100644
-> --- a/package/libpjsip/libpjsip.hash
-> +++ b/package/libpjsip/libpjsip.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256	936a4c5b98601b52325463a397ddf11ab4106c6a7b04f8dc7cdd377efbb597de	pjproject-2.10.tar.gz
-> -sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-> +sha256  45f6604372df3f49293749cd7c0b42cb21c4fb666c66f8ed9765de004d1eae38  pjproject-2.11.1.tar.gz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index 771db0ac72..b05cc31a83 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -LIBPJSIP_VERSION = 2.10
-> +LIBPJSIP_VERSION = 2.11.1
->  LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
->  LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
-> -# https://github.com/pjsip/pjproject/archive/2.10.tar.gz
-> +# https://github.com/pjsip/pjproject/archive/2.11.1.tar.gz
->  
->  LIBPJSIP_DEPENDENCIES = libsrtp
->  LIBPJSIP_LICENSE = GPL-2.0+
-> -- 
-> 2.34.1
+>>  $(eval $(host-autotools-package))
+>> --
+>> 2.34.1
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___        
+>        |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There 
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
+> conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
