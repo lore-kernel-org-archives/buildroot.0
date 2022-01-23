@@ -1,77 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF892C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 22:09:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D0EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 22:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5036840338;
-	Sun, 23 Jan 2022 22:09:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BB804011F;
+	Sun, 23 Jan 2022 22:15:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CJuXDQJmp4dS; Sun, 23 Jan 2022 22:09:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w3MFFYf-VfI9; Sun, 23 Jan 2022 22:15:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B3FE4030D;
-	Sun, 23 Jan 2022 22:09:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4AB441BF2F9
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:09:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4063740636;
+	Sun, 23 Jan 2022 22:15:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9034A1BF2F9
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38F014030D
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:09:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BEE940613
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:15:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wGmunEqH9-sZ for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 22:09:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vanQuRbPB4bP for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 22:15:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1E176402EE
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 22:09:14 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id v13so10188041wrv.10
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 14:09:14 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 80C5940616
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 22:15:41 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ f202-20020a1c1fd3000000b0034dd403f4fbso23091780wmf.1
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 14:15:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=nyyKEAlLaJPvVBPkzk5y/iBLPvd4zJ9jHeIUbrgUzYQ=;
- b=i8UCzoJmxwzp0Me8b0cEOzSakSB7GDtO/kpaJ974y+j8hHnwB+1cCGMeg0ixxS5iPc
- 87aXijACaECoUrT5mg8zDl5VlUJGfwgmS1Vn1RhUdeNdmSZ8WPYdYZLCem6y3Jp1HEMs
- wuSZVHRK058leSgICyt9Pdvj4TO4tT+F7OTFt765fq2Vk/wd52P1Qox9xPez+TvqvOk2
- WaQpVIvD8CZtFGA/OhDlSahqxu7hbFU0wdd2g14WP5Xn7B9lURQzEQy3YN2nym0Zxlku
- 6AsWpV67qzgSPxtDSbMjmE6/ilUIgi+KTGQro4dEqlt4DHWRmNLz+5A/8S+3puHeNrWt
- ZEdg==
+ bh=D0FtcOxqb+9urubVbqKJeSEvhjjxXycMBeS/NZWRhRo=;
+ b=B7d/izLmS3UF9PqelZDF3UeNiw4hATp16Jq7U9YCDWCOxytQ+E9hhn2Fy63SgjxVWF
+ FFfp3WSxx3IJ6KhpfUpMTChJVjGF33tq38v5GWoxD+sAD9U5PThaRNw2EbczzhZkhrBh
+ 18AJy5HS6KPh9KZgKWe4dX1zSkhA/03Sks+FxF9/+UAmyW1ltQMnaNfVK7WpFSBpa7XF
+ 0bx77kAnlR7HRvXQkY6FH8Cid12ln7nPRsPzLOgcIWyRHToCODDvEEQTNknJot5Vl6Rx
+ X5yo3K6KXzaav7rQKUyf/20lfc3aKb/qIa2ZgqfrYOGbE4bXX0S9I4dgKJIEIICqNzbJ
+ U23g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=nyyKEAlLaJPvVBPkzk5y/iBLPvd4zJ9jHeIUbrgUzYQ=;
- b=mqnWWSn6ZjjKvglXXgfQbzl2IMXdUs96WaiBEmsfcMMsK05AFGT7fNMYpefEmvfgqI
- 1PUjZkwOALpMNPRSwIOFJlYbkyBfBKdXNyBUxpClQ1XH7cGDZGDRAZ0QSvN5PzlpVQEI
- /vlbMnrVymXRzJGALacv/G+XfmtmYYbTVWncNCwNsg0aMgPwwHRRubjYYxo5veF0O49/
- 7Ar3Zn8I5o/YzcN+F9dIXb6Xu7o6+4eYFccrwLt4UgOq6C67EN4dWBK04skrMF8R1K3R
- dFLIxQEehrmj8xzfEuGQ3gV/TgwuJjUY3sEkCTv2V8r+IAvfKr6Ac6FaB8jREj8mS9h9
- y/TQ==
-X-Gm-Message-State: AOAM533qrBldgxxSid08MUpk+YhTxG42w2PgMFUjIgUv78neefAua1UB
- gqTdBKJg3VSnU4Wkf4ToOWTVlnAF87Y=
-X-Google-Smtp-Source: ABdhPJykHQI+Y1ApKf71SjpvZP7nf57beT0Vh+5EpCYka/BFcXmsNc67knAMwXJBp/tpKAZBzgbEDw==
-X-Received: by 2002:a5d:58c8:: with SMTP id o8mr11725171wrf.549.1642975753076; 
- Sun, 23 Jan 2022 14:09:13 -0800 (PST)
+ bh=D0FtcOxqb+9urubVbqKJeSEvhjjxXycMBeS/NZWRhRo=;
+ b=Bvl/Fx+3lqxxV5jLwttYN6tr+leQCEUlKc0NpfZOBEPuvdtW3mVNqwwiIRcDvEGTKy
+ V2F0/oKoN84yhzMIWmvwCNzW1PC+kQ63qRL1WauwoFWXOOA7kC76fnYs0CEa8XRfdhvg
+ kWz6gyUTdoPYC0jX/RRd0XRS+RroKV6nVev9fb8/GDrs2J1gd8HxIEYcJgg7CLqbVJXW
+ 0t/ZZPRKjvK8a5OTw6laee25V3nSiSP3BPMEFmGBfab2JA6+SZbr+qtNUNKd8PP3Wg1T
+ tOfnF6NbGYXZkPCv0mViHXP7ToZkMe1XLuBa6bymX2XDgPdzw+RqRmz/pDhbqWK3XgZY
+ O0BQ==
+X-Gm-Message-State: AOAM531FxXEKTNkPHlZaVA+WZd0FyMcffeywGjshrFXYskwCfz4LsnRn
+ WxNrjAkGzQiZStaFDeLwmLu4Mixj4Yg=
+X-Google-Smtp-Source: ABdhPJzTVCKS2Og5gkP6+f6wCEQoCFww3eiOYi5K67g2J6Nbo/I1zLhnrxdGWBadPTuEF2kYofvTlQ==
+X-Received: by 2002:a05:600c:3790:: with SMTP id
+ o16mr9304761wmr.174.1642976139424; 
+ Sun, 23 Jan 2022 14:15:39 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id b2sm1964034wri.88.2022.01.23.14.09.12
+ by smtp.gmail.com with ESMTPSA id u7sm11476686wmc.11.2022.01.23.14.15.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 14:09:12 -0800 (PST)
+ Sun, 23 Jan 2022 14:15:39 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 23:07:31 +0100
-Message-Id: <20220123220731.787537-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jan 2022 23:14:02 +0100
+Message-Id: <20220123221402.787958-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pytz: bump to version 2021.3
+Subject: [Buildroot] [PATCH 1/1] package/python-pyftpdlib: bump to version
+ 1.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,44 +93,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Update hash of LICENSE.txt (year updated)
+- Update hash of LICENSE file (license updated to make it recognizable
+  by github:
+  https://github.com/giampaolo/pyftpdlib/commit/a3016e7d694c226cae6a2b7672c6c5196124cd7a)
 - Update indentation in hash file (two spaces)
+
+https://github.com/giampaolo/pyftpdlib/blob/release-1.5.6/HISTORY.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pytz/python-pytz.hash | 6 +++---
- package/python-pytz/python-pytz.mk   | 4 ++--
+ package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index d1ce81e590..e0f253902c 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+index 7f8da95550..abbb1261b2 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.hash
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5	c3d84a465fc56a4edd52cca8873ac0df  pytz-2019.3.tar.gz
--sha256	b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be  pytz-2019.3.tar.gz
-+md5  d7b7060bbac4970afa2050c139c9fcb6  pytz-2021.3.tar.gz
-+sha256  acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326  pytz-2021.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
+-md5	7f8089520d60171bee5dab2b721e8d00  pyftpdlib-1.5.5.tar.gz
+-sha256	1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752  pyftpdlib-1.5.5.tar.gz
++md5  459dd3e685c4b7dfcf574ca05e5586eb  pyftpdlib-1.5.6.tar.gz
++sha256  fda655d81f29af52885ca2f8a2704134baed540f16d66a0b26e8fdfafd12db5e  pyftpdlib-1.5.6.tar.gz
  # Locally computed sha256 checksums
--sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-+sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 888f3c4556..d606750699 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
+-sha256	18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
++sha256  67a832551570a5ac5f7901eaa5ece4b9491fda7f2d8c93957c3bbc68a5a76d88  LICENSE
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+index dbbb9e2842..931e2dad06 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.mk
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2019.3
-+PYTHON_PYTZ_VERSION = 2021.3
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/82/c3/534ddba230bd4fbbd3b7a3d35f3341d014cca213f369a9940925e7e5f691
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/e3/8e/1cde9d002f48a940b9d9d38820aaf444b229450c0854bdf15305ce4a3d1a
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYFTPDLIB_VERSION = 1.5.5
++PYTHON_PYFTPDLIB_VERSION = 1.5.6
+ PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
+-PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/27/64/06a574350c79873e908fa9f48b617e7961de50fc468acc0a05d76771bce9
++PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/31/61/63ef60aca6de07eba1639d9d47f3f8e29462e8bb49d6a8dce9aeff240646
+ PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+ PYTHON_PYFTPDLIB_LICENSE = MIT
+ PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
