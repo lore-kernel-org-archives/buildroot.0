@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5E74C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCB4EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97B7B405ED;
-	Sun, 23 Jan 2022 21:30:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4740A408E5;
+	Sun, 23 Jan 2022 21:47:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a1jzsSVLzZtN; Sun, 23 Jan 2022 21:30:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aOGu7vvi4K41; Sun, 23 Jan 2022 21:47:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97EE14011B;
-	Sun, 23 Jan 2022 21:30:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 72D0D1BF3F6
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:30:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87DEC408E1;
+	Sun, 23 Jan 2022 21:47:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CC941BF3F6
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EB8183F60
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:30:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28F3B405F7
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:47:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ePxoOVGzj4N for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 21:30:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GEw3GegdFLXn for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 21:47:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34D5383F11
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:30:55 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id h29so7453332wrb.5
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 13:30:55 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3694E405ED
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:47:34 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ l35-20020a05600c1d2300b0034d477271c1so26316812wms.3
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 13:47:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=o+wOsE5WP0agmSpxGuwCpRyyPbvlJFfHa5N9f6FMoMg=;
- b=DLJCLd/Xpid3LLcMW4+2KWwpYJQ4K+x3Be62D7LST9hMZQYg7JzN2n5nP5v/DBcdVO
- beHeJKNaSQhDaXzSvt7M9yNOj00K6gShP/Bo2A0SSeeJ/0ayqbGIwKmTKw86x/Apf5Wm
- jYuP9Hv5r7uBTPaIiMukHVmCC0UxownY2qj+pA6KT8/k1lBxEvcDcWdNUhFm+z87iYBY
- FDKlNfhCmqOdu5zUPCiCpQWqX6Ywacqolo1A17Cu7X3NFxBi9w+csVv7809dIK05zWzL
- Gd3vpIl2otIoV0JwrpIrqakhFJvx7rJxC/tUNxdARZLqcE72nBQT1eGn4TbOkOy2bPWN
- EH6Q==
+ bh=MOUgNs1uCoFdwVWRAe8lLaMROzUahtFMvWAMUObVGlI=;
+ b=Cyx6+Rgi89XQdzSuvhGccgXaQOW0igollSWKqoAwZsVXPWo+R3tShLnjyC3fZXx5ys
+ OjMvDo5kv+4x5n/IwA9jVKqRgUIslVy9FN8S83kPn5F0O66s91Yr0/eykbJ5e4i2pYGr
+ 0fJum/ej/sfbvivaljr3x8gUdMLeFx0pTM0XqOzRESXuRceup2xE+jbrO9EHdKbJYTmN
+ K0dHeaLPwz5U1nVlIPzovHHS/A+joqtuEpOX6alRODX19onZA5sQ1R17+zEz5etRH0aa
+ hhgkha/H6BT4L2N85dQg8J+GANQMS/Sp7Baz1/CDvkU8du/rG+8QAUdCxMZiwn2l29JW
+ MtWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=o+wOsE5WP0agmSpxGuwCpRyyPbvlJFfHa5N9f6FMoMg=;
- b=s2kwuw+FzZfpusxSskTUapKx44KurkWc/nYxCiDShdkomDfaFWIFV3sXDQxHa7FtOo
- ul4A2DuSOAn3b1e3oGMhy0enkJU8XlZFgO5nVUpMyJvU7MW7Gm+8/7klhQiB5yb4bOTw
- T804+/leXbm5l/Wu7P3E20a6+u7zyIKKZADCEiwrrtTuuMWeSyCqCysb9yhSqbcgCvuq
- FzVcGVyO10UeqPBxjAxnXEN1LHQf8W6+QrkXlAKFi+LxIWrCkRMd5wHpSVQPeWypl7ad
- miwfyJGcToDyH7SRScOddks2tgLa7PoMhCwkRrQYghJtyKeINIqqs+HOLQCMK81Bpr/T
- 4Ksw==
-X-Gm-Message-State: AOAM531A8Ni/LESp6dPNn3goJPz7szXeiM3UVRjBhl/nmAHBauymzPp2
- OJxxVR5VVBXx2lKSpjLYsF+vBAKFwpY=
-X-Google-Smtp-Source: ABdhPJxwtLLeIViWkhCgjiF4iuqqMheqBb0sC5Kx3cAN3KQogU4Tj5mSdyYVT8gOX+BQY3prUlqwbQ==
-X-Received: by 2002:a05:6000:1569:: with SMTP id
- 9mr4071789wrz.265.1642973453413; 
- Sun, 23 Jan 2022 13:30:53 -0800 (PST)
+ bh=MOUgNs1uCoFdwVWRAe8lLaMROzUahtFMvWAMUObVGlI=;
+ b=eH8nZ+ZwXnKNebZy71mDhUPfb5+yVtXdi6F8xk35Zk2/lJlckZoULGAbqrPdJdV5fZ
+ jYB8ldrTWgc92OWWrsjTg/B5RIx7CVQlAJ9p0jvZi4y/IVLcyFV6jO01FMNQyrC6SrG5
+ sRrMvAZFMBUNaQ07ksn83Uy1zqw7bZGdyDQD/IPoP0+L4U6U1t2ugjriVdMStBrVIapD
+ U/ub+tJLQA64sW0SFOFDlp0USYyKwN33/tWDXN0k7FdjiKGLVr23gSD77JIreTDeJFzq
+ vrS3i8jdnL7gCgqMxp0Ck780VxskwkF4dCFxe8Og5hRvFDLIYTYmk2Mdys7+VHULafXp
+ R2bA==
+X-Gm-Message-State: AOAM533M0UqhdjlTEmBRllgQbCCVE9piVwwq8Dag1efG5LUa9B7T8N47
+ pCkJfjnhfzGtWsxYgDZumW5/OV+lnKY=
+X-Google-Smtp-Source: ABdhPJyRboXLG7Sklu37ZL05sjTfqSkgd2DDMmGBByfRDIogJsBnAJxJzLKNtoiThV7Q4zGgUFROiQ==
+X-Received: by 2002:a1c:f616:: with SMTP id w22mr9187566wmc.75.1642974452292; 
+ Sun, 23 Jan 2022 13:47:32 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id u14sm14456014wrs.17.2022.01.23.13.30.53
+ by smtp.gmail.com with ESMTPSA id i2sm2764098wmq.23.2022.01.23.13.47.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 13:30:53 -0800 (PST)
+ Sun, 23 Jan 2022 13:47:31 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 22:29:16 +0100
-Message-Id: <20220123212916.782418-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jan 2022 22:45:48 +0100
+Message-Id: <20220123214548.783629-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/libev: bump to version 4.33
+Subject: [Buildroot] [PATCH 1/1] package/vte: needs gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,39 +92,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update indentation in hash file (two spaces)
+vte needs C++20 since
+https://gitlab.gnome.org/GNOME/vte/-/commit/eec33cce0b9359fddda35703e22bffd1f8f28852
+to avoid the following build failure raised since bump to version 0.66.2
+in commit 53c0c7dd01228122c7ceb44d65f2800dbcf473f1:
 
-https://github.com/xorangekiller/libev-git/blob/rel-4_33/Changes
+../output-1/build/vte-0.66.2/meson.build:144:0: ERROR: Assert failed: option -std=gnu++20 not supported by gcc
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c0d1adeffbf97805a0f669d01929a56ccc66a835
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libev/libev.hash | 4 ++--
- package/libev/libev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vte/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libev/libev.hash b/package/libev/libev.hash
-index 9ab341dedd..a849f3f39a 100644
---- a/package/libev/libev.hash
-+++ b/package/libev/libev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 2d5526fc8da4f072dd5c73e18fbb1666f5ef8ed78b73bba12e195cfdd810344e  libev-4.27.tar.gz
--sha256 c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
-+sha256  507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea  libev-4.33.tar.gz
-+sha256  c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 38b0530f62..9f3c19d46c 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/vte/Config.in b/package/vte/Config.in
+index 2635a6007c..45d627885f 100644
+--- a/package/vte/Config.in
++++ b/package/vte/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_VTE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+@@ -22,13 +22,13 @@ config BR2_PACKAGE_VTE
  
--LIBEV_VERSION = 4.27
-+LIBEV_VERSION = 4.33
- LIBEV_SITE = http://dist.schmorp.de/libev/Attic
- LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
+ 	  http://github.com/GNOME/vte
+ 
+-comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 10"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+ 		BR2_TOOLCHAIN_USES_MUSL
+ 
+ comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
 -- 
 2.34.1
 
