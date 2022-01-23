@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79553C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DAD0C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2429360D74;
-	Sun, 23 Jan 2022 21:23:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AAC260E0A;
+	Sun, 23 Jan 2022 21:24:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gVOnluS7kovI; Sun, 23 Jan 2022 21:23:48 +0000 (UTC)
+	with ESMTP id 5apuw1bbe1wG; Sun, 23 Jan 2022 21:24:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69CD760DCA;
-	Sun, 23 Jan 2022 21:23:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7238260DBA;
+	Sun, 23 Jan 2022 21:23:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DF99B1BF296
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:23:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29FA61BF296
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CAACC405EC
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:23:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17D4A405ED
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:23:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C5inHgwIcuyb for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 21:23:36 +0000 (UTC)
+ with ESMTP id u9AFwytWsiBM for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 21:23:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0308C40105
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:23:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44E1440105
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:23:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 37A1781456; Sun, 23 Jan 2022 21:16:49 +0000 (UTC)
+ id 7C7FD81456; Sun, 23 Jan 2022 21:16:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 22:20:37 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d81064a03c1ade13ee52b4dcd7a33ede4bf23e9a
-X-Git-Newrev: c2475ccb4ccc4619d83980ea5e3add7cb7c34c9f
+Date: Sun, 23 Jan 2022 21:42:27 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 1eb325609509caa6eced3220f88434add8e08125
+X-Git-Newrev: 1ea385642d5b33dc347bad3f31d51f3e0f70ec2d
 X-Patchwork-Hint: ignore
-Message-Id: <20220123211649.37A1781456@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gcc: fix xtensa
- overlay for gcc ccache hash
+Message-Id: <20220123211656.7C7FD81456@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/mpd-mpc: disable
+ documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,37 +59,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2475ccb4ccc4619d83980ea5e3add7cb7c34c9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1ea385642d5b33dc347bad3f31d51f3e0f70ec2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Commit b3b60706221d (arch/xtensa: allow specifying path to tarball file)
-missed a place where the xtensa overlay was referenced, thus breaking
-the calculation for the ccache hash.
+Disable documentation which is available (and enabled by default) since
+bump to version 0.31 in commit 0186da2923c07656005264dbb3001ca706a2ef10
+and
+https://github.com/MusicPlayerDaemon/mpc/commit/60e173c0198743fd6af906682eadec1cc67a4975
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b98ed34072f07f0c367b23d1e018f5b9487b3c34)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8a78e215c3bc8bcfcfdd5ba8f8c82d977c91e91b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mpd-mpc/mpd-mpc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5e419f7ede..28b6a0c95c 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -286,7 +286,7 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
- 		$(addsuffix /gcc/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
- 		$(addsuffix /gcc/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
- ifeq ($(BR2_xtensa),y)
--HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_TAR)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_FILE)
- endif
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index 6eebc63cca..d5a981d70e 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -11,5 +11,6 @@ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
+ MPD_MPC_LICENSE_FILES = COPYING
+ MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
++MPD_MPC_CONF_OPTS = -Ddocumentation=disabled
  
- # _CONF_OPTS contains some references to the absolute path of $(HOST_DIR)
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
