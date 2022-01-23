@@ -1,46 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB278C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D4EC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FE3340323;
-	Sun, 23 Jan 2022 19:52:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17F5460D4B;
+	Sun, 23 Jan 2022 19:52:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vv6bg5F_GkCz; Sun, 23 Jan 2022 19:52:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rnCZW9jnzs8v; Sun, 23 Jan 2022 19:52:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 902DE4014C;
-	Sun, 23 Jan 2022 19:52:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4D4EE1BF406
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57EB860C2B;
+	Sun, 23 Jan 2022 19:52:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 69CF61BF97D
  for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D0114033A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55CE881A58
  for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hJvuIYKDfZSm for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mh9gDJw15iOF for <buildroot@lists.busybox.net>;
  Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 603C440319
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84EF081289
  for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id B33D38296B; Sun, 23 Jan 2022 19:45:37 +0000 (UTC)
+ id DE43C82B40; Sun, 23 Jan 2022 19:45:37 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:49:21 +0100
+Date: Sun, 23 Jan 2022 20:49:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d824fc1145de69ef00415232668f6f1efe814668
-X-Git-Newrev: aa1a33027fabe03f98b10edfa2a94555e9413415
+X-Git-Oldrev: 038d7d685f811d48c2870df86c94c8641539f78b
+X-Git-Newrev: 2c7ad667ec4a25226848baba809e492ca0ff06da
 X-Patchwork-Hint: ignore
-Message-Id: <20220123194537.B33D38296B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xl2tp: bump to version 1.3.17
+Message-Id: <20220123194537.DE43C82B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpjsip: security bump to version
+ 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,40 +59,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa1a33027fabe03f98b10edfa2a94555e9413415
+commit: https://git.buildroot.net/buildroot/commit/?id=2c7ad667ec4a25226848baba809e492ca0ff06da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/xelerance/xl2tpd/releases/tag/v1.3.17
+Security update. This version is recommended for all users to improve
+the security of applications using PJSIP.
+
+Fix CVE-2020-15260, CVE-2021-21375 and CVE-2021-32686
+
+Update indentation in hash file (two spaces)
+
+https://github.com/pjsip/pjproject/security/advisories/GHSA-8hcp-hm38-mfph
+https://github.com/pjsip/pjproject/security/advisories/GHSA-hvq6-f89p-frvp
+https://github.com/pjsip/pjproject/security/advisories/GHSA-cv8x-p47p-99wr
+https://github.com/pjsip/pjproject/releases/tag/2.11
+https://github.com/pjsip/pjproject/releases/tag/2.11.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpjsip/libpjsip.hash | 4 ++--
+ package/libpjsip/libpjsip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 471657f0f2..eca918bc83 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index 68c2208885..f39ebf4060 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  c28608b315adb25c8bf9579c1d6ab52ab47c4c43b68a5ab63c5d039196fd180f  xl2tp-1.3.16.tar.gz
-+sha256  898d9b6a374c78dea5f20d80fd50fac13428ad746fefb16ff5f6bec449affe67  xl2tp-1.3.17.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index ca404060a2..e42eeb1709 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256	936a4c5b98601b52325463a397ddf11ab4106c6a7b04f8dc7cdd377efbb597de	pjproject-2.10.tar.gz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  45f6604372df3f49293749cd7c0b42cb21c4fb666c66f8ed9765de004d1eae38  pjproject-2.11.1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 8feec9bcb2..0a93780e93 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--XL2TP_VERSION = 1.3.16
-+XL2TP_VERSION = 1.3.17
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+-LIBPJSIP_VERSION = 2.10
++LIBPJSIP_VERSION = 2.11.1
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+-# https://github.com/pjsip/pjproject/archive/2.10.tar.gz
++# https://github.com/pjsip/pjproject/archive/2.11.1.tar.gz
+ 
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
