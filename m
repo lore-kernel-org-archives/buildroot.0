@@ -1,63 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C95BC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 08:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1BBAC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 08:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19F328143D;
-	Sun, 23 Jan 2022 08:39:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60914404A1;
+	Sun, 23 Jan 2022 08:39:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 18St_nZ9Z_wK; Sun, 23 Jan 2022 08:39:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kEXKRI0CE9Tb; Sun, 23 Jan 2022 08:39:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4906681424;
-	Sun, 23 Jan 2022 08:39:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D1E240327;
+	Sun, 23 Jan 2022 08:39:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 512481BF33D
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 08:39:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 436411BF33D
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 08:39:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F41581424
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 08:39:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A7D181440
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 08:39:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=free.fr
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qPYXN5tfHK_O for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 08:39:42 +0000 (UTC)
+ with ESMTP id DZ_bMArrmAbV for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 08:39:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8B8F8141B
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 08:39:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 551198143C
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 08:39:53 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:8038:e8ec:605a:7149])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EAEBEB0051E;
- Sun, 23 Jan 2022 09:39:35 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id CBEACB0053A;
+ Sun, 23 Jan 2022 09:39:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1642927179;
- bh=Pq8/PmcF3oFv+uIYqgs6f0nY3FM47YQV2VXHYZUxIoQ=;
+ s=smtp-20201208; t=1642927191;
+ bh=pfldVC9GKuac9wDb6iylLI2afDQ0dDqCEOtwES1ik1s=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gbMRlt1ZNRfqAR8pMZIeJM6OhM4OXmHBt8OKgmZiKqu7Xi4TS0WmUQidd6CRIqg7I
- FEUw1gM/cZwiu6CLPW+M5b/3hFhFOG7cbrG2JtSU5n/8UmWFHz3IVh/fGLmgJgaP+o
- 71v49YY5cOv85jc+2XNAg9Tuz04XoMtaYrbwxT0ZIs6A5X4lDQOsCaTtF5+2km5ebI
- BVD17E2Ktw+w1Pr1B6qP2zEcwjSQdzgmHcGptF4caUtRsSvKqWBzTOQ1FXEjLAgYQf
- MHnlYifYIss8N7pd7c2Iwywe2a4jQJ+9LdhGMtT80lsI0z+CF/ufWVGEBwR51UcRUK
- eyBKOF9vg0qyQ==
+ b=qhV+GKJdf8QRXYBG/7Ar9+SKYNuuzzCTeWl9W9dT8KHvJwAhCowTBpZeHVmJr8Hck
+ Ug37U60TCM/PvS8SCksvAynN/V6bvmQ1MvQGAE+XrngORfW2wpmYWbJNcEVYO1pYyt
+ l2wF8D9lunhOs6QZxDvKUXqz7Fd57/37TZ3m03h8L7N2Afml74kkyECuFv4JhuaVfG
+ AP4rtvQeVfhW6vX6R+a8ednjmDWePgB6TvruVSfxPGs3adj7inEEySIiD9XZGySq6z
+ gJOnCJxRC18lQxJP6PyuG6+T0bhMCU7Lgta0Y6+HCUmaA2ipqHzpFaJMp554mjdTka
+ z3jrlAzeEFwsQ==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Jan 2022 09:39:35 +0100
-Date: Sun, 23 Jan 2022 09:39:35 +0100
+ Sun, 23 Jan 2022 09:39:48 +0100
+Date: Sun, 23 Jan 2022 09:39:48 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220123083935.GL3621364@scaer>
-References: <20220122224410.309822-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220123083948.GM3621364@scaer>
+References: <20220122224935.310100-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220122224410.309822-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220122224935.310100-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: switch to pcre2
+Subject: Re: [Buildroot] [PATCH 1/1] package/lighttpd: replace mod_compress
+ by mod_deflate
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,11 +80,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2022-01-22 23:44 +0100, Fabrice Fontaine spake thusly:
-> Switch to pcre2 which is supported since version 1.4.62 and
-> https://github.com/lighttpd/lighttpd1.4/commit/7512d82ca49f1b579819c2974c61de4e3137c70b
-> and enabled by default since version 1.4.64 and
-> https://github.com/lighttpd/lighttpd1.4/commit/750414d3bb6f13c119220e56d0c8123e665dffc5
+On 2022-01-22 23:49 +0100, Fabrice Fontaine spake thusly:
+> mod_compress has been subsumed by mod_deflate since version 1.4.56 and
+> https://github.com/lighttpd/lighttpd1.4/commit/dab212b5f5ee468b632f40f28699efc810f27210
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -91,49 +92,29 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/lighttpd/Config.in   | 2 +-
->  package/lighttpd/lighttpd.mk | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  package/lighttpd/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-> index 9f593a9228..ed674a9227 100644
+> index ed674a9227..99a09e9766 100644
 > --- a/package/lighttpd/Config.in
 > +++ b/package/lighttpd/Config.in
-> @@ -48,7 +48,7 @@ config BR2_PACKAGE_LIGHTTPD_BZIP2
+> @@ -38,13 +38,13 @@ config BR2_PACKAGE_LIGHTTPD_ZLIB
+>  	bool "zlib support"
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+> -	  Enable zlib support for lighttpd mod_compress.
+> +	  Enable zlib support for lighttpd mod_deflate.
+>  
+>  config BR2_PACKAGE_LIGHTTPD_BZIP2
+>  	bool "bzip2 support"
+>  	select BR2_PACKAGE_BZIP2
+>  	help
+> -	  Enable bzip2 support for lighttpd mod_compress.
+> +	  Enable bzip2 support for lighttpd mod_deflate.
 >  
 >  config BR2_PACKAGE_LIGHTTPD_PCRE
 >  	bool "pcre support"
-> -	select BR2_PACKAGE_PCRE
-> +	select BR2_PACKAGE_PCRE2
->  	help
->  	  Enable PCRE support. Needed to support mod_rewrite
->  
-> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-> index f0974dd5b2..2a05071209 100644
-> --- a/package/lighttpd/lighttpd.mk
-> +++ b/package/lighttpd/lighttpd.mk
-> @@ -26,6 +26,7 @@ LIGHTTPD_CONF_OPTS = \
->  	-Dwith_mysql=false \
->  	-Dwith_nettle=false \
->  	-Dwith_nss=false \
-> +	-Dwith_pcre=false \
->  	-Dwith_pgsql=false \
->  	-Dwith_sasl=false \
->  	-Dwith_wolfssl=false \
-> @@ -65,10 +66,10 @@ LIGHTTPD_CONF_OPTS += -Dwith_bzip=false
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIGHTTPD_PCRE),y)
-> -LIGHTTPD_DEPENDENCIES += pcre
-> -LIGHTTPD_CONF_OPTS += -Dwith_pcre=true
-> +LIGHTTPD_DEPENDENCIES += pcre2
-> +LIGHTTPD_CONF_OPTS += -Dwith_pcre2=true
->  else
-> -LIGHTTPD_CONF_OPTS += -Dwith_pcre=false
-> +LIGHTTPD_CONF_OPTS += -Dwith_pcre2=false
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
 > -- 
 > 2.34.1
 > 
