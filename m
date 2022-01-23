@@ -1,81 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BD6C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5E74C433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 21:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B60D560DA0;
-	Sun, 23 Jan 2022 21:29:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97B7B405ED;
+	Sun, 23 Jan 2022 21:30:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id brvFFN4OXGpH; Sun, 23 Jan 2022 21:29:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a1jzsSVLzZtN; Sun, 23 Jan 2022 21:30:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E887160D79;
-	Sun, 23 Jan 2022 21:29:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 896001BF97A
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:29:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97EE14011B;
+	Sun, 23 Jan 2022 21:30:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 72D0D1BF3F6
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:30:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8655340289
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:29:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6EB8183F60
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 21:30:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=gmail.com
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RWqWtsHs-p0k for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 21:29:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9ePxoOVGzj4N for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 21:30:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3D5A240282
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:29:37 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id s18so10100076wrv.7
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 13:29:37 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 34D5383F11
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 21:30:55 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id h29so7453332wrb.5
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 13:30:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yR879uWm+EHiCz7bwCYQfqBsGHa6kCoXoHM1DfJ/M/I=;
- b=VoyWqsfViRdhGP+TlkI7hyjYt1OB6HBFZiF7UVzthqfPtccU+dQB5nUOtwbxtdaqkr
- 0heefxCyk2fzQ80MGAocmicSvdsJ/CE7jJMTPA2r2Uv6xx2XQftApMTDwIFf9CKCRNiW
- 7zD2RiD6HsYA6eaGiFvy/tWK8EJHZyTPgXRG1Agzinj2bOvVU/lhVAjYnOV1bMuszvxJ
- XLIkRdffpPVVJHUwX5ETGPf4VK+HYFHmxum1lWS1frT4C+A1Rosr7nDb/XI6AJz4n0/j
- KeCSLqiyWgnYpr8miFuYC3H+k5zp/6z812/5q+1jlTa5DD5SRtlm03T7ls5XlWcO9cww
- elaA==
+ bh=o+wOsE5WP0agmSpxGuwCpRyyPbvlJFfHa5N9f6FMoMg=;
+ b=DLJCLd/Xpid3LLcMW4+2KWwpYJQ4K+x3Be62D7LST9hMZQYg7JzN2n5nP5v/DBcdVO
+ beHeJKNaSQhDaXzSvt7M9yNOj00K6gShP/Bo2A0SSeeJ/0ayqbGIwKmTKw86x/Apf5Wm
+ jYuP9Hv5r7uBTPaIiMukHVmCC0UxownY2qj+pA6KT8/k1lBxEvcDcWdNUhFm+z87iYBY
+ FDKlNfhCmqOdu5zUPCiCpQWqX6Ywacqolo1A17Cu7X3NFxBi9w+csVv7809dIK05zWzL
+ Gd3vpIl2otIoV0JwrpIrqakhFJvx7rJxC/tUNxdARZLqcE72nBQT1eGn4TbOkOy2bPWN
+ EH6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=yR879uWm+EHiCz7bwCYQfqBsGHa6kCoXoHM1DfJ/M/I=;
- b=E4vFNfWO8/ni0pPqUXqzQTW1nNMXG51dslqWc5cHNYIJpmIc8ZRLRkTdJ+IWWjYxv5
- dZYnIYwAgCUrJ0LBejkfIncGSEv7bgM1w+akfSrfPhmqss+ayOO8k9/os2rgvvdlxwvi
- N7Lst8naeR1Ji5EVRPvVBYmdSQb+cKxdjEDTwXiV+8KTLk5a6JIu97bW/UE5izyIwpz/
- esDnXJBLtaMW1k4iOVFfJPfo/vTbnfZPSQ2QpdK4wnSxoURmfyzXFBXxrJrUOi0SWUwb
- Pb0h+G6RnVFTnM2Azy9VWmuxafM1aw1LsyCYDbQe4fCa912NZxd60kcd8dL+CLyv8S0Y
- zNLw==
-X-Gm-Message-State: AOAM5303prbMIquv3GqUF51knOZ8EPX6nkiRMVMhwzCbU2n3jRPZk5pq
- WImuSC5mBd1ZBTLjvQCEWHlp4GxaHrc=
-X-Google-Smtp-Source: ABdhPJw3r0yr948toKrmOV8HOsRF7nUDI7Jic3HDX6Cp7x3EZiDvStPOI4gg3KtBSrnRap6alyqUAA==
-X-Received: by 2002:a05:6000:381:: with SMTP id
- u1mr11863040wrf.431.1642973375437; 
- Sun, 23 Jan 2022 13:29:35 -0800 (PST)
+ bh=o+wOsE5WP0agmSpxGuwCpRyyPbvlJFfHa5N9f6FMoMg=;
+ b=s2kwuw+FzZfpusxSskTUapKx44KurkWc/nYxCiDShdkomDfaFWIFV3sXDQxHa7FtOo
+ ul4A2DuSOAn3b1e3oGMhy0enkJU8XlZFgO5nVUpMyJvU7MW7Gm+8/7klhQiB5yb4bOTw
+ T804+/leXbm5l/Wu7P3E20a6+u7zyIKKZADCEiwrrtTuuMWeSyCqCysb9yhSqbcgCvuq
+ FzVcGVyO10UeqPBxjAxnXEN1LHQf8W6+QrkXlAKFi+LxIWrCkRMd5wHpSVQPeWypl7ad
+ miwfyJGcToDyH7SRScOddks2tgLa7PoMhCwkRrQYghJtyKeINIqqs+HOLQCMK81Bpr/T
+ 4Ksw==
+X-Gm-Message-State: AOAM531A8Ni/LESp6dPNn3goJPz7szXeiM3UVRjBhl/nmAHBauymzPp2
+ OJxxVR5VVBXx2lKSpjLYsF+vBAKFwpY=
+X-Google-Smtp-Source: ABdhPJxwtLLeIViWkhCgjiF4iuqqMheqBb0sC5Kx3cAN3KQogU4Tj5mSdyYVT8gOX+BQY3prUlqwbQ==
+X-Received: by 2002:a05:6000:1569:: with SMTP id
+ 9mr4071789wrz.265.1642973453413; 
+ Sun, 23 Jan 2022 13:30:53 -0800 (PST)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id y2sm16555867wmj.13.2022.01.23.13.29.35
+ by smtp.gmail.com with ESMTPSA id u14sm14456014wrs.17.2022.01.23.13.30.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 13:29:35 -0800 (PST)
+ Sun, 23 Jan 2022 13:30:53 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 22:27:57 +0100
-Message-Id: <20220123212757.781999-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jan 2022 22:29:16 +0100
+Message-Id: <20220123212916.782418-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/xml-security-c: bump to version
- 2.0.4
+Subject: [Buildroot] [PATCH 1/1] package/libev: bump to version 4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,118 +86,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 2.0.4 of the Apache XML Security for C++ has been released,
-correcting support for OpenSSL earlier than 1.1.
+Update indentation in hash file (two spaces)
 
-Version 2.0.3 of the Apache XML Security for C++ has been released,
-adding support for OpenSSL 3.0.0.
-
-Drop patch (already in version) and so autoreconf
-
-https://santuario.apache.org/cindex.html
+https://github.com/xorangekiller/libev-git/blob/rel-4_33/Changes
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ariable-cache-option-for-getcwd-test.patch | 50 -------------------
- package/xml-security-c/xml-security-c.hash    |  4 +-
- package/xml-security-c/xml-security-c.mk      |  5 +-
- 3 files changed, 3 insertions(+), 56 deletions(-)
- delete mode 100644 package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+ package/libev/libev.hash | 4 ++--
+ package/libev/libev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-deleted file mode 100644
-index 26b53ba719..0000000000
---- a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 9d14fad412a497fe83cfc6ab594ddc612512f02a Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Thu, 4 Jun 2020 20:34:11 -0500
--Subject: [PATCH] autoconf variable cache option for getcwd test
--
--The cached variable allows cross compiled builds to successfully set the
--desired default for this value without invoking a test.
--
--Fixes:
--https://issues.apache.org/jira/browse/SANTUARIO-549
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- configure.ac | 20 ++++++++++++--------
-- 1 file changed, 12 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index b43d7a5..c3d4489 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
-- 
-- # Check whether getcwd can dynamically allocate memory.
-- AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
---AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
---     #include <unistd.h>],
---[char *cwd = getcwd(NULL, 0);
---return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
---     [AC_MSG_RESULT(yes)
---      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
---         [Define to 1 if getcwd(NULL, 0) works])],
---     [AC_MSG_RESULT(no)])
--+AC_CACHE_VAL([xml_cv_func_getcwd_null],
--+[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
--+     #include <unistd.h>
--+     char *cwd = getcwd(NULL, 0);
--+     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
--+  [xml_cv_func_getcwd_null=yes],
--+  [xml_cv_func_getcwd_null=no])])
--+AC_MSG_RESULT([$xml_cv_func_getcwd_null])
--+if test $xml_cv_func_getcwd_null = yes; then
--+AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
--+  [Define to 1 if getcwd(NULL, 0) works])
--+fi
-- 
-- AC_LANG(C++)
-- 
---- 
--2.17.1
--
-diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
-index d91ed86e9c..f4b7041a63 100644
---- a/package/xml-security-c/xml-security-c.hash
-+++ b/package/xml-security-c/xml-security-c.hash
+diff --git a/package/libev/libev.hash b/package/libev/libev.hash
+index 9ab341dedd..a849f3f39a 100644
+--- a/package/libev/libev.hash
++++ b/package/libev/libev.hash
 @@ -1,3 +1,3 @@
--# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.tar.gz.sha256
--sha256  c303a2b08cb9ca0f5594adcbb83829b1e793175d7114a82f7d78def8bb2e30df  xml-security-c-2.0.2.tar.gz
-+# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz.sha256
-+sha256  a78da6720f6c2ba14100d2426131e0d33eac5a2dba5cc11bdd04974b7eb89003  xml-security-c-2.0.4.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
-index fe761819ee..fda9af4798 100644
---- a/package/xml-security-c/xml-security-c.mk
-+++ b/package/xml-security-c/xml-security-c.mk
+ # Locally calculated
+-sha256 2d5526fc8da4f072dd5c73e18fbb1666f5ef8ed78b73bba12e195cfdd810344e  libev-4.27.tar.gz
+-sha256 c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
++sha256  507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea  libev-4.33.tar.gz
++sha256  c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 38b0530f62..9f3c19d46c 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XML_SECURITY_C_VERSION = 2.0.2
-+XML_SECURITY_C_VERSION = 2.0.4
- XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
- XML_SECURITY_C_LICENSE = Apache-2.0
- XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
-@@ -15,7 +15,4 @@ XML_SECURITY_C_CONF_ENV = \
- 	xml_cv_func_getcwd_null=yes \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- 
--# Patched configure.ac
--XML_SECURITY_C_AUTORECONF = YES
--
- $(eval $(autotools-package))
+-LIBEV_VERSION = 4.27
++LIBEV_VERSION = 4.33
+ LIBEV_SITE = http://dist.schmorp.de/libev/Attic
+ LIBEV_INSTALL_STAGING = YES
+ LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
 -- 
 2.34.1
 
