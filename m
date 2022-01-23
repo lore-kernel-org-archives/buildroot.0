@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFD2C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:53:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 937DDC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1808B40213;
-	Sun, 23 Jan 2022 19:53:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46A89401FD;
+	Sun, 23 Jan 2022 19:53:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DExrBb24Rgxp; Sun, 23 Jan 2022 19:53:04 +0000 (UTC)
+	with ESMTP id PyS_I-0HqSJm; Sun, 23 Jan 2022 19:53:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ABA34022A;
-	Sun, 23 Jan 2022 19:53:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 587841BF97C
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8370040281;
+	Sun, 23 Jan 2022 19:53:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 61DC11BF406
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5351440253
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E64340319
  for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:52:25 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WQiEH1p7Pfk4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yn4xHmWY8EHQ for <buildroot@lists.busybox.net>;
  Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B1824014C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69ADF40334
  for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:52:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id D5D628296B; Sun, 23 Jan 2022 19:45:37 +0000 (UTC)
+ id C3FD282B45; Sun, 23 Jan 2022 19:45:37 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:49:31 +0100
+Date: Sun, 23 Jan 2022 20:49:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a42e347222a2d04947d2e6985ea241ce593a0ad
-X-Git-Newrev: 038d7d685f811d48c2870df86c94c8641539f78b
+X-Git-Oldrev: 029a6dc3e3320984c6369747e0b79060f13b2afc
+X-Git-Newrev: 4b44e7d988569778d952e9ad3e7e76cfe75bbe7e
 X-Patchwork-Hint: ignore
-Message-Id: <20220123194537.D5D628296B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lft: bump to version 3.91
+Message-Id: <20220123194537.C3FD282B45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectl: bump to version 4.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +58,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=038d7d685f811d48c2870df86c94c8641539f78b
+commit: https://git.buildroot.net/buildroot/commit/?id=4b44e7d988569778d952e9ad3e7e76cfe75bbe7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lft 3.91 / WhoB 3.91
-----------------------
-- Fixed bugs.debian.org/cgi-bin/bugreport.cgi?bug=922430
-- Updated date
-
-lft 3.9 / WhoB 3.9
-----------------------
-- Fixed a bug that could indicate a target was closed when it was open
-- Improved support for DLT_NULL interfaces on BSD-like operating systems
-- Improved deprecated pcap device enumeration method
-- Improved GraphViz output format appearance
+4.3.2	 Oct 7, 2021
+ - very minor bug. the last command in perfquery is not in a loop and
+   prevents the collectl daemon from starting via the service.
 
 Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lft/lft.hash | 6 +++---
- package/lft/lft.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/collectl/collectl.hash | 8 ++++----
+ package/collectl/collectl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-index 91a1fb0659..9bcce843bc 100644
---- a/package/lft/lft.hash
-+++ b/package/lft/lft.hash
+diff --git a/package/collectl/collectl.hash b/package/collectl/collectl.hash
+index d866e0becc..1785d25d87 100644
+--- a/package/collectl/collectl.hash
++++ b/package/collectl/collectl.hash
 @@ -1,5 +1,5 @@
- # From http://pwhois.org/lft/
--md5 31b15aabc619707427a73657512560f8  lft-3.8.tar.gz
-+md5  73cb955546692cf0fb5d7931939c56de  lft-3.91.tar.gz
  # Locally calculated
--sha256 10f427e77b0f8207817329bd8ef0310078434612620073369264d15e6f97e990  lft-3.8.tar.gz
--sha256 e3b7634630e6800eccca6ecafb5d40153d4f8f7a20e2b2399bf3c0ea92f44614  COPYING
-+sha256  aad13e671adcfc471ab99417161964882d147893a54664f3f465ec5c8398e6af  lft-3.91.tar.gz
-+sha256  e3b7634630e6800eccca6ecafb5d40153d4f8f7a20e2b2399bf3c0ea92f44614  COPYING
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-index 5154c83fef..37e6e77767 100644
---- a/package/lft/lft.mk
-+++ b/package/lft/lft.mk
+-sha256 2187264d974b36a653c8a4b028ac6eeab23e1885f8b2563a33f06358f39889f1  collectl-4.3.1.src.tar.gz
+-sha256 b92800d37afa2aa03c02817ff3b68efc7236436fe76af06ad9b1fc4682f59bcb  ARTISTIC
+-sha256 264fe27852db5624e6a9a9845b4e14e91ee5007305b33e5556dfade394d578a8  COPYING
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL
++sha256  9fab4769441c07201748e52c7f8c7b21526ab45a05142dd2b2b1fa5c16c38750  collectl-4.3.2.src.tar.gz
++sha256  b92800d37afa2aa03c02817ff3b68efc7236436fe76af06ad9b1fc4682f59bcb  ARTISTIC
++sha256  264fe27852db5624e6a9a9845b4e14e91ee5007305b33e5556dfade394d578a8  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL
+diff --git a/package/collectl/collectl.mk b/package/collectl/collectl.mk
+index c9fb59293c..c6cb2e1494 100644
+--- a/package/collectl/collectl.mk
++++ b/package/collectl/collectl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LFT_VERSION = 3.8
-+LFT_VERSION = 3.91
- LFT_SITE = http://pwhois.org/get
- LFT_DEPENDENCIES = libpcap
- LFT_LICENSE = VOSTROM Public License for Open Source
+-COLLECTL_VERSION = 4.3.1
++COLLECTL_VERSION = 4.3.2
+ COLLECTL_SOURCE = collectl-$(COLLECTL_VERSION).src.tar.gz
+ COLLECTL_SITE = http://downloads.sourceforge.net/collectl/collectl
+ COLLECTL_LICENSE = Artistic or GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
