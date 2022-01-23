@@ -1,80 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D0EC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 22:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B14DDC433EF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 22:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BB804011F;
-	Sun, 23 Jan 2022 22:15:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DD2283F89;
+	Sun, 23 Jan 2022 22:21:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w3MFFYf-VfI9; Sun, 23 Jan 2022 22:15:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cr8B5-w35Gs4; Sun, 23 Jan 2022 22:21:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4063740636;
-	Sun, 23 Jan 2022 22:15:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9034A1BF2F9
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:15:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 661BD8349A;
+	Sun, 23 Jan 2022 22:21:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64E201BF2F9
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BEE940613
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:15:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5267B408FD
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 22:21:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vanQuRbPB4bP for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 22:15:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 80C5940616
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 22:15:41 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- f202-20020a1c1fd3000000b0034dd403f4fbso23091780wmf.1
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 14:15:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=D0FtcOxqb+9urubVbqKJeSEvhjjxXycMBeS/NZWRhRo=;
- b=B7d/izLmS3UF9PqelZDF3UeNiw4hATp16Jq7U9YCDWCOxytQ+E9hhn2Fy63SgjxVWF
- FFfp3WSxx3IJ6KhpfUpMTChJVjGF33tq38v5GWoxD+sAD9U5PThaRNw2EbczzhZkhrBh
- 18AJy5HS6KPh9KZgKWe4dX1zSkhA/03Sks+FxF9/+UAmyW1ltQMnaNfVK7WpFSBpa7XF
- 0bx77kAnlR7HRvXQkY6FH8Cid12ln7nPRsPzLOgcIWyRHToCODDvEEQTNknJot5Vl6Rx
- X5yo3K6KXzaav7rQKUyf/20lfc3aKb/qIa2ZgqfrYOGbE4bXX0S9I4dgKJIEIICqNzbJ
- U23g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=D0FtcOxqb+9urubVbqKJeSEvhjjxXycMBeS/NZWRhRo=;
- b=Bvl/Fx+3lqxxV5jLwttYN6tr+leQCEUlKc0NpfZOBEPuvdtW3mVNqwwiIRcDvEGTKy
- V2F0/oKoN84yhzMIWmvwCNzW1PC+kQ63qRL1WauwoFWXOOA7kC76fnYs0CEa8XRfdhvg
- kWz6gyUTdoPYC0jX/RRd0XRS+RroKV6nVev9fb8/GDrs2J1gd8HxIEYcJgg7CLqbVJXW
- 0t/ZZPRKjvK8a5OTw6laee25V3nSiSP3BPMEFmGBfab2JA6+SZbr+qtNUNKd8PP3Wg1T
- tOfnF6NbGYXZkPCv0mViHXP7ToZkMe1XLuBa6bymX2XDgPdzw+RqRmz/pDhbqWK3XgZY
- O0BQ==
-X-Gm-Message-State: AOAM531FxXEKTNkPHlZaVA+WZd0FyMcffeywGjshrFXYskwCfz4LsnRn
- WxNrjAkGzQiZStaFDeLwmLu4Mixj4Yg=
-X-Google-Smtp-Source: ABdhPJzTVCKS2Og5gkP6+f6wCEQoCFww3eiOYi5K67g2J6Nbo/I1zLhnrxdGWBadPTuEF2kYofvTlQ==
-X-Received: by 2002:a05:600c:3790:: with SMTP id
- o16mr9304761wmr.174.1642976139424; 
- Sun, 23 Jan 2022 14:15:39 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id u7sm11476686wmc.11.2022.01.23.14.15.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 14:15:39 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 23:14:02 +0100
-Message-Id: <20220123221402.787958-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wXXR0DibNy2x for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 22:21:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D9CD4034C
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 22:21:52 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id BlF8nozOrI46dBlF8nEhfT; Sun, 23 Jan 2022 23:21:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642976510; bh=EmENQ+XFvuPUE1wjQypRo73SLtpF/14znBEObv6sv+Q=;
+ h=Subject:To:From:Date:MIME-Version:Content-Type;
+ b=gBlGOVaL7cyo0y5P1rcSz1bbtSW4K/IHHRQaAuDmeCJeJi6jfK6vUAn6mIdfrr0BE
+ dfhuRtRS0a2sFXOs9ngXoSFI5fIvA7AmXUR2682rVAfMxLuOR1I/xA8ATIyIelHvJ/
+ tGAniivFbKTWbJbGt98IVBDM21d8ne2o457z9nsXrWJFeIAMSytBjxScm+EnmOdZmC
+ oqyic61glyD8qkahjwGHQkrmZfo9viJ+eCejQSBFeePLfKZZR2TlipEo6WWB57PgHb
+ 7G3n+VYORWrDwx5ZLsgRPm5rDaJNiL7SHepDoiyVmqUBOEQN5vBMGq8XZ96k2INu9/
+ Fhnj9gyOOz9XA==
+To: Antoine Tenart <atenart@kernel.org>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+ <20220119222332.66485-1-giulio.benetti@benettiengineering.com>
+ <20220119233944.7ba2d09f@windsurf> <20220120084804.429f1d54@bootlin.com>
+ <164267096542.4497.13116457792635384701@kwain>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <2d19c071-3859-25db-0966-2fd8ca3d845f@benettiengineering.com>
+Date: Sun, 23 Jan 2022 23:21:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pyftpdlib: bump to version
- 1.5.6
+In-Reply-To: <164267096542.4497.13116457792635384701@kwain>
+Content-Language: en-US
+X-CMAE-Envelope: MS4wfIgx4wCVNPMqcYMIJ1Syax1PcOvnLij0e8w5PDVKM0NG4Q03k5oH+h8xi/m70e4UStzViU37kkatK9bkaEb0txlfuVJ6DxHulCVwVUzK5W9kIKIctq+0
+ GOeZqBORve2V1SWBXzwcI7UOG5lh7C45skm1ax8fHdG85EaymhKFDMzsVvymss0HYw8E7Lpq9ELs4Q+j10m+DmELqclRFl6/cTh9ahq6Ih0Ki0Q2KflGhFC1
+ qF4pDa0frfM5Eih62rkXzIb0k5BEeNXw0TTUvPSJnJAVQp32pHeD7XvZxptm1e3SMPfJCvdBTCxk2mefinfYa419yivAJzAwQJMjQ+1NYpo=
+Subject: Re: [Buildroot] [PATCH v3] package/refpolicy: Add option to disable
+ "dontaudit" rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,58 +76,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Update hash of LICENSE file (license updated to make it recognizable
-  by github:
-  https://github.com/giampaolo/pyftpdlib/commit/a3016e7d694c226cae6a2b7672c6c5196124cd7a)
-- Update indentation in hash file (two spaces)
+Hi Antoine, Maxime, Thomas, All,
 
-https://github.com/giampaolo/pyftpdlib/blob/release-1.5.6/HISTORY.rst
+On 20/01/22 10:29, Antoine Tenart wrote:
+> Quoting Maxime Chevallier (2022-01-20 08:48:04)
+>> On Wed, 19 Jan 2022 23:39:44 +0100
+>> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>> On Wed, 19 Jan 2022 23:23:32 +0100
+>>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>>
+>>>> +config BR2_REFPOLICY_DISABLE_DONTAUDIT
+>>>> +    bool "Disable dontaudit"
+>>>
+>>> I am still extremely confused by the name of option, with its double
+>>> negative.
+>>>
+>>> When enabled, this option will disable something that doesn't audit.
+>>> Meh.
+>>
+>> I agree about the confusing double-negative, but it follows the SELinux
+>> terminology from the rules syntax. My personal view is that the "make
+>> enableaudit" target is a bit confusing already :)
+> 
+> Agreed.
+> 
+>>> Is it possible to find a better name / description that doesn't make
+>>> one's brain segfault when trying to understand what it does ?
+>>
+>> Maybe we can think of an option name like
+>> "BR2_REFPOLICY_VERBOSE_DONTAUDIT", suggesting that we're not silencing
+>> these 'dontaudit' rules anymore ? The only actual effect is what gets
+>> printed in the AVC logs.
+>>
+>>> The make target that gets triggered is "enableaudit". Would it make
+>>> sense to call this option BR2_PACKAGE_REFPOLICY_ENABLE_AUDIT ?
+>>
+>> The more I think about that, the more I think that using
+>> "enable/disable" here is misleading, the behaviour stays the same with
+>> regard to what gets denied/allow, only the logs are going to change.
+> 
+> I would suggest using BR2_PACKAGE_REFPOLICY_WITH_DONTAUDIT, defaulting
+> to y (using _WITHOUT_ would be less clear IMHO).
+> 
+> And in Kconfig something along the lines:
+> 
+>    bool "Build with dontaudit rules"
+>    default y
+>    help
+>      The refpolicy comes with 'dontaudit' rules suppressing audit logs
+>      for known and expected violations of the policy. These rules are
+>      enabled by default. Building without the 'dontaudit' rules will lead
+>      in more denied actions being logged, which can be useful for
+>      debugging purposes. Note that running 'semodules -DB' from a running
+>      system will have the same effect.
+> 
+>      Say y if unsure.
+> 
+> (Please check the semodules part, never tried it).
+> 
+> WDYT?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
- package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Re-reading this after some day it looks to me like the simple
+BR2_PACKAGE_REFPOLICY_ENABLEAUDIT is correct. Because it "Removes all 
+dontaudit rules from policy.conf", so it's true that it enables audit 
+logs in the end. It's a very specific options and the one who will use 
+it will know what he will enable and most of all we can specify in the 
+help section that:
+"Removes all dontaudit rules from policy.conf"
 
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-index 7f8da95550..abbb1261b2 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.hash
-+++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
--md5	7f8089520d60171bee5dab2b721e8d00  pyftpdlib-1.5.5.tar.gz
--sha256	1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752  pyftpdlib-1.5.5.tar.gz
-+md5  459dd3e685c4b7dfcf574ca05e5586eb  pyftpdlib-1.5.6.tar.gz
-+sha256  fda655d81f29af52885ca2f8a2704134baed540f16d66a0b26e8fdfafd12db5e  pyftpdlib-1.5.6.tar.gz
- # Locally computed sha256 checksums
--sha256	18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
-+sha256  67a832551570a5ac5f7901eaa5ece4b9491fda7f2d8c93957c3bbc68a5a76d88  LICENSE
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-index dbbb9e2842..931e2dad06 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.mk
-+++ b/package/python-pyftpdlib/python-pyftpdlib.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYFTPDLIB_VERSION = 1.5.5
-+PYTHON_PYFTPDLIB_VERSION = 1.5.6
- PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
--PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/27/64/06a574350c79873e908fa9f48b617e7961de50fc468acc0a05d76771bce9
-+PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/31/61/63ef60aca6de07eba1639d9d47f3f8e29462e8bb49d6a8dce9aeff240646
- PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
- PYTHON_PYFTPDLIB_LICENSE = MIT
- PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+It changes the perspective we are looking at it, but in the end, it 
+"Removes all dontaudit rules from policy.conf" and subsequentially this 
+leads to show the audits logs. So it enables audits.
+
+Does it work for you?
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
