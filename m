@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D44FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA31BC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D613D81A4E;
-	Sun, 23 Jan 2022 19:50:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 762904012E;
+	Sun, 23 Jan 2022 19:50:16 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T7o5vCPRcfsc; Sun, 23 Jan 2022 19:50:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1IZ6cn6DCts2; Sun, 23 Jan 2022 19:50:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16BEB81A2B;
-	Sun, 23 Jan 2022 19:50:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CA8151BF406
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 500804014C;
+	Sun, 23 Jan 2022 19:50:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 571351BF406
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C603B4030F
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45FEF60C2B
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:49:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jSOJ1Ve230qG for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 19:49:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7yeG8yLdmBXW for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 19:49:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10F944030D
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:49:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8694660C2A
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:49:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6B4DD829F4; Sun, 23 Jan 2022 19:43:03 +0000 (UTC)
+ id E0277829F4; Sun, 23 Jan 2022 19:43:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:48:55 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d4e00807d44b61a444410afa66650a0095532a8d
-X-Git-Newrev: e29333183c94e8739ef6995e63a1cccb53219f52
+Date: Sun, 23 Jan 2022 20:47:26 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: c756e6ac7b14684712f85fcdc18598431f081a72
+X-Git-Newrev: 1eb325609509caa6eced3220f88434add8e08125
 X-Patchwork-Hint: ignore
-Message-Id: <20220123194303.6B4DD829F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/apache: security
+Message-Id: <20220123194309.E0277829F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/apache: security
  bump to version 2.4.52
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e29333183c94e8739ef6995e63a1cccb53219f52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1eb325609509caa6eced3220f88434add8e08125
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Fixes the following security issues:
 
@@ -113,7 +113,7 @@ index 138717c336..014d920772 100644
  # Locally computed
  sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
 diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index d55f43148e..3b518795be 100644
+index ff01b25106..5fcb887fbc 100644
 --- a/package/apache/apache.mk
 +++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
