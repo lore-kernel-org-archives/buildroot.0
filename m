@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 886A2C433F5
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D29C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D4B740253;
-	Sun, 23 Jan 2022 19:41:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B7FE60D4B;
+	Sun, 23 Jan 2022 19:45:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 55vvsgcatNHu; Sun, 23 Jan 2022 19:41:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j0oPW7zvqAeR; Sun, 23 Jan 2022 19:45:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFCE14012E;
-	Sun, 23 Jan 2022 19:41:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 528EC1BF406
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:41:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4984660C2B;
+	Sun, 23 Jan 2022 19:45:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F6DD1BF406
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A98081CA0
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:41:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E11040345
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:45:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dNTXO-0q3Wb3 for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 19:41:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nBnYPMBZTBy2 for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 19:44:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FCEA8248F
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:41:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 730E740334
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:44:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id CD97C82B2E; Sun, 23 Jan 2022 19:34:46 +0000 (UTC)
+ id CF7F782B2E; Sun, 23 Jan 2022 19:38:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:39:30 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 3377aa01883c8b88ff2c4918cd0dbc0e863e9bdb
-X-Git-Newrev: d4e00807d44b61a444410afa66650a0095532a8d
+Date: Sun, 23 Jan 2022 20:38:47 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: cca59981bb2ad73675555f35c4c3f6dcbe7a1fcc
+X-Git-Newrev: c756e6ac7b14684712f85fcdc18598431f081a72
 X-Patchwork-Hint: ignore
-Message-Id: <20220123193446.CD97C82B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/janus-gateway:
+Message-Id: <20220123193812.CF7F782B2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/janus-gateway:
  fix CVE-2021-4124
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4e00807d44b61a444410afa66650a0095532a8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c756e6ac7b14684712f85fcdc18598431f081a72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 janus-gateway is vulnerable to Improper Neutralization of Input During
 Web Page Generation ('Cross-site Scripting')
