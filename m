@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76456C433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57E0EC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0195E60D4B;
-	Sun, 23 Jan 2022 19:11:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0499B408D1;
+	Sun, 23 Jan 2022 19:11:52 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jr1aB1oLZ2bb; Sun, 23 Jan 2022 19:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sJ496DW_A30V; Sun, 23 Jan 2022 19:11:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3719C60C2A;
-	Sun, 23 Jan 2022 19:11:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4EB031BF406
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E7EF408DC;
+	Sun, 23 Jan 2022 19:11:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D75921BF406
  for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 390B540106
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:10:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEA5E817D3
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:10:48 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0O74aplawuId for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UL69P_OcXoIh for <buildroot@lists.busybox.net>;
  Sun, 23 Jan 2022 19:10:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C512405CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 091D781987
  for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:10:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 866D982B2E; Sun, 23 Jan 2022 19:04:01 +0000 (UTC)
+ id 73D10828C8; Sun, 23 Jan 2022 19:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:08:51 +0100
+Date: Sun, 23 Jan 2022 20:03:50 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: d7836d25c38fc0566dde7547bc1efd70b012413a
-X-Git-Newrev: ea7ed63f1d151c584888529bf9a3a2f5bacf929a
+X-Git-Oldrev: a81b639a808ad7c2c0172a16e8741375150eedfb
+X-Git-Newrev: 815d8f10bcb431151da10434bec034d62e9d287c
 X-Patchwork-Hint: ignore
-Message-Id: <20220123190401.866D982B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/mbedtls: security
- bump to version 2.16.12
+Message-Id: <20220123190401.73D10828C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/imagemagick: fix
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +59,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea7ed63f1d151c584888529bf9a3a2f5bacf929a
+commit: https://git.buildroot.net/buildroot/commit/?id=815d8f10bcb431151da10434bec034d62e9d287c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2021-12
-https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.12
+BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS dependency was wrongly added to
+BR2_PACKAGE_HOST_IMAGEMAGICK by commit
+df20e4546384d1c249a6a0541183590671e83d77, indeed host-librsvg is only
+needed by BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit da5c80f6750899578882688e68c128d8a21032c8)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 38f6b42d310e389245a6772ae20b8bce73e1c61c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index b93da164f9..8247748afd 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.11:
--sha256  c18e7e9abf95e69e425260493720470021384a1728417042060a35d0b7b18b41  mbedtls-2.16.11.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.12:
-+sha256  294871ab1864a65d0b74325e9219d5bcd6e91c34a3c59270c357bb9ae4d5c393  mbedtls-2.16.12.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 9207daf186..93ac1bb163 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
+index e12d82939a..671b0995dc 100644
+--- a/package/imagemagick/Config.in.host
++++ b/package/imagemagick/Config.in.host
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_HOST_IMAGEMAGICK
+ 	bool "host imagemagick"
+-	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+ 	help
+ 	  ImageMagick(R) is a software suite to create, edit, and
+ 	  compose bitmap images. It can read, convert and write images
+@@ -17,6 +16,7 @@ if BR2_PACKAGE_HOST_IMAGEMAGICK
  
--MBEDTLS_VERSION = 2.16.11
-+MBEDTLS_VERSION = 2.16.12
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
+ 	bool "SVG support"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+ 	help
+ 	  Say 'y' here is you need ImageMagick tools (like convert)
+ 	  to support SVG.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
