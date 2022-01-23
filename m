@@ -4,44 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B50FC433EF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77C5DC433F5
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jan 2022 19:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2778580C30;
-	Sun, 23 Jan 2022 19:13:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42FEB812AF;
+	Sun, 23 Jan 2022 19:13:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u_g-g9poECxx; Sun, 23 Jan 2022 19:13:28 +0000 (UTC)
+	with ESMTP id UC-eKMKCAEBc; Sun, 23 Jan 2022 19:13:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6ADE883F6E;
-	Sun, 23 Jan 2022 19:13:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A61691BF406
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:10:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66480812A8;
+	Sun, 23 Jan 2022 19:13:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AD7E1BF406
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 726A283F63
- for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:10:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67B084014C
+ for <buildroot@lists.busybox.net>; Sun, 23 Jan 2022 19:12:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rgnpCU5UyNXZ for <buildroot@lists.busybox.net>;
- Sun, 23 Jan 2022 19:10:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B40B483F6C
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:10:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3A71382968; Sun, 23 Jan 2022 19:04:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 20:08:36 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: a5737ed3478278b66125b8bcf403a3cffa6488a4
-X-Git-Newrev: 9319c37a6085ccc9daf389f40f6f0382f57c05f3
-X-Patchwork-Hint: ignore
-Message-Id: <20220123190408.3A71382968@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/mbedtls: security
- bump to version 2.16.12
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=aruba.it
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O7VHRCNH5YgD for <buildroot@lists.busybox.net>;
+ Sun, 23 Jan 2022 19:12:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99D4240106
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 19:12:28 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.178.108])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id BiHqn2q9vc6LXBiHqnxd8Q; Sun, 23 Jan 2022 20:12:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1642965146; bh=hhoE01CRjQPdSYfqZpZdES+d6qtXL79bCRqIGxP1dsw=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=HJNp9avSiBkIxhDGJIdSCRO+9Ty0vMjY9ojmJtZWXHR815UwCin2Gsc6jEjzw2szZ
+ WNmVizd7wmdHjYxfl+2cNTBC2WK3m+MpDNBrSlIggF8irc7NCquumPVCEbq4rFts3p
+ 26BlrrRJoyhTpqFUm12GHFj36sKul/qpdzy2L+PdX7jhoPIji4GtPljeNS5Mok1dsy
+ YYRFiwB48eDrWV29kQ7D7Xg3kc9UkfSBAR/2LZ1r/rVPbJ9D4ohkoCMpHI9CijtGUy
+ 24hHgXdteqAJsr+UGoYf/QKCkIJgvSOk2P4v+kS+41+4lNfTn0+2/XGIRec7WJxFnk
+ NUo9Eoy9WgpMw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sun, 23 Jan 2022 20:12:25 +0100
+Message-Id: <83218573-DFC3-4AA3-B21E-F5C32DBADC1B@benettiengineering.com>
+References: <9c9b7005-6f85-f812-21b5-fa029136477b@gmail.com>
+In-Reply-To: <9c9b7005-6f85-f812-21b5-fa029136477b@gmail.com>
+To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+X-Mailer: iPhone Mail (19C63)
+X-CMAE-Envelope: MS4wfOd4EQ9ljQfmTHrRwX8lpMbMGcuHP1sR54Nkit8N3b7D3Kv+GxK/pr4WZ0Fe3PSfpMAYwA4P11C96kz3w12EjYvE+3v4azkiSftbL061jemDvC2sjMEt
+ 0toFoSsE2wwMw0QEBKLsHodfiRv3PmdcHRiDVdXIf+y5F41qO7IAcmSPT6IhBZBpLO7X2Y65ntT2FB7v2zNms4G3r2YbGkylBUrAaWiNZSR72VDpYA3IB8RJ
+ mJFsqrOyBD580uEwRyRhxQ==
+Subject: Re: [Buildroot] [PATCH 25/28] configs/orangepi_zero_defconfig:
+ enable NEON/VFPV4 FPU strategy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,52 +69,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9319c37a6085ccc9daf389f40f6f0382f57c05f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
-
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2021-12
-https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.12
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit da5c80f6750899578882688e68c128d8a21032c8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index b93da164f9..8247748afd 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.11:
--sha256  c18e7e9abf95e69e425260493720470021384a1728417042060a35d0b7b18b41  mbedtls-2.16.11.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.12:
-+sha256  294871ab1864a65d0b74325e9219d5bcd6e91c34a3c59270c357bb9ae4d5c393  mbedtls-2.16.12.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 9207daf186..93ac1bb163 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBEDTLS_VERSION = 2.16.11
-+MBEDTLS_VERSION = 2.16.12
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU2VyZ2V5LAoKdGhhbmsgeW91IGZvciB0aGUgVGVzdGVkLWJ5LCBidXQgeW91IHNob3VsZCBw
+dXQgaXTigKYKCj4gSWwgZ2lvcm5vIDIzIGdlbiAyMDIyLCBhbGxlIG9yZSAxOTowOCwgU2VyZ2V5
+IEt1em1pbm92IDxrdXptaW5vdi5zZXJnZXk4MUBnbWFpbC5jb20+IGhhIHNjcml0dG86Cj4gCj4g
+77u/MTguMDEuMjAyMiAxMzo0MywgR2l1bGlvIEJlbmV0dGk6Cj4+IFRoaXMgYm9hcmQgaGFzIEFs
+bHdpbm5lciBIMisoY29tcGF0aWJsZSB3aXRoIEgzKSB0aGF0IGlzIGEgY29ydGV4LUE3IGFuZAo+
+PiBzdXBwb3J0cyBORU9OL1ZGUFY0IEZQVSBzdHJhdGVneSwgc28gbGV0J3MgZW5hYmxlIGl0IGlu
+c3RlYWQgb2Ygb25seSBWRlBWNC4KPj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdp
+dWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+CgrigKZoZXJlLCBhZnRlciBteSBT
+b0IuCgpBbmQgd2hlbiBhbnN3ZXJpbmcgdG8gTWFpbGluZyBMaXN0KE1MKSwgYWx3YXlzIHVzZSDi
+gJxSZXBseSB0byBBbGzigJ0uCgpIb25lc3RseSBpdOKAmXMgc2luY2UgeWVhcnMgSSBhbHdheXMg
+dXNlIOKAnFJlcGx5IHRvIEFsbOKAnSBiZWNhdXNlIGl0IHdvcmtzIGJvdGggZm9yIG11bHRpcGxl
+IHJlY2lwaWVudHMgYW5kIGZvciBzaW5nbGUgcmVjaXBpZW50IHRvby4KClRoaXMgd2F5IEkgZG9u
+4oCZdCBmb3JnZXQgdG8gZG8gaXQuCgpCZXN0IHJlZ2FyZHMhCkdpdWxpbwoKPj4gLS0tCj4+ICBj
+b25maWdzL29yYW5nZXBpX3plcm9fZGVmY29uZmlnIHwgMiArLQo+PiAgMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+IGRpZmYgLS1naXQgYS9jb25maWdzL29y
+YW5nZXBpX3plcm9fZGVmY29uZmlnIGIvY29uZmlncy9vcmFuZ2VwaV96ZXJvX2RlZmNvbmZpZwo+
+PiBpbmRleCAxYzEwN2IxMGU2Li5hMGFmODA5ZTkyIDEwMDY0NAo+PiAtLS0gYS9jb25maWdzL29y
+YW5nZXBpX3plcm9fZGVmY29uZmlnCj4+ICsrKyBiL2NvbmZpZ3Mvb3JhbmdlcGlfemVyb19kZWZj
+b25maWcKPj4gQEAgLTEsNiArMSw2IEBACj4+ICBCUjJfYXJtPXkKPj4gIEJSMl9jb3J0ZXhfYTc9
+eQo+PiAtQlIyX0FSTV9GUFVfVkZQVjQ9eQo+PiArQlIyX0FSTV9GUFVfTkVPTl9WRlBWND15Cj4+
+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVyby9wYXRj
+aGVzIgo+PiAgQlIyX1JPT1RGU19ERVZJQ0VfQ1JFQVRJT05fRFlOQU1JQ19NREVWPXkKPj4gIEJS
+Ml9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xMj15Cj4gCj4gVGVzdGVkLWJ5
+OiBTZXJnZXkgS3V6bWlub3YgPGt1em1pbm92LnNlcmdleTgxQGdtYWlsLmNvbT4KPiBfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
