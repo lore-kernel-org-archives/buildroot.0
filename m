@@ -1,60 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58CBC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 19:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BD4FC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 20:16:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C3C960F19;
-	Mon, 24 Jan 2022 19:56:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09F9C84BA2;
+	Mon, 24 Jan 2022 20:16:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AYUalaT3NBus; Mon, 24 Jan 2022 19:56:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CP4-25TC6u90; Mon, 24 Jan 2022 20:16:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96B8760F05;
-	Mon, 24 Jan 2022 19:56:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A34E81BF5EA
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 19:56:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 575E984B9A;
+	Mon, 24 Jan 2022 20:16:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B0DF41BF396
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 20:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FD7D41744
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 19:56:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D4EC84B9A
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 20:16:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7JsOZNT6xyEv for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 19:56:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q82v03HT1tf5 for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 20:16:32 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87A68408F9
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 19:56:45 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net (unknown
- [IPv6:2a01:e0a:43e:e970:8763:f5a3:4adf:bb86])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 34E9EB0055A;
- Mon, 24 Jan 2022 20:56:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643054202;
- bh=/DsljdepLDLVjxi9cYu778MFDGK6saSS7FXBvD0IxYk=;
- h=From:To:Cc:Subject:Date:From;
- b=j596+l3FMOMmFQr9QytzX5ad4yM3T5pTuOVK6s9Dy+F468JGDmf3x7yeP6r05C4zQ
- olhe0txg8gBMo8CR4ejGLyGDxQEOo+jgf4Ny/DYUxgs+8cmYmGIN47tbD2DzimIFTX
- qk/iw3vmli7BqRQtFvX4hIdXE63HlDfwuZnPa1GgxRY+HSoP054CyYBtMFt9lbK3DM
- BA5tdlbZFDx2Ln12joZ+VeAXOg6yDaya7O9JzXxMBJ/xmMsUtMNE+gqIiOIg6ylsyO
- ZnI/juIVmBx8KMHociRs5/4mujRI+uk/vSRmDKBUN2VVnCNCPAL3rg4RgrregTU/by
- Iu1/AQyetxopw==
-From: Julien Olivain <ju.o@free.fr>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 578A584B98
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 20:16:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1643055389;
+ bh=+zyikdkwvTJA+BW9JaOMQgk3iPPkR0MZuh6TNhMoBDg=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=CWp3fbYShcTt/sYnmiN/hPOUoa40SWpvqzDW9APReQ0grckvlZ7LO4erT3xMFDBEK
+ foI3GH/5T2nH402fQ2yFLBZbFF7FbPjpK2VFT77xXmmlOCfp+M4OOeCA3uaRomGrF1
+ sanRrTCcIZUvAxopX8as6U1vMbFN3pEALb2gklSw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.fritz.box ([62.216.209.192]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Mlw3X-1mTRYU0PcB-00j1Yj for <buildroot@buildroot.org>; Mon, 24 Jan 2022
+ 21:16:29 +0100
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 20:56:34 +0100
-Message-Id: <20220124195634.522856-1-ju.o@free.fr>
+Date: Mon, 24 Jan 2022 21:16:28 +0100
+Message-Id: <20220124201628.11015-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.2.5
+X-Provags-ID: V03:K1:dmvgjp/VFp8MxPxk1DEWhdVOQt/S28VKdFTpw/LBKzY+M8s1DnD
+ NqGXD3lHfAzArlND/XHqAE1UxI3id5vm0XdvwBG6lwZppiq96JajC+Es89Y6Lq4kRA6GIkV
+ 8OUmtaN9XDsAoRM4GNsHVgfWXb/Fom3DUTsX3Bo9K0RCqO+QDE50340tgJmwwcLc/fufIi6
+ u/r9BBDnF5B07bboBc/VQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TtkWJWDiJTA=:eLxecPrKKCDspjci9geiSK
+ GHe5Ycr8kBvhHI/96ezypc73yOgGPQY3BPN3Zq0jURsatiV8k/pZOCEcn6HJAo1OiueKHM2L1
+ xhTcmNXnScnSO9iIRq/iytF84z2qDUUYZusmdZRjPIoV4jBT7YK8uoIy5FcRrX4NbSg9Xz72h
+ NEGzzn/JXivQXDd0FQmWSQBFIcA9yn1LbHfEsHItAZbcAVBzq1K+AbB9E3RK6eHDysf8+OcAh
+ P/hP88s0+LFzlduUVW2GND/pN1FmR42tKLr/gx7Hs0iylmw6iVRBmviBTTmthVQgXZi0Wzcy9
+ yyWMEbtSWpKaG7TToLU0NbYN/QbP4YnIys+3Gg2QtxUoJRNTp8U4uYESczasOwTybCFipw/A8
+ QMQwuQmBrYFV91yDKJynEr2sKVQSkm2Hcjg8b/FK5hvo2quCSyQfYm/M8Kr3IBIEHTw3URpA3
+ 639tXbC5vdZbAU01YSne9xQmPxyRWfatFMHHA1jp07ndluvYIPZFuLM07z7FPJCWQovuP433O
+ lFe1SqTZhb9snhuXPG8VVkUeBCitlILsotTX9CoVZjy9IZAVbQMfwOXFhmXl1hq3DvdxBLzHl
+ oLDb+eGMk+qmu46vhkXnUa1BtcLyNA53+yerZF7BiaRj4620BS36FL/QnRo4LSqUVgT0F+MAG
+ 0z/GDP4BGx/jzi/U10Up9E/yHKmC55ELQ4e51LgJkuX+OTWo4WaE2IVcIuP2igvL0MaogBIjt
+ oRzdTwqntodOEg1W6WLWHJFdIYdAjBiEEcJRU3R4BMxb9WQXfib4QPH39I6m5XRl4V1vCMD1v
+ DoNBKjYSbAiMhUkR05uRYsVKQ1OivXkntwJb/eHr4mU3qA9t18L2K84QBwpegT8C3xG+lEC9M
+ PNU2cm8WrmRaqPVy8EAuh56ZIMJPdrmHmSprarkmDYTmAzRMxPgt16j8t/9osUCXPZzPBIg+e
+ U2h1kEe8/83CYi0I4ghACvqxIZBY+cbFNMpEJiSIq+3SBD/PQDIwEMHiynS3Aq1p3GZ9mQGgS
+ rs46C5MSoJiBPxdfqwLu/SA0OMhdaQHelSG2WQH9Ylf9hmowTK/cWLDcnpdI1vKX+d2UUfePV
+ 0WLiB/03l5T66I=
+Subject: [Buildroot] [PATCH v1] package/util-linux: bump version to 2.37.3
+ (fixes CVE-2021-3996, CVE-2021-3995)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,43 +83,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v2.2.4, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.5
+For details see [1].
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+[1] https://www.spinics.net/lists/util-linux-ng/msg17037.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 4e544bc7f6..0d41c16d8d 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  83cb1dba04c632ede74f0c0717018b062c0e00b639722203b23f77a961afd390  fluidsynth-2.2.4.tar.gz
-+sha256  9037e703617f91c4c36039a5059e0f624164799d856af715bcd8a23c07ba03b8  fluidsynth-2.2.5.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 4ca8518ae0..b500944c16 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index eafbe9254a..9c10a42dca 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.37/sha256sums.asc
+-sha256  6a0764c1aae7fb607ef8a6dd2c0f6c47d5e5fd27aa08820abaad9ec14e28e9d9  util-linux-2.37.2.tar.xz
++sha256  590c592e58cd6bf38519cb467af05ce6a1ab18040e3e3418f24bcfb2f55f9776  util-linux-2.37.3.tar.xz
+ # License files, locally calculated
+ sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index cf0fee409b..88d4984e2f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
--FLUIDSYNTH_VERSION = 2.2.4
-+FLUIDSYNTH_VERSION = 2.2.5
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+ UTIL_LINUX_VERSION_MAJOR = 2.37
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
 -- 
 2.34.1
 
