@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9499C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:30:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D479C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7BE6340576;
-	Mon, 24 Jan 2022 10:30:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD34360E6A;
+	Mon, 24 Jan 2022 10:36:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2t_m9S82CFhP; Mon, 24 Jan 2022 10:30:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FAC540475;
-	Mon, 24 Jan 2022 10:30:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25AAF1BF3A4
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:29:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1452860A91
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:29:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4KZl_aiU0pfo for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 10:29:56 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gF6ZzlAArBiE; Mon, 24 Jan 2022 10:36:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D59E61019;
+	Mon, 24 Jan 2022 10:36:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1386C1BF3A4
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:36:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 095B184B66
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:36:40 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y0dYngIC7wGJ for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 10:36:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CD33360591
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 10:29:56 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id d188so4531045iof.7
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 02:29:56 -0800 (PST)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 20BEC84B67
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 10:36:36 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id a12so18883511iod.9
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 02:36:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WnwGyz1JQxKsKuAGVcc/ZM+LKxgcoancq+m1mX+dgp8=;
- b=Q9eQs4BMmra8Isv7gtn375VyNUSLkFxEIpQcjMvFou15XipqbnFBzNoJSr0+gMjtS1
- aCeuCqOWOS84Au+IEoFfySmJUB20Z/vR7LRW6HG/gOt35ReglylpqQA5hKZd3FOgbylX
- dsG9gUL4LPcSjm63tZCdtNSPZ7tpiE39GdfvqDOjPd6jUa79dAppIbJTK9A8GLVTkTyS
- BCXVYVk7yFiKuNIqYqCXLaKx+TK4kC9oGHNqfCmpAAdf5dLH9MHcNRkFmt17YPorqAao
- QubjVdqJLY/FE6IKBcuX4dUD4K7kdxfd+gdo3WbPp7tmvmeSzd0uCsKU5+RefkazueKe
- IfLA==
+ bh=vubi4a1zWdxZJjF7OmvnwL09BGuYxblK3O3cUOamXTg=;
+ b=FrGZg7vvBKh6q7oiXg2p7VQLgOjM5Zu4WjwLSIaEs2Lz+TixBCELKU7fi3kxrQPvKV
+ BOSHeOprX+tfUI54gF/sYpXrgzlAE5MCWD6giES2qdvx0jztZJp5Kna/pMHnJnm9uLey
+ 5bTiDVW/zN1P5dH5jNnAFOMN1yD/P/LBLj9oxaUz3/7BQmNWAndUPDCZG5GEZZnlMMP3
+ GWFOmMtYIA+s304kEBAIVTAPuO3UCRF0/5Rgmum1kgCOAvdZ/SqRT/BpbOS2f1w0JgWj
+ w0TRr+KWdUtv8Oznx5c/l/bAXjIzpoZaiOw+RzIgRDAh3hn0I+9Rn3qLVNQtFFKxmh5+
+ J7Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=WnwGyz1JQxKsKuAGVcc/ZM+LKxgcoancq+m1mX+dgp8=;
- b=YFDrtd0NZEBbE0RyMUEESBvaqOTW8ZTrNI4WKgV1P+9Z3VJTuDAfK8WNYH1ZJBtMYW
- BrD1lkK9tTgiosKyoqglXJJisQtiBfyilOSATC7UIkTAqEi0uF9MJbbbrp4vCbD3IqW+
- jF6+iEh3uex7zrZab131HQvkcbE6CBJfeKeBOdaPPTGD87ntDowZDZbUD2U2HZ40jE9p
- rn+KwOrbnLO9YhOfs/5lSXvNnhjlpB8AFsS85zymd/vBnE4oI00SmrkbEDHnmNs5cnlp
- /Kn4CEASB3+9oKhYbUlZZ+FR6YajlDL7HLlJCreER+74MRajTKr2jknWLonKrFg72GHy
- 0w+w==
-X-Gm-Message-State: AOAM533XLSNxt5Kf0TQ956jKGxy9FfEHXbl1UWzvqfuCVQWRMOcDplUD
- RqbkRtBxQPF3X0Jw7KPcX1EjXBUS0zg=
-X-Google-Smtp-Source: ABdhPJw8STWXjrD9FHRXxHLT1JUX0uDbTEz7CVzZtoMHjDjU4rub23095WhPWxVwJ6YNlBbrGqwXzw==
-X-Received: by 2002:a02:ca04:: with SMTP id i4mr3507699jak.128.1643020195623; 
- Mon, 24 Jan 2022 02:29:55 -0800 (PST)
+ bh=vubi4a1zWdxZJjF7OmvnwL09BGuYxblK3O3cUOamXTg=;
+ b=t6+NJsepY+FuzZ/4KC0HWXdAtdORIaDqBrYDS0n7Cv1TG9T+IRGDZFebSR/2G6iipl
+ PrW6x868vhuD2V6tFdCUnLwVv08jzn5x9iFJNmm4S/+uxBMmqUnnd8HvfMAyiUe4TVwm
+ BWzdlHoZmgtS1SfcYi7m3Bdku9G8xkPpdpQVaNKK4/pQMWCSsMDgSk39fxjV6KaJaKZw
+ QfzTyHLxHR1jc5CtXgxnM8bibqO2sf66BaNf3B27ZaiI+08n1Rc9NjjaIpm3fi5KxXNY
+ qKEqysNKDdpF5f8WjYsKF8nhGDPx4+NtmPXvt8bX3gowOavWcVLYarGa6gOXZ89qPHYP
+ SmZA==
+X-Gm-Message-State: AOAM530zRQSNCsgbAuVNwBXKmlpUxEBSsaMJ+Z9bfL/QQjgOQZxw9e6p
+ 7/lwN9TicHuvNEk/jhwchbDvpuXpYTA=
+X-Google-Smtp-Source: ABdhPJzI+S1DK1X/rE667sufZmnWd7CP5/BFxytJ0QDqAMw3iN4tEu6hhnLqUA1cBddI8Ud3xyal7A==
+X-Received: by 2002:a5e:9b0e:: with SMTP id j14mr7688679iok.127.1643020595904; 
+ Mon, 24 Jan 2022 02:36:35 -0800 (PST)
 Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
  [97.118.239.242])
- by smtp.gmail.com with ESMTPSA id e8sm6221953iow.53.2022.01.24.02.29.55
+ by smtp.gmail.com with ESMTPSA id r15sm7091380ilo.25.2022.01.24.02.36.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jan 2022 02:29:55 -0800 (PST)
+ Mon, 24 Jan 2022 02:36:35 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 03:29:53 -0700
-Message-Id: <20220124102953.524912-1-james.hilliard1@gmail.com>
+Date: Mon, 24 Jan 2022 03:36:34 -0700
+Message-Id: <20220124103634.527471-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-pillow: bump to verison 9.0.0
+Subject: [Buildroot] [PATCH 1/1] package/python-fonttools: bump to version
+ 4.28.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,51 +86,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash change due to copyright year update:
-https://github.com/python-pillow/Pillow/commit/0bb3f87dcc72a1a80f50690abde5a3ac4576d3d6
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pillow/python-pillow.hash | 6 +++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-fonttools/python-fonttools.hash | 4 ++--
+ package/python-fonttools/python-fonttools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index d14cb5cff6..f3ca8e6014 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  7a1eb5a250c7ccbd549a89e16404f09f  Pillow-8.4.0.tar.gz
--sha256  b8e2f83c56e141920c39464b852de3719dfbfb6e3c99a2d8da0edf4fb33176ed  Pillow-8.4.0.tar.gz
-+md5  c5af6e413d2fe9247cf16ce25c816b14  Pillow-9.0.0.tar.gz
-+sha256  ee6e2963e92762923956fe5d3479b1fdc3b76c83f290aad131a2f98c3df0593e  Pillow-9.0.0.tar.gz
- 
+diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
+index 2e79861e2c..1f9b546c23 100644
+--- a/package/python-fonttools/python-fonttools.hash
++++ b/package/python-fonttools/python-fonttools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fonttools/json
+-md5  fcf1425460855b5892c990027b5396c8  fonttools-4.28.2.zip
+-sha256  dca694331af74c8ad47acc5171e57f6b78fac5692bf050f2ab572964577ac0dd  fonttools-4.28.2.zip
++md5  4a894b3cd108432f7636849b4026b771  fonttools-4.28.5.zip
++sha256  545c05d0f7903a863c2020e07b8f0a57517f2c40d940bded77076397872d14ca  fonttools-4.28.5.zip
  # Locally computed sha256 checksums
--sha256  5bb11d96b393a698df70018069a986248021f286344c437a13f299c3daf1dfd4  LICENSE
-+sha256  a6554cb737ba6c9b47d3301f78de03b4ed0d3f08d6cf9400714f3d4c894f6943  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 5ed57c55cb..2f2e817882 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+ sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
+diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
+index 9ec369d550..c5c605161b 100644
+--- a/package/python-fonttools/python-fonttools.mk
++++ b/package/python-fonttools/python-fonttools.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 8.4.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/7d/2a/2fc11b54e2742db06297f7fa7f420a0e3069fdcf0e4b57dfec33f0b08622
-+PYTHON_PILLOW_VERSION = 9.0.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/b0/43/3e286c93b9fa20e233d53532cc419b5aad8a468d91065dbef4c846058834
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_FONTTOOLS_VERSION = 4.28.2
++PYTHON_FONTTOOLS_VERSION = 4.28.5
+ PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
+-PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/3c/d5/f722e0d1aed0d547383913c6bc3c4ff35772952057b8e2b8fe3be8df4216
++PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/ce/1b/d4cd86f4e6cbd54a3c4f807015b116299bcd6d6587ea0645d88ba9d932bb
+ PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
+ PYTHON_FONTTOOLS_LICENSE = MIT
+ PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
