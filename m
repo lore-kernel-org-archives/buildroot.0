@@ -4,57 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB768C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:42:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A56C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6151860D4E;
-	Mon, 24 Jan 2022 10:42:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 893A460E28;
+	Mon, 24 Jan 2022 10:42:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 68PafXByqxpV; Mon, 24 Jan 2022 10:42:02 +0000 (UTC)
+	with ESMTP id In_IK9ps19H4; Mon, 24 Jan 2022 10:42:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADFE860D51;
-	Mon, 24 Jan 2022 10:42:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91E141BF3A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD88D60E34;
+	Mon, 24 Jan 2022 10:42:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BA5BB1BF97D
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 800E6833B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id A914C40168
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:42:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp1.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (1024-bit key) header.d=studio-punkt.com
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cPavCxVTn7pB for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YdyaK89fp5rg for <buildroot@lists.busybox.net>;
  Mon, 24 Jan 2022 10:42:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from studio-punkt.com (studio-punkt.com [37.221.193.131])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1B638275C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08C5740167
  for <buildroot@buildroot.org>; Mon, 24 Jan 2022 10:41:59 +0000 (UTC)
 Received: from localhost.localdomain (pd9e2b73d.dip0.t-ipconnect.de
  [217.226.183.61])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
  (No client certificate requested)
- by studio-punkt.com (Postfix) with ESMTPSA id 548FF1206A2;
- Mon, 24 Jan 2022 11:41:51 +0100 (CET)
+ by studio-punkt.com (Postfix) with ESMTPSA id 3C176120EE6;
+ Mon, 24 Jan 2022 11:41:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=studio-punkt.com;
  s=dkim; t=1643020919;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=W5ND50LYDbLfbBR99fysct6HQmnc945unLz8I2xSRKM=;
- b=aW03c98EsDGdrxnukNBbKTIPTbUmw981tS0Gonv3o24T2bKWOcvB68/TUy4Q24001FVSBq
- obTX+bVh2K9z8O5HJTpJiSF6nvHzCt3VlBiQUyt5jVOufiJSX7FCCY6+QLPmLAjeTe+X1A
- RQG93uBxk00FWECf2A/GRaCHX2QEOdk=
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+SCbtFcalM4ez/9ctezv1QL8RVYvMT5rqkS+FragyxY=;
+ b=EFhtw9JSJJfikJ+Cu7rtP3ffdbKC2oWN0gzIpegOtBga6IHQfniRZuRJe10Ak1MCIWSxEX
+ id8A1sjH1wjpiKbHnElgzMphq++GGpXghcmbcTTe3reUtd55TRcJsy94bDYWFkU5cB1c9F
+ vH1X05h20G3sXKn161PqnPHq2Q1iKIk=
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 11:41:15 +0100
-Message-Id: <20220124104116.12902-1-evgeni@studio-punkt.com>
+Date: Mon, 24 Jan 2022 11:41:16 +0100
+Message-Id: <20220124104116.12902-2-evgeni@studio-punkt.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124104116.12902-1-evgeni@studio-punkt.com>
+References: <20220124104116.12902-1-evgeni@studio-punkt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 0/1] fs: fix /tmp and /run clean-up in POSIX
+Subject: [Buildroot] [PATCH 1/1] fs: fix /tmp and /run clean-up in POSIX
  shells
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,23 +78,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+In POSIX sh, ^ in place of ! in glob bracket expressions
+is undefined.
 
-the fakeroot script uses [^c] to request the deletion of all hidden
-files within the tmp and run folders. This however does not work under
-dash (or other POSIX shells) without additional configuration.
-
-The proposed patch fixes the clean-up actions introduced with
-5e78e7e97d772124f0d31653aca33731abe5b4db .
-
-Regards,
-
-Evgeni Dobrev (1):
-  fs: fix /tmp and /run clean-up in POSIX shells
-
+Signed-off-by: Evgeni Dobrev <evgeni@studio-punkt.com>
+---
  fs/common.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/fs/common.mk b/fs/common.mk
+index 45beb5ae7b..64a94d9ad8 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -186,7 +186,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+ 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+-	echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[^.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[^.]*" >> $$(FAKEROOT_SCRIPT)
++	echo "rm -rf $$(TARGET_DIR)/run/* $$(TARGET_DIR)/run/.[!.]* $$(TARGET_DIR)/tmp/* $$(TARGET_DIR)/tmp/.[!.]*" >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_SELINUX)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
 -- 
 2.34.1
 
