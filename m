@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53ACEC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7334BC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 01CFF401CA;
-	Mon, 24 Jan 2022 17:36:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3157840A6A;
+	Mon, 24 Jan 2022 17:36:43 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2UzcDm4WWZ_n; Mon, 24 Jan 2022 17:36:29 +0000 (UTC)
+	with ESMTP id EvXJ6HBpsILg; Mon, 24 Jan 2022 17:36:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 042DD405F2;
-	Mon, 24 Jan 2022 17:36:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D61A1BF487
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCDA7405F2;
+	Mon, 24 Jan 2022 17:36:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 208EA1BF97D
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09A6760EBF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E5FB40225
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:26 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id krlig2-hqlwe for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ySLuUg9FLWT2 for <buildroot@lists.busybox.net>;
  Mon, 24 Jan 2022 17:36:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6BEFB60A79
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65EF640209
  for <buildroot@buildroot.org>; Mon, 24 Jan 2022 17:36:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C6FA982B33; Mon, 24 Jan 2022 17:29:36 +0000 (UTC)
+ id BE29381DB9; Mon, 24 Jan 2022 17:29:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 17:33:39 +0100
+Date: Mon, 24 Jan 2022 17:28:33 +0100
 X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: b2619c07f0a479cbdc3739b12d1e7a0cc4ffd562
-X-Git-Newrev: 4294adf244cd5083ba957a106c4a13562692367d
+X-Git-Oldrev: c2475ccb4ccc4619d83980ea5e3add7cb7c34c9f
+X-Git-Newrev: b2619c07f0a479cbdc3739b12d1e7a0cc4ffd562
 X-Patchwork-Hint: ignore
-Message-Id: <20220124172936.C6FA982B33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/cage: only enable
- XWayland if wlroots has X11
+Message-Id: <20220124172936.BE29381DB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: add
+ optional dependency to icu & libglib2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4294adf244cd5083ba957a106c4a13562692367d
+commit: https://git.buildroot.net/buildroot/commit/?id=b2619c07f0a479cbdc3739b12d1e7a0cc4ffd562
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Cage requires wlroots to be built with X11 enabled
-in order to enable XWayland, otherwise it will fail
-with error:
+icu is used in lib/util/charset/
+https://git.samba.org/samba.git/?p=samba.git;a=blob;f=lib/util/charset/wscript_configure;hb=HEAD#l40
 
-"ERROR: Problem encountered: Cannot build Cage with
-XWayland support: wlroots has been built without it"
+libglib2 is used in source3/
+https://git.samba.org/samba.git/?p=samba.git;a=blob;f=source3/wscript;hb=HEAD#l1778
 
-Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
-[yann.morin.1998@free.fr:
-  - drop explicit _XORG7, as _WLROOTS_X11 depends on it
-]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3e4c2d6213a09e9a0c598f800510acd6687ffcda)
+(cherry picked from commit 1c4c68b8fbf471919fbbaf4e688a75c4de36a331)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cage/cage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/samba4/samba4.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 9fc01d36c1..731702b4d3 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -10,7 +10,7 @@ CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
- 
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
- CAGE_CONF_OPTS = -Dxwayland=true
- else
- CAGE_CONF_OPTS = -Dxwayland=false
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index b2fb4882cb..5673521836 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -16,8 +16,10 @@ SAMBA4_DEPENDENCIES = \
+ 	host-e2fsprogs host-flex host-heimdal host-nfs-utils \
+ 	host-perl host-perl-parse-yapp host-python3 \
+ 	cmocka e2fsprogs gnutls popt zlib \
++	$(if $(BR2_PACKAGE_ICU),icu) \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
++	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_READLINE),readline) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ SAMBA4_CFLAGS = $(TARGET_CFLAGS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
