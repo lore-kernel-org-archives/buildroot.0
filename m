@@ -1,51 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD120C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 21:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C8A3C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 21:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 195624063A;
-	Mon, 24 Jan 2022 21:02:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5z-p-xW51uQv; Mon, 24 Jan 2022 21:02:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29FE640573;
-	Mon, 24 Jan 2022 21:02:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C7871BF3FB
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:02:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12C7141713
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:02:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4ACE415A5;
+	Mon, 24 Jan 2022 21:03:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PmMhzZzruQsl for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 21:02:42 +0000 (UTC)
-X-Greylist: delayed 00:17:08 by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0058741712
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 21:02:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 86665E0003;
- Mon, 24 Jan 2022 21:02:39 +0000 (UTC)
-Date: Mon, 24 Jan 2022 22:02:38 +0100
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RmHs677codK6; Mon, 24 Jan 2022 21:03:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 130E0410A4;
+	Mon, 24 Jan 2022 21:03:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA7941BF3FB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97D8F84C10
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BRrE1YzQDzWc for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 21:03:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4E1A84C0E
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 21:03:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B2A8D822E9; Mon, 24 Jan 2022 20:56:24 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20220124220238.1fa0568b@windsurf>
-In-Reply-To: <87k0ep9gbx.fsf@tarshish>
-References: <20220124173521.2236-1-jborne@kalray.eu> <87k0ep9gbx.fsf@tarshish>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [RFC PATCH 0/1] Fix binutils/libiberty target
- install directory
+To: buildroot@buildroot.org
+Date: Mon, 24 Jan 2022 22:03:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 27d08083ed4db5bd055219574cc602aaf8053a49
+X-Git-Newrev: 3edc9055c2098de37d4365a20fe278deaa0cebb6
+X-Patchwork-Hint: ignore
+Message-Id: <20220124205624.B2A8D822E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libev: bump to version 4.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +52,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jonathan Borne <jborne@kalray.eu>, jmaselbas@kalray.eu,
- ysionneaux@kalray.eu
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 24 Jan 2022 19:44:29 +0200
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3edc9055c2098de37d4365a20fe278deaa0cebb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Is there a reason behind this?  
-> 
-> As I understand that's because libiberty is static only. Buildroot does
-> not copy static libraries to $(TARGET_DIR) because they are only used at
-> build time, but not at run-time.
+Update indentation in hash file (two spaces)
 
-True, but it doesn't make sense to do that in
-BINUTILS_INSTALL_TARGET_CMDS. It should go in
-BINUTILS_INSTALL_STAGING_CMDS, where it is already present, as Romain
-pointed out.
+https://github.com/xorangekiller/libev-git/blob/rel-4_33/Changes
 
-So basically:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libev/libev.hash | 4 ++--
+ package/libev/libev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
-
-needs to be dropped from BINUTILS_INSTALL_TARGET_CMDS, if indeed
-libiberty is only installed as a static library.
-
-However, taking a step back:
-
-# We just want libbfd, libiberty and libopcodes,
-# not the full-blown binutils in staging
-define BINUTILS_INSTALL_STAGING_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(STAGING_DIR) install
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
-endef
-
-# If we don't want full binutils on target
-ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
-define BINUTILS_INSTALL_TARGET_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
-endef
-endif
-
-This is *extremely* suspicious. Indeed, we get the libraries
-unconditionally installed in staging, so any other library or program
-that we build after binutils can potentially link against thosze
-libraries.
-
-But we only install them conditionally in $(TARGET_DIR) if
-BR2_PACKAGE_BINUTILS_TARGET=y.
-
-This seems very bad to me. Both target and staging installations should
-be done under the same condition.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libev/libev.hash b/package/libev/libev.hash
+index 9ab341dedd..a849f3f39a 100644
+--- a/package/libev/libev.hash
++++ b/package/libev/libev.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 2d5526fc8da4f072dd5c73e18fbb1666f5ef8ed78b73bba12e195cfdd810344e  libev-4.27.tar.gz
+-sha256 c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
++sha256  507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea  libev-4.33.tar.gz
++sha256  c4dd1a5bc38b041a320b93c5d6c08f5c41a63f2ce718ee16cfcb757fad448199  LICENSE
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 38b0530f62..9f3c19d46c 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEV_VERSION = 4.27
++LIBEV_VERSION = 4.33
+ LIBEV_SITE = http://dist.schmorp.de/libev/Attic
+ LIBEV_INSTALL_STAGING = YES
+ LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
