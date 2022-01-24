@@ -4,61 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 865EAC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 08:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE276C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 08:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26BA9400F1;
-	Mon, 24 Jan 2022 08:12:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DEDB40273;
+	Mon, 24 Jan 2022 08:44:12 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OTQyy-rC0M0O; Mon, 24 Jan 2022 08:12:56 +0000 (UTC)
+	with ESMTP id CvYRrh06Yl1s; Mon, 24 Jan 2022 08:44:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03E7D4015C;
-	Mon, 24 Jan 2022 08:12:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2B11BF2AA
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:12:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 401644015C;
+	Mon, 24 Jan 2022 08:44:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 879161BF2AA
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:44:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B86F60A88
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:12:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84325817F2
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:44:08 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp3.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T14-LtW7Z03A for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 08:12:51 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81F0060A46
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 08:12:51 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPA
- id BuT2nOgfHz0d2BuT2nS7Cp; Mon, 24 Jan 2022 09:12:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643011969; bh=kvjPrGRDmMiWuMj7xAdZ/ODNyMU2WiJWmKzXUMNLXM4=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=E8MLBTkmbeV9XFhbkXjCcRRbOh6Vgvvot39+QoQgT43f7roOEbhtQUGJEOl+RSC6T
- RTGLih60R6WbTOy+mJjyOe+xKSgJXCtX8ujOhMJrjQgWhYD9t+7xcHX9CmcKrJyiZl
- XIoAXqgtQbscnL+ANf7CLeo6lpEsoI5a5Q5pU3Nr+PIeis5N3ThrzzuIGN5J78A8Dh
- 1JCMEUUC1Plo3gYDNKbe+2w1Zy7Ctm/IjZTV1Y65JmCbJ6WAr2WewtvxgI9E1wRpqm
- NSYSdQ+CGUvWMlBcnmASpXECa+Zm8nk3NqCNv4q4WPc2vCtCBeCP1D4OFZHzaV1/gs
- 9sN+zQ1UUHaZQ==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Mon, 24 Jan 2022 09:12:47 +0100
-Message-Id: <2BFF5C08-8E54-4689-894E-0A0BE3D6A71A@benettiengineering.com>
-References: <1dea301e-8425-a1ca-fc69-db338825b19c@gmail.com>
-In-Reply-To: <1dea301e-8425-a1ca-fc69-db338825b19c@gmail.com>
-To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-X-Mailer: iPhone Mail (19C63)
-X-CMAE-Envelope: MS4wfIcHZ1UsxYgUNJcgg9+ksSSu2CbQLQf6hbhZwABn+C8bqMlt+f6chboLzMfBeMLDTDhQdQEJPtajlPYdy1KBHmok3R2MOZN5OGwtAcDfdNsvT9Y5lbAS
- 2ykSoeaBpFu0DxUM1c2Lks97z35ZsgRmFWXvk2a5ai4Hsx006kCLWBepismVHdzXxnFYeFAtPWEkrhyz5i0QpIgI4dl9uifFQdrv0/LEkGzute9p4enCwXd1
- iu4nKABCoqtNzfx4Ptfq88Jl80h59TJ+Vnkqrfp8Sgh3tKi2UmVcRoJUWzhKLgdtRXt5U1EThgi9PXHmH1I+WlHcWYmZq6M3qYS2VImWpo1+6LYXkZnsq4/R
- 6Q7ETxOL
-Subject: Re: [Buildroot] [PATCH 1/2] board/kontron/pitx-imx8m: use extlinux
- instead of U-Boot boot script
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=kernel.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BZnGv3-_9Qfw for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 08:44:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E43B9817ED
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 08:44:07 +0000 (UTC)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 905E460BA2;
+ Mon, 24 Jan 2022 08:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC2CC340E1;
+ Mon, 24 Jan 2022 08:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1643013846;
+ bh=6SzDmxGUP9buL2rJcd1l+dEr6zhNHujOXM9Taer58sk=;
+ h=In-Reply-To:References:Subject:Cc:To:From:Date:From;
+ b=uZpbE1MXUlW3CYD2a+app+7pwUEJlN3X3L1Cofb7IU7/wCmnbIRuFilbohwvnS+Yv
+ gu2/fiF9jXY5mvrnVgtg7JN1+sYESgDGOgrWPozHuK+kBxmE+tkcR8ZoXvW2ms/gag
+ 59sM667x218s9S6VDimor56D6xIrN3fhN/MPPdjepJG8SPFi9xZx/U1JXaYN1MnCyd
+ S3oEhJLrAF4Xyz2CPZoVvFZJHW/vcb2ZC7RBeGWgdSemwXowUDFKWGSJwfpeGYUj40
+ 8KvRo9AJkhaPORWwX0SuJiMagyJn2be9524dwGR0e2KnrpmtXFzA7JDHuzdTGmbSEA
+ EWueCW/3AbmaA==
+MIME-Version: 1.0
+In-Reply-To: <2d19c071-3859-25db-0966-2fd8ca3d845f@benettiengineering.com>
+References: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+ <20220119222332.66485-1-giulio.benetti@benettiengineering.com>
+ <20220119233944.7ba2d09f@windsurf> <20220120084804.429f1d54@bootlin.com>
+ <164267096542.4497.13116457792635384701@kwain>
+ <2d19c071-3859-25db-0966-2fd8ca3d845f@benettiengineering.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Antoine Tenart <atenart@kernel.org>
+Message-ID: <164301384246.4708.15294151281235312059@kwain>
+Date: Mon, 24 Jan 2022 09:44:02 +0100
+Subject: Re: [Buildroot] [PATCH v3] package/refpolicy: Add option to disable
+ "dontaudit" rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +76,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cj4gSWwgZ2lvcm5vIDI0IGdlbiAyMDIyLCBhbGxlIG9yZSAwNjo0MywgU2VyZ2V5IEt1em1pbm92
-IDxrdXptaW5vdi5zZXJnZXk4MUBnbWFpbC5jb20+IGhhIHNjcml0dG86Cj4gCj4g77u/SGkgQWxs
-LAo+IAo+IDI0LjAxLjIwMjIgMDE6MDEsIEdpdWxpbyBCZW5ldHRpOgo+PiBJTUhPIHRoZSB3b3Jz
-dCBkcmF3YmFjayBJIHNlZSB3aGlsZSB1c2luZyBleHRsaW51eC5jb25mIFZTIGJvb3Quc2NyIGlz
-IHRoZSBtaXNzaW5nIGNoZWNrc3VtLiBFc3BlY2lhbGx5IG9uIGVtYmVkZGVkIHN5c3RlbXMgd2Ug
-ZGVlcGx5IHRyZWF0Lgo+PiBOb3QgaGF2aW5nIHN1Y2ggY2hlY2tzdW0gY2FuIG1ha2Ugc3lzdGVt
-IGJvb3Rpbmcgd2l0aG91dCBhIHBhcmFtZXRlciBvbiBsaW51eCBjb21tYW5kIGxpbmUgZm9yIGV4
-YW1wbGUsIG9ubHkgYmVjYXVzZSAxIEFTQ0lJIGhhcyBiZWVuIGNvcnJ1cHRlZC4KPj4gSSBwcmVm
-ZXIgdGhlIHN5c3RlbSB0byBub3QgYm9vdCBhdCBhbGwgaW4gZ2VuZXJhbCBpbnN0ZWFkIG9mIGhh
-dmluZyBpdCAid29ya2luZyIgd2hpbGUgaGlkaW5nIHNvbWUgcG90ZW50aWFsIHByb2JsZW0uCj4+
-IFdoYXQgZG8geW91IGFuZCBBbGwgdGhpbmsgYWJvdXQgdGhpcz8KPiAKPiBJTUhPIGV4dGxpbnV4
-LmNvbmYgaXMgbW9yZSBkZWJ1Z2dpbmcgZnJpZW5kbHkuCj4gCj4gQm9vdC5zY3IgcmVxdWlyZXMg
-dGhlIGZvbGxvd2luZyBjb21tYW5kOgo+IG1raW1hZ2UgLUMgbm9uZSAtQSBhcm0gLVQgc2NyaXB0
-IC1kIGJvb3QuY21kIGJvb3Quc2NyCj4gCj4gVGhlIG1raW1hZ2UgdXRpbGl0eSAoQlIyX1BBQ0tB
-R0VfSE9TVF9VQk9PVF9UT09MUykgaXMgbm90IG9uIHRoZSBib2FyZCwgeW91IG5lZWQgdG8gdHJh
-bnNmZXIgdGhlIGNvbnZlcnRlZCBmaWxlIG92ZXIgdGhlIG5ldHdvcmsuIE9yIHJlY29ubmVjdCB0
-aGUgbWljcm9TRCBjYXJkLgoKSSBhZ3JlZSB3aXRoIHRoaXMgdG9vLiBJ4oCZdmUgZm91bmQgbXlz
-ZWxmIG1hbnkgdGltZXMgYmxhbWluZyBiZWNhdXNlIEkgY291bGRu4oCZdCBzaW1wbHkgbW9kaWZ5
-IGJvb3Quc2NyIG9uIHRhcmdldCBhbmQgcmVib290LgpCdXQgSSBmaW5kIGl0IHN0aWxsIGRhbmdl
-cm91cy4KCkFub3RoZXIgdGhpbmcgdGhhdCBJIGRvbuKAmXQgZmluZCBwb3NzaWJsZSB0byBkbyB3
-aXRoIGV4dGxpbnV4LmNvbmYgaXMgdXNpbmcgdWJvb3Qgc2NyaXB0aW5nIHBvc3NpYmlsaXR5IHRo
-YXQgZW5hYmxlcyB5b3UgdG8gZG8gbG90IG9yIHRoaW5ncywgbGlrZSBmZHQtb3ZlcmxheSBleHBh
-bmQgYW5kIGFwcGx5LCBzaG93IGEgYm1wIGluc3RlYWQgb2YgaGF2aW5nIGEgc3RhdGljIHNwbGFz
-aHNjcmVlbiBhbmQgc28gb24uCgpJIGRvbuKAmXQgdGhpbmsgdGhpcyBpcyBhY2hpZXZhYmxlIHdp
-dGggZXh0bGludXguY29uZgoKVGhlc2UgYXJlIG9ubHkgbXkgdGhvdWdodHMgYnV0IEkgc3RpbGwg
-ZG9u4oCZdCBoYXZlIGEgc29sdXRpb24gaG9uZXN0bHkuIEluIHBhcnRpY3VsYXIgdG8gdW5pZm9y
-bSBib2FyZHMuCgpCZXN0IHJlZ2FyZHMKR2l1bGlvCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Quoting Giulio Benetti (2022-01-23 23:21:50)
+> 
+> Re-reading this after some day it looks to me like the simple
+> BR2_PACKAGE_REFPOLICY_ENABLEAUDIT is correct. Because it "Removes all 
+> dontaudit rules from policy.conf", so it's true that it enables audit 
+> logs in the end. It's a very specific options and the one who will use 
+> it will know what he will enable and most of all we can specify in the 
+> help section that:
+> "Removes all dontaudit rules from policy.conf"
+
+> Does it work for you?
+
+As long as the help text is clear enough for the user, either config
+option name should be acceptable. Using the above is good to have an 1:1
+mapping with the target name, at the expense of having the help text not
+matching it and an unclear option name from the user perspective (it's a
+bit weird not to enable it, at first). For _WITH_DONTAUDIT_, the
+opposite is true. I'd say there is no perfect solution, we can either
+stay close to the refpolicy internals or have the Buildroot specifics
+more consistent; not sure which is better.
+
+Thanks,
+Antoine
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
