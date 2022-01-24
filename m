@@ -1,79 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A6DDC433EF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 09:30:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A2BBC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 09:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DEFB605C9;
-	Mon, 24 Jan 2022 09:30:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3452040951;
+	Mon, 24 Jan 2022 09:30:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sJeFAr7fIhXW; Mon, 24 Jan 2022 09:30:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VrJFU8iUxYAl; Mon, 24 Jan 2022 09:30:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0C8960C2A;
-	Mon, 24 Jan 2022 09:30:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0D0231BF3DB
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 09:29:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D77BC40979;
+	Mon, 24 Jan 2022 09:30:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B2CA1BF3DB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 09:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EED3E60B9F
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 09:29:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 093FD8281A
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 09:30:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aK3p8oRrv9VD for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 09:29:53 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 77A11605C9
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 09:29:53 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id n17so2821660iod.4
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 01:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QfeDrIOBmg3uNsoFFEvyqfAe2JuDbb2T/x+QY8Ob/zw=;
- b=oGoVEF6drG1AcywF2EQT7LI3w+oPbsUB0hSZYi/OiJRVd7//vykvIWFyuts29N9c+/
- MRUERMKNj/EGkZYWSF368vVqrnOJ4ESrAet29QMtHwSCjnQCxTjp23eisM21+RyLkUix
- lTJRERM5boT0v9N7+dxO7zlf+0o2l6qr8YRGFeUtMirWe6dB0k9apY49HT1kfuxQzp3p
- QBMUB2xfjjXyRAzw0p/TxuSxPxvraqzyJ0BfFRwIM7mRCnN/1TlFg55iw9+jXi/R0fYj
- nf4XOXK6Pq8Tr2z7VhFY3Oic9DRmHf76CNTucJ1EGA3afcljJchwTdsN+A68iGt0e5pn
- ZQxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QfeDrIOBmg3uNsoFFEvyqfAe2JuDbb2T/x+QY8Ob/zw=;
- b=N27pWWUVxRskmnyyuz2g1G+FTOEvDrzhRSzquKemHXdWybzAhCLeC2HBCZC7Yx5e6S
- QQpVHgrbizJQscrMO1oXgf5avrYW7N0P6hZhy6BJH5KWTT9FY5bL+23JX63anjypKlNT
- qtPIjYtuytDlQbxmkE383/aiXwj7BzaHTe45RZCKfu0NfS+kg75Ki5L6vuxLIsRq2Vi/
- OiFCeoM6q385YiDPEsuXMQ9gpIGn2sR/0/sM8cDAtxNkqrTJdzkK0apHVYlmGuHjFlOF
- nAbH8TXFubPi9ExbwESBRw+aA0nM3YxdGNnZjRC3Ewprr2kto2xKrl7W4jr27QfpVRGl
- NFRg==
-X-Gm-Message-State: AOAM532rywU3Zq5rd6AQEE8EHr6rjL5R4FDYceRTegHbWBb0/Lvwl8ZI
- yZDp5hirmc34/ekyDdtwCVRP0nEDwRU=
-X-Google-Smtp-Source: ABdhPJw50VrUjPs3v0bzMwdAtuvz/BYPJqtAkDi+78ahlt0GDYyyBE3gYHFD8DS//FQe82z28cQ9wg==
-X-Received: by 2002:a05:6602:2e88:: with SMTP id
- m8mr7468818iow.16.1643016592316; 
- Mon, 24 Jan 2022 01:29:52 -0800 (PST)
-Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
- [97.118.239.242])
- by smtp.gmail.com with ESMTPSA id v6sm7050520ilu.60.2022.01.24.01.29.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jan 2022 01:29:52 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 02:29:49 -0700
-Message-Id: <20220124092949.137812-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=kernel.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qsDAzXXvENwk for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 09:30:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7A10482C91
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 09:30:08 +0000 (UTC)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by sin.source.kernel.org (Postfix) with ESMTPS id 69D09CE1051;
+ Mon, 24 Jan 2022 09:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF2CC340E7;
+ Mon, 24 Jan 2022 09:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+ s=k20201202; t=1643016602;
+ bh=qU6IqW799Xhz7Lo6RiGkRZhhjdx6K5ElLqpy8wvf1gw=;
+ h=In-Reply-To:References:Subject:Cc:To:From:Date:From;
+ b=gkBgMftiZEfisyvb9SKjQp42Ch1UN6JzI0jYA0JS/RiP+4jBL7xAcRDMyXli5V501
+ ycT1kXWhQnQ8CEnPL5WfKRoPl1UiotXxT6/MT2It5ftMoUdqLRVBAhCpfhdi8Pmdn2
+ 55fhFHXmii2T6DQ5cGenRZ1eY1Bqi4of+fPgpRE3ogeM7g0GqJf48fGsQfFfQOQ0pd
+ noQ2RQ8klrHyQ1LTKb36Cmv125aTc+2XV2XyURDh1yI34cK6PxZ3HH1JawEp4rQROo
+ 9PTd27X1wd7RHeXae6qdjz8dlOUkOpVElFD2OALqxvMubpHIeI3Xk9UM5/TLLo9Deb
+ CkI5PdJA0IQ3A==
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
- 6.0.1
+In-Reply-To: <F25BFFC0-C4B1-4099-99A5-F42AF66C061E@benettiengineering.com>
+References: <164301520937.4708.9842501306400984658@kwain>
+ <F25BFFC0-C4B1-4099-99A5-F42AF66C061E@benettiengineering.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Antoine Tenart <atenart@kernel.org>
+Message-ID: <164301659905.4708.13356617813640521530@kwain>
+Date: Mon, 24 Jan 2022 10:29:59 +0100
+Subject: Re: [Buildroot] [PATCH v3] package/refpolicy: Add option to disable
+ "dontaudit" rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,50 +71,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 2d9943fc0d..789a6ec59f 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5  e28b9592289597b232f09e5cc3857f32  multidict-5.2.0.tar.gz
--sha256  0dd1c93edb444b33ba2274b66f63def8a327d607c6c790772f448a53b6ea59ce  multidict-5.2.0.tar.gz
-+md5  c9a6ee3d39df11616cfe0c89abd5134b  multidict-6.0.1.tar.gz
-+sha256  d40616f3f9326a18e1f2fa7c7e8e0e04a7e5228bfa2bd62c1e0d68fbc259b09b  multidict-6.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  06a240ea10ba868fda2de58df859886961df873aa74bbab1e0f13eaf99f92b7b  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index 2619cad2ee..ff8fbcd053 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MULTIDICT_VERSION = 5.2.0
-+PYTHON_MULTIDICT_VERSION = 6.0.1
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/8e/7c/e12a69795b7b7d5071614af2c691c97fbf16a2a513c66ec52dd7d0a115bb
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/78/91/db40f5e6bd2b5d2f3fff0f5edee05035513c11fff09c565368f22129240a
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UXVvdGluZyBHaXVsaW8gQmVuZXR0aSAoMjAyMi0wMS0yNCAxMDoyMDo1OSkKPiAKPiBUaGVuIEni
+gJlkIGdvIGZvcjoKPiBCUjJfUEFDS0FHRV9SRUZQT0xJQ1lfRU5BQkxFX0VYVFJBX0FVRElUX0xP
+Rwo+IAo+IOKAnEVuYWJsZSBleHRyYSBhdWRpdCBsb2figJ0KPiAKPiBBbmQgaW4gdGhlIGhlbHAg
+c2VjdGlvbiBJIHNwZWNpZnkgYWxsIHRoZSB3YXJuaW5ncy4KPiBEZWZhdWx0ZWQgdG8gbi4KPiAK
+PiBUaGlzIHdheSBpdOKAmXMgcHJldHR5IGNsZWFyIHRvIG1lIHRoYXQgSSBhcHByb2FjaCB0aGUg
+cGFja2FnZSBmb3IgdGhlCj4gZmlyc3QgdGltZS4gQW5kIG1vc3Qgb2YgYWxsIGl04oCZcyB3aGF0
+IGl0IGRvZXMgYXMgeW914oCZdmUgZXhwbGFpbmVkIG1lCj4gYWJvdmUuCgpCdXQgdGhlbiBpdCdz
+IG5vdCBjbG9zZSB0byB0aGUgcmVmcG9saWN5IGltcGxlbWVudGF0aW9uIGFuZCBJIGRvbid0CmZp
+bmQgaXQgcGFydGljdWxhcmx5IGNsZWFyIGVpdGhlci4gRXh0cmEgYXVkaXQgY291bGQgYmUgbmlj
+ZSBpbiBtYW55CndheXMgOikKCkxldCdzIHdhaXQgYSBiaXQgZm9yIG90aGVyIHRvIGhhdmUgdGlt
+ZSB0byBjaGltZSBpbiwgdGhleSBtaWdodCBoYXZlIGFuCmludGVyZXN0aW5nIHRha2UsIG9yIHN1
+Z2dlc3Rpb25zLgoKVGhhbmtzLApBbnRvaW5lCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
