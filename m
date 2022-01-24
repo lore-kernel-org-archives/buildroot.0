@@ -1,47 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57216C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 21:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2CD9C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 21:03:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E997B60F22;
-	Mon, 24 Jan 2022 21:03:29 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pYy3UVGDIeAQ; Mon, 24 Jan 2022 21:03:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A8F460B2B;
-	Mon, 24 Jan 2022 21:03:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E47181BF3FB
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1D7784C0E
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 422D581750;
+	Mon, 24 Jan 2022 21:03:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hnj4LHq2UYbO for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 21:03:13 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pijdub6aN_s4; Mon, 24 Jan 2022 21:03:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91074814AB;
+	Mon, 24 Jan 2022 21:03:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EC731BF3FB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BA6D415D0
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 21:03:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ge13p2K7vs8s for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 21:03:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FBE484C0C
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 21:03:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9264440943
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 21:03:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AA7E1822E8; Mon, 24 Jan 2022 20:56:24 +0000 (UTC)
+ id A11B2822E9; Mon, 24 Jan 2022 20:56:48 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 21:58:58 +0100
+Date: Mon, 24 Jan 2022 22:03:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c7ad667ec4a25226848baba809e492ca0ff06da
-X-Git-Newrev: 27d08083ed4db5bd055219574cc602aaf8053a49
+X-Git-Oldrev: 3edc9055c2098de37d4365a20fe278deaa0cebb6
+X-Git-Newrev: 63245fcf9bc801facd7b4775cc4ae9d31c3c8e24
 X-Patchwork-Hint: ignore
-Message-Id: <20220124205624.AA7E1822E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xml-security-c: bump to version
- 2.0.4
+Message-Id: <20220124205648.A11B2822E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vte: needs gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,114 +58,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27d08083ed4db5bd055219574cc602aaf8053a49
+commit: https://git.buildroot.net/buildroot/commit/?id=63245fcf9bc801facd7b4775cc4ae9d31c3c8e24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 2.0.4 of the Apache XML Security for C++ has been released,
-correcting support for OpenSSL earlier than 1.1.
+vte needs C++20 since
+https://gitlab.gnome.org/GNOME/vte/-/commit/eec33cce0b9359fddda35703e22bffd1f8f28852
+to avoid the following build failure raised since bump to version 0.66.2
+in commit 53c0c7dd01228122c7ceb44d65f2800dbcf473f1:
 
-Version 2.0.3 of the Apache XML Security for C++ has been released,
-adding support for OpenSSL 3.0.0.
+../output-1/build/vte-0.66.2/meson.build:144:0: ERROR: Assert failed: option -std=gnu++20 not supported by gcc
 
-Drop patch (already in version) and so autoreconf
-
-https://santuario.apache.org/cindex.html
+Fixes:
+ - http://autobuild.buildroot.org/results/c0d1adeffbf97805a0f669d01929a56ccc66a835
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...onf-variable-cache-option-for-getcwd-test.patch | 50 ----------------------
- package/xml-security-c/xml-security-c.hash         |  4 +-
- package/xml-security-c/xml-security-c.mk           |  5 +--
- 3 files changed, 3 insertions(+), 56 deletions(-)
+ package/vte/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-deleted file mode 100644
-index 26b53ba719..0000000000
---- a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 9d14fad412a497fe83cfc6ab594ddc612512f02a Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Thu, 4 Jun 2020 20:34:11 -0500
--Subject: [PATCH] autoconf variable cache option for getcwd test
--
--The cached variable allows cross compiled builds to successfully set the
--desired default for this value without invoking a test.
--
--Fixes:
--https://issues.apache.org/jira/browse/SANTUARIO-549
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- configure.ac | 20 ++++++++++++--------
-- 1 file changed, 12 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index b43d7a5..c3d4489 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
-- 
-- # Check whether getcwd can dynamically allocate memory.
-- AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
---AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
---     #include <unistd.h>],
---[char *cwd = getcwd(NULL, 0);
---return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
---     [AC_MSG_RESULT(yes)
---      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
---         [Define to 1 if getcwd(NULL, 0) works])],
---     [AC_MSG_RESULT(no)])
--+AC_CACHE_VAL([xml_cv_func_getcwd_null],
--+[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
--+     #include <unistd.h>
--+     char *cwd = getcwd(NULL, 0);
--+     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
--+  [xml_cv_func_getcwd_null=yes],
--+  [xml_cv_func_getcwd_null=no])])
--+AC_MSG_RESULT([$xml_cv_func_getcwd_null])
--+if test $xml_cv_func_getcwd_null = yes; then
--+AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
--+  [Define to 1 if getcwd(NULL, 0) works])
--+fi
-- 
-- AC_LANG(C++)
-- 
---- 
--2.17.1
--
-diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
-index d91ed86e9c..f4b7041a63 100644
---- a/package/xml-security-c/xml-security-c.hash
-+++ b/package/xml-security-c/xml-security-c.hash
-@@ -1,3 +1,3 @@
--# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.tar.gz.sha256
--sha256  c303a2b08cb9ca0f5594adcbb83829b1e793175d7114a82f7d78def8bb2e30df  xml-security-c-2.0.2.tar.gz
-+# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz.sha256
-+sha256  a78da6720f6c2ba14100d2426131e0d33eac5a2dba5cc11bdd04974b7eb89003  xml-security-c-2.0.4.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
-index fe761819ee..fda9af4798 100644
---- a/package/xml-security-c/xml-security-c.mk
-+++ b/package/xml-security-c/xml-security-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/vte/Config.in b/package/vte/Config.in
+index 2635a6007c..45d627885f 100644
+--- a/package/vte/Config.in
++++ b/package/vte/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_VTE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+@@ -22,13 +22,13 @@ config BR2_PACKAGE_VTE
  
--XML_SECURITY_C_VERSION = 2.0.2
-+XML_SECURITY_C_VERSION = 2.0.4
- XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
- XML_SECURITY_C_LICENSE = Apache-2.0
- XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
-@@ -15,7 +15,4 @@ XML_SECURITY_C_CONF_ENV = \
- 	xml_cv_func_getcwd_null=yes \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ 	  http://github.com/GNOME/vte
  
--# Patched configure.ac
--XML_SECURITY_C_AUTORECONF = YES
--
- $(eval $(autotools-package))
+-comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 4.8"
++comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 10"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+ 		BR2_TOOLCHAIN_USES_MUSL
+ 
+ comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
