@@ -1,79 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC22C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85F2C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 10:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 615FF60D79;
-	Mon, 24 Jan 2022 10:42:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62F0B4050F;
+	Mon, 24 Jan 2022 10:46:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y_oeEtnQXT6m; Mon, 24 Jan 2022 10:42:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94CA360E31;
-	Mon, 24 Jan 2022 10:42:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 912891BF3A4
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:42:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FEC64017E
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:42:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RAJQgh_QKJfU for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 10:42:42 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HhOKXEvyB8IT; Mon, 24 Jan 2022 10:46:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A12AB403C8;
+	Mon, 24 Jan 2022 10:46:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7039B1BF3A4
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:46:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B2B1403B9
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 10:46:43 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp2.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OiwAfKNlNzdl for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 10:46:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D7AC40167
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 10:42:42 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id q204so4325495iod.8
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 02:42:42 -0800 (PST)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1943C401FE
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 10:46:41 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id z199so4415757iof.10
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 02:46:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=7oa2GvZCKAi/uGbLud2xMIati9w/BKRF8oQIRg3mVWU=;
- b=Kz+WzoLNuyl96JFz+/4mLaJUeNML1kaPFiVhRz84DLjjdvbGBqgII4akSUQo8fU6jP
- kXHBk4Nriewb4t3FyRdfvS9agX19P1GOdHMMakGrtcxBx4i1XfvdUWOB3vGAnrmWx39d
- tHuvoujbfblXaF9oVgLJLdDK2qv7R/2aNp8qV9kdNqvSTrTvxzblUDM3JpLrQn1JZ8HG
- 65Ry5rvcIbt5wy/LEAllsJy4JrF8iL9hCkMoSV8PYmczOeXBjnaP2PkJZ8PgPExqtyV7
- ASip0l/hl5wrNyWWrnBv9g+Zk5HQvnynbnC3sVGgBQ6GUNa+6NIXvWpnhePUPtl21oBB
- fSwg==
+ bh=WqM8GkE33TDY0F/xKTSUmFL9NGkAkDRY/0niUchQ68g=;
+ b=Oxd8dreG/RQ3h2qo4GXhL4MavImnNf/AXFtUoF2/1HTBlooRn8NNiQilws4pV4Iqw1
+ HJngBm448L6G3UdVbYKjlIK9wJpiYXrMrkGjsTUO1nFfBCMiHzBV5qKhi+zfAIfKxYdj
+ LwPMx0KxsrT1VjZjhhmJOHd3pym7ATenj6JcDOBfwMhON/3v1jLtzdBRmf62lzAjzNah
+ Qnh6MEBNYcQn6483GunBQ83EUjmGaguSjEt1QPJTt+sX1ytmrRDdgSdCCbdK73WUgWlR
+ ZIb/6OMQ/BVsRfb1qptpqw0+FCmNW1KxjoRDTc6i8SG4uVKODJSkCsjXylCtJGe0JB9R
+ t2QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=7oa2GvZCKAi/uGbLud2xMIati9w/BKRF8oQIRg3mVWU=;
- b=o4PZYIyWDimMqxD/C5s6rSVvZyPF0zLUm08Ow4iL9i2iIpQchrJhIV5Gi81bk+7LOe
- yD6nJFcVcrvH7xGXFEvQeqoviOs4Izz635ZSOUF660eEuHN78cwwpdv0OFJrzGiFN2Tf
- wpVLRmmU+Ri+a/FZnItcdr3lv7FGx7NnQeC3tiKXUCGVZS98hjq/4cXEGuk5yAR0lhn2
- 7L+6JMrN2ZwryQ+UbZYOB57Ti70D8cFK0nsNlo66W5ZeI8lP923oSyYBieJwwTXQfT2E
- 669Hd3qA0T/HKMSJQXgVBxoswYxiQXSSCbKeFGUpRql95ZMYViohs+ne9dhdhuzv9N10
- sy8A==
-X-Gm-Message-State: AOAM530bb8yWwBk6iNM/cH5wo62vd6dYz/2kVtN+mef2WRO630iQEj5T
- WbWDsnBWGsLA3N6pkiLSCpN0wsGj678=
-X-Google-Smtp-Source: ABdhPJyGqT69V7yf8+0NBn9jlO+s0LUSTNbu3gfm6YQxZcaeKM/K2NB2pqYnE/5zLYbTFFfodYhYsQ==
-X-Received: by 2002:a02:2ac8:: with SMTP id w191mr5030790jaw.89.1643020961616; 
- Mon, 24 Jan 2022 02:42:41 -0800 (PST)
+ bh=WqM8GkE33TDY0F/xKTSUmFL9NGkAkDRY/0niUchQ68g=;
+ b=wRy7P88ByFdoTdqCNV0Db6K6eguQrEdkAynEXMsnu00ScZ1X8w5IH+bZaCOI4XTHuZ
+ s780K9L095u/VmVGRRF18tfRvoPUrP6VDJU0nMCZb85TT1xgcerOXXNgCnFMIe5d1/yf
+ wCUoLd3g0wMn0lPOGSMrXv10/0yS8jlLxtgIXaooDNRAhRlr/PsXn9+XlzMUJ2pbtXTX
+ tguzASH9gft86LeqndzGInu6sRxZNNNErvC95mX4GJrLtDUvtoXvUyKzQ+pOkP3rMFSl
+ ladQPzz4tkAk4R1yYNliB/Fb78bMa9vOstaOvcJrS3+JG/QFzBLI1kjhzzAiFIyAfZee
+ Rq2A==
+X-Gm-Message-State: AOAM533QcaK275J42vpkMFBi87YxrxzmMX+zIDY52ZfQQL0q7C7PS8FQ
+ ZyuQ/yPTnh8R3NwvG4Dp9x1FhopqnDQ=
+X-Google-Smtp-Source: ABdhPJy9lHZcPXYJrWeRF91gnomCvupoImE/cOj8Xq8yW7i4rBQAkrgXDadUMs+R1/VovaHhHWkSkw==
+X-Received: by 2002:a05:6602:2d49:: with SMTP id
+ d9mr7568987iow.64.1643021201105; 
+ Mon, 24 Jan 2022 02:46:41 -0800 (PST)
 Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
  [97.118.239.242])
- by smtp.gmail.com with ESMTPSA id n9sm7762201ilk.27.2022.01.24.02.42.41
+ by smtp.gmail.com with ESMTPSA id j6sm7150270ils.33.2022.01.24.02.46.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jan 2022 02:42:41 -0800 (PST)
+ Mon, 24 Jan 2022 02:46:40 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 03:42:40 -0700
-Message-Id: <20220124104240.531060-1-james.hilliard1@gmail.com>
+Date: Mon, 24 Jan 2022 03:46:39 -0700
+Message-Id: <20220124104639.532519-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: bump to version 3.0.3
+Subject: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +94,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-jinja2/python-jinja2.hash | 4 ++--
- package/python-jinja2/python-jinja2.mk   | 4 ++--
+ package/python-idna/python-idna.hash | 4 ++--
+ package/python-idna/python-idna.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index afd07e89f1..ea7fe71a35 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 08a7be9d56..27c42c8b59 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5  059f89375d7ea60eb7013f341f0b89e7  Jinja2-3.0.2.tar.gz
--sha256  827a0e32839ab1600d4eb1c4c33ec5a8edfbc5cb42dafa13b81f182f97784b45  Jinja2-3.0.2.tar.gz
-+md5  b76ae2f0647abebc81e7c03f5fb7b00f  Jinja2-3.0.3.tar.gz
-+sha256  611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7  Jinja2-3.0.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  08ea8e2ce09e522424e872409c221138  idna-3.2.tar.gz
+-sha256  467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3  idna-3.2.tar.gz
++md5  5856306eac5f25db8249e37a4c6ee3e7  idna-3.3.tar.gz
++sha256  9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d  idna-3.3.tar.gz
  # Locally computed sha256 checksums
- sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index bb53f95699..752daf653c 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
+ sha256  a2d6e4d940bd24dbe7b9645cde19a9792cc51db7ae0d5acd301ac860caa3e836  LICENSE.md
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index a2c842f1e7..2a1ec8314b 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 3.0.2
-+PYTHON_JINJA2_VERSION = 3.0.3
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/f8/86/7c0eb6e8b05385d1ce682abc0f994abd1668e148fb52603fa86e15d4c110
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/91/a5/429efc6246119e1e3fbf562c00187d04e83e54619249eb732bb423efa6c6
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
+-PYTHON_IDNA_VERSION = 3.2
++PYTHON_IDNA_VERSION = 3.3
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/cb/38/4c4d00ddfa48abe616d7e572e02a04273603db446975ab46bbcd36552005
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/62/08/e3fc7c8161090f742f504f40b1bccbfc544d4a4e09eb774bf40aafce5436
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+ PYTHON_IDNA_SETUP_TYPE = setuptools
 -- 
 2.25.1
 
