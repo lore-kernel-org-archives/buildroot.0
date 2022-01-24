@@ -1,69 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35B5BC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 07:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6621BC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 08:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DFC774025D;
-	Mon, 24 Jan 2022 07:49:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5DF5827A1;
+	Mon, 24 Jan 2022 08:00:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W1t1minyrawu; Mon, 24 Jan 2022 07:48:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YNqs5rpZvVba; Mon, 24 Jan 2022 08:00:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFE0B4015C;
-	Mon, 24 Jan 2022 07:48:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 555991BF356
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:48:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B1B28195D;
+	Mon, 24 Jan 2022 08:00:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AC46F1BF356
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 517ED60A91
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:48:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B1FE8195D
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:00:17 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0vefY_9BBEed for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 07:48:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O-U0DAcsDFXD for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 08:00:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com
- [209.85.216.51])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A44516059F
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 07:48:56 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id
- my12-20020a17090b4c8c00b001b528ba1cd7so10936874pjb.1
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 23:48:56 -0800 (PST)
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com
+ [209.85.215.173])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3CA68144B
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 08:00:16 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id p125so14672328pga.2
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 00:00:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=HtM7UUozFPs9QhA4izR0h19WNc/xmeTYc4/obpCh/B4=;
- b=qHVPP7cldwqY8Q04YF9/sdEjwYKhsN7sDSLCz898pxJqRBdFsOtGfU2k5IHOIoMEbI
- c+cGn+Mwxq9homP4aXNfdkERbs5lm6DimAZZ1kKjeRN+LSo4YwRzn5hAJh3oMbeEXkEY
- FomcUNidsGAWCi+HwnECzFhVHmYyK8F56Pz7Lm86Jpq8sbjBvRDJZF5POS1xnZ4HYMTr
- LjOII3VWY2b6AAlePoPrEAwYll2nEEsJILa3HUgGXuHg9iRGzQ2sbjWcZd+IoxIFmLH8
- Ybo90W9gKeR1/IyDebglJC3E+70t29nZyTvPwx8ckJvcMl6ufcnMibBj6CFmmNLVElCt
- lHYw==
-X-Gm-Message-State: AOAM532GyaJgu+9yA1vGKDrJ7C52u+WnTQoX/7F1szbqVsYKTC+4YpPD
- fWu8ix5W8rCEPlTBnB76SYgqZq6lz6CmzQ==
-X-Google-Smtp-Source: ABdhPJy1VZwKBTHWRToQ7Gn6aB+RtX8ZrB1jstRRWoM7jvJXzsoeuVYCYpYe19+wjyAWAyqlHuHRQQ==
-X-Received: by 2002:a17:902:b903:b0:14a:db1b:6a57 with SMTP id
- bf3-20020a170902b90300b0014adb1b6a57mr12740180plb.67.1643010535718; 
- Sun, 23 Jan 2022 23:48:55 -0800 (PST)
+ bh=O73p3U/FxE0+EzqMDQRBGikswO4Els3hmwxFOBjNLFM=;
+ b=bL9IocH4DBr/bmkTOWCtlp5tuqEQ7996sTfpL+vHGMZiO1DO9MVGjwb6NOLfYPt58c
+ +QTIi0c7wfXNn2u1qEiEn/NXEV/pj7KWBcMrKO/DwzBJpICuWAjlw4Ydm9nJWl7Mzg5v
+ X30yLH1FE3JNGOgQXf8lQWQ9WWheHEME3YxTzohailmbzm2GkMQ8X7ib/KN3iYt4d48E
+ NL98yFqzio4rfsZqaoiaYs6oKIeudAs+ckv3yuF2RnyhAcHAJk42VfXZ8/cU4f0HSZgu
+ CdxEDXm8+/77bB9DsN3i+4UlzazO1w6V/sen8VnsryQSekqNjleywKBRj+ZmpcGEcbCr
+ apUw==
+X-Gm-Message-State: AOAM532BmmvdKD7tjknac1DreA9tJMyZsoyHAuQFzpzdCIWFyQzlScco
+ ki9OZFpbtX+9hFA6f7Fse6BG//ss735gWw==
+X-Google-Smtp-Source: ABdhPJyZKZ7EoMQVHf5T5uPD0LE7zYMekD2RBCvbJFz5zkIOem782W9P7HiHSj/wyFJCphYO7EIbSQ==
+X-Received: by 2002:a05:6a00:a92:b0:4c5:90cb:71e4 with SMTP id
+ b18-20020a056a000a9200b004c590cb71e4mr12836537pfl.1.1643011216216; 
+ Mon, 24 Jan 2022 00:00:16 -0800 (PST)
 Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
  by smtp.gmail.com with ESMTPSA id
- bc19sm1213714pgb.66.2022.01.23.23.48.54
+ k16sm8813148pfu.140.2022.01.24.00.00.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 23:48:55 -0800 (PST)
+ Mon, 24 Jan 2022 00:00:15 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 23:48:53 -0800
-Message-Id: <20220124074853.77797-1-christian@paral.in>
+Date: Mon, 24 Jan 2022 00:00:13 -0800
+Message-Id: <20220124080013.83231-1-christian@paral.in>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/moby-buildkit: support building as
- host package
+Subject: [Buildroot] [PATCH 1/1] package/runc: bump to version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,59 +83,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Users may want to use buildkitd and buildkitctl to build images on the host.
+Added LGPL-2.1 license specifier: libseccomp is statically-linked.
 
-Adds package host-moby-buildkit and BR2_PACKAGE_HOST_MOBY_BUILDKIT.
+https://github.com/opencontainers/runc/releases/tag/v1.1.0
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in.host                 | 1 +
- package/moby-buildkit/Config.in.host   | 8 ++++++++
- package/moby-buildkit/moby-buildkit.mk | 6 ++++++
- 3 files changed, 15 insertions(+)
- create mode 100644 package/moby-buildkit/Config.in.host
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 20034f6ee0..3bf6fab2db 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -53,6 +53,7 @@ menu "Host utilities"
- 	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
-+	source "package/moby-buildkit/Config.in.host"
- 	source "package/mtd/Config.in.host"
- 	source "package/mtools/Config.in.host"
- 	source "package/mxsldr/Config.in.host"
-diff --git a/package/moby-buildkit/Config.in.host b/package/moby-buildkit/Config.in.host
-new file mode 100644
-index 0000000000..a3b18548f8
---- /dev/null
-+++ b/package/moby-buildkit/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_MOBY_BUILDKIT
-+	bool "host moby-buildkit"
-+	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	help
-+	  BuildKit is a toolkit for converting source code to build
-+	  artifacts in an efficient expressive and repeatable manner.
-+
-+	  https://github.com/moby/buildkit
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index 3f0df351ef..533ce6485a 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
-@@ -19,4 +19,10 @@ MOBY_BUILDKIT_LDFLAGS = \
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 4ef04132bf..38d9f52510 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0eaf2f6606d72f166a5e7138a8a8d4d8f85d84e43448c08c66a1c93ead17a574  runc-1.0.3.tar.gz
++sha256  a8de57edbf0ff741ea798ccdd99ac0e1b79914f552871bd7cd92b0569f200964  runc-1.1.0.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index c4e45a00a9..a40075544e 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(MOBY_BUILDKIT_BUILD_TARGETS))
+-RUNC_VERSION = 1.0.3
++RUNC_VERSION = 1.1.0
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+-RUNC_LICENSE = Apache-2.0
++RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
+ RUNC_LICENSE_FILES = LICENSE
+ RUNC_CPE_ID_VENDOR = linuxfoundation
  
-+HOST_MOBY_BUILDKIT_TAGS = cgo
-+HOST_MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
-+
-+HOST_MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(HOST_MOBY_BUILDKIT_BUILD_TARGETS))
-+
- $(eval $(golang-package))
-+$(eval $(host-golang-package))
 -- 
 2.34.1
 
