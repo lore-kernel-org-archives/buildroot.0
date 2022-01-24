@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AB1AC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 07:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D3DDC433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 07:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD9CD40273;
-	Mon, 24 Jan 2022 07:11:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 216724018E;
+	Mon, 24 Jan 2022 07:15:01 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pbgB2kDR46mS; Mon, 24 Jan 2022 07:11:51 +0000 (UTC)
+	with ESMTP id 46Vj8vz2hslP; Mon, 24 Jan 2022 07:15:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0DD040116;
-	Mon, 24 Jan 2022 07:11:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1BEBB1BF356
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:11:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1684740123;
+	Mon, 24 Jan 2022 07:14:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F0681BF356
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1726060AD2
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:11:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 167F240123
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 07:14:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hvvhMUemg3_W for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 07:11:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CpMFXPW9LsCe for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 07:14:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com
- [209.85.214.182])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 44513607A1
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 07:11:48 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id y17so4280050plg.7
- for <buildroot@buildroot.org>; Sun, 23 Jan 2022 23:11:48 -0800 (PST)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com
+ [209.85.215.174])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2EBAA400F1
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 07:14:57 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id 187so14359648pga.10
+ for <buildroot@buildroot.org>; Sun, 23 Jan 2022 23:14:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=wNN4DCKXzphXMBsfEPKDKLnl9p6AulICu6fNJ5N5n7I=;
- b=w/ZD2+snAtLGAAeGEX+ExJoNOad+yr/eNN0okrdy3f8wlur56eDZcIinLpdXZ2KKeS
- 5bht5sQbVZj0r7RmO5stpz5bDmZ5TkEca8rBasX/5H/5d9kO4PgyK9aNgZclt4uNtMkI
- 9mBEVXpnmaiFLeZ0BMMkrU5wYpESXBl83iMGaEOgRcNKkMsNHw+23YbGdCBoLUqYZCoJ
- ySL7n0+nZJ7j3yczEet1SQZ+UAxIaE9uWvJPTRy0R4et7dCPFgyaM2E4YfUBDGIkqcHk
- dNc+VDNngZr4CKhuKTBXJYMcB8SH6ok+aOkFfmYDp+u4wQBwwz/O7YH+fxO6qVdS0ZG0
- MIjA==
-X-Gm-Message-State: AOAM532vfb9+zL5zE+NC4gAGrsx4ZXOTBTMfXWStQQyaa/QVFJ0ioW50
- qXpI1e9D8Bq5dtngErMWVwP60rV8Ld3UxA==
-X-Google-Smtp-Source: ABdhPJyTBLs22Xwd97tMDSIJQ7/I1qztfjPmGb4nkqbAlixwuo95o6J3OvhKktvpBESQPu45eNBSUA==
-X-Received: by 2002:a17:902:eb4d:b0:14b:5ab:a365 with SMTP id
- i13-20020a170902eb4d00b0014b05aba365mr12837019pli.105.1643008307284; 
- Sun, 23 Jan 2022 23:11:47 -0800 (PST)
+ bh=OCujD7rgZifXUYgX1tq+vffLeLB/3Uu8G3hv4JFSJ0Q=;
+ b=kJPtM+DBRmO1WV6ITnffrYsmXdvcW7iaAOQhol7So7HHj8XcS2gt8vw2RKZI8JuJj3
+ MHTKeNO8fadVExevUnbT9yd2jA2WrUyJbraojR9AMJmwqrJFVfudW3Uum+EWsbRi16aS
+ dG6u5OyIh+yPLBQetYDeSb8wK+ai+42H5FK+M+kfRlDJfDXWQ9GStcpMsP7NxwC9ZKrP
+ yr6wxS5gIbcTtN4sW6SgWY6zG2hN3q26NrRmplv0+joWQC6MS1csEOPbIIHNz7xjEhbv
+ p8BNlK5gx7LU723sUvNqa0AnDh18tAi14whTquQ+de02kTkTy0uGNTUsffvSdCT0UMXZ
+ /5gQ==
+X-Gm-Message-State: AOAM5320fjbYf9CMmJ2fLQl0C8d154Yp5Aaux6VodjdJX2jlLPyaSeIq
+ FnGMqcRoYPTKGEvnecF+zBZqFY7E+GojCw==
+X-Google-Smtp-Source: ABdhPJwePNvVEMl9OLtKp3bt8kLaT05RSwERCrkqyXdUmOYj4EV2Bkw0Hd2SLeQMmGpB/9i6uqIHvQ==
+X-Received: by 2002:a62:1ec3:0:b0:4bb:ea7d:6c4f with SMTP id
+ e186-20020a621ec3000000b004bbea7d6c4fmr12866104pfe.4.1643008496222; 
+ Sun, 23 Jan 2022 23:14:56 -0800 (PST)
 Received: from localhost.localdomain (ip68-6-95-5.sb.sd.cox.net. [68.6.95.5])
  by smtp.gmail.com with ESMTPSA id
- lp17sm1513839pjb.25.2022.01.23.23.11.46
+ u2sm813356pfk.15.2022.01.23.23.14.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 23 Jan 2022 23:11:46 -0800 (PST)
+ Sun, 23 Jan 2022 23:14:55 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Sun, 23 Jan 2022 23:11:43 -0800
-Message-Id: <20220124071143.15869-1-christian@paral.in>
+Date: Sun, 23 Jan 2022 23:14:53 -0800
+Message-Id: <20220124071453.16225-1-christian@paral.in>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/batman-adv: bump to version 2021.04
+Subject: [Buildroot] [PATCH 1/1] package/containerd: security bump to
+ version 1.5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,48 +79,46 @@ Reply-To: Christian Stewart <christian@paral.in>
 Cc: Christian Stewart <christian@paral.in>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/batman-adv/batman-adv.hash | 4 ++--
- package/batman-adv/batman-adv.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index f81df11000..2060e3de2e 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,7 +1,7 @@
- # From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.1/batman-adv-2021.1.tar.gz.sha1
--sha1  27a0dc7cb74b868bc0ab52794ecedd0448f0fb61  batman-adv-2021.1.tar.gz
-+sha1  80a3e4d763b6bf35db6e561ed9d6775dc874d7c6  batman-adv-2021.4.tar.gz
- 
- # Hash for license files
--sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
-+sha256  cff7a2f160045fd0dbf1f1cd7e35e93bf489e81cb8b9501b3756daa391f3eb1b  batman-adv-2021.4.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index e58ac85bef..838f9b1851 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATMAN_ADV_VERSION = 2021.1
-+BATMAN_ADV_VERSION = 2021.4
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q1ZFLTIwMjEtNDM4MTY6ICJVbnByaXZpbGVnZWQgcG9kIHVzaW5nIGBob3N0UGF0aGAgY2FuIHNp
+ZGUtc3RlcCBhY3RpdmUgTFNNIHdoZW4KaXQgaXMgU0VMaW51eCIKCkNvbnRhaW5lcnMgbGF1bmNo
+ZWQgdGhyb3VnaCBjb250YWluZXJk4oCZcyBDUkkgaW1wbGVtZW50YXRpb24gb24gTGludXggc3lz
+dGVtcwp3aGljaCB1c2UgdGhlIFNFTGludXggc2VjdXJpdHkgbW9kdWxlIGFuZCBjb250YWluZXJk
+IHZlcnNpb25zIHNpbmNlIHYxLjUuMCBjYW4KY2F1c2UgYXJiaXRyYXJ5IGZpbGVzIGFuZCBkaXJl
+Y3RvcmllcyBvbiB0aGUgaG9zdCB0byBiZSByZWxhYmVsZWQgdG8gbWF0Y2ggdGhlCmNvbnRhaW5l
+ciBwcm9jZXNzIGxhYmVsIHRocm91Z2ggdGhlIHVzZSBvZiBzcGVjaWFsbHktY29uZmlndXJlZCBi
+aW5kIG1vdW50cyBpbiBhCmhvc3RQYXRoIHZvbHVtZS4gVGhpcyByZWxhYmVsaW5nIGVsZXZhdGVz
+IHBlcm1pc3Npb25zIGZvciB0aGUgY29udGFpbmVyLApncmFudGluZyBmdWxsIHJlYWQvd3JpdGUg
+YWNjZXNzIG92ZXIgdGhlIGFmZmVjdGVkIGZpbGVzIGFuZCBkaXJlY3Rvcmllcy4KS3ViZXJuZXRl
+cyBhbmQgY3JpY3RsIGNhbiBib3RoIGJlIGNvbmZpZ3VyZWQgdG8gdXNlIGNvbnRhaW5lcmTigJlz
+IENSSQppbXBsZW1lbnRhdGlvbi4KCmh0dHBzOi8vZ2l0aHViLmNvbS9hZHZpc29yaWVzL0dIU0Et
+bXZmZi1oM2NqLXdqOWMKaHR0cHM6Ly9naXRodWIuY29tL2NvbnRhaW5lcmQvY29udGFpbmVyZC9y
+ZWxlYXNlcy90YWcvdjEuNS45CgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gU3Rld2FydCA8Y2hy
+aXN0aWFuQHBhcmFsLmluPgotLS0KIHBhY2thZ2UvY29udGFpbmVyZC9jb250YWluZXJkLmhhc2gg
+fCAyICstCiBwYWNrYWdlL2NvbnRhaW5lcmQvY29udGFpbmVyZC5tayAgIHwgMiArLQogMiBmaWxl
+cyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQuaGFzaCBiL3BhY2thZ2UvY29udGFpbmVyZC9j
+b250YWluZXJkLmhhc2gKaW5kZXggZjFhNjcwOTU1NC4uZDVhYWZlMmU3MCAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQuaGFzaAorKysgYi9wYWNrYWdlL2NvbnRhaW5l
+cmQvY29udGFpbmVyZC5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBDb21wdXRlZCBsb2NhbGx5Ci1z
+aGEyNTYgIGE0MWFiOGQzOTM5M2M5NDU2OTQxYjQ3N2MzM2JiMWIyMjFhMjliNjM1ZjFjOWE5OTUy
+M2FhYjJmNWU3NGY3OTAgIGNvbnRhaW5lcmQtMS41LjgudGFyLmd6CitzaGEyNTYgIDQwYzk3Njdh
+ZjNlODdmMmMzNmFkZjJmNTYzZjBhODM3NGU4MGIzMGJkMmI3YWE4MDA1OGM4NTkxMjQwNmNlZjQg
+IGNvbnRhaW5lcmQtMS41LjkudGFyLmd6CiBzaGEyNTYgIDRiYmUzYjg4NWU4Y2QxOTA3YWI0Y2Y5
+YTQxZTg2MmU3NGUyNGI1NDIyMjk3YTRmMmZlNTI0ZTZhMzBhZGEyYjQgIExJQ0VOU0UKZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvY29udGFpbmVyZC9jb250YWluZXJkLm1rIGIvcGFja2FnZS9jb250YWlu
+ZXJkL2NvbnRhaW5lcmQubWsKaW5kZXggY2Q5NzVkYjI3NC4uODk3NmUxMmYxYSAxMDA2NDQKLS0t
+IGEvcGFja2FnZS9jb250YWluZXJkL2NvbnRhaW5lcmQubWsKKysrIGIvcGFja2FnZS9jb250YWlu
+ZXJkL2NvbnRhaW5lcmQubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIwogCi1DT05UQUlORVJEX1ZFUlNJT04gPSAxLjUuOAorQ09OVEFJTkVSRF9WRVJTSU9OID0g
+MS41LjkKIENPTlRBSU5FUkRfU0lURSA9ICQoY2FsbCBnaXRodWIsY29udGFpbmVyZCxjb250YWlu
+ZXJkLHYkKENPTlRBSU5FUkRfVkVSU0lPTikpCiBDT05UQUlORVJEX0xJQ0VOU0UgPSBBcGFjaGUt
+Mi4wCiBDT05UQUlORVJEX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCi0tIAoyLjM0LjEKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
