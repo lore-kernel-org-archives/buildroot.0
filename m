@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66337C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3E2C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14CC8400FE;
-	Mon, 24 Jan 2022 17:37:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 782F340209;
+	Mon, 24 Jan 2022 17:37:34 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mqb8drjrwBYk; Mon, 24 Jan 2022 17:37:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xi5Ea6tOuYns; Mon, 24 Jan 2022 17:37:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF902405F2;
-	Mon, 24 Jan 2022 17:37:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0A7BE1BF487
+	by smtp4.osuosl.org (Postfix) with ESMTP id D31F141752;
+	Mon, 24 Jan 2022 17:37:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C68B1BF97D
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED6B660A79
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFEEF4174E
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id osbLOrFipFAr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JO3Z43-4n1Fj for <buildroot@lists.busybox.net>;
  Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5131E6009C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4574140209
  for <buildroot@buildroot.org>; Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AB89182BCC; Mon, 24 Jan 2022 17:29:47 +0000 (UTC)
+ id A0D2B82B33; Mon, 24 Jan 2022 17:29:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 18:22:26 +0100
+Date: Mon, 24 Jan 2022 17:31:45 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 0031fc0f1825de7207a7c0777a4402750b6d3583
-X-Git-Newrev: 2b769aaa1fcb8e425b17879a229d633a7d5da1f4
+X-Git-Oldrev: a8e5a9c8cdac32c85e42ed305482a7cf4296c52f
+X-Git-Newrev: 0031fc0f1825de7207a7c0777a4402750b6d3583
 X-Patchwork-Hint: ignore
-Message-Id: <20220124172947.AB89182BCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/php: bump version
- to 8.0.14
+Message-Id: <20220124172947.A0D2B82B33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/cage: only enable
+ XWayland if wlroots has X11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b769aaa1fcb8e425b17879a229d633a7d5da1f4
+commit: https://git.buildroot.net/buildroot/commit/?id=0031fc0f1825de7207a7c0777a4402750b6d3583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.0.14
+Cage requires wlroots to be built with X11 enabled
+in order to enable XWayland, otherwise it will fail
+with error:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a351e9fbe0b652a3b7472573916d791ba00fa1b)
+"ERROR: Problem encountered: Cannot build Cage with
+XWayland support: wlroots has been built without it"
+
+Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
+[yann.morin.1998@free.fr:
+  - drop explicit _XORG7, as _WLROOTS_X11 depends on it
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3e4c2d6213a09e9a0c598f800510acd6687ffcda)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cage/cage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 254484e72f..329410b54f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  cd976805ec2e9198417651027dfe16854ba2c2c388151ab9d4d268513d52ed52  php-8.0.13.tar.xz
-+sha256  fbde8247ac200e4de73449d9fefc8b495d323b5be9c10cdb645fb431c91156e3  php-8.0.14.tar.xz
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index a661857a95..c132f086f6 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -11,7 +11,7 @@ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
+ CAGE_CONF_OPTS = -Dman-pages=disabled
  
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8c45da77a2..ca59334104 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.0.13
-+PHP_VERSION = 8.0.14
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ CAGE_CONF_OPTS += -Dxwayland=true
+ else
+ CAGE_CONF_OPTS += -Dxwayland=false
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
