@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3E2C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3908AC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 17:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 782F340209;
-	Mon, 24 Jan 2022 17:37:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2C234098A;
+	Mon, 24 Jan 2022 17:37:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xi5Ea6tOuYns; Mon, 24 Jan 2022 17:37:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rL5HqeZxz-UN; Mon, 24 Jan 2022 17:37:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D31F141752;
-	Mon, 24 Jan 2022 17:37:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0C68B1BF97D
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2822405F2;
+	Mon, 24 Jan 2022 17:37:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 704921BF487
  for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFEEF4174E
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AF2684BC7
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 17:36:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JO3Z43-4n1Fj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oUPPKdHn5SWU for <buildroot@lists.busybox.net>;
  Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4574140209
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BF8184BA2
  for <buildroot@buildroot.org>; Mon, 24 Jan 2022 17:36:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A0D2B82B33; Mon, 24 Jan 2022 17:29:47 +0000 (UTC)
+ id 9828282972; Mon, 24 Jan 2022 17:29:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 17:31:45 +0100
+Date: Mon, 24 Jan 2022 17:28:16 +0100
 X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: a8e5a9c8cdac32c85e42ed305482a7cf4296c52f
-X-Git-Newrev: 0031fc0f1825de7207a7c0777a4402750b6d3583
+X-Git-Oldrev: adf50a486a70065c18e1b925021343daabf6b4e9
+X-Git-Newrev: a8e5a9c8cdac32c85e42ed305482a7cf4296c52f
 X-Patchwork-Hint: ignore
-Message-Id: <20220124172947.A0D2B82B33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/cage: only enable
- XWayland if wlroots has X11
+Message-Id: <20220124172947.9828282972@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/samba4: add
+ optional dependency to icu & libglib2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +59,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0031fc0f1825de7207a7c0777a4402750b6d3583
+commit: https://git.buildroot.net/buildroot/commit/?id=a8e5a9c8cdac32c85e42ed305482a7cf4296c52f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
-Cage requires wlroots to be built with X11 enabled
-in order to enable XWayland, otherwise it will fail
-with error:
+icu is used in lib/util/charset/
+https://git.samba.org/samba.git/?p=samba.git;a=blob;f=lib/util/charset/wscript_configure;hb=HEAD#l40
 
-"ERROR: Problem encountered: Cannot build Cage with
-XWayland support: wlroots has been built without it"
+libglib2 is used in source3/
+https://git.samba.org/samba.git/?p=samba.git;a=blob;f=source3/wscript;hb=HEAD#l1778
 
-Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
-[yann.morin.1998@free.fr:
-  - drop explicit _XORG7, as _WLROOTS_X11 depends on it
-]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3e4c2d6213a09e9a0c598f800510acd6687ffcda)
+(cherry picked from commit 1c4c68b8fbf471919fbbaf4e688a75c4de36a331)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cage/cage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/samba4/samba4.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index a661857a95..c132f086f6 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -11,7 +11,7 @@ CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
- CAGE_CONF_OPTS = -Dman-pages=disabled
- 
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
- CAGE_CONF_OPTS += -Dxwayland=true
- else
- CAGE_CONF_OPTS += -Dxwayland=false
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index eb1f3b830e..de019e7afc 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -17,8 +17,10 @@ SAMBA4_DEPENDENCIES = \
+ 	host-e2fsprogs host-flex host-heimdal host-nfs-utils \
+ 	host-perl host-perl-parse-yapp host-python3 \
+ 	cmocka e2fsprogs gnutls popt zlib \
++	$(if $(BR2_PACKAGE_ICU),icu) \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
++	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_READLINE),readline) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ SAMBA4_CFLAGS = $(TARGET_CFLAGS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
