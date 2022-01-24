@@ -1,81 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4A95C433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 11:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E17C6C433EF
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 11:17:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 776DE40576;
-	Mon, 24 Jan 2022 11:00:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8813D410A6;
+	Mon, 24 Jan 2022 11:17:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GBlmeo2cLOFF; Mon, 24 Jan 2022 11:00:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63DCB40475;
-	Mon, 24 Jan 2022 11:00:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45E531BF3A4
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 11:00:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 337CF40977
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 11:00:18 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B-aErqBxbs2H for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 11:00:17 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qaOwgCJF4-Pl; Mon, 24 Jan 2022 11:17:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3BC5409E3;
+	Mon, 24 Jan 2022 11:17:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B6691BF215
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 11:17:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49B7181902
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 11:17:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NY3VNvbNWlmv for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 11:17:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3DD540935
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 11:00:16 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id u6so4866076iln.3
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 03:00:16 -0800 (PST)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 263BF818CD
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 11:17:29 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id z199so4517846iof.10
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 03:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Uxr2NpbFLLWHT3eSGGYmBvIw5Q5r2kwNtsTt2Z3/R1s=;
- b=RW/7hlRjxovT4nsRl78dr+qel8FqaX3GekXXMSKn0hnOVtSw+HDKSsCMiaN+KklhFx
- J/ztaiy92uk5GPDr6u2MOvynyW/tCIREBsLjaw9hBfaD9hScUqCJXMm6tb6lHtZO532r
- r5aAMg5ICRTDSgT11Vqy5s20ZA60q3lp2KczWm9HElGVQJ6kGiOkgLU8gfpv/voven/I
- 9Bm7TNeK99T/NhPbFIo2dn4NyflEA5P6vtym2Tkr7AiUke2HVqrOn8EX7Ws5MKyUufIm
- pvlXJV9ExIKNgBwuHKAhwcXPtZeoSbXJIvi+PN2uhL49LIQAbO/mJzZ7yP5DD6hdnM7M
- aE9Q==
+ bh=rRoO5dxHm80YT37gyMFnLKXCfkMjoIB/upFmXDkd5O4=;
+ b=MgV+PeIJTz2cwEsH8K//Zyo+n3INW/dUJCf8Y+1d4DuY1jlZAvD7Nia7/2KNeXUSEn
+ Ze+OO/L2uvHGfTDpOiphDvbvfVWDYPtbZ5fDA/6JOZJ746rEWCVu2t5xPbqve2UznBbk
+ tnxbIkv0nIi3WpA1+6KOcc3nT42nzg9c914wLO8IG3c3v+NB7DPUnLIeIfS9YMSqBiZ1
+ C39b0u+NMqzqg9Bv94MTEUI2CoBxDrOFZn3kHI8PqJ1SOscK4QmOgHtj9WWDLtbxgmby
+ m/o2r/IIRQgPDPkGow5ysn7Rqo/4TiDXE4dVJmLfMMKkd+LV1kWBKWTk/nKCdHcHBTzi
+ Rpbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Uxr2NpbFLLWHT3eSGGYmBvIw5Q5r2kwNtsTt2Z3/R1s=;
- b=l80yNm4GicCaUo9cgwD8FE7b53jZPmwBmHp7V8ait+3T0m3CVTjVvocykxQx0qeoIE
- E6tesD3hoVTAJ8Mlpb6DOEOJv+7diZOWGy6MjWhluJ2vGxHteTwMha5eSxpFVKXDsGvK
- dwPQAgbOwraHcnB2SoFvzRYYbwhqIpCrYqFjBSH0p0XX2wcaRtGlv6qo5OM0LzVIAWy+
- e56qMz7nzYowZ/Nh9JX075P2EWbYMMgBw9md+i40r+O/lsYl70hcoU4giOtV6jQUW77O
- oVPStoK0GCCHwPYnJ3vTCIchws96jcuyevpwqQDJyJ34wDUK9AmX60C9EY3M7dtzBnej
- mtLg==
-X-Gm-Message-State: AOAM532f30osUei8eqbJkoRwc4IiikLtdfuX5r+cwYBi1HnmO/yk5+3t
- rIEeSdkl3mJdbP3B9hXdb11avnLJ408=
-X-Google-Smtp-Source: ABdhPJwn5YFouBbofmZ8yH0uL0CBBEmi5wZF1ntN2KgYHGoflwHEqq6iflSTnRLeF5/kwtNl2VaM+g==
-X-Received: by 2002:a05:6e02:1946:: with SMTP id
- x6mr8053236ilu.10.1643022015893; 
- Mon, 24 Jan 2022 03:00:15 -0800 (PST)
+ bh=rRoO5dxHm80YT37gyMFnLKXCfkMjoIB/upFmXDkd5O4=;
+ b=NKpKqJn5tjZQ1Glh46dRTQz6D217dCpxL9rs73dhWjvA4c2dUzD82yuZPyvDq1IxN/
+ li+Q3A9X9nAM6AYFCDny+pnXuElVeoOHYKdZe4DVE5jvSEMNfZNCGCBcoqhpbC7R+mCc
+ C8tqkr/siPINLxGShkEJarJmWyYDz6O9mxer9Gvzx1kou9jxFp/MlgYHusiyKFVtxsz9
+ sdwOPoT1gZLSeDYdy1ezFnnNvUMHXqgo96fqz2H7tAi5waJvQgo3n2fIqB/b0CAw+QZ7
+ YhHzNJOFk/hUmfOGQ9U1A+XVWYoTG8CITkWaeOX3cE7fqKazlGGnuct5EOwoXQuk3IWE
+ Wxlw==
+X-Gm-Message-State: AOAM533YHKdDbDCufvFD4aVW+yc1xE3trZ0Z8VPyJspBg1K0tbz1yDm8
+ y2Lvngy4GL0aEOqfe0AAxY5QtYldr1A=
+X-Google-Smtp-Source: ABdhPJykRADfM5Hzorx2Fam23VgXe1u4auhaP2nF3fhUWGEF/6HNVP69okVHPYoG4YRBrrNuAP9g4g==
+X-Received: by 2002:a6b:d80a:: with SMTP id y10mr7811352iob.181.1643023048057; 
+ Mon, 24 Jan 2022 03:17:28 -0800 (PST)
 Received: from james-x399.localdomain (97-118-239-242.hlrn.qwest.net.
  [97.118.239.242])
- by smtp.gmail.com with ESMTPSA id k11sm5973030iob.23.2022.01.24.03.00.15
+ by smtp.gmail.com with ESMTPSA id o11sm7644009ilu.36.2022.01.24.03.17.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jan 2022 03:00:15 -0800 (PST)
+ Mon, 24 Jan 2022 03:17:27 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 04:00:14 -0700
-Message-Id: <20220124110014.537689-1-james.hilliard1@gmail.com>
+Date: Mon, 24 Jan 2022 04:17:25 -0700
+Message-Id: <20220124111725.544497-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-pycparser: bump to
- version 2.21
+Subject: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,67 +85,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Geoffrey Ragot <geoffreyragot@gmail.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year update:
-https://github.com/eliben/pycparser/commit/78beeb7d6f0a760f90a8592d9533042363a82810
+Drop python2 support and propagate dependency changes.
+
+Ensure optimized cython build is enabled and add host cython
+dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycparser/python-pycparser.hash | 6 +++---
- package/python-pycparser/python-pycparser.mk   | 4 ++--
- package/python3-pycparser/python3-pycparser.mk | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/libcamera/libcamera.mk             |  2 +-
+ package/mongodb/mongodb.mk                 |  2 +-
+ package/python-pyyaml/Config.in            |  1 +
+ package/python-pyyaml/python-pyyaml.hash   |  4 ++--
+ package/python-pyyaml/python-pyyaml.mk     |  9 +++++----
+ package/python3-pyyaml/python3-pyyaml.hash |  1 -
+ package/python3-pyyaml/python3-pyyaml.mk   | 20 --------------------
+ 7 files changed, 10 insertions(+), 29 deletions(-)
+ delete mode 120000 package/python3-pyyaml/python3-pyyaml.hash
+ delete mode 100644 package/python3-pyyaml/python3-pyyaml.mk
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index 0426444399..34401a319a 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 0052ca558a..524cf07e03 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -12,7 +12,7 @@ LIBCAMERA_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-python-jinja2 \
+ 	host-python3-ply \
+-	host-python3-pyyaml \
++	host-python-pyyaml \
+ 	gnutls
+ LIBCAMERA_CONF_OPTS = \
+ 	-Dandroid=disabled \
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index c33c3c2eb7..92656dd7a4 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -18,7 +18,7 @@ MONGODB_DEPENDENCIES = \
+ 	boost \
+ 	host-python3-cheetah \
+ 	host-python3-psutil \
+-	host-python3-pyyaml \
++	host-python-pyyaml \
+ 	host-python3-regex \
+ 	host-python-requests \
+ 	host-scons \
+diff --git a/package/python-pyyaml/Config.in b/package/python-pyyaml/Config.in
+index 45e818b7e7..eb073b9c03 100644
+--- a/package/python-pyyaml/Config.in
++++ b/package/python-pyyaml/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYYAML
+ 	bool "python-pyyaml"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_LIBYAML
+ 	help
+ 	  The PyYAML package contains binding to the libyaml API.
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 82b2f4f880..f8b5332565 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycparser/json
--md5  b8f88de737db8c346ee8d31c07c7a25a  pycparser-2.20.tar.gz
--sha256  2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0  pycparser-2.20.tar.gz
-+md5  48f7d743bf018f7bb2ffc5fb976d1492  pycparser-2.21.tar.gz
-+sha256  e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206  pycparser-2.21.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyYAML/json
+-md5  46e25294c7efec23d4072ed6a7777f46  PyYAML-5.4.1.tar.gz
+-sha256  607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e  PyYAML-5.4.1.tar.gz
++md5  1d19c798f25e58e3e582f0f8c977dbb8  PyYAML-6.0.tar.gz
++sha256  68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2  PyYAML-6.0.tar.gz
  # Locally computed sha256 checksums
--sha256  3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
-+sha256  3e7df25b8dfb658c9a91501930d4d943b05087a8347c7e2b4325616af535047b  LICENSE
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index 5f44a562af..20c3f641a9 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
-@@ -5,9 +5,9 @@
+ sha256  8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index c9013de8ec..8f5a2d269e 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,17 +4,18 @@
+ #
  ################################################################################
  
- # Please keep in sync with package/python3-pycparser/python3-pycparser.mk
--PYTHON_PYCPARSER_VERSION = 2.20
-+PYTHON_PYCPARSER_VERSION = 2.21
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
-+PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/5e/0b/95d387f5f4433cb0f53ff7ad859bd2c6051051cebbb564f139a999ab46de
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3-Clause
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
-diff --git a/package/python3-pycparser/python3-pycparser.mk b/package/python3-pycparser/python3-pycparser.mk
-index 68769ceb46..4075f4a38f 100644
---- a/package/python3-pycparser/python3-pycparser.mk
-+++ b/package/python3-pycparser/python3-pycparser.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+-# Please keep in sync package/python3-pyyaml/python3-pyyaml.mk
+-PYTHON_PYYAML_VERSION = 5.4.1
++PYTHON_PYYAML_VERSION = 6.0
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/36/2b/61d51a2c4f25ef062ae3f74576b01638bebad5e045f747ff12643df63844
+ PYTHON_PYYAML_SETUP_TYPE = setuptools
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
+ PYTHON_PYYAML_CPE_ID_VENDOR = pyyaml
+ PYTHON_PYYAML_CPE_ID_PRODUCT = pyyaml
+-PYTHON_PYYAML_DEPENDENCIES = libyaml
++PYTHON_PYYAML_DEPENDENCIES = host-python-cython libyaml
++PYTHON_PYYAML_ENV = PYYAML_FORCE_CYTHON=1
+ HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
++HOST_PYTHON_PYYAML_NEEDS_HOST_PYTHON = python3
  
- # Please keep in sync with package/python-pycparser/python-pycparser.mk
--PYTHON3_PYCPARSER_VERSION = 2.20
-+PYTHON3_PYCPARSER_VERSION = 2.21
- PYTHON3_PYCPARSER_SOURCE = pycparser-$(PYTHON3_PYCPARSER_VERSION).tar.gz
--PYTHON3_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
-+PYTHON3_PYCPARSER_SITE = https://files.pythonhosted.org/packages/5e/0b/95d387f5f4433cb0f53ff7ad859bd2c6051051cebbb564f139a999ab46de
- PYTHON3_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON3_PYCPARSER_LICENSE = BSD-3-Clause
- PYTHON3_PYCPARSER_LICENSE_FILES = LICENSE
+ $(eval $(python-package))
+ $(eval $(host-python-package))
+diff --git a/package/python3-pyyaml/python3-pyyaml.hash b/package/python3-pyyaml/python3-pyyaml.hash
+deleted file mode 120000
+index afa4932ecb..0000000000
+--- a/package/python3-pyyaml/python3-pyyaml.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../python-pyyaml/python-pyyaml.hash
+\ No newline at end of file
+diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
+deleted file mode 100644
+index f758341502..0000000000
+--- a/package/python3-pyyaml/python3-pyyaml.mk
++++ /dev/null
+@@ -1,20 +0,0 @@
+-################################################################################
+-#
+-# python3-pyyaml
+-#
+-################################################################################
+-
+-# Please keep in sync with package/python-pyyaml/python-pyyaml.mk
+-PYTHON3_PYYAML_VERSION = 5.4.1
+-PYTHON3_PYYAML_SOURCE = PyYAML-$(PYTHON3_PYYAML_VERSION).tar.gz
+-PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
+-PYTHON3_PYYAML_SETUP_TYPE = setuptools
+-PYTHON3_PYYAML_LICENSE = MIT
+-PYTHON3_PYYAML_LICENSE_FILES = LICENSE
+-PYTHON3_PYYAML_CPE_ID_VENDOR = pyyaml
+-PYTHON3_PYYAML_CPE_ID_PRODUCT = pyyaml
+-HOST_PYTHON3_PYYAML_DL_SUBDIR = python-pyyaml
+-HOST_PYTHON3_PYYAML_NEEDS_HOST_PYTHON = python3
+-HOST_PYTHON3_PYYAML_DEPENDENCIES = host-libyaml
+-
+-$(eval $(host-python-package))
 -- 
 2.25.1
 
