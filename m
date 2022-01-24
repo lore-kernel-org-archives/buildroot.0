@@ -1,80 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6025FC433F5
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 08:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4861C433F5
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jan 2022 08:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07F6B60AB9;
-	Mon, 24 Jan 2022 08:04:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A9314025D;
+	Mon, 24 Jan 2022 08:09:49 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BmOjPBXsUIOy; Mon, 24 Jan 2022 08:04:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aXqUCGa9bbGh; Mon, 24 Jan 2022 08:09:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49AE16076A;
-	Mon, 24 Jan 2022 08:04:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 673394015C;
+	Mon, 24 Jan 2022 08:09:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 563151BF356
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:04:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A84E1BF2AA
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52D6F824EE
- for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:04:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 765B3826C8
+ for <buildroot@lists.busybox.net>; Mon, 24 Jan 2022 08:09:45 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Authentication-Results: smtp1.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=gmail.com
+ dkim=pass (2048-bit key) header.d=paral.in
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7vFckVmOXwmH for <buildroot@lists.busybox.net>;
- Mon, 24 Jan 2022 08:04:10 +0000 (UTC)
+ with ESMTP id 6Yk0mdwpwInE for <buildroot@lists.busybox.net>;
+ Mon, 24 Jan 2022 08:09:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE726824DF
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 08:04:09 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id a13so11918939wrh.9
- for <buildroot@buildroot.org>; Mon, 24 Jan 2022 00:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eLk6tT38uKgOBiJj991h0nA6MLKz61AZtSS3GdioxvI=;
- b=PeOZhGDl+ldv6TmsaTZ3HB7QyUN0JOiQhpZkT//KnMPGRHNKWwskLO87nc9m61Jgmg
- cNl2pD2VR759L8paGW7ktTRmUsDr2yuCp+wv18p2wsjBK7Q7QhI5NEf5nq4J0x/9cLXb
- yg0ZZhR54fnBarQgaciPB+w+FaoeDvK7Sl4JC8PxqqGLHDvyT1ecylOwFShSDSvwx7Tz
- cT+ZcIM5OfewSqQwXZm6CVsKzJOKkHjXYq4oCIMKot4iuIXmLWDL+yBOMiBM/e6Y0RUN
- p/M8+23Alde/dynY1qUyhIoMCL6T1+BM/j7CFeVMCI5tbtLtD5cXFqfVIc5wvBdNRyIF
- i80Q==
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com
+ [IPv6:2607:f8b0:4864:20::a35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 71F6382695
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 08:09:44 +0000 (UTC)
+Received: by mail-vk1-xa35.google.com with SMTP id 19so9622096vkl.2
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 00:09:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paral.in; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=Wq/VgEsiP0CZoyFxRzH3iMsYMMeyj0Z5RrKchAriWbM=;
+ b=Fky86wZQ3h6Amx8TkIbqwqb8f6p/LZkyfMR4LJFehqiI4hnGbYVrW9FdxqWXsFRwFc
+ 4TlYRlOZmIML0b/e6W3kXfw0H884uPC2LdpLo7g/Q9Nmh7TK4U1HM+bcsjpJ3AaHmdVz
+ GlXYWXCXsuZTynpziU0kj8grGZEPsRhML+Xy+1rSOz1qjy63mplRQo3X0wP6Olb3XNPe
+ bn7q3q7s3xUgyQbNCOdrNZc10HWmrG8aKVVIK8qbN7/EZhSjJ29GuFh9taJBRrAf/Ily
+ xqniGeYgc5G8yYXD+fr/wjzR2pCBTevrsxmIvw/q2frcFfaQ+jXtB5KMNwiCWRFVrTrj
+ tjLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eLk6tT38uKgOBiJj991h0nA6MLKz61AZtSS3GdioxvI=;
- b=I/JWWxpNNd7F5tvaJstqbuwYGatR25e7hsVEc5pgjFsu6NYt7YrfJkWo3UIEx3B5PO
- O9JV3sRNf4DltCUU/Th44CyZ6lx8szRSOMyLbPp8dEKrI0XY3SH1KJKmeJ8Qcpc0QNg0
- Nwad6bHlAw2zOpOYERHDFagBLVc/EzZnBhNwbJ0BHm26vsEIt35I9k8/2wuxXIKxxFPn
- 8EIJhhmy6nBFeoQnIvUbqGCzGnqrtL3JxeqdFJswrTd6EorFrHJjn/y77KMjy6Syxoin
- 1vzxO5Pc2onZ2KyFEy7T3Ri5bEcYVhg/LFhyiE47wOpTYpPRDf5ws1AnkQnQyZgTwkYB
- 8N/A==
-X-Gm-Message-State: AOAM533NfEGXri1ihImLK2u7z0yEjeHF0U7f+ds0UDTszncnaPxUmekd
- 4l69EFrynZdc45zSSC+X4BBZAdtivG0=
-X-Google-Smtp-Source: ABdhPJzYUAcA0FwHoReO/xh8njMLl7nGIFyHhvIpynzrRwwQORZYHdwEu16gaT7P/kgfPJv8MCMt0w==
-X-Received: by 2002:a05:6000:1708:: with SMTP id
- n8mr4989003wrc.227.1643011448090; 
- Mon, 24 Jan 2022 00:04:08 -0800 (PST)
-Received: from home.localdomain ([178.124.208.44])
- by smtp.gmail.com with ESMTPSA id y2sm17639128wmj.13.2022.01.24.00.04.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jan 2022 00:04:07 -0800 (PST)
-From: Uladzimir Bely <wiselord1983@gmail.com>
-To: wiselord1983@gmail.com,
-	buildroot@buildroot.org
-Date: Mon, 24 Jan 2022 11:03:52 +0300
-Message-Id: <20220124080352.2116-1-wiselord1983@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Wq/VgEsiP0CZoyFxRzH3iMsYMMeyj0Z5RrKchAriWbM=;
+ b=xy5dhtMmU8mhA17Dg2eNYtDHuQ+nZcJxexXOJma1T1nDlnQqYi4uAftkl7ZmLTU9fn
+ BatO3fhHDfcvuWYGk46DkIFhPsX/L+9IqEAxYnHQdcOlWnVazFfYXBVWFK51YUWMPj9N
+ fF0gAL63+Jr61mO7kwgtgf6QEdj4zH6fWimbvethPMwGQ5IL5SDZvbwn4/yIx2tAY1bi
+ LGiZ7EHXJ29p5jREf9pvOl9cOwihbSuPdsDjsP7LBi/vs7ulk+akYxAlwhqOu9UbobHM
+ msLNFEOXKsSIP3Y/k0slCaV1zkdQUuNK3ndQBGaIQTVWG6NsmHIAvm8Fl+Cpygu29I2I
+ 8sBg==
+X-Gm-Message-State: AOAM531DciSXgFkWyfyCRdXTF9FHat+0bXYbcC9ZRSCf9tsu1wq4Zdm/
+ Y4hPVRcJDMkisKtOCCvHBkJj7EdqcSbnFA==
+X-Google-Smtp-Source: ABdhPJytYi3kSvUCDCgYzxHrs4TtZcdiDuP5/yCjxuowEHa6qzWeZzXbe4RxR7LoNpeWphAE8mKPFA==
+X-Received: by 2002:a05:6122:130c:: with SMTP id
+ e12mr496282vkp.41.1643011782822; 
+ Mon, 24 Jan 2022 00:09:42 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com.
+ [209.85.222.48])
+ by smtp.gmail.com with ESMTPSA id d19sm20075vsh.18.2022.01.24.00.09.42
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 24 Jan 2022 00:09:42 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id m90so29449932uam.2
+ for <buildroot@buildroot.org>; Mon, 24 Jan 2022 00:09:42 -0800 (PST)
+X-Received: by 2002:a67:fb82:: with SMTP id n2mr4705065vsr.4.1643011781797;
+ Mon, 24 Jan 2022 00:09:41 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-mpd2: bump to version 3.0.5
+References: <20220124071143.15869-1-christian@paral.in>
+In-Reply-To: <20220124071143.15869-1-christian@paral.in>
+Date: Mon, 24 Jan 2022 00:09:30 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2oDpxOW0mapqNmfuBVJAbB1XTZ+DFHqANcQzY_G_sux7g@mail.gmail.com>
+Message-ID: <CA+h8R2oDpxOW0mapqNmfuBVJAbB1XTZ+DFHqANcQzY_G_sux7g@mail.gmail.com>
+To: Christian Stewart <christian@paral.in>
+Subject: Re: [Buildroot] [PATCH 1/1] package/batman-adv: bump to version
+ 2021.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,47 +92,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Uladzimir Bely <wiselord1983@gmail.com>
----
- package/python-mpd2/python-mpd2.hash | 4 ++--
- package/python-mpd2/python-mpd2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi all,
 
-diff --git a/package/python-mpd2/python-mpd2.hash b/package/python-mpd2/python-mpd2.hash
-index 83487257ee..88dcb28377 100644
---- a/package/python-mpd2/python-mpd2.hash
-+++ b/package/python-mpd2/python-mpd2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-mpd2/json
--md5  e31c6063e9c2e029a26b0815cd08b05e  python-mpd2-3.0.4.tar.gz
--sha256  7a67834e22d97e7cd77f8951c8baf87c149285c67d67d73550ce034302561ae5  python-mpd2-3.0.4.tar.gz
-+md5  594dff3e53c8eb6f583ba642bc2c1a27  python-mpd2-3.0.5.tar.gz
-+sha256  6f1bffd93b9a32fc018a9bbf3487505b52e0d757ec34066905c60a912d492384  python-mpd2-3.0.5.tar.gz
- # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-mpd2/python-mpd2.mk b/package/python-mpd2/python-mpd2.mk
-index f357e302fd..bfe382b59e 100644
---- a/package/python-mpd2/python-mpd2.mk
-+++ b/package/python-mpd2/python-mpd2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_MPD2_VERSION = 3.0.4
--PYTHON_MPD2_SITE = https://files.pythonhosted.org/packages/ad/92/bec26455a3a6d6146bcf2a974f5c3509d451306413b386fc12b037d9e3b0
-+PYTHON_MPD2_VERSION = 3.0.5
-+PYTHON_MPD2_SITE = https://files.pythonhosted.org/packages/ed/c2/263621bdbbc37fa1a55fa1a7f66fd601bf08b3f87481e318a3509fb6c4bf
- PYTHON_MPD2_SETUP_TYPE = setuptools
- PYTHON_MPD2_LICENSE = LGPL-3.0+
- PYTHON_MPD2_LICENSE_FILES = LICENSE.txt
--- 
-2.34.1
+On Sun, Jan 23, 2022 at 11:11 PM Christian Stewart <christian@paral.in> wrote:
+> --- a/package/batman-adv/batman-adv.hash
+> +++ b/package/batman-adv/batman-adv.hash
+> @@ -1,7 +1,7 @@
+>  # From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.1/batman-adv-2021.1.tar.gz.sha1
+> -sha1  27a0dc7cb74b868bc0ab52794ecedd0448f0fb61  batman-adv-2021.1.tar.gz
+> +sha1  80a3e4d763b6bf35db6e561ed9d6775dc874d7c6  batman-adv-2021.4.tar.gz
 
+... comment should read:
+
+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.4/batman-adv-2021.4.tar.gz.sha1
+
+Thanks,
+Christian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
