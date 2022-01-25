@@ -1,48 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50C3C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:07:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779D7C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 600A7415CC;
-	Tue, 25 Jan 2022 18:07:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 226018291C;
+	Tue, 25 Jan 2022 18:08:24 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8L1jbnzafHJk; Tue, 25 Jan 2022 18:08:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71BA6827A0;
+	Tue, 25 Jan 2022 18:08:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DDD1A1BF301
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:08:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA7B340337
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:08:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ctYDWqGx21U7; Tue, 25 Jan 2022 18:07:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74DAA415C5;
-	Tue, 25 Jan 2022 18:07:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C4D21BF301
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:06:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77D7460D6E
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:06:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FmWHpt1-jDD4 for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:06:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA1BF60B3A
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:06:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C1D22818F6; Tue, 25 Jan 2022 18:00:01 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9pk-1eS3J55a for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:08:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C23F440219
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:08:19 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C610B100011;
+ Tue, 25 Jan 2022 18:08:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nCQEm-00083p-T0; Tue, 25 Jan 2022 19:08:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 19:06:32 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 941714483eed1cd0cf3524b30e5ff1fe96f348f6
-X-Git-Newrev: 57941d2e66d5147dcc9241e248a240cb47d0212c
-X-Patchwork-Hint: ignore
-Message-Id: <20220125180001.C1D22818F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x]
- package/gcc/Config.in.host: fix BR2_GCC_VERSION_ARC select of
- BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20211228133959.3690191-1-fontaine.fabrice@gmail.com>
+Date: Tue, 25 Jan 2022 19:08:12 +0100
+In-Reply-To: <20211228133959.3690191-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 28 Dec 2021 14:39:59 +0100")
+Message-ID: <875yq7lmcz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/rng-tools: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,47 +59,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57941d2e66d5147dcc9241e248a240cb47d0212c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-When the gcc arc version was bumped to a version using gcc
-10.x (arc-2020.09-release) in commit 0791abfba022 (toolchain: update ARC
-tools to arc-2020.09-release), the select of BR2_GCC_VERSION_ARC on the
-appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz was not updated.
+ > Fix the following musl build failure raised since bump to version 6.14
+ > in commit 5292d1cf9ad0605cc264fedc75c1b9a169aa183b:
 
-Commit 0b4c7ba01cfe (toolchain: update option descriptions for ARC tools
-arc-2020.09-release) fixed the prompt, but still forgot to update the
-appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz.
+ > /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld:
+ > rngd-rngd_jitter.o: in function `rngd_notime_start':
+ > rngd_jitter.c:(.text+0xdc2): undefined reference to `pthread_attr_setaffinity_np'
 
-This commit eventually fixes this issue.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3ec7df86856aa9bee2f18a8faa44fd58bc8a6657
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 81662cf228290f4abd72243730156baabb8b91c9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index aa2665cbee..a1fe192d3a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -12,7 +12,7 @@ config BR2_GCC_VERSION_ARC
- 	bool "gcc arc (10.x)"
- 	# Only supported architecture
- 	depends on BR2_arc
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_GCC_VERSION_POWERPC_SPE
- 	bool "gcc powerpc spe"
+Committed to 2021.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
