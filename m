@@ -4,52 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C353C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50C3C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AA41415A6;
-	Tue, 25 Jan 2022 18:06:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 600A7415CC;
+	Tue, 25 Jan 2022 18:07:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FQfoPNBOClFU; Tue, 25 Jan 2022 18:06:57 +0000 (UTC)
+	with ESMTP id ctYDWqGx21U7; Tue, 25 Jan 2022 18:07:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71A21415A8;
-	Tue, 25 Jan 2022 18:06:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74DAA415C5;
+	Tue, 25 Jan 2022 18:07:08 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 806B71BF301
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:06:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C4D21BF301
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:06:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F88A60AB5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77D7460D6E
  for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:06:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LqJHgSiXVplh for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:06:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 236D560DFA
+ with ESMTP id FmWHpt1-jDD4 for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:06:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA1BF60B3A
  for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:06:52 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 72C47C0003;
- Tue, 25 Jan 2022 18:06:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nCQDP-0007z1-G0; Tue, 25 Jan 2022 19:06:47 +0100
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C1D22818F6; Tue, 25 Jan 2022 18:00:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20211227215833.1136054-1-thomas.petazzoni@bootlin.com>
- <20211228204448.GB3390456@scaer>
-Date: Tue, 25 Jan 2022 19:06:47 +0100
-In-Reply-To: <20211228204448.GB3390456@scaer> (Yann E. MORIN's message of
- "Tue, 28 Dec 2021 21:44:48 +0100")
-Message-ID: <87a6fjlmfc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/gcc/Config.in.host: fix
- BR2_GCC_VERSION_ARC select of BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
+To: buildroot@buildroot.org
+Date: Tue, 25 Jan 2022 19:06:32 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 941714483eed1cd0cf3524b30e5ff1fe96f348f6
+X-Git-Newrev: 57941d2e66d5147dcc9241e248a240cb47d0212c
+X-Patchwork-Hint: ignore
+Message-Id: <20220125180001.C1D22818F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x]
+ package/gcc/Config.in.host: fix BR2_GCC_VERSION_ARC select of
+ BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,34 +54,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=57941d2e66d5147dcc9241e248a240cb47d0212c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
- > Thomas, All,
- > On 2021-12-27 22:58 +0100, Thomas Petazzoni spake thusly:
- >> When the gcc arc version was bumped to a version using gcc
- >> 10.x (arc-2020.09-release) in commit
- >> 0791abfba0227803b19895ea22326f4e17ac93dc, the select of
- >> BR2_GCC_VERSION_ARC on the appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz
- >> was not updated. This commit fixes this issue.
+When the gcc arc version was bumped to a version using gcc
+10.x (arc-2020.09-release) in commit 0791abfba022 (toolchain: update ARC
+tools to arc-2020.09-release), the select of BR2_GCC_VERSION_ARC on the
+appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz was not updated.
 
- > I've slightly rephrased the commit log to also add a reference to
- > 0b4c7ba01cfe (toolchain: update option descriptions for ARC tools
- > arc-2020.09-release) which also missed updating the select.
+Commit 0b4c7ba01cfe (toolchain: update option descriptions for ARC tools
+arc-2020.09-release) fixed the prompt, but still forgot to update the
+appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_xyz.
 
- > Nice catch, applied to master, thanks.
+This commit eventually fixes this issue.
 
-Committed to 2021.11.x, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 81662cf228290f4abd72243730156baabb8b91c9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index aa2665cbee..a1fe192d3a 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -12,7 +12,7 @@ config BR2_GCC_VERSION_ARC
+ 	bool "gcc arc (10.x)"
+ 	# Only supported architecture
+ 	depends on BR2_arc
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ config BR2_GCC_VERSION_POWERPC_SPE
+ 	bool "gcc powerpc spe"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
