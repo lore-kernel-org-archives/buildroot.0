@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5343DC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 17:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C02A3C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 17:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B68B0408A3;
-	Tue, 25 Jan 2022 17:03:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72B3B60AF2;
+	Tue, 25 Jan 2022 17:04:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jE1iWDT5f1K1; Tue, 25 Jan 2022 17:04:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDE6A6080A;
+	Tue, 25 Jan 2022 17:04:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 375131BF957
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:04:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F0D1401D2
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:04:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eoLlm1AAc4nj; Tue, 25 Jan 2022 17:03:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AE7A4062A;
-	Tue, 25 Jan 2022 17:03:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D28C71BF34E
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:03:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C028540209
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:03:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5SDy8Ls_G1WV for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 17:03:42 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fHaF2picEreo for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 17:04:30 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABA1F401EF
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 17:03:41 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE2734013A
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 17:04:29 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 421A0FF80A;
- Tue, 25 Jan 2022 17:03:39 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 56CE6100006;
+ Tue, 25 Jan 2022 17:04:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
  (envelope-from <peter@korsgaard.com>)
- id 1nCPEI-00066s-IV; Tue, 25 Jan 2022 18:03:38 +0100
+ id 1nCPF3-0006Ak-0E; Tue, 25 Jan 2022 18:04:25 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabio Estevam <festevam@gmail.com>
 References: <20211227175130.2986949-1-festevam@gmail.com>
- <20211227175130.2986949-2-festevam@gmail.com>
-Date: Tue, 25 Jan 2022 18:03:38 +0100
-In-Reply-To: <20211227175130.2986949-2-festevam@gmail.com> (Fabio Estevam's
- message of "Mon, 27 Dec 2021 14:51:29 -0300")
-Message-ID: <87v8y7lpcl.fsf@dell.be.48ers.dk>
+ <20211227175130.2986949-3-festevam@gmail.com>
+Date: Tue, 25 Jan 2022 18:04:24 +0100
+In-Reply-To: <20211227175130.2986949-3-festevam@gmail.com> (Fabio Estevam's
+ message of "Mon, 27 Dec 2021 14:51:30 -0300")
+Message-ID: <87r18vlpbb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] configs/mx6cubox: Select
+Subject: Re: [Buildroot] [PATCH 3/3] configs/imx6ullevk: Select
  BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,7 +77,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  >       |            ^~~~~~~~~~~~~~~
 
  > Fixes:
- > - https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006257
+ > - https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006189
  > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed to 2021.11.x, thanks.
