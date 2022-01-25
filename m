@@ -1,87 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF8A7C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 20:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB26C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 20:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51732409C0;
-	Tue, 25 Jan 2022 20:49:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7110782726;
+	Tue, 25 Jan 2022 20:49:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BFBjVnx8NJ1a; Tue, 25 Jan 2022 20:49:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3aeMYywdvcoc; Tue, 25 Jan 2022 20:49:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C0C9409D3;
-	Tue, 25 Jan 2022 20:49:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9C9B82451;
+	Tue, 25 Jan 2022 20:49:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75A631BF5A1
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:49:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B2F921BF5A1
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62C92409D3
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:49:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1C0641496
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:49:29 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W77J9PxGCwWH for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 20:49:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8E8A6409C0
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 20:49:20 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id p15so33434302ejc.7
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 12:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=DyANQla+ueHlicmYpvvucgk1Dak1LjdgaQ1grF7Zyso=;
- b=BTq+OLp3khYhHSw1453KqR3r6LFdP8S+dZYomYxLC7/yOXq0zb/CPQ9ddP0tDAsY2s
- fSKIze3Q4cSjJ7eG7Mqs43Aut76V5gsEoa4TuuIkEeiSwhK91MTcpyxVrOVSJyWCKEyq
- S3ROhdScbvb5bSOYUeGnDtECFY9EDlLDEmqyky00euJl+oujQ41tv7Q/Zsa3XvYfzXxA
- O7R4/Y5kEgROtiiT288BnVIwykGuFoVoewlM8XjDZNbvAhTRv5S7AzodCvqYnIumX7fo
- Vtjr3ADLdy80zFvKZdJtHSy6Iesf9bIIi0CmBs/KBl2uuoD4a+JMRbSYH3qYmW3Uh5hI
- 6Q/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=DyANQla+ueHlicmYpvvucgk1Dak1LjdgaQ1grF7Zyso=;
- b=tn9F+vUPQM6OCArE4KTI5xRgkejxEOtXLZYjUZivPtT7rsYeB6mvcEu0N6Lq0qYav5
- 1tJYAEfmHhwBT2+VX+VEGww1TG8OJM54C32JOvsy6eCO+UdyIKYYKfg2rS2WrCjBILV4
- DA7FoaYaH7al61lFvhNF0sVxkRVSf3xhttto6JIM0zW0JmEJJzP0xB9zy5CElPwO07CE
- Lk4F8ja4bPywQVS5a6EiAm4vb2NJ7a92HUn5eAfQtXeu1q2vONWpBFPr234yu9ZYEt2s
- VSWEkN5I48rpZuf7Dc5E1OTxrbmiSsSs9vJvNMoenw3aL0sLq9NJgucgQWf4lJSZ9WUy
- +aQg==
-X-Gm-Message-State: AOAM533/IMdFml8ZADSuyJ+gId+o0O4tpGDTyynuifnBxnATNGnkSuCZ
- ATXlupk8373P+b8d9IUIh31/IYmrQABUvQ==
-X-Google-Smtp-Source: ABdhPJxhNgPX5ruH/JhhS4YaWDkubh4VJi9PKf58N0NeiPa8YOsWFu2uBJZ3vHF2IBJPLyqDSSLTzw==
-X-Received: by 2002:a17:907:a088:: with SMTP id
- hu8mr17084124ejc.528.1643143758593; 
- Tue, 25 Jan 2022 12:49:18 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
- (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
- by smtp.gmail.com with ESMTPSA id jl17sm6687543ejc.16.2022.01.25.12.49.17
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 25 Jan 2022 12:49:18 -0800 (PST)
-Message-ID: <27e2c9f6-8ed6-b23e-ba39-9f04e29f4590@mind.be>
-Date: Tue, 25 Jan 2022 21:49:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1642875217.git.yann.morin.1998@free.fr>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <cover.1642875217.git.yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH 0/2 v2] core: fixup PPD paths (branch
- yem/ppd-fixup-paths)
+ with ESMTP id vPqNpgK7s3t6 for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 20:49:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 027484148B
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 20:49:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id D5D9182810; Tue, 25 Jan 2022 20:42:37 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Tue, 25 Jan 2022 21:47:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b06294e9897e90862656416e8b67fdace15488d7
+X-Git-Newrev: 2f9a1c621302c6cdf01dfff88f0343d7b03a6107
+X-Patchwork-Hint: ignore
+Message-Id: <20220125204237.D5D9182810@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core/pkg-generic: apply post-prepare hooks
+ before monitoring directories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,60 +53,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul CORDIER <lpdev@cordier.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Herve Codina <herve.codina@bootlin.com>,
- Andreas Naumann <anaumann@ultratronik.de>, Adam Duskett <aduskett@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2f9a1c621302c6cdf01dfff88f0343d7b03a6107
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Monitoring the target/ and host/ directories and so on, will serve to
+generate lists of files installed by the packages. Those lists are then
+used to generate graphs of the size those package take on the target
+for example.
 
-On 22/01/2022 19:13, Yann E. MORIN wrote:
-> Hello All!
-> 
-> This series builds upon previous good work from Andreas [0], Louis-Paul
-> [1], and Adam [2].
-> 
-> The first patch is the core of the change: rather than have multiple
-> hooks that each cater for different types of files (.py, .pc, .pri,
-> .cmake and so on), we jut do what we already do in relocate-sdk: we just
-> look for all text files that have a PPD prefix in them, and replace tht
-> with the current package's PPD.
-> 
-> The second patch ensures that we can build reliable files lists, so that
-> files we tweak in the infra are not believed to be installed/modified by
-> the current package.
-> 
-> [0] https://lore.kernel.org/buildroot/20200217212350.29750-21-anaumann@ultratronik.de/
-> [1] https://lore.kernel.org/buildroot/a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org/
-> [2] https://lore.kernel.org/buildroot/20220106171720.12857-1-aduskett@gmail.com/
-> 
-> Changes v1 -> v2:
->    - use --binary-files=without-match, as this *considerably* speeds up
->      the fixup  (Arnout)
->    - rename the python fixup  (Arnout)
+With PPD, we will also want to use those lists to only copy those files
+actually installed by each dependencies of a package, recursively.
 
-  Both applied to master, thanks.
+Currently, those lists are not entirely reliable, as the starting points
+are established before we apply PPD fixup hooks. As such, at the end of
+a package installation, fixed up files will be found to belong to the
+current package, while they were in fact provided by one of its
+dependency.
 
-  Regards,
-  Arnout
+While this does no big harm, if at all, for the size graphs, it will
+trigger overwrite detection when we eventually gather packages together
+to aggregate a PPD or te final host and target. So, we better have the
+lists of files be reliable.
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (2):
->        core/pkg-generic: fixup all PPD paths in a generic fashion
->        core/pkg-generic: apply post-prepare hooks before monitoring directories
-> 
->   package/pkg-generic.mk | 47 +++++++++++++++++++++++------------------------
->   1 file changed, 23 insertions(+), 24 deletions(-)
-> 
+So, we only start monitoring the directories after we apply the PPD
+fixups (or seen the other way around for a smaller diff: we apply the
+PPD fixups before we start monitoring the directories).
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 78226ee266..b3a7e1d60e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -273,11 +273,11 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call MESSAGE,"Configuring")
+ 	$(Q)mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR) $(BINARIES_DIR)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
++	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
+ 	@$(call pkg_size_before,$(TARGET_DIR))
+ 	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+ 	@$(call pkg_size_before,$(BINARIES_DIR),-images)
+ 	@$(call pkg_size_before,$(HOST_DIR),-host)
+-	$(foreach hook,$($(PKG)_POST_PREPARE_HOOKS),$(call $(hook))$(sep))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
