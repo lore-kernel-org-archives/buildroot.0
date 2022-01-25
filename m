@@ -1,77 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DE98C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 335F3C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D64CB4027F;
-	Tue, 25 Jan 2022 18:53:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5BE481B69;
+	Tue, 25 Jan 2022 18:59:38 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y7KFwCRrqetT; Tue, 25 Jan 2022 18:53:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5YywfgSrHPWt; Tue, 25 Jan 2022 18:59:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C37C40256;
-	Tue, 25 Jan 2022 18:53:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4B8601BF2C8
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:53:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36F5281B48;
+	Tue, 25 Jan 2022 18:59:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B5421BF2C8
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:59:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4625440256
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:53:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6621C607CE
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:59:35 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 90HaFqmytEhZ for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:53:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 276C24013B
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:53:19 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id l25so21589462wrb.13
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 10:53:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cdq4E5xAzgiYDsfr9pWqR0/Z0ZQxsnD5466vzn8V3DQ=;
- b=Mfao3rOdi5Yutred5MZOoMKTRMayvit/NUn0dTql1U1L8r6wtCNKc3Ca4HqipqyfZd
- aMrTaCQQCKMb29381HUb96LQzSeeDsu+YR8Nda2mkR202GCx/DyDnrE7oOTdQwhqNNky
- zR21KVndK5xT04lXNm1+uUOi//P08RR+svlQZo7g6GlS1JClVkQM/QJP6p6yKkL79MTr
- cZgEUSK94hO/X27FnCYWpXwMyuZrQs9G0GlGKILbn8KPuggL/c/ryY3yyTUEoux4pVNJ
- 5o0e5Ul64KlMd0R4EPb4Bx3NQSrfsE1K1y7+a/cTrtIviuYVGZ4TlHD1ZC3ah2MdvYRg
- plUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cdq4E5xAzgiYDsfr9pWqR0/Z0ZQxsnD5466vzn8V3DQ=;
- b=W/L5YbpT6RNsI8w7u49n/mGe8+csClT31zoCtVdeyLXL3Ymt3MzghhV8f6krlohs/N
- OH/P2s6OHd2UI1jGAqoC4YFBpoNW+noia3GnyuGjOOKTlWC1TwBHTWQB78AqMjEMEoy2
- xbwaCKzDAECc4nOiZAVxJrR21e9k9bB5a2UEGRRHYqtl6tR/8NqF+L0iaLVdPbiU4kzq
- E6bcA0tSVfuALz1MT9r5QYja1MhHbF1YKhq5hNpedY3ii8et2Wfpt9CScCjZKdf4mqAn
- LzUYYWktpQnGT6vgXoXwS4vcqtgp7hv90aTo5xzbawQLVOgybDmiX00ppGmztkcMFpNh
- cQGA==
-X-Gm-Message-State: AOAM5324ijXkf1LXDeJ0WICI7xCftRkfHkNBjb7qmpQ3IfvEQHV8fplx
- rEITGvAZPif3/LB3jYI3iZ7BV/FUE+M=
-X-Google-Smtp-Source: ABdhPJzPK/KL2DN+k2suCVLVTIQbwUpP2iWDaMA3iV0GCtEMpbj/6iJojBpbtdB9boBk16cuAfDIVw==
-X-Received: by 2002:a5d:670b:: with SMTP id o11mr11659481wru.655.1643136797107; 
- Tue, 25 Jan 2022 10:53:17 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id p16sm1287308wmq.20.2022.01.25.10.53.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jan 2022 10:53:16 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 19:51:26 +0100
-Message-Id: <20220125185126.52194-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wn-1SaOzBFdu for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:59:34 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03BAD6079D
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:59:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by relay12.mail.gandi.net (Postfix) with ESMTPSA id BDCFA200002;
+ Tue, 25 Jan 2022 18:59:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nCR2Q-000177-3I; Tue, 25 Jan 2022 19:59:30 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20211228214236.BD2C582B78@busybox.osuosl.org>
+Date: Tue, 25 Jan 2022 19:59:30 +0100
+In-Reply-To: <20211228214236.BD2C582B78@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 28 Dec 2021 22:47:41 +0100")
+Message-ID: <87wnink5f1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/gupnp: bump to version 1.4.3
+Subject: Re: [Buildroot] [git commit] package/erlang-rebar: fix linking
+ failure on shared library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,49 +59,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.4.3/NEWS
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b00c034fe58ad2ae87b2289e07912b6c10d19ee1
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index cc78be7d5d..cc5e2b5775 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.4/gupnp-1.4.2.sha256sum:
--sha256  bcad92f2ee09d02f55e0f6ea480c475ed8a7523529263f7ce28013d3c263bacc  gupnp-1.4.2.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
-+sha256  14eda777934da2df743d072489933bd9811332b7b5bf41626b8032efb28b33ba  gupnp-1.4.3.tar.xz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index aebf9225a8..dca747f064 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GUPNP_VERSION_MAJOR = 1.4
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.1+
+ > Add patch to fix linking failure while creating shared library. As
+ > explained in the patch itself, there is no specific variable for when we
+ > link a shared library and rebar itself rely on the default LDFLAGS. Since
+ > by default every CFLAGS is filled with -fPIC we need to make sure that
+ > every LDFLAGS is the same, so not having any other *_LDFLAGS variable to
+ > fille with -fPIC let's add it to the main LDFLAGS.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/602/60296a48210e7ffc6bc9fa50ee586441a8957e85/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2021.11.x, thanks.
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
