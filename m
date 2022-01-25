@@ -4,60 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 209C9C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F25AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDC0A410DE;
-	Tue, 25 Jan 2022 18:19:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6CE1403CA;
+	Tue, 25 Jan 2022 18:34:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RxLCAV-k_1dC; Tue, 25 Jan 2022 18:19:30 +0000 (UTC)
+	with ESMTP id iGHp19eiZO0g; Tue, 25 Jan 2022 18:34:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03139414C1;
-	Tue, 25 Jan 2022 18:19:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E27240495;
+	Tue, 25 Jan 2022 18:34:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1DD7C1BF301
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:19:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D26B1BF301
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C5AB4033D
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:19:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A33740882
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:34:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q3kNZG921hGk for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:19:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BBB9C40336
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:19:26 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:40e2:478e:9a26:9cef])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 08E4A5FFA9;
- Tue, 25 Jan 2022 19:19:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643134764;
- bh=2VNrERLqv9CxzJXMDFrDfb3HmSoyXoicf+zOOOEPp8Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=J6LWau7eiRYrRTWrsVDRleDSnH5x8veRuMeyJELWBS6PsmCdxOLIosItSPqswS/IO
- veS79kwXpWMlpRhXRQLPpUzH49PgOkbrl/CAV9OOClV/d4px1kVSfl4VUZkZIzyhQ6
- xbRh9/R8vUQp2bEB1fF3ZylhSS8mqmaRFNZkKjm6Vndfzgx8P8SvdPVdeKNRuGLSNF
- 4VIZMTNHq8+G0Xlz6jQbBPWWiSYYhKST0dPVvLAHMBGylg2Gq1QdXTY+1LUMEDwnu9
- VGBVK3eq36Em2xJrWk0Tkx4RFzb4X2vOyaRIYQpmEzl18qt94X9PiyuqRnp85+yNuo
- j56jBI1g93XLg==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 25 Jan 2022 19:19:21 +0100
-Date: Tue, 25 Jan 2022 19:19:21 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Uladzimir Bely <wiselord1983@gmail.com>
-Message-ID: <20220125181921.GC457876@scaer>
-References: <20220124080352.2116-1-wiselord1983@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220124080352.2116-1-wiselord1983@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH] package/python-mpd2: bump to version 3.0.5
+ with ESMTP id Ko2tIeLRYRX1 for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:34:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BCD24403CA
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:34:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id CDAB7827E3; Tue, 25 Jan 2022 18:27:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 25 Jan 2022 19:20:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b603f2a1e8f2875e1f1c4cec385a73b3e88901b5
+X-Git-Newrev: 4211a933a3f9762b2816c372f7aa2ca5e92db32d
+X-Patchwork-Hint: ignore
+Message-Id: <20220125182726.CDAB7827E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyftpdlib: bump to version
+ 1.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,69 +53,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Uladzimir, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4211a933a3f9762b2816c372f7aa2ca5e92db32d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-01-24 11:03 +0300, Uladzimir Bely spake thusly:
-> Signed-off-by: Uladzimir Bely <wiselord1983@gmail.com>
+- Update hash of LICENSE file (license updated to make it recognizable
+  by github:
+  https://github.com/giampaolo/pyftpdlib/commit/a3016e7d694c226cae6a2b7672c6c5196124cd7a)
+- Update indentation in hash file (two spaces)
 
-Applied to master, thanks.
+https://github.com/giampaolo/pyftpdlib/blob/release-1.5.6/HISTORY.rst
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> ---
->  package/python-mpd2/python-mpd2.hash | 4 ++--
->  package/python-mpd2/python-mpd2.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-mpd2/python-mpd2.hash b/package/python-mpd2/python-mpd2.hash
-> index 83487257ee..88dcb28377 100644
-> --- a/package/python-mpd2/python-mpd2.hash
-> +++ b/package/python-mpd2/python-mpd2.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/python-mpd2/json
-> -md5  e31c6063e9c2e029a26b0815cd08b05e  python-mpd2-3.0.4.tar.gz
-> -sha256  7a67834e22d97e7cd77f8951c8baf87c149285c67d67d73550ce034302561ae5  python-mpd2-3.0.4.tar.gz
-> +md5  594dff3e53c8eb6f583ba642bc2c1a27  python-mpd2-3.0.5.tar.gz
-> +sha256  6f1bffd93b9a32fc018a9bbf3487505b52e0d757ec34066905c60a912d492384  python-mpd2-3.0.5.tar.gz
->  # Locally computed sha256 checksums
->  sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-> diff --git a/package/python-mpd2/python-mpd2.mk b/package/python-mpd2/python-mpd2.mk
-> index f357e302fd..bfe382b59e 100644
-> --- a/package/python-mpd2/python-mpd2.mk
-> +++ b/package/python-mpd2/python-mpd2.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -PYTHON_MPD2_VERSION = 3.0.4
-> -PYTHON_MPD2_SITE = https://files.pythonhosted.org/packages/ad/92/bec26455a3a6d6146bcf2a974f5c3509d451306413b386fc12b037d9e3b0
-> +PYTHON_MPD2_VERSION = 3.0.5
-> +PYTHON_MPD2_SITE = https://files.pythonhosted.org/packages/ed/c2/263621bdbbc37fa1a55fa1a7f66fd601bf08b3f87481e318a3509fb6c4bf
->  PYTHON_MPD2_SETUP_TYPE = setuptools
->  PYTHON_MPD2_LICENSE = LGPL-3.0+
->  PYTHON_MPD2_LICENSE_FILES = LICENSE.txt
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+index 7f8da95550..abbb1261b2 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.hash
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyftpdlib/json
+-md5	7f8089520d60171bee5dab2b721e8d00  pyftpdlib-1.5.5.tar.gz
+-sha256	1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752  pyftpdlib-1.5.5.tar.gz
++md5  459dd3e685c4b7dfcf574ca05e5586eb  pyftpdlib-1.5.6.tar.gz
++sha256  fda655d81f29af52885ca2f8a2704134baed540f16d66a0b26e8fdfafd12db5e  pyftpdlib-1.5.6.tar.gz
+ # Locally computed sha256 checksums
+-sha256	18a4ff1ddf890838e36504b307581e3eb42c890a7272ce28b18b3ce1205b7ea8  LICENSE
++sha256  67a832551570a5ac5f7901eaa5ece4b9491fda7f2d8c93957c3bbc68a5a76d88  LICENSE
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+index dbbb9e2842..931e2dad06 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.mk
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYFTPDLIB_VERSION = 1.5.5
++PYTHON_PYFTPDLIB_VERSION = 1.5.6
+ PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
+-PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/27/64/06a574350c79873e908fa9f48b617e7961de50fc468acc0a05d76771bce9
++PYTHON_PYFTPDLIB_SITE = https://files.pythonhosted.org/packages/31/61/63ef60aca6de07eba1639d9d47f3f8e29462e8bb49d6a8dce9aeff240646
+ PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+ PYTHON_PYFTPDLIB_LICENSE = MIT
+ PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
