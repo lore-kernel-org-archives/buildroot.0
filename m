@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4BD1C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B89AC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B64F40986;
-	Tue, 25 Jan 2022 18:08:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A439F60D6E;
+	Tue, 25 Jan 2022 18:09:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kc9rjYPvVJ67; Tue, 25 Jan 2022 18:08:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tYvcd4M15jdN; Tue, 25 Jan 2022 18:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BDBE408C5;
-	Tue, 25 Jan 2022 18:08:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E97E660E0F;
+	Tue, 25 Jan 2022 18:09:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7BD941BF301
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:08:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 055C51BF301
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B53C827A0
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:08:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 022A881A16
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ac4e7TPK2TFe for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:08:17 +0000 (UTC)
+ with ESMTP id 4I6IzoOCYlsB for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8374D82716
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:08:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 626DD8142A
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9FD73818AF; Tue, 25 Jan 2022 18:01:26 +0000 (UTC)
+ id 79BDC825DF; Tue, 25 Jan 2022 18:03:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 19:07:49 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: 57941d2e66d5147dcc9241e248a240cb47d0212c
-X-Git-Newrev: b30309847e307dee233d7cd8c57586f1ff50cad5
+Date: Tue, 25 Jan 2022 19:09:46 +0100
+X-Git-Refname: refs/heads/2021.02.x
+X-Git-Oldrev: 123e8b59879bda71e29c6e6485a75e9fc10bfdf6
+X-Git-Newrev: f54fa1d46972059790203547063b67f72be8fa7c
 X-Patchwork-Hint: ignore
-Message-Id: <20220125180126.9FD73818AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] package/rng-tools: fix
- musl build
+Message-Id: <20220125180302.79BDC825DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.02.x] package/collectd: add
+ missing comment for mysql dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,131 +59,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b30309847e307dee233d7cd8c57586f1ff50cad5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
-
-Fix the following musl build failure raised since bump to version 6.14
-in commit 5292d1cf9ad0605cc264fedc75c1b9a169aa183b:
-
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i586-buildroot-linux-musl/9.3.0/../../../../i586-buildroot-linux-musl/bin/ld: rngd-rngd_jitter.o: in function `rngd_notime_start':
-rngd_jitter.c:(.text+0xdc2): undefined reference to `pthread_attr_setaffinity_np'
-
-Fixes:
- - http://autobuild.buildroot.org/results/3ec7df86856aa9bee2f18a8faa44fd58bc8a6657
+commit: https://git.buildroot.net/buildroot/commit/?id=f54fa1d46972059790203547063b67f72be8fa7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d94e2b6dd4f291a77bbfd06eabb7ce85c9bb6aa9)
+(cherry picked from commit f877c668114c3dab465127a307b3268f1f34db5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-detect-non-posix-extensions-for-pthreads.patch | 43 +++++++++++++++++++
- ...se-of-either-pthread-affinity-set-methods.patch | 49 ++++++++++++++++++++++
- 2 files changed, 92 insertions(+)
+ package/collectd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch b/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
-new file mode 100644
-index 0000000000..ba6cf63d7c
---- /dev/null
-+++ b/package/rng-tools/0001-Adding-ability-to-detect-non-posix-extensions-for-pthreads.patch
-@@ -0,0 +1,43 @@
-+From d1840e54a15fc454936cada10cce7fd91d06232b Mon Sep 17 00:00:00 2001
-+From: Neil Horman <nhorman@gmail.com>
-+Date: Thu, 15 Jul 2021 08:43:01 -0400
-+Subject: [PATCH] Adding ability to detect non-posix extensions for pthreads
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 82c24fdbc3..d783317f8a 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -377,6 +377,10 @@ config BR2_PACKAGE_COLLECTD_MYSQL
+ 	  Connects to a MySQL database and issues a "show status"
+ 	  command.
+ 
++comment "mysql needs a toolchain w/ C++, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+Theres a desire to build rngd with musl, which doesn't have all the gnu
-+extensions (but it has some).  So test for those.  Note, this requires
-+the addition of the USE_EXTENSIONS macro to enable -d_GNU_SOURCE
-+
-+Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
-+
-+[Retrieved from:
-+https://github.com/nhorman/rng-tools/commit/d1840e54a15fc454936cada10cce7fd91d06232b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0fe06fc..de7dca3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -25,6 +25,7 @@ AC_CANONICAL_TARGET dnl required for broken AX_PTHREAD
-+ AM_INIT_AUTOMAKE([foreign])
-+ AC_CONFIG_HEADERS([rng-tools-config.h])
-+ AC_CONFIG_MACRO_DIRS([m4])
-++AC_USE_SYSTEM_EXTENSIONS
-+ 
-+ dnl Parse options
-+ 
-+@@ -100,6 +101,12 @@ AS_IF(
-+ 	], [AC_MSG_NOTICE([Disabling JITTER entropy source])]
-+ )
-+ 
-++AC_CHECK_DECL(pthread_attr_setaffinity_np,
-++		[AC_DEFINE([HAVE_PTHREAD_ATTR_SETAFFINITY], 1,[Set ATTR_SETAFFINITY])],
-++		[ AC_CHECK_DECL(pthread_setaffinity_np,
-++		   [AC_DEFINE([HAVE_PTHREAD_SETAFFINITY],1, [Set PTHREAD_SETAFFINITY])], [ AC_MSG_ERROR([Neither pthread_setaffinity_np nor pthread_attr_setaffinity_np found])],[[#include <pthread.h>]])
-++		], [[#include <pthread.h>]])
-++
-+ AS_IF(
-+ 	[ test "x$with_nistbeacon" != "xno"],
-+ 	[
-diff --git a/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch b/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
-new file mode 100644
-index 0000000000..17285baa6a
---- /dev/null
-+++ b/package/rng-tools/0002-Allow-for-use-of-either-pthread-affinity-set-methods.patch
-@@ -0,0 +1,49 @@
-+From 5caa086dc14cecf68d1a5c31e87ba1efb2c00893 Mon Sep 17 00:00:00 2001
-+From: Neil Horman <nhorman@gmail.com>
-+Date: Thu, 15 Jul 2021 08:48:10 -0400
-+Subject: [PATCH] Allow for use of either pthread affinity set methods
-+
-+musl has support for pthread_setaffinity_np, but not
-+pthread_attr_setaffinity_np.  so check for hte existence of either
-+function in configure, and use the appropriate one.
-+
-+Signed-off-by: Neil Horman <nhorman@tuxdriver.com>
-+
-+[Retrieved from:
-+https://github.com/nhorman/rng-tools/commit/5caa086dc14cecf68d1a5c31e87ba1efb2c00893]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ rngd_jitter.c | 15 ++++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/rngd_jitter.c b/rngd_jitter.c
-+index ea29436..5c7e09e 100644
-+--- a/rngd_jitter.c
-++++ b/rngd_jitter.c
-+@@ -67,12 +67,25 @@ static int rngd_notime_start(void *ctx,
-+ 	for(i=i-1;i>=0;i--) {
-+ 		CPU_SET(i,cpus);
-+ 	}
-+-	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
-+ 
-++        /*
-++	 * Note that only one of:
-++	 * HAVE_PTHREAD_ATTR_SETAFFINITY
-++	 * and
-++	 * HAVE_PTHREAD_SETAFFINITY
-++	 * Will ever be set, as per the configure.ac logic
-++	 */
-++#ifdef HAVE_PTHREAD_ATTR_SETAFFINITY
-++	pthread_attr_setaffinity_np(&thread_ctx->notime_pthread_attr, cpusize, cpus);
-++#endif
-+ 	ret = -pthread_create(&thread_ctx->notime_thread_id,
-+ 				&thread_ctx->notime_pthread_attr,
-+ 				start_routine, arg);
-+ 
-++#ifdef HAVE_PTHREAD_SETAFFINITY
-++	pthread_setaffinity_np(&thread_ctx->notime_thread_id, cpusize, cpus);
-++#endif
-++
-+ 	CPU_FREE(cpus);
-+ 	return ret;
-+ }
+ config BR2_PACKAGE_COLLECTD_NETLINK
+ 	bool "netlink"
+ 	select BR2_PACKAGE_LIBMNL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
