@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F40C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C3BC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8252E84CC1;
-	Tue, 25 Jan 2022 07:58:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28397400FB;
+	Tue, 25 Jan 2022 07:58:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VS4FP-r0OLWd; Tue, 25 Jan 2022 07:58:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sBy3dWtO9_du; Tue, 25 Jan 2022 07:58:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 764CC84CEB;
-	Tue, 25 Jan 2022 07:58:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 73B9D1BF990
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD7944034A;
+	Tue, 25 Jan 2022 07:58:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 180E61BF2CC
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 320BC60B57
+ by smtp2.osuosl.org (Postfix) with ESMTP id E26F740377
  for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9sm8whGDUFmF for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yjnLoRYowKiz for <buildroot@lists.busybox.net>;
  Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2483B60FA4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 379354034A
  for <buildroot@buildroot.org>; Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2F2268233A; Tue, 25 Jan 2022 07:49:20 +0000 (UTC)
+ id 437C48277A; Tue, 25 Jan 2022 07:49:20 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 08:40:57 +0100
+Date: Tue, 25 Jan 2022 08:41:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9887615eda3076679fca2fe3a8335aa9cfc09f72
-X-Git-Newrev: 7910b5e72df6e9b6c1dc6d3f041cf154668bd3b2
+X-Git-Oldrev: 93cb79318147191bf3b9fc2b047c24095f3194bc
+X-Git-Newrev: 7df632905fdd7d9334b71f08d8b324841912144f
 X-Patchwork-Hint: ignore
-Message-Id: <20220125074920.2F2268233A@busybox.osuosl.org>
+Message-Id: <20220125074920.437C48277A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-bootlin: re-update OpenRISC
- toolchains
+ toolchain/toolchain-external/toolchain-external-bootlin: update with new
+ x86-64 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,124 +60,862 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7910b5e72df6e9b6c1dc6d3f041cf154668bd3b2
+commit: https://git.buildroot.net/buildroot/commit/?id=7df632905fdd7d9334b71f08d8b324841912144f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The OpenRISC toolchains have been rebuilt once again, this time with
-the _REENTRANT fixed merged in commit
-98e39dc80ee81a166df90b4ff3232038a63b759c ("package/gcc: define
-_REENTRANT for OpenRISC when -pthread is passed")
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../toolchain-external-bootlin/Config.in.options         |  8 ++++----
- .../toolchain-external-bootlin.hash                      | 16 ++++++++--------
- .../toolchain-external-bootlin.mk                        |  8 ++++----
- 3 files changed, 16 insertions(+), 16 deletions(-)
+ .../tests/toolchain/test_external_bootlin.py       | 225 +++++++++++
+ .../toolchain-external-bootlin/Config.in.options   | 446 +++++++++++++++++++++
+ .../toolchain-external-bootlin.hash                |  30 ++
+ .../toolchain-external-bootlin.mk                  |  90 +++++
+ 4 files changed, 791 insertions(+)
 
+diff --git a/support/testing/tests/toolchain/test_external_bootlin.py b/support/testing/tests/toolchain/test_external_bootlin.py
+index 5e908b957e..cf6174303e 100644
+--- a/support/testing/tests/toolchain/test_external_bootlin.py
++++ b/support/testing/tests/toolchain/test_external_bootlin.py
+@@ -2362,6 +2362,231 @@ class TestExternalToolchainBootlinSparcv8UclibcStable(TestExternalToolchain):
+         TestExternalToolchain.common_check(self)
+ 
+ 
++class TestExternalToolchainBootlinX8664GlibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664GlibcStable(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664MuslBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664MuslStable(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664UclibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664UclibcStable(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_STABLE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v2GlibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v2=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_GLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v2MuslBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v2=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_MUSL_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v2UclibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v2=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_UCLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v3GlibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v3=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_GLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v3MuslBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v3=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_MUSL_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v3UclibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v3=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_UCLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v4GlibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v4=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_GLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v4MuslBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v4=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_MUSL_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainBootlinX8664v4UclibcBleedingEdge(TestExternalToolchain):
++    config = """
++        BR2_x86_64=y
++        BR2_x86_x86_64_v4=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_UCLIBC_BLEEDING_EDGE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "x86_64-linux"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
+ class TestExternalToolchainBootlinX8664corei7GlibcBleedingEdge(TestExternalToolchain):
+     config = """
+         BR2_x86_64=y
 diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 94dea4a386..55b6d4c786 100644
+index 55b6d4c786..42cad21d71 100644
 --- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
 +++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -2400,7 +2400,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_NIOS2_GLIBC_STABLE
+@@ -37,6 +37,10 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+ 	default y if BR2_sh && BR2_sh4aeb
+ 	default y if BR2_sparc64 && BR2_sparc_v9
+ 	default y if BR2_sparc && BR2_sparc_v8
++	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2
++	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
++	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42 && BR2_X86_CPU_HAS_AVX && BR2_X86_CPU_HAS_AVX2
++	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42 && BR2_X86_CPU_HAS_AVX && BR2_X86_CPU_HAS_AVX2
+ 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
+ 	default y if BR2_i386 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3
+ 	default y if BR2_i386 && !BR2_x86_i486 && !BR2_x86_i586 && !BR2_x86_x1000
+@@ -3791,6 +3795,448 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARCV8_UCLIBC_STABLE
+ 
  	  https://toolchains.bootlin.com/
  
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_BLEEDING_EDGE
--	bool "openrisc musl bleeding-edge 2021.11-4"
-+	bool "openrisc musl bleeding-edge 2021.11-5"
- 	depends on BR2_or1k
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
-@@ -2423,7 +2423,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_BLEEDING_EDGE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE
--	bool "openrisc musl stable 2021.11-4"
-+	bool "openrisc musl stable 2021.11-5"
- 	depends on BR2_or1k
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-@@ -2445,7 +2445,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE
--	bool "openrisc uclibc bleeding-edge 2021.11-4"
-+	bool "openrisc uclibc bleeding-edge 2021.11-5"
- 	depends on BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-@@ -2468,7 +2468,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE
--	bool "openrisc uclibc stable 2021.11-4"
-+	bool "openrisc uclibc stable 2021.11-5"
- 	depends on BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_BLEEDING_EDGE
++	bool "x86-64 glibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  glibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE
++	bool "x86-64 glibc stable 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  glibc C library. This is a stable version, which means it
++	  is using stable and proven versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_BLEEDING_EDGE
++	bool "x86-64 musl bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_USE_MMU
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  musl C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE
++	bool "x86-64 musl stable 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_USE_MMU
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  musl C library. This is a stable version, which means it is
++	  using stable and proven versions of gcc, gdb and binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_BLEEDING_EDGE
++	bool "x86-64 uclibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  uclibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_STABLE
++	bool "x86-64 uclibc stable 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	help
++	  Bootlin toolchain for the x86-64 architecture, using the
++	  uclibc C library. This is a stable version, which means it
++	  is using stable and proven versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_GLIBC_BLEEDING_EDGE
++	bool "x86-64-v2 glibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Bootlin toolchain for the x86-64-v2 architecture, using the
++	  glibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_MUSL_BLEEDING_EDGE
++	bool "x86-64-v2 musl bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_USE_MMU
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Bootlin toolchain for the x86-64-v2 architecture, using the
++	  musl C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_UCLIBC_BLEEDING_EDGE
++	bool "x86-64-v2 uclibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	help
++	  Bootlin toolchain for the x86-64-v2 architecture, using the
++	  uclibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_GLIBC_BLEEDING_EDGE
++	bool "x86-64-v3 glibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Bootlin toolchain for the x86-64-v3 architecture, using the
++	  glibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_MUSL_BLEEDING_EDGE
++	bool "x86-64-v3 musl bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	depends on BR2_USE_MMU
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Bootlin toolchain for the x86-64-v3 architecture, using the
++	  musl C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_UCLIBC_BLEEDING_EDGE
++	bool "x86-64-v3 uclibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	help
++	  Bootlin toolchain for the x86-64-v3 architecture, using the
++	  uclibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_GLIBC_BLEEDING_EDGE
++	bool "x86-64-v4 glibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Bootlin toolchain for the x86-64-v4 architecture, using the
++	  glibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_MUSL_BLEEDING_EDGE
++	bool "x86-64-v4 musl bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	depends on BR2_USE_MMU
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Bootlin toolchain for the x86-64-v4 architecture, using the
++	  musl C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
++config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_UCLIBC_BLEEDING_EDGE
++	bool "x86-64-v4 uclibc bleeding-edge 2021.11-5"
++	depends on BR2_x86_64
++	depends on BR2_X86_CPU_HAS_MMX
++	depends on BR2_X86_CPU_HAS_SSE
++	depends on BR2_X86_CPU_HAS_SSE2
++	depends on BR2_X86_CPU_HAS_SSE3
++	depends on BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_X86_CPU_HAS_SSE4
++	depends on BR2_X86_CPU_HAS_SSE42
++	depends on BR2_X86_CPU_HAS_AVX
++	depends on BR2_X86_CPU_HAS_AVX2
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	help
++	  Bootlin toolchain for the x86-64-v4 architecture, using the
++	  uclibc C library. This is a bleeding-edge version, which
++	  means it is using the latest versions of gcc, gdb and
++	  binutils.
++
++	  https://toolchains.bootlin.com/
++
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE
+ 	bool "x86-64-core-i7 glibc bleeding-edge 2021.11-1"
+ 	depends on BR2_x86_64
 diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-index 638130d8b8..8819782ac5 100644
+index 8819782ac5..6542694033 100644
 --- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
 +++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-@@ -192,14 +192,14 @@ sha256  30d82c7ca41a0df9931a29a46ed881f21a889e9e59baf04e820c6679be87a7fb  mips64
- sha256  5c2dc11062f4817e81a328b12ab30be486b7e68c7c876eb45fffca72332a8804  nios2--glibc--bleeding-edge-2021.11-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/nios2/tarballs/nios2--glibc--stable-2021.11-1.sha256
- sha256  f6f37f1e551edda0251ece8d906ed720bd8ec45da9d4b3e1d13721bdc9ef2882  nios2--glibc--stable-2021.11-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--musl--bleeding-edge-2021.11-4.sha256
--sha256  9100a143a2f96c46d4d593fb25f4cab4a2efc61371f12bd1a686fbd52ee64c63  openrisc--musl--bleeding-edge-2021.11-4.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--musl--stable-2021.11-4.sha256
--sha256  72fce2be59c18a5b3a02f51ebb83119a0f3d29ab7f2d5cd560038ff6f94f137a  openrisc--musl--stable-2021.11-4.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--uclibc--bleeding-edge-2021.11-4.sha256
--sha256  ffbdedf741bcfeadaf0c52ac09af83b24eedca2e9a5fc563127c5fdbd10c79a6  openrisc--uclibc--bleeding-edge-2021.11-4.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--uclibc--stable-2021.11-4.sha256
--sha256  082ec406a6a516d582a092e63f9078e200a1e32dc24d47928f90c09b1e61819b  openrisc--uclibc--stable-2021.11-4.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--musl--bleeding-edge-2021.11-5.sha256
-+sha256  03f46c8fdded0002a2a04749bcf86136ec26a841654bf9fdc14575cc510739c6  openrisc--musl--bleeding-edge-2021.11-5.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--musl--stable-2021.11-5.sha256
-+sha256  409e4a7473125e7de7c8b0e6bc1cb971d53e63ac057e9a19102e4ce1467f442a  openrisc--musl--stable-2021.11-5.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--uclibc--bleeding-edge-2021.11-5.sha256
-+sha256  9028d4e526f9e805b021791443805541a179eaf2e47a2af4dfbefb2021e44e9f  openrisc--uclibc--bleeding-edge-2021.11-5.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--uclibc--stable-2021.11-5.sha256
-+sha256  f07d8e465f7e94e55330cfb55bbaf9fc27e4bb7b688271ead60a15aec3dbbf76  openrisc--uclibc--stable-2021.11-5.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--bleeding-edge-2021.11-1.sha256
- sha256  53afdbe1e48d0c60d560db8d17042a99288661fe10eebbfcfec4e56a6c2ca594  powerpc-440fp--glibc--bleeding-edge-2021.11-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--stable-2021.11-1.sha256
+@@ -306,6 +306,36 @@ sha256  0ef307f6c91733ee82ce65801768013f7e6220b605f4e152158cb55b4f983582  sparc6
+ sha256  3c85420becb7caa84a9a229483f3f2d7158eb66817acdfa5d5700c3a05436cba  sparcv8--uclibc--bleeding-edge-2021.11-3.tar.bz2
+ # From https://toolchains.bootlin.com/downloads/releases/toolchains/sparcv8/tarballs/sparcv8--uclibc--stable-2021.11-1.sha256
+ sha256  f6d35e33338b26e71403b4c6d3944ab561f2a6e9b801ab33fbb401b4722044dd  sparcv8--uclibc--stable-2021.11-1.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--bleeding-edge-2021.11-5.sha256
++sha256  024fd8edc91b9bfd643f8cf94e3f3ff2a6457aea654d10ef3516db8c3d94d5f5  x86-64--glibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2021.11-5.sha256
++sha256  6fe812add925493ea0841365f1fb7ca17fd9224bab61a731063f7f12f3a621b0  x86-64--glibc--stable-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--musl--bleeding-edge-2021.11-5.sha256
++sha256  468e6b73146595923fe87980a30adb54cd78f4c1e2f228e1a2c9bb705ea4243d  x86-64--musl--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--musl--stable-2021.11-5.sha256
++sha256  2943617f6537ca195a66fb9db4a801a5dd1c108741c400d530d558d06908dd75  x86-64--musl--stable-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--uclibc--bleeding-edge-2021.11-5.sha256
++sha256  4aa8b8e2806d6fc87ba64ccec0a59b8a2fb5d157cda006d893e3f2264b7f0f10  x86-64--uclibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--uclibc--stable-2021.11-5.sha256
++sha256  e68fd1b23f4a5c5132f2122e4012c17eb24e5179b2ff45bb793a27ac30dd454f  x86-64--uclibc--stable-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs/x86-64-v2--glibc--bleeding-edge-2021.11-5.sha256
++sha256  af20cf98ce937f298e0958e16793bb4c7b08236bc69ab11574a4266cccc3823d  x86-64-v2--glibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs/x86-64-v2--musl--bleeding-edge-2021.11-5.sha256
++sha256  17add21a0337d2f7d0d79d1f21db88098c3474920d71f902be46e8995eb86d35  x86-64-v2--musl--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs/x86-64-v2--uclibc--bleeding-edge-2021.11-5.sha256
++sha256  b3ef49012af9fc9c2c8a44b0a20722be69b518cec5db06e48480291fc28aefe0  x86-64-v2--uclibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs/x86-64-v3--glibc--bleeding-edge-2021.11-5.sha256
++sha256  244d4afab02b9c54c76385657d26798515331d7d4fa90928315366f31b9cc39e  x86-64-v3--glibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs/x86-64-v3--musl--bleeding-edge-2021.11-5.sha256
++sha256  551cff1b6425e2a6ced7b7ad032fba49b43ed095faae38d1842260ac0b5d6dbf  x86-64-v3--musl--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs/x86-64-v3--uclibc--bleeding-edge-2021.11-5.sha256
++sha256  30188f50adef711b55ac1d5be7218e0d6ee4200ddb8660e4d4971a9cefe22f91  x86-64-v3--uclibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs/x86-64-v4--glibc--bleeding-edge-2021.11-5.sha256
++sha256  0cd2de7c4103aa8cf47b72dc71146eb3bf7742a18d56c93128340ab3f4175804  x86-64-v4--glibc--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs/x86-64-v4--musl--bleeding-edge-2021.11-5.sha256
++sha256  e159da16459e0f0d06a9a7467d5121202ab95e2fa6bf8abffdc0008c72fe9b07  x86-64-v4--musl--bleeding-edge-2021.11-5.tar.bz2
++# From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs/x86-64-v4--uclibc--bleeding-edge-2021.11-5.sha256
++sha256  984f011d170d3e46322ae4a110c86ebf995598d877f410201b3fb3d86e25dac2  x86-64-v4--uclibc--bleeding-edge-2021.11-5.tar.bz2
+ # From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2021.11-1.sha256
+ sha256  a3dbfcd3347a72ca344ae77882f929615776ea9b1b058eeea0a0915e7db89b69  x86-64-core-i7--glibc--bleeding-edge-2021.11-1.tar.bz2
+ # From https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2021.11-1.sha256
 diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-index f28592272c..64ae44f364 100644
+index 64ae44f364..fb19ef2909 100644
 --- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
 +++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-@@ -583,25 +583,25 @@ TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/relea
+@@ -924,6 +924,96 @@ TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = sparcv8--uclibc--stable-$(TOOLCHAIN_EXTERNAL
+ TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/sparcv8/tarballs
  endif
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_BLEEDING_EDGE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-4
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_BLEEDING_EDGE),y)
 +TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = openrisc--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_MUSL_STABLE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-4
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE),y)
 +TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = openrisc--musl--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_BLEEDING_EDGE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-4
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--glibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_BLEEDING_EDGE),y)
 +TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = openrisc--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-4
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_MUSL_STABLE),y)
 +TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = openrisc--uclibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs
- endif
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--musl--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_UCLIBC_STABLE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64--uclibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_GLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v2--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_MUSL_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v2--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V2_UCLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v2--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v2/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_GLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v3--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_MUSL_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v3--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V3_UCLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v3--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v3/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_GLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v4--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_MUSL_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v4--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs
++endif
++
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_V4_UCLIBC_BLEEDING_EDGE),y)
++TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-5
++TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-v4--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
++TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-v4/tarballs
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE),y)
+ TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2021.11-1
+ TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = x86-64-core-i7--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
