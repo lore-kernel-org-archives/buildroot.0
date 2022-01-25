@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A56BC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88CC6C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F297284CCD;
-	Tue, 25 Jan 2022 07:56:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A14184CE3;
+	Tue, 25 Jan 2022 07:56:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B3eKhdEt62sM; Tue, 25 Jan 2022 07:56:26 +0000 (UTC)
+	with ESMTP id fTYm0AfIt4jA; Tue, 25 Jan 2022 07:56:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45DFA84CC6;
-	Tue, 25 Jan 2022 07:56:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45AD41BF990
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F5CD84CE4;
+	Tue, 25 Jan 2022 07:56:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BB221BF2CC
  for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 330CF41579
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3014840A91
  for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:11 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hE62sZrjXHpE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nZH5HxeUzc9X for <buildroot@lists.busybox.net>;
  Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F73F41551
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B1CF400FB
  for <buildroot@buildroot.org>; Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 8D7868233A; Tue, 25 Jan 2022 07:49:20 +0000 (UTC)
+ id 378B082774; Tue, 25 Jan 2022 07:49:20 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 08:41:24 +0100
+Date: Tue, 25 Jan 2022 08:40:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82879ada2bb997dd3a6ff8541fe1a9169a832dba
-X-Git-Newrev: 86a70de48e6608c222ec6f9b443420ab62406722
+X-Git-Oldrev: 7910b5e72df6e9b6c1dc6d3f041cf154668bd3b2
+X-Git-Newrev: 93cb79318147191bf3b9fc2b047c24095f3194bc
 X-Patchwork-Hint: ignore
-Message-Id: <20220125074920.8D7868233A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/Config.in.x86: add cannonlake,
- icelake-client, icelake-server CPU variants
+Message-Id: <20220125074920.378B082774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
+ add support for new x86-64 toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,77 +59,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a70de48e6608c222ec6f9b443420ab62406722
+commit: https://git.buildroot.net/buildroot/commit/?id=93cb79318147191bf3b9fc2b047c24095f3194bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These were added in gcc 8.x.
+Following the merge of
+d6ce2a16814fd96a45888a774da6a4db74cd540a ("arch/Config.in.x86: add
+option for -march=x86-64") and
+eeace1cc13ce09a0c88ce177465b836d6eb58298 ("arch/Config.in.x86: add support for
+x86-64-v2, x86-64-v3, x86-64-v4"), bootlin.toolchains.com now provides
+toolchains targetting the x86-64, x86-64-v2, x86-64-v3 and x86-64-v4
+architecture variants.
+
+This commits modifies gen-bootlin-toolchains to support these
+toolchains. It should be noted that the description for the x86-64-v3
+and x86-64-v4 toolchains are for now the same, as Buildroot doesn't
+yet have the options to describe the extra features that x86-64-v4
+expects to find on the hardware platform.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/Config.in.x86 | 42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 48 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 2034fb3bb7..e9c55bb319 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -315,6 +315,45 @@ config BR2_x86_skylake_avx512
- 	select BR2_X86_CPU_HAS_AVX2
- 	select BR2_X86_CPU_HAS_AVX512
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-+config BR2_x86_cannonlake
-+	bool "cannonlake"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
-+	select BR2_X86_CPU_HAS_AVX
-+	select BR2_X86_CPU_HAS_AVX2
-+	select BR2_X86_CPU_HAS_AVX512
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+config BR2_x86_icelake_client
-+	bool "icelake-client"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
-+	select BR2_X86_CPU_HAS_AVX
-+	select BR2_X86_CPU_HAS_AVX2
-+	select BR2_X86_CPU_HAS_AVX512
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+config BR2_x86_icelake_server
-+	bool "icelake-server"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
-+	select BR2_X86_CPU_HAS_AVX
-+	select BR2_X86_CPU_HAS_AVX2
-+	select BR2_X86_CPU_HAS_AVX512
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_x86_k6
- 	bool "k6"
- 	depends on !BR2_x86_64
-@@ -448,6 +487,9 @@ config BR2_GCC_TARGET_ARCH
- 	default "westmere"	if BR2_x86_westmere
- 	default "silvermont"	if BR2_x86_silvermont
- 	default "skylake-avx512" if BR2_x86_skylake_avx512
-+	default "cannonlake"	if BR2_x86_cannonlake
-+	default "icelake-client" if BR2_x86_icelake_client
-+	default "icelake-server" if BR2_x86_icelake_server
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index f160a44152..a42ddb4097 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -178,6 +178,54 @@ arches = {
+         'conditions': ['BR2_sparc', 'BR2_sparc_v8'],
+         'prefix': 'sparc',
+     },
++    'x86-64': {
++        'conditions': ['BR2_x86_64',
++                       'BR2_X86_CPU_HAS_MMX',
++                       'BR2_X86_CPU_HAS_SSE',
++                       'BR2_X86_CPU_HAS_SSE2'],
++        'test_options': ['BR2_x86_64', 'BR2_x86_x86_64'],
++        'prefix': 'x86_64',
++    },
++    'x86-64-v2': {
++        'conditions': ['BR2_x86_64',
++                       'BR2_X86_CPU_HAS_MMX',
++                       'BR2_X86_CPU_HAS_SSE',
++                       'BR2_X86_CPU_HAS_SSE2',
++                       'BR2_X86_CPU_HAS_SSE3',
++                       'BR2_X86_CPU_HAS_SSSE3',
++                       'BR2_X86_CPU_HAS_SSE4',
++                       'BR2_X86_CPU_HAS_SSE42'],
++        'test_options': ['BR2_x86_64', 'BR2_x86_x86_64_v2'],
++        'prefix': 'x86_64',
++    },
++    'x86-64-v3': {
++        'conditions': ['BR2_x86_64',
++                       'BR2_X86_CPU_HAS_MMX',
++                       'BR2_X86_CPU_HAS_SSE',
++                       'BR2_X86_CPU_HAS_SSE2',
++                       'BR2_X86_CPU_HAS_SSE3',
++                       'BR2_X86_CPU_HAS_SSSE3',
++                       'BR2_X86_CPU_HAS_SSE4',
++                       'BR2_X86_CPU_HAS_SSE42',
++                       'BR2_X86_CPU_HAS_AVX',
++                       'BR2_X86_CPU_HAS_AVX2'],
++        'test_options': ['BR2_x86_64', 'BR2_x86_x86_64_v3'],
++        'prefix': 'x86_64',
++    },
++    'x86-64-v4': {
++        'conditions': ['BR2_x86_64',
++                       'BR2_X86_CPU_HAS_MMX',
++                       'BR2_X86_CPU_HAS_SSE',
++                       'BR2_X86_CPU_HAS_SSE2',
++                       'BR2_X86_CPU_HAS_SSE3',
++                       'BR2_X86_CPU_HAS_SSSE3',
++                       'BR2_X86_CPU_HAS_SSE4',
++                       'BR2_X86_CPU_HAS_SSE42',
++                       'BR2_X86_CPU_HAS_AVX',
++                       'BR2_X86_CPU_HAS_AVX2'],
++        'test_options': ['BR2_x86_64', 'BR2_x86_x86_64_v4'],
++        'prefix': 'x86_64',
++    },
+     'x86-64-core-i7': {
+         'conditions': ['BR2_x86_64',
+                        'BR2_X86_CPU_HAS_MMX',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
