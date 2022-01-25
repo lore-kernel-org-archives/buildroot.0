@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78F75C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1232C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 21:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1871160AAB;
-	Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90FAF4049E;
+	Tue, 25 Jan 2022 21:16:14 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1ojQULl_BEqf; Tue, 25 Jan 2022 21:16:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wYdvQgu1oTjA; Tue, 25 Jan 2022 21:16:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C86660B02;
-	Tue, 25 Jan 2022 21:16:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B1CE11BF599
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:15:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81569401C8;
+	Tue, 25 Jan 2022 21:16:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E3C711BF599
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F02182882
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:15:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1ED340345
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WVyCkpYuAP1R for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 21:15:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id htNlShw4HzR3 for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED966818C4
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 21:15:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3446140341
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 21:16:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C306D825E2; Tue, 25 Jan 2022 21:09:06 +0000 (UTC)
+ id 0AAB9825E2; Tue, 25 Jan 2022 21:09:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 22:14:37 +0100
-X-Git-Refname: refs/heads/2021.02.x
-X-Git-Oldrev: 11f7c50bc2a0451bab846166cbc4ab680205e545
-X-Git-Newrev: 575a94b1acc2079f6f0ebb37f451f6bf044c99eb
+Date: Tue, 25 Jan 2022 22:14:31 +0100
+X-Git-Refname: refs/heads/2021.11.x
+X-Git-Oldrev: 292f2d7ca073f0161c0c7f1bd23c1d920b273bc3
+X-Git-Newrev: 6c4f7f1c2efc9ed079d8520d053b507b4cabfea3
 X-Patchwork-Hint: ignore
-Message-Id: <20220125210906.C306D825E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.02.x] package/vlc: needs
+Message-Id: <20220125210911.0AAB9825E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2021.11.x] package/vlc: needs
  host-gettext
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,8 +59,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=575a94b1acc2079f6f0ebb37f451f6bf044c99eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6c4f7f1c2efc9ed079d8520d053b507b4cabfea3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
 
 Build fails on systems without /usr/bin/msgfmt. This has been an issue
 that exists since at least vlc 3.0.7, with build failures that can be
