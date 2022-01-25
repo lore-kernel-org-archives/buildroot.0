@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD7BFC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97C08C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 18:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91CB682A28;
-	Tue, 25 Jan 2022 18:42:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F76F812E9;
+	Tue, 25 Jan 2022 18:43:40 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RrdVMsQKoZjN; Tue, 25 Jan 2022 18:42:18 +0000 (UTC)
+	with ESMTP id rs8vGKlelU1C; Tue, 25 Jan 2022 18:43:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE9CE81BF5;
-	Tue, 25 Jan 2022 18:42:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 22BA61BF2C8
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:42:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8046A812EC;
+	Tue, 25 Jan 2022 18:43:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 91F151BF2C8
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DEF3401A3
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:42:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 813AC40304
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 18:43:36 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp2.osuosl.org (amavisd-new);
+Authentication-Results: smtp4.osuosl.org (amavisd-new);
  dkim=pass (2048-bit key) header.d=free.fr
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cil-INNBdSBj for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 18:42:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6vsO_TQVwdzV for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 18:43:35 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D899F4013B
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:42:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A522D402F6
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 18:43:35 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:40e2:478e:9a26:9cef])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 68E285FFA9;
- Tue, 25 Jan 2022 19:42:09 +0100 (CET)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 196765FF9A;
+ Tue, 25 Jan 2022 19:43:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643136132;
- bh=9srpT37xiMrqyV48TyloOTQhMPW7aPNP39Ux3QKRTaw=;
+ s=smtp-20201208; t=1643136214;
+ bh=05ZSQabvEq709wFpWUN9lL6OaZ1Pux1JE8bUopaVrAQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=s/1tanocw9hYTCYk4ggDUnuDo5P6Bw9Ku69UJgySDPTE87eft4qkwQrFKBD3rukAn
- M43n0Wz1cQ8PkQsxnOtYrMlTzj3oL9u32zrz4teHzhIS7JEM9J7MPw2LWxKwTNFSRA
- nvpLPP6IF24oJ72i6AHrZTjqBCqUSvA5BBa4Yoa+edptffVum71HEaPydkV9Wwqlj+
- csxFxdKJk42TCpOLPXkJesHcj2MkbXhjNUojoyipcbtRh6SQxLvnYH0OK5MYG5lOJZ
- +4Cikj850jpKT5wTXrbTLa9KWkHzBL60nqL5Z6w27OFyhrf8wbp5UGbuxrBRpVNNHy
- i6/e2dnlXf1bg==
+ b=dNVlAUlGEAoe5X6dcy+0StvYJAxuYgI+L/ewNTENMn0gx5hj8m7RpBuIZizz93Y9B
+ O42cgksahNhhyug+BiwWHuo6/Mzo9vOj+qUk3J5PwqGyln0mZijR2NRi2AS6Plo/Pc
+ y2aJprAQpNY0ZLNdpBVBk41WZ2cz1zXZ8kTOEYEIamheehYuaOg5Y5F4XW0O2NVYmB
+ NEjFs38TahpYOYcg5bod1FDIaUllzf6n87UhsNZxlkD6zQaMHi+wbHjEP8Gjo4rf/t
+ pyvH40kCsr1x/9BX5te+3X8bg5pcF0FlH+U9z1CUVi07TbNee/3ZQKIqXSxp+GWwlC
+ APy64QFrHEUmg==
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 25 Jan 2022 19:42:09 +0100
-Date: Tue, 25 Jan 2022 19:42:09 +0100
+ Tue, 25 Jan 2022 19:43:30 +0100
+Date: Tue, 25 Jan 2022 19:43:30 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220125184209.GF457876@scaer>
-References: <20220123220731.787537-1-fontaine.fabrice@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220125184330.GG457876@scaer>
+References: <20220124093610.410365-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220123220731.787537-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20220124093610.410365-1-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pytz: bump to version
- 2021.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiorwlock: bump to
+ version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,55 +78,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+James, All,
 
-On 2022-01-23 23:07 +0100, Fabrice Fontaine spake thusly:
-> - Update hash of LICENSE.txt (year updated)
-> - Update indentation in hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2022-01-24 02:36 -0700, James Hilliard spake thusly:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-This, and the three followimng python updates, applied to master, thanks.
+Applied to master, along with a bunch of your other python package
+updates, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-pytz/python-pytz.hash | 6 +++---
->  package/python-pytz/python-pytz.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/python-aiorwlock/python-aiorwlock.hash | 4 ++--
+>  package/python-aiorwlock/python-aiorwlock.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-> index d1ce81e590..e0f253902c 100644
-> --- a/package/python-pytz/python-pytz.hash
-> +++ b/package/python-pytz/python-pytz.hash
+> diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+> index fad7079789..15584a8a41 100644
+> --- a/package/python-aiorwlock/python-aiorwlock.hash
+> +++ b/package/python-aiorwlock/python-aiorwlock.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/pytz/json
-> -md5	c3d84a465fc56a4edd52cca8873ac0df  pytz-2019.3.tar.gz
-> -sha256	b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be  pytz-2019.3.tar.gz
-> +md5  d7b7060bbac4970afa2050c139c9fcb6  pytz-2021.3.tar.gz
-> +sha256  acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326  pytz-2021.3.tar.gz
+>  # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
+> -md5  f0fac247fd884f59d53f6deeb866a52d  aiorwlock-1.2.0.tar.gz
+> -sha256  3626ed72f92a57e71c685d7fc0329578e5d2dee2ab80805beec8b5119053146d  aiorwlock-1.2.0.tar.gz
+> +md5  28e4812a1d1d67a2be4370209ece5528  aiorwlock-1.3.0.tar.gz
+> +sha256  83f12d87df4b9728a0b8fda1756585ab0d652b107bab59c6084e1b1ad692ab45  aiorwlock-1.3.0.tar.gz
 >  # Locally computed sha256 checksums
-> -sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-> +sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
-> diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-> index 888f3c4556..d606750699 100644
-> --- a/package/python-pytz/python-pytz.mk
-> +++ b/package/python-pytz/python-pytz.mk
+>  sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
+> diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+> index 4ba4965eb5..a5e7eeae83 100644
+> --- a/package/python-aiorwlock/python-aiorwlock.mk
+> +++ b/package/python-aiorwlock/python-aiorwlock.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_PYTZ_VERSION = 2019.3
-> +PYTHON_PYTZ_VERSION = 2021.3
->  PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
-> -PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/82/c3/534ddba230bd4fbbd3b7a3d35f3341d014cca213f369a9940925e7e5f691
-> +PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/e3/8e/1cde9d002f48a940b9d9d38820aaf444b229450c0854bdf15305ce4a3d1a
->  PYTHON_PYTZ_SETUP_TYPE = setuptools
->  PYTHON_PYTZ_LICENSE = MIT
->  PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+> -PYTHON_AIORWLOCK_VERSION = 1.2.0
+> +PYTHON_AIORWLOCK_VERSION = 1.3.0
+>  PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
+> -PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/22/84/98ef7b69764b0ceee7afe2139f45f9cbba21c849b0bd8a6eeecb11ee650d
+> +PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/77/fe/7027595f5e635ac1f597f7160a420e1f642a474576efb697001efea16bdc
+>  PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
+>  PYTHON_AIORWLOCK_LICENSE = Apache-2.0
+>  PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
 > -- 
-> 2.34.1
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
