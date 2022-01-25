@@ -4,62 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D29DC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 20:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BA8DC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 20:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CF9F4012B;
-	Tue, 25 Jan 2022 20:55:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 356E44036E;
+	Tue, 25 Jan 2022 20:57:44 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PAP_an-wi-iY; Tue, 25 Jan 2022 20:55:49 +0000 (UTC)
+	with ESMTP id qtWthOO0R-NC; Tue, 25 Jan 2022 20:57:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5152401C8;
-	Tue, 25 Jan 2022 20:55:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 358FB401C8;
+	Tue, 25 Jan 2022 20:57:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 093E41BF5A1
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:55:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1F73E1BF5A1
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9CB8401C8
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:55:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D23B401C8
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 20:57:41 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ajS1WheXRKsP for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 20:55:45 +0000 (UTC)
+ with ESMTP id oa3aGjwBzrJs for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 20:57:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 56B654012B
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 20:55:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:40e2:478e:9a26:9cef])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 05F6C5FF23;
- Tue, 25 Jan 2022 21:55:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643144142;
- bh=U9wFg5hbRdtn8rr35bpkH75o8TTeByXcDKbn/sazUJk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=n/Jk7ir30GbkpakeNwxCOBRLjgq1y6EOaiBZewsdJmY5MaA6V6PU/kyf6oEEcEXxm
- vslQ29FKw7K8QT7ES+nKc4Hs/8tYzxSFNdmf7bZBQpdTwo+sltiYCr/5/Beznw9sBz
- cCAkbBX+7saAc7MPRQSBUpkOS7NAUWMchwdGC3+l+mB4wPHlOcSUFVz1rZIGbGNU6e
- 5FMKf455vdnh4SaBR+gj6TMdJ905ciwHN29kJbMiBfcc6YK13voftFAiwedl3hcoyX
- ll8CoVrm2l96fRrCpxAyPk98Js7BuCxUSkoYiFsruHM/Wdasp/ou+xEKj6RUIldHLN
- ZP7pvYbMaZg/A==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 25 Jan 2022 21:55:23 +0100
-Date: Tue, 25 Jan 2022 21:55:23 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220125205523.GH457876@scaer>
-References: <20220118104338.2081259-1-giulio.benetti@benettiengineering.com>
- <20220122153243.009b24ba@windsurf>
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 177974012B
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 20:57:40 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id ah7so33327653ejc.4
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 12:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=RHK/Ut1CfEt0f0IuKXDBbsXz+RY6u5TWFHgsZx5nJVw=;
+ b=Bqq2DMthz2ZCxyGOgZdpZvROkuFjlgJoZU8yvODbEvBvcCCyeBhfPa5+5yNtvtE2a5
+ X32MJnjIST0I46LI2Qs9RJ3yfVffBxzOZzdjb69vhA7IGQDji1i3QmQaJvmejF2IkLuH
+ 75+Cz4nPBxKfO1Ax7UpjzB4Z00P1b23T8tJbSZkrDnvcar2Ut2nGKRio/MXc1QJtxgCc
+ kUfmSQ0CndxxNlEHvDTMrSsYipdr71Q0oHJ/u7VWry30NLRQ3TLrgFZ9kkILgn6GeACy
+ oEy/9QYsrMp/YyMuiSjmqQCxopJn2nwgUbBUa1DXFR3bm5MY4++Nmg1xN+M5AFnC+I/p
+ ToQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=RHK/Ut1CfEt0f0IuKXDBbsXz+RY6u5TWFHgsZx5nJVw=;
+ b=v7BJfAPYbLRRljWWJbh7Z0FUF6/gLvMA/sdEckFBv219O/1C9PwlOumertZfwcoV1Q
+ GMXoKtUYMjSs0w7LB/4rjOtYYMJ3+uWiNUzTysIn+UA05ffEgvx7ylG+dpoQ01o+JVzc
+ PmA33whhyilN7dfA4HyfqX+abRH4XRqy5AUbMluGl2rRFtsdKXJk3VLK1y+yAZVhkdkZ
+ V0/z+m/ZZj72M19E61UZp5MOn2qj1pVd7k1++5UAG3I1yomC00hBeUb+VErLU5rOOSAd
+ VK/IyFOHKJGs5B8QbRgJHRmqgE6PlKKU9ICbxi2SsnvVdJ+7lQYy0u9bM7wvamvM8CIY
+ p/Qw==
+X-Gm-Message-State: AOAM5315j8aIWq2yHIY+jiAkdg+9CnX44PGOdKS53Wxzm2MS9cyr/zIe
+ ZTslbfQOLhmBYkGVPTYgkKP3Lw==
+X-Google-Smtp-Source: ABdhPJxWKKo/WcjGQnV4X/4erfX86rR4gneYP5UebbuGpRenZyEgPecOqbkwFtmxPoPs12YJwF7aGQ==
+X-Received: by 2002:a17:907:7208:: with SMTP id
+ dr8mr18051210ejc.503.1643144258295; 
+ Tue, 25 Jan 2022 12:57:38 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:1400:24ea:cbca:e681?
+ (ptr-9fplejn4os7m3x31ny9.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:1400:24ea:cbca:e681])
+ by smtp.gmail.com with ESMTPSA id u1sm6532990ejj.215.2022.01.25.12.57.37
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 25 Jan 2022 12:57:37 -0800 (PST)
+Message-ID: <73fe7aba-588b-133b-f0a6-960cbefb162f@mind.be>
+Date: Tue, 25 Jan 2022 21:57:37 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220122153243.009b24ba@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 00/28] Use the best FPU strategies on
- 32-bits Arm Cortex
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-GB
+To: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+ buildroot@buildroot.org
+References: <20211106181424.299041-1-peron.clem@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20211106181424.299041-1-peron.clem@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/2] configs/beelink_gs1: increase rootfs
+ size to 120M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,103 +93,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Theo Debrouwere <t.debrouwere@televic.com>, Simon Doppler <dopsi@dopsi.ch>,
- Edgar Bonet <bonet@grenoble.cnrs.fr>, Mike Harmony <mike.harmony@snapav.com>,
- Sergey Matyukevich <geomatsi@gmail.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>, Davide Viti <zinosat@gmail.com>,
- Jan Kraval <jan.kraval@gmail.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Michel Stempin <michel.stempin@wanadoo.fr>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabio Estevam <festevam@gmail.com>, Biagio Montaruli <biagio.hkr@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, Giulio, All,
-
-On 2022-01-22 15:32 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 18 Jan 2022 11:43:10 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
-> > this patchset aims to enable the best FPU strategy for every board with
-> > 32-bits Arm Cortex actually present in Buildroot. I don't own these boards
-> > so I can't test these changes. What is about Allwinner doesn't worry me
-> > because I've tested a lot of cases with Olimex boards, but the other
-> > changes are still to be tested.
-> > 
-> > So I ask to the board maintainers to test the patches that involve their
-> > boards if possible. Anyway I've checked well all the SoCs Datasheet and I
-> > think I've made it correctly, even if in some of them it's not specified
-> > if VFPv4 means -D32. I assume it like that because otherwise -D16 is
-> > usually specified.
-> 
-> Do we have a good understand of what -mfpu=neon-vfpv4 does? Your patch
-> series basically converts many defconfigs to use this -mfpu value, but
-> it's not clear to me how it works. What does it mean to combine NEON
-> and VFPv4 instructions?
-
-The gcc man page states that specifying Neon as part of the fpu setting
-has no effect, unless the -funsafe-math-optimizations is also specified,
-because Neon is not compliant zith IEEE 754:
-
-    If the selected floating-point hardware includes the NEON extension
-    (e.g. -mfpu=neon), note that floating-point operations are not
-    generated by GCC's auto-vectorization pass unless
-    -funsafe-math-optimizations is also specified. This is because NEON
-    hardware does not fully implement the IEEE 754 standard for
-    floating-point arithmetic (in particular denormal values are treated
-    as zero), so the use of NEON instructions may lead to a loss of
-    precision.
-
-So it is my understanding that using Neon is not a good idea overall. It
-should only be requested on-demand by people who know what they are
-doing, and most probably, be setting appropriate CFLAGS on a per-package
-basis.
-
-Additionally, changing the default FPU setting on those defconfigs is
-not really interesting. Indeed, the base system that (most of) those
-defconfig build are probably not exercising the FPU setting much (the
-busybox login and shell are probably not using much FPU insns).
-
-So, for me, this series is a no-go, first because it has not been tsted
-on actual hardware, second because some of the changes introduce a
-dubious feature which is actually a no-op at best, or worse will
-generate incorrect code.
-
-Regards,
-Yann E. MORIN.
-
-> Regarding VFPv4 D16 vs. D32,
-> https://developer.arm.com/documentation/den0018/a/Compiling-NEON-Instructions/GCC-command-line-options/Option-to-specify-the-FPU
-> tells us:
-> 
->   VFPv3 and VFPv4 implementations provide 32 double-precision
->   registers. However, when NEON unit is not present, the top sixteen
->   registers (D16-D31) become optional. This is shown by the -d16 in the
->   option name, which means that the top sixteen D registers are not
->   available.
-> 
-> So, my understanding is that when NEON is available, the VFPv4 is
-> guaranteed to have the 32 double-precision registers (D32).
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBDbGXMgW1lbnQsCgpPbiAwNi8xMS8yMDIxIDE5OjE0LCBDbMOpbWVudCBQw6lyb24gd3Jv
+dGU6Cj4gRm9yIHRoZSBtb21lbnQgQmVlbGluayBHUzEgdXNlIGEgZGVmYXVsdCByb290ZnMgc2l6
+ZSBvZiA2ME0KPiB3aGljaCBtYWtlIHNvbWV0aW1lcyB0aGUgYnVpbGQgZmFpbGVkIGR1ZSB0byBt
+aXNzaW5nIHNwYWNlLgoKICBUaGF0J3Mgc3VycHJpc2luZy4uLiBUaGUgb25seSB0aGluZyBpbiB0
+aGUgcm9vdGZzIGlzIGJ1c3lib3gsIHNvIHRoZSByb290ZnMgCnNpemUgc2hvdWxkIGJlIHdheSBs
+ZXNzIHRoYW4gMU1CLCBsZXQgYWxvbmUgNjBNQi4uLgoKICBBbHNvLCAic29tZXRpbWVzIiBpcyBz
+dXNwaWNpb3VzLiBUaGUgcm9vdGZzIHNob3VsZCBiZSBhbG1vc3QgYmluYXJ5IGlkZW50aWNhbCAK
+YmV0d2VlbiB0d28gYnVpbGRzICh0aGVyZSBhcmUgc29tZSBkYXRlcyBhbmQgcGF0aHMgaW4gdGhl
+cmUgaWYgeW91IGRvbid0IGVuYWJsZSAKQlIyX1JFUFJPRFVDSUJMRSkuCgogIERvIHlvdSBoYXZl
+IGEgYml0IG1vcmUgZGV0YWlsL2V4YW1wbGUgb2YgaG93IGl0IGZhaWxzPwoKICBSZWdhcmRzLAog
+IEFybm91dAoKPiAKPiBJbmNyZWFzZSB0aGUgcm9vdGZzIHNpemUgdG8gMTIwTS4KPiAKPiBTaWdu
+ZWQtb2ZmLWJ5OiBDbMOpbWVudCBQw6lyb24gPHBlcm9uLmNsZW1AZ21haWwuY29tPgo+IC0tLQo+
+ICAgY29uZmlncy9iZWVsaW5rX2dzMV9kZWZjb25maWcgfCAxICsKPiAgIDEgZmlsZSBjaGFuZ2Vk
+LCAxIGluc2VydGlvbigrKQo+IAo+IGRpZmYgLS1naXQgYS9jb25maWdzL2JlZWxpbmtfZ3MxX2Rl
+ZmNvbmZpZyBiL2NvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCj4gaW5kZXggZTg4ZjNlM2I2
+OS4uMTg3MmFhYmRmMCAxMDA2NDQKPiAtLS0gYS9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZp
+Zwo+ICsrKyBiL2NvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCj4gQEAgLTI0LDYgKzI0LDcg
+QEAgQlIyX1BBQ0tBR0VfQVVUT1NTSD15Cj4gICBCUjJfUEFDS0FHRV9EUk9QQkVBUj15Cj4gICBC
+UjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiAgIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4g
+K0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfU0laRT0iMTIwTSIKPiAgIAo+ICAgIyBGaXJtd2FyZQo+
+ICAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Cl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
