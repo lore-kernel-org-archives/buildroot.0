@@ -1,47 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E6BC433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 17:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E90C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 17:10:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55F2541552;
-	Tue, 25 Jan 2022 17:06:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5549582A8F;
+	Tue, 25 Jan 2022 17:10:31 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rbVtEFKrY8v0; Tue, 25 Jan 2022 17:10:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9959B82A4F;
+	Tue, 25 Jan 2022 17:10:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 063881BF957
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:10:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E922641526
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:10:27 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A0WnUmdDgWoo; Tue, 25 Jan 2022 17:06:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2C4C41526;
-	Tue, 25 Jan 2022 17:06:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A35B11BF957
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:06:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F20E60A7E
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 17:06:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zj1rMJNOMKwb for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 17:06:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C5AD60B0C
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 17:06:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5EBEE827B3; Tue, 25 Jan 2022 16:59:19 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T1tELs9qfdIw for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 17:10:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1BF674034F
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 17:10:26 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 46C1560005;
+ Tue, 25 Jan 2022 17:10:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+ (envelope-from <peter@korsgaard.com>)
+ id 1nCPKp-0006Ly-Fe; Tue, 25 Jan 2022 18:10:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 25 Jan 2022 18:02:33 +0100
-X-Git-Refname: refs/heads/2021.11.x
-X-Git-Oldrev: e77dc1817a9f42e7ec9733b6c616ac534851101b
-X-Git-Newrev: 850b8697a2f46c8d0f5c3ec816711bff74d8da25
-X-Patchwork-Hint: ignore
-Message-Id: <20220125165919.5EBEE827B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2021.11.x] configs/mx6cubox: select
- BR2_TARGET_UBOOT_NEEDS_OPENSSL
+To: Christian Stewart <christian@paral.in>
+References: <20211227003034.8877-1-christian@paral.in>
+Date: Tue, 25 Jan 2022 18:10:23 +0100
+In-Reply-To: <20211227003034.8877-1-christian@paral.in> (Christian Stewart's
+ message of "Sun, 26 Dec 2021 16:30:34 -0800")
+Message-ID: <87mtjjlp1c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/docker-engine: bump to version
+ 20.10.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,44 +60,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Anisse Astier <anisse@astier.eu>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850b8697a2f46c8d0f5c3ec816711bff74d8da25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.11.x
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following build
-error:
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-include/image.h:1178:12: fatal error: openssl/evp.h: No such file or directory
- 1178 | #  include <openssl/evp.h>
-      |            ^~~~~~~~~~~~~~~
+Committed to 2021.02.x and 2021.11.x, thanks.
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/1915006257
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 635f4b8b5a04d0802aa429fb92dbcd757feed66c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/mx6cubox_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index d0ce2f9a6d..e80d995525 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -39,6 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- 
- # required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
