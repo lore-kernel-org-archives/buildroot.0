@@ -4,53 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36302C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 05:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5040C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 06:04:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD66240480;
-	Tue, 25 Jan 2022 05:51:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F64D40A90;
+	Tue, 25 Jan 2022 06:04:02 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YmxVdWBag_tw; Tue, 25 Jan 2022 05:51:05 +0000 (UTC)
+	with ESMTP id mIlBwie5roUh; Tue, 25 Jan 2022 06:04:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E32CF4016C;
-	Tue, 25 Jan 2022 05:51:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3F4B01BF307
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 05:50:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4720640A8D;
+	Tue, 25 Jan 2022 06:04:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CD1F41BF307
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 06:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CED860B6F
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 05:50:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C329D84C6B
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 06:03:58 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ieX2V43KtfEh for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 05:50:45 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=tkos.co.il
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ushkysA5GDWP for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 06:03:56 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from ATCSQR.andestech.com (atcsqr.andestech.com [60.248.187.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 702EE60B62
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 05:50:45 +0000 (UTC)
-Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
- by ATCSQR.andestech.com with ESMTP id 20P5oOgj084844
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 13:50:24 +0800 (GMT-8)
- (envelope-from peterlin@andestech.com)
-Received: from atcfdc88.andestech.com (10.0.15.120) by ATCPCS16.andestech.com
- (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0;
- Tue, 25 Jan 2022 13:50:22 +0800
-From: Yu Chien Peter Lin <peterlin@andestech.com>
-To: <buildroot@buildroot.org>
-Date: Tue, 25 Jan 2022 13:49:56 +0800
-Message-ID: <20220125054956.27492-3-peterlin@andestech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220125054956.27492-1-peterlin@andestech.com>
-References: <20220125054956.27492-1-peterlin@andestech.com>
+Received: from mx.tkos.co.il (guitar.tcltek.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 494A384BCE
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 06:03:56 +0000 (UTC)
+Received: from tarshish (unknown [10.0.8.3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx.tkos.co.il (Postfix) with ESMTPS id 32D2F440537;
+ Tue, 25 Jan 2022 08:03:40 +0200 (IST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+ s=default; t=1643090620;
+ bh=/6wz8leU8l5BZAQ1T0n/wQONyuKx8oqgnhZCdlZGH0o=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=v7T7X6UhmskucVWDVmZ+9IgDsM+GHKUYSinp9QiLlhOVaCV+4R+kheQLbVW+ZxH7D
+ JkK4B0JKD1CYYR9/g2zvIk7tM/b7b048cdFrT6Tk40tUQS9ktVAtJoiAVY1D5NunDA
+ ROztOj9ZHz16L6Jj6ERl/Pe8QMGfT4VOy086J6TSqoSX5tG3TYGjAAXIIJOaFtctmq
+ MqIbhuXr2R2JXE1hsCzM6Mwowq6LNlt8DMR2NYmZh2zQFek5OjRmCue2zgqmgwm1eb
+ S7SR2bZknVwQWoP/HMXGhrZIIrdNxaRa5Y5WZNl9pJRd6MkX9wq1vGpdeyBVDwm81N
+ r7Bci4OWmAGlQ==
+References: <20220124213420.1171861-1-angelo@amarulasolutions.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 25 Jan 2022 08:01:55 +0200
+In-reply-to: <20220124213420.1171861-1-angelo@amarulasolutions.com>
+Message-ID: <877dao9ws8.fsf@tarshish>
 MIME-Version: 1.0
-X-Originating-IP: [10.0.15.120]
-X-DNSRBL: 
-X-MAIL: ATCSQR.andestech.com 20P5oOgj084844
-Subject: [Buildroot] [PATCH v2 3/3] DEVELOPERS: add Yu-Chien Lin to
- board/andes
+Subject: Re: [Buildroot] [PATCH v2] package/htpdate: bump to version 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +67,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yu Chien Peter Lin <peterlin@andestech.com>, alankao@andestech.com
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nylon is no longer at Andes.
+Hi Angelo,
 
-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
-Signed-off-by: Alan Kao <alankao@andestech.com>
----
- DEVELOPERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Jan 24 2022, Angelo Compagnucci wrote:
+> Bump and update project to its new location.
+>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> * Rebased on master
+> * Keeping buildroot package init scripts
+>
+>  package/htpdate/S43htpdate      | 2 +-
+>  package/htpdate/htpdate.hash    | 2 +-
+>  package/htpdate/htpdate.mk      | 6 +++---
+>  package/htpdate/htpdate.service | 2 +-
+>  4 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
+> index 75f9a995ff..5971d70639 100644
+> --- a/package/htpdate/S43htpdate
+> +++ b/package/htpdate/S43htpdate
+> @@ -9,7 +9,7 @@ test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
+>  start() {
+>  	printf 'Starting %s: ' "$DAEMON"
+>  	# shellcheck disable=SC2086 # we need the word splitting
+> -	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
+> +	start-stop-daemon -S -q -x "/usr/sbin/$DAEMON" \
+>  		-- -D -i "$PIDFILE" $HTPDATE_ARGS
+>  	status=$?
+>  	if [ "$status" -eq 0 ]; then
+> diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
+> index 824266c1bc..ef27f8f94c 100644
+> --- a/package/htpdate/htpdate.hash
+> +++ b/package/htpdate/htpdate.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated:
+> -sha256 d2cff522b8f53b00769dcca77d8025b19238ed35d702a4739dc05e387f718909  htpdate-1.2.6.tar.gz
+> +sha256 74f34b013eba6f99369819fa4b3d48e9ab5e531ad04f6af59cc04e8777c76ed7  htpdate-1.3.3.tar.gz
+>  sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
+> diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+> index 52022346a9..200c3207a2 100644
+> --- a/package/htpdate/htpdate.mk
+> +++ b/package/htpdate/htpdate.mk
+> @@ -4,13 +4,13 @@
+>  #
+>  ################################################################################
+>  
+> -HTPDATE_VERSION = 1.2.6
+> -HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
+> +HTPDATE_VERSION = 1.3.3
+> +HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dc810b6fe1..b191734d5a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2137,10 +2137,11 @@ N:	Norbert Lange <nolange79@gmail.com>
- F:	package/systemd/
- F:	package/tcf-agent/
- 
--N:	Nylon Chen <nylon7@andestech.com>
-+N:	Yu Chien Peter Lin <peterlin@andestech.com>
- F:	arch/Config.in.nds32
- F:	board/andes
- F:	configs/andes_ae3xx_defconfig
-+F:	configs/andes_ae350_45_defconfig
- F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
- 
- N:	Olaf Rempel <razzor@kopf-tisch.de>
+You should update the Config.in link as well.
+
+baruch
+
+>  HTPDATE_LICENSE = GPL-2.0+
+>  HTPDATE_LICENSE_FILES = LICENSE
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> -HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
+> +HTPDATE_BUILD_OPTS = https
+>  HTPDATE_DEPENDENCIES += openssl host-pkgconf
+>  endif
+>  
+> diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+> index b7f1371b08..95220581d4 100644
+> --- a/package/htpdate/htpdate.service
+> +++ b/package/htpdate/htpdate.service
+> @@ -7,7 +7,7 @@ Type=forking
+>  PIDFile=/run/htpdate.pid
+>  Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
+>  EnvironmentFile=-/etc/default/htpdate
+> -ExecStart=/usr/bin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
+> +ExecStart=/usr/sbin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
+>  
+>  [Install]
+>  WantedBy=multi-user.target
+
+
 -- 
-2.17.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
