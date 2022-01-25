@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D24C433EF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 21:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA771C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 21:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6629C40319;
-	Tue, 25 Jan 2022 21:08:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C3654034C;
+	Tue, 25 Jan 2022 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 57SLu3Pi7X9H; Tue, 25 Jan 2022 21:08:01 +0000 (UTC)
+	with ESMTP id A_uvH5JLaJ3p; Tue, 25 Jan 2022 21:09:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6BFB402B1;
-	Tue, 25 Jan 2022 21:08:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 292CE1BF599
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:07:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D6C640341;
+	Tue, 25 Jan 2022 21:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F5C71BF599
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1589C402B1
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:07:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F240B6080A
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 21:09:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 02a8gAIzWhio for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 21:07:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F05C340272
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 21:07:56 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by relay12.mail.gandi.net (Postfix) with ESMTPSA id 84C12200006;
- Tue, 25 Jan 2022 21:07:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
- (envelope-from <peter@korsgaard.com>)
- id 1nCT2e-0004Ky-MB; Tue, 25 Jan 2022 22:07:52 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20211229090605.B5B8182A06@busybox.osuosl.org>
-Date: Tue, 25 Jan 2022 22:07:52 +0100
-In-Reply-To: <20211229090605.B5B8182A06@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 29 Dec 2021 10:11:27 +0100")
-Message-ID: <87o83zjzh3.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Authentication-Results: smtp3.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id krmUfpI87S7D for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 21:09:51 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D116D60759
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 21:09:50 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id s18so22163808wrv.7
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 13:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=m1bHxo8kd7d5OmmMtoQHmqnvi+YiKWx2ZqWPMHRElaw=;
+ b=al7J+TDrwlxK+OCUQpDM6YjGiaGVMEsB0lvD4NRf1I99A83KDRaZPBx+ANX5TCS5Nx
+ hd/YTo6GHQk7Rj1PvX/vfxgRC689gPJDqZarsgvX9gKuX/hkstCOVjrkEcraWHm1KuZ0
+ ZSSUt1bNHuldJygrgNps/6yzGcVTwp7C+2RO6dNdsYdi0qnALDz7YhoSSYKogZiijTHA
+ anUBfmBlx40eVZTyj9ZQG/bvb4ci7IfKktIm221vRpv9waszXdQNs54ddE22xQT4LShz
+ jP/fCGvpxc2XPZGqKPaSGys1FvRWUd2WXAlw26tIS/TuDxZsb4XCc9yzFkLcGeI2Qbgq
+ tVmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=m1bHxo8kd7d5OmmMtoQHmqnvi+YiKWx2ZqWPMHRElaw=;
+ b=vboX3iVwdiWztI9ufGnggtZN0LIPKK0OBMigs2etgt8loCBf+Gvjepc9c67OCBEJN8
+ OUNs7vqnIFY0M6jZVEds3C4ENb6u/lMlUVXiTC/T8K8glBxTyiL2baCWId2AvTvJzXIJ
+ dSu3JerRzWNOu/jgifc1eEhkwrm6SPEffV1iXzLfCNJZ9mJz5T0MKf0+d8lL7s3j8gIE
+ bf6s3e87CpCS6OXS8BaTZHHodU09/Z7duPMNdAMmb3T39meKH5rqiS/PJVtgVUo6SGrr
+ lqMQnNlL9AsgusnYCS4cpVJgrYz+8rYHJtzsQqctBete0AWeftzPI4B/ARSnLWbqf0vv
+ 47qQ==
+X-Gm-Message-State: AOAM533EVZceFqXtqyjaCzUh2AViwzD2Y2yv0WE0iRIvfplQ+5gPkSrd
+ RDDIvf29jAlG81e3gTElzjKzoHaKGtg=
+X-Google-Smtp-Source: ABdhPJzF8/AzOAfwte9Hcg+EWLumAeEw/cQjMh7NGe1ZoWoZemtUE/kwIHWEagP7Pp+ZP6aO7NET/A==
+X-Received: by 2002:a5d:59ac:: with SMTP id p12mr2436415wrr.437.1643144988769; 
+ Tue, 25 Jan 2022 13:09:48 -0800 (PST)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id u3sm7924508wrs.55.2022.01.25.13.09.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 25 Jan 2022 13:09:47 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 25 Jan 2022 22:08:00 +0100
+Message-Id: <20220125210800.299916-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] Makefile: set HOST*_NOCCACHE variables
- only if unset
+Subject: [Buildroot] [PATCH 1/1] package/netopeer2: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +85,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Disable tests which are enabled since bump to version 2.0.35 in commit
+13d4856b916d797c3c771669edd3eb883336766f and
+https://github.com/CESNET/netopeer2/commit/466a0b3c268ee319b4f65980404715a2723b4c0a
+to avoid the following build failure if cmocka is built before
+netopeer2:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=c5912e7db37cc0a04696cf081410ec007f8f0be9
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In file included from /home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
+                 from /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/lib/gcc/riscv64-buildroot-linux-musl/10.3.0/include/stdint.h:9,
+                 from /home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/libyang/libyang.h:18,
+                 from /home/buildroot/autobuild/instance-2/output-1/build/netopeer2-2.0.35/tests/test_sub_ntf.c:27:
+/home/buildroot/autobuild/instance-2/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:53:24: error: conflicting types for 'uintptr_t'
+   53 | typedef unsigned _Addr uintptr_t;
+      |                        ^~~~~~~~~
 
- > Set HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE only if they are not
- > set. This allows recursive calls to "make" to work as intended in the
- > presence of ccache. Such recursive calls to "make" can for example
- > happen if one calls "make legal-info" from within a post-build script,
- > to integrate some results of the legal-info output into the root
- > filesystem.
+Fixes:
+ - http://autobuild.buildroot.org/results/0660a4f767d5cdaf07b28a508101b87f0300850f
 
- > Without guarding these variables, a recursive invocation of make would
- > re-define
- >     HOSTCC_NOCCACHE := $(HOSTCC)
- > and
- >     HOSTCXX_NOCCACHE := $(HOSTCXX)
- > at a point in time when HOSTCC and HOSTCXX already point to ccache.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/netopeer2/netopeer2.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- > It used to work by "accident" until
- > ca6a2907c27c8171336643d1ab41bd5c34ee3794 ("make: support: use `command
- > -v' instead of `which'"), due to how "which" was behaving when invoked
- > with multiple arguments. After switching to "command -v", which
- > behaves different with multiple arguments, this HOSTCC_NOCCACHE
- > redefinition problem surfaced. Even though
- > ca6a2907c27c8171336643d1ab41bd5c34ee3794 has since then been reverted
- > for other reasons, it does make sense to guard the definition of
- > HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE to not rely on a side-effect of
- > using "which".
-
- > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
- > Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2021.11.x, thanks.
-
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index c8b6763313..43f22b7e4c 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
+@@ -11,7 +11,9 @@ NETOPEER2_LICENSE = BSD-3-Clause
+ NETOPEER2_LICENSE_FILES = LICENSE
+ NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo host-sysrepo
+ 
+-NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
++NETOPEER2_CONF_OPTS = \
++	-DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF) \
++	-DENABLE_TESTS=OFF
+ 
+ # Set a build specific SYSREPO_SHM_PREFIX to ensure we can safely delete the
+ # files. This also ensures that concurrent parallel builds will not be
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
