@@ -1,66 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 021E8C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A0AC433F5
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jan 2022 07:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9912E60B3B;
-	Tue, 25 Jan 2022 07:09:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CA3E400FB;
+	Tue, 25 Jan 2022 07:56:14 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s_uA01HevbCq; Tue, 25 Jan 2022 07:56:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59453404AB;
+	Tue, 25 Jan 2022 07:56:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B61A1BF2CC
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE1A860BB5
+ for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DffN0ZC1FvQ7; Tue, 25 Jan 2022 07:09:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D409D60B22;
-	Tue, 25 Jan 2022 07:09:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C11791BF2CC
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:09:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF9BF410B5
- for <buildroot@lists.busybox.net>; Tue, 25 Jan 2022 07:09:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=aruba.it
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0WJ4L7oUzsxo for <buildroot@lists.busybox.net>;
- Tue, 25 Jan 2022 07:09:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from smtpcmd10102.aruba.it (smtpcmd10102.aruba.it [62.149.156.102])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34F3B410B1
- for <buildroot@buildroot.org>; Tue, 25 Jan 2022 07:09:09 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.178.108])
- by Aruba Outgoing Smtp  with ESMTPSA
- id CFwxn7obvDzPJCFwxn2ZyK; Tue, 25 Jan 2022 08:09:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1643094547; bh=XrO9ZvQZFxdvHOqKUrMPnSGaFfnA95ypmWvxM4Ui96c=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=EARRUIi2Xy6ODDdNJSRat9ItLYjH/hL7maUkawhxpMLXPsl/las5jBsYm8dOPdoXT
- lNwj9ZU2+z2+blZQ5u7UodjftQVW6G7YaS1/juvMJEMGQ3sOndtWDhetRcODKpmEjv
- 6CpYxnEsLHqnUgx3jh2lnoitugWh3RFNQ62QiY/pxbm/k+5nq/+60Xb0RIu+pWsvWM
- 5FWwqoDkalv5dUvbLJtp8f5agwb9ckSGeevGnldnY7WZaaSbC0xtOBr7wKNTdEvA+D
- UqhF7Lr0e9dz/hqEo2G+gk6daC2dh46sHjAS/Is5VykoOPl7DmMY2NI7NYKjwus3Y1
- cZ+jChgq473fg==
-Message-ID: <78204a26-75d9-ef6a-bf7f-dee8b47fa508@benettiengineering.com>
-Date: Tue, 25 Jan 2022 08:09:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To: Peter Korsgaard <peter@korsgaard.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-References: <20220125070545.09FA6401E1@smtp2.osuosl.org>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220125070545.09FA6401E1@smtp2.osuosl.org>
-X-CMAE-Envelope: MS4wfCnn4weVd5i9gNmrmYEuqFucKJFmKw2gJlA2199pp+rKuhVHxnleKBfE9BwyunKmyvbjTGFpyCHPjKsrmLLMARa5uUXmMCik0fUeP7pK5QqjIbl20Py+
- dnOgQpRtnv65uYdUmHmOs6aCTk/UwjhoEHD+XCCZMRGvI3udOAnmY+T5KWBdVBNDHYjdXOODbJpYfFPtvINzv3Pzl4YAFy+3p/3Ta27OBHE6thDE6cMQakmE
- GCL692l4kFhesfzR1Tk63EtPpVC6MjL9xZ4AQuUL8iyam9lXyX2mWkK7ZAV4CK3x
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2022-01-24
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wqFjzIsgbmKZ for <buildroot@lists.busybox.net>;
+ Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E5A860B2F
+ for <buildroot@buildroot.org>; Tue, 25 Jan 2022 07:56:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 4C91E8233A; Tue, 25 Jan 2022 07:49:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 25 Jan 2022 08:41:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7df632905fdd7d9334b71f08d8b324841912144f
+X-Git-Newrev: 73d135a695cf59eb8ab6aafb59bfd281a7400203
+X-Patchwork-Hint: ignore
+Message-Id: <20220125074920.4C91E8233A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/Config.in.x86: drastically simplify
+ the BR2_ARCH definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,30 +53,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=73d135a695cf59eb8ab6aafb59bfd281a7400203
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 25/01/22 08:05, Thomas Petazzoni wrote:
-[SNIP]
+The BR2_ARCH definition is like this:
 
-> Detail of failures for 2021.11.x
-> --------------------------------
-> 
->      arch     |             reason             | OK? |                                       url                                       | orph?
-> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-> microblazeel |          libnss-3.73           | NOK | http://autobuild.buildroot.net/results/e02c7a0e22d8eee226e5c906537f7dfc559e067e |
+ * i486 for the i486 platform
+ * i586 for a small number of platforms
+ * i686 for all other x86 platforms when used in 32-bit, but we
+   enumerate their entire list
+ * x86_64 for all x86 64-bit platforms
 
-This ^^^ is fixed by:
-https://git.buildroot.net/buildroot/commit/?id=540029eb4550760c2190a18ecbf0cb4391bb1dea
+The list for i686 is long and needs to be extended everytime a new
+platform is added, with no added value.
 
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+So this commit simplifies that by replacing this long list with just:
+
+   default "i686"	  if BR2_i386
+
+This works because Kconfig guarantees us that if an i386 platform
+matches an earlier case (i486 or one of the i586 platforms), the i486
+and i586 earlier in the list will match.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ arch/Config.in.x86 | 30 ++++++------------------------
+ 1 file changed, 6 insertions(+), 24 deletions(-)
+
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 0ba9ecbcea..a330d72f1d 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -311,30 +311,12 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_c32
+ 	default "i586"		if BR2_x86_winchip_c6
+ 	default "i586"		if BR2_x86_winchip2
+-	default "i686"		if BR2_x86_i686
+-	default "i686"		if BR2_x86_pentium2
+-	default "i686"		if BR2_x86_pentium3
+-	default "i686"		if BR2_x86_pentium4
+-	default "i686"		if BR2_x86_pentium_m
+-	default "i686"		if BR2_x86_pentiumpro
+-	default "i686"		if BR2_x86_prescott
+-	default "i686"		if BR2_x86_nocona && BR2_i386
+-	default "i686"		if BR2_x86_core2 && BR2_i386
+-	default "i686"		if BR2_x86_corei7 && BR2_i386
+-	default "i686"		if BR2_x86_westmere && BR2_i386
+-	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+-	default "i686"		if BR2_x86_core_avx2 && BR2_i386
+-	default "i686"		if BR2_x86_atom && BR2_i386
+-	default "i686"		if BR2_x86_silvermont && BR2_i386
+-	default "i686"		if BR2_x86_opteron && BR2_i386
+-	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
+-	default "i686"		if BR2_x86_barcelona && BR2_i386
+-	default "i686"		if BR2_x86_jaguar && BR2_i386
+-	default "i686"		if BR2_x86_steamroller && BR2_i386
+-	default "i686"		if BR2_x86_k6
+-	default "i686"		if BR2_x86_k6_2
+-	default "i686"		if BR2_x86_athlon
+-	default "i686"		if BR2_x86_athlon_4
++	# We use the property of Kconfig that the first match of a
++	# list of default will be chosen. So the following entry will
++	# not match for all BR2_i386=y configurations, but only the
++	# ones that didn't match any of the previous cases (i486,
++	# i586).
++	default "i686"		if BR2_i386
+ 	default "x86_64"	if BR2_x86_64
+ 
+ config BR2_ENDIAN
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
