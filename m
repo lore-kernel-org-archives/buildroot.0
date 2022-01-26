@@ -4,64 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F4BC28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 05:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60372C2BA4C
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 07:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 906A260EAA;
-	Wed, 26 Jan 2022 05:41:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBB1460B44;
+	Wed, 26 Jan 2022 07:06:37 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UBG1KA_VsNFI; Wed, 26 Jan 2022 05:41:45 +0000 (UTC)
+	with ESMTP id I-fDH14CKaFY; Wed, 26 Jan 2022 07:06:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B10A760EA5;
-	Wed, 26 Jan 2022 05:41:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D7CF1BF591
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:41:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC63E60BD6;
+	Wed, 26 Jan 2022 07:06:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C85C01BF844
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 07:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B6D04155E
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 05:41:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB83F40629
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 07:06:33 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Authentication-Results: smtp4.osuosl.org (amavisd-new);
- dkim=pass (2048-bit key) header.d=lexina.in
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Sbq9F24iRAE for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 05:41:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-Received: from mx.msync.work (mx.msync.work [IPv6:2a01:4f9:2b:2dc2::3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 631CC40933
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 05:41:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 96420282D11; Wed, 26 Jan 2022 05:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
- t=1643175690; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references:
- disposition-notification-to; bh=pfuMmif/rl8iI6sn33qt0Zf0s3NbTwgtWv8gXAmARs8=; 
- b=L58V1e+dEGT8jKKb0Ni6rG4rH3mgtImAX64Mf0L3uLYJ7J9/XqWwza2WsbOR/cAD1X8DE/
- 5/u8384+564NbiU0oGusqj6DcVo6WRhzvkjmqHRACag+0FqCwRhznW/e+9mcgvzitERLVB
- qqw9rOz4VQtEonGAbr/YdUOI7FLAf17HanB5rSuFb0aNCeSY7SzPcJl2GpfnilYR1VkOUS
- w/xqHVT3aWIimyICmNdY5cmogNb94uk4R4nulndWoUcmfVVc9OGcjI0NLlXC/JfOLTq2Nb
- XtyHk8w43OATzY8ecf6BAiogzrsw/JU49u8bcqAAWKXeWyokIHN/NG1fATBZLw==
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Neil Armstrong <narmstrong@baylibre.com>
-References: <20220118111457.2491318-1-adeep@lexina.in>
- <20220122143327.7d1a1cf7@windsurf>
- <27eb54d9-6897-a2df-00c3-fb6dca8aba91@lexina.in>
- <20220122160914.7e4cc513@windsurf>
- <1a3ce2b5-4b17-b79f-5dd5-29637575d473@lexina.in>
- <4a94b253-6fe7-5e79-b1e9-331b0a9051ca@baylibre.com>
- <20220124214529.56b1bf5d@windsurf>
-Message-ID: <f8514765-6558-cbab-61c7-13112726b245@lexina.in>
-Date: Wed, 26 Jan 2022 08:41:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c16Yf5Gwb3W0 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 07:06:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FEDA400F2
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 07:06:30 +0000 (UTC)
+Received: (Authenticated sender: bot@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 92CF01C0010
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 07:06:27 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20220124214529.56b1bf5d@windsurf>
-Content-Language: en-US
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/amlogic-boot-fip: new package
+To: buildroot@buildroot.org
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Jan 2022 07:06:27 -0000
+Message-Id: <20220126070633.AB83F40629@smtp2.osuosl.org>
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2022-01-25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,126 +52,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Vyacheslav via buildroot <buildroot@buildroot.org>
-Reply-To: Vyacheslav <adeep@lexina.in>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi.
-Thanks all for replies.
+Hello,
 
-24.01.2022 23:45, Thomas Petazzoni wrote:
-> Hello Neil,
-> 
-> Thanks for the additional feedback.
-> 
-> On Mon, 24 Jan 2022 14:41:49 +0100
-> Neil Armstrong <narmstrong@baylibre.com> wrote:
-> 
->> The binaries must be split into 2 categories:
->> - Pre-built: bl2, bl31, bl21, bl32, fip_create, aml_encrypt_*, ddr*.fw, acs_tool.py
->> - Built in the Vendor U-Boot source: acs.bin bl301.bin
-> 
-> Right.
-> 
->> In 2019, Amlogic finally added a LICENSE for the pre-built binaries, before
->> nobody knew what was the term of the distribution.
->>
->> commit 6abaf9a869a6584b3cfca8b96d0946ed49bc9b64
->> Author: Lawrence Mok <lawrence.mok@amlogic.com>
->> Date:   Mon May 6 12:34:56 2019 -0700
->>
->>      add LICENSE file and text referring to it [1/1]
->>
->>      Change-Id: Id291f42bec3ddb0c2162e6540ce1f35d1cb1d079
->>
->> The LICENSE can be found at [1] in Khadas github.
-> 
-> And this license is the one used at
-> https://github.com/LibreELEC/amlogic-boot-fip which Vyacheslav wants to
-> package in Buildroot, and this license is extremely restrictive.
-> Basically, it says that excepts private use of the content of this
-> repository, you can't do anything with it.
-> 
->> Concerning the acs.bin & bl301.bin, they use the U-Boot build system and
->> config header files and all these were also updated with the following SPDX:
->> /* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> 
-> I don't really see what the license of the U-Boot build system and
-> config headers has to do with the resulting license of the binaries.
-> 
->> commit 94de43d3d940cf75b4a9e4fd2a2715be8eff6138
->> Author: Jiucheng Xu <jiucheng.xu@amlogic.com>
->> Date:   Wed Dec 16 10:11:00 2020 +0800
->>
->>      license: Fix the license of amlogic related codes [1/1]
->>
->>      PD#SWPL-39001
->>
->>      Problem:
->>      A customer want to add amlogic driver in uboot to
->>      their private bootloader. Since the driver codes
->>      are licensed under GPL-2.0, and customer have
->>      to open their code, so we need fix the license
->>      issue.
->>
->>      Solution:
->>      Fix the license of our related code in uboot by
->>      adding MIT license
->>
->>      Verify:
->>      Franklin
->>
->>      Change-Id: I2f3571e8720d1f4db069f882353d6ae050702cba
->>      Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
->>
->> Note, none of the vendor who publicly published the Amlogic U-Boot
->> source has this change, so we can consider acs.bin & bl301.bin
->> generated from GPL-2.0 as the commit explains.
-> 
-> This is really a stretch. The question is which source files are
-> compiled into acs.bin and bl301.bin ? If they use parts under the
-> GPL-2.0, then indeed we can assume the whole is also under GPL-2.0, as
-> it is the only license under which derivative works can be published.
+Autobuild statistics for 2022-01-25
+===================================
 
-These sources usually published inside Amlogic U-Boot source
+      branch |  OK | NOK | TIM | TOT |
+  2021.02.x  | 62  |  7  |  0  | 69  |
+  2021.11.x  | 23  |  6  |  0  | 29  |
+    master   | 98  | 40  |  0  | 138 |
 
-> 
-> But the repository at https://github.com/LibreELEC/amlogic-boot-fip/
-> contains a lot more things than acs.bin and bl301.bin.
-> 
->> The pre-built binaries stored on the LibreELEC repository only comes from
->> public Vendor sources (Khadas, HardKernel, Libre Computer, FriendlyARM, Radxa)
->> and checked against vendor repositories we have access to.
->>
->> We assume they got permission from Amlogic to publicly redistribute these binaries
->> as we (BayLibre) were allowed to redistribute the VDEC firmware in [2] & [3].
-> 
-> If that's the case, then why does
-> https://github.com/LibreELEC/amlogic-boot-fip has this LICENSE file
-> with scary terms?
-> 
-> I am really surprised by how unclear the licensing terms are for those
-> blobs. This should scare pretty much any company from doing products
-> based on Amlogic SoCs.
-> 
-> Would it be possible to clarify this with Amlogic, and instead of their
-> silly terms of "you can't do anything with it", have a license that at
-> least allows distribution on Amlogic platforms?
+Classification of failures by reason for master
+-----------------------------------------------
 
-I will try to contact Amlogic via JetHome, but most likely after the 
-Chinese New Year.
+                  rygel-0.40.2 | 7 
+        host-util-linux-2.37.3 | 3 
+             bluez5_utils-5.63 | 2 
+                       frr-8.1 | 2 
+                rtorrent-0.9.8 | 2 
+                 wavemon-0.9.4 | 2 
+                  xvisor-0.3.1 | 2 
+              cryptsetup-2.4.2 | 1 
+                     file-5.41 | 1 
+google-breakpad-7515ab13768... | 1 
+       gst1-plugins-bad-1.18.5 | 1 
+                   gstd-0.13.0 | 1 
+                   guile-3.0.7 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+                   libiio-0.23 | 1 
+                log4cxx-0.12.0 | 1 
+                 mesa3d-21.3.4 | 1 
+               mongrel2-1.13.0 | 1 
+                     mtd-2.1.3 | 1 
+           oracle-mysql-5.1.73 | 1 
+               pcsc-lite-1.9.5 | 1 
+piglit-2affee53f3ad7a96f5b3... | 1 
+               pipewire-0.3.43 | 1 
+      qt5webkit-5.212.0-alpha4 | 1 
+                    ruby-3.1.0 | 1 
+           tesseract-ocr-5.0.1 | 1 
+                       unknown | 1 
 
-> 
-> Again, thanks for your support on this!
-> 
-> Thomas
-> 
 
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/54adb8da5e66e02f3943a681e21e8f26020723ea |     
+    arm      |       bluez5_utils-5.63        | NOK | http://autobuild.buildroot.net/results/76eae25f0c53205aad295cb79833aa59cb5aade9 |     
+microblazeel |        cryptsetup-2.4.2        | NOK | http://autobuild.buildroot.net/results/c723c687d5c26206c98cfa84789e9fdbdbad31b4 |     
+    i586     |           file-5.41            | NOK | http://autobuild.buildroot.net/results/31246e6d4dd51863c16e17cf5011092f3c4b7bb4 | ORPH
+   nios2     |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/2756ee8a00d78c2a04762972bcddf3c15564a0c0 |     
+    arc      |            frr-8.1             | NOK | http://autobuild.buildroot.net/results/ed31b5f6ef268009d5f8e76d0c1e18337a9e905a |     
+   mipsel    | google-breakpad-7515ab13768... | NOK | http://autobuild.buildroot.net/results/97e3722e8ede7fa2aa0073dab4df654f3df186fb |     
+    i686     |    gst1-plugins-bad-1.18.5     | NOK | http://autobuild.buildroot.net/results/eaf1890176431000ea8b371956f0d2d7e9907aea | ORPH
+    arm      |          gstd-0.13.0           | NOK | http://autobuild.buildroot.net/results/b9db1a63fa3740b7c6e089ddc2e1557ea0ca0f5e | ORPH
+  aarch64    |          guile-3.0.7           | NOK | http://autobuild.buildroot.net/results/d6ceddf52d22453fe21665b9b865f2c782382353 | ORPH
+   x86_64    |     host-util-linux-2.37.3     | NOK | http://autobuild.buildroot.net/results/562757475bbd1d3fdfe2ce3f5237d8d4cf1479ae | ORPH
+  riscv64    |     host-util-linux-2.37.3     | NOK | http://autobuild.buildroot.net/results/271d8a7d670b6a7314b8e2159829a222b54f41cc | ORPH
+  mips64el   |     host-util-linux-2.37.3     | NOK | http://autobuild.buildroot.net/results/11bc283f48b058738b89204517daac7d720abf03 | ORPH
+powerpc64le  | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/917191d50af8f97b7bda82a669f3185660f64373 |     
+    arm      |          libiio-0.23           | NOK | http://autobuild.buildroot.net/results/e8847eabd5df1d9d31b88d69230145916020585c |     
+   x86_64    |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/f635b4c0032ce5cf8a56f526ba6092c0895e9b11 |     
+   x86_64    |         mesa3d-21.3.4          | NOK | http://autobuild.buildroot.net/results/55c3c66c6c909853d47a470e0bbbab7186c83793 |     
+    arm      |        mongrel2-1.13.0         | NOK | http://autobuild.buildroot.net/results/3e931bb6833e58f6ddb56ebbc0c599d71c3a8625 |     
+  riscv64    |           mtd-2.1.3            | NOK | http://autobuild.buildroot.net/results/f9bcc2f70eba388b28616bbff2d6e3b3e298837b |     
+   xtensa    |      oracle-mysql-5.1.73       | NOK | http://autobuild.buildroot.net/results/9a6e946cca1fe51ad157e6ca12ce5d7f41e8c8dc | ORPH
+    or1k     |        pcsc-lite-1.9.5         | NOK | http://autobuild.buildroot.net/results/1ec8035c8f01e5488b5ae4e079badfa0c543f958 | ORPH
+    arc      | piglit-2affee53f3ad7a96f5b3... | NOK | http://autobuild.buildroot.net/results/889a0aa9d8e78c066b03a491003fa8cd03597309 |     
+   sparc     |        pipewire-0.3.43         | NOK | http://autobuild.buildroot.net/results/192f40a5c6e05fc11507494e19db52a47082fc35 |     
+  aarch64    |    qt5webkit-5.212.0-alpha4    | NOK | http://autobuild.buildroot.net/results/f9aac4aa3cc590e77a510223624aebdc8547a8ed |     
+    or1k     |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/0aad6294d1f24a9e37e7fa56093aeabdac0f6298 | ORPH
+   xtensa    |         rtorrent-0.9.8         | NOK | http://autobuild.buildroot.net/results/fe114a9af0ac0afc77243fd27035477bfc315e8c | ORPH
+  riscv64    |           ruby-3.1.0           | NOK | http://autobuild.buildroot.net/results/7fb735e45754f415a32b348be465849d5f0d999a |     
+   sparc     |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/a566e2dcabb20625fa3471b610674ad46117acaf |     
+  powerpc    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/d088d25baed4e150850c7dc35e19e04821520c51 |     
+powerpc64le  |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/953702716339fa18a1f8ff6f9e7164938a3a32d6 |     
+  powerpc    |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/ef794d13e33665706c559230533f510f9b09f82e |     
+    or1k     |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/c076313116d1673de4ea83771c7ec2747ccfa99c |     
+   s390x     |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/2c4f10e59fa30b51571fdd49b3a4b073321ee876 |     
+    or1k     |          rygel-0.40.2          | NOK | http://autobuild.buildroot.net/results/9cc341458465e085fbcb7f11db3b4fb50dabf748 |     
+    arm      |      tesseract-ocr-5.0.1       | NOK | http://autobuild.buildroot.net/results/7d43c5b119bfdbef58ef0982d2f7a6260e2b7e0c |     
+  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/5bd88a00dfb20bfaec848b9364f62bbf4badef47 |     
+    i686     |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/7b8d62b1243136b236f5b44af024d41be5bbcec4 |     
+  powerpc    |         wavemon-0.9.4          | NOK | http://autobuild.buildroot.net/results/1b8021154751346fb5600b2b141980bdcd7e550d |     
+    arm      |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/2bcbbb270df71d2489b7bc83e56c898c58cc90d2 |     
+    arm      |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/1211bf6ff10c75815fa3ac320532fab5fe649a2b |     
+
+
+Classification of failures by reason for 2021.02.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 2 
+               apcupsd-3.14.14 | 1 
+                  gensio-2.2.3 | 1 
+monkey-f54856ce250c4e257354... | 1 
+               openldap-2.4.59 | 1 
+                rocksdb-6.13.3 | 1 
+
+
+Detail of failures for 2021.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/95417fecaf5976aa788c4c6f5ec58f3d75619c73 |     
+  riscv32    |          gensio-2.2.3          | NOK | http://autobuild.buildroot.net/results/f165cda8231d63d7b315532a805fca96829b6786 |     
+   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/981cd03f661e96e86e4dbbd7b2fcb66bf7adedb4 |     
+  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/360860fa5a9764620e9c759bafe925537f5c36c9 |     
+  powerpc    | monkey-f54856ce250c4e257354... | NOK | http://autobuild.buildroot.net/results/6ef4b40c949458afafde99746ccdb1cae3427f31 |     
+  riscv32    |        openldap-2.4.59         | NOK | http://autobuild.buildroot.net/results/52ce384941c2a7b72563d66fc3e5315d0d413729 |     
+    m68k     |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/cad0d08147f78d82228b2e54648a718fb292fb90 |     
+
+
+Classification of failures by reason for 2021.11.x
+--------------------------------------------------
+
+              host-erlang-22.2 | 3 
+libdbi-88b8477d57153b9f736d... | 1 
+                   libnss-3.73 | 1 
+                log4cxx-0.12.0 | 1 
+
+
+Detail of failures for 2021.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/384a0f8a933ef3f3fd58234667e8aa1ab182ddf1 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/95c73e4235569012043c7c2909b8b65459502052 |     
+    arm      |        host-erlang-22.2        | NOK | http://autobuild.buildroot.net/results/626168546a3ef19fce9fe59be5ef0531e752548b |     
+    m68k     | libdbi-88b8477d57153b9f736d... | NOK | http://autobuild.buildroot.net/results/d8b2626828d09351bbd91a7931f5b94e2bf790b9 |     
+   mipsel    |          libnss-3.73           | NOK | http://autobuild.buildroot.net/results/69dc2eb15f7d6c9727b48dfd888f5d611e0ce20d |     
+    arm      |         log4cxx-0.12.0         | NOK | http://autobuild.buildroot.net/results/6c917351920678771987a9f06c3bb8c0dd489b17 |     
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
