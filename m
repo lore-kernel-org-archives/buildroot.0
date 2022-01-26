@@ -1,78 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 559B5C433F5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CDDFC433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 21:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C1F440A38;
-	Wed, 26 Jan 2022 21:19:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D043084D96;
+	Wed, 26 Jan 2022 21:21:00 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gSICRl1P87U0; Wed, 26 Jan 2022 21:19:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m-Rk-ctPIZjm; Wed, 26 Jan 2022 21:21:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E00D0409F5;
-	Wed, 26 Jan 2022 21:19:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B357F1BF48B
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:19:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14D6584D94;
+	Wed, 26 Jan 2022 21:20:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 999521BF48B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0F65409F5
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:19:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87DBA60FCE
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 21:20:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K3ueoeUiJPZ0 for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 21:19:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C4F7403A4
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:19:33 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id a13so1176616wrh.9
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 13:19:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=W7ALtjrp6yUSfOLTTA6xD+r66hUoTob9YXNERzpevmA=;
- b=CpQQ0+8rjkwiVNpwQoUfH6nZa4EgI0/z410tHkLleJ+WGVNQ/9+2Ap2y00noDnUeSq
- lWkUsGqaFkobuQZaTjSoi3GWFs9tn/beRVd1dFQ5M+Uh9aygjWC3FS5lGyjmi+AxuWER
- +ry8MqKlACM4xzYZNxtSRcQrbiiB8NPrWeXSAZ1qHcU7AITyAHw0hS2TKE9lSUyYnGmw
- cN4MEAEjfJ+MdheNSaR4L93IY0grFVxCtzEc29mvKO9ANH/e1vDa9UeEQmZzC07I52WW
- aC33qpa4NLEgl5bjMRWmRNHTH63fmzThmmDz+3yLjJ9kU8fAGAeJgB27H3ceYns1rKtJ
- WAIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=W7ALtjrp6yUSfOLTTA6xD+r66hUoTob9YXNERzpevmA=;
- b=R5gnT5/u3z08fL9dKSFCR4HeiINkeWCoFh+DFmPHgqWcy4SGxErWlK0wEjVSXTbSuJ
- QC3LV4SMDaG8EKAMRonMPIgcZw0jVQLx98suiVj4Wcedzl/adVcnc3X6LfIYsSjlOtDV
- l/trbRUIad/ALOwLXGpfwpjo6lD5Q2SAAbCttkUjOPevcGxV+ipt4bKqB8UNa4oekQP1
- SK6DxCKyNddXSIEhOQHtGsWsaBz5exhzlxbUapyH3Q9sL3jn3I8558jxAzgnNj/oPnG5
- FcNxlHki8XpCLILHMeqs2HrJ9mx+7XciLESpRo9rbZtKlFr8jhn5nixlsaSQ6jVJQEdk
- HgvQ==
-X-Gm-Message-State: AOAM533I0ToRMPWRQXRmuzGcNnqH3/NenFJPeAPabaoVijBQSBcxglf4
- +Y0CoESnW7e41r57S3gBLIjorxUTaiY=
-X-Google-Smtp-Source: ABdhPJzds6sU7Tu27zHVx4J8Zk49YB1WeqsauhT54H+L1+vawpVCOS10u3JFRkV2FviXyuz0QkrWgw==
-X-Received: by 2002:a05:6000:3ce:: with SMTP id
- b14mr446133wrg.118.1643231971777; 
- Wed, 26 Jan 2022 13:19:31 -0800 (PST)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id o3sm339963wrq.70.2022.01.26.13.19.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 26 Jan 2022 13:19:31 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1uK8GjSQp1vs for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 21:20:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABEB960FC9
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 21:20:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 49F3B82815; Wed, 26 Jan 2022 21:14:03 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Jan 2022 22:17:49 +0100
-Message-Id: <20220126211749.1550932-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/lighttpd: add pgsql support
+Date: Wed, 26 Jan 2022 22:18:31 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 18a863063735e2c658fa6947a4e540e9dda6c431
+X-Git-Newrev: 334a69f12ebc8fd23818f33d4dfb17f8864d95e9
+X-Patchwork-Hint: ignore
+Message-Id: <20220126211403.49F3B82815@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gvfs: fix build with meson >= 0.61
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,69 +52,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=334a69f12ebc8fd23818f33d4dfb17f8864d95e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix the following build failure raised since bump of meson to version
+0.61.0 in commit a8dc871139f83c8b4a0cdcdaf2ded18ee463d65f:
+
+../output-1/build/gvfs-1.48.1/daemon/meson.build:368:7: ERROR: Function does not take positional arguments.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6231649fac82a70b215186c3396b879a28a96f60
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lighttpd/Config.in   | 10 ++++++++++
- package/lighttpd/lighttpd.mk |  8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ ...Remove-incorrect-i18n.merge_file-argument.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index eb8ab480a0..57bb756603 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -86,6 +86,16 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
- 	help
- 	  Enable PCRE support. Needed to support mod_rewrite
- 
-+config BR2_PACKAGE_LIGHTTPD_PGSQL
-+	bool "pgsql support"
-+	depends on BR2_USE_MMU # postgresql
-+	select BR2_PACKAGE_POSTGRESQL
-+	help
-+	  Enable postgres support for lighttpd mod_vhostdb_pgsql.
+diff --git a/package/gvfs/0001-build-Remove-incorrect-i18n.merge_file-argument.patch b/package/gvfs/0001-build-Remove-incorrect-i18n.merge_file-argument.patch
+new file mode 100644
+index 0000000000..a85a1a374e
+--- /dev/null
++++ b/package/gvfs/0001-build-Remove-incorrect-i18n.merge_file-argument.patch
+@@ -0,0 +1,33 @@
++From 17a067b9b823a0d54e061eae45ff8e2c7e4a88d0 Mon Sep 17 00:00:00 2001
++From: Ondrej Holy <oholy@redhat.com>
++Date: Fri, 21 Jan 2022 08:32:31 +0100
++Subject: [PATCH] build: Remove incorrect i18n.merge_file argument
 +
-+comment "pgsql support needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
++The positional argument was being silently ignored until meson 0.60.0 where
++it fails with "ERROR: Function does not take positional arguments".
 +
- config BR2_PACKAGE_LIGHTTPD_WEBDAV
- 	bool "webdav support"
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 90b4ba0a72..595c59cb37 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -22,7 +22,6 @@ LIGHTTPD_CONF_OPTS = \
- 	-Dwith_nettle=false \
- 	-Dwith_nss=false \
- 	-Dwith_pcre=false \
--	-Dwith_pgsql=false \
- 	-Dwith_sasl=false \
- 	-Dwith_wolfssl=false \
- 	-Dwith_xattr=false \
-@@ -101,6 +100,13 @@ else
- LIGHTTPD_CONF_OPTS += -Dwith_pcre2=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIGHTTPD_PGSQL),y)
-+LIGHTTPD_DEPENDENCIES += postgresql
-+LIGHTTPD_CONF_OPTS += -Dwith_pgsql=true
-+else
-+LIGHTTPD_CONF_OPTS += -Dwith_pgsql=false
-+endif
++Related: https://github.com/mesonbuild/meson/issues/9441
++Fixes: https://gitlab.gnome.org/GNOME/gvfs/-/issues/599
 +
- ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
- LIGHTTPD_DEPENDENCIES += libxml2 sqlite
- LIGHTTPD_CONF_OPTS += -Dwith_webdav_props=true
--- 
-2.34.1
-
++[Retrieved (and backported) from:
++https://gitlab.gnome.org/GNOME/gvfs/-/commit/17a067b9b823a0d54e061eae45ff8e2c7e4a88d0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ daemon/meson.build | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/daemon/meson.build b/daemon/meson.build
++index 5f9559aa..e20ada29 100644
++--- a/daemon/meson.build
+++++ b/daemon/meson.build
++@@ -360,7 +360,6 @@ if enable_admin
++   )
++ 
++   i18n.merge_file(
++-    policy,
++     input: policy_in,
++     output: '@BASENAME@',
++     po_dir: po_dir,
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
