@@ -1,51 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B717C433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AED69C433EF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBF3F40445;
-	Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7471484D07;
+	Wed, 26 Jan 2022 22:06:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q2RxxxfYMkc5; Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id blgRyhcvoeGG; Wed, 26 Jan 2022 22:06:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0215C4015A;
-	Wed, 26 Jan 2022 22:06:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 439A21BF475
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:06:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEE2B84CFB;
+	Wed, 26 Jan 2022 22:06:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CA3721BF475
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FCEF61035
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:06:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B8F56417F1
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N_6eMOItC2h1 for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 22:06:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28F166102A
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:06:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5C0B8240005;
- Wed, 26 Jan 2022 22:06:34 +0000 (UTC)
-Date: Wed, 26 Jan 2022 23:06:33 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HemOhWkLGhci for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DB6441717
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:06:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9C042827A0; Wed, 26 Jan 2022 21:59:45 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220126230633.4a76c296@windsurf>
-In-Reply-To: <20220124221047.2597699-1-fontaine.fabrice@gmail.com>
-References: <20220124221047.2597699-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump to
- version 0.103.5
+To: buildroot@buildroot.org
+Date: Wed, 26 Jan 2022 23:05:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2d893f870f7c0be22b340cd5fca5ae0661c20182
+X-Git-Newrev: 96c6ccb49808c312a7dfbd12edf08716de621405
+X-Patchwork-Hint: ignore
+Message-Id: <20220126215945.9C042827A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sslh: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,37 +52,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 24 Jan 2022 23:10:47 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=96c6ccb49808c312a7dfbd12edf08716de621405
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ClamAV 0.103.5 is a critical patch release with the following fix:
-> 
->  - CVE-2022-20698: Fix for invalid pointer read that may cause a crash.
->    Affects 0.104.1, 0.103.4 and prior when ClamAV is compiled with
->    libjson-c and the CL_SCAN_GENERAL_COLLECT_METADATA scan option (the
->    clamscan --gen-json option) is enabled.
-> 
-> https://github.com/Cisco-Talos/clamav/blob/clamav-0.103.5/NEWS.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/clamav/clamav.hash | 2 +-
->  package/clamav/clamav.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure raised since bump to version 1.22c in
+commit 5b9c58531e97b012a8a11c6ae5145b16dcfb8f74:
 
-Applied to master, thanks.
+sslh-select.c: In function 'udp_timeouts':
+sslh-select.c:480:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (int i = 0; i < fd_info->max_fd; i++) {
+     ^
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/aaaac2beb16730747b4265e81d09cb5e072c7267
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sslh/sslh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
+index 99fb6bf922..897b3b6505 100644
+--- a/package/sslh/sslh.mk
++++ b/package/sslh/sslh.mk
+@@ -11,7 +11,7 @@ SSLH_LICENSE = GPL-2.0+
+ SSLH_LICENSE_FILES = COPYING
+ SSLH_DEPENDENCIES = pcre2
+ 
+-SSLH_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
++SSLH_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ 
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ SSLH_DEPENDENCIES += libbsd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
