@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A774FC433EF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58FD6C433F5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 22:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 461ED40445;
-	Wed, 26 Jan 2022 22:09:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9CB841670;
+	Wed, 26 Jan 2022 22:09:46 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yl6aju3WYOxt; Wed, 26 Jan 2022 22:09:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TFF3LxVVuy09; Wed, 26 Jan 2022 22:09:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60FEA4015A;
-	Wed, 26 Jan 2022 22:09:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E7B11BF475
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:09:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4478D4158E;
+	Wed, 26 Jan 2022 22:09:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C53661BF475
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CB5682605
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:09:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B397061002
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 22:09:42 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pFsB-QsyzTSz for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 22:09:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NibBkjN2Tt78 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 22:09:41 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4B86D82572
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:09:29 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 83F7360FF3
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 22:09:40 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7BB36E0004;
- Wed, 26 Jan 2022 22:09:27 +0000 (UTC)
-Date: Wed, 26 Jan 2022 23:09:26 +0100
+ by mail.gandi.net (Postfix) with ESMTPSA id 0704E1C0003;
+ Wed, 26 Jan 2022 22:09:37 +0000 (UTC)
+Date: Wed, 26 Jan 2022 23:09:36 +0100
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220126230926.7b02ffda@windsurf>
-In-Reply-To: <20220124221657.2629467-1-fontaine.fabrice@gmail.com>
-References: <20220124221657.2629467-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220126230936.32fe7c2e@windsurf>
+In-Reply-To: <20220115153319.2227752-1-fontaine.fabrice@gmail.com>
+References: <20220115153319.2227752-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: bump to version 1.6.9
+Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: fix static build with
+ libgcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,32 +63,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 24 Jan 2022 23:16:57 +0100
+On Sat, 15 Jan 2022 16:33:19 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop patches (already in version) and so autoreconf
+> Fix the following static build failure with libgcrypt raised since the
+> addition of the package in commit
+> 663f39c88c01593855c18355a4decdceeffd884b:
 > 
-> https://github.com/chu11/freeipmi-mirror/blob/freeipmi-1-6-9/NEWS
+> configure:13665: /home/buildroot/autobuild/instance-1/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static conftest.c -lgcrypt   >&5
+> /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/10.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libgcrypt.a(libgcrypt_la-visibility.o): in function `gcry_err_make_from_errno':
+> visibility.c:(.text+0x29): undefined reference to `gpg_err_code_from_errno'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5354f7231cf08bf762e7d86fca874ce63d9a116b
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/freeipmi/0001-fix-build-on-musl.patch | 49 ------------------
->  .../0002-check-for-inb-and-outb.patch         | 50 -------------------
->  ...ure.ac-use-pkg-config-to-find-gcrypt.patch | 50 -------------------
->  package/freeipmi/freeipmi.hash                |  2 +-
->  package/freeipmi/freeipmi.mk                  |  4 +-
->  5 files changed, 2 insertions(+), 153 deletions(-)
->  delete mode 100644 package/freeipmi/0001-fix-build-on-musl.patch
->  delete mode 100644 package/freeipmi/0002-check-for-inb-and-outb.patch
->  delete mode 100644 package/freeipmi/0003-configure.ac-use-pkg-config-to-find-gcrypt.patch
+>  ...ure.ac-use-pkg-config-to-find-gcrypt.patch | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 package/freeipmi/0003-configure.ac-use-pkg-config-to-find-gcrypt.patch
 
-This patch was not applying on master, because it was assuming that
-"package/freeipmi: fix static build with  libgcrypt" was applied, which
-isn't in master. Since the patch added by "package/freeipmi: fix static
-build with  libgcrypt" is not in upstream freeipmi, I applied the
-version bump, but without the removal of patch 0003.
-
-Thanks a lot!
+I've marked this one as Not Applicable.
 
 Thomas
 -- 
