@@ -4,61 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B37C28CF5
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 17:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94491C28CF5
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jan 2022 17:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C28760F9C;
-	Wed, 26 Jan 2022 17:42:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 473D160F4D;
+	Wed, 26 Jan 2022 17:44:57 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X1QqqcKBxhO6; Wed, 26 Jan 2022 17:42:28 +0000 (UTC)
+	with ESMTP id h9v_-TgjyTjK; Wed, 26 Jan 2022 17:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C79E060F93;
-	Wed, 26 Jan 2022 17:42:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1DB5B1BF417
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:42:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 837A460F3E;
+	Wed, 26 Jan 2022 17:44:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 521021BF417
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B22160F8C
- for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:42:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40BDE813B5
+ for <buildroot@lists.busybox.net>; Wed, 26 Jan 2022 17:44:53 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id prEwt8Xi2PVY for <buildroot@lists.busybox.net>;
- Wed, 26 Jan 2022 17:42:25 +0000 (UTC)
+Authentication-Results: smtp1.osuosl.org (amavisd-new);
+ dkim=pass (2048-bit key) header.d=gmail.com
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uou5oocYLs_Y for <buildroot@lists.busybox.net>;
+ Wed, 26 Jan 2022 17:44:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 14F9660EFA
- for <buildroot@buildroot.org>; Wed, 26 Jan 2022 17:42:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:61f5:fb85:a06d:c0])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E347813F838;
- Wed, 26 Jan 2022 18:42:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
- s=smtp-20201208; t=1643218942;
- bh=GtJmBiWqgoQVObmy47gPTa1ayRB4z8un2Nl4pisNbU8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IQn7nb0OxPsCivLZhR0QGi0GXnKZFjehsaD2T9hotZCVpM236KnQr4gUMTax5XRYf
- 1nX6lNvucTtovvwxnLyVjJRQdlzzUPhYlFUh/1+r3PIUM59by0ToYILMbzsFP7BFR3
- dhu3e1VFfGuoAkxfUClf8Tdr+v1VzkY/A8394EK9WbCpN05/3IjcoTkKQZx8x5CTzb
- rEEmDgU2dK0szGbw01zwRp7+06YyK1+DwRiwP05E0ohfLydcPj8mJcC25c1emPMe0D
- MqJtYZiqr3xSMk9HSCxfpYQyrNZCiGSPS3TsDXXEHVNOG+2J5+x51iC/s2GYJV+E9i
- 9xegPag7B3Pnw==
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 26 Jan 2022 18:42:18 +0100
-Date: Wed, 26 Jan 2022 18:42:18 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20220126174218.GJ457876@scaer>
-References: <20220116104114.103601-1-ju.o@free.fr>
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ADCC0813B0
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 17:44:52 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id u129so1032075oib.4
+ for <buildroot@buildroot.org>; Wed, 26 Jan 2022 09:44:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc; bh=+dAn+GoicNwLHArXlrRhUWAWM6jyp7JwDjea76Wrl70=;
+ b=g3BD0Ps/rSQi0dAW+0Wxlu3WzoFt/epoz8d/aAUA1xJtyKWWTMvdW03yd2A2Z61EjJ
+ lY1Xwb2QACSG6S+JeO/wWbwQMkrzesBLc7bp3y3SZTbqjpNIi6gV5NtLGeTJQTv5qUH+
+ AGohhWcugv9mCCp6kdV+cCfrEvkg90Bqd49IRlXp4IO4fmABs/ZzCEX1OdTYkr5Xy98L
+ HKI05Nk3A6Armh0Tm++469liZZsGfRMflSZ8dMngj9cFka0Q+8PqHzVqoULtX2a+guBX
+ y0+nXC+x1GT0mvk1a3QMC9c3CBIaXzsNbL7n1wsOTKAQKl70mpEEn70BGB/G6edCUI9D
+ cjMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=+dAn+GoicNwLHArXlrRhUWAWM6jyp7JwDjea76Wrl70=;
+ b=oZ16rOwAb8N6/BTD3NVqb5e2y7gDzisuRPTg0k9bVotlfyTbvhPETPcfYPZa0TfWh+
+ vg0hTlYS+zfxtSjswD1frtFMIEqPyPIzYBUtuPfTvIuUvwyK6z7oUopTwzrKLjC0ijiE
+ kMDPYra0LPdCiTTKlnYslW4DJHIrs9Fr6JrUKwPglcL83EjDQR7GO7DuJtYeufSz2rvM
+ G4qCt/2G2qxY4yvjmfCX9Qx0Hb6KGv3iUzLwxAP/FeB8f5OURrKKs/SbnBFGI8kZm2ky
+ B7357ahiIaC2N17G40ll+epGJivpMsCLYCTb705xhMco1waxAPxdrtsLvQgHZDF7rT2m
+ LZHw==
+X-Gm-Message-State: AOAM53387mgoFZ/ut6pUGbCmET/ahhiRiSqkzQkLXIcEutJk5lTAGCkp
+ OKzYRrH5zXXwxC53J5d7GUJqhEQ7FfEbPqsml5K2uZ3DEo8=
+X-Google-Smtp-Source: ABdhPJz2CgILULkgcqU1GWbX47uckoo1pnwb8QJd+otaathpRr3YuTrjlfVr0vlhcHRwvPAhu4owXk+ME1IGUQgPQR0=
+X-Received: by 2002:a05:6808:201b:: with SMTP id
+ q27mr4455247oiw.73.1643219091649; 
+ Wed, 26 Jan 2022 09:44:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220116104114.103601-1-ju.o@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add test for
- python-gnupg
+References: <20220101000408.1538099-1-james.hilliard1@gmail.com>
+ <87v8y6h8c7.fsf@dell.be.48ers.dk>
+In-Reply-To: <87v8y6h8c7.fsf@dell.be.48ers.dk>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 26 Jan 2022 10:44:40 -0700
+Message-ID: <CADvTj4rOqP1pZnp4hz=xb3Y5wBK2eJO7v9EMsd2VGcgRScAu2w@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohttp: add aiosignal
+ runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,119 +83,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
- buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+On Wed, Jan 26, 2022 at 7:36 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>
+>  > Fixes:
+>  >   File "/usr/lib/python3.10/site-packages/aiohttp/__init__.py", line 6, in <module>
+>  >   File "/usr/lib/python3.10/site-packages/aiohttp/client.py", line 88, in <module>
+>  >   File "/usr/lib/python3.10/site-packages/aiohttp/tracing.py", line 5, in <module>
+>  > ModuleNotFoundError: No module named 'aiosignal'
+>
+>  > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+> When was this introduced? Do we need to backport this to 2021.02.x /
+> 2021.11.x?
 
-On 2022-01-16 11:41 +0100, Julien Olivain spake thusly:
-> This commit add a simple test doing symmetric encryption/decryption
-> to check this python interface with the gpg binary is working fine.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+Looks like it's required for aiohttp v3.8.0 and newer, so we shouldn't
+need to backport.
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS                                    |  2 ++
->  .../tests/package/sample_python_gnupg.py      | 24 +++++++++++++++++++
->  .../tests/package/test_python_gnupg.py        | 21 ++++++++++++++++
->  3 files changed, 47 insertions(+)
->  create mode 100644 support/testing/tests/package/sample_python_gnupg.py
->  create mode 100644 support/testing/tests/package/test_python_gnupg.py
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a91e2dfcde..e038941b3b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1611,6 +1611,8 @@ F:	package/python-distro/
->  F:	package/python-gnupg/
->  F:	package/python-pyalsa/
->  F:	package/riscv-isa-sim/
-> +F:	support/testing/tests/package/sample_python_gnupg.py
-> +F:	support/testing/tests/package/test_python_gnupg.py
->  
->  N:	Julien Viard de Galbert <julien@vdg.name>
->  F:	package/dieharder/
-> diff --git a/support/testing/tests/package/sample_python_gnupg.py b/support/testing/tests/package/sample_python_gnupg.py
-> new file mode 100644
-> index 0000000000..b5b718a8cb
-> --- /dev/null
-> +++ b/support/testing/tests/package/sample_python_gnupg.py
-> @@ -0,0 +1,24 @@
-> +import gnupg
-> +
-> +gpg = gnupg.GPG(verbose=True)
-> +
-> +plain_data = "Some plain text data"
-> +good_passphrase = "Good Passphrase"
-> +
-> +# Test Encrypt
-> +result = gpg.encrypt(plain_data, None, passphrase=good_passphrase, symmetric=True)
-> +assert(result.returncode == 0)
-> +enc_data = str(result)
-> +assert(enc_data != plain_data)
-> +
-> +# Test Good Decrypt
-> +result = gpg.decrypt(enc_data, passphrase=good_passphrase)
-> +assert(result.returncode == 0)
-> +dec_data = str(result)
-> +assert(dec_data == plain_data)
-> +
-> +# Test Bad Decrypt
-> +result = gpg.decrypt(enc_data, passphrase='A Wrong Passphrase')
-> +assert(result.returncode != 0)
-> +dec_data = str(result)
-> +assert(dec_data != plain_data)
-> diff --git a/support/testing/tests/package/test_python_gnupg.py b/support/testing/tests/package/test_python_gnupg.py
-> new file mode 100644
-> index 0000000000..0c71f6b6d0
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_gnupg.py
-> @@ -0,0 +1,21 @@
-> +from tests.package.test_python import TestPythonPackageBase
-> +
-> +
-> +class TestPythonPy2GnuPG(TestPythonPackageBase):
-> +    __test__ = True
-> +    config = TestPythonPackageBase.config + \
-> +        """
-> +        BR2_PACKAGE_PYTHON=y
-> +        BR2_PACKAGE_PYTHON_GNUPG=y
-> +        """
-> +    sample_scripts = ["tests/package/sample_python_gnupg.py"]
-> +
-> +
-> +class TestPythonPy3GnuPG(TestPythonPackageBase):
-> +    __test__ = True
-> +    config = TestPythonPackageBase.config + \
-> +        """
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_GNUPG=y
-> +        """
-> +    sample_scripts = ["tests/package/sample_python_gnupg.py"]
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> --
+> Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
